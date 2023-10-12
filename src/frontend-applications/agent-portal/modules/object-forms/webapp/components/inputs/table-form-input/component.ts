@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,17 +7,23 @@
  * --
  */
 
+import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { DynamicFieldTableFormValue } from '../../../../model/FormValues/DynamicFields/DynamicFieldTableFormValue';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
+import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private bindingIds: string[];
     private formValue: DynamicFieldTableFormValue;
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -64,6 +70,18 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.hasAction = this.formValue.minRowCount !== this.formValue.maxRowCount;
 
         this.state.prepared = true;
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (data: any, eventId: string): void => {
+                if (data.blocked) {
+                    this.state.readonly = true;
+                } else {
+                    this.state.readonly = this.formValue.readonly;
+                }
+            }
+        };
+        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     // create new, to not use ref, else "isNotSame" check will fail in ObjectFormValue (setFormValue)
@@ -85,6 +103,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.bindingIds?.length && this.formValue) {
             this.formValue.removePropertyBinding(this.bindingIds);
         }
+        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public removeTable(): void {

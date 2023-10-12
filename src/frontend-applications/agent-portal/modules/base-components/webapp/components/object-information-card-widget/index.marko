@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -16,13 +16,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div.info-container>
             <div.info-avatar class={
                 "no-avatar":
-                    !Array.isArray(state.avatar) || !state.avatar.length
+                    !state.avatar || !Array.isArray(state.avatar) || !state.avatar.length
             }>
                 <if(Array.isArray(state.avatar) && state.avatar.length)>
                     <for|avatar| of=state.avatar>
                         <icon icon=avatar/>
                     </for>
                 </if>
+                <else-if(state.avatar && !Array.isArray(state.avatar))>
+                     <icon icon=avatar/>
+                </else-if>
             </div>
             <if(state.valuesReady)>
                 <div.info-rows>
@@ -51,15 +54,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     <for|info| of=group>
                                         <if(info.componentId)>
                                             <div>
-                                                <div style=info.textStyle>${info.preparedText}</div>
+                                                <div title=info.preparedText style=info.textStyle>${info.preparedText}</div>
                                                 <div.component-value>
                                                     <link-target
                                                         routingConfiguration=info.routingConfiguration
                                                         objectId=info.routingObjectId>
                                                         <@content>
-                                                            <${state.templates[
-                                                                info.componentId
-                                                            ]} ...info.componentData on-setDataMapValue('setDataMapValue')/>
+                                                            <${component.getTemplate(info.componentId)} ...info.componentData on-setDataMapValue('setDataMapValue')/>
                                                         </@content>
                                                     </link-target>
                                                 </div>
@@ -83,6 +84,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                                         info.preparedLinkSrc
                                                     )>
                                                         <a href=info.preparedLinkSrc target="_blank">${info.preparedText}</a>
+                                                    </else-if>
+                                                    <else-if(info.multiline)>
+                                                        <pre>${info.preparedText}</pre>
                                                     </else-if>
                                                     <else>${info.preparedText}</else>
                                                 </span>

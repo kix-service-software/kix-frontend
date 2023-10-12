@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -68,9 +68,12 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
         const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value && value.value) {
-            this.state.currentValue = new Date(value.value);
-            this.state.dateValue = DateTimeUtil.getKIXDateString(this.state.currentValue);
-            this.state.timeValue = DateTimeUtil.getKIXTimeString(this.state.currentValue, true);
+            const currentValue = new Date(value.value);
+            if (currentValue.getTime()) {
+                this.state.currentValue = currentValue;
+                this.state.dateValue = DateTimeUtil.getKIXDateString(this.state.currentValue);
+                this.state.timeValue = DateTimeUtil.getKIXTimeString(this.state.currentValue, true);
+            }
         }
 
         setTimeout(() => {
@@ -100,7 +103,10 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
         const dateValue = this.state.dateValue || '2000-01-01';
 
         const date = new Date(
-            dateValue + (this.state.timeValue ? ` ${this.state.timeValue}` : '')
+            dateValue + (
+                this.state.timeValue && this.state.timeValue.match(/^\d\d:\d\d/) ?
+                    ` ${this.state.timeValue}` : ''
+            )
         );
 
         if (date && this.state.inputType === InputFieldTypes.DATE) {

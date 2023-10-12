@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,6 +15,7 @@ import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFi
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { ImportManager, ImportPropertyOperator } from '../../../../import/webapp/core';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { UserProperty } from '../../../../user/model/UserProperty';
 import { ContactProperty } from '../../../model/ContactProperty';
 import { ContactService } from '../ContactService';
@@ -56,6 +57,18 @@ export class ContactImportManager extends ImportManager {
         }
     }
 
+    public async isMultiselect(
+        property: string, operator: SearchOperator | string, forSearch?: boolean
+    ): Promise<boolean> {
+        switch (property) {
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+            case KIXObjectProperty.VALID_ID:
+                return false;
+            default:
+                return super.isMultiselect(property, operator, forSearch);
+        }
+    }
+
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [];
         const attributes = [
@@ -63,6 +76,11 @@ export class ContactImportManager extends ImportManager {
             ContactProperty.COMMENT,
             ContactProperty.COUNTRY,
             ContactProperty.EMAIL,
+            ContactProperty.EMAIL1,
+            ContactProperty.EMAIL2,
+            ContactProperty.EMAIL3,
+            ContactProperty.EMAIL4,
+            ContactProperty.EMAIL5,
             ContactProperty.FAX,
             ContactProperty.FIRSTNAME,
             ContactProperty.LASTNAME,

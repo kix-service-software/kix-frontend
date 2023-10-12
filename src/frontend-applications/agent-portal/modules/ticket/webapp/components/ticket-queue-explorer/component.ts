@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -75,7 +75,7 @@ export class Component {
 
     private async loadQueues(context: TicketContext): Promise<void> {
         this.state.nodes = null;
-        const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
+        const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(true, null, ['READ']);
         this.state.nodes = await QueueService.getInstance().prepareObjectTree(
             queuesHierarchy, true, false, null, undefined, true, true
         );

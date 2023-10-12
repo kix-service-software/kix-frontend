@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -8,24 +8,21 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <div.form.search-template-form>
-    <div.form-field.show-object() title=state.translations["Translatable#Search"]>
+    <div.form-field.show-object() title=state.translations['Translatable#Search']>
         <div.field-label>
             <span.label-text>
-                <translation-string pattern="Translatable#Search"/>
+                <translation-string pattern='Translatable#Search'/>
             </span>
         </div>
         <div.field-icon/>
         <div.field-input>
-            <form-list
-                placeholder="Translatable#Save new search"
-                loadNodes=state.loadNodes
-                on-nodesChanged("nodesChanged")/>
+            <form-list placeholder='Translatable#Save new search' loadNodes=state.loadNodes on-nodesChanged('nodesChanged')/>
         </div>
     </div>
-    <div.form-field.show-object() title=state.translations["Translatable#Title"]>
+    <div.form-field.show-object() title=state.translations['Translatable#Title']>
         <div.field-label>
             <span.label-text>
-                <translation-string pattern="Translatable#Title"/>
+                <translation-string pattern='Translatable#Title'/>
             </span>
         </div>
         <div.field-icon/>
@@ -34,28 +31,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 class={
                     invalid: state.nameInvalid
                 }
-                type="text"
+                type='text'
                 value=state.name
-                placeholder=state.translations["Translatable#Search Title"]
-                on-input("nameChanged")
-                on-keydown("keyPressed")/>
+                placeholder=state.translations['Translatable#Search Title']
+                on-input('nameChanged')
+                on-keydown('keyPressed')
+                on-click('inputClicked')/>
         </div>
     </div>
-    <translation-string pattern="Translatable#Find this saved search within the Dropdown Bookmarks, located in the header menu right besides the New-button"/>
+    <translation-string pattern='Translatable#Find this saved search within the Dropdown Bookmarks, located in the header menu right besides the New-button'/>
     <div.overlay-buttons>
         <button.kix-button.cancel-button
-            type="button"
-            on-click("closeOverlay", false)
-            title=state.translations["Translatable#Cancel"]>
+            type='button'
+            on-click('closeOverlay', false)
+            title=state.translations['Translatable#Cancel']>
             <span.kix-icon-close/>
-            <translation-string pattern="Translatable#Cancel"/>
+            <translation-string pattern='Translatable#Cancel'/>
         </button>
         <button.kix-button.submit-button
-            type="button"
-            on-click("closeOverlay", true)
-            title=state.translations["Translatable#Save"]>
+            type='button'
+            on-click('closeOverlay', true)
+            title=state.translations['Translatable#Save']>
             <span.kix-icon-check/>
-            <translation-string pattern="Translatable#Save"/>
+            <translation-string pattern='Translatable#Save'/>
         </button>
     </div>
 </div>

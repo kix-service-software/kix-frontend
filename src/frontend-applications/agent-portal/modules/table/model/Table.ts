@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -44,6 +44,7 @@ import { ContextService } from '../../base-components/webapp/core/ContextService
 import { ContextMode } from '../../../model/ContextMode';
 import { SearchCache } from '../../search/model/SearchCache';
 import { DataType } from '../../../model/DataType';
+import { IdService } from '../../../model/IdService';
 
 export class Table implements Table {
 
@@ -100,7 +101,7 @@ export class Table implements Table {
         ClientStorageService.setOption(this.getTableId(), tableStateString);
     }
 
-    private loadTableState(): void {
+    public loadTableState(): TableState {
         const tableStateString = ClientStorageService.getOption(this.getTableId());
         try {
             this.tableState = JSON.parse(tableStateString);
@@ -110,8 +111,12 @@ export class Table implements Table {
             this.sortColumnId = this.tableState?.sortColumnId || this.sortColumnId;
             this.sortOrder = this.tableState?.sortOrder || this.sortOrder;
 
-            this.setRowSelection(this.tableState?.selectedRows || []);
+            if (this.tableState?.selectedRows?.length) {
+                this.setRowSelection(this.tableState?.selectedRows || []);
+            }
+
             this.tableState?.columnsizes?.forEach((cs) => this.getColumn(cs[0])?.setSize(cs[1]));
+            return this.tableState;
         } catch (error) {
             console.error('Error loading table state: ' + this.getTableId());
             console.error(error);
@@ -145,11 +150,15 @@ export class Table implements Table {
         this.contentProvider = contentProvider;
     }
 
+    public getContentProvider(): ITableContentProvider {
+        return this.contentProvider;
+    }
+
     public setColumnConfiguration(columnConfiguration: IColumnConfiguration[]): void {
         this.columnConfigurations = columnConfiguration;
     }
 
-    public async initialize(): Promise<void> {
+    public async initialize(forceReload: boolean = true): Promise<void> {
         if (!this.initialized) {
             this.initialized = true;
 
@@ -189,14 +198,13 @@ export class Table implements Table {
 
             await this.initDisplayRows();
 
+            this.setSortByContext();
+
             if (this.sortColumnId && this.sortOrder) {
                 await this.sort(this.sortColumnId, this.sortOrder, true);
             }
 
             if (this.filterValue || this.filterCriteria?.length || this.columns.some((c) => c.isFiltered())) {
-                if (this.filterValue) {
-                    await this.initDisplayRows(true);
-                }
                 await this.filter(true);
             }
 
@@ -222,6 +230,31 @@ export class Table implements Table {
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.SORTED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.COLUMN_RESIZED, this.subscriber);
+        } else if (forceReload) {
+            await this.reload();
+        }
+    }
+
+    private setSortByContext(): void {
+        if (this.contextId && !this.sortColumnId) {
+            const context = ContextService.getInstance().getActiveContext();
+            if (context.contextId === this.contextId) {
+                const sort = context.getSortOrder(this.getObjectType());
+                if (sort) {
+                    let property = sort.split('.')[1];
+                    if (property) {
+                        property = property.split(':')[0];
+                        this.sortOrder = SortOrder.UP;
+                        if (property.match(/^-.+/)) {
+                            this.sortOrder = SortOrder.DOWN;
+                            property = property.replace(/-(.+)/, '$1');
+                        }
+                        if (this.columns.some((c) => c.getColumnId() === property)) {
+                            this.sortColumnId = property;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -262,6 +295,7 @@ export class Table implements Table {
     }
 
     private async loadRowData(relevantHandlerConfigIds?: string[]): Promise<void> {
+        const existingRows = this.rows;
         this.rows = [];
         this.filteredRows = null;
 
@@ -279,7 +313,7 @@ export class Table implements Table {
                 rowObjects = await this.considerHandlerData(rowObjects, relevantHandlerConfigIds);
             }
 
-            rowObjects.forEach((d) => rows.push(this.createRow(d, false)));
+            rowObjects.forEach((d) => rows.push(this.createRow(d, false, existingRows)));
             this.rows = rows;
         }
     }
@@ -328,8 +362,16 @@ export class Table implements Table {
         this.handlerRowObjects[handlerConfig.id] = handlerRowObjects;
     }
 
-    public createRow(tableObject?: RowObject, addRow: boolean = true): Row {
-        const row = new Row(this, tableObject);
+    public createRow(tableObject?: RowObject, addRow: boolean = true, existingRows: Row[] = []): Row {
+        const objectId = tableObject?.getObject()?.ObjectId || IdService.generateDateBasedId();
+        const rowId = Row.getRowId(this.getTableId(), objectId);
+        let row = existingRows.find((r) => r.getRowId() === rowId);
+        if (!row) {
+            row = new Row(this, tableObject);
+        } else if (tableObject) {
+            row.setRowObject(tableObject);
+        }
+
         if (addRow) {
             this.rows.push(row);
         }
@@ -579,8 +621,6 @@ export class Table implements Table {
 
         await this.filterColumns();
 
-        await this.initDisplayRows();
-
         EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
         EventService.getInstance().publish(TableEvent.TABLE_FILTERED, new TableEventData(this.getTableId()));
     }
@@ -613,7 +653,6 @@ export class Table implements Table {
     public async sort(columnId: string, sortOrder: SortOrder, silent?: boolean): Promise<void> {
         this.sortColumnId = columnId;
         this.sortOrder = sortOrder;
-
         const promises = [];
         this.getRows(true).forEach((r) => promises.push(r.getCell(this.sortColumnId)?.initDisplayValue()));
         await Promise.all(promises);
@@ -637,8 +676,6 @@ export class Table implements Table {
                 }
             }
 
-            await this.initDisplayRows();
-
             if (!silent) {
                 EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
                 EventService.getInstance().publish(
@@ -646,15 +683,14 @@ export class Table implements Table {
                 );
             }
         }
+
+        this.saveTableState();
     }
 
-    public async initDisplayRows(all?: boolean): Promise<void> {
+    public async initDisplayRows(): Promise<void> {
         const rows = this.getRows();
         const promises = [];
-        const displayLimit = all
-            ? this.getRows(true).length
-            : (this.getTableConfiguration()?.displayLimit || 15) + 2;
-        for (let i = 0; i < displayLimit; i++) {
+        for (let i = 0; i < this.getRows(true).length; i++) {
             if (rows[i]) {
                 promises.push(rows[i].initializeDisplayValues());
             }
@@ -762,8 +798,12 @@ export class Table implements Table {
                 await this.sort(this.sortColumnId, this.sortOrder);
             }
 
+            if (this.isFiltered()) {
+                this.filter();
+            }
+
             this.toggleFirstRow();
-            this.initDisplayRows();
+            await this.initDisplayRows();
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(TableEvent.RELOADED, new TableEventData(this.getTableId()));
 
@@ -792,6 +832,15 @@ export class Table implements Table {
     public isFiltered(): boolean {
         return this.isFilterDefined(this.filterValue, this.filterCriteria) ||
             this.getColumns().some((c) => c.isFiltered());
+    }
+
+    public async setRowObject(row: Row, rowObject: RowObject): Promise<void> {
+        row.setRowObject(rowObject);
+        await row.initializeDisplayValues();
+        EventService.getInstance().publish(
+            TableEvent.ROW_VALUE_CHANGED,
+            new TableEventData(this.getTableId(), row.getRowId())
+        );
     }
 
     public updateRowObject(object: KIXObject): void {
@@ -848,6 +897,11 @@ export class Table implements Table {
         let count = 0;
         this.getRows(all).forEach((r) => count += r.getRowCount());
         return count;
+    }
+
+    public async loadMore(): Promise<void> {
+        this.resetFilter();
+        await this.contentProvider.loadMore();
     }
 
 }

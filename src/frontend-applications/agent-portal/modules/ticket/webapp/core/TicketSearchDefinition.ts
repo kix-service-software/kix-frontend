@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -151,7 +151,7 @@ export class TicketSearchDefinition extends SearchDefinition {
                 && c.property !== TicketProperty.CREATED_STATE_ID
                 && c.property !== TicketProperty.ARTICLE_CREATE_TIME
                 && c.property !== TicketProperty.ATTACHMENT_NAME
-                && c.property !== TicketProperty.WATCH_USER_ID
+                && c.property !== TicketProperty.WATCHER_USER_ID
                 && c.property !== TicketProperty.STATE_TYPE
                 && c.property !== TicketProperty.LAST_CHANGE_TIME
                 && !this.isArticleProperty(c.property)

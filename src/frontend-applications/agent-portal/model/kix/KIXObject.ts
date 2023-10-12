@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,7 +8,6 @@
  */
 
 import { KIXObjectType } from './KIXObjectType';
-import { ConfiguredPermissions } from '../ConfiguredPermissions';
 import { Link } from '../../modules/links/model/Link';
 import { DynamicFieldValue } from '../../modules/dynamic-fields/model/DynamicFieldValue';
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
@@ -24,8 +23,6 @@ export abstract class KIXObject extends BindableObject {
     public abstract ObjectId: string | number;
 
     public abstract KIXObjectType: KIXObjectType | string;
-
-    public ConfiguredPermissions: ConfiguredPermissions;
 
     public Links: Link[] = [];
 

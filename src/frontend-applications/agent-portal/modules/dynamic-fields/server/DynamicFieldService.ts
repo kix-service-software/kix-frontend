@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,6 +23,7 @@ import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
 import { DynamicFieldType } from '../model/DynamicFieldType';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 
 
@@ -78,23 +79,23 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
-        let objects = [];
+    ): Promise<ObjectResponse<T>> {
+        let objectResponse = new ObjectResponse();
 
         if (objectType === KIXObjectType.DYNAMIC_FIELD) {
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'DynamicField',
                 clientRequestId, DynamicField
             );
         } else if (objectType === KIXObjectType.DYNAMIC_FIELD_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'types');
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, objectType, uri, loadingOptions, null, 'DynamicFieldType',
                 clientRequestId, DynamicFieldType
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public async createObject(
@@ -125,7 +126,7 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
     }
 
     public async loadDynamicField(token: string, name: string, id?: number): Promise<DynamicField> {
-        let dynamicFields: DynamicField[];
+        let objectResponse = new ObjectResponse<DynamicField>();
         if (name || id) {
             const filter = id ? null : [
                 new FilterCriteria(
@@ -133,12 +134,13 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
                     FilterType.AND, name
                 )
             ];
-            dynamicFields = await this.loadObjects<DynamicField>(
+            objectResponse = await this.loadObjects<DynamicField>(
                 token, '',
                 KIXObjectType.DYNAMIC_FIELD, id ? [id] : null,
                 new KIXObjectLoadingOptions(filter, null, null, [DynamicFieldProperty.CONFIG]), null
-            ).catch(() => [] as DynamicField[]);
+            ).catch(() => new ObjectResponse());
         }
+        const dynamicFields = objectResponse?.objects || [];
         return dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
     }
 

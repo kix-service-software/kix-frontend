@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -62,14 +62,15 @@ export class KIXObjectNamespace extends SocketNameSpace {
 
         const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
         if (service) {
-            const objects: any[] = await service.loadObjects(
+            const objectResponse = await service.loadObjects(
                 token, data.clientRequestId, data.objectType, data.objectIds,
                 data.loadingOptions, data.objectLoadingOptions
             );
-            const response = new SocketResponse(
-                KIXObjectEvent.LOAD_OBJECTS_FINISHED, new LoadObjectsResponse(data.requestId, objects)
+
+            const response = new LoadObjectsResponse(
+                data.requestId, objectResponse?.objects, objectResponse?.totalCount
             );
-            return (response);
+            return new SocketResponse(KIXObjectEvent.LOAD_OBJECTS_FINISHED, response);
         } else {
             const errorMessage = 'No API service registered for object type ' + data.objectType;
             LoggingService.getInstance().error(errorMessage);

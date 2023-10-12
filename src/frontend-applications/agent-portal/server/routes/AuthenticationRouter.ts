@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,7 @@ import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { AuthenticationService } from '../../../../server/services/AuthenticationService';
 import { UserType } from '../../modules/user/model/UserType';
+import { ObjectResponse } from '../services/ObjectResponse';
 
 export class AuthenticationRouter extends KIXRouter {
 
@@ -70,6 +71,9 @@ export class AuthenticationRouter extends KIXRouter {
         const config = ConfigurationService.getInstance().getServerConfiguration();
         const ssoEnabled = config?.SSO_ENABLED;
 
+        let authType = '';
+        let negotiationToken = '';
+
         if (ssoEnabled) {
             if (!req.cookies.authNegotiationDone && !req.cookies.authNoSSO) {
                 res.cookie('authNegotiationDone', true, { httpOnly: true });
@@ -89,46 +93,57 @@ export class AuthenticationRouter extends KIXRouter {
                 const authorization = req.headers['authorization'];
                 if (typeof authorization === 'string' && authorization.split(' ')[0] === 'Negotiate') {
                     // already negotiated (SSO)
-                    const negotiationToken = authorization.split(' ')[1];
-
-                    let success = true;
-                    const token = await AuthenticationService.getInstance().login(
-                        null, null, UserType.AGENT, negotiationToken, null, null, false
-                    ).catch((e) => {
-                        LoggingService.getInstance().error('Error when trying to login with negotiate token (SSO)');
-                        success = false;
-                    });
-
-                    if (success) {
-                        res.cookie('token', token);
-                        res.clearCookie('authNegotiationDone');
-                        res.status(200);
-                        res.send(
-                            `<!DOCTYPE html>
-                        <html lang="en">
-                            <head>
-                                <title>KIX Agent Portal</title>
-                                <meta http-equiv="refresh" content="3; URL=/">
-                            </head>
-                            <body></body>
-                        </html>`
-                        );
-                    } else {
-                        this.routeToLoginPage(res, req);
-                    }
-                } else {
-                    this.routeToLoginPage(res, req);
+                    negotiationToken = authorization.split(' ')[1];
+                    authType = 'negotiate token (SSO)';
                 }
             }
-        } else {
-            this.routeToLoginPage(res, req);
         }
+
+        let user = '';
+        if (req.headers['x-kix-user'] && typeof req.headers['x-kix-user'] === 'string') {
+            // login with trusted header
+            user = req.headers['x-kix-user'];
+            authType = 'trusted HTTP header';
+        }
+
+        if (user || negotiationToken) {
+            let success = true;
+            const token = await AuthenticationService.getInstance().login(
+                user, null, UserType.AGENT, negotiationToken, null, null, false
+            ).catch((e) => {
+                LoggingService.getInstance().error('Error when trying to login with ' + authType);
+                success = false;
+            });
+
+            if (success) {
+                res.cookie('token', token);
+                res.clearCookie('authNegotiationDone');
+                res.status(200);
+                res.send(
+                    `<!DOCTYPE html>
+                            <html lang="en">
+                                <head>
+                                    <title>KIX Agent Portal</title>
+                                    <meta http-equiv="refresh" content="3; URL=/">
+                                </head>
+                                <body></body>
+                            </html>`
+                );
+            }
+        }
+
+        this.routeToLoginPage(req, res);
     }
 
-    private async routeToLoginPage(res: Response, req: Request): Promise<void> {
+    private async routeToLoginPage(req: Request, res: Response): Promise<void> {
         res.clearCookie('token');
         res.clearCookie('authNegotiationDone');
         res.cookie('authNoSSO', true, { httpOnly: true });
+
+        if (req.headers['x-forwarded-for']) {
+            res.cookie('x-forwarded-for', req.headers['x-forwarded-for']);
+        }
+
         const applications = await PluginService.getInstance().getExtensions<IMarkoApplication>(
             AgentPortalExtensions.MARKO_APPLICATION
         );
@@ -150,10 +165,8 @@ export class AuthenticationRouter extends KIXRouter {
                 const imprintLink = await this.getImprintLink()
                     .catch((e) => '');
 
-                let redirectUrl = '/';
-                if (req.url !== '/auth') {
-                    redirectUrl = req.url;
-                }
+                const url = req.query['redirectUrl']?.toString();
+                const redirectUrl = decodeURIComponent(url) || '/';
 
                 const favIcon = await this.getIcon('agent-portal-icon');
                 const logo = await this.getIcon('agent-portal-logo');
@@ -187,19 +200,22 @@ export class AuthenticationRouter extends KIXRouter {
     private async getImprintLink(): Promise<string> {
         let imprintLink = '';
         const config = ConfigurationService.getInstance().getServerConfiguration();
-        const imprintConfig = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+        const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
             config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.IMPRINT_LINK],
             undefined, undefined
-        ).catch(() => []);
+        ).catch(() => new ObjectResponse<SysConfigOption>());
+
+        const imprintConfig = objectResponse?.objects || [];
 
         if (imprintConfig && imprintConfig.length) {
             const data = imprintConfig[0].Value;
 
-            const defaultLangConfig = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+            const response = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                 config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.DEFAULT_LANGUAGE],
                 undefined, undefined
-            ).catch(() => []);
+            ).catch(() => new ObjectResponse<SysConfigOption>());
 
+            const defaultLangConfig = response?.objects || [];
             if (defaultLangConfig && defaultLangConfig.length) {
                 imprintLink = data[defaultLangConfig[0].Value];
             } else {

@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -13,59 +13,64 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     contentActions=state.contentActions
 >
     <@content>
-        <div.criteria-container key="search-criteria-container">
+        <div key="search-criteria-container" class="criteria-container">
             <if(state.manager)>
-                <div.search-criteria>
+                <div class="search-criteria">
                     <dynamic-form-field-container
                         manager=state.manager
                         key="search-criteria-dynamic-form"
                     />
                 </div>
-                <div.search-limit>
+                <div class="search-limit">
                     <span>
                         <translation-string pattern="Translatable#Limit:"/>
                     </span>
-                    <input.input-style
+                    <input
                         type="number"
                         value=state.limit
                         on-input("limitChanged")
+                        class="input-style"
                     >
                 </div>
                 <if(state.sortTreeId)>
-                    <div.search-sort>
+                    <div class="search-sort">
                         <span>
                             <translation-string pattern="Translatable#Sort attribute:"/>
                         </span>
-                        <form-list.input-style
+                        <form-list
                             treeId=state.sortTreeId
                             on-nodesChanged("sortAttributeChanged")
+                            class="input-style"
                         />
-                        <span.search-sort-descending>
+                        <span class="search-sort-descending">
                             <translation-string pattern="Translatable#Descending:"/>
                         </span>
-                        <input.input-style
+                        <input
                             type="checkbox"
-                            checked=state.sortDescanding
-                            on-input("sortDescandingChanged")
+                            checked=state.sortDescending
+                            on-input("sortDescendingChanged")
+                            class="input-style"
                         >
                     </div>
                 </if>
-                <div.search-button-container>
-                    <button.kix-button.form-blank-cancel-button
+                <div class="search-button-container">
+                    <button
                         type="button"
                         on-click("resetSearch")
                         title=(state.translations["Translatable#Reset data"])
+                        class="kix-button form-blank-cancel-button"
                     >
-                        <span.kix-icon-delete/>
+                        <span class="kix-icon-delete"/>
                         <translation-string pattern="Translatable#Reset data"/>
                     </button>
-                    <button.kix-button.form-blank-submit-button
+                    <button
                         type="button"
                         on-click("search")
                         title=(state.translations["Translatable#Start search"])
                         disabled=!state.canSearch
+                        class="kix-button form-blank-submit-button"
                     >
-                        <span.kix-icon-search/>
+                        <span class="kix-icon-search"/>
                         <translation-string
                             pattern="Translatable#Start search"
                             placeholders=[]

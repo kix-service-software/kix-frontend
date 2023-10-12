@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,6 +15,7 @@ import { KIXObjectSpecificLoadingOptions } from '../../model/KIXObjectSpecificLo
 import { KIXObjectSpecificCreateOptions } from '../../model/KIXObjectSpecificCreateOptions';
 import { KIXObjectSpecificDeleteOptions } from '../../model/KIXObjectSpecificDeleteOptions';
 import { Error } from '../../../../server/model/Error';
+import { ObjectResponse } from './ObjectResponse';
 
 export interface IKIXObjectService extends IService {
 
@@ -23,7 +24,7 @@ export interface IKIXObjectService extends IService {
     loadObjects<T extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]>;
+    ): Promise<ObjectResponse<T>>;
 
     createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, parameter: Array<[string, string]>,
@@ -40,7 +41,9 @@ export interface IKIXObjectService extends IService {
         deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string
     ): Promise<Error[]>;
 
-    commitObject(token: string, clientRequestId: string, object: KIXObject): Promise<number | string>;
+    commitObject(
+        token: string, clientRequestId: string, object: KIXObject, relevantOrganisationId: number
+    ): Promise<number | string>;
 
     loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string>;
 

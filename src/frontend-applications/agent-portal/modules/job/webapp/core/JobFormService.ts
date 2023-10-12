@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -128,6 +128,30 @@ export class JobFormService extends KIXObjectFormService {
         return value;
     }
 
+    protected async postPrepareForm(
+        form: FormConfiguration, formInstance: FormInstance, formFieldValues, job: Job
+    ): Promise<void> {
+
+        if (form.formContext === FormContext.EDIT) {
+            // add additional filter fields and set filter values
+            if (Array.isArray(job.Filter) && job.Filter.length) {
+                const formField = formInstance.getFormFieldByProperty(JobProperty.FILTER);
+                const fieldPromises = [];
+                if (formField) {
+                    for (let i = 1; i < job.Filter.length; i++) {
+                        fieldPromises.push(formInstance.duplicateAndAddNewField(formField));
+                    }
+                }
+                await Promise.all(fieldPromises);
+                const filterFields = formInstance.getFormFieldsByProperty(JobProperty.FILTER);
+                const values: [string, any][] = filterFields.map((f, index) => {
+                    return [f.instanceId, job.Filter[index]];
+                });
+                formInstance.provideFormFieldValues(values, undefined, true, false);
+            }
+        }
+    }
+
     public async getNewFormField(
         formInstance: FormInstance, f: FormFieldConfiguration, parent?: FormFieldConfiguration
     ): Promise<FormFieldConfiguration> {
@@ -167,6 +191,19 @@ export class JobFormService extends KIXObjectFormService {
     ): Promise<Array<[string, any]>> {
         parameter = parameter.filter((p) => !p[0].startsWith('###MACRO###'));
         parameter = parameter.filter((p) => p[0] !== JobProperty.MACROS || p[1] !== null);
+
+        // collect all filter values
+        const filterParameter = parameter.filter((p) => p[0] === JobProperty.FILTER);
+        parameter = parameter.filter((p) => p[0] !== JobProperty.FILTER);
+        const filter = [];
+        filterParameter.forEach((fp) => {
+            if (Array.isArray(fp[1]) && fp[1].length) {
+                filter.push(fp[1]);
+            }
+        });
+        // sort filter, to get same result if no changes were made (and "biggest" filter comes first)
+        parameter.push([JobProperty.FILTER, filter.sort().reverse()]);
+
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 

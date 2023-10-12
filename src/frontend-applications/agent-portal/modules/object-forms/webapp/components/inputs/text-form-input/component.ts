@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -57,6 +57,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         this.formValue?.removePropertyBinding(this.bindingIds);
+    }
+
+    public keyDown(event: any): void {
+        if (event.keyCode === 13) {
+            this.state.value = event.target.value;
+            this.formValue.setFormValue(this.state.value);
+        }
     }
 
     public valueChanged(event: any): void {

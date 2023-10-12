@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -77,13 +77,13 @@ export abstract class SearchDefinition {
     }
 
     public async getLoadingOptions(
-        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescanding?: boolean
+        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescending?: boolean
     ): Promise<KIXObjectLoadingOptions> {
-        const sortOrder = await this.getSortOrder(sortAttribute, sortDescanding);
+        const sortOrder = await this.getSortOrder(sortAttribute, sortDescending);
         return new KIXObjectLoadingOptions(criteria, sortOrder, limit);
     }
 
-    private async getSortOrder(sortAttribute: string, sortDescanding: boolean): Promise<string> {
+    private async getSortOrder(sortAttribute: string, sortDescending: boolean): Promise<string> {
         let sortOrder: string;
         if (sortAttribute) {
             let type = await (this.formManager as SearchFormManager).getSortAttributeType(sortAttribute);
@@ -112,7 +112,7 @@ export abstract class SearchDefinition {
             }
 
             // create some string like "Ticket.-Age:numeric"
-            sortOrder = `${this.objectType}.${sortDescanding ? '-' : ''}${sortAttribute}${type ? ':' + type : ''}`;
+            sortOrder = `${this.objectType}.${sortDescending ? '-' : ''}${sortAttribute}${type ? ':' + type : ''}`;
         }
         return sortOrder;
     }
@@ -140,6 +140,10 @@ export abstract class SearchDefinition {
                     }
                 }
             }
+        }
+
+        for (const definition of this.extendedDefinitions) {
+            await definition.prepareFormFilterCriteria(filteredCriteria, forSearch);
         }
 
         return filteredCriteria;

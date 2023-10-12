@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,23 +7,24 @@
  * --
  */
 
-import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
-import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
-import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
-import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
-import { SysConfigOption } from '../model/SysConfigOption';
-import { SysConfigOptionDefinition } from '../model/SysConfigOptionDefinition';
-import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Error } from '../../../../../server/model/Error';
-import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
+import { LogLevel } from '../../../../../server/model/LogLevel';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { AgentPortalConfiguration } from '../../../model/configuration/AgentPortalConfiguration';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { SysConfigKey } from '../model/SysConfigKey';
-import { FilterCriteria } from '../../../model/FilterCriteria';
-import { AgentPortalConfiguation } from '../../../model/configuration/AgentPortalConfiguation';
-import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
-import { LogLevel } from '../../../../../server/model/LogLevel';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { SysConfigOption } from '../model/SysConfigOption';
+import { SysConfigOptionDefinition } from '../model/SysConfigOptionDefinition';
 
 export class SysConfigService extends KIXObjectAPIService {
 
@@ -54,8 +55,6 @@ export class SysConfigService extends KIXObjectAPIService {
         SysConfigKey.MAX_ALLOWED_SIZE
     ];
 
-    private optionCache: Map<string, SysConfigOption> = new Map();
-
     private constructor() {
         super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
@@ -76,46 +75,35 @@ export class SysConfigService extends KIXObjectAPIService {
         }
 
         LoggingService.getInstance().info('Preload SysconfigOptions');
-        this.optionCache.clear();
 
-        const loadingOptions = new KIXObjectLoadingOptions();
-        loadingOptions.cacheType = `Preload::${KIXObjectType.SYS_CONFIG_OPTION}`;
-        const options = await this.loadObjects<SysConfigOption>(
-            config?.BACKEND_API_TOKEN, 'SysConfigServicePreload', KIXObjectType.SYS_CONFIG_OPTION, this.preloadOptionKeys,
-            loadingOptions, null
-        ).catch((): SysConfigOption[] => []);
-
-        for (const option of options) {
-            this.optionCache.set(option.Name, option);
+        for (const key of this.preloadOptionKeys) {
+            await this.loadObjects<SysConfigOption>(
+                config?.BACKEND_API_TOKEN, 'SysConfigServicePreload', KIXObjectType.SYS_CONFIG_OPTION, [key], null, null
+            ).catch((): SysConfigOption[] => []);
         }
     }
 
     public async loadObjects<O>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<O[]> {
-        let objects = [];
+    ): Promise<ObjectResponse<O>> {
+        let objectResponse = new ObjectResponse();
 
         if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
-
-            if (objectIds?.length === 1 && this.optionCache.has(objectIds[0])) {
-                objects = [this.optionCache.get(objectIds[0])];
-            } else {
-                objects = await super.load<SysConfigOption>(
-                    token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds,
-                    KIXObjectType.SYS_CONFIG_OPTION, clientRequestId, SysConfigOption
-                );
-            }
+            objectResponse = await super.load<SysConfigOption>(
+                token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds,
+                KIXObjectType.SYS_CONFIG_OPTION, clientRequestId, SysConfigOption
+            );
         } else if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
             const uri = this.buildUri(this.RESOURCE_URI, 'definitions');
-            objects = await super.load<SysConfigOptionDefinition>(
+            objectResponse = await super.load<SysConfigOptionDefinition>(
                 token, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, uri,
                 loadingOptions, objectIds, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
                 clientRequestId, SysConfigOptionDefinition
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<O>;
     }
 
     public async updateObject(
@@ -178,10 +166,11 @@ export class SysConfigService extends KIXObjectAPIService {
     }
 
     public async getTicketViewableStateTypes(token: string): Promise<string[]> {
-        const viewableStateTypes = await this.loadObjects<SysConfigOption>(
+        const objectResponse = await this.loadObjects<SysConfigOption>(
             token, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE], null, null
-        ).catch(() => [] as SysConfigOption[]);
+        ).catch(() => new ObjectResponse<SysConfigOption>());
 
+        const viewableStateTypes = objectResponse?.objects;
         const stateTypes: string[] = viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : [];
 
         return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
@@ -191,15 +180,15 @@ export class SysConfigService extends KIXObjectAPIService {
         return [];
     }
 
-    public async getAgentPortalConfiguration(token: string): Promise<AgentPortalConfiguation> {
-        const configs = await this.loadObjects<SysConfigOption>(
-            token, '', KIXObjectType.SYS_CONFIG_OPTION, [AgentPortalConfiguation.CONFIGURATION_ID], null, null
-        ).catch((): SysConfigOption[] => []);
+    public async getPortalConfiguration(token: string): Promise<AgentPortalConfiguration> {
+        const response = await this.loadObjects<SysConfigOption>(
+            token, '', KIXObjectType.SYS_CONFIG_OPTION, [AgentPortalConfiguration.CONFIGURATION_ID], null, null
+        ).catch((): ObjectResponse<SysConfigOption> => new ObjectResponse([]));
 
-        let config: AgentPortalConfiguation;
-        if (Array.isArray(configs) && configs.length) {
+        let config: AgentPortalConfiguration = new AgentPortalConfiguration();
+        if (response?.objects?.length) {
             try {
-                config = JSON.parse(configs[0].Value);
+                config = JSON.parse(response?.objects[0].Value);
             } catch (error) {
                 LoggingService.getInstance().error(error);
             }

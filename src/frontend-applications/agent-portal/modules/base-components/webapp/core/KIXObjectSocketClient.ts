@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -39,6 +39,7 @@ import { PortalNotification } from '../../../portal-notification/model/PortalNot
 import { PortalNotificationType } from '../../../portal-notification/model/PortalNotificationType';
 import { DisplayValueRequest } from '../../../../model/DisplayValueRequest';
 import { DisplayValueResponse } from '../../../../model/DisplayValueResponse';
+import { ObjectResponse } from '../../../../server/services/ObjectResponse';
 
 export class KIXObjectSocketClient extends SocketClient {
 
@@ -52,8 +53,20 @@ export class KIXObjectSocketClient extends SocketClient {
         return KIXObjectSocketClient.INSTANCE;
     }
 
+    private collectionsCounts: Map<string, number> = new Map();
+    private collectionsLimits: Map<string, number> = new Map();
+    private collectionsController: Map<string, AbortController> = new Map();
+
     private constructor() {
         super('kixobjects');
+    }
+
+    public getCollectionsCount(collectionId: string): number {
+        return this.collectionsCounts.get(collectionId);
+    }
+
+    public getCollectionsLimit(collectionId: string): number {
+        return this.collectionsLimits.get(collectionId);
     }
 
     public async loadDisplayValue(
@@ -95,7 +108,7 @@ export class KIXObjectSocketClient extends SocketClient {
         kixObjectType: KIXObjectType | string, objectConstructors: Array<new (object?: T) => T>,
         objectIds: Array<string | number> = null, loadingOptions: KIXObjectLoadingOptions = null,
         objectLoadingOptions: KIXObjectSpecificLoadingOptions = null, cache: boolean = true, timeout?: number,
-        silent?: boolean
+        silent?: boolean, collectionId?: string
     ): Promise<T[]> {
         this.checkSocketConnection();
 
@@ -111,7 +124,12 @@ export class KIXObjectSocketClient extends SocketClient {
 
         const organisationId = ClientStorageService.getOption('RelevantOrganisationID');
         if (organisationId) {
-            loadingOptions.query.push(['RelevantOrganisationID', organisationId]);
+            const index = loadingOptions.query.findIndex((q) => q[0] === 'RelevantOrganisationID');
+            if (index !== -1) {
+                loadingOptions.query[index] = ['RelevantOrganisationID', organisationId];
+            } else {
+                loadingOptions.query.push(['RelevantOrganisationID', organisationId]);
+            }
         }
 
         const request = new LoadObjectsRequest(
@@ -119,33 +137,58 @@ export class KIXObjectSocketClient extends SocketClient {
             kixObjectType, objectIds, loadingOptions, objectLoadingOptions
         );
 
-        let requestPromise: Promise<T[]>;
+        let requestPromise: Promise<LoadObjectsResponse<T>>;
         if (cache) {
             const cacheType = loadingOptions?.cacheType || kixObjectType;
             const cacheKey = JSON.stringify({ cacheType, objectIds, loadingOptions, objectLoadingOptions });
 
             requestPromise = BrowserCacheService.getInstance().get(cacheKey, cacheType);
             if (!requestPromise) {
-                requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout, silent);
+                requestPromise = this.createLoadRequestPromise<T>(
+                    request, objectConstructors, timeout, silent, collectionId
+                );
                 BrowserCacheService.getInstance().set(cacheKey, requestPromise, cacheType);
 
                 requestPromise.catch((error) => {
                     BrowserCacheService.getInstance().delete(cacheKey, cacheType);
                 });
             }
-            return requestPromise;
+        } else {
+            requestPromise = this.createLoadRequestPromise<T>(
+                request, objectConstructors, timeout, silent, collectionId
+            );
         }
 
-        requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout, silent);
-        return requestPromise;
+        const response = await requestPromise;
+
+        if (collectionId) {
+            this.collectionsCounts.set(collectionId, Number(response.totalCount));
+            if (loadingOptions?.limit) {
+                this.collectionsLimits.set(collectionId, Number(loadingOptions.limit));
+            }
+        }
+
+        return response.objects;
     }
 
     private async createLoadRequestPromise<T extends KIXObject>(
         request: LoadObjectsRequest, objectConstructors: Array<new (object?: T) => T>, timeout?: number,
-        silent?: boolean
-    ): Promise<T[]> {
+        silent?: boolean, collectionId?: string
+    ): Promise<LoadObjectsResponse<T>> {
+        let controller: AbortController;
+
+        if (collectionId) {
+            const oldController = this.collectionsController.get(collectionId);
+            if (oldController) {
+                oldController.abort();
+            }
+
+            controller = new AbortController();
+            this.collectionsController.set(collectionId, controller);
+        }
+
         const response = await this.sendRequest<LoadObjectsResponse<T>>(
-            request, KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, timeout, silent
+            request, KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, timeout, silent, controller
         ).catch((error): LoadObjectsResponse<T> => {
             if (error instanceof PermissionError) {
                 return new LoadObjectsResponse(request.clientRequestId, []);
@@ -154,10 +197,9 @@ export class KIXObjectSocketClient extends SocketClient {
             }
         });
 
-        let objects = response.objects;
         if (objectConstructors && objectConstructors.length) {
             const newObjects = [];
-            for (const obj of objects) {
+            for (const obj of response.objects) {
                 let object = obj;
                 for (const objectConstructor of objectConstructors) {
                     try {
@@ -177,9 +219,10 @@ export class KIXObjectSocketClient extends SocketClient {
                 newObjects.push(object);
             }
 
-            objects = newObjects;
+            response.objects = newObjects;
         }
-        return objects;
+
+        return response;
     }
 
     public async createObject(
@@ -256,7 +299,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
     private async sendRequest<T extends ISocketResponse>(
         requestObject: ISocketObjectRequest, event: string, finishEvent: string, defaultTimeout?: number,
-        silent?: boolean
+        silent?: boolean, controller?: AbortController
     ): Promise<T> {
         this.checkSocketConnection();
 
@@ -264,6 +307,17 @@ export class KIXObjectSocketClient extends SocketClient {
 
         return new Promise<T>((resolve, reject) => {
             let timeout: any;
+
+            if (controller) {
+                if (controller.signal.aborted) {
+                    reject(new Error('SILENT', ''));
+                }
+                const abortEventListener: any = () => {
+                    controller.signal.removeEventListener('abort', abortEventListener);
+                    reject(new Error('SILENT', ''));
+                };
+                controller.signal.addEventListener('abort', abortEventListener);
+            }
 
             if (defaultTimeout > 0) {
                 timeout = window.setTimeout(() => {
@@ -313,8 +367,11 @@ export class KIXObjectSocketClient extends SocketClient {
             this.socket.on(SocketEvent.PERMISSION_ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestObject.requestId) {
                     window.clearTimeout(timeout);
-                    console.error('No permissions');
-                    console.error(error.error);
+                    if (!silent) {
+                        console.error('No permissions');
+                        console.error(error.error);
+                    }
+
                     const permissionError = error.error as PermissionError;
                     reject(new PermissionError(permissionError, permissionError.resource, permissionError.method));
                 }

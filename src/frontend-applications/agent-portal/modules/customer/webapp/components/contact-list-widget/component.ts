@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -13,16 +13,10 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { OrganisationAdditionalInformationKeys } from '../../core/context/OrganisationContext';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
-import { IdService } from '../../../../../model/IdService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private instanceId: string;
-    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -48,18 +42,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             });
 
-            this.subscriber = {
-                eventSubscriberId: IdService.generateDateBasedId(this.instanceId),
-                eventPublished: (data: any, eventId: string): void => {
-                    if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.CONTACT) {
-                        this.state.prepared = false;
-                    } else if (eventId === ContextUIEvent.RELOAD_OBJECTS_FINISHED && data === KIXObjectType.CONTACT) {
-                        this.state.prepared = true;
-                    }
-                }
-            };
-            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
-            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS_FINISHED, this.subscriber);
         }
 
         this.state.filterActions = await ActionFactory.getInstance().generateActions(
@@ -75,9 +57,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (context) {
             context.unregisterListener('contact-list-widget');
         }
-
-        EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS_FINISHED, this.subscriber);
     }
 
     private async setWidgetDependingMode(): Promise<void> {

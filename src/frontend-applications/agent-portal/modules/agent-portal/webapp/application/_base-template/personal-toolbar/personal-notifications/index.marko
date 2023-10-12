@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -7,9 +7,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.notification-dropdown-container class=state.notificationClass title=state.translations["Translatable#Notifications"]>
-    <div.action-icon><icon icon=state.notificationIcon/></div>
-    <div.action-text>
+<div
+    class=["notification-dropdown-container", state.notificationClass]
+    title=(state.translations["Translatable#Notifications"])
+>
+    <div class="action-icon">
+        <icon icon=state.notificationIcon/>
+    </div>
+    <div class="action-text">
         <if(state.isMobile)>
             ${state.translations["Translatable#Notifications"] +
             " (" +
@@ -17,33 +22,59 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             ")"}
         </if>
         <else>${state.notificationsCount}</else>
-    </div> 
-    <div.notification-group-list>
+    </div>
+
+    <div class="notification-group-list">
         <for|group| of=state.notifications>
-            <div.notification-group>
-                <div.notification-group-title>
-                    <span>${group[0]} (${group[1].length})</span>
+            <div class="notification-group">
+                <div class="notification-group-title">
+                    <span>
+                        <translation-string pattern=group[0]/>
+                         (${group[1].length})
+                    </span>
                     <if(component.isGroupRemovable(group[0]))>
-                        <div.notification-group-remove on-click("removeGroup", group[0])><span.kix-icon-close/></div>
+                        <div
+                            on-click("removeGroup", group[0])
+                            class="notification-group-remove"
+                        >
+                            <span class="kix-icon-close"/>
+                        </div>
                     </if>
-                    </div>
+                </div>
                 <ul>
                     <for|notification| of=group[1]>
                         <li
                             on-click("notificationClicked", notification)
                             class={
-                                "notification-advise": notification.type === "advise",
-                                "notification-info": notification.type === "info",
-                                "notification-warning": notification.type === "warning",
-                                "notification-important": notification.type === "important",
+                                "notification-advise":
+                                    notification.type === "advise",
+                                "notification-info":
+                                    notification.type === "info",
+                                "notification-warning":
+                                    notification.type === "warning",
+                                "notification-important":
+                                    notification.type === "important",
                             }
                         >
-                            <div.notification-icon><icon icon=notification.icon/></div>
-                            <div.notification-date>${component.getCreateTime(notification)}</div>
-                            <div.notification-title>${notification.title}</div>
-                            <div.notification-teaser>${notification.teaserText}</div>
+                            <div class="notification-icon">
+                                <icon icon=notification.icon/>
+                            </div>
+                            <div class="notification-date">
+                                ${component.getCreateTime(notification)}
+                            </div>
+                            <div class="notification-title">
+                                ${notification.title}
+                            </div>
+                            <div class="notification-teaser">
+                                ${notification.teaserText}
+                            </div>
                             <if(notification.isLocal)>
-                                <div.notification-remove on-click("removeNotification", notification)><span.kix-icon-close/></div>
+                                <div
+                                    on-click("removeNotification", notification)
+                                    class="notification-remove"
+                                >
+                                    <span class="kix-icon-close"/>
+                                </div>
                             </if>
                         </li>
                     </for>

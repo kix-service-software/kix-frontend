@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,6 +15,7 @@ import { ClientStorageService } from '../../../../../base-components/webapp/core
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { TimeoutTimer } from '../../../../../base-components/webapp/core/TimeoutTimer';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
+import { AgentService } from '../../../../../user/webapp/core/AgentService';
 import { Article } from '../../../../model/Article';
 import { ComponentState } from './ComponentState';
 
@@ -112,6 +113,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.filterCustomer = !this.state.filterCustomer;
         } else if (type === 'unread') {
             this.state.filterUnread = !this.state.filterUnread;
+        } else if (type === 'myArticles') {
+            this.state.filterMyArticles = !this.state.filterMyArticles;
         }
         this.filter();
     }
@@ -146,13 +149,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             isFiltered = true;
         }
 
+        if (this.state.filterMyArticles) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            articles = articles.filter((a) => a.CreatedBy === currentUser.UserID);
+            isFiltered = true;
+        }
+
         if (this.state.filterValue && this.state.filterValue !== '') {
             articles = articles.filter((a) => {
-                return a.Body.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.Subject.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.To.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.Cc.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.From.match(new RegExp(this.state.filterValue, 'ig'));
+                const body = a.Body?.replace(/(?:\r\n|\r|\n)/g, ' ').trim().replace(/\s\s+/g, ' ');
+                return body?.match(new RegExp(this.state.filterValue, 'ig')) ||
+                    a.Subject?.match(new RegExp(this.state.filterValue, 'ig')) ||
+                    a.To?.match(new RegExp(this.state.filterValue, 'ig')) ||
+                    a.Cc?.match(new RegExp(this.state.filterValue, 'ig')) ||
+                    a.From?.match(new RegExp(this.state.filterValue, 'ig'));
             });
             isFiltered = true;
         }

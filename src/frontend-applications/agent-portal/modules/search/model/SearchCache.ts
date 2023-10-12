@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -31,7 +31,7 @@ export class SearchCache<T extends KIXObject = KIXObject> {
         public name: string = '',
         public limit: number = 50,
         public sortAttribute: string = null,
-        public sortDescanding: boolean = false
+        public sortDescending: boolean = false
     ) {
         if (!id) {
             this.id = IdService.generateDateBasedId('SearchCache');
@@ -51,14 +51,14 @@ export class SearchCache<T extends KIXObject = KIXObject> {
         this.limit = this.originalLimit;
         this.name = '';
         this.sortAttribute = null;
-        this.sortDescanding = false;
+        this.sortDescending = false;
     }
 
     public static create(searchCache: SearchCache): SearchCache {
         return new SearchCache(
             searchCache.id, searchCache.contextId,
             searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, searchCache.primaryValue,
-            searchCache.name, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescanding
+            searchCache.name, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescending
         );
     }
 

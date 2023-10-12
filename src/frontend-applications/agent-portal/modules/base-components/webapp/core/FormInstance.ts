@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -327,6 +327,27 @@ export class FormInstance {
         return null;
     }
 
+    public async addNewFieldsAfterField(
+        newFormFields: FormFieldConfiguration[], afterField: FormFieldConfiguration
+    ): Promise<void> {
+        if (Array.isArray(newFormFields) && afterField) {
+            const fields: FormFieldConfiguration[] = this.getFields(afterField);
+            if (Array.isArray(fields)) {
+                let index = fields.findIndex((c) => c.instanceId === afterField.instanceId);
+
+                newFormFields.forEach((c) => {
+                    index++;
+                    fields.splice(index, 0, c);
+                });
+                this.setDefaultValueAndParent(newFormFields, afterField.parent);
+
+                EventService.getInstance().publish(
+                    FormEvent.FIELD_CHILDREN_ADDED, { formInstance: this, parent: afterField.parent }
+                );
+            }
+        }
+    }
+
     public async addFieldChildren(
         parent: FormFieldConfiguration, children: FormFieldConfiguration[], clearChildren: boolean = false,
         asFirst?: boolean
@@ -597,13 +618,21 @@ export class FormInstance {
     }
 
     public async validateForm(): Promise<ValidationResult[]> {
-        let result = [];
+        const result = [];
 
         if (this.form.validation) {
             for (const p of this.form.pages) {
                 for (const g of p.groups) {
                     const groupResult = await this.validateFields(g.formFields);
-                    result = [...result, ...groupResult];
+                    result.push(...groupResult);
+                }
+            }
+
+            const context = ContextService.getInstance().getActiveContext();
+            if (context) {
+                const dynamicFormResults = context.getAdditionalInformation('DynamicFormValidationResults');
+                if (dynamicFormResults?.length) {
+                    result.push(...dynamicFormResults);
                 }
             }
 

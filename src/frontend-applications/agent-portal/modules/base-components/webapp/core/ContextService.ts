@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -32,6 +32,7 @@ import { AdditionalContextInformation } from './AdditionalContextInformation';
 import { ApplicationEvent } from './ApplicationEvent';
 import { KIXModulesService } from './KIXModulesService';
 import { ToolbarAction } from '../../../agent-portal/webapp/application/_base-template/personal-toolbar/ToolbarAction';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 
 export class ContextService {
 
@@ -87,9 +88,10 @@ export class ContextService {
         }
     }
 
-    public getContextDescriptors(contextMode: ContextMode): ContextDescriptor[] {
+    public getContextDescriptors(contextMode: ContextMode, objectType?: KIXObjectType | string): ContextDescriptor[] {
         return this.contextDescriptorList
             .filter((cd) => cd.contextMode === contextMode)
+            .filter((cd) => !objectType ? true : cd.kixObjectTypes.some((ot) => ot === objectType))
             .sort((a, b) => a.priority - b.priority);
     }
 
@@ -117,7 +119,7 @@ export class ContextService {
         if (!context || allowMultiple) {
             context = await this.createContextInstance(
                 contextId, objectId, undefined, urlParams, additionalInformation
-            );
+            ).catch((): Context => null);
 
             if (this.isStorableDialogContext(context)) {
                 await this.updateStorage(context?.instanceId);
@@ -165,7 +167,8 @@ export class ContextService {
             (c) => c.instanceId === instanceId || c.equals(contextId, objectId)
         );
         if (!context) {
-            context = await this.createContextInstance(contextId, objectId, instanceId, null, null, contextPreference);
+            context = await this.createContextInstance(
+                contextId, objectId, instanceId, null, null, contextPreference).catch((): Context => null);
         }
 
         return context;
@@ -200,25 +203,27 @@ export class ContextService {
                     }
                     const context = this.contextInstances.splice(index, 1)[0];
 
-                    const iter = this.serviceListener.values();
-                    let entry = iter.next();
-                    while (entry.value) {
-                        const listener = entry.value as IContextServiceListener;
-                        await listener.beforeDestroy(context);
-                        entry = iter.next();
-                    }
+                    if (context) {
+                        const iter = this.serviceListener.values();
+                        let entry = iter.next();
+                        while (entry.value) {
+                            const listener = entry.value as IContextServiceListener;
+                            await listener.beforeDestroy(context);
+                            entry = iter.next();
+                        }
 
-                    for (const extension of context?.contextExtensions) {
-                        await extension?.destroy(context);
-                    }
+                        for (const extension of context?.contextExtensions) {
+                            await extension?.destroy(context);
+                        }
 
-                    await context.destroy();
-                    EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context);
+                        await context?.destroy();
+                        EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context);
+                    }
 
                     this.activeContextIndex--;
 
                     if (switchToTarget) {
-                        this.switchToTargetContext(
+                        await this.switchToTargetContext(
                             sourceContext, targetContextId, targetObjectId, useSourceContext
                         );
                     }
@@ -235,7 +240,7 @@ export class ContextService {
         for (const c of [...this.contextInstances]) {
             await this.removeContext(c.instanceId, null, null, false, silent);
         }
-        this.switchToTargetContext(null, this.DEFAULT_FALLBACK_CONTEXT);
+        await this.switchToTargetContext(null, this.DEFAULT_FALLBACK_CONTEXT);
     }
 
     public checkDialogConfirmation(contextInstanceId: string, silent?: boolean): Promise<boolean> {
@@ -271,20 +276,20 @@ export class ContextService {
         return canRemove;
     }
 
-    private switchToTargetContext(
+    private async switchToTargetContext(
         sourceContext: any, targetContextId?: string, targetObjectId?: string | number, useSourceContext?: boolean
-    ): void {
+    ): Promise<void> {
         const context = this.contextInstances.find((c) => c.instanceId === sourceContext?.instanceId);
         if (!useSourceContext && targetContextId) {
-            this.setActiveContext(targetContextId, targetObjectId);
+            await this.setActiveContext(targetContextId, targetObjectId);
         } else if (context) {
-            this.setContextByInstanceId(sourceContext.instanceId);
+            await this.setContextByInstanceId(sourceContext.instanceId);
         } else if (this.contextInstances.length > 0) {
-            this.setContextByInstanceId(
+            await this.setContextByInstanceId(
                 this.contextInstances[this.contextInstances.length - 1].instanceId
             );
         } else {
-            this.setActiveContext(this.DEFAULT_FALLBACK_CONTEXT);
+            await this.setActiveContext(this.DEFAULT_FALLBACK_CONTEXT);
         }
     }
 
@@ -470,45 +475,24 @@ export class ContextService {
     ): Promise<Context> {
         objectId = objectId?.toString();
         const promiseKey = JSON.stringify({ contextId, objectId });
+
         if (!this.contextCreatePromises.has(promiseKey)) {
             this.contextCreatePromises.set(
-                promiseKey, this.createPromise(contextId, objectId, instanceId)
+                promiseKey, this.createPromise(
+                    promiseKey, contextId, objectId, instanceId,
+                    urlParams, additionalInformation, contextPreference
+                )
             );
         }
 
-        const contextPromise = this.contextCreatePromises.get(promiseKey);
-        const newContext = await contextPromise.catch((): Context => null);
-
-        this.contextCreatePromises.delete(promiseKey);
-
-        if (newContext) {
-            const index = this.activeContextIndex >= 0
-                ? this.activeContextIndex
-                : this.contextInstances.length - 1;
-            this.contextInstances.splice(index + 1, 0, newContext);
-
-            // TODO: create tests for: additional infos and preferences known prior or in init
-            // add information prior init, some extensions may need them in init
-            if (additionalInformation) {
-                additionalInformation.forEach((ai) => newContext.setAdditionalInformation(ai[0], ai[1]));
-            }
-            if (contextPreference) {
-                await newContext.getStorageManager()?.loadStoredValues(contextPreference);
-            }
-
-            await newContext.initContext(urlParams).catch((e) => {
-                console.error(e);
-                this.removeContext(instanceId);
-            });
-
-            EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, newContext);
-        }
-
-        return newContext;
+        return this.contextCreatePromises.get(promiseKey);
     }
 
     private createPromise(
-        contextId: string, objectId?: string | number, instanceId?: string
+        promiseKey: string, contextId: string, objectId?: string | number, instanceId?: string,
+        urlParams?: URLSearchParams,
+        additionalInformation: Array<[string, any]> = [],
+        contextPreference?: ContextPreference
     ): Promise<Context> {
         return new Promise<Context>(async (resolve, reject) => {
             const descriptor = this.contextDescriptorList.find((cd) => cd.contextId === contextId);
@@ -535,10 +519,28 @@ export class ContextService {
                                 instanceId: previousContext.instanceId
                             });
                         }
+                        if (additionalInformation) {
+                            additionalInformation.forEach((ai) => context.setAdditionalInformation(ai[0], ai[1]));
+                        }
+                        if (contextPreference) {
+                            await context.getStorageManager()?.loadStoredValues(contextPreference);
+                        }
+
+                        await context.initContext(urlParams).catch((e) => {
+                            console.error(e);
+                            this.removeContext(instanceId);
+                        });
+
+
+                        const index = this.activeContextIndex >= 0
+                            ? this.activeContextIndex
+                            : this.contextInstances.length - 1;
+                        this.contextInstances.splice(index + 1, 0, context);
+                        EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, context);
                     }
                 }
             }
-
+            this.contextCreatePromises.delete(promiseKey);
             resolve(context);
         });
     }
@@ -630,7 +632,8 @@ export class ContextService {
                         return null;
                     });
 
-                if (preference) {
+                const hasContext = this.storedContexts?.some((c) => c.instanceId === context.instanceId);
+                if (preference && !hasContext) {
                     this.storedContexts.push(preference);
                     stored = true;
                 }
@@ -691,6 +694,8 @@ export class ContextService {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
             const contextId = context.descriptor.contextId;
+
+            TableFactoryService.getInstance().deleteContextTables(context?.contextId);
 
             const currentUser = await AgentService.getInstance().getCurrentUser();
             const preference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');

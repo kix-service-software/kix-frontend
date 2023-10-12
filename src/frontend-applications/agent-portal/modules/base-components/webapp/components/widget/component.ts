@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,20 +7,19 @@
  * --
  */
 
-import { ComponentState } from './ComponentState';
-import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
-import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { Context } from '../../../../../model/Context';
+import { IdService } from '../../../../../model/IdService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
+import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { BrowserUtil } from '../../core/BrowserUtil';
 import { ClientStorageService } from '../../core/ClientStorageService';
 import { TabContainerEvent } from '../../core/TabContainerEvent';
 import { TabContainerEventData } from '../../core/TabContainerEventData';
-import { BrowserUtil } from '../../core/BrowserUtil';
-import { PlaceholderService } from '../../core/PlaceholderService';
-import { Context } from '../../../../../model/Context';
+import { ComponentState } from './ComponentState';
 
 class WidgetComponent implements IEventSubscriber {
 
@@ -52,13 +51,7 @@ class WidgetComponent implements IEventSubscriber {
     }
 
     private async setTitle(title: string): Promise<void> {
-        const translatedTitle = await TranslationService.translate(title);
-        const object = await this.context?.getObject();
-        const titleWithPlaceholder = await PlaceholderService.getInstance().replacePlaceholders(
-            translatedTitle, object
-        );
-
-        this.state.title = titleWithPlaceholder || translatedTitle;
+        this.state.title = await TranslationService.translate(title);
     }
 
     public async onMount(): Promise<void> {
@@ -95,19 +88,20 @@ class WidgetComponent implements IEventSubscriber {
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TITLE, this);
     }
 
-    public minimizeWidget(force: boolean = false, event: any): void {
-        if (event && event.preventDefault) {
+    public async minimizeWidget(force: boolean = false, event: any): Promise<void> {
+        if (event) {
+            event.stopPropagation();
             event.preventDefault();
         }
 
-        if (this.state.minimizable) {
+        if (this.state.minimizable && (!await BrowserUtil.isTextSelected() || !event)) {
             if (
                 force
                 || (
-                    (event.target.tagName === 'DIV'
+                    (event?.target.tagName === 'DIV'
                         || event.target.tagName === 'SPAN'
                         || event.target.tagName === 'UL')
-                    && (event.target.classList.contains('widget-header')
+                    && (event?.target.classList.contains('widget-header')
                         || event.target.classList.contains('header-left')
                         || event.target.classList.contains('header-right')
                         || event.target.classList.contains('tab-list'))
@@ -225,10 +219,8 @@ class WidgetComponent implements IEventSubscriber {
     }
 
     public getWidgetTypeActionDisplaySetting(): boolean {
-        return (
-            this.state.widgetType === WidgetType.SIDEBAR
-            || this.state.widgetType === WidgetType.OVERLAY
-        ) ? false : true;
+        return (!(this.state.widgetType === WidgetType.SIDEBAR
+            || this.state.widgetType === WidgetType.OVERLAY));
     }
 
     public isSidebarWidget(): boolean {

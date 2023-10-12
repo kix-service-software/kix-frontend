@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,37 +7,35 @@
  * --
  */
 
-import { IPlaceholderHandler } from '../../../base-components/webapp/core/IPlaceholderHandler';
-import { Ticket } from '../../model/Ticket';
-import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
-import { SortUtil } from '../../../../model/SortUtil';
-import { ArticleProperty } from '../../model/ArticleProperty';
 import { DataType } from '../../../../model/DataType';
-import { SortOrder } from '../../../../model/SortOrder';
-import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
-import { QueuePlaceholderHandler } from './QueuePlaceholderHandler';
-import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
-import { User } from '../../../user/model/User';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { UserPlaceholderHandler } from '../../../user/webapp/core/UserPlaceholderHandler';
-import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { TicketProperty } from '../../model/TicketProperty';
-import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
-import { OrganisationPlaceholderHandler } from '../../../customer/webapp/core/OrganisationPlaceholderHandler';
-import { ContactPlaceholderHandler } from '../../../customer/webapp/core/ContactPlaceholderHandler';
-import {
-    DynamicFieldValuePlaceholderHandler
-} from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { SortOrder } from '../../../../model/SortOrder';
+import { SortUtil } from '../../../../model/SortUtil';
 import { AbstractPlaceholderHandler } from '../../../../modules/base-components/webapp/core/AbstractPlaceholderHandler';
-import { Article } from '../../model/Article';
-import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { IPlaceholderHandler } from '../../../base-components/webapp/core/IPlaceholderHandler';
 import { Contact } from '../../../customer/model/Contact';
 import { Organisation } from '../../../customer/model/Organisation';
+import { ContactPlaceholderHandler } from '../../../customer/webapp/core/ContactPlaceholderHandler';
+import { OrganisationPlaceholderHandler } from '../../../customer/webapp/core/OrganisationPlaceholderHandler';
+import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import { User } from '../../../user/model/User';
 import { UserProperty } from '../../../user/model/UserProperty';
+import { UserPlaceholderHandler } from '../../../user/webapp/core/UserPlaceholderHandler';
+import { Article } from '../../model/Article';
+import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
+import { ArticleProperty } from '../../model/ArticleProperty';
+import { Ticket } from '../../model/Ticket';
+import { TicketProperty } from '../../model/TicketProperty';
+import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
+import { QueuePlaceholderHandler } from './QueuePlaceholderHandler';
 
 export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -83,148 +81,207 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         this.extendedPlaceholderHandler.push(handler);
     }
 
-    public async replace(placeholder: string, ticket?: Ticket, language?: string): Promise<string> {
+    public async replace(
+        placeholder: string, ticket?: Ticket, language?: string, forRichtext?: boolean
+    ): Promise<string> {
         let result = '';
         const objectString = PlaceholderService.getInstance().getObjectString(placeholder);
-        if (!ticket) {
-            ticket = await this.getTicket();
-        }
-        if (ticket && this.isHandlerFor(objectString)) {
-            const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
-            if (attribute) {
-                switch (objectString) {
-                    case 'TICKET':
-                        result = await this.getTicketValue(attribute, ticket, language, placeholder);
-                        break;
-                    case 'FIRST':
-                    case 'LAST':
-                        const flArticles = await this.getArticles(ticket);
-                        if (flArticles && !!flArticles.length) {
-                            const article = SortUtil.sortObjects(
-                                flArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER,
-                                objectString === 'FIRST' ? SortOrder.UP : SortOrder.DOWN
-                            )[0];
-                            if (article) {
-                                result = await ArticlePlaceholderHandler.getInstance().replace(
-                                    placeholder, article, language
-                                );
-                            }
-                        }
-                        break;
-                    case 'CUSTOMER':
-                    case 'AGENT':
-                        const caArticles = await this.getArticles(ticket);
-                        if (caArticles && !!caArticles.length) {
-                            const relevantArticles = caArticles.filter(
-                                (a) => a.SenderType === (objectString === 'AGENT' ? 'agent' : 'external')
+        if (this.isHandlerFor(objectString)) {
+            if (!ticket) {
+                ticket = await this.getTicket();
+            }
+            if (ticket) {
+                const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
+                if (attribute) {
+                    switch (objectString) {
+                        case 'TICKET':
+                            result = await this.handleTicket(attribute, ticket, language, placeholder);
+                            break;
+                        case 'FIRST':
+                        case 'LAST':
+                            result = await this.handleFLArticle(
+                                ticket, objectString, result, placeholder, language, forRichtext
                             );
-                            const lastArticle = SortUtil.sortObjects(
-                                relevantArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER, SortOrder.DOWN
-                            )[0];
-                            if (lastArticle) {
-                                result = await ArticlePlaceholderHandler.getInstance().replace(
-                                    placeholder, lastArticle, language
-                                );
-                            }
-                        }
-                        break;
-                    case 'ARTICLE':
-                        const dialogContext = ContextService.getInstance().getActiveContext();
-                        if (dialogContext) {
-                            const articleId = dialogContext.getAdditionalInformation(
-                                ArticleProperty.REFERENCED_ARTICLE_ID
+                            break;
+                        case 'CUSTOMER':
+                        case 'AGENT':
+                            result = await this.handleCAArticle(
+                                ticket, objectString, result, placeholder, language, forRichtext
                             );
-                            if (articleId) {
-                                let referencedArticle;
-                                const articles = await this.getArticles(ticket, Number(articleId));
-                                if (articles && articles.length) {
-                                    referencedArticle = articles[0];
-                                }
-                                if (referencedArticle) {
-                                    result = await ArticlePlaceholderHandler.getInstance().replace(
-                                        placeholder, referencedArticle, language
-                                    );
-                                }
+                            break;
+                        case 'ARTICLE':
+                            result = await this.handleArticle(ticket, result, placeholder, language, forRichtext);
+                            break;
+                        case 'OWNER':
+                        case 'TICKETOWNER':
+                            result = await this.handleOwner(ticket, result, placeholder, language, forRichtext);
+                            break;
+                        case 'RESPONSIBLE':
+                        case 'TICKETRESPONSIBLE':
+                            result = await this.handleResponsible(ticket, result, placeholder, language, forRichtext);
+                            break;
+                        case 'CONTACT':
+                            result = await this.handleContact(ticket, result, placeholder, language, forRichtext);
+                            break;
+                        case 'ORG':
+                            result = await this.handleOrganisation(ticket, result, placeholder, language);
+                            break;
+                        case 'QUEUE':
+                            if (ticket.QueueID) {
+                                result = await QueuePlaceholderHandler.prototype.replace(placeholder, ticket, language);
                             }
-                        }
-                        break;
-                    case 'OWNER':
-                    case 'TICKETOWNER':
-                        if (ticket.OwnerID && !isNaN(Number(ticket.OwnerID))) {
-                            const loadingOptions = new KIXObjectLoadingOptions(
-                                null, null, null,
-                                ['Preferences', UserProperty.CONTACT],
-                                ['Preferences', UserProperty.CONTACT]
-                            );
-                            const users = await KIXObjectService.loadObjects<User>(
-                                KIXObjectType.USER, [ticket.OwnerID], loadingOptions, null, true, true, true
-                            ).catch((error) => [] as User[]);
-                            if (users && !!users.length) {
-                                result = await UserPlaceholderHandler.prototype.replace(
-                                    placeholder, users[0], language
-                                );
-                            }
-                        }
-                        break;
-                    case 'RESPONSIBLE':
-                    case 'TICKETRESPONSIBLE':
-                        if (ticket.ResponsibleID && !isNaN(Number(ticket.ResponsibleID))) {
-                            const loadingOptions = new KIXObjectLoadingOptions(
-                                null, null, null, null, ['Preferences']
-                            );
-                            const users = await KIXObjectService.loadObjects<User>(
-                                KIXObjectType.USER, [ticket.ResponsibleID], loadingOptions, null, true, true, true
-                            ).catch((error) => [] as User[]);
-                            if (users && !!users.length) {
-                                result = await UserPlaceholderHandler.prototype.replace(
-                                    placeholder, users[0], language
-                                );
-                            }
-                        }
-                        break;
-                    case 'CONTACT':
-                        let contact: Contact;
-                        if (ticket.ContactID && !isNaN(Number(ticket.ContactID))) {
-                            const contacts = await KIXObjectService.loadObjects(
-                                KIXObjectType.CONTACT, [ticket.ContactID], null, null, true
-                            ).catch((error) => []);
-                            if (contacts && !!contacts.length) {
-                                contact = contacts[0];
-                            }
-                        } else if (ticket instanceof Contact) {
-                            contact = ticket;
-                        }
-                        if (contact) {
-                            result = await ContactPlaceholderHandler.prototype.replace(
-                                placeholder, contact, language
-                            );
-                        }
-                        break;
-                    case 'ORG':
-                        let organisation: Organisation;
-                        if (ticket.OrganisationID && !isNaN(Number(ticket.OrganisationID))) {
-                            const organisations = await KIXObjectService.loadObjects(
-                                KIXObjectType.ORGANISATION, [ticket.OrganisationID], null, null, true
-                            ).catch((error) => []);
-                            if (organisations && !!organisations.length) {
-                                organisation = organisations[0];
-                            }
-                        } else if (ticket instanceof Organisation) {
-                            organisation = ticket;
-                        }
-                        if (organisation) {
-                            result = await OrganisationPlaceholderHandler.prototype.replace(
-                                placeholder, organisation, language
-                            );
-                        }
-                        break;
-                    case 'QUEUE':
-                        if (ticket.QueueID) {
-                            result = await QueuePlaceholderHandler.prototype.replace(placeholder, ticket, language);
-                        }
-                        break;
-                    default:
+                            break;
+                        default:
+                    }
                 }
+            }
+        }
+        return result;
+    }
+
+    private async handleOrganisation(
+        ticket: Ticket, result: string, placeholder: string, language: string
+    ): Promise<string> {
+        let organisation: Organisation;
+        if (ticket.OrganisationID && !isNaN(Number(ticket.OrganisationID))) {
+            const organisations = await KIXObjectService.loadObjects(
+                KIXObjectType.ORGANISATION, [ticket.OrganisationID], null, null, true
+            ).catch((error) => []);
+            if (organisations && !!organisations.length) {
+                organisation = organisations[0];
+            }
+        } else if (ticket instanceof Organisation) {
+            organisation = ticket;
+        }
+        if (organisation) {
+            result = await OrganisationPlaceholderHandler.prototype.replace(
+                placeholder, organisation, language
+            );
+        }
+        return result;
+    }
+
+    private async handleContact(
+        ticket: Ticket, result: string, placeholder: string, language: string, forRichtext?: boolean
+    ): Promise<string> {
+        let contact: Contact;
+        if (ticket.ContactID && !isNaN(Number(ticket.ContactID))) {
+            const contacts = await KIXObjectService.loadObjects(
+                KIXObjectType.CONTACT, [ticket.ContactID], null, null, true
+            ).catch((error) => []);
+            if (contacts && !!contacts.length) {
+                contact = contacts[0];
+            }
+        } else if (ticket instanceof Contact) {
+            contact = ticket;
+        }
+        if (contact) {
+            result = await ContactPlaceholderHandler.prototype.replace(
+                placeholder, contact, language, forRichtext
+            );
+        }
+        return result;
+    }
+
+    private async handleResponsible(
+        ticket: Ticket, result: string, placeholder: string, language: string, forRichtext?: boolean
+    ): Promise<string> {
+        if (ticket.ResponsibleID && !isNaN(Number(ticket.ResponsibleID))) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, null, ['Preferences']
+            );
+            const users = await KIXObjectService.loadObjects<User>(
+                KIXObjectType.USER, [ticket.ResponsibleID], loadingOptions, null, true, true, true
+            ).catch((error) => [] as User[]);
+            if (users && !!users.length) {
+                result = await UserPlaceholderHandler.prototype.replace(
+                    placeholder, users[0], language, forRichtext
+                );
+            }
+        }
+        return result;
+    }
+
+    private async handleOwner(
+        ticket: Ticket, result: string, placeholder: string, language: string, forRichtext?: boolean
+    ): Promise<string> {
+        if (ticket.OwnerID && !isNaN(Number(ticket.OwnerID))) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null,
+                ['Preferences', UserProperty.CONTACT],
+                ['Preferences', UserProperty.CONTACT]
+            );
+            const users = await KIXObjectService.loadObjects<User>(
+                KIXObjectType.USER, [ticket.OwnerID], loadingOptions, null, true, true, true
+            ).catch((error) => [] as User[]);
+            if (users && !!users.length) {
+                result = await UserPlaceholderHandler.prototype.replace(
+                    placeholder, users[0], language, forRichtext
+                );
+            }
+        }
+        return result;
+    }
+
+    private async handleArticle(
+        ticket: Ticket, result: string, placeholder: string, language: string, forRichtext?: boolean
+    ): Promise<string> {
+        const dialogContext = ContextService.getInstance().getActiveContext();
+        if (dialogContext) {
+            const articleId = dialogContext.getAdditionalInformation(
+                ArticleProperty.REFERENCED_ARTICLE_ID
+            );
+            let referencedArticle;
+            if (articleId) {
+                const articles = await this.getArticles(ticket, Number(articleId));
+                if (articles && articles.length) {
+                    referencedArticle = articles[0];
+                }
+                if (referencedArticle) {
+                    result = await ArticlePlaceholderHandler.getInstance().replace(
+                        placeholder, referencedArticle, language, forRichtext
+                    );
+                }
+            }
+        }
+        return result;
+    }
+
+    private async handleCAArticle(
+        ticket: Ticket, objectString: string, result: string, placeholder: string, language: string,
+        forRichtext?: boolean
+    ): Promise<string> {
+        const caArticles = await this.getArticles(ticket);
+        if (caArticles && !!caArticles.length) {
+            const relevantArticles = caArticles.filter(
+                (a) => a.SenderType === (objectString === 'AGENT' ? 'agent' : 'external')
+            );
+            const lastArticle = SortUtil.sortObjects(
+                relevantArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER, SortOrder.DOWN
+            )[0];
+            if (lastArticle) {
+                result = await ArticlePlaceholderHandler.getInstance().replace(
+                    placeholder, lastArticle, language, forRichtext
+                );
+            }
+        }
+        return result;
+    }
+
+    private async handleFLArticle(
+        ticket: Ticket, objectString: string, result: string, placeholder: string, language: string,
+        forRichtext?: boolean
+    ): Promise<string> {
+        const flArticles = await this.getArticles(ticket);
+        if (flArticles && !!flArticles.length) {
+            const article = SortUtil.sortObjects(
+                flArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER,
+                objectString === 'FIRST' ? SortOrder.UP : SortOrder.DOWN
+            )[0];
+            if (article) {
+                result = await ArticlePlaceholderHandler.getInstance().replace(
+                    placeholder, article, language, forRichtext
+                );
             }
         }
         return result;
@@ -255,32 +312,37 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         return articles;
     }
 
-    private async getTicketValue(
+    private async handleTicket(
         attribute: string, ticket?: Ticket, language?: string, placeholder?: string
     ): Promise<string> {
         let result = '';
-        let normalTicketAttribut: boolean = true;
+        let normalTicketAttribute: boolean = true;
         const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
 
         if (
             PlaceholderService.getInstance().isDynamicFieldAttribute(attribute) && DynamicFieldValuePlaceholderHandler
         ) {
             result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(ticket, optionsString);
-            normalTicketAttribut = false;
+            normalTicketAttribute = false;
         } else if (this.extendedPlaceholderHandler.length && placeholder) {
             const handler = SortUtil.sortObjects(this.extendedPlaceholderHandler, 'handlerId').find(
                 (ph) => ph.isHandlerFor(placeholder)
             );
             if (handler) {
                 result = await handler.replace(placeholder, ticket, language);
-                normalTicketAttribut = false;
+                normalTicketAttribute = false;
             }
         }
 
-        if (normalTicketAttribut && this.isKnownProperty(attribute)) {
+        if (normalTicketAttribute && this.isKnownProperty(attribute)) {
             switch (attribute) {
                 case 'ID':
                     result = ticket[TicketProperty.TICKET_ID] ? ticket[TicketProperty.TICKET_ID].toString() : '';
+                    break;
+                case TicketProperty.AGE:
+                    const createDate = new Date(ticket.Created);
+                    const age = (Date.now() - createDate.getTime()) / 1000;
+                    result = DateTimeUtil.calculateTimeInterval(age);
                     break;
                 case TicketProperty.STATE_ID:
                 case TicketProperty.QUEUE_ID:
@@ -348,28 +410,9 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
     public async getTicket(): Promise<Ticket> {
         const ticket = new Ticket();
-        const dialogContext = ContextService.getInstance().getActiveContext();
-        if (dialogContext) {
-
-            // get object from context (will possibly be the current form object)
-            const contextTicket = await dialogContext.getObject<Ticket>(KIXObjectType.TICKET);
-
-            // include in own object (do not overwrite object from context - pending time unix)
-            this.setObject(ticket, contextTicket);
-
-            this.preparePendingTimeUnix(ticket);
-        }
+        await this.prepareObject(ticket);
+        this.preparePendingTimeUnix(ticket);
         return ticket;
-    }
-
-    private setObject(ticket: Ticket, TicketToAdd: Ticket): void {
-        if (TicketToAdd) {
-            Object.getOwnPropertyNames(TicketToAdd).forEach((property) => {
-                if (typeof TicketToAdd[property] !== 'undefined' && !this.ignoreProperty(property)) {
-                    ticket[property] = TicketToAdd[property];
-                }
-            });
-        }
     }
 
     private preparePendingTimeUnix(ticket: Ticket): void {
@@ -381,7 +424,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         }
     }
 
-    private ignoreProperty(property: string): boolean {
+    protected ignoreProperty(property: string): boolean {
         switch (property) {
             case TicketProperty.UNSEEN:
             case KIXObjectProperty.OBJECT_ID:
@@ -392,7 +435,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             case KIXObjectProperty.CHANGE_TIME:
                 return true;
             default:
-                return false;
+                return super.ignoreProperty(property);
         }
     }
 

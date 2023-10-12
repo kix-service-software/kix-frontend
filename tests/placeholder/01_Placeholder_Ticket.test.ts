@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -169,7 +169,11 @@ describe('Placeholder replacement for ticket', () => {
 
         it('Should replace ticket age placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.AGE}>`, ticket);
-            const age = DateTimeUtil.calculateTimeInterval(Number(ticket.Age));
+
+            const createDate = new Date(ticket.Created);
+            const ticketAge = (Date.now() - createDate.getTime()) / 1000;
+
+            const age = DateTimeUtil.calculateTimeInterval(ticketAge);
             expect(text).equal(age);
         });
 
@@ -301,7 +305,6 @@ class someTestFunctions {
         ticket.OwnerID = 1;
         ticket.TypeID = 1;
         ticket.ResponsibleID = 1;
-        ticket.Age = 123456789;
         ticket.Created = '2019-05-30 08:45:30';
         ticket.CreateBy = 1;
         ticket.Changed = '2019-06-05 10:45:30';
@@ -314,13 +317,13 @@ class someTestFunctions {
         ticket.DynamicFields = [
             new DynamicFieldValue(
                 {
-                    ID: '1', Name: 'TicketTextDF', Label: 'Ticket Text DF',
+                    ID: 1, Name: 'TicketTextDF', Label: 'Ticket Text DF',
                     Value: ['Test Text', 'Test Text 2'], DisplayValue: 'Test Text, Test Text 2'
                 } as DynamicFieldValue
             ),
             new DynamicFieldValue(
                 {
-                    ID: '1', Name: 'TicketSelectionDF', Label: 'Ticket Selection DF',
+                    ID: 1, Name: 'TicketSelectionDF', Label: 'Ticket Selection DF',
                     Value: ['1', '3', '5'], DisplayValue: 'One, Three, Five'
                 } as DynamicFieldValue
             ),

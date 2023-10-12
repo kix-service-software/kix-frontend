@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -33,9 +33,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         let icons: Array<string | ObjectIcon> = [];
         const value = cell.getValue();
         if (value) {
-            if (Array.isArray(value.displayValue)) {
-                values = value.displayValue.split(',').map((v) => v.trim());
-            } else if (typeof value.displayValue === 'string') {
+            if (Array.isArray(value.displayValueList)) {
+                values = value.displayValueList.map((v) => v.trim());
+            } else if (Array.isArray(value.displayValue)) {
+                values = value.displayValue.map((v) => v.trim());
+            } else if (typeof value.displayValue === 'string') { // also empty string
                 values = value.displayValue ? value.displayValue.split(',').map((v) => v.trim()) : [];
             } else if (typeof value.objectValue !== 'undefined' && value.objectValue !== null) {
                 values = Array.isArray(value.objectValue) ? value.objectValue : [value.objectValue];
@@ -47,7 +49,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         values = values.map((v, index) => new Label(
             null, v,
             icons[index] ? icons[index] : null,
-            v, null, v, false
+            v, null, v, false,
+            undefined, undefined,
+            value.displayClasses ? value.displayClasses[index] : null
         ));
         if (sort) {
             values = SortUtil.sortObjects(values, 'text', DataType.STRING);

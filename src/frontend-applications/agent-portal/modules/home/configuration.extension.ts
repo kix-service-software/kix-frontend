@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -28,7 +28,6 @@ import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
-import { SortOrder } from '../../model/SortOrder';
 import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../model/DataType';
 import { ToggleOptions } from '../table/model/ToggleOptions';
@@ -39,6 +38,7 @@ import { ConfigurationService } from '../../../../server/services/ConfigurationS
 import { ReportingAPIService } from '../reporting/server/ReportingService';
 import { ReportDefinition } from '../reporting/model/ReportDefinition';
 import { ReportDefinitionProperty } from '../reporting/model/ReportDefinitionProperty';
+import { ObjectResponse } from '../../server/services/ObjectResponse';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -53,28 +53,32 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
         );
 
+        const openTicketsLoadingOptions = new KIXObjectLoadingOptions();
+        openTicketsLoadingOptions.filter = [
+            new FilterCriteria(
+                TicketProperty.OWNER_ID, SearchOperator.EQUALS,
+                FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
+            ),
+            new FilterCriteria(
+                TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
+                FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
+            ),
+            stateTypeFilterCriteria
+        ];
+        openTicketsLoadingOptions.sortOrder = 'Ticket.CreateTime:datetime';
+        openTicketsLoadingOptions.limit = 10;
+        openTicketsLoadingOptions.searchLimit = 100;
+
         const tableMyOpenTicketsConfiguration = new TableConfiguration(
             'home-dashboard-ticket-table-myOpenTickets', 'Translatable#My Open Tickets Table', ConfigurationType.Table,
-            KIXObjectType.TICKET,
-            new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        TicketProperty.OWNER_ID, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
-                    ),
-                    new FilterCriteria(
-                        TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
-                    ),
-                    stateTypeFilterCriteria
-                ], 'Ticket.-Age:numeric', 100
-            ), null, null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
+            KIXObjectType.TICKET, openTicketsLoadingOptions, null, null, null, true, true,
+            new ToggleOptions('ticket-article-details', 'article', [], true)
         );
         configurations.push(tableMyOpenTicketsConfiguration);
 
         const tableMyOpenTicketsWidgetConfiguration = new TableWidgetConfiguration(
             'home-dashboard-ticket-table-myOpenTickets-widget', 'Translatable#My Open Tickets Table Widget',
-            ConfigurationType.TableWidget, KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.DOWN],
+            ConfigurationType.TableWidget, KIXObjectType.TICKET, null,
             new ConfigurationDefinition('home-dashboard-ticket-table-myOpenTickets', ConfigurationType.Table)
         );
         configurations.push(tableMyOpenTicketsWidgetConfiguration);
@@ -89,17 +93,19 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(myOpenTicketsWidget);
 
+        const newTicketsLoadingOptions = new KIXObjectLoadingOptions();
+        newTicketsLoadingOptions.filter = [
+            new FilterCriteria(
+                TicketProperty.STATE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.OR, 1
+            )
+        ];
+        newTicketsLoadingOptions.sortOrder = 'Ticket.-CreateTime:datetime';
+        newTicketsLoadingOptions.limit = 10;
+        newTicketsLoadingOptions.searchLimit = 100;
+
         const newTicketsTableConfig = new TableConfiguration(
             'home-dashboard-ticket-table-new', 'Translatable#New Tickets Table', ConfigurationType.Table,
-            KIXObjectType.TICKET,
-            new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        TicketProperty.STATE_ID, SearchOperator.EQUALS,
-                        FilterDataType.NUMERIC, FilterType.OR, 1
-                    )
-                ], 'Ticket.-Age:numeric', 100
-            ),
+            KIXObjectType.TICKET, newTicketsLoadingOptions,
             null,
             [
                 new DefaultColumnConfiguration(null, null, null,
@@ -109,7 +115,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
                 ),
                 new DefaultColumnConfiguration(null, null, null,
-                    TicketProperty.TITLE, true, false, true, true, 463, true, true
+                    TicketProperty.TITLE, true, false, true, true, 463, true, true, false, DataType.STRING,
+                    true, null, null, false
                 ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
@@ -131,7 +138,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const newTicketsTableWidget = new TableWidgetConfiguration(
             'home-dashboard-ticket-new-table-widget', 'Translatable#New Tickets Table Widget',
             ConfigurationType.TableWidget,
-            KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.UP],
+            KIXObjectType.TICKET, null,
             new ConfigurationDefinition('home-dashboard-ticket-table-new', ConfigurationType.Table),
             null, null, true
         );
@@ -279,15 +286,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
     private async getReportId(name: string): Promise<number> {
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const reportDefinitions = await ReportingAPIService.getInstance().loadObjects<ReportDefinition>(
+        const objectResponse = await ReportingAPIService.getInstance().loadObjects<ReportDefinition>(
             serverConfig?.BACKEND_API_TOKEN, 'home-configuration', KIXObjectType.REPORT_DEFINITION, null,
             new KIXObjectLoadingOptions([
                 new FilterCriteria(
                     ReportDefinitionProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, name
                 )
             ]), null
-        ).catch((): ReportDefinition[] => []);
+        ).catch(() => new ObjectResponse<ReportDefinition>());
 
+        const reportDefinitions = objectResponse?.objects || [];
         return reportDefinitions?.length ? reportDefinitions[0].ID : null;
     }
 

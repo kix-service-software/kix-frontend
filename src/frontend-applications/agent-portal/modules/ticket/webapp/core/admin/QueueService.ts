@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,9 +17,8 @@ import { QueueProperty } from '../../../model/QueueProperty';
 import { TreeNode, TreeNodeProperty, TreeUtil } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FollowUpType } from '../../../model/FollowUpType';
-import { SortUtil } from '../../../../../model/SortUtil';
-import { DataType } from '../../../../../model/DataType';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { AgentSocketClient } from '../../../../user/webapp/core/AgentSocketClient';
 
 export class QueueService extends KIXObjectService<Queue> {
 
@@ -179,13 +178,26 @@ export class QueueService extends KIXObjectService<Queue> {
         return properties;
     }
 
-    public async getQueuesHierarchy(withData: boolean = true, queues?: Queue[]): Promise<Queue[]> {
+    public async getQueuesHierarchy(
+        withData: boolean = true, queues?: Queue[], permissions: string[] = []
+    ): Promise<Queue[]> {
         let queueTree: Queue[] = [];
         if (!queues) {
             const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.query = [];
             if (withData) {
                 loadingOptions.includes = ['TicketStats'];
-                loadingOptions.query = [['TicketStats.StateType', 'Open']];
+                loadingOptions.query.push(['TicketStats.StateType', 'Open']);
+            }
+
+            if (permissions?.length) {
+                const user = await AgentSocketClient.getInstance().getCurrentUser(false);
+                const requiredPermission = {
+                    Object: KIXObjectType.USER,
+                    ObjectID: user?.UserID,
+                    Permission: permissions.join(',')
+                };
+                loadingOptions.query.push(['requiredPermission', JSON.stringify(requiredPermission)]);
             }
 
             loadingOptions.cacheType = 'QUEUE_HIERARCHY';

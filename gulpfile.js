@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -26,32 +26,37 @@ function cleanUp(cb) {
 }
 
 function licenseHeaderTS() {
+    const year = new Date().getFullYear();
     return gulp.src('src/**/*.ts')
-        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8')))
+        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), { year: year }))
         .pipe(gulp.dest('src/'));
 }
 
 function licenseHeaderMarko() {
+    const year = new Date().getFullYear();
     return gulp.src('src/**/*.marko')
-        .pipe(license(fs.readFileSync('license-html-header.txt', 'utf8')))
+        .pipe(license(fs.readFileSync('license-html-header.txt', 'utf8'), { year: year }))
         .pipe(gulp.dest('src/'));
 }
 
 function licenseHeaderLess() {
+    const year = new Date().getFullYear();
     return gulp.src(['src/**/*.less', '!src/frontend-applications/agent-portal/static/less/default/kix_font.less'])
-        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8')))
+        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), { year: year }))
         .pipe(gulp.dest('src/'));
 }
 
 function licenseHeaderTests() {
+    const year = new Date().getFullYear();
     return gulp.src('tests/**/*.ts')
-        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8')))
+        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), { year: year }))
         .pipe(gulp.dest('tests/'));
 }
 
 function licenseHeaderCucumber() {
+    const year = new Date().getFullYear();
     return gulp.src('features/**/*.feature')
-        .pipe(license(fs.readFileSync('license-feature-header.txt', 'utf8')))
+        .pipe(license(fs.readFileSync('license-feature-header.txt', 'utf8'), { year: year }))
         .pipe(gulp.dest('features/'));
 }
 
@@ -74,13 +79,13 @@ function lint() {
 
 function compileSrc() {
     let config = {};
-    if (process.env.NODE_ENV !== "production") {
-        console.log("Use tsconfig for development.")
+    if (process.env.NODE_ENV !== 'production') {
+        console.log('Use tsconfig for development.');
         config.sourceMap = true;
         config.declaration = true;
     }
 
-    const ts = require("gulp-typescript");
+    const ts = require('gulp-typescript');
     const sourcemaps = require('gulp-sourcemaps');
     const tsProject = ts.createProject('tsconfig.json', config);
     const result = tsProject
@@ -97,7 +102,7 @@ function compileSrc() {
                 return path.relative(path.dirname(sourceFile), file.cwd);
             }
         }))
-        .pipe(gulp.dest("dist"));
+        .pipe(gulp.dest('dist'));
 }
 
 function copyPlugins() {
@@ -152,6 +157,12 @@ function buildAgentPortalApp(cb) {
     cb();
 }
 
+gulp.task('license-headers', (done) => {
+    let tasks = [licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber];
+    gulp.series(tasks)();
+    done();
+});
+
 let build = series(
     cleanUp,
     lint,
@@ -159,7 +170,7 @@ let build = series(
     parallel(copyPlugins, buildAgentPortalApp)
 );
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
     build = series(
         cleanUp,
         parallel(licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber),

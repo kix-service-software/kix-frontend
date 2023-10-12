@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -15,7 +15,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     style={
         height: input.height
     }
-    title=(state.cell.getValue() ? state.cell.getValue().displayValue : "")>
+    title=(state.cell.getValue() ? state.cell.getDisplayValue() : "")>
     <if(state.showIcons && state.cell && state.cell.getValue().displayIcons)>
         <span>
             <for|icon| of=state.cell.getValue().displayIcons>
@@ -24,6 +24,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </span>
     </if>
     <if(state.showText && state.cell.getValue())>
-        <span.text.cell-display-text>${state.cell.getValue().displayValue}</span>
+        <span.text.cell-display-text>${state.cell.getDisplayValue()}</span>
     </if>
 </div>

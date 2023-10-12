@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -13,7 +13,6 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { JobFormService } from '../../core';
 import { Job } from '../../../model/Job';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
@@ -62,35 +61,34 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const job = await context.getObject<Job>();
         const manager = JobFormService.getInstance().getJobFormManager(job.Type);
         if (manager && manager.supportFilter() && this.state.widgetConfiguration) {
-            const title = await TranslationService.translate(this.state.widgetConfiguration.title);
-            let count = 0;
-            for (const f in job.Filter) {
-                if (job.Filter[f] && Array.isArray(job.Filter[f])) {
-                    count += job.Filter[f].length;
-                }
+            this.state.title = this.state.widgetConfiguration.title;
+            if (Array.isArray(job.Filter)) {
+                const tablePromises = [];
+                job.Filter.forEach((orFilter, index) => {
+                    if (typeof orFilter === 'object') {
+                        tablePromises.push(this.prepareTable(job.ID, index));
+                    }
+                });
+                this.state.tables = (await Promise.all(tablePromises)).filter((t) => t);
+                setTimeout(() => this.state.prepared = true, 50);
             }
-            this.state.title = `${title} (${count})`;
-            await this.prepareTable();
-            setTimeout(() => this.state.prepared = true, 50);
         } else {
             this.state.show = false;
         }
     }
 
-    private async prepareTable(): Promise<void> {
+    private async prepareTable(jobId: number, filterIndex: number): Promise<void> {
+        let table;
         if (this.state.widgetConfiguration) {
-            if (!this.state.table) {
-                this.state.table = await TableFactoryService.getInstance().createTable(
-                    'job-assigned-filter', KIXObjectType.JOB_FILTER,
-                    new TableConfiguration(
-                        null, null, null, KIXObjectType.JOB_FILTER, null, null, null, null, null, null, null, null,
-                        TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                    ), null, null, true, false, false, true, true
-                );
-            } else {
-                this.state.table.reload();
-            }
+            table = await TableFactoryService.getInstance().createTable(
+                `job-assigned-filter-${jobId}-${filterIndex}`, KIXObjectType.JOB_FILTER,
+                new TableConfiguration(
+                    null, null, null, KIXObjectType.JOB_FILTER, null, null, null, null, null, null, null, null,
+                    TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ), [filterIndex], null, true, false, false, true, true
+            );
         }
+        return table;
     }
 
 }

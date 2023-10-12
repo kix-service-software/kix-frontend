@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -28,6 +28,7 @@ import { SearchOperator } from '../../search/model/SearchOperator';
 import { FilterType } from '../../../model/FilterType';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { KIXObject } from '../../../model/kix/KIXObject';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class OrganisationAPIService extends KIXObjectAPIService {
 
@@ -67,33 +68,35 @@ export class OrganisationAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType,
         objectIds: string[], loadingOptions: KIXObjectLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse<Organisation>();
 
         if (objectType === KIXObjectType.ORGANISATION) {
 
             const preload = await this.shouldPreload(token, KIXObjectType.CONTACT);
 
             if (loadingOptions || !preload) {
-                objects = await super.load<Organisation>(
+                objectResponse = await super.load<Organisation>(
                     token, KIXObjectType.ORGANISATION, this.RESOURCE_URI,
                     loadingOptions, objectIds, KIXObjectType.ORGANISATION,
                     clientRequestId, Organisation
                 );
             } else {
-                objects = await super.load(
+                objectResponse = await super.load(
                     token, KIXObjectType.ORGANISATION, this.RESOURCE_URI, null, null, KIXObjectType.ORGANISATION,
                     clientRequestId, Organisation
                 );
 
                 if (Array.isArray(objectIds) && objectIds.length) {
-                    objects = objects.filter((o) => objectIds.some((oid) => Number(oid) === o.ID));
+                    objectResponse.objects = objectResponse.objects?.filter(
+                        (o) => objectIds.some((oid) => Number(oid) === o.ID)
+                    );
                 }
             }
         }
 
-        return objects;
+        return objectResponse as any;
     }
 
     public async createObject(

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -121,10 +121,12 @@ export class KIXModuleNamespace extends SocketNameSpace {
                     )
                 ], null, 0);
 
-                const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                     serverConfig.BACKEND_API_TOKEN, 'FormConfiguration', KIXObjectType.SYS_CONFIG_OPTION, null,
                     loadingOptions, null
                 );
+
+                const options = objectResponse?.objects || [];
 
                 const formOptions = options.filter((c) => c.ContextMetadata === 'Form');
 

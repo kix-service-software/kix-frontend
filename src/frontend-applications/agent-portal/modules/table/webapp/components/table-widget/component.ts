@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -33,6 +33,8 @@ import { TableFactoryService } from '../../core/factory/TableFactoryService';
 import { Context } from '../../../../../model/Context';
 import { FormValueProperty } from '../../../../object-forms/model/FormValueProperty';
 import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
+import { ObjectFormEvent } from '../../../../object-forms/model/ObjectFormEvent';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 class Component {
 
@@ -46,6 +48,7 @@ class Component {
     private contextListener: IContextListener;
     private prepareTitleTimeout: any;
     private context: Context;
+    private formBindingIds: Map<string, string>;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -85,56 +88,57 @@ class Component {
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
                 eventPublished: async (data: any, eventId: string): Promise<void> => {
-                    if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === this.state.table?.getObjectType()
-                    ) {
-                        this.state.loading = true;
-                    }
-
                     if (data?.tableId === this.state.table?.getTableId()) {
                         const isdependent = this.state.widgetConfiguration.contextDependent;
                         if (eventId === TableEvent.COLUMN_FILTERED && isdependent) {
                             this.setFilteredObjectListToContext();
-                        } else if (eventId === TableEvent.RELOAD) {
-                            this.state.loading = true;
                         } else if (eventId === TableEvent.RELOADED) {
                             if (settings && settings.resetFilterOnReload) {
                                 const filterComponent = (this as any).getComponent('table-widget-filter');
                                 if (filterComponent) {
                                     filterComponent.reset();
                                 }
-                            } else {
-                                this.state.table.filter();
                             }
 
-                            setTimeout(() => this.state.loading = false, 100);
+                            this.prepareTitle();
                         } else {
-                            if (eventId === TableEvent.TABLE_READY && this.state.table.isFiltered()) {
-                                this.state.filterCount = this.state.table.getRowCount();
-                                this.state.filterValue = this.state.table.getFilterValue();
-                                this.prepareTitle();
+                            if (eventId === TableEvent.TABLE_READY) {
+                                if (this.state.table.isFiltered()) {
+                                    this.state.filterCount = this.state.table.getRowCount();
+                                    this.state.filterValue = this.state.table.getFilterValue();
+                                    this.prepareTitle();
+                                } else {
+                                    this.state.filterCount = null;
+                                }
                             }
                             WidgetService.getInstance().updateActions(this.state.instanceId);
                         }
+                    } else if (
+                        eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED
+                        && this.formBindingIds.size
+                    ) {
+                        this.addFormBindings();
                     }
+
                 }
             };
 
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.RELOADED, this.subscriber);
-            EventService.getInstance().subscribe(TableEvent.RELOAD, this.subscriber);
-            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
 
-            this.prepareHeader();
-            await this.prepareTable();
-            this.prepareActions();
-            this.prepareTitle();
-
+            await this.prepare();
+            this.state.filterValue = this.state.table ? this.state.table.getFilterValue() : null;
             this.prepareContextDependency(settings);
             this.prepareFormDependency();
         }
+    }
+
+    private async prepare(): Promise<void> {
+        this.prepareHeader();
+        await this.prepareTable();
+        this.prepareActions();
+        this.prepareTitle();
     }
 
     private prepareContextDependency(settings: TableWidgetConfiguration): void {
@@ -145,21 +149,16 @@ class Component {
             this.contextListener = {
                 sidebarLeftToggled: (): void => { return; },
                 filteredObjectListChanged: (): void => { return; },
-                objectChanged: (): void => { return; },
-                objectListChanged: (objectType: KIXObjectType | string): void => {
+                objectChanged: async (
+                    objectId: number, object: KIXObject, objectType: KIXObjectType | string
+                ): Promise<void> => {
                     if (objectType === this.objectType) {
-                        const activeContext = ContextService.getInstance().getActiveContext();
-                        if (this.context.instanceId === activeContext.instanceId) {
-                            if (settings?.resetFilterOnReload) {
-                                this.state.table?.resetFilter();
-                                const filterComponent = (this as any).getComponent('table-widget-filter');
-                                filterComponent?.reset();
-                            } else if (this.state.table) {
-                                this.state.filterValue = this.state.table.getFilterValue();
-                            }
-
-                            this.prepareTitle();
-                        }
+                        await this.reloadTable(settings);
+                    }
+                },
+                objectListChanged: async (objectType: KIXObjectType | string): Promise<void> => {
+                    if (objectType === this.objectType) {
+                        await this.reloadTable(settings);
                     }
                 },
                 sidebarRightToggled: (): void => { return; },
@@ -176,24 +175,55 @@ class Component {
         }
     }
 
+    private async reloadTable(settings: TableWidgetConfiguration): Promise<void> {
+        const activeContext = ContextService.getInstance().getActiveContext();
+        if (this.context.instanceId === activeContext.instanceId) {
+            if (this.state.table.isFiltered()) {
+                if (settings?.resetFilterOnReload) {
+                    this.state.table?.resetFilter();
+                    const filterComponent = (this as any).getComponent('table-widget-filter');
+                    filterComponent?.reset();
+                } else if (this.state.table) {
+                    this.state.filterValue = this.state.table.getFilterValue();
+                }
+            }
+
+            await this.prepare();
+        }
+    }
+
     private async prepareFormDependency(): Promise<void> {
         if (this.state.widgetConfiguration.formDependent) {
+            this.formBindingIds = new Map();
+            EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
+            // add bindings if mapper already initialized
+            await this.addFormBindings();
+        }
+    }
 
-            const formHandler = await this.context.getFormManager().getObjectFormHandler();
-            const formDependencyProperties = [...this.state.widgetConfiguration.formDependencyProperties || []];
-            const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
-            const tableConfiguration = settings?.configuration as TableConfiguration;
-            const relevantHandlerIds = this.addAdditionalDependenciesAndGetRelevantHandlerIds(
-                formDependencyProperties, tableConfiguration
-            );
-            if (formDependencyProperties.length) {
-                for (const property of formDependencyProperties) {
-                    const formValue = formHandler?.objectFormValueMapper?.findFormValue(property);
-                    if (formValue) {
-                        formValue?.addPropertyBinding(FormValueProperty.VALUE, (value: ObjectFormValue) => {
-                            this.state.table?.reload(null, null, relevantHandlerIds);
-                        });
+    private async addFormBindings(): Promise<void> {
+        const formHandler = await this.context.getFormManager().getObjectFormHandler();
+        const formDependencyProperties = [...this.state.widgetConfiguration.formDependencyProperties || []];
+        const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
+        const tableConfiguration = settings?.configuration as TableConfiguration;
+        const relevantHandlerIds = this.addAdditionalDependenciesAndGetRelevantHandlerIds(
+            formDependencyProperties, tableConfiguration
+        );
+        if (formDependencyProperties.length) {
+            for (const property of formDependencyProperties) {
+                const formValue = formHandler?.objectFormValueMapper?.findFormValue(property);
+                if (formValue) {
+                    // remove "old" bindings (prevent double entries)
+                    if (this.formBindingIds.has(property)) {
+                        formValue.removePropertyBinding([this.formBindingIds.get(property)]);
                     }
+                    const formBindingId = formValue.addPropertyBinding(
+                        FormValueProperty.VALUE,
+                        (value: ObjectFormValue) => {
+                            this.state.table?.reload(null, null, relevantHandlerIds);
+                        }
+                    );
+                    this.formBindingIds.set(property, formBindingId);
                 }
             }
         }
@@ -232,6 +262,7 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.RELOAD, this.subscriber);
         EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.COLUMN_FILTERED, this.subscriber);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
 
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
@@ -253,9 +284,19 @@ class Component {
         }
 
         this.prepareTitleTimeout = setTimeout(async () => {
-            let count = 0;
-            if (this.state.table) {
-                count = this.state.table.getRowCount(true);
+            let count = this.state.table?.getContentProvider()?.totalCount || 0;
+
+            if (!count) {
+                count = this.state.table?.getRowCount(true);
+            }
+
+            let countString = `${count}`;
+            // TODO: consider frontend filtering?
+            // if current loaded (page) < total, show actually loaded (api-filter/permission) of total
+            const currentLimit = this.state.table?.getContentProvider()?.currentLimit || count;
+            if (currentLimit < count) {
+                const visibleRows = this.state.table?.getRowCount();
+                countString = `${visibleRows}/${count}`;
             }
 
             if (!this.configuredTitle) {
@@ -264,7 +305,7 @@ class Component {
                     title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
                 }
                 title = await TranslationService.translate(title);
-                const countString = count > 0 ? ' (' + count + ')' : '';
+                countString = count > 0 ? ' (' + countString + ')' : '';
                 this.state.title = title + countString;
             }
         }, 200);
@@ -287,9 +328,14 @@ class Component {
                 settings.shortTable, false, !settings.cache
             );
 
+            const tableState = table?.loadTableState();
+
             if (settings.sort) {
-                table?.sort(settings.sort[0], settings.sort[1]);
+                const sortColumnId = tableState?.sortColumnId ?? settings.sort[0];
+                const sortOrder = tableState?.sortOrder ?? settings.sort[1];
+                table?.sort(sortColumnId, sortOrder);
             }
+
             await table?.initialize();
 
             if (table?.getFilterCriteria()) {
@@ -319,8 +365,6 @@ class Component {
             this.state.filterValue = textFilterValue;
             const predefinedCriteria = filter ? filter.criteria : [];
             const newFilter = [...predefinedCriteria, ...this.additionalFilterCriteria];
-
-            await this.state.table.initDisplayRows(true);
 
             this.state.table.setFilter(textFilterValue, newFilter);
             await this.state.table.filter();

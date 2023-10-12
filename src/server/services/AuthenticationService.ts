@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,6 +23,8 @@ import cookie from 'cookie';
 import { Socket } from 'socket.io';
 import { LoggingService } from './LoggingService';
 import { CacheService } from '../../frontend-applications/agent-portal/server/services/cache';
+import { HTTPResponse } from '../../frontend-applications/agent-portal/server/services/HTTPResponse';
+import { IncomingHttpHeaders } from 'node:http';
 
 export class AuthenticationService {
 
@@ -48,8 +50,8 @@ export class AuthenticationService {
         await CacheService.getInstance().set('CALLBACK_TOKEN', backendCallbackToken);
     }
 
-    private createToken(userLogin: string, backendToken: string, remoteAddress: string): string {
-        const token = jwt.sign({ userLogin, remoteAddress, backendToken, created: Date.now() }, this.tokenSecret);
+    private createToken(userLogin: string, backendToken: string): string {
+        const token = jwt.sign({ userLogin, backendToken, created: Date.now() }, this.tokenSecret);
         return token;
     }
 
@@ -67,22 +69,14 @@ export class AuthenticationService {
         return jwt.decode(token, secret);
     }
 
-    public async validateToken(token: string, remoteAddress: string, clientRequestId: string): Promise<boolean> {
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        if (config.CHECK_TOKEN_ORIGIN) {
-            const decodedToken = this.decodeToken(token);
-            if (decodedToken.remoteAddress !== remoteAddress) {
-                return false;
-            }
-        }
-
+    public async validateToken(token: string, clientRequestId: string): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             HttpService.getInstance().get<SessionResponse>(
                 'session', {}, token, clientRequestId, null, false
-            ).then((response: SessionResponse) => {
+            ).then((response: HTTPResponse<SessionResponse>) => {
                 resolve(
-                    typeof response !== 'undefined' && response !== null &&
-                    typeof response.Session !== 'undefined' && response.Session !== null
+                    typeof response?.responseData?.Session !== 'undefined' &&
+                    response?.responseData?.Session !== null
                 );
             }).catch((error) => {
                 resolve(false);
@@ -107,30 +101,29 @@ export class AuthenticationService {
 
     public async isAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
         const token: string = req.cookies.token;
-        if (token) {
-            const remoteAddress = req.headers['x-forwarded-for'] ||
-                req.socket.remoteAddress ||
-                (req.socket ? req.socket.remoteAddress : null);
 
-            this.validateToken(
-                token,
-                Array.isArray(remoteAddress) ? remoteAddress[0] : remoteAddress,
-                'AuthenticationService'
-            ).then((valid) => {
-                if (valid) {
-                    res.cookie('token', token, { httpOnly: true });
-                    next();
-                } else {
-                    res.clearCookie('token');
-                    res.redirect('/auth');
-                }
-            }).catch((error) => {
-                res.clearCookie('token');
-                res.redirect('/auth');
-            });
-        } else {
+        let redirect = true;
+
+        if (token) {
+            const valid = await this.validateToken(token, 'AuthenticationService').catch((error) => false);
+
+            if (valid) {
+                redirect = false;
+                res.cookie('token', token, { httpOnly: true });
+                next();
+            }
+        }
+
+        if (redirect) {
             res.clearCookie('token');
-            res.redirect('/auth');
+
+            let query = '';
+            if (!req.url?.startsWith('auth')) {
+                const url = encodeURIComponent(req.url);
+                query = `?redirectUrl=${url}`;
+            }
+
+            res.redirect(`/auth${query}`);
         }
     }
 
@@ -158,9 +151,8 @@ export class AuthenticationService {
             const token = parsedCookie[`${tokenPrefix}token`];
 
             if (token) {
-                const valid = await this.validateToken(
-                    token, socket.handshake.address, 'AuthenticationService'
-                ).catch(() => next(new SocketAuthenticationError('Error validating token!')));
+                const valid = await this.validateToken(token, 'AuthenticationService')
+                    .catch(() => next(new SocketAuthenticationError('Error validating token!')));
 
                 if (valid) {
                     next();
@@ -179,14 +171,22 @@ export class AuthenticationService {
     }
 
     public async login(
-        user: string, password: string, userType: UserType, negotiateToken: string,
-        clientRequestId: string, remoteAddress: string, fakeLogin?: boolean
+        login: string, password: string, userType: UserType, negotiateToken: string,
+        clientRequestId: string, headers: IncomingHttpHeaders, fakeLogin?: boolean
     ): Promise<string> {
-        const userLogin = new UserLogin(user, password, userType, negotiateToken);
+        const userLogin = new UserLogin(login, password, userType, negotiateToken);
         const response = await HttpService.getInstance().post<LoginResponse>(
-            'auth', userLogin, null, clientRequestId, undefined, false
+            'auth', userLogin, null, clientRequestId, undefined, false, null, headers
         );
-        const token = fakeLogin ? response.Token : this.createToken(user, response.Token, remoteAddress);
+        const token = fakeLogin ? response.Token : this.createToken(login, response.Token);
+
+        const user = await HttpService.getInstance().getUserByToken(token);
+        if (!user?.Contact?.ID) {
+            await this.logout(token);
+            LoggingService.getInstance().error(`No contact available for user ${login}!`);
+            throw new SocketAuthenticationError('No contact available for user!');
+        }
+
         return token;
     }
 

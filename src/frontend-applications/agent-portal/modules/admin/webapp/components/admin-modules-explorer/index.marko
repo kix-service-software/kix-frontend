@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -14,19 +14,23 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             state.widgetConfiguration
                 ? state.widgetConfiguration.title
                 : "Translatable#Administration"
-        )>
+        )
+    >
         <@content>
             <filter
                 on-filter("filter")
                 key="admin-modules-explorer-filter"
-                showFilterCount=false/>
+                filterValue=state.filterValue
+                showFilterCount=false
+            />
             <if(state.nodes && state.prepared)>
                 <tree
                     tree=state.nodes
                     key="admin-modules-tree"
                     activeNode=state.activeNode
                     filterValue=state.filterValue
-                    on-nodeClicked("activeNodeChanged")/>
+                    on-nodeClicked("activeNodeChanged")
+                />
             </if>
         </@content>
     </widget>

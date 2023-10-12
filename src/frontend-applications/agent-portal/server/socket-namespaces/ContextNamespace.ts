@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -39,6 +39,7 @@ import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { PluginService } from '../../../../server/services/PluginService';
 import { IMarkoApplication } from '../extensions/IMarkoApplication';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
+import { ObjectResponse } from '../services/ObjectResponse';
 
 export class ContextNamespace extends SocketNameSpace {
 
@@ -136,11 +137,12 @@ export class ContextNamespace extends SocketNameSpace {
             )
         ], null, 0);
 
-        const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+        const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
             serverConfig.BACKEND_API_TOKEN, 'ContextConfiguration', KIXObjectType.SYS_CONFIG_OPTION, null,
             loadingOptions, null
-        ).catch((): SysConfigOption[] => []);
+        ).catch(() => new ObjectResponse<SysConfigOption>());
 
+        const options = objectResponse?.objects || [];
         const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
 
         LoggingService.getInstance().info(`${application.name}: Build ${contextOptions.length} context configurations.`);
@@ -209,11 +211,11 @@ export class ContextNamespace extends SocketNameSpace {
             )
         ]);
 
-        const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+        const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
             serverConfig.BACKEND_API_TOKEN, 'ContextConfiguration', KIXObjectType.SYS_CONFIG_OPTION, null,
             loadingOptions, null
         );
-
+        const options = objectResponse?.objects || [];
         const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
 
         const cacheType = `${data.application}ContextConfiguration`;

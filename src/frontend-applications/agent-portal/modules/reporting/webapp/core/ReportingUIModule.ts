@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -41,7 +41,7 @@ import { ReportingJobFormManager } from './form/ReportingJobFormManager';
 
 export class UIModule implements IUIModule {
 
-    public priority: number = 900;
+    public priority: number = 50001;
 
     public name: string = 'ReportingUIModule';
 

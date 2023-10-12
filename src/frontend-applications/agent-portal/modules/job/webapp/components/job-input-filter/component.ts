@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,6 +22,9 @@ import { SearchService } from '../../../../search/webapp/core';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TreeService } from '../../../../base-components/webapp/core/tree';
+import { IdService } from '../../../../../model/IdService';
+import { FilterType } from '../../../../../model/FilterType';
+import { FilterDataType } from '../../../../../model/FilterDataType';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -38,7 +41,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.listenerId = 'job-input-filter-manager-listener';
+        this.listenerId = IdService.generateDateBasedId('job-input-filter-manager-listener');
         await this.setManager();
         await super.onMount();
 
@@ -65,7 +68,7 @@ class Component extends FormInputComponent<any, ComponentState> {
 
         const jobFormManager = JobFormService.getInstance().getJobFormManager(type);
 
-        this.state.manager = jobFormManager ? jobFormManager.filterManager : null;
+        this.state.manager = jobFormManager?.getFilterManager() || jobFormManager?.filterManager;
         if (this.state.manager) {
             this.state.manager.init();
             this.state.manager.reset(false);
@@ -78,9 +81,19 @@ class Component extends FormInputComponent<any, ComponentState> {
                     let filterValues: FilterCriteria[] = [];
                     if (await this.state.manager.hasDefinedValues()) {
                         const values = await this.state.manager.getEditableValues();
-                        const searchDefinition =
-                            SearchService.getInstance().getSearchDefinition(this.state.manager.objectType);
-                        filterValues = values.map((v) => searchDefinition.getFilterCriteria(v));
+                        const searchDefinition = SearchService.getInstance().getSearchDefinition(
+                            this.state.manager.objectType
+                        );
+                        if (searchDefinition) {
+                            filterValues = values.map((v) => searchDefinition.getFilterCriteria(v));
+                        } else {
+                            // take it as given (e.g. for type "Reporting")
+                            filterValues = values.map((v) =>
+                                new FilterCriteria(
+                                    v.property, v.operator, FilterDataType.STRING, FilterType.AND, v.value
+                                )
+                            );
+                        }
                     }
                     super.provideValue(filterValues, true);
                 }, 200);
@@ -138,8 +151,7 @@ class Component extends FormInputComponent<any, ComponentState> {
             fromBackend ? criteria.Field : criteria.property,
             fromBackend ? criteria.Operator : criteria.operator,
             fromBackend ? criteria.Value : criteria.value,
-            [], false, true, objectType, null, null,
-            fromBackend ? criteria.Field : criteria.property
+            [], false, true, objectType
         );
         this.state.manager.setValue(filterValue);
     }

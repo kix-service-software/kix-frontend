@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,8 +22,9 @@ import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectSer
 import { TableEvent } from './TableEvent';
 import { TableSortUtil } from '../webapp/core/TableSortUtil';
 import { TableEventData } from './TableEventData';
+import { BindableObject } from '../../../model/BindableObject';
 
-export class Row {
+export class Row extends BindableObject {
 
     private id: string;
     private cells: Cell[] = [];
@@ -36,6 +37,7 @@ export class Row {
     public filterMatch: boolean = true;
 
     public constructor(private table: Table, private rowObject?: RowObject) {
+        super();
         const objectId = rowObject?.getObject()?.ObjectId || IdService.generateDateBasedId();
         this.id = `${table.getTableId()}-row-${objectId}`;
 
@@ -45,18 +47,24 @@ export class Row {
         }
     }
 
+    public static getRowId(tableId: string, objectId: string): string {
+        return `${tableId}-row-${objectId}`;
+    }
+
     private createChildren(children: RowObject[]): void {
         children?.forEach((c) => this.children.push(new Row(this.table, c)));
     }
 
-    public initializeDisplayValues(): void {
+    public async initializeDisplayValues(): Promise<any[]> {
+        const promises = [];
         this.cells.forEach((c) => {
-            c.initDisplayValue();
+            promises.push(c.initDisplayValue());
         });
 
         if (Array.isArray(this.children) && this.children.length) {
-            this.children.forEach((cr) => cr.initializeDisplayValues());
+            this.children.forEach((cr) => promises.push(cr.initializeDisplayValues()));
         }
+        return Promise.all(promises);
     }
 
     public getTable(): Table {
@@ -69,6 +77,11 @@ export class Row {
 
     public getRowObject<T = any>(): RowObject<T> {
         return this.rowObject;
+    }
+
+    public setRowObject<T = any>(rowObject: RowObject): void {
+        this.rowObject = rowObject;
+        this.updateValues();
     }
 
     public getChildren(): Row[] {
@@ -282,13 +295,12 @@ export class Row {
             if (!cell) {
                 this.cells.push(new Cell(this, new TableValue(c.getColumnId(), null)));
             }
-        }
-
-        );
+        });
     }
 
     public setValueState(state: ValueState): void {
         this.getRowObject().setValueState(state);
+        this.cells.forEach((c) => c.getValue().state = state);
         EventService.getInstance().publish(
             TableEvent.ROW_VALUE_STATE_CHANGED, new TableEventData(this.getTable().getTableId(), this.getRowId())
         );

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,13 +7,14 @@
  * --
  */
 
-import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
-import { SysConfigOption } from '../../model/SysConfigOption';
+import { AgentPortalConfiguration } from '../../../../model/configuration/AgentPortalConfiguration';
+import { DisplayValueConfiguration } from '../../../../model/configuration/DisplayValueConfiguration';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
 import { SysConfigKey } from '../../model/SysConfigKey';
+import { SysConfigOption } from '../../model/SysConfigOption';
 import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
-import { AgentPortalConfiguation } from '../../../../model/configuration/AgentPortalConfiguation';
-import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 
 export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
@@ -53,7 +54,7 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
     }
 
-    public async getSysconfigOptionValue<T = string>(key: string): Promise<T> {
+    public async getSysConfigOptionValue<T = string>(key: string): Promise<T> {
         const config: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, [key]
         ).catch((error): SysConfigOption[] => []);
@@ -67,10 +68,10 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         return value;
     }
 
-    public async getAgentPortalConfiguration(): Promise<AgentPortalConfiguation> {
-        let config: AgentPortalConfiguation;
+    public async getPortalConfiguration<T = any>(): Promise<T> {
+        let config: AgentPortalConfiguration;
 
-        const value = await this.getSysconfigOptionValue(AgentPortalConfiguation.CONFIGURATION_ID)
+        const value = await this.getSysConfigOptionValue(AgentPortalConfiguration.CONFIGURATION_ID)
             .catch(() => null);
         if (value) {
             try {
@@ -80,7 +81,36 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
             }
         }
 
+        return config as any;
+    }
+
+    public async getDisplayValueConfiguration(): Promise<DisplayValueConfiguration> {
+        let config: DisplayValueConfiguration;
+
+        const value = await this.getSysConfigOptionValue(KIXModulesService.displayValueConfigurationKey)
+            .catch(() => null);
+        if (value) {
+            try {
+                config = JSON.parse(value);
+            } catch (error) {
+                console.error('Could not parse Display Value Configuration');
+            }
+        }
+
         return config;
+    }
+
+    public async getDisplayValuePattern(objectType: KIXObjectType | string): Promise<string> {
+        let pattern;
+
+        const config = await SysConfigService.getInstance().getDisplayValueConfiguration();
+        if (config) {
+            const displayValue = config.displayValues?.find((dv) => dv.objectType === objectType);
+
+            pattern = displayValue?.pattern;
+        }
+
+        return pattern;
     }
 
 }

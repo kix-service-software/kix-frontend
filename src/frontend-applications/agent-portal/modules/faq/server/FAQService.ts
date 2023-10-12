@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,27 +7,28 @@
  * --
  */
 
-import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
-import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
-import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
-import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
-import { FAQArticleAttachmentLoadingOptions } from '../model/FAQArticleAttachmentLoadingOptions';
-import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
-import { CreateFAQVoteOptions } from '../model/CreateFAQVoteOptions';
-import { Attachment } from '../../../model/kix/Attachment';
-import { LoggingService } from '../../../../../server/services/LoggingService';
-import { FAQArticleProperty } from '../model/FAQArticleProperty';
 import { Error } from '../../../../../server/model/Error';
+import { LoggingService } from '../../../../../server/services/LoggingService';
 import { FilterCriteria } from '../../../model/FilterCriteria';
-import { FAQArticle } from '../model/FAQArticle';
-import { FAQCategory } from '../model/FAQCategory';
-import { SearchOperator } from '../../search/model/SearchOperator';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
-import { SearchProperty } from '../../search/model/SearchProperty';
-import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
+import { Attachment } from '../../../model/kix/Attachment';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { SearchOperator } from '../../search/model/SearchOperator';
+import { SearchProperty } from '../../search/model/SearchProperty';
+import { CreateFAQVoteOptions } from '../model/CreateFAQVoteOptions';
+import { FAQArticle } from '../model/FAQArticle';
+import { FAQArticleAttachmentLoadingOptions } from '../model/FAQArticleAttachmentLoadingOptions';
+import { FAQArticleProperty } from '../model/FAQArticleProperty';
+import { FAQCategory } from '../model/FAQCategory';
 
 
 export class FAQService extends KIXObjectAPIService {
@@ -62,38 +63,39 @@ export class FAQService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
-        let objects = [];
+    ): Promise<ObjectResponse<T>> {
+        let objectResponse = new ObjectResponse();
 
         switch (objectType) {
             case KIXObjectType.FAQ_ARTICLE:
-                objects = await super.load(
+                objectResponse = await super.load(
                     token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'FAQArticle',
                     clientRequestId, FAQArticle
                 );
                 break;
             case KIXObjectType.FAQ_CATEGORY:
                 const categoryUri = this.buildUri('system', 'faq', 'categories');
-                objects = await super.load(
+                objectResponse = await super.load(
                     token, objectType, categoryUri, loadingOptions, objectIds, 'FAQCategory',
                     clientRequestId, FAQCategory
                 );
                 break;
             case KIXObjectType.FAQ_ARTICLE_ATTACHMENT:
-                objects = await this.loadAttachment(
+                const attachment = await this.loadAttachment(
                     token, loadingOptions, (objectLoadingOptions as FAQArticleAttachmentLoadingOptions)
                 );
+                objectResponse = new ObjectResponse(attachment, 1);
                 break;
             case KIXObjectType.FAQ_KEYWORD:
                 const uri = this.buildUri(this.RESOURCE_URI, 'keywords');
-                objects = await super.load<string>(
+                objectResponse = await super.load<string>(
                     token, KIXObjectType.FAQ_KEYWORD, uri, null, null, 'FAQKeyword', clientRequestId
                 );
                 break;
             default:
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public createObject(
@@ -133,10 +135,11 @@ export class FAQService extends KIXObjectAPIService {
     ): Promise<void> {
         const uri = this.buildUri(this.RESOURCE_URI, objectId, 'attachments');
 
-        const existingAttachments = await super.load<Attachment>(
+        const objectResponse = await super.load<Attachment>(
             token, KIXObjectType.FAQ_ARTICLE_ATTACHMENT, uri, null, null, 'Attachment', clientRequestId, Attachment
         );
 
+        const existingAttachments = objectResponse.objects || [];
         const deletableAttachments = existingAttachments
             ? existingAttachments.filter((a) => a.Disposition !== 'inline' && !attachments.some((at) => at.ID === a.ID))
             : [];
@@ -257,10 +260,10 @@ export class FAQService extends KIXObjectAPIService {
                 'attachments', objectLoadingOptions.attachmentId
             );
 
-            const attachments = await super.load<Attachment>(
+            const objectResponse = await super.load<Attachment>(
                 token, null, uri, loadingOptions, null, 'Attachment', 'FAQService', Attachment
             );
-            return attachments;
+            return objectResponse.objects || [];
         } else {
             const error = 'No FAQArticleAttachmentLoadingOptions given.';
             throw error;
@@ -297,6 +300,18 @@ export class FAQService extends KIXObjectAPIService {
                 ),
             ];
             criteria = [...criteria, ...primarySearch];
+        }
+
+        const categoryCriteria = criteria.find((c) => c.property === FAQArticleProperty.CATEGORY_ID);
+        if (categoryCriteria && categoryCriteria.operator === SearchOperator.EQUALS) {
+            categoryCriteria.operator = SearchOperator.IN;
+            categoryCriteria.value = [categoryCriteria.value as any];
+        }
+
+        const validCriteria = criteria.find((c) => c.property === KIXObjectProperty.VALID_ID);
+        if (validCriteria && validCriteria.operator === SearchOperator.EQUALS) {
+            validCriteria.operator = SearchOperator.IN;
+            validCriteria.value = [validCriteria.value as any];
         }
 
         return criteria;

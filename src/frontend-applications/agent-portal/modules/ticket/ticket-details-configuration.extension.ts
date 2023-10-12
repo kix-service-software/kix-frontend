@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -310,6 +310,24 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     conditions: [
                                         new UIFilterCriterion(
                                             'DynamicFields.AffectedServices',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    text: 'Translatable#Merged into the Ticket',
+                                    textStyle: 'font-weight:bold;margin-bottom:0.5rem',
+                                    icon: 'kix-icon-ticket',
+                                    componentId: 'dynamic-field-value',
+                                    componentData: {
+                                        name: 'MergeToTicket'
+                                    },
+                                    conditions: [
+                                        new UIFilterCriterion(
+                                            'DynamicFields.MergeToTicket',
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
@@ -933,7 +951,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         [
                             new FilterCriteria(
                                 ConfigItemProperty.ASSIGNED_CONTACT, SearchOperator.EQUALS,
-                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_ContactID>'
+                                FilterDataType.NUMERIC, FilterType.OR, '<KIX_TICKET_ContactID>'
+                            ),
+                            new FilterCriteria(
+                                ConfigItemProperty.ASSIGNED_ORGANISATION, SearchOperator.EQUALS,
+                                FilterDataType.NUMERIC, FilterType.OR, '<KIX_TICKET_OrganisationID>'
                             )
                         ], null, 100
                     ), 10,

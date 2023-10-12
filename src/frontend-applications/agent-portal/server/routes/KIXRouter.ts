@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,6 +15,7 @@ import { ObjectIconLoadingOptions } from '../model/ObjectIconLoadingOptions';
 import { ObjectIcon } from '../../modules/icon/model/ObjectIcon';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { KIXObjectServiceRegistry } from '../services/KIXObjectServiceRegistry';
+import { ObjectResponse } from '../services/ObjectResponse';
 
 export abstract class KIXRouter implements IRouter {
 
@@ -55,11 +56,12 @@ export abstract class KIXRouter implements IRouter {
             const service = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.OBJECT_ICON);
             if (service) {
                 const logoLoadingOptions = new ObjectIconLoadingOptions(name, name);
-                const icons = await service.loadObjects<ObjectIcon>(
+                const objectResponse = await service.loadObjects<ObjectIcon>(
                     config.BACKEND_API_TOKEN, '',
                     KIXObjectType.OBJECT_ICON, null, null, logoLoadingOptions
-                ).catch(() => [] as ObjectIcon[]);
+                ).catch(() => new ObjectResponse<ObjectIcon>());
 
+                const icons = objectResponse?.objects || [];
                 return icons?.length ? icons[0] : null;
             }
         }

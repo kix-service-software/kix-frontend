@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,6 +19,8 @@ import { Queue } from '../model/Queue';
 import { FollowUpType } from '../model/FollowUpType';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { CacheService } from '../../../server/services/cache';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { QueueProperty } from '../model/QueueProperty';
 
 export class QueueAPIService extends KIXObjectAPIService {
 
@@ -58,41 +60,55 @@ export class QueueAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
         if (objectType === KIXObjectType.QUEUE) {
             const uri = this.buildUri(this.RESOURCE_URI);
-            objects = await super.load<Queue>(
+            objectResponse = await super.load<Queue>(
                 token, KIXObjectType.QUEUE, uri, loadingOptions, null, KIXObjectType.QUEUE, clientRequestId, Queue
-            );
+            ).catch((e): ObjectResponse<Queue> => {
+                return new ObjectResponse();
+            });
 
             if (objectIds && objectIds.length) {
-                objects = objects.filter((t) => objectIds.some((oid) => oid === t.QueueID));
+                objectResponse.objects = objectResponse?.objects?.filter(
+                    (t: Queue) => objectIds.some((oid) => Number(oid) === Number(t.QueueID))
+                );
             }
         } else if (objectType === KIXObjectType.FOLLOW_UP_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'followuptypes');
-            objects = await super.load(
+            objectResponse = await super.load<FollowUpType>(
                 token, KIXObjectType.FOLLOW_UP_TYPE, uri, loadingOptions, null, KIXObjectType.FOLLOW_UP_TYPE,
                 clientRequestId, FollowUpType
             );
             if (objectIds && objectIds.length) {
-                objects = objects.filter((q) => objectIds.some((oid) => oid.toString() === q.ObjectId.toString()));
+                objectResponse.objects = objectResponse?.objects?.filter(
+                    (f: FollowUpType) => objectIds.some((oid) => oid.toString() === f.ObjectId.toString())
+                );
             }
         }
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public async createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
+        const index = parameter.findIndex((p) => p[0] === QueueProperty.ASSIGNED_PERMISSIONS);
+        if (index !== -1) {
+            const permissions = parameter[index][1];
+            parameter.splice(index, 1);
+            parameter.push([QueueProperty.PERMISSIONS, permissions]);
+        }
+
         const id = await super.executeUpdateOrCreateRequest<number>(
             token, clientRequestId, parameter, this.RESOURCE_URI, this.objectType, 'QueueID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
+
         return id;
     }
 
@@ -100,6 +116,13 @@ export class QueueAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
+        const index = parameter.findIndex((p) => p[0] === QueueProperty.ASSIGNED_PERMISSIONS);
+        if (index !== -1) {
+            const permissions = parameter[index][1];
+            parameter.splice(index, 1);
+            parameter.push([QueueProperty.PERMISSIONS, permissions]);
+        }
+
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
         const id = await super.executeUpdateOrCreateRequest<number>(
             token, clientRequestId, parameter, uri, this.objectType, 'QueueID'
@@ -107,6 +130,8 @@ export class QueueAPIService extends KIXObjectAPIService {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
+
         return id;
     }
+
 }

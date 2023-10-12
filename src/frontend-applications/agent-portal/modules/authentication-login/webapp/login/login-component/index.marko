@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -15,7 +15,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <div.login-dialog>
                 <if(
                     Array.isArray(state.notifications) &&
-                    state.notifications.length,
+                    state.notifications.length
                 )>
                     <div.portal-notifications>
                         <login-notification-list notifications=state.notifications/>
@@ -90,20 +90,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 name="username"
                                 tabindex="1"
                                 value=state.userName
-                                on-change("userNameChanged")
+                                on-input("userNameChanged")
                                 key="login-user-name"
                             >
                         </label>
                         <label>
                             <span>${component.getString("Password")}:</span>
-                            <!-- no-update to keep autofilled passwords -->
                             <input.input-style
-                                type="password"
+                                type=state.passwordFieldType
                                 name="password"
                                 tabindex="2"
-                                key="login-user-password"
-                                no-update
+                                value=state.password
+                                on-input("passwordChanged")
+                                key="login-password"
                             >
+                            <div.d-flex.align-items-center.justify-content-center.px-2
+                                role="button"
+                                on-click("togglePasswordVisibility")
+                            >
+                                <i.far class={
+                                    "fa-eye":  state.passwordFieldType === "text",
+                                    "fa-eye-slash": state.passwordFieldType === "password",
+                                }/>
+                            </div>
                         </label>
                         <div.dialog-buttons>
                             <button.kix-button.special-button

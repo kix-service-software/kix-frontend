@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,13 +17,14 @@ import { TicketProperty } from '../../../../../ticket/model/TicketProperty';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { KanbanEvent } from '../../../core/KanbanEvent';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
-import { Ticket } from '../../../../../ticket/model/Ticket';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 import { ObjectIconLoadingOptions } from '../../../../../../server/model/ObjectIconLoadingOptions';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { User } from '../../../../../user/model/User';
+import { Ticket } from '../../../../../ticket/model/Ticket';
+import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -83,16 +84,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async ticketChanged(data: any, eventId: string): Promise<void> {
-        if (data.ticketId && Number(data.ticketId) === this.state.ticket.TicketID) {
+        if (Number(data.ticket?.TicketID) === this.state.ticket.TicketID) {
+            this.state.update = true;
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
             const tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, [data.ticketId]
-            );
+                KIXObjectType.TICKET, [this.state.ticket.TicketID], loadingOptions
+            ).catch((): Ticket[] => []);
 
-            if (tickets && tickets.length) {
+            if (tickets?.length) {
                 this.state.ticket = tickets[0];
+                await this.prepareAvatar();
+                setTimeout(() => this.state.update = false, 20);
             }
-
-            await this.prepareAvatar();
         }
     }
 

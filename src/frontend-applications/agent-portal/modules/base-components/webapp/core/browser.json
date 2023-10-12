@@ -95,6 +95,7 @@
         "require ./MaxLengthFormFieldValidator",
         "require ./NotificationHandler",
         "require ./NumberInputOptions",
+        "require ./ObjectInformationCardDataHandler",
         "require ./ObjectReferenceCountValidator",
         "require ./ObjectReferenceOptions",
         "require ./OverlayService",

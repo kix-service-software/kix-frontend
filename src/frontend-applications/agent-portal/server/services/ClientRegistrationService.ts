@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -60,11 +60,11 @@ export class ClientRegistrationService extends KIXObjectAPIService {
         token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any
     ): Promise<ClientRegistration[]> {
 
-        const response = await this.getObjects<ClientRegistrationsResponse>(
+        const httpResponse = await this.getObjects<ClientRegistrationsResponse>(
             token, limit, order, changedAfter, query
         );
 
-        return response.ClientRegistration;
+        return httpResponse?.responseData?.ClientRegistration;
     }
 
     public async submitClientRegistration(
@@ -187,7 +187,9 @@ export class ClientRegistrationService extends KIXObjectAPIService {
             const sysconfigOptionDefinitions = configurations.map((c) => {
                 const name = c.name ? c.name : c.id;
                 const definition: any = {
-                    AccessLevel: SysConfigAccessLevel.INTERNAL,
+                    AccessLevel: c.application === 'agent-portal'
+                        ? SysConfigAccessLevel.INTERNAL
+                        : SysConfigAccessLevel.EXTERNAL,
                     Name: c.id,
                     Description: name,
                     Default: JSON.stringify(c),
@@ -195,7 +197,7 @@ export class ClientRegistrationService extends KIXObjectAPIService {
                     ContextMetadata: c.type,
                     Type: 'String',
                     IsRequired: 0,
-                    ValidID: c.valid ? 1 : 2,
+                    ValidID: 1,
                 };
                 return definition;
             });

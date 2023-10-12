@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,6 +21,8 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 
 
 export class UserLabelProvider extends LabelProvider<User> {
@@ -165,13 +167,13 @@ export class UserLabelProvider extends LabelProvider<User> {
             default:
                 if (this.isContactProperty(property) || property === 'ContactID') {
                     let contact = user.Contact;
-                    if (!contact) {
+                    if (!contact && user.UserID) {
                         const loadingOptions = new KIXObjectLoadingOptions();
                         loadingOptions.includes = [KIXObjectType.CONTACT];
-                        const user = await KIXObjectService.loadObjects<User>(
-                            KIXObjectType.USER, null, loadingOptions, null, true
+                        const userWithContact = await KIXObjectService.loadObjects<User>(
+                            KIXObjectType.USER, [user.UserID], loadingOptions, null, true
                         ).catch((): User[] => []);
-                        contact = user?.length ? user[0].Contact : null;
+                        contact = userWithContact?.length ? userWithContact[0].Contact : null;
                     }
 
                     if (contact) {
@@ -206,15 +208,21 @@ export class UserLabelProvider extends LabelProvider<User> {
     }
 
     public async getObjectText(user: User, id?: boolean, title?: boolean, translatable?: boolean): Promise<string> {
-        if (user.Contact) {
+        let displayValue = user?.UserLogin;
+
+        const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.USER);
+
+        if (pattern && user) {
+            displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, user);
+        } else if (user.Contact) {
             const email = user.Contact ? ` (${user.Contact.Email})` : '';
             const base = user.Contact ? `${user.Contact.Firstname} ${user.Contact.Lastname}` : user.UserLogin;
-            return `${base}${email}`;
+            displayValue = `${base}${email}`;
         } else if (user['UserFirstname'] && user['UserLastname'] && user['UserEmail']) {
-            return `${user['UserLastname']}, ${user['UserFirstname']} (${user.UserLogin})`;
+            displayValue = `${user['UserLastname']}, ${user['UserFirstname']} (${user.UserLogin})`;
         }
 
-        return user.UserLogin;
+        return displayValue;
     }
 
     public getObjectTypeIcon(): string | ObjectIcon {

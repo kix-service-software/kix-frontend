@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,10 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { TicketService } from '../../core';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
+import { BackendNotification } from '../../../../../model/BackendNotification';
+import { TicketUIEvent } from '../../../model/TicketUIEvent';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -31,6 +35,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private context: Context;
     private sortOrder: string;
     private loadTimeout: any;
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -58,11 +63,24 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.translations = await TranslationService.createTranslationObject(
             ['Translatable#Go to top', 'Translatable#Read all', 'Translatable#Collapse all',
-                'Translatable#Preview List', 'Translatable#Compact View']);
+                'Translatable#Preview List', 'Translatable#Compact View', 'Translatable#Change sort direction']);
 
         if (!this.state.articles?.length) {
             await this.loadFilteredArticles();
         }
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('communication-widget'),
+            eventPublished: (data: any, eventId: string): void => {
+                if (eventId === ApplicationEvent.OBJECT_DELETED) {
+                    this.handleObjectDeleted(data);
+                } else if (eventId === TicketUIEvent.SCROLL_TO_ARTICLE) {
+                    this.handleScrollToArticle(data);
+                }
+            }
+        };
+        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.subscriber);
+        EventService.getInstance().subscribe(TicketUIEvent.SCROLL_TO_ARTICLE, this.subscriber);
 
         setTimeout(() => {
             this.context.registerListener('communication-widget', {
@@ -83,6 +101,29 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 sidebarRightToggled: () => null
             });
         }, 1000);
+    }
+
+    private handleObjectDeleted(data: BackendNotification): void {
+        const isArticleDelete = data?.Event === 'DELETE' && data?.Namespace === 'Ticket.Article';
+        if (isArticleDelete) {
+            const objectIds = data?.ObjectID?.split('::');
+            if (objectIds?.length === 2) {
+                const hasArticle = this.state.articles.some((a) => a.ArticleID.toString() === objectIds[1]);
+                if (hasArticle) {
+                    this.loadFilteredArticles();
+                }
+            }
+        }
+    }
+
+    private handleScrollToArticle(data: any): void {
+        if (!isNaN(Number(data.articleId))) {
+            const component = (this as any).getComponent('article-' + Number(data.articleId));
+            if (component) {
+                component.scrollToArticle();
+                component.toggleArticleCompactView();
+            }
+        }
     }
 
     private async enableReadAction(): Promise<void> {
@@ -129,16 +170,22 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.widgetTitle = `${title} (${articleLengthText})`;
 
         if (this.state.articles?.length) {
-            setTimeout(() => {
-                EventService.getInstance().publish(
-                    'TOGGLE_ARTICLE', { articleId: this.state.articles[0].ArticleID, expanded: true }
-                );
-            }, 2000);
+            const article = this.state.articles[0];
+            let component = (this as any).getComponent('article-' + article.ArticleID);
+            if (!component) {
+                setTimeout(() => {
+                    component = (this as any).getComponent('article-' + article.ArticleID);
+                    component?.toggleArticleCompactView();
+                }, 150);
+            } else {
+                component?.toggleArticleCompactView();
+            }
         }
     }
 
     public onDestroy(): void {
         this.context.unregisterListener('communication-widget');
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.subscriber);
     }
 
     public async readAll(): Promise<void> {
@@ -189,6 +236,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (element) {
             element.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
         }
+    }
+
+    public changeSortDirection(): void {
+        if (this.sortOrder === 'newest') this.sortOrder = 'odlest';
+        else this.sortOrder = 'newest';
+        AgentService.getInstance().setPreferences([[PersonalSettingsProperty.ARTICLE_SORT_ORDER, this.sortOrder]]);
+        this.loadFilteredArticles();
     }
 }
 

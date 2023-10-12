@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -25,6 +25,8 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { Label } from '../../../base-components/webapp/core/Label';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
@@ -194,21 +196,36 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
     }
 
     public async getObjectText(configItem: ConfigItem, id: boolean = true, name: boolean = true): Promise<string> {
-        let returnString = '';
+        let displayValue = '';
         if (configItem) {
-            let configItemHook: string = '';
 
-            const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
-                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
-            ).catch((error): SysConfigOption[] => []);
-
-            if (hookConfig && hookConfig.length) {
-                configItemHook = hookConfig[0].Value;
+            let pattern = await SysConfigService.getInstance().getDisplayValuePattern(`${KIXObjectType.CONFIG_ITEM}::${configItem.Class}`);
+            if (!pattern) {
+                pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.CONFIG_ITEM);
             }
 
-            returnString = `${configItemHook}${configItem.Number} - ${configItem.Name}`;
+            if (pattern) {
+                displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, configItem);
+            }
+
+            if (!displayValue) {
+
+                let configItemHook: string = '';
+
+                const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
+                ).catch((error): SysConfigOption[] => []);
+
+                if (hookConfig && hookConfig.length) {
+                    configItemHook = hookConfig[0].Value;
+                }
+                if (id) displayValue += `${configItemHook}${configItem.Number}`;
+                if (id && name && configItem.Name) displayValue += ' - ';
+                if (name && configItem.Name) displayValue += `${configItem.Name}`;
+            }
         }
-        return returnString;
+
+        return displayValue;
     }
 
     public getObjectTypeIcon(): string | ObjectIcon {

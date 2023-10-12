@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -13,6 +13,8 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { ObjectIconLoadingOptions } from '../../../../server/model/ObjectIconLoadingOptions';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXIcon } from '../../model/KIXIcon';
+import { FontawesomeIcon } from '../../model/FontawesomeIcon';
 
 export class ObjectIconService extends KIXObjectService<ObjectIcon> {
 
@@ -34,9 +36,13 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
 
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: ObjectIconLoadingOptions
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: ObjectIconLoadingOptions,
+        cache: boolean = true, forceIds?: boolean, silent?: boolean, collectionId?: string
     ): Promise<O[]> {
-        let icons = await super.loadObjects<ObjectIcon>(KIXObjectType.OBJECT_ICON, null);
+        let icons = await super.loadObjects<ObjectIcon>(
+            KIXObjectType.OBJECT_ICON, undefined, undefined, undefined, undefined, undefined, undefined, collectionId
+        );
+
         if (objectLoadingOptions && objectLoadingOptions instanceof ObjectIconLoadingOptions) {
             const icon = icons.find(
                 (i) => {
@@ -67,6 +73,32 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
 
     public getLinkObjectName(): string {
         return 'ObjectIcon';
+    }
+
+    public async getAvailableIcons(
+        kixFont: boolean = true, fontAwesome: boolean = true, kixIcons: boolean = true
+    ): Promise<Array<ObjectIcon | string>> {
+        const icons = [];
+
+        if (kixFont) {
+            for (const [key, value] of Object.entries(KIXIcon.icons)) {
+                icons.push(key);
+            }
+        }
+
+        if (fontAwesome) {
+            for (const [key, value] of Object.entries(FontawesomeIcon.icons)) {
+                icons.push(key);
+            }
+        }
+
+        if (kixIcons) {
+            const objectIcons = await this.loadObjects<ObjectIcon>(KIXObjectType.OBJECT_ICON, null)
+                .catch((): ObjectIcon[] => []);
+            icons.push(...objectIcons);
+        }
+
+        return icons;
     }
 
 }

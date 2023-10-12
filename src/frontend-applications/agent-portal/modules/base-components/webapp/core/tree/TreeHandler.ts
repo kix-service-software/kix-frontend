@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -96,22 +96,13 @@ export class TreeHandler {
                         event.preventDefault();
                         event.stopPropagation();
                     }
-                    this.selectNavigationNode(true);
+                    // TODO: changed (allow also de-select), because spacebar (below) currently not usable
+                    this.selectNavigationNode();
                     this.finishListener.forEach((l) => l());
                     break;
-                case ' ':
-                    this.selectNavigationNode();
-                    break;
-                case 'Tab':
-                    if (!event.ctrlKey) {
-                        this.selectNavigationNode();
-                        this.finishListener.forEach((l) => l());
-                        if (event.preventDefault && event.stopPropagation) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                    }
-                    break;
+                // case ' ': // TODO: currently deactivated (filter also gets space => new search triggered)
+                //     this.selectNavigationNode();
+                //     break;
                 case 'Escape':
                     this.finishListener.forEach((l) => l());
                     if (event.preventDefault && event.stopPropagation) {
@@ -178,6 +169,7 @@ export class TreeHandler {
         }
         const treeSelection = this.getSelection(this.tree);
         this.setSelection(treeSelection, true, true, true, filterSelection);
+        this.expandSelection(this.tree);
 
         this.listener.forEach((l) => l(this.tree));
     }
@@ -268,8 +260,9 @@ export class TreeHandler {
         }
     }
 
-    public expandSelection(tree: TreeNode[] = this.tree): boolean {
+    public expandSelection(tree: TreeNode[] = this.tree || []): boolean {
         let expand = false;
+        if (!tree || tree.length === 0) return false;
         for (const node of tree) {
             if (node.children) {
                 const childSelected = this.expandSelection(node.children);

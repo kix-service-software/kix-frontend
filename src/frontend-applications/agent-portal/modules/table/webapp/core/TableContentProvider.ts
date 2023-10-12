@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,14 +7,20 @@
  * --
  */
 
+import { Context } from '../../../../model/Context';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { IdService } from '../../../../model/IdService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectSocketClient } from '../../../base-components/webapp/core/KIXObjectSocketClient';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { SearchService } from '../../../search/webapp/core';
@@ -24,12 +30,24 @@ import { Table } from '../../model/Table';
 import { TableValue } from '../../model/TableValue';
 import { TableFactoryService } from './factory/TableFactoryService';
 
-
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     protected initialized: boolean = false;
 
+    protected context: Context;
+    protected subscriber: IEventSubscriber;
+
     protected useCache: boolean = true;
+
+    public usePaging: boolean = true;
+    protected currentPageIndex: number = 1;
+
+    protected reloadInProgress: boolean = false;
+
+    private id: string = IdService.generateDateBasedId('TableContentProvider');
+
+    public totalCount: number;
+    public currentLimit: number;
 
     public constructor(
         protected objectType: KIXObjectType | string,
@@ -44,18 +62,27 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public async initialize(): Promise<void> {
         if (!this.initialized) {
             if (this.contextId) {
-                const context = ContextService.getInstance().getActiveContext();
-                if (context) {
-                    context.registerListener(this.table.getTableId() + '-content-provider', {
-                        sidebarLeftToggled: (): void => { return; },
-                        filteredObjectListChanged: (): void => { return; },
-                        objectChanged: this.objectChanged.bind(this),
-                        objectListChanged: this.objectListChanged.bind(this),
-                        sidebarRightToggled: (): void => { return; },
-                        scrollInformationChanged: () => { return; },
-                        additionalInformationChanged: (): void => { return; }
-                    });
-                }
+                this.context = ContextService.getInstance().getActiveContext();
+                this.context?.registerListener(this.table.getTableId() + '-content-provider', {
+                    sidebarLeftToggled: (): void => { return; },
+                    filteredObjectListChanged: (): void => { return; },
+                    objectChanged: this.objectChanged.bind(this),
+                    objectListChanged: this.objectListChanged.bind(this),
+                    sidebarRightToggled: (): void => { return; },
+                    scrollInformationChanged: () => { return; },
+                    additionalInformationChanged: (): void => { return; }
+                });
+
+                this.subscriber = {
+                    eventSubscriberId: IdService.generateDateBasedId(),
+                    eventPublished: (context: Context): void => {
+                        if (this.context.instanceId === context.instanceId) {
+                            this.currentPageIndex = 1;
+                        }
+                    }
+                };
+
+                EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
             }
             this.initialized = true;
         }
@@ -66,6 +93,10 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 context.unregisterListener(this.table.getTableId() + '-content-provider');
+            }
+
+            if (this.subscriber) {
+                EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
             }
         }
     }
@@ -91,8 +122,25 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         return this.objectType;
     }
 
+    public async loadMore(): Promise<void> {
+        this.currentPageIndex++;
+        if (this.contextId && !this.objectIds) {
+            const pageSize = this.context?.getPageSize(this.objectType) || this.loadingOptions?.limit || 20;
+            const currentLimit = this.currentPageIndex * pageSize;
+
+            const context = ContextService.getInstance().getActiveContext();
+            await context.reloadObjectList(this.objectType, undefined, currentLimit);
+        }
+        await this.table.reload();
+    }
+
     public async loadData(): Promise<Array<RowObject<T>>> {
         let objects = [];
+
+        const pageSize = this.loadingOptions?.limit;
+        this.currentLimit = this.usePaging && pageSize
+            ? this.currentPageIndex * pageSize
+            : null;
 
         if (this.objects) {
             objects = this.objects;
@@ -100,17 +148,37 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             const hasDFColumn = this.hasDFColumnConfigured();
             const includes = hasDFColumn ? [KIXObjectProperty.DYNAMIC_FIELDS] : [];
             objects = await SearchService.getInstance().executeSearchCache(
-                this.table.getTableConfiguration().searchId, undefined, undefined, undefined, undefined, includes
+                this.table.getTableConfiguration().searchId, undefined, undefined, undefined, undefined,
+                includes, this.currentLimit, this.loadingOptions?.searchLimit
+            );
+            this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
+                this.table.getTableConfiguration().searchId
             );
         } else if (this.contextId && !this.objectIds) {
             const context = ContextService.getInstance().getActiveContext();
-            objects = context ? await context.getObjectList(this.objectType) : [];
+            objects = context ? await context.getObjectList(this.objectType, this.currentLimit) : [];
+            this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
+                context.contextId + this.objectType
+            );
+            this.currentLimit = KIXObjectSocketClient.getInstance().getCollectionsLimit(
+                context.contextId + this.objectType
+            );
         } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
             const forceIds = (this.objectIds && this.objectIds.length > 0) ? true : false;
             const loadingOptions = await this.prepareLoadingOptions();
+
+            if (this.usePaging) {
+                loadingOptions.limit = this.currentLimit;
+            }
+
             objects = await KIXObjectService.loadObjects<KIXObject>(
-                this.objectType, this.objectIds, loadingOptions, this.specificLoadingOptions, forceIds, this.useCache
+                this.objectType, this.objectIds, loadingOptions, this.specificLoadingOptions,
+                forceIds, this.useCache, undefined, this.id
             );
+
+            if (this.currentLimit) {
+                this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(this.id);
+            }
         }
 
         if (!objects) {
@@ -122,8 +190,18 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     public async getRowObjects(objects: T[]): Promise<RowObject<T>[]> {
         const rowObjectPromises: Array<Promise<RowObject<T>>> = [];
+        const rowObjects: Array<RowObject<T>> = [];
         if (objects) {
             for (const o of objects) {
+
+                if (this.reloadInProgress) {
+                    const row = this.table.getRowByObjectId((o as any).ObjectId);
+                    if (row) {
+                        rowObjects.push(row.getRowObject());
+                        continue;
+                    }
+                }
+
                 rowObjectPromises.push(new Promise<RowObject<T>>(async (resolve, reject) => {
                     const values: TableValue[] = [];
 
@@ -131,10 +209,23 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     for (const column of columns) {
 
                         let tableValue: TableValue;
-                        if (column.property?.startsWith(`${KIXObjectProperty.DYNAMIC_FIELDS}.`)) {
-                            const dfName = KIXObjectService.getDynamicFieldName(column.property);
-                            const dfv = o[KIXObjectProperty.DYNAMIC_FIELDS].find((dfv) => dfv.Name === dfName);
+                        const dfName = KIXObjectService.getDynamicFieldName(column.property);
+                        if (dfName) {
+                            const dfv: DynamicFieldValue = o[KIXObjectProperty.DYNAMIC_FIELDS].find(
+                                (dfv) => dfv.Name === dfName
+                            );
                             tableValue = new TableValue(column.property, dfv?.Value, dfv?.DisplayValue?.toString());
+                            tableValue.displayValueList = dfv?.PreparedValue;
+
+                            // split display value on reference fields,
+                            // because they often use some short value (ValueLookup) as prepared value
+                            // TODO: use correct display string of referenced object type
+                            const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+                            if (dfv?.DisplayValue && dynamicField && dynamicField.FieldType.match(/Reference$/)) {
+                                tableValue.displayValueList = dynamicField.Config?.ItemSeparator ?
+                                    dfv.DisplayValue.split(dynamicField.Config.ItemSeparator) :
+                                    null;
+                            }
                         } else {
                             tableValue = new TableValue(column.property, o[column.property], null, null, null);
 
@@ -153,7 +244,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             }
         }
 
-        const rowObjects = await Promise.all(rowObjectPromises);
+        const loadedRowObjects = await Promise.all(rowObjectPromises);
+        rowObjects.push(...loadedRowObjects);
+
         return rowObjects;
     }
 
@@ -172,11 +265,13 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     protected async prepareLoadingOptions(): Promise<KIXObjectLoadingOptions> {
         const loadingOptions = new KIXObjectLoadingOptions(
             [],
-            this.loadingOptions ? this.loadingOptions.sortOrder : null,
-            this.loadingOptions ? this.loadingOptions.limit : null,
-            this.loadingOptions ? this.loadingOptions.includes : null,
-            this.loadingOptions ? this.loadingOptions.expands : null,
-            this.loadingOptions ? this.loadingOptions.query : null
+            this.loadingOptions?.sortOrder,
+            this.loadingOptions?.limit,
+            this.loadingOptions?.includes,
+            this.loadingOptions?.expands,
+            this.loadingOptions?.query,
+            this.loadingOptions?.cacheType,
+            this.loadingOptions?.searchLimit
         );
 
         const context = ContextService.getInstance().getActiveContext();
@@ -189,6 +284,22 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     );
                     const preparedCriterion = new FilterCriteria(
                         criterion.property, criterion.operator, criterion.type, criterion.filterType, value
+                    );
+                    loadingOptions.filter.push(preparedCriterion);
+                } else if (Array.isArray(criterion.value)) {
+                    const values = [];
+                    for (const value of criterion.value) {
+                        if (typeof value === 'string') {
+                            const replacedValue = await PlaceholderService.getInstance().replacePlaceholders(
+                                value, contextObject
+                            );
+                            values.push(replacedValue);
+                        } else {
+                            values.push(value);
+                        }
+                    }
+                    const preparedCriterion = new FilterCriteria(
+                        criterion.property, criterion.operator, criterion.type, criterion.filterType, values
                     );
                     loadingOptions.filter.push(preparedCriterion);
                 } else {

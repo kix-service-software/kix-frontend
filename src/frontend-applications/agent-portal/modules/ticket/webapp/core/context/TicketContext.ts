@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,6 +27,8 @@ import { ContextEvents } from '../../../../base-components/webapp/core/ContextEv
 import { ContextPreference } from '../../../../../model/ContextPreference';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
 
 export class TicketContext extends Context {
 
@@ -35,12 +37,28 @@ export class TicketContext extends Context {
     public queueId: number;
     public filterValue: string;
 
-    public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        super.initContext();
+    private currentLimit: number;
 
-        if (this.queueId || this.filterValue) {
-            this.loadTickets();
-        }
+    private subscriber: IEventSubscriber;
+
+    public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        await super.initContext();
+        await this.loadTickets();
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(TicketContext.CONTEXT_ID),
+            eventPublished: (data: Context, eventId: string): void => {
+                if (data.instanceId === this.instanceId) {
+                    this.loadTickets(undefined, this.currentLimit);
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
+    }
+
+    public async destroy(): Promise<void> {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
     }
 
     public getIcon(): string {
@@ -92,9 +110,10 @@ export class TicketContext extends Context {
     public async setQueue(queueId: number, history: boolean = true): Promise<void> {
         if (!this.queueId || this.queueId !== queueId) {
             this.queueId = queueId;
-            this.loadTickets();
 
             EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+            this.loadTickets();
 
             if (history) {
                 ContextService.getInstance().setDocumentHistory(true, this, this, null);
@@ -109,9 +128,9 @@ export class TicketContext extends Context {
 
     public async setFilterValue(filterValue: string, history: boolean = true): Promise<void> {
         this.filterValue = filterValue;
-        this.loadTickets();
-
         EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+        this.loadTickets();
 
         if (history) {
             ContextService.getInstance().setDocumentHistory(true, this, this, null);
@@ -123,7 +142,7 @@ export class TicketContext extends Context {
         }
     }
 
-    private async loadTickets(silent: boolean = false): Promise<void> {
+    private async loadTickets(silent: boolean = false, limit?: number): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.TICKET);
 
         const loadingOptions = new KIXObjectLoadingOptions(
@@ -146,9 +165,10 @@ export class TicketContext extends Context {
             loadingOptions.filter.push(fulltextFilter);
         }
 
+        loadingOptions.limit = limit;
+
         if (!this.queueId) {
-            loadingOptions.limit = 100;
-            loadingOptions.sortOrder = '-Ticket.Age:numeric';
+            loadingOptions.sortOrder = 'Ticket.-Age:numeric';
 
             if (!this.filterValue) {
                 loadingOptions.filter.push(new FilterCriteria(
@@ -168,8 +188,11 @@ export class TicketContext extends Context {
         const additionalIncludes = this.getAdditionalInformation(AdditionalContextInformation.INCLUDES) || [];
         loadingOptions.includes.push(...additionalIncludes);
 
+        this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
+
         const tickets = await KIXObjectService.loadObjects(
-            KIXObjectType.TICKET, null, loadingOptions, null, false
+            KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined,
+            this.contextId + KIXObjectType.TICKET
         ).catch((error) => []);
 
         this.setObjectList(KIXObjectType.TICKET, tickets, silent);
@@ -178,9 +201,12 @@ export class TicketContext extends Context {
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
-    public reloadObjectList(objectType: KIXObjectType, silent: boolean = false): Promise<void> {
+    public reloadObjectList(objectType: KIXObjectType, silent: boolean = false, limit?: number): Promise<void> {
         if (objectType === KIXObjectType.TICKET) {
-            return this.loadTickets(silent);
+            this.currentLimit = limit;
+            return this.loadTickets(silent, limit);
+        } else {
+            return super.reloadObjectList(objectType, silent, limit);
         }
     }
 

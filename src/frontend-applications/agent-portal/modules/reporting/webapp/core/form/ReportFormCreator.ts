@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,7 +7,6 @@
  * --
  */
 
-import { DefaultSelectInputFormOption } from '../../../../../model/configuration/DefaultSelectInputFormOption';
 import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
@@ -19,6 +18,7 @@ import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { ReportDefinition } from '../../../model/ReportDefinition';
 import { ReportDefinitionProperty } from '../../../model/ReportDefinitionProperty';
@@ -57,9 +57,9 @@ export class ReportFormCreator {
         const outputFormatField = new FormFieldConfiguration(
             'report-outputformats-outputformats', 'Translatable#Output Formats',
             ReportDefinitionProperty.AVAILABLE_OUTPUT_FORMATS,
-            'default-select-input', true, 'Translatable#Helptext_Reporting_Report_OutputFormats',
+            'object-reference-input', true, 'Translatable#Helptext_Reporting_Report_OutputFormats',
             [
-                new FormFieldOption(DefaultSelectInputFormOption.MULTI, true)
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
             ]
         );
         outputFormatField.instanceId = IdService.generateDateBasedId();
@@ -95,7 +95,7 @@ export class ReportFormCreator {
             outputFormatField.defaultValue = new FormFieldValue([nodes[0].id]);
         }
 
-        outputFormatField.options.push(new FormFieldOption(DefaultSelectInputFormOption.NODES, nodes));
+        outputFormatField.options.push(new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, nodes));
         return outputFormatField;
     }
 

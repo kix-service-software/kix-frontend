@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,7 +8,6 @@
  */
 
 import { ISocketNamespace } from './ISocketNamespace';
-import { AuthenticationService } from '../../../../server/services/AuthenticationService';
 import { SocketEvent } from '../../modules/base-components/webapp/core/SocketEvent';
 import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
 import { ProfilingService } from '../../../../server/services/ProfilingService';
@@ -86,6 +85,7 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             ProfilingService.getInstance().logStart(profileTaskId);
 
             const response = await handler(data, client).catch((error) => {
+                LoggingService.getInstance().error(`Error SocketEvent (${event})`, error);
                 if (error instanceof SocketAuthenticationError) {
                     client.emit(SocketEvent.INVALID_TOKEN, new SocketErrorResponse(data.requestId, error));
                 } else if (error instanceof PermissionError) {

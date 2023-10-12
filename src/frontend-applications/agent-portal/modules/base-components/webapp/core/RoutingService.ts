@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,21 +7,17 @@
  * --
  */
 
-import { AgentService } from '../../../user/webapp/core/AgentService';
-import { KIXModulesSocketClient } from './KIXModulesSocketClient';
 import { ContextService } from './ContextService';
 import { ActionFactory } from './ActionFactory';
-import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
 import { ContextMode } from '../../../../model/ContextMode';
 import { KIXModulesService } from './KIXModulesService';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { BrowserUtil } from './BrowserUtil';
+import { AdditionalRoutingHandler } from './AdditionalRoutingHandler';
 
 export class RoutingService {
 
     private static INSTANCE: RoutingService = null;
-
-    private VISITED_KEY = 'KIXWebFrontendVisitedVersion';
 
     public static getInstance(): RoutingService {
         if (!RoutingService.INSTANCE) {
@@ -33,6 +29,12 @@ export class RoutingService {
 
     private constructor() { }
 
+    private additionalRoutingHandler: AdditionalRoutingHandler[] = [];
+
+    public registerRoutingHandler(routingHandler: AdditionalRoutingHandler): void {
+        this.additionalRoutingHandler.push(routingHandler);
+    }
+
     public async routeToInitialContext(
         history: boolean = false, useURL: boolean = true, defaultContextId?: string
     ): Promise<void> {
@@ -43,8 +45,10 @@ export class RoutingService {
             routed = await this.routeToURL(history);
         }
 
-        routed = await this.setReleaseContext() || routed;
-        routed = await SetupService.getInstance().setSetupAssistentIfNeeded() || routed;
+        const routingHandler = this.additionalRoutingHandler.sort((a, b) => a.priority - b.priority);
+        for (const handler of routingHandler) {
+            routed = await handler.handleRouting() || routed;
+        }
 
         if (!routed) {
             const contextList = ContextService.getInstance().getContextInstances();
@@ -76,37 +80,6 @@ export class RoutingService {
         }
     }
 
-    private async setReleaseContext(): Promise<boolean> {
-        let routed: boolean = false;
-
-        const needReleaseInfo = await this.isReleaseInfoNeeded();
-        if (needReleaseInfo) {
-            await ContextService.getInstance().setActiveContext('release');
-
-            const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-            const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
-            AgentService.getInstance().setPreferences([
-                [this.VISITED_KEY, buildNumber.toString()]
-            ]);
-            routed = true;
-        }
-
-        return routed;
-    }
-
-    private async isReleaseInfoNeeded(): Promise<boolean> {
-        let releaseInfoVisited: string;
-        const currentUser = await AgentService.getInstance().getCurrentUser();
-        if (currentUser && currentUser.Preferences) {
-            const vistedVersion = currentUser.Preferences.find((p) => p.ID === this.VISITED_KEY);
-            releaseInfoVisited = vistedVersion ? vistedVersion.Value : null;
-        }
-
-        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-        const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
-        return !releaseInfoVisited || (buildNumber && releaseInfoVisited !== buildNumber.toString());
-    }
-
     private setHomeContextIfNeeded(defaultContextId: string = 'home'): boolean {
         let routed: boolean = false;
         const contextList = ContextService.getInstance().getContextInstances();
@@ -125,18 +98,18 @@ export class RoutingService {
 
         const prefixLength = KIXModulesService.urlPrefix.length;
         const pathName = parsedUrl.pathname.substring(prefixLength + 1, parsedUrl.pathname.length);
-        const path = parsedUrl.pathname === '/' ? [] : pathName.split('/');
+        const path = parsedUrl.pathname === '/' ? [] : this.removeEmptyPaths(pathName.split('/'));
 
         let contextUrl: string;
         let objectId: string;
 
-        if (path.length > 1) {
+        if (path.length) {
             contextUrl = path[0];
             objectId = path[1];
         }
 
         if (contextUrl && contextUrl !== '') {
-            routed = await this.handleURLParams(urlParams, contextUrl);
+            routed = await this.handleURLParams(urlParams, contextUrl, history);
 
             if (!routed) {
                 const context = await ContextService.getInstance().setContextByUrl(
@@ -151,7 +124,18 @@ export class RoutingService {
         return routed;
     }
 
-    private async handleURLParams(params: URLSearchParams, contextId?: string): Promise<boolean> {
+    private removeEmptyPaths(path: string[]): string[] {
+        path.forEach((p, i) => {
+            if (!p) {
+                path.splice(i, 1);
+            }
+        });
+        return path;
+    }
+
+    private async handleURLParams(
+        params: URLSearchParams, contextId?: string, history: boolean = true
+    ): Promise<boolean> {
         const result = await new Promise<boolean>(async (resolve, reject) => {
             if (params.has('new')) {
 
@@ -163,7 +147,9 @@ export class RoutingService {
                     (c) => c.urlPaths.some((url) => url === contextId)
                 );
 
-                await ContextService.getInstance().setActiveContext(contextDescriptor?.contextId, null, params);
+                await ContextService.getInstance().setActiveContext(
+                    contextDescriptor?.contextId, null, params, [], history
+                );
 
                 resolve(true);
             } else if (params.has('actionId')) {

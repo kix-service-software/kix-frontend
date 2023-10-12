@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,12 +7,16 @@
  * --
  */
 
+import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { TreeNode, TreeUtil } from '../../../../../base-components/webapp/core/tree';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
+import { TreeNode } from '../../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../model/FormValues/SelectObjectFormValue';
+import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
@@ -20,6 +24,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private bindingIds: string[];
     private formValue: SelectObjectFormValue<Array<string | number> | string | number>;
     private searchTimeout: any;
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -37,11 +43,38 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             if (this.formValue.treeHandler && element) {
                 this.formValue.treeHandler.setKeyListenerElement(element);
             }
+
+            const myDropdown = document.getElementById(`id_${this.state.searchValueKey}`);
+            myDropdown?.addEventListener('hidden.bs.dropdown', async () => {
+                await this.formValue?.setSelectedNodes();
+                this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
+                if (this.formValue.isAutoComplete) {
+                    this.formValue?.treeHandler?.setTree([]);
+                }
+                const searchInput: any = (this as any).getEl(this.state.searchValueKey);
+                if (searchInput) {
+                    searchInput.value = '';
+                }
+            });
+
         }, 100);
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (data: any, eventId: string): void => {
+                if (data.blocked) {
+                    this.state.readonly = true;
+                } else {
+                    this.state.readonly = this.formValue.readonly;
+                }
+            }
+        };
+        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public onDestroy(): void {
         this.formValue?.removePropertyBinding(this.bindingIds);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public onUpdate(): void {
@@ -68,18 +101,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.bindingIds.push(
             this.formValue?.addPropertyBinding('maxSelectCount', () => {
                 this.state.multiselect = this.formValue?.multiselect;
-            })
-        );
-
-        this.bindingIds.push(
-            this.formValue.addPropertyBinding('selectedNodes', async () => {
-                this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
-            })
-        );
-
-        this.bindingIds.push(
+            }),
             this.formValue.addPropertyBinding(FormValueProperty.READ_ONLY, (formValue: ObjectFormValue) => {
                 this.setReadonly(Boolean(formValue.readonly));
+            }),
+            this.formValue.addPropertyBinding(FormValueProperty.VALUE, async () => {
+                this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
+            }),
+            this.formValue.addPropertyBinding('selectedNodes', async () => {
+                this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
             })
         );
 
@@ -123,7 +153,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        if (event.key === 'Enter' && this.formValue.freeText) {
+        const searchResultLength = this.formValue?.treeHandler?.getTree()?.length;
+        if (event.key === 'Enter' && this.formValue.freeText && !searchResultLength) {
             if (Array.isArray(this.formValue.value) && this.formValue.multiselect) {
                 this.formValue.setFormValue([...this.formValue.value, event.target.value]);
             } else {
@@ -188,7 +219,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public selectInputClicked(event: any): void {
-        if (this.formValue?.multiselect) {
+        if (this.formValue?.multiselect || this.state.readonly) {
             this.stopPropagation(event);
         }
     }
@@ -206,20 +237,27 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public selectAll(event: any): void {
         this.stopPropagation(event);
 
-        if (this.state.selectedNodes?.length) {
-            this.formValue.removeValue(null);
+        if (this.state.selectAll) {
+            this.formValue?.treeHandler?.selectAll();
+            this.state.selectAll = false;
         } else {
-            this.formValue.selectAll();
+            this.formValue?.treeHandler?.selectNone();
+            this.state.selectAll = true;
         }
     }
 
-    public inputClicked(): void {
-        setTimeout(() => {
-            const element = (this as any).getEl(this.state.searchValueKey);
-            if (element) {
-                element.focus();
-            }
-        }, 50);
+    public inputClicked(event: any): void {
+        if (this.state.readonly) {
+            this.stopPropagation(event);
+            event.preventDefault();
+        } else {
+            setTimeout(() => {
+                const element = (this as any).getEl(this.state.searchValueKey);
+                if (element) {
+                    element.focus();
+                }
+            }, 50);
+        }
     }
 
     private stopPropagation(event: any): void {
@@ -230,6 +268,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (event.preventDefault) {
             event.preventDefault();
         }
+    }
+
+    public async apply(event: any): Promise<void> {
+        // TODO: apply but keep dropdown open else trigger "click"
+        // const element = document.getElementById(`id_${this.state.searchValueKey}`);
+        // element?.click();
+        await this.formValue?.setSelectedNodes();
+        this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
     }
 
     public async prepareAutocompleteHint(): Promise<void> {

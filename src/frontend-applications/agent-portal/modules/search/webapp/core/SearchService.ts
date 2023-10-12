@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -137,6 +137,8 @@ export class SearchService {
             loadingOptions.expands.push(KIXObjectProperty.LINKS);
         }
 
+        loadingOptions.searchLimit = limit;
+
         const objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
         return (objects as any);
     }
@@ -150,7 +152,7 @@ export class SearchService {
     public async searchObjects(
         searchCache: SearchCache,
         context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>(),
-        additionalIncludes: string[] = []
+        additionalIncludes: string[] = [], limit?: number, searchLimit?: number
     ): Promise<KIXObject[]> {
         if (!searchCache) {
             throw new Error('No search available');
@@ -162,8 +164,15 @@ export class SearchService {
         preparedCriteria = this.prepareCriteria(preparedCriteria);
 
         const loadingOptions = await searchDefinition.getLoadingOptions(
-            preparedCriteria, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescanding
+            preparedCriteria, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescending
         );
+
+        if (limit) {
+            loadingOptions.limit = limit;
+        }
+
+        loadingOptions.searchLimit = loadingOptions.limit;
+
 
         const hastDFInCriteria = preparedCriteria.some((criteria) => criteria.property.startsWith('DynamicFields.'));
         if (hastDFInCriteria) {
@@ -174,18 +183,30 @@ export class SearchService {
                 loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
             }
         }
+        const includes = context.getAdditionalInformation('INCLUDES');
+        if (includes && includes.length > 0) {
+            additionalIncludes.push(...includes);
+        }
 
-        if (additionalIncludes?.length) {
+        let uniqueIncludes: any;
+
+        if (additionalIncludes && additionalIncludes.length > 0) {
+            uniqueIncludes = additionalIncludes.filter((element, index) => {
+                return additionalIncludes.indexOf(element) === index;
+            });
+        }
+
+        if (uniqueIncludes?.length) {
             if (Array.isArray(loadingOptions.includes)) {
-                loadingOptions.includes.push(...additionalIncludes);
+                loadingOptions.includes.push(...uniqueIncludes);
             }
             else {
-                loadingOptions.includes = additionalIncludes;
+                loadingOptions.includes = uniqueIncludes;
             }
         }
 
         const objects = await KIXObjectService.loadObjects(
-            searchCache.objectType, null, loadingOptions, null, false
+            searchCache.objectType, null, loadingOptions, null, false, undefined, undefined, searchCache.id
         );
 
         if (context instanceof SearchContext) {
@@ -286,10 +307,13 @@ export class SearchService {
                 case SearchOperator.BETWEEN:
                     if (Array.isArray(c.value) && c.value[0] && c.value[1]) {
                         // switch if necessary
-                        if (SortUtil.compareDate(c.value[0].toString(), c.value[1].toString()) > 0) {
-                            const oldStartDate = c.value[0];
+                        const switchValue = c.type === FilterDataType.NUMERIC ?
+                            Boolean(SortUtil.compareNumber(c.value[0], c.value[1]) > 0) :
+                            Boolean(SortUtil.compareDate(c.value[0].toString(), c.value[1].toString()) > 0);
+                        if (switchValue) {
+                            const oldStartValue = c.value[0];
                             c.value[0] = c.value[1];
-                            c.value[1] = oldStartDate;
+                            c.value[1] = oldStartValue;
                         }
                         prepareCriteria.push(new FilterCriteria(
                             c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType, c.value[0]
@@ -401,7 +425,7 @@ export class SearchService {
 
     public async executeSearchCache(
         id?: string, name?: string, cache?: SearchCache, context?: SearchContext, setSearchContext?: boolean,
-        additionalIncludes: string[] = []
+        additionalIncludes: string[] = [], limit?: number, searchLimit?: number
     ): Promise<KIXObject[]> {
         const search = await SearchSocketClient.getInstance().loadSearch();
         let searchCache = cache || search.find((s) => s.id === id);
@@ -413,7 +437,7 @@ export class SearchService {
             context = await this.setSearchContext(searchCache?.objectType);
         }
 
-        return await this.searchObjects(searchCache, context, additionalIncludes);
+        return await this.searchObjects(searchCache, context, additionalIncludes, limit, searchLimit);
     }
 
     private async setSearchContext(

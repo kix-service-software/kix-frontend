@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -55,7 +55,7 @@ export class UIModule implements IUIModule {
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'object-dialog', ['text-modules'], NewTextModuleDialogContext,
             [
-                new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
+                new UIComponentPermission('system/textmodules', [CRUD.CREATE])
             ],
             'Translatable#New Textmodule', 'kix-icon-gear'
         );
@@ -65,7 +65,7 @@ export class UIModule implements IUIModule {
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'object-dialog', ['text-modules'], EditTextModuleDialogContext,
             [
-                new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
+                new UIComponentPermission('system/textmodules', [CRUD.CREATE])
             ],
             'Translatable#Edit Textmodule', 'kix-icon-gear'
         );

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -9,9 +9,9 @@
 
 .release-dashboard {
     .slider-widget {
-        padding: 2rem 6rem 5rem;
+        padding: 2rem 2rem 2rem;
         display: grid;
-        grid-template-columns: 375px auto;
+        grid-template-columns: 375px auto 375px;
         grid-template-rows: min-content;
         grid-gap: @margin-default;
 
@@ -146,5 +146,14 @@
                 }
             }
         }
+    }
+}
+
+#release-information {
+    background-color: @primary-7;
+    border-radius: 10px;
+
+    &>#release-information-title {
+        color: @primary-0;
     }
 }

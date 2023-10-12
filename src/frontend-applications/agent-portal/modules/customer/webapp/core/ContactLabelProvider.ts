@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,6 +22,8 @@ import { User } from '../../../user/model/User';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 
 export class ContactLabelProvider extends LabelProvider<Contact> {
 
@@ -96,6 +98,21 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case ContactProperty.EMAIL:
                 displayValue = 'Translatable#Email';
                 break;
+            case ContactProperty.EMAIL1:
+                displayValue = 'Translatable#Email1';
+                break;
+            case ContactProperty.EMAIL2:
+                displayValue = 'Translatable#Email2';
+                break;
+            case ContactProperty.EMAIL3:
+                displayValue = 'Translatable#Email3';
+                break;
+            case ContactProperty.EMAIL4:
+                displayValue = 'Translatable#Email4';
+                break;
+            case ContactProperty.EMAIL5:
+                displayValue = 'Translatable#Email5';
+                break;
             case ContactProperty.ORGANISATION_IDS:
                 displayValue = 'Translatable#Assigned Organisations';
                 break;
@@ -162,12 +179,12 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         return userProperties.some((p) => p === property);
     }
 
-    public async getExportPropertyValue(property: string, value: any): Promise<any> {
+    public async getExportPropertyValue(property: string, value: any, object?: any): Promise<any> {
         let newValue = value;
         switch (property) {
             case ContactProperty.PRIMARY_ORGANISATION_NUMBER:
-                if (value && typeof value === 'object') {
-                    const orgId = value[ContactProperty.PRIMARY_ORGANISATION_ID];
+                if (object) {
+                    const orgId = object[ContactProperty.PRIMARY_ORGANISATION_ID];
                     if (orgId) {
                         const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
                             KIXObjectType.ORGANISATION, [orgId], null, null, true
@@ -179,7 +196,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 }
                 break;
             default:
-                newValue = await super.getExportPropertyValue(property, value);
+                newValue = await super.getExportPropertyValue(property, value, object);
         }
         return newValue;
     }
@@ -276,27 +293,33 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
     public async getObjectText(
         contact: Contact, id: boolean = false, name: boolean = false, translatable: boolean = true
     ): Promise<string> {
-        let returnString = '';
+        let displayValue = '';
         if (contact) {
-            const user = await this.getUserByContact(contact);
-            const idString = user ? user.UserLogin : contact.Email;
-            if (id) {
-                returnString = idString;
-            }
-            if (name) {
-                returnString = `${contact.Firstname} ${contact.Lastname}`;
-            }
-            if (id && name) {
-                returnString = `${contact.Firstname} ${contact.Lastname} (${idString})`;
-            }
-            if (!id && !name) {
-                returnString = `${contact.Firstname} ${contact.Lastname} (${idString})`;
+            const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.CONTACT);
+
+            if (pattern) {
+                displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, contact);
+            } else {
+                const user = await this.getUserByContact(contact);
+                const idString = user ? user.UserLogin : contact.Email;
+                if (id) {
+                    displayValue = idString;
+                }
+                if (name) {
+                    displayValue = `${contact.Firstname} ${contact.Lastname}`;
+                }
+                if (id && name) {
+                    displayValue = `${contact.Firstname} ${contact.Lastname} (${idString})`;
+                }
+                if (!id && !name) {
+                    displayValue = `${contact.Firstname} ${contact.Lastname} (${idString})`;
+                }
             }
         } else {
             const contactLabel = await TranslationService.translate('Translatable#Contact');
-            returnString = contactLabel;
+            displayValue = contactLabel;
         }
-        return returnString;
+        return displayValue;
     }
 
     public getObjectTypeIcon(): string | ObjectIcon {

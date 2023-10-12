@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,6 +15,8 @@ import { NotificationEvent } from '../../model/NotificationEvent';
 import { BackendNotification } from '../../model/BackendNotification';
 import { SocketService } from '../services/SocketService';
 import { LoggingService } from '../../../../server/services/LoggingService';
+import { ServerManager } from '../../../../server/ServerManager';
+import { NotificationNamespace } from '../socket-namespaces/NotificationNamespace';
 
 export class NotificationRouter extends KIXRouter {
 
@@ -26,6 +28,9 @@ export class NotificationRouter extends KIXRouter {
         }
         return NotificationRouter.INSTANCE;
     }
+
+    private notificationTimeout: any;
+    private notificationsQueue: BackendNotification[] = [];
 
     private constructor() {
         super();
@@ -50,19 +55,37 @@ export class NotificationRouter extends KIXRouter {
 
     private async handleRequest(req: Request, res: Response): Promise<void> {
         if (Array.isArray(req.body)) {
-            const objectEvents: BackendNotification[] = req.body;
-            CacheService.getInstance().updateCaches(objectEvents)
-                .then(() => {
-                    SocketService.getInstance().broadcast(NotificationEvent.UPDATE_EVENTS, objectEvents);
-                }).catch((error) => {
-                    LoggingService.getInstance().error(error);
-                });
+            if (this.notificationTimeout) {
+                clearTimeout(this.notificationTimeout);
+            }
 
-            this.notificationListener.forEach((l) => l(objectEvents));
+            const objectEvents: BackendNotification[] = req.body;
+            for (const event of objectEvents) {
+                const hasEvent = this.notificationsQueue.some(
+                    (e) => e.Namespace === event.Namespace && e.ObjectID === event.ObjectID
+                );
+                if (!hasEvent) {
+                    this.notificationsQueue.push(event);
+                }
+            }
+
+            this.notificationTimeout = setTimeout(() => this.handleNotifications(), 500);
         }
 
         res.status(201).send();
     }
 
+    private async handleNotifications(): Promise<void> {
+        await CacheService.getInstance().updateCaches(this.notificationsQueue)
+            .catch((error) => LoggingService.getInstance().error(error));
+
+        const servers = ServerManager.getInstance().getServers();
+        for (const server of servers) {
+            server?.getSocketService()?.broadcast(NotificationEvent.UPDATE_EVENTS, this.notificationsQueue);
+        }
+
+        this.notificationListener.forEach((l) => l(this.notificationsQueue));
+        this.notificationsQueue = [];
+    }
 
 }

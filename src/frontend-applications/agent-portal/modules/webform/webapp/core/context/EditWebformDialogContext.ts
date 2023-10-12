@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,9 +8,22 @@
  */
 
 import { Context } from '../../../../../model/Context';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 export class EditWebformDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-webform-dialog-context';
+
+    public async getObject<O extends KIXObject>(
+        objectType: KIXObjectType | string = KIXObjectType.WEBFORM,
+        reload: boolean = false, changedProperties?: string[]
+    ): Promise<O> {
+        let object;
+        if (objectType === KIXObjectType.WEBFORM) {
+            object = await super.getObject(objectType);
+        }
+        return object;
+    }
 
 }

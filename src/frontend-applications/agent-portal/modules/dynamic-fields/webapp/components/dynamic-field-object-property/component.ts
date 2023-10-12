@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -20,6 +20,7 @@ import { LabelService } from '../../../../base-components/webapp/core/LabelServi
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ContextMode } from '../../../../../model/ContextMode';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -122,14 +123,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public labelClicked(label: Label): void {
-        const contextMap = {};
-        contextMap[DynamicFieldTypes.CI_REFERENCE] = 'config-item-details';
-        contextMap[DynamicFieldTypes.TICKET_REFERENCE] = 'ticket-details';
-
-        const contextId = contextMap[label?.id];
-
-        if (contextId) {
-            ContextService.getInstance().setActiveContext(contextId, label.id);
+        if (label?.id && label?.object) {
+            const contextDescriptorList = ContextService.getInstance().getContextDescriptors(ContextMode.DETAILS);
+            for (const contextDescriptor of (contextDescriptorList)) {
+                if(contextDescriptor.isContextFor(label.object.KIXObjectType)) {
+                    ContextService.getInstance().setActiveContext(contextDescriptor.contextId, label.id);
+                    return;
+                }
+            }
         }
     }
 

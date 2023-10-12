@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,6 +22,7 @@ import { UpdateObjectIconResponse } from './UpdateObjectIconResponse';
 import { UpdateObjectIconRequest } from './UpdateObjectIconRequest';
 import { Error } from '../../../../../server/model/Error';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class ObjectIconService extends KIXObjectAPIService {
 
@@ -50,39 +51,42 @@ export class ObjectIconService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, iconLoadingOptions: ObjectIconLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse<ObjectIcon>();
         if (objectType === KIXObjectType.OBJECT_ICON) {
             const objectIcons = await this.getObjectIcons(token);
+
             if (objectIds && objectIds.length) {
-                objects = objectIcons.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
-            } else if (iconLoadingOptions) {
-                if (iconLoadingOptions.object && iconLoadingOptions.objectId) {
-                    const icon = objectIcons.find(
-                        (oi) => oi.Object === iconLoadingOptions.object
-                            && oi.ObjectID.toString() === iconLoadingOptions.objectId.toString()
-                    );
-                    if (icon) {
-                        objects = [icon];
-                    }
+                const filteredIcons = objectIcons?.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                objectResponse = new ObjectResponse(filteredIcons, filteredIcons.length);
+            } else if (iconLoadingOptions?.object && iconLoadingOptions?.objectId) {
+                const icon = objectIcons.find(
+                    (oi) => oi.Object === iconLoadingOptions.object
+                        && oi.ObjectID.toString() === iconLoadingOptions.objectId.toString()
+                );
+                if (icon) {
+                    objectResponse = new ObjectResponse([icon], 1);
                 }
             } else {
-                objects = objectIcons;
+                objectResponse = new ObjectResponse<ObjectIcon>(objectIcons, objectIcons.length);
             }
         }
 
-        return objects;
+        objectResponse.totalCount = objectResponse.objects?.length;
+        return objectResponse as any;
     }
 
     public async getObjectIcons(token: string): Promise<ObjectIcon[]> {
         const config = ConfigurationService.getInstance().getServerConfiguration();
         // unlimit search, else it could possible not found if default limit is too low
         const loadingOptions = new KIXObjectLoadingOptions(null, null, 0);
-        return await super.load<ObjectIcon>(
+        const objectResponse = await super.load<ObjectIcon>(
             config?.BACKEND_API_TOKEN, KIXObjectType.OBJECT_ICON, this.RESOURCE_URI, loadingOptions, null, 'ObjectIcon',
             'ObjectIconService', ObjectIcon
         );
+
+        return objectResponse?.objects || [];
     }
 
     public async createObject(

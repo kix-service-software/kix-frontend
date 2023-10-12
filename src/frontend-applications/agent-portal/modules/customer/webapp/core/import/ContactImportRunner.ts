@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,7 +14,6 @@ import { FilterType } from '../../../../../model/FilterType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ImportRunner } from '../../../../import/webapp/core/ImportRunner';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
@@ -29,6 +28,10 @@ import { OrganisationProperty } from '../../../model/OrganisationProperty';
 export class ContactImportRunner extends ImportRunner {
 
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
+
+    protected getKnownProperties(): string[] {
+        return Object.values(ContactProperty);
+    }
 
     protected async prepareParameter(object: Contact): Promise<Array<[string, any]>> {
         const parameter = await super.prepareParameter(object);
@@ -48,7 +51,8 @@ export class ContactImportRunner extends ImportRunner {
             existingUser = Array.isArray(result) && result.length > 0 ? result[0] : undefined;
 
             if (existingUser) {
-                if ((existingContact as Contact)?.AssignedUserID !== existingUser.UserID) {
+                if ((existingContact as Contact)?.AssignedUserID &&
+                    (existingContact as Contact)?.AssignedUserID !== existingUser.UserID) {
                     throw new Error(
                         null,
                         await TranslationService.translate('Translatable#User is already assigned'));
@@ -72,11 +76,13 @@ export class ContactImportRunner extends ImportRunner {
             }
         }
 
-        const user = new User();
-        user.IsAgent = Number(object[UserProperty.IS_AGENT]) || 0;
-        user.IsCustomer = Number(object[UserProperty.IS_CUSTOMER]) || 0;
-        user.UserLogin = object[UserProperty.USER_LOGIN] || '';
-        object[KIXObjectType.USER] = user;
+        if (object[UserProperty.USER_LOGIN]) {
+            const user = new User();
+            user.IsAgent = Number(object[UserProperty.IS_AGENT]) || 0;
+            user.IsCustomer = Number(object[UserProperty.IS_CUSTOMER]) || 0;
+            user.UserLogin = object[UserProperty.USER_LOGIN];
+            object[KIXObjectType.USER] = user;
+        }
 
         return new Contact(object as Contact);
     }
@@ -97,7 +103,7 @@ export class ContactImportRunner extends ImportRunner {
     }
 
     public async getRequiredProperties(): Promise<string[]> {
-        return [ContactProperty.EMAIL, ContactProperty.PRIMARY_ORGANISATION_ID];
+        return [ContactProperty.EMAIL];
     }
 
     public getAlternativeProperty(property: string): string {
@@ -129,6 +135,14 @@ export class ContactImportRunner extends ImportRunner {
                 new FilterCriteria(
                     ContactProperty.EMAIL, SearchOperator.EQUALS,
                     FilterDataType.STRING, FilterType.AND, contact.Email
+                ),
+                new FilterCriteria(
+                    ContactProperty.FIRSTNAME, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, contact.Firstname
+                ),
+                new FilterCriteria(
+                    ContactProperty.LASTNAME, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, contact.Lastname
                 )
             ];
             const loadingOptions = new KIXObjectLoadingOptions(filter);

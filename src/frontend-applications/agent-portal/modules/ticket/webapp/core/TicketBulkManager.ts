@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,14 +23,13 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
-import { TicketService } from '.';
-import { BulkDialogContext, BulkManager } from '../../../bulk/webapp/core';
+import { QueueService, TicketService } from '.';
+import { BulkManager } from '../../../bulk/webapp/core';
 import { UserProperty } from '../../../user/model/UserProperty';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
-import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class TicketBulkManager extends BulkManager {
 
@@ -215,14 +214,15 @@ export class TicketBulkManager extends BulkManager {
                             UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                             FilterType.AND, 1
                         )
-                    ], undefined, undefined, undefined, undefined,
-                    [
-                        ['requiredPermission', 'TicketRead,TicketCreate']
-                    ]
+                    ], undefined, undefined, undefined, undefined
                 );
                 nodes = await TicketService.getInstance().getTreeNodes(
                     property, false, false, undefined, loadingOptions
                 );
+                break;
+            case TicketProperty.QUEUE_ID:
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['CREATE']);
+                nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy);
                 break;
             default:
                 nodes = await TicketService.getInstance().getTreeNodes(property);
@@ -311,34 +311,69 @@ export class TicketBulkManager extends BulkManager {
     public async validate(): Promise<ValidationResult[]> {
         const validationResult = await super.validate();
 
-        const result = [];
+        const results = [];
         const pendingValue = this.values.find((v) => v.property === TicketProperty.PENDING_TIME);
         if (pendingValue) {
             if (pendingValue.value) {
                 const pendingDate = new Date(pendingValue.value);
                 if (isNaN(pendingDate.getTime())) {
-                    result.push(
+                    results.push(
                         new ValidationResult(
                             ValidationSeverity.ERROR, 'Translatable#Pending Time has invalid date!'
                         )
                     );
                 } else if (pendingDate < new Date()) {
-                    result.push(
+                    results.push(
                         new ValidationResult(
                             ValidationSeverity.ERROR, 'Translatable#Pending Time has to be in future!'
                         )
                     );
                 }
             } else {
-                result.push(
+                results.push(
                     new ValidationResult(ValidationSeverity.ERROR, 'Translatable#Pending Time is required!')
                 );
             }
 
-            pendingValue.valid = !result.some((r) => r.severity === ValidationSeverity.ERROR);
+            pendingValue.valid = !results.some((r) => r.severity === ValidationSeverity.ERROR);
+            results.forEach((r) => {
+                if (r.severity === ValidationSeverity.ERROR) {
+                    pendingValue.validErrorMessages.push(r.message);
+                }
+            });
         }
 
-        validationResult.push(...result);
+        validationResult.push(...results);
         return validationResult;
     }
+
+    public async prepareLoadingOptions(
+        value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
+    ): Promise<KIXObjectLoadingOptions> {
+        if (value.property === TicketProperty.OWNER_ID || TicketProperty.RESPONSIBLE_ID) {
+
+            const queueValue = this.getValues()?.find((v) => v.property === TicketProperty.QUEUE_ID);
+            if (queueValue) {
+                const queueId = Array.isArray(queueValue.value)
+                    ? queueValue.value[0]
+                    : queueValue.value;
+
+                const requiredPermission = {
+                    Object: KIXObjectType.QUEUE,
+                    ObjectID: queueId,
+                    Permission: 'WRITE,READ'
+                };
+
+                const query: [string, string][] = [
+                    ['requiredPermission', JSON.stringify(requiredPermission)]
+                ];
+
+                loadingOptions.query = query;
+            } else {
+                loadingOptions.query = [];
+            }
+        }
+        return loadingOptions;
+    }
+
 }

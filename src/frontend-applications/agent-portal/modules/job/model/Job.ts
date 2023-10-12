@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -36,7 +36,7 @@ export class Job extends KIXObject {
 
     public ExecPlans: ExecPlan[];
 
-    public Filter: any;
+    public Filter: any[];
 
     public constructor(job?: Job) {
         super(job);
@@ -50,7 +50,8 @@ export class Job extends KIXObject {
             this.ExecPlanIDs = job.ExecPlanIDs;
             this.ExecPlans = job.ExecPlans ? job.ExecPlans.map((e) => new ExecPlan(e)) : [];
             this.LastExecutionTime = job.LastExecutionTime;
-            this.Filter = job.Filter;
+            this.Filter = job.Filter && !Array.isArray(job.Filter) ?
+                [job.Filter] : job.Filter;
 
             this.Macros = job.Macros
                 ? job.Macros.map((a) => new Macro(a))
@@ -65,22 +66,26 @@ export class Job extends KIXObject {
     }
 
     private prepareFilter(): void {
-        if (this.Filter) {
-            // key = AND or OR
-            for (const key in this.Filter) {
-                if (Array.isArray(this.Filter[key])) {
-                    const preparedFilter = [];
-                    for (const filter of this.Filter[key]) {
-                        if (filter.Field.match(/^DynamicField_/)) {
-                            filter.Field = filter.Field.replace(
-                                /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
-                            );
+        if (Array.isArray(this.Filter)) {
+            this.Filter.forEach((filter) => {
+                if (typeof filter === 'object') {
+                    // key = AND or OR
+                    for (const key in filter) {
+                        if (Array.isArray(filter[key])) {
+                            const preparedFilter = [];
+                            for (const filterCriteria of filter[key]) {
+                                if (filterCriteria.Field.match(/^DynamicField_/)) {
+                                    filterCriteria.Field = filterCriteria.Field.replace(
+                                        /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
+                                    );
+                                }
+                                this.prepareObjectFilter(preparedFilter, filterCriteria);
+                            }
+                            filter[key] = preparedFilter;
                         }
-                        this.prepareObjectFilter(preparedFilter, filter);
                     }
-                    this.Filter[key] = preparedFilter;
                 }
-            }
+            });
         }
     }
 }

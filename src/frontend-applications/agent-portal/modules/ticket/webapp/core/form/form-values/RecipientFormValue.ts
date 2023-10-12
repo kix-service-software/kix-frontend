@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -25,14 +25,11 @@ import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
 import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
 import addrparser from 'address-rfc2822';
-import { ArticleProperty } from '../../../../model/ArticleProperty';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
-import { Article } from '../../../../model/Article';
-import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
+import { ArticleProperty } from '../../../../model/ArticleProperty';
 
-export class RecipientFormValue extends SelectObjectFormValue {
+export class RecipientFormValue extends SelectObjectFormValue<any> {
 
     public constructor(public property: string,
         object: any,
@@ -55,18 +52,6 @@ export class RecipientFormValue extends SelectObjectFormValue {
         this.autoCompleteConfiguration = new AutoCompleteConfiguration(undefined, undefined, undefined, objectName);
 
         this.loadingOptions = new KIXObjectLoadingOptions(null, null, 10);
-
-        if (!this.value?.length && this.property === ArticleProperty.TO) {
-            const context = ContextService.getInstance().getActiveContext();
-            const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
-            if (refArticleId) {
-                const refTicketId = context?.getObjectId();
-                const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
-                if (refArticle) {
-                    this.setFormValue([refArticle?.From]);
-                }
-            }
-        }
     }
 
     protected async handlePlaceholders(value: any): Promise<any> {
@@ -132,6 +117,11 @@ export class RecipientFormValue extends SelectObjectFormValue {
         this.selectedNodes = selectedNodes;
     }
 
+    protected async searchObjects(): Promise<Contact[]> {
+        const contacts = await super.searchObjects();
+        return contacts.filter((c) => c.ValidID === 1);
+    }
+
     private async getEmailValues(value): Promise<[Contact[], string[], string[]]> {
         const contactValues: any[] = Array.isArray(value)
             ? value.filter((v) => v !== null && typeof v !== 'undefined')
@@ -179,23 +169,28 @@ export class RecipientFormValue extends SelectObjectFormValue {
 
     private async addEmailAddressNodes(emailAddresses: any[], nodes: TreeNode[]): Promise<TreeNode[]> {
         const searchMailAddresses = emailAddresses.map((v) => v.replace(/.+ <(.+)>/, '$1'));
-        const mailContacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
-            new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        'Email', SearchOperator.IN, FilterDataType.STRING,
-                        FilterType.OR, searchMailAddresses
-                    )
-                ]
-
-            ), null, true
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [
+                new FilterCriteria(
+                    'Email', SearchOperator.IN, FilterDataType.STRING,
+                    FilterType.OR, searchMailAddresses
+                )
+            ]
         );
+        loadingOptions.limit = 1;
+        loadingOptions.searchLimit = 1;
+
+        const mailContacts = await KIXObjectService.loadObjects<Contact>(
+            KIXObjectType.CONTACT, null, loadingOptions, null, true
+        );
+
         const mailNodes = await this.getContactNodes(mailContacts);
 
         const unknownMailAddressNodes = emailAddresses.map((ma) => {
             const id = ma.replace(/.+ <(.+)>/, '$1');
             return new TreeNode(id, ma, 'kix-icon-man-bubble');
         });
+
         return [
             ...nodes,
             ...mailNodes.filter((mn) => !nodes.some((n) => n.id === mn.id)),
@@ -242,18 +237,6 @@ export class RecipientFormValue extends SelectObjectFormValue {
         await super.setObjectValue(recipientValue);
     }
 
-    private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
-        let article: Article;
-        if (refArticleId && refTicketId) {
-            const articles = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, [refArticleId], null,
-                new ArticleLoadingOptions(refTicketId), true
-            ).catch(() => [] as Article[]);
-            article = articles.find((a) => a.ArticleID === refArticleId);
-        }
-        return article;
-    }
-
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
         if ((!this.value || isEdit) && field.defaultValue?.value && !field.empty) {
@@ -263,6 +246,11 @@ export class RecipientFormValue extends SelectObjectFormValue {
 
         if (field.empty) {
             this.setFormValue(null);
+        }
+
+        // enable TO if "active" in template for new context
+        if (!isEdit && this.property === ArticleProperty.TO) {
+            this.enabled = true;
         }
     }
 

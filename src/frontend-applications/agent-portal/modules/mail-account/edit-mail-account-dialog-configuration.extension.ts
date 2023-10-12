@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,16 +19,8 @@ import { ContextMode } from '../../model/ContextMode';
 import { FormFieldConfiguration } from '../../model/configuration/FormFieldConfiguration';
 import { MailAccountProperty } from './model/MailAccountProperty';
 import { FormFieldOption } from '../../model/configuration/FormFieldOption';
-import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
-import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
-import { FilterCriteria } from '../../model/FilterCriteria';
-import { SearchOperator } from '../search/model/SearchOperator';
-import { FilterDataType } from '../../model/FilterDataType';
-import { FilterType } from '../../model/FilterType';
-import { TreeNode } from '../base-components/webapp/core/tree';
-import { DispatchingType } from './model/DispatchingType';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
@@ -97,7 +89,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'mail-account-edit-form-field-accept-header',
-                'Translatable#Accept KIX Header', MailAccountProperty.TRUSTED, 'checkbox-input', true,
+                'Translatable#Accept KIX Header', MailAccountProperty.TRUSTED, 'checkbox-input', false,
                 'Translatable#Helptext_Admin_MailAccountCreate_AcceptKIXHeader', undefined,
                 new FormFieldValue(false)
             )
@@ -105,29 +97,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'mail-account-edit-form-field-dispatching',
-                'Translatable#Dispatching', MailAccountProperty.DISPATCHING_BY, 'object-reference-input',
-                true, 'Translatable#Helptext_Admin_MailAccountCreate_Dispachting',
-                [
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
-                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    'ParentID', SearchOperator.EQUALS, FilterDataType.STRING,
-                                    FilterType.AND, null
-                                )
-                            ],
-                            null, null,
-                            ['SubQueues'],
-                            ['SubQueues']
-                        )
-                    ),
-                    new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true),
-                    new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, [
-                        new TreeNode(DispatchingType.FRONTEND_KEY_DEFAULT, 'Translatable#Default'),
-                    ])
-                ]
+                'Translatable#Dispatching', MailAccountProperty.DISPATCHING_BY, 'mail-account-input-dispatching',
+                true, 'Translatable#Helptext_Admin_MailAccountCreate_Dispachting'
             )
         );
         configurations.push(

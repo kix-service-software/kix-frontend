@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,14 +15,19 @@ import { FilterType } from '../../../../../../model/FilterType';
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
+import { User } from '../../../../../user/model/User';
 import { UserProperty } from '../../../../../user/model/UserProperty';
 import { Ticket } from '../../../../model/Ticket';
+import { TicketProperty } from '../../../../model/TicketProperty';
 
 export class UserObjectFormValue extends SelectObjectFormValue {
+
+    private objectBindingIds: string[] = [];
 
     public constructor(
         property: string,
@@ -36,10 +41,29 @@ export class UserObjectFormValue extends SelectObjectFormValue {
         this.autoCompleteConfiguration = new AutoCompleteConfiguration();
     }
 
-
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
+    }
 
+    public async initFormValue(): Promise<void> {
+        await super.initFormValue();
+        if (this.object && this.property) {
+            if (this.objectValueMapper?.object) {
+                this.objectBindingIds = [
+                    this.objectValueMapper.object.addBinding(TicketProperty.QUEUE_ID, () => {
+                        this.setLoadingOptions();
+                        this.value = null;
+                    })
+                ];
+            }
+        }
+
+        this.setLoadingOptions();
+
+        this.loadInitialUser();
+    }
+
+    public async setLoadingOptions(): Promise<void> {
         // add default loading options for (agent) users
         const filter: FilterCriteria[] = [
             new FilterCriteria(
@@ -51,8 +75,17 @@ export class UserObjectFormValue extends SelectObjectFormValue {
                 FilterType.AND, 1
             )
         ];
+
+        const ticket = this.objectValueMapper?.object as Ticket;
+
+        const requiredPermission = {
+            Object: KIXObjectType.QUEUE,
+            ObjectID: ticket?.QueueID,
+            Permission: 'WRITE,READ'
+        };
+
         const query: [string, string][] = [
-            ['requiredPermission', 'TicketRead,TicketCreate']
+            ['requiredPermission', JSON.stringify(requiredPermission)]
         ];
 
         if (!this.loadingOptions) {
@@ -69,23 +102,24 @@ export class UserObjectFormValue extends SelectObjectFormValue {
             this.loadingOptions.filter = filter;
         }
 
-        if (Array.isArray(this.loadingOptions.query)) {
-            query.forEach((q) => {
-                if (!this.loadingOptions.query.some((loq) => loq[0] === q[0])) {
-                    this.loadingOptions.query.push(q);
-                }
-            });
-        } else {
-            this.loadingOptions.query = query;
-        }
+        this.loadingOptions.query = query;
     }
 
-    public async initFormValue(): Promise<void> {
-        await super.initFormValue();
-        if (this.object && this.property) {
-            const userId = this.object[this.property];
-            if (userId) {
-                await this.setFormValue(userId, true);
+    public async reset(
+        ignoreProperties?: string[], ignoreFormValueProperties?: string[], ignoreFormValueReset?: string[]
+    ): Promise<void> {
+        await super.reset(ignoreProperties, ignoreFormValueProperties, ignoreFormValueReset);
+        await this.loadInitialUser();
+    }
+
+    protected async loadInitialUser(): Promise<void> {
+        if (this.enabled) {
+            this.loadingOptions.limit = 10;
+            this.loadingOptions.searchLimit = 10;
+            const users = await KIXObjectService.loadObjects<User>(KIXObjectType.USER, null, this.loadingOptions)
+                .catch((): User[] => []);
+            if (users?.length) {
+                await this.prepareSelectableNodes(users);
             }
         }
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -217,7 +217,8 @@ export abstract class KIXObjectFormService {
             f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
             [], null, (parent ? parent.instanceId : f.parentInstanceId), f.countDefault, f.countMax, f.countMin,
             f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure, f.readonly,
-            f.placeholder, undefined, f.showLabel, f.name, f.draggableFields, f.defaultHint
+            f.placeholder, undefined, f.showLabel, f.name, f.draggableFields, f.defaultHint, f.type, f.visible,
+            f.translateLabel, f.valid, f.countSeparatorString
         );
 
         newField.instanceId = IdService.generateDateBasedId(newField.property);

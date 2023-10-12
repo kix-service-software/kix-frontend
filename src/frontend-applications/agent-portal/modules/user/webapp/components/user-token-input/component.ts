@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,18 +7,18 @@
  * --
  */
 
-import { ComponentState } from './ComponentState';
-import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
-import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { UserProperty } from '../../../model/UserProperty';
-import { AgentService } from '../../core/AgentService';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { PersonalSettingsProperty } from '../../../model/PersonalSettingsProperty';
 import { User } from '../../../model/User';
-import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { UserProperty } from '../../../model/UserProperty';
+import { AgentService } from '../../core/AgentService';
+import { ComponentState } from './ComponentState';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -49,7 +49,7 @@ class Component extends FormInputComponent<string, ComponentState> {
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint });
 
         const objectType = this.userId ? KIXObjectType.USER : KIXObjectType.CURRENT_USER;
-        await KIXObjectService.updateObject(objectType, [[UserProperty.EXEC_GENRATE_TOKEN, 1]], this.userId)
+        await KIXObjectService.updateObject(objectType, [[UserProperty.EXEC_GENERATE_TOKEN, 1]], this.userId)
             .catch(() => null);
         this.setCurrentValue();
 

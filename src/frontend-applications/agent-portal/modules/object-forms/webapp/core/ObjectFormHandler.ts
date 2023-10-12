@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -81,7 +81,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
 
     public async commit(): Promise<string | number> {
 
-        this.objectFormValidator.enable();
+        await this.objectFormValidator.enable();
         const valid = await this.objectFormValidator.validateForm();
         if (!valid) {
             const validationResults = this.objectFormValueMapper.getValidationResults();
@@ -119,8 +119,8 @@ export class ObjectFormHandler<T extends KIXObject = any> {
         return id;
     }
 
-    public enableValidation(): void {
-        this.objectFormValidator.enable();
+    public async enableValidation(): Promise<void> {
+        await this.objectFormValidator.enable();
     }
 
     public disableValidation(): void {

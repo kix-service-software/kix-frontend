@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -18,6 +18,8 @@ import { Error } from '../../../../../server/model/Error';
 import { TicketType } from '../model/TicketType';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { TicketTypeProperty } from '../model/TicketTypeProperty';
 
 export class TicketTypeAPIService extends KIXObjectAPIService {
 
@@ -50,28 +52,36 @@ export class TicketTypeAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse<TicketType>();
         if (objectType === KIXObjectType.TICKET_TYPE) {
             const hasValidFilter = loadingOptions?.filter?.length === 1 &&
                 loadingOptions.filter[0].property === KIXObjectProperty.VALID_ID;
+            const hasNameFilter = loadingOptions?.filter?.length === 1 &&
+                loadingOptions.filter[0].property === TicketTypeProperty.NAME;
 
-            objects = await super.load<TicketType>(
+            objectResponse = await super.load<TicketType>(
                 token, KIXObjectType.TICKET_TYPE, this.RESOURCE_URI, null, null,
                 KIXObjectType.TICKET_TYPE, clientRequestId, TicketType
-            );
+            ).catch((): ObjectResponse<TicketType> => new ObjectResponse());
 
             if (hasValidFilter) {
-                objects = objects.filter((o) => o.ValidID === loadingOptions.filter[0].value);
+                objectResponse.objects = objectResponse?.objects?.filter(
+                    (o) => o.ValidID === loadingOptions.filter[0].value
+                );
+            } else if (hasNameFilter) {
+                objectResponse.objects = objectResponse?.objects?.filter(
+                    (o) => o.Name === loadingOptions.filter[0].value
+                );
             }
 
             if (objectIds && objectIds.length) {
-                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ID));
+                objectResponse.objects = objectResponse?.objects?.filter((t) => objectIds.some((oid) => oid === t.ID));
             }
         }
 
-        return objects;
+        return objectResponse as any;
     }
 
     public async createObject(

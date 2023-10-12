@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -31,6 +31,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state = new ComponentState();
     }
 
+    public onInput(input: any): void {
+        this.column = input.column;
+        this.cell = input.cell;
+        this.initCellComponent();
+    }
+
     public async onMount(): Promise<void> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
@@ -38,41 +44,46 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (this.cell && data === this.cell.getValue().instanceId) {
                     (this as any).setStateDirty();
                     setTimeout(() => this.state.loading = false, 5);
+                } else if (eventId === TableEvent.ROW_VALUE_STATE_CHANGED) {
+                    this.setValueStateClass();
                 }
             }
         };
 
         await this.cell.getValue().initDisplayValue(this.cell);
 
+        this.initCellComponent();
+
         this.state.loading = false;
 
         EventService.getInstance().subscribe(TableEvent.DISPLAY_VALUE_CHANGED, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this.subscriber);
     }
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TableEvent.DISPLAY_VALUE_CHANGED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this.subscriber);
     }
 
-    public onInput(input: any): void {
-
-        if (input.column) {
-            this.column = input.column;
+    private initCellComponent(): void {
+        if (this.column) {
             const componentId = this.column.getColumnConfiguration().componentId;
             this.state.showDefaultCell = !componentId || componentId === '';
         }
 
-        if (input.cell) {
-            this.cell = input.cell;
-            const table = input.cell.getRow().getTable();
+        if (this.cell) {
+            const table = this.cell.getRow().getTable();
             const tableConfiguration = table.getTableConfiguration();
-            const object = input.cell.getRow().getRowObject().getObject();
+            const object = this.cell.getRow().getRowObject().getObject();
             if (tableConfiguration && tableConfiguration.routingConfiguration) {
                 this.state.object = object;
                 this.state.routingConfiguration = tableConfiguration.routingConfiguration;
             } else if (object && object.KIXObjectType) {
                 const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(object.KIXObjectType);
                 if (service) {
-                    this.state.routingConfiguration = service.getObjectRoutingConfiguration(object);
+                    this.state.routingConfiguration = service.getObjectRoutingConfiguration(
+                        object, this.column.getColumnConfiguration().property
+                    );
                 }
             }
 
@@ -84,7 +95,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.objectId = object[this.state.routingConfiguration.objectIdProperty];
             }
 
-            this.setValueStateClass(input.cell);
+            this.setValueStateClass();
         }
     }
 
@@ -97,10 +108,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return undefined;
     }
 
-    private async setValueStateClass(cell: Cell): Promise<void> {
+    private async setValueStateClass(): Promise<void> {
         let classes = [];
-        const state = cell.getValue().state && cell.getValue().state !== ValueState.NONE
-            ? cell.getValue().state : cell.getRow().getRowObject().getValueState();
+        const state = this.cell.getValue()?.state !== ValueState.NONE
+            ? this.cell.getValue().state
+            : this.cell.getRow().getRowObject().getValueState();
+
         if (state) {
             switch (state) {
                 case ValueState.CHANGED:
@@ -131,20 +144,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        const object = cell.getRow().getRowObject().getObject();
+        const object = this.cell.getRow().getRowObject().getObject();
         if (object) {
-            const objectType = cell.getRow().getTable().getObjectType();
+            const objectType = this.cell.getRow().getTable().getObjectType();
             const cssHandler = TableCSSHandlerRegistry.getObjectCSSHandler(objectType);
             if (cssHandler) {
                 for (const handler of cssHandler) {
-                    const valueClasses = await handler.getValueCSSClasses(object, cell.getValue());
+                    const valueClasses = await handler.getValueCSSClasses(object, this.cell.getValue());
                     valueClasses.forEach((c) => classes.push(c));
                 }
             }
 
             const commonHandler = TableCSSHandlerRegistry.getCommonCSSHandler();
             for (const h of commonHandler) {
-                const valueClasses = await h.getValueCSSClasses(object, cell.getValue());
+                const valueClasses = await h.getValueCSSClasses(object, this.cell.getValue());
                 classes = [...classes, ...valueClasses];
             }
         }

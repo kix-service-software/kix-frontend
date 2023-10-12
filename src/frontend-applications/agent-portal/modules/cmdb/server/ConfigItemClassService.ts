@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -25,6 +25,7 @@ import { UpdateConfigItemClassRequest } from './api/UpdateConfigItemClassRequest
 import { Error } from '../../../../../server/model/Error';
 import { ConfigItemClass } from '../model/ConfigItemClass';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 
 export class ConfigItemAPIClassService extends KIXObjectAPIService {
@@ -75,8 +76,8 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
-        let objects = [];
+    ): Promise<ObjectResponse<T>> {
+        let objectResponse = new ObjectResponse<ConfigItemClass>();
 
         const cacheTypes = [
             `${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`,
@@ -84,12 +85,12 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
         ];
 
         if (cacheTypes.some((ct) => ct === (loadingOptions?.cacheType))) {
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'ConfigItemClass',
                 clientRequestId, ConfigItemClass
             );
         } else {
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, objectType, this.RESOURCE_URI, null, null, 'ConfigItemClass',
                 clientRequestId, ConfigItemClass
             );
@@ -98,15 +99,19 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
                 loadingOptions.filter[0].property === KIXObjectProperty.VALID_ID;
 
             if (hasValidFilter) {
-                objects = objects.filter((o) => o.ValidID === loadingOptions.filter[0].value);
+                objectResponse.objects = objectResponse.objects?.filter(
+                    (o) => o.ValidID === loadingOptions.filter[0].value
+                );
             }
 
             if (objectIds && objectIds.length) {
-                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ID));
+                objectResponse.objects = objectResponse.objects?.filter(
+                    (t) => objectIds.some((oid) => oid === t.ID)
+                );
             }
         }
 
-        return objects;
+        return objectResponse as any;
     }
 
     public async createObject(

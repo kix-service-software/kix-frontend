@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -34,7 +34,16 @@ class ActionComponent {
     }
 
     public doAction(event: any): void {
+        if (!this.state.canRunAction) return;
+        this.state.canRunAction = false;
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
         this.state.action.run(event);
+        setTimeout(() => {
+            this.state.canRunAction = true;
+        }, 500);
     }
 
     public linkClicked(event: any): void {

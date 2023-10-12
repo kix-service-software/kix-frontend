@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,10 +29,16 @@ export class SortUtil {
             case DataType.DATE:
             case DataType.DATE_TIME:
                 sort = SortUtil.compareDate(a[property], b[property], sortOrder);
+                if (sort === 0) {
+                    sort = SortUtil.compareObjectByObjectId(a, b, sortOrder);
+                }
                 break;
             case DataType.NUMBER:
             case DataType.INTEGER:
                 sort = SortUtil.compareNumber(a[property], b[property], sortOrder);
+                if (sort === 0) {
+                    sort = SortUtil.compareObjectByObjectId(a, b, sortOrder);
+                }
                 break;
             default:
                 sort = SortUtil.compareString(a[property], b[property], sortOrder);
@@ -70,7 +76,7 @@ export class SortUtil {
     }
 
     public static compareNumber(
-        a: number, b: number, sortOrder: SortOrder = SortOrder.UP, notNumberBefore: boolean = true
+        a: any, b: any, sortOrder: SortOrder = SortOrder.UP, notNumberBefore: boolean = true
     ): number {
         let sort = 0;
         if (typeof a !== 'number') {
@@ -95,6 +101,16 @@ export class SortUtil {
             sort = (dateA.getTime() - dateB.getTime());
         }
         return sortOrder === SortOrder.DOWN ? sort * (-1) : sort;
+    }
+
+    public static compareObjectByObjectId<T>(a: T, b: T, sortOrder: SortOrder): number {
+        let sort = 0;
+        if (a['ObjectId']) {
+            typeof a['ObjectId'] === 'number'
+                ? sort = SortUtil.compareNumber(a['ObjectId'], b['ObjectId'], sortOrder)
+                : sort = SortUtil.compareString(a['ObjectId'], b['ObjectId'], sortOrder);
+        }
+        return sort;
     }
 
 }

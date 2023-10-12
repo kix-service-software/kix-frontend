@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,6 +11,8 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { TicketUIEvent } from '../../../model/TicketUIEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -30,10 +32,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         event.stopPropagation();
         event.preventDefault();
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.provideScrollInformation(KIXObjectType.ARTICLE, this.state.cell.getValue().objectValue);
-        }
+        EventService.getInstance().publish(
+            TicketUIEvent.SCROLL_TO_ARTICLE, { articleId: this.state.cell.getValue().objectValue }
+        );
     }
 
 }

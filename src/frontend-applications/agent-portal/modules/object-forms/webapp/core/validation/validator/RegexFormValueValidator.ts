@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,7 +17,7 @@ export class RegexFormValueValidator extends ObjectFormValueValidator {
     public async validate(formValue: ObjectFormValue<any>): Promise<ValidationResult[]> {
         const result = [];
 
-        if (!formValue?.isCountHandler && formValue?.value && formValue?.regExList?.length) {
+        if (formValue?.value && formValue?.regExList?.length) {
             formValue.regExList.forEach((regExItem) => {
                 const regex = new RegExp(regExItem.regEx);
                 if (!regex.test(formValue.value)) {

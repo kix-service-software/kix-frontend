@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,6 +29,8 @@ import { Ticket } from '../../model/Ticket';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { ConfigItemProperty } from '../../../cmdb/model/ConfigItemProperty';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -129,8 +131,6 @@ export class TicketSearchFormManager extends SearchFormManager {
 
     private isDropDown(property: string): boolean {
         return Ticket.SEARCH_PROPERTIES.some((p) => p.Property === property && p.InputType === InputFieldTypes.DROPDOWN)
-            || property === KIXObjectProperty.CREATE_BY
-            || property === KIXObjectProperty.CHANGE_BY
             || property === TicketProperty.STATE_TYPE
             || property === 'Queue.FollowUpID';
     }
@@ -183,6 +183,10 @@ export class TicketSearchFormManager extends SearchFormManager {
                     new TreeNode(0, no),
                     new TreeNode(1, yes)
                 ];
+                break;
+            case TicketProperty.QUEUE_ID:
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['READ']);
+                nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, true, true);
                 break;
             default:
                 nodes = await super.getTreeNodes(property);
@@ -239,16 +243,29 @@ export class TicketSearchFormManager extends SearchFormManager {
 
     public async setValue(newValue: ObjectPropertyValue, silent?: boolean): Promise<void> {
         if (newValue.property === TicketProperty.STATE_TYPE && this.handleViewableStateType) {
-            newValue.readonly = false;
-            newValue.required = true;
-            newValue.changeable = false;
-            if (!newValue.value) {
-                newValue.value = ['Open'];
+
+            const stateValue = this.values.find((v) => v.property === TicketProperty.STATE_ID);
+            if (!stateValue) {
+                newValue.readonly = false;
+                newValue.required = false;
+                newValue.changeable = false;
+                if (!newValue.value) {
+                    newValue.value = ['Open'];
+                }
             }
         }
 
         await super.setValue(newValue, silent);
     }
 
+    public async prepareLoadingOptions(
+        value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
+    ): Promise<KIXObjectLoadingOptions> {
+        if (value.property === 'DynamicFields.AffectedServices') {
+            loadingOptions.filter = loadingOptions.filter?.filter(
+                (filter) => filter.property !== ConfigItemProperty.CUR_DEPL_STATE_ID);
+        }
+        return loadingOptions;
+    }
 
 }

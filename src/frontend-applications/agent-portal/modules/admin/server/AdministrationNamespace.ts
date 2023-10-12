@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -20,8 +20,8 @@ import { AdminCategoriesResponse } from '../model/AdminCategoriesResponse';
 import { AdminModuleService } from './AdminModuleService';
 import { AdminModuleCategory } from '../model/AdminModuleCategory';
 import { AdminModule } from '../model/AdminModule';
-import { CacheService } from '../../../server/services/cache';
 import { Socket } from 'socket.io';
+import cookie from 'cookie';
 
 export class AdministrationNamespace extends SocketNameSpace {
 
@@ -52,19 +52,21 @@ export class AdministrationNamespace extends SocketNameSpace {
     }
 
     private async loadAdminCategories(data: MainMenuEntriesRequest, client: Socket): Promise<SocketResponse> {
-        let adminCategoryResponse = await CacheService.getInstance().get('KIX_ADMIN_MODULES');
-        if (!adminCategoryResponse) {
-            adminCategoryResponse = await AdminModuleService.getInstance().getAdminModules()
-                .then((categories: Array<AdminModuleCategory | AdminModule>) =>
-                    new SocketResponse(
-                        AdministrationEvent.ADMIN_CATEGORIES_LOADED,
-                        new AdminCategoriesResponse(data.requestId, categories)
-                    )
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
+
+        const adminCategoryResponse = await AdminModuleService.getInstance().getAdminModules(token)
+            .then((categories: Array<AdminModuleCategory | AdminModule>) =>
+                new SocketResponse(
+                    AdministrationEvent.ADMIN_CATEGORIES_LOADED,
+                    new AdminCategoriesResponse(data.requestId, categories)
                 )
-                .catch(
-                    (error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
-                );
-        }
+            )
+            .catch(
+                (error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
+            );
         return adminCategoryResponse;
     }
 

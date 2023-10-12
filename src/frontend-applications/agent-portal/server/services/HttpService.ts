@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,9 +21,12 @@ import { Error } from '../../../../server/model/Error';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { User } from '../../modules/user/model/User';
 import { PermissionError } from '../../modules/user/model/PermissionError';
-import { AxiosAdapter, AxiosError, AxiosRequestConfig } from 'axios';
+import { AxiosAdapter, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { SocketAuthenticationError } from '../../../../server/model/SocketAuthenticationError';
 import { RequestCounter } from '../../../../server/services/RequestCounter';
+import { HTTPResponse } from './HTTPResponse';
+import { Session } from '../../../../server/model/Session';
+import { IncomingHttpHeaders } from 'http';
 
 export class HttpService {
 
@@ -66,7 +69,7 @@ export class HttpService {
     public async get<T>(
         resource: string, queryParameters: any, token: string, clientRequestId: string,
         cacheKeyPrefix: string = '', useCache: boolean = true
-    ): Promise<T> {
+    ): Promise<HTTPResponse<T>> {
         const options = {
             method: RequestMethod.GET,
             params: queryParameters
@@ -105,7 +108,7 @@ export class HttpService {
             }
         }
 
-        const requestPromise = this.executeRequest<T>(resource, token, clientRequestId, options);
+        const requestPromise = this.executeRequest<HTTPResponse>(resource, token, clientRequestId, options);
         this.requestPromises.set(requestKey, requestPromise);
 
         if (this.isClusterEnabled && useCache) {
@@ -115,7 +118,7 @@ export class HttpService {
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size, true);
 
-        const response = await requestPromise.catch((error): any => {
+        const response = await requestPromise.catch((error) => {
             this.requestPromises.delete(requestKey);
             RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
 
@@ -127,6 +130,10 @@ export class HttpService {
             throw error;
         });
 
+        this.requestPromises.delete(requestKey);
+
+        RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
+
         if (useCache) {
             if (this.isClusterEnabled) {
                 LoggingService.getInstance().debug('\tSEMAPHOR\t' + semaphorKey + '\tDELETE');
@@ -136,38 +143,38 @@ export class HttpService {
             CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
         }
 
-        this.requestPromises.delete(requestKey);
-
-        RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
-
         return response;
     }
 
     public async post<T>(
         resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = '',
-        logError: boolean = true
+        logError: boolean = true, relevantOrganisationId?: number, headers?: IncomingHttpHeaders
     ): Promise<T> {
         const options: AxiosRequestConfig = {
             method: RequestMethod.POST,
-            data: content
+            data: content,
+            params: { RelevantOrganisationID: relevantOrganisationId }
         };
 
-        const response = await this.executeRequest<T>(resource, token, clientRequestId, options, logError);
+
+        const response = await this.executeRequest(resource, token, clientRequestId, options, logError, headers);
         await CacheService.getInstance().deleteKeys(cacheKeyPrefix).catch(() => null);
-        return response;
+        return response?.data;
     }
 
     public async patch<T>(
-        resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = ''
+        resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = '',
+        relevantOrganisationId: number
     ): Promise<T> {
         const options: AxiosRequestConfig = {
             method: RequestMethod.PATCH,
-            data: content
+            data: content,
+            params: { RelevantOrganisationID: relevantOrganisationId }
         };
 
-        const response = await this.executeRequest<T>(resource, token, clientRequestId, options);
+        const response = await this.executeRequest(resource, token, clientRequestId, options);
         await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
-        return response;
+        return response?.data;
     }
 
     public async delete<T>(
@@ -181,7 +188,7 @@ export class HttpService {
         const errors = [];
         const executePromises = [];
         resources.forEach((resource) => executePromises.push(
-            this.executeRequest<T>(resource, token, clientRequestId, options, logError)
+            this.executeRequest(resource, token, clientRequestId, options, logError)
                 .catch((error: Error) => errors.push(error))
         ));
 
@@ -199,7 +206,8 @@ export class HttpService {
         };
 
         const user = await this.getUserByToken(token);
-        const cacheId = user.RoleIDs?.sort().join(';');
+        const session = await this.getUserSession(token);
+        const cacheId = user.RoleIDs?.sort().join(';') + `${session?.UserType}`;
 
         const cacheKey = cacheId + resource;
         const cacheType = collection === null || typeof collection === 'undefined' || collection
@@ -211,14 +219,15 @@ export class HttpService {
             if (!this.requestPromises.has(cacheKey)) {
                 this.requestPromises.set(
                     cacheKey,
-                    this.executeRequest<Response>(
+                    this.executeRequest(
                         resource, token, clientRequestId, options, true
                     )
                 );
             }
 
             const request = this.requestPromises.get(cacheKey);
-            headers = await request;
+            const response = await request;
+            headers = response.headers;
             await CacheService.getInstance().set(cacheKey, headers, cacheType);
             this.requestPromises.delete(cacheKey);
         }
@@ -226,9 +235,9 @@ export class HttpService {
         return new OptionsResponse(headers);
     }
 
-    private async executeRequest<T>(
+    private async executeRequest<T = AxiosResponse>(
         resource: string, token: string, clientRequestId: string, options: AxiosRequestConfig,
-        logError: boolean = true
+        logError: boolean = true, headers?: IncomingHttpHeaders
     ): Promise<T> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
@@ -239,10 +248,11 @@ export class HttpService {
         // extend options
         options.baseURL = this.apiURL;
         options.url = this.buildRequestUrl(resource);
-        options.headers = {
-            'Authorization': 'Token ' + backendToken,
-            'KIX-Request-ID': clientRequestId ? clientRequestId : ''
-        };
+
+        options.headers = headers || {};
+        options.headers['Authorization'] = 'Token ' + backendToken;
+        options.headers['KIX-Request-ID'] = clientRequestId ? clientRequestId : '';
+
         options.maxBodyLength = Infinity;
         options.maxContentLength = Infinity;
 
@@ -268,7 +278,7 @@ export class HttpService {
                 data: [options, parameter]
             });
 
-        const response = await this.axios(options).catch((error: AxiosError) => {
+        let response: AxiosResponse | HTTPResponse = await this.axios(options).catch((error: AxiosError) => {
             if (logError) {
                 LoggingService.getInstance().error(
                     `Error during HTTP (${resource}) ${options.method} request.`, error
@@ -286,7 +296,21 @@ export class HttpService {
 
         ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
 
-        return options.method === RequestMethod.OPTIONS ? response.headers : response.data;
+        if (options.method === 'GET') {
+            const countHeaders: any = {};
+            if (response.headers) {
+                for (const h in response.headers) {
+                    if (h.startsWith('x-total-count-')) {
+                        const object = h.toLocaleLowerCase().replace('x-total-count-', '');
+                        countHeaders[object] = Number(response.headers[h]) || 0;
+                    }
+                }
+            }
+
+            response = new HTTPResponse(response?.data, countHeaders);
+        }
+
+        return response as any;
     }
 
     private getPreparedBody(body: any): any {
@@ -345,7 +369,6 @@ export class HttpService {
 
     public async getUserByToken(token: string, withStats?: boolean): Promise<User> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
-
         const userId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
 
         const cacheType = withStats
@@ -374,7 +397,7 @@ export class HttpService {
                 };
             } else {
                 params = {
-                    'include': 'Preferences,RoleIDs,Contact'
+                    'include': 'Preferences,RoleIDs,Contact,DynamicFields'
                 };
             }
 
@@ -418,6 +441,64 @@ export class HttpService {
             return null;
         });
         return loadedUser;
+    }
+
+    public async getUserSession(token: string): Promise<Session> {
+        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+
+        const cacheType = `${KIXObjectType.USER_SESSION}_${token}`;
+
+        const session = await CacheService.getInstance().get(backendToken, cacheType);
+        if (session) {
+            return session;
+        }
+
+        const requestKey = `${KIXObjectType.USER_SESSION}-${token}`;
+        if (this.requestPromises.has(requestKey)) {
+            return this.requestPromises.get(requestKey);
+        }
+
+        const requestPromise = new Promise<User>(async (resolve, reject) => {
+            const options: AxiosRequestConfig = { method: RequestMethod.GET };
+
+            const uri = 'session';
+            options.url = this.buildRequestUrl(uri);
+            options.headers = {
+                'Authorization': 'Token ' + backendToken,
+                'KIX-Request-ID': ''
+            };
+
+            // start profiling
+            const profileTaskId = ProfilingService.getInstance().start(
+                'HttpService', options.method + '\t' + uri + '\t', { data: [options] }
+            );
+
+            const response = await this.axios(options)
+                .catch((error: AxiosError) => {
+                    LoggingService.getInstance().error(
+                        `Error during HTTP (${uri}) ${options.method} request.`, error
+                    );
+                    ProfilingService.getInstance().stop(profileTaskId, { data: ['Error'] });
+                    if (error.response?.status === 403) {
+                        throw new PermissionError(this.createError(error), uri, options.method);
+                    } else {
+                        throw this.createError(error);
+                    }
+                });
+
+            await CacheService.getInstance().set(backendToken, response.data['Session'], cacheType);
+            ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
+            this.requestPromises.delete(requestKey);
+            resolve(response.data['Session']);
+        });
+
+        this.requestPromises.set(requestKey, requestPromise);
+
+        const loadedSession = await requestPromise.catch(() => {
+            this.requestPromises.delete(requestKey);
+            return null;
+        });
+        return loadedSession;
     }
 
     public getPendingRequestCount(): number {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,6 +19,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ValidService } from '../../../valid/webapp/core';
@@ -28,6 +29,7 @@ export abstract class ImportRunner {
 
     public abstract objectType: KIXObjectType | string;
 
+    private knownProperties: string[];
     private csvProperties: string[] = [];
     private csvObjects: any[] = [];
 
@@ -39,6 +41,10 @@ export abstract class ImportRunner {
         this.errors = [];
         this.csvObjects = [];
         this.csvProperties = [];
+        this.knownProperties = [
+            ...this.getKnownProperties(),
+            ...Object.values(KIXObjectProperty)
+        ];
 
         const encoding = ImportConfig.getCharacterSet().find((v) => v.key === characterSet)?.value;
         const importString = await BrowserUtil.readFileAsText(csvFile, encoding);
@@ -50,6 +56,10 @@ export abstract class ImportRunner {
         }
 
         this.csvObjects = await this.prepareObjects();
+    }
+
+    protected getKnownProperties(): string[] {
+        return [];
     }
 
     private async parseCSVData(
@@ -68,9 +78,6 @@ export abstract class ImportRunner {
     }
 
     private async readCSVData(lines: Array<string[]>): Promise<void> {
-        this.csvObjects = [];
-        this.csvProperties = [];
-
         this.csvProperties = lines.length > 0 ? lines.shift() : [];
 
         const lineErrors: number[] = [];
@@ -87,6 +94,9 @@ export abstract class ImportRunner {
             object['CSV_LINE'] = rowIndex + 1;
             this.csvObjects.push(object);
         });
+        this.csvProperties = this.csvProperties.filter(
+            (p) => this.knownProperties.some((kp) => p === kp) || p.match(/^DynamicField/)
+        );
 
         if (lineErrors.length) {
             const rowLabel = await TranslationService.translate('Translatable#Row');
@@ -131,6 +141,7 @@ export abstract class ImportRunner {
 
     public async getObject(object: any): Promise<KIXObject> {
         await this.fixValidValue(object);
+        await this.prepareDFs(object);
 
         const specificObject = await this.getSpecificObject(object);
         if (specificObject) {
@@ -141,6 +152,9 @@ export abstract class ImportRunner {
                 return o && o['CSV_LINE'] === specificObject['CSV_LINE'];
             };
         }
+
+        this.removeUnknownProperties(specificObject);
+
         return specificObject;
     }
 
@@ -155,8 +169,40 @@ export abstract class ImportRunner {
         }
     }
 
+    private async prepareDFs(object: any): Promise<void> {
+        const dfs = [];
+        Object.keys(object).forEach((property: string) => {
+            const dfName = KIXObjectService.getDynamicFieldName(property);
+            if (dfName) {
+                dfs.push(property);
+            }
+        });
+        if (dfs.length) {
+            object.DynamicFields = [];
+            dfs.forEach((property) => {
+                const valueList = object[property].split(':KEYSEPARATOR:');
+                let dfName = KIXObjectService.getDynamicFieldName(property);
+                dfName = dfName.replace(/(.+)_key/, '$1');
+                const dfValue = new DynamicFieldValue();
+                dfValue.Name = dfName;
+                dfValue.Value = valueList;
+                object.DynamicFields.push(dfValue);
+            });
+        }
+    }
+
     protected getSpecificObject(object: any): Promise<KIXObject> {
         return object;
+    }
+
+    private removeUnknownProperties(object: any): void {
+        const unknownProperties = [];
+        Object.keys(object).forEach((p) => {
+            if (p !== 'CSV_LINE' && !this.knownProperties.some((kp) => p === kp)) {
+                unknownProperties.push(p);
+            }
+        });
+        unknownProperties.forEach((p) => delete object[p]);
     }
 
     public getIgnoreProperties(): string[] {

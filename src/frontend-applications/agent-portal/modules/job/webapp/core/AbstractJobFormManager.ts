@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,7 +7,7 @@
  * --
  */
 
-import { JobService } from '.';
+import { JobService } from './JobService';
 import { DefaultSelectInputFormOption } from '../../../../model/configuration/DefaultSelectInputFormOption';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
@@ -40,6 +40,10 @@ export class AbstractJobFormManager {
     protected execPageId: string = 'job-form-page-execution-plan';
     protected filterPageId: string = 'job-form-page-filters';
     protected actionPageId: string = 'job-form-page-actions';
+
+    public getFilterManager(): AbstractDynamicFormManager {
+        return;
+    }
 
     public addExtendedJobFormManager(manager: ExtendedJobFormManager): void {
         this.extendedJobFormManager.push(manager);
@@ -185,16 +189,14 @@ export class AbstractJobFormManager {
     }
 
     protected async getFilterPage(formInstance: FormInstance): Promise<FormPageConfiguration> {
-        const filtersValue = await this.getValue(
-            JobProperty.FILTER, null, null, this.job, formInstance?.getFormContext()
-        );
-
         const filters = new FormFieldConfiguration(
             'job-form-field-filters',
             'Translatable#Filter', JobProperty.FILTER, 'job-input-filter', false,
             'Translatable#Helptext_Admin_JobCreateEdit_Filter', undefined,
-            filtersValue ? new FormFieldValue(filtersValue) : null
+            null, null, null, null,
+            1, 10, 0
         );
+        filters.countSeparatorString = 'or';
         const filterGroup = new FormGroupConfiguration(
             'job-new-form-group-filters', 'Translatable#Filter',
             undefined, undefined, [filters]
@@ -284,6 +286,12 @@ export class AbstractJobFormManager {
             case JobProperty.MACROS:
                 if (job && formContext === FormContext.EDIT) {
                     value = job.Type;
+                }
+                break;
+            case JobProperty.FILTER:
+                if (job && formContext === FormContext.EDIT) {
+                    // will be set in postPrepareForm
+                    value = null;
                 }
                 break;
             default:

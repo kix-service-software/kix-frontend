@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -79,11 +79,11 @@ describe('Report Form Creator', () => {
                     });
 
                     it('Should have input component object-reference-input', () => {
-                        expect(field.inputComponent).equals('default-select-input');
+                        expect(field.inputComponent).equals('object-reference-input');
                     });
 
                     it('Should provide available the output formats for the report definition', () => {
-                        const option = field.options.find((o) => o.option === DefaultSelectInputFormOption.NODES);
+                        const option = field.options.find((o) => o.option === ObjectReferenceOptions.ADDITIONAL_NODES);
                         expect(option).exist;
                         expect(option.value).exist;
                         expect(option.value).an('array');
@@ -93,7 +93,7 @@ describe('Report Form Creator', () => {
                     });
 
                     it('should be a multislect input', () => {
-                        const option = field.options.find((o) => o.option === DefaultSelectInputFormOption.MULTI);
+                        const option = field.options.find((o) => o.option === ObjectReferenceOptions.MULTISELECT);
                         expect(option).exist;
                         expect(option.value).exist;
                         expect(option.value).true;

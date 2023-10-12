@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -8,8 +8,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.prepared)>
-    <div.number-form-input>
-        <input.form-control
+    <div class="number-form-input">
+        <input
             type="number"
             value=state.value
             min=state.min
@@ -17,8 +17,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             step=state.step
             readonly=state.readonly
             disabled=state.readonly
-            on-input("valueChanged")
+            on-change("valueChanged")
+            class="form-control"
         >
-        <span.unit-string><translation-string pattern=state.unitString/></span>
+        <span class="unit-string">
+            <translation-string pattern=state.unitString/>
+        </span>
     </div>
 </if>

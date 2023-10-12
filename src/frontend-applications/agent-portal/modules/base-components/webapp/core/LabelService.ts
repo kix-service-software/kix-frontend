@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -52,7 +52,9 @@ export class LabelService {
 
     public clearDisplayValueCache(objectType: KIXObjectType | string): void {
         this.displayIconCache.delete(objectType);
+        this.requestIconPromises.delete(objectType);
         this.displayValueCache.delete(objectType);
+        this.requestDisplayValuePromises.delete(objectType);
     }
 
     public registerLabelProvider<T>(labelProvider: ILabelProvider<T>): void {
@@ -139,6 +141,7 @@ export class LabelService {
                 JSON.stringify(defaultValue) : defaultValue;
         }
         valueString += translatable ? '-1' : '-0';
+        valueString += short ? '-1' : '-0';
 
         // if we have already a display value for this property then return directly
         // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
@@ -445,19 +448,19 @@ export class LabelService {
     }
 
     public async getExportPropertyValue(
-        property: string, objectType: KIXObjectType | string, value: any
+        property: string, objectType: KIXObjectType | string, value: any, object?: any
     ): Promise<string> {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
             for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
-                const result = await extendedLabelProvider.getExportPropertyValue(property, value);
+                const result = await extendedLabelProvider.getExportPropertyValue(property, value, object);
                 if (result) {
                     return result;
                 }
             }
 
-            return await labelProvider.getExportPropertyValue(property, value);
+            return await labelProvider.getExportPropertyValue(property, value, object);
         }
         return null;
     }
@@ -549,9 +552,13 @@ export class LabelService {
             fieldValue.ID ? Number(fieldValue.ID) : null
         ) : null;
         if (dynamicField) {
-            return (this.objectLabelProvider.find(
-                (lp) => lp.isLabelProviderForDFType(dynamicField.FieldType)
-            ) as LabelProvider);
+            let labelProvider = this.objectLabelProvider.find((lp) =>
+                lp.isLabelProviderForDFType(dynamicField.FieldType));
+            if (!labelProvider) {
+                labelProvider = this.objectLabelProvider.find((lp) =>
+                    lp.isLabelProviderForDFType(KIXObjectType.DYNAMIC_FIELD));
+            }
+            return (labelProvider as LabelProvider);
         }
         return;
     }

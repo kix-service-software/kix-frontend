@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -56,6 +56,9 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
             case MailAccountProperty.OAUTH2_PROFILEID:
                 displayValue = 'Translatable#OAuth2 Profile';
                 break;
+            case MailAccountProperty.QUEUE_ID:
+                displayValue = 'Translatable#Queue';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }
@@ -84,13 +87,18 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
                 break;
             case MailAccountProperty.DISPATCHING_BY:
                 if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_DEFAULT) {
-                    displayValue = 'Translatable#Default';
-                } else if (mailAccount.QueueID) {
-                    const queues = await KIXObjectService.loadObjects(
-                        KIXObjectType.QUEUE, [mailAccount.QueueID], null, null, true
-                    ).catch((error) => []);
-                    displayValue = queues && !!queues.length ? queues[0].Name : value;
+                    displayValue = 'Translatable#Default Queue (SysConfig)';
+                } else if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_FROM) {
+                    displayValue = 'Translatable#recipient adresses (To, Cc, etc.)';
+                } else if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_QUEUE) {
+                    displayValue = 'Translatable#Queue';
                 }
+                break;
+            case MailAccountProperty.QUEUE_ID:
+                const queues = await KIXObjectService.loadObjects(
+                    KIXObjectType.QUEUE, [mailAccount.QueueID], null, null, true
+                ).catch((error) => []);
+                displayValue = queues && !!queues.length ? queues[0].Name : value;
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);

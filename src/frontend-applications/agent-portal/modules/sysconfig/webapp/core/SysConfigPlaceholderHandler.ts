@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,13 +8,13 @@
  */
 
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
-import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { SysConfigOptionType } from '../../model/SysConfigOptionType';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
+import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
+import { SysConfigOptionType } from '../../model/SysConfigOptionType';
 
 export class SysConfigPlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -35,9 +35,9 @@ export class SysConfigPlaceholderHandler extends AbstractPlaceholderHandler {
             sysConfigOptionDef = sysConfigOptionDefs && !!sysConfigOptionDefs.length
                 ? sysConfigOptionDefs[0] : null;
         }
-        if (sysConfigOptionDef) {
+        if (sysConfigOptionDef && sysConfigOptionDef.AccessLevel !== 'confidential') {
             const value = typeof sysConfigOptionDef.Value !== 'undefined'
-                && sysConfigOptionDef.Value !== null && sysConfigOptionDef.Value !== ''
+            && sysConfigOptionDef.Value !== null && sysConfigOptionDef.Value !== ''
                 ? sysConfigOptionDef.Value : sysConfigOptionDef.Default;
             switch (sysConfigOptionDef.Type) {
                 case SysConfigOptionType.OPTION:

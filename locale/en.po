@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2022-12-21 10:18+0000\n"
-"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
+"PO-Revision-Date: 2023-06-05 14:20+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@kixdesk.com>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
 "Language: en\n"
@@ -163,8 +163,8 @@ msgstr ""
 msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
 msgstr ""
 "Default value is used to initialize the field when first displayed; It is "
-"specified as an offset at the time the field is displayed (0=now; 3600=now+"
-"1h, blank=no initialization)."
+"specified as an offset at the time the field is displayed (0=now; 3600=now"
+"+1h, blank=no initialization)."
 
 msgid "Admin_DynamicField_Edit_Name_Hint"
 msgstr ""
@@ -232,7 +232,7 @@ msgid "All agents watching this ticket"
 msgstr ""
 
 msgid "All agents with read permissions for the ticket"
-msgstr ""
+msgstr "All agents with read-only permission for the ticket"
 
 msgid "All agents with update permission for the ticket"
 msgstr ""
@@ -247,6 +247,9 @@ msgid "All Objects"
 msgstr ""
 
 msgid "All open tabs will be closed. Continue?"
+msgstr ""
+
+msgid "Allow access to admin module"
 msgstr ""
 
 msgid "All tickets"
@@ -292,7 +295,7 @@ msgstr ""
 msgid "Approved"
 msgstr ""
 
-msgid "A product by c.a.p.e. IT GmbH"
+msgid "A product by KIX Service Software GmbH"
 msgstr ""
 
 msgid "Archived"
@@ -418,6 +421,9 @@ msgstr ""
 msgid "Avatar"
 msgstr ""
 
+msgid "A year after 2200 is not possible."
+msgstr ""
+
 msgid "Backend"
 msgstr ""
 
@@ -485,9 +491,12 @@ msgid "Changed by"
 msgstr ""
 
 msgid "Change Password"
-msgstr ""
+msgstr "Change Password"
 
 msgid "Changes cannot be saved. How do you want to proceed?"
+msgstr ""
+
+msgid "Change sort direction"
 msgstr ""
 
 msgid "Changes saved."
@@ -865,6 +874,9 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
+msgid "Default Queue (SysConfig)"
+msgstr ""
+
 msgid "Default Value"
 msgstr ""
 
@@ -920,9 +932,6 @@ msgid "Detailed search results"
 msgstr ""
 
 msgid "Dispatching"
-msgstr ""
-
-msgid "Display Limit"
 msgstr ""
 
 msgid "Display Name"
@@ -1104,6 +1113,21 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
+msgid "Email1"
+msgstr ""
+
+msgid "Email2"
+msgstr ""
+
+msgid "Email3"
+msgstr ""
+
+msgid "Email4"
+msgstr ""
+
+msgid "Email5"
+msgstr ""
+
 msgid "Email Account"
 msgstr ""
 
@@ -1117,6 +1141,12 @@ msgid "Email Address Details"
 msgstr ""
 
 msgid "Email Addresses"
+msgstr ""
+
+msgid "Email could not be sent"
+msgstr ""
+
+msgid "Email Error"
 msgstr ""
 
 msgid "Email Filter"
@@ -1254,6 +1284,9 @@ msgstr ""
 msgid "FAQ Article History"
 msgstr ""
 
+msgid "FAQ Articles successfully removed."
+msgstr ""
+
 msgid "FAQ Attributes"
 msgstr ""
 
@@ -1329,6 +1362,9 @@ msgstr ""
 msgid "Field Type"
 msgstr ""
 
+msgid "File Upload"
+msgstr ""
+
 msgid "Filter"
 msgstr ""
 
@@ -1374,7 +1410,7 @@ msgid "Follow Up on Tickets"
 msgstr ""
 
 msgid "Follow Up Ticket Lock"
-msgstr ""
+msgstr "Follow Up Ticket Lock"
 
 msgid ""
 "For a more intensive introduction to the use and administration of KIX, you "
@@ -1599,6 +1635,9 @@ msgid "Helptext_Admin_MailAccountCreate_Dispachting"
 msgstr ""
 "Choose the team, which is supposed to receive incoming emails from this "
 "account. It is defined within the SysConfig which team is set as “default”."
+
+msgid "Helptext_Admin_MailAccountCreate_Dispatching_Queue"
+msgstr ""
 
 msgid "Helptext_Admin_MailAccountCreate_Host"
 msgstr "Insert the host name, holding the account. Example: mail.example.com"
@@ -1937,6 +1976,9 @@ msgstr ""
 "kg.com” To connect answers to this email address with already existing "
 "tickets, this address needs to match with a mail account, configured in KIX."
 
+msgid "Helptext_Admin_SystemAddressCreate_Queue"
+msgstr ""
+
 msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr "The email address can only be used within the system if set “valid”."
 
@@ -2002,6 +2044,9 @@ msgstr ""
 "If you want to subordinate the new team to an already existing team, you can "
 "choose this here."
 
+msgid "Helptext_Admin_Tickets_QueueCreate_Permission"
+msgstr ""
+
 msgid "Helptext_Admin_Tickets_QueueCreate_SenderAddress."
 msgstr "Sender address for emails send by this team."
 
@@ -2056,6 +2101,9 @@ msgid "Helptext_Admin_TranslationSearch"
 msgstr ""
 "Searchable are properties of the colum \"Pattern\". If only a part of a name "
 "is inserted it must be put in * (Wildcard-Search)."
+
+msgid "Helptext_Admin_Users_RoleCreate_AllowAdminModule"
+msgstr ""
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
@@ -2958,6 +3006,9 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
+msgid "Latest releases"
+msgstr ""
+
 msgid "Layer"
 msgstr ""
 
@@ -2971,6 +3022,9 @@ msgid "Let's go"
 msgstr ""
 
 msgid "Lets go"
+msgstr ""
+
+msgid "Library"
 msgstr ""
 
 msgid "Limit:"
@@ -3013,6 +3067,9 @@ msgid "Link Types"
 msgstr ""
 
 msgid "Loading ..."
+msgstr ""
+
+msgid "Load more"
 msgstr ""
 
 msgid "Localisation"
@@ -3078,6 +3135,9 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
+msgid "Merged into the Ticket"
+msgstr ""
+
 msgid "Message"
 msgstr ""
 
@@ -3118,6 +3178,9 @@ msgid "more than ago"
 msgstr ""
 
 msgid "Multiple"
+msgstr ""
+
+msgid "My Articles"
 msgstr ""
 
 msgid "My locked tickets"
@@ -3603,6 +3666,9 @@ msgstr ""
 msgid "Owner"
 msgstr "Owner"
 
+msgid "Page Size"
+msgstr ""
+
 msgid "Paramater"
 msgstr ""
 
@@ -3864,7 +3930,13 @@ msgstr ""
 msgid "Readonly"
 msgstr ""
 
+msgid "Read & Write"
+msgstr ""
+
 msgid "Recently Closed"
+msgstr ""
+
+msgid "recipient adresses (To, Cc, etc.)"
 msgstr ""
 
 msgid "Recipients"
@@ -3922,6 +3994,12 @@ msgid "Remove Address"
 msgstr "Remove Adress(es)"
 
 msgid "Remove dependency to organisation"
+msgstr ""
+
+msgid "Remove FAQ Article(s)"
+msgstr ""
+
+msgid "Remove FAQ Articles"
 msgstr ""
 
 msgid "Remove FAQ Categories"
@@ -4021,6 +4099,9 @@ msgid "Required field {0} has no value."
 msgstr ""
 
 msgid "Required field {0} is no JSON."
+msgstr ""
+
+msgid "Required field has no value."
 msgstr ""
 
 msgid "Reset"
@@ -4150,6 +4231,12 @@ msgid "Search {0} will be deleted. Are you sure?"
 msgstr ""
 
 msgid "Search error!"
+msgstr ""
+
+msgid "Search Limit"
+msgstr ""
+
+msgid "Search menu"
 msgstr ""
 
 msgid "SEARCH_OPERATOR_WITHIN_LAST"
@@ -4283,7 +4370,7 @@ msgstr ""
 msgid "setup_assistant_system_settings_text"
 msgstr ""
 "Please add basic system settings according to your system setup. For kix."
-"cloud users please check your notification email.  For on-premise-"
+"cloud users please check your notification email. For on-premise-"
 "installations: frontend refers to FQDN+port where the agent portal may be "
 "reached (e.g. \"your.docker.host:20001\"). Backend refers to FQDN+port where "
 "the KIX REST-API can be reached (e.g. \"your.docker.host:20000\"). Customer "
@@ -4547,6 +4634,9 @@ msgstr ""
 msgid "Table Configuration"
 msgstr ""
 
+msgid "Table Height (Row Count)"
+msgstr ""
+
 msgid "Tables"
 msgstr ""
 
@@ -4637,6 +4727,9 @@ msgstr ""
 
 msgid ""
 "There are open dialogs. Any data you may have entered will be lost. Continue?"
+msgstr ""
+
+msgid "The requested ticket is not available due to restricted permissions."
 msgstr ""
 
 msgid ""
@@ -5010,6 +5103,9 @@ msgid "Work in Progress"
 msgstr ""
 
 msgid "Wrap Lines"
+msgstr ""
+
+msgid "Write"
 msgstr ""
 
 msgid "Year(s)"

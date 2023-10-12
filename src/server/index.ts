@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,16 +11,11 @@ import { ConfigurationService } from './services/ConfigurationService';
 import { LoggingService } from './services/LoggingService';
 
 const cluster = require('cluster');
-const http = require('http');
-const https = require('https');
-const fs = require('fs');
 
-import { Server as SocketServer } from 'socket.io';
 const { setupMaster, setupWorker } = require('@socket.io/sticky');
 const { createAdapter, setupPrimary } = require('@socket.io/cluster-adapter');
 
 import { cpus } from 'node:os';
-import express from 'express';
 import { MigrationService } from '../frontend-applications/agent-portal/migrations/MigrationService';
 import { IInitialDataExtension } from '../frontend-applications/agent-portal/model/IInitialDataExtension';
 import { AgentPortalExtensions } from '../frontend-applications/agent-portal/server/extensions/AgentPortalExtensions';
@@ -28,8 +23,12 @@ import { ClientRegistrationService } from '../frontend-applications/agent-portal
 import { MarkoService } from '../frontend-applications/agent-portal/server/services/MarkoService';
 import { SocketService } from '../frontend-applications/agent-portal/server/services/SocketService';
 import { PluginService } from './services/PluginService';
-import { Server } from '../frontend-applications/agent-portal/server/Server';
 import { AuthenticationService } from './services/AuthenticationService';
+import { IServer } from './model/IServer';
+import { IServiceExtension } from '../frontend-applications/agent-portal/server/extensions/IServiceExtension';
+import { ServerExtensions } from './model/ServerExtensions';
+import { IFrontendServerExtension } from './model/IFrontendServerExtension';
+import { ServerManager } from './ServerManager';
 
 const path = require('path');
 
@@ -44,30 +43,51 @@ async function initializeServer(): Promise<void> {
     LoggingService.getInstance().info('[SERVER] Start');
 
     const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-    const maxConfig = serverConfig?.SOCKET_MAX_HTTP_BUFFER_SIZE;
-    const maxHttpBufferSize = maxConfig || 1e8;
+
+    await initPlugins();
+    const serviceExtensions = await PluginService.getInstance().getExtensions<IServiceExtension>(
+        AgentPortalExtensions.SERVICES
+    );
+    LoggingService.getInstance().info(`Initialize ${serviceExtensions.length} service extensions`);
+    for (const extension of serviceExtensions) {
+        await extension.initServices();
+    }
+
+    const serverExtensions = await PluginService.getInstance().getExtensions<IFrontendServerExtension>(
+        ServerExtensions.APPLICATION_SERVER
+    );
+
+
+    for (const extension of serverExtensions) {
+        ServerManager.getInstance().registerServer(extension.getServer());
+    }
+
+    const servers: IServer[] = ServerManager.getInstance().getServers();
+
+    initProcessListener();
 
     if (serverConfig.CLUSTER_ENABLED) {
         if (cluster.isPrimary) {
 
             LoggingService.getInstance().info('CLUSTER - Master start');
 
-            await initPlugins();
             await initializeFrontend();
-            await initApplication();
+            await buildApplications();
 
-            const httpServer = createHTTPServer(false);
+            for (const server of servers) {
+                await server.initialize();
+                const httpServer = server.getHttpServer();
+                const port = server.getPort();
 
-            setupMaster(httpServer, {
-                loadBalancingMethod: 'least-connection',
-            });
+                setupMaster(httpServer, {
+                    loadBalancingMethod: 'least-connection',
+                });
 
-            setupPrimary();
+                setupPrimary();
 
-            const port = getPort();
-            httpServer.listen(port);
-            LoggingService.getInstance().info(`Frontend server is running on HTTPS: https://FQDN:${port}`);
-
+                httpServer.listen(port);
+                LoggingService.getInstance().info(`Frontend server is running on HTTPS: https://FQDN:${port}`);
+            }
             const numCPUs = serverConfig.CLUSTER_WORKER_COUNT || cpus().length;
             for (let i = 0; i < numCPUs; i++) {
                 cluster.fork();
@@ -81,39 +101,29 @@ async function initializeServer(): Promise<void> {
         } else {
             LoggingService.getInstance().info(`CLUSTER - Worker ${process.pid} started`);
 
-            await initPlugins();
-            await initApplication();
+            await buildApplications();
 
-            const httpServer = createHTTPServer(false);
-            const io = new SocketServer(httpServer, {
-                maxHttpBufferSize
-            });
+            for (const server of servers) {
+                await server.initialize();
+                // use the cluster adapter
+                server.getSocketIO().adapter(createAdapter());
 
-            // use the cluster adapter
-            io.adapter(createAdapter());
-
-            // setup connection with the primary process
-            setupWorker(io);
-
-            await SocketService.getInstance().initialize(io);
+                // setup connection with the primary process
+                setupWorker(server.getSocketIO());
+            }
         }
     } else {
-        await initPlugins();
         await initializeFrontend();
-        await initApplication();
+        await buildApplications();
 
-        const httpServer = createHTTPServer();
-
-        const io = require('socket.io')(httpServer, {
-            maxHttpBufferSize
-        });
-
-        await SocketService.getInstance().initialize(io);
-
-        const port = getPort();
-        httpServer.listen(port);
-
-        LoggingService.getInstance().info(`Frontend server is running on HTTPS: https://FQDN:${serverConfig.HTTPS_PORT}`);
+        for (const server of servers) {
+            await server.initialize();
+            server.initializeSocketIO();
+            server.getHttpServer()?.listen(server.getPort());
+            LoggingService.getInstance().info(
+                `${server.name} - Server is running on HTTPS: https://FQDN:${server.getPort()}`
+            );
+        }
     }
 }
 
@@ -148,62 +158,13 @@ async function initializeFrontend(): Promise<void> {
     }
 }
 
-function getPort(): number {
-    let port = 3001;
-    const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-    if (serverConfig.USE_SSL) {
-        port = serverConfig.HTTPS_PORT || 3001;
-    } else {
-        port = serverConfig.HTTP_PORT || 3000;
-    }
-
-    return port;
-}
-
-function createHTTPServer(ssl: boolean = true): any {
-    const options = {
-        key: fs.readFileSync(path.join(__dirname, '..', '..', 'cert', 'key.pem')),
-        cert: fs.readFileSync(path.join(__dirname, '..', '..', 'cert', 'cert.pem')),
-        passphrase: 'kix2018'
-    };
-
-    const app = Server.getInstance().application || express();
-
-    let server;
-    const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-    if (ssl && serverConfig.USE_SSL) {
-        server = https.createServer(options, app);
-    } else {
-        server = http.createServer(app);
-    }
-
-    return server;
-}
-
-async function initApplication(): Promise<void> {
-    const configDir = path.join(__dirname, '..', '..', 'config');
-    const certDir = path.join(__dirname, '..', '..', 'cert');
-    const dataDir = path.join(__dirname, '..', '..', 'data');
-    ConfigurationService.getInstance().init(configDir, certDir, dataDir);
-
+async function buildApplications(): Promise<void> {
     const pluginDirs = [
         'frontend-applications',
         'frontend-applications/agent-portal/modules'
     ];
     await PluginService.getInstance().init(pluginDirs.map((pd) => path.join('..', pd)));
-
     await MarkoService.getInstance().initializeMarkoApplications();
-
-    try {
-        const startUpBegin = Date.now();
-        await Server.getInstance().initServer();
-        const startUpEnd = Date.now();
-        LoggingService.getInstance().info(`[SERVER] Ready - Startup in ${(startUpEnd - startUpBegin) / 1000}s`);
-    } catch (error) {
-        LoggingService.getInstance().error('Could not initialize server');
-        LoggingService.getInstance().error(error);
-    }
-
 }
 
 
@@ -221,6 +182,29 @@ async function createClientRegistration(): Promise<void> {
         });
 
     LoggingService.getInstance().info('ClientRegistration created.');
+}
+
+function initProcessListener(): void {
+    process.on('unhandledRejection', (reason, promise) => {
+        LoggingService.getInstance().error('An unhandledRejection occured:', reason);
+        LoggingService.getInstance().error(reason.toString(), reason);
+        console.error('Unhandled Rejection at: Promise', promise, 'reason:', reason);
+        console.error(reason);
+    });
+
+    process.on('uncaughtException', (reason, promise) => {
+        LoggingService.getInstance().error('An uncaughtException occured:', reason);
+        LoggingService.getInstance().error(reason.toString(), reason);
+        console.error('uncaught Exception at: Promise', promise, 'reason:', reason);
+        console.error(reason);
+    });
+
+    process.on('exit', () => {
+        LoggingService.getInstance().warning('Exit NodeJS process');
+        const error = new Error().stack;
+        LoggingService.getInstance().error('Exit NodeJS process', error);
+        console.trace('');
+    });
 }
 
 

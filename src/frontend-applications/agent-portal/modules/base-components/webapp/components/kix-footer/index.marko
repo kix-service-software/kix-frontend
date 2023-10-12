@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -7,27 +7,35 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.kix-footer>
+<div class="kix-footer">
     <if(input.leftText || input.rightText)>
-        <div.left-text>
+        <div class="left-text">
             <translation-string pattern=input.leftText/>
         </div>
     </if>
     <div>
-        <if(state.releaseInfo)>${state.kixProduct + " " + state.kixVersion + " " + state.buildNumber + " | "}</if>
+        <if(state.releaseInfo)>
+            ${state.kixProduct +
+            " " +
+            state.kixVersion +
+            " " +
+            state.buildNumber +
+            " | "}
+        </if>
         <if(state.currentUserLogin)>
             <translation-string pattern="Translatable#Logged in"/>
             ${": " + state.currentUserLogin + " | "}
         </if>
-        <translation-string pattern="Translatable#A product by c.a.p.e. IT GmbH"/>
+        <translation-string pattern="Translatable#A product by KIX Service Software GmbH"/>
         <if(state.imprintLink)>
-            ${" |" + " "}<a href=state.imprintLink target="_blank">
+            ${" |" + " "}
+            <a href=state.imprintLink target="_blank">
                 <translation-string pattern="Translatable#Imprint"/>
             </a>
         </if>
     </div>
     <if(input.leftText || input.rightText)>
-        <div.right-text>
+        <div class="right-text">
             <translation-string pattern=input.rightText/>
         </div>
     </if>

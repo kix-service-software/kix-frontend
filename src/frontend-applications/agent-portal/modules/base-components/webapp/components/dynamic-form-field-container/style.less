@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -61,37 +61,70 @@
             }
         }
 
-        .addtional-options {
+        div.errors {
             grid-row: 2;
-            grid-column: 2 /span 3;
+            grid-column: 3;
+        }
 
+        .advanced-options {
+            grid-row: 2;
+            grid-column: 1;
             color: @primary-0;
+            align-self: start;
 
             &:hover {
                 color: @primary-4;
                 cursor: pointer;
             }
+        }
 
-            .additonal-editor-container {
-                height: 40rem;
-                display: grid;
-                grid-template-columns: 15rem auto;
-                gap: .5rem 0;
+        .advanced-options-json-editor {
+            grid-row: 2;
+            grid-column: 2 / span 2;
+        }
 
-                padding: 0 0 0 @margin-small;
-            }
+        div.errors~.advanced-options-json-editor {
+            grid-row: 3;
         }
 
         &.with-options:not(.no-operation) {
-            grid-template-columns: @dynamic-value-columns-with-options
+            grid-template-columns: @dynamic-value-columns-with-options;
+
+            div.errors {
+                grid-column: 4
+            }
+
+            .advanced-options {
+                grid-column: 2;
+            }
+
+            .advanced-options-json-editor {
+                grid-column: 3 / span 2;
+            }
         }
 
         &.no-operation:not(.with-options) {
             grid-template-columns: @dynamic-value-columns-no-operation;
+
+            div.errors {
+                grid-column: 2
+            }
+
+            .advanced-options-json-editor {
+                grid-column: 2;
+            }
         }
 
         &.with-options.no-operation {
             grid-template-columns: @dynamic-value-columns-with-options-no-operation;
+
+            .advanced-options {
+                grid-column: 2;
+            }
+
+            .advanced-options-json-editor {
+                grid-column: 3;
+            }
         }
 
         .value {

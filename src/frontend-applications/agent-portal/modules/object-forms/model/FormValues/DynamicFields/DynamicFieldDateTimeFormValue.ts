@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,18 +12,12 @@ import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFi
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldTypes } from '../../../../dynamic-fields/model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
-import { FormValueProperty } from '../../FormValueProperty';
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { DateTimeFormValue } from '../DateTimeFormValue';
 import { ObjectFormValue } from '../ObjectFormValue';
-import { DynamicFieldFormValueCountHandler } from './DynamicFieldFormValueCountHandler';
-import { ICountableFormValue } from './ICountableFromValue';
 
-export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements ICountableFormValue {
+export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
 
-    public dfValues: DynamicFieldValue[] = [];
-
-    private bindingIds: string[] = [];
 
     public constructor(
         public property: string,
@@ -34,11 +28,6 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
     ) {
         super(property, object, objectValueMapper, parent);
         this.inputComponentId = 'datetime-form-input';
-        this.addBindings();
-    }
-
-    public destroy(): void {
-        this.removePropertyBinding(this.bindingIds);
     }
 
     public findFormValue(property: string): ObjectFormValue {
@@ -51,7 +40,10 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
+        await this.setDateConfiguration();
+    }
 
+    private async getDynamicFieldConfig(): Promise<any> {
         const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
 
         if (dynamicField.FieldType === DynamicFieldTypes.DATE) {
@@ -60,17 +52,12 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
             this.inputType === InputFieldTypes.DATE_TIME;
         }
 
-        const config = dynamicField.Config;
-
-        this.countDefault = Number(config?.CountDefault) || 0;
-        this.countMax = Number(config?.CountMax) || 0;
-        this.countMin = Number(config?.CountMin) || 0;
-        this.setDateConfiguration(config);
-
-        this.value = this.object[this.property];
+        return dynamicField.Config;
     }
 
-    private setDateConfiguration(config: any): void {
+    private async setDateConfiguration(): Promise<void> {
+        const config = await this.getDynamicFieldConfig();
+
         switch (config?.DateRestriction) {
             case 'DisablePastDates':
                 this.setDatesLimit(config, true, false);
@@ -92,22 +79,24 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
             offset = Number(config?.DefaultValue) >= 0 ? Number(config?.DefaultValue) : null;
         }
 
-        if (!this.value && offset !== null) {
-            const date = new Date();
-            date.setSeconds(date.getSeconds() + offset);
-            this.value = DateTimeUtil.getKIXDateTimeString(date);
+        if (!this.value && offset !== null && !this.isEmpty) {
+            this.value = this.getOffsetValue(offset);
         }
     }
 
     private setDatesLimit(config: any, disablePast = false, disableFuture = false): void {
         if (disablePast) {
-            this.minDate = new Date().toISOString();
+            const date = new Date();
+            date.setHours(0);
+            date.setMinutes(0);
+            date.setSeconds(0);
+            this.minDate = DateTimeUtil.getKIXDateTimeString(date);
         } else if (this.parseYearsToInt(config?.YearsInPast)) {
             this.minDate = this.calculateDate(config?.YearsInPast);
         }
 
         if (disableFuture) {
-            this.maxDate = new Date().toISOString();
+            this.maxDate = DateTimeUtil.getKIXDateTimeString(new Date());
         } else if (this.parseYearsToInt(config?.YearsInFuture)) {
             this.maxDate = this.calculateDate(config?.YearsInFuture, true);
         }
@@ -138,40 +127,14 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
         return number;
     }
 
-    public canAddValue(instanceId: string): boolean {
-        return DynamicFieldFormValueCountHandler.canAddValue(this, instanceId);
-    }
-
-    public async addFormValue(instanceId: string, value: any): Promise<void> {
-        await DynamicFieldFormValueCountHandler.addFormValue(this, instanceId, value);
-        await super.addFormValue(instanceId, value);
-    }
-
-    public canRemoveValue(instanceId: string): boolean {
-        return DynamicFieldFormValueCountHandler.canRemoveValue(this, instanceId);
-    }
-
-    public async removeFormValue(instanceId: string): Promise<void> {
-        await DynamicFieldFormValueCountHandler.removeFormValue(this, instanceId);
-        await super.removeFormValue(instanceId);
-    }
-
-    public setDFValue(): void {
-        DynamicFieldFormValueCountHandler.setDFValue(this, super.setFormValue.bind(this));
-    }
-
-    private addBindings(): void {
-        this.bindingIds.push(
-            this.addPropertyBinding(FormValueProperty.COUNT_MAX, (value: ObjectFormValue) => this._countMax())
-        );
-    }
-
     public async setFormValue(value: any, force?: boolean): Promise<void> {
-        if (this.isCountHandler) {
-            await DynamicFieldFormValueCountHandler.setFormValue(value, force, this, this.instanceId);
-        } else {
-            await super.setFormValue(value, force);
-        }
+        value = DateTimeUtil.calculateRelativeDate(value);
+        await super.setFormValue(value, force);
     }
 
+    protected getOffsetValue(offset: number): string {
+        const date = new Date();
+        date.setSeconds(date.getSeconds() + offset);
+        return DateTimeUtil.getKIXDateTimeString(date);
+    }
 }

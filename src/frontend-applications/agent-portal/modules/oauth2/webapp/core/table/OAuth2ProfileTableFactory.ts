@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -87,7 +87,7 @@ export class OAuth2ProfileTableFactory extends TableFactory {
                 break;
             case OAuth2ProfileProperty.HAS_ACCESS_TOKEN:
                 config = new DefaultColumnConfiguration(null, null, null,
-                    property, false, true, false, false, 50, true, true, true, DataType.NUMBER
+                    property, false, true, true, false, 150, true, true, true, DataType.NUMBER
                 );
                 break;
             case OAuth2ProfileProperty.RENEW_AUTH:

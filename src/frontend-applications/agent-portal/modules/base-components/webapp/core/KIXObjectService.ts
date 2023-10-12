@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -109,16 +109,16 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType | string, objectIds?: Array<number | string>,
         loadingOptions?: KIXObjectLoadingOptions,
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions, silent: boolean = false,
-        cache: boolean = true, forceIds?: boolean
+        cache: boolean = true, forceIds?: boolean, collectionId?: string
     ): Promise<T[]> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         let objects = [];
         if (service) {
             objects = await service.loadObjects(
                 objectType, objectIds ? [...objectIds] : null, loadingOptions, objectLoadingOptions, cache, forceIds,
-                silent
+                silent, collectionId
             ).catch((error: Error) => {
-                if (!silent) {
+                if (!silent && error?.Code !== 'SILENT') {
                     // TODO: Publish event to show an error dialog
                     const content = new ComponentContent('list-with-title',
                         {
@@ -142,7 +142,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true, forceIds?: boolean, silent?: boolean
+        cache: boolean = true, forceIds?: boolean, silent?: boolean, collectionId?: string
     ): Promise<O[]> {
         const objectConstructors = this.getObjectConstructors(objectType);
 
@@ -151,13 +151,13 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             if (objectIds.length) {
                 objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
                     objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache,
-                    undefined, silent
+                    undefined, silent, collectionId
                 );
             }
         } else {
             objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
                 objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache,
-                undefined, silent
+                undefined, silent, collectionId
             );
         }
         return objects;
@@ -369,8 +369,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         switch (property) {
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
+                let userIds: number[] = null;
+                if (Array.isArray(filterIds)) {
+                    userIds = filterIds.filter((id) => !isNaN(Number(id))).map((id) => Number(id));
+                }
                 let users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, null,
+                    KIXObjectType.USER, userIds,
                     new KIXObjectLoadingOptions(
                         null, null, null, [UserProperty.CONTACT]
                     ), null, true
@@ -523,7 +527,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             });
 
             for (const o of objects) {
-                const label = await LabelService.getInstance().getObjectText(o, null, null, translatable);
+                const label = await LabelService.getInstance().getObjectText(o, true, true, translatable);
                 const icon = LabelService.getInstance().getObjectIcon(o);
                 nodes.push(new TreeNode(o.ObjectId, label, icon));
             }
@@ -582,7 +586,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return nodes;
     }
 
-    public static async loadDynamicField(name: string, id?: number): Promise<DynamicField> {
+    public static async loadDynamicField(name: string, id?: number | string): Promise<DynamicField> {
         let dynamicField: DynamicField;
         if (name || id) {
             const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
@@ -726,31 +730,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             }
         } else {
             switch (property) {
-                case TicketProperty.OWNER_ID:
-                case TicketProperty.RESPONSIBLE_ID:
+                case KIXObjectProperty.CREATE_BY:
+                case KIXObjectProperty.CHANGE_BY:
                     objectType = KIXObjectType.USER;
                     break;
-                case TicketProperty.CONTACT_ID:
-                case ArticleProperty.TO:
-                case ArticleProperty.CC:
-                case ArticleProperty.BCC:
-                    objectType = KIXObjectType.CONTACT;
-                    break;
-                case TicketProperty.ORGANISATION_ID:
                 case ContactProperty.PRIMARY_ORGANISATION_ID:
                     objectType = KIXObjectType.ORGANISATION;
-                    break;
-                case TicketProperty.TYPE_ID:
-                    objectType = KIXObjectType.TICKET_TYPE;
-                    break;
-                case TicketProperty.QUEUE_ID:
-                    objectType = KIXObjectType.QUEUE;
-                    break;
-                case TicketProperty.PRIORITY_ID:
-                    objectType = KIXObjectType.TICKET_PRIORITY;
-                    break;
-                case TicketProperty.STATE_ID:
-                    objectType = KIXObjectType.TICKET_STATE;
                     break;
                 default:
             }
@@ -787,10 +772,9 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         let preload = false;
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.SYS_CONFIG_OPTION);
         if (service) {
-            const agentPortalConfig = await (service as any).getAgentPortalConfiguration();
+            const agentPortalConfig = await (service as any).getPortalConfiguration();
             preload = agentPortalConfig?.preloadObjects?.some((o) => o === objectType) || false;
         }
         return preload;
     }
-
 }

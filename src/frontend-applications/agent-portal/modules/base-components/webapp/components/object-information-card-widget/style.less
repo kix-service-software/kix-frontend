@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -56,16 +56,11 @@
 
         .info-row-content {
             display: grid;
-            grid-auto-flow: column;
-            grid-auto-columns: @basic-column-width;
-            grid-column-gap: 1rem;
+            grid-auto-flow: dense;
+            grid-gap: 1rem;
 
-            &.created-by-row {
-                grid-auto-columns: fit-content(100%);
-
-                &>.info-group>.info-value {
-                    grid-template-columns: auto;
-                }
+            &.created-by-row>.info-group>.info-value {
+                grid-template-columns: auto;
             }
 
             &.no-value {
@@ -86,7 +81,7 @@
                 grid-auto-rows: min-content;
                 grid-row-gap: @margin-small;
                 align-items: start;
-                overflow: hidden;
+                overflow: auto;
 
                 &.no-value {
                     display: none;

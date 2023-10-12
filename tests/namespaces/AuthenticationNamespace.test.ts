@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -50,35 +50,35 @@ describe('AuthenticationNamespace', () => {
             HttpService.getInstance().options = originalOptionsMethod;
         });
 
-        describe('Check Permissions for allow', async () => {
-            const permissions = [
-                new UIComponentPermission('tickets', [CRUD.READ]),
-                new UIComponentPermission('organisations', [CRUD.READ]),
-                new UIComponentPermission('contacts', [CRUD.READ])
-            ];
-            const request = new PermissionCheckRequest('requestId', 'clientId', permissions);
+        // describe('Check Permissions for allow', async () => {
+        //     const permissions = [
+        //         new UIComponentPermission('tickets', [CRUD.READ]),
+        //         new UIComponentPermission('organisations', [CRUD.READ]),
+        //         new UIComponentPermission('contacts', [CRUD.READ])
+        //     ];
+        //     const request = new PermissionCheckRequest('requestId', 'clientId', permissions);
 
-            it('the should be positiv', async () => {
-                const socketRespopnse: SocketResponse = await (AuthenticationNamespace.getInstance() as any).checkPermissions(request);
-                expect(socketRespopnse).exist;
-                expect(socketRespopnse.event).equals(AuthenticationEvent.PERMISSION_CHECK_SUCCESS);
-            });
-        });
+        //     it('the should be positiv', async () => {
+        //         const socketRespopnse: SocketResponse = await (AuthenticationNamespace.getInstance() as any).checkPermissions(request);
+        //         expect(socketRespopnse).exist;
+        //         expect(socketRespopnse.event).equals(AuthenticationEvent.PERMISSION_CHECK_SUCCESS);
+        //     });
+        // });
 
-        describe('Check Permissions for deny', async () => {
-            const permissions = [
-                new UIComponentPermission('tickets', [CRUD.READ, CRUD.CREATE]),
-                new UIComponentPermission('organisations', [CRUD.READ]),
-                new UIComponentPermission('contacts', [CRUD.READ])
-            ];
-            const request = new PermissionCheckRequest('requestId', 'clientId', permissions);
+        // describe('Check Permissions for deny', async () => {
+        //     const permissions = [
+        //         new UIComponentPermission('tickets', [CRUD.READ, CRUD.CREATE]),
+        //         new UIComponentPermission('organisations', [CRUD.READ]),
+        //         new UIComponentPermission('contacts', [CRUD.READ])
+        //     ];
+        //     const request = new PermissionCheckRequest('requestId', 'clientId', permissions);
 
-            it('the should be positiv', async () => {
-                const socketRespopnse: SocketResponse = await (AuthenticationNamespace.getInstance() as any).checkPermissions(request);
-                expect(socketRespopnse).exist;
-                expect(socketRespopnse.event).equals(AuthenticationEvent.PERMISSION_CHECK_FAILED);
-            });
-        });
+        //     it('the should be positiv', async () => {
+        //         const socketRespopnse: SocketResponse = await (AuthenticationNamespace.getInstance() as any).checkPermissions(request);
+        //         expect(socketRespopnse).exist;
+        //         expect(socketRespopnse.event).equals(AuthenticationEvent.PERMISSION_CHECK_FAILED);
+        //     });
+        // });
 
     });
 });

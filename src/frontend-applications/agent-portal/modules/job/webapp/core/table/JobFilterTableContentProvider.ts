@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -32,14 +32,17 @@ export class JobFilterTableContentProvider extends TableContentProvider<any> {
     }
 
     public async loadData(): Promise<RowObject[]> {
+        const rowObjects: RowObject[] = [];
+
         const context = ContextService.getInstance().getActiveContext();
         const job = context ? await context.getObject<Job>() : null;
 
-        const rowObjects: RowObject[] = [];
-        if (job && job.Filter && typeof job.Filter === 'object') {
-            for (const filter in job.Filter) {
-                if (filter && Array.isArray(job.Filter[filter])) {
-                    const criteria = job.Filter[filter];
+        const filterList = Array.isArray(job?.Filter) && Array.isArray(this.objectIds) ?
+            job.Filter[this.objectIds[0]] : null;
+        if (filterList && typeof filterList === 'object') {
+            for (const filter in filterList) {
+                if (filter && Array.isArray(filterList[filter])) {
+                    const criteria = filterList[filter];
                     for (const criterion of criteria) {
                         let displayKey: string = criterion.Field;
                         let displayValues: any;
@@ -57,13 +60,16 @@ export class JobFilterTableContentProvider extends TableContentProvider<any> {
                         }
 
                         const operatorLabel = await SearchOperatorUtil.getText(criterion.Operator);
+                        const allStrings = Array.isArray(displayValues) &&
+                            displayValues.every((dv) => typeof dv === 'string');
 
                         const values: TableValue[] = [
                             new TableValue(JobFilterTableProperty.FIELD, criterion.Field, displayKey),
                             new TableValue(JobFilterTableProperty.OPERATOR, criterion.Operator, operatorLabel),
                             new TableValue(
                                 JobFilterTableProperty.VALUE, displayValues,
-                                displayString, null, displayIcons
+                                displayString, null, displayIcons, undefined,
+                                allStrings ? displayValues : undefined
                             )
                         ];
                         rowObjects.push(new RowObject<any>(values));

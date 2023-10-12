@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -69,7 +69,10 @@ export class FormFactory {
             field.draggableFields,
             field.defaultHint,
             field.type,
-            field.visible
+            field.visible,
+            field.translateLabel,
+            field.valid,
+            field.countSeparatorString
         );
         clonedField.instanceId = field.instanceId || IdService.generateDateBasedId(prefixForNewInstanceId);
         clonedField.parent = field.parent;

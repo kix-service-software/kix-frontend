@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,7 +24,9 @@ export class PortalNotification {
         public teaserText: string = '',
         public fullText: string = '',
         public keywords: string = '',
-        public usageContext: string[] = []
+        public usageContext: string[] = [],
+        public callback?: (notification: PortalNotification) => void,
+        public data?: any
     ) {
         switch (type) {
             case PortalNotificationType.ADVICE:

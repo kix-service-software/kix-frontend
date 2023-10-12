@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -46,6 +46,7 @@ import { TicketState } from '../model/TicketState';
 import { TicketPriority } from '../model/TicketPriority';
 import { TicketType } from '../model/TicketType';
 import { ExtendedTicketDetailsDataBuilder } from './ExtendedTicketDetailsDataBuilder';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class TicketDetailsDataBuilder {
 
@@ -71,7 +72,7 @@ export class TicketDetailsDataBuilder {
         let ticket: Ticket;
         if (token && ticketId) {
             const requestId = IdService.generateDateBasedId();
-            const tickets = await TicketAPIService.getInstance().loadObjects<Ticket>(
+            const objectResponse = await TicketAPIService.getInstance().loadObjects<Ticket>(
                 token, requestId, KIXObjectType.TICKET, [ticketId],
                 new KIXObjectLoadingOptions(
                     undefined, undefined, undefined,
@@ -82,7 +83,9 @@ export class TicketDetailsDataBuilder {
                         KIXObjectProperty.DYNAMIC_FIELDS
                     ]
                 ), undefined
-            ).catch(() => [] as Ticket[]);
+            ).catch(() => new ObjectResponse<Ticket>());
+
+            const tickets = objectResponse?.objects;
             ticket = tickets && tickets.length ? tickets[0] : null;
         }
         return ticket;
@@ -338,10 +341,11 @@ export class TicketDetailsDataBuilder {
                 displayValue = 'Translatable#Pending until';
                 break;
             case TicketProperty.TICKET_NUMBER:
-                const hookConfig: SysConfigOption[] = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                     token, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK], null, null
-                ).catch((): SysConfigOption[] => []);
+                ).catch(() => new ObjectResponse<SysConfigOption>());
 
+                const hookConfig = objectResponse?.objects || [];
                 if (hookConfig && hookConfig.length) {
                     displayValue = hookConfig[0].Value;
                 }
@@ -385,10 +389,11 @@ export class TicketDetailsDataBuilder {
             loadingOptions = new KIXObjectLoadingOptions(null, null, null, includes);
         }
 
-        const objects = await service.loadObjects(
+        const objectResponse = await service.loadObjects(
             token, '', objectType, [id], loadingOptions, null
-        ).catch((error) => []);
+        ).catch((error) => new ObjectResponse());
 
+        const objects = objectResponse?.objects;
         return objects && !!objects.length ? objects[0] : null;
     }
 

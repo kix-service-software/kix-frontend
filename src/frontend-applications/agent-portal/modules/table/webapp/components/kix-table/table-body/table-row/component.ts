@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,7 +8,6 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../../base-components/webapp/core/IEventSubscriber';
 import { RoutingService } from '../../../../../../base-components/webapp/core/RoutingService';
@@ -25,13 +24,28 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     private observer: IntersectionObserver;
 
+    private bindingIds: string[] = [];
+
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        if (this.bindingIds?.length) {
+            this.state.row?.removeBindings(this.bindingIds);
+        }
+
         this.state.row = input.row;
+
         if (this.state.row) {
+
+            this.bindingIds = [];
+            this.bindingIds.push(
+                this.state.row.addBinding('selected', (selected: boolean) => this.state.selected = selected)
+            );
+            this.bindingIds.push(
+                this.state.row.addBinding('canBeSelected', (selectable: boolean) => this.state.selectable = selectable)
+            );
             this.state.selected = this.state.row.isSelected();
             this.state.selectable = this.state.row.isSelectable();
             this.state.open = this.state.row.isExpanded();
@@ -43,8 +57,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public async onMount(): Promise<void> {
         if (this.state.row) {
             this.eventSubscriberId = this.state.row.getTable().getTableId() + '-' + this.state.row.getRowId();
-            EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this);
-            EventService.getInstance().subscribe(TableEvent.ROW_SELECTABLE_CHANGED, this);
+
             EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_VALUE_CHANGED, this);
@@ -54,12 +67,14 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTABLE_CHANGED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_CHANGED, this);
         EventService.getInstance().unsubscribe(TableEvent.TOGGLE_ROWS, this);
+
+        if (this.bindingIds?.length) {
+            this.state.row.removeBindings(this.bindingIds);
+        }
 
         if (this.observer) {
             this.observer.disconnect();
@@ -99,21 +114,14 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
         if (data && data.tableId === this.state.row.getTable().getTableId()) {
             if (data.rowId === this.state.row.getRowId()) {
-                if (eventId === TableEvent.ROW_SELECTION_CHANGED) {
-                    this.state.selected = this.state.row.isSelected();
-                }
-                if (eventId === TableEvent.ROW_SELECTABLE_CHANGED) {
-                    this.state.selectable = this.state.row.isSelectable();
-                }
                 if (eventId === TableEvent.ROW_TOGGLED) {
                     this.state.open = this.state.row.isExpanded();
                 }
-                if (
-                    (eventId === TableEvent.ROW_VALUE_STATE_CHANGED || eventId === TableEvent.ROW_VALUE_CHANGED)
-                    && data.rowId === this.state.row.getRowId()
-                ) {
+                if ((eventId === TableEvent.ROW_VALUE_STATE_CHANGED || eventId === TableEvent.ROW_VALUE_CHANGED)) {
                     this.setRowClasses();
                 }
+
+                (this as any).setStateDirty();
             }
 
             if (eventId === TableEvent.TOGGLE_ROWS) {
@@ -136,11 +144,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public changeSelect(event: any): void {
         event.stopPropagation();
         event.preventDefault();
-        if (this.state.row.isSelected()) {
-            this.state.row.select(false);
-        } else {
-            this.state.row.select();
-        }
+
+        this.state.selected = !this.state.selected;
+        this.state.row.select(this.state.selected);
     }
 
     public getColumns(): Column[] {

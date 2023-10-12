@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,6 +12,8 @@ import { MailAccount } from '../../model/MailAccount';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { MailAccountProperty } from '../../model/MailAccountProperty';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { DispatchingType } from '../../model/DispatchingType';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 
 export class MailAccountService extends KIXObjectService<MailAccount> {
@@ -47,6 +49,27 @@ export class MailAccountService extends KIXObjectService<MailAccount> {
             case MailAccountProperty.TYPE:
                 const types = await this.loadObjects(KIXObjectType.MAIL_ACCOUNT_TYPE, null);
                 nodes = types ? types.map((t) => new TreeNode(t, t.toString())) : [];
+                break;
+            case MailAccountProperty.DISPATCHING_BY:
+                const translations = await TranslationService.createTranslationObject([
+                    'Translatable#Default Queue (SysConfig)',
+                    'Translatable#recipient adresses (To, Cc, etc.)',
+                    'Translatable#Queue'
+                ]);
+                nodes = [
+                    new TreeNode(
+                        DispatchingType.BACKEND_KEY_DEFAULT,
+                        translations['Translatable#Default Queue (SysConfig)']
+                    ),
+                    new TreeNode(
+                        DispatchingType.BACKEND_KEY_FROM,
+                        translations['Translatable#recipient adresses (To, Cc, etc.)']
+                    ),
+                    new TreeNode(
+                        DispatchingType.BACKEND_KEY_QUEUE,
+                        translations['Translatable#Queue']
+                    )
+                ];
                 break;
             default:
         }

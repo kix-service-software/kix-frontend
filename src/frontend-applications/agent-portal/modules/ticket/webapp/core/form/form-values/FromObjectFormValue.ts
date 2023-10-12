@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,7 +16,6 @@ import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectF
 import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
 import { AgentService } from '../../../../../user/webapp/core/AgentService';
 import { Queue } from '../../../../model/Queue';
-import { Ticket } from '../../../../model/Ticket';
 import { TicketProperty } from '../../../../model/TicketProperty';
 
 export class FromObjectFormValue extends SelectObjectFormValue {
@@ -40,7 +39,7 @@ export class FromObjectFormValue extends SelectObjectFormValue {
 
     public async loadSelectableValues(): Promise<void> {
         const queueValue = this.objectValueMapper.findFormValue(TicketProperty.QUEUE_ID);
-        this.initNodes(queueValue?.value);
+        await this.initNodes(queueValue?.value);
     }
 
     private async initNodes(queueId: number): Promise<void> {
@@ -82,6 +81,10 @@ export class FromObjectFormValue extends SelectObjectFormValue {
 
                 this.treeHandler?.setTree(nodes);
                 this.treeHandler?.setSelection(nodes?.length ? [nodes[0]] : [], true);
+
+                if (nodes.length) {
+                    this.setFormValue(nodes[0].id);
+                }
             }
         } else if (!queueId && this.treeHandler) {
             this.treeHandler?.setTree([]);

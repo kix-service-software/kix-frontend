@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -99,28 +99,28 @@ class Component {
 
             group1.push(new ToolbarAction(
                 'kix-icon-man', myTicketsNewArticles, true, user.Tickets.OwnedAndUnseen.length, actionId,
-                user.Tickets.OwnedAndUnseen.map((id) => Number(id))
+                'OwnedAndUnseen'
             ));
             group1.push(new ToolbarAction(
-                'kix-icon-man', myTickets, false, user.Tickets.Owned.length, actionId, user.Tickets.Owned
+                'kix-icon-man', myTickets, false, user.Tickets.Owned.length, actionId, 'Owned'
             ));
 
             group2.push(new ToolbarAction(
                 'kix-icon-eye', myWatchedTicketsNewArticles, true, user.Tickets.WatchedAndUnseen.length,
-                actionId, user.Tickets.WatchedAndUnseen.map((id) => Number(id))
+                actionId, 'WatchedAndUnseen'
             ));
             group2.push(new ToolbarAction(
                 'kix-icon-eye', myWatchedTickets, false, user.Tickets.Watched.length, actionId,
-                user.Tickets.Watched.map((id) => Number(id))
+                'Watched'
             ));
 
             group3.push(new ToolbarAction(
                 'kix-icon-lock-close', myLockedTicketsNewArticles, true, user.Tickets.OwnedAndLockedAndUnseen.length,
-                actionId, user.Tickets.OwnedAndLockedAndUnseen.map((id) => Number(id))
+                actionId, 'OwnedAndLockedAndUnseen'
             ));
             group3.push(new ToolbarAction(
                 'kix-icon-lock-close', myLockedTickets, false, user.Tickets.OwnedAndLocked.length, actionId,
-                user.Tickets.OwnedAndLocked.map((id) => Number(id))
+                'OwnedAndLocked'
             ));
             ContextService.getInstance().registerToolbarActions([...group1, ...group2, ...group3]);
             this.state.toolbarGroups = [group1, group2, group3];

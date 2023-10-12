@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,9 +8,21 @@
  */
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
-import { AgentPortalConfiguation as AgentPortalConfiguration } from '../../model/configuration/AgentPortalConfiguation';
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { AgentPortalConfiguration } from '../../model/configuration/AgentPortalConfiguration';
+import { DisplayValueConfiguration } from '../../model/configuration/DisplayValueConfiguration';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { ObjectResponse } from '../../server/services/ObjectResponse';
+import { SearchOperator } from '../search/model/SearchOperator';
+import { Role } from '../user/model/Role';
+import { RoleProperty } from '../user/model/RoleProperty';
+import { RoleService } from '../user/server/RoleService';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -19,7 +31,21 @@ class Extension extends KIXExtension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
-        return [new AgentPortalConfiguration()];
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                RoleProperty.NAME, SearchOperator.IN, FilterDataType.STRING, FilterType.AND,
+                ['Superuser', 'System Admin', 'FAQ Admin', 'Textmodule Admin']
+            )
+        ]);
+        const roles = await RoleService.getInstance().loadObjects<Role>(
+            config.BACKEND_API_TOKEN, 'AgentPortalConfigExtension', KIXObjectType.ROLE, null, loadingOptions, null
+        ).catch((): ObjectResponse<Role> => new ObjectResponse([]));
+
+        const agentPortalConfig = new AgentPortalConfiguration();
+        agentPortalConfig.adminRoleIds = roles.objects?.map((r) => r.ID);
+
+        return [agentPortalConfig, new DisplayValueConfiguration()];
     }
 
     public async getFormConfigurations(): Promise<IConfiguration[]> {

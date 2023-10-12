@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -108,6 +108,9 @@ class Component {
 
                 await this.prepareTable();
 
+                const previousAddedLinks = context.getAdditionalInformation('CreateLinkDescription') ?? [];
+                if (previousAddedLinks?.length) await this.linksAdded(previousAddedLinks);
+
                 this.setLinkDescriptions();
             }
         }
@@ -131,11 +134,28 @@ class Component {
     }
 
     public async linksAdded(result: CreateLinkDescription[][]): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        const previousAddedLinks = context.getAdditionalInformation('CreateLinkDescription') ?? [];
+        if (previousAddedLinks?.length && this.compareLinksArrays(previousAddedLinks[1], result[1])) {
+            result = [result[0], [...previousAddedLinks[1], ...result[1]]];
+        }
+        context.setAdditionalInformation('CreateLinkDescription', result);
         this.linkDescriptions = result[0];
         await this.addNewLinks(result[1]);
         this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
         this.setCanSubmit();
         this.setLinkDescriptions();
+    }
+
+    private compareLinksArrays(arr1: CreateLinkDescription[], arr2: CreateLinkDescription[]): boolean {
+        if (arr1.length !== arr2.length) return true;
+        else {
+            let different = true;
+            for (let i = 0; i < arr1.length; i++) {
+                different = different && arr1[i].linkableObject.ObjectId !== arr2[i].linkableObject.ObjectId;
+            }
+            return different;
+        }
     }
 
     private async reviseLinkObjects(): Promise<void> {
@@ -262,8 +282,8 @@ class Component {
                 } as LinkObject));
             }
 
-            this.availableLinkObjects = [...this.availableLinkObjects, ...newLinkObjects];
-            this.newLinkObjects = [...this.newLinkObjects, ...newLinkObjects];
+            this.availableLinkObjects = this.filterUniqueLinks([...this.availableLinkObjects, ...newLinkObjects]);
+            this.newLinkObjects = this.filterUniqueLinks([...this.newLinkObjects, ...newLinkObjects]);
 
             const context = ContextService.getInstance().getActiveContext();
             context.setObjectList(KIXObjectType.LINK_OBJECT, [...this.availableLinkObjects]);
@@ -378,6 +398,18 @@ class Component {
         BrowserUtil.toggleLoadingShield('APP_SHIELD', true, 'Translatable#Links will be removed.');
         const failIds = await KIXObjectService.deleteObject(KIXObjectType.LINK_OBJECT, linkIdsToDelete);
         return !failIds || failIds.length === 0;
+    }
+
+
+    private filterUniqueLinks(array: Array<LinkObject>): Array<LinkObject> {
+        const filteredMappedArray = array.map((item) => item.ObjectId).filter((item, index, arr) => {
+            return arr.indexOf(item) === index;
+        });
+        const filteredLinks = [];
+        filteredMappedArray.forEach((objectId) => {
+            filteredLinks.push(array.find((item) => item.ObjectId === objectId));
+        });
+        return filteredLinks;
     }
 
 }

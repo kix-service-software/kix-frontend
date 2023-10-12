@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -53,14 +53,13 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
 
         const context = ContextService.getInstance().getActiveContext();
         const useRefArticleAttachments = context?.getAdditionalInformation('USE_REFERENCED_ATTACHMENTS');
-        const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
-        if (useRefArticleAttachments && refArticleId) {
-            const refTicketId = context?.getObjectId();
-            const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
-            if (refArticle) {
+        if (useRefArticleAttachments) {
+            const article = await this.getReferencedArticle();
+            if (article) {
                 const attachments = await this.getRefAttachments(
-                    refArticle.getAttachments(), refArticleId, Number(refTicketId)
+                    article.getAttachments(), article.ArticleID, article.TicketID
                 );
+
                 if (attachments?.length) {
                     const newValue = attachments;
                     if (Array.isArray(this.value) && this.value.length) {
@@ -70,6 +69,19 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
                 }
             }
         }
+    }
+
+    private async getReferencedArticle(): Promise<Article> {
+        const context = ContextService.getInstance().getActiveContext();
+        let article = context.getAdditionalInformation('REFERENCED_ARTICLE');
+
+        const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+        if (!article && refArticleId) {
+            const refTicketId = context?.getObjectId();
+            article = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
+        }
+
+        return article;
     }
 
     private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
@@ -107,5 +119,13 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
             attachmentsWithContent = await Promise.all(attachmentPromises);
         }
         return attachmentsWithContent;
+    }
+
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        if (Array.isArray(value) && value.length === 0) {
+            value = null;
+        }
+
+        await super.setFormValue(value, force);
     }
 }

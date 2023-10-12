@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -166,6 +166,86 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     {
                                         property: ContactProperty.EMAIL
                                     }, null, null, '', '', null, '', '2'
+                                )
+                            ],
+                            [
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
+                                        property: ContactProperty.EMAIL1
+                                    },
+                                    [
+                                        new UIFilterCriterion(
+                                            ContactProperty.EMAIL1,
+                                            SearchOperator.NOT_EQUALS,
+                                            ''
+                                        )
+                                    ],
+                                    null, '', '', null, '', '2'
+                                )
+                            ],
+                            [
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
+                                        property: ContactProperty.EMAIL2
+                                    },
+                                    [
+                                        new UIFilterCriterion(
+                                            ContactProperty.EMAIL2,
+                                            SearchOperator.NOT_EQUALS,
+                                            ''
+                                        )
+                                    ],
+                                    null, '', '', null, '', '2'
+                                )
+                            ],
+                            [
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
+                                        property: ContactProperty.EMAIL3
+                                    },
+                                    [
+                                        new UIFilterCriterion(
+                                            ContactProperty.EMAIL3,
+                                            SearchOperator.NOT_EQUALS,
+                                            ''
+                                        )
+                                    ],
+                                    null, '', '', null, '', '2'
+                                )
+                            ],
+                            [
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
+                                        property: ContactProperty.EMAIL4
+                                    },
+                                    [
+                                        new UIFilterCriterion(
+                                            ContactProperty.EMAIL4,
+                                            SearchOperator.NOT_EQUALS,
+                                            ''
+                                        )
+                                    ],
+                                    null, '', '', null, '', '2'
+                                )
+                            ],
+                            [
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
+                                        property: ContactProperty.EMAIL5
+                                    },
+                                    [
+                                        new UIFilterCriterion(
+                                            ContactProperty.EMAIL5,
+                                            SearchOperator.NOT_EQUALS,
+                                            ''
+                                        )
+                                    ],
+                                    null, '', '', null, '', '2'
                                 )
                             ]
                         ], null, null, true
@@ -459,8 +539,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     'contact-create-action'
                 ],
                 [
-                    'contact-edit-action', 'contact-duplicate-action', 'organisation-create-action',
-                    'ticket-create-action', 'config-item-create-action'
+                    'contact-edit-action', 'contact-duplicate-action', 'ticket-create-action'
                 ],
                 [],
                 [

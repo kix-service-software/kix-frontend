@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -55,6 +55,10 @@ class Component extends FormInputComponent<any, ComponentState> {
         }
 
         await super.onMount();
+    }
+
+    public async onDestroy(): Promise<void> {
+        this.state.manager?.unregisterListener(this.state.field?.instanceId);
     }
 
     public async setCurrentValue(): Promise<void> {

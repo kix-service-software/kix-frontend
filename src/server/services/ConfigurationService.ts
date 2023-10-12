@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -57,10 +57,6 @@ export class ConfigurationService {
     public saveDataFileContent(fileName: string, content: any): void {
         const filePath = path.join(this.dataDir, fileName);
         fs.writeFileSync(filePath, JSON.stringify(content));
-    }
-
-    private getComponentConfigurationFilePath(fileName: string): string {
-        return path.join(this.configurationDirectory, fileName);
     }
 
     private loadServerConfig(serverConfig: string): IServerConfiguration {
