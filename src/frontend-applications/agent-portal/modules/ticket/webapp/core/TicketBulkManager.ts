@@ -30,6 +30,7 @@ import { ObjectReferenceOptions } from '../../../base-components/webapp/core/Obj
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class TicketBulkManager extends BulkManager {
 
@@ -226,6 +227,9 @@ export class TicketBulkManager extends BulkManager {
                 break;
             default:
                 nodes = await TicketService.getInstance().getTreeNodes(property);
+                for (const node of nodes) {
+                    node.label = await TranslationService.translate(node.label);
+                }
         }
         return nodes;
     }
