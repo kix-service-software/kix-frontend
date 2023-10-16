@@ -8,9 +8,27 @@
  */
 
 import { Context } from '../../../../../model/Context';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 
 export class NewJobDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-job-dialog-context';
 
+    public async getObject<O extends KIXObject>(
+        objectType: KIXObjectType = KIXObjectType.JOB, reload: boolean = false, changedProperties?: string[]
+    ): Promise<O> {
+        let object;
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['ExecPlans', 'Macros']);
+        if (objectType) {
+            const objectId = this.getObjectId();
+            if (objectId) {
+                const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions);
+                object = objects && objects.length ? objects[0] : null;
+            }
+        }
+        return object;
+    }
 }

@@ -29,6 +29,8 @@ import { JobProperty } from '../../model/JobProperty';
 import { Macro } from '../../model/Macro';
 import { ExtendedJobFormManager } from './ExtendedJobFormManager';
 import { MacroFieldCreator } from './MacroFieldCreator';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class AbstractJobFormManager {
 
@@ -249,9 +251,11 @@ export class AbstractJobFormManager {
     public async getValue(
         property: string, formField: FormFieldConfiguration, value: any, job: Job, formContext: FormContext
     ): Promise<any> {
+        const context = ContextService.getInstance().getActiveContext();
+        const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
         switch (property) {
             case JobProperty.EXEC_PLAN_WEEKDAYS:
-                if (job && formContext === FormContext.EDIT) {
+                if (job && (formContext === FormContext.EDIT || duplicate)) {
                     const execPlans: ExecPlan[] = await JobService.getExecPlansOfJob(job);
                     if (execPlans) {
                         const timeExecPlans = execPlans.filter((ep) => ep.Type === ExecPlanTypes.TIME_BASED);
@@ -262,7 +266,7 @@ export class AbstractJobFormManager {
                 }
                 break;
             case JobProperty.EXEC_PLAN_WEEKDAYS_TIMES:
-                if (job && formContext === FormContext.EDIT) {
+                if (job && (formContext === FormContext.EDIT || duplicate)) {
                     const execPlans: ExecPlan[] = await JobService.getExecPlansOfJob(job);
                     if (execPlans) {
                         const timeExecPlans = execPlans.filter((ep) => ep.Type === ExecPlanTypes.TIME_BASED);
@@ -273,7 +277,7 @@ export class AbstractJobFormManager {
                 }
                 break;
             case JobProperty.EXEC_PLAN_EVENTS:
-                if (job && formContext === FormContext.EDIT) {
+                if (job && (formContext === FormContext.EDIT || duplicate)) {
                     const execPlans: ExecPlan[] = await JobService.getExecPlansOfJob(job);
                     if (execPlans) {
                         const eventExecPlans = execPlans.filter((ep) => ep.Type === ExecPlanTypes.EVENT_BASED);
@@ -284,12 +288,12 @@ export class AbstractJobFormManager {
                 }
                 break;
             case JobProperty.MACROS:
-                if (job && formContext === FormContext.EDIT) {
+                if (job && (formContext === FormContext.EDIT || duplicate)) {
                     value = job.Type;
                 }
                 break;
             case JobProperty.FILTER:
-                if (job && formContext === FormContext.EDIT) {
+                if (job && (formContext === FormContext.EDIT || duplicate)) {
                     // will be set in postPrepareForm
                     value = null;
                 }
