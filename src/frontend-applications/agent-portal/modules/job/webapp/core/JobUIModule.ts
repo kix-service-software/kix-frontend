@@ -89,6 +89,7 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('job-table-delete', JobTableDeleteAction);
 
         ActionFactory.getInstance().registerAction('job-edit-action', JobEditAction);
+
         const editJobDialogContext = new ContextDescriptor(
             EditJobDialogContext.CONTEXT_ID, [KIXObjectType.JOB],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
