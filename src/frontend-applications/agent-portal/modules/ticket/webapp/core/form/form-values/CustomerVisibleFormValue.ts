@@ -11,26 +11,24 @@ import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { BooleanFormValue } from '../../../../../object-forms/model/FormValues/BooleanFormValue';
+import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { Article } from '../../../../model/Article';
 import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 
 export class CustomerVisibleFormValue extends BooleanFormValue {
 
-    private ticketBindingIds: string[] = [];
-    private articleBindingIds: string[] = [];
-    private initialReadonly: boolean;
-
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
+
+        if (!this.hint) {
+            this.hint = await TranslationService.translate('Translatable#Helptext_Tickets_TicketCreate_CustomerVisible');
+        }
 
         const article = await this.getReferencedArticle();
         if (article) {
             this.value = article?.CustomerVisible;
         }
-
-        // remember inital readonly (do not use possible new value from setVisibleIfNecessary)
-        this.initialReadonly = this.readonly;
     }
 
     private async getReferencedArticle(): Promise<Article> {
@@ -44,11 +42,6 @@ export class CustomerVisibleFormValue extends BooleanFormValue {
         }
 
         return article;
-    }
-
-    public setInitialState(): void {
-        super.setInitialState();
-        this.initialState.set('readonly', this.initialReadonly);
     }
 
     private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
