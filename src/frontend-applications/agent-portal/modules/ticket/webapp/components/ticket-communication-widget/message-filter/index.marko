@@ -29,27 +29,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          </label>
       </div> -->
         <if(input.useExternal || typeof input.useExternal === "undefined")>
-            <div class="ms-4 my-2 d-flex flex-row justify-content-between align-items-center">
+            <div class="ms-4 form-check">
                 <input
                     type="checkbox"
                     checked=state.filterExternal
                     on-click("filterChanged", "external")
                     id="filter-external"
+                    class="form-check-input"
                 >
-                <label for="filter-external">
+                <label for="filter-external" class="form-check-label">
                     <translation-string pattern="Translatable#From external"/>
                 </label>
             </div>
         </if>
         <if(input.useInternal || typeof input.useInternal === "undefined")>
-            <div class="ms-4 my-2 d-flex flex-row justify-content-between align-items-center">
+            <div class="ms-4 form-check">
                 <input
                     type="checkbox"
                     checked=state.filterInternal
                     on-click("filterChanged", "internal")
                     id="filter-internal"
+                    class="form-check-input"
                 >
-                <label for="filter-internal">
+                <label for="filter-internal" class="form-check-label">
                     <translation-string pattern="Translatable#From internal"/>
                 </label>
             </div>
@@ -58,33 +60,35 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             input.useCustomerPortal ||
             typeof input.useCustomerPortal === "undefined"
         )>
-            <div class="ms-4 my-2 d-flex flex-row justify-content-between align-items-center">
+            <div class="ms-4 form-check">
                 <input
                     type="checkbox"
                     checked=state.filterCustomer
                     on-click("filterChanged", "customer")
                     id="filter-customer"
+                    class="form-check-input"
                 >
-                <label for="filter-customer">
+                <label for="filter-customer" class="form-check-label">
                     <translation-string pattern="Translatable#Visible in Self Service Portal"/>
                 </label>
             </div>
         </if>
         <if(input.useUnread || typeof input.useUnread === "undefined")>
-            <div class="ms-4 my-2 d-flex flex-row justify-content-between align-items-center">
+            <div class="ms-4 form-check">
                 <input
                     type="checkbox"
                     checked=state.filterUnread
                     on-click("filterChanged", "unread")
                     id="filter-unread"
+                    class="form-check-input"
                 >
-                <label for="filter-unread">
+                <label for="filter-unread" class="form-check-label">
                     <translation-string pattern="Translatable#Unread"/>
                 </label>
             </div>
         </if>
         <if(input.useDate || typeof input.useDate === "undefined")>
-            <div class="ms-4 my-2 d-flex flex-row justify-content-between align-items-center">
+            <div class="ms-4 d-flex flex-row justify-content-between align-items-center">
                 <i
                     class=[
                         "fas me-3",
@@ -112,7 +116,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
         </if>
         <if(input.useMyArticles)>
-            <div class="ms-4 my-2 d-flex flex-row justify-content-between align-items-center">
+            <div class="ms-4 form-check">
                 <translation-string pattern="Translatable#All"/>
                 <div class="form-check d-flex justify-content-center form-switch mx-1">
                     <input
