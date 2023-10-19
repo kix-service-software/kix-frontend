@@ -61,10 +61,8 @@ export class NotificationRouter extends KIXRouter {
 
             const objectEvents: BackendNotification[] = req.body;
             for (const event of objectEvents) {
-                const hasEvent = this.notificationsQueue.some(
-                    (e) => e.Namespace === event.Namespace && e.ObjectID === event.ObjectID
-                );
-                if (!hasEvent) {
+                const hasEvent = this.notificationsQueue.some((e) => e.Namespace === event.Namespace);
+                if (!hasEvent || CacheService.getInstance().isUserStatsAffected(event.Namespace)) {
                     this.notificationsQueue.push(event);
                 }
             }
