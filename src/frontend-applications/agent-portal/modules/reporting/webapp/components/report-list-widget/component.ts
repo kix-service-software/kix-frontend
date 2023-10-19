@@ -37,12 +37,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.instanceId),
                 eventPublished: (data: any, eventId: string): void => {
-                    if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.REPORT) {
-                        this.state.prepared = false;
-                    } else if (eventId === ContextUIEvent.RELOAD_OBJECTS_FINISHED &&
-                        data === KIXObjectType.REPORT) {
-                        this.state.prepared = true;
-                    } else if (eventId === TableEvent.ROW_SELECTION_CHANGED &&
+                    if (eventId === TableEvent.ROW_SELECTION_CHANGED &&
                         data.table.getObjectType() === KIXObjectType.REPORT) {
                         context.setFilteredObjectList(KIXObjectType.REPORT,
                             data.table.getSelectedRows().map((r) => r.getRowObject().getObject()));
@@ -50,8 +45,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     }
                 }
             };
-            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
-            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS_FINISHED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
         }
 
@@ -59,8 +52,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onDestroy(): Promise<void> {
-        EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS_FINISHED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
     }
 }

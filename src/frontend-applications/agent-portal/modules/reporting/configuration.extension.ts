@@ -63,7 +63,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'reporting-dashboard-reports-table-widget', 'Reports Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.REPORT, [ReportProperty.ID, SortOrder.UP],
             new ConfigurationDefinition('reporting-dashboard-reports-table', ConfigurationType.Table), null,
-            null, true, null, null, null, false
+            null, true, null, null, true, false
         );
         configurations.push(reportsTableWidget);
 
