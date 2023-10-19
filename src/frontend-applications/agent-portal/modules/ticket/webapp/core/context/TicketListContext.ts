@@ -31,7 +31,7 @@ export class TicketListContext extends Context {
     public async loadTickets(limit?: number): Promise<void> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, limit, ['Watchers']);
         loadingOptions.limit = limit;
-        this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
+        await this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
 
         const user = await AgentService.getInstance().getCurrentUser(true);
         const ticketStatsProperty = this.getAdditionalInformation('TicketStatsProperty');
@@ -50,7 +50,7 @@ export class TicketListContext extends Context {
     }
 
     public async reloadObjectList(
-        objectType: KIXObjectType | string, silent: boolean = false, limit: number
+        objectType: KIXObjectType | string, silent: boolean = false, limit?: number
     ): Promise<void> {
         await this.loadTickets(limit);
         return super.reloadObjectList(objectType, silent, limit);

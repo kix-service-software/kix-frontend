@@ -27,7 +27,6 @@ import { FilterType } from '../../model/FilterType';
 import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../model/configuration/TableRowHeight';
 import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
-import { SortOrder } from '../../model/SortOrder';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
@@ -256,40 +255,40 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(ticketListConfig);
 
-        configurations.push(
-            new ContextConfiguration(
-                this.getModuleId(), 'Ticket Dashboard Configuration', ConfigurationType.Context,
-                this.getModuleId(),
-                [],
-                [
-                    new ConfiguredWidget(
-                        'ticket-dashboard-queue-explorer', 'ticket-dashboard-queue-explorer', null,
-                        [
-                            new UIComponentPermission('tickets', [CRUD.READ]),
-                            new UIComponentPermission('system/ticket/queues', [CRUD.READ])
-                        ]
-                    )
-                ], [],
-                [
-                    new ConfiguredWidget(
-                        'ticket-dashboard-chart-widget-priorities', 'ticket-dashboard-chart-widget-priorities', null,
-                        [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-                    ),
-                    new ConfiguredWidget(
-                        'ticket-dashboard-chart-widget-states', 'ticket-dashboard-chart-widget-states', null,
-                        [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-                    ),
-                    new ConfiguredWidget(
-                        'ticket-dashboard-chart-widget-new-tickets', 'ticket-dashboard-chart-widget-new-tickets', null,
-                        [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-                    ),
-                    new ConfiguredWidget(
-                        'ticket-dashboard-ticket-list-widget', 'ticket-dashboard-ticket-list-widget', null,
-                        [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.LARGE
-                    )
-                ]
-            )
+        const contextConfig = new ContextConfiguration(
+            this.getModuleId(), 'Ticket Dashboard Configuration', ConfigurationType.Context,
+            this.getModuleId(),
+            [],
+            [
+                new ConfiguredWidget(
+                    'ticket-dashboard-queue-explorer', 'ticket-dashboard-queue-explorer', null,
+                    [
+                        new UIComponentPermission('tickets', [CRUD.READ]),
+                        new UIComponentPermission('system/ticket/queues', [CRUD.READ])
+                    ]
+                )
+            ], [],
+            [
+                new ConfiguredWidget(
+                    'ticket-dashboard-chart-widget-priorities', 'ticket-dashboard-chart-widget-priorities', null,
+                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
+                ),
+                new ConfiguredWidget(
+                    'ticket-dashboard-chart-widget-states', 'ticket-dashboard-chart-widget-states', null,
+                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
+                ),
+                new ConfiguredWidget(
+                    'ticket-dashboard-chart-widget-new-tickets', 'ticket-dashboard-chart-widget-new-tickets', null,
+                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
+                ),
+                new ConfiguredWidget(
+                    'ticket-dashboard-ticket-list-widget', 'ticket-dashboard-ticket-list-widget', null,
+                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.LARGE
+                )
+            ]
         );
+        contextConfig.tableWidgetInstanceIds = [[KIXObjectType.TICKET, 'ticket-dashboard-ticket-list-widget']];
+        configurations.push(contextConfig);
 
         return configurations;
     }

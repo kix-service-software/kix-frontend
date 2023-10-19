@@ -34,7 +34,8 @@ export class ContextConfiguration implements IConfiguration {
                 public dialogs: ConfiguredDialogWidget[] = [],
                 public customizable: boolean = false,
                 public valid: boolean = true,
-                public loadingOptions: Array<[KIXObjectType | string, KIXObjectLoadingOptions]> = null
+                public loadingOptions: Array<[KIXObjectType | string, KIXObjectLoadingOptions]> = null,
+                public tableWidgetInstanceIds: Array<[string, string]> = []
         ) { }
 
 }

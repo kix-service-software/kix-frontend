@@ -147,7 +147,7 @@ export class OrganisationContext extends Context {
 
             const collectionId = this.contextId + KIXObjectType.ORGANISATION;
 
-            this.prepareContextLoadingOptions(KIXObjectType.ORGANISATION, loadingOptions);
+            await this.prepareContextLoadingOptions(KIXObjectType.ORGANISATION, loadingOptions);
 
             const organisations = await KIXObjectService.loadObjects(
                 KIXObjectType.ORGANISATION, null, loadingOptions, null, false, undefined, undefined, collectionId
@@ -188,14 +188,14 @@ export class OrganisationContext extends Context {
                     FilterDataType.NUMERIC, FilterType.AND, organisationIds
                 ));
             }
-            this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
+            await this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
             contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, undefined, undefined, undefined, undefined, collectionId
             );
         } else if (!isOrganisationDepending && this.filterValue) {
             const filter = await ContactService.getInstance().prepareFullTextFilter(this.filterValue);
             loadingOptions.filter = filter;
-            this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
+            await this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
             contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, undefined, undefined, undefined, undefined, collectionId
             );
@@ -205,7 +205,7 @@ export class OrganisationContext extends Context {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS_FINISHED, KIXObjectType.CONTACT);
     }
 
-    public reloadObjectList(objectType: KIXObjectType, silent: boolean = false, limit: number = 20): Promise<void> {
+    public reloadObjectList(objectType: KIXObjectType, silent: boolean = false, limit?: number): Promise<void> {
         if (objectType === KIXObjectType.ORGANISATION) {
             this.currentOrganisationLimit = limit;
             return this.loadOrganisations(this.currentOrganisationLimit);

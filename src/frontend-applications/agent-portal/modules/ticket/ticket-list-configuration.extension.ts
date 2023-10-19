@@ -67,17 +67,17 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(tableWidget);
 
-        configurations.push(
-            new ContextConfiguration(
-                this.getModuleId(), 'User Ticket List', ConfigurationType.Context,
-                this.getModuleId(),
-                [],
-                [], [],
-                [
-                    new ConfiguredWidget('user-ticket-list-table-widget', 'user-ticket-list-table-widget')
-                ]
-            )
+        const contextConfig = new ContextConfiguration(
+            this.getModuleId(), 'User Ticket List', ConfigurationType.Context,
+            this.getModuleId(),
+            [],
+            [], [],
+            [
+                new ConfiguredWidget('user-ticket-list-table-widget', 'user-ticket-list-table-widget')
+            ]
         );
+        contextConfig.tableWidgetInstanceIds = [[KIXObjectType.TICKET, 'user-ticket-list-table-widget']];
+        configurations.push(contextConfig);
 
         return configurations;
     }
