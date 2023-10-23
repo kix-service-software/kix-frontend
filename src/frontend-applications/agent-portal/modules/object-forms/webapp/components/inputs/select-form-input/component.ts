@@ -270,12 +270,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public async apply(event: any): Promise<void> {
-        // TODO: apply but keep dropdown open else trigger "click"
-        // const element = document.getElementById(`id_${this.state.searchValueKey}`);
-        // element?.click();
+    public async select(event: any): Promise<void> {
         await this.formValue?.setSelectedNodes();
         this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
+    }
+
+    public async apply(event: any): Promise<void> {
+        const element = document.getElementById(`id_${this.state.searchValueKey}`);
+        element?.click();
     }
 
     public async prepareAutocompleteHint(): Promise<void> {
