@@ -39,7 +39,6 @@ import { PortalNotification } from '../../../portal-notification/model/PortalNot
 import { PortalNotificationType } from '../../../portal-notification/model/PortalNotificationType';
 import { DisplayValueRequest } from '../../../../model/DisplayValueRequest';
 import { DisplayValueResponse } from '../../../../model/DisplayValueResponse';
-import { ObjectResponse } from '../../../../server/services/ObjectResponse';
 
 export class KIXObjectSocketClient extends SocketClient {
 
@@ -190,12 +189,18 @@ export class KIXObjectSocketClient extends SocketClient {
         const response = await this.sendRequest<LoadObjectsResponse<T>>(
             request, KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, timeout, silent, controller
         ).catch((error): LoadObjectsResponse<T> => {
+            if (collectionId) {
+                this.collectionsController.delete(collectionId);
+            }
             if (error instanceof PermissionError) {
                 return new LoadObjectsResponse(request.clientRequestId, []);
             } else {
                 throw error;
             }
         });
+        if (collectionId) {
+            this.collectionsController.delete(collectionId);
+        }
 
         if (objectConstructors && objectConstructors.length) {
             const newObjects = [];
