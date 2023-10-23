@@ -1,9 +1,1 @@
-{
-    "dependencies": [
-        "./style.less",
-        "require ./login-component",
-        "require ../../../base-components/webapp/components/loading-spinner",
-        "require ../../../base-components/webapp/components/editor",
-        "./login-component/static/background.png"
-    ]
-}
+{"dependencies":["./style.less","require ./login-component","require ../../../base-components/webapp/components/loading-spinner","require ../../../base-components/webapp/components/editor","./login-component/static/background.png","../../../../modules/object-forms/webapp"]}

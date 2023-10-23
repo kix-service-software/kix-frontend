@@ -30,6 +30,7 @@ import { JobRun } from '../model/JobRun';
 import { CacheService } from '../../../server/services/cache';
 import { IdService } from '../../../model/IdService';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { MacroType } from '../model/MacroType';
 
 export class JobAPIService extends KIXObjectAPIService {
 
@@ -51,6 +52,7 @@ export class JobAPIService extends KIXObjectAPIService {
     protected RESOURCE_URI_JOB_TYPE: string = this.buildUri('system', 'automation', 'jobs', 'types');
     protected RESOURCE_URI_EXEC_PLAN: string = this.buildUri('system', 'automation', 'execplans');
     protected RESOURCE_URI_MACRO: string = this.buildUri('system', 'automation', 'macros');
+    protected RESOURCE_URI_MACRO_TYPE: string = this.buildUri('system', 'automation', 'macros', 'types');
 
     public objectType: KIXObjectType = KIXObjectType.JOB;
 
@@ -60,7 +62,8 @@ export class JobAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.JOB_RUN
             || kixObjectType === KIXObjectType.EXEC_PLAN
             || kixObjectType === KIXObjectType.MACRO
-            || kixObjectType === KIXObjectType.MACRO_ACTION_TYPE;
+            || kixObjectType === KIXObjectType.MACRO_ACTION_TYPE
+            || kixObjectType === KIXObjectType.MACRO_TYPE;
     }
 
     public async loadObjects<T>(
@@ -109,6 +112,11 @@ export class JobAPIService extends KIXObjectAPIService {
                     clientRequestId, MacroActionType
                 );
             }
+        } else if (objectType === KIXObjectType.MACRO_TYPE) {
+            objectResponse = await super.load<MacroType>(
+                token, KIXObjectType.MACRO_TYPE, this.RESOURCE_URI_MACRO_TYPE, loadingOptions,
+                null, 'MacroType', clientRequestId, MacroType
+            );
         }
 
         return objectResponse as ObjectResponse<T>;
