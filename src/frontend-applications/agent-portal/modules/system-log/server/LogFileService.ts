@@ -50,14 +50,20 @@ export class LogFileService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.LOG_FILE) {
             if (!Array.isArray(objectIds)) {
-                objectResponse = await super.load<LogFile>(
-                    token, KIXObjectType.LOG_FILE, this.RESOURCE_URI, loadingOptions, objectIds, 'LogFile',
-                    clientRequestId, LogFile, false
-                );
+                const tierParameter = loadingOptions?.query?.find((q) => q[0] === 'tier');
+                if (!tierParameter || tierParameter[1] === LogTier.BACKEND) {
 
-                objectResponse.objects?.forEach((lf) => lf.tier = LogTier.BACKEND);
+                    objectResponse = await super.load<LogFile>(
+                        token, KIXObjectType.LOG_FILE, this.RESOURCE_URI, loadingOptions, objectIds, 'LogFile',
+                        clientRequestId, LogFile, false
+                    );
 
-                const feLogFiles = await LoggingService.getInstance().getLogFiles();
+                    objectResponse.objects?.forEach((lf) => lf.tier = LogTier.BACKEND);
+                }
+                let feLogFiles = [];
+                if (!tierParameter || tierParameter[1] === LogTier.FRONTEND) {
+                    feLogFiles = await LoggingService.getInstance().getLogFiles();
+                }
                 objectResponse.objects = [
                     ...objectResponse.objects,
                     ...feLogFiles

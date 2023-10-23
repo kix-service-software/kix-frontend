@@ -25,6 +25,7 @@ import { JobTypes } from '../../model/JobTypes';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { MacroType } from '../../model/MacroType';
 
 export class JobService extends KIXObjectService<Job> {
 
@@ -47,6 +48,7 @@ export class JobService extends KIXObjectService<Job> {
         this.objectConstructors.set(KIXObjectType.EXEC_PLAN, [ExecPlan]);
         this.objectConstructors.set(KIXObjectType.MACRO, [Macro]);
         this.objectConstructors.set(KIXObjectType.MACRO_ACTION_TYPE, [MacroActionType]);
+        this.objectConstructors.set(KIXObjectType.MACRO_TYPE, [MacroType]);
     }
 
     public addTypeMapping(jobType: JobTypes | string, kixObjectType: KIXObjectType | string): void {
@@ -66,7 +68,8 @@ export class JobService extends KIXObjectService<Job> {
             || kixObjectType === KIXObjectType.JOB_RUN
             || kixObjectType === KIXObjectType.EXEC_PLAN
             || kixObjectType === KIXObjectType.MACRO
-            || kixObjectType === KIXObjectType.MACRO_ACTION_TYPE;
+            || kixObjectType === KIXObjectType.MACRO_ACTION_TYPE
+            || kixObjectType === KIXObjectType.MACRO_TYPE;
     }
 
     public getLinkObjectName(): string {
@@ -78,7 +81,7 @@ export class JobService extends KIXObjectService<Job> {
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
         let objects: O[];
-        if (objectType === KIXObjectType.JOB_TYPE) {
+        if (objectType === KIXObjectType.JOB_TYPE || objectType === KIXObjectType.MACRO_TYPE) {
             objects = await super.loadObjects<O>(objectType, null, loadingOptions, objectLoadingOptions);
             if (objectIds) {
                 objects = objects.filter(

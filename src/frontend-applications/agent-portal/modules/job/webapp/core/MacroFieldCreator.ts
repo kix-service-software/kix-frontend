@@ -24,7 +24,6 @@ import { ObjectReferenceOptions } from '../../../base-components/webapp/core/Obj
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { JobProperty } from '../../model/JobProperty';
-import { JobType } from '../../model/JobType';
 import { JobTypes } from '../../model/JobTypes';
 import { Macro } from '../../model/Macro';
 import { MacroAction } from '../../model/MacroAction';
@@ -32,6 +31,7 @@ import { MacroActionType } from '../../model/MacroActionType';
 import { MacroActionTypeOption } from '../../model/MacroActionTypeOption';
 import { MacroActionTypeResult } from '../../model/MacroActionTypeResult';
 import { MacroProperty } from '../../model/MacroProperty';
+import { MacroType } from '../../model/MacroType';
 import { AbstractJobFormManager } from './AbstractJobFormManager';
 import { JobFormService } from './JobFormService';
 import { JobService } from './JobService';
@@ -45,9 +45,14 @@ export class MacroFieldCreator {
             'job-form-field-macro', '', JobProperty.MACROS, 'default-select-input'
         );
 
-        // FIXME: load macro types (currently identical to job types)
-        const types = await KIXObjectService.loadObjects<JobType>(KIXObjectType.JOB_TYPE).catch((): JobType[] => []);
-        const typeNodes = types.map((t) => new TreeNode(t.Name, t.DisplayName));
+        const types = await KIXObjectService.loadObjects<MacroType>(KIXObjectType.MACRO_TYPE).catch(
+            (): MacroType[] => []);
+        const typeNodes = [];
+        types.forEach((t) => {
+            if (t.DisplayName) {
+                typeNodes.push(new TreeNode(t.Name, t.DisplayName));
+            }
+        });
         macroField.options.push(new FormFieldOption(DefaultSelectInputFormOption.NODES, typeNodes));
         macroField.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false));
 

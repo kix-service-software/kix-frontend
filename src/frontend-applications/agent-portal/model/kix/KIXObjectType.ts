@@ -105,6 +105,8 @@ export enum KIXObjectType {
 
     MACRO_ACTION_TYPE = 'MacroActionType',
 
+    MACRO_TYPE = 'MacroType',
+
     MAIL_ACCOUNT = 'MailAccount',
 
     MAIL_ACCOUNT_TYPE = 'MailAccountType',
