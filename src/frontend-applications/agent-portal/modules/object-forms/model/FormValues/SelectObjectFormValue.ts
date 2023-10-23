@@ -58,6 +58,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     protected initialized: boolean = false;
     protected selectedNodes: TreeNode[] = [];
 
+    private prepareSelectableController: AbortController;
+
     public constructor(
         public property: string,
         object: any,
@@ -410,43 +412,58 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     protected async prepareSelectableNodes(objects: KIXObject[]): Promise<void> {
-        let nodes: TreeNode[] = [];
-        if (Array.isArray(objects) && objects.length) {
-            if (this.structureOption) {
-                nodes = await KIXObjectService.prepareObjectTree(
-                    this.objectType, objects, this.showInvalidNodes,
-                    this.isInvalidClickable, null, this.translatable
-                );
-            } else {
-                const promises = [];
-                for (const o of objects) {
-                    promises.push(ObjectReferenceUtil.createTreeNode(
-                        o, this.showInvalidNodes, this.isInvalidClickable, this.useTextAsId, this.translatable
-                    ));
+        // prevent that possible slower prior prepare overwrites current prepare (see "setTree" below)
+        if (this.prepareSelectableController) {
+            this.prepareSelectableController.abort();
+        }
+        const controller = new AbortController();
+        this.prepareSelectableController = controller;
+
+        await new Promise<void>(async (resolve) => {
+            let nodes: TreeNode[] = [];
+            if (Array.isArray(objects) && objects.length) {
+                if (this.structureOption) {
+                    nodes = await KIXObjectService.prepareObjectTree(
+                        this.objectType, objects, this.showInvalidNodes,
+                        this.isInvalidClickable, null, this.translatable
+                    );
+                } else {
+                    const promises = [];
+                    for (const o of objects) {
+                        promises.push(ObjectReferenceUtil.createTreeNode(
+                            o, this.showInvalidNodes, this.isInvalidClickable, this.useTextAsId, this.translatable
+                        ));
+                    }
+
+                    nodes = await Promise.all<TreeNode>(promises);
+                    nodes.filter((n) => n instanceof TreeNode);
                 }
 
-                nodes = await Promise.all<TreeNode>(promises);
-                nodes.filter((n) => n instanceof TreeNode);
+                nodes = nodes.filter((node, index) => nodes.findIndex((n) => n.id === node.id) === index);
+                SortUtil.sortObjects(nodes, 'label', DataType.STRING);
             }
 
-            nodes = nodes.filter((node, index) => nodes.findIndex((n) => n.id === node.id) === index);
-            SortUtil.sortObjects(nodes, 'label', DataType.STRING);
-        }
+            const value = this.value !== undefined && this.value !== null
+                ? Array.isArray(this.value) ? this.value : [this.value]
+                : null;
 
-        const value = this.value !== undefined && this.value !== null
-            ? Array.isArray(this.value) ? this.value : [this.value]
-            : null;
-
-        if (Array.isArray(value)) {
-            for (const v of value) {
-                const node = TreeUtil.findNode(nodes, v);
-                if (node) {
-                    node.selected = true;
+            if (Array.isArray(value)) {
+                for (const v of value) {
+                    const node = TreeUtil.findNode(nodes, v);
+                    if (node) {
+                        node.selected = true;
+                    }
                 }
             }
-        }
 
-        this.treeHandler?.setTree(nodes, undefined, true, true);
+            // do not set tree if aborted - no need for "old" value
+            if (!controller.signal.aborted) {
+                this.treeHandler?.setTree(nodes, undefined, true, true);
+            }
+            resolve();
+        });
+
+        this.prepareSelectableController = null;
     }
 
     public async search(searchValue: string): Promise<void> {
@@ -486,8 +503,9 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             loadingOptions = await ObjectReferenceUtil.prepareLoadingOptions(loadingOptions, this.searchValue);
 
             if (service) {
-                objects = await service.loadObjects<KIXObject>(
-                    this.objectType, null, loadingOptions, this.specificLoadingOptions, false
+                objects = await KIXObjectService.loadObjects<KIXObject>(
+                    this.objectType, null, loadingOptions, this.specificLoadingOptions, false,
+                    true, undefined, this.instanceId
                 ).catch(() => []);
             }
         }

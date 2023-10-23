@@ -30,7 +30,7 @@ import { UIUtil } from '../../core/UIUtil';
 export class ObjectReferenceUtil {
 
     public static async searchObjects(
-        limit: number, searchValue: string, options: FormFieldOption[] = []
+        limit: number, searchValue: string, options: FormFieldOption[] = [], collectionId?: string
     ): Promise<KIXObject[]> {
         let objects: KIXObject[] = [];
 
@@ -89,7 +89,8 @@ export class ObjectReferenceUtil {
             // use ids only if no filter given => filter with ids afterwards
             // TODO: use ids as additional filter/search to prevent missing results because of limit
             objects = await KIXObjectService.loadObjects<KIXObject>(
-                objectType, filter ? null : objectIds, preparedOptions, specificLoadingOptions?.value, false
+                objectType, filter ? null : objectIds, preparedOptions, specificLoadingOptions?.value, false,
+                true, undefined, collectionId
             );
             if (filter && objectIds) {
                 objects = objects.filter((o) => objectIds.some((oid) => oid.toString() === o.ObjectId.toString()));
