@@ -65,8 +65,6 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
                 this.context = ContextService.getInstance().getActiveContext();
 
-                this.setContextLoadingLimit();
-
                 this.context?.registerListener(this.table.getTableId() + '-content-provider', {
                     sidebarLeftToggled: (): void => { return; },
                     filteredObjectListChanged: (): void => { return; },
@@ -89,25 +87,6 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
             }
             this.initialized = true;
-        }
-    }
-
-    private setContextLoadingLimit(): void {
-        // overwrite limit and search limit in context config if available
-        const contextLoadingOptions = this.context.getContextLoadingOptions(this.objectType);
-        if (contextLoadingOptions) {
-
-            const hasLimit = this.loadingOptions?.limit !== null
-                && typeof this.loadingOptions?.limit !== 'undefined';
-            if (hasLimit) {
-                contextLoadingOptions.limit = this.loadingOptions.limit;
-            }
-
-            const hasSearchLimit = this.loadingOptions?.searchLimit !== null
-                && typeof this.loadingOptions?.searchLimit !== 'undefined';
-            if (hasSearchLimit) {
-                contextLoadingOptions.searchLimit = this.loadingOptions?.searchLimit;
-            }
         }
     }
 
@@ -148,7 +127,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public async loadMore(): Promise<void> {
         this.currentPageIndex++;
         if (this.contextId && !this.objectIds) {
-            const pageSize = this.context?.getPageSize(this.objectType) || this.loadingOptions?.limit || 20;
+            const pageSize = await this.context?.getPageSize(this.objectType) || this.loadingOptions?.limit || 20;
             const currentLimit = this.currentPageIndex * pageSize;
 
             const context = ContextService.getInstance().getActiveContext();

@@ -119,7 +119,7 @@ export class FAQContext extends Context {
             );
         }
 
-        this.prepareContextLoadingOptions(KIXObjectType.FAQ_ARTICLE, loadingOptions);
+        await this.prepareContextLoadingOptions(KIXObjectType.FAQ_ARTICLE, loadingOptions);
 
         const faqArticles = await KIXObjectService.loadObjects(
             KIXObjectType.FAQ_ARTICLE, null, loadingOptions, null, false, undefined, undefined,

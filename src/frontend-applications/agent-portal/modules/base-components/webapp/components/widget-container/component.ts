@@ -159,7 +159,9 @@ class Component {
             this.state.widgets.map((w) => w.instanceId), this.modifiedWidgets, this.contextWidgetList
         );
 
-        EventService.getInstance().publish(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED);
+        EventService.getInstance().publish(
+            ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, { widgets: [...this.modifiedWidgets] }
+        );
         EventService.getInstance().publish(ApplicationEvent.TOGGLE_CONFIGURATION_MODE, { cancel: false });
     }
 

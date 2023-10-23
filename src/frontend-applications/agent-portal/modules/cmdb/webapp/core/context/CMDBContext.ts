@@ -190,7 +190,7 @@ export class CMDBContext extends Context {
             loadingOptions.sortOrder = 'ConfigItem.ChangeTime:datetime';
         }
 
-        this.prepareContextLoadingOptions(KIXObjectType.CONFIG_ITEM, loadingOptions);
+        await this.prepareContextLoadingOptions(KIXObjectType.CONFIG_ITEM, loadingOptions);
 
         const configItems = await KIXObjectService.loadObjects(
             KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false, undefined, undefined,
