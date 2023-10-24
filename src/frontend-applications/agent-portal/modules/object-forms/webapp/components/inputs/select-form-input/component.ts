@@ -43,6 +43,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             if (this.formValue.treeHandler && element) {
                 this.formValue.treeHandler.setKeyListenerElement(element);
             }
+
+            const myDropdown = document.getElementById(`id_${this.state.searchValueKey}`);
+            myDropdown?.addEventListener('hidden.bs.dropdown', async () => {
+                await this.formValue?.setSelectedNodes();
+                this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
+                if (this.formValue.isAutoComplete) {
+                    this.formValue?.treeHandler?.setTree([]);
+                }
+                const searchInput: any = (this as any).getEl(this.state.searchValueKey);
+                if (searchInput) {
+                    searchInput.value = '';
+                }
+            });
+
         }, 100);
 
         this.subscriber = {
@@ -87,23 +101,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.bindingIds.push(
             this.formValue?.addPropertyBinding('maxSelectCount', () => {
                 this.state.multiselect = this.formValue?.multiselect;
-            })
-        );
-
-        this.bindingIds.push(
-            this.formValue.addPropertyBinding('selectedNodes', async () => {
-                this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
-            })
-        );
-
-        this.bindingIds.push(
+            }),
             this.formValue.addPropertyBinding(FormValueProperty.READ_ONLY, (formValue: ObjectFormValue) => {
                 this.setReadonly(Boolean(formValue.readonly));
-            })
-        );
-
-        this.bindingIds.push(
-            this.formValue.addPropertyBinding(FormValueProperty.VALUE, async (formValue: ObjectFormValue) => {
+            }),
+            this.formValue.addPropertyBinding(FormValueProperty.VALUE, async () => {
+                this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
+            }),
+            this.formValue.addPropertyBinding('selectedNodes', async () => {
                 this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
             })
         );
@@ -232,10 +237,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public selectAll(event: any): void {
         this.stopPropagation(event);
 
-        if (this.state.selectedNodes?.length) {
-            this.formValue.removeValue(null);
+        if (this.state.selectAll) {
+            this.formValue?.treeHandler?.selectAll();
+            this.state.selectAll = false;
         } else {
-            this.formValue.selectAll();
+            this.formValue?.treeHandler?.selectNone();
+            this.state.selectAll = true;
         }
     }
 
@@ -261,6 +268,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (event.preventDefault) {
             event.preventDefault();
         }
+    }
+
+    public async select(event: any): Promise<void> {
+        await this.formValue?.setSelectedNodes();
+        this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
+    }
+
+    public async apply(event: any): Promise<void> {
+        const element = document.getElementById(`id_${this.state.searchValueKey}`);
+        element?.click();
     }
 
     public async prepareAutocompleteHint(): Promise<void> {

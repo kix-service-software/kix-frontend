@@ -161,6 +161,12 @@ class EditorComponent {
                 };
 
                 this.editor.on('change', changeListener);
+
+                this.editor.on('blur', () => {
+                    const value = this.editor.getData();
+                    (this as any).emit('focusLost', value);
+                });
+
                 this.editor.on('mode', () => {
                     const editable = this.editor.editable();
                     if (editable) {

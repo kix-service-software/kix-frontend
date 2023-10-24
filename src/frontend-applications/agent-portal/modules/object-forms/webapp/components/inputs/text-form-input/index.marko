@@ -9,18 +9,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.prepared)>
    <if(!state.readonly)>
-      <input.form-control
+      <input
          type="text"
          value=state.value
-         on-keydown("valueChanged")
-      />
+         on-keydown("keyDown")
+         on-change("valueChanged")
+         class="form-control"
+      >
    </if>
    <else-if(state.readonly)>
-      <input.form-control
+      <input
          type="text"
          value=state.value
          disabled=state.readonly
-         on-keydown("valueChanged")
-      />
+         on-keydown("keyDown")
+         on-change("valueChanged")
+         class="form-control"
+      >
    </else-if>
 </if>

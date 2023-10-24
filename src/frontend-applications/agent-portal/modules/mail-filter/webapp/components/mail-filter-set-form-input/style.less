@@ -11,14 +11,14 @@
     display: grid;
     grid-template-columns: @dynamic-value-columns-no-operation;
     align-items: center;
-    grid-column-gap: @dynamic-value-gap;
+    grid-column-gap: (@dynamic-value-gap+1rem);
     margin-bottom: @margin-small;
     justify-items: start;
 
     >span {
         display: grid;
         grid-template-columns: auto 1rem;
-        grid-gap: @margin-small / 2;
+        grid-gap: (@margin-small / 2);
 
         >span:first-child {
             .shorten-text();
