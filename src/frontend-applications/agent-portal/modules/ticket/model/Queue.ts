@@ -18,7 +18,6 @@ export class Queue extends KIXObject {
 
     public ObjectId: string | number;
     public QueueID: number;
-    public Calendar: string;
     public DefaultSignKey: string;
     public FollowUpID: number;
     public FollowUpLock: number;
