@@ -142,8 +142,8 @@ class Component {
         return null;
     }
 
-    public async download(attachment: Attachment): Promise<void> {
-        if (this.images && this.images.some((i) => i.imageId === attachment.ID)) {
+    public async download(attachment: Attachment, force: boolean): Promise<void> {
+        if (!force && this.images && this.images.some((i) => i.imageId === attachment.ID)) {
             EventService.getInstance().publish(
                 ImageViewerEvent.OPEN_VIEWER,
                 new ImageViewerEventData(this.images, attachment.ID)
@@ -151,7 +151,7 @@ class Component {
         } else {
             const attachmentWithContent = await this.loadAttachment(attachment);
             if (attachmentWithContent) {
-                if (attachmentWithContent.ContentType === 'application/pdf') {
+                if (!force && attachmentWithContent.ContentType === 'application/pdf') {
                     BrowserUtil.openPDF(attachmentWithContent.Content, attachmentWithContent.Filename);
                 } else {
                     BrowserUtil.startBrowserDownload(
