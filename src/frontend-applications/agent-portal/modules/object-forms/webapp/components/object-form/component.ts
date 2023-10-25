@@ -102,7 +102,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async setFormValues(): Promise<void> {
         this.formhandler = await this.context.getFormManager().getObjectFormHandler();
-        this.state.formValues = this.formhandler?.getFormValues() || [];
+        if (this.formhandler) {
+            this.state.formValues = this.formhandler?.getFormValues() || [];
+            this.state.prepared = true;
+        } else {
+            this.state.error = 'Translatable#No form available. Please contact your administrator.';
+        }
     }
 
     public async submit(): Promise<void> {
