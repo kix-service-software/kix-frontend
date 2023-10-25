@@ -17,6 +17,11 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
 
 export class TicketListContext extends Context {
 
@@ -29,7 +34,7 @@ export class TicketListContext extends Context {
     }
 
     public async loadTickets(limit?: number): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, limit, ['Watchers']);
+        const loadingOptions = new KIXObjectLoadingOptions([], null, limit, ['Watchers']);
         loadingOptions.limit = limit;
         await this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
 
@@ -39,8 +44,15 @@ export class TicketListContext extends Context {
         const ticketIds = user.Tickets[ticketStatsProperty];
         let tickets: Ticket[] = [];
         if (ticketIds?.length) {
+            loadingOptions.filter.push(
+                new FilterCriteria(
+                    TicketProperty.TICKET_ID, SearchOperator.IN,
+                    FilterDataType.NUMERIC, FilterType.AND, ticketIds
+                )
+            );
+
             tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, ticketIds, loadingOptions, null, false, undefined, undefined,
+                KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined,
                 this.contextId + KIXObjectType.TICKET
             ).catch(() => []);
         }
