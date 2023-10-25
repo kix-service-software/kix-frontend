@@ -10,16 +10,16 @@
 import { DynamicFieldTableFormValue } from '../DynamicFields/DynamicFieldTableFormValue';
 import { FormValueAction } from '../FormValueAction';
 
-export class TableAddFormValueAction extends FormValueAction {
+export class TableApplyAction extends FormValueAction {
 
 
     public async initAction(): Promise<void> {
-        this.text = 'Translatable#Add initial table';
-        this.icon = 'fas fa-plus x-small';
+        this.text = 'Translatable#Apply Table';
+        this.icon = 'fas fa-check x-small';
     }
 
     public async canShow(): Promise<boolean> {
-        return this.formValue.enabled && (!this.formValue.value || this.formValue.value.length === 0);
+        return this.formValue.enabled;
     }
 
     public canRun(): boolean {
@@ -27,7 +27,11 @@ export class TableAddFormValueAction extends FormValueAction {
     }
 
     public async run(event: any): Promise<void> {
-        (this.formValue as DynamicFieldTableFormValue)?.addInitialTable();
+        this.addInitialTable();
+    }
+
+    private addInitialTable(): void {
+        (this.formValue as DynamicFieldTableFormValue)?.apply();
     }
 
 }
