@@ -108,6 +108,9 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             case ConfigItemProperty.NAME:
                 displayValue = 'Translatable#Name';
                 break;
+            case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
+                displayValue = 'Translatable#Include Previous Version';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }

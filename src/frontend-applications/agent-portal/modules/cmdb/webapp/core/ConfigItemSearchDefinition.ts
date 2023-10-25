@@ -91,6 +91,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         for (const searchCriteria of criteria) {
             switch (searchCriteria.property) {
                 case SearchProperty.FULLTEXT:
+                case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
                     newCriteria.push(searchCriteria);
                     break;
                 case ConfigItemProperty.NAME:

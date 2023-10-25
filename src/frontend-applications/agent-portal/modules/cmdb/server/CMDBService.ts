@@ -341,7 +341,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 !c.property.startsWith('Data') &&
                 !c.property.startsWith('CurrentVersion') &&
                 c.property !== ConfigItemProperty.ASSIGNED_CONTACT &&
-                c.property !== ConfigItemProperty.ASSIGNED_ORGANISATION;
+                c.property !== ConfigItemProperty.ASSIGNED_ORGANISATION &&
+                c.property !== ConfigItemProperty.PREVIOUS_VERSION_SEARCH;
         });
     }
 
@@ -384,7 +385,6 @@ export class CMDBAPIService extends KIXObjectAPIService {
                     )
                 );
             }
-
         }
 
         const newCriteria = criteria.filter((c) =>
@@ -400,7 +400,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property.startsWith('Data') ||
             c.property.startsWith('CurrentVersion') ||
             c.property === ConfigItemProperty.ASSIGNED_CONTACT ||
-            c.property === ConfigItemProperty.ASSIGNED_ORGANISATION
+            c.property === ConfigItemProperty.ASSIGNED_ORGANISATION ||
+            c.property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH
         );
 
         for (const searchCriteria of newCriteria) {
@@ -422,6 +423,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
                     searchCriteria.operator = SearchOperator.IN;
                     searchCriteria.value = Array.isArray(searchCriteria.value)
                         ? searchCriteria.value : [searchCriteria.value as number];
+                    break;
+                case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
+                    searchCriteria.operator = SearchOperator.EQUALS;
+                    searchCriteria.value = Array.isArray(searchCriteria.value)
+                        ? searchCriteria.value[0] : searchCriteria.value;
                     break;
                 default:
             }
