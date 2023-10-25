@@ -108,19 +108,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public removeTable(): void {
         this.state.value = null;
-        this.formValue?.setFormValue(null);
+        this.formValue?.setTableValue(null);
     }
 
     public tableValueChanged(rowIndex: number, colIndex: number, event: any): void {
         this.state.value[rowIndex][colIndex] = event.target.value;
         (this as any).setStateDirty('tableValues');
-        this.formValue.setFormValue(this.state.value);
+        this.formValue.setTableValue(this.state.value);
     }
 
     public tableRowRemoved(index: number, event: any): void {
         this.state.value.splice(index, 1);
         (this as any).setStateDirty('tableValues');
-        this.formValue.setFormValue(this.state.value);
+        this.formValue.setTableValue(this.state.value);
     }
 
     public tableRowAdded(event: any): void {
@@ -134,7 +134,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.value.push(newRow);
 
         (this as any).setStateDirty('tableValues');
-        this.formValue.setFormValue(this.state.value);
+        this.formValue.setTableValue(this.state.value);
     }
 
     public canRemove(index: number): boolean {
