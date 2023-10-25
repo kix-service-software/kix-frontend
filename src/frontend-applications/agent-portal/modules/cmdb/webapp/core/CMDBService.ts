@@ -220,6 +220,14 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                     ));
                 }
                 break;
+            case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
+                const no = await TranslationService.translate('No');
+                const yes = await TranslationService.translate('Yes');
+                nodes = [
+                    new TreeNode(0, no),
+                    new TreeNode(1, yes)
+                ];
+                break;
             default:
                 nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
         }

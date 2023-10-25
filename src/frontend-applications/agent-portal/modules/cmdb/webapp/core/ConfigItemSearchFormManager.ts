@@ -49,7 +49,8 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             [SearchProperty.FULLTEXT, null],
             [ConfigItemProperty.NAME, null],
             [VersionProperty.NUMBER, null],
-            [KIXObjectProperty.CHANGE_TIME, null]
+            [KIXObjectProperty.CHANGE_TIME, null],
+            [ConfigItemProperty.PREVIOUS_VERSION_SEARCH, null]
         ];
 
         const canContact = await this.checkReadPermissions('contacts');
@@ -131,6 +132,8 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             operations = [SearchOperator.CONTAINS];
         } else if (property === ConfigItemProperty.NAME || property === VersionProperty.NUMBER) {
             operations = stringOperators;
+        } else if (property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH) {
+            operations = [SearchOperator.EQUALS];
         } else if (this.isDropDown(property)) {
             operations = numberOperators;
         } else if (this.isDateTime(property)) {
@@ -211,7 +214,8 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             || property === ConfigItemProperty.CUR_INCI_STATE_ID
             || property === ConfigItemProperty.CLASS_ID
             || property === KIXObjectProperty.CREATE_BY
-            || property === KIXObjectProperty.CHANGE_BY;
+            || property === KIXObjectProperty.CHANGE_BY
+            || property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH;
     }
 
     private isDateTime(property: string): boolean {
@@ -226,6 +230,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CHANGE_BY:
+            case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
                 return await CMDBService.getInstance().getTreeNodes(property, true, true);
             default:
                 const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);
@@ -269,6 +274,9 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
     }
 
     public async isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean> {
+        if (property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH) {
+            return false;
+        }
         return true;
     }
 
