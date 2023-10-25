@@ -7,12 +7,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.attachment on-click('download')>
-    <span.attachment-icon>
-        <icon icon=state.icon showUnknown=true/>
+<div on-click("download", false) class="attachment">
+    <span class="attachment-icon">
+        <icon icon=state.icon showUnknown/>
     </span>
-    <span.attachment-link class=(state.progress ? "inactive-link" : "") title=state.attachment.Filename>
+    <span
+        class=["attachment-link", state.progress ? "inactive-link" : ""]
+        title=(state.attachment.Filename)
+    >
         ${state.attachment.Filename}
     </span>
-    <span.file-size>(${state.attachment.Filesize})</span>
+    <span class="file-size">
+        (${state.attachment.Filesize})
+    </span>
+    <span on-click("download", true) class="file-download kix-icon-download"/>
 </div>

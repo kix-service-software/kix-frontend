@@ -40,8 +40,8 @@ class ArticleAttachmentComponent {
         return null;
     }
 
-    public onClick(): void {
-        (this as any).emit('fileClicked');
+    public onClick(force: boolean): void {
+        (this as any).emit('fileClicked', force);
     }
 
 }

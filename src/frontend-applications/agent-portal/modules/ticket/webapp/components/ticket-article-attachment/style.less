@@ -10,7 +10,7 @@
 .attachment {
     display: grid;
     grid-column-gap: @margin-small;
-    grid-template-columns: min-content auto 1fr;
+    grid-template-columns: min-content auto 1fr auto;
 
     .attachment-link {
         .shorten-text();
@@ -28,5 +28,11 @@
 
     .file-size {
         white-space: nowrap;
+    }
+
+    .file-download {
+        &:hover {
+            cursor: pointer;
+        }
     }
 }

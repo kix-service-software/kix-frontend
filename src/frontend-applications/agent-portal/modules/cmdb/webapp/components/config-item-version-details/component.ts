@@ -102,14 +102,14 @@ class Component {
         return preparedDataArray;
     }
 
-    public async fileClicked(attachment: ConfigItemAttachment): Promise<void> {
+    public async fileClicked(attachment: ConfigItemAttachment, force: boolean): Promise<void> {
         if (this.state.version) {
             let images: DisplayImageDescription[] = [];
             if (attachment.ContentType.match(/^image\//)) {
                 images = await this.getImages(attachment.ID);
             }
 
-            if (images.length && images.some((i) => i.imageId === attachment.ID)) {
+            if (!force && images.length && images.some((i) => i.imageId === attachment.ID)) {
                 EventService.getInstance().publish(
                     ImageViewerEvent.OPEN_VIEWER,
                     new ImageViewerEventData(images, attachment.ID)
@@ -121,7 +121,7 @@ class Component {
                 );
 
                 if (attachments && attachments.length) {
-                    if (attachments[0].ContentType === 'application/pdf') {
+                    if (!force && attachments[0].ContentType === 'application/pdf') {
                         BrowserUtil.openPDF(attachments[0].Content, attachments[0].Filename);
                     } else {
                         BrowserUtil.startBrowserDownload(
