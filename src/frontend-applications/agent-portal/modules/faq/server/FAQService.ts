@@ -308,11 +308,7 @@ export class FAQService extends KIXObjectAPIService {
             categoryCriteria.value = [categoryCriteria.value as any];
         }
 
-        const validCriteria = criteria.find((c) => c.property === KIXObjectProperty.VALID_ID);
-        if (validCriteria && validCriteria.operator === SearchOperator.EQUALS) {
-            validCriteria.operator = SearchOperator.IN;
-            validCriteria.value = [validCriteria.value as any];
-        }
+        criteria = criteria.filter((c) => c.property !== KIXObjectProperty.VALID_ID);
 
         return criteria;
     }
