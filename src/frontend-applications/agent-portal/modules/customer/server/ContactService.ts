@@ -147,7 +147,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         });
 
         let userId;
-        if (userParameter.length) {
+        if (userParameter.length && userParameter.some((up) => up[0] === UserProperty.USER_LOGIN)) {
             const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
             userId = await this.createOrUpdateUser(token, clientRequestId, userParameter, assignedUserId).catch(
                 (error: Error) => {
