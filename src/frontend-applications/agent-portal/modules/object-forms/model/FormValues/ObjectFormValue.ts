@@ -74,6 +74,10 @@ export class ObjectFormValue<T = any> {
         }
     }
 
+    public getInitialState(property: string): any {
+        return this.initialState.get(property);
+    }
+
     public setInitialState(): void {
         this.initialState.set('countDefault', this.countDefault);
         this.initialState.set('countMax', this.countMax);
@@ -255,8 +259,11 @@ export class ObjectFormValue<T = any> {
 
         this.enabled = true;
         this.visible = field.visible;
+        this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
         this.readonly = field.readonly;
+        this.setNewInitialState(FormValueProperty.READ_ONLY, this.readonly);
         this.required = field.required;
+        this.setNewInitialState(FormValueProperty.REQUIRED, this.required);
         this.isSetInBackground = field.options.some((o) => o.option === 'set hidden') || this.parent?.isSetInBackground;
 
         if (field?.property !== KIXObjectProperty.DYNAMIC_FIELDS) {

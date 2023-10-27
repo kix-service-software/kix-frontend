@@ -14,6 +14,7 @@ import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
+import { FormValueProperty } from '../../../../../object-forms/model/FormValueProperty';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
@@ -214,7 +215,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
 
             if (formValue) {
-                formValue.visible = true;
+                const initialVisible = formValue.getInitialState(FormValueProperty.VISIBLE);
+                formValue.visible = typeof initialVisible !== 'undefined' && initialVisible !== null
+                    ? initialVisible
+                    : true;
 
                 if (property === ArticleProperty.CC) {
                     formValue.visible = false;
