@@ -57,6 +57,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             });
 
+            myDropdown?.addEventListener('show.bs.dropdown', () => {
+                this.state.selectAll = this.formValue?.treeHandler?.getSelectedNodes()?.length <= 0;
+            });
+
         }, 100);
 
         this.subscriber = {
