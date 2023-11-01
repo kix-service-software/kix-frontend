@@ -101,7 +101,7 @@ export class CacheService {
         await Promise.all(promises);
     }
 
-    private isUserStatsAffected(namespace: string): boolean {
+    public isUserStatsAffected(namespace: string): boolean {
         const isOwnerEvent = namespace.startsWith('Ticket.Owner');
         const isLockEvent = namespace.startsWith('Ticket.Lock');
         const isWatcherEvent = namespace.startsWith('Watcher');
