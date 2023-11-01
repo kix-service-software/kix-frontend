@@ -45,7 +45,6 @@ export class ClientNotificationSocketClient extends SocketClient {
 
                 events = events
                     .filter((e) => e.RequestID !== ClientStorageService.getClientRequestId())
-                    .filter((e) => e.Namespace !== 'Ticket.Article.Flag')
                     .filter((e) => e.Namespace !== 'Ticket.Watcher')
                     .filter((e) => e.Namespace !== 'Ticket.History');
                 NotificationHandler.handleUpdateNotifications(events);

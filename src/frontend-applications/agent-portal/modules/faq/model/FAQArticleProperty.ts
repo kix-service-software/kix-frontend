@@ -55,4 +55,14 @@ export enum FAQArticleProperty {
 
     LINK = 'LINK',
 
+    // display properties
+    CATEGORY = 'CATEGORY',
+    CATEGORY_FULLNAME = 'CATEGORY_FULLNAME',
+    FIELD_1_NO_INLINE = 'Field1NoInline',
+    FIELD_2_NO_INLINE = 'Field2NoInline',
+    FIELD_3_NO_INLINE = 'Field3NoInline',
+    FIELD_4_NO_INLINE = 'Field4NoInline',
+    FIELD_5_NO_INLINE = 'Field5NoInline',
+    FIELD_6_NO_INLINE = 'Field6NoInline'
+
 }

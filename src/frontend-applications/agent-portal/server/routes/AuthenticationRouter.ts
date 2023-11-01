@@ -71,6 +71,9 @@ export class AuthenticationRouter extends KIXRouter {
         const config = ConfigurationService.getInstance().getServerConfiguration();
         const ssoEnabled = config?.SSO_ENABLED;
 
+        let authType = '';
+        let negotiationToken = '';
+
         if (ssoEnabled) {
             if (!req.cookies.authNegotiationDone && !req.cookies.authNoSSO) {
                 res.cookie('authNegotiationDone', true, { httpOnly: true });
@@ -87,45 +90,45 @@ export class AuthenticationRouter extends KIXRouter {
                     </html>`
                 );
             } else {
-                let authType = '';
-                let negotiationToken = '';
                 const authorization = req.headers['authorization'];
                 if (typeof authorization === 'string' && authorization.split(' ')[0] === 'Negotiate') {
                     // already negotiated (SSO)
                     negotiationToken = authorization.split(' ')[1];
                     authType = 'negotiate token (SSO)';
                 }
+            }
+        }
 
-                let user = '';
-                if (req.headers['x-kix-user'] && typeof req.headers['x-kix-user'] === 'string') {
-                    // login with trusted header
-                    user = req.headers['x-kix-user'];
-                    authType = 'trusted HTTP header';
-                }
+        let user = '';
+        if (req.headers['x-kix-user'] && typeof req.headers['x-kix-user'] === 'string') {
+            // login with trusted header
+            user = req.headers['x-kix-user'];
+            authType = 'trusted HTTP header';
+        }
 
-                let success = true;
-                const token = await AuthenticationService.getInstance().login(
-                    user, null, UserType.AGENT, negotiationToken, null, null, false
-                ).catch((e) => {
-                    LoggingService.getInstance().error('Error when trying to login with ' + authType);
-                    success = false;
-                });
+        if (user || negotiationToken) {
+            let success = true;
+            const token = await AuthenticationService.getInstance().login(
+                user, null, UserType.AGENT, negotiationToken, null, null, false
+            ).catch((e) => {
+                LoggingService.getInstance().error('Error when trying to login with ' + authType);
+                success = false;
+            });
 
-                if (success) {
-                    res.cookie('token', token);
-                    res.clearCookie('authNegotiationDone');
-                    res.status(200);
-                    res.send(
-                        `<!DOCTYPE html>
-                        <html lang="en">
-                            <head>
-                                <title>KIX Agent Portal</title>
-                                <meta http-equiv="refresh" content="3; URL=/">
-                            </head>
-                            <body></body>
-                        </html>`
-                    );
-                }
+            if (success) {
+                res.cookie('token', token);
+                res.clearCookie('authNegotiationDone');
+                res.status(200);
+                res.send(
+                    `<!DOCTYPE html>
+                            <html lang="en">
+                                <head>
+                                    <title>KIX Agent Portal</title>
+                                    <meta http-equiv="refresh" content="3; URL=/">
+                                </head>
+                                <body></body>
+                            </html>`
+                );
             }
         }
 
@@ -136,6 +139,11 @@ export class AuthenticationRouter extends KIXRouter {
         res.clearCookie('token');
         res.clearCookie('authNegotiationDone');
         res.cookie('authNoSSO', true, { httpOnly: true });
+
+        if (req.headers['x-forwarded-for']) {
+            res.cookie('x-forwarded-for', req.headers['x-forwarded-for']);
+        }
+
         const applications = await PluginService.getInstance().getExtensions<IMarkoApplication>(
             AgentPortalExtensions.MARKO_APPLICATION
         );

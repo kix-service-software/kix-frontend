@@ -9,11 +9,14 @@
 
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { EventService } from '../../../base-components/webapp/core/EventService';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ObjectFormEvent } from '../ObjectFormEvent';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
 import { DynamicFieldAffectedAssetFormValue } from './DynamicFields/DynamicFieldAffectedAssetFormValue';
 import { DynamicFieldChecklistFormValue } from './DynamicFields/DynamicFieldChecklistFormValue';
@@ -39,23 +42,15 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         this.enabled = true;
     }
 
-    public async initFormValue(): Promise<void> {
-        if (this.objectValueMapper?.object?.KIXObjectType) {
-            const dynamicFields = await KIXObjectService.loadDynamicFields(this.objectValueMapper.object.KIXObjectType);
-            if (dynamicFields?.length) {
-                for (const df of dynamicFields) {
-                    let dynamicFieldValue;
-                    if (Array.isArray(this.value) && this.value.length) {
-                        dynamicFieldValue = this.value.find((v) => v.Name === df.Name);
-                    }
-                    const formValue = this.findFormValue(df.Name);
-                    if (!formValue) {
-                        await this.createFormValue(df.Name, dynamicFieldValue);
-                    }
-                }
+    public async createDFFormValues(): Promise<void> {
+        if (Array.isArray(this.object?.DynamicFields)) {
+            for (const dfValue of this.object.DynamicFields) {
+                await this.createFormValue(dfValue?.Name, dfValue);
             }
         }
+    }
 
+    public async initFormValue(): Promise<void> {
         this.inputComponentId = null;
         this.visible = false;
         this.enabled = true;
@@ -70,7 +65,7 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         }
 
         if (formValue) {
-            formValue.initFormValueByField(field);
+            await formValue.initFormValueByField(field);
         } else {
             console.warn(`Could not find/create form value for dynamic field ${nameOption?.value}`);
             console.warn(field);
@@ -149,6 +144,10 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
 
             if (addFormValue) {
                 this.formValues.push(formValue);
+                const context = ContextService.getInstance().getActiveContext();
+                EventService.getInstance().publish(
+                    ObjectFormEvent.FORM_VALUE_ADDED, { instanceId: context?.instanceId }
+                );
             }
         }
 

@@ -69,6 +69,7 @@ class Component {
 
                 existingValue.required = cv.required;
                 existingValue.value.valid = cv.valid;
+                existingValue.value.validErrorMessages = cv.validErrorMessages;
             } else {
                 const value = new DynamicFormFieldValue(this.manager, cv, cv.id);
                 await value.init();
@@ -108,7 +109,8 @@ class Component {
                     this.manager,
                     new ObjectPropertyValue(
                         v.property, v.operator, v.value, v.options, v.required, v.valid,
-                        v.objectType, v.readonly, v.changeable, v.id, v.additionalOptions
+                        v.objectType, v.readonly, v.changeable, v.id, v.additionalOptions,
+                        v.validErrorMessages
                     ),
                     v.id
                 );

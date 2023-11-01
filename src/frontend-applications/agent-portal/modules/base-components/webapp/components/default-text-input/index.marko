@@ -8,18 +8,39 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.field)>
-    <input.input-style
-        class={
-                invalid: state.invalid
-            }
-        value=state.currentValue
-        type=state.inputType
-        maxlength=state.field.maxLength
-        placeholder=state.placeholder
-        autocomplete=component.getAutoCompleteOption()
-        required=input.required
-        readonly=state.field.readonly
-        disabled=state.field.readonly
-        on-blur("focusLost")
-        on-input("valueChanged")/>
+    <div class="input-group">
+        <input
+            class=[
+                "form-control input-style",
+                {
+                    invalid: state.invalid,
+                },
+            ]
+            value=state.currentValue
+            type=component.getInputType(state.isPasswordVisible)
+            maxlength=(state.field.maxLength)
+            placeholder=state.placeholder
+            autocomplete=component.getAutoCompleteOption()
+            required=input.required
+            readonly=(state.field.readonly)
+            disabled=(state.field.readonly)
+            on-blur("focusLost")
+            on-input("valueChanged")
+        >
+        <if(state.isPasswordInit)>
+            <div
+                role="button"
+                on-click("togglePasswordVisible")
+                class="input-group-text"
+            >
+                <i class=[
+                    "far",
+                    {
+                        "fa-eye": state.isPasswordVisible,
+                        "fa-eye-slash": !state.isPasswordVisible,
+                    },
+                ]/>
+            </div>
+        </if>
+    </div>
 </if>

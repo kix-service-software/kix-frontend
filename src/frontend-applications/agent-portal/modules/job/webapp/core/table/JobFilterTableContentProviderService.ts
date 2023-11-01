@@ -185,7 +185,7 @@ export class JobFilterTableContentProviderService {
         if (dfName && value) {
 
             const val = Array.isArray(value) ? value : [value];
-            const preDFValue = { Name: dfName, Value: val, PreparedValue: val } as DynamicFieldValue;
+            const preDFValue = { Name: dfName, Value: val } as DynamicFieldValue;
             const dfValue = new DynamicFieldValue(preDFValue);
 
             const preparedValue = await LabelService.getInstance().getDFDisplayValues(objectType, dfValue);

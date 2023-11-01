@@ -7,50 +7,79 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget instanceId=state.instanceId title=state.widgetTitle contentActions=state.actions>
+<widget
+    instanceId=state.instanceId
+    title=state.widgetTitle
+    contentActions=state.actions
+>
     <@content>
-        <div#communication-top.communication-container>
-            <div.communication-header>
+        <div class="communication-container" id="communication-top">
+            <div class="communication-header d-flex flex-row flex-wrap justify-content-between align-items-center px-2 py-2">
                 <message-filter/>
-                <div.icons-wrapper>
-                    <i.fas.fa-check-double
-                        title=state.translations['Translatable#Read all']
-                        class={
-                            active: state.activeUnreadAction
-                        }
-                        on-click('readAll')/>
-                    <i.fas.fa-angle-double-up
-                        title=state.translations['Translatable#Collapse all']
-                        on-click('collapseAll')/>
-                    <i.fas.fa-comment
-                        title=state.translations['Translatable#Preview List']
-                        class={
-                            selected: !state.selectedCompactView
-                        }
-                        on-click('selectNormalDisplay')/>
-                    <i.fas.fa-list-ul
-                        title=state.translations['Translatable#Compact View']
-                        class={
-                            selected: state.selectedCompactView
-                        }
-                        on-click('selectListDisplay')/>
-                    <i.fas.fa-sort
-                        title=state.translations['Translatable#Change sort direction']
-                        on-click('changeSortDirection')/>
+                <div class="icons-wrapper">
+                    <i
+                        title=(state.translations["Translatable#Read all"])
+                        class=[
+                            "fas fa-check-double",
+                            {
+                                active: state.activeUnreadAction,
+                            },
+                        ]
+                        on-click("readAll")
+                    />
+                    <i
+                        title=(state.translations["Translatable#Collapse all"])
+                        on-click("collapseAll")
+                        class="fas fa-angle-double-up"
+                    />
+                    <i
+                        title=(state.translations["Translatable#Preview List"])
+                        class=[
+                            "fas fa-comment",
+                            {
+                                selected: !state.selectedCompactView,
+                            },
+                        ]
+                        on-click("selectNormalDisplay")
+                    />
+                    <i
+                        title=(state.translations["Translatable#Compact View"])
+                        class=[
+                            "fas fa-list-ul",
+                            {
+                                selected: state.selectedCompactView,
+                            },
+                        ]
+                        on-click("selectListDisplay")
+                    />
+                    <i
+                        title=(
+                            state.translations[
+                                "Translatable#Change sort direction"
+                            ]
+                        )
+                        on-click("changeSortDirection")
+                        class="fas fa-sort"
+                    />
                 </div>
             </div>
-            <div.communication-list>
+            <div class="communication-list">
                 <if(state.articles)>
                     <for|article, index| of=state.articles>
                         <message-content
                             article=article
                             articleCountNumber=article.countNumber
                             selectedCompactView=state.selectedCompactView
-                            key=('article-' + article.ArticleID)/>
+                            key="article-" + article.ArticleID
+                        />
                     </for>
                 </if>
-                <a.top title=state.translations['Translatable#Go to top'] on-click('scrollToTop')>
-                    <i.fa.fa-arrow-up.move-up/>
+                <a
+                    title=(state.translations["Translatable#Go to top"])
+                    on-click("scrollToTop")
+                    class="top"
+                >
+                    <i class="fa fa-arrow-up move-up"/>
                 </a>
             </div>
         </div>

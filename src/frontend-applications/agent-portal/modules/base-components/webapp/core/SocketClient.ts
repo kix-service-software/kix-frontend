@@ -37,6 +37,11 @@ export abstract class SocketClient {
             }
         };
 
+        const forwardedHeader = ClientStorageService.getCookie('x-forwarded-for');
+        if (forwardedHeader) {
+            options.extraHeaders['X-FORWARDED-FOR'] = forwardedHeader;
+        }
+
         this.socket = io(socketUrl + '/' + this.namespace, options);
 
         this.socket.on(SocketEvent.INVALID_TOKEN, () => {

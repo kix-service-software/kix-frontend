@@ -205,6 +205,8 @@ export class TicketContext extends Context {
         if (objectType === KIXObjectType.TICKET) {
             this.currentLimit = limit;
             return this.loadTickets(silent, limit);
+        } else {
+            return super.reloadObjectList(objectType, silent, limit);
         }
     }
 

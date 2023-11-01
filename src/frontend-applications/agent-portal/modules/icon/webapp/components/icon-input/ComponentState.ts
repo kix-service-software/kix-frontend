@@ -13,9 +13,9 @@ import { ObjectIcon } from '../../../model/ObjectIcon';
 export class ComponentState extends FormInputComponentState {
 
     public constructor(
-        public dragging: boolean = false,
         public icon: string | ObjectIcon = null,
-        public title: string = null
+        public fileUpload: boolean = false,
+        public libraryEnabled: boolean = true
     ) {
         super();
     }

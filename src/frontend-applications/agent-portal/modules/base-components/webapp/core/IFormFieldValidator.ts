@@ -18,7 +18,9 @@ export interface IFormFieldValidator {
 
     isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean;
 
-    validate(formField: FormFieldConfiguration, formId: string, formInstance?: FormInstance): Promise<ValidationResult>;
+    validate(
+        formField: FormFieldConfiguration, formId: string, formInstance?: FormInstance
+    ): Promise<ValidationResult | ValidationResult[]>;
 
     isValidatorForDF(dynamicField: DynamicField): boolean;
 

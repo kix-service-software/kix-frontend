@@ -177,6 +177,8 @@ class Component {
                 const originalWidget = this.originalWidgets.find((w) => w.instanceId === widget.instanceId);
                 widget.configuration = originalWidget.configuration;
             });
+        } else {
+            this.state.widgets = [...this.modifiedWidgets];
         }
 
         this.state.configurationMode = false;

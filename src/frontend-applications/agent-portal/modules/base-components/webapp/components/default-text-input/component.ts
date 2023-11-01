@@ -32,6 +32,9 @@ class Component extends FormInputComponent<string, ComponentState> {
             if (inputTypeOption) {
                 this.state.inputType = inputTypeOption.value.toString() || InputFieldTypes.TEXT;
             }
+            if (this.state.inputType === InputFieldTypes.PASSWORD) {
+                this.state.isPasswordInit = true;
+            }
         }
         this.update();
     }
@@ -75,6 +78,17 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
+    }
+
+    public togglePasswordVisible(): void {
+        if (this.state.isPasswordInit) {
+            this.state.isPasswordVisible = !this.state.isPasswordVisible;
+        }
+    }
+
+    public getInputType(isPasswordVisible: boolean): string {
+        if (isPasswordVisible) return InputFieldTypes.TEXT;
+        return this.state.inputType;
     }
 
 }

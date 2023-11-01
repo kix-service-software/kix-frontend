@@ -107,9 +107,11 @@ export class ReportingContext extends Context {
     public async reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
         if (objectType === KIXObjectType.REPORT) {
             await this.loadReportDefinitions();
-            await this.loadReports();
+            return this.loadReports();
         } else if (objectType === KIXObjectType.REPORT_DEFINITION) {
-            await this.loadReportDefinitions();
+            return this.loadReportDefinitions();
+        } else {
+            return super.reloadObjectList(objectType);
         }
     }
 

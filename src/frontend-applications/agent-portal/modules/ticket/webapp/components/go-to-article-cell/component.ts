@@ -11,6 +11,8 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { TicketUIEvent } from '../../../model/TicketUIEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -30,10 +32,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         event.stopPropagation();
         event.preventDefault();
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.provideScrollInformation(KIXObjectType.ARTICLE, this.state.cell.getValue().objectValue);
-        }
+        EventService.getInstance().publish(
+            TicketUIEvent.SCROLL_TO_ARTICLE, { articleId: this.state.cell.getValue().objectValue }
+        );
     }
 
 }

@@ -35,7 +35,7 @@ export class DynamicFieldAffectedAssetFormValue extends DynamicFieldCIReferenceF
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
-        super.initFormValueByField(field);
+        await super.initFormValueByField(field);
         const value = await DynamicFieldFormUtil.getInstance().handleDynamicFieldValue(field);
         if (value) {
             if (this.value && this.value.length) {

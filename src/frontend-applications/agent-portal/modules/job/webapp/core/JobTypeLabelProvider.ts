@@ -12,6 +12,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { JobType } from '../../model/JobType';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
 
 export class JobTypeLabelProvider extends LabelProvider {
 
@@ -35,17 +36,22 @@ export class JobTypeLabelProvider extends LabelProvider {
     }
 
     public getObjectIcon(jobType?: JobType): string | ObjectIcon {
-        switch (jobType.Name) {
-            case 'Ticket':
-                return 'kix-icon-ticket';
-            case 'ITSMConfigItem':
-                return 'fas fa-archive';
-            case 'Synchronisation':
-                return 'kix-icon-arrow-refresh';
-            case 'Reporting':
-                return 'fas fa-chart-pie';
-            default:
-                return new ObjectIcon(null, KIXObjectType.JOB_TYPE, jobType.Name);
+        if (jobType) {
+            switch (jobType.Name) {
+                case 'Ticket':
+                    return LabelService.getInstance().getObjectTypeIcon(KIXObjectType.TICKET) || 'kix-icon-ticket';
+                case 'ITSMConfigItem':
+                    return LabelService.getInstance().getObjectTypeIcon(KIXObjectType.CONFIG_ITEM) || 'fas fa-archive';
+                case 'Synchronisation':
+                    return 'kix-icon-arrow-refresh';
+                case 'Reporting':
+                    return 'fas fa-chart-pie';
+                case 'Contact':
+                    return LabelService.getInstance().getObjectTypeIcon(KIXObjectType.CONTACT) || 'kix-icon-man-bubble';
+                default:
+                    return new ObjectIcon(null, KIXObjectType.JOB_TYPE, jobType.Name);
+            }
         }
+        return;
     }
 }

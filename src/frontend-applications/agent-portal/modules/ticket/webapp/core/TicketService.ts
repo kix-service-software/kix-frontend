@@ -831,6 +831,9 @@ export class TicketService extends KIXObjectService<Ticket> {
                 case TicketProperty.CREATED_STATE_ID:
                     objectType = KIXObjectType.TICKET_STATE;
                     break;
+                case TicketProperty.LOCK_ID:
+                    objectType = KIXObjectType.TICKET_LOCK;
+                    break;
                 default:
             }
         }

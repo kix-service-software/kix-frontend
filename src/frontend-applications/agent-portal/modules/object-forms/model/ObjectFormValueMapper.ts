@@ -16,6 +16,7 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ClientStorageService } from '../../base-components/webapp/core/ClientStorageService';
 import { EventService } from '../../base-components/webapp/core/EventService';
+import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
 import { ValidationResult } from '../../base-components/webapp/core/ValidationResult';
 import { DynamicFormFieldOption } from '../../dynamic-fields/webapp/core';
 import { ObjectFormHandler } from '../webapp/core/ObjectFormHandler';
@@ -129,7 +130,10 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     protected async mapObjectValues(object: T): Promise<void> {
-        this.formValues.push(new DynamicFieldObjectFormValue(KIXObjectProperty.DYNAMIC_FIELDS, object, this, null));
+        const dfFormValue = new DynamicFieldObjectFormValue(KIXObjectProperty.DYNAMIC_FIELDS, object, this, null);
+        this.formValues.push(dfFormValue);
+        // create from values for existing dynamic field values
+        await dfFormValue.createDFFormValues();
 
         for (const mapperExtension of this.extensions) {
             await mapperExtension.mapObjectValues(object);
@@ -204,25 +208,30 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             }
 
             const endCreateFormValue = Date.now();
-            console.debug(`createFormValue (${formValue.property} - ${(formValue as any).dfName}): ${endCreateFormValue - startCreateFormValue}ms`);
+            if (formValue) {
+                console.debug(`createFormValue (${formValue.property} - ${(formValue as any).dfName}): ${endCreateFormValue - startCreateFormValue}ms`);
+            }
         }
 
-        for (const mapperExtension of this.extensions) {
-            if (formValue) {
+        if (formValue) {
+            for (const mapperExtension of this.extensions) {
+
                 const startExtension = Date.now();
                 await mapperExtension.initFormValueByField(field, formValue);
                 const endExtension = Date.now();
                 console.debug(`mapperExtension (${mapperExtension?.constructor?.name}): ${endExtension - startExtension}ms`);
             }
+
+            const startInit = Date.now();
+            await formValue?.initFormValueByField(field);
+            const endInit = Date.now();
+            console.debug(`initFormValueByField (${formValue.property} - ${(formValue as any).dfName}): ${endInit - startInit}ms`);
+
+            const endMapFormField = Date.now();
+            console.debug(`mapFormField (${formValue.property}): ${endMapFormField - startMapFormField}ms`);
+        } else {
+            console.debug(`No FormValue for ${field.property}`);
         }
-
-        const startInit = Date.now();
-        await formValue?.initFormValueByField(field);
-        const endInit = Date.now();
-        console.debug(`initFormValueByField (${formValue.property} - ${(formValue as any).dfName}): ${endInit - startInit}ms`);
-
-        const endMapFormField = Date.now();
-        console.debug(`mapFormField (${formValue.property}): ${endMapFormField - startMapFormField}ms`);
     }
 
     protected async createFormValue(property: string, object: T): Promise<ObjectFormValue> {
@@ -373,7 +382,17 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     private async applyPropertyInstruction(instruction: PropertyInstruction): Promise<void> {
-        const formValue = this.findFormValue(instruction.property);
+        let formValue = this.findFormValue(instruction.property);
+
+        if (!formValue) {
+            const dfName = KIXObjectService.getDynamicFieldName(instruction.property);
+            if (dfName) {
+                const dfFormValue = this.findFormValue(KIXObjectProperty.DYNAMIC_FIELDS);
+                if (dfFormValue) {
+                    formValue = await (dfFormValue as DynamicFieldObjectFormValue)?.createFormValue(dfName);
+                }
+            }
+        }
 
         if (formValue) {
 

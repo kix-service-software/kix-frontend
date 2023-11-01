@@ -249,6 +249,9 @@ msgstr ""
 msgid "All open tabs will be closed. Continue?"
 msgstr ""
 
+msgid "Allow access to admin module"
+msgstr ""
+
 msgid "All tickets"
 msgstr ""
 
@@ -416,6 +419,9 @@ msgid "Available Output Formats"
 msgstr ""
 
 msgid "Avatar"
+msgstr ""
+
+msgid "A year after 2200 is not possible."
 msgstr ""
 
 msgid "Backend"
@@ -868,6 +874,9 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
+msgid "Default Queue (SysConfig)"
+msgstr ""
+
 msgid "Default Value"
 msgstr ""
 
@@ -1134,6 +1143,12 @@ msgstr ""
 msgid "Email Addresses"
 msgstr ""
 
+msgid "Email could not be sent"
+msgstr ""
+
+msgid "Email Error"
+msgstr ""
+
 msgid "Email Filter"
 msgstr ""
 
@@ -1345,6 +1360,9 @@ msgid "<< Field Options:"
 msgstr ""
 
 msgid "Field Type"
+msgstr ""
+
+msgid "File Upload"
 msgstr ""
 
 msgid "Filter"
@@ -1617,6 +1635,9 @@ msgid "Helptext_Admin_MailAccountCreate_Dispachting"
 msgstr ""
 "Choose the team, which is supposed to receive incoming emails from this "
 "account. It is defined within the SysConfig which team is set as “default”."
+
+msgid "Helptext_Admin_MailAccountCreate_Dispatching_Queue"
+msgstr ""
 
 msgid "Helptext_Admin_MailAccountCreate_Host"
 msgstr "Insert the host name, holding the account. Example: mail.example.com"
@@ -1955,6 +1976,9 @@ msgstr ""
 "kg.com” To connect answers to this email address with already existing "
 "tickets, this address needs to match with a mail account, configured in KIX."
 
+msgid "Helptext_Admin_SystemAddressCreate_Queue"
+msgstr ""
+
 msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr "The email address can only be used within the system if set “valid”."
 
@@ -2077,6 +2101,9 @@ msgid "Helptext_Admin_TranslationSearch"
 msgstr ""
 "Searchable are properties of the colum \"Pattern\". If only a part of a name "
 "is inserted it must be put in * (Wildcard-Search)."
+
+msgid "Helptext_Admin_Users_RoleCreate_AllowAdminModule"
+msgstr ""
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
@@ -2997,6 +3024,9 @@ msgstr ""
 msgid "Lets go"
 msgstr ""
 
+msgid "Library"
+msgstr ""
+
 msgid "Limit:"
 msgstr "Limit (Search Results):"
 
@@ -3906,6 +3936,9 @@ msgstr ""
 msgid "Recently Closed"
 msgstr ""
 
+msgid "recipient adresses (To, Cc, etc.)"
+msgstr ""
+
 msgid "Recipients"
 msgstr ""
 
@@ -4068,6 +4101,9 @@ msgstr ""
 msgid "Required field {0} is no JSON."
 msgstr ""
 
+msgid "Required field has no value."
+msgstr ""
+
 msgid "Reset"
 msgstr ""
 
@@ -4198,6 +4234,9 @@ msgid "Search error!"
 msgstr ""
 
 msgid "Search Limit"
+msgstr ""
+
+msgid "Search menu"
 msgstr ""
 
 msgid "SEARCH_OPERATOR_WITHIN_LAST"

@@ -12,6 +12,7 @@ import { PluginService } from '../../../../../server/services/PluginService';
 import { IAdminModuleExtension } from './IAdminModuleExtension';
 import { AdminModule } from '../model/AdminModule';
 import { AgentPortalExtensions } from '../../../server/extensions/AgentPortalExtensions';
+import { PermissionService } from '../../../server/services/PermissionService';
 
 export class AdminModuleService {
 
@@ -26,46 +27,76 @@ export class AdminModuleService {
 
     private constructor() { }
 
-    public async getAdminModules(): Promise<Array<AdminModuleCategory | AdminModule>> {
+    public async getAdminModules(token: string): Promise<Array<AdminModuleCategory | AdminModule>> {
         const moduleExtensions = await PluginService.getInstance().getExtensions<IAdminModuleExtension>(
             AgentPortalExtensions.ADMIN_MODULE
         );
 
         const categories: AdminModuleCategory[] = [];
 
-        moduleExtensions.forEach((m) => {
+        for (const m of moduleExtensions) {
             const moduleCategories = m.getAdminModules();
-            moduleCategories.forEach((c) => this.mergeCategory(categories, c));
-        });
+            for (const c of moduleCategories) {
+                await this.mergeCategory(categories, c, token);
+            }
+        }
 
         return categories;
     }
 
-    private mergeCategory(
-        categories: Array<AdminModuleCategory | AdminModule>, module: AdminModuleCategory | AdminModule
-    ): void {
+    private async mergeCategory(
+        categories: Array<AdminModuleCategory | AdminModule>, module: AdminModuleCategory | AdminModule,
+        token: string
+    ): Promise<void> {
         if (module instanceof AdminModuleCategory) {
-            const existingCategory = categories.find((c) => c.id === module.id);
-            if (existingCategory) {
-                const category = existingCategory as AdminModuleCategory;
-                if (module.children) {
-                    if (!category.children) {
-                        category.children = [];
-                    }
-                    module.children.forEach((c) => this.mergeCategory(category.children, c));
+            let category = categories.find((c) => c.id === module.id) as AdminModuleCategory;
+            if (!category) {
+                category = JSON.parse(JSON.stringify(module));
+                category.children = [];
+                category.modules = [];
+                categories.push(category);
+            }
+
+            if (module.children) {
+                if (!category.children) {
+                    category.children = [];
+                }
+                for (const c of module.children) {
+                    await this.mergeCategory(category.children, c, token);
+                }
+            }
+
+            if (module.modules) {
+                if (!category.modules) {
+                    category.modules = [];
                 }
 
-                if (module.modules) {
-                    if (!category.modules) {
-                        category.modules = [];
+                for (const m of module.modules) {
+
+                    const allowed = await PermissionService.getInstance().checkPermissions(
+                        token, m.permissions, null, null
+                    ).catch(() => false);
+
+                    if (allowed) {
+                        category.modules.push(m);
                     }
-                    module.modules.forEach((m) => category.modules.push(m));
                 }
-            } else {
-                categories.push(module);
+            }
+
+            if (!category.children?.length && !category.modules?.length) {
+                const index = categories.findIndex((c) => c.id === category.id);
+                if (index !== -1) {
+                    categories.splice(index, 1);
+                }
             }
         } else {
-            categories.push(module);
+            const allowed = await PermissionService.getInstance().checkPermissions(
+                token, module.permissions, null, null
+            ).catch(() => false);
+
+            if (allowed) {
+                categories.push(module);
+            }
         }
     }
 

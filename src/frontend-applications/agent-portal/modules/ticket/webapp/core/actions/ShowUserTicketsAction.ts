@@ -32,12 +32,11 @@ export class ShowUserTicketsAction extends AbstractAction {
         const ticketStatsproperty = this.data as string;
 
         await ContextService.getInstance().setActiveContext(
-            TicketListContext.CONTEXT_ID, null, null,
+            TicketListContext.CONTEXT_ID, ticketStatsproperty, null,
             [['TicketStatsProperty', ticketStatsproperty]]
         );
 
         const context = ContextService.getInstance().getActiveContext() as TicketListContext;
-
         context.setDisplayText(this.text);
         context.setIcon(this.icon);
     }

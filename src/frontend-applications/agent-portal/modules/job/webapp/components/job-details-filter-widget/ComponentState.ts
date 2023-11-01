@@ -17,7 +17,7 @@ export class ComponentState extends WidgetComponentState {
     public constructor(
         public prepared: boolean = false,
         public show: boolean = true,
-        public table: Table = null,
+        public tables: Table[] = [],
         public title: string = '',
     ) {
         super();

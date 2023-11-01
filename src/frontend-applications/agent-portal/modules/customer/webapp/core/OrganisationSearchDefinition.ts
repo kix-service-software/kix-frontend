@@ -41,9 +41,9 @@ export class OrganisationSearchDefinition extends SearchDefinition {
     }
 
     public async getLoadingOptions(
-        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescanding?: boolean
+        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescending?: boolean
     ): Promise<KIXObjectLoadingOptions> {
-        const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescanding);
+        const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescending);
         loadingOptions.includes = ['Tickets', 'Contacts'];
         return loadingOptions;
     }

@@ -46,12 +46,15 @@ export class ObjectFormValidator {
         EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_CHANGED, this.subscriber);
     }
 
-    public enable(): void {
+    public async enable(): Promise<void> {
         this.enabled = true;
 
+        const validationPromises = [];
         for (const fv of this.validationQueue) {
-            this.validate(fv);
+            validationPromises.push(this.validate(fv));
         }
+
+        await Promise.all(validationPromises);
 
         this.validationQueue = [];
     }

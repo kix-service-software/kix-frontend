@@ -23,7 +23,7 @@ export class ComponentState extends AbstractComponentState {
         public canSearch: boolean = false,
         public limit: number = 50,
         public sortAttribute: string = null,
-        public sortDescanding: boolean = false,
+        public sortDescending: boolean = false,
         public sortTreeId: string = null
     ) {
         super();

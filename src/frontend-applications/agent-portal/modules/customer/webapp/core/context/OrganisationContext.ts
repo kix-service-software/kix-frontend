@@ -212,6 +212,8 @@ export class OrganisationContext extends Context {
         } else if (objectType === KIXObjectType.CONTACT) {
             this.currentContactLimit = limit;
             return this.loadContacts(this.currentContactLimit);
+        } else {
+            return super.reloadObjectList(objectType, silent, limit);
         }
     }
 

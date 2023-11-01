@@ -20,8 +20,8 @@ export interface IPlaceholderHandler {
 
     isHandlerForDFType(dfFieldType: string): boolean;
 
-    replaceDFObjectPlaceholder(attributePath: string, objectIds: number[], language?: string): Promise<string>
+    replaceDFObjectPlaceholder(attributePath: string, objectId: number, language?: string): Promise<string>
 
-    replace(placeholder: string, object?: KIXObject, language?: string): Promise<string>;
+    replace(placeholder: string, object?: KIXObject, language?: string, forRichtext?: boolean): Promise<string>;
 
 }

@@ -355,12 +355,6 @@ export class Ticket extends KIXObject {
             InputType: InputFieldTypes.DROPDOWN
         },
         {
-            Property: TicketProperty.CREATED_USER_ID,
-            Operations: [SearchOperator.IN],
-            DataType: FilterDataType.NUMERIC,
-            InputType: InputFieldTypes.OBJECT_REFERENCE
-        },
-        {
             Property: TicketProperty.CREATE_TIME,
             Operations: Ticket.DATETIME_OPERATORS,
             DataType: FilterDataType.DATETIME,

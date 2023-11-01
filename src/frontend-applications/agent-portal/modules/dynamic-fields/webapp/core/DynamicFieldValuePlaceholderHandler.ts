@@ -116,8 +116,16 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
             result = await this.handleHTMLValue(object, dfValue);
         } else if (dfValue && dfOptions && dfOptions.match(/^Short$/i)) {
             result = await this.handleShortValue(object, dfValue);
-        } else if (dfOptions && dfOptions.match(/^ObjectValue$/i)) {
-            result = dfValue ? dfValue.Value : [];
+        } else if (dfOptions && dfOptions.match(/^ObjectValue.*$/i)) {
+            const valueIndex = dfOptions.replace(/^ObjectValue_(\d+?)$/, '$1');
+            if (valueIndex === 'ObjectValue') {
+                result = dfValue ? dfValue.Value : [];
+            } else if (!isNaN(Number(valueIndex))) {
+                result = dfValue &&
+                    typeof dfValue.Value[valueIndex] !== 'undefined' &&
+                    dfValue.Value[valueIndex] !== null ?
+                    dfValue.Value[valueIndex] : '';
+            }
         } else if (dfOptions && dfOptions.match(/^Object_\d+_.+$/i) && dfValue?.Value?.length) {
             const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name, dfValue.ID);
             if (dynamicField) {

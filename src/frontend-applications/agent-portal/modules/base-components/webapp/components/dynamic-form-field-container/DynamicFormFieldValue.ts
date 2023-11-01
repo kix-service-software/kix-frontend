@@ -699,9 +699,7 @@ export class DynamicFormFieldValue {
         if (this.isWithin) {
             if (
                 this.withinStartType && this.withinStartValue && this.withinStartUnit &&
-                this.withinEndType && this.withinEndValue && this.withinEndUnit &&
-                !isNaN(Number(this.withinStartValue)) &&
-                !isNaN(Number(this.withinEndValue))
+                this.withinEndType && this.withinEndValue && this.withinEndUnit
             ) {
                 currentValue.value = [
                     this.withinStartType, this.withinStartValue, this.withinStartUnit,

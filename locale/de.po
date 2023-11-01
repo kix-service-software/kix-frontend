@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2023-06-27 12:20+0000\n"
+"PO-Revision-Date: 2023-09-27 12:24+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@kixdesk.com>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -264,6 +264,9 @@ msgstr "Alle Objekte"
 msgid "All open tabs will be closed. Continue?"
 msgstr "Alle geöffneten Tabs werden geschlossen. Fortfahren?"
 
+msgid "Allow access to admin module"
+msgstr ""
+
 msgid "All tickets"
 msgstr "Alle Tickets"
 
@@ -316,7 +319,7 @@ msgid "Approved"
 msgstr "Genehmigt"
 
 msgid "A product by KIX Service Software GmbH"
-msgstr ""
+msgstr "Ein Produkt der KIX Service Software GmbH"
 
 msgid "Archived"
 msgstr "Archiviert"
@@ -441,6 +444,9 @@ msgstr "Verfügbare Ausgabeformate"
 msgid "Avatar"
 msgstr "Avatar"
 
+msgid "A year after 2200 is not possible."
+msgstr ""
+
 msgid "Backend"
 msgstr "Backend"
 
@@ -515,7 +521,7 @@ msgstr ""
 "Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?"
 
 msgid "Change sort direction"
-msgstr ""
+msgstr "Sortierrichtung ändern"
 
 msgid "Changes saved."
 msgstr "Änderungen wurden gespeichert."
@@ -892,6 +898,9 @@ msgstr "DBMS"
 msgid "Default"
 msgstr "Standard"
 
+msgid "Default Queue (SysConfig)"
+msgstr ""
+
 msgid "Default Value"
 msgstr "Vorgabewert"
 
@@ -1160,6 +1169,12 @@ msgstr "Emailadressdetails"
 msgid "Email Addresses"
 msgstr "E-Mail-Adressen"
 
+msgid "Email could not be sent"
+msgstr ""
+
+msgid "Email Error"
+msgstr ""
+
 msgid "Email Filter"
 msgstr "E-Mail-Filter"
 
@@ -1296,7 +1311,7 @@ msgid "FAQ Article History"
 msgstr "FAQ Artikel Historie"
 
 msgid "FAQ Articles successfully removed."
-msgstr ""
+msgstr "FAQ Artikel erfolgreich entfernt."
 
 msgid "FAQ Attributes"
 msgstr "FAQ Attribute"
@@ -1372,6 +1387,9 @@ msgstr "<< Feld Optionen:"
 
 msgid "Field Type"
 msgstr "Feldtyp"
+
+msgid "File Upload"
+msgstr ""
 
 msgid "Filter"
 msgstr "Filter"
@@ -1666,6 +1684,9 @@ msgstr ""
 "Wählen Sie das Team, in welche über dieses Konto eingehende E-Mails "
 "verschoben werden. Welches Team als „Standard“ hinterlegt ist, wird in der "
 "SysConfig definiert."
+
+msgid "Helptext_Admin_MailAccountCreate_Dispatching_Queue"
+msgstr ""
 
 msgid "Helptext_Admin_MailAccountCreate_Host"
 msgstr ""
@@ -2056,6 +2077,9 @@ msgstr ""
 "„support@muster-kg.com“ Diese muss zu einem in KIX konfigurierten Konto "
 "passen, wenn Antworten an diese Adresse im KIX an Tickets ankommen sollen."
 
+msgid "Helptext_Admin_SystemAddressCreate_Queue"
+msgstr ""
+
 msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr ""
 "Die E-Mail-Adresse kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
@@ -2195,6 +2219,9 @@ msgstr ""
 "Durchsuchbar sind die Eigenschaften in der Spalte \"Pattern\". Wird nur ein "
 "Teil einer Bezeichnung gesucht, muss dieser in * gesetzt werden (Wildcard-"
 "Suche)."
+
+msgid "Helptext_Admin_Users_RoleCreate_AllowAdminModule"
+msgstr ""
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
@@ -3180,7 +3207,7 @@ msgid "Last Name"
 msgstr "Nachname"
 
 msgid "Latest releases"
-msgstr ""
+msgstr "Letzte Version"
 
 msgid "Layer"
 msgstr "Layer"
@@ -3196,6 +3223,9 @@ msgstr "Los geht's"
 
 msgid "Lets go"
 msgstr "Los geht's"
+
+msgid "Library"
+msgstr ""
 
 msgid "Limit:"
 msgstr "Limit (Suchergebnisse):"
@@ -4110,6 +4140,9 @@ msgstr "Lesen & Schreiben"
 msgid "Recently Closed"
 msgstr "Kürzlich Geschlossen"
 
+msgid "recipient adresses (To, Cc, etc.)"
+msgstr ""
+
 msgid "Recipients"
 msgstr "Empfänger"
 
@@ -4147,7 +4180,7 @@ msgid "Reload Agent Portal Configurations"
 msgstr "Frontend-Konfigurationen neu laden"
 
 msgid "Reload Calendar Data ..."
-msgstr "Kalenderdaten neu laden ..."
+msgstr "Kalenderdaten neu laden..."
 
 msgid "Reload Frontend Configurations"
 msgstr "Lade Frontend-Konfigurationen neu"
@@ -4168,10 +4201,10 @@ msgid "Remove dependency to organisation"
 msgstr "Abhängigkeit zur Organisation lösen"
 
 msgid "Remove FAQ Article(s)"
-msgstr ""
+msgstr "FAQ-Artikel entfernen"
 
 msgid "Remove FAQ Articles"
-msgstr ""
+msgstr "FAQ-Artikel entfernen"
 
 msgid "Remove FAQ Categories"
 msgstr "FAQ Kategorien entfernen"
@@ -4271,6 +4304,9 @@ msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
 msgid "Required field {0} is no JSON."
 msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format."
+
+msgid "Required field has no value."
+msgstr ""
 
 msgid "Reset"
 msgstr "Rücksetzen"
@@ -4405,6 +4441,9 @@ msgstr "Fehler bei Suche!"
 
 msgid "Search Limit"
 msgstr "Suchlimit"
+
+msgid "Search menu"
+msgstr "Suchmenü"
 
 msgid "SEARCH_OPERATOR_WITHIN_LAST"
 msgstr "der letzten"

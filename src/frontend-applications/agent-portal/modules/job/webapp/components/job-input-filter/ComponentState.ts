@@ -7,6 +7,7 @@
  * --
  */
 
+import { IdService } from '../../../../../model/IdService';
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
 import { AbstractDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form';
 
@@ -14,7 +15,9 @@ export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public manager: AbstractDynamicFormManager = null,
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public componentId: string = IdService.generateDateBasedId('job-input-filter')
+
     ) {
         super();
     }

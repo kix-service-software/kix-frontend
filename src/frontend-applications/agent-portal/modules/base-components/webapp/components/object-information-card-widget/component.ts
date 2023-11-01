@@ -103,6 +103,17 @@ class Component {
         });
     }
 
+    public hasRowValue(row: InformationRowConfiguration): boolean {
+        let hasValue = false;
+        for (const value of row.values) {
+            hasValue = this.hasValue(value);
+            if (hasValue) {
+                break;
+            }
+        }
+        return hasValue;
+    }
+
     // function also needed for object-avatar-label
     public setDataMapValue(value: [string, boolean]): void {
         const previousValue = this.valueDataMap.get(value[0]);
@@ -125,17 +136,6 @@ class Component {
             }
         }
         return false;
-    }
-
-    public hasRowValue(row: InformationRowConfiguration): boolean {
-        let hasValue = false;
-        row.values.forEach((value) => {
-            hasValue = this.hasValue(value);
-            if (hasValue) {
-                return true;
-            }
-        });
-        return hasValue;
     }
 
     public getCustomRowStyle(index: number): string {

@@ -122,6 +122,8 @@ export class TicketDetailsContext extends Context {
             if (!silent) {
                 this.setObjectList(KIXObjectType.ARTICLE, null);
             }
+        } else {
+            return super.reloadObjectList(objectType, silent);
         }
     }
 

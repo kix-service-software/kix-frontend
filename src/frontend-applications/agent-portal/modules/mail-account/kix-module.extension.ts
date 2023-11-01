@@ -33,6 +33,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             []
         ),
         new UIComponent(
+            'mail-account-input-dispatching',
+            '/kix-module-mail-account$0/webapp/components/mail-account-input-dispatching',
+            []
+        ),
+        new UIComponent(
             'mail-account-info-widget', '/kix-module-mail-account$0/webapp/components/mail-account-info-widget', []
         ),
         new UIComponent(

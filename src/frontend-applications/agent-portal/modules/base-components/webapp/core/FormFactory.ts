@@ -69,7 +69,10 @@ export class FormFactory {
             field.draggableFields,
             field.defaultHint,
             field.type,
-            field.visible
+            field.visible,
+            field.translateLabel,
+            field.valid,
+            field.countSeparatorString
         );
         clonedField.instanceId = field.instanceId || IdService.generateDateBasedId(prefixForNewInstanceId);
         clonedField.parent = field.parent;
