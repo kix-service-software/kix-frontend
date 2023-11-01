@@ -154,6 +154,26 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         configurations.push(
             new FormFieldConfiguration(
+                'organisation-edit-form-field-pattern',
+                'Translatable#Pattern', KIXObjectProperty.DYNAMIC_FIELDS, null, false,
+                'Translatable#Helptext_Organisation_Address_Domain_Pattern',
+                [
+                    new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'AddressDomainPattern')
+                ]
+            )
+        );
+
+        configurations.push(
+            new FormGroupConfiguration(
+                'organisation-edit-form-group-domain', 'Translatable#Address Domain',
+                [
+                    'organisation-edit-form-field-pattern',
+                ]
+            )
+        );
+
+        configurations.push(
+            new FormFieldConfiguration(
                 'organisation-edit-form-field-icon',
                 'Translatable#Avatar', 'ICON', 'icon-input', false,
                 'Translatable#Helptext_Customers_OrganisationCreate_Avatar.',
@@ -199,6 +219,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     'organisation-edit-form-group-information',
                     'organisation-edit-form-group-address',
+                    'organisation-edit-form-group-domain',
                     'organisation-edit-form-group-other'
                 ]
             )
