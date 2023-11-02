@@ -226,7 +226,10 @@ export class HttpService {
             }
 
             const request = this.requestPromises.get(cacheKey);
-            const response = await request;
+            const response = await request.catch((e) => {
+                this.requestPromises.delete(cacheKey);
+                throw e;
+            });
             headers = response.headers;
             await CacheService.getInstance().set(cacheKey, headers, cacheType);
             this.requestPromises.delete(cacheKey);
