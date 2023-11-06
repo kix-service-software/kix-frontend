@@ -378,6 +378,7 @@ export class ContactFormService extends KIXObjectFormService {
                 isAgent = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_AGENT)) : 0;
                 isCustomer = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_CUSTOMER)) : 0;
             }
+
             parameter.push([UserProperty.IS_AGENT, isAgent]);
             parameter.push([UserProperty.IS_CUSTOMER, isCustomer]);
 
