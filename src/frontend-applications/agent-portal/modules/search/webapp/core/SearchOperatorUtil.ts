@@ -29,6 +29,8 @@ export class SearchOperatorUtil {
                 return await TranslationService.translate('Translatable#since');
             case SearchOperator.IN:
                 return await TranslationService.translate('Translatable#contained in');
+            case SearchOperator.NOT_IN:
+                return await TranslationService.translate('Translatable#not contained in');
             case SearchOperator.LESS_THAN:
                 return await TranslationService.translate('Translatable#before');
             case SearchOperator.LESS_THAN_OR_EQUAL:
