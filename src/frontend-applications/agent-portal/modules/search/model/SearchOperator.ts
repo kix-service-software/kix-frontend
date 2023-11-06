@@ -25,6 +25,8 @@ export enum SearchOperator {
 
     IN = 'IN',
 
+    NOT_IN = '!IN',
+
     CONTAINS = 'CONTAINS',
 
     STARTS_WITH = 'STARTSWITH',

@@ -736,6 +736,9 @@ msgstr "Kontakte"
 msgid "contained in"
 msgstr "enthalten in"
 
+msgid "not contained in"
+msgstr "nicht enthalten in"
+
 msgid "Contained in Affected Assets"
 msgstr "enthalten in betroffenen Assets"
 
