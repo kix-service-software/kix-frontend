@@ -1,0 +1,10 @@
+{
+    "name": "kix-module-labelProviderExtensions",
+    "extensions": {
+        "kix:modules": {
+            "labelProviderExtensions-module": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}
