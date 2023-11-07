@@ -63,12 +63,12 @@ export class OrganisationService extends KIXObjectService<Organisation> {
         if (loadingOptions || !preload) {
             objects = await super.loadObjects<Organisation>(
                 KIXObjectType.ORGANISATION, objectIds, loadingOptions,
-                undefined, undefined, undefined, undefined, collectionId
+                undefined, undefined, undefined, silent, collectionId
             );
         } else {
             objects = await super.loadObjects<Organisation>(
                 KIXObjectType.ORGANISATION, null, loadingOptions, objectLoadingOptions,
-                undefined, undefined, undefined, collectionId
+                undefined, undefined, silent, collectionId
             );
             if (objectIds) {
                 objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));

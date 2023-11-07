@@ -22,9 +22,6 @@ import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldVal
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
 import { UserProperty } from '../../../user/model/UserProperty';
 import { DynamicFieldFormUtil } from './DynamicFieldFormUtil';
-import { ConfigItemProperty } from '../../../cmdb/model/ConfigItemProperty';
-import { ConfigItem } from '../../../cmdb/model/ConfigItem';
-import { LabelService } from './LabelService';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { ExtendedLabelProvider } from './ExtendedLabelProvider';
 import { Label } from './Label';
@@ -307,6 +304,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     public async getDFDisplayValues(
         fieldValue: DynamicFieldValue, short?: boolean
     ): Promise<[string[], string, string[]]> {
+        // TODO: loop needed? => LabelService does it already
         for (const elp of this.extendedLabelProvider) {
             const result = await elp.getDFDisplayValues(fieldValue);
             if (result) {
@@ -333,9 +331,6 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                         break;
                     case DynamicFieldTypes.SELECTION:
                         values = await LabelProvider.getDFSelectionFieldValues(dynamicField, fieldValue);
-                        break;
-                    case DynamicFieldTypes.CI_REFERENCE:
-                        values = await LabelProvider.getDFCIReferenceFieldValues(dynamicField, fieldValue, short);
                         break;
                     case DynamicFieldTypes.CHECK_LIST:
                         values = LabelProvider.getDFChecklistFieldShortValues(dynamicField, fieldValue);
@@ -422,31 +417,6 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             }
         }
         return values;
-    }
-
-    public static async getDFCIReferenceFieldValues(
-        field: DynamicField, fieldValue: DynamicFieldValue, short: boolean = false
-    ): Promise<string[]> {
-        let values = fieldValue.PreparedValue;
-
-        if (!values && fieldValue.Value) {
-            if (!Array.isArray(fieldValue.Value)) {
-                values = [fieldValue.Value];
-            } else {
-                values = fieldValue.Value;
-            }
-            const configItems = await KIXObjectService.loadObjects<ConfigItem>(
-                KIXObjectType.CONFIG_ITEM, values,
-                new KIXObjectLoadingOptions(
-                    null, null, null, [ConfigItemProperty.CURRENT_VERSION]
-                ), null, true
-            ).catch(() => [] as ConfigItem[]);
-
-            const valuePromises = [];
-            configItems.forEach((ci) => valuePromises.push(LabelService.getInstance().getObjectText(ci, !short)));
-            values = await Promise.all<string>(valuePromises);
-        }
-        return values || [];
     }
 
     public async createLabelsFromDFValue(fieldValue: DynamicFieldValue): Promise<Label[]> {
