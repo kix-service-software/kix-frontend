@@ -77,8 +77,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.addPropertyBinding(FormValueProperty.POSSIBLE_VALUES, (value: SelectObjectFormValue) => {
             if (this.isAutoComplete && this.possibleValues?.length) {
                 this.isAutoComplete = false;
-                this.loadSelectableValues();
             }
+            this.loadSelectableValues();
         });
     }
 
