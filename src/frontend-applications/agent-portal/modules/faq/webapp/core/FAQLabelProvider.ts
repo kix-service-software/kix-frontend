@@ -136,8 +136,8 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 break;
             case FAQArticleProperty.VOTES:
                 displayValue = '';
-                if (faqArticle.Votes && faqArticle.Votes.length) {
-                    const average = BrowserUtil.calculateAverage(faqArticle.Votes.map((v) => v.Rating));
+                if (faqArticle.Rating) {
+                    const average = BrowserUtil.round(faqArticle.Rating);
                     displayValue = `(${average})`;
                 }
                 break;
@@ -230,8 +230,8 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
 
         switch (property) {
             case FAQArticleProperty.VOTES:
-                if (faqArticle && faqArticle.Votes && faqArticle.Votes.length) {
-                    const average = BrowserUtil.calculateAverage(faqArticle.Votes.map((v) => v.Rating));
+                if (faqArticle?.Rating) {
+                    const average = BrowserUtil.round(faqArticle.Rating);
                     for (let i = 0; i < Math.floor(average); i++) {
                         icons.push('kix-icon-star-fully');
                     }

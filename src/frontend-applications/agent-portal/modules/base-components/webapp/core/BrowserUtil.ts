@@ -196,7 +196,7 @@ export class BrowserUtil {
         return Number(browserFontSizeSetting.replace('px', ''));
     }
 
-    private static round(value: number, step: number = 0.5): number {
+    public static round(value: number, step: number = 0.5): number {
         const inv = 1.0 / step;
         return Math.round(value * inv) / inv;
     }
