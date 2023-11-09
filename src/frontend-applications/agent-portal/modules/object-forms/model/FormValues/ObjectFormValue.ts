@@ -241,7 +241,7 @@ export class ObjectFormValue<T = any> {
         const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
 
         const defaultValue = field.defaultValue?.value;
-        let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null);
+        let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null && defaultValue !== '');
         if (Array.isArray(defaultValue)) {
             hasDefaultValue = defaultValue.length > 0;
         }
