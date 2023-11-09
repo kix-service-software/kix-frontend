@@ -41,6 +41,8 @@ export class FAQArticle extends KIXObject {
     public Created: string;
     public ChangedBy: number;
     public Changed: string;
+    public Rating: number;
+    public VoteCount: number;
 
     public Attachments: Attachment[];
     public History: FAQHistory[];
@@ -73,6 +75,8 @@ export class FAQArticle extends KIXObject {
             this.Created = faqArticle.Created;
             this.ChangedBy = faqArticle.ChangedBy;
             this.Changed = faqArticle.Changed;
+            this.Rating = faqArticle.Rating;
+            this.VoteCount = faqArticle.VoteCount;
 
             this.LinkTypeName = faqArticle.LinkTypeName;
             this.Attachments = faqArticle.Attachments ? faqArticle.Attachments.map((a) => new Attachment(a)) : [];

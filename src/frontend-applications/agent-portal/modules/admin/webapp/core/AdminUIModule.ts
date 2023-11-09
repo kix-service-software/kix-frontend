@@ -75,15 +75,18 @@ export class UIModule implements IUIModule {
     private async registerAdminContext(): Promise<void> {
         const adminModuleAllowed = await this.checkAdminModuleAllowed();
         if (adminModuleAllowed) {
-            const contextDescriptor = new ContextDescriptor(
-                AdminContext.CONTEXT_ID, this.contextObjectTypes, ContextType.MAIN, ContextMode.DASHBOARD,
-                false, 'admin', ['admin'], AdminContext
-            );
+            this.registerContextIfNeeded();
+        }
+    }
 
-            const adminModules = await AdministrationSocketClient.getInstance().loadAdminCategories().catch(() => []);
-            if (adminModules?.length) {
-                ContextService.getInstance().registerContext(contextDescriptor);
-            }
+    private async registerContextIfNeeded(): Promise<void> {
+        const contextDescriptor = new ContextDescriptor(
+            AdminContext.CONTEXT_ID, this.contextObjectTypes, ContextType.MAIN, ContextMode.DASHBOARD,
+            false, 'admin', ['admin'], AdminContext
+        );
+        const adminModules = await AdministrationSocketClient.getInstance().loadAdminCategories().catch(() => []);
+        if (adminModules.length) {
+            ContextService.getInstance().registerContext(contextDescriptor);
         }
     }
 

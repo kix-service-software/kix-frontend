@@ -38,8 +38,14 @@ export class DynamicFieldAffectedAssetFormValue extends DynamicFieldCIReferenceF
         await super.initFormValueByField(field);
         const value = await DynamicFieldFormUtil.getInstance().handleDynamicFieldValue(field);
         if (value) {
-            if (this.value && this.value.length) {
-                this.value.push(value);
+            if (this.value?.length) {
+                if (Array.isArray(value)) {
+                    this.value.push(...value);
+                } else {
+                    this.value.push(value);
+                }
+            } else if (Array.isArray(value)) {
+                this.value = value;
             } else {
                 this.value = [value];
             }
