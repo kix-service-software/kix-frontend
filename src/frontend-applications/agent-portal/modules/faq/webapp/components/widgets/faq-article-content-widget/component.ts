@@ -86,13 +86,13 @@ class Component {
     private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
         this.state.faqArticle = faqArticle;
 
-        if (faqArticle && faqArticle.Attachments) {
+        if (faqArticle?.Attachments) {
             this.state.attachments = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
             this.state.inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(faqArticle);
             this.prepareImages();
 
             this.stars = await LabelService.getInstance().getIcons(faqArticle, FAQArticleProperty.VOTES);
-            this.rating = BrowserUtil.calculateAverage(faqArticle.Votes.map((v) => v.Rating));
+            this.rating = BrowserUtil.round(faqArticle.Rating);
             this.prepareActions();
         }
     }
@@ -100,7 +100,7 @@ class Component {
     private async prepareImages(): Promise<void> {
         const attachmentPromises: Array<Promise<DisplayImageDescription>> = [];
         const imageAttachments = this.state.attachments.filter((a) => a.ContentType.match(/^image\//));
-        if (imageAttachments && imageAttachments.length) {
+        if (imageAttachments?.length) {
             for (const imageAttachment of imageAttachments) {
                 attachmentPromises.push(
                     new Promise<DisplayImageDescription>(async (resolve, reject) => {
@@ -128,7 +128,7 @@ class Component {
     }
 
     public getRatingTooltip(): string {
-        const count = this.state.faqArticle.Votes ? this.state.faqArticle.Votes.length : 0;
+        const count = this.state.faqArticle.VoteCount ? this.state.faqArticle.VoteCount : 0;
         return `${this.state.translations['Translatable#Number of ratings']}: ${count}`;
     }
 

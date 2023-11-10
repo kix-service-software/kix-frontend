@@ -230,8 +230,8 @@ export class FAQService extends KIXObjectService {
 
     public async checkFilterValue(article: FAQArticle, criteria: UIFilterCriterion): Promise<boolean> {
         let match = false;
-        if (criteria.property === FAQArticleProperty.VOTES && article && article.Votes) {
-            const rating = BrowserUtil.calculateAverage(article.Votes.map((v) => v.Rating));
+        if (criteria.property === FAQArticleProperty.VOTES && article?.Rating) {
+            const rating = BrowserUtil.round(article.Rating);
             match = (criteria.value as []).some((v: FAQVote) => v.Rating === rating);
         } else {
             match = await super.checkFilterValue(article, criteria);

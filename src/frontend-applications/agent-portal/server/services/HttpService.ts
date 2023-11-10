@@ -230,6 +230,7 @@ export class HttpService {
                 this.requestPromises.delete(cacheKey);
                 throw e;
             });
+
             headers = response.headers;
             await CacheService.getInstance().set(cacheKey, headers, cacheType);
             this.requestPromises.delete(cacheKey);
