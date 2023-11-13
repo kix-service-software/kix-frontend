@@ -286,6 +286,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     textStyle: 'font-weight:bold;margin-bottom:0.5rem',
                                     icon: 'kix-icon-ci',
                                     componentId: 'dynamic-field-value',
+                                    detailViewWidthFactor: '2',
                                     componentData: {
                                         name: 'AffectedAsset'
                                     },
@@ -368,6 +369,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     textPlaceholder: [
                                         '<KIX_TICKET_AccountedTime>'
                                     ],
+                                    detailViewWidthFactor: '2',
                                     icon: 'kix-icon-time',
                                     conditions: [
                                         new UIFilterCriterion(
