@@ -165,7 +165,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         configurations.push(
             new FormGroupConfiguration(
-                'organisation-edit-form-group-domain', 'Translatable#Address Domain',
+                'organisation-edit-form-group-domain', 'Translatable#Email Address Domain',
                 [
                     'organisation-edit-form-field-pattern',
                 ]
