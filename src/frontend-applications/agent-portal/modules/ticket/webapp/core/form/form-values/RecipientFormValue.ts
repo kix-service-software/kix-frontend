@@ -228,7 +228,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
     private async getEmailValues(value): Promise<[Contact[], string[], string[]]> {
         const contactValues: any[] = Array.isArray(value)
             ? value.filter((v) => v !== null && typeof v !== 'undefined')
-            : typeof value === 'string' ? (value as string).split(/\s?,\s/) : [];
+            : value ? [value] : [];
 
         const emailAddresses: string[] = [];
         const contactIds: number[] = [];
@@ -265,7 +265,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
                 }
             }
         } catch (error) {
-            emailAddresses.push(value);
+            // do nothing
         }
         return emailAddresses;
     }
