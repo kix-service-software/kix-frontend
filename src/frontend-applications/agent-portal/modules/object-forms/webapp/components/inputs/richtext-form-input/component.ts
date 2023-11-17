@@ -70,6 +70,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onDestroy(): Promise<void> {
+        const editorComponent = (this as any).getComponent(this.state.editorId);
+        if (editorComponent) {
+            const currentValue = editorComponent.getValue();
+            this.formValue?.setFormValue(currentValue);
+        }
+
         if (this.bindingIds?.length && this.formValue) {
             this.formValue.removePropertyBinding(this.bindingIds);
         }

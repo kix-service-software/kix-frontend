@@ -320,6 +320,14 @@ class EditorComponent {
         return Boolean(CKEDITOR?.instances && CKEDITOR.instances[this.state.id]);
     }
 
+    public getValue(): string {
+        let value: string;
+        if (this.editor) {
+            value = this.editor.getData();
+        }
+        return value;
+    }
+
 }
 
 module.exports = EditorComponent;
