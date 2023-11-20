@@ -28,4 +28,8 @@ export class BulkDialogContext extends Context {
         return 'kix-icon-arrow-collect';
     }
 
+    public supportsBackendSort(type: string): boolean {
+        return false;
+    }
+
 }

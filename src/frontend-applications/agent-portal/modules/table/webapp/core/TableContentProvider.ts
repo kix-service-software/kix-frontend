@@ -15,6 +15,7 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { SortOrder } from '../../../../model/SortOrder';
 import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
@@ -23,6 +24,8 @@ import { KIXObjectService } from '../../../base-components/webapp/core/KIXObject
 import { KIXObjectSocketClient } from '../../../base-components/webapp/core/KIXObjectSocketClient';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
+import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
+import { ObjectSearchLoadingOptions } from '../../../object-search/model/ObjectSearchLoadingOptions';
 import { SearchService } from '../../../search/webapp/core';
 import { ITableContentProvider } from '../../model/ITableContentProvider';
 import { RowObject } from '../../model/RowObject';
@@ -40,6 +43,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     protected useCache: boolean = true;
 
     public usePaging: boolean = true;
+
+    protected useBackendSort: boolean = false;
+
     protected currentPageIndex: number = 1;
 
     protected reloadInProgress: boolean = false;
@@ -49,6 +55,11 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public totalCount: number;
     public currentLimit: number;
 
+    private sort: string;
+
+    protected supportedSorts: Map<string, boolean>;
+    private additionalSortMapping: Map<string, string>;
+
     public constructor(
         protected objectType: KIXObjectType | string,
         protected table: Table,
@@ -57,10 +68,16 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         protected contextId?: string,
         protected objects?: KIXObject[],
         protected specificLoadingOptions?: KIXObjectSpecificLoadingOptions
-    ) { }
+    ) {
+        this.additionalSortMapping = new Map();
+    }
 
     public async initialize(): Promise<void> {
         if (!this.initialized) {
+            if (this.isBackendSortSupported()) {
+                await this.prepareSupportedSort();
+            }
+
             if (this.contextId) {
 
                 this.context = ContextService.getInstance().getActiveContext();
@@ -88,6 +105,24 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             }
             this.initialized = true;
         }
+    }
+
+    protected async prepareSupportedSort(): Promise<void> {
+        this.supportedSorts = new Map();
+        const supportedAttributes = await KIXObjectService.loadObjects<ObjectSearch>(
+            KIXObjectType.OBJECT_SEARCH, undefined, undefined,
+            new ObjectSearchLoadingOptions(this.objectType), true
+        ).catch(() => [] as ObjectSearch[]);
+
+        supportedAttributes.forEach((sA) => {
+            let property = sA.Property;
+            if (property.match(/^DynamicField_/)) {
+                property = property.replace(
+                    /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
+                );
+            }
+            this.supportedSorts.set(property, sA.IsSortable);
+        });
     }
 
     public async destroy(): Promise<void> {
@@ -151,20 +186,22 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             const includes = hasDFColumn ? [KIXObjectProperty.DYNAMIC_FIELDS] : [];
             objects = await SearchService.getInstance().executeSearchCache(
                 this.table.getTableConfiguration().searchId, undefined, undefined, undefined, undefined,
-                includes, this.currentLimit, this.loadingOptions?.searchLimit
+                includes, this.currentLimit, this.loadingOptions?.searchLimit, this.sort
             );
             this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
                 this.table.getTableConfiguration().searchId
             );
         } else if (this.contextId && !this.objectIds) {
             const context = ContextService.getInstance().getActiveContext();
-            objects = context ? await context.getObjectList(this.objectType, this.currentLimit) : [];
-            this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
-                context.contextId + this.objectType
-            );
-            this.currentLimit = KIXObjectSocketClient.getInstance().getCollectionsLimit(
-                context.contextId + this.objectType
-            );
+            if (context && context.contextId === this.contextId) {
+                objects = await context.getObjectList(this.objectType, this.currentLimit);
+                this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
+                    context.contextId + this.objectType
+                );
+                this.currentLimit = KIXObjectSocketClient.getInstance().getCollectionsLimit(
+                    context.contextId + this.objectType
+                );
+            }
         } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
             const forceIds = (this.objectIds && this.objectIds.length > 0) ? true : false;
             const loadingOptions = await this.prepareLoadingOptions();
@@ -267,7 +304,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     protected async prepareLoadingOptions(): Promise<KIXObjectLoadingOptions> {
         const loadingOptions = new KIXObjectLoadingOptions(
             [],
-            this.loadingOptions?.sortOrder,
+            this.sort || this.loadingOptions?.sortOrder,
             this.loadingOptions?.limit,
             this.loadingOptions?.includes,
             this.loadingOptions?.expands,
@@ -339,5 +376,63 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         const tableColumns = this.table?.getTableConfiguration()?.tableColumns || [];
         const hasDFColumn = tableColumns?.some((tc) => KIXObjectService.getDynamicFieldName(tc.property));
         return hasDFColumn;
+    }
+
+    public async setSort(property: string, direction: SortOrder, reload: boolean = true): Promise<void> {
+        if (this.isBackendSortSupportedForProperty(property)) {
+            if (property.match(/^DynamicFields\./)) {
+                property = property.replace(
+                    /^DynamicFields\.(.+)$/, 'DynamicField_$1'
+                );
+            }
+            this.sort = `${this.objectType}.${direction === SortOrder.DOWN ? '-' : ''}${this.getSortAttribute(property)}`;
+
+            // reset limit
+            this.currentPageIndex = 1;
+
+            if (this.contextId) {
+                const context = ContextService.getInstance().getActiveContext();
+                if (context && context.contextId === this.contextId) {
+                    context.setSortOrder(this.objectType, this.sort, reload);
+                }
+            } else if (reload) {
+                await this.table.reload();
+            }
+        } else {
+            // eslint-disable-next-line no-console
+            console.warn(`Sort with property "${property}" is not supported.`);
+        }
+    }
+
+    protected getSortAttribute(attribute: string): string {
+        return this.additionalSortMapping.get(attribute) || attribute;
+    }
+
+    public addAdditionalSortMappings(sortMappings: Map<string, string>): void {
+        if (sortMappings) {
+            if (!this.additionalSortMapping) {
+                this.additionalSortMapping = sortMappings;
+            } else {
+                this.additionalSortMapping = new Map([...this.additionalSortMapping, ...sortMappings]);
+            }
+        }
+    }
+
+    public isBackendSortSupported(): boolean {
+        let supportsBackendSort = this.useBackendSort;
+        if (supportsBackendSort && this.contextId) {
+            const context = ContextService.getInstance().getActiveContext();
+            if (context && context.contextId === this.contextId) {
+                supportsBackendSort = context.supportsBackendSort(this.objectType);
+            }
+        }
+        return supportsBackendSort;
+    }
+
+    public isBackendSortSupportedForProperty(property: string): boolean {
+        if (this.isBackendSortSupported() && this.supportedSorts) {
+            return this.supportedSorts.get(this.getSortAttribute(property)) || false;
+        }
+        return false;
     }
 }

@@ -517,7 +517,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             const hasInvalidNumericSearch = searchCriteria.some((c) => {
                 let result = false;
                 if (c.type === FilterDataType.NUMERIC) {
-                    if (c.operator === SearchOperator.IN && Array.isArray(c.value)) {
+                    if (
+                        (c.operator === SearchOperator.IN || c.operator === SearchOperator.NOT_IN)
+                        && Array.isArray(c.value)
+                    ) {
                         result = c.value.some((v) => v === '' || isNaN(Number(v)));
                     } else {
                         result = c.type === FilterDataType.NUMERIC && (c.value === '' || isNaN(Number(c.value)));

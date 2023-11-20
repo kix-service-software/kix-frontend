@@ -80,7 +80,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
 
     public getFullColumnLength(): number {
-        let columnLength = this.columnLength + 1;
+        let columnLength = (this.columnLength || this.table?.getColumns()?.length || 0) + 1;
         if (this.selectionEnabled) {
             columnLength++;
         }

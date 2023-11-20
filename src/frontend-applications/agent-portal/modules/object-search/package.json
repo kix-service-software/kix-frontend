@@ -1,0 +1,15 @@
+{
+    "name": "kix-module-object-search",
+    "extensions": {
+        "kix:modules": {
+            "object-search-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:services": {
+            "object-search-service": {
+                "module": "service.extension"
+            }
+        }
+    }
+}

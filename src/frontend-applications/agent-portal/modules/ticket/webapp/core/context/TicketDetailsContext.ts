@@ -23,6 +23,7 @@ import { TicketHistory } from '../../../model/TicketHistory';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { TicketProperty } from '../../../model/TicketProperty';
 
 export class TicketDetailsContext extends Context {
 
@@ -95,7 +96,8 @@ export class TicketDetailsContext extends Context {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null,
             [
-                'StateType', 'ObjectActions', 'SLACriteria', KIXObjectProperty.DYNAMIC_FIELDS
+                'StateType', 'ObjectActions', 'SLACriteria', KIXObjectProperty.DYNAMIC_FIELDS,
+                TicketProperty.WATCHER_ID, KIXObjectProperty.LINK_COUNT
             ]
         );
 

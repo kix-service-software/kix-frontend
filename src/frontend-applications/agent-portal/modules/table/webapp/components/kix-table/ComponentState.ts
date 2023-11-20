@@ -14,7 +14,8 @@ export class ComponentState {
     public constructor(
         public table: Table = null,
         public tableHeight: string = 'unset',
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public showLoadingShield: boolean = false
     ) { }
 
 }

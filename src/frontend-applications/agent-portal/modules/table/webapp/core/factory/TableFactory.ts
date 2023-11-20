@@ -170,4 +170,19 @@ export abstract class TableFactory {
         }
     }
 
+    public getAdditionalSortMappings(): Map<string, string> {
+        const mappings = new Map();
+        if (Array.isArray(this.extendedTableFactories)) {
+            for (const tf of this.extendedTableFactories) {
+                const mapping = tf.getAdditionalSortMappings() || [];
+                mapping.forEach((m) => {
+                    if (Array.isArray(m)) {
+                        mappings.set(m[0], m[1]);
+                    }
+                });
+            }
+        }
+        return mappings;
+    }
+
 }

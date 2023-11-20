@@ -40,6 +40,7 @@ import { OverlayService } from '../../../base-components/webapp/core/OverlayServ
 import { OverlayType } from '../../../base-components/webapp/core/OverlayType';
 import { StringContent } from '../../../base-components/webapp/core/StringContent';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 
 export class SearchService {
 
@@ -78,10 +79,10 @@ export class SearchService {
         return tableConfig;
     }
 
-    public async executeSearch<T extends KIXObject = KIXObject>(
+    public async getLoadingOptions<T extends KIXObject = KIXObject>(
         formInstance: FormInstance, excludeObjects: KIXObject[] = [], limit?: number,
         includeLinks?: boolean
-    ): Promise<T[]> {
+    ): Promise<KIXObjectLoadingOptions> {
         const formObjectType = formInstance.getObjectType();
         const searchDefinition = this.getSearchDefinition(formObjectType);
         const formFieldValues = formInstance.getAllFormFieldValues();
@@ -139,8 +140,7 @@ export class SearchService {
 
         loadingOptions.searchLimit = limit;
 
-        const objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
-        return (objects as any);
+        return loadingOptions;
     }
 
     public async searchObjectsFromSearchId(id: string): Promise<KIXObject[]> {
@@ -152,7 +152,7 @@ export class SearchService {
     public async searchObjects(
         searchCache: SearchCache,
         context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>(),
-        additionalIncludes: string[] = [], limit?: number, searchLimit?: number
+        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: string
     ): Promise<KIXObject[]> {
         if (!searchCache) {
             throw new Error('No search available');
@@ -170,9 +170,6 @@ export class SearchService {
         if (limit) {
             loadingOptions.limit = limit;
         }
-
-        loadingOptions.searchLimit = loadingOptions.limit;
-
 
         const hastDFInCriteria = preparedCriteria.some((criteria) => criteria.property.startsWith('DynamicFields.'));
         if (hastDFInCriteria) {
@@ -204,6 +201,16 @@ export class SearchService {
                 loadingOptions.includes = uniqueIncludes;
             }
         }
+
+        if (context) {
+            await context.prepareContextLoadingOptions(searchCache.objectType, loadingOptions);
+        }
+
+        if (sort) {
+            loadingOptions.sortOrder = sort;
+        }
+
+        loadingOptions.searchLimit = searchLimit || searchCache.limit || loadingOptions.searchLimit || 200;
 
         const objects = await KIXObjectService.loadObjects(
             searchCache.objectType, null, loadingOptions, null, false, undefined, undefined, searchCache.id
@@ -425,7 +432,7 @@ export class SearchService {
 
     public async executeSearchCache(
         id?: string, name?: string, cache?: SearchCache, context?: SearchContext, setSearchContext?: boolean,
-        additionalIncludes: string[] = [], limit?: number, searchLimit?: number
+        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: string
     ): Promise<KIXObject[]> {
         const search = await SearchSocketClient.getInstance().loadSearch();
         let searchCache = cache || search.find((s) => s.id === id);
@@ -437,7 +444,7 @@ export class SearchService {
             context = await this.setSearchContext(searchCache?.objectType);
         }
 
-        return await this.searchObjects(searchCache, context, additionalIncludes, limit, searchLimit);
+        return await this.searchObjects(searchCache, context, additionalIncludes, limit, searchLimit, sort);
     }
 
     private async setSearchContext(

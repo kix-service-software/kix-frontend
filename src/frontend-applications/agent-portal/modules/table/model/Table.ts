@@ -101,6 +101,21 @@ export class Table implements Table {
         ClientStorageService.setOption(this.getTableId(), tableStateString);
     }
 
+    public hasSortByTableState(): boolean {
+        let sortByState: boolean = false;
+        const tableStateString = ClientStorageService.getOption(this.getTableId());
+        try {
+            const tableState = JSON.parse(tableStateString);
+            sortByState = Boolean(tableState?.sortColumnId && tableState?.sortOrder);
+            this.sortColumnId = tableState?.sortColumnId || this.sortColumnId;
+            this.sortOrder = tableState?.sortOrder || this.sortOrder;
+        } catch (error) {
+            console.error('Error loading table state: ' + this.getTableId());
+            console.error(error);
+        }
+        return sortByState;
+    }
+
     public loadTableState(): TableState {
         const tableStateString = ClientStorageService.getOption(this.getTableId());
         try {
@@ -162,6 +177,11 @@ export class Table implements Table {
         if (!this.initialized) {
             this.initialized = true;
 
+            // init provider now to prepare sortable attributes if necessary
+            if (this.contentProvider) {
+                await this.contentProvider.initialize();
+            }
+
             this.columns = [];
             if (this.columnConfigurations) {
                 for (const c of this.columnConfigurations) {
@@ -177,9 +197,29 @@ export class Table implements Table {
 
             await this.prepareAdditionalSearchColumns();
 
-            if (this.contentProvider) {
-                await this.contentProvider.initialize();
+            // get sort by state or by context or from configured column
+            const hasSortByTableState = this.hasSortByTableState();
+            if (hasSortByTableState) {
+                const column = this.getColumn(this.sortColumnId);
+                if (column) {
+                    column.setSortOrder(this.sortOrder);
+                }
+            } else if (this.contextId) {
+                this.setSortByContext();
             }
+
+            if (!this.sortColumnId) {
+                const sortColumn = this.columns.find((c) => c.getSortOrder());
+                if (sortColumn) {
+                    this.sortColumnId = sortColumn.getColumnConfiguration().property;
+                    this.sortOrder = sortColumn.getSortOrder();
+                }
+            }
+
+            if (this.sortColumnId && this.sortOrder) {
+                this.getContentProvider().setSort(this.sortColumnId, this.sortOrder, false);
+            }
+
             await this.loadRowData();
 
             this.rows.forEach((r) => {
@@ -188,19 +228,12 @@ export class Table implements Table {
                 });
             });
 
-            const sortColumn = this.columns.find((c) => c.getSortOrder());
-            if (sortColumn) {
-                this.sortColumnId = sortColumn.getColumnConfiguration().property;
-                this.sortOrder = sortColumn.getSortOrder();
-            }
-
             this.loadTableState();
 
             await this.initDisplayRows();
 
-            this.setSortByContext();
-
-            if (this.sortColumnId && this.sortOrder) {
+            // sort in frontend if data is not already sorted
+            if (this.sortColumnId && this.sortOrder && !this.getContentProvider()?.isBackendSortSupported()) {
                 await this.sort(this.sortColumnId, this.sortOrder, true);
             }
 
@@ -236,22 +269,20 @@ export class Table implements Table {
     }
 
     private setSortByContext(): void {
-        if (this.contextId && !this.sortColumnId) {
-            const context = ContextService.getInstance().getActiveContext();
-            if (context.contextId === this.contextId) {
-                const sort = context.getSortOrder(this.getObjectType());
-                if (sort) {
-                    let property = sort.split('.')[1];
-                    if (property) {
-                        property = property.split(':')[0];
-                        this.sortOrder = SortOrder.UP;
-                        if (property.match(/^-.+/)) {
-                            this.sortOrder = SortOrder.DOWN;
-                            property = property.replace(/-(.+)/, '$1');
-                        }
-                        if (this.columns.some((c) => c.getColumnId() === property)) {
-                            this.sortColumnId = property;
-                        }
+        const context = ContextService.getInstance().getActiveContext();
+        if (context.contextId === this.contextId) {
+            const sort = context.getSortOrder(this.getObjectType());
+            if (sort) {
+                let property = sort.split('.')[1];
+                if (property) {
+                    property = property.split(':')[0];
+                    this.sortOrder = SortOrder.UP;
+                    if (property.match(/^-.+/)) {
+                        this.sortOrder = SortOrder.DOWN;
+                        property = property.replace(/-(.+)/, '$1');
+                    }
+                    if (this.columns.some((c) => c.getColumnId() === property)) {
+                        this.sortColumnId = property;
                     }
                 }
             }
@@ -390,6 +421,13 @@ export class Table implements Table {
         }
 
         if (canCreate) {
+            if (
+                columnConfiguration.sortable &&
+                this.getContentProvider()?.isBackendSortSupported() &&
+                !this.getContentProvider()?.isBackendSortSupportedForProperty(columnConfiguration.property)
+            ) {
+                columnConfiguration.sortable = false;
+            }
             column = new Column(this, columnConfiguration);
             this.columns.push(column);
             EventService.getInstance().publish(TableEvent.COLUMN_CREATED, { tableId: this.getTableId() });
@@ -653,28 +691,24 @@ export class Table implements Table {
     public async sort(columnId: string, sortOrder: SortOrder, silent?: boolean): Promise<void> {
         this.sortColumnId = columnId;
         this.sortOrder = sortOrder;
-        const promises = [];
-        this.getRows(true).forEach((r) => promises.push(r.getCell(this.sortColumnId)?.initDisplayValue()));
-        await Promise.all(promises);
 
         this.getColumns().forEach((c) => c.setSortOrder(null));
         const column = this.getColumn(columnId);
+
+        if (this.getContentProvider()?.isBackendSortSupported()) {
+            EventService.getInstance().publish(
+                TableEvent.TABLE_WAITING_START, new TableEventData(this.getTableId(), null, columnId)
+            );
+            await this.getContentProvider().setSort(this.sortColumnId, this.sortOrder);
+            EventService.getInstance().publish(
+                TableEvent.TABLE_WAITING_END, new TableEventData(this.getTableId(), null, columnId)
+            );
+        } else {
+            await this.doTableSort(column, sortOrder);
+        }
+
         if (column) {
             column.setSortOrder(sortOrder);
-
-            const dataType = column.getColumnConfiguration().dataType || DataType.STRING;
-
-            if (this.filteredRows) {
-                this.filteredRows = TableSortUtil.sort(this.filteredRows, columnId, sortOrder, dataType);
-                for (const row of this.filteredRows) {
-                    row.sortChildren(columnId, sortOrder, dataType);
-                }
-            } else {
-                this.rows = TableSortUtil.sort(this.rows, columnId, sortOrder, dataType);
-                for (const row of this.rows) {
-                    row.sortChildren(columnId, sortOrder, dataType);
-                }
-            }
 
             if (!silent) {
                 EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
@@ -685,6 +719,28 @@ export class Table implements Table {
         }
 
         this.saveTableState();
+    }
+
+    private async doTableSort(column: Column, sortOrder: SortOrder): Promise<void> {
+        const promises = [];
+        this.getRows(true).forEach((r) => promises.push(r.getCell(this.sortColumnId)?.initDisplayValue()));
+        await Promise.all(promises);
+
+        if (column) {
+            const dataType = column.getColumnConfiguration().dataType || DataType.STRING;
+
+            if (this.filteredRows) {
+                this.filteredRows = TableSortUtil.sort(this.filteredRows, this.sortColumnId, sortOrder, dataType);
+                for (const row of this.filteredRows) {
+                    row.sortChildren(this.sortColumnId, sortOrder, dataType);
+                }
+            } else {
+                this.rows = TableSortUtil.sort(this.rows, this.sortColumnId, sortOrder, dataType);
+                for (const row of this.rows) {
+                    row.sortChildren(this.sortColumnId, sortOrder, dataType);
+                }
+            }
+        }
     }
 
     public async initDisplayRows(): Promise<void> {
@@ -794,7 +850,7 @@ export class Table implements Table {
                 );
             }
 
-            if (sort && this.sortColumnId && this.sortOrder) {
+            if (!this.getContentProvider()?.isBackendSortSupported() && sort && this.sortColumnId && this.sortOrder) {
                 await this.sort(this.sortColumnId, this.sortOrder);
             }
 
@@ -900,8 +956,14 @@ export class Table implements Table {
     }
 
     public async loadMore(): Promise<void> {
+        EventService.getInstance().publish(
+            TableEvent.TABLE_WAITING_START, new TableEventData(this.getTableId())
+        );
         this.resetFilter();
         await this.contentProvider.loadMore();
+        EventService.getInstance().publish(
+            TableEvent.TABLE_WAITING_END, new TableEventData(this.getTableId())
+        );
     }
 
 }

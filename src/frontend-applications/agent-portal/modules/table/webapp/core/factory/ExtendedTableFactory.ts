@@ -52,4 +52,8 @@ export abstract class ExtendedTableFactory {
         return;
     }
 
+    public getAdditionalSortMappings(): Array<[string, string]> {
+        return;
+    }
+
 }
