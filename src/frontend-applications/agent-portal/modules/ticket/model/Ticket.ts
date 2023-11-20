@@ -177,6 +177,9 @@ export class Ticket extends KIXObject {
                 this.Type = new TicketType(object);
                 this.TypeID = object?.ID;
             }
+
+            this.CreateTime = ticket.Created;
+            this.ChangeTime = ticket.Changed;
         } else {
             this.TicketNumber = null;
             this.Title = null;

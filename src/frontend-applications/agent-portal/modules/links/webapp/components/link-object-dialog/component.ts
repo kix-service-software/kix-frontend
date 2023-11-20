@@ -82,6 +82,7 @@ class LinkDialogComponent {
         this.state.linkDescriptions = null;
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this.tableSubscriber);
     }
 
     private async loadNodes(): Promise<TreeNode[]> {
@@ -142,20 +143,20 @@ class LinkDialogComponent {
 
     private async executeSearch(): Promise<void> {
         BrowserUtil.toggleLoadingShield('APP_SHIELD', true);
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getActiveContext<EditLinkedObjectsDialogContext>();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        if (formInstance.hasValues()) {
+        if (context && formInstance.hasValues()) {
             const excludeObjects = this.rootObject && formInstance.getObjectType() === this.rootObject.KIXObjectType
                 ? [this.rootObject]
                 : null;
 
-            const objects = await SearchService.getInstance().executeSearch(
-                formInstance, excludeObjects, 150, true
+            const loadingOptions = await SearchService.getInstance().getLoadingOptions(
+                formInstance, excludeObjects, null, true
             );
 
-            context.setObjectList(formInstance.getObjectType(), objects);
+            await context.loadLinkedObjects(formInstance.getObjectType(), loadingOptions);
+
             await this.prepareResultTable();
-            this.state.resultCount = objects.length;
             this.setSubmitState();
         }
 
@@ -171,7 +172,7 @@ class LinkDialogComponent {
         const objectType = formInstance.getObjectType();
 
         const tableConfiguration = new TableConfiguration(null, null, null,
-            objectType, null, 5, null, [], true, false,
+            objectType, null, 10, null, [], true, false,
             null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await TableFactoryService.getInstance().createTable(
@@ -186,7 +187,10 @@ class LinkDialogComponent {
             eventSubscriberId: 'link-object-dialog',
             eventPublished: (data: TableEventData, eventId: string): void => {
                 if (data && data.tableId === table.getTableId()) {
-                    if (eventId === TableEvent.TABLE_READY) {
+                    if (eventId === TableEvent.REFRESH) {
+                        this.state.resultCount = table?.getRowCount();
+                    } else if (eventId === TableEvent.TABLE_READY) {
+                        this.state.resultCount = table?.getRowCount();
                         this.setLinkedAsValues(table, this.state.linkDescriptions);
                         setTimeout(() => this.markNotSelectableRows(), 50);
                     }
@@ -197,6 +201,7 @@ class LinkDialogComponent {
         };
 
         EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.REFRESH, this.tableSubscriber);
         EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
 
         setTimeout(() => this.state.table = table, 50);

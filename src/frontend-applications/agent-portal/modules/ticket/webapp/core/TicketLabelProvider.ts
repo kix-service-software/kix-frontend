@@ -143,10 +143,15 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.WATCHERS:
                 if (value) {
                     const currentUser = await AgentService.getInstance().getCurrentUser();
-                    displayValue = value.some((w) => w.UserID === currentUser.UserID)
-                        ? 'Translatable#Watched'
-                        : '';
+                    if (currentUser) {
+                        displayValue = value.some((w) => w.UserID === currentUser.UserID)
+                            ? 'Translatable#Watched'
+                            : '';
+                    }
                 }
+                break;
+            case TicketProperty.WATCHER_ID:
+                displayValue = value && !isNaN(Number(value)) ? 'Translatable#Watched' : '';
                 break;
             case TicketProperty.AGE:
                 if (value) {
@@ -188,6 +193,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         let displayValue = property;
         switch (property) {
             case TicketProperty.WATCHERS:
+            case TicketProperty.WATCHER_ID:
                 displayValue = 'Translatable#Observer';
                 break;
             case TicketProperty.UNSEEN:
@@ -364,6 +370,12 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                         displayValue = DateTimeUtil.calculateTimeInterval(age, undefined);
                         translatable = false;
                     }
+                    break;
+                case TicketProperty.WATCHERS:
+                case TicketProperty.WATCHER_ID:
+                    displayValue = ticket.WatcherID > 0
+                        ? 'Translatable#Watched'
+                        : '';
                     break;
                 default:
                     displayValue = await super.getDisplayText(ticket, property, defaultValue, translatable);
@@ -580,6 +592,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     : icons.push('kix-icon-lock-open');
                 break;
             case TicketProperty.WATCHERS:
+            case TicketProperty.WATCHER_ID:
                 if (ticket.WatcherID > 0) {
                     icons.push('kix-icon-eye');
                 }

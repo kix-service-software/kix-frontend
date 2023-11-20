@@ -27,8 +27,6 @@ export class TicketListContext extends Context {
 
     public static CONTEXT_ID: string = 'ticket-list';
 
-    private ticketIds: number[];
-
     public getIcon(): string | ObjectIcon {
         return this.icon || 'kix-icon-ticket';
     }
@@ -64,8 +62,11 @@ export class TicketListContext extends Context {
     public async reloadObjectList(
         objectType: KIXObjectType | string, silent: boolean = false, limit?: number
     ): Promise<void> {
-        await this.loadTickets(limit);
-        return super.reloadObjectList(objectType, silent, limit);
+        if (objectType === KIXObjectType.TICKET) {
+            return this.loadTickets(limit);
+        } else {
+            return super.reloadObjectList(objectType, silent, limit);
+        }
     }
 
     public async update(urlParams: URLSearchParams): Promise<void> {
@@ -76,8 +77,6 @@ export class TicketListContext extends Context {
         if (urlParams) {
             this.setAdditionalInformation('TicketStatsProperty', urlParams.has('list'));
         }
-
-        this.loadTickets();
     }
 
     public async getUrl(): Promise<string> {

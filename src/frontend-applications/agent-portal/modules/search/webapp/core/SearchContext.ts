@@ -20,10 +20,20 @@ import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { SearchEvent } from '../../model/SearchEvent';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 
 export abstract class SearchContext extends Context {
 
     protected searchCache: SearchCache;
+    private tableId: string;
+
+    public getTableId(type: string): string {
+        if (!this.tableId) {
+            // use instance specific id for separate table-sort of eahc opened search tab
+            this.tableId = IdService.generateDateBasedId(`search-table-${type}`);
+        }
+        return this.tableId;
+    }
 
     public getSearchCache(): SearchCache {
         return this.searchCache;
@@ -68,6 +78,16 @@ export abstract class SearchContext extends Context {
             }
         }
         return url;
+    }
+
+    public async destroy(): Promise<void> {
+        super.destroy();
+        // remove all table-states if no other instance of this context is open, to "reset" sort
+        if (!ContextService.getInstance().hasContextInstance(this.contextId)) {
+            TableFactoryService.getInstance().deleteContextTables(this.contextId, undefined, false);
+        }
+
+        return;
     }
 
     public setSearchCache(cache: SearchCache): void {
@@ -127,4 +147,12 @@ export abstract class SearchContext extends Context {
         ContextService.getInstance().setDocumentHistory(true, this, this, null);
     }
 
+    public async setSortOrder(type: string, sortOrder: string, reload: boolean = true): Promise<void> {
+        super.setSortOrder(type, sortOrder, false);
+        if (reload) {
+            await SearchService.getInstance().searchObjects(
+                this.searchCache, undefined, undefined, undefined, undefined, sortOrder
+            );
+        }
+    }
 }

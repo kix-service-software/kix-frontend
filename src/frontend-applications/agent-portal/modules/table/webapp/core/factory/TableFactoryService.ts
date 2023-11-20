@@ -39,7 +39,7 @@ export class TableFactoryService {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (context: Context): void => {
-                this.deleteContextTables(context?.contextId);
+                this.deleteContextTables(context?.contextId, undefined, true);
             }
         };
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
@@ -111,6 +111,13 @@ export class TableFactoryService {
                     tableKey, tableConfiguration, objectIds, contextId,
                     defaultRouting, defaultToggle, short, objectType, objects
                 );
+
+                if (table.getContentProvider()?.isBackendSortSupported()) {
+                    const sortMappings = factory.getAdditionalSortMappings();
+                    if (sortMappings) {
+                        table.getContentProvider().addAdditionalSortMappings(sortMappings);
+                    }
+                }
 
                 if (tableContextId) {
                     if (!this.contextTableInstances.has(tableContextId)) {

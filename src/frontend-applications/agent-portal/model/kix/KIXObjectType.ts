@@ -201,5 +201,7 @@ export enum KIXObjectType {
 
     WEBFORM = 'WEBFORM',
 
-    CONTEXT = 'CONTEXT'
+    CONTEXT = 'CONTEXT',
+
+    OBJECT_SEARCH = 'OBJECT_SEARCH'
 }

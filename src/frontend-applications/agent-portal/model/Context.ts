@@ -66,6 +66,8 @@ export abstract class Context {
 
     public initialized: boolean = false;
 
+    private objectSorts: Map<string, string> = new Map();
+
     public constructor(
         public descriptor: ContextDescriptor,
         protected objectId: string | number = null,
@@ -768,7 +770,7 @@ export abstract class Context {
         return contextId === this.descriptor.contextId && objectId === contextObjectId;
     }
 
-    protected async prepareContextLoadingOptions(
+    public async prepareContextLoadingOptions(
         type: KIXObjectType | string, loadingOptions: KIXObjectLoadingOptions
     ): Promise<void> {
         loadingOptions.filter ||= [];
@@ -780,10 +782,6 @@ export abstract class Context {
         if (contextLoadingOptions) {
             if (Array.isArray(contextLoadingOptions.filter)) {
                 loadingOptions.filter.push(...contextLoadingOptions.filter);
-            }
-
-            if (contextLoadingOptions.sortOrder) {
-                loadingOptions.sortOrder = this.getSortOrder(type);
             }
 
             if (Array.isArray(contextLoadingOptions.includes)) {
@@ -805,7 +803,15 @@ export abstract class Context {
             loadingOptions.limit = await this.getPageSize(type);
         }
 
-        loadingOptions.searchLimit = await this.getSearchLimit(type);
+        const searchLimit = await this.getSearchLimit(type);
+        if (typeof searchLimit !== 'undefined') {
+            loadingOptions.searchLimit = searchLimit;
+        }
+
+        const sortOrder = this.getSortOrder(type);
+        if (sortOrder) {
+            loadingOptions.sortOrder = this.getSortOrder(type);
+        }
     }
 
     public async getPageSize(type: KIXObjectType | string): Promise<number> {
@@ -864,16 +870,30 @@ export abstract class Context {
         return contextLoadingOptions;
     }
 
-    public getSortOrder(type: KIXObjectType | string): string {
-        const contextLoadingOptionsIndex = Array.isArray(this.configuration?.loadingOptions) ?
-            this.configuration.loadingOptions.findIndex((lo) => Array.isArray(lo) && lo[0] === type) : -1;
-        const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
-            this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
+    public async setSortOrder(type: string, sortOrder: string, reload: boolean = true): Promise<void> {
+        if (type && sortOrder) {
+            this.objectSorts.set(type, sortOrder);
+            if (reload) {
+                await this.reloadObjectList(type);
+            }
+        }
+    }
+
+    public getSortOrder(type: string): string {
+        if (this.objectSorts.has(type)) {
+            return this.objectSorts.get(type);
+        }
+
+        const contextLoadingOptions = this.getContextLoadingOptions(type);
         let sortOrder = contextLoadingOptions?.sortOrder;
         if (sortOrder && !sortOrder.match(/^.+\..+/)) {
             sortOrder = type + '.' + sortOrder;
         }
         return sortOrder;
+    }
+
+    public supportsBackendSort(type: string): boolean {
+        return true;
     }
 
 }

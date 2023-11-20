@@ -9,6 +9,7 @@
 
 import { RowObject } from './RowObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { SortOrder } from '../../../model/SortOrder';
 
 export interface ITableContentProvider<T = any> {
 
@@ -28,5 +29,13 @@ export interface ITableContentProvider<T = any> {
     destroy(): void;
 
     loadMore(): Promise<void>;
+
+    setSort(property: string, direction: SortOrder, reload?: boolean): void;
+
+    addAdditionalSortMappings(sortMappings: Map<string, string>): void;
+
+    isBackendSortSupported(): boolean
+
+    isBackendSortSupportedForProperty(property: string): boolean;
 
 }

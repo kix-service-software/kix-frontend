@@ -24,6 +24,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 table=input.table
                 key=input.table.getTableId() + "table-body"
             />
+            <if(state.showLoadingShield)>
+                <div class="table-shield">
+                    <loading-spinner/>
+                </div>
+            </if>
         </table>
     </if>
 </div>

@@ -53,6 +53,8 @@ import { PermissionService } from '../../../server/services/PermissionService';
 import { SysConfigOption } from '../../sysconfig/model/SysConfigOption';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
+import { ObjectSearchAPIService } from '../../object-search/server/ObjectSearchAPIService';
+import { ObjectSearchLoadingOptions } from '../../object-search/model/ObjectSearchLoadingOptions';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -103,7 +105,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             { permissions: [new UIComponentPermission('/system/textmodules', [CRUD.READ])], type: KIXObjectType.TEXT_MODULE },
             { permissions: [new UIComponentPermission('/system/ticket/queues', [CRUD.READ])], type: KIXObjectType.QUEUE },
             { permissions: [new UIComponentPermission('/system/dynamicfields', [CRUD.READ])], type: KIXObjectType.DYNAMIC_FIELD },
-            { permissions: [new UIComponentPermission('/system/config', [CRUD.READ])], type: KIXObjectType.SYS_CONFIG_OPTION }
+            { permissions: [new UIComponentPermission('/system/config', [CRUD.READ])], type: KIXObjectType.SYS_CONFIG_OPTION },
+            { permissions: [new UIComponentPermission('/objectsearch/ticket', [CRUD.READ])], type: KIXObjectType.OBJECT_SEARCH }
         ].forEach((cp) => {
             permissionPromises.push(
                 new Promise(async (resolve) => {
@@ -212,6 +215,15 @@ export class TicketAPIService extends KIXObjectAPIService {
                 SysConfigService.getInstance().loadObjects(
                     token, 'TicketServicePreload', KIXObjectType.SYS_CONFIG_OPTION,
                     [SysConfigKey.TICKET_HOOK_DIVIDER], null, null
+                )
+            );
+        }
+
+        if (allowedList.has(KIXObjectType.OBJECT_SEARCH)) {
+            promises.push(
+                ObjectSearchAPIService.getInstance().loadObjects(
+                    token, 'TicketServicePreload', KIXObjectType.OBJECT_SEARCH, null, null,
+                    new ObjectSearchLoadingOptions(KIXObjectType.TICKET)
                 )
             );
         }
