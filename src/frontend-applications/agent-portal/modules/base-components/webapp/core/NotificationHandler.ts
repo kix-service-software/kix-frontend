@@ -17,17 +17,28 @@ import { ApplicationEvent } from './ApplicationEvent';
 
 export class NotificationHandler {
 
-    private static updateTimeout: any;
-    private static updates: Array<[KIXObjectType | string, string | number]> = [];
+    private static INSTANCE: NotificationHandler;
 
-    public static async handleUpdateNotifications(events: BackendNotification[]): Promise<void> {
-        await NotificationHandler.checkForPermissionUpdate(events);
-        NotificationHandler.checkForDataUpdate(events);
-        NotificationHandler.publishEvents(events);
+    public static getInstance(): NotificationHandler {
+        if (!NotificationHandler.INSTANCE) {
+            NotificationHandler.INSTANCE = new NotificationHandler();
+        }
+        return NotificationHandler.INSTANCE;
     }
 
-    private static async checkForPermissionUpdate(events: BackendNotification[]): Promise<void> {
-        const user = await AgentSocketClient.getInstance().getCurrentUser(false);
+    private constructor() { }
+
+    private updateTimeout: any;
+    private updates: Array<[KIXObjectType | string, string | number]> = [];
+
+    public async handleUpdateNotifications(events: BackendNotification[]): Promise<void> {
+        await this.checkForPermissionUpdate(events);
+        this.checkForDataUpdate(events);
+        this.publishEvents(events);
+    }
+
+    private async checkForPermissionUpdate(events: BackendNotification[]): Promise<void> {
+        const user = await AgentSocketClient.getInstance().getCurrentUser();
 
         let userIsAffacted = events
             .filter((e) => e.ObjectID && e.Namespace === `${KIXObjectType.ROLE}.${KIXObjectType.USER}`)
@@ -49,7 +60,7 @@ export class NotificationHandler {
         }
     }
 
-    private static checkForDataUpdate(events: BackendNotification[]): void {
+    private checkForDataUpdate(events: BackendNotification[]): void {
         for (const e of events) {
             const objectType = this.getObjectType(e.Namespace);
             let eventObjectId = e.ObjectID;
@@ -60,8 +71,6 @@ export class NotificationHandler {
             if (!this.updates.some((u) => u[0] === objectType && u[1] === eventObjectId)) {
                 this.updates.push([objectType, eventObjectId]);
             }
-
-            AgentSocketClient.getInstance().handleNotifications(e);
         }
 
         if (this.updateTimeout) {
@@ -70,15 +79,11 @@ export class NotificationHandler {
 
         this.updateTimeout = setTimeout(() => {
             ContextService.getInstance().notifyUpdates(this.updates);
-
-            if (this.updates?.some((u) => u[0] === KIXObjectType.TICKET)) {
-                EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
-            }
             this.updates = [];
         }, 3000);
     }
 
-    private static getObjectType(namespace: string): string {
+    private getObjectType(namespace: string): string {
         const objects = namespace?.split('.');
         if (objects.length > 1) {
             if (objects[0] === 'FAQ') {
@@ -101,7 +106,7 @@ export class NotificationHandler {
         return objects[0];
     }
 
-    private static publishEvents(events: BackendNotification[]): void {
+    private publishEvents(events: BackendNotification[]): void {
         for (const e of events) {
             let event = ApplicationEvent.OBJECT_CREATED;
             if (e.Event === 'UPDATE') {

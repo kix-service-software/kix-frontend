@@ -45,11 +45,8 @@ class Component {
             this.state.showTicketActions = true;
             this.initTicketActions();
 
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
+            EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, this.subscriber);
         }
-
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, this.subscriber);
 
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
         this.resizeHandling();
@@ -70,8 +67,10 @@ class Component {
     }
 
     private async initTicketActions(): Promise<void> {
-        const user = await AgentService.getInstance().getCurrentUser(true);
-        this.state.ownedTicketsCount = user.Tickets.Owned.length;
+        const counter = await AgentService.getInstance().getCounter();
+        const ticketCounter = counter?.Ticket;
+
+        this.state.ownedTicketsCount = ticketCounter?.Owned || 0;
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Personal Kanban Board', 'Translatable#Personal Ticket Calendar'
@@ -98,28 +97,28 @@ class Component {
             const group3 = [];
 
             group1.push(new ToolbarAction(
-                'kix-icon-man', myTicketsNewArticles, true, user.Tickets.OwnedAndUnseen.length, actionId,
+                'kix-icon-man', myTicketsNewArticles, true, ticketCounter?.OwnedAndUnseen || 0, actionId,
                 'OwnedAndUnseen'
             ));
             group1.push(new ToolbarAction(
-                'kix-icon-man', myTickets, false, user.Tickets.Owned.length, actionId, 'Owned'
+                'kix-icon-man', myTickets, false, ticketCounter?.Owned || 0, actionId, 'Owned'
             ));
 
             group2.push(new ToolbarAction(
-                'kix-icon-eye', myWatchedTicketsNewArticles, true, user.Tickets.WatchedAndUnseen.length,
+                'kix-icon-eye', myWatchedTicketsNewArticles, true, ticketCounter?.WatchedAndUnseen || 0,
                 actionId, 'WatchedAndUnseen'
             ));
             group2.push(new ToolbarAction(
-                'kix-icon-eye', myWatchedTickets, false, user.Tickets.Watched.length, actionId,
+                'kix-icon-eye', myWatchedTickets, false, ticketCounter?.Watched || 0, actionId,
                 'Watched'
             ));
 
             group3.push(new ToolbarAction(
-                'kix-icon-lock-close', myLockedTicketsNewArticles, true, user.Tickets.OwnedAndLockedAndUnseen.length,
+                'kix-icon-lock-close', myLockedTicketsNewArticles, true, ticketCounter?.OwnedAndLockedAndUnseen || 0,
                 actionId, 'OwnedAndLockedAndUnseen'
             ));
             group3.push(new ToolbarAction(
-                'kix-icon-lock-close', myLockedTickets, false, user.Tickets.OwnedAndLocked.length, actionId,
+                'kix-icon-lock-close', myLockedTickets, false, ticketCounter?.OwnedAndLocked || 0, actionId,
                 'OwnedAndLocked'
             ));
             ContextService.getInstance().registerToolbarActions([...group1, ...group2, ...group3]);

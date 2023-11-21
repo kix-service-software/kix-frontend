@@ -38,7 +38,7 @@ export class QueueFormValue extends SelectObjectFormValue<number> {
     }
 
     public async loadSelectableValues(): Promise<void> {
-        const user = await AgentSocketClient.getInstance().getCurrentUser(false);
+        const user = await AgentSocketClient.getInstance().getCurrentUser();
 
         this.loadingOptions = new KIXObjectLoadingOptions();
         const requiredPermission = {

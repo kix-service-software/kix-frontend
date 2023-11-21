@@ -53,6 +53,8 @@ import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
 import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { TicketLockLabelProvider } from './TicketLockLabelProvider';
+import { DoNotSentEventHandler } from './DoNotSentEventHandler';
+import { UserCounterEventHandler } from './UserCounterEventHandler';
 
 export class UIModule implements IUIModule {
 
@@ -121,6 +123,9 @@ export class UIModule implements IUIModule {
             ticketManager.addExtendedJobFormManager(new TicketStateSet());
             ticketManager.addExtendedJobFormManager(new TeamSet());
         }
+
+        DoNotSentEventHandler.getInstance();
+        UserCounterEventHandler.getInstance();
 
         if (this.doRegisterContexts) {
             await this.registerContexts();

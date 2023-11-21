@@ -26,6 +26,7 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { UserPreference } from '../../model/UserPreference';
+import { Counter } from '../../model/Counter';
 
 export class AgentService extends KIXObjectService<User> {
 
@@ -83,8 +84,8 @@ export class AgentService extends KIXObjectService<User> {
         return await AgentSocketClient.getInstance().getPersonalSettings();
     }
 
-    public getCurrentUser(withStats?: boolean): Promise<User> {
-        return AgentSocketClient.getInstance().getCurrentUser(withStats);
+    public getCurrentUser(): Promise<User> {
+        return AgentSocketClient.getInstance().getCurrentUser();
     }
 
     public async setPreferencesByForm(): Promise<void> {
@@ -148,5 +149,11 @@ export class AgentService extends KIXObjectService<User> {
         const currentUser = await this.getCurrentUser();
         const preference = currentUser?.Preferences.find((p) => p.ID === id);
         return preference;
+    }
+
+    public async getCounter(): Promise<Counter> {
+        const counter = await KIXObjectService.loadObjects<Counter>(KIXObjectType.USER_COUNTER)
+            .catch((): Counter[] => []);
+        return counter?.length ? counter[0] : new Counter();
     }
 }

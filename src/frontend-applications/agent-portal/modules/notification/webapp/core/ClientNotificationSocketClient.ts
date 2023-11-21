@@ -14,8 +14,6 @@ import { ClientStorageService } from '../../../../modules/base-components/webapp
 import { NotificationHandler } from '../../../../modules/base-components/webapp/core/NotificationHandler';
 import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
 import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
-import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class ClientNotificationSocketClient extends SocketClient {
 
@@ -37,17 +35,11 @@ export class ClientNotificationSocketClient extends SocketClient {
                 events = events.map((e) => new BackendNotification(e));
                 BrowserCacheService.getInstance().updateCaches(events);
 
-                // check if we need to clear the current user cache to update the toolbar data
-                if (events.some((e) => e.Namespace.startsWith('Ticket'))) {
-                    await AgentSocketClient.getInstance().clearCurrentUserCache();
-                    BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
-                }
-
                 events = events
                     .filter((e) => e.RequestID !== ClientStorageService.getClientRequestId())
                     .filter((e) => e.Namespace !== 'Ticket.Watcher')
                     .filter((e) => e.Namespace !== 'Ticket.History');
-                NotificationHandler.handleUpdateNotifications(events);
+                NotificationHandler.getInstance().handleUpdateNotifications(events);
             });
 
         this.socket.on(
