@@ -191,7 +191,7 @@ export class QueueService extends KIXObjectService<Queue> {
             }
 
             if (permissions?.length) {
-                const user = await AgentSocketClient.getInstance().getCurrentUser(false);
+                const user = await AgentSocketClient.getInstance().getCurrentUser();
                 const requiredPermission = {
                     Object: KIXObjectType.USER,
                     ObjectID: user?.UserID,

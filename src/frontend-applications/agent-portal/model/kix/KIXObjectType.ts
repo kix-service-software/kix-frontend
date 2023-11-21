@@ -199,5 +199,10 @@ export enum KIXObjectType {
 
     WEBFORM = 'WEBFORM',
 
-    CONTEXT = 'CONTEXT'
+    CONTEXT = 'CONTEXT',
+
+    USER_TICKETS = 'USER_TICKETS',
+
+    USER_COUNTER = 'USER_COUNTER'
+
 }

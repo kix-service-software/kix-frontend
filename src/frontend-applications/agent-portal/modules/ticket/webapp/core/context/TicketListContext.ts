@@ -29,21 +29,18 @@ export class TicketListContext extends Context {
     }
 
     public async loadTickets(limit?: number): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, limit, ['Watchers']);
-        loadingOptions.limit = limit;
-        this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
-
-        const user = await AgentService.getInstance().getCurrentUser(true);
         const ticketStatsProperty = this.getAdditionalInformation('TicketStatsProperty');
 
-        const ticketIds = user.Tickets[ticketStatsProperty];
-        let tickets: Ticket[] = [];
-        if (ticketIds?.length) {
-            tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, ticketIds, loadingOptions, null, false, undefined, undefined,
-                this.contextId + KIXObjectType.TICKET
-            ).catch(() => []);
-        }
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, limit, ['Watchers']);
+        loadingOptions.limit = limit;
+
+        this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
+        loadingOptions.query = [['Counter', ticketStatsProperty]];
+
+        const tickets = await KIXObjectService.loadObjects<Ticket>(
+            KIXObjectType.USER_TICKETS, null, loadingOptions, null, false, undefined, undefined,
+            this.contextId + KIXObjectType.TICKET
+        ).catch(() => []);
 
         await this.getUrl();
         this.setObjectList(KIXObjectType.TICKET, tickets);
