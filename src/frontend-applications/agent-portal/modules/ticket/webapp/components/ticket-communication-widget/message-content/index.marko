@@ -7,14 +7,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.message-content-container class={
-    unread: state.article && state.unseen === 1,
-    'compact-view-message-content-container': state.selectedCompactView
-}>
+<div class=[
+    "message-content-container",
+    {
+        unread: state.article && state.unseen === 1,
+        "compact-view-message-content-container": state.selectedCompactView,
+    },
+]>
     <if(state.show && state.article)>
-        <div.left-avatar>
+        <div class="left-avatar">
             <if(state.isExternal)>
-                <div.contact-avatar title=state.fromDisplayName>
+                <div title=state.fromDisplayName class="contact-avatar">
                     <if(state.contactIcon)>
                         <icon icon=state.contactIcon/>
                     </if>
@@ -22,42 +25,65 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <loading-spinner/>
                     </else>
                 </div>
-                <div.speech-bubble style=`background-color: ${state.backgroundColor};`/>
+                <div
+                    style=`background-color: ${state.backgroundColor};`
+                    class="speech-bubble"
+                />
             </if>
         </div>
-        <div.message style=`background-color: ${state.backgroundColor};` on-click('toggleArticleCompactView')>
-            <div.header class={
-                'list-view': state.selectedCompactView && !state.compactViewExpanded
-            }>
-                <message-header article=state.article fromDisplayName=state.fromDisplayName/>
+        <div
+            style=`background-color: ${state.backgroundColor};`
+            on-click("toggleArticleCompactView")
+            class="message"
+        >
+            <div class=[
+                "header",
+                {
+                    "list-view":
+                        state.selectedCompactView && !state.compactViewExpanded,
+                },
+            ]>
+                <message-header
+                    article=state.article
+                    articleCountNumber=input.articleCountNumber
+                    fromDisplayName=state.fromDisplayName
+                />
             </div>
             <if(!state.selectedCompactView || state.compactViewExpanded)>
                 <if(state.expanded && state.showContent)>
-                    <div.receiver-list>
+                    <div class="receiver-list">
                         <if(state.articleTo)>
-                            <div.receiver>
-                                <span.title>
-                                    <translation-string pattern='Translatable#To'/>:
+                            <div class="receiver">
+                                <span class="title">
+                                    <translation-string pattern="Translatable#To"/>
+                                    :
                                 </span>
                                 <span>${state.articleTo}</span>
                             </div>
                         </if>
                         <if(state.articleCc)>
-                            <div.receiver>
-                                <span.title>
-                                    <translation-string pattern='Translatable#Cc'/>:
+                            <div class="receiver">
+                                <span class="title">
+                                    <translation-string pattern="Translatable#Cc"/>
+                                    :
                                 </span>
                                 <span>${state.articleCc}</span>
                             </div>
                         </if>
                     </div>
-                    <div.message-body>
-                        <div.show-message.hide-top on-click('toggleArticleListView')>
-                            <translation-string pattern='Translatable#Hide Message'/>
+                    <div class="message-body">
+                        <div
+                            on-click("toggleArticleListView")
+                            class="show-message hide-top"
+                        >
+                            <translation-string pattern="Translatable#Hide Message"/>
                         </div>
                         <ticket-article-content article=state.article/>
-                        <div.show-message on-click('toggleArticleListView')>
-                            <translation-string pattern='Translatable#Hide Message'/>
+                        <div
+                            on-click("toggleArticleListView")
+                            class="show-message"
+                        >
+                            <translation-string pattern="Translatable#Hide Message"/>
                         </div>
                     </div>
                 </if>
@@ -65,31 +91,49 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <loading-spinner/>
                 </else-if>
                 <else>
-                    <div.message-body-short>
-                        <div.short-message>${state.shortMessage}</div>
-                        <div.show-message on-click('toggleArticleListView')>
-                            <translation-string pattern='Translatable#Show all'/>
+                    <div class="message-body-short">
+                        <div class="short-message">
+                            ${state.shortMessage}
+                        </div>
+                        <div
+                            on-click("toggleArticleListView")
+                            class="show-message"
+                        >
+                            <translation-string pattern="Translatable#Show all"/>
                         </div>
                     </div>
                 </else>
-                <div.message-footer>
-                    <div.attachments-control>
-                        <div.attachments-list>
+                <div class="message-footer">
+                    <div class="attachments-control">
+                        <div class="attachments-list">
                             <if(Array.isArray(state.articleAttachments))>
                                 <for|attachment| of=state.articleAttachments>
-                                    <ticket-article-attachment article=state.article attachment=attachment images=state.images useReadonlyStyle=false/>
+                                    <ticket-article-attachment
+                                        article=state.article
+                                        attachment=attachment
+                                        images=state.images
+                                        useReadonlyStyle=false
+                                    />
                                 </for>
                             </if>
                         </div>
                         <if(state.hasInlineAttachments)>
-                            <a.attachmentsToggle on-click('toggleAttachments')>
+                            <a
+                                on-click("toggleAttachments")
+                                class="attachmentsToggle"
+                            >
                                 <translation-string pattern=`Translatable#${
-                                    state.showAllAttachments ? 'Hide inline attachments' : 'Show all attachments'
+                                    state.showAllAttachments
+                                        ? "Hide inline attachments"
+                                        : "Show all attachments"
                                 }`/>
                             </a>
                         </if>
                     </div>
-                    <div.actions-list style=`background-color: ${state.backgroundColor};`>
+                    <div
+                        style=`background-color: ${state.backgroundColor};`
+                        class="actions-list"
+                    >
                         <if(state.actions && state.actions.length)>
                             <action-list list=state.actions/>
                         </if>
@@ -97,10 +141,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
             </if>
         </div>
-        <div.right-avatar>
+        <div class="right-avatar">
             <if(!state.isExternal)>
-                <div.speech-bubble style=`background-color: ${state.backgroundColor};`/>
-                <div.contact-avatar title=state.fromDisplayName>
+                <div
+                    style=`background-color: ${state.backgroundColor};`
+                    class="speech-bubble"
+                />
+                <div title=state.fromDisplayName class="contact-avatar">
                     <if(state.contactIcon)>
                         <icon icon=state.contactIcon/>
                     </if>
@@ -110,5 +157,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
             </if>
         </div>
-    </if>   
+    </if>
+
 </div>
