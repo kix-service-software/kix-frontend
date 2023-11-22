@@ -132,7 +132,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public tabClicked(tab: ContextTab, event: any): void {
-        if (!tab.active) {
+        if (!tab.active && !this.state.blocked) {
             tab.refresh = false;
             ContextService.getInstance().setContextByInstanceId(tab.contextInstanceId);
         }
