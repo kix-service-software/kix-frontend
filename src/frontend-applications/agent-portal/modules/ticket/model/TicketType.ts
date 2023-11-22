@@ -22,6 +22,8 @@ export class TicketType extends KIXObject {
 
   public Name: string;
 
+  public TypeName: string;
+
   public Comment: string;
 
   public ValidID: number;
