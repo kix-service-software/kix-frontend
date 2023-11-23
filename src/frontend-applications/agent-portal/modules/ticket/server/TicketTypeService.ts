@@ -60,6 +60,8 @@ export class TicketTypeAPIService extends KIXObjectAPIService {
                 loadingOptions.filter[0].property === KIXObjectProperty.VALID_ID;
             const hasNameFilter = loadingOptions?.filter?.length === 1 &&
                 loadingOptions.filter[0].property === TicketTypeProperty.NAME;
+            const hasTypeNameFilter = loadingOptions?.filter?.length === 1 &&
+                loadingOptions.filter[0].property === TicketTypeProperty.TYPE_NAME;
 
             objectResponse = await super.load<TicketType>(
                 token, KIXObjectType.TICKET_TYPE, this.RESOURCE_URI, null, null,
@@ -70,9 +72,17 @@ export class TicketTypeAPIService extends KIXObjectAPIService {
                 objectResponse.objects = objectResponse?.objects?.filter(
                     (o) => o.ValidID === loadingOptions.filter[0].value
                 );
-            } else if (hasNameFilter) {
+            }
+
+            if (hasNameFilter) {
                 objectResponse.objects = objectResponse?.objects?.filter(
                     (o) => o.Name === loadingOptions.filter[0].value
+                );
+            }
+
+            if (hasTypeNameFilter) {
+                objectResponse.objects = objectResponse?.objects?.filter(
+                    (o) => o.TypeName === loadingOptions.filter[0].value
                 );
             }
 
