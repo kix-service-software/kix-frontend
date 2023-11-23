@@ -42,10 +42,10 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
             }
 
             const minDateOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.MIN_DATE);
-            this.state.minDate = minDateOption ? minDateOption.value : null;
+            this.state.minDate = minDateOption ? DateTimeUtil.getKIXDateString(new Date(minDateOption.value)) : null;
 
             const maxDateOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.MAX_DATE);
-            this.state.maxDate = maxDateOption ? maxDateOption.value : null;
+            this.state.maxDate = maxDateOption ? DateTimeUtil.getKIXDateString(new Date(maxDateOption.value)) : null;
         }
         this.update();
     }

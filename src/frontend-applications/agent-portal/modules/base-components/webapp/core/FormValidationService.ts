@@ -19,6 +19,7 @@ import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { FormInstance } from './FormInstance';
 import { ValidationSeverity } from './ValidationSeverity';
 import { SysConfigOptionDefinitionProperty } from '../../../sysconfig/model/SysConfigOptionDefinitionProperty';
+import { DateFormFieldValidator } from './DateFormFieldValidator';
 
 export class FormValidationService {
 
@@ -44,6 +45,7 @@ export class FormValidationService {
         this.registerValidator(new MaxLengthFormFieldValidator());
         this.registerValidator(new RegExFormFieldValidator());
         this.registerValidator(new JSONFormFieldValidator());
+        this.registerValidator(new DateFormFieldValidator());
     }
 
     private formFieldValidators: IFormFieldValidator[] = [];
