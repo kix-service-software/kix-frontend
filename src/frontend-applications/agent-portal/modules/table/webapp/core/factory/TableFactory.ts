@@ -149,6 +149,7 @@ export abstract class TableFactory {
 
         const criteria = searchCache.criteria.filter((c) => {
             return c.property !== SearchProperty.FULLTEXT
+                && c.property !== SearchProperty.PRIMARY
                 && c.property !== TicketProperty.CLOSE_TIME
                 && c.property !== TicketProperty.LAST_CHANGE_TIME;
         });
