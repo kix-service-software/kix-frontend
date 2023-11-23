@@ -188,7 +188,8 @@ describe('Context', () => {
                     "test-widget-2",
                     "test-widget-3",
                     "test-widget-4",
-                ]
+                ],
+                customizable: true
             }
         };
 
