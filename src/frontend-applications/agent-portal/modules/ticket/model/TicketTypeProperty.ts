@@ -13,6 +13,8 @@ export enum TicketTypeProperty {
 
     NAME = 'Name',
 
+    TYPE_NAME = 'TypeName',
+
     COMMENT = 'Comment',
 
     VALID_ID = 'ValidID',
