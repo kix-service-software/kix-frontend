@@ -17,6 +17,7 @@ import { ContextDescriptor } from '../../src/frontend-applications/agent-portal/
 import { User } from '../../src/frontend-applications/agent-portal/modules/user/model/User';
 import { UserPreference } from '../../src/frontend-applications/agent-portal/modules/user/model/UserPreference';
 import { AgentService } from '../../src/frontend-applications/agent-portal/modules/user/webapp/core/AgentService';
+import { ContextConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/ContextConfiguration';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -188,8 +189,7 @@ describe('Context', () => {
                     "test-widget-2",
                     "test-widget-3",
                     "test-widget-4",
-                ],
-                customizable: true
+                ]
             }
         };
 
@@ -242,6 +242,8 @@ class TestContext extends Context {
 
     public constructor() {
         super(new ContextDescriptor('test-context', null, null, null, null, null, null, null));
+        this.configuration = new ContextConfiguration('', '', '', '');
+        this.configuration.customizable = true;
     }
 
 }
