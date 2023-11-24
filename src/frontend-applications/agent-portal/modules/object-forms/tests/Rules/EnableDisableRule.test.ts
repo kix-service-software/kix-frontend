@@ -22,9 +22,11 @@ describe('Rule - Enable / Disable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ Enable: 1 }],
-            'testProperty3': [{ Enable: 1 }],
-            'testProperty5': [{ Enable: 1 }]
+            EvaluationResult: {
+                'testProperty1': [{ Enable: 1 }],
+                'testProperty3': [{ Enable: 1 }],
+                'testProperty5': [{ Enable: 1 }]
+            }
         })
 
         before(async () => {
@@ -71,9 +73,11 @@ describe('Rule - Enable / Disable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ Disable: 1 }],
-            'testProperty3': [{ Disable: 1 }],
-            'testProperty5': [{ Disable: 1 }]
+            EvaluationResult: {
+                'testProperty1': [{ Disable: 1 }],
+                'testProperty3': [{ Disable: 1 }],
+                'testProperty5': [{ Disable: 1 }]
+            }
         })
 
         before(async () => {

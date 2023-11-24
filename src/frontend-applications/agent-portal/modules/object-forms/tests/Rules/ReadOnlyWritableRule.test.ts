@@ -22,9 +22,11 @@ describe('Rule - ReadOnly / Writeable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ ReadOnly: 1 }],
-            'testProperty3': [{ ReadOnly: 1 }],
-            'testProperty5': [{ ReadOnly: 1 }]
+            EvaluationResult: {
+                'testProperty1': [{ ReadOnly: 1 }],
+                'testProperty3': [{ ReadOnly: 1 }],
+                'testProperty5': [{ ReadOnly: 1 }]
+            }
         })
 
         before(async () => {
@@ -65,9 +67,11 @@ describe('Rule - ReadOnly / Writeable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ ReadOnly: 0 }],
-            'testProperty3': [{ ReadOnly: 0 }],
-            'testProperty5': [{ ReadOnly: 0 }]
+            EvaluationResult: {
+                'testProperty1': [{ ReadOnly: 0 }],
+                'testProperty3': [{ ReadOnly: 0 }],
+                'testProperty5': [{ ReadOnly: 0 }]
+            }
         })
 
         before(async () => {
@@ -114,9 +118,11 @@ describe('Rule - ReadOnly / Writeable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ Writeable: 0 }],
-            'testProperty3': [{ Writeable: 0 }],
-            'testProperty5': [{ Writeable: 0 }]
+            EvaluationResult: {
+                'testProperty1': [{ Writeable: 0 }],
+                'testProperty3': [{ Writeable: 0 }],
+                'testProperty5': [{ Writeable: 0 }]
+            }
         })
 
         before(async () => {
@@ -157,9 +163,11 @@ describe('Rule - ReadOnly / Writeable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ Writeable: 1 }],
-            'testProperty3': [{ Writeable: 1 }],
-            'testProperty5': [{ Writeable: 1 }]
+            EvaluationResult: {
+                'testProperty1': [{ Writeable: 1 }],
+                'testProperty3': [{ Writeable: 1 }],
+                'testProperty5': [{ Writeable: 1 }]
+            }
         })
 
         before(async () => {
