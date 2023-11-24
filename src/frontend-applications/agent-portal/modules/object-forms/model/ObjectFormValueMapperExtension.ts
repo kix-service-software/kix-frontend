@@ -18,6 +18,10 @@ export abstract class ObjectFormValueMapperExtension<T extends KIXObject = KIXOb
 
     public constructor(protected objectValueMapper: ObjectFormValueMapper) { }
 
+    public async init(): Promise<void> {
+        return;
+    }
+
     public destroy(): void {
         return;
     }

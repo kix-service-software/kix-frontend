@@ -22,9 +22,11 @@ describe('Rule - Show / Hide', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ Show: 1 }],
-            'testProperty3': [{ Show: 1 }],
-            'testProperty5': [{ Show: 1 }]
+            EvaluationResult: {
+                'testProperty1': [{ Show: 1 }],
+                'testProperty3': [{ Show: 1 }],
+                'testProperty5': [{ Show: 1 }]
+            }
         })
 
         before(async () => {
@@ -71,9 +73,11 @@ describe('Rule - Show / Hide', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ Hide: 1 }],
-            'testProperty3': [{ Hide: 1 }],
-            'testProperty5': [{ Hide: 1 }]
+            EvaluationResult: {
+                'testProperty1': [{ Hide: 1 }],
+                'testProperty3': [{ Hide: 1 }],
+                'testProperty5': [{ Hide: 1 }]
+            }
         })
 
         before(async () => {

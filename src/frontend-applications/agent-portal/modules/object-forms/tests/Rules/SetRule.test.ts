@@ -22,9 +22,11 @@ describe('Rule - Set', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ Set: 'testValue1' }],
-            'testProperty3': [{ Set: 'testValue3' }],
-            'testProperty5': [{ Set: 'testValue5' }]
+            EvaluationResult: {
+                'testProperty1': [{ Set: 'testValue1' }],
+                'testProperty3': [{ Set: 'testValue3' }],
+                'testProperty5': [{ Set: 'testValue5' }]
+            }
         })
 
         before(async () => {

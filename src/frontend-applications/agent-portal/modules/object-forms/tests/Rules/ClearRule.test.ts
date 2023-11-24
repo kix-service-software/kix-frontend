@@ -22,9 +22,11 @@ describe('Rule - Clear', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ Clear: 1 }],
-            'testProperty3': [{ Clear: 1 }],
-            'testProperty5': [{ Clear: 1 }]
+            EvaluationResult: {
+                'testProperty1': [{ Clear: 1 }],
+                'testProperty3': [{ Clear: 1 }],
+                'testProperty5': [{ Clear: 1 }]
+            }
         })
 
         before(async () => {

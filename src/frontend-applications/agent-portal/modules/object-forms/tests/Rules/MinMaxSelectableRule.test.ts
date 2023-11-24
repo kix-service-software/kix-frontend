@@ -23,9 +23,11 @@ describe('Rule - MinSelectable / MaxSelectable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testSelectProperty1': [{ MinSelectable: 3 }],
-            'testSelectProperty3': [{ MinSelectable: 3 }],
-            'testSelectProperty5': [{ MinSelectable: 3 }]
+            EvaluationResult: {
+                'testSelectProperty1': [{ MinSelectable: 3 }],
+                'testSelectProperty3': [{ MinSelectable: 3 }],
+                'testSelectProperty5': [{ MinSelectable: 3 }]
+            }
         })
 
         before(async () => {
@@ -71,9 +73,11 @@ describe('Rule - MinSelectable / MaxSelectable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testSelectProperty1': [{ MaxSelectable: 3 }],
-            'testSelectProperty3': [{ MaxSelectable: 3 }],
-            'testSelectProperty5': [{ MaxSelectable: 3 }]
+            EvaluationResult: {
+                'testSelectProperty1': [{ MaxSelectable: 3 }],
+                'testSelectProperty3': [{ MaxSelectable: 3 }],
+                'testSelectProperty5': [{ MaxSelectable: 3 }]
+            }
         })
 
         before(async () => {

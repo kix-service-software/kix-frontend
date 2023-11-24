@@ -81,6 +81,14 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     public async mapFormValues(object: T): Promise<void> {
+
+        for (const mapperExtension of this.extensions) {
+            const startInitMapper = Date.now();
+            await mapperExtension.init();
+            const endInitMapper = Date.now();
+            console.debug(`Init Mapper Extension (${mapperExtension?.constructor?.name}): ${endInitMapper - startInitMapper}ms`);
+        }
+
         this.object = object;
         const startMapObjectValues = Date.now();
         await this.mapObjectValues(object);
