@@ -438,7 +438,10 @@ export abstract class Context {
             );
         }
 
-        const userWidgets = await this.getUserWidgetList('content');
+        let userWidgets = [];
+        if (this.configuration.customizable) {
+            userWidgets = await this.getUserWidgetList('content');
+        }
         const widgets = this.mergeWidgetLists(content, userWidgets);
 
         const allowedWidgets = await this.filterAllowedWidgets(widgets);
@@ -484,17 +487,19 @@ export abstract class Context {
 
     private async getUserWidgetList(contextWidgetList: string): Promise<Array<string | ConfiguredWidget>> {
         let widgets: ConfiguredWidget[] = [];
-        const currentUser = await AgentService.getInstance().getCurrentUser();
-        const widgetListPreference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
-        if (widgetListPreference && widgetListPreference.Value) {
-            try {
-                const value = JSON.parse(widgetListPreference.Value);
-                const contextLists = value[this.descriptor.contextId];
-                if (contextLists) {
-                    widgets = contextLists[contextWidgetList] || [];
+        if (this.configuration?.customizable) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            const widgetListPreference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
+            if (widgetListPreference && widgetListPreference.Value) {
+                try {
+                    const value = JSON.parse(widgetListPreference.Value);
+                    const contextLists = value[this.descriptor.contextId];
+                    if (contextLists) {
+                        widgets = contextLists[contextWidgetList] || [];
+                    }
+                } catch (error) {
+                    console.error(error);
                 }
-            } catch (error) {
-                console.error(error);
             }
         }
 
@@ -611,23 +616,25 @@ export abstract class Context {
     private async getUserWidgetConfiguration(instanceId: string): Promise<ConfiguredWidget> {
         let widget: ConfiguredWidget;
 
-        const currentUser = await AgentService.getInstance().getCurrentUser();
-        const widgetListPreference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
-        if (widgetListPreference && widgetListPreference.Value) {
-            const value = JSON.parse(widgetListPreference.Value);
-            const contextLists = value[this.descriptor.contextId];
-            if (contextLists) {
-                for (const contextWidgetList in contextLists) {
-                    if (Array.isArray(contextLists[contextWidgetList])) {
-                        const widgets: Array<string | ConfiguredWidget> = contextLists[contextWidgetList];
+        if (this.configuration?.customizable) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            const widgetListPreference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
+            if (widgetListPreference && widgetListPreference.Value) {
+                const value = JSON.parse(widgetListPreference.Value);
+                const contextLists = value[this.descriptor.contextId];
+                if (contextLists) {
+                    for (const contextWidgetList in contextLists) {
+                        if (Array.isArray(contextLists[contextWidgetList])) {
+                            const widgets: Array<string | ConfiguredWidget> = contextLists[contextWidgetList];
 
-                        widget = widgets
-                            .filter((w) => typeof w !== 'string')
-                            .map((w): ConfiguredWidget => w as ConfiguredWidget)
-                            .find((w) => w.instanceId === instanceId);
+                            widget = widgets
+                                .filter((w) => typeof w !== 'string')
+                                .map((w): ConfiguredWidget => w as ConfiguredWidget)
+                                .find((w) => w.instanceId === instanceId);
 
-                        if (widget) {
-                            break;
+                            if (widget) {
+                                break;
+                            }
                         }
                     }
                 }
