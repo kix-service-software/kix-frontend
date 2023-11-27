@@ -205,7 +205,14 @@ export class TicketSearchFormManager extends SearchFormManager {
 
     public async getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>> {
         const options = await super.getInputTypeOptions(property, operator);
-        if (property === TicketProperty.OWNER_ID || property === TicketProperty.RESPONSIBLE_ID) {
+        const freeTextProperties = [
+            TicketProperty.OWNER_ID,
+            TicketProperty.RESPONSIBLE_ID,
+            TicketProperty.CONTACT_ID,
+            TicketProperty.ORGANISATION_ID
+        ];
+
+        if (freeTextProperties.some((p) => p === property)) {
             options.push([ObjectReferenceOptions.FREETEXT, true]);
         }
 
