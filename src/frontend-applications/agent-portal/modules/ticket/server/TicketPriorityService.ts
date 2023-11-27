@@ -45,7 +45,7 @@ export class TicketPriorityAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.TICKET_PRIORITY;
     }
 
-    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
         return TicketPriority;
     }
 
@@ -78,7 +78,7 @@ export class TicketPriorityAPIService extends KIXObjectAPIService {
 
             if (objectIds && objectIds.length) {
                 objectResponse.objects = objectResponse?.objects?.filter(
-                    (t) => objectIds.some((oid) => oid === t.ID)
+                    (t) => objectIds.some((oid) => oid?.toString() === t.ID.toString())
                 );
             }
         }
