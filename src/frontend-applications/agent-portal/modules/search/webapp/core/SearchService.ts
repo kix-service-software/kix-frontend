@@ -442,6 +442,14 @@ export class SearchService {
 
         if (setSearchContext) {
             context = await this.setSearchContext(searchCache?.objectType);
+            return new Promise((resolve, reject) => {
+                setTimeout(async () => {
+                    const objects = await this.searchObjects(
+                        searchCache, context, additionalIncludes, limit, searchLimit, sort
+                    );
+                    resolve(objects);
+                }, 500);
+            });
         }
 
         return await this.searchObjects(searchCache, context, additionalIncludes, limit, searchLimit, sort);
