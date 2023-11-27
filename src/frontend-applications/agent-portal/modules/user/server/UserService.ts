@@ -57,7 +57,7 @@ export class UserService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.CURRENT_USER;
     }
 
-    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
         let objectClass;
 
         if (objectType === KIXObjectType.USER) {
