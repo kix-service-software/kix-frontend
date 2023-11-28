@@ -12,6 +12,7 @@ import { ConfigItem } from '../../../model/ConfigItem';
 import { Table } from '../../../../table/model/Table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 
 export class ConfigItemTableContentProvider extends TableContentProvider<ConfigItem> {
 
@@ -22,6 +23,20 @@ export class ConfigItemTableContentProvider extends TableContentProvider<ConfigI
         contextId?: string
     ) {
         super(KIXObjectType.CONFIG_ITEM, table, objectIds, loadingOptions, contextId);
+        this.useBackendSort = true;
+    }
+
+    protected getSortAttribute(attribute: string): string {
+        switch (attribute) {
+            case ConfigItemProperty.CUR_DEPL_STATE_ID:
+                return 'DeplState';
+            case ConfigItemProperty.CUR_INCI_STATE_ID:
+                return 'InciState';
+            case ConfigItemProperty.CLASS_ID:
+                return ConfigItemProperty.CLASS;
+            default:
+        }
+        return super.getSortAttribute(attribute);
     }
 
 }
