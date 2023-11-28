@@ -23,11 +23,17 @@ import { TicketHistory } from '../../../model/TicketHistory';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { ArticleLoader } from './ArticleLoader';
 import { TicketProperty } from '../../../model/TicketProperty';
 
 export class TicketDetailsContext extends Context {
 
     public static CONTEXT_ID = 'ticket-details';
+    private articleLoader: ArticleLoader;
+
+    public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        this.articleLoader = new ArticleLoader(Number(this.objectId));
+    }
 
     public getIcon(): string {
         return 'kix-icon-ticket';
@@ -146,5 +152,9 @@ export class TicketDetailsContext extends Context {
             KIXObjectType.TICKET_HISTORY, [this.objectId]
         );
         return ticketHistory;
+    }
+
+    public loadArticle(articleId: number, cb: (article: Article) => void): void {
+        this.articleLoader?.queueArticle(articleId, cb);
     }
 }

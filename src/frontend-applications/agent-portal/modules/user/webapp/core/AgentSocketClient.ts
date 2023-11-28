@@ -24,10 +24,6 @@ import { SetPreferencesRequest } from '../../../../modules/base-components/webap
 import { SetPreferencesResponse } from '../../../../modules/base-components/webapp/core/SetPreferencesResponse';
 import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
 import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
-import { BackendNotification } from '../../../../model/BackendNotification';
-import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
-import { EventService } from '../../../base-components/webapp/core/EventService';
-import { ISocketResponse } from '../../../base-components/webapp/core/ISocketResponse';
 
 export class AgentSocketClient extends SocketClient {
 
@@ -41,17 +37,16 @@ export class AgentSocketClient extends SocketClient {
         return AgentSocketClient.INSTANCE;
     }
 
-    private userId: number;
+    public userId: number;
 
     public constructor() {
         super('agent');
     }
 
-    public async getCurrentUser(withStats: boolean): Promise<User> {
+    public async getCurrentUser(): Promise<User> {
         let currentUserRequestPromise;
-        const cacheType = withStats
-            ? `${KIXObjectType.CURRENT_USER}_STATS`
-            : KIXObjectType.CURRENT_USER;
+
+        const cacheType = KIXObjectType.CURRENT_USER;
 
         if (BrowserCacheService.getInstance().has(cacheType, cacheType)) {
             currentUserRequestPromise = BrowserCacheService.getInstance().get(cacheType, cacheType);
@@ -61,8 +56,7 @@ export class AgentSocketClient extends SocketClient {
             const requestId = IdService.generateDateBasedId();
             const currentUserRequest = new GetCurrentUserRequest(
                 requestId,
-                ClientStorageService.getClientRequestId(),
-                withStats
+                ClientStorageService.getClientRequestId()
             );
 
             const socketTimeout = ClientStorageService.getSocketTimeout();
@@ -191,62 +185,4 @@ export class AgentSocketClient extends SocketClient {
         });
     }
 
-    public handleNotifications(event: BackendNotification): void {
-        const isOwnerEvent = event.Namespace.startsWith('Ticket.Owner');
-        const isLockEvent = event.Namespace.startsWith('Ticket.Lock');
-        const isWatchEvent = event.Namespace.startsWith('Watcher');
-
-        const ids = event.ObjectID?.toString().split('::') || [];
-
-        if (ids?.length === 3) {
-            const id1Match = ids[1].toString() === this.userId?.toString();
-            const id2Match = ids[2].toString() === this.userId?.toString();
-            if (isOwnerEvent && (id1Match || id2Match)) {
-                BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
-                EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
-            } else if ((isLockEvent || isWatchEvent) && id2Match) {
-                BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
-                EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
-            }
-        }
-    }
-
-    public async clearCurrentUserCache(): Promise<void> {
-        const requestId = IdService.generateDateBasedId();
-        const currentUserRequest: ISocketRequest = {
-            clientRequestId: ClientStorageService.getClientRequestId(),
-            requestId
-        };
-
-        const socketTimeout = ClientStorageService.getSocketTimeout();
-        const clearCurrentUserCacheRequestPromise = new Promise<void>((resolve, reject) => {
-
-            if (this.socket) {
-                const timeout = window.setTimeout(() => {
-                    reject('Timeout: ' + AgentEvent.CLEAR_CURRENT_USER_CACHE);
-                }, socketTimeout);
-
-                this.socket.on(
-                    AgentEvent.CLEAR_CURRENT_USER_CACHE_FINISHED, async (result: ISocketResponse) => {
-                        if (result.requestId === requestId) {
-                            window.clearTimeout(timeout);
-                            resolve();
-                        }
-                    });
-
-                this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
-                    window.clearTimeout(timeout);
-                    console.error('Socket Error: getCurrentUser');
-                    console.error(error.error);
-                    reject(error.error);
-                });
-
-                this.socket.emit(AgentEvent.CLEAR_CURRENT_USER_CACHE, currentUserRequest);
-            } else {
-                resolve(null);
-            }
-        });
-
-        return clearCurrentUserCacheRequestPromise;
-    }
 }

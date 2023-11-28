@@ -7,10 +7,8 @@
  * --
  */
 
-import { Context } from '../../../../../../model/Context';
 import { IdService } from '../../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { SortUtil } from '../../../../../../model/SortUtil';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ActionFactory } from '../../../../../base-components/webapp/core/ActionFactory';
@@ -21,17 +19,15 @@ import { EventService } from '../../../../../base-components/webapp/core/EventSe
 import { IContextListener } from '../../../../../base-components/webapp/core/IContextListener';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { KIXModulesService } from '../../../../../base-components/webapp/core/KIXModulesService';
-import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 import { Article } from '../../../../model/Article';
-import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
-import { TicketService } from '../../../core';
+import { TicketDetailsContext, TicketService } from '../../../core';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
+    private context: TicketDetailsContext;
     private eventSubscriber: IEventSubscriber;
     private contextListener: IContextListener;
     private contextListenerId: string;
@@ -55,22 +51,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         // on update, some article was already loaded
         if (this.state.article && this.state.article.ArticleID !== this.article.ArticleID) {
-            await this.loadArticle(true);
+            await this.loadArticle();
         } else if (oldChangeTime !== currChangeTime) {
             this.state.article = this.article;
             this.prepareArticleData();
         }
 
         this.state.selectedCompactView = typeof input.selectedCompactView !== 'undefined' ? input.selectedCompactView : true;
-
-        // load article and prepare actions if not done yet
-        if ((!this.state.selectedCompactView || this.state.expanded) && !this.state.article['ObjectActions']?.length) {
-            this.loadArticle(true);
-        }
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        this.context = ContextService.getInstance().getActiveContext<TicketDetailsContext>();
         this.prepareObserver();
 
         this.state.unseen = this.state.article.Unseen;
@@ -131,7 +122,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private intersectionCallback(entries, observer): void {
         entries.forEach(async (entry) => {
             if (entry.isIntersecting && entry.intersectionRatio > 0) {
-                await this.loadArticle();
+                this.loadArticle();
                 if (this.state.expanded) {
                     this.toggleArticleContent();
                 }
@@ -254,12 +245,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (forceOpen) {
             this.state.compactViewExpanded = true;
             this.state.expanded = this.state.compactViewExpanded;
-            await this.loadArticle();
             this.toggleArticleContent();
         } else if (!await BrowserUtil.isTextSelected() && this.state.selectedCompactView) {
             this.state.compactViewExpanded = !this.state.compactViewExpanded;
             this.state.expanded = this.state.compactViewExpanded;
-            await this.loadArticle();
             this.toggleArticleContent();
         }
     }
@@ -281,7 +270,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.article, ArticleProperty.CC, undefined, false, false
             );
 
-            await this.loadArticle();
             await this.setArticleSeen(undefined, true);
 
             this.state.unseen = 0;
@@ -341,42 +329,25 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.filterAttachments();
     }
 
-    private async loadArticle(force?: boolean): Promise<void> {
-        let articles = [];
-        if (!this.articleLoaded || force) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null,
-                [
-                    ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, 'ObjectActions'
-                ]
-            );
-            articles = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, [this.article.ArticleID], loadingOptions,
-                new ArticleLoadingOptions(this.article.TicketID)
-            );
-
-            if (articles?.length) {
+    private async loadArticle(): Promise<void> {
+        if (!this.articleLoaded) {
+            this.context.loadArticle(this.article.ArticleID, async (a: Article) => {
                 const countNumber = this.state.article['countNumber'];
-                this.state.article = articles[0];
+                this.state.article = a;
                 this.state.article['countNumber'] = countNumber;
                 this.articleLoaded = true;
-            }
+
+                await this.prepareActions();
+                this.prepareAttachments();
+                if (!this.state.selectedCompactView) {
+                    await this.prepareImages();
+                }
+
+                await this.prepareArticleData();
+
+                this.state.show = true;
+            });
         }
-
-        if (articles?.length) {
-            this.state.article = articles[0];
-            this.articleLoaded = true;
-        }
-
-        await this.prepareActions();
-        this.prepareAttachments();
-        if (!this.state.selectedCompactView) {
-            await this.prepareImages();
-        }
-
-        await this.prepareArticleData();
-
-        this.state.show = true;
     }
 }
 

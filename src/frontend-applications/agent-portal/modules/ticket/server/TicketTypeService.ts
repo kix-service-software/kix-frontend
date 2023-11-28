@@ -45,7 +45,7 @@ export class TicketTypeAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.TICKET_TYPE;
     }
 
-    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
         return TicketType;
     }
 
@@ -87,7 +87,9 @@ export class TicketTypeAPIService extends KIXObjectAPIService {
             }
 
             if (objectIds && objectIds.length) {
-                objectResponse.objects = objectResponse?.objects?.filter((t) => objectIds.some((oid) => oid === t.ID));
+                objectResponse.objects = objectResponse?.objects?.filter(
+                    (t) => objectIds.some((oid) => oid?.toString() === t.ID?.toString())
+                );
             }
         }
 

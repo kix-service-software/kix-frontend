@@ -371,13 +371,11 @@ export class HttpService {
         return key;
     }
 
-    public async getUserByToken(token: string, withStats?: boolean): Promise<User> {
+    public async getUserByToken(token: string): Promise<User> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
         const userId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
 
-        const cacheType = withStats
-            ? `${KIXObjectType.CURRENT_USER}_STATS_${userId}`
-            : `${KIXObjectType.CURRENT_USER}_${userId}`;
+        const cacheType = `${KIXObjectType.CURRENT_USER}_${userId}`;
 
         if (userId) {
             const user = await CacheService.getInstance().get(backendToken, cacheType);
@@ -392,18 +390,9 @@ export class HttpService {
         }
 
         const requestPromise = new Promise<User>(async (resolve, reject) => {
-            let params = {};
-
-            if (withStats) {
-                params = {
-                    'include': 'Tickets',
-                    'Tickets.StateType': 'Open'
-                };
-            } else {
-                params = {
-                    'include': 'Preferences,RoleIDs,Contact,DynamicFields'
-                };
-            }
+            const params = {
+                'include': 'Preferences,RoleIDs,Contact,DynamicFields'
+            };
 
             const options: AxiosRequestConfig = { method: RequestMethod.GET, params };
 

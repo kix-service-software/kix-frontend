@@ -61,7 +61,9 @@ export class GeneralCatalogService extends KIXObjectAPIService {
                 token, KIXObjectType.GENERAL_CATALOG_CLASS, uri, null, null, 'GeneralCatalogClass', clientRequestId
             );
             if (objectIds) {
-                objectResponse.objects = objectResponse.objects?.filter((o) => objectIds.some((oi) => oi === o));
+                objectResponse.objects = objectResponse.objects?.filter(
+                    (o) => objectIds.some((oi) => oi?.toString() === o?.toString())
+                );
             }
         }
 

@@ -91,7 +91,7 @@ export class UIModule implements IUIModule {
     }
 
     private async checkAdminModuleAllowed(): Promise<boolean> {
-        const currentUser = await AgentSocketClient.getInstance().getCurrentUser(false);
+        const currentUser = await AgentSocketClient.getInstance().getCurrentUser();
         let allowed = currentUser.UserID === 1;
         if (!allowed && Array.isArray(currentUser.RoleIDs)) {
             const agentPortalConfig = await SysConfigService.getInstance().getPortalConfiguration()

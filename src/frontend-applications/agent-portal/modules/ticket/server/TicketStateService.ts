@@ -48,7 +48,7 @@ export class TicketStateAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.TICKET_STATE_TYPE;
     }
 
-    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
         let objectClass;
 
         if (objectType === KIXObjectType.TICKET_STATE) {
@@ -88,7 +88,7 @@ export class TicketStateAPIService extends KIXObjectAPIService {
 
             if (objectIds && objectIds.length) {
                 objectResponse.objects = objectResponse.objects?.filter(
-                    (t) => objectIds.some((oid) => oid === t.ID)
+                    (t) => objectIds.some((oid) => oid?.toString() === t.ID?.toString())
                 );
             }
         } else if (objectType === KIXObjectType.TICKET_STATE_TYPE) {

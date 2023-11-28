@@ -83,13 +83,9 @@ export class CacheService {
                 promises.push(this.clearCache());
             } else if (!event.Namespace) {
                 LoggingService.getInstance().warning('Ignore Backend Notification (missing Namespace in event)', event);
-            } else if (this.isUserStatsAffected(event.Namespace)) {
-                promises.push(this.handleUserStatsCache(event));
-
-                // update regular caches also
-                if (event.Event === 'UPDATE') {
-                    promises.push(this.deleteKeys(event.Namespace));
-                }
+            } else if (event.Namespace === 'User.Counters') {
+                await this.deleteKeys(`${KIXObjectType.USER_TICKETS}_${event.UserID}`);
+                await this.deleteKeys(`${KIXObjectType.USER_COUNTER}_${event.UserID}`);
             } else if (event.Namespace.startsWith('User.UserPreference')) {
                 promises.push(this.handleUserPreferencesCache(event));
             } else if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
@@ -99,31 +95,6 @@ export class CacheService {
         }
 
         await Promise.all(promises);
-    }
-
-    public isUserStatsAffected(namespace: string): boolean {
-        const isOwnerEvent = namespace.startsWith('Ticket.Owner');
-        const isLockEvent = namespace.startsWith('Ticket.Lock');
-        const isWatcherEvent = namespace.startsWith('Watcher');
-
-        return isOwnerEvent || isLockEvent || isWatcherEvent;
-    }
-
-    private async handleUserStatsCache(event: BackendNotification): Promise<void> {
-        const isOwnerEvent = event.Namespace.startsWith('Ticket.Owner');
-        const isLockEvent = event.Namespace.startsWith('Ticket.Lock');
-        const isWatcherEvent = event.Namespace.startsWith('Watcher');
-
-        const ids = event.ObjectID?.split('::');
-
-        if (ids?.length === 3) {
-            if (isOwnerEvent) {
-                await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${ids[1]}`);
-                await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${ids[2]}`);
-            } else if (isLockEvent || isWatcherEvent) {
-                await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${ids[2]}`);
-            }
-        }
     }
 
     private async handleUserPreferencesCache(event: BackendNotification): Promise<void> {

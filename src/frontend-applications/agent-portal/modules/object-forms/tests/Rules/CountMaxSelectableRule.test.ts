@@ -23,9 +23,11 @@ describe('Rule - CountMax', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ CountMax: 3 }],
-            'testProperty3': [{ CountMax: 3 }],
-            'testProperty5': [{ CountMax: 3 }]
+            EvaluationResult: {
+                'testProperty1': [{ CountMax: 3 }],
+                'testProperty3': [{ CountMax: 3 }],
+                'testProperty5': [{ CountMax: 3 }]
+            }
         })
 
         before(async () => {
@@ -66,9 +68,11 @@ describe('Rule - CountMax', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ CountMax: 0 }],
-            'testProperty3': [{ CountMax: 0 }],
-            'testProperty5': [{ CountMax: 0 }]
+            EvaluationResult: {
+                'testProperty1': [{ CountMax: 0 }],
+                'testProperty3': [{ CountMax: 0 }],
+                'testProperty5': [{ CountMax: 0 }]
+            }
         })
 
         before(async () => {

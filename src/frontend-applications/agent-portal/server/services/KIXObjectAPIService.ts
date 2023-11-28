@@ -34,10 +34,10 @@ import { CacheService } from './cache';
 import { SearchProperty } from '../../modules/search/model/SearchProperty';
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
 import { SortUtil } from '../../model/SortUtil';
-import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { HTTPResponse } from './HTTPResponse';
 import { ObjectResponse } from './ObjectResponse';
 import { FilterDataType } from '../../model/FilterDataType';
+import { ObjectLoader } from './ObjectLoader';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -57,7 +57,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         this.extendedServices.push(service);
     }
 
-    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
         return null;
     }
 
@@ -68,18 +68,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             const cacheKey = `${objectType}-${objectId}-displayvalue`;
             displayValue = await CacheService.getInstance().get(cacheKey, objectType);
             if (!displayValue && objectId) {
-
-                const config = ConfigurationService.getInstance().getServerConfiguration();
-                const objectResponse = await this.loadObjects(
-                    config?.BACKEND_API_TOKEN, 'KIXObjectAPIService', objectType, [objectId], null, null
-                );
-
-                if (objectResponse?.objects?.length) {
-                    let object = objectResponse.objects[0];
-                    const objectClass = this.getObjectClass(objectType);
-                    if (objectClass) {
-                        object = new objectClass(object);
-                    }
+                const object = await ObjectLoader.getInstance().queue(objectType, objectId).catch(() => null);
+                if (object) {
                     displayValue = object.toString();
                     await CacheService.getInstance().set(cacheKey, displayValue, objectType);
                 }

@@ -17,6 +17,7 @@ export class BackendNotification {
     public Timestamp: string;
     public Event: ObjectUpdatedEvent;
     public ObjectType: string;
+    public UserID: number;
 
     public constructor(notification?: BackendNotification) {
         if (notification) {
@@ -26,6 +27,7 @@ export class BackendNotification {
             this.Timestamp = notification.Timestamp;
             this.RequestID = notification.RequestID;
             this.ObjectType = notification.ObjectType;
+            this.UserID = Number(notification.UserID);
         }
     }
 }
