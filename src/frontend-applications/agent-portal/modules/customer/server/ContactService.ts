@@ -62,40 +62,13 @@ export class ContactAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.CONTACT;
     }
 
-    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
         let objectClass;
 
         if (objectType === KIXObjectType.CONTACT) {
             objectClass = Contact;
         }
         return objectClass;
-    }
-
-    public async loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string> {
-        let displayValue = '';
-
-        if (objectType === KIXObjectType.CONTACT) {
-            const cacheKey = `${objectType}-${objectId}-displayvalue`;
-            displayValue = await CacheService.getInstance().get(cacheKey, objectType);
-            if (!displayValue && objectId) {
-                const loadingOptions = new KIXObjectLoadingOptions();
-                loadingOptions.includes = [ContactProperty.USER];
-
-                const config = ConfigurationService.getInstance().getServerConfiguration();
-                const objectResponse = await this.loadObjects<Contact>(
-                    config?.BACKEND_API_TOKEN, 'ContactAPIService', objectType, [objectId], loadingOptions
-                );
-
-                const contacts = objectResponse?.objects || [];
-                if (contacts?.length) {
-                    const contact = new Contact(contacts[0]);
-                    displayValue = contact.toString();
-                    await CacheService.getInstance().set(cacheKey, displayValue, objectType);
-                }
-            }
-        }
-
-        return displayValue;
     }
 
     public async loadObjects<T>(
@@ -121,7 +94,7 @@ export class ContactAPIService extends KIXObjectAPIService {
 
                 if (Array.isArray(objectIds) && objectIds.length) {
                     objectResponse.objects = objectResponse.objects?.filter(
-                        (o) => objectIds.some((oid) => Number(oid) === o.ID)
+                        (o) => objectIds.some((oid) => Number(oid) === Number(o.ID))
                     );
                 }
             }

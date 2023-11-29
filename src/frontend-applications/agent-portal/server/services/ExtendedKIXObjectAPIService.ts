@@ -20,6 +20,10 @@ import { ObjectResponse } from './ObjectResponse';
 
 export abstract class ExtendedKIXObjectAPIService implements IKIXObjectService {
 
+    public getObjectClass(objectType: string): new (object: KIXObject) => KIXObject {
+        return;
+    }
+
     public isServiceFor(kixObjectType: string): boolean {
         return false;
     }

@@ -276,7 +276,6 @@ export class BrowserCacheService {
                 break;
             case KIXObjectType.ARTICLE:
                 cacheKeyPrefixes.push(KIXObjectType.ATTACHMENT);
-                BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
                 break;
             default:
         }

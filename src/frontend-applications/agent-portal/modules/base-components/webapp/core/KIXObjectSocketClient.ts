@@ -101,6 +101,10 @@ export class KIXObjectSocketClient extends SocketClient {
             KIXObjectEvent.LOAD_DISPLAY_VALUE, KIXObjectEvent.LOAD_DISPLAY_VALUE_FINISHED
         ).catch((): DisplayValueResponse => new DisplayValueResponse(null, ''));
 
+        if (!response.displayValue) {
+            console.error(`No display value for ${request.objectType} with id ${request.objectId}`);
+            return '';
+        }
         return response.displayValue;
     }
 

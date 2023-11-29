@@ -13,16 +13,21 @@ export class RuleResult {
 
     public InputOrder: string[];
     public propertyInstructions: PropertyInstruction[] = [];
+    public conditionProperties: string[] = [];
 
     public constructor(result: any) {
-        if (result) {
+        if (result?.EvaluationResult) {
             this.InputOrder = result.InputOrder || [];
 
-            for (const value in result) {
-                if (Object.prototype.hasOwnProperty.call(result, value) && value !== 'InputOrder') {
-                    this.propertyInstructions.push(new PropertyInstruction(value, result[value]));
+            const evaluationResult = result.EvaluationResult;
+
+            for (const value in evaluationResult) {
+                if (Object.prototype.hasOwnProperty.call(evaluationResult, value) && value !== 'InputOrder') {
+                    this.propertyInstructions.push(new PropertyInstruction(value, evaluationResult[value]));
                 }
             }
+
+            this.conditionProperties = result.ConditionProperties || [];
         }
     }
 

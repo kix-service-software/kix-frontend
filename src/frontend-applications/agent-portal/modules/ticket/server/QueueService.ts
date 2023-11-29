@@ -48,7 +48,7 @@ export class QueueAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.FOLLOW_UP_TYPE;
     }
 
-    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
         let objectClass;
 
         if (objectType === KIXObjectType.QUEUE) {

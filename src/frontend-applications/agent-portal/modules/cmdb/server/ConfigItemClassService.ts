@@ -100,13 +100,13 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
 
             if (hasValidFilter) {
                 objectResponse.objects = objectResponse.objects?.filter(
-                    (o) => o.ValidID === loadingOptions.filter[0].value
+                    (o) => o.ValidID?.toString() === loadingOptions.filter[0].value?.toString()
                 );
             }
 
             if (objectIds && objectIds.length) {
                 objectResponse.objects = objectResponse.objects?.filter(
-                    (t) => objectIds.some((oid) => oid === t.ID)
+                    (t) => objectIds.some((oid) => oid?.toString() === t.ID?.toString())
                 );
             }
         }

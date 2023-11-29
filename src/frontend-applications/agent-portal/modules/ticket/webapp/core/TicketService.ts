@@ -63,6 +63,7 @@ import { ArticleColorsConfiguration } from '../../model/ArticleColorsConfigurati
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
+import { Counter } from '../../../user/model/Counter';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -86,6 +87,8 @@ export class TicketService extends KIXObjectService<Ticket> {
         this.objectConstructors.set(KIXObjectType.TICKET_LOCK, [TicketLock]);
         this.objectConstructors.set(KIXObjectType.WATCHER, [Watcher]);
         this.objectConstructors.set(KIXObjectType.TICKET_HISTORY, [TicketHistory]);
+        this.objectConstructors.set(KIXObjectType.USER_TICKETS, [Ticket]);
+        this.objectConstructors.set(KIXObjectType.USER_COUNTER, [Counter]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
@@ -95,7 +98,9 @@ export class TicketService extends KIXObjectService<Ticket> {
             || kixObjectType === KIXObjectType.TICKET_LOCK
             || kixObjectType === KIXObjectType.WATCHER
             || kixObjectType === KIXObjectType.TICKET_HISTORY
-            || kixObjectType === KIXObjectType.HTML_TO_PDF;
+            || kixObjectType === KIXObjectType.HTML_TO_PDF
+            || kixObjectType === KIXObjectType.USER_TICKETS
+            || kixObjectType === KIXObjectType.USER_COUNTER;
     }
 
     public async loadObjects<O extends KIXObject>(

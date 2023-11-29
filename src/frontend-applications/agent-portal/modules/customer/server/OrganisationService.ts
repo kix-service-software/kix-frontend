@@ -56,7 +56,7 @@ export class OrganisationAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.ORGANISATION;
     }
 
-    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
         let objectClass;
 
         if (objectType === KIXObjectType.ORGANISATION) {
@@ -90,7 +90,7 @@ export class OrganisationAPIService extends KIXObjectAPIService {
 
                 if (Array.isArray(objectIds) && objectIds.length) {
                     objectResponse.objects = objectResponse.objects?.filter(
-                        (o) => objectIds.some((oid) => Number(oid) === o.ID)
+                        (o) => objectIds.some((oid) => Number(oid) === Number(o.ID))
                     );
                 }
             }
