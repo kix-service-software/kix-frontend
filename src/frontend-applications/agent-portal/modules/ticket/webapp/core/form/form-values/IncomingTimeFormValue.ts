@@ -12,6 +12,7 @@ import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadin
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { DateTimeUtil } from '../../../../../base-components/webapp/core/DateTimeUtil';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
+import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 import { DateTimeFormValue } from '../../../../../object-forms/model/FormValues/DateTimeFormValue';
 import { Article } from '../../../../model/Article';
 import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
@@ -27,6 +28,10 @@ export class IncomingTimeFormValue extends DateTimeFormValue {
             const date = new Date(Number(article.IncomingTime) * 1000);
             value = date;
         }
+
+        this.label = await LabelService.getInstance().getPropertyText(
+            ArticleProperty.INCOMING_TIME, KIXObjectType.ARTICLE
+        );
 
         return super.setFormValue(value);
     }
