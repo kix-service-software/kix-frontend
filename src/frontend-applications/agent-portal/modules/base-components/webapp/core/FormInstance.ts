@@ -97,8 +97,8 @@ export class FormInstance {
         this.setFieldsReadonly(group.formFields, readonly);
     }
 
-    private setFieldsReadonly(formFields: FormFieldConfiguration[], readonly: boolean = true): void {
-        formFields.forEach((f) => {
+    public setFieldsReadonly(formFields: FormFieldConfiguration[], readonly: boolean = true): void {
+        formFields.filter((f) => f).forEach((f) => {
             f.readonly = readonly;
             EventService.getInstance().publish(FormEvent.FIELD_READONLY_CHANGED, { instanceId: f.instanceId });
             if (Array.isArray(f.children) && f.children.length) {
