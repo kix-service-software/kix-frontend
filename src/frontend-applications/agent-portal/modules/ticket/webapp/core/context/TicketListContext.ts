@@ -16,12 +16,7 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { AgentService } from '../../../../user/webapp/core/AgentService';
-import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { TicketProperty } from '../../../model/TicketProperty';
-import { SearchOperator } from '../../../../search/model/SearchOperator';
-import { FilterDataType } from '../../../../../model/FilterDataType';
-import { FilterType } from '../../../../../model/FilterType';
 
 export class TicketListContext extends Context {
 
@@ -34,7 +29,8 @@ export class TicketListContext extends Context {
     public async loadTickets(limit?: number): Promise<void> {
         const ticketStatsProperty = this.getAdditionalInformation('TicketStatsProperty');
 
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, limit, ['Watchers']);
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, limit);
+        loadingOptions.includes = [TicketProperty.WATCHERS, TicketProperty.STATE_TYPE];
         loadingOptions.limit = limit;
 
         this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
@@ -71,7 +67,7 @@ export class TicketListContext extends Context {
 
     public async getUrl(): Promise<string> {
         let url: string = '';
-        if (Array.isArray(this.descriptor.urlPaths) && this.descriptor.urlPaths.length) {
+        if (Array.isArray(this.descriptor?.urlPaths) && this.descriptor?.urlPaths.length) {
             url = this.descriptor.urlPaths[0];
             const params = [];
             const ticketStatsProperty = this.getAdditionalInformation('TicketStatsProperty');

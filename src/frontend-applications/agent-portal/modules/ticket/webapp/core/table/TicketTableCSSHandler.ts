@@ -24,7 +24,7 @@ export class TicketTableCSSHandler implements ITableCSSHandler<Ticket> {
             }
 
             const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();
-            if (!stateTypes?.some((t) => t === ticket.StateType)) {
+            if (ticket.StateType && !stateTypes?.some((t) => t === ticket.StateType)) {
                 classes.push('invalid-object');
             }
         }
