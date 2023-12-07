@@ -7,6 +7,7 @@
  * --
  */
 
+import { SortDataType } from '../../../model/SortDataType';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
@@ -27,6 +28,8 @@ export class ObjectSearch extends KIXObject {
 
     public Property: string;
 
+    public ValueType: SortDataType | string;
+
     public constructor(objectSearch?: ObjectSearch) {
         super(objectSearch);
         if (objectSearch) {
@@ -36,6 +39,7 @@ export class ObjectSearch extends KIXObject {
             // this.ObjectType = objectSearch.ObjectType;
             this.Operators = objectSearch.Operators;
             this.Property = objectSearch.Property;
+            this.ValueType = objectSearch.ValueType;
         }
     }
 

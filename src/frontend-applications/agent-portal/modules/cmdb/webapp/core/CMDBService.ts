@@ -482,7 +482,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         const filter = [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             )
         ];
 

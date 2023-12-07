@@ -342,7 +342,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 !c.property.startsWith('CurrentVersion') &&
                 c.property !== ConfigItemProperty.ASSIGNED_CONTACT &&
                 c.property !== ConfigItemProperty.ASSIGNED_ORGANISATION &&
-                c.property !== ConfigItemProperty.PREVIOUS_VERSION_SEARCH;
+                c.property !== ConfigItemProperty.PREVIOUS_VERSION_SEARCH &&
+                c.property !== 'ID';
         });
     }
 
@@ -401,7 +402,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property.startsWith('CurrentVersion') ||
             c.property === ConfigItemProperty.ASSIGNED_CONTACT ||
             c.property === ConfigItemProperty.ASSIGNED_ORGANISATION ||
-            c.property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH
+            c.property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH ||
+            c.property === 'ID'
         );
 
         for (const searchCriteria of newCriteria) {

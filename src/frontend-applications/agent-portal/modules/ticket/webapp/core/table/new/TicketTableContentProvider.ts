@@ -69,7 +69,8 @@ export class TicketTableContentProvider extends TableContentProvider<Ticket> {
             case TicketProperty.CREATED:
                 return KIXObjectProperty.CREATE_TIME;
             case TicketProperty.CHANGED:
-                return KIXObjectProperty.CHANGE_TIME;
+            case KIXObjectProperty.CHANGE_TIME:
+                return TicketProperty.LAST_CHANGE_TIME;
             default:
         }
         return super.getSortAttribute(attribute);

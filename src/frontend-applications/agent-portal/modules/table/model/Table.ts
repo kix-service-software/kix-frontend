@@ -689,6 +689,11 @@ export class Table implements Table {
         return (value && value !== '') || (criteria && criteria.length !== 0);
     }
 
+    public async presetSort(columnId: string, sortOrder: SortOrder): Promise<void> {
+        this.sortColumnId = columnId;
+        this.sortOrder = sortOrder;
+    }
+
     public async sort(columnId: string, sortOrder: SortOrder, silent?: boolean): Promise<void> {
         this.sortColumnId = columnId;
         this.sortOrder = sortOrder;

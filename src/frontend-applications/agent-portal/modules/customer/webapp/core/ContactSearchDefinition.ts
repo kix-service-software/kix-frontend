@@ -41,14 +41,6 @@ export class ContactSearchDefinition extends SearchDefinition {
         return formManager;
     }
 
-    public async getLoadingOptions(
-        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescending?: boolean
-    ): Promise<KIXObjectLoadingOptions> {
-        const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescending);
-        loadingOptions.includes = ['Tickets'];
-        return loadingOptions;
-    }
-
     public getDefaultSearchCriteria(): string[] {
         return [
             SearchProperty.FULLTEXT,
