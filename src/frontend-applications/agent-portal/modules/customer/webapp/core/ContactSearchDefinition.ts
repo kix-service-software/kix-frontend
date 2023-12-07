@@ -46,7 +46,7 @@ export class ContactSearchDefinition extends SearchDefinition {
             SearchProperty.FULLTEXT,
             ContactProperty.FIRSTNAME,
             ContactProperty.LASTNAME,
-            ContactProperty.EMAIL,
+            ContactProperty.EMAILS,
             UserProperty.USER_LOGIN
         ];
     }

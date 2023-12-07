@@ -96,6 +96,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 displayValue = 'Translatable#Last Name';
                 break;
             case ContactProperty.EMAIL:
+            case ContactProperty.EMAILS:
                 displayValue = 'Translatable#Email';
                 break;
             case ContactProperty.EMAIL1:

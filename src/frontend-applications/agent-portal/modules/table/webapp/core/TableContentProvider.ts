@@ -410,7 +410,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 sortType = SortDataType.TEXTUAL;
             }
 
-            const sort = `${this.objectType}.${direction === SortOrder.DOWN ? '-' : ''}${this.getSortAttribute(property)}:${sortType}`;
+            const sort = this.getSort(direction, property, sortType);
             if (sort !== this.sort) {
                 this.sort = sort;
 
@@ -430,6 +430,11 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             // eslint-disable-next-line no-console
             console.warn(`Sort with property "${property}" is not supported.`);
         }
+    }
+
+    protected getSort(direction: SortOrder, property: string, sortType: string): string {
+        return this.objectType + '.' + (direction === SortOrder.DOWN ? '-' : '') +
+            this.getSortAttribute(property) + ':' + sortType;
     }
 
     protected getSortAttribute(attribute: string): string {
