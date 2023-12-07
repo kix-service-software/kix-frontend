@@ -330,10 +330,10 @@ class Component {
 
             const tableState = table?.loadTableState();
 
-            if (settings.sort) {
+            if (settings.sort && !table?.hasSortByTableState()) {
                 const sortColumnId = tableState?.sortColumnId ?? settings.sort[0];
                 const sortOrder = tableState?.sortOrder ?? settings.sort[1];
-                table?.sort(sortColumnId, sortOrder);
+                table?.presetSort(sortColumnId, sortOrder);
             }
 
             await table?.initialize();

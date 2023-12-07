@@ -152,6 +152,11 @@ export class OrganisationAPIService extends KIXObjectAPIService {
         return response.OrganisationID;
     }
 
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        // TODO: allow nothing at the moment, maybe no filter needed anymore
+        return [];
+    }
+
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         let searchCriteria = criteria.filter(
             (c) => c.property === OrganisationProperty.NAME
@@ -165,7 +170,7 @@ export class OrganisationAPIService extends KIXObjectAPIService {
             const primarySearch = [
                 new FilterCriteria(
                     OrganisationProperty.NUMBER, SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
+                    FilterDataType.STRING, FilterType.OR, primary.value
                 ),
             ];
             searchCriteria = [...searchCriteria, ...primarySearch];

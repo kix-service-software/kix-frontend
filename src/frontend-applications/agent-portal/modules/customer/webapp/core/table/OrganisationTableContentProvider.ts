@@ -26,6 +26,7 @@ export class OrganisationTableContentProvider extends TableContentProvider<Organ
         contextId?: string
     ) {
         super(KIXObjectType.ORGANISATION, table, objectIds, loadingOptions, contextId);
+        this.useBackendSort = true;
     }
 
     public async loadData(): Promise<Array<RowObject<Organisation>>> {

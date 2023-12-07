@@ -294,7 +294,7 @@ export class ContactAPIService extends KIXObjectAPIService {
             const primarySearch = [
                 new FilterCriteria(
                     ContactProperty.EMAIL, SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
+                    FilterDataType.STRING, FilterType.OR, primary.value
                 ),
             ];
             searchCriteria = [...searchCriteria, ...primarySearch];

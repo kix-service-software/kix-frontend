@@ -40,10 +40,6 @@ export class OrganisationContext extends Context {
         super.initContext(urlParams);
 
         this.additionalInformation.set(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, false);
-
-        if (this.filterValue) {
-            this.loadOrganisations();
-        }
     }
 
     public async update(urlParams: URLSearchParams): Promise<void> {
@@ -142,15 +138,13 @@ export class OrganisationContext extends Context {
             const filter = await OrganisationService.getInstance().prepareFullTextFilter(this.filterValue);
             const loadingOptions = new KIXObjectLoadingOptions(filter);
             loadingOptions.limit = limit;
-            loadingOptions.searchLimit = 250;
             loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
-
-            const collectionId = this.contextId + KIXObjectType.ORGANISATION;
 
             await this.prepareContextLoadingOptions(KIXObjectType.ORGANISATION, loadingOptions);
 
             const organisations = await KIXObjectService.loadObjects(
-                KIXObjectType.ORGANISATION, null, loadingOptions, null, false, undefined, undefined, collectionId
+                KIXObjectType.ORGANISATION, null, loadingOptions, null, false, undefined, undefined,
+                this.contextId + KIXObjectType.ORGANISATION
             ).catch((error) => []);
 
             this.setObjectList(KIXObjectType.ORGANISATION, organisations);
@@ -161,7 +155,6 @@ export class OrganisationContext extends Context {
             this.setObjectList(KIXObjectType.ORGANISATION, []);
             this.setObjectList(KIXObjectType.CONTACT, []);
         }
-
     }
 
     public async loadContacts(limit?: number): Promise<void> {
@@ -176,7 +169,6 @@ export class OrganisationContext extends Context {
         const loadingOptions = new KIXObjectLoadingOptions([]);
         loadingOptions.includes = [ContactProperty.USER, KIXObjectProperty.DYNAMIC_FIELDS];
         loadingOptions.limit = limit;
-        loadingOptions.searchLimit = 250;
 
         const collectionId = this.contextId + KIXObjectType.CONTACT;
 
