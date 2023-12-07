@@ -291,17 +291,6 @@ export class SearchService {
         this.searchDefinitions.push(searchDefinition);
     }
 
-    public async getSearchProperties(
-        objectType: KIXObjectType | string, parameter?: Array<[string, any]>
-    ): Promise<Array<[string, string]>> {
-        const searchDefinition = this.getSearchDefinition(objectType);
-        let properties = [];
-        if (searchDefinition) {
-            properties = await searchDefinition.getProperties(parameter);
-        }
-        return properties;
-    }
-
     public getSearchDefinition(objectType: KIXObjectType | string): SearchDefinition {
         return this.searchDefinitions.find((sd) => sd.objectType === objectType);
     }

@@ -21,6 +21,7 @@ import { Table } from '../../../../table/model/Table';
 import { TableValue } from '../../../../table/model/TableValue';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ContextMode } from '../../../../../model/ContextMode';
+import { SortOrder } from '../../../../../model/SortOrder';
 
 export class ContactTableContentProvider extends TableContentProvider<Contact> {
 
@@ -31,6 +32,7 @@ export class ContactTableContentProvider extends TableContentProvider<Contact> {
         contextId?: string
     ) {
         super(KIXObjectType.CONTACT, table, objectIds, loadingOptions, contextId);
+        this.useBackendSort = true;
     }
 
     public async loadData(): Promise<Array<RowObject<Contact>>> {
@@ -81,5 +83,24 @@ export class ContactTableContentProvider extends TableContentProvider<Contact> {
     private isUserProperty(property: string): boolean {
         const userProperties = Object.keys(UserProperty).map((p) => UserProperty[p]);
         return userProperties.some((p) => p === property);
+    }
+
+    protected getSort(direction: SortOrder, property: string, sortType: string): string {
+        let sort = super.getSort(direction, property, sortType);
+
+        // add second sort with counterpart to prevent mixed results on "is not ... and has no user"
+        // result should be like "is agent, then all is not agent and then all without user" or vice versa
+        if (
+            (property === UserProperty.IS_AGENT || property === UserProperty.IS_CUSTOMER) &&
+            this.isBackendSortSupportedForProperty(UserProperty.IS_AGENT) &&
+            this.isBackendSortSupportedForProperty(UserProperty.IS_CUSTOMER)
+        ) {
+            const counterpart = property === UserProperty.IS_AGENT ? UserProperty.IS_CUSTOMER : UserProperty.IS_AGENT;
+            sort += ',' + this.objectType + '.' +
+                (direction === SortOrder.DOWN ? '-' : '') +
+                this.getSortAttribute(counterpart) + ':' +
+                this.sortTypeMapping.get(counterpart);
+        }
+        return sort;
     }
 }

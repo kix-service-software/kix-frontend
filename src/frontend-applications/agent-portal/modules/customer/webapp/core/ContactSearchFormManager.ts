@@ -44,7 +44,7 @@ export class ContactSearchFormManager extends SearchFormManager {
             [SearchProperty.FULLTEXT, null],
             [ContactProperty.FIRSTNAME, null],
             [ContactProperty.LASTNAME, null],
-            [ContactProperty.EMAIL, null],
+            [ContactProperty.EMAILS, null],
             [UserProperty.USER_LOGIN, null],
             [ContactProperty.COUNTRY, null],
             [ContactProperty.STREET, null],

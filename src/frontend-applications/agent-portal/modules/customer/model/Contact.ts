@@ -101,7 +101,7 @@ export class Contact extends KIXObject {
     // TODO: allow all possible (in backend) Operators for attributes - managers should limit
     public static SEARCH_PROPERTIES = [
         {
-            Property: ContactProperty.EMAIL,
+            Property: ContactProperty.EMAILS,
             Operations: Contact.STRING_OPERATORS,
             DataType: FilterDataType.STRING,
             InputType: InputFieldTypes.TEXT
