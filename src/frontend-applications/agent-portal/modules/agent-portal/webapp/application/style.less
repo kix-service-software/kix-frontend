@@ -9,12 +9,15 @@
 
 @import "../../../../static/less/index.less";
 
-@h-w-size: 7px;
+@h-size: 12px;
+@w-size: 10px;
 
-::-webkit-scrollbar {
-    height: @h-w-size;
-    width: @h-w-size;
-    background: transparent;
+::-webkit-scrollbar,
+::-moz-scrollbar {
+    height: @h-size;
+    width: @w-size;
+    background: #eeeeee;
+    box-shadow: inset 0 0 5px grey;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -28,10 +31,4 @@
 
 ::-webkit-scrollbar-corner {
     background: #000;
-}
-
-::-moz-scrollbar {
-    height: @h-w-size;
-    width: @h-w-size;
-    background: transparent;
 }
