@@ -94,7 +94,7 @@ export class ClientRegistrationService extends KIXObjectAPIService {
         await this.sendDeleteRequest<void>(token, clientRequestId, [uri], null);
     }
 
-    public async createClientRegistration(backendAuthenticationToken: string): Promise<void> {
+    public async createClientRegistration(): Promise<void> {
         LoggingService.getInstance().info('[CLIENT REGISTRATION] Start');
         const start = Date.now();
 
@@ -115,9 +115,6 @@ export class ClientRegistrationService extends KIXObjectAPIService {
 
         const createClientRegistration = new CreateClientRegistration(
             serverConfig.NOTIFICATION_CLIENT_ID,
-            serverConfig.NOTIFICATION_URL,
-            serverConfig.NOTIFICATION_INTERVAL,
-            'Token ' + backendAuthenticationToken,
             poDefinitions,
             configurations,
             backendDependencies,
