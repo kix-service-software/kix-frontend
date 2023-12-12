@@ -51,12 +51,14 @@ export class SetupService {
         if (options && options.length) {
             const savedSteps: SetupStepResult[] = JSON.parse(options[0].Value);
 
-            this.setupSteps.forEach((ss) => {
-                const setupStep = savedSteps.find((s) => s.stepId === ss.id);
-                ss.completed = setupStep ? setupStep.completed : false;
-                ss.skipped = setupStep ? setupStep.skipped : false;
-                ss.result = setupStep ? setupStep.result : null;
-            });
+            if (savedSteps) {
+                this.setupSteps.forEach((ss) => {
+                    const setupStep = savedSteps.find((s) => s.stepId === ss.id);
+                    ss.completed = setupStep ? setupStep.completed : false;
+                    ss.skipped = setupStep ? setupStep.skipped : false;
+                    ss.result = setupStep ? setupStep.result : null;
+                });
+            }
 
         }
     }
