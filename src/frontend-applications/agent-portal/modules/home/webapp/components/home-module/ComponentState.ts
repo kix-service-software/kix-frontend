@@ -11,6 +11,9 @@ import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredW
 
 export class ComponentState {
 
-    public contentWidgets: ConfiguredWidget[] = [];
+    public constructor(
+        public contentWidgets: ConfiguredWidget[] = [],
+        public prepared: boolean = false
+    ) { }
 
 }
