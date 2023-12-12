@@ -37,7 +37,11 @@ class HomeComponent {
 
     private async prepareWidgets(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        this.state.contentWidgets = await context.getContent();
+        this.state.prepared = false;
+        setTimeout(async () => {
+            this.state.contentWidgets = await context.getContent();
+            this.state.prepared = true;
+        }, 100);
     }
 
     public onDestroy(): void {

@@ -7,6 +7,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.dashboard.home>
-    <widget-container widgets=state.contentWidgets contextWidgetList="content"/>
+<div class="dashboard home">
+    <if(state.prepared)>
+        <widget-container
+            widgets=state.contentWidgets
+            contextWidgetList="content"
+        />
+    </if>
 </div>
