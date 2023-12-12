@@ -219,7 +219,6 @@ export class ObjectFormValue<T = any> {
 
     public async disable(): Promise<void> {
         this.enabled = false;
-        this.visible = false;
         this.value = null;
     }
 

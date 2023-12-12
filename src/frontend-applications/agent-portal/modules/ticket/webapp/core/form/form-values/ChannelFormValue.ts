@@ -215,27 +215,15 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
 
             if (formValue) {
-                const initialVisible = formValue.getInitialState(FormValueProperty.VISIBLE);
-                formValue.visible = typeof initialVisible !== 'undefined' && initialVisible !== null
-                    ? initialVisible
-                    : true;
-
                 if (property === ArticleProperty.CC) {
-                    formValue.visible = false;
                     const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                    if (
-                        (!toValue?.enabled && !isEdit)
-                        || (toValue?.enabled && formValue?.value && isEdit)
-                    ) {
-                        formValue.visible = true;
-                    }
+                    const canShow = (!toValue?.enabled && !isEdit) || (toValue?.enabled && formValue?.value && isEdit);
+                    formValue.visible = canShow;
                 }
                 if (property === ArticleProperty.BCC) {
-                    formValue.visible = false;
                     const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                    if (toValue?.enabled && formValue?.value && isEdit) {
-                        formValue.visible = true;
-                    }
+                    const canShow = toValue?.enabled && formValue?.value && isEdit;
+                    formValue.visible = canShow;
                 }
 
                 // TO is enabled for edit or if set by template (initFormValueByField in RecipientFormValue)
