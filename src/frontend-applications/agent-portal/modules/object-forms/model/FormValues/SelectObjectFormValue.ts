@@ -76,11 +76,12 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             new FormValueBinding(this, 'multiselect', object, property),
         );
 
-        this.addPropertyBinding(FormValueProperty.POSSIBLE_VALUES, (value: SelectObjectFormValue) => {
+        this.addPropertyBinding(FormValueProperty.POSSIBLE_VALUES, async (value: SelectObjectFormValue) => {
             if (this.isAutoComplete && this.possibleValues?.length) {
                 this.isAutoComplete = false;
             }
-            this.loadSelectableValues();
+            await this.loadSelectableValues();
+            this.loadSelectedValues();
         });
     }
 
