@@ -10,7 +10,6 @@
 import { Application, Router } from 'express';
 import { AuthenticationRouter } from './AuthenticationRouter';
 import { ApplicationRouter } from './ApplicationRouter';
-import { NotificationRouter } from './NotificationRouter';
 import { PluginService } from '../../../../server/services/PluginService';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { IServerRouterExtension } from '../extensions/IServerRouterExtension';
@@ -37,9 +36,6 @@ export class ServerRouter {
             ApplicationRouter.getInstance().getBaseRoute(), ApplicationRouter.getInstance().getRouter()
         );
 
-        this.expressRouter.use(
-            NotificationRouter.getInstance().getBaseRoute(), NotificationRouter.getInstance().getRouter()
-        );
     }
 
     private async initExtensions(): Promise<void> {

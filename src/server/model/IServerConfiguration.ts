@@ -23,10 +23,6 @@ export interface IServerConfiguration {
 
     CHECK_TOKEN_ORIGIN: boolean;
 
-    NOTIFICATION_URL: string;
-
-    NOTIFICATION_INTERVAL: number;
-
     NOTIFICATION_CLIENT_ID: string;
 
     BACKEND_API_URL: string;
