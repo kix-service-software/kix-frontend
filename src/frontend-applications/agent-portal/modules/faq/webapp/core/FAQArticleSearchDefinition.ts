@@ -32,8 +32,7 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescending?: boolean
     ): Promise<KIXObjectLoadingOptions> {
         const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescending);
-        loadingOptions.includes = [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES];
-        loadingOptions.expands = [KIXObjectProperty.LINKS];
+        loadingOptions.includes = [FAQArticleProperty.RATING];
         return loadingOptions;
     }
 

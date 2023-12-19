@@ -15,6 +15,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { TableValue } from '../../../../table/model/TableValue';
 import { FAQArticleProperty } from '../../../model/FAQArticleProperty';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class FAQArticleTableContentProvider extends TableContentProvider<FAQArticle> {
 
@@ -26,6 +27,7 @@ export class FAQArticleTableContentProvider extends TableContentProvider<FAQArti
         objects?: KIXObject[]
     ) {
         super(KIXObjectType.FAQ_ARTICLE, table, objectIds, loadingOptions, contextId, objects);
+        this.useBackendSort = true;
     }
 
     protected async prepareSpecificValues(values: TableValue[], faqArticle: FAQArticle): Promise<void> {

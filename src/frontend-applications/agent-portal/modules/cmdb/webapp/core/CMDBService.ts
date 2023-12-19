@@ -38,6 +38,7 @@ import { EventService } from '../../../base-components/webapp/core/EventService'
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { ConfigItemClassProperty } from '../../model/ConfigItemClassProperty';
+import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 
 export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> {
 
@@ -487,5 +488,46 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         ];
 
         return filter;
+    }
+
+    public async getSortableAttributes(filtered: boolean = true): Promise<ObjectSearch[]> {
+        const supportedAttributes = await super.getSortableAttributes(filtered);
+
+        const filterList = [
+            ConfigItemProperty.CLASS_ID,
+            'ClassIDs',
+            ConfigItemProperty.CONFIG_ITEM_ID,
+            'DeplStateID',
+            'DeplStateIDs',
+            'DeplState',
+            'InciStateID',
+            'InciStateIDs',
+            'InciState'
+        ];
+        // use frontend "known" attribute
+        const deplState = supportedAttributes.find((sA) => sA.Property === 'DeplStateID');
+        if (deplState) {
+            deplState.Property = ConfigItemProperty.CUR_DEPL_STATE_ID;
+        }
+        const inciState = supportedAttributes.find((sA) => sA.Property === 'InciStateID');
+        if (inciState) {
+            inciState.Property = ConfigItemProperty.CUR_INCI_STATE_ID;
+        }
+        return filtered ?
+            supportedAttributes.filter((sA) => !filterList.some((fp) => fp === sA.Property)) :
+            supportedAttributes;
+    }
+
+    protected getSortAttribute(attribute: string): string {
+        switch (attribute) {
+            case ConfigItemProperty.CUR_DEPL_STATE_ID:
+                return 'DeplState';
+            case ConfigItemProperty.CUR_INCI_STATE_ID:
+                return 'InciState';
+            case ConfigItemProperty.CLASS_ID:
+                return ConfigItemProperty.CLASS;
+            default:
+        }
+        return super.getSortAttribute(attribute);
     }
 }

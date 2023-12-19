@@ -1,12 +1,12 @@
-KIX Pro 18 enthält Softwarebestandteile, die von den Rechteinhabern als Freie Software bzw. Open Source Software 
-lizenziert werden. Die entsprechenden Lizenzinformationen finden Sie im root-Verzeichnis (Hauptverzeichnis)) der ausgelieferten 
-Software KIX Pro 18. Sie können den Quellcode dieser Softwarebestandteile gegen Erstattung der uns entstehenden Kosten in 
-Höhe von EUR 10,00 von uns auf einem Datenträger erhalten, wenn Sie innerhalb von drei Jahren nach dem Vertrieb der Software 
-durch uns bzw. zumindest solange, wie wir Support und Ersatzteile für KIX Pro 18 anbieten, eine Anfrage an uns unter folgender 
+KIX Pro 18 enthält Softwarebestandteile, die von den Rechteinhabern als Freie Software bzw. Open Source Software
+lizenziert werden. Die entsprechenden Lizenzinformationen finden Sie im root-Verzeichnis (Hauptverzeichnis)) der ausgelieferten
+Software KIX Pro 18. Sie können den Quellcode dieser Softwarebestandteile gegen Erstattung der uns entstehenden Kosten in
+Höhe von EUR 10,00 von uns auf einem Datenträger erhalten, wenn Sie innerhalb von drei Jahren nach dem Vertrieb der Software
+durch uns bzw. zumindest solange, wie wir Support und Ersatzteile für KIX Pro 18 anbieten, eine Anfrage an uns unter folgender
 Adresse stellen:
- 
-cape IT GmbH
+
+KIX Service Software GmbH
 Schönherrstr. 8
 D-09113 Chemnitz
- 
-Geben Sie dabei bitte den Betreff "Quellcode KIX Pro 18“ an. 
+
+Geben Sie dabei bitte den Betreff "Quellcode KIX Pro 18“ an.

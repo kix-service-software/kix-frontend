@@ -205,7 +205,7 @@ export class Table implements Table {
                     column.setSortOrder(this.sortOrder);
                 }
             } else if (this.contextId) {
-                this.setSortByContext();
+                await this.setSortByContext();
             }
 
             if (!this.sortColumnId) {
@@ -217,7 +217,7 @@ export class Table implements Table {
             }
 
             if (this.sortColumnId && this.sortOrder) {
-                this.getContentProvider().setSort(this.sortColumnId, this.sortOrder, false);
+                await this.getContentProvider().setSort(this.sortColumnId, this.sortOrder, false);
             }
 
             await this.loadRowData();
@@ -268,10 +268,10 @@ export class Table implements Table {
         }
     }
 
-    private setSortByContext(): void {
+    private async setSortByContext(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         if (context.contextId === this.contextId) {
-            const sort = context.getSortOrder(this.getObjectType());
+            const sort = await context.getSortOrder(this.getObjectType());
             if (sort) {
                 let property = sort.split('.')[1];
                 if (property) {
@@ -338,9 +338,7 @@ export class Table implements Table {
             if (
                 // if intersection is active and no rowobjects found, result list is always empty, so ignore handler
                 (!this.tableConfiguration?.intersection || (rowObjects && rowObjects.length))
-                && this.tableConfiguration
-                && Array.isArray(this.tableConfiguration.additionalTableObjectsHandler)
-                && this.tableConfiguration.additionalTableObjectsHandler.length
+                && this.hasAdditionalHandler()
             ) {
                 rowObjects = await this.considerHandlerData(rowObjects, relevantHandlerConfigIds);
             }
@@ -348,6 +346,12 @@ export class Table implements Table {
             rowObjects.forEach((d) => rows.push(this.createRow(d, false, existingRows)));
             this.rows = rows;
         }
+    }
+
+    private hasAdditionalHandler(): boolean {
+        return Boolean(this.tableConfiguration
+            && Array.isArray(this.tableConfiguration.additionalTableObjectsHandler)
+            && this.tableConfiguration.additionalTableObjectsHandler.length);
     }
 
     private async considerHandlerData(
@@ -422,12 +426,10 @@ export class Table implements Table {
         }
 
         if (canCreate) {
-            if (
-                columnConfiguration.sortable &&
-                this.getContentProvider()?.isBackendSortSupported() &&
-                !this.getContentProvider()?.isBackendSortSupportedForProperty(columnConfiguration.property)
-            ) {
-                columnConfiguration.sortable = false;
+            if (columnConfiguration.sortable && this.getContentProvider()?.isBackendSortSupported()) {
+                columnConfiguration.sortable = await this.getContentProvider()?.isBackendSortSupportedForProperty(
+                    columnConfiguration.property
+                );
             }
             column = new Column(this, columnConfiguration);
             this.columns.push(column);
@@ -689,19 +691,25 @@ export class Table implements Table {
         return (value && value !== '') || (criteria && criteria.length !== 0);
     }
 
-    public async presetSort(columnId: string, sortOrder: SortOrder): Promise<void> {
-        this.sortColumnId = columnId;
-        this.sortOrder = sortOrder;
+    public async setSort(columnId: string, sortOrder: SortOrder): Promise<void> {
+        if (this.sortColumnId !== columnId || this.sortOrder !== sortOrder) {
+            this.sortColumnId = columnId;
+            this.sortOrder = sortOrder;
+
+            this.getColumns().forEach((c) => c.setSortOrder(null));
+            const column = this.getColumn(columnId);
+            if (column) {
+                column.setSortOrder(sortOrder);
+            }
+            this.saveTableState();
+        }
     }
 
     public async sort(columnId: string, sortOrder: SortOrder, silent?: boolean): Promise<void> {
-        this.sortColumnId = columnId;
-        this.sortOrder = sortOrder;
+        this.setSort(columnId, sortOrder);
 
-        this.getColumns().forEach((c) => c.setSortOrder(null));
-        const column = this.getColumn(columnId);
-
-        if (this.getContentProvider()?.isBackendSortSupported()) {
+        // with handler a combined request is not supported now, so use "frontend sort"
+        if (this.getContentProvider()?.isBackendSortSupported() && !this.hasAdditionalHandler()) {
             EventService.getInstance().publish(
                 TableEvent.TABLE_WAITING_START, new TableEventData(this.getTableId(), null, columnId)
             );
@@ -710,40 +718,35 @@ export class Table implements Table {
                 TableEvent.TABLE_WAITING_END, new TableEventData(this.getTableId(), null, columnId)
             );
         } else {
-            await this.doTableSort(column, sortOrder);
+            await this.doTableSort();
         }
 
-        if (column) {
-            column.setSortOrder(sortOrder);
-
-            if (!silent) {
-                EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
-                EventService.getInstance().publish(
-                    TableEvent.SORTED, new TableEventData(this.getTableId(), null, columnId)
-                );
-            }
+        if (!silent) {
+            EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
+            EventService.getInstance().publish(
+                TableEvent.SORTED, new TableEventData(this.getTableId(), null, columnId)
+            );
         }
-
-        this.saveTableState();
     }
 
-    private async doTableSort(column: Column, sortOrder: SortOrder): Promise<void> {
+    private async doTableSort(): Promise<void> {
         const promises = [];
         this.getRows(true).forEach((r) => promises.push(r.getCell(this.sortColumnId)?.initDisplayValue()));
         await Promise.all(promises);
 
+        const column = this.getColumn(this.sortColumnId);
         if (column) {
             const dataType = column.getColumnConfiguration().dataType || DataType.STRING;
 
             if (this.filteredRows) {
-                this.filteredRows = TableSortUtil.sort(this.filteredRows, this.sortColumnId, sortOrder, dataType);
+                this.filteredRows = TableSortUtil.sort(this.filteredRows, this.sortColumnId, this.sortOrder, dataType);
                 for (const row of this.filteredRows) {
-                    row.sortChildren(this.sortColumnId, sortOrder, dataType);
+                    row.sortChildren(this.sortColumnId, this.sortOrder, dataType);
                 }
             } else {
-                this.rows = TableSortUtil.sort(this.rows, this.sortColumnId, sortOrder, dataType);
+                this.rows = TableSortUtil.sort(this.rows, this.sortColumnId, this.sortOrder, dataType);
                 for (const row of this.rows) {
-                    row.sortChildren(this.sortColumnId, sortOrder, dataType);
+                    row.sortChildren(this.sortColumnId, this.sortOrder, dataType);
                 }
             }
         }
@@ -856,7 +859,10 @@ export class Table implements Table {
                 );
             }
 
-            if (!this.getContentProvider()?.isBackendSortSupported() && sort && this.sortColumnId && this.sortOrder) {
+            if (
+                (!this.getContentProvider()?.isBackendSortSupported() || this.hasAdditionalHandler()) &&
+                sort && this.sortColumnId && this.sortOrder
+            ) {
                 await this.sort(this.sortColumnId, this.sortOrder);
             }
 

@@ -23,4 +23,8 @@ export class ExtendedSearchFormManager extends ExtendedDynamicFormManager {
     public async getSortAttributeType(attribute: string): Promise<string> {
         return;
     }
+
+    public getSortAttribute(attribute: string): string {
+        return;
+    }
 }

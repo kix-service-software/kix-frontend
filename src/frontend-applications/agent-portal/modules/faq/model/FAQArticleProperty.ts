@@ -53,11 +53,13 @@ export enum FAQArticleProperty {
 
     VOTES = 'Votes',
 
+    RATING = 'Rating',
+
     LINK = 'LINK',
 
     // display properties
-    CATEGORY = 'CATEGORY',
-    CATEGORY_FULLNAME = 'CATEGORY_FULLNAME',
+    CATEGORY = 'Category',
+    CATEGORY_FULLNAME = 'CategoryFullname',
     FIELD_1_NO_INLINE = 'Field1NoInline',
     FIELD_2_NO_INLINE = 'Field2NoInline',
     FIELD_3_NO_INLINE = 'Field3NoInline',

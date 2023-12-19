@@ -158,7 +158,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 token, uri, clientRequestId, query
             );
         } else if (loadingOptions.filter) {
-            await this.buildFilter(loadingOptions.filter, 'ConfigItem', query, token);
+            const success = await this.buildFilter(loadingOptions.filter, 'ConfigItem', query, token);
+            if (!success) {
+                LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
+                return new ObjectResponse([], 0);
+            }
             const uri = this.buildUri('cmdb', 'configitems');
             httpResponse = await this.getObjectByUri<ConfigItemsResponse>(token, uri, clientRequestId, query);
         } else {
@@ -218,7 +222,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 }
 
             } else if (loadingOptions.filter) {
-                await this.buildFilter(loadingOptions.filter, 'Image', query, token);
+                const success = await this.buildFilter(loadingOptions.filter, 'Image', query, token);
+                if (!success) {
+                    LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
+                    return [];
+                }
                 const uri = this.buildUri('cmdb', subResource);
                 const response = await this.getObjectByUri<ConfigItemImagesResponse>(
                     token, uri, clientRequestId, query

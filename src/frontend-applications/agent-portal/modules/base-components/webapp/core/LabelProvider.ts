@@ -80,6 +80,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 displayValue = 'Translatable#Comment';
                 break;
             case KIXObjectProperty.VALID_ID:
+            case 'Valid':
                 displayValue = 'Translatable#Validity';
                 break;
             case KIXObjectProperty.CREATE_BY:

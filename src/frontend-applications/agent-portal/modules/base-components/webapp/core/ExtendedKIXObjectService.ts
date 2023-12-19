@@ -123,4 +123,8 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
         return null;
     }
 
+    public getSortAttribute(attribute: string): string {
+        return null;
+    }
+
 }

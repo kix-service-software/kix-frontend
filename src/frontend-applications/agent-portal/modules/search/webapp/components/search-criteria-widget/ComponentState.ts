@@ -21,7 +21,6 @@ export class ComponentState extends AbstractComponentState {
         public contentActions: IAction[] = [],
         public manager: SearchFormManager = null,
         public canSearch: boolean = false,
-        public limit: number = 50,
         public sortAttribute: string = null,
         public sortDescending: boolean = false,
         public sortTreeId: string = null

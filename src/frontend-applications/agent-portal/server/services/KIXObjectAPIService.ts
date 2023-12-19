@@ -61,13 +61,18 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         return null;
     }
 
-    public async loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string> {
+    public async loadDisplayValue(
+        objectType: KIXObjectType | string, objectId: string | number, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<string> {
         let displayValue = '';
 
         if (objectType && objectId) {
             const cacheKey = `${objectType}-${objectId}-displayvalue`;
             displayValue = await CacheService.getInstance().get(cacheKey, objectType);
             if (!displayValue && objectId) {
+                if (loadingOptions) {
+                    ObjectLoader.getInstance().setLoadingoptions(objectType, loadingOptions);
+                }
                 const object = await ObjectLoader.getInstance().queue(objectType, objectId).catch(() => null);
                 if (object) {
                     displayValue = object.toString();

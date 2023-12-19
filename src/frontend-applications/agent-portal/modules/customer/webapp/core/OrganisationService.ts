@@ -21,6 +21,7 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { OrganisationProperty } from '../../model/OrganisationProperty';
+import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 
@@ -156,6 +157,17 @@ export class OrganisationService extends KIXObjectService<Organisation> {
             }
         }
         return [...objectProperties, ...superProperties];
+    }
+
+    public async getSortableAttributes(filtered: boolean = true): Promise<ObjectSearch[]> {
+        const supportedAttributes = await super.getSortableAttributes(filtered);
+
+        const filterList = [
+            'OrganisationID'
+        ];
+        return filtered ?
+            supportedAttributes.filter((sA) => !filterList.some((fp) => fp === sA.Property)) :
+            supportedAttributes;
     }
 
 }

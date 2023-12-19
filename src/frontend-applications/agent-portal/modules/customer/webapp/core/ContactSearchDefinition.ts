@@ -51,4 +51,20 @@ export class ContactSearchDefinition extends SearchDefinition {
         ];
     }
 
+    public async getLoadingOptions(
+        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescending?: boolean
+    ): Promise<KIXObjectLoadingOptions> {
+        const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescending);
+        if (loadingOptions) {
+            if (!loadingOptions.includes) {
+                loadingOptions.includes = [];
+            }
+
+            // include user with preferences to prevent single requests for each user of each contact
+            // to get and prepare user related values
+            loadingOptions.includes.push(ContactProperty.USER, UserProperty.PREFERENCES);
+        }
+        return loadingOptions;
+    }
+
 }

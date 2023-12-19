@@ -25,7 +25,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         configurations.push(
             new ContextConfiguration(
-                this.getModuleId(), 'Search', ConfigurationType.Context, this.getModuleId(), [], []
+                this.getModuleId(), 'Contact Search', ConfigurationType.Context, this.getModuleId(), [], []
             )
         );
 

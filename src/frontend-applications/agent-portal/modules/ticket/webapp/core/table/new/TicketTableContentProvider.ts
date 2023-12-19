@@ -13,8 +13,6 @@ import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadin
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../../model/kix/KIXObject';
 import { Table } from '../../../../../table/model/Table';
-import { TicketProperty } from '../../../../model/TicketProperty';
-import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 
 export class TicketTableContentProvider extends TableContentProvider<Ticket> {
 
@@ -45,35 +43,4 @@ export class TicketTableContentProvider extends TableContentProvider<Ticket> {
 
         return loadingOptions;
     }
-
-    protected getSortAttribute(attribute: string): string {
-        switch (attribute) {
-            case TicketProperty.CONTACT_ID:
-                return 'Contact';
-            case TicketProperty.LOCK_ID:
-                return 'Lock';
-            case TicketProperty.ORGANISATION_ID:
-                return 'Organisation';
-            case TicketProperty.OWNER_ID:
-                return 'Owner';
-            case TicketProperty.PRIORITY_ID:
-                return 'Priority';
-            case TicketProperty.QUEUE_ID:
-                return 'Queue';
-            case TicketProperty.RESPONSIBLE_ID:
-                return 'Responsible';
-            case TicketProperty.STATE_ID:
-                return 'State';
-            case TicketProperty.TYPE_ID:
-                return 'Type';
-            case TicketProperty.CREATED:
-                return KIXObjectProperty.CREATE_TIME;
-            case TicketProperty.CHANGED:
-            case KIXObjectProperty.CHANGE_TIME:
-                return TicketProperty.LAST_CHANGE_TIME;
-            default:
-        }
-        return super.getSortAttribute(attribute);
-    }
-
 }

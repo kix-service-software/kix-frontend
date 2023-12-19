@@ -203,18 +203,23 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 displayValue = 'Translatable#Title';
                 break;
             case TicketProperty.LOCK_ID:
+            case TicketProperty.LOCK:
                 displayValue = 'Translatable#Lock State';
                 break;
             case TicketProperty.PRIORITY_ID:
+            case TicketProperty.PRIORITY:
                 displayValue = short ? 'Translatable#Prio' : 'Translatable#Priority';
                 break;
             case TicketProperty.TYPE_ID:
+            case TicketProperty.TYPE:
                 displayValue = 'Translatable#Type';
                 break;
             case TicketProperty.QUEUE_ID:
+            case TicketProperty.QUEUE:
                 displayValue = 'Translatable#Queue';
                 break;
             case TicketProperty.STATE_ID:
+            case TicketProperty.STATE:
                 displayValue = 'Translatable#State';
                 break;
             case TicketProperty.STATE_TYPE:
@@ -224,15 +229,19 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 displayValue = 'Translatable#State Type';
                 break;
             case TicketProperty.OWNER_ID:
+            case TicketProperty.OWNER:
                 displayValue = 'Translatable#Owner';
                 break;
             case TicketProperty.RESPONSIBLE_ID:
+            case TicketProperty.RESPONSIBLE:
                 displayValue = 'Translatable#Responsible';
                 break;
             case TicketProperty.ORGANISATION_ID:
+            case TicketProperty.ORGANISATION:
                 displayValue = 'Translatable#Organisation';
                 break;
             case TicketProperty.CONTACT_ID:
+            case TicketProperty.CONTACT:
                 displayValue = 'Translatable#Contact';
                 break;
             case TicketProperty.AGE:
@@ -256,7 +265,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 displayValue = 'Translatable#Closed at';
                 break;
             case TicketProperty.LAST_CHANGE_TIME:
-                displayValue = 'Translatable#Last changed time';
+                displayValue = 'Translatable#Changed at';
                 break;
             case TicketProperty.ARCHIVE_FLAG:
                 displayValue = 'Translatable#Archived';

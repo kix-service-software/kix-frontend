@@ -30,12 +30,10 @@ export interface ITableContentProvider<T = any> {
 
     loadMore(): Promise<void>;
 
-    setSort(property: string, direction: SortOrder, reload?: boolean): void;
-
-    addAdditionalSortMappings(sortMappings: Map<string, string>): void;
+    setSort(property: string, direction: SortOrder, reload?: boolean): Promise<void>;
 
     isBackendSortSupported(): boolean
 
-    isBackendSortSupportedForProperty(property: string): boolean;
+    isBackendSortSupportedForProperty(property: string): Promise<boolean>;
 
 }

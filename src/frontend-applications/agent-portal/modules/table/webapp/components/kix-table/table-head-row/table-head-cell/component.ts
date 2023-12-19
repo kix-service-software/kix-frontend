@@ -36,6 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public onInput(input: any): void {
         this.state.column = input.column;
         this.state.isSorted = Boolean(this.state.column.getSortOrder());
+        this.state.sortOrderDown = this.isSortOrderDown();
         this.setIconAndTitle();
         this.setSize();
 

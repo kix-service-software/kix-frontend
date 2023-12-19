@@ -79,42 +79,8 @@ export abstract class SearchDefinition {
     public async getLoadingOptions(
         criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescending?: boolean
     ): Promise<KIXObjectLoadingOptions> {
-        const sortOrder = await this.getSortOrder(sortAttribute, sortDescending);
+        const sortOrder = await KIXObjectService.getSortOrder(sortAttribute, sortDescending, this.objectType);
         return new KIXObjectLoadingOptions(criteria, sortOrder, limit);
-    }
-
-    private async getSortOrder(sortAttribute: string, sortDescending: boolean): Promise<string> {
-        let sortOrder: string;
-        if (sortAttribute) {
-            let type = await (this.formManager as SearchFormManager).getSortAttributeType(sortAttribute);
-
-            if (!type) {
-                const dfName = KIXObjectService.getDynamicFieldName(sortAttribute);
-                if (dfName) {
-
-                    // DynamicFields.Name => DynamicField_Name
-                    sortAttribute = sortAttribute.replace(/s?\./, '_');
-                    const field = await KIXObjectService.loadDynamicField(dfName);
-                    if (field) {
-                        if (field.FieldType === DynamicFieldTypes.DATE) {
-                            type = FilterDataType.DATE;
-                        } else if (field.FieldType === DynamicFieldTypes.DATE_TIME) {
-                            type = FilterDataType.DATETIME;
-                        }
-                    }
-                }
-            }
-
-            if (type !== FilterDataType.NUMERIC &&
-                type !== FilterDataType.DATE &&
-                type !== FilterDataType.DATETIME) {
-                type = null;
-            }
-
-            // create some string like "Ticket.-Age:numeric"
-            sortOrder = `${this.objectType}.${sortDescending ? '-' : ''}${sortAttribute}${type ? ':' + type : ''}`;
-        }
-        return sortOrder;
     }
 
     public async prepareFormFilterCriteria(

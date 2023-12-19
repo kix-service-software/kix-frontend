@@ -8,28 +8,28 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.configuration)>
-    <h2.configuration-title>
+    <h2 class="configuration-title">
         <translation-string pattern="Translatable#Table Widget"/>
     </h2>
-    <div.table-widget-configuration-container.table-container>
+    <div class="table-widget-configuration-container table-container">
         <if(input.advancedSettings)>
-            <table.kix-table.configuration-table>
+            <table class="kix-table configuration-table">
                 <thead>
                     <tr>
-                        <th.table-head-cell>
+                        <th class="table-head-cell">
                             <translation-string pattern="Translatable#Option"/>
                         </th>
-                        <th.table-head-cell>
+                        <th class="table-head-cell">
                             <translation-string pattern="Translatable#Value"/>
                         </th>
                     </tr>
                 </thead>
-                <tbody.show-object>
+                <tbody class="show-object">
                     <tr>
-                        <td.content-cell>
+                        <td class="content-cell">
                             <translation-string pattern="Translatable#Show Filter"/>
                         </td>
-                        <td.content-cell on-click("showFilterChanged")>
+                        <td on-click("showFilterChanged") class="content-cell">
                             <input
                                 type="checkbox"
                                 checked=(state.configuration.showFilter)
@@ -38,19 +38,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </tr>
 
                     <tr>
-                        <td.content-cell>
+                        <td class="content-cell">
                             <translation-string pattern="Translatable#Sort"/>
                         </td>
-                        <td.content-cell.table-sort>
-                            <input
-                                type="checkbox"
-                                on-click("switchSort")
-                                checked=state.isSortEnabled
-                            >
+                        <td class="content-cell table-sort">
                             <form-list
                                 treeId=state.sortTreeId
                                 multiselect=false
-                                disabled=!state.isSortEnabled
                                 on-nodesChanged("sortColumnChanged")
                             />
                             <translation-string pattern="Translatable#DESC"/>
@@ -58,11 +52,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 type="checkbox"
                                 on-click("sortOrderChanged")
                                 checked=state.isDESC
-                                disabled=!state.isSortEnabled
                             >
                         </td>
                     </tr>
-
                 </tbody>
             </table>
         </if>

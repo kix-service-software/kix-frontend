@@ -21,11 +21,13 @@ import { EventService } from '../../../base-components/webapp/core/EventService'
 import { SearchEvent } from '../../model/SearchEvent';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export abstract class SearchContext extends Context {
 
     protected searchCache: SearchCache;
     private tableId: string;
+    private searchDone: boolean;
 
     public getTableId(type: string): string {
         if (!this.tableId) {
@@ -139,6 +141,7 @@ export abstract class SearchContext extends Context {
     public async setSearchResult(objects: KIXObject[]): Promise<void> {
         this.searchCache.result = objects;
         this.setObjectList(this.searchCache.objectType, objects);
+        this.searchDone = true;
     }
 
     public resetSearch(): void {
@@ -147,12 +150,27 @@ export abstract class SearchContext extends Context {
         ContextService.getInstance().setDocumentHistory(true, this, this, null);
     }
 
-    public async setSortOrder(type: string, sortOrder: string, reload: boolean = true): Promise<void> {
-        super.setSortOrder(type, sortOrder, false);
+    public async setSortOrder(
+        type: string, property: string, descanding: boolean, reload: boolean = true, limit?: number
+    ): Promise<void> {
+        super.setSortOrder(type, property, descanding, false, limit);
         if (reload) {
             await SearchService.getInstance().searchObjects(
-                this.searchCache, undefined, undefined, undefined, undefined, sortOrder
+                this.searchCache, undefined, undefined, limit, undefined
             );
         }
+    }
+
+    public async reloadObjectList(objectType: KIXObjectType, silent: boolean = false, limit?: number): Promise<void> {
+        if (this.searchDone) {
+            await SearchService.getInstance().searchObjects(
+                this.searchCache, undefined, undefined, limit, undefined
+            );
+        }
+        return;
+    }
+
+    public getCollectionId(): string {
+        return this.searchCache?.id;
     }
 }

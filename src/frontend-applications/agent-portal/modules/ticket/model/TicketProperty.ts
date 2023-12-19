@@ -16,22 +16,31 @@ export enum TicketProperty {
     TICKET_ID = 'TicketID',
 
     STATE_ID = 'StateID',
+    STATE = 'State',
 
     PRIORITY_ID = 'PriorityID',
+    PRIORITY = 'Priority',
 
     LOCK_ID = 'LockID',
+    LOCK = 'Lock',
 
     QUEUE_ID = 'QueueID',
+    QUEUE = 'Queue',
 
     ORGANISATION_ID = 'OrganisationID',
+    ORGANISATION = 'Organisation',
 
     CONTACT_ID = 'ContactID',
+    CONTACT = 'Contact',
 
     OWNER_ID = 'OwnerID',
+    OWNER = 'Owner',
 
     TYPE_ID = 'TypeID',
+    TYPE = 'Type',
 
     RESPONSIBLE_ID = 'ResponsibleID',
+    RESPONSIBLE = 'Responsible',
 
     AGE = 'Age',
 
@@ -78,6 +87,7 @@ export enum TicketProperty {
     HISTORY = 'History',
 
     STATE_TYPE_ID = 'StateTypeID',
+    STATE_TYPE = 'StateType',
 
     CREATE_TIME = 'CreateTime',
 
@@ -91,11 +101,7 @@ export enum TicketProperty {
 
     CREATED_TYPE_ID = 'CreatedTypeID',
 
-    CREATED_USER_ID = 'CreatedUserID',
-
-    STATE_TYPE = 'StateType',
-
-    STATE = 'State',
+    CREATED_USER_ID = 'CreatedUserID', // TODO: depricated use CreateByID instead if necessary
 
     UNTIL_TIME = 'UntilTime'
 }

@@ -45,7 +45,9 @@ export interface IKIXObjectService extends IService {
         token: string, clientRequestId: string, object: KIXObject, relevantOrganisationId: number
     ): Promise<number | string>;
 
-    loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string>;
+    loadDisplayValue(
+        objectType: KIXObjectType | string, objectId: string | number, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<string>;
 
     getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject;
 

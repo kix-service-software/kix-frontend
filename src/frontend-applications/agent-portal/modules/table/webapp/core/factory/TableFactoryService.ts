@@ -112,13 +112,6 @@ export class TableFactoryService {
                     defaultRouting, defaultToggle, short, objectType, objects
                 );
 
-                if (table.getContentProvider()?.isBackendSortSupported()) {
-                    const sortMappings = factory.getAdditionalSortMappings();
-                    if (sortMappings) {
-                        table.getContentProvider().addAdditionalSortMappings(sortMappings);
-                    }
-                }
-
                 if (tableContextId) {
                     if (!this.contextTableInstances.has(tableContextId)) {
                         this.contextTableInstances.set(tableContextId, new Map());

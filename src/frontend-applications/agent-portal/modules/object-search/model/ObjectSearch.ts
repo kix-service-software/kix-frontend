@@ -9,6 +9,7 @@
 
 import { SortDataType } from '../../../model/SortDataType';
 import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class ObjectSearch extends KIXObject {
@@ -38,8 +39,16 @@ export class ObjectSearch extends KIXObject {
             this.ObjectId = objectSearch.Property;
             // this.ObjectType = objectSearch.ObjectType;
             this.Operators = objectSearch.Operators;
-            this.Property = objectSearch.Property;
-            this.ValueType = objectSearch.ValueType;
+
+            let property = objectSearch.Property;
+            if (property.match(/^DynamicField_/)) {
+                property = property.replace(
+                    /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
+                );
+            }
+            this.Property = property;
+
+            this.ValueType = objectSearch.ValueType || SortDataType.TEXTUAL;
         }
     }
 
