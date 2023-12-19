@@ -31,6 +31,7 @@ import { RoutingConfiguration } from '../../../../../model/configuration/Routing
 import { OrganisationDetailsContext } from '../../../../customer/webapp/core/context/OrganisationDetailsContext';
 import { ContactDetailsContext } from '../../../../customer/webapp/core/context/ContactDetailsContext';
 import { ConfigItemDetailsContext } from '../../core';
+import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 
 class Component {
 
@@ -51,14 +52,23 @@ class Component {
     }
 
     private async loadVersion(configItem: ConfigItem): Promise<void> {
-        const versions = await KIXObjectService.loadObjects<Version>(
-            KIXObjectType.CONFIG_ITEM_VERSION, configItem.CurrentVersion ? [configItem.CurrentVersion.VersionID] : null,
-            new KIXObjectLoadingOptions(undefined, null, null, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]),
-            new ConfigItemVersionLoadingOptions(configItem.ConfigItemID)
-        );
+        if (!configItem.CurrentVersion) {
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.includes = [
+                ConfigItemProperty.CURRENT_VERSION,
+                VersionProperty.DATA, VersionProperty.PREPARED_DATA
+            ];
+            const configItems = await KIXObjectService.loadObjects<ConfigItem>(
+                KIXObjectType.CONFIG_ITEM, [configItem.ConfigItemID], loadingOptions
+            ).catch((): ConfigItem[] => []);
 
-        if (versions && versions.length) {
-            this.state.version = versions[versions.length - 1];
+            if (configItems.length) {
+                configItem = configItems[0];
+            }
+        }
+
+        if (configItem.CurrentVersion) {
+            this.state.version = configItem.CurrentVersion;
             this.prepareVersion();
         }
     }
