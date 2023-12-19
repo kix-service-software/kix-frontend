@@ -101,7 +101,7 @@ export class KIXObjectSocketClient extends SocketClient {
         ).catch((): DisplayValueResponse => new DisplayValueResponse(null, ''));
 
         if (!response.displayValue) {
-            console.error(`No display value for ${request.objectType} with id ${request.objectId}`);
+            console.warn(`No display value for ${request.objectType} with id ${request.objectId}`);
             return '';
         }
         return response.displayValue;
@@ -167,7 +167,10 @@ export class KIXObjectSocketClient extends SocketClient {
         if (collectionId) {
             this.collectionsCounts.set(collectionId, Number(response.totalCount));
             if (loadingOptions?.limit) {
-                this.collectionsLimits.set(collectionId, Number(loadingOptions.limit));
+                const count = !response.objects.length ? 0 :
+                    response.objects.length < loadingOptions.limit ? response.objects.length :
+                        loadingOptions.limit;
+                this.collectionsLimits.set(collectionId, count);
             }
         }
 

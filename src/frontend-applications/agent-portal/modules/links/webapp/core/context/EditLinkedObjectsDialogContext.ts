@@ -52,8 +52,10 @@ export class EditLinkedObjectsDialogContext extends Context {
         return objects;
     }
 
-    public async setSortOrder(objectType: string, sortOrder: string, reload: boolean = true): Promise<void> {
-        super.setSortOrder(objectType, sortOrder, false);
+    public async setSortOrder(
+        objectType: string, property: string, descanding: boolean, reload: boolean = true, limit?: number
+    ): Promise<void> {
+        super.setSortOrder(objectType, property, descanding, false, limit);
         if (reload) {
             await this.loadLinkedObjects(objectType, this.loadingOptions.get(objectType));
         }

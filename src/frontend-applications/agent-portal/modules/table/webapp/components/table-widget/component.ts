@@ -220,7 +220,7 @@ class Component {
                     const formBindingId = formValue.addPropertyBinding(
                         FormValueProperty.VALUE,
                         (value: ObjectFormValue) => {
-                            this.state.table?.reload(null, null, relevantHandlerIds);
+                            this.state.table?.reload(undefined, undefined, relevantHandlerIds);
                         }
                     );
                     this.formBindingIds.set(property, formBindingId);
@@ -333,7 +333,7 @@ class Component {
             if (settings.sort && !table?.hasSortByTableState()) {
                 const sortColumnId = tableState?.sortColumnId ?? settings.sort[0];
                 const sortOrder = tableState?.sortOrder ?? settings.sort[1];
-                table?.presetSort(sortColumnId, sortOrder);
+                table?.setSort(sortColumnId, sortOrder);
             }
 
             await table?.initialize();

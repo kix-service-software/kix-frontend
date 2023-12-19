@@ -118,6 +118,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 displayValue = 'Translatable#Assigned Organisations';
                 break;
             case ContactProperty.PRIMARY_ORGANISATION_ID:
+            case ContactProperty.PRIMARY_ORGANISATION:
                 displayValue = 'Translatable#Organisation';
                 break;
             case ContactProperty.PHONE:

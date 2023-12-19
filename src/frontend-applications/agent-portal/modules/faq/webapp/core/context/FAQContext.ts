@@ -30,14 +30,6 @@ export class FAQContext extends Context {
 
     public categoryId: number;
 
-    public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        super.initContext();
-
-        if (this.categoryId) {
-            this.loadFAQArticles();
-        }
-    }
-
     public getIcon(): string {
         return 'kix-icon-faq';
     }
@@ -107,8 +99,7 @@ export class FAQContext extends Context {
                 FilterType.AND, [1]
             )
         ];
-        loadingOptions.includes = [FAQArticleProperty.VOTES];
-        loadingOptions.expands = [FAQArticleProperty.VOTES];
+        loadingOptions.includes = [FAQArticleProperty.RATING];
 
         if (this.categoryId) {
             loadingOptions.filter.push(

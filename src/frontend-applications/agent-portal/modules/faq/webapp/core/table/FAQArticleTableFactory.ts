@@ -95,9 +95,9 @@ export class FAQArticleTableFactory extends TableFactory {
                 return new DefaultColumnConfiguration(null, null, null,
                     FAQArticleProperty.CUSTOMER_VISIBLE, false, true, false, true, 75, true, true, true
                 );
-            case FAQArticleProperty.VOTES:
+            case FAQArticleProperty.RATING:
                 return new DefaultColumnConfiguration(null, null, null,
-                    FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false,
+                    FAQArticleProperty.RATING, true, true, true, false, 120, true, true, true, DataType.NUMBER, false,
                     null, null, null, true, true
                 );
             case FAQArticleProperty.CATEGORY_ID:
@@ -147,6 +147,25 @@ export class FAQArticleTableFactory extends TableFactory {
                     this.getColumnFilterValues(childRows, column, values);
                 }
             });
+        } else if (column.getColumnId() === FAQArticleProperty.RATING) {
+            rows.forEach((r) => {
+                const cell = r.getCell(column.getColumnId());
+                if (cell) {
+                    const cellValue = cell.getValue();
+                    const rating = cellValue.objectValue ? BrowserUtil.round(cellValue.objectValue) : '';
+                    const existingValue = values.find((v) => (v[0] as any === rating));
+
+                    if (existingValue) {
+                        existingValue[1] += 1;
+                    } else {
+                        values.push([rating as any, 1]);
+                    }
+                }
+                const childRows = r.getChildren();
+                if (childRows && !!childRows.length) {
+                    this.getColumnFilterValues(childRows, column, values);
+                }
+            });
         } else {
             values = TableFactory.getColumnFilterValues(rows, column);
         }
@@ -161,7 +180,7 @@ export class FAQArticleTableFactory extends TableFactory {
                 this.getDefaultColumnConfiguration(FAQArticleProperty.NUMBER),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.TITLE),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.LANGUAGE),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.VOTES),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.RATING),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.CATEGORY_ID)
             ];
         } else {
@@ -170,7 +189,7 @@ export class FAQArticleTableFactory extends TableFactory {
                 this.getDefaultColumnConfiguration(FAQArticleProperty.TITLE),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.LANGUAGE),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.CUSTOMER_VISIBLE),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.VOTES),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.RATING),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.CATEGORY_ID),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.CHANGED),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.CHANGED_BY)

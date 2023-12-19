@@ -71,7 +71,7 @@ export class AdminContext extends Context {
     public async setAdminModule(adminModuleId: string, history: boolean = true): Promise<void> {
         if (!this.adminModuleId || this.adminModuleId !== adminModuleId) {
 
-            TableFactoryService.getInstance().deleteContextTables(AdminContext.CONTEXT_ID);
+            TableFactoryService.getInstance().deleteContextTables(AdminContext.CONTEXT_ID, undefined, true);
 
             this.adminModuleId = adminModuleId;
             this.filterValue = null;

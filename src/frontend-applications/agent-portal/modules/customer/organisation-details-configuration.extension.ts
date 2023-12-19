@@ -339,7 +339,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                 FilterDataType.NUMERIC, FilterType.AND, '<KIX_ORGANISATION_ID>'
                                             )
                                         ],
-                                        'Ticket.-ChangeTime',
+                                        'Ticket.-LastChangeTime',
                                         100,
                                         [KIXObjectProperty.DYNAMIC_FIELDS]
                                     ), 15,

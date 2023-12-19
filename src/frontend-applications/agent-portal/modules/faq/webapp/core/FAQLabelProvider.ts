@@ -39,6 +39,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = category ? category.Name : value;
                 break;
             case FAQArticleProperty.VOTES:
+            case FAQArticleProperty.RATING:
                 displayValue = value.toString();
                 break;
             case FAQArticleProperty.CUSTOMER_VISIBLE:
@@ -67,6 +68,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = 'Translatable#Attachments';
                 break;
             case FAQArticleProperty.CATEGORY_ID:
+            case FAQArticleProperty.CATEGORY:
                 displayValue = 'Translatable#Category';
                 break;
             case FAQArticleProperty.CUSTOMER_VISIBLE:
@@ -107,7 +109,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
             case FAQArticleProperty.TITLE:
                 displayValue = 'Translatable#Title';
                 break;
-            case FAQArticleProperty.VOTES:
+            case FAQArticleProperty.RATING:
                 displayValue = 'Translatable#Rating';
                 break;
             default:
@@ -135,10 +137,9 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = category ? category.Name : displayValue;
                 break;
             case FAQArticleProperty.VOTES:
-                displayValue = '';
-                if (faqArticle.Rating) {
-                    const average = BrowserUtil.round(faqArticle.Rating);
-                    displayValue = `(${average})`;
+            case FAQArticleProperty.RATING:
+                if (!isNaN(Number(faqArticle.Rating)) && faqArticle.Rating > 0) {
+                    displayValue = `(${BrowserUtil.round(faqArticle.Rating)})`;
                 }
                 break;
             case FAQArticleProperty.LANGUAGE:
@@ -230,6 +231,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
 
         switch (property) {
             case FAQArticleProperty.VOTES:
+            case FAQArticleProperty.RATING:
                 if (faqArticle?.Rating) {
                     const average = BrowserUtil.round(faqArticle.Rating);
                     for (let i = 0; i < Math.floor(average); i++) {

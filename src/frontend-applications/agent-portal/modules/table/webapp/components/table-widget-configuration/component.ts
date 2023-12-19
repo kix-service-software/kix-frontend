@@ -12,6 +12,7 @@ import { TableConfiguration } from '../../../../../model/configuration/TableConf
 import { SortOrder } from '../../../../../model/SortOrder';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TreeHandler, TreeNode, TreeService, TreeUtil } from '../../../../base-components/webapp/core/tree';
 import { ComponentState } from './ComponentState';
@@ -37,27 +38,34 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async updateSortConfiguration(): Promise<void> {
-        this.state.isSortEnabled = Array.isArray(this.state.configuration.sort);
-        if (this.state.isSortEnabled) {
+        if (Array.isArray(this.state.configuration.sort)) {
             this.state.isDESC = this.state.configuration.sort[1] === SortOrder.DOWN;
         }
 
         const tableConfiguration = this.state.configuration.configuration as TableConfiguration;
-        const columns = tableConfiguration?.tableColumns;
-        const nodes: TreeNode[] = [];
-        if (Array.isArray(columns)) {
-            for (const c of columns) {
-                const label = await LabelService.getInstance().getPropertyText(
-                    c.property, tableConfiguration.objectType
+        const supportedAttributes = await KIXObjectService.getSortableAttributes(tableConfiguration.objectType);
+        let nodes: TreeNode[] = [];
+        if (Array.isArray(supportedAttributes)) {
+            const labelPromises = [];
+            for (const sA of supportedAttributes) {
+                labelPromises.push(
+                    new Promise<void>(async (resolve) => {
+                        const label = await LabelService.getInstance().getPropertyText(
+                            sA.Property, tableConfiguration.objectType
+                        );
+                        nodes.push(new TreeNode(sA.Property, label));
+                        resolve();
+                    })
                 );
-                nodes.push(new TreeNode(c.property, label));
             }
+            await Promise.all(labelPromises);
         }
+        nodes = nodes.sort((a, b) => a.label.localeCompare(b.label));
 
         this.sortColumnTreeHandler = TreeService.getInstance().getTreeHandler(this.state.sortTreeId);
         if (this.sortColumnTreeHandler) {
             this.sortColumnTreeHandler.setTree(nodes, null, true);
-            const selectedNode = this.state.isSortEnabled
+            const selectedNode = Array.isArray(this.state.configuration.sort)
                 ? TreeUtil.findNode(nodes, this.state.configuration.sort[0])
                 : nodes[0];
             this.sortColumnTreeHandler.setSelection([selectedNode], true);
@@ -78,35 +86,26 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.emitConfigurationChanged();
     }
 
-    public switchSort(): void {
-        if (this.state.isSortEnabled) {
-            this.state.configuration.sort = null;
+    public sortColumnChanged(nodes: TreeNode[]): void {
+        if (Array.isArray(nodes) && nodes.length) {
+            this.state.configuration.sort = [
+                nodes[0].id,
+                this.state.configuration.sort ? this.state.configuration.sort[1] : SortOrder.UP
+            ];
         } else {
-            const columnSelection = this.sortColumnTreeHandler.getSelectedNodes();
-            if (Array.isArray(columnSelection) && columnSelection.length) {
-                this.state.configuration.sort = [
-                    columnSelection[0].id,
-                    this.state.isDESC ? SortOrder.DOWN : SortOrder.UP
-                ];
-            }
+            this.state.configuration.sort = null;
+            this.state.isDESC = false;
         }
-
-        this.state.isSortEnabled = Array.isArray(this.state.configuration.sort);
         this.emitConfigurationChanged();
     }
 
-    public sortColumnChanged(nodes: TreeNode[]): void {
-        if (Array.isArray(nodes) && nodes.length && this.state.isSortEnabled) {
-            this.state.configuration.sort[0] = nodes[0].id;
-            this.emitConfigurationChanged();
-        }
-    }
-
     public sortOrderChanged(): void {
-        if (this.state.isSortEnabled) {
-            this.state.configuration.sort[1] = this.state.configuration.sort[1] === SortOrder.DOWN
-                ? SortOrder.UP
-                : SortOrder.DOWN;
+        this.state.configuration.sort = [
+            this.state.configuration.sort ? this.state.configuration.sort[0] : null,
+            this.state.configuration.sort && this.state.configuration.sort[1] === SortOrder.DOWN ?
+                SortOrder.UP : SortOrder.DOWN
+        ];
+        if (this.state.configuration.sort && this.state.configuration.sort[0]) {
             this.emitConfigurationChanged();
         }
     }

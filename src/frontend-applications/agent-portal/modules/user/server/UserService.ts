@@ -69,34 +69,9 @@ export class UserService extends KIXObjectAPIService {
     }
 
     public async loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string> {
-        let displayValue = '';
-
-        if (objectType === KIXObjectType.USER) {
-            const cacheType = `${objectType}-DISPLAY_VALUE`;
-            const cacheKey = `${objectType}-${objectId}-displayvalue`;
-            displayValue = await CacheService.getInstance().get(cacheKey, cacheType);
-            if (!displayValue && objectId) {
-                const loadingOptions = new KIXObjectLoadingOptions();
-                loadingOptions.includes = [UserProperty.CONTACT];
-
-                const config = ConfigurationService.getInstance().getServerConfiguration();
-                const objectResponse = await this.loadObjects<User>(
-                    config?.BACKEND_API_TOKEN, 'UserAPIService', objectType, [objectId], loadingOptions, null
-                );
-
-                const users = objectResponse?.objects || [];
-
-                if (users?.length) {
-                    const user = new User(users[0]);
-                    displayValue = user.toString();
-                    await CacheService.getInstance().set(cacheKey, displayValue, cacheType);
-                }
-            }
-        } else {
-            displayValue = await super.loadDisplayValue(objectType, objectId);
-        }
-
-        return displayValue;
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.includes = [UserProperty.CONTACT];
+        return await super.loadDisplayValue(objectType, objectId, loadingOptions);
     }
 
     public async loadObjects<T>(

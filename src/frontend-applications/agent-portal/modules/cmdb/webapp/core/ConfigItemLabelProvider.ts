@@ -91,9 +91,13 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = 'Translatable#Class';
                 break;
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
+            case ConfigItemProperty.CUR_DEPL_STATE:
+            case ConfigItemProperty.DEPL_STATE:
                 displayValue = 'Translatable#Current deployment state';
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
+            case ConfigItemProperty.CUR_INCI_STATE:
+            case ConfigItemProperty.INCI_STATE:
                 displayValue = 'Translatable#Current incident state';
                 break;
             case ConfigItemProperty.VERSIONS:

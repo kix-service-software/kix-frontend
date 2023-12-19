@@ -91,7 +91,7 @@ class Component {
             this.state.inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(faqArticle);
             this.prepareImages();
 
-            this.stars = await LabelService.getInstance().getIcons(faqArticle, FAQArticleProperty.VOTES);
+            this.stars = await LabelService.getInstance().getIcons(faqArticle, FAQArticleProperty.RATING);
             this.rating = BrowserUtil.round(faqArticle.Rating);
             this.prepareActions();
         }

@@ -66,7 +66,7 @@ export abstract class Context {
 
     public initialized: boolean = false;
 
-    private objectSorts: Map<string, string> = new Map();
+    private objectSorts: Map<string, [string, boolean]> = new Map();
 
     public constructor(
         public descriptor: ContextDescriptor,
@@ -118,7 +118,9 @@ export abstract class Context {
                             Array.isArray(data?.widgets) &&
                             Array.isArray(this.configuration?.tableWidgetInstanceIds);
 
-                        TableFactoryService.getInstance().deleteContextTables(this.contextId, data?.objectType);
+                        TableFactoryService.getInstance().deleteContextTables(
+                            this.contextId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
+                        );
 
                         if (objectUpdate || objectDelete) {
                             if (this.objectLists.has(data.objectType)) {
@@ -815,9 +817,9 @@ export abstract class Context {
             loadingOptions.searchLimit = searchLimit;
         }
 
-        const sortOrder = this.getSortOrder(type);
+        const sortOrder = await this.getSortOrder(type);
         if (sortOrder) {
-            loadingOptions.sortOrder = this.getSortOrder(type);
+            loadingOptions.sortOrder = sortOrder;
         }
     }
 
@@ -877,18 +879,34 @@ export abstract class Context {
         return contextLoadingOptions;
     }
 
-    public async setSortOrder(type: string, sortOrder: string, reload: boolean = true): Promise<void> {
-        if (type && sortOrder) {
-            this.objectSorts.set(type, sortOrder);
+    public async setSortOrder(
+        type: string, property: string, descanding: boolean, reload: boolean = true, limit?: number
+    ): Promise<void> {
+        if (type) {
+            const sort: [string, boolean] = [property, descanding];
+            this.objectSorts.set(type, sort);
             if (reload) {
-                await this.reloadObjectList(type);
+                await this.reloadObjectList(type, undefined, limit);
             }
         }
     }
 
-    public getSortOrder(type: string): string {
+    public getSort(type: string): [string, boolean] {
         if (this.objectSorts.has(type)) {
-            return this.objectSorts.get(type);
+            const sort = this.objectSorts.get(type);
+            if (sort?.length) {
+                return sort;
+            }
+        }
+        return;
+    }
+
+    public async getSortOrder(type: string): Promise<string> {
+        if (this.objectSorts.has(type)) {
+            const sort = this.objectSorts.get(type);
+            if (sort?.length) {
+                return KIXObjectService.getSortOrder(sort[0], sort[1], type);
+            }
         }
 
         const contextLoadingOptions = this.getContextLoadingOptions(type);
@@ -901,6 +919,10 @@ export abstract class Context {
 
     public supportsBackendSort(type: string): boolean {
         return true;
+    }
+
+    public getCollectionId(): string {
+        return;
     }
 
 }

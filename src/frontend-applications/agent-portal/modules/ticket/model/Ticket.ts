@@ -331,12 +331,12 @@ export class Ticket extends KIXObject {
             DataType: FilterDataType.STRING,
             InputType: InputFieldTypes.TEXT
         },
-        {
-            Property: TicketProperty.CHANGE_TIME,
-            Operations: Ticket.DATETIME_OPERATORS,
-            DataType: FilterDataType.DATETIME,
-            InputType: InputFieldTypes.DATE_TIME
-        },
+        // {
+        //     Property: TicketProperty.CHANGE_TIME,     // use LAST_CHANGE_TIME if needed, CHANGE_TIME uses history
+        //     Operations: Ticket.DATETIME_OPERATORS,
+        //     DataType: FilterDataType.DATETIME,
+        //     InputType: InputFieldTypes.DATE_TIME
+        // },
         {
             Property: TicketProperty.CLOSE_TIME,
             Operations: Ticket.DATETIME_OPERATORS,
@@ -524,137 +524,4 @@ export class Ticket extends KIXObject {
             InputType: InputFieldTypes.DROPDOWN
         }
     ];
-
-    // TODO: allow all possible (in backend) sort attributes - managers should limit
-    public static SORT_PROPERTIES = [
-        // {
-        //     Property: TicketProperty.ARCHIVE_FLAG,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: ArticleProperty.CHANNEL_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: ArticleProperty.SENDER_TYPE_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        {
-            Property: ArticleProperty.CUSTOMER_VISIBLE,
-            DataType: FilterDataType.NUMERIC,
-        },
-        {
-            Property: ArticleProperty.FROM,
-            DataType: FilterDataType.STRING,
-        },
-        {
-            Property: ArticleProperty.TO,
-            DataType: FilterDataType.STRING,
-        },
-        {
-            Property: ArticleProperty.CC,
-            DataType: FilterDataType.STRING,
-        },
-        {
-            Property: ArticleProperty.SUBJECT,
-            DataType: FilterDataType.STRING,
-        },
-        {
-            Property: ArticleProperty.BODY,
-            DataType: FilterDataType.STRING,
-        },
-        {
-            Property: TicketProperty.ARTICLE_CREATE_TIME,
-            DataType: FilterDataType.DATETIME,
-        },
-        // {
-        //     Property: TicketProperty.CONTACT_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: TicketProperty.CREATED_PRIORITY_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: TicketProperty.CREATED_QUEUE_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: TicketProperty.CREATED_STATE_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: TicketProperty.CREATED_TYPE_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: TicketProperty.CREATED_USER_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        {
-            Property: TicketProperty.CHANGE_TIME,
-            DataType: FilterDataType.DATETIME,
-        },
-        {
-            Property: TicketProperty.CLOSE_TIME,
-            DataType: FilterDataType.DATETIME,
-        },
-        // {
-        //     Property: TicketProperty.LOCK_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: TicketProperty.ORGANISATION_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: TicketProperty.OWNER_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: TicketProperty.RESPONSIBLE_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: TicketProperty.PRIORITY_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: TicketProperty.QUEUE_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        // {
-        //     Property: TicketProperty.STATE_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // },
-        {
-            Property: TicketProperty.TICKET_ID,
-            DataType: FilterDataType.NUMERIC,
-        },
-        {
-            Property: TicketProperty.TICKET_NUMBER,
-            DataType: FilterDataType.STRING,
-        },
-        {
-            Property: TicketProperty.CREATE_TIME,
-            DataType: FilterDataType.DATETIME,
-        },
-        {
-            Property: TicketProperty.PENDING_TIME,
-            DataType: FilterDataType.DATETIME,
-        },
-        {
-            Property: TicketProperty.LAST_CHANGE_TIME,
-            DataType: FilterDataType.DATETIME,
-        },
-        {
-            Property: TicketProperty.TITLE,
-            DataType: FilterDataType.STRING,
-        },
-        // {
-        //     Property: TicketProperty.TYPE_ID,
-        //     DataType: FilterDataType.NUMERIC,
-        // }
-    ];
-
 }

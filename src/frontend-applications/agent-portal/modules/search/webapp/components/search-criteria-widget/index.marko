@@ -21,17 +21,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         key="search-criteria-dynamic-form"
                     />
                 </div>
-                <div class="search-limit">
-                    <span>
-                        <translation-string pattern="Translatable#Limit:"/>
-                    </span>
-                    <input
-                        type="number"
-                        value=state.limit
-                        on-input("limitChanged")
-                        class="input-style"
-                    >
-                </div>
                 <if(state.sortTreeId)>
                     <div class="search-sort">
                         <span>

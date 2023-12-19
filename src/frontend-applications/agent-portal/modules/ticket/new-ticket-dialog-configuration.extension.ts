@@ -29,6 +29,7 @@ import { TableRowHeight } from '../../model/configuration/TableRowHeight';
 import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
 import { ContextMode } from '../../model/ContextMode';
+import { DataType } from '../../model/DataType';
 import { FilterCriteria } from '../../model/FilterCriteria';
 import { FilterDataType } from '../../model/FilterDataType';
 import { FilterType } from '../../model/FilterType';
@@ -255,10 +256,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             new FilterCriteria(
                                 TicketProperty.CONTACT_ID, SearchOperator.EQUALS,
                                 FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_ContactID>'
-                            ),
-                            new FilterCriteria(
-                                TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS,
-                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_TicketID>'
                             )
                         ], null, 100
                     ), 10,
@@ -298,7 +295,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
                                 FilterDataType.NUMERIC, FilterType.AND, 1
                             )
-                        ], null, 100, [FAQArticleProperty.VOTES]
+                        ], null, 100, [FAQArticleProperty.RATING]
                     ), 10,
                     [
                         new DefaultColumnConfiguration(
@@ -313,7 +310,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             null, null, null, FAQArticleProperty.TITLE, true, false, true, false, 260, true, false
                         ),
                         new DefaultColumnConfiguration(
-                            null, null, null, FAQArticleProperty.VOTES, true, false, false, false, 50, true, false
+                            null, null, null, FAQArticleProperty.RATING, true, false, false, false, 50, true, false,
+                            false, DataType.NUMBER
                         ),
                     ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL,
                     null, null, null,

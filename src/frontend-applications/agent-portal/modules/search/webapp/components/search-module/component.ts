@@ -17,6 +17,7 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { KIXObjectSocketClient } from '../../../../base-components/webapp/core/KIXObjectSocketClient';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { SearchEvent } from '../../../model/SearchEvent';
@@ -72,8 +73,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const objectName = await LabelService.getInstance().getObjectName(objectType, true);
         let title = await TranslationService.translate('Translatable#Search Results: {0}', [objectName]);
 
-        const resultCount = this.context?.getSearchCache()?.result?.length || 0;
-        title += ` (${resultCount})`;
+        const resultCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
+            this.context.getCollectionId()
+        ) || 0;
+        const currentCount = KIXObjectSocketClient.getInstance().getCollectionsLimit(
+            this.context.getCollectionId()
+        ) || 0;
+        title += ` (${currentCount}/${resultCount})`;
         this.state.title = title;
     }
 }

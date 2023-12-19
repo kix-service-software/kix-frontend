@@ -152,7 +152,7 @@ export class SearchService {
     public async searchObjects(
         searchCache: SearchCache,
         context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>(),
-        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: string
+        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean]
     ): Promise<KIXObject[]> {
         if (!searchCache) {
             throw new Error('No search available');
@@ -164,7 +164,7 @@ export class SearchService {
         preparedCriteria = this.prepareCriteria(preparedCriteria);
 
         const loadingOptions = await searchDefinition.getLoadingOptions(
-            preparedCriteria, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescending
+            preparedCriteria, null, searchCache.sortAttribute, searchCache.sortDescending
         );
 
         if (limit) {
@@ -206,11 +206,15 @@ export class SearchService {
             await context.prepareContextLoadingOptions(searchCache.objectType, loadingOptions);
         }
 
-        if (sort) {
-            loadingOptions.sortOrder = sort;
+        if (!loadingOptions.limit) {
+            loadingOptions.limit = searchCache.limit;
         }
 
-        loadingOptions.searchLimit = searchLimit || searchCache.limit || loadingOptions.searchLimit || 200;
+        if (sort?.length) {
+            loadingOptions.sortOrder = await KIXObjectService.getSortOrder(sort[0], sort[1], searchCache.objectType);
+        }
+
+        loadingOptions.searchLimit = searchLimit || searchCache.limit || loadingOptions.searchLimit;
 
         const objects = await KIXObjectService.loadObjects(
             searchCache.objectType, null, loadingOptions, null, false, undefined, undefined, searchCache.id
@@ -421,7 +425,7 @@ export class SearchService {
 
     public async executeSearchCache(
         id?: string, name?: string, cache?: SearchCache, context?: SearchContext, setSearchContext?: boolean,
-        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: string
+        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean]
     ): Promise<KIXObject[]> {
         const search = await SearchSocketClient.getInstance().loadSearch();
         let searchCache = cache || search.find((s) => s.id === id);

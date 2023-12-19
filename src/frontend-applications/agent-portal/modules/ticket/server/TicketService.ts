@@ -772,7 +772,9 @@ export class TicketAPIService extends KIXObjectAPIService {
                 (sp.APIOperations?.includes(f.operator as SearchOperator) ||
                     sp.Operations?.includes(f.operator as SearchOperator)
                 )
-            )
+            ) ||
+            f.property === KIXObjectProperty.CREATE_BY || f.property === KIXObjectProperty.CHANGE_BY ||
+            f.property === KIXObjectProperty.CREATE_TIME || f.property === KIXObjectProperty.CHANGE_TIME
         );
 
         await this.setUserID(searchCriteria, token);

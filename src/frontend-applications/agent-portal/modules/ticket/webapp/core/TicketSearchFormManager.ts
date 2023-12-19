@@ -219,35 +219,6 @@ export class TicketSearchFormManager extends SearchFormManager {
         return options;
     }
 
-    public async getSortAttributeTree(): Promise<TreeNode[]> {
-        let sortNodes: TreeNode[] = [];
-        for (const prop of Ticket.SORT_PROPERTIES) {
-            sortNodes.push(new TreeNode(prop.Property, null));
-        }
-
-        for (const n of sortNodes) {
-            const label = await LabelService.getInstance().getPropertyText(
-                n.id, KIXObjectType.TICKET
-            );
-            n.label = label;
-        }
-
-        const superNodes = await super.getSortAttributeTree();
-        sortNodes = [...sortNodes, ...superNodes];
-
-        return sortNodes.sort((a, b) => a.label.localeCompare(b.label));
-    }
-
-    public async getSortAttributeType(attribute: string): Promise<string> {
-        const superType = await super.getSortAttributeType(attribute);
-        if (superType) {
-            return superType;
-        }
-
-        const property = Ticket.SORT_PROPERTIES.find((p) => p.Property === attribute);
-        return property ? property.DataType : null;
-    }
-
     public async setValue(newValue: ObjectPropertyValue, silent?: boolean): Promise<void> {
         if (newValue.property === TicketProperty.STATE_TYPE && this.handleViewableStateType) {
 
@@ -274,5 +245,4 @@ export class TicketSearchFormManager extends SearchFormManager {
         }
         return loadingOptions;
     }
-
 }

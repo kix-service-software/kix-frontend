@@ -58,9 +58,9 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
                         )
                     );
                 }
+
                 const preparedLoadingOptions = new KIXObjectLoadingOptions(
-                    filter, null, null, loadingOptions ? loadingOptions.includes : null,
-                    loadingOptions ? loadingOptions.expands : null
+                    filter, null, loadingOptions?.limit, loadingOptions?.includes, loadingOptions?.expands
                 );
                 articles = await KIXObjectService.loadObjects<FAQArticle>(
                     KIXObjectType.FAQ_ARTICLE, null, preparedLoadingOptions
