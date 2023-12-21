@@ -42,7 +42,7 @@ export class TicketArticleCreate extends ExtendedJobFormManager {
                     option, actionType, actionFieldInstanceId, 'rich-text-input',
                     defaultValue
                 );
-            } else if (option.Name === 'CustomerVisible') {
+            } else if (option.Name === 'CustomerVisible' || option.Name === 'DoNotSendEmail') {
                 if (action && action.Parameters) {
                     defaultValue = Boolean(action.Parameters[option.Name]);
                 }
