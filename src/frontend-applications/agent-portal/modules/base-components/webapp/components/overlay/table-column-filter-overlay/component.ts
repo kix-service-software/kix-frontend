@@ -85,7 +85,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
                 objectType, this.column.getColumnId(), fv[0]
             );
-            const label = `${displayValue} (${fv[1]})`;
+            const label = `${displayValue || fv[0]} (${fv[1]})`;
             const icons = await LabelService.getInstance().getIconsForType(
                 objectType, null, this.column.getColumnId(), fv[0]
             );

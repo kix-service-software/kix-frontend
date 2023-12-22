@@ -156,4 +156,10 @@ export class AuthenticationService {
         await HttpService.getInstance().delete(['session'], token, null).catch((error) => null);
         return true;
     }
+
+    public getUsageContext(token: string): string {
+        const backendToken = this.getBackendToken(token);
+        const tokenValue = this.decodeToken(backendToken);
+        return tokenValue.UserType;
+    }
 }

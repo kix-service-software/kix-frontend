@@ -74,7 +74,6 @@ export class TicketLockAction extends AbstractAction<Ticket> {
         ).catch((error) => null);
 
         setTimeout(async () => {
-            BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
             const context = ContextService.getInstance().getActiveContext();
             await context.getObject(KIXObjectType.TICKET, true);
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });

@@ -22,7 +22,6 @@ import { CacheService } from '../../../server/services/cache';
 
 import cookie from 'cookie';
 import { Socket } from 'socket.io';
-import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
 
 export class TicketNamespace extends SocketNameSpace {
 
@@ -105,10 +104,6 @@ export class TicketNamespace extends SocketNameSpace {
             new SocketResponse(TicketEvent.SET_ARTICLE_SEEN_FLAG_DONE, { requestId: data.requestId })
         ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
-        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
-        const userId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
-
-        CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${userId}`);
         CacheService.getInstance().deleteKeys(KIXObjectType.TICKET);
 
         return response;

@@ -49,7 +49,7 @@ export class LoggingService {
 
         // do not log in test mode
         if (!ServerUtil.isTestMode()) {
-            const logDirectory = this.createLogDirectory(serverConfig);
+            const logDirectory = LoggingService.createLogDirectory();
             try {
                 this.createLogger(logDirectory);
             } catch (error) {
@@ -181,7 +181,8 @@ export class LoggingService {
         return tailedContent;
     }
 
-    private createLogDirectory(serverConfig: IServerConfiguration): string {
+    public static createLogDirectory(): string {
+        const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
         let logFileDir = serverConfig.LOG_FILEDIR || 'logs/';
         logFileDir = path.join(__dirname, '../../../', logFileDir.replace(/\/\w+\.log$/, ''));
         if (!fs.existsSync(logFileDir)) {
