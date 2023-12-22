@@ -152,14 +152,12 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
-        this.deleteUserCache();
         await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId)
             .catch((error) => console.error(error));
         EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
     public async markTicketAsSeen(ticketId: number): Promise<void> {
-        this.deleteUserCache();
         await KIXObjectService.updateObject(
             KIXObjectType.TICKET, [['MarkAsSeen', 1]], ticketId
         );
@@ -795,10 +793,6 @@ export class TicketService extends KIXObjectService<Ticket> {
         }
 
         return color;
-    }
-
-    private deleteUserCache(): void {
-        BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
     }
 
 
