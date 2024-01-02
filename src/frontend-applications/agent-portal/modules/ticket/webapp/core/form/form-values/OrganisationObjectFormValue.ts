@@ -41,14 +41,16 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
-        this.objectBindingId = this.objectValueMapper?.object?.
-            addBinding(TicketProperty.CONTACT_ID, async (value: number) => {
+        await this.setOrganisationValue(null, true);
+
+        this.objectBindingId = this.objectValueMapper?.object?.addBinding(
+            TicketProperty.CONTACT_ID,
+            async (value: number) => {
                 await this.loadSelectableValues();
                 await this.setOrganisationValue(value);
                 this.objectValueMapper?.validateFormValue(this, true);
-            });
-
-        await this.setOrganisationValue();
+            }
+        );
     }
 
     public destroy(): void {
@@ -93,12 +95,10 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
             } else {
                 this.clearPossibleValuesAndNodes();
             }
-        } else {
-            this.clearPossibleValuesAndNodes();
         }
     }
 
-    private async setOrganisationValue(contactId?: number): Promise<void> {
+    private async setOrganisationValue(contactId?: number, init?: boolean): Promise<void> {
         let organisationId: number | string = null;
 
         if (!contactId) {
@@ -141,7 +141,9 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
             }
         }
 
-        return this.setFormValue(organisationId, true);
+        if (!init) {
+            await this.setFormValue(organisationId, true);
+        }
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {

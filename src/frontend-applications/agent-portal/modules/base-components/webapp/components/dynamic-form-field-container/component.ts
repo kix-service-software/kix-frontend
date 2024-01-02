@@ -29,9 +29,12 @@ class Component {
     private additionalOptionsTimeout: any;
     private timoutTimer: TimeoutTimer;
 
+    private hintTimeoutTimer: TimeoutTimer;
+
     public onCreate(): void {
         this.state = new ComponentState();
         this.timoutTimer = new TimeoutTimer();
+        this.hintTimeoutTimer = new TimeoutTimer();
     }
 
     public onInput(input: any): void {
@@ -110,7 +113,7 @@ class Component {
                     new ObjectPropertyValue(
                         v.property, v.operator, v.value, v.options, v.required, v.valid,
                         v.objectType, v.readonly, v.changeable, v.id, v.additionalOptions,
-                        v.validErrorMessages
+                        v.validErrorMessages, v.hint
                     ),
                     v.id
                 );
@@ -438,6 +441,14 @@ class Component {
 
             (this as any).setStateDirty('dynamicValues');
         }
+    }
+
+    public hintValueChanged(value: DynamicFormFieldValue, event: any): void {
+        this.timoutTimer.restartTimer(() => {
+            const hint = event.target.value;
+            value.value.hint = hint;
+            this.provideValue(value);
+        }, 500);
     }
 
 }

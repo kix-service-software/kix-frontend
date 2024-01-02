@@ -231,6 +231,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             this.values[index].value = newValue.value;
             this.values[index].required = newValue.required;
             this.values[index].additionalOptions = newValue.additionalOptions;
+            this.values[index].hint = newValue.hint;
         } else {
             this.values.push(newValue);
         }

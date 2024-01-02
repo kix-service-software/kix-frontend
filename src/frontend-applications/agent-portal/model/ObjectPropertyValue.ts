@@ -28,7 +28,8 @@ export class ObjectPropertyValue {
         public changeable: boolean = true,
         public id: string = IdService.generateDateBasedId('value-'),
         public additionalOptions: FormFieldOption[] = null,
-        public validErrorMessages: string[] = []
+        public validErrorMessages: string[] = [],
+        public hint: string = ''
     ) { }
 
 }
