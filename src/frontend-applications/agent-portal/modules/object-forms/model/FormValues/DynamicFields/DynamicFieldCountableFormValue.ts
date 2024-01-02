@@ -175,6 +175,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             fv.readonly = this.readonly;
             fv.required = this.required;
             fv.label = this.label;
+            fv.hint = this.hint;
 
             (fv as any).IS_COUNTABLE = true;
 

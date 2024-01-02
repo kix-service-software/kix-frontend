@@ -96,7 +96,7 @@ export class DynamicFormFieldValue {
         public removable: boolean = true,
         public readonly: boolean = value.readonly,
         public changeable: boolean = value.changeable,
-        public required: boolean = value.required
+        public required: boolean = value.required,
     ) {
 
         if (!id) {
