@@ -327,6 +327,8 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 });
         }
 
+        EventService.getInstance().publish(ObjectFormEvent.FORM_VALUE_ADDED);
+
         if (debugRules) {
             console.debug('FormValues after applyPropertyInstructions:');
             console.debug(this.formValues);
