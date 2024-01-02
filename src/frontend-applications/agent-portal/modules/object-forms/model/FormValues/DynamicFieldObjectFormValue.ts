@@ -151,6 +151,8 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
             }
         }
 
+        formValue.setInitialState();
+
         return formValue;
     }
 
