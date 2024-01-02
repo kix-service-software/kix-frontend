@@ -75,14 +75,6 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             new FormValueBinding(this, 'selectedNodes', object, property),
             new FormValueBinding(this, 'multiselect', object, property),
         );
-
-        this.addPropertyBinding(FormValueProperty.POSSIBLE_VALUES, async (value: SelectObjectFormValue) => {
-            if (this.isAutoComplete && this.possibleValues?.length) {
-                this.isAutoComplete = false;
-            }
-            await this.loadSelectableValues();
-            this.loadSelectedValues();
-        });
     }
 
     public destroy(): void {
@@ -191,6 +183,13 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
         await this.loadSelectableValues();
         await this.loadSelectedValues();
+
+        this.addPropertyBinding(FormValueProperty.POSSIBLE_VALUES, (value: SelectObjectFormValue) => {
+            if (this.isAutoComplete && this.possibleValues?.length) {
+                this.isAutoComplete = false;
+            }
+            this.loadSelectableValues();
+        });
 
         this.addPropertyBinding('multiselect', (value: SelectObjectFormValue) => {
             if (!this.multiselect && Array.isArray(this.value) && this.value.length > 1) {
@@ -636,6 +635,6 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     public async update(): Promise<void> {
         await this.loadSelectableValues();
-        await this.setSelectedNodes();
+        await this.loadSelectedValues();
     }
 }
