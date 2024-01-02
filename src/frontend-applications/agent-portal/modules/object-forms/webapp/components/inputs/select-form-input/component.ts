@@ -113,7 +113,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
             }),
             this.formValue.addPropertyBinding('selectedNodes', async () => {
+                this.state.prepared = false;
                 this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
+                setTimeout(() => this.state.prepared = true, 20);
             })
         );
 
