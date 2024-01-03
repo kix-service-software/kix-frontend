@@ -145,6 +145,7 @@ export class UserObjectFormValue extends SelectObjectFormValue {
 
             if (!users.length) {
                 this.value = null;
+                this.loadSelectedValues();
             }
         }
     }
