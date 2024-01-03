@@ -266,22 +266,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private stopPropagation(event: any): void {
-        if (event.stopPropagation) {
-            event.stopPropagation();
-        }
-
-        if (event.preventDefault) {
-            event.preventDefault();
-        }
-    }
-
-    public async select(event: any): Promise<void> {
+    public async select(event: any, reopen?: boolean): Promise<void> {
         await this.formValue?.setSelectedNodes();
         this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
+
+        if (reopen) {
+            setTimeout(() => {
+                const element = document.getElementById(`id_${this.state.searchValueKey}`);
+                element?.click();
+            }, 50);
+        }
     }
 
     public async apply(event: any): Promise<void> {
+        await this.select(event, false);
         const element = document.getElementById(`id_${this.state.searchValueKey}`);
         element?.click();
     }
@@ -299,6 +297,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.autoCompleteHint = message;
         }
     }
+
+    private stopPropagation(event: any): void {
+        if (event.stopPropagation) {
+            event.stopPropagation();
+        }
+
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+    }
+
 }
 
 module.exports = Component;
