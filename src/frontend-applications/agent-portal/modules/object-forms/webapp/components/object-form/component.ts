@@ -85,8 +85,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
 
-        BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', true);
-        setTimeout(() => BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', false), 250);
+        setTimeout(() => this.state.prepared = true, 250);
     }
 
     public onDestroy(): void {
