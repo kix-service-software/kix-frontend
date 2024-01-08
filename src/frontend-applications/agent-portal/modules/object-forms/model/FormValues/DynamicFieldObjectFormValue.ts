@@ -149,9 +149,9 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
                     ObjectFormEvent.FORM_VALUE_ADDED, { instanceId: context?.instanceId }
                 );
             }
-        }
 
-        formValue.setInitialState();
+            formValue.setInitialState();
+        }
 
         return formValue;
     }
