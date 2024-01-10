@@ -45,6 +45,7 @@ import { RoleTableFactory, UserTableFactory } from './admin/table';
 import { RoleService } from './admin/RoleService';
 import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
+import { UserPreferencesEventHandler } from './UserPreferencesEventHandler';
 
 
 export class UIModule implements IUIModule {
@@ -112,6 +113,8 @@ export class UIModule implements IUIModule {
                 'kix-icon-admin', 20
             )
         );
+
+        UserPreferencesEventHandler.getInstance();
     }
 
     private registerUser(): void {

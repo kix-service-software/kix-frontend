@@ -125,7 +125,6 @@ export abstract class SearchContext extends Context {
                 .catch((error: Error) => BrowserUtil.openErrorOverlay(error.message));
 
             this.searchCache.name = name;
-            await SearchService.getInstance().getSearchBookmarks(true);
             EventService.getInstance().publish(SearchEvent.SAVE_SEARCH_FINISHED);
         }
     }
