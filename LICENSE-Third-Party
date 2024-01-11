@@ -182,8 +182,8 @@
 │  └─ licenseFile: node_modules/@json-editor/json-editor/LICENSE
 ├─ @kix/frontend@19.0.0
 │  ├─ licenses: GPL-3.0*
-│  ├─ repository: https://github.com/cape-it/kix-frontend.git
-│  ├─ publisher: 2006-2023 KIX Service Software GmbH
+│  ├─ repository: https://github.com/kix-service-software/kix-frontend.git
+│  ├─ publisher: 2006-2024 KIX Service Software GmbH
 │  ├─ path: .
 │  └─ licenseFile: LICENSE
 ├─ @lasso/marko-taglib@2.0.3
