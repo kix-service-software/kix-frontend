@@ -24,6 +24,7 @@ import { SelectObjectFormValue } from '../SelectObjectFormValue';
 
 export class DynamicFieldCIReferenceFormValue<T = number> extends SelectObjectFormValue<T> {
 
+    protected loadObjectsSeparately: boolean = true;
 
     public constructor(
         public property: string,
