@@ -60,6 +60,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     private prepareSelectableController: AbortController;
 
+    protected loadObjectsSeparately: boolean;
+
     public constructor(
         public property: string,
         object: any,
@@ -554,38 +556,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                     : objectIds.filter((id) => !id.toString().match(/<KIX_.+>/))
                 : [];
             if (idsToLoad.length) {
-                if (this.isAutoComplete) {
-                    const objects = await KIXObjectService.loadObjects(
-                        this.objectType, idsToLoad as any[], this.loadingOptions,
-                        this.specificLoadingOptions, true, null, true
-                    ).catch(() => []);
-
-                    for (const object of objects) {
-                        const node = await ObjectReferenceUtil.createTreeNode(
-                            object, this.showInvalidNodes, this.isInvalidClickable, this.useTextAsId,
-                            this.translatable
-                        );
-                        if (node) {
-                            node.selected = true;
-                            selectedNodes.push(node);
-                        }
-                    }
-                } else {
-                    const objects = await KIXObjectService.loadObjects(
-                        this.objectType, idsToLoad as any[], null, null, true, null, true
-                    ).catch(() => []);
-                    if (objects && !!objects.length) {
-                        for (const object of objects) {
-                            const node = await ObjectReferenceUtil.createTreeNode(
-                                object, this.translatable, this.isInvalidClickable, this.useTextAsId, this.translatable
-                            );
-                            if (node) {
-                                node.selected = true;
-                                selectedNodes.push(node);
-                            }
-                        }
-                    }
-                }
+                selectedNodes = await this.loadNodes(idsToLoad);
             }
 
             if (this.freeText || idsToLoad.length !== objectIds.length) {
@@ -604,6 +575,83 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         }
 
         this.selectedNodes = selectedNodes.sort((a, b) => a.id - b.id);
+    }
+
+    private async loadNodes(idsToLoad: T[]): Promise<TreeNode[]> {
+        const selectedNodes: TreeNode[] = [];
+        if (this.isAutoComplete) {
+            let objects = [];
+            if (this.loadObjectsSeparately) {
+                objects = await this.getObjectsSeparately(idsToLoad);
+            } else {
+                objects = await KIXObjectService.loadObjects(
+                    this.objectType, idsToLoad as any[], this.loadingOptions,
+                    this.specificLoadingOptions, true, null, true
+                ).catch(() => []);
+            }
+
+            for (const object of objects) {
+                const node = await ObjectReferenceUtil.createTreeNode(
+                    object, this.showInvalidNodes, this.isInvalidClickable, this.useTextAsId,
+                    this.translatable
+                );
+                if (node) {
+                    node.selected = true;
+                    selectedNodes.push(node);
+                }
+            }
+        } else {
+            let objects = [];
+            if (this.loadObjectsSeparately) {
+                objects = await this.getObjectsSeparately(idsToLoad);
+            } else {
+                objects = await KIXObjectService.loadObjects(
+                    this.objectType, idsToLoad as any[], null, null, true, null, true
+                ).catch(() => []);
+            }
+
+            if (objects && !!objects.length) {
+                for (const object of objects) {
+                    const node = await ObjectReferenceUtil.createTreeNode(
+                        object, this.translatable, this.isInvalidClickable, this.useTextAsId, this.translatable
+                    );
+                    if (node) {
+                        node.selected = true;
+                        selectedNodes.push(node);
+                    }
+                }
+            }
+        }
+        return selectedNodes;
+    }
+
+    private async getObjectsSeparately(ids: any[]): Promise<KIXObject[]> {
+        const objectPromises = [];
+        if (ids) {
+            if (!Array.isArray(ids)) {
+                ids = [ids];
+            }
+
+            // load objects separately, to prevent empty value if "no permission" error occurs
+            ids.forEach(async (id) =>
+                objectPromises.push(
+                    KIXObjectService.loadObjects(
+                        this.objectType, [id], this.loadingOptions,
+                        this.specificLoadingOptions, true, null, true
+                    ).catch(() => [])
+                )
+            );
+        }
+
+        const objects = [];
+        await Promise.allSettled<Array<KIXObject[]>>(objectPromises).then((results) =>
+            results.forEach((r) => {
+                if (r.status === 'fulfilled' && r.value?.length) {
+                    objects.push(...r.value);
+                }
+            })
+        );
+        return objects;
     }
 
     public async removeValue(value: string | number): Promise<void> {
