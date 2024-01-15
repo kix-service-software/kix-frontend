@@ -83,6 +83,8 @@ export enum SysConfigKey {
 
     TICKET_PRIORITY_DEFAULT = 'Ticket::Priority::Default',
 
-    TICKET_QUEUE_DEFAULT = 'Ticket::Queue::Default'
+    TICKET_QUEUE_DEFAULT = 'Ticket::Queue::Default',
+
+    TICKET_PLACEHOLDER_BODYRICHTEXT_LINECOUNT = 'Ticket::Placeholder::BodyRichtext::DefaultLineCount'
 
 }
