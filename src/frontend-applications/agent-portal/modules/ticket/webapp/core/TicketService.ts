@@ -499,7 +499,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             } else {
 
                 // remove inline images
-                content = content.replace(/<img.+?src="cid:.+?>/, '');
+                content = content.replace(/<img.+?src="cid:.+?>/g, '');
             }
 
             return [content, inlineContent];
