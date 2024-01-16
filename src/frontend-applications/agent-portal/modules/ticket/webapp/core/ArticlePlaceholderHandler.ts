@@ -185,12 +185,17 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
 
         // get all opening and closing tag names but not self closing ones
         // e.g. <div>, <p class...> but not <br /> or <img src... />
-        const startTags = (
-            body.match(/(?:<([^\s\/]+?)>|<([^\s\/]+)\s+.+?[^\/]>)/g) || []
-        ).map((tag) => tag.slice(1, -1)); // remove < and >
-        const endTags = (
-            body.match(/<\/(.+?)>/g) || []
-        ).map((tag) => tag.slice(2, -1)); // remove </ and >
+        const ingoreTags = [
+            'area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen',
+            'link', 'meta', 'param', 'source', 'track', 'wbr'
+        ];
+        const startTags = (body.match(/(?:<([^!\s\/]+?)>|<([^!\s\/]+)\s+.+?\s*[^\/]>)/g) || [])
+            .map((tag) => tag.slice(1, -1))// remove < and >
+            .map((tag: string) => tag.replace(/(\w+).*/s, '$1'))
+            .filter((tag) => !ingoreTags.some((itag) => itag === tag));
+        const endTags = (body.match(/<\/(.+?)>/g) || [])
+            .map((tag) => tag.slice(2, -1)) // remove </ and >
+            .filter((tag) => !ingoreTags.some((itag) => itag === tag));
 
         // rember only opening tags with no closing counterpart
         if (endTags.length) {

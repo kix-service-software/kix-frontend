@@ -299,7 +299,7 @@ describe('Placeholder replacement for article', () => {
         });
     });
 
-    describe('Replace with compley body richtext article placeholder.', async () => {
+    describe('Replace limited body richtext article placeholder.', async () => {
         before(() => {
             TicketService.getInstance().getPreparedArticleBodyContent = (article: Article, removeInlineImages: boolean = false
             ): Promise<[string, InlineContent[]]> => {
@@ -327,13 +327,7 @@ describe('Placeholder replacement for article', () => {
             }
         });
 
-        let ticket: Ticket;
-        let ticketPlaceholderHandler: TicketPlaceholderHandler = new TicketPlaceholderHandler();
-        before(() => {
-            ticket = someTestFunctions.prepareTicket();
-        });
-
-        it('Should replace article richtext body placeholder (check if all opened tags are closed - correctly)', async () => {
+        it('Should replace article richtext body placeholder (check if all opened tags are closed - correctly (8))', async () => {
             const subjectText = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_BodyRichtext_8>`, article);
             expect(subjectText).exist;
             expect(subjectText).equal(`<html>
@@ -354,7 +348,7 @@ describe('Placeholder replacement for article', () => {
 [...]`);
         });
 
-        it('Should replace article richtext body placeholder (check if all opened tags are closed - correctly)', async () => {
+        it('Should replace article richtext body placeholder (check if all opened tags are closed - correctly (10))', async () => {
             const subjectText = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_BodyRichtext_10>`, article);
             expect(subjectText).exist;
             expect(subjectText).equal(`<html>
@@ -372,6 +366,60 @@ describe('Placeholder replacement for article', () => {
 </table>
 </p>
 </div>
+</div>
+</body>
+</html>
+[...]`);
+        });
+    });
+
+    describe('Replace limited body richtext article placeholder (special tags).', async () => {
+        before(() => {
+            TicketService.getInstance().getPreparedArticleBodyContent = (article: Article, removeInlineImages: boolean = false
+            ): Promise<[string, InlineContent[]]> => {
+                return new Promise((resolve) => {
+                    resolve([`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <link type="text/css">
+        <script scr="some.source"></script>
+    </head>
+    <body>
+        <div class="someClass">
+            <!--
+            <meta>
+            <br>
+            </br>
+            <span
+                class="someClass"
+            >
+                <div>
+                    <div>`, []]);
+                });
+            }
+        });
+
+        it('Should replace article richtext body placeholder (check if multiline tag is closed and some special tags are ingored (not closed))', async () => {
+            const subjectText = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_BodyRichtext_16>`, article);
+            expect(subjectText).exist;
+            expect(subjectText).equal(`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <link type="text/css">
+        <script scr="some.source"></script>
+    </head>
+    <body>
+        <div class="someClass">
+            <!--
+            <meta>
+            <br>
+            </br>
+            <span
+                class="someClass"
+            >
+                <div>
+</div>
+</span>
 </div>
 </body>
 </html>
