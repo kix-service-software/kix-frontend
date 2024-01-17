@@ -315,6 +315,9 @@ msgstr "Alle eingegebenen Daten werden verworfen. Fortfahren?"
 msgid "Apply"
 msgstr "Anwenden"
 
+msgid "Apply Table"
+msgstr ""
+
 msgid "Approved"
 msgstr "Genehmigt"
 
@@ -735,9 +738,6 @@ msgstr "Kontakte"
 
 msgid "contained in"
 msgstr "enthalten in"
-
-msgid "not contained in"
-msgstr "nicht enthalten in"
 
 msgid "Contained in Affected Assets"
 msgstr "enthalten in betroffenen Assets"
@@ -1169,6 +1169,9 @@ msgstr "E-Mail-Adresse"
 msgid "Email Address Details"
 msgstr "Emailadressdetails"
 
+msgid "Email Address Domain"
+msgstr ""
+
 msgid "Email Addresses"
 msgstr "E-Mail-Adressen"
 
@@ -1225,9 +1228,6 @@ msgstr "Envelope From"
 
 msgid "equals"
 msgstr "ist gleich"
-
-msgid "not equals"
-msgstr ""
 
 msgid "Error"
 msgstr "Fehler"
@@ -1375,6 +1375,12 @@ msgstr "Feld {0} hat eine leere Zeile."
 
 msgid "Field {0} has an invalid value ({1})."
 msgstr "Feld {0} enthält einen ungültigen Wert ({1})."
+
+msgid "Field {0} has an invalid value (max date: {1})."
+msgstr ""
+
+msgid "Field {0} has an invalid value (min date: {2})."
+msgstr ""
 
 msgid "Field Agent App"
 msgstr "Field Agent App"
@@ -2644,6 +2650,9 @@ msgstr ""
 "Action hinterlegen. Diese Variable kann als spezieller Platzhalter "
 "\"${VariableName}\" in folgenden Aktionen verwendet werden."
 
+msgid "Helptext_Organisation_Address_Domain_Pattern"
+msgstr ""
+
 msgid "Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint"
 msgstr ""
 "Bei Abbruch einer Bearbeitung (Schließen eines Dialogs) keine Bestätigung "
@@ -2887,6 +2896,13 @@ msgstr ""
 "hierher zurückkehren. Für unbekannte Kontakte ist auch die Eingabe einer "
 "syntaktisch korrekten E-Mail-Adresse (name@beispiel.de) möglich."
 
+msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
+msgstr ""
+"Durch die Aktivierung des Flags wird der Artikel im Self Service Portal "
+"angezeigt. Wenn nicht aktiviert, prüfen Hintergrundautomatismen, ob der "
+"Ticketkontakt zu den Artikelempfängern gehört, und stellen die Sichtbarkeit "
+"entsprechend ein."
+
 msgid "Helptext_Tickets_TicketCreate_Organisation"
 msgstr ""
 "Die Organisation wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
@@ -3097,6 +3113,9 @@ msgstr "Vorfallsstatus"
 msgid "Incident State"
 msgstr "Vorfallsstatus"
 
+msgid "Include Previous Version"
+msgstr ""
+
 msgid "Include this code into the <head> area of your webpage."
 msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
 
@@ -3235,9 +3254,6 @@ msgstr "Los geht's"
 
 msgid "Library"
 msgstr "Bibliothek"
-
-msgid "Limit:"
-msgstr "Limit (Suchergebnisse):"
 
 msgid "link {0}"
 msgstr "{0} verknüpfen"
@@ -3617,6 +3633,9 @@ msgstr "Kein Kanal"
 msgid "No data available."
 msgstr "Keine Angaben verfügbar."
 
+msgid "No form available. Please contact your administrator."
+msgstr ""
+
 msgid "No objects available."
 msgstr "Keine Objekte verfügbar."
 
@@ -3634,6 +3653,9 @@ msgstr "Kein Bericht verfügbar"
 
 msgid "Not available (not any more or not yet)"
 msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
+
+msgid "not contained in"
+msgstr "nicht enthalten in"
 
 msgid "Note"
 msgstr "Notiz"
@@ -4486,6 +4508,9 @@ msgstr "Zweiter Wert ist keine Ganzzahl."
 
 msgid "Seconds(s)"
 msgstr "Sekunde(n)"
+
+msgid "Select"
+msgstr ""
 
 msgid "Select all"
 msgstr "Alle auswählen"
@@ -5396,6 +5421,9 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
+#~ msgid "Limit:"
+#~ msgstr "Limit (Suchergebnisse):"
+
 #~ msgid "A product by c.a.p.e. IT GmbH"
 #~ msgstr "Ein Produkt der c.a.p.e. IT GmbH"
 
@@ -5544,13 +5572,6 @@ msgstr "PLZ"
 #~ msgstr ""
 #~ "Beschreiben Sie hier das Anliegen des Tickets. Wenn Sie als Kanal „E-"
 #~ "Mail“ gewählt haben, erhält der Empfänger diesen Text."
-
-#~ msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
-#~ msgstr ""
-#~ "Durch die Aktivierung des Flags wird der Artikel im Self Service Portal "
-#~ "angezeigt. Wenn nicht aktiviert, prüfen Hintergrundautomatismen, ob der "
-#~ "Ticketkontakt zu den Artikelempfängern gehört, und stellen die "
-#~ "Sichtbarkeit entsprechend ein."
 
 #~ msgid "Helptext_Tickets_TicketCreate_Subject"
 #~ msgstr "Eine kurze Zusammenfassung ihrer Meldung"

@@ -292,6 +292,9 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
+msgid "Apply Table"
+msgstr ""
+
 msgid "Approved"
 msgstr ""
 
@@ -710,9 +713,6 @@ msgid "Contacts"
 msgstr ""
 
 msgid "contained in"
-msgstr ""
-
-msgid "not contained in"
 msgstr ""
 
 msgid "Contained in Affected Assets"
@@ -1143,6 +1143,9 @@ msgstr ""
 msgid "Email Address Details"
 msgstr ""
 
+msgid "Email Address Domain"
+msgstr ""
+
 msgid "Email Addresses"
 msgstr ""
 
@@ -1198,9 +1201,6 @@ msgid "Envelope From"
 msgstr ""
 
 msgid "equals"
-msgstr ""
-
-msgid "not equals"
 msgstr ""
 
 msgid "Error"
@@ -1348,6 +1348,12 @@ msgid "Field {0} has an empty rows."
 msgstr ""
 
 msgid "Field {0} has an invalid value ({1})."
+msgstr ""
+
+msgid "Field {0} has an invalid value (max date: {1})."
+msgstr ""
+
+msgid "Field {0} has an invalid value (min date: {2})."
 msgstr ""
 
 msgid "Field Agent App"
@@ -2480,6 +2486,9 @@ msgstr ""
 "names. The variable can be used as special placeholder in following actions "
 "like \"${VariableName}\"."
 
+msgid "Helptext_Organisation_Address_Domain_Pattern"
+msgstr ""
+
 msgid "Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint"
 msgstr ""
 
@@ -2701,6 +2710,12 @@ msgstr ""
 "contact is not yet known, you may create this contact or just enter a "
 "syntactically correct email address."
 
+msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
+msgstr ""
+"Enabling visibility will cause the article to be displayed in the Self "
+"Service Portal. If disabled, background automatisms will check if the ticket "
+"contact is among the articles recipients and set visibility accordingly."
+
 msgid "Helptext_Tickets_TicketCreate_Organisation"
 msgstr ""
 "Organisation is assigned autoamtically depending on the chosen contact."
@@ -2899,6 +2914,9 @@ msgstr ""
 msgid "Incident State"
 msgstr ""
 
+msgid "Include Previous Version"
+msgstr ""
+
 msgid "Include this code into the <head> area of your webpage."
 msgstr ""
 
@@ -3035,9 +3053,6 @@ msgstr ""
 
 msgid "Library"
 msgstr ""
-
-msgid "Limit:"
-msgstr "Limit (Search Results):"
 
 msgid "link {0}"
 msgstr "Link {0}"
@@ -3417,6 +3432,9 @@ msgstr ""
 msgid "No data available."
 msgstr ""
 
+msgid "No form available. Please contact your administrator."
+msgstr ""
+
 msgid "No objects available."
 msgstr ""
 
@@ -3433,6 +3451,9 @@ msgid "No report available"
 msgstr ""
 
 msgid "Not available (not any more or not yet)"
+msgstr ""
+
+msgid "not contained in"
 msgstr ""
 
 msgid "Note"
@@ -4279,6 +4300,9 @@ msgid "Second number value is not an integer."
 msgstr ""
 
 msgid "Seconds(s)"
+msgstr ""
+
+msgid "Select"
 msgstr ""
 
 msgid "Select all"
@@ -5168,6 +5192,9 @@ msgstr ""
 msgid "ZIP"
 msgstr ""
 
+#~ msgid "Limit:"
+#~ msgstr "Limit (Search Results):"
+
 #~ msgid "Helptext_Tickets_ArticleCreate_Attachments"
 #~ msgstr ""
 #~ "Choose if you want to save the ticket description only internally (Note) "
@@ -5211,13 +5238,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Describe the ticket concern. If you chose “Email” as channel, this is the "
 #~ "text the recipient(s) will receive."
-
-#~ msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
-#~ msgstr ""
-#~ "Enabling visibility will cause the article to be displayed in the Self "
-#~ "Service Portal. If disabled, background automatisms will check if the "
-#~ "ticket contact is among the articles recipients and set visibility "
-#~ "accordingly."
 
 #~ msgid "Helptext_Tickets_TicketCreate_Subject"
 #~ msgstr "Briefly summarize the ticket topic."
