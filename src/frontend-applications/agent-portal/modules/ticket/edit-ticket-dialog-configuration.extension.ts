@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -50,6 +50,7 @@ import { SortOrder } from '../../model/SortOrder';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
 import { UserProperty } from '../user/model/UserProperty';
+import { DataType } from '../../model/DataType';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -263,7 +264,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
                                 FilterDataType.NUMERIC, FilterType.AND, 1
                             )
-                        ], null, 100, [FAQArticleProperty.VOTES]
+                        ], null, 100, [FAQArticleProperty.RATING]
                     ), 10,
                     [
                         new DefaultColumnConfiguration(
@@ -278,7 +279,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             null, null, null, FAQArticleProperty.TITLE, true, false, true, false, 260, true, false
                         ),
                         new DefaultColumnConfiguration(
-                            null, null, null, FAQArticleProperty.VOTES, true, false, false, false, 50, true, false
+                            null, null, null, FAQArticleProperty.RATING, true, false, false, false, 50, true, false,
+                            false, DataType.NUMBER
                         ),
                     ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL,
                     null, null, null,

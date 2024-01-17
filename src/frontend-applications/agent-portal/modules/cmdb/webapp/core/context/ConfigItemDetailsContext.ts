@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,6 +16,7 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { VersionProperty } from '../../../model/VersionProperty';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class ConfigItemDetailsContext extends Context {
 
@@ -52,9 +53,9 @@ export class ConfigItemDetailsContext extends Context {
             null, null, null,
             [
                 'Versions', 'History', VersionProperty.DEFINITION,
-                VersionProperty.DATA, VersionProperty.PREPARED_DATA
-            ],
-            ['Links']
+                VersionProperty.DATA, VersionProperty.PREPARED_DATA,
+                KIXObjectProperty.LINK_COUNT
+            ]
         );
 
         return await this.loadDetailsObject<ConfigItem>(KIXObjectType.CONFIG_ITEM, loadingOptions);

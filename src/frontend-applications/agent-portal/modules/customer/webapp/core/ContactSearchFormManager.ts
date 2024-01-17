@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -44,7 +44,7 @@ export class ContactSearchFormManager extends SearchFormManager {
             [SearchProperty.FULLTEXT, null],
             [ContactProperty.FIRSTNAME, null],
             [ContactProperty.LASTNAME, null],
-            [ContactProperty.EMAIL, null],
+            [ContactProperty.EMAILS, null],
             [UserProperty.USER_LOGIN, null],
             [ContactProperty.COUNTRY, null],
             [ContactProperty.STREET, null],

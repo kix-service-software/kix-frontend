@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -57,6 +57,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             });
 
+            myDropdown?.addEventListener('show.bs.dropdown', () => {
+                this.state.selectAll = this.formValue?.treeHandler?.getSelectedNodes()?.length <= 0;
+            });
+
         }, 100);
 
         this.subscriber = {
@@ -109,7 +113,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
             }),
             this.formValue.addPropertyBinding('selectedNodes', async () => {
+                this.state.prepared = false;
                 this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
+                setTimeout(() => this.state.prepared = true, 20);
             })
         );
 
@@ -260,22 +266,22 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private stopPropagation(event: any): void {
-        if (event.stopPropagation) {
-            event.stopPropagation();
-        }
+    public async select(event: any, reopen?: boolean): Promise<void> {
+        await this.formValue?.setSelectedNodes();
+        this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
 
-        if (event.preventDefault) {
-            event.preventDefault();
+        if (reopen) {
+            setTimeout(() => {
+                const element = document.getElementById(`id_${this.state.searchValueKey}`);
+                element?.click();
+            }, 50);
         }
     }
 
     public async apply(event: any): Promise<void> {
-        // TODO: apply but keep dropdown open else trigger "click"
-        // const element = document.getElementById(`id_${this.state.searchValueKey}`);
-        // element?.click();
-        await this.formValue?.setSelectedNodes();
-        this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
+        await this.select(event, false);
+        const element = document.getElementById(`id_${this.state.searchValueKey}`);
+        element?.click();
     }
 
     public async prepareAutocompleteHint(): Promise<void> {
@@ -291,6 +297,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.autoCompleteHint = message;
         }
     }
+
+    private stopPropagation(event: any): void {
+        if (event.stopPropagation) {
+            event.stopPropagation();
+        }
+
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+    }
+
 }
 
 module.exports = Component;

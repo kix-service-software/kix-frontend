@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -38,8 +38,14 @@ export class DynamicFieldAffectedAssetFormValue extends DynamicFieldCIReferenceF
         await super.initFormValueByField(field);
         const value = await DynamicFieldFormUtil.getInstance().handleDynamicFieldValue(field);
         if (value) {
-            if (this.value && this.value.length) {
-                this.value.push(value);
+            if (this.value?.length) {
+                if (Array.isArray(value)) {
+                    this.value.push(...value);
+                } else {
+                    this.value.push(value);
+                }
+            } else if (Array.isArray(value)) {
+                this.value = value;
             } else {
                 this.value = [value];
             }

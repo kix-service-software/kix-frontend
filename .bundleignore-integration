@@ -1,0 +1,14 @@
+.allure-cucumber-reporter.js
+.babelrc
+.cache
+.nycrc
+.bundleignore
+./marko.json
+package-lock.json
+test-results.xml
+test-result.tar.gz
+allure-result
+gl-code-quality-report.json
+logs
+./node_modules
+./dist

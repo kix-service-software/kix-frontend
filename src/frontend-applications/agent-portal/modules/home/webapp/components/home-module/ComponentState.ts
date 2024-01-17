@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,6 +11,9 @@ import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredW
 
 export class ComponentState {
 
-    public contentWidgets: ConfiguredWidget[] = [];
+    public constructor(
+        public contentWidgets: ConfiguredWidget[] = [],
+        public prepared: boolean = false
+    ) { }
 
 }

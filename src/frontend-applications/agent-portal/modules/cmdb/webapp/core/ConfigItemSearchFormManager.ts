@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -49,7 +49,8 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             [SearchProperty.FULLTEXT, null],
             [ConfigItemProperty.NAME, null],
             [VersionProperty.NUMBER, null],
-            [KIXObjectProperty.CHANGE_TIME, null]
+            [KIXObjectProperty.CHANGE_TIME, null],
+            [ConfigItemProperty.PREVIOUS_VERSION_SEARCH, null]
         ];
 
         const canContact = await this.checkReadPermissions('contacts');
@@ -131,6 +132,8 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             operations = [SearchOperator.CONTAINS];
         } else if (property === ConfigItemProperty.NAME || property === VersionProperty.NUMBER) {
             operations = stringOperators;
+        } else if (property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH) {
+            operations = [SearchOperator.EQUALS];
         } else if (this.isDropDown(property)) {
             operations = numberOperators;
         } else if (this.isDateTime(property)) {
@@ -211,7 +214,8 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             || property === ConfigItemProperty.CUR_INCI_STATE_ID
             || property === ConfigItemProperty.CLASS_ID
             || property === KIXObjectProperty.CREATE_BY
-            || property === KIXObjectProperty.CHANGE_BY;
+            || property === KIXObjectProperty.CHANGE_BY
+            || property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH;
     }
 
     private isDateTime(property: string): boolean {
@@ -226,6 +230,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CHANGE_BY:
+            case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
                 return await CMDBService.getInstance().getTreeNodes(property, true, true);
             default:
                 const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);
@@ -269,6 +274,9 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
     }
 
     public async isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean> {
+        if (property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH) {
+            return false;
+        }
         return true;
     }
 
@@ -316,34 +324,4 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
 
         super.setValue(newValue, silent);
     }
-
-    public async getSortAttributeTree(): Promise<TreeNode[]> {
-        let sortNodes: TreeNode[] = [];
-        for (const prop of ConfigItem.SORT_PROPERTIES) {
-            sortNodes.push(new TreeNode(prop.Property, null));
-        }
-
-        for (const n of sortNodes) {
-            const label = await LabelService.getInstance().getPropertyText(
-                n.id, this.objectType
-            );
-            n.label = label;
-        }
-
-        const superNodes = await super.getSortAttributeTree(false);
-        sortNodes = [...sortNodes, ...superNodes];
-
-        return sortNodes.sort((a, b) => a.label.localeCompare(b.label));
-    }
-
-    public async getSortAttributeType(attribute: string): Promise<string> {
-        const superType = await super.getSortAttributeType(attribute);
-        if (superType) {
-            return superType;
-        }
-
-        const property = ConfigItem.SORT_PROPERTIES.find((p) => p.Property === attribute);
-        return property ? property.DataType : null;
-    }
-
 }

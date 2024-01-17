@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -41,22 +41,30 @@ export class ContactSearchDefinition extends SearchDefinition {
         return formManager;
     }
 
-    public async getLoadingOptions(
-        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescending?: boolean
-    ): Promise<KIXObjectLoadingOptions> {
-        const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescending);
-        loadingOptions.includes = ['Tickets'];
-        return loadingOptions;
-    }
-
     public getDefaultSearchCriteria(): string[] {
         return [
             SearchProperty.FULLTEXT,
             ContactProperty.FIRSTNAME,
             ContactProperty.LASTNAME,
-            ContactProperty.EMAIL,
+            ContactProperty.EMAILS,
             UserProperty.USER_LOGIN
         ];
+    }
+
+    public async getLoadingOptions(
+        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescending?: boolean
+    ): Promise<KIXObjectLoadingOptions> {
+        const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescending);
+        if (loadingOptions) {
+            if (!loadingOptions.includes) {
+                loadingOptions.includes = [];
+            }
+
+            // include user with preferences to prevent single requests for each user of each contact
+            // to get and prepare user related values
+            loadingOptions.includes.push(ContactProperty.USER, UserProperty.PREFERENCES);
+        }
+        return loadingOptions;
     }
 
 }

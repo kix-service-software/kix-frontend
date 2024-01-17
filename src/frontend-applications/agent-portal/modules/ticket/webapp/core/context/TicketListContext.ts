@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,44 +16,43 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { TicketProperty } from '../../../model/TicketProperty';
 
 export class TicketListContext extends Context {
 
     public static CONTEXT_ID: string = 'ticket-list';
-
-    private ticketIds: number[];
 
     public getIcon(): string | ObjectIcon {
         return this.icon || 'kix-icon-ticket';
     }
 
     public async loadTickets(limit?: number): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, limit, ['Watchers']);
-        loadingOptions.limit = limit;
-        this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
-
-        const user = await AgentService.getInstance().getCurrentUser(true);
         const ticketStatsProperty = this.getAdditionalInformation('TicketStatsProperty');
 
-        const ticketIds = user.Tickets[ticketStatsProperty];
-        let tickets: Ticket[] = [];
-        if (ticketIds?.length) {
-            tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, ticketIds, loadingOptions, null, false, undefined, undefined,
-                this.contextId + KIXObjectType.TICKET
-            ).catch(() => []);
-        }
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, limit);
+        loadingOptions.includes = [TicketProperty.WATCHERS, TicketProperty.STATE_TYPE];
+        loadingOptions.limit = limit;
+
+        this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
+        loadingOptions.query = [['Counter', ticketStatsProperty]];
+
+        const tickets = await KIXObjectService.loadObjects<Ticket>(
+            KIXObjectType.USER_TICKETS, null, loadingOptions, null, false, undefined, undefined,
+            this.contextId + KIXObjectType.TICKET
+        ).catch(() => []);
 
         await this.getUrl();
         this.setObjectList(KIXObjectType.TICKET, tickets);
     }
 
     public async reloadObjectList(
-        objectType: KIXObjectType | string, silent: boolean = false, limit: number
+        objectType: KIXObjectType | string, silent: boolean = false, limit?: number
     ): Promise<void> {
-        await this.loadTickets(limit);
-        return super.reloadObjectList(objectType, silent, limit);
+        if (objectType === KIXObjectType.TICKET) {
+            return this.loadTickets(limit);
+        } else {
+            return super.reloadObjectList(objectType, silent, limit);
+        }
     }
 
     public async update(urlParams: URLSearchParams): Promise<void> {
@@ -64,13 +63,11 @@ export class TicketListContext extends Context {
         if (urlParams) {
             this.setAdditionalInformation('TicketStatsProperty', urlParams.has('list'));
         }
-
-        this.loadTickets();
     }
 
     public async getUrl(): Promise<string> {
         let url: string = '';
-        if (Array.isArray(this.descriptor.urlPaths) && this.descriptor.urlPaths.length) {
+        if (Array.isArray(this.descriptor?.urlPaths) && this.descriptor?.urlPaths.length) {
             url = this.descriptor.urlPaths[0];
             const params = [];
             const ticketStatsProperty = this.getAdditionalInformation('TicketStatsProperty');

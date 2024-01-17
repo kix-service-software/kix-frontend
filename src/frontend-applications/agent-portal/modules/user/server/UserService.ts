@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -28,7 +28,6 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { CacheService } from '../../../server/services/cache';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
-import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class UserService extends KIXObjectAPIService {
@@ -57,7 +56,7 @@ export class UserService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.CURRENT_USER;
     }
 
-    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
         let objectClass;
 
         if (objectType === KIXObjectType.USER) {
@@ -69,34 +68,9 @@ export class UserService extends KIXObjectAPIService {
     }
 
     public async loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string> {
-        let displayValue = '';
-
-        if (objectType === KIXObjectType.USER) {
-            const cacheType = `${objectType}-DISPLAY_VALUE`;
-            const cacheKey = `${objectType}-${objectId}-displayvalue`;
-            displayValue = await CacheService.getInstance().get(cacheKey, cacheType);
-            if (!displayValue && objectId) {
-                const loadingOptions = new KIXObjectLoadingOptions();
-                loadingOptions.includes = [UserProperty.CONTACT];
-
-                const config = ConfigurationService.getInstance().getServerConfiguration();
-                const objectResponse = await this.loadObjects<User>(
-                    config?.BACKEND_API_TOKEN, 'UserAPIService', objectType, [objectId], loadingOptions, null
-                );
-
-                const users = objectResponse?.objects || [];
-
-                if (users?.length) {
-                    const user = new User(users[0]);
-                    displayValue = user.toString();
-                    await CacheService.getInstance().set(cacheKey, displayValue, cacheType);
-                }
-            }
-        } else {
-            displayValue = await super.loadDisplayValue(objectType, objectId);
-        }
-
-        return displayValue;
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.includes = [UserProperty.CONTACT];
+        return await super.loadDisplayValue(objectType, objectId, loadingOptions);
     }
 
     public async loadObjects<T>(
@@ -362,10 +336,6 @@ export class UserService extends KIXObjectAPIService {
             }
         }
 
-        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
-        const cacheUserId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
-        await CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_${cacheUserId}`);
-
         if (errors.length) {
             throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
         }
@@ -387,7 +357,8 @@ export class UserService extends KIXObjectAPIService {
             UserProperty.IS_AGENT,
             UserProperty.IS_CUSTOMER,
             UserProperty.PREFERENCES + '\..*?',
-            KIXObjectProperty.VALID_ID
+            KIXObjectProperty.VALID_ID,
+            UserProperty.USER_ID
         ];
 
         const searchCriteria = criteria.filter(

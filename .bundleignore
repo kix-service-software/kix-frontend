@@ -7,6 +7,7 @@
 .npmignore
 .nycrc
 .bundleignore
+.bundleignore-integration
 .vscode
 .gitlab-ci.yml
 gulpfile.js

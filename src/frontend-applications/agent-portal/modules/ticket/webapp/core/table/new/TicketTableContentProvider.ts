@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,7 @@ export class TicketTableContentProvider extends TableContentProvider<Ticket> {
         objects?: KIXObject[]
     ) {
         super(KIXObjectType.TICKET, table, objectIds, loadingOptions, contextId, objects);
+        this.useBackendSort = true;
     }
 
     protected async prepareLoadingOptions(): Promise<KIXObjectLoadingOptions> {
@@ -42,5 +43,4 @@ export class TicketTableContentProvider extends TableContentProvider<Ticket> {
 
         return loadingOptions;
     }
-
 }

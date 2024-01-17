@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -63,7 +63,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'reporting-dashboard-reports-table-widget', 'Reports Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.REPORT, [ReportProperty.ID, SortOrder.UP],
             new ConfigurationDefinition('reporting-dashboard-reports-table', ConfigurationType.Table), null,
-            null, true, null, null, null, false
+            null, true, null, null, true, false
         );
         configurations.push(reportsTableWidget);
 

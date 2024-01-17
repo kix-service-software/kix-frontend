@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -158,7 +158,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 token, uri, clientRequestId, query
             );
         } else if (loadingOptions.filter) {
-            await this.buildFilter(loadingOptions.filter, 'ConfigItem', query, token);
+            const success = await this.buildFilter(loadingOptions.filter, 'ConfigItem', query, token);
+            if (!success) {
+                LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
+                return new ObjectResponse([], 0);
+            }
             const uri = this.buildUri('cmdb', 'configitems');
             httpResponse = await this.getObjectByUri<ConfigItemsResponse>(token, uri, clientRequestId, query);
         } else {
@@ -218,7 +222,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 }
 
             } else if (loadingOptions.filter) {
-                await this.buildFilter(loadingOptions.filter, 'Image', query, token);
+                const success = await this.buildFilter(loadingOptions.filter, 'Image', query, token);
+                if (!success) {
+                    LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
+                    return [];
+                }
                 const uri = this.buildUri('cmdb', subResource);
                 const response = await this.getObjectByUri<ConfigItemImagesResponse>(
                     token, uri, clientRequestId, query
@@ -341,7 +349,9 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 !c.property.startsWith('Data') &&
                 !c.property.startsWith('CurrentVersion') &&
                 c.property !== ConfigItemProperty.ASSIGNED_CONTACT &&
-                c.property !== ConfigItemProperty.ASSIGNED_ORGANISATION;
+                c.property !== ConfigItemProperty.ASSIGNED_ORGANISATION &&
+                c.property !== ConfigItemProperty.PREVIOUS_VERSION_SEARCH &&
+                c.property !== 'ID';
         });
     }
 
@@ -384,7 +394,6 @@ export class CMDBAPIService extends KIXObjectAPIService {
                     )
                 );
             }
-
         }
 
         const newCriteria = criteria.filter((c) =>
@@ -400,7 +409,9 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property.startsWith('Data') ||
             c.property.startsWith('CurrentVersion') ||
             c.property === ConfigItemProperty.ASSIGNED_CONTACT ||
-            c.property === ConfigItemProperty.ASSIGNED_ORGANISATION
+            c.property === ConfigItemProperty.ASSIGNED_ORGANISATION ||
+            c.property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH ||
+            c.property === 'ID'
         );
 
         for (const searchCriteria of newCriteria) {
@@ -422,6 +433,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
                     searchCriteria.operator = SearchOperator.IN;
                     searchCriteria.value = Array.isArray(searchCriteria.value)
                         ? searchCriteria.value : [searchCriteria.value as number];
+                    break;
+                case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
+                    searchCriteria.operator = SearchOperator.EQUALS;
+                    searchCriteria.value = Array.isArray(searchCriteria.value)
+                        ? searchCriteria.value[0] : searchCriteria.value;
                     break;
                 default:
             }

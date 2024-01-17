@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,6 +12,7 @@ import { ConfigItem } from '../../../model/ConfigItem';
 import { Table } from '../../../../table/model/Table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 
 export class ConfigItemTableContentProvider extends TableContentProvider<ConfigItem> {
 
@@ -22,6 +23,7 @@ export class ConfigItemTableContentProvider extends TableContentProvider<ConfigI
         contextId?: string
     ) {
         super(KIXObjectType.CONFIG_ITEM, table, objectIds, loadingOptions, contextId);
+        this.useBackendSort = true;
     }
 
 }

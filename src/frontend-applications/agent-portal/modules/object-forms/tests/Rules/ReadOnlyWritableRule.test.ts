@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,9 +22,11 @@ describe('Rule - ReadOnly / Writeable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ ReadOnly: 1 }],
-            'testProperty3': [{ ReadOnly: 1 }],
-            'testProperty5': [{ ReadOnly: 1 }]
+            EvaluationResult: {
+                'testProperty1': [{ ReadOnly: 1 }],
+                'testProperty3': [{ ReadOnly: 1 }],
+                'testProperty5': [{ ReadOnly: 1 }]
+            }
         })
 
         before(async () => {
@@ -65,9 +67,11 @@ describe('Rule - ReadOnly / Writeable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ ReadOnly: 0 }],
-            'testProperty3': [{ ReadOnly: 0 }],
-            'testProperty5': [{ ReadOnly: 0 }]
+            EvaluationResult: {
+                'testProperty1': [{ ReadOnly: 0 }],
+                'testProperty3': [{ ReadOnly: 0 }],
+                'testProperty5': [{ ReadOnly: 0 }]
+            }
         })
 
         before(async () => {
@@ -114,9 +118,11 @@ describe('Rule - ReadOnly / Writeable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ Writeable: 0 }],
-            'testProperty3': [{ Writeable: 0 }],
-            'testProperty5': [{ Writeable: 0 }]
+            EvaluationResult: {
+                'testProperty1': [{ Writeable: 0 }],
+                'testProperty3': [{ Writeable: 0 }],
+                'testProperty5': [{ Writeable: 0 }]
+            }
         })
 
         before(async () => {
@@ -157,9 +163,11 @@ describe('Rule - ReadOnly / Writeable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ Writeable: 1 }],
-            'testProperty3': [{ Writeable: 1 }],
-            'testProperty5': [{ Writeable: 1 }]
+            EvaluationResult: {
+                'testProperty1': [{ Writeable: 1 }],
+                'testProperty3': [{ Writeable: 1 }],
+                'testProperty5': [{ Writeable: 1 }]
+            }
         })
 
         before(async () => {

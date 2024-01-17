@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -38,6 +38,8 @@ import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { ContextMode } from '../../../../model/ContextMode';
 import { VersionProperty } from '../../model/VersionProperty';
 import { Context } from '../../../../model/Context';
+import { DateInputDefinition } from '../../model/DateInputDefinition';
+import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 
 export class ConfigItemFormFactory {
 
@@ -326,23 +328,57 @@ export class ConfigItemFormFactory {
     }
 
     private getDateField(ad: AttributeDefinition, parentInstanceId: string): FormFieldConfiguration {
-        return new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, 'date-time-input', ad.Input.Required, null,
+        const fieldConfig = new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, 'date-time-input', ad.Input.Required, null,
             [
-                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE),
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE)
             ],
             null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength,
             ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
+
+        const dateInput = (ad.Input as DateInputDefinition);
+        if (dateInput.YearPeriodFuture) {
+            const date = new Date();
+            date.setFullYear(date.getFullYear() + dateInput.YearPeriodFuture);
+            const maxDate = DateTimeUtil.getKIXDateTimeString(date);
+            fieldConfig.options.push(new FormFieldOption(FormFieldOptions.MAX_DATE, maxDate));
+        }
+
+        if (dateInput.YearPeriodPast) {
+            const date = new Date();
+            date.setFullYear(date.getFullYear() - dateInput.YearPeriodPast);
+            const minDate = DateTimeUtil.getKIXDateTimeString(date);
+            fieldConfig.options.push(new FormFieldOption(FormFieldOptions.MIN_DATE, minDate));
+        }
+
+        return fieldConfig;
     }
 
     private getDateTimeField(ad: AttributeDefinition, parentInstanceId: string): FormFieldConfiguration {
-        return new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, 'date-time-input', ad.Input.Required, null,
+        const fieldConfig = new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, 'date-time-input', ad.Input.Required, null,
             [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE_TIME)
             ], null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
+
+        const dateInput = (ad.Input as DateInputDefinition);
+        if (dateInput.YearPeriodFuture) {
+            const date = new Date();
+            date.setFullYear(date.getFullYear() + dateInput.YearPeriodFuture);
+            const maxDate = DateTimeUtil.getKIXDateTimeString(date);
+            fieldConfig.options.push(new FormFieldOption(FormFieldOptions.MAX_DATE, maxDate));
+        }
+
+        if (dateInput.YearPeriodPast) {
+            const date = new Date();
+            date.setFullYear(date.getFullYear() - dateInput.YearPeriodPast);
+            const minDate = DateTimeUtil.getKIXDateTimeString(date);
+            fieldConfig.options.push(new FormFieldOption(FormFieldOptions.MIN_DATE, minDate));
+        }
+
+        return fieldConfig;
     }
 
     private getDefaultFormField(

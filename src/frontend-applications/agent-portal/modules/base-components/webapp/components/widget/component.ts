@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -75,7 +75,7 @@ class WidgetComponent implements IEventSubscriber {
         }
 
         const storedMinimized = ClientStorageService.getOption(`${this.state.instanceId}-minimized`);
-        if (typeof storedMinimized !== 'undefined') {
+        if (typeof storedMinimized !== 'undefined' && storedMinimized !== null) {
             this.state.minimized = storedMinimized === 'true';
         }
 

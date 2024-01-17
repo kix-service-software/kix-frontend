@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,10 +19,6 @@ export enum AgentEvent {
 
     GET_CURRENT_USER = 'GET_CURRENT_USER',
 
-    GET_CURRENT_USER_FINISHED = 'GET_CURRENT_USER_FINISHED',
-
-    CLEAR_CURRENT_USER_CACHE = 'CLEAR_CURRENT_USER_CACHE',
-
-    CLEAR_CURRENT_USER_CACHE_FINISHED = 'CLEAR_CURRENT_USER_CACHE_FINISHED'
+    GET_CURRENT_USER_FINISHED = 'GET_CURRENT_USER_FINISHED'
 
 }

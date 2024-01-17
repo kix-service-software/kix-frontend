@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -100,13 +100,13 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
 
             if (hasValidFilter) {
                 objectResponse.objects = objectResponse.objects?.filter(
-                    (o) => o.ValidID === loadingOptions.filter[0].value
+                    (o) => o.ValidID?.toString() === loadingOptions.filter[0].value?.toString()
                 );
             }
 
             if (objectIds && objectIds.length) {
                 objectResponse.objects = objectResponse.objects?.filter(
-                    (t) => objectIds.some((oid) => oid === t.ID)
+                    (t) => objectIds.some((oid) => oid?.toString() === t.ID?.toString())
                 );
             }
         }

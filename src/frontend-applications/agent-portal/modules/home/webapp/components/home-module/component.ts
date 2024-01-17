@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -37,7 +37,11 @@ class HomeComponent {
 
     private async prepareWidgets(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        this.state.contentWidgets = await context.getContent();
+        this.state.prepared = false;
+        setTimeout(async () => {
+            this.state.contentWidgets = await context.getContent();
+            this.state.prepared = true;
+        }, 100);
     }
 
     public onDestroy(): void {

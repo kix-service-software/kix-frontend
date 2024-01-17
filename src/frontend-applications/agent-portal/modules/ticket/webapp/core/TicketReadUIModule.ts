@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -53,6 +53,8 @@ import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
 import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { TicketLockLabelProvider } from './TicketLockLabelProvider';
+import { DoNotSentEventHandler } from './DoNotSentEventHandler';
+import { UserCounterEventHandler } from './UserCounterEventHandler';
 
 export class UIModule implements IUIModule {
 
@@ -121,6 +123,9 @@ export class UIModule implements IUIModule {
             ticketManager.addExtendedJobFormManager(new TicketStateSet());
             ticketManager.addExtendedJobFormManager(new TeamSet());
         }
+
+        DoNotSentEventHandler.getInstance();
+        UserCounterEventHandler.getInstance();
 
         if (this.doRegisterContexts) {
             await this.registerContexts();

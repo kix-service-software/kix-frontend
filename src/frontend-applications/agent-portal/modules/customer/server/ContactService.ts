@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -62,40 +62,13 @@ export class ContactAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.CONTACT;
     }
 
-    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
         let objectClass;
 
         if (objectType === KIXObjectType.CONTACT) {
             objectClass = Contact;
         }
         return objectClass;
-    }
-
-    public async loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string> {
-        let displayValue = '';
-
-        if (objectType === KIXObjectType.CONTACT) {
-            const cacheKey = `${objectType}-${objectId}-displayvalue`;
-            displayValue = await CacheService.getInstance().get(cacheKey, objectType);
-            if (!displayValue && objectId) {
-                const loadingOptions = new KIXObjectLoadingOptions();
-                loadingOptions.includes = [ContactProperty.USER];
-
-                const config = ConfigurationService.getInstance().getServerConfiguration();
-                const objectResponse = await this.loadObjects<Contact>(
-                    config?.BACKEND_API_TOKEN, 'ContactAPIService', objectType, [objectId], loadingOptions
-                );
-
-                const contacts = objectResponse?.objects || [];
-                if (contacts?.length) {
-                    const contact = new Contact(contacts[0]);
-                    displayValue = contact.toString();
-                    await CacheService.getInstance().set(cacheKey, displayValue, objectType);
-                }
-            }
-        }
-
-        return displayValue;
     }
 
     public async loadObjects<T>(
@@ -121,7 +94,7 @@ export class ContactAPIService extends KIXObjectAPIService {
 
                 if (Array.isArray(objectIds) && objectIds.length) {
                     objectResponse.objects = objectResponse.objects?.filter(
-                        (o) => objectIds.some((oid) => Number(oid) === o.ID)
+                        (o) => objectIds.some((oid) => Number(oid) === Number(o.ID))
                     );
                 }
             }
@@ -147,7 +120,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         });
 
         let userId;
-        if (userParameter.length) {
+        if (userParameter.length && userParameter.some((up) => up[0] === UserProperty.USER_LOGIN)) {
             const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
             userId = await this.createOrUpdateUser(token, clientRequestId, userParameter, assignedUserId).catch(
                 (error: Error) => {
@@ -297,46 +270,22 @@ export class ContactAPIService extends KIXObjectAPIService {
     }
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        const filterCriteria = criteria.filter((f) =>
-            !this.isUserProperty(f.property) &&
-            f.property !== ContactProperty.EMAIL
-        );
-
-        return filterCriteria;
+        // TODO: allow nothing at the moment, maybe filter not needed anymore
+        return [];
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        let searchCriteria = criteria.filter((f) =>
-            f.property !== ContactProperty.PRIMARY_ORGANISATION_ID &&
-            f.property !== SearchProperty.PRIMARY &&
-            (
-                f.operator !== SearchOperator.IN ||
-                f.property === ContactProperty.EMAIL ||
-                f.property === KIXObjectProperty.VALID_ID
-            )
-        );
+        const searchCriteria = criteria.filter((f) => f.property !== SearchProperty.PRIMARY);
 
         const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
         if (primary) {
-            const primarySearch = [
-                new FilterCriteria(
-                    ContactProperty.EMAIL, SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
-                ),
-            ];
-            searchCriteria = [...searchCriteria, ...primarySearch];
-        }
-
-        const loginProperty = searchCriteria.find((sc) => sc.property === UserProperty.USER_LOGIN);
-        if (loginProperty) {
-            loginProperty.property = 'Login';
+            const primarySearch = new FilterCriteria(
+                ContactProperty.EMAILS, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, primary.value
+            );
+            searchCriteria.push(primarySearch);
         }
 
         return searchCriteria;
-    }
-
-    private isUserProperty(property: string): boolean {
-        const userProperties = Object.keys(UserProperty).map((p) => UserProperty[p]);
-        return userProperties.some((p) => p === property);
     }
 }

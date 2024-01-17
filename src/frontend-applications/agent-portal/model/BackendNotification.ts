@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,6 +17,7 @@ export class BackendNotification {
     public Timestamp: string;
     public Event: ObjectUpdatedEvent;
     public ObjectType: string;
+    public UserID: number;
 
     public constructor(notification?: BackendNotification) {
         if (notification) {
@@ -26,6 +27,7 @@ export class BackendNotification {
             this.Timestamp = notification.Timestamp;
             this.RequestID = notification.RequestID;
             this.ObjectType = notification.ObjectType;
+            this.UserID = Number(notification.UserID);
         }
     }
 }

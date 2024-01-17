@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -34,10 +34,10 @@ import { CacheService } from './cache';
 import { SearchProperty } from '../../modules/search/model/SearchProperty';
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
 import { SortUtil } from '../../model/SortUtil';
-import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { HTTPResponse } from './HTTPResponse';
 import { ObjectResponse } from './ObjectResponse';
 import { FilterDataType } from '../../model/FilterDataType';
+import { ObjectLoader } from './ObjectLoader';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -57,29 +57,24 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         this.extendedServices.push(service);
     }
 
-    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
         return null;
     }
 
-    public async loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string> {
+    public async loadDisplayValue(
+        objectType: KIXObjectType | string, objectId: string | number, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<string> {
         let displayValue = '';
 
         if (objectType && objectId) {
             const cacheKey = `${objectType}-${objectId}-displayvalue`;
             displayValue = await CacheService.getInstance().get(cacheKey, objectType);
             if (!displayValue && objectId) {
-
-                const config = ConfigurationService.getInstance().getServerConfiguration();
-                const objectResponse = await this.loadObjects(
-                    config?.BACKEND_API_TOKEN, 'KIXObjectAPIService', objectType, [objectId], null, null
-                );
-
-                if (objectResponse?.objects?.length) {
-                    let object = objectResponse.objects[0];
-                    const objectClass = this.getObjectClass(objectType);
-                    if (objectClass) {
-                        object = new objectClass(object);
-                    }
+                if (loadingOptions) {
+                    ObjectLoader.getInstance().setLoadingoptions(objectType, loadingOptions);
+                }
+                const object = await ObjectLoader.getInstance().queue(objectType, objectId).catch(() => null);
+                if (object) {
                     displayValue = object.toString();
                     await CacheService.getInstance().set(cacheKey, displayValue, objectType);
                 }
@@ -500,21 +495,45 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         searchCriteria = [...searchCriteria, ...dynamicFieldCriteria];
 
-        // check for "invalid" (not satisfiable) AND criteria (IN criteria with empty values)
         if (searchCriteria.length) {
+            // check for "invalid" (not satisfiable) AND criteria (IN criteria with empty values)
             const hasEmptyINSearch = searchCriteria.some(
-                (c) => c.operator === SearchOperator.IN && c.filterType === FilterType.AND
+                (c) => (c.operator === SearchOperator.IN || c.operator === SearchOperator.NOT_IN)
+                    && c.filterType === FilterType.AND
                     && (c.value === null || (Array.isArray(c.value) && !c.value.length))
             );
 
             if (hasEmptyINSearch) {
+                LoggingService.getInstance().warning('Invalid api filter: Empty search value for IN search.');
+                return false;
+            }
+
+            // check for "invalid" NUMERIC search
+            const hasInvalidNumericSearch = searchCriteria.some((c) => {
+                let result = false;
+                if (c.type === FilterDataType.NUMERIC) {
+                    if (
+                        (c.operator === SearchOperator.IN || c.operator === SearchOperator.NOT_IN)
+                        && Array.isArray(c.value)
+                    ) {
+                        result = c.value.some((v) => v === '' || isNaN(Number(v)));
+                    } else {
+                        result = c.type === FilterDataType.NUMERIC && (c.value === '' || isNaN(Number(c.value)));
+                    }
+                }
+                return result;
+            });
+
+            if (hasInvalidNumericSearch) {
+                LoggingService.getInstance().warning('Invalid api filter: NUMERIC search has non numeric value.');
                 return false;
             }
         }
 
         // filter IN criteria with empty values
         searchCriteria = searchCriteria.filter(
-            (c) => c.operator !== SearchOperator.IN || (Array.isArray(c.value) && c.value.length)
+            (c) => (c.operator !== SearchOperator.IN && c.operator !== SearchOperator.NOT_IN)
+                || (Array.isArray(c.value) && c.value.length)
         );
 
         if (searchCriteria.length) {

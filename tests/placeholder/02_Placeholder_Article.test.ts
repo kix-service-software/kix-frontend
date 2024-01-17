@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,11 @@ import { ContextService } from '../../src/frontend-applications/agent-portal/mod
 import { ContextDescriptor } from '../../src/frontend-applications/agent-portal/model/ContextDescriptor';
 import { Context } from '../../src/frontend-applications/agent-portal/model/Context';
 import { TranslationService } from '../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
+import { TicketService } from '../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { InlineContent } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/InlineContent';
+import { SysConfigOption } from '../../src/frontend-applications/agent-portal/modules/sysconfig/model/SysConfigOption';
+import { KIXObjectService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -32,6 +37,8 @@ describe('Placeholder replacement for article', () => {
 
     let article: Article
     let articlePlaceholderHandler: ArticlePlaceholderHandler = new ArticlePlaceholderHandler();
+    let orgPrepareFunction;
+    let orgLoadFunction;
     before(() => {
         LabelService.getInstance()['objectLabelProvider'] = [];
         LabelService.getInstance()['propertiesLabelProvider'].clear();
@@ -41,12 +48,41 @@ describe('Placeholder replacement for article', () => {
         articleLabelProvider.getDisplayText = someTestFunctions.changedGetDisplayTextMethod;
         LabelService.getInstance().registerLabelProvider(articleLabelProvider);
         (TranslationService.getInstance() as any).translations = {};
+
+        orgPrepareFunction = TicketService.getInstance().getPreparedArticleBodyContent;
+        TicketService.getInstance().getPreparedArticleBodyContent = (article: Article, removeInlineImages: boolean = false
+        ): Promise<[string, InlineContent[]]> => {
+            return new Promise((resolve) => {
+                resolve([`line1<br />\nline2<br />\nline3<br />\nline4<br />\nline5<br />\nline6<br />\n\n\nline7<br />\nline8<br />`, []]);
+            });
+        }
+        orgLoadFunction = KIXObjectService.loadObjects;
+        KIXObjectService.loadObjects = (
+            objectType: KIXObjectType | string, objectIds?: Array<number | string>,
+            loadingOptions?,
+            objectLoadingOptions?, silent: boolean = false,
+            cache: boolean = true, forceIds?: boolean, collectionId?: string
+        ) => {
+            if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
+                return new Promise((resolve) => {
+                    const option = new SysConfigOption();
+                    option.Value = 5;
+                    resolve([option as any]);
+                });
+            }
+            return orgLoadFunction(
+                objectType, objectIds, loadingOptions, objectLoadingOptions, silent,
+                cache, forceIds, collectionId
+            );
+        }
     });
 
     after(() => {
         (TranslationService.getInstance() as any).translations = null;
         LabelService.getInstance()['objectLabelProvider'] = [];
         LabelService.getInstance()['propertiesLabelProvider'].clear();
+        TicketService.getInstance().getPreparedArticleBodyContent = orgPrepareFunction;
+        KIXObjectService.loadObjects = orgLoadFunction;
     });
 
     describe('Replace simple article attribute placeholder.', async () => {
@@ -71,7 +107,7 @@ describe('Placeholder replacement for article', () => {
 
         it('Should replace article Subject placeholder - use only first 5 characters', async () => {
             const text = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_${ArticleProperty.SUBJECT}_5>`, article);
-            expect(text).equal(article.Subject.substr(0, 5));
+            expect(text).equal(article.Subject.slice(0, 4)); // index 0 to 4 = 5 characters
         });
 
         it('Should replace article Body placeholder', async () => {
@@ -81,12 +117,22 @@ describe('Placeholder replacement for article', () => {
 
         it('Should replace article Body placeholder - use only first 5 characters', async () => {
             const text = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_${ArticleProperty.BODY}_5>`, article);
-            expect(text).equal(article.Body.substr(0, 5));
+            expect(text).equal(article.Body.slice(0, 4));
         });
 
-        it('Should replace article Body richtext placeholder', async () => {
+        it('Should replace article Body richtext placeholder with line limit by config', async () => {
             const text = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_${ArticleProperty.BODY_RICHTEXT}>`, article);
-            expect(text).equal('<p>some html text</p>');
+            expect(text).equal("line1<br />\nline2<br />\nline3<br />\nline4<br />\nline5<br />\n[...]");
+        });
+
+        it('Should replace article Body richtext placeholder with line limit', async () => {
+            const text = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_${ArticleProperty.BODY_RICHTEXT}_3>`, article);
+            expect(text).equal("line1<br />\nline2<br />\nline3<br />\n[...]");
+        });
+
+        it('Should replace article Body richtext placeholder unlimited', async () => {
+            const text = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_${ArticleProperty.BODY_RICHTEXT}_0>`, article);
+            expect(text).equal("line1<br />\nline2<br />\nline3<br />\nline4<br />\nline5<br />\nline6<br />\n\n\nline7<br />\nline8<br />");
         });
 
         it('Should replace article From placeholder', async () => {
@@ -252,6 +298,134 @@ describe('Placeholder replacement for article', () => {
             });
         });
     });
+
+    describe('Replace limited body richtext article placeholder.', async () => {
+        before(() => {
+            TicketService.getInstance().getPreparedArticleBodyContent = (article: Article, removeInlineImages: boolean = false
+            ): Promise<[string, InlineContent[]]> => {
+                return new Promise((resolve) => {
+                    resolve([`<html>
+    <body>
+        <div>
+            <div>Test</div>
+            <div>
+                <p>
+                    <table>
+                        <tr>
+                            <td>
+                                <div>Test2</div>
+                            </td>
+                        </tr>
+                    </table>
+                </p>
+                <div>Test3</div>
+            </div>
+        </div>
+    </body>
+</html>`, []]);
+                });
+            }
+        });
+
+        it('Should replace article richtext body placeholder (check if all opened tags are closed - correctly (8))', async () => {
+            const subjectText = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_BodyRichtext_8>`, article);
+            expect(subjectText).exist;
+            expect(subjectText).equal(`<html>
+    <body>
+        <div>
+            <div>Test</div>
+            <div>
+                <p>
+                    <table>
+                        <tr>
+</tr>
+</table>
+</p>
+</div>
+</div>
+</body>
+</html>
+[...]`);
+        });
+
+        it('Should replace article richtext body placeholder (check if all opened tags are closed - correctly (10))', async () => {
+            const subjectText = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_BodyRichtext_10>`, article);
+            expect(subjectText).exist;
+            expect(subjectText).equal(`<html>
+    <body>
+        <div>
+            <div>Test</div>
+            <div>
+                <p>
+                    <table>
+                        <tr>
+                            <td>
+                                <div>Test2</div>
+</td>
+</tr>
+</table>
+</p>
+</div>
+</div>
+</body>
+</html>
+[...]`);
+        });
+    });
+
+    describe('Replace limited body richtext article placeholder (special tags).', async () => {
+        before(() => {
+            TicketService.getInstance().getPreparedArticleBodyContent = (article: Article, removeInlineImages: boolean = false
+            ): Promise<[string, InlineContent[]]> => {
+                return new Promise((resolve) => {
+                    resolve([`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <link type="text/css">
+        <script scr="some.source"></script>
+    </head>
+    <body>
+        <div class="someClass">
+            <!--
+            <meta>
+            <br>
+            </br>
+            <span
+                class="someClass"
+            >
+                <div>
+                    <div>`, []]);
+                });
+            }
+        });
+
+        it('Should replace article richtext body placeholder (check if multiline tag is closed and some special tags are ingored (not closed))', async () => {
+            const subjectText = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_BodyRichtext_16>`, article);
+            expect(subjectText).exist;
+            expect(subjectText).equal(`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <link type="text/css">
+        <script scr="some.source"></script>
+    </head>
+    <body>
+        <div class="someClass">
+            <!--
+            <meta>
+            <br>
+            </br>
+            <span
+                class="someClass"
+            >
+                <div>
+</div>
+</span>
+</div>
+</body>
+</html>
+[...]`);
+        });
+    });
 });
 
 class newArticlePlaceholderDialogContext extends Context {
@@ -277,9 +451,6 @@ class someTestFunctions {
                 break;
             case ArticleProperty.INCOMING_TIME:
                 displayValue = DateTimeUtil.calculateTimeInterval(Number(displayValue));
-                break;
-            case ArticleProperty.BODY_RICHTEXT:
-                displayValue = '<p>some html text</p>';
                 break;
             default:
         }

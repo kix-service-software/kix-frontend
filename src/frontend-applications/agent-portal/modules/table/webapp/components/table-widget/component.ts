@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -220,7 +220,7 @@ class Component {
                     const formBindingId = formValue.addPropertyBinding(
                         FormValueProperty.VALUE,
                         (value: ObjectFormValue) => {
-                            this.state.table?.reload(null, null, relevantHandlerIds);
+                            this.state.table?.reload(undefined, undefined, relevantHandlerIds);
                         }
                     );
                     this.formBindingIds.set(property, formBindingId);
@@ -330,10 +330,10 @@ class Component {
 
             const tableState = table?.loadTableState();
 
-            if (settings.sort) {
+            if (settings.sort && !table?.hasSortByTableState()) {
                 const sortColumnId = tableState?.sortColumnId ?? settings.sort[0];
                 const sortOrder = tableState?.sortOrder ?? settings.sort[1];
-                table?.sort(sortColumnId, sortOrder);
+                table?.setSort(sortColumnId, sortOrder);
             }
 
             await table?.initialize();

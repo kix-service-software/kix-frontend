@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -205,40 +205,18 @@ export class TicketSearchFormManager extends SearchFormManager {
 
     public async getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>> {
         const options = await super.getInputTypeOptions(property, operator);
-        if (property === TicketProperty.OWNER_ID || property === TicketProperty.RESPONSIBLE_ID) {
+        const freeTextProperties = [
+            TicketProperty.OWNER_ID,
+            TicketProperty.RESPONSIBLE_ID,
+            TicketProperty.CONTACT_ID,
+            TicketProperty.ORGANISATION_ID
+        ];
+
+        if (freeTextProperties.some((p) => p === property)) {
             options.push([ObjectReferenceOptions.FREETEXT, true]);
         }
 
         return options;
-    }
-
-    public async getSortAttributeTree(): Promise<TreeNode[]> {
-        let sortNodes: TreeNode[] = [];
-        for (const prop of Ticket.SORT_PROPERTIES) {
-            sortNodes.push(new TreeNode(prop.Property, null));
-        }
-
-        for (const n of sortNodes) {
-            const label = await LabelService.getInstance().getPropertyText(
-                n.id, KIXObjectType.TICKET
-            );
-            n.label = label;
-        }
-
-        const superNodes = await super.getSortAttributeTree();
-        sortNodes = [...sortNodes, ...superNodes];
-
-        return sortNodes.sort((a, b) => a.label.localeCompare(b.label));
-    }
-
-    public async getSortAttributeType(attribute: string): Promise<string> {
-        const superType = await super.getSortAttributeType(attribute);
-        if (superType) {
-            return superType;
-        }
-
-        const property = Ticket.SORT_PROPERTIES.find((p) => p.Property === attribute);
-        return property ? property.DataType : null;
     }
 
     public async setValue(newValue: ObjectPropertyValue, silent?: boolean): Promise<void> {
@@ -267,5 +245,4 @@ export class TicketSearchFormManager extends SearchFormManager {
         }
         return loadingOptions;
     }
-
 }

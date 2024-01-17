@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -61,7 +61,9 @@ export class GeneralCatalogService extends KIXObjectAPIService {
                 token, KIXObjectType.GENERAL_CATALOG_CLASS, uri, null, null, 'GeneralCatalogClass', clientRequestId
             );
             if (objectIds) {
-                objectResponse.objects = objectResponse.objects?.filter((o) => objectIds.some((oi) => oi === o));
+                objectResponse.objects = objectResponse.objects?.filter(
+                    (o) => objectIds.some((oi) => oi?.toString() === o?.toString())
+                );
             }
         }
 

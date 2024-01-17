@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -34,7 +34,8 @@ export class ContextConfiguration implements IConfiguration {
                 public dialogs: ConfiguredDialogWidget[] = [],
                 public customizable: boolean = false,
                 public valid: boolean = true,
-                public loadingOptions: Array<[KIXObjectType | string, KIXObjectLoadingOptions]> = null
+                public loadingOptions: Array<[KIXObjectType | string, KIXObjectLoadingOptions]> = null,
+                public tableWidgetInstanceIds: Array<[string, string]> = []
         ) { }
 
 }

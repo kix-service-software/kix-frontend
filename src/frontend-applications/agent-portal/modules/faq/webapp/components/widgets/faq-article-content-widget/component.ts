@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -86,13 +86,13 @@ class Component {
     private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
         this.state.faqArticle = faqArticle;
 
-        if (faqArticle && faqArticle.Attachments) {
+        if (faqArticle?.Attachments) {
             this.state.attachments = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
             this.state.inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(faqArticle);
             this.prepareImages();
 
-            this.stars = await LabelService.getInstance().getIcons(faqArticle, FAQArticleProperty.VOTES);
-            this.rating = BrowserUtil.calculateAverage(faqArticle.Votes.map((v) => v.Rating));
+            this.stars = await LabelService.getInstance().getIcons(faqArticle, FAQArticleProperty.RATING);
+            this.rating = BrowserUtil.round(faqArticle.Rating);
             this.prepareActions();
         }
     }
@@ -100,7 +100,7 @@ class Component {
     private async prepareImages(): Promise<void> {
         const attachmentPromises: Array<Promise<DisplayImageDescription>> = [];
         const imageAttachments = this.state.attachments.filter((a) => a.ContentType.match(/^image\//));
-        if (imageAttachments && imageAttachments.length) {
+        if (imageAttachments?.length) {
             for (const imageAttachment of imageAttachments) {
                 attachmentPromises.push(
                     new Promise<DisplayImageDescription>(async (resolve, reject) => {
@@ -128,7 +128,7 @@ class Component {
     }
 
     public getRatingTooltip(): string {
-        const count = this.state.faqArticle.Votes ? this.state.faqArticle.Votes.length : 0;
+        const count = this.state.faqArticle.VoteCount ? this.state.faqArticle.VoteCount : 0;
         return `${this.state.translations['Translatable#Number of ratings']}: ${count}`;
     }
 
@@ -142,8 +142,8 @@ class Component {
         return null;
     }
 
-    public async download(attachment: Attachment): Promise<void> {
-        if (this.images && this.images.some((i) => i.imageId === attachment.ID)) {
+    public async download(attachment: Attachment, force: boolean): Promise<void> {
+        if (!force && this.images && this.images.some((i) => i.imageId === attachment.ID)) {
             EventService.getInstance().publish(
                 ImageViewerEvent.OPEN_VIEWER,
                 new ImageViewerEventData(this.images, attachment.ID)
@@ -151,7 +151,7 @@ class Component {
         } else {
             const attachmentWithContent = await this.loadAttachment(attachment);
             if (attachmentWithContent) {
-                if (attachmentWithContent.ContentType === 'application/pdf') {
+                if (!force && attachmentWithContent.ContentType === 'application/pdf') {
                     BrowserUtil.openPDF(attachmentWithContent.Content, attachmentWithContent.Filename);
                 } else {
                     BrowserUtil.startBrowserDownload(

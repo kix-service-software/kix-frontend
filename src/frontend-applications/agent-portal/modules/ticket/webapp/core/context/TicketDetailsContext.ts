@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,10 +23,17 @@ import { TicketHistory } from '../../../model/TicketHistory';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { ArticleLoader } from './ArticleLoader';
+import { TicketProperty } from '../../../model/TicketProperty';
 
 export class TicketDetailsContext extends Context {
 
     public static CONTEXT_ID = 'ticket-details';
+    private articleLoader: ArticleLoader;
+
+    public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        this.articleLoader = new ArticleLoader(Number(this.objectId));
+    }
 
     public getIcon(): string {
         return 'kix-icon-ticket';
@@ -95,7 +102,8 @@ export class TicketDetailsContext extends Context {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null,
             [
-                'StateType', 'ObjectActions', 'SLACriteria', KIXObjectProperty.DYNAMIC_FIELDS
+                'StateType', 'ObjectActions', 'SLACriteria', KIXObjectProperty.DYNAMIC_FIELDS,
+                TicketProperty.WATCHER_ID, KIXObjectProperty.LINK_COUNT
             ]
         );
 
@@ -144,5 +152,9 @@ export class TicketDetailsContext extends Context {
             KIXObjectType.TICKET_HISTORY, [this.objectId]
         );
         return ticketHistory;
+    }
+
+    public loadArticle(articleId: number, cb: (article: Article) => void): void {
+        this.articleLoader?.queueArticle(articleId, cb);
     }
 }

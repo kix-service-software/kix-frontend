@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -28,7 +28,8 @@ export class ObjectPropertyValue {
         public changeable: boolean = true,
         public id: string = IdService.generateDateBasedId('value-'),
         public additionalOptions: FormFieldOption[] = null,
-        public validErrorMessages: string[] = []
+        public validErrorMessages: string[] = [],
+        public hint: string = ''
     ) { }
 
 }

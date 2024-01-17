@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -25,15 +25,15 @@ import { Ticket } from '../../model/Ticket';
 import { TicketUIEvent } from '../../model/TicketUIEvent';
 import { TicketDetailsContext } from './context';
 
-export class TicketNotificationHandler {
+export class DoNotSentEventHandler {
 
-    private static INSTANCE: TicketNotificationHandler;
+    private static INSTANCE: DoNotSentEventHandler;
 
-    public static getInstance(): TicketNotificationHandler {
-        if (!TicketNotificationHandler.INSTANCE) {
-            TicketNotificationHandler.INSTANCE = new TicketNotificationHandler();
+    public static getInstance(): DoNotSentEventHandler {
+        if (!DoNotSentEventHandler.INSTANCE) {
+            DoNotSentEventHandler.INSTANCE = new DoNotSentEventHandler();
         }
-        return TicketNotificationHandler.INSTANCE;
+        return DoNotSentEventHandler.INSTANCE;
     }
 
     private subscriber: IEventSubscriber;
@@ -45,7 +45,6 @@ export class TicketNotificationHandler {
             eventPublished: (data: BackendNotification): void => {
                 if (data instanceof BackendNotification && data.Namespace === 'Ticket.Article.Flag') {
                     this.checkForNotSentError(data);
-
                 }
             }
         };
@@ -56,9 +55,9 @@ export class TicketNotificationHandler {
     private async checkForNotSentError(backendNotification: BackendNotification): Promise<void> {
         const split = backendNotification?.ObjectID?.split('::') || [];
         if (split.length === 4 && split[2] === 'NotSentError') {
-            const currentUser = await AgentSocketClient.getInstance().getCurrentUser(false)
+            const currentUser = await AgentSocketClient.getInstance().getCurrentUser()
                 .catch(() => null);
-            if (currentUser?.UserID === Number(split[3])) {
+            if (currentUser?.UserID === backendNotification.UserID) {
                 const message = await TranslationService.translate('Translatable#Email could not be sent');
                 const notSentErrorNotification = new PortalNotification(
                     'NotSentError', 'Translatable#Email Error', PortalNotificationType.IMPORTANT,
@@ -84,6 +83,12 @@ export class TicketNotificationHandler {
         }
     }
 
+    private async loadTicket(ticketId: number): Promise<Ticket> {
+        const tickets = await KIXObjectService.loadObjects<Ticket>(KIXObjectType.TICKET, [ticketId])
+            .catch(() => []);
+        return tickets?.length ? tickets[0] : null;
+    }
+
     private async setTicketContext(notification: PortalNotification): Promise<void> {
         const ticketId = notification?.data?.ticketId;
         const articleId = notification?.data?.articleId;
@@ -97,12 +102,6 @@ export class TicketNotificationHandler {
                 );
             }, 2000);
         }
-    }
-
-    private async loadTicket(ticketId: number): Promise<Ticket> {
-        const tickets = await KIXObjectService.loadObjects<Ticket>(KIXObjectType.TICKET, [ticketId])
-            .catch(() => []);
-        return tickets?.length ? tickets[0] : null;
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -75,20 +75,23 @@ export class UIModule implements IUIModule {
     private async registerAdminContext(): Promise<void> {
         const adminModuleAllowed = await this.checkAdminModuleAllowed();
         if (adminModuleAllowed) {
-            const contextDescriptor = new ContextDescriptor(
-                AdminContext.CONTEXT_ID, this.contextObjectTypes, ContextType.MAIN, ContextMode.DASHBOARD,
-                false, 'admin', ['admin'], AdminContext
-            );
+            this.registerContextIfNeeded();
+        }
+    }
 
-            const adminModules = await AdministrationSocketClient.getInstance().loadAdminCategories().catch(() => []);
-            if (adminModules?.length) {
-                ContextService.getInstance().registerContext(contextDescriptor);
-            }
+    private async registerContextIfNeeded(): Promise<void> {
+        const contextDescriptor = new ContextDescriptor(
+            AdminContext.CONTEXT_ID, this.contextObjectTypes, ContextType.MAIN, ContextMode.DASHBOARD,
+            false, 'admin', ['admin'], AdminContext
+        );
+        const adminModules = await AdministrationSocketClient.getInstance().loadAdminCategories().catch(() => []);
+        if (adminModules.length) {
+            ContextService.getInstance().registerContext(contextDescriptor);
         }
     }
 
     private async checkAdminModuleAllowed(): Promise<boolean> {
-        const currentUser = await AgentSocketClient.getInstance().getCurrentUser(false);
+        const currentUser = await AgentSocketClient.getInstance().getCurrentUser();
         let allowed = currentUser.UserID === 1;
         if (!allowed && Array.isArray(currentUser.RoleIDs)) {
             const agentPortalConfig = await SysConfigService.getInstance().getPortalConfiguration()

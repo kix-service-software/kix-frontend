@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,6 +14,7 @@ import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
+import { FormValueProperty } from '../../../../../object-forms/model/FormValueProperty';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
@@ -214,24 +215,15 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
 
             if (formValue) {
-                formValue.visible = true;
-
                 if (property === ArticleProperty.CC) {
-                    formValue.visible = false;
                     const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                    if (
-                        (!toValue?.enabled && !isEdit)
-                        || (toValue?.enabled && formValue?.value && isEdit)
-                    ) {
-                        formValue.visible = true;
-                    }
+                    const canShow = (!toValue?.enabled && !isEdit) || (toValue?.enabled && formValue?.value && isEdit);
+                    formValue.visible = canShow;
                 }
                 if (property === ArticleProperty.BCC) {
-                    formValue.visible = false;
                     const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                    if (toValue?.enabled && formValue?.value && isEdit) {
-                        formValue.visible = true;
-                    }
+                    const canShow = toValue?.enabled && formValue?.value && isEdit;
+                    formValue.visible = canShow;
                 }
 
                 // TO is enabled for edit or if set by template (initFormValueByField in RecipientFormValue)

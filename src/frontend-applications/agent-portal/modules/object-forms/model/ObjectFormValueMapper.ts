@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -81,6 +81,14 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     public async mapFormValues(object: T): Promise<void> {
+
+        for (const mapperExtension of this.extensions) {
+            const startInitMapper = Date.now();
+            await mapperExtension.init();
+            const endInitMapper = Date.now();
+            console.debug(`Init Mapper Extension (${mapperExtension?.constructor?.name}): ${endInitMapper - startInitMapper}ms`);
+        }
+
         this.object = object;
         const startMapObjectValues = Date.now();
         await this.mapObjectValues(object);
@@ -318,6 +326,8 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                     console.error(e);
                 });
         }
+
+        EventService.getInstance().publish(ObjectFormEvent.FORM_VALUE_ADDED);
 
         if (debugRules) {
             console.debug('FormValues after applyPropertyInstructions:');

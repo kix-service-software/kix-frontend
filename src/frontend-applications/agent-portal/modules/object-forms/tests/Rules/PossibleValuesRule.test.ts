@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,9 +22,11 @@ describe('Rule - PossibleValues / Add / Remove', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ PossibleValues: [1, 2, 3] }],
-            'testProperty3': [{ PossibleValues: [1, 2, 3] }],
-            'testProperty5': [{ PossibleValues: [1, 2, 3] }]
+            EvaluationResult: {
+                'testProperty1': [{ PossibleValues: [1, 2, 3] }],
+                'testProperty3': [{ PossibleValues: [1, 2, 3] }],
+                'testProperty5': [{ PossibleValues: [1, 2, 3] }]
+            }
         })
 
         before(async () => {
@@ -65,9 +67,11 @@ describe('Rule - PossibleValues / Add / Remove', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ PossibleValuesAdd: [4, 5] }],
-            'testProperty3': [{ PossibleValuesAdd: [4, 5] }],
-            'testProperty5': [{ PossibleValuesAdd: [4, 5] }]
+            EvaluationResult: {
+                'testProperty1': [{ PossibleValuesAdd: [4, 5] }],
+                'testProperty3': [{ PossibleValuesAdd: [4, 5] }],
+                'testProperty5': [{ PossibleValuesAdd: [4, 5] }]
+            }
         })
 
         before(async () => {
@@ -117,9 +121,11 @@ describe('Rule - PossibleValues / Add / Remove', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ PossibleValuesAdd: [4, 5] }],
-            'testProperty3': [{ PossibleValuesAdd: [4, 5] }],
-            'testProperty5': [{ PossibleValuesAdd: [4, 5] }]
+            EvaluationResult: {
+                'testProperty1': [{ PossibleValuesAdd: [4, 5] }],
+                'testProperty3': [{ PossibleValuesAdd: [4, 5] }],
+                'testProperty5': [{ PossibleValuesAdd: [4, 5] }]
+            }
         })
 
         before(async () => {
@@ -163,9 +169,11 @@ describe('Rule - PossibleValues / Add / Remove', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ PossibleValuesRemove: [2, 3] }],
-            'testProperty3': [{ PossibleValuesRemove: [2, 3] }],
-            'testProperty5': [{ PossibleValuesRemove: [2, 3] }]
+            EvaluationResult: {
+                'testProperty1': [{ PossibleValuesRemove: [2, 3] }],
+                'testProperty3': [{ PossibleValuesRemove: [2, 3] }],
+                'testProperty5': [{ PossibleValuesRemove: [2, 3] }]
+            }
         })
 
         before(async () => {
@@ -209,9 +217,11 @@ describe('Rule - PossibleValues / Add / Remove', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ PossibleValuesRemove: [2, 3, 5, 6] }],
-            'testProperty3': [{ PossibleValuesRemove: [2, 3, 5, 6] }],
-            'testProperty5': [{ PossibleValuesRemove: [2, 3, 5, 6] }]
+            EvaluationResult: {
+                'testProperty1': [{ PossibleValuesRemove: [2, 3, 5, 6] }],
+                'testProperty3': [{ PossibleValuesRemove: [2, 3, 5, 6] }],
+                'testProperty5': [{ PossibleValuesRemove: [2, 3, 5, 6] }]
+            }
         })
 
         before(async () => {
@@ -257,9 +267,11 @@ describe('Rule - PossibleValues / Add / Remove', () => {
 
             let objectFormValueMapper: ObjectFormValueMapper;
             const readonlyRule = new RuleResult({
-                'testProperty1': [{ PossibleValuesRemove: [2, 3] }],
-                'testProperty3': [{ PossibleValuesRemove: [2] }],
-                'testProperty5': [{ PossibleValuesRemove: [1, 2] }],
+                EvaluationResult: {
+                    'testProperty1': [{ PossibleValuesRemove: [2, 3] }],
+                    'testProperty3': [{ PossibleValuesRemove: [2] }],
+                    'testProperty5': [{ PossibleValuesRemove: [1, 2] }],
+                }
             });
 
             before(async () => {

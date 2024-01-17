@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,6 +22,7 @@ import { IColumnConfiguration } from '../../../../../model/configuration/IColumn
 import { SearchCache } from '../../../../search/model/SearchCache';
 import { Table } from '../../../../table/model/Table';
 import { ToggleOptions } from '../../../../table/model/ToggleOptions';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 export class TicketTableFactory extends TableFactory {
 
@@ -81,6 +82,7 @@ export class TicketTableFactory extends TableFactory {
         for (const extendedFactory of this.extendedTableFactories) {
             extendedFactory.modifiyTableConfiguation(tableConfiguration, useDefaultColumns);
         }
+        this.addIncludesIfNeeded(tableConfiguration);
 
         return tableConfiguration;
     }
@@ -124,7 +126,7 @@ export class TicketTableFactory extends TableFactory {
                     TicketProperty.UNSEEN, false, true, false, false, 41, true, false, false, DataType.STRING, false
                 ),
                 new DefaultColumnConfiguration(null, null, null,
-                    TicketProperty.WATCHERS, false, true, false, false, 41, true, false, false, DataType.STRING, false
+                    TicketProperty.WATCHER_ID, false, true, false, false, 41, true, false, false, DataType.STRING, false
                 ),
                 new DefaultColumnConfiguration(
                     null, null, null, TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true
@@ -185,6 +187,40 @@ export class TicketTableFactory extends TableFactory {
         }
 
         return config;
+    }
+
+    private addIncludesIfNeeded(tableConfiguration: TableConfiguration): void {
+        if (
+            tableConfiguration.tableColumns.some((c) => c.property === TicketProperty.UNSEEN)
+        ) {
+            if (!tableConfiguration.loadingOptions) {
+                tableConfiguration.loadingOptions = new KIXObjectLoadingOptions();
+            }
+            if (!tableConfiguration.loadingOptions.includes) {
+                tableConfiguration.loadingOptions.includes = [];
+            }
+            if (!tableConfiguration.loadingOptions.includes?.some((i) => i === TicketProperty.UNSEEN)) {
+                tableConfiguration.loadingOptions.includes.push(TicketProperty.UNSEEN);
+            }
+        }
+
+        const watcherColumn = tableConfiguration.tableColumns.find(
+            (c) => c.property === TicketProperty.WATCHERS || c.property === TicketProperty.WATCHER_ID
+        );
+        if (watcherColumn) {
+            // make sure correct property is used (prevent including watchers)
+            watcherColumn.property = TicketProperty.WATCHER_ID;
+
+            if (!tableConfiguration.loadingOptions) {
+                tableConfiguration.loadingOptions = new KIXObjectLoadingOptions();
+            }
+            if (!tableConfiguration.loadingOptions.includes) {
+                tableConfiguration.loadingOptions.includes = [];
+            }
+            if (!tableConfiguration.loadingOptions.includes?.some((i) => i === TicketProperty.WATCHER_ID)) {
+                tableConfiguration.loadingOptions.includes.push(TicketProperty.WATCHER_ID);
+            }
+        }
     }
 
 }

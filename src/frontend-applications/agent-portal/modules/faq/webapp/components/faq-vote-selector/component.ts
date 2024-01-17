@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -36,9 +36,11 @@ export class Component {
 
     public onInput(input: any): void {
         this.faqArticle = input.faqArticle;
-        if (this.faqArticle && this.faqArticle.Votes) {
-            this.rating = BrowserUtil.calculateAverage(this.faqArticle.Votes.map((v) => v.Rating));
-            this.voteCount = this.faqArticle.Votes.length;
+        if (this.faqArticle?.Rating) {
+            this.rating = BrowserUtil.round(this.faqArticle.Rating);
+        }
+        if (this.faqArticle?.VoteCount) {
+            this.voteCount = this.faqArticle.VoteCount;
         }
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,14 +12,16 @@ export enum ConfigItemProperty {
     CONFIG_ITEM_ID = 'ConfigItemID',
     CHANGE_BY = 'ChangeBy',
     CHANGE_TIME = 'ChangeTime',
-    CLASS = 'Class',
     CUR_INCI_STATE_ID = 'CurInciStateID',
     CUR_INCI_STATE = 'CurInciState',
     CUR_INCI_STATE_TYPE = 'CurInciStateType',
+    INCI_STATE = 'InciState',
     CLASS_ID = 'ClassID',
+    CLASS = 'Class',
     CUR_DEPL_STATE_ID = 'CurDeplStateID',
     CUR_DEPL_STATE = 'CurDeplState',
     CUR_DEPL_STATE_TYPE = 'CurDeplStateType',
+    DEPL_STATE = 'DeplState',
     NUMBER = 'Number',
     NAME = 'Name',
     CREATE_BY = 'CreateBy',
@@ -32,6 +34,7 @@ export enum ConfigItemProperty {
 
     // search properties
     ASSIGNED_CONTACT = 'AssignedContact',
-    ASSIGNED_ORGANISATION = 'AssignedOrganisation'
+    ASSIGNED_ORGANISATION = 'AssignedOrganisation',
+    PREVIOUS_VERSION_SEARCH = 'PreviousVersionSearch'
 
 }

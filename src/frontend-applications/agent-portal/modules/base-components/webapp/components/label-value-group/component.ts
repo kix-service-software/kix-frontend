@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -64,11 +64,11 @@ export class Component {
         return columnString + ';';
     }
 
-    public fileClicked(groupIndex: number = null, attachment: any = null): void {
+    public fileClicked(force: boolean, groupIndex: number = null, attachment: any = null): void {
         if (groupIndex !== null && this.state.groups[groupIndex]) {
-            (this as any).emit('fileClicked', this.state.groups[groupIndex].value.attachment);
+            (this as any).emit('fileClicked', force, this.state.groups[groupIndex].value.attachment);
         } else if (attachment) {
-            (this as any).emit('fileClicked', attachment);
+            (this as any).emit('fileClicked', force, attachment);
         }
     }
 }

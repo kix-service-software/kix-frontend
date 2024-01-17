@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -40,10 +40,6 @@ export class OrganisationContext extends Context {
         super.initContext(urlParams);
 
         this.additionalInformation.set(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, false);
-
-        if (this.filterValue) {
-            this.loadOrganisations();
-        }
     }
 
     public async update(urlParams: URLSearchParams): Promise<void> {
@@ -142,15 +138,13 @@ export class OrganisationContext extends Context {
             const filter = await OrganisationService.getInstance().prepareFullTextFilter(this.filterValue);
             const loadingOptions = new KIXObjectLoadingOptions(filter);
             loadingOptions.limit = limit;
-            loadingOptions.searchLimit = 250;
             loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
 
-            const collectionId = this.contextId + KIXObjectType.ORGANISATION;
-
-            this.prepareContextLoadingOptions(KIXObjectType.ORGANISATION, loadingOptions);
+            await this.prepareContextLoadingOptions(KIXObjectType.ORGANISATION, loadingOptions);
 
             const organisations = await KIXObjectService.loadObjects(
-                KIXObjectType.ORGANISATION, null, loadingOptions, null, false, undefined, undefined, collectionId
+                KIXObjectType.ORGANISATION, null, loadingOptions, null, false, undefined, undefined,
+                this.contextId + KIXObjectType.ORGANISATION
             ).catch((error) => []);
 
             this.setObjectList(KIXObjectType.ORGANISATION, organisations);
@@ -161,7 +155,6 @@ export class OrganisationContext extends Context {
             this.setObjectList(KIXObjectType.ORGANISATION, []);
             this.setObjectList(KIXObjectType.CONTACT, []);
         }
-
     }
 
     public async loadContacts(limit?: number): Promise<void> {
@@ -176,7 +169,6 @@ export class OrganisationContext extends Context {
         const loadingOptions = new KIXObjectLoadingOptions([]);
         loadingOptions.includes = [ContactProperty.USER, KIXObjectProperty.DYNAMIC_FIELDS];
         loadingOptions.limit = limit;
-        loadingOptions.searchLimit = 250;
 
         const collectionId = this.contextId + KIXObjectType.CONTACT;
 
@@ -188,14 +180,14 @@ export class OrganisationContext extends Context {
                     FilterDataType.NUMERIC, FilterType.AND, organisationIds
                 ));
             }
-            this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
+            await this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
             contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, undefined, undefined, undefined, undefined, collectionId
             );
         } else if (!isOrganisationDepending && this.filterValue) {
             const filter = await ContactService.getInstance().prepareFullTextFilter(this.filterValue);
             loadingOptions.filter = filter;
-            this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
+            await this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
             contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, undefined, undefined, undefined, undefined, collectionId
             );
@@ -205,7 +197,7 @@ export class OrganisationContext extends Context {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS_FINISHED, KIXObjectType.CONTACT);
     }
 
-    public reloadObjectList(objectType: KIXObjectType, silent: boolean = false, limit: number = 20): Promise<void> {
+    public reloadObjectList(objectType: KIXObjectType, silent: boolean = false, limit?: number): Promise<void> {
         if (objectType === KIXObjectType.ORGANISATION) {
             this.currentOrganisationLimit = limit;
             return this.loadOrganisations(this.currentOrganisationLimit);

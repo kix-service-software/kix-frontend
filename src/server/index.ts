@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,14 +21,13 @@ import { IInitialDataExtension } from '../frontend-applications/agent-portal/mod
 import { AgentPortalExtensions } from '../frontend-applications/agent-portal/server/extensions/AgentPortalExtensions';
 import { ClientRegistrationService } from '../frontend-applications/agent-portal/server/services/ClientRegistrationService';
 import { MarkoService } from '../frontend-applications/agent-portal/server/services/MarkoService';
-import { SocketService } from '../frontend-applications/agent-portal/server/services/SocketService';
 import { PluginService } from './services/PluginService';
-import { AuthenticationService } from './services/AuthenticationService';
 import { IServer } from './model/IServer';
 import { IServiceExtension } from '../frontend-applications/agent-portal/server/extensions/IServiceExtension';
 import { ServerExtensions } from './model/ServerExtensions';
 import { IFrontendServerExtension } from './model/IFrontendServerExtension';
 import { ServerManager } from './ServerManager';
+import { ClientNotificationService } from '../frontend-applications/agent-portal/server/services/ClientNotificationService';
 
 const path = require('path');
 
@@ -65,6 +64,8 @@ async function initializeServer(): Promise<void> {
     const servers: IServer[] = ServerManager.getInstance().getServers();
 
     initProcessListener();
+
+    ClientNotificationService.getInstance();
 
     if (serverConfig.CLUSTER_ENABLED) {
         if (cluster.isPrimary) {
@@ -171,8 +172,7 @@ async function buildApplications(): Promise<void> {
 async function createClientRegistration(): Promise<void> {
     LoggingService.getInstance().info('Create ClientRegsitration');
 
-    const backendToken = await AuthenticationService.getInstance().getCallbackToken();
-    await ClientRegistrationService.getInstance().createClientRegistration(backendToken)
+    await ClientRegistrationService.getInstance().createClientRegistration()
         .catch((error) => {
             LoggingService.getInstance().error(error);
             LoggingService.getInstance().error(

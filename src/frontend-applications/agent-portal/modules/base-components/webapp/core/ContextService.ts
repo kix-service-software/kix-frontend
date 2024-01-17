@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -476,10 +476,12 @@ export class ContextService {
         objectId = objectId?.toString();
         const promiseKey = JSON.stringify({ contextId, objectId });
 
-        if (!this.contextCreatePromises.has(promiseKey)) {
+        const descriptor = this.contextDescriptorList.find((cd) => cd.contextId === contextId);
+
+        if (descriptor && !this.contextCreatePromises.has(promiseKey)) {
             this.contextCreatePromises.set(
                 promiseKey, this.createPromise(
-                    promiseKey, contextId, objectId, instanceId,
+                    promiseKey, descriptor, objectId, instanceId,
                     urlParams, additionalInformation, contextPreference
                 )
             );
@@ -489,13 +491,13 @@ export class ContextService {
     }
 
     private createPromise(
-        promiseKey: string, contextId: string, objectId?: string | number, instanceId?: string,
+        promiseKey: string, descriptor: ContextDescriptor, objectId?: string | number, instanceId?: string,
         urlParams?: URLSearchParams,
         additionalInformation: Array<[string, any]> = [],
         contextPreference?: ContextPreference
     ): Promise<Context> {
         return new Promise<Context>(async (resolve, reject) => {
-            const descriptor = this.contextDescriptorList.find((cd) => cd.contextId === contextId);
+
 
             let context: Context;
             if (descriptor) {

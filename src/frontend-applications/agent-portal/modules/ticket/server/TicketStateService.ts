@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -48,7 +48,7 @@ export class TicketStateAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.TICKET_STATE_TYPE;
     }
 
-    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
         let objectClass;
 
         if (objectType === KIXObjectType.TICKET_STATE) {
@@ -88,7 +88,7 @@ export class TicketStateAPIService extends KIXObjectAPIService {
 
             if (objectIds && objectIds.length) {
                 objectResponse.objects = objectResponse.objects?.filter(
-                    (t) => objectIds.some((oid) => oid === t.ID)
+                    (t) => objectIds.some((oid) => oid?.toString() === t.ID?.toString())
                 );
             }
         } else if (objectType === KIXObjectType.TICKET_STATE_TYPE) {

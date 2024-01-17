@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,6 +17,7 @@ import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
 import { SysConfigService } from '../../../../sysconfig/webapp/core';
 import { TextModule } from '../../../../textmodule/model/TextModule';
 import { BrowserUtil } from '../../core/BrowserUtil';
+import { CKEditorConfiguration } from '../../../model/CKEditorConfiguration';
 import { ComponentState } from './ComponentState';
 
 declare let CKEDITOR: any;
@@ -87,7 +88,7 @@ class EditorComponent {
                     }
                 }
 
-                if (typeof input.readOnly !== 'undefined' && this.state.readOnly !== input.readOnly) {
+                if (typeof input.readOnly !== 'undefined' && input.readOnly !== null) {
                     this.state.readOnly = input.readOnly;
                     this.editor.setReadOnly(this.state.readOnly);
                 }
@@ -125,7 +126,7 @@ class EditorComponent {
             const agentPortalConfig = await SysConfigService.getInstance()
                 .getPortalConfiguration<AgentPortalConfiguration>();
 
-            const editorConfig = agentPortalConfig?.ckEditorConfiguration;
+            const editorConfig = agentPortalConfig?.ckEditorConfiguration || new CKEditorConfiguration();
 
             this.createTimeout = setTimeout(async () => {
                 if (!this.state.readOnly) {
@@ -317,6 +318,14 @@ class EditorComponent {
      */
     private instanceExists(): boolean {
         return Boolean(CKEDITOR?.instances && CKEDITOR.instances[this.state.id]);
+    }
+
+    public getValue(): string {
+        let value: string;
+        if (this.editor) {
+            value = this.editor.getData();
+        }
+        return value;
     }
 
 }

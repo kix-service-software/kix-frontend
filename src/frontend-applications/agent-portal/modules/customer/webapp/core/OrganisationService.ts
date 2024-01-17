@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,6 +21,7 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { OrganisationProperty } from '../../model/OrganisationProperty';
+import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 
@@ -63,12 +64,12 @@ export class OrganisationService extends KIXObjectService<Organisation> {
         if (loadingOptions || !preload) {
             objects = await super.loadObjects<Organisation>(
                 KIXObjectType.ORGANISATION, objectIds, loadingOptions,
-                undefined, undefined, undefined, undefined, collectionId
+                undefined, undefined, undefined, silent, collectionId
             );
         } else {
             objects = await super.loadObjects<Organisation>(
                 KIXObjectType.ORGANISATION, null, loadingOptions, objectLoadingOptions,
-                undefined, undefined, undefined, collectionId
+                undefined, undefined, silent, collectionId
             );
             if (objectIds) {
                 objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
@@ -142,7 +143,7 @@ export class OrganisationService extends KIXObjectService<Organisation> {
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
             )
         ];
     }
@@ -156,6 +157,17 @@ export class OrganisationService extends KIXObjectService<Organisation> {
             }
         }
         return [...objectProperties, ...superProperties];
+    }
+
+    public async getSortableAttributes(filtered: boolean = true): Promise<ObjectSearch[]> {
+        const supportedAttributes = await super.getSortableAttributes(filtered);
+
+        const filterList = [
+            'OrganisationID'
+        ];
+        return filtered ?
+            supportedAttributes.filter((sA) => !filterList.some((fp) => fp === sA.Property)) :
+            supportedAttributes;
     }
 
 }

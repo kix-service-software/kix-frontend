@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,6 +12,7 @@ import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { SortUtil } from '../../../../../../model/SortUtil';
 import { ObjectReferenceUtil } from '../../../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
+import { TimeoutTimer } from '../../../../../base-components/webapp/core/TimeoutTimer';
 import { TreeNode } from '../../../../../base-components/webapp/core/tree';
 import { Contact } from '../../../../../customer/model/Contact';
 import { Organisation } from '../../../../../customer/model/Organisation';
@@ -25,6 +26,8 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
 
     objectBindingId: string;
 
+    private setFormValueTimeout: TimeoutTimer;
+
     public constructor(
         property: string,
         ticket: Ticket,
@@ -37,18 +40,22 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
         this.isAutoComplete = false;
         this.hasFilter = false;
         this.multiselect = false;
+
+        this.setFormValueTimeout = new TimeoutTimer();
     }
 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
-        this.objectBindingId = this.objectValueMapper?.object?.
-            addBinding(TicketProperty.CONTACT_ID, async (value: number) => {
+        await this.setOrganisationValue(null, true);
+
+        this.objectBindingId = this.objectValueMapper?.object?.addBinding(
+            TicketProperty.CONTACT_ID,
+            async (value: number) => {
                 await this.loadSelectableValues();
                 await this.setOrganisationValue(value);
                 this.objectValueMapper?.validateFormValue(this, true);
-            });
-
-        await this.setOrganisationValue();
+            }
+        );
     }
 
     public destroy(): void {
@@ -93,12 +100,10 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
             } else {
                 this.clearPossibleValuesAndNodes();
             }
-        } else {
-            this.clearPossibleValuesAndNodes();
         }
     }
 
-    private async setOrganisationValue(contactId?: number): Promise<void> {
+    private async setOrganisationValue(contactId?: number, init?: boolean): Promise<void> {
         let organisationId: number | string = null;
 
         if (!contactId) {
@@ -141,19 +146,23 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
             }
         }
 
-        return this.setFormValue(organisationId, true);
+        if (!init) {
+            await this.setFormValue(organisationId, true);
+        }
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
-        let newValue;
-        if (value) {
-            if (Array.isArray(value)) {
-                newValue = value[0];
-            } else {
-                newValue = value;
+        this.setFormValueTimeout.restartTimer(() => {
+            let newValue;
+            if (value) {
+                if (Array.isArray(value)) {
+                    newValue = value[0];
+                } else {
+                    newValue = value;
+                }
             }
-        }
-        return super.setFormValue(newValue, force);
+            super.setFormValue(newValue, force);
+        }, 350);
     }
 
     private clearPossibleValuesAndNodes(): void {

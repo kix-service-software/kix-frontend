@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -96,7 +96,7 @@ export class DynamicFormFieldValue {
         public removable: boolean = true,
         public readonly: boolean = value.readonly,
         public changeable: boolean = value.changeable,
-        public required: boolean = value.required
+        public required: boolean = value.required,
     ) {
 
         if (!id) {
@@ -428,6 +428,11 @@ export class DynamicFormFieldValue {
                             this.withinEndValue = partsTo[1];
                             this.withinEndUnit = partsTo[2];
                         }
+
+                        this.value.value = [
+                            this.withinStartType, this.withinStartValue, this.withinStartUnit,
+                            this.withinEndType, this.withinEndValue, this.withinEndUnit
+                        ];
                     } else if (this.value.value.length === 6) {
                         this.withinStartType = this.value.value[0];
                         this.withinStartValue = this.value.value[1];

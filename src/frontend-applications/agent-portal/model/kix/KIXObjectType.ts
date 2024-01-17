@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -105,6 +105,8 @@ export enum KIXObjectType {
 
     MACRO_ACTION_TYPE = 'MacroActionType',
 
+    MACRO_TYPE = 'MacroType',
+
     MAIL_ACCOUNT = 'MailAccount',
 
     MAIL_ACCOUNT_TYPE = 'MailAccountType',
@@ -199,5 +201,12 @@ export enum KIXObjectType {
 
     WEBFORM = 'WEBFORM',
 
-    CONTEXT = 'CONTEXT'
+    CONTEXT = 'CONTEXT',
+
+    OBJECT_SEARCH = 'OBJECT_SEARCH',
+
+    USER_TICKETS = 'USER_TICKETS',
+
+    USER_COUNTER = 'USER_COUNTER'
+
 }

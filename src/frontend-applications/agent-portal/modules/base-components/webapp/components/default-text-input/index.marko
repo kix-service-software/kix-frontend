@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -8,26 +8,39 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.field)>
-    <input.input-style
-        class={
-                invalid: state.invalid
-            }
-        value=state.currentValue
-        type=component.getInputType(state.isPasswordVisible)
-        maxlength=state.field.maxLength
-        placeholder=state.placeholder
-        autocomplete=component.getAutoCompleteOption()
-        required=input.required
-        readonly=state.field.readonly
-        disabled=state.field.readonly
-        on-blur("focusLost")
-        on-input("valueChanged")/>
-    <if(state.isPasswordInit)>
-        <div.d-flex.align-items-center.justify-content-center.px-2 role="button" on-click("togglePasswordVisible")>
-            <i.far class={
-                'fa-eye': state.isPasswordVisible,
-                'fa-eye-slash': !state.isPasswordVisible
-            }></i>
-        </div>
-    </if>
+    <div class="input-group">
+        <input
+            class=[
+                "form-control input-style",
+                {
+                    invalid: state.invalid,
+                },
+            ]
+            value=state.currentValue
+            type=component.getInputType(state.isPasswordVisible)
+            maxlength=(state.field.maxLength)
+            placeholder=state.placeholder
+            autocomplete=component.getAutoCompleteOption()
+            required=input.required
+            readonly=(state.field.readonly)
+            disabled=(state.field.readonly)
+            on-blur("focusLost")
+            on-input("valueChanged")
+        >
+        <if(state.isPasswordInit)>
+            <div
+                role="button"
+                on-click("togglePasswordVisible")
+                class="input-group-text"
+            >
+                <i class=[
+                    "far",
+                    {
+                        "fa-eye": state.isPasswordVisible,
+                        "fa-eye-slash": !state.isPasswordVisible,
+                    },
+                ]/>
+            </div>
+        </if>
+    </div>
 </if>

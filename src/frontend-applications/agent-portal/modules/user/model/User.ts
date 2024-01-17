@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,7 +10,6 @@
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { UserPreference } from './UserPreference';
-import { Tickets } from './Tickets';
 import { Contact } from '../../customer/model/Contact';
 
 export class User extends KIXObject {
@@ -35,7 +34,6 @@ export class User extends KIXObject {
 
     public Preferences: UserPreference[];
     public RoleIDs: number[];
-    public Tickets: Tickets;
 
     public constructor(user?: User) {
         super(user);
@@ -44,7 +42,6 @@ export class User extends KIXObject {
             this.ObjectId = this.UserID;
             this.UserLogin = user.UserLogin;
             this.Preferences = user.Preferences ? user.Preferences.map((p) => new UserPreference(p)) : [];
-            this.Tickets = user.Tickets;
             this.ValidID = user.ValidID;
             this.UserComment = user.UserComment;
             this.RoleIDs = user.RoleIDs ? user.RoleIDs : [];
@@ -54,15 +51,6 @@ export class User extends KIXObject {
             this.UserFirstname = user.UserFirstname;
             this.UserLastname = user.UserLastname;
             this.UserFullname = user.UserFullname;
-
-            if (this.Tickets) {
-                this.Tickets.Owned = this.Tickets.Owned.map((t) => Number(t));
-                this.Tickets.OwnedAndLocked = this.Tickets.OwnedAndLocked.map((t) => Number(t));
-                this.Tickets.OwnedAndLockedAndUnseen = this.Tickets.OwnedAndLockedAndUnseen.map((t) => Number(t));
-                this.Tickets.OwnedAndUnseen = this.Tickets.OwnedAndUnseen.map((t) => Number(t));
-                this.Tickets.Watched = this.Tickets.Watched.map((t) => Number(t));
-                this.Tickets.WatchedAndUnseen = this.Tickets.WatchedAndUnseen.map((t) => Number(t));
-            }
         }
     }
 

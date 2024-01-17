@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,9 +22,11 @@ describe('Rule - Set', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
-            'testProperty1': [{ Set: 'testValue1' }],
-            'testProperty3': [{ Set: 'testValue3' }],
-            'testProperty5': [{ Set: 'testValue5' }]
+            EvaluationResult: {
+                'testProperty1': [{ Set: 'testValue1' }],
+                'testProperty3': [{ Set: 'testValue3' }],
+                'testProperty5': [{ Set: 'testValue5' }]
+            }
         })
 
         before(async () => {

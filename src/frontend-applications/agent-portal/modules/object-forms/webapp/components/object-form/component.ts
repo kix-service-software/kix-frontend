@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -55,7 +55,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.submitPattern = submitButtonText;
         }
 
-        await this.loadForm();
+        await this.setFormValues();
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('object-form'),
@@ -70,12 +70,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     data.instanceId === this.context.instanceId
                 ) {
                     this.state.prepared = false;
-                    this.loadForm();
-                    setTimeout(() => this.state.prepared = true, 5);
+                    await this.setFormValues();
+                    setTimeout(() => this.state.prepared = true, 35);
                 } else if (eventId === ObjectFormEvent.FIELD_ORDER_CHANGED) {
                     this.state.prepared = false;
                     await this.setFormValues();
-                    setTimeout(() => this.state.prepared = true, 5);
+                    setTimeout(() => this.state.prepared = true, 35);
                 }
             }
         };
@@ -85,8 +85,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
 
-        BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', true);
-        setTimeout(() => BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', false), 250);
+        setTimeout(() => this.state.prepared = true, 250);
     }
 
     public onDestroy(): void {
@@ -96,13 +95,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
-    private async loadForm(): Promise<void> {
-        await this.setFormValues();
-    }
-
     private async setFormValues(): Promise<void> {
         this.formhandler = await this.context.getFormManager().getObjectFormHandler();
-        this.state.formValues = this.formhandler?.getFormValues() || [];
+        if (this.formhandler) {
+            this.state.formValues = this.formhandler?.getFormValues() || [];
+        } else {
+            this.state.error = 'Translatable#No form available. Please contact your administrator.';
+        }
     }
 
     public async submit(): Promise<void> {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -286,6 +286,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     textStyle: 'font-weight:bold;margin-bottom:0.5rem',
                                     icon: 'kix-icon-ci',
                                     componentId: 'dynamic-field-value',
+                                    detailViewWidthFactor: '2',
                                     componentData: {
                                         name: 'AffectedAsset'
                                     },
@@ -368,6 +369,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     textPlaceholder: [
                                         '<KIX_TICKET_AccountedTime>'
                                     ],
+                                    detailViewWidthFactor: '2',
                                     icon: 'kix-icon-time',
                                     conditions: [
                                         new UIFilterCriterion(
@@ -816,7 +818,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
                                 FilterDataType.NUMERIC, FilterType.AND, 1
                             )
-                        ], null, 100, [FAQArticleProperty.VOTES]
+                        ], null, 100, [FAQArticleProperty.RATING]
                     ), 10,
                     [
                         new DefaultColumnConfiguration(
@@ -827,7 +829,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             null, null, null, FAQArticleProperty.TITLE, true, false, true, false, 260, true, false
                         ),
                         new DefaultColumnConfiguration(
-                            null, null, null, FAQArticleProperty.VOTES, true, false, false, false, 50, true, false
+                            null, null, null, FAQArticleProperty.RATING, true, false, false, false, 50, true, false
                         ),
                     ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL,
                     null, null, null,
@@ -919,7 +921,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS,
                                 FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_TicketID>'
                             )
-                        ], null, 100
+                        ], null, 50, null, null, null, null, 50
                     ), 10,
                     [
                         new DefaultColumnConfiguration(

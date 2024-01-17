@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -13,16 +13,21 @@ export class RuleResult {
 
     public InputOrder: string[];
     public propertyInstructions: PropertyInstruction[] = [];
+    public conditionProperties: string[] = [];
 
     public constructor(result: any) {
-        if (result) {
+        if (result?.EvaluationResult) {
             this.InputOrder = result.InputOrder || [];
 
-            for (const value in result) {
-                if (Object.prototype.hasOwnProperty.call(result, value) && value !== 'InputOrder') {
-                    this.propertyInstructions.push(new PropertyInstruction(value, result[value]));
+            const evaluationResult = result.EvaluationResult;
+
+            for (const value in evaluationResult) {
+                if (Object.prototype.hasOwnProperty.call(evaluationResult, value) && value !== 'InputOrder') {
+                    this.propertyInstructions.push(new PropertyInstruction(value, evaluationResult[value]));
                 }
             }
+
+            this.conditionProperties = result.ConditionProperties || [];
         }
     }
 

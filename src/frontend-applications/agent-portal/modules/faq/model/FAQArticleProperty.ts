@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -53,11 +53,13 @@ export enum FAQArticleProperty {
 
     VOTES = 'Votes',
 
+    RATING = 'Rating',
+
     LINK = 'LINK',
 
     // display properties
-    CATEGORY = 'CATEGORY',
-    CATEGORY_FULLNAME = 'CATEGORY_FULLNAME',
+    CATEGORY = 'Category',
+    CATEGORY_FULLNAME = 'CategoryFullname',
     FIELD_1_NO_INLINE = 'Field1NoInline',
     FIELD_2_NO_INLINE = 'Field2NoInline',
     FIELD_3_NO_INLINE = 'Field3NoInline',

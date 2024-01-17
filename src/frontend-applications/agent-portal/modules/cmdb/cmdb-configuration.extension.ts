@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -251,38 +251,38 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(ciListWidget);
 
-        configurations.push(
-            new ContextConfiguration(
-                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(),
-                [],
-                [
-                    new ConfiguredWidget(
-                        'cmdb-dashboard-class-explorer', 'cmdb-dashboard-class-explorer', null,
-                        [new UIComponentPermission('system/cmdb/classes', [CRUD.READ])]
-                    )
-                ],
-                [],
-                [
-                    new ConfiguredWidget(
-                        'cmdb-dashboard-ci-chart-items-count', 'cmdb-dashboard-ci-chart-items-count', null,
-                        [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
-                    ),
-                    new ConfiguredWidget(
-                        'cmdb-dashboard-ci-chart-deployment-states', 'cmdb-dashboard-ci-chart-deployment-states', null,
-                        [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
-                    ),
-                    new ConfiguredWidget(
-                        'cmdb-dashboard-ci-chart-incident-states', 'cmdb-dashboard-ci-chart-incident-states', null,
-                        [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
-                    ),
-                    new ConfiguredWidget(
-                        'cmdb-dashboard-ci-list-widget', 'cmdb-dashboard-ci-list-widget', null,
-                        [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.LARGE
-                    )
-                ]
-            )
+        const contextConfig = new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+            this.getModuleId(),
+            [],
+            [
+                new ConfiguredWidget(
+                    'cmdb-dashboard-class-explorer', 'cmdb-dashboard-class-explorer', null,
+                    [new UIComponentPermission('system/cmdb/classes', [CRUD.READ])]
+                )
+            ],
+            [],
+            [
+                new ConfiguredWidget(
+                    'cmdb-dashboard-ci-chart-items-count', 'cmdb-dashboard-ci-chart-items-count', null,
+                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
+                ),
+                new ConfiguredWidget(
+                    'cmdb-dashboard-ci-chart-deployment-states', 'cmdb-dashboard-ci-chart-deployment-states', null,
+                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
+                ),
+                new ConfiguredWidget(
+                    'cmdb-dashboard-ci-chart-incident-states', 'cmdb-dashboard-ci-chart-incident-states', null,
+                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
+                ),
+                new ConfiguredWidget(
+                    'cmdb-dashboard-ci-list-widget', 'cmdb-dashboard-ci-list-widget', null,
+                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.LARGE
+                )
+            ]
         );
+        contextConfig.tableWidgetInstanceIds = [[KIXObjectType.CONFIG_ITEM, 'cmdb-dashboard-ci-list-widget']];
+        configurations.push(contextConfig);
 
         return configurations;
     }

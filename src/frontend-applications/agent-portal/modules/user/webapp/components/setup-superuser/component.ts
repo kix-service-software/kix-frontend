@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -88,7 +88,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             new FormFieldConfiguration(
                 'create-superuser-icon',
                 'Translatable#Avatar', 'ICON', 'icon-input', false,
-                'Translatable#Helptext_Customers_ContactCreate_Avatar.'
+                'Translatable#Helptext_Customers_ContactCreate_Avatar.',
+                [
+                    new FormFieldOption('ICON_LIBRARY', false)
+                ]
             ),
             new FormFieldConfiguration(
                 'create-superuser-login',
@@ -101,7 +104,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 'Translatable#Helptext_User_UserCreateEdit_Password',
                 [
                     new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
-                ], undefined, undefined, undefined, undefined, undefined, undefined,
+                ],
+                undefined, undefined, undefined, undefined, undefined, undefined,
                 undefined, undefined, undefined, undefined, undefined, undefined,
                 undefined, this.update ? 'Translatable#not modified' : undefined
             )

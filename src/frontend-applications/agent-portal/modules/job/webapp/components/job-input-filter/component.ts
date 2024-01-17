@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -144,6 +144,33 @@ class Component extends FormInputComponent<any, ComponentState> {
                 objectType = await this.state.manager.getObjectReferenceObjectType(
                     fromBackend ? criteria.Field : criteria.property
                 );
+            }
+        }
+
+        if (fromBackend && criteria.Operator === 'WITHIN') {
+            if (Array.isArray(fromBackend ? criteria.Value : criteria.value)) {
+                const val = fromBackend ? criteria.Value : criteria.value;
+                if (val.length === 2) {
+                    const newValue = [];
+                    const partsFrom = val[0].split(/(\d+)/);
+                    if (partsFrom.length === 3) {
+                        newValue[0] = partsFrom[0];
+                        newValue[1] = partsFrom[1];
+                        newValue[2] = partsFrom[2];
+                    }
+                    const partsTo = val[1].split(/(\d+)/);
+                    if (partsTo.length === 3) {
+                        newValue[3] = partsTo[0];
+                        newValue[4] = partsTo[1];
+                        newValue[5] = partsTo[2];
+                    }
+
+                    if (fromBackend) {
+                        criteria.Value = newValue;
+                    } else {
+                        criteria.value = newValue;
+                    }
+                }
             }
         }
 
