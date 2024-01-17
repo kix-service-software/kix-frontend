@@ -712,6 +712,9 @@ msgstr ""
 msgid "contained in"
 msgstr ""
 
+msgid "not contained in"
+msgstr ""
+
 msgid "Contained in Affected Assets"
 msgstr ""
 
@@ -1195,6 +1198,9 @@ msgid "Envelope From"
 msgstr ""
 
 msgid "equals"
+msgstr ""
+
+msgid "not equals"
 msgstr ""
 
 msgid "Error"
@@ -5206,11 +5212,12 @@ msgstr ""
 #~ "Describe the ticket concern. If you chose “Email” as channel, this is the "
 #~ "text the recipient(s) will receive."
 
-msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
-msgstr ""
-"Enabling visibility will cause the article to be displayed in the Self "
-"Service Portal. If disabled, background automatisms will check if the ticket "
-"contact is among the articles recipients and set visibility accordingly."
+#~ msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
+#~ msgstr ""
+#~ "Enabling visibility will cause the article to be displayed in the Self "
+#~ "Service Portal. If disabled, background automatisms will check if the "
+#~ "ticket contact is among the articles recipients and set visibility "
+#~ "accordingly."
 
 #~ msgid "Helptext_Tickets_TicketCreate_Subject"
 #~ msgstr "Briefly summarize the ticket topic."

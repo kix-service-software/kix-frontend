@@ -1226,6 +1226,9 @@ msgstr "Envelope From"
 msgid "equals"
 msgstr "ist gleich"
 
+msgid "not equals"
+msgstr ""
+
 msgid "Error"
 msgstr "Fehler"
 
@@ -5542,12 +5545,12 @@ msgstr "PLZ"
 #~ "Beschreiben Sie hier das Anliegen des Tickets. Wenn Sie als Kanal „E-"
 #~ "Mail“ gewählt haben, erhält der Empfänger diesen Text."
 
-msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
-msgstr ""
-"Durch die Aktivierung des Flags wird der Artikel im Self Service Portal "
-"angezeigt. Wenn nicht aktiviert, prüfen Hintergrundautomatismen, ob der "
-"Ticketkontakt zu den Artikelempfängern gehört, und stellen die Sichtbarkeit "
-"entsprechend ein."
+#~ msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
+#~ msgstr ""
+#~ "Durch die Aktivierung des Flags wird der Artikel im Self Service Portal "
+#~ "angezeigt. Wenn nicht aktiviert, prüfen Hintergrundautomatismen, ob der "
+#~ "Ticketkontakt zu den Artikelempfängern gehört, und stellen die "
+#~ "Sichtbarkeit entsprechend ein."
 
 #~ msgid "Helptext_Tickets_TicketCreate_Subject"
 #~ msgstr "Eine kurze Zusammenfassung ihrer Meldung"
