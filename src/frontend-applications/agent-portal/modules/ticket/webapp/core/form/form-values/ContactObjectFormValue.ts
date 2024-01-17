@@ -8,11 +8,13 @@
  */
 
 import { AutoCompleteConfiguration } from '../../../../../../model/configuration/AutoCompleteConfiguration';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FilterCriteria } from '../../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { FormValidationService } from '../../../../../base-components/webapp/core/FormValidationService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
@@ -26,6 +28,8 @@ import { Ticket } from '../../../../model/Ticket';
 
 export class ContactObjectFormValue extends SelectObjectFormValue {
 
+    public canCreateContact: boolean;
+
     public constructor(
         property: string,
         ticket: Ticket,
@@ -36,6 +40,8 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
         this.objectType = KIXObjectType.CONTACT;
         this.isAutoComplete = true;
         this.autoCompleteConfiguration = new AutoCompleteConfiguration();
+
+        this.canCreateContact = true;
     }
 
     public async initFormValue(): Promise<void> {
@@ -46,6 +52,15 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
         const contact = context?.getAdditionalInformation(KIXObjectType.CONTACT);
         if (contact) {
             this.setFormValue(contact.ID);
+        }
+    }
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        await super.initFormValueByField(field);
+        const option = field?.options?.find((o) => o.option === 'SHOW_NEW_CONTACT');
+        const isDefined = option && option.value !== null && option.value !== 'undefinded';
+        if (isDefined && !BrowserUtil.isBooleanTrue(option?.value)) {
+            this.canCreateContact = false;
         }
     }
 
