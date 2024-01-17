@@ -8,16 +8,18 @@
     "scripts": {
         "start": "node dist/server/index.js",
         "build": "./node_modules/.bin/gulp",
-        "lint": "./node_modules/.bin/eslint --quiet --ext .ts ./src/ --format gitlab .",
+        "lint": "./node_modules/.bin/eslint --quiet --ext .ts ./src/",
         "test-cucumber": "rm -Rf dist/ && tsc --project tsconfig-cucumber.json && cp -R features/ dist/ && ./node_modules/cucumber/bin/cucumber-js dist/features/ -f allure-cucumber-reporter.js",
         "test-cucumber-dev": "rm -Rf dist/ && tsc --project tsconfig-cucumber.json && cp -R features/ dist/  && ./node_modules/cucumber/bin/cucumber-js dist/features/",
-        "test": "export http_proxy= && export https_proxy= && export NODE_ENV=test && sleep 1 && ./node_modules/.bin/nyc --reporter=text-summary --reporter cobertura --reporter html ./node_modules/.bin/mocha --reporter mocha-multi-reporters --reporter-options configFile=mocha.json --require ts-node/register --require source-map-support/register --full-trace --exit \"./{,!(node_modules)/**/}*.test.ts\"",
-        "test-plugin": "export http_proxy= && export https_proxy= && export NODE_ENV=test && sleep 1 && ./node_modules/.bin/nyc --reporter cobertura --reporter html --include \"src/plugins/${PLUGIN:-KIXPro}\" ./node_modules/.bin/mocha --preserve-symlinks --reporter mocha-multi-reporters --reporter-options configFile=mocha.json --require ts-node/register --require source-map-support/register --full-trace --exit \"src/plugins/${PLUGIN:-KIXPro}/**/*.test.ts\"",
+        "test": "export http_proxy= && export https_proxy= && export NODE_ENV=test && sleep 1 && ./node_modules/.bin/nyc --report-dir=quality/code-coverage --reporter=text-summary --reporter cobertura --reporter html ./node_modules/.bin/mocha --reporter mocha-multi-reporters --reporter-options configFile=mocha.json --require ts-node/register --require source-map-support/register --full-trace --exit \"./{,!(node_modules)/**/}*.test.ts\"",
+        "test-plugin": "export http_proxy= && export https_proxy= && export NODE_ENV=test && sleep 1 && ./node_modules/.bin/nyc --report-dir=quality/code-coverage --reporter cobertura --reporter html --include \"src/plugins/${PLUGIN:-KIXPro}\" ./node_modules/.bin/mocha --preserve-symlinks --reporter mocha-multi-reporters --reporter-options configFile=mocha.json --require ts-node/register --require source-map-support/register --full-trace --exit \"src/plugins/${PLUGIN:-KIXPro}/**/*.test.ts\"",
         "bundle": "rm -f ${npm_package_config_bundlefile} && tar cfz ${npm_package_config_bundlefile} --exclude-from=.bundleignore *",
         "bundle-integration": "rm -f kix-frontend-integrationtest.tar.gz && tar cfz kix-frontend-integrationtest.tar.gz --exclude-from=.bundleignore-integration *",
         "extract-translatables": "./extract-translatables.sh",
         "build-doc": "raml2html --template ./doc/_raml2html_template/index.nunjucks ./doc/index.raml > ./doc/index.html",
-        "generate-3rd-party-licenses": "./node_modules/license-checker/bin/license-checker --production --out LICENSE-Third-Party --relativeLicensePath"
+        "generate-3rd-party-licenses": "./node_modules/license-checker/bin/license-checker --production --out LICENSE-Third-Party --relativeLicensePath",
+        "lint-warn": "./node_modules/.bin/eslint -f node_modules/eslint-html-reporter/reporter-team-city.js -o quality/lint.html --ext .ts ./src/ .",
+        "typescript-coverage": "./node_modules/.bin/typescript-coverage-report --outputDir ./quality/coverage-ts"
     },
     "nyc": {
         "include": [
@@ -115,6 +117,7 @@
         "cucumber-html-reporter": "^5.4.0",
         "eslint": "7.31.0",
         "eslint-formatter-gitlab": "^2.2.0",
+        "eslint-html-reporter": "^0.7.4",
         "gulp": "4.0.2",
         "gulp-clean": "0.4.0",
         "gulp-eslint": "^6.0.0",
@@ -130,6 +133,7 @@
         "raml2html": "7.8.0",
         "source-map-support": "^0.5.19",
         "ts-node": "^10.1.0",
-        "typescript": "4.3.5"
+        "typescript": "4.3.5",
+        "typescript-coverage-report": "^0.8.0"
     }
 }
