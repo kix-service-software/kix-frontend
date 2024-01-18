@@ -24,6 +24,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private bindingIds: string[];
     private formValue: SelectObjectFormValue<Array<string | number> | string | number>;
     private searchTimeout: any;
+    private isFocusFreeText: boolean;
 
     private subscriber: IEventSubscriber;
 
@@ -159,14 +160,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        const searchResultLength = this.formValue?.treeHandler?.getTree()?.length;
-        if (event.key === 'Enter' && this.formValue.freeText && !searchResultLength) {
+        if (event.key === 'Enter' && this.formValue.freeText && this.isFocusFreeText) {
             if (Array.isArray(this.formValue.value) && this.formValue.multiselect) {
                 this.formValue.setFormValue([...this.formValue.value, event.target.value]);
             } else {
                 this.formValue.setFormValue([event.target.value]);
             }
-
         }
     }
 
@@ -184,9 +183,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const isFilterInput = filterInput && document.activeElement === filterInput;
 
         if (isFilterInput && !this.navigationKeyPressed(event.key)) {
+            this.isFocusFreeText = true;
             this.stopPropagation(event);
 
         } else if (isFilterInput && event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            this.isFocusFreeText = false;
             if (hiddenInput) {
                 hiddenInput.focus();
             }
