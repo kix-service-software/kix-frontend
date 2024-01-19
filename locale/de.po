@@ -3564,6 +3564,9 @@ msgstr "Neuer Textbaustein"
 msgid "New Ticket"
 msgstr "Neues Ticket"
 
+msgid "New Tickets"
+msgstr "Neue Tickets"
+
 msgid "New Tickets Chart"
 msgstr "Neuer Ticketchart"
 
@@ -4171,8 +4174,8 @@ msgstr "Lesen & Schreiben"
 msgid "Recently Closed"
 msgstr "Kürzlich Geschlossen"
 
-msgid "recipient adresses (To, Cc, etc.)"
-msgstr "Empfängeradressen (To, Cc, etc.)"
+msgid "recipient addresses (To, Cc, etc.)"
+msgstr ""
 
 msgid "Recipients"
 msgstr "Empfänger"
@@ -5421,6 +5424,9 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
+#~ msgid "recipient adresses (To, Cc, etc.)"
+#~ msgstr "Empfängeradressen (To, Cc, etc.)"
+
 #~ msgid "Limit:"
 #~ msgstr "Limit (Suchergebnisse):"
 
@@ -5630,9 +5636,6 @@ msgstr "PLZ"
 
 #~ msgid "Helptext_Import_File"
 #~ msgstr "Wählen Sie eine .csv-Datei mit zu importierenden Werten."
-
-#~ msgid "New Tickets"
-#~ msgstr "Neue Tickets"
 
 #~ msgid "Pending Tickets"
 #~ msgstr "Tickets im Warten-Status"

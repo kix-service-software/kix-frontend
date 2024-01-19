@@ -3363,6 +3363,9 @@ msgstr ""
 msgid "New Ticket"
 msgstr ""
 
+msgid "New Tickets"
+msgstr ""
+
 msgid "New Tickets Chart"
 msgstr ""
 
@@ -3966,7 +3969,7 @@ msgstr ""
 msgid "Recently Closed"
 msgstr ""
 
-msgid "recipient adresses (To, Cc, etc.)"
+msgid "recipient addresses (To, Cc, etc.)"
 msgstr ""
 
 msgid "Recipients"
