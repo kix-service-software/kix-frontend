@@ -146,7 +146,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const newTicketsWidget = new WidgetConfiguration(
             'home-dashboard-new-tickets-widget', 'Translatable#New Tickets Widget', ConfigurationType.Widget,
-            'table-widget', 'New Tickets', ['bulk-action', 'csv-export-action'],
+            'table-widget', 'Translatable#New Tickets', ['bulk-action', 'csv-export-action'],
             new ConfigurationDefinition('home-dashboard-ticket-new-table-widget', ConfigurationType.TableWidget),
             null, false, true, 'kix-icon-ticket', false
         );

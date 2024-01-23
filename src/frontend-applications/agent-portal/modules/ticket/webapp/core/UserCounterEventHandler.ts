@@ -35,7 +35,7 @@ export class UserCounterEventHandler {
             eventPublished: (data: BackendNotification): void => {
                 if (data instanceof BackendNotification && data.Namespace === 'User.Counters') {
                     const userId = AgentSocketClient.getInstance().userId;
-                    if (data.UserID?.toString() === userId?.toString()) {
+                    if (!data.UserID || data.UserID?.toString() === userId?.toString()) {
                         this.updateCurrentUserCache();
                     }
                 }

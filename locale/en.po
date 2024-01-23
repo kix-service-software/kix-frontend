@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2023-06-05 14:20+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@kixdesk.com>\n"
+"PO-Revision-Date: 2023-11-15 16:37+0000\n"
+"Last-Translator: tto <Torsten.Thau@kixdesk.com>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
 "Language: en\n"
@@ -290,6 +290,9 @@ msgid "Any data you have entered will be lost. Continue?"
 msgstr ""
 
 msgid "Apply"
+msgstr ""
+
+msgid "Apply Table"
 msgstr ""
 
 msgid "Approved"
@@ -1140,6 +1143,9 @@ msgstr ""
 msgid "Email Address Details"
 msgstr ""
 
+msgid "Email Address Domain"
+msgstr ""
+
 msgid "Email Addresses"
 msgstr ""
 
@@ -1342,6 +1348,12 @@ msgid "Field {0} has an empty rows."
 msgstr ""
 
 msgid "Field {0} has an invalid value ({1})."
+msgstr ""
+
+msgid "Field {0} has an invalid value (max date: {1})."
+msgstr ""
+
+msgid "Field {0} has an invalid value (min date: {2})."
 msgstr ""
 
 msgid "Field Agent App"
@@ -2474,6 +2486,9 @@ msgstr ""
 "names. The variable can be used as special placeholder in following actions "
 "like \"${VariableName}\"."
 
+msgid "Helptext_Organisation_Address_Domain_Pattern"
+msgstr ""
+
 msgid "Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint"
 msgstr ""
 
@@ -2695,6 +2710,12 @@ msgstr ""
 "contact is not yet known, you may create this contact or just enter a "
 "syntactically correct email address."
 
+msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
+msgstr ""
+"Enabling visibility will cause the article to be displayed in the Self "
+"Service Portal. If disabled, background automatisms will check if the ticket "
+"contact is among the articles recipients and set visibility accordingly."
+
 msgid "Helptext_Tickets_TicketCreate_Organisation"
 msgstr ""
 "Organisation is assigned autoamtically depending on the chosen contact."
@@ -2799,6 +2820,9 @@ msgstr ""
 
 msgid "HelptImporConfigext_Import_File"
 msgstr ""
+"The file must contain columns labeled with \"ServiceID\",\"SLA\","
+"\"Organisation (Number)\",\"Type\",\"Priority\",\"Contact\", \"Validity\" "
+"for value mapping."
 
 msgid "Hide"
 msgstr ""
@@ -2888,6 +2912,9 @@ msgid "Incident state"
 msgstr ""
 
 msgid "Incident State"
+msgstr ""
+
+msgid "Include Previous Version"
 msgstr ""
 
 msgid "Include this code into the <head> area of your webpage."
@@ -3026,9 +3053,6 @@ msgstr ""
 
 msgid "Library"
 msgstr ""
-
-msgid "Limit:"
-msgstr "Limit (Search Results):"
 
 msgid "link {0}"
 msgstr "Link {0}"
@@ -3339,6 +3363,9 @@ msgstr ""
 msgid "New Ticket"
 msgstr ""
 
+msgid "New Tickets"
+msgstr ""
+
 msgid "New Tickets Chart"
 msgstr ""
 
@@ -3408,6 +3435,9 @@ msgstr ""
 msgid "No data available."
 msgstr ""
 
+msgid "No form available. Please contact your administrator."
+msgstr ""
+
 msgid "No objects available."
 msgstr ""
 
@@ -3424,6 +3454,9 @@ msgid "No report available"
 msgstr ""
 
 msgid "Not available (not any more or not yet)"
+msgstr ""
+
+msgid "not contained in"
 msgstr ""
 
 msgid "Note"
@@ -3936,7 +3969,7 @@ msgstr ""
 msgid "Recently Closed"
 msgstr ""
 
-msgid "recipient adresses (To, Cc, etc.)"
+msgid "recipient addresses (To, Cc, etc.)"
 msgstr ""
 
 msgid "Recipients"
@@ -4270,6 +4303,9 @@ msgid "Second number value is not an integer."
 msgstr ""
 
 msgid "Seconds(s)"
+msgstr ""
+
+msgid "Select"
 msgstr ""
 
 msgid "Select all"
@@ -5159,6 +5195,9 @@ msgstr ""
 msgid "ZIP"
 msgstr ""
 
+#~ msgid "Limit:"
+#~ msgstr "Limit (Search Results):"
+
 #~ msgid "Helptext_Tickets_ArticleCreate_Attachments"
 #~ msgstr ""
 #~ "Choose if you want to save the ticket description only internally (Note) "
@@ -5202,12 +5241,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Describe the ticket concern. If you chose “Email” as channel, this is the "
 #~ "text the recipient(s) will receive."
-
-msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
-msgstr ""
-"Enabling visibility will cause the article to be displayed in the Self "
-"Service Portal. If disabled, background automatisms will check if the ticket "
-"contact is among the articles recipients and set visibility accordingly."
 
 #~ msgid "Helptext_Tickets_TicketCreate_Subject"
 #~ msgstr "Briefly summarize the ticket topic."

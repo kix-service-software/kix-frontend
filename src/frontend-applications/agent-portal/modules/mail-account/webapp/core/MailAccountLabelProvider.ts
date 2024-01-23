@@ -89,7 +89,7 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
                 if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_DEFAULT) {
                     displayValue = 'Translatable#Default Queue (SysConfig)';
                 } else if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_FROM) {
-                    displayValue = 'Translatable#recipient adresses (To, Cc, etc.)';
+                    displayValue = 'Translatable#recipient addresses (To, Cc, etc.)';
                 } else if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_QUEUE) {
                     displayValue = 'Translatable#Queue';
                 }

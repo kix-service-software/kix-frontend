@@ -53,7 +53,7 @@ export class MailAccountService extends KIXObjectService<MailAccount> {
             case MailAccountProperty.DISPATCHING_BY:
                 const translations = await TranslationService.createTranslationObject([
                     'Translatable#Default Queue (SysConfig)',
-                    'Translatable#recipient adresses (To, Cc, etc.)',
+                    'Translatable#recipient addresses (To, Cc, etc.)',
                     'Translatable#Queue'
                 ]);
                 nodes = [
@@ -63,7 +63,7 @@ export class MailAccountService extends KIXObjectService<MailAccount> {
                     ),
                     new TreeNode(
                         DispatchingType.BACKEND_KEY_FROM,
-                        translations['Translatable#recipient adresses (To, Cc, etc.)']
+                        translations['Translatable#recipient addresses (To, Cc, etc.)']
                     ),
                     new TreeNode(
                         DispatchingType.BACKEND_KEY_QUEUE,
