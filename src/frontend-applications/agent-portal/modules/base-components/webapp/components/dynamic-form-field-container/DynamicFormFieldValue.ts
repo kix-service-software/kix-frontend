@@ -135,8 +135,8 @@ export class DynamicFormFieldValue {
         await this.manager.setValue(this.value, true);
     }
 
-    public updateProperties(): void {
-        this.setPropertyTree();
+    public async updateProperties(): Promise<string> {
+        return this.setPropertyTree();
     }
 
     public clearValue(): void {
@@ -182,7 +182,7 @@ export class DynamicFormFieldValue {
         await this.createValueInput();
     }
 
-    public async setPropertyTree(): Promise<void> {
+    public async setPropertyTree(): Promise<string> {
         const properties = await this.manager.getProperties();
         // TODO: Its not needed to check unique here, because getProperties() should return only available properties.
         // The manager should make the decision
@@ -208,6 +208,11 @@ export class DynamicFormFieldValue {
             const propNode = nodes.find((n) => n.id.toString() === this.value.property);
             if (propNode) {
                 this.propertyTreeHandler.setSelection([propNode], true, true, true);
+            }
+            // remember instanceId if property is not allowed anmyore (not found in nodes)
+            // (Used elsewhere to delete the node.)
+            else {
+                return this.instanceId;
             }
         }
     }
