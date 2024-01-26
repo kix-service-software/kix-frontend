@@ -339,6 +339,8 @@ export class UserService extends KIXObjectAPIService {
         if (errors.length) {
             throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
         }
+
+        await CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_${userId}`);
     }
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
