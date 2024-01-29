@@ -104,7 +104,7 @@ class Component {
                     criteria.push(searchDefinition.getFilterCriteria(v));
                 }
 
-                context?.getSearchCache()?.setCriteria(criteria, true);
+                context?.getSearchCache()?.setCriteria(criteria);
             }, 100);
         });
     }
