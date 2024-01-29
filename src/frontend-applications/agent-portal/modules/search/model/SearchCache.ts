@@ -62,9 +62,9 @@ export class SearchCache<T extends KIXObject = KIXObject> {
         );
     }
 
-    public async setCriteria(criteria: FilterCriteria[] = [], forSearch: boolean = false): Promise<void> {
+    public async setCriteria(criteria: FilterCriteria[] = []): Promise<void> {
         const searchDefinition = SearchService.getInstance().getSearchDefinition(this.objectType);
-        this.criteria = await searchDefinition?.prepareFormFilterCriteria(criteria, forSearch);
+        this.criteria = await searchDefinition?.prepareFormFilterCriteria(criteria, false);
     }
 
 }

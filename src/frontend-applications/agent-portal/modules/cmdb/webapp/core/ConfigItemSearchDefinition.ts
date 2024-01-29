@@ -133,7 +133,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     newCriteria.push(searchCriteria);
                     break;
                 default:
-                    if (classIds && forSearch) {
+                    if (classIds && forSearch && !searchCriteria.property.match(/^CurrentVersion.Data/)) {
                         const path = await ConfigItemClassAttributeUtil.getAttributePath(
                             searchCriteria.property, classIds
                         );
@@ -167,10 +167,6 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         let criteria = [];
         switch (property) {
             case ConfigItemProperty.NAME:
-                criteria.push(new FilterCriteria(
-                    'CurrentVersion.' + property, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, value
-                ));
-                break;
             case ConfigItemProperty.NUMBER:
                 criteria.push(
                     new FilterCriteria(property, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, value)
