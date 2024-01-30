@@ -77,7 +77,7 @@ export class AgentNamespace extends SocketNameSpace {
 
         if (user) {
             const response = await UserService.getInstance().setPreferences(
-                token, data.clientRequestId, data.parameter, user?.UserID
+                token, data.clientRequestId, data.parameter, user?.UserID, true
             ).then(() => {
                 if (
                     Array.isArray(data?.parameter) &&
