@@ -2735,7 +2735,7 @@ msgid "Helptext_Tickets_TicketCreate_State"
 msgstr ""
 
 msgid "Helptext_Tickets_TicketCreate_Type"
-msgstr ""
+msgstr "The ticket type is used to categorise the type of request."
 
 msgid "Helptext_Tickets_TicketEdit_AffectedAsset"
 msgstr ""
