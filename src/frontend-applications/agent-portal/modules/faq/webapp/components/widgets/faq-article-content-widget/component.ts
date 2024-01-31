@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -91,7 +91,7 @@ class Component {
             this.state.inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(faqArticle);
             this.prepareImages();
 
-            this.stars = await LabelService.getInstance().getIcons(faqArticle, FAQArticleProperty.VOTES);
+            this.stars = await LabelService.getInstance().getIcons(faqArticle, FAQArticleProperty.RATING);
             this.rating = BrowserUtil.round(faqArticle.Rating);
             this.prepareActions();
         }
@@ -142,8 +142,8 @@ class Component {
         return null;
     }
 
-    public async download(attachment: Attachment): Promise<void> {
-        if (this.images && this.images.some((i) => i.imageId === attachment.ID)) {
+    public async download(attachment: Attachment, force: boolean): Promise<void> {
+        if (!force && this.images && this.images.some((i) => i.imageId === attachment.ID)) {
             EventService.getInstance().publish(
                 ImageViewerEvent.OPEN_VIEWER,
                 new ImageViewerEventData(this.images, attachment.ID)
@@ -151,7 +151,7 @@ class Component {
         } else {
             const attachmentWithContent = await this.loadAttachment(attachment);
             if (attachmentWithContent) {
-                if (attachmentWithContent.ContentType === 'application/pdf') {
+                if (!force && attachmentWithContent.ContentType === 'application/pdf') {
                     BrowserUtil.openPDF(attachmentWithContent.Content, attachmentWithContent.Filename);
                 } else {
                     BrowserUtil.startBrowserDownload(

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,6 +14,7 @@ import { TableRemoveFormValueAction } from '../actions/TableRemoveFormValueActio
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { FormValueAction } from '../FormValueAction';
 import { ObjectFormValue } from '../ObjectFormValue';
+import { TableApplyAction } from '../actions/TableApplyAction';
 
 export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>> {
 
@@ -23,6 +24,8 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
     public maxRowCount: number;
     public initialRowCount: number;
     public translatableColumn: boolean;
+
+    public tableValue: Array<string[]>;
 
     public constructor(
         public property: string,
@@ -39,7 +42,7 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
     public getValueActionClasses(): Array<new (
         formValue: ObjectFormValue, objectValueMapper: ObjectFormValueMapper
     ) => FormValueAction> {
-        return [TableAddFormValueAction, TableRemoveFormValueAction];
+        return [TableApplyAction, TableAddFormValueAction, TableRemoveFormValueAction];
     }
 
     public findFormValue(property: string): ObjectFormValue {
@@ -109,6 +112,14 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
         await super.setObjectValue(v);
     }
 
+    public setTableValue(value: Array<string[]>): void {
+        this.tableValue = value;
+    }
+
+    public apply(): void {
+        this.setFormValue(this.tableValue);
+    }
+
     public async setFormValue(value: any, force?: boolean): Promise<void> {
         try {
             let newValue;
@@ -118,6 +129,8 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
                 newValue = value;
             }
             super.setFormValue(newValue, force);
+
+            this.tableValue = value;
         } catch (e) {
             console.error(e);
         }

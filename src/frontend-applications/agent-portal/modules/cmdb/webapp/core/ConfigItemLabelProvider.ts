@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -91,9 +91,13 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = 'Translatable#Class';
                 break;
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
+            case ConfigItemProperty.CUR_DEPL_STATE:
+            case ConfigItemProperty.DEPL_STATE:
                 displayValue = 'Translatable#Current deployment state';
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
+            case ConfigItemProperty.CUR_INCI_STATE:
+            case ConfigItemProperty.INCI_STATE:
                 displayValue = 'Translatable#Current incident state';
                 break;
             case ConfigItemProperty.VERSIONS:
@@ -107,6 +111,9 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 break;
             case ConfigItemProperty.NAME:
                 displayValue = 'Translatable#Name';
+                break;
+            case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
+                displayValue = 'Translatable#Include Previous Version';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);

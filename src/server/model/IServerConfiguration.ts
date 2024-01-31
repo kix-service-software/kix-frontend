@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,10 +22,6 @@ export interface IServerConfiguration {
     FRONTEND_TOKEN_SECRET: string;
 
     CHECK_TOKEN_ORIGIN: boolean;
-
-    NOTIFICATION_URL: string;
-
-    NOTIFICATION_INTERVAL: number;
 
     NOTIFICATION_CLIENT_ID: string;
 

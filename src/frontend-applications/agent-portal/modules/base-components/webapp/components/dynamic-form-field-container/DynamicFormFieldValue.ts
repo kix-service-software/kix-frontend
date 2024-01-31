@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -96,7 +96,7 @@ export class DynamicFormFieldValue {
         public removable: boolean = true,
         public readonly: boolean = value.readonly,
         public changeable: boolean = value.changeable,
-        public required: boolean = value.required
+        public required: boolean = value.required,
     ) {
 
         if (!id) {
@@ -135,8 +135,8 @@ export class DynamicFormFieldValue {
         await this.manager.setValue(this.value, true);
     }
 
-    public updateProperties(): void {
-        this.setPropertyTree();
+    public async updateProperties(): Promise<string> {
+        return this.setPropertyTree();
     }
 
     public clearValue(): void {
@@ -182,7 +182,7 @@ export class DynamicFormFieldValue {
         await this.createValueInput();
     }
 
-    public async setPropertyTree(): Promise<void> {
+    public async setPropertyTree(): Promise<string> {
         const properties = await this.manager.getProperties();
         // TODO: Its not needed to check unique here, because getProperties() should return only available properties.
         // The manager should make the decision
@@ -208,6 +208,11 @@ export class DynamicFormFieldValue {
             const propNode = nodes.find((n) => n.id.toString() === this.value.property);
             if (propNode) {
                 this.propertyTreeHandler.setSelection([propNode], true, true, true);
+            }
+            // remember instanceId if property is not allowed anmyore (not found in nodes)
+            // (Used elsewhere to delete the node.)
+            else {
+                return this.instanceId;
             }
         }
     }
@@ -428,6 +433,11 @@ export class DynamicFormFieldValue {
                             this.withinEndValue = partsTo[1];
                             this.withinEndUnit = partsTo[2];
                         }
+
+                        this.value.value = [
+                            this.withinStartType, this.withinStartValue, this.withinStartUnit,
+                            this.withinEndType, this.withinEndValue, this.withinEndUnit
+                        ];
                     } else if (this.value.value.length === 6) {
                         this.withinStartType = this.value.value[0];
                         this.withinStartValue = this.value.value[1];

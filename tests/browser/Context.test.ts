@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,6 +17,7 @@ import { ContextDescriptor } from '../../src/frontend-applications/agent-portal/
 import { User } from '../../src/frontend-applications/agent-portal/modules/user/model/User';
 import { UserPreference } from '../../src/frontend-applications/agent-portal/modules/user/model/UserPreference';
 import { AgentService } from '../../src/frontend-applications/agent-portal/modules/user/webapp/core/AgentService';
+import { ContextConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/ContextConfiguration';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -241,6 +242,8 @@ class TestContext extends Context {
 
     public constructor() {
         super(new ContextDescriptor('test-context', null, null, null, null, null, null, null));
+        this.configuration = new ContextConfiguration('', '', '', '');
+        this.configuration.customizable = true;
     }
 
 }

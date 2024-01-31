@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -132,7 +132,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public tabClicked(tab: ContextTab, event: any): void {
-        if (!tab.active) {
+        if (!tab.active && !this.state.blocked) {
             tab.refresh = false;
             ContextService.getInstance().setContextByInstanceId(tab.contextInstanceId);
         }

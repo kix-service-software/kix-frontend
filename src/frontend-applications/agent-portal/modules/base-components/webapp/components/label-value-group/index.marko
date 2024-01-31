@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -7,64 +7,88 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.label-value-groups-container>
+<div class="label-value-groups-container">
     <if(state.groups && Array.isArray(state.groups) && !!state.groups.length)>
         <for|group, index| of=state.groups>
-            <div.group
+            <div
                 key="label-value-group[]"
                 style=component.getGroupStyle(index)
-                class={
-                    minimizable: group.sub && Array.isArray(group.sub) && !!group.sub.length
-                }
-                on-click("minimizeGroup", index)>
-                <div.label title=group.label>
+                class=[
+                    "group",
+                    {
+                        minimizable:
+                            group.sub &&
+                            Array.isArray(group.sub) &&
+                            !!group.sub.length,
+                    },
+                ]
+                on-click("minimizeGroup", index)
+            >
+                <div title=group.label class="label">
                     <span>
                         <translation-string pattern=group.label/>
                     </span>
                 </div>
                 <if(group.value && group.value.value)>
                     <if(group.value.attachment)>
-                        <file-entry attachment=group.value.attachment on-fileClicked("fileClicked", index)/>
+                        <file-entry
+                            attachment=(group.value.attachment)
+                            on-fileClicked("fileClicked", index)
+                        />
                     </if>
                     <else>
-                        <div.value title=group.value.value>
+                        <div title=(group.value.value) class="value">
                             <if(group.value.multiline)>
                                 <pre>${group.value.value}</pre>
                             </if>
                             <else>
-                                <link-target routingConfiguration=group.value.routingConfiguration>
-                                    <@content>
-                                        ${group.value.value}
-                                    </@content>
+                                <link-target routingConfiguration=(
+                                    group.value.routingConfiguration
+                                )>
+                                    <@content>${group.value.value}</@content>
                                 </link-target>
                             </else>
                         </div>
                     </else>
                 </if>
-                <if(group.sub && Array.isArray(group.sub) && !!group.sub.length && state.toggleButtonVisible)>
-                    <div.toggle>
-                        <div.line class={
-                            minimized: component.groupIsMinimized(index)
-                        }/>
+                <if(
+                    group.sub &&
+                    Array.isArray(group.sub) &&
+                    !!group.sub.length &&
+                    state.toggleButtonVisible
+                )>
+                    <div class="toggle">
+                        <div class=[
+                            "line",
+                            {
+                                minimized: component.groupIsMinimized(index),
+                            },
+                        ]/>
                         <if(component.groupIsMinimized(index))>
-                            <span.kix-icon-sort-down.as-button/>
+                            <span class="kix-icon-sort-down as-button"/>
                         </if>
                         <else>
-                            <span.kix-icon-triangle-up.as-button>
-                                <span.path1/>
-                                <span.path2/>
+                            <span class="kix-icon-triangle-up as-button">
+                                <span class="path1"/>
+                                <span class="path2"/>
                             </span>
                         </else>
                     </div>
                 </if>
             </div>
-            <if(group.sub && Array.isArray(group.sub) && !!group.sub.length && !component.groupIsMinimized(index))>
-                <div.sub>
+            <if(
+                group.sub &&
+                Array.isArray(group.sub) &&
+                !!group.sub.length &&
+                !component.groupIsMinimized(index)
+            )>
+                <div class="sub">
                     <label-value-group
                         toggleButtonVisible=state.toggleButtonVisible
                         groups=group.sub
-                        level=(state.level + 1)
-                        on-fileClicked("fileClicked", null)/>
+                        level=state.level + 1
+                        on-fileClicked("fileClicked", null)
+                    />
                 </div>
             </if>
         </for>

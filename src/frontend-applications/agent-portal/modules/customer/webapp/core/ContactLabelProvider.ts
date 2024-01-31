@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -96,6 +96,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 displayValue = 'Translatable#Last Name';
                 break;
             case ContactProperty.EMAIL:
+            case ContactProperty.EMAILS:
                 displayValue = 'Translatable#Email';
                 break;
             case ContactProperty.EMAIL1:
@@ -117,6 +118,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 displayValue = 'Translatable#Assigned Organisations';
                 break;
             case ContactProperty.PRIMARY_ORGANISATION_ID:
+            case ContactProperty.PRIMARY_ORGANISATION:
                 displayValue = 'Translatable#Organisation';
                 break;
             case ContactProperty.PHONE:

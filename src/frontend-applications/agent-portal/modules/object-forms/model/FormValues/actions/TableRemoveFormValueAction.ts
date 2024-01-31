@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,6 +7,7 @@
  * --
  */
 
+import { DynamicFieldTableFormValue } from '../DynamicFields/DynamicFieldTableFormValue';
 import { FormValueAction } from '../FormValueAction';
 
 export class TableRemoveFormValueAction extends FormValueAction {
@@ -25,11 +26,7 @@ export class TableRemoveFormValueAction extends FormValueAction {
     }
 
     public async run(event: any): Promise<void> {
-        this.removeTable();
-    }
-
-    public removeTable(): void {
-        this.formValue?.setFormValue(null);
+        (this.formValue as DynamicFieldTableFormValue)?.setFormValue(null);
     }
 
 }

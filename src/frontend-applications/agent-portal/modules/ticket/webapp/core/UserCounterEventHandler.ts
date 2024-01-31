@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -35,7 +35,7 @@ export class UserCounterEventHandler {
             eventPublished: (data: BackendNotification): void => {
                 if (data instanceof BackendNotification && data.Namespace === 'User.Counters') {
                     const userId = AgentSocketClient.getInstance().userId;
-                    if (data.UserID?.toString() === userId?.toString()) {
+                    if (!data.UserID || data.UserID?.toString() === userId?.toString()) {
                         this.updateCurrentUserCache();
                     }
                 }

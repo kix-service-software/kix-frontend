@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -72,6 +72,10 @@ export class ObjectFormValue<T = any> {
             this.value = object[property];
             this.createBindings(property, object);
         }
+    }
+
+    public getInitialState(property: string): any {
+        return this.initialState.get(property);
     }
 
     public setInitialState(): void {
@@ -215,7 +219,6 @@ export class ObjectFormValue<T = any> {
 
     public async disable(): Promise<void> {
         this.enabled = false;
-        this.visible = false;
         this.value = null;
     }
 
@@ -255,8 +258,11 @@ export class ObjectFormValue<T = any> {
 
         this.enabled = true;
         this.visible = field.visible;
+        this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
         this.readonly = field.readonly;
+        this.setNewInitialState(FormValueProperty.READ_ONLY, this.readonly);
         this.required = field.required;
+        this.setNewInitialState(FormValueProperty.REQUIRED, this.required);
         this.isSetInBackground = field.options.some((o) => o.option === 'set hidden') || this.parent?.isSetInBackground;
 
         if (field?.property !== KIXObjectProperty.DYNAMIC_FIELDS) {

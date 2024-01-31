@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -53,7 +53,7 @@ export class MailAccountService extends KIXObjectService<MailAccount> {
             case MailAccountProperty.DISPATCHING_BY:
                 const translations = await TranslationService.createTranslationObject([
                     'Translatable#Default Queue (SysConfig)',
-                    'Translatable#recipient adresses (To, Cc, etc.)',
+                    'Translatable#recipient addresses (To, Cc, etc.)',
                     'Translatable#Queue'
                 ]);
                 nodes = [
@@ -63,7 +63,7 @@ export class MailAccountService extends KIXObjectService<MailAccount> {
                     ),
                     new TreeNode(
                         DispatchingType.BACKEND_KEY_FROM,
-                        translations['Translatable#recipient adresses (To, Cc, etc.)']
+                        translations['Translatable#recipient addresses (To, Cc, etc.)']
                     ),
                     new TreeNode(
                         DispatchingType.BACKEND_KEY_QUEUE,

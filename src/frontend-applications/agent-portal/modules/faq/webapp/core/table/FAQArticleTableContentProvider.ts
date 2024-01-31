@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,6 +15,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { TableValue } from '../../../../table/model/TableValue';
 import { FAQArticleProperty } from '../../../model/FAQArticleProperty';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class FAQArticleTableContentProvider extends TableContentProvider<FAQArticle> {
 
@@ -26,6 +27,7 @@ export class FAQArticleTableContentProvider extends TableContentProvider<FAQArti
         objects?: KIXObject[]
     ) {
         super(KIXObjectType.FAQ_ARTICLE, table, objectIds, loadingOptions, contextId, objects);
+        this.useBackendSort = true;
     }
 
     protected async prepareSpecificValues(values: TableValue[], faqArticle: FAQArticle): Promise<void> {

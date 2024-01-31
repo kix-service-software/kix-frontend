@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -67,17 +67,17 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(tableWidget);
 
-        configurations.push(
-            new ContextConfiguration(
-                this.getModuleId(), 'User Ticket List', ConfigurationType.Context,
-                this.getModuleId(),
-                [],
-                [], [],
-                [
-                    new ConfiguredWidget('user-ticket-list-table-widget', 'user-ticket-list-table-widget')
-                ]
-            )
+        const contextConfig = new ContextConfiguration(
+            this.getModuleId(), 'User Ticket List', ConfigurationType.Context,
+            this.getModuleId(),
+            [],
+            [], [],
+            [
+                new ConfiguredWidget('user-ticket-list-table-widget', 'user-ticket-list-table-widget')
+            ]
         );
+        contextConfig.tableWidgetInstanceIds = [[KIXObjectType.TICKET, 'user-ticket-list-table-widget']];
+        configurations.push(contextConfig);
 
         return configurations;
     }

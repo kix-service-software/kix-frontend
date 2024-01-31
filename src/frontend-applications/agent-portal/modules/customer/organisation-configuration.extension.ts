@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -80,24 +80,27 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(contactListWidget);
 
-        configurations.push(
-            new ContextConfiguration(
-                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(),
-                [],
-                [], [],
-                [
-                    new ConfiguredWidget(
-                        'customer-dashboard-organisations-widget', 'customer-dashboard-organisations-widget', null,
-                        [new UIComponentPermission('organisations', [CRUD.READ])]
-                    ),
-                    new ConfiguredWidget(
-                        'customer-dashboard-contacts-widget', 'customer-dashboard-contacts-widget', null,
-                        [new UIComponentPermission('contacts', [CRUD.READ])]
-                    )
-                ]
-            )
+        const contextConfig = new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+            this.getModuleId(),
+            [],
+            [], [],
+            [
+                new ConfiguredWidget(
+                    'customer-dashboard-organisations-widget', 'customer-dashboard-organisations-widget', null,
+                    [new UIComponentPermission('organisations', [CRUD.READ])]
+                ),
+                new ConfiguredWidget(
+                    'customer-dashboard-contacts-widget', 'customer-dashboard-contacts-widget', null,
+                    [new UIComponentPermission('contacts', [CRUD.READ])]
+                )
+            ]
         );
+        contextConfig.tableWidgetInstanceIds = [
+            [KIXObjectType.ORGANISATION, 'customer-dashboard-organisations-widget'],
+            [KIXObjectType.CONTACT, 'customer-dashboard-contacts-widget']
+        ];
+        configurations.push(contextConfig);
 
         return configurations;
     }

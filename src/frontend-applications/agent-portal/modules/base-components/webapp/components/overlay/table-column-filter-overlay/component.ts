@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -85,7 +85,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
                 objectType, this.column.getColumnId(), fv[0]
             );
-            const label = `${displayValue} (${fv[1]})`;
+            const label = `${displayValue || fv[0]} (${fv[1]})`;
             const icons = await LabelService.getInstance().getIconsForType(
                 objectType, null, this.column.getColumnId(), fv[0]
             );

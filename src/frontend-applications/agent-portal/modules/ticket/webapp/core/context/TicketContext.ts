@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,8 +27,6 @@ import { ContextEvents } from '../../../../base-components/webapp/core/ContextEv
 import { ContextPreference } from '../../../../../model/ContextPreference';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
 
 export class TicketContext extends Context {
 
@@ -36,30 +34,6 @@ export class TicketContext extends Context {
 
     public queueId: number;
     public filterValue: string;
-
-    private currentLimit: number;
-
-    private subscriber: IEventSubscriber;
-
-    public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        await super.initContext();
-        await this.loadTickets();
-
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(TicketContext.CONTEXT_ID),
-            eventPublished: (data: Context, eventId: string): void => {
-                if (data.instanceId === this.instanceId) {
-                    this.loadTickets(undefined, this.currentLimit);
-                }
-            }
-        };
-
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
-    }
-
-    public async destroy(): Promise<void> {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
-    }
 
     public getIcon(): string {
         return 'kix-icon-ticket';
@@ -146,7 +120,7 @@ export class TicketContext extends Context {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.TICKET);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            [], null, null, [KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.STATE_TYPE]
+            [], null, null, [KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.STATE_TYPE, TicketProperty.UNSEEN]
         );
 
         if (this.queueId) {
@@ -188,7 +162,7 @@ export class TicketContext extends Context {
         const additionalIncludes = this.getAdditionalInformation(AdditionalContextInformation.INCLUDES) || [];
         loadingOptions.includes.push(...additionalIncludes);
 
-        this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
+        await this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
 
         const tickets = await KIXObjectService.loadObjects(
             KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined,
@@ -203,7 +177,6 @@ export class TicketContext extends Context {
 
     public reloadObjectList(objectType: KIXObjectType, silent: boolean = false, limit?: number): Promise<void> {
         if (objectType === KIXObjectType.TICKET) {
-            this.currentLimit = limit;
             return this.loadTickets(silent, limit);
         } else {
             return super.reloadObjectList(objectType, silent, limit);

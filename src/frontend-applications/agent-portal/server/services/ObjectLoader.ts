@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,6 +8,7 @@
  */
 
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { KIXObject } from '../../model/kix/KIXObject';
 import { KIXObjectServiceRegistry } from './KIXObjectServiceRegistry';
 import { ObjectResponse } from './ObjectResponse';
@@ -27,7 +28,13 @@ export class ObjectLoader {
 
     private objectIdMap: Map<string, Map<string, [(object: any) => void, (error: any) => void]>> = new Map();
 
+    private loadingOptionsMap: Map<string, KIXObjectLoadingOptions> = new Map();
+
     private timeout: any;
+
+    public setLoadingoptions(objectType: string, loadingOptions: KIXObjectLoadingOptions): void {
+        this.loadingOptionsMap.set(objectType, loadingOptions);
+    }
 
     public queue<T = any>(objectType: string, objectId: string | number): Promise<T> {
         if (!objectType || !objectId) {
@@ -54,6 +61,7 @@ export class ObjectLoader {
             this.objectIdMap.forEach((value, key) => {
                 this.loadObjects(key, value);
                 this.objectIdMap.delete(key);
+                this.loadingOptionsMap.delete(key);
             });
         }, 150);
     }
@@ -67,8 +75,11 @@ export class ObjectLoader {
 
             const objectIds = [...objectMap.keys()];
 
+            const loadingOptions = this.loadingOptionsMap.has(objectType) ?
+                this.loadingOptionsMap.get(objectType) : null;
+
             const objectResponse = await service.loadObjects<KIXObject>(
-                config?.BACKEND_API_TOKEN, 'KIXObjectAPIService', objectType, objectIds, null, null
+                config?.BACKEND_API_TOKEN, 'KIXObjectAPIService', objectType, objectIds, loadingOptions, null
             ).catch((): ObjectResponse<KIXObject> => new ObjectResponse());
 
             const objectClass = service.getObjectClass(objectType);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -42,10 +42,10 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
             }
 
             const minDateOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.MIN_DATE);
-            this.state.minDate = minDateOption ? minDateOption.value : null;
+            this.state.minDate = minDateOption ? DateTimeUtil.getKIXDateString(new Date(minDateOption.value)) : null;
 
             const maxDateOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.MAX_DATE);
-            this.state.maxDate = maxDateOption ? maxDateOption.value : null;
+            this.state.maxDate = maxDateOption ? DateTimeUtil.getKIXDateString(new Date(maxDateOption.value)) : null;
         }
         this.update();
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,7 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ArticleLoader } from './ArticleLoader';
+import { TicketProperty } from '../../../model/TicketProperty';
 
 export class TicketDetailsContext extends Context {
 
@@ -101,7 +102,8 @@ export class TicketDetailsContext extends Context {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null,
             [
-                'StateType', 'ObjectActions', 'SLACriteria', KIXObjectProperty.DYNAMIC_FIELDS
+                'StateType', 'ObjectActions', 'SLACriteria', KIXObjectProperty.DYNAMIC_FIELDS,
+                TicketProperty.WATCHER_ID, KIXObjectProperty.LINK_COUNT
             ]
         );
 

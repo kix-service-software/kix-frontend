@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -36,6 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public onInput(input: any): void {
         this.state.column = input.column;
         this.state.isSorted = Boolean(this.state.column.getSortOrder());
+        this.state.sortOrderDown = this.isSortOrderDown();
         this.setIconAndTitle();
         this.setSize();
 

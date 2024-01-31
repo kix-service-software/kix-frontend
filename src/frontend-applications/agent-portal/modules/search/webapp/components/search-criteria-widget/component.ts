@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -131,8 +131,6 @@ class Component {
         const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
         const cache = context?.getSearchCache();
 
-        this.state.limit = cache?.limit;
-
         if (this.state.manager && Array.isArray(cache?.criteria) && cache?.criteria.length) {
             for (const criteria of cache.criteria) {
                 this.state.manager?.setValue(
@@ -187,17 +185,12 @@ class Component {
         const hint = await TranslationService.translate('Translatable#Search');
         BrowserUtil.toggleLoadingShield('SEARCH_CRITERIA_SHIELD', true, hint);
         const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
+        const cache = context?.getSearchCache();
+        if (cache) {
+            context.setSortOrder(cache.objectType, cache.sortAttribute, cache.sortDescending, false);
+        }
         await SearchService.getInstance().searchObjects(context?.getSearchCache());
         BrowserUtil.toggleLoadingShield('SEARCH_CRITERIA_SHIELD', false);
-    }
-
-    public limitChanged(event: any): void {
-        this.state.limit = event.target.value;
-        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
-        const searchCache = context?.getSearchCache();
-        if (searchCache) {
-            searchCache.limit = this.state.limit;
-        }
     }
 
     public sortAttributeChanged(nodes: TreeNode[]): void {

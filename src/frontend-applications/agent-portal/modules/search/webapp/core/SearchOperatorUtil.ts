@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,6 +29,8 @@ export class SearchOperatorUtil {
                 return await TranslationService.translate('Translatable#since');
             case SearchOperator.IN:
                 return await TranslationService.translate('Translatable#contained in');
+            case SearchOperator.NOT_IN:
+                return await TranslationService.translate('Translatable#not contained in');
             case SearchOperator.LESS_THAN:
                 return await TranslationService.translate('Translatable#before');
             case SearchOperator.LESS_THAN_OR_EQUAL:

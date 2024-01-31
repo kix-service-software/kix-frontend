@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -79,12 +79,12 @@ export class SortUtil {
         a: any, b: any, sortOrder: SortOrder = SortOrder.UP, notNumberBefore: boolean = true
     ): number {
         let sort = 0;
-        if (typeof a !== 'number') {
+        if (isNaN(Number(a))) {
             sort = notNumberBefore ? -1 : 1;
-        } else if (typeof b !== 'number') {
+        } else if (isNaN(b)) {
             sort = notNumberBefore ? 1 : -1;
         } else {
-            sort = a - b;
+            sort = Number(a) - Number(b);
         }
         return sortOrder === SortOrder.DOWN ? sort * (-1) : sort;
     }

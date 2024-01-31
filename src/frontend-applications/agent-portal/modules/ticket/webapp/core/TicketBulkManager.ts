@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -30,6 +30,7 @@ import { ObjectReferenceOptions } from '../../../base-components/webapp/core/Obj
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class TicketBulkManager extends BulkManager {
 
@@ -226,6 +227,9 @@ export class TicketBulkManager extends BulkManager {
                 break;
             default:
                 nodes = await TicketService.getInstance().getTreeNodes(property);
+                for (const node of nodes) {
+                    node.label = await TranslationService.translate(node.label);
+                }
         }
         return nodes;
     }

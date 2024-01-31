@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -244,7 +244,8 @@ export class ContactAPIService extends KIXObjectAPIService {
                 p[0] === UserProperty.ROLE_IDS ||
                 p[0] === PersonalSettingsProperty.MY_QUEUES ||
                 p[0] === PersonalSettingsProperty.NOTIFICATIONS ||
-                p[0] === PersonalSettingsProperty.USER_LANGUAGE
+                p[0] === PersonalSettingsProperty.USER_LANGUAGE ||
+                p[0] === KIXObjectProperty.VALID_ID // use contact valid also as user valid
             );
         }
     }
@@ -270,46 +271,22 @@ export class ContactAPIService extends KIXObjectAPIService {
     }
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        const filterCriteria = criteria.filter((f) =>
-            !this.isUserProperty(f.property) &&
-            f.property !== ContactProperty.EMAIL
-        );
-
-        return filterCriteria;
+        // TODO: allow nothing at the moment, maybe filter not needed anymore
+        return [];
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        let searchCriteria = criteria.filter((f) =>
-            f.property !== ContactProperty.PRIMARY_ORGANISATION_ID &&
-            f.property !== SearchProperty.PRIMARY &&
-            (
-                f.operator !== SearchOperator.IN ||
-                f.property === ContactProperty.EMAIL ||
-                f.property === KIXObjectProperty.VALID_ID
-            )
-        );
+        const searchCriteria = criteria.filter((f) => f.property !== SearchProperty.PRIMARY);
 
         const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
         if (primary) {
-            const primarySearch = [
-                new FilterCriteria(
-                    ContactProperty.EMAIL, SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
-                ),
-            ];
-            searchCriteria = [...searchCriteria, ...primarySearch];
-        }
-
-        const loginProperty = searchCriteria.find((sc) => sc.property === UserProperty.USER_LOGIN);
-        if (loginProperty) {
-            loginProperty.property = 'Login';
+            const primarySearch = new FilterCriteria(
+                ContactProperty.EMAILS, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, primary.value
+            );
+            searchCriteria.push(primarySearch);
         }
 
         return searchCriteria;
-    }
-
-    private isUserProperty(property: string): boolean {
-        const userProperties = Object.keys(UserProperty).map((p) => UserProperty[p]);
-        return userProperties.some((p) => p === property);
     }
 }

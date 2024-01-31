@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -66,7 +66,7 @@ export class CMDBGraphInstance extends GraphInstance<CID3Node, CID3Link, ConfigI
     protected async createD3Nodes(graph: Graph<ConfigItem>): Promise<CID3Node[]> {
         const d3Nodes: CID3Node[] = [];
         for (const n of graph.Nodes) {
-            if (n.Object.CurDeplStateType !== 'postproductive'){
+            if (n.Object.CurDeplStateType !== 'postproductive') {
                 let bgColor = super.getNodeColor(null);
                 switch (n.Object.CurInciState) {
                     case 'Incident':
@@ -118,7 +118,9 @@ export class CMDBGraphInstance extends GraphInstance<CID3Node, CID3Link, ConfigI
 
         node.append('image')
             .attr('xlink:href', (d: CID3Node) => {
-                return 'data:image/svg+xml;base64,' + this.icons.get(d.classId)?.Content;
+                const contentType = this.icons.get(d.classId).ContentType || 'png';
+                const content = this.icons.get(d.classId)?.Content;
+                return `data:image/${contentType};base64, ${content}`;
             })
             .attr('x', '-12px')
             .attr('y', '-12px')

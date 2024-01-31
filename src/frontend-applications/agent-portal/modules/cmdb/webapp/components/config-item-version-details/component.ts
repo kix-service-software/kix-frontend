@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -31,6 +31,7 @@ import { RoutingConfiguration } from '../../../../../model/configuration/Routing
 import { OrganisationDetailsContext } from '../../../../customer/webapp/core/context/OrganisationDetailsContext';
 import { ContactDetailsContext } from '../../../../customer/webapp/core/context/ContactDetailsContext';
 import { ConfigItemDetailsContext } from '../../core';
+import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 
 class Component {
 
@@ -51,14 +52,23 @@ class Component {
     }
 
     private async loadVersion(configItem: ConfigItem): Promise<void> {
-        const versions = await KIXObjectService.loadObjects<Version>(
-            KIXObjectType.CONFIG_ITEM_VERSION, configItem.CurrentVersion ? [configItem.CurrentVersion.VersionID] : null,
-            new KIXObjectLoadingOptions(undefined, null, null, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]),
-            new ConfigItemVersionLoadingOptions(configItem.ConfigItemID)
-        );
+        if (!configItem.CurrentVersion) {
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.includes = [
+                ConfigItemProperty.CURRENT_VERSION,
+                VersionProperty.DATA, VersionProperty.PREPARED_DATA
+            ];
+            const configItems = await KIXObjectService.loadObjects<ConfigItem>(
+                KIXObjectType.CONFIG_ITEM, [configItem.ConfigItemID], loadingOptions
+            ).catch((): ConfigItem[] => []);
 
-        if (versions && versions.length) {
-            this.state.version = versions[versions.length - 1];
+            if (configItems.length) {
+                configItem = configItems[0];
+            }
+        }
+
+        if (configItem.CurrentVersion) {
+            this.state.version = configItem.CurrentVersion;
             this.prepareVersion();
         }
     }
@@ -102,14 +112,14 @@ class Component {
         return preparedDataArray;
     }
 
-    public async fileClicked(attachment: ConfigItemAttachment): Promise<void> {
+    public async fileClicked(attachment: ConfigItemAttachment, force: boolean): Promise<void> {
         if (this.state.version) {
             let images: DisplayImageDescription[] = [];
             if (attachment.ContentType.match(/^image\//)) {
                 images = await this.getImages(attachment.ID);
             }
 
-            if (images.length && images.some((i) => i.imageId === attachment.ID)) {
+            if (!force && images.length && images.some((i) => i.imageId === attachment.ID)) {
                 EventService.getInstance().publish(
                     ImageViewerEvent.OPEN_VIEWER,
                     new ImageViewerEventData(images, attachment.ID)
@@ -121,7 +131,7 @@ class Component {
                 );
 
                 if (attachments && attachments.length) {
-                    if (attachments[0].ContentType === 'application/pdf') {
+                    if (!force && attachments[0].ContentType === 'application/pdf') {
                         BrowserUtil.openPDF(attachments[0].Content, attachments[0].Filename);
                     } else {
                         BrowserUtil.startBrowserDownload(

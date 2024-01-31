@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -133,23 +133,39 @@ export class TicketDetailsDFDataBuilder {
     public static async getDFCIReferenceFieldValues(token: string, fieldValue: DynamicFieldValue): Promise<string[]> {
         let values = fieldValue.PreparedValue;
 
-        if (!values && fieldValue.Value) {
-            if (!Array.isArray(fieldValue.Value)) {
-                values = [fieldValue.Value];
-            } else {
-                values = fieldValue.Value;
-            }
-            const objectResponse = await CMDBAPIService.getInstance().loadObjects<ConfigItem>(
-                token, '',
-                KIXObjectType.CONFIG_ITEM, values,
-                new KIXObjectLoadingOptions(
-                    null, null, null, [ConfigItemProperty.CURRENT_VERSION]
-                ), null
-            ).catch(() => new ObjectResponse<ConfigItem>());
-
-            const configItems = objectResponse?.objects || [];
+        if (fieldValue.Value) {
+            const configItems = await TicketDetailsDFDataBuilder.getConfigItems(token, values);
             values = configItems.map((ci) => '#' + ci.Number + ' - ' + ci.Name);
         }
         return values || [];
+    }
+
+    private static async getConfigItems(token: string, values: string[]): Promise<ConfigItem[]> {
+        const configItemPromises = [];
+        if (values) {
+            if (!Array.isArray(values)) {
+                values = [values];
+            }
+
+            // load items separately, to prevent empty value if "no permission" error occurs
+            values.forEach(async (v) => configItemPromises.push(
+                CMDBAPIService.getInstance().loadObjects<ConfigItem>(
+                    token, '',
+                    KIXObjectType.CONFIG_ITEM, [v],
+                    new KIXObjectLoadingOptions(
+                        null, null, null, [ConfigItemProperty.CURRENT_VERSION]
+                    ), null
+                ).catch(() => new ObjectResponse<ConfigItem>())
+            ));
+        }
+
+        const configItems = [];
+        await Promise.allSettled<ObjectResponse<ConfigItem>>(configItemPromises)
+            .then((results) => results.forEach((r) => {
+                if (r.status === 'fulfilled' && r.value?.objects?.length) {
+                    configItems.push(...r.value.objects);
+                }
+            }));
+        return configItems;
     }
 }

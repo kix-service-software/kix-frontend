@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -33,6 +33,7 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../../../model/ContextMode';
 import { SearchProperty } from '../../../search/model/SearchProperty';
+import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 
 
 export class FAQService extends KIXObjectService {
@@ -72,7 +73,7 @@ export class FAQService extends KIXObjectService {
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         const filter: FilterCriteria[] = [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
             )
         ];
 
@@ -230,9 +231,12 @@ export class FAQService extends KIXObjectService {
 
     public async checkFilterValue(article: FAQArticle, criteria: UIFilterCriterion): Promise<boolean> {
         let match = false;
-        if (criteria.property === FAQArticleProperty.VOTES && article?.Rating) {
-            const rating = BrowserUtil.round(article.Rating);
+        if (criteria.property === FAQArticleProperty.VOTES) {
+            const rating = BrowserUtil.round(article?.Rating || 0);
             match = (criteria.value as []).some((v: FAQVote) => v.Rating === rating);
+        } else if (criteria.property === FAQArticleProperty.RATING) {
+            const rating = BrowserUtil.round(article?.Rating || 0);
+            match = (criteria.value as []).some((v: number) => BrowserUtil.round(v || 0) === rating);
         } else {
             match = await super.checkFilterValue(article, criteria);
         }
@@ -255,5 +259,41 @@ export class FAQService extends KIXObjectService {
             }
         }
         return [...objectProperties, ...superProperties];
+    }
+
+    public async getSortableAttributes(filtered: boolean = true
+    ): Promise<ObjectSearch[]> {
+        const supportedAttributes = await super.getSortableAttributes(filtered);
+
+        const filterList = [
+            FAQArticleProperty.CATEGORY_ID,
+            'CreatedUserIDs',
+            'FAQArticleID',
+            FAQArticleProperty.FIELD_4,
+            FAQArticleProperty.FIELD_5,
+            'LastChangedUserIDs',
+            'Visibility',
+            FAQArticleProperty.VOTES
+        ];
+        return filtered ?
+            supportedAttributes.filter((sA) => !filterList.some((fp) => fp === sA.Property)) :
+            supportedAttributes;
+    }
+
+    protected getSortAttribute(attribute: string): string {
+        switch (attribute) {
+            case FAQArticleProperty.CATEGORY_ID:
+                return FAQArticleProperty.CATEGORY;
+            case FAQArticleProperty.CHANGED_BY:
+                return KIXObjectProperty.CHANGE_BY;
+            case FAQArticleProperty.CHANGED:
+                return KIXObjectProperty.CHANGE_TIME;
+            case FAQArticleProperty.CREATED_BY:
+                return KIXObjectProperty.CREATE_BY;
+            case FAQArticleProperty.CREATED:
+                return KIXObjectProperty.CREATE_TIME;
+            default:
+        }
+        return super.getSortAttribute(attribute);
     }
 }
