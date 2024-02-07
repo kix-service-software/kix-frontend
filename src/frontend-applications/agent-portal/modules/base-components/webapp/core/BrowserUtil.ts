@@ -425,4 +425,18 @@ export class BrowserUtil {
         });
     }
 
+    public static isBooleanTrue(value: string): boolean {
+        let result = false;
+
+        if (typeof value === 'string') {
+            result = value && value !== '0' && value !== 'false';
+        } else if (typeof value === 'number') {
+            result = Boolean(value);
+        } else if (typeof value === 'boolean') {
+            result = value;
+        }
+
+        return result;
+    }
+
 }
