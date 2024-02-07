@@ -216,7 +216,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
     private prepareTicket(ticket: Ticket): void {
 
-        if (ticket.LockID === 2 && (!ticket.OwnerID || ticket.OwnerID === 1)) {
+        if (ticket.LockID === 2 && ticket.OwnerID === 1) {
             delete ticket.LockID;
         }
 
