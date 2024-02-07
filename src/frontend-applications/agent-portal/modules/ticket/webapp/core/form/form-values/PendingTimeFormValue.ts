@@ -32,11 +32,12 @@ export class PendingTimeFormValue extends DateTimeFormValue {
 
     public async initFormValue(): Promise<void> {
         const isPending = await TicketService.isPendingState(this.object[TicketProperty.STATE_ID]);
-        if (isPending) {
+
+        if (!this.enabled && isPending) {
             await this.enable();
+            this.visible = true;
         }
 
-        this.visible = isPending;
         this.isSortable = false;
 
         await super.initFormValue();
