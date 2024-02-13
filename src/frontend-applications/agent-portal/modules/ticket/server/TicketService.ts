@@ -837,26 +837,6 @@ export class TicketAPIService extends KIXObjectAPIService {
             }
         }
 
-        const hasStateSearch = searchCriteria.some((c) =>
-            c.property === TicketProperty.STATE_ID ||
-            c.property === TicketProperty.STATE_TYPE ||
-            c.property === TicketProperty.STATE_TYPE_ID
-        );
-
-        const hasTicketSearch = searchCriteria.some((c) =>
-            c.property === TicketProperty.TICKET_NUMBER ||
-            c.property === TicketProperty.TICKET_ID
-        );
-
-        if (!hasStateSearch && !hasTicketSearch) {
-            searchCriteria.push(
-                new FilterCriteria(
-                    TicketProperty.STATE_TYPE, SearchOperator.IN,
-                    FilterDataType.STRING, FilterType.AND, ['Open']
-                )
-            );
-        }
-
         return searchCriteria;
     }
 
