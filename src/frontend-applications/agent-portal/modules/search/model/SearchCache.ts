@@ -54,9 +54,10 @@ export class SearchCache<T extends KIXObject = KIXObject> {
         this.sortDescending = false;
     }
 
-    public static create(searchCache: SearchCache): SearchCache {
+    public static create(searchCache: SearchCache, createNew?: boolean): SearchCache {
+        const id = createNew ? IdService.generateDateBasedId('SearchCache') : searchCache.id;
         return new SearchCache(
-            searchCache.id, searchCache.contextId,
+            id, searchCache.contextId,
             searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, searchCache.primaryValue,
             searchCache.name, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescending
         );

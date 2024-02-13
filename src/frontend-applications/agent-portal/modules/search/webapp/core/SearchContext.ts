@@ -118,7 +118,8 @@ export abstract class SearchContext extends Context {
 
     public async saveCache(name: string): Promise<void> {
         if (this.searchCache) {
-            const search = SearchCache.create(this.searchCache);
+            const createNew = this.searchCache.name !== name;
+            const search = SearchCache.create(this.searchCache, createNew);
             search.name = name;
 
             await SearchSocketClient.getInstance().saveSearch(search)
