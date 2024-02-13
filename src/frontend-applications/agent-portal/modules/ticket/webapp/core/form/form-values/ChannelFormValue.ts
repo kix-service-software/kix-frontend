@@ -235,6 +235,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 if (formValue.property === ArticleProperty.FROM || formValue.property === ArticleProperty.TO) {
                     formValue.required = channelName === 'email' && this.visible;
                 }
+
+                if (formValue.property === ArticleProperty.SUBJECT || formValue.property === ArticleProperty.BODY) {
+                    formValue.required = true;
+                }
             }
         }
     }
