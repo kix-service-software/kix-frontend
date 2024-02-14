@@ -159,7 +159,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public async loadData(): Promise<Array<RowObject<T>>> {
         let objects = [];
 
-        const pageSize = this.loadingOptions?.limit || (this.isBackendSortSupported() ? 20 : null);
+        const pageSize = await this.getPageSize();
         this.currentLimit = this.usePaging && pageSize
             ? this.currentPageIndex * pageSize
             : null;
@@ -215,6 +215,19 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         }
 
         return await this.getRowObjects(objects);
+    }
+
+    private async getPageSize(): Promise<number> {
+        if (typeof this.loadingOptions?.limit !== 'undefined' && this.loadingOptions?.limit !== null) {
+            return this.loadingOptions?.limit;
+        } else if (this.isBackendSortSupported()) {
+            if (this.contextId) {
+                const context = ContextService.getInstance().getActiveContext();
+                return await context.getPageSize(this.objectType);
+            }
+            return 20;
+        }
+        return;
     }
 
     public async getRowObjects(objects: T[]): Promise<RowObject<T>[]> {
