@@ -57,8 +57,13 @@ describe('Placeholder replacement for contact', () => {
             expect(text).equal(contact.ID.toString());
         });
 
-        it('Should replace contact login placeholder', async () => {
+        it('Should replace contact user login placeholder', async () => {
             const text = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${UserProperty.USER_LOGIN}>`, contact);
+            expect(text).equal(contact.User.UserLogin);
+        });
+
+        it('Should replace contact login placeholder', async () => {
+            const text = await contactPlaceholderHandler.replace(`<KIX_CONTACT_Login>`, contact);
             expect(text).equal(contact.User.UserLogin);
         });
 
