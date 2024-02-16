@@ -41,6 +41,8 @@ export class KIXModulesService {
 
     private releaseInfo: ReleaseInfo;
 
+    private uiModules: IUIModule[] = [];
+
     public async init(modules: IKIXModuleExtension[]): Promise<void> {
         this.tags = new Map();
         this.modules = modules;
@@ -48,20 +50,20 @@ export class KIXModulesService {
             m.uiComponents.forEach((c) => this.tags.set(c.tagId, c.componentPath));
         });
 
-        await this.initModules();
+        this.loadModules();
+        await this.registerModules();
+        await this.registerModuleExtensions();
     }
 
-    private async initModules(): Promise<void> {
+    private loadModules(): void {
         const modules = KIXModulesService.getInstance().getModules();
-
         const requireStart = Date.now();
-        const uiModules: IUIModule[] = [];
         for (const mod of modules) {
             for (const c of mod.initComponents) {
                 try {
                     const component = require(c.componentPath);
                     if (component && component.UIModule) {
-                        uiModules.push(new component.UIModule());
+                        this.uiModules.push(new component.UIModule());
                     }
                 } catch (error) {
                     console.error(error);
@@ -70,22 +72,41 @@ export class KIXModulesService {
         }
         const requireEnd = Date.now();
         console.debug(`Require ${modules.length} modules in ${requireEnd - requireStart}ms`);
+    }
 
+    private async registerModules(): Promise<void> {
         const moduleStart = Date.now();
-        uiModules.sort((a, b) => a.priority - b.priority);
-        for (let i = 0; i < uiModules.length; i++) {
-            if (uiModules[i].register) {
+        this.uiModules.sort((a, b) => a.priority - b.priority);
+        for (let i = 0; i < this.uiModules.length; i++) {
+            if (this.uiModules[i].register) {
                 const start = Date.now();
-                await uiModules[i].register();
+                await this.uiModules[i].register();
                 const end = Date.now();
-                console.debug(`register module: ${uiModules[i].priority} - ${uiModules[i].name} - ${end - start}ms`);
+                console.debug(`register module: ${this.uiModules[i].priority} - ${this.uiModules[i].name} - ${end - start}ms`);
             } else {
-                console.warn(`module with prioritiy ${uiModules[i].priority} did not implement register() method.`);
+                console.warn(`module with prioritiy ${this.uiModules[i].priority} did not implement register() method.`);
             }
-            const percent = Math.round((i / uiModules.length) * 100);
+            const percent = Math.round((i / this.uiModules.length) * 100);
         }
         const moduleEnd = Date.now();
         console.debug(`Init modules in ${moduleEnd - moduleStart}ms`);
+    }
+
+    private async registerModuleExtensions(): Promise<void> {
+        const moduleStart = Date.now();
+        this.uiModules.sort((a, b) => a.priority - b.priority);
+        for (const uiModule of this.uiModules) {
+            if (uiModule.registerExtensions) {
+                const start = Date.now();
+                await uiModule.registerExtensions();
+                const end = Date.now();
+                console.debug(`register module extensions: ${uiModule.priority} - ${uiModule.name} - ${end - start}ms`);
+            } else {
+                console.warn(`module with prioritiy ${uiModule.priority} did not implement registerExtensions() method.`);
+            }
+        }
+        const moduleEnd = Date.now();
+        console.debug(`Register Module Extensions modules in ${moduleEnd - moduleStart}ms`);
     }
 
     public getModules(): IKIXModuleExtension[] {

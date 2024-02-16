@@ -53,14 +53,14 @@ export class UIModule implements IUIModule {
         KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN
     ];
 
-    public unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
+    public async register(): Promise<void> {
+        const adminModuleAllowed = await this.checkAdminModuleAllowed();
+        if (adminModuleAllowed) {
+            this.registerContextIfNeeded();
+        }
     }
 
-    public async register(): Promise<void> {
-
-        await this.registerAdminContext();
-
+    public async registerExtensions(): Promise<void> {
         SetupService.getInstance().registerSetupStep(
             new SetupStep('setup-system-settings', 'Translatable#System', 'setup-system-settings',
                 [
@@ -70,13 +70,6 @@ export class UIModule implements IUIModule {
                 'kix-icon-gears', 5
             )
         );
-    }
-
-    private async registerAdminContext(): Promise<void> {
-        const adminModuleAllowed = await this.checkAdminModuleAllowed();
-        if (adminModuleAllowed) {
-            this.registerContextIfNeeded();
-        }
     }
 
     private async registerContextIfNeeded(): Promise<void> {

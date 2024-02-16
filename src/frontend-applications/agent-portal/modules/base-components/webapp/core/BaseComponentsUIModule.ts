@@ -19,16 +19,16 @@ export class UIModule implements IUIModule {
 
     public name: string = 'BaseComponentsUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public priority: number = 800;
 
     public async register(): Promise<void> {
         ActionFactory.getInstance().registerAction('reset-user-context-widget-list', ResetUserContextWidgetListAction);
         FormValidationService.getInstance().registerValidator(new ObjectReferenceCountValidator());
         PlaceholderService.getInstance().registerPlaceholderHandler(new KIXObjectPlaceholderHandler());
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

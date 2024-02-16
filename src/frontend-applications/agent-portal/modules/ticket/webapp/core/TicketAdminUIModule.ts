@@ -38,10 +38,6 @@ export class UIModule extends TicketReadUIModule {
 
     protected doRegisterContexts: boolean = false;
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         super.register();
         ServiceRegistry.registerServiceInstance(TicketTypeFormService.getInstance());

@@ -87,7 +87,9 @@ export class UIModule implements IUIModule {
             'Translatable#Notification Details', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(notificationDetailsContext);
+    }
 
+    public async registerExtensions(): Promise<void> {
         SetupService.getInstance().registerSetupStep(
             new SetupStep('setup-notification-template', 'Translatable#Notification Template', 'setup-notification-template',
                 [
@@ -97,10 +99,6 @@ export class UIModule implements IUIModule {
                 'kix-icon-letter-blue', 60
             )
         );
-    }
-
-    public unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
     }
 
 }
