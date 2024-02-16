@@ -21,7 +21,7 @@ export class UIModule implements IUIModule {
         RoutingService.getInstance().registerRoutingHandler(new SetupAssistentRoutingHandler());
     }
 
-    public async unRegister(): Promise<void> {
+    public async registerExtensions(): Promise<void> {
         return;
     }
 }

@@ -37,10 +37,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'MailFilterUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(MailFilterService.getInstance());
         ServiceRegistry.registerServiceInstance(MailFilterFormService.getInstance());
@@ -93,5 +89,9 @@ export class UIModule implements IUIModule {
             'Translatable#Mail Filter Details', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(mailFilterDetailsContext);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 }

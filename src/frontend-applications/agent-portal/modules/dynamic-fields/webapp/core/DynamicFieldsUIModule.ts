@@ -57,10 +57,6 @@ export class UIModule implements IUIModule {
     private defaultValueTitle: string;
     private defaultValueDescription: string;
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.registerServiceInstance(DynamicFieldFormService.getInstance());
@@ -101,6 +97,10 @@ export class UIModule implements IUIModule {
         FormValidationService.getInstance().registerValidator(new DynamicFieldTableValidator());
 
         this.registerSchemas();
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
     // tslint:disable:max-line-length

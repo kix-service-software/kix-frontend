@@ -17,15 +17,15 @@ export class UIModule implements IUIModule {
 
     public name: string = 'ObjectSearchUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public priority: number = 90;
 
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(ObjectSearchService.getInstance());
         BrowserCacheService.getInstance().addDependencies(KIXObjectType.DYNAMIC_FIELD, [KIXObjectType.OBJECT_SEARCH]);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

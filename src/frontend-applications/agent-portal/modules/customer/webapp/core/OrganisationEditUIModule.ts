@@ -34,10 +34,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'OrganisationEditUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ImportService.getInstance().registerImportManager(new OrganisationImportManager());
         ImportService.getInstance().registerImportRunner(new OrganisationImportRunner());
@@ -56,6 +52,10 @@ export class UIModule implements IUIModule {
                 'kix-icon-man-house', 50
             )
         );
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
     private registerContexts(): void {

@@ -31,10 +31,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'FAQAdminUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
 
         ServiceRegistry.registerServiceInstance(FAQService.getInstance());
@@ -82,6 +78,10 @@ export class UIModule implements IUIModule {
         );
         ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);
 
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

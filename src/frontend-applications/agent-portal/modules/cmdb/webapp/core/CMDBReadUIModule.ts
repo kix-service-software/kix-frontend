@@ -55,10 +55,6 @@ export class UIModule implements IUIModule {
 
     public priority: number = 200;
 
-    public unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(CMDBService.getInstance());
         ServiceRegistry.registerServiceInstance(ConfigItemFormService.getInstance());
@@ -81,12 +77,14 @@ export class UIModule implements IUIModule {
             KIXObjectType.CONFIG_ITEM, new PostproductivCSSHandler()
         );
 
-        GraphService.registerGraphInstance('ConfigItemLinkGraph', CMDBGraphInstance);
-
         PlaceholderService.getInstance().registerPlaceholderHandler(ConfigItemPlaceholderHandler.getInstance());
 
         await this.registerContexts();
         this.registerActions();
+    }
+
+    public async registerExtensions(): Promise<void> {
+        GraphService.registerGraphInstance('ConfigItemLinkGraph', CMDBGraphInstance);
     }
 
     private async registerContexts(): Promise<void> {

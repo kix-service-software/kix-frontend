@@ -20,11 +20,11 @@ export class UIModule implements IUIModule {
 
     public name: string = 'SearchUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
+    public async register(): Promise<void> {
+        return;
     }
 
-    public async register(): Promise<void> {
+    public async registerExtensions(): Promise<void> {
         const dialogs = await ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
         if (dialogs && dialogs.length) {
             ActionFactory.getInstance().registerAction('save-search-action', SaveSearchAction);
@@ -32,10 +32,6 @@ export class UIModule implements IUIModule {
             ActionFactory.getInstance().registerAction('load-search-action', LoadSearchAction);
         }
 
-        this.registerBookmarks();
-    }
-
-    private async registerBookmarks(): Promise<void> {
         await SearchService.getInstance().getSearchBookmarks(true);
     }
 

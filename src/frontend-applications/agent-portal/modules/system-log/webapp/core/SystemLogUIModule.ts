@@ -29,10 +29,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'SystemLogUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public priority: number = 800;
 
     public async register(): Promise<void> {
@@ -55,6 +51,10 @@ export class UIModule implements IUIModule {
         TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(
             KIXObjectType.LOG_FILE, new LogFileTableCSSHandler()
         );
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

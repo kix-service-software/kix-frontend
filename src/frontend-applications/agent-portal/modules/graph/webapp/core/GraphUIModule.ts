@@ -25,10 +25,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'GeneralCatalogUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
 
         ServiceRegistry.registerServiceInstance(GraphService.getInstance());
@@ -43,6 +39,10 @@ export class UIModule implements IUIModule {
             'Translatable#Asset Graph', 'fas fa-project-diagram'
         );
         ContextService.getInstance().registerContext(graphContext);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

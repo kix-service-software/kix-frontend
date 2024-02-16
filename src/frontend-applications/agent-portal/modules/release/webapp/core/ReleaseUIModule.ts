@@ -24,9 +24,6 @@ export class UIModule implements IUIModule {
     public name: string = 'ReleaseUIModule';
 
     public async register(): Promise<void> {
-
-        RoutingService.getInstance().registerRoutingHandler(new ReleaseRoutingHandler());
-
         const releaseContext = new ContextDescriptor(
             ReleaseContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'release-module', ['release'], ReleaseContext
@@ -34,8 +31,8 @@ export class UIModule implements IUIModule {
         ContextService.getInstance().registerContext(releaseContext);
     }
 
-    public unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
+    public async registerExtensions(): Promise<void> {
+        RoutingService.getInstance().registerRoutingHandler(new ReleaseRoutingHandler());
     }
 
 }
