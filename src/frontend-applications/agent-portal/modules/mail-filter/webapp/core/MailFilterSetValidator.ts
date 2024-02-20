@@ -17,32 +17,34 @@ import { MailFilterMatch } from '../../model/MailFilterMatch';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
-export class MailFilterMatchValidator implements IFormFieldValidator {
+export class MailFilterSetValidator implements IFormFieldValidator {
 
-    public validatorId: string = 'MailFilterMatchValidator';
+    public validatorId: string = 'MailFilterSetValidator';
 
     public isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean {
-        return formField.property === MailFilterProperty.MATCH;
+        return formField.property === MailFilterProperty.SET;
     }
 
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
 
-        if (formField.property === MailFilterProperty.MATCH) {
+        if (formField.property === MailFilterProperty.SET) {
             const context = ContextService.getInstance().getActiveContext();
             const formInstance = await context?.getFormManager()?.getFormInstance();
             const value = formInstance.getFormFieldValue<MailFilterMatch[]>(formField.instanceId);
             if (value && value.value && Array.isArray(value.value)) {
-                for (const matchValue of value.value) {
-                    if (matchValue.Value) {
-                        try {
-                            new RegExp(matchValue.Value);
-                        } catch (error) {
-                            return new ValidationResult(ValidationSeverity.ERROR, error.message);
+                for (const setValue of value.value) {
+                    if (setValue.Value) {
+                        if (setValue.Value.match(/^\s*$/)) {
+                            const message = await TranslationService.translate(
+                                'Translatable#{0}: just white spaces as value is not allowed.',
+                                [setValue.Key]
+                            );
+                            return new ValidationResult(ValidationSeverity.ERROR, message);
                         }
                     } else {
                         const message = await TranslationService.translate(
                             'Translatable#{0}: has no value.',
-                            [matchValue.Key]
+                            [setValue.Key]
                         );
                         return new ValidationResult(ValidationSeverity.ERROR, message);
                     }
