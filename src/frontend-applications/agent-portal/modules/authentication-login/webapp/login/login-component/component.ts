@@ -15,6 +15,8 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { PortalNotificationEvent } from '../../../../portal-notification/model/PortalNotificationEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
+import { AuthMethod } from '../../../../../model/AuthMethod';
+import { UserType } from '../../../../user/model/UserType';
 
 declare const window: Window;
 
@@ -26,6 +28,8 @@ class Component {
     private translations: Array<[string, string]>;
     private subscriber: IEventSubscriber;
 
+    private authMethods: AuthMethod[];
+
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
@@ -33,6 +37,8 @@ class Component {
     public onInput(input: any): void {
         this.state.logout = input.logout;
         this.redirectUrl = input.redirectUrl;
+        this.authMethods = input.authMethods || [];
+        this.state.error = input.error;
     }
 
     public async onMount(): Promise<void> {
@@ -49,6 +55,11 @@ class Component {
             }
         };
         EventService.getInstance().subscribe(PortalNotificationEvent.PRE_LOGIN_NOTIFICATIONS_UPDATED, this.subscriber);
+
+        if (this.authMethods?.length) {
+            this.state.hasLogin = this.authMethods.some((am) => am.type === 'LOGIN');
+            this.state.authMethods = this.authMethods.filter((am) => am.type !== 'LOGIN');
+        }
 
         setTimeout(() => {
             const userElement = (this as any).getEl('login-user-name');
@@ -139,6 +150,11 @@ class Component {
     public togglePasswordVisibility(): void {
         this.state.passwordFieldType = this.state.passwordFieldType === InputFieldTypes.PASSWORD.toLowerCase() ?
             InputFieldTypes.TEXT.toLowerCase() : InputFieldTypes.PASSWORD.toLowerCase();
+    }
+
+    public async authMethodClicked(method: AuthMethod): Promise<void> {
+        const url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        window.location.href = `${url}?authmethod=${JSON.stringify(method)}&usertype=${UserType.AGENT}&returnUrl=${encodeURIComponent(url)}&redirectUrl=${encodeURIComponent(this.redirectUrl)}`;
     }
 }
 
