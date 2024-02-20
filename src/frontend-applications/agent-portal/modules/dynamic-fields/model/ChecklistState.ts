@@ -7,19 +7,12 @@
  * --
  */
 
-import { CheckListInputType } from './CheckListInputType';
+export class ChecklistState {
 
-export class CheckListItem {
-
-    public Id: string;
-
-    public title: string;
-
-    public description: string;
-
-    public input: CheckListInputType;
-
-    public value: string;
-
-    public sub: CheckListItem[];
+    public constructor(
+        public label: string,
+        public icon?: string,
+        public done: boolean = true,
+        public order?: number
+    ) { }
 }

@@ -7,23 +7,23 @@
  * --
  */
 
-import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ComponentState } from './ComponentState';
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        this.state.checklist = input.checklist || [];
-        this.state.field = input.field;
+        this.state.checklist = input.checklist;
     }
 
     public async onMount(): Promise<void> {
-        return;
+        this.state.prepared = true;
     }
+
 }
 
 module.exports = Component;

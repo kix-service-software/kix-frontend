@@ -7,7 +7,7 @@
  * --
  */
 
-import { CheckListItem } from '../../core/CheckListItem';
+import { CheckListItem } from '../../../model/CheckListItem';
 
 export class ComponentState {
 
