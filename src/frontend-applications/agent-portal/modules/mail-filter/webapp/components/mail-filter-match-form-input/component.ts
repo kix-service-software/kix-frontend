@@ -44,12 +44,13 @@ class Component extends FormInputComponent<any[], ComponentState> {
                 if (await this.state.matchManager.hasDefinedValues()) {
                     const values = await this.state.matchManager.getEditableValues();
                     values.forEach((v) => {
-                        if (v.property && v.value && (v.value as MailFilterMatch).Value) {
+                        // do not check value just use it, validator will reject if necessary
+                        if (v.property) {
                             matchValues.push(
                                 new MailFilterMatch(
                                     v.property,
-                                    (v.value as MailFilterMatch).Value,
-                                    (v.value as MailFilterMatch).Not
+                                    v.value ? (v.value as MailFilterMatch).Value : '',
+                                    v.value ? (v.value as MailFilterMatch).Not : 0
                                 )
                             );
                         }

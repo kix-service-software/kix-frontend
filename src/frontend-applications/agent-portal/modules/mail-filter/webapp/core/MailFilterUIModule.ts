@@ -29,6 +29,7 @@ import { MailFilterMatchValidator } from './MailFilterMatchValidator';
 import { MailFilterTableDeleteAction } from './actions/MailFilterTableDeleteAction';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { MailFilterSetValidator } from './MailFilterSetValidator';
 
 
 export class UIModule implements IUIModule {
@@ -64,6 +65,7 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('mail-filter-edit', MailFilterEditAction);
 
         FormValidationService.getInstance().registerValidator(new MailFilterMatchValidator());
+        FormValidationService.getInstance().registerValidator(new MailFilterSetValidator());
 
         const editMailFilterDialogContext = new ContextDescriptor(
             EditMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
