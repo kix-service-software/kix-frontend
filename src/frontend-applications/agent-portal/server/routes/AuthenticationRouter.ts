@@ -25,6 +25,7 @@ import { LoggingService } from '../../../../server/services/LoggingService';
 import { AuthenticationService } from '../../../../server/services/AuthenticationService';
 import { UserType } from '../../modules/user/model/UserType';
 import { ObjectResponse } from '../services/ObjectResponse';
+import { IRouterHandler } from '../model/IRouterHandler';
 
 export class AuthenticationRouter extends KIXRouter {
 
@@ -42,7 +43,15 @@ export class AuthenticationRouter extends KIXRouter {
     }
 
     protected initialize(): void {
-        this.router.get('/', this.login.bind(this));
+        PluginService.getInstance().getExtensions<IRouterHandler>(
+            AgentPortalExtensions.AUTH_ROUTER_HANDLER
+        ).then((handler: IRouterHandler[] = []) => {
+            const handleCBs = handler.map((h) => h.handle.bind(h));
+            this.router.get('/', ...handleCBs, this.login.bind(this));
+        }).catch(() => {
+            this.router.get('/', this.login.bind(this));
+        });
+
         this.router.get('/logout', this.logout.bind(this));
     }
 
@@ -171,8 +180,12 @@ export class AuthenticationRouter extends KIXRouter {
                 const favIcon = await this.getIcon('agent-portal-icon');
                 const logo = await this.getIcon('agent-portal-logo');
 
+                const error = !!req.query['error'];
+
+                const authMethods = await AuthenticationService.getInstance().getAuthMethods();
+
                 (res as any).marko(template, {
-                    login: true, logout, releaseInfo, imprintLink, redirectUrl, favIcon, logo
+                    login: true, logout, releaseInfo, imprintLink, redirectUrl, favIcon, logo, authMethods, error
                 });
             } catch (error) {
                 console.error(error);
