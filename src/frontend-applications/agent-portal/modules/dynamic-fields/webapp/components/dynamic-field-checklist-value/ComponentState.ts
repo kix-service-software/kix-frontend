@@ -7,17 +7,16 @@
  * --
  */
 
-import { DynamicField } from '../../../model/DynamicField';
-import { Label } from '../../../../base-components/webapp/core/Label';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { CheckListItem } from '../../../model/CheckListItem';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public field: DynamicField = null,
-        public labels: Label[] = [],
         public checklist: CheckListItem[] = [],
-        public table: Array<string[]> = []
-    ) { }
+        public prepared: boolean = false,
+    ) {
+        super();
+    }
 
 }

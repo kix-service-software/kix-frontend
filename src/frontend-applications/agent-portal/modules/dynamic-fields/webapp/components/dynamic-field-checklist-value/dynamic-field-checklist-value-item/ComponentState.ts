@@ -7,19 +7,15 @@
  * --
  */
 
-import { IdService } from '../../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
-import { CheckListItem } from '../../../../../dynamic-fields/model/CheckListItem';
+import { CheckListItem } from '../../../../model/CheckListItem';
+
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public value: CheckListItem[] = [],
-        public prepared: boolean = false,
-        public progressValue: number = 0,
-        public progressText: string = '',
-        public checklistId: string = IdService.generateDateBasedId('-checklist'),
-        public readonly: boolean = false
+        public item: CheckListItem = null,
+        public expanded: boolean = true,
     ) {
         super();
     }

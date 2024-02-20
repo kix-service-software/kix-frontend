@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { CheckListItem } from '../../../core/CheckListItem';
+import { CheckListItem } from '../../../../model/CheckListItem';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { TreeHandler, TreeService, TreeNode } from '../../../../../base-components/webapp/core/tree';
 

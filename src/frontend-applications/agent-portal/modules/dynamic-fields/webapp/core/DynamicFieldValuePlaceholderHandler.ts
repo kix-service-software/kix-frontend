@@ -12,7 +12,7 @@ import { KIXObjectService } from '../../../base-components/webapp/core/KIXObject
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { DynamicFieldTypes } from '../../model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../model/DynamicFieldValue';
-import { CheckListItem } from './CheckListItem';
+import { CheckListItem } from '../../model/CheckListItem';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { ExtendedDynamicFieldPlaceholderHandler } from './ExtendedDynamicFieldPlaceholderHandler';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';

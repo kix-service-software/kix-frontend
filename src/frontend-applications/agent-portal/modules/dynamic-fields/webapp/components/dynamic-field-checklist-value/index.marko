@@ -7,8 +7,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div class="checklist-info">
-    <dynamic-field-checklist-progress checklist=state.checklist/>
-
-    <dynamic-field-checklist-value checklist=state.checklist/>
-</div>
+<if(state.prepared)>
+   <for|item, index| of=state.checklist>
+      <dynamic-field-checklist-value-item item=item level=`${index}`/>
+   </for>
+</if>

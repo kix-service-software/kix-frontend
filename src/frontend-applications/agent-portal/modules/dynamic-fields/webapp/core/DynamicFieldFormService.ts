@@ -19,7 +19,10 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { DynamicFieldTypes } from '../../model/DynamicFieldTypes';
 import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
-import { CheckListItem } from './CheckListItem';
+import { CheckListItem } from '../../model/CheckListItem';
+import { DynamicFieldFormUtil } from '../../../base-components/webapp/core/DynamicFieldFormUtil';
+import { ChecklistState } from '../../model/ChecklistState';
+import { CheckListInputType } from '../../model/CheckListInputType';
 
 export class DynamicFieldFormService extends KIXObjectFormService {
 
@@ -86,7 +89,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                         value.TranslatableValues = Boolean(value.TranslatableValues === '1');
                     } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
                         const checklist = JSON.parse(value.DefaultValue);
-                        this.prepareChecklistConfig(checklist);
+                        DynamicFieldFormService.prepareChecklistConfig(checklist);
                         value.DefaultValue = checklist;
                     }
                 }
@@ -104,14 +107,31 @@ export class DynamicFieldFormService extends KIXObjectFormService {
         }
     }
 
-    private prepareChecklistConfig(checklist: CheckListItem[]): void {
-        checklist.forEach((ci) => {
+    public static prepareChecklistConfig(checklist: CheckListItem[]): void {
+        for (const ci of checklist) {
+
+            if (ci.inputStates) {
+                ci.checklistStates = [];
+                for (const key in ci.inputStates) {
+                    if (ci.inputStates[key]) {
+                        const state = ci.inputStates[key];
+                        ci.checklistStates.push(new ChecklistState(key, state.icon, state.done, state.order));
+                    }
+                }
+
+                delete ci.inputStates;
+            }
+
+            if (ci.input === CheckListInputType.ChecklistState && !ci.checklistStates?.length) {
+                ci.checklistStates = DynamicFieldFormUtil.getDefaultChecklistStates();
+            }
+
             if (!ci.sub) {
                 ci.sub = [];
             } else {
                 this.prepareChecklistConfig(ci.sub);
             }
-        });
+        }
     }
 
     public async postPrepareValues(
@@ -131,7 +151,9 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                 possibleValue.forEach((p) => possibleValueHash[p.Key] = p.Value);
                 configParameter[1].PossibleValues = possibleValueHash;
             } else if (fieldTypeParameter[1] === DynamicFieldTypes.CHECK_LIST) {
-                configParameter[1].DefaultValue = JSON.stringify(configParameter[1].DefaultValue);
+                const checklist = configParameter[1].DefaultValue;
+                this.prepareChecklistValue(checklist);
+                configParameter[1].DefaultValue = JSON.stringify(checklist);
             }
         }
 
@@ -141,6 +163,34 @@ export class DynamicFieldFormService extends KIXObjectFormService {
         }
 
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
+    }
+
+    private prepareChecklistValue(checklist: CheckListItem[]): void {
+        for (const ci of checklist) {
+
+            if (!ci.checklistStates || ci.checklistStates.length === 0) {
+                ci.checklistStates = DynamicFieldFormUtil.getDefaultChecklistStates() || [];
+            }
+
+            if (Array.isArray(ci.checklistStates)) {
+                ci.inputStates = {};
+                for (const state of ci.checklistStates) {
+                    ci.inputStates[state.label] = {
+                        order: state.order,
+                        icon: state.icon,
+                        done: state.done
+                    };
+                }
+            }
+
+            delete ci.checklistStates;
+
+            if (!ci.sub) {
+                ci.sub = [];
+            } else {
+                this.prepareChecklistValue(ci.sub);
+            }
+        }
     }
 
 }

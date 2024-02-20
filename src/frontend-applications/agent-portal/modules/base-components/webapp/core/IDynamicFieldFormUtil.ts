@@ -12,7 +12,7 @@ import { FormFieldConfiguration } from '../../../../model/configuration/FormFiel
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { ValidationResult } from './ValidationResult';
-import { CheckListItem } from '../../../dynamic-fields/webapp/core/CheckListItem';
+import { CheckListItem } from '../../../dynamic-fields/model/CheckListItem';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { KIXObjectFormService } from './KIXObjectFormService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
