@@ -41,6 +41,7 @@ import { OverlayType } from '../../../base-components/webapp/core/OverlayType';
 import { StringContent } from '../../../base-components/webapp/core/StringContent';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 
 export class SearchService {
 
@@ -60,6 +61,8 @@ export class SearchService {
     private formSearches: Map<KIXObjectType | string, (formId: string) => Promise<any[]>> = new Map();
     private formTableConfigs: Map<KIXObjectType | string, Table> = new Map();
     private searchDefinitions: SearchDefinition[] = [];
+
+    private readonly TICKET_SEARCH_CONTEXTID = 'search-ticket-context';
 
     public registerFormSearch<T extends KIXObject>(
         objectType: KIXObjectType | string,
@@ -152,7 +155,8 @@ export class SearchService {
     public async searchObjects(
         searchCache: SearchCache,
         context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>(),
-        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean]
+        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean],
+        setResult: boolean = true
     ): Promise<KIXObject[]> {
         if (!searchCache) {
             throw new Error('No search available');
@@ -220,12 +224,50 @@ export class SearchService {
             searchCache.objectType, null, loadingOptions, null, false, undefined, undefined, searchCache.id
         );
 
-        if (context instanceof SearchContext) {
-            context.setSearchCache(searchCache);
-            context.setSearchResult(objects);
+        if (setResult && context instanceof SearchContext) {
+            setTimeout(() => {
+                context.setSearchCache(searchCache);
+                context.setSearchResult(objects);
+            }, 1000);
         }
 
         return objects;
+    }
+
+    public async executeUserFulltextSearch(value?: string): Promise<void> {
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Search' }
+        );
+
+        const searchDescriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
+        const searchContextDescriptor = this.getSearchContextDescriptor();
+        const hasTicketSearchContext = searchDescriptors.some((sd) => sd.contextId === this.TICKET_SEARCH_CONTEXTID);
+
+        let contextId: string = searchContextDescriptor?.contextId;
+        if (!searchContextDescriptor && hasTicketSearchContext) {
+            contextId = this.TICKET_SEARCH_CONTEXTID;
+        } else if (!searchContextDescriptor && searchDescriptors.length) {
+            contextId = searchDescriptors[0].contextId;
+        }
+
+        const descriptor = searchContextDescriptor || ContextService.getInstance().getContextDescriptor(contextId);
+        if (descriptor && value) {
+            await this.executePrimarySearch(descriptor.kixObjectTypes[0], value).catch((error) => {
+                OverlayService.getInstance().openOverlay(
+                    OverlayType.WARNING, null, new StringContent(error), 'Translatable#Search error!',
+                    null, true
+                );
+            });
+        }
+    }
+
+    private getSearchContextDescriptor(): ContextDescriptor {
+        const context = ContextService.getInstance().getActiveContext();
+        const searchDescriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
+        const searchContextDescriptor = searchDescriptors.find(
+            (sd) => sd.kixObjectTypes.some((ot) => ot === context.descriptor.kixObjectTypes[0])
+        );
+        return searchContextDescriptor;
     }
 
     public async executePrimarySearch<T extends KIXObject>(
@@ -240,40 +282,37 @@ export class SearchService {
 
         searchCache.primaryValue = searchValue;
 
-        const searchContext = await this.setSearchContext(searchCache?.objectType);
-        const objects = await this.searchObjects(searchCache);
+        const objects = await this.searchObjects(
+            searchCache, undefined, undefined, undefined, undefined, undefined, false
+        );
 
         if (Array.isArray(objects) && objects.length === 1) {
             const contextService = ContextService.getInstance();
             const contextDescriptors = contextService.getContextDescriptors(ContextMode.DETAILS);
             const detailContextId = contextDescriptors.find(
                 (cd) => cd.kixObjectTypes.some((ot) =>
-                    ot === searchContext?.descriptor.kixObjectTypes[0])
+                    ot === objectType)
             );
             if (detailContextId) {
                 contextService.toggleActiveContext();
                 contextService.setActiveContext(detailContextId.contextId, objects[0].ObjectId);
             }
         } else {
-            await SearchService.getInstance().executeFullTextSearch(
-                objectType, searchValue
-            ).catch((error) => {
+            await SearchService.getInstance().executeFullTextSearch(objectType, searchValue, true).catch((error) => {
                 OverlayService.getInstance().openOverlay(
                     OverlayType.WARNING, null, new StringContent(error), 'Translatable#Search error!',
                     null, true
                 );
             });
 
-            EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
-            );
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
         }
 
         return (objects as any);
     }
 
     public async executeFullTextSearch<T extends KIXObject>(
-        objectType: KIXObjectType | string, searchValue: string
+        objectType: KIXObjectType | string, searchValue: string, setContext?: boolean
     ): Promise<T[]> {
         const searchCache = new SearchCache<T>(null, null, objectType, [], []);
         searchCache.criteria = [
@@ -287,7 +326,14 @@ export class SearchService {
         const searchDefinition = this.getSearchDefinition(objectType);
         searchDefinition?.appendFullTextCriteria(searchCache.criteria);
 
-        const objects = await this.searchObjects(searchCache);
+        let context;
+        if (setContext) {
+            context = await this.setSearchContext(objectType);
+        }
+
+        const objects = await this.searchObjects(
+            searchCache, context, undefined, undefined, undefined, undefined, setContext
+        );
         return (objects as any);
     }
 
