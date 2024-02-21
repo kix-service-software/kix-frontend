@@ -30,7 +30,7 @@ export class TicketListContext extends Context {
         const ticketStatsProperty = this.getAdditionalInformation('TicketStatsProperty');
 
         const loadingOptions = new KIXObjectLoadingOptions(null, null, limit);
-        loadingOptions.includes = [TicketProperty.WATCHERS, TicketProperty.STATE_TYPE];
+        loadingOptions.includes = [TicketProperty.WATCHERS, TicketProperty.STATE_TYPE, TicketProperty.UNSEEN];
         loadingOptions.limit = limit;
 
         this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);

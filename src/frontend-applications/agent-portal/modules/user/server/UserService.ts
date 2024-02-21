@@ -142,7 +142,7 @@ export class UserService extends KIXObjectAPIService {
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             let uri = this.buildUri('session', 'user', 'preferences');
-            if (createOptions) {
+            if (createOptions && !(createOptions as SetPreferenceOptions).bySession) {
                 const userId = (createOptions as SetPreferenceOptions).userId;
                 if (userId) {
                     uri = this.buildUri(this.RESOURCE_URI, userId, 'preferences');
@@ -218,7 +218,7 @@ export class UserService extends KIXObjectAPIService {
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             let uri = this.buildUri('session', 'user', 'preferences', objectId);
-            if (updateOptions) {
+            if (updateOptions && !(updateOptions as SetPreferenceOptions).bySession) {
                 const userId = (updateOptions as SetPreferenceOptions).userId;
                 if (userId) {
                     uri = this.buildUri(this.RESOURCE_URI, userId, 'preferences', objectId);
@@ -271,7 +271,7 @@ export class UserService extends KIXObjectAPIService {
     }
 
     public async setPreferences(
-        token: string, clientRequestId: string, parameter: Array<[string, any]>, userId?: number
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, userId?: number, bySession?: boolean
     ): Promise<void> {
         const objectResponse = await this.loadObjects<UserPreference>(
             token, null, KIXObjectType.USER_PREFERENCE, null, null,
@@ -281,7 +281,7 @@ export class UserService extends KIXObjectAPIService {
 
         const errors: Error[] = [];
 
-        const options = userId ? new SetPreferenceOptions(userId) : undefined;
+        const options = new SetPreferenceOptions(userId, bySession);
 
         parameter = parameter.filter((p) =>
             p[0] !== PersonalSettingsProperty.CURRENT_PASSWORD &&
@@ -311,7 +311,7 @@ export class UserService extends KIXObjectAPIService {
                     });
                 } else {
                     let uri = this.buildUri('system', 'users', userId, 'preferences', param[0]);
-                    if (!options?.userId) {
+                    if (bySession) {
                         uri = this.buildUri('session', 'user', 'preferences', param[0]);
                     }
 
@@ -338,6 +338,10 @@ export class UserService extends KIXObjectAPIService {
 
         if (errors.length) {
             throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
+        }
+
+        if (userId) {
+            await CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_${userId}`);
         }
     }
 

@@ -12,7 +12,7 @@ import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecific
 
 export class SetPreferenceOptions extends KIXObjectSpecificCreateOptions {
 
-    public constructor(public userId: number) {
+    public constructor(public userId?: number, public bySession?: boolean) {
         super();
     }
 
