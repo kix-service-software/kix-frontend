@@ -7,23 +7,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<if(state.prepared)>
-   <div class="dropdown">
-      <div
-         role="button"
-         id=`id_${state.searchValueKey}`
-         ...state.dropdownAttributes
-         tabindex="0"
-         on-keydown("keydownOnSelectInput")
-         on-click("inputClicked")
-         class="select-input-row"
-      >
-         <div class=[
-            "form-control select-input-container rounded-0",
-            {
-               readonly: state.readonly,
-            },
-         ]>
+<div class="dropdown" id=`id_${state.searchValueKey}`>
+   <div
+      role="button"
+      ...state.dropdownAttributes
+      tabindex="0"
+      on-keydown("keydownOnSelectInput")
+      on-click("inputClicked")
+      class="select-input-row"
+   >
+      <div class=[
+         "form-control select-input-container rounded-0",
+         {
+            readonly: state.readonly,
+         },
+      ]>
+         <if(state.prepared)>
             <ul class="list-group list-group-horizontal flex-wrap">
                <for|node| of=state.selectedNodes>
 
@@ -41,91 +40,91 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                   </li>
                </for>
             </ul>
-         </div>
-         <if(!state.readonly)>
-            <button
-               type="button"
-               on-click("clearValue")
-               class="object-forms-component btn btn-outline-secondary rounded-0 border-start-0 border-end-0"
-            >
-               <i class="far fa-times-circle"/>
-            </button>
-            <button
-               type="button"
-               class="object-forms-component btn btn-outline-secondary dropdown-toggle rounded-0 border-start-0 border-start-0 rounded-end"
-            />
          </if>
       </div>
-      <div
-         on-click("selectInputClicked")
-         aria-labelledby=`id_${state.searchValueKey}`
-         class="select-input-list dropdown-menu w-100 pt-0 pb-0"
-      >
-         <if(state.hasFilter)>
-            <div
-               key=state.searchValueKey + "-keylistener"
-               class="dropdown-item sticky-top bg-white"
+      <if(!state.readonly && state.prepared)>
+         <button
+            type="button"
+            on-click("clearValue")
+            class="object-forms-component btn btn-outline-secondary rounded-0 border-start-0 border-end-0"
+         >
+            <i class="far fa-times-circle"/>
+         </button>
+         <button
+            type="button"
+            class="object-forms-component btn btn-outline-secondary dropdown-toggle rounded-0 border-start-0 border-start-0 rounded-end"
+         />
+      </if>
+   </div>
+   <div
+      on-click("selectInputClicked")
+      aria-labelledby=`id_${state.searchValueKey}`
+      class="select-input-list dropdown-menu w-100 pt-0 pb-0"
+   >
+      <if(state.hasFilter)>
+         <div
+            key=state.searchValueKey + "-keylistener"
+            class="dropdown-item sticky-top bg-white"
+         >
+            <input
+               type="text"
+               placeholder=state.searchPlaceholder
+               key=state.searchValueKey
+               on-keyup("searchValueChanged")
+               on-keydown("keydown")
+               no-update
+               class="form-control"
             >
-               <input
-                  type="text"
-                  placeholder=state.searchPlaceholder
-                  key=state.searchValueKey
-                  on-keyup("searchValueChanged")
-                  on-keydown("keydown")
-                  no-update
-                  class="form-control"
-               >
-               <input
-                  type="text"
-                  key=state.searchValueKey + "-hidden"
-                  on-keydown("keydown")
-                  class="d-none"
-               >
-               <if(state.autoComplete && state.noResult)>
-                  <div class="mt-2 ms-2 fst-italic text-secondary">
-                     ${state.autoCompleteHint}
-                  </div>
-               </if>
-            </div>
-         </if>
-         <if(state.searchLoading || state.readonly)>
-            <loading-spinner/>
-         </if>
-         <else-if(state.treeId)>
-            <div class="ms-3 mt-2">
-               <form-list-tree key=state.treeId treeId=state.treeId/>
-            </div>
-            <if(state.multiselect)>
-               <div class="ps-3 pt-2 border-top dropdown-buttons">
-                  <button
-                     type="button"
-                     on-click("apply")
-                     class="btn btn-outline-success me-3 my-2"
-                  >
-                     <translation-string pattern="Translatable#Apply"/>
-                  </button>
-                  <button
-                     type="button"
-                     on-click("select")
-                     class="btn btn-outline-success me-3 my-2"
-                  >
-                     <translation-string pattern="Translatable#Select"/>
-                  </button>
-                  <button
-                     type="button"
-                     on-click("selectAll")
-                     class="btn btn-outline-success"
-                  >
-                     <if(state.selectAll)>
-                        <translation-string pattern="Translatable#Select All"/>
-                     </if>
-                     <else>
-                        <translation-string pattern="Translatable#Select None"/>
-                     </else>
-                  </button>
+            <input
+               type="text"
+               key=state.searchValueKey + "-hidden"
+               on-keydown("keydown")
+               class="d-none"
+            >
+            <if(state.autoComplete && state.noResult)>
+               <div class="mt-2 ms-2 fst-italic text-secondary">
+                  ${state.autoCompleteHint}
                </div>
             </if>
-         </else-if>
-      </div>
+         </div>
+      </if>
+      <if(state.searchLoading || state.readonly)>
+         <loading-spinner/>
+      </if>
+      <else-if(state.treeId)>
+         <div class="ms-3 mt-2">
+            <form-list-tree key=state.treeId treeId=state.treeId/>
+         </div>
+         <if(state.multiselect)>
+            <div class="ps-3 pt-2 border-top dropdown-buttons">
+               <button
+                  type="button"
+                  on-click("apply")
+                  class="btn btn-outline-success me-3 my-2"
+               >
+                  <translation-string pattern="Translatable#Apply"/>
+               </button>
+               <button
+                  type="button"
+                  on-click("select")
+                  class="btn btn-outline-success me-3 my-2"
+               >
+                  <translation-string pattern="Translatable#Select"/>
+               </button>
+               <button
+                  type="button"
+                  on-click("selectAll")
+                  class="btn btn-outline-success"
+               >
+                  <if(state.selectAll)>
+                     <translation-string pattern="Translatable#Select All"/>
+                  </if>
+                  <else>
+                     <translation-string pattern="Translatable#Select None"/>
+                  </else>
+               </button>
+            </div>
+         </if>
+      </else-if>
    </div>
-</if>
+</div>
