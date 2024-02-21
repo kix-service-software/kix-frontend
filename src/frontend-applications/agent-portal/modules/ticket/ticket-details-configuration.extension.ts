@@ -471,8 +471,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'ticket-details-parent-child-table-widget', 'Child Tickets', ConfigurationType.TableWidget, 'Ticket',
                 null, null, new TableConfiguration(
                     'ticket-details-parent-child-table-config', 'Child Tickets', ConfigurationType.Table, 'Ticket',
-                    {
-                        'filter': [
+                    new KIXObjectLoadingOptions(
+                        [
                             {
                                 'property': 'TicketID',
                                 'operator': 'IN',
@@ -488,7 +488,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 'value': '<KIX_TICKET_TicketID>'
                             }
                         ]
-                    },
+                    ),
                     10,
                     [
                         {
