@@ -12,132 +12,124 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div class="login-background"/>
 
         <div class="login-dialog">
-            <if(!state.loading && state.hasLogin)>
 
-                <if(
-                    Array.isArray(state.notifications) &&
-                    state.notifications.length
-                )>
-                    <div class="portal-notifications">
-                        <login-notification-list notifications=state.notifications/>
-                    </div>
-                </if>
-                <div class="dialog-header">
-                    <div id="kix-logo">
-                        <if(input.logo)>
-                            <img
-                                alt="kix-logo"
-                                src=(
-                                    "data:" +
-                                    input.logo.ContentType +
-                                    ";base64," +
-                                    input.logo.Content
-                                )
-                            >
-                        </if>
-                        <else>
-                            <img
-                                alt="kix-logo"
-                                src="/static/img/kix_default.png"
-                            >
-                        </else>
-                    </div>
-                    <h1>${component.getString("Welcome to KIX")}</h1>
+            <if(
+                Array.isArray(state.notifications) && state.notifications.length
+            )>
+                <div class="portal-notifications">
+                    <login-notification-list notifications=state.notifications/>
                 </div>
-
-                <if(state.error || state.logout || state.unsupportedBrowser)>
-                    <div class="dialog-message-area">
-                        <if(state.unsupportedBrowser)>
-                            <div class="message message-hint">
-                                ${component.getString(
-                                    "Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox.",
-                                )}
-                            </div>
-                        </if>
-                        <if(state.error)>
-                            <div class="message message-error">
-                                <span class="kix-icon-warnsign"/>
-                                ${component.getString("Login failed")}
-                            </div>
-                        </if>
-                        <else-if(state.logout)>
-                            <div class="message message-success">
-                                <span class="kix-icon-icircle"/>
-                                ${component.getString(
-                                    "You have successfully logged out.",
-                                )}
-                            </div>
-                        </else-if>
-                    </div>
-                </if>
-                <if(state.loginProcess)>
-                    <div class="loading-container">
-                        <div class="login-loading">
-                            <div class="loading-dots">
-                                <div class="loading-dots--dot"/>
-                                <div class="loading-dots--dot"/>
-                                <div class="loading-dots--dot"/>
-                            </div>
-                        </div>
-                    </div>
-                </if>
-                <else>
-                    <div on-keydown("keyDown") class="dialog-content">
-                        <label>
-                            <span>${component.getString("Login Name")}:</span>
-                            <input
-                                type="text"
-                                name="username"
-                                tabindex="1"
-                                value=state.userName
-                                on-input("userNameChanged")
-                                key="login-user-name"
-                                class="input-style"
-                            >
-                        </label>
-                        <label>
-                            <span>${component.getString("Password")}:</span>
-                            <input
-                                type=state.passwordFieldType
-                                name="password"
-                                tabindex="2"
-                                value=state.password
-                                on-input("passwordChanged")
-                                key="login-password"
-                                class="input-style"
-                            >
-                            <div
-                                role="button"
-                                on-click("togglePasswordVisibility")
-                                class="d-flex align-items-center justify-content-center px-2"
-                            >
-                                <i class=[
-                                    "far",
-                                    {
-                                        "fa-eye":
-                                            state.passwordFieldType === "text",
-                                        "fa-eye-slash":
-                                            state.passwordFieldType ===
-                                            "password",
-                                    },
-                                ]/>
-                            </div>
-                        </label>
-                        <div class="dialog-buttons">
-                            <button
-                                type="button"
-                                on-click("login")
-                                tabindex="3"
-                                class="kix-button special-button"
-                            >
-                                <span class="kix-icon-check"/>
-                                ${component.getString("Login")}
-                            </button>
-                        </div>
-                    </div>
-                </else>
             </if>
+            <div class="dialog-header">
+                <div id="kix-logo">
+                    <if(input.logo)>
+                        <img
+                            alt="kix-logo"
+                            src=(
+                                "data:" +
+                                input.logo.ContentType +
+                                ";base64," +
+                                input.logo.Content
+                            )
+                        >
+                    </if>
+                    <else>
+                        <img alt="kix-logo" src="/static/img/kix_default.png">
+                    </else>
+                </div>
+                <h1>${component.getString("Welcome to KIX")}</h1>
+            </div>
 
+            <if(state.error || state.logout || state.unsupportedBrowser)>
+                <div class="dialog-message-area">
+                    <if(state.unsupportedBrowser)>
+                        <div class="message message-hint">
+                            ${component.getString(
+                                "Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox.",
+                            )}
+                        </div>
+                    </if>
+                    <if(state.error)>
+                        <div class="message message-error">
+                            <span class="kix-icon-warnsign"/>
+                            ${component.getString("Login failed")}
+                        </div>
+                    </if>
+                    <else-if(state.logout)>
+                        <div class="message message-success">
+                            <span class="kix-icon-icircle"/>
+                            ${component.getString(
+                                "You have successfully logged out.",
+                            )}
+                        </div>
+                    </else-if>
+                </div>
+            </if>
+            <if(state.loginProcess)>
+                <div class="loading-container">
+                    <div class="login-loading">
+                        <div class="loading-dots">
+                            <div class="loading-dots--dot"/>
+                            <div class="loading-dots--dot"/>
+                            <div class="loading-dots--dot"/>
+                        </div>
+                    </div>
+                </div>
+            </if>
+            <else-if(!state.loading && state.hasLogin)>
+                <div on-keydown("keyDown") class="dialog-content">
+                    <label>
+                        <span>${component.getString("Login Name")}:</span>
+                        <input
+                            type="text"
+                            name="username"
+                            tabindex="1"
+                            value=state.userName
+                            on-input("userNameChanged")
+                            key="login-user-name"
+                            class="input-style"
+                        >
+                    </label>
+                    <label>
+                        <span>${component.getString("Password")}:</span>
+                        <input
+                            type=state.passwordFieldType
+                            name="password"
+                            tabindex="2"
+                            value=state.password
+                            on-input("passwordChanged")
+                            key="login-password"
+                            class="input-style"
+                        >
+                        <div
+                            role="button"
+                            on-click("togglePasswordVisibility")
+                            class="d-flex align-items-center justify-content-center px-2"
+                        >
+                            <i class=[
+                                "far",
+                                {
+                                    "fa-eye":
+                                        state.passwordFieldType === "text",
+                                    "fa-eye-slash":
+                                        state.passwordFieldType === "password",
+                                },
+                            ]/>
+                        </div>
+                    </label>
+                    <div class="dialog-buttons">
+                        <button
+                            type="button"
+                            on-click("login")
+                            tabindex="3"
+                            class="kix-button special-button"
+                        >
+                            <span class="kix-icon-check"/>
+                            ${component.getString("Login")}
+                        </button>
+                    </div>
+                </div>
+            </else-if>
             <if(Array.isArray(state.authMethods) && state.authMethods.length)>
                 <hr>
                 <div class="d-grid gap-2 col-6 mx-auto my-4">
