@@ -11,8 +11,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <div class="login-page clearfix">
         <div class="login-background"/>
 
-        <if(!state.loading && state.hasLogin)>
-            <div class="login-dialog">
+        <div class="login-dialog">
+            <if(!state.loading && state.hasLogin)>
+
                 <if(
                     Array.isArray(state.notifications) &&
                     state.notifications.length
@@ -135,30 +136,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         </div>
                     </div>
                 </else>
-                <if(
-                    Array.isArray(state.authMethods) && state.authMethods.length
-                )>
-                    <hr>
-                    <div class="d-grid gap-2 col-6 mx-auto my-4">
-                        <for|method| of=state.authMethods>
-                            <button
-                                class="btn btn-outline-secondary"
-                                type="button"
-                                on-click("authMethodClicked", method)
-                            >
-                                ${method.name}
-                            </button>
-                        </for>
-                    </div>
-                </if>
-            </div>
-            <if(input.releaseInfo)>
-                <login-footer
-                    releaseInfo=input.releaseInfo
-                    imprintLink=input.imprintLink
-                    unauthorized
-                />
             </if>
+
+            <if(Array.isArray(state.authMethods) && state.authMethods.length)>
+                <hr>
+                <div class="d-grid gap-2 col-6 mx-auto my-4">
+                    <for|method| of=state.authMethods>
+                        <button
+                            class="btn btn-outline-secondary"
+                            type="button"
+                            on-click("authMethodClicked", method)
+                        >
+                            ${method.name}
+                        </button>
+                    </for>
+                </div>
+            </if>
+        </div>
+        <if(input.releaseInfo)>
+            <login-footer
+                releaseInfo=input.releaseInfo
+                imprintLink=input.imprintLink
+                unauthorized
+            />
         </if>
     </div>
 </div>
