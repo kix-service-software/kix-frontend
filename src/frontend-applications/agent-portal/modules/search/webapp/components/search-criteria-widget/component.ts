@@ -69,10 +69,6 @@ class Component {
             }
         };
 
-        EventService.getInstance().subscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
-        EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
-        EventService.getInstance().subscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
-
         this.keyListenerElement = (this as any).getEl('search-criteria-container');
         if (this.keyListenerElement) {
             this.keyListener = this.keyDown.bind(this);
@@ -85,9 +81,9 @@ class Component {
             context.descriptor.kixObjectTypes[0]
         );
         this.state.manager = (searchDefinition?.formManager as SearchFormManager);
-        this.setTitle();
-        this.initManager();
-        this.initSort();
+        await this.setTitle();
+        await this.initManager();
+        await this.initSort();
 
         this.managerListenerId = IdService.generateDateBasedId('search-criteria-widget');
         this.state.manager?.registerListener(this.managerListenerId, async () => {
@@ -107,6 +103,10 @@ class Component {
                 context?.getSearchCache()?.setCriteria(criteria);
             }, 100);
         });
+
+        EventService.getInstance().subscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
+        EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
+        EventService.getInstance().subscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
     }
 
     public onDestroy(): void {
