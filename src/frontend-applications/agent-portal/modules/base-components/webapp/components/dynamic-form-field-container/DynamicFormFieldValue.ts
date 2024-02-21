@@ -37,7 +37,7 @@ export class DynamicFormFieldValue {
     public isSpecificInput: boolean = false;
     public isNumber: boolean = false;
     public specificInputType: string = null;
-    public inputOptions: Array<[string, string | number]> = [];
+    public inputOptions: Array<[string, any]> = [];
 
     public operationIsStringInput: boolean = false;
     public operationIsNone: boolean = false;
@@ -722,7 +722,7 @@ export class DynamicFormFieldValue {
         let loadingOptions: KIXObjectLoadingOptions;
         const option = this.inputOptions.find((o) => o[0] === ObjectReferenceOptions.LOADINGOPTIONS);
         if (option) {
-            loadingOptions = { ...option[1] as KIXObjectLoadingOptions };
+            loadingOptions = KIXObjectLoadingOptions.clone(option[1]);
             loadingOptions.filter = loadingOptions.filter ? [...loadingOptions.filter] : [];
         } else {
             loadingOptions = new KIXObjectLoadingOptions();

@@ -22,4 +22,18 @@ export class KIXObjectLoadingOptions {
         public searchLimit?: number
     ) { }
 
+    public static clone(
+        loadingOptions: KIXObjectLoadingOptions = new KIXObjectLoadingOptions()
+    ): KIXObjectLoadingOptions {
+        const clonedFilter = JSON.parse(JSON.stringify(loadingOptions.filter || []));
+        const clonedQuery = JSON.parse(JSON.stringify(loadingOptions.query || []));
+        const clonedIncludes = JSON.parse(JSON.stringify(loadingOptions.includes || []));
+        const clonedExpands = JSON.parse(JSON.stringify(loadingOptions.expands || []));
+
+        return new KIXObjectLoadingOptions(
+            clonedFilter, loadingOptions.sortOrder, loadingOptions.limit, clonedIncludes, clonedExpands,
+            clonedQuery, loadingOptions.cacheType, loadingOptions.searchLimit
+        );
+    }
+
 }
