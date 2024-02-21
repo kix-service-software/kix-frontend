@@ -153,6 +153,7 @@ class Component {
     }
 
     public async authMethodClicked(method: AuthMethod): Promise<void> {
+        this.state.loginProcess = true;
         const url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
         window.location.href = `${url}?authmethod=${JSON.stringify(method)}&usertype=${UserType.AGENT}&returnUrl=${encodeURIComponent(url)}&redirectUrl=${encodeURIComponent(this.redirectUrl)}`;
     }
