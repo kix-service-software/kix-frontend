@@ -66,7 +66,7 @@ export abstract class Context {
 
     public initialized: boolean = false;
 
-    private objectSorts: Map<string, [string, boolean]> = new Map();
+    protected objectSorts: Map<string, [string, boolean]> = new Map();
 
     public constructor(
         public descriptor: ContextDescriptor,
@@ -868,7 +868,7 @@ export abstract class Context {
         return loadingOptions;
     }
 
-    private getContextLoadingOptions(type: string): KIXObjectLoadingOptions {
+    protected getContextLoadingOptions(type: string): KIXObjectLoadingOptions {
         let contextLoadingOptions: KIXObjectLoadingOptions;
 
         if (type && Array.isArray(this.configuration?.loadingOptions)) {
