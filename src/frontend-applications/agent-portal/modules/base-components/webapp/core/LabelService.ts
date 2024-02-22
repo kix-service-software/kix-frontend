@@ -412,7 +412,8 @@ export class LabelService {
     }
 
     public async getPropertyText(
-        property: string, objectType: KIXObjectType | string, short: boolean = false, translatable: boolean = true
+        property: string, objectType: KIXObjectType | string, short: boolean = false, translatable: boolean = true,
+        object?: KIXObject
     ): Promise<string> {
         const labelProvider = this.getLabelProviderForType(objectType);
 
@@ -424,7 +425,7 @@ export class LabelService {
                 }
             }
 
-            return await labelProvider.getPropertyText(property, short, translatable);
+            return await labelProvider.getPropertyText(property, short, translatable, object);
         }
         return null;
     }

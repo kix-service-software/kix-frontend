@@ -216,7 +216,7 @@ export class Table implements Table {
                 }
             }
 
-            if (this.sortColumnId && this.sortOrder) {
+            if (this.sortColumnId && this.sortOrder && this.getContentProvider()?.isBackendSortSupported()) {
                 await this.getContentProvider().setSort(this.sortColumnId, this.sortOrder, false);
             }
 

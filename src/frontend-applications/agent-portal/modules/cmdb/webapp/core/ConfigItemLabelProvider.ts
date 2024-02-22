@@ -83,7 +83,9 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(
+        property: string, short?: boolean, translatable: boolean = true, configItem?: ConfigItem
+    ): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ConfigItemProperty.CLASS:
@@ -116,7 +118,12 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = 'Translatable#Include Previous Version';
                 break;
             default:
-                displayValue = await super.getPropertyText(property, short, translatable);
+                const attributes = configItem?.getPreparedData(property);
+                if (attributes && attributes.length > 0) {
+                    displayValue = attributes[0].Label;
+                } else {
+                    displayValue = await super.getPropertyText(property, short, translatable);
+                }
         }
 
         if (displayValue) {

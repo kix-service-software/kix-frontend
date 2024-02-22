@@ -52,7 +52,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
 
                 this.state.description = await LabelService.getInstance().getPropertyText(
-                    this.property, contextObject.KIXObjectType
+                    this.property, contextObject.KIXObjectType, undefined, undefined, contextObject
                 );
 
                 hasValue = this.state.displayText && this.state.displayText.length > 0 ||

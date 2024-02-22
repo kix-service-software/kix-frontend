@@ -45,7 +45,7 @@ export class ConfigItemTableFactory extends TableFactory {
         return table;
     }
 
-    private setDefaultTableConfiguration(
+    protected setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): TableConfiguration {
         const tableColumns = this.getDefaultColumns();
