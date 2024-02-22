@@ -26,7 +26,8 @@ export class ComponentState {
         public passwordFieldType: string = (InputFieldTypes.PASSWORD).toLowerCase(),
         public password: string = '',
         public hasLogin: boolean = false,
-        public authMethods: AuthMethod[] = null
+        public authMethods: AuthMethod[] = null,
+        public prepared: boolean = false
     ) { }
 
 }

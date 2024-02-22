@@ -67,6 +67,8 @@ class Component {
                 userElement.focus();
             }
         }, 200);
+
+        this.state.prepared = true;
     }
 
     public onDestroy(): void {

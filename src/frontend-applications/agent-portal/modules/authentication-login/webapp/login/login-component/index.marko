@@ -10,11 +10,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <div class="login-wrapper">
     <div class="login-page clearfix">
         <div class="login-background"/>
-        <if(!state.loading)>
+        <if(!state.loading && state.prepared)>
             <div class="login-dialog">
 
                 <if(
-                    Array.isArray(state.notifications) && state.notifications.length
+                    Array.isArray(state.notifications) &&
+                    state.notifications.length
                 )>
                     <div class="portal-notifications">
                         <login-notification-list notifications=state.notifications/>
@@ -34,7 +35,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             >
                         </if>
                         <else>
-                            <img alt="kix-logo" src="/static/img/kix_default.png">
+                            <img
+                                alt="kix-logo"
+                                src="/static/img/kix_default.png"
+                            >
                         </else>
                     </div>
                     <h1>${component.getString("Welcome to KIX")}</h1>
@@ -80,7 +84,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <if(state.hasLogin)>
                         <div on-keydown("keyDown") class="dialog-content">
                             <label>
-                                <span>${component.getString("Login Name")}:</span>
+                                <span>
+                                    ${component.getString("Login Name")}:
+                                </span>
                                 <input
                                     type="text"
                                     name="username"
@@ -111,9 +117,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         "far",
                                         {
                                             "fa-eye":
-                                                state.passwordFieldType === "text",
+                                                state.passwordFieldType ===
+                                                "text",
                                             "fa-eye-slash":
-                                                state.passwordFieldType === "password",
+                                                state.passwordFieldType ===
+                                                "password",
                                         },
                                     ]/>
                                 </div>
@@ -131,7 +139,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             </div>
                         </div>
                     </if>
-                    <if(Array.isArray(state.authMethods) && state.authMethods.length)>
+                    <if(
+                        Array.isArray(state.authMethods) &&
+                        state.authMethods.length
+                    )>
                         <hr>
                         <div class="d-grid gap-2 col-6 mx-auto my-4">
                             <for|method| of=state.authMethods>
