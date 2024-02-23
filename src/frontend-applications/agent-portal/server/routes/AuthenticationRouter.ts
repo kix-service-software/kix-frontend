@@ -77,12 +77,20 @@ export class AuthenticationRouter extends KIXRouter {
             res.redirect('/static/html/unsupported-browser/index.html');
         }
 
+        const ssoSuccess = await this.doSSOLogin(req, res);
+        if (!ssoSuccess) {
+            this.routeToLoginPage(req, res);
+        }
+    }
+
+    private async doSSOLogin(req: Request, res: Response): Promise<boolean> {
+        let ssoSuccess = false;
+
         const config = ConfigurationService.getInstance().getServerConfiguration();
         const ssoEnabled = config?.SSO_ENABLED;
 
         let authType = '';
         let negotiationToken = '';
-
         if (ssoEnabled) {
             if (!req.cookies.authNegotiationDone && !req.cookies.authNoSSO) {
                 res.cookie('authNegotiationDone', true, { httpOnly: true });
@@ -98,6 +106,7 @@ export class AuthenticationRouter extends KIXRouter {
                         <body></body>
                     </html>`
                 );
+                ssoSuccess = true;
             } else {
                 const authorization = req.headers['authorization'];
                 if (typeof authorization === 'string' && authorization.split(' ')[0] === 'Negotiate') {
@@ -138,10 +147,10 @@ export class AuthenticationRouter extends KIXRouter {
                                 <body></body>
                             </html>`
                 );
+                ssoSuccess = true;
             }
         }
-
-        this.routeToLoginPage(req, res);
+        return ssoSuccess;
     }
 
     private async routeToLoginPage(req: Request, res: Response): Promise<void> {
