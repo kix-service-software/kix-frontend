@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -59,6 +59,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: async (data: TableEventData, eventId: string): Promise<void> => {
                 if (this.state.table && data && data.tableId === this.state.table.getTableId()) {
+                    if (eventId === TableEvent.TABLE_WAITING_START || eventId === TableEvent.TABLE_WAITING_END) {
+                        this.state.showLoadingShield = Boolean(eventId === TableEvent.TABLE_WAITING_START);
+                    }
+
                     if (eventId === TableEvent.REFRESH) {
                         //await this.provideContextContent();
                         this.setTableHeight();
@@ -110,6 +114,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(TableEvent.SORTED, this.subscriber);
         EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this.subscriber);
         EventService.getInstance().subscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_WAITING_START, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_WAITING_END, this.subscriber);
 
         setTimeout(() => {
             const scrollPosString = ClientStorageService.getOption(`${this.state.table?.getTableId()}-scrollpos`);
@@ -138,6 +144,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(TableEvent.SORTED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_WAITING_START, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_WAITING_END, this.subscriber);
     }
 
     private async provideContextContent(): Promise<void> {

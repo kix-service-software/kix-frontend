@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,7 +22,6 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import { Socket } from 'socket.io';
 import { LoggingService } from './LoggingService';
-import { CacheService } from '../../frontend-applications/agent-portal/server/services/cache';
 import { HTTPResponse } from '../../frontend-applications/agent-portal/server/services/HTTPResponse';
 import { IncomingHttpHeaders } from 'node:http';
 
@@ -42,12 +41,6 @@ export class AuthenticationService {
     private constructor() {
         const config = ConfigurationService.getInstance().getServerConfiguration();
         this.tokenSecret = config?.FRONTEND_TOKEN_SECRET;
-    }
-
-    private async createCallbackToken(): Promise<void> {
-        const backendCallbackToken = jwt.sign({ name: 'backend-callback', created: Date.now() }, this.tokenSecret);
-        ConfigurationService.getInstance().saveDataFileContent('backend_callback_token.json', { 'CallbackToken': backendCallbackToken });
-        await CacheService.getInstance().set('CALLBACK_TOKEN', backendCallbackToken);
     }
 
     private createToken(userLogin: string, backendToken: string): string {
@@ -84,21 +77,6 @@ export class AuthenticationService {
         });
     }
 
-    public async getCallbackToken(): Promise<string> {
-        let token = await CacheService.getInstance().get('CALLBACK_TOKEN');
-        if (!token) {
-            // check if we have one in the filesystem
-            const callbackToken = ConfigurationService.getInstance().getDataFileContent('backend_callback_token.json');
-            token = callbackToken.CallbackToken;
-        }
-        if (!token) {
-            await this.createCallbackToken();
-            token = await CacheService.getInstance().get('CALLBACK_TOKEN');
-        }
-
-        return token;
-    }
-
     public async isAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
         const token: string = req.cookies.token;
 
@@ -124,22 +102,6 @@ export class AuthenticationService {
             }
 
             res.redirect(`/auth${query}`);
-        }
-    }
-
-    public async isCallbackAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
-        if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Token') {
-            const token = req.headers.authorization.split(' ')[1];
-            if (token) {
-                const callbackToken = await this.getCallbackToken();
-                if (token === callbackToken) {
-                    next();
-                } else {
-                    res.status(401).send('Not authorized!');
-                }
-            }
-        } else {
-            res.status(403).send();
         }
     }
 
@@ -193,5 +155,11 @@ export class AuthenticationService {
     public async logout(token: string): Promise<boolean> {
         await HttpService.getInstance().delete(['session'], token, null).catch((error) => null);
         return true;
+    }
+
+    public getUsageContext(token: string): string {
+        const backendToken = this.getBackendToken(token);
+        const tokenValue = this.decodeToken(backendToken);
+        return tokenValue.UserType;
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -89,7 +89,7 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
                 if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_DEFAULT) {
                     displayValue = 'Translatable#Default Queue (SysConfig)';
                 } else if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_FROM) {
-                    displayValue = 'Translatable#recipient adresses (To, Cc, etc.)';
+                    displayValue = 'Translatable#recipient addresses (To, Cc, etc.)';
                 } else if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_QUEUE) {
                     displayValue = 'Translatable#Queue';
                 }

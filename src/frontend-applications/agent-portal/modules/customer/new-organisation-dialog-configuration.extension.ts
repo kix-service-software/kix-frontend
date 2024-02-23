@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -154,6 +154,26 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         configurations.push(
             new FormFieldConfiguration(
+                'organisation-new-form-field-pattern',
+                'Translatable#Pattern', KIXObjectProperty.DYNAMIC_FIELDS, null, false,
+                'Translatable#Helptext_Organisation_Address_Domain_Pattern',
+                [
+                    new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'AddressDomainPattern')
+                ]
+            )
+        );
+
+        configurations.push(
+            new FormGroupConfiguration(
+                'organisation-new-form-group-domain', 'Translatable#Email Address Domain',
+                [
+                    'organisation-new-form-field-pattern',
+                ]
+            )
+        );
+
+        configurations.push(
+            new FormFieldConfiguration(
                 'organisation-new-form-field-icon',
                 'Translatable#Avatar', 'ICON', 'icon-input', false,
                 'Translatable#Helptext_Customers_OrganisationCreate_Avatar.',
@@ -199,6 +219,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     'organisation-new-form-group-information',
                     'organisation-new-form-group-address',
+                    'organisation-new-form-group-domain',
                     'organisation-new-form-group-other'
                 ]
             )

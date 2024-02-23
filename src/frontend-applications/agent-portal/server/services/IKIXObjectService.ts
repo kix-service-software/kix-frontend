@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -45,7 +45,9 @@ export interface IKIXObjectService extends IService {
         token: string, clientRequestId: string, object: KIXObject, relevantOrganisationId: number
     ): Promise<number | string>;
 
-    loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string>;
+    loadDisplayValue(
+        objectType: KIXObjectType | string, objectId: string | number, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<string>;
 
     getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject;
 

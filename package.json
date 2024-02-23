@@ -14,6 +14,7 @@
         "test": "export http_proxy= && export https_proxy= && export NODE_ENV=test && sleep 1 && ./node_modules/.bin/nyc --reporter=text-summary --reporter cobertura --reporter html ./node_modules/.bin/mocha --reporter mocha-multi-reporters --reporter-options configFile=mocha.json --require ts-node/register --require source-map-support/register --full-trace --exit \"./{,!(node_modules)/**/}*.test.ts\"",
         "test-plugin": "export http_proxy= && export https_proxy= && export NODE_ENV=test && sleep 1 && ./node_modules/.bin/nyc --reporter cobertura --reporter html --include \"src/plugins/${PLUGIN:-KIXPro}\" ./node_modules/.bin/mocha --preserve-symlinks --reporter mocha-multi-reporters --reporter-options configFile=mocha.json --require ts-node/register --require source-map-support/register --full-trace --exit \"src/plugins/${PLUGIN:-KIXPro}/**/*.test.ts\"",
         "bundle": "rm -f ${npm_package_config_bundlefile} && tar cfz ${npm_package_config_bundlefile} --exclude-from=.bundleignore *",
+        "bundle-integration": "rm -f kix-frontend-integrationtest.tar.gz && tar cfz kix-frontend-integrationtest.tar.gz --exclude-from=.bundleignore-integration *",
         "extract-translatables": "./extract-translatables.sh",
         "build-doc": "raml2html --template ./doc/_raml2html_template/index.nunjucks ./doc/index.raml > ./doc/index.html",
         "generate-3rd-party-licenses": "./node_modules/license-checker/bin/license-checker --production --out LICENSE-Third-Party --relativeLicensePath"

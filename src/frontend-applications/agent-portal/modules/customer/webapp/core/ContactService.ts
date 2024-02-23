@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,6 +23,8 @@ import { ContactProperty } from '../../model/ContactProperty';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { NewContactDialogContext } from './context/NewContactDialogContext';
+import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
+import { UserProperty } from '../../../user/model/UserProperty';
 
 export class ContactService extends KIXObjectService<Contact> {
 
@@ -129,7 +131,7 @@ export class ContactService extends KIXObjectService<Contact> {
     public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, `*${searchValue}*`
             )
         ];
     }
@@ -168,5 +170,52 @@ export class ContactService extends KIXObjectService<Contact> {
             }
         }
         return [...objectProperties, ...superProperties];
+    }
+
+    public async getSortableAttributes(filtered: boolean = true
+    ): Promise<ObjectSearch[]> {
+        const supportedAttributes = await super.getSortableAttributes(filtered);
+
+        const filterList = [
+            'ContactID',
+            ContactProperty.ORGANISATION_IDS,
+            ContactProperty.ASSIGNED_USER_ID,
+            'Organisation',
+            'OrganisationID',
+            'OrganisationNumber',
+            ContactProperty.PRIMARY_ORGANISATION,
+            'PrimaryOrganisationNumber',
+            'Login',
+            'UserID'
+        ];
+        return filtered ?
+            supportedAttributes.filter((sA) => !filterList.some((fp) => fp === sA.Property)) :
+            supportedAttributes;
+    }
+
+    protected async getSortOrder(property: string, descanding: boolean, orgProperty: string): Promise<string> {
+        let sort = await super.getSortOrder(property, descanding, orgProperty);
+
+        // add second sort with counterpart to prevent mixed results on "is not ... and has no user"
+        // result should be like "is agent, then all is not agent and then all without user" or vice versa
+        if ((property === UserProperty.IS_AGENT || property === UserProperty.IS_CUSTOMER)) {
+            const counterpart = this.getSortAttribute(
+                property === UserProperty.IS_AGENT ? UserProperty.IS_CUSTOMER : UserProperty.IS_AGENT
+            );
+            if (counterpart) {
+                const sortType = await this.getSortType(counterpart, this.objectType);
+                sort = `${sort},${this.objectType}.${descanding ? '-' : ''}${counterpart}:${sortType}`;
+            }
+        }
+        return sort;
+    }
+
+    protected getSortAttribute(attribute: string): string {
+        switch (attribute) {
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+                return ContactProperty.PRIMARY_ORGANISATION;
+            default:
+        }
+        return super.getSortAttribute(attribute);
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -42,11 +42,6 @@ export class CMDBContext extends Context {
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
         super.initContext();
 
-        if (this.classId || this.filterValue) {
-            this.loadConfigItems();
-        }
-
-
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(TicketContext.CONTEXT_ID),
             eventPublished: (data: Context, eventId: string): void => {
@@ -84,8 +79,8 @@ export class CMDBContext extends Context {
 
     private handleURLParams(urlParams: URLSearchParams): void {
         if (urlParams) {
-            this.setCIClass(urlParams.has('classId') ? Number(urlParams.get('classId')) : null, false);
-            this.setFilterValue(urlParams.has('filter') ? decodeURI(urlParams.get('filter')) : null, false);
+            this.setCIClass(urlParams.has('classId') ? Number(urlParams.get('classId')) : null, false, false);
+            this.setFilterValue(urlParams.has('filter') ? decodeURI(urlParams.get('filter')) : null, false, false);
         }
     }
 
@@ -109,14 +104,16 @@ export class CMDBContext extends Context {
         return url;
     }
 
-    public async setCIClass(classId: number, history: boolean = true): Promise<void> {
+    public async setCIClass(classId: number, history: boolean = true, reload: boolean = true): Promise<void> {
         if (!this.classId || this.classId !== classId) {
             this.classId = classId;
             this.setAdditionalInformation(ConfigItemProperty.CLASS_ID, classId);
 
             EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
 
-            this.loadConfigItems();
+            if (reload) {
+                this.loadConfigItems();
+            }
 
             if (history) {
                 ContextService.getInstance().setDocumentHistory(true, this, this, null);
@@ -129,12 +126,14 @@ export class CMDBContext extends Context {
         }
     }
 
-    public async setFilterValue(filterValue: string, history: boolean = true): Promise<void> {
+    public async setFilterValue(filterValue: string, history: boolean = true, reload: boolean = true): Promise<void> {
         this.filterValue = filterValue;
 
         EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
 
-        this.loadConfigItems();
+        if (reload) {
+            this.loadConfigItems();
+        }
 
         if (history) {
             ContextService.getInstance().setDocumentHistory(true, this, this, null);
@@ -190,7 +189,7 @@ export class CMDBContext extends Context {
             loadingOptions.sortOrder = 'ConfigItem.ChangeTime:datetime';
         }
 
-        this.prepareContextLoadingOptions(KIXObjectType.CONFIG_ITEM, loadingOptions);
+        await this.prepareContextLoadingOptions(KIXObjectType.CONFIG_ITEM, loadingOptions);
 
         const configItems = await KIXObjectService.loadObjects(
             KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false, undefined, undefined,

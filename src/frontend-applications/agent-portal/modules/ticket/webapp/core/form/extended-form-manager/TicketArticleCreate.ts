@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -42,7 +42,7 @@ export class TicketArticleCreate extends ExtendedJobFormManager {
                     option, actionType, actionFieldInstanceId, 'rich-text-input',
                     defaultValue
                 );
-            } else if (option.Name === 'CustomerVisible') {
+            } else if (option.Name === 'CustomerVisible' || option.Name === 'DoNotSendEmail') {
                 if (action && action.Parameters) {
                     defaultValue = Boolean(action.Parameters[option.Name]);
                 }

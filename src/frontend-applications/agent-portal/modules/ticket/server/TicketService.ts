@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -52,6 +52,8 @@ import { CRUD } from '../../../../../server/model/rest/CRUD';
 import { PermissionService } from '../../../server/services/PermissionService';
 import { SysConfigOption } from '../../sysconfig/model/SysConfigOption';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { ObjectSearchAPIService } from '../../object-search/server/ObjectSearchAPIService';
+import { ObjectSearchLoadingOptions } from '../../object-search/model/ObjectSearchLoadingOptions';
 import { Counter } from '../../user/model/Counter';
 
 export class TicketAPIService extends KIXObjectAPIService {
@@ -105,7 +107,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             { permissions: [new UIComponentPermission('/system/textmodules', [CRUD.READ])], type: KIXObjectType.TEXT_MODULE },
             { permissions: [new UIComponentPermission('/system/ticket/queues', [CRUD.READ])], type: KIXObjectType.QUEUE },
             { permissions: [new UIComponentPermission('/system/dynamicfields', [CRUD.READ])], type: KIXObjectType.DYNAMIC_FIELD },
-            { permissions: [new UIComponentPermission('/system/config', [CRUD.READ])], type: KIXObjectType.SYS_CONFIG_OPTION }
+            { permissions: [new UIComponentPermission('/system/config', [CRUD.READ])], type: KIXObjectType.SYS_CONFIG_OPTION },
+            { permissions: [new UIComponentPermission('/objectsearch/ticket', [CRUD.READ])], type: KIXObjectType.OBJECT_SEARCH }
         ].forEach((cp) => {
             permissionPromises.push(
                 new Promise(async (resolve) => {
@@ -218,6 +221,15 @@ export class TicketAPIService extends KIXObjectAPIService {
             );
         }
 
+        if (allowedList.has(KIXObjectType.OBJECT_SEARCH)) {
+            promises.push(
+                ObjectSearchAPIService.getInstance().loadObjects(
+                    token, 'TicketServicePreload', KIXObjectType.OBJECT_SEARCH, null, null,
+                    new ObjectSearchLoadingOptions(KIXObjectType.TICKET)
+                )
+            );
+        }
+
         for (const extendedService of this.extendedServices) {
             promises.push(extendedService.preloadObjects(token));
         }
@@ -235,7 +247,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         let objectResponse = new ObjectResponse([], 0);
         if (objectType === KIXObjectType.TICKET) {
 
-            const includes = [TicketProperty.STATE_TYPE];
+            const includes = [TicketProperty.STATE_TYPE, TicketProperty.UNSEEN];
             const expands = [];
 
             if (!loadingOptions) {
@@ -756,13 +768,13 @@ export class TicketAPIService extends KIXObjectAPIService {
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         let searchCriteria = criteria.filter((f) =>
-            Ticket.SEARCH_PROPERTIES.some((sp) => sp.Property === f.property)
-            && (
-                // TicketID and TypeID can NE as search
-                f.operator !== SearchOperator.NOT_EQUALS ||
-                f.property === TicketProperty.TYPE_ID ||
-                f.property === TicketProperty.TICKET_ID
-            )
+            Ticket.SEARCH_PROPERTIES.some((sp) => sp.Property === f.property &&
+                (sp.APIOperations?.includes(f.operator as SearchOperator) ||
+                    sp.Operations?.includes(f.operator as SearchOperator)
+                )
+            ) ||
+            f.property === KIXObjectProperty.CREATE_BY || f.property === KIXObjectProperty.CHANGE_BY ||
+            f.property === KIXObjectProperty.CREATE_TIME || f.property === KIXObjectProperty.CHANGE_TIME
         );
 
         await this.setUserID(searchCriteria, token);

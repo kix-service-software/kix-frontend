@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -97,8 +97,8 @@ export class FormInstance {
         this.setFieldsReadonly(group.formFields, readonly);
     }
 
-    private setFieldsReadonly(formFields: FormFieldConfiguration[], readonly: boolean = true): void {
-        formFields.forEach((f) => {
+    public setFieldsReadonly(formFields: FormFieldConfiguration[], readonly: boolean = true): void {
+        formFields.filter((f) => f).forEach((f) => {
             f.readonly = readonly;
             EventService.getInstance().publish(FormEvent.FIELD_READONLY_CHANGED, { instanceId: f.instanceId });
             if (Array.isArray(f.children) && f.children.length) {

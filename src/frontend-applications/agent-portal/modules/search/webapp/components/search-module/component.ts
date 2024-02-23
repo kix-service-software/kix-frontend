@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,6 +17,7 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { KIXObjectSocketClient } from '../../../../base-components/webapp/core/KIXObjectSocketClient';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { SearchEvent } from '../../../model/SearchEvent';
@@ -46,7 +47,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             false, false, this.state.icon, true
         );
 
-        this.state.instanceId = IdService.generateDateBasedId(`search-table-${searchCache.objectType}`);
+        this.state.instanceId = this.context.getTableId(searchCache.objectType);
         this.state.objectType = searchCache.objectType;
         this.state.configuration = widgetConfiguration;
 
@@ -72,8 +73,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const objectName = await LabelService.getInstance().getObjectName(objectType, true);
         let title = await TranslationService.translate('Translatable#Search Results: {0}', [objectName]);
 
-        const resultCount = this.context?.getSearchCache()?.result?.length || 0;
-        title += ` (${resultCount})`;
+        const resultCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
+            this.context.getCollectionId()
+        ) || 0;
+        const currentCount = KIXObjectSocketClient.getInstance().getCollectionsLimit(
+            this.context.getCollectionId()
+        ) || 0;
+        title += ` (${currentCount}/${resultCount})`;
         this.state.title = title;
     }
 }

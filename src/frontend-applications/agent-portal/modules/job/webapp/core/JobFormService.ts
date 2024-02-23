@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -28,6 +28,8 @@ import { FormEvent } from '../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../base-components/webapp/core/FormValuesChangedEventData';
 import { MacroFieldCreator } from './MacroFieldCreator';
 import { MacroObjectCreator } from './MacroObjectCreator';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class JobFormService extends KIXObjectFormService {
 
@@ -96,7 +98,9 @@ export class JobFormService extends KIXObjectFormService {
         form.pages = [];
         form.pages.push(AbstractJobFormManager.getJobPage(formInstance));
 
-        if (form.pages.length && job && form.formContext === FormContext.EDIT) {
+        const context = ContextService.getInstance().getActiveContext();
+        const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
+        if (form.pages.length && job && (form.formContext === FormContext.EDIT || duplicate)) {
             const manager = this.getJobFormManager(job.Type);
             manager.job = job;
 
@@ -122,8 +126,17 @@ export class JobFormService extends KIXObjectFormService {
         property: string, value: any, job: Job, formField: FormFieldConfiguration, formContext: FormContext
     ): Promise<any> {
         if (job) {
-            const manager = this.getJobFormManager(job.Type);
-            value = await manager.getValue(property, formField, value, job, formContext);
+            const context = ContextService.getInstance().getActiveContext();
+            const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
+            if (property === JobProperty.NAME && formContext === FormContext.NEW && duplicate) {
+                const actionName = await TranslationService.translate(
+                    'Translatable#Copy of {0}', [value]
+                );
+                value = actionName;
+            } else {
+                const manager = this.getJobFormManager(job.Type);
+                value = await manager.getValue(property, formField, value, job, formContext);
+            }
         }
         return value;
     }
@@ -132,7 +145,9 @@ export class JobFormService extends KIXObjectFormService {
         form: FormConfiguration, formInstance: FormInstance, formFieldValues, job: Job
     ): Promise<void> {
 
-        if (form.formContext === FormContext.EDIT) {
+        const context = ContextService.getInstance().getActiveContext();
+        const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
+        if (form.formContext === FormContext.EDIT || duplicate) {
             // add additional filter fields and set filter values
             if (Array.isArray(job.Filter) && job.Filter.length) {
                 const formField = formInstance.getFormFieldByProperty(JobProperty.FILTER);

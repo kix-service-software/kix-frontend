@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -44,10 +44,11 @@ import { RoutingConfiguration } from '../../../../model/configuration/RoutingCon
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 import { ExtendedKIXObjectService } from './ExtendedKIXObjectService';
-import { TicketProperty } from '../../../ticket/model/TicketProperty';
 import { ContactProperty } from '../../../customer/model/ContactProperty';
-import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
 import { KIXObjectFormService } from './KIXObjectFormService';
+import { ObjectSearchLoadingOptions } from '../../../object-search/model/ObjectSearchLoadingOptions';
+import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
+import { SortDataType } from '../../../../model/SortDataType';
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -777,4 +778,111 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         }
         return preload;
     }
+
+    public static async getSortableAttributes(
+        objectType: KIXObjectType | string, filtered: boolean = true
+    ): Promise<ObjectSearch[]> {
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+        let attributes = [];
+        if (service) {
+            attributes = await service.getSortableAttributes(filtered);
+        } else {
+            const errorMessage = `No service registered for object type ${objectType}`;
+            console.warn(errorMessage);
+        }
+        return attributes;
+    }
+
+    public async getSortableAttributes(filtered: boolean = true): Promise<ObjectSearch[]> {
+        const supportedAttributes = await KIXObjectService.loadObjects<ObjectSearch>(
+            KIXObjectType.OBJECT_SEARCH, undefined, undefined,
+            new ObjectSearchLoadingOptions(this.objectType), true
+        ).catch(() => [] as ObjectSearch[]);
+        const sortableAttributes = supportedAttributes.filter((sA) => sA.IsSortable);
+
+        return filtered ? sortableAttributes.filter(
+            (sA) =>
+                sA.Property !== 'ID' && sA.Property !== 'Valid' &&
+                sA.Property !== 'CreateByID' && sA.Property !== 'ChangeByID'
+        ) : sortableAttributes;
+    }
+
+    public static async getSortOrder(
+        property: string, descanding: boolean = false, objectType: KIXObjectType | string
+    ): Promise<string> {
+        let sortOrder = null;
+        if (property) {
+            const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+            if (service) {
+                sortOrder = await service.getSortOrder(property, descanding, objectType);
+            } else {
+                const errorMessage = `No service registered for object type ${objectType}`;
+                console.warn(errorMessage);
+            }
+        }
+
+        return sortOrder;
+    }
+
+    protected async getSortOrder(
+        property: string, descanding: boolean, objectType: KIXObjectType | string
+    ): Promise<string> {
+        property = this.getSortAttribute(property);
+        const sortType = await this.getSortType(property, objectType);
+        if (property.match(/^DynamicFields\./)) {
+            property = property.replace(
+                /^DynamicFields\.(.+)$/, 'DynamicField_$1'
+            );
+        }
+        return `${this.objectType}.${descanding ? '-' : ''}${property}:${sortType}`;
+    }
+
+    protected async getSortType(property: string, objectType: KIXObjectType | string): Promise<SortDataType> {
+        let sortType = SortDataType.TEXTUAL;
+        const supportedAttributes = await KIXObjectService.getSortableAttributes(objectType);
+        if (supportedAttributes?.length) {
+            const knownTypes = Object.keys(SortDataType);
+            const relevantAttribute = supportedAttributes.find((sA) => sA.Property === property);
+            if (relevantAttribute) {
+                sortType = relevantAttribute.ValueType as SortDataType;
+                if (!knownTypes.some((t) => t === sortType)) {
+                    sortType = SortDataType.TEXTUAL;
+                }
+            }
+        }
+        return sortType;
+    }
+
+    protected getSortAttribute(attribute: string): string {
+        for (const extendedService of this.extendedServices) {
+            const extendedAttribute = extendedService.getSortAttribute(attribute);
+            if (extendedAttribute) {
+                return extendedAttribute;
+            }
+        }
+
+        switch (attribute) {
+            case KIXObjectProperty.VALID_ID:
+                return 'Valid';
+            default:
+        }
+
+        return attribute;
+    }
+
+    public static async isBackendSortSupportedForProperty(
+        property: string, objectType: KIXObjectType | string
+    ): Promise<boolean> {
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+        if (service) {
+            const supportedAttributes = await KIXObjectService.getSortableAttributes(objectType, false);
+            if (supportedAttributes?.length) {
+                const sortProperty = service.getSortAttribute(property);
+                return supportedAttributes.some((sA) => sA.Property === sortProperty);
+            }
+        }
+        return false;
+    }
+
+
 }

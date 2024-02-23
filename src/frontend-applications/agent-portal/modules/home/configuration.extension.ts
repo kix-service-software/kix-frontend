@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -146,7 +146,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const newTicketsWidget = new WidgetConfiguration(
             'home-dashboard-new-tickets-widget', 'Translatable#New Tickets Widget', ConfigurationType.Widget,
-            'table-widget', 'New Tickets', ['bulk-action', 'csv-export-action'],
+            'table-widget', 'Translatable#New Tickets', ['bulk-action', 'csv-export-action'],
             new ConfigurationDefinition('home-dashboard-ticket-new-table-widget', ConfigurationType.TableWidget),
             null, false, true, 'kix-icon-ticket', false
         );

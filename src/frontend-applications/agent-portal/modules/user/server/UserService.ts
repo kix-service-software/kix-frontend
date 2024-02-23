@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -28,7 +28,6 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { CacheService } from '../../../server/services/cache';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
-import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class UserService extends KIXObjectAPIService {
@@ -69,34 +68,9 @@ export class UserService extends KIXObjectAPIService {
     }
 
     public async loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string> {
-        let displayValue = '';
-
-        if (objectType === KIXObjectType.USER) {
-            const cacheType = `${objectType}-DISPLAY_VALUE`;
-            const cacheKey = `${objectType}-${objectId}-displayvalue`;
-            displayValue = await CacheService.getInstance().get(cacheKey, cacheType);
-            if (!displayValue && objectId) {
-                const loadingOptions = new KIXObjectLoadingOptions();
-                loadingOptions.includes = [UserProperty.CONTACT];
-
-                const config = ConfigurationService.getInstance().getServerConfiguration();
-                const objectResponse = await this.loadObjects<User>(
-                    config?.BACKEND_API_TOKEN, 'UserAPIService', objectType, [objectId], loadingOptions, null
-                );
-
-                const users = objectResponse?.objects || [];
-
-                if (users?.length) {
-                    const user = new User(users[0]);
-                    displayValue = user.toString();
-                    await CacheService.getInstance().set(cacheKey, displayValue, cacheType);
-                }
-            }
-        } else {
-            displayValue = await super.loadDisplayValue(objectType, objectId);
-        }
-
-        return displayValue;
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.includes = [UserProperty.CONTACT];
+        return await super.loadDisplayValue(objectType, objectId, loadingOptions);
     }
 
     public async loadObjects<T>(
@@ -168,7 +142,7 @@ export class UserService extends KIXObjectAPIService {
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             let uri = this.buildUri('session', 'user', 'preferences');
-            if (createOptions) {
+            if (createOptions && !(createOptions as SetPreferenceOptions).bySession) {
                 const userId = (createOptions as SetPreferenceOptions).userId;
                 if (userId) {
                     uri = this.buildUri(this.RESOURCE_URI, userId, 'preferences');
@@ -244,7 +218,7 @@ export class UserService extends KIXObjectAPIService {
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             let uri = this.buildUri('session', 'user', 'preferences', objectId);
-            if (updateOptions) {
+            if (updateOptions && !(updateOptions as SetPreferenceOptions).bySession) {
                 const userId = (updateOptions as SetPreferenceOptions).userId;
                 if (userId) {
                     uri = this.buildUri(this.RESOURCE_URI, userId, 'preferences', objectId);
@@ -297,7 +271,7 @@ export class UserService extends KIXObjectAPIService {
     }
 
     public async setPreferences(
-        token: string, clientRequestId: string, parameter: Array<[string, any]>, userId?: number
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, userId?: number, bySession?: boolean
     ): Promise<void> {
         const objectResponse = await this.loadObjects<UserPreference>(
             token, null, KIXObjectType.USER_PREFERENCE, null, null,
@@ -307,7 +281,7 @@ export class UserService extends KIXObjectAPIService {
 
         const errors: Error[] = [];
 
-        const options = userId ? new SetPreferenceOptions(userId) : undefined;
+        const options = new SetPreferenceOptions(userId, bySession);
 
         parameter = parameter.filter((p) =>
             p[0] !== PersonalSettingsProperty.CURRENT_PASSWORD &&
@@ -337,7 +311,7 @@ export class UserService extends KIXObjectAPIService {
                     });
                 } else {
                     let uri = this.buildUri('system', 'users', userId, 'preferences', param[0]);
-                    if (!options?.userId) {
+                    if (bySession) {
                         uri = this.buildUri('session', 'user', 'preferences', param[0]);
                     }
 
@@ -362,12 +336,12 @@ export class UserService extends KIXObjectAPIService {
             }
         }
 
-        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
-        const cacheUserId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
-        await CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_${cacheUserId}`);
-
         if (errors.length) {
             throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
+        }
+
+        if (userId) {
+            await CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_${userId}`);
         }
     }
 
@@ -387,7 +361,8 @@ export class UserService extends KIXObjectAPIService {
             UserProperty.IS_AGENT,
             UserProperty.IS_CUSTOMER,
             UserProperty.PREFERENCES + '\..*?',
-            KIXObjectProperty.VALID_ID
+            KIXObjectProperty.VALID_ID,
+            UserProperty.USER_ID
         ];
 
         const searchCriteria = criteria.filter(

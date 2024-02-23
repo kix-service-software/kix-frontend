@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -228,7 +228,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
     private async getEmailValues(value): Promise<[Contact[], string[], string[]]> {
         const contactValues: any[] = Array.isArray(value)
             ? value.filter((v) => v !== null && typeof v !== 'undefined')
-            : typeof value === 'string' ? (value as string).split(/\s?,\s/) : [];
+            : value ? [value] : [];
 
         const emailAddresses: string[] = [];
         const contactIds: number[] = [];
@@ -265,7 +265,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
                 }
             }
         } catch (error) {
-            emailAddresses.push(value);
+            // do nothing
         }
         return emailAddresses;
     }

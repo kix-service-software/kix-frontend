@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -38,13 +38,13 @@ class ArticleAttachmentComponent {
         this.images = Array.isArray(input.images) ? input.images : [];
     }
 
-    public async download(event: any): Promise<void> {
+    public async download(force: boolean = false, event: any): Promise<void> {
         event.stopPropagation();
         event.preventDefault();
 
         if (this.state.article && this.state.attachment) {
 
-            if (this.images && this.images.some((i) => i.imageId === this.state.attachment.ID)) {
+            if (!force && this.images && this.images.some((i) => i.imageId === this.state.attachment.ID)) {
                 EventService.getInstance().publish(
                     ImageViewerEvent.OPEN_VIEWER,
                     new ImageViewerEventData(this.images, this.state.attachment.ID)
@@ -54,7 +54,7 @@ class ArticleAttachmentComponent {
                 const attachment = await this.loadArticleAttachment(this.state.attachment.ID);
                 this.state.progress = false;
 
-                if (attachment.ContentType === 'application/pdf') {
+                if (!force && attachment.ContentType === 'application/pdf') {
                     BrowserUtil.openPDF(attachment.Content, attachment.Filename);
                 } else {
                     BrowserUtil.startBrowserDownload(attachment.Filename, attachment.Content, attachment.ContentType);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private bindingIds: string[];
     private formValue: SelectObjectFormValue<Array<string | number> | string | number>;
     private searchTimeout: any;
+    private isFocusFreeText: boolean;
 
     private subscriber: IEventSubscriber;
 
@@ -55,6 +56,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 if (searchInput) {
                     searchInput.value = '';
                 }
+            });
+
+            myDropdown?.addEventListener('show.bs.dropdown', () => {
+                this.state.selectAll = this.formValue?.treeHandler?.getSelectedNodes()?.length <= 0;
             });
 
         }, 100);
@@ -109,7 +114,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
             }),
             this.formValue.addPropertyBinding('selectedNodes', async () => {
+                this.state.prepared = false;
                 this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
+                setTimeout(() => this.state.prepared = true, 20);
             })
         );
 
@@ -153,14 +160,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        const searchResultLength = this.formValue?.treeHandler?.getTree()?.length;
-        if (event.key === 'Enter' && this.formValue.freeText && !searchResultLength) {
+        if (event.key === 'Enter' && this.formValue.freeText && this.isFocusFreeText) {
             if (Array.isArray(this.formValue.value) && this.formValue.multiselect) {
                 this.formValue.setFormValue([...this.formValue.value, event.target.value]);
             } else {
                 this.formValue.setFormValue([event.target.value]);
             }
-
         }
     }
 
@@ -178,9 +183,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const isFilterInput = filterInput && document.activeElement === filterInput;
 
         if (isFilterInput && !this.navigationKeyPressed(event.key)) {
+            this.isFocusFreeText = true;
             this.stopPropagation(event);
 
         } else if (isFilterInput && event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            this.isFocusFreeText = false;
             if (hiddenInput) {
                 hiddenInput.focus();
             }
@@ -260,22 +267,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private stopPropagation(event: any): void {
-        if (event.stopPropagation) {
-            event.stopPropagation();
-        }
-
-        if (event.preventDefault) {
-            event.preventDefault();
-        }
-    }
-
-    public async select(event: any): Promise<void> {
+    public async select(event: any, reopen?: boolean): Promise<void> {
         await this.formValue?.setSelectedNodes();
         this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
+
+        if (reopen) {
+            setTimeout(() => {
+                const element = document.getElementById(`id_${this.state.searchValueKey}`);
+                element?.click();
+            }, 50);
+        }
     }
 
     public async apply(event: any): Promise<void> {
+        await this.select(event, false);
         const element = document.getElementById(`id_${this.state.searchValueKey}`);
         element?.click();
     }
@@ -293,6 +298,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.autoCompleteHint = message;
         }
     }
+
+    private stopPropagation(event: any): void {
+        if (event.stopPropagation) {
+            event.stopPropagation();
+        }
+
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+    }
+
 }
 
 module.exports = Component;

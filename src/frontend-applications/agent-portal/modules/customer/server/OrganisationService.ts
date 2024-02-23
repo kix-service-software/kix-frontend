@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -152,23 +152,21 @@ export class OrganisationAPIService extends KIXObjectAPIService {
         return response.OrganisationID;
     }
 
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        // TODO: allow nothing at the moment, maybe filter not needed anymore
+        return [];
+    }
+
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        let searchCriteria = criteria.filter(
-            (c) => c.property === OrganisationProperty.NAME
-                || c.property === OrganisationProperty.NUMBER
-                || c.property === SearchProperty.FULLTEXT
-                || c.property !== SearchProperty.PRIMARY
-        );
+        const searchCriteria = criteria.filter((c) => c.property !== SearchProperty.PRIMARY);
 
         const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
         if (primary) {
-            const primarySearch = [
-                new FilterCriteria(
-                    OrganisationProperty.NUMBER, SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
-                ),
-            ];
-            searchCriteria = [...searchCriteria, ...primarySearch];
+            const primaryFilter = new FilterCriteria(
+                OrganisationProperty.NUMBER, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, primary.value
+            );
+            searchCriteria.push(primaryFilter);
         }
 
         return searchCriteria;

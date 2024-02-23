@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -523,6 +523,29 @@
                     right: 0;
                     text-align: center;
                     cursor: pointer;
+                }
+            }
+        }
+
+        >.table-shield {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: fade(@secondary-6, 70%);
+            // background: fade(@secondary-4, 70%);
+            z-index: 20;
+            text-align: center;
+
+            >.loading-spinner {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translateY(-50%) translateX(-50%);
+
+                >.child::before {
+                    background-color: @secondary-6;
                 }
             }
         }

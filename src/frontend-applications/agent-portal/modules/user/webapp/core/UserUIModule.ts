@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -45,6 +45,7 @@ import { RoleTableFactory, UserTableFactory } from './admin/table';
 import { RoleService } from './admin/RoleService';
 import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
+import { UserPreferencesEventHandler } from './UserPreferencesEventHandler';
 
 
 export class UIModule implements IUIModule {
@@ -112,6 +113,8 @@ export class UIModule implements IUIModule {
                 'kix-icon-admin', 20
             )
         );
+
+        UserPreferencesEventHandler.getInstance();
     }
 
     private registerUser(): void {

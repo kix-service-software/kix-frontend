@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,6 +12,7 @@ import { RedisClient } from 'redis';
 import { ICache } from './ICache';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { BackendNotification } from '../../../model/BackendNotification';
 
 export class RedisCache implements ICache {
 
@@ -164,7 +165,6 @@ export class RedisCache implements ICache {
         this.redisClient = null;
 
         const config = ConfigurationService.getInstance().getServerConfiguration();
-
         const port = config.REDIS_CACHE_PORT;
         const host = config.REDIS_CACHE_HOST;
 
@@ -203,6 +203,37 @@ export class RedisCache implements ICache {
         } while (cursor !== '0');
 
         return found;
+    }
+
+    public subscribe(channel: string, cb: (events: BackendNotification[]) => void): void {
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        const port = config.REDIS_CACHE_PORT;
+        const host = config.REDIS_CACHE_HOST;
+
+        const redis = require('redis');
+        const subscriber = redis.createClient({
+            port, host, retry_strategy: (options) => 2000
+        });
+
+        subscriber?.subscribe(channel, (error, message) => {
+            if (error) {
+                LoggingService.getInstance().error(error);
+            }
+            LoggingService.getInstance().info(`REDIS: Subscribed to channel ${message}`);
+        });
+
+        subscriber?.on('message', (incomingChannel: string, message) => {
+            if (incomingChannel === channel) {
+                try {
+                    const events = JSON.parse(message);
+                    if (Array.isArray(events)) {
+                        cb(events);
+                    }
+                } catch (err) {
+                    LoggingService.getInstance().error(err);
+                }
+            }
+        });
     }
 
 }

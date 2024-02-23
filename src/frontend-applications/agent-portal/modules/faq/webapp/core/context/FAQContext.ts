@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,14 +29,6 @@ export class FAQContext extends Context {
     public static CONTEXT_ID: string = 'faq';
 
     public categoryId: number;
-
-    public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        super.initContext();
-
-        if (this.categoryId) {
-            this.loadFAQArticles();
-        }
-    }
 
     public getIcon(): string {
         return 'kix-icon-faq';
@@ -107,8 +99,7 @@ export class FAQContext extends Context {
                 FilterType.AND, [1]
             )
         ];
-        loadingOptions.includes = [FAQArticleProperty.VOTES];
-        loadingOptions.expands = [FAQArticleProperty.VOTES];
+        loadingOptions.includes = [FAQArticleProperty.RATING];
 
         if (this.categoryId) {
             loadingOptions.filter.push(
@@ -119,7 +110,7 @@ export class FAQContext extends Context {
             );
         }
 
-        this.prepareContextLoadingOptions(KIXObjectType.FAQ_ARTICLE, loadingOptions);
+        await this.prepareContextLoadingOptions(KIXObjectType.FAQ_ARTICLE, loadingOptions);
 
         const faqArticles = await KIXObjectService.loadObjects(
             KIXObjectType.FAQ_ARTICLE, null, loadingOptions, null, false, undefined, undefined,

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,6 +21,7 @@ import { Table } from '../../../../table/model/Table';
 import { TableValue } from '../../../../table/model/TableValue';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ContextMode } from '../../../../../model/ContextMode';
+import { SortOrder } from '../../../../../model/SortOrder';
 
 export class ContactTableContentProvider extends TableContentProvider<Contact> {
 
@@ -31,6 +32,7 @@ export class ContactTableContentProvider extends TableContentProvider<Contact> {
         contextId?: string
     ) {
         super(KIXObjectType.CONTACT, table, objectIds, loadingOptions, contextId);
+        this.useBackendSort = true;
     }
 
     public async loadData(): Promise<Array<RowObject<Contact>>> {

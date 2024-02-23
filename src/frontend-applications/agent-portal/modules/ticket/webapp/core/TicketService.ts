@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -64,6 +64,8 @@ import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { Counter } from '../../../user/model/Counter';
+import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -150,14 +152,12 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
-        this.deleteUserCache();
         await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId)
             .catch((error) => console.error(error));
         EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
     public async markTicketAsSeen(ticketId: number): Promise<void> {
-        this.deleteUserCache();
         await KIXObjectService.updateObject(
             KIXObjectType.TICKET, [['MarkAsSeen', 1]], ticketId
         );
@@ -499,7 +499,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             } else {
 
                 // remove inline images
-                content = content.replace(/<img.+?src="cid:.+?>/, '');
+                content = content.replace(/<img.+?src="cid:.+?>/g, '');
             }
 
             return [content, inlineContent];
@@ -795,10 +795,6 @@ export class TicketService extends KIXObjectService<Ticket> {
         return color;
     }
 
-    private deleteUserCache(): void {
-        BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
-    }
-
 
     public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
         let objectType = await super.getObjectTypeForProperty(property);
@@ -843,5 +839,67 @@ export class TicketService extends KIXObjectService<Ticket> {
             }
         }
         return objectType;
+    }
+
+    public async getSortableAttributes(filtered: boolean = true
+    ): Promise<ObjectSearch[]> {
+        const supportedAttributes = await super.getSortableAttributes(filtered);
+
+        const filterList = [
+            TicketProperty.CONTACT,
+            TicketProperty.CREATED_PRIORITY_ID,
+            TicketProperty.CREATED_QUEUE_ID,
+            TicketProperty.CREATED_STATE_ID,
+            TicketProperty.CREATED_TYPE_ID,
+            TicketProperty.CREATED_USER_ID,
+            TicketProperty.CREATED,
+            TicketProperty.CHANGED,
+            TicketProperty.CHANGE_TIME,
+            TicketProperty.LOCK,
+            TicketProperty.ORGANISATION,
+            TicketProperty.OWNER,
+            TicketProperty.PRIORITY,
+            TicketProperty.QUEUE,
+            TicketProperty.RESPONSIBLE,
+            TicketProperty.STATE,
+            TicketProperty.TYPE,
+            'OrganisationNumber',
+            'SLACriterion.EscalationStart',
+            'SLACriterion.EscalationStop',
+            TicketProperty.TICKET_ID
+        ];
+        return filtered ?
+            supportedAttributes.filter((sA) => !filterList.some((fp) => fp === sA.Property)) :
+            supportedAttributes;
+    }
+
+    protected getSortAttribute(attribute: string): string {
+        switch (attribute) {
+            case TicketProperty.CONTACT_ID:
+                return TicketProperty.CONTACT;
+            case TicketProperty.LOCK_ID:
+                return TicketProperty.LOCK;
+            case TicketProperty.ORGANISATION_ID:
+                return TicketProperty.ORGANISATION;
+            case TicketProperty.OWNER_ID:
+                return TicketProperty.OWNER;
+            case TicketProperty.PRIORITY_ID:
+                return TicketProperty.PRIORITY;
+            case TicketProperty.QUEUE_ID:
+                return TicketProperty.QUEUE;
+            case TicketProperty.RESPONSIBLE_ID:
+                return TicketProperty.RESPONSIBLE;
+            case TicketProperty.STATE_ID:
+                return TicketProperty.STATE;
+            case TicketProperty.TYPE_ID:
+                return TicketProperty.TYPE;
+            case TicketProperty.CREATED:
+                return KIXObjectProperty.CREATE_TIME;
+            case TicketProperty.CHANGED:
+            case KIXObjectProperty.CHANGE_TIME:
+                return TicketProperty.LAST_CHANGE_TIME;
+            default:
+        }
+        return super.getSortAttribute(attribute);
     }
 }

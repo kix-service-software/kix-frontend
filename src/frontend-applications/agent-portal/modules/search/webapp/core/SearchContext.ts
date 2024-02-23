@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -20,10 +20,22 @@ import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { SearchEvent } from '../../model/SearchEvent';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export abstract class SearchContext extends Context {
 
     protected searchCache: SearchCache;
+    private tableId: string;
+    private searchDone: boolean;
+
+    public getTableId(type: string): string {
+        if (!this.tableId) {
+            // use instance specific id for separate table-sort of eahc opened search tab
+            this.tableId = IdService.generateDateBasedId(`search-table-${type}`);
+        }
+        return this.tableId;
+    }
 
     public getSearchCache(): SearchCache {
         return this.searchCache;
@@ -70,6 +82,16 @@ export abstract class SearchContext extends Context {
         return url;
     }
 
+    public async destroy(): Promise<void> {
+        super.destroy();
+        // remove all table-states if no other instance of this context is open, to "reset" sort
+        if (!ContextService.getInstance().hasContextInstance(this.contextId)) {
+            TableFactoryService.getInstance().deleteContextTables(this.contextId, undefined, false);
+        }
+
+        return;
+    }
+
     public setSearchCache(cache: SearchCache): void {
         this.searchCache = cache;
         EventService.getInstance().publish(SearchEvent.SEARCH_CACHE_CHANGED, this);
@@ -103,7 +125,6 @@ export abstract class SearchContext extends Context {
                 .catch((error: Error) => BrowserUtil.openErrorOverlay(error.message));
 
             this.searchCache.name = name;
-            await SearchService.getInstance().getSearchBookmarks(true);
             EventService.getInstance().publish(SearchEvent.SAVE_SEARCH_FINISHED);
         }
     }
@@ -119,6 +140,7 @@ export abstract class SearchContext extends Context {
     public async setSearchResult(objects: KIXObject[]): Promise<void> {
         this.searchCache.result = objects;
         this.setObjectList(this.searchCache.objectType, objects);
+        this.searchDone = true;
     }
 
     public resetSearch(): void {
@@ -127,4 +149,27 @@ export abstract class SearchContext extends Context {
         ContextService.getInstance().setDocumentHistory(true, this, this, null);
     }
 
+    public async setSortOrder(
+        type: string, property: string, descanding: boolean, reload: boolean = true, limit?: number
+    ): Promise<void> {
+        super.setSortOrder(type, property, descanding, false, limit);
+        if (reload) {
+            await SearchService.getInstance().searchObjects(
+                this.searchCache, undefined, undefined, limit, undefined
+            );
+        }
+    }
+
+    public async reloadObjectList(objectType: KIXObjectType, silent: boolean = false, limit?: number): Promise<void> {
+        if (this.searchDone) {
+            await SearchService.getInstance().searchObjects(
+                this.searchCache, undefined, undefined, limit, undefined
+            );
+        }
+        return;
+    }
+
+    public getCollectionId(): string {
+        return this.searchCache?.id;
+    }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -18,7 +18,6 @@ export class Queue extends KIXObject {
 
     public ObjectId: string | number;
     public QueueID: number;
-    public Calendar: string;
     public DefaultSignKey: string;
     public FollowUpID: number;
     public FollowUpLock: number;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,6 +17,7 @@ class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
     private confirmCallback: () => void = null;
     private cancelCallback: () => void = null;
     private buttonLabels: [string, string];
+    private confirmed: boolean;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -26,6 +27,12 @@ class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
         this.confirmCallback = input.confirmCallback;
         this.cancelCallback = input.cancelCallback;
         this.update(input);
+    }
+
+    public onDestroy(): void {
+        if (!this.confirmed && this.cancelCallback && typeof this.cancelCallback === 'function') {
+            this.cancelCallback();
+        }
     }
 
     private async update(input: any): Promise<void> {
@@ -49,6 +56,7 @@ class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
     }
 
     public closeOverlay(confirm: boolean = false): void {
+        this.confirmed = true;
         (this as any).emit('closeOverlay');
         if (confirm) {
             if (this.confirmCallback && typeof this.confirmCallback === 'function') {

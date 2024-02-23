@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -308,10 +308,14 @@ export class FAQService extends KIXObjectAPIService {
             categoryCriteria.value = [categoryCriteria.value as any];
         }
 
-        const validCriteria = criteria.find((c) => c.property === KIXObjectProperty.VALID_ID);
-        if (validCriteria && validCriteria.operator === SearchOperator.EQUALS) {
-            validCriteria.operator = SearchOperator.IN;
-            validCriteria.value = [validCriteria.value as any];
+        const createdCriteria = criteria.find((sc) => sc.property === FAQArticleProperty.CREATED);
+        if (createdCriteria) {
+            createdCriteria.property = KIXObjectProperty.CREATE_TIME;
+        }
+
+        const changedCriteria = criteria.find((sc) => sc.property === FAQArticleProperty.CHANGED);
+        if (changedCriteria) {
+            changedCriteria.property = KIXObjectProperty.CHANGE_TIME;
         }
 
         return criteria;

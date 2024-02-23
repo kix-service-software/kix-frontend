@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,22 +16,31 @@ export enum TicketProperty {
     TICKET_ID = 'TicketID',
 
     STATE_ID = 'StateID',
+    STATE = 'State',
 
     PRIORITY_ID = 'PriorityID',
+    PRIORITY = 'Priority',
 
     LOCK_ID = 'LockID',
+    LOCK = 'Lock',
 
     QUEUE_ID = 'QueueID',
+    QUEUE = 'Queue',
 
     ORGANISATION_ID = 'OrganisationID',
+    ORGANISATION = 'Organisation',
 
     CONTACT_ID = 'ContactID',
+    CONTACT = 'Contact',
 
     OWNER_ID = 'OwnerID',
+    OWNER = 'Owner',
 
     TYPE_ID = 'TypeID',
+    TYPE = 'Type',
 
     RESPONSIBLE_ID = 'ResponsibleID',
+    RESPONSIBLE = 'Responsible',
 
     AGE = 'Age',
 
@@ -46,6 +55,8 @@ export enum TicketProperty {
     TICKET_NOTES = 'TicketNotes',
 
     WATCHER_USER_ID = 'WatcherUserID',
+
+    WATCHER_ID = 'WatcherID',
 
     CLOSE_TIME = 'CloseTime',
 
@@ -76,6 +87,7 @@ export enum TicketProperty {
     HISTORY = 'History',
 
     STATE_TYPE_ID = 'StateTypeID',
+    STATE_TYPE = 'StateType',
 
     CREATE_TIME = 'CreateTime',
 
@@ -89,11 +101,7 @@ export enum TicketProperty {
 
     CREATED_TYPE_ID = 'CreatedTypeID',
 
-    CREATED_USER_ID = 'CreatedUserID',
-
-    STATE_TYPE = 'StateType',
-
-    STATE = 'State',
+    CREATED_USER_ID = 'CreatedUserID', // TODO: depricated use CreateByID instead if necessary
 
     UNTIL_TIME = 'UntilTime'
 }

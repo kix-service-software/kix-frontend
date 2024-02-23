@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,7 @@ import { TranslationService } from '../modules/translation/webapp/core/Translati
 import { AgentService } from '../modules/user/webapp/core/AgentService';
 import { ConfiguredWidget } from './configuration/ConfiguredWidget';
 import { ContextConfiguration } from './configuration/ContextConfiguration';
+import { TableConfiguration } from './configuration/TableConfiguration';
 import { WidgetConfiguration } from './configuration/WidgetConfiguration';
 import { WidgetType } from './configuration/WidgetType';
 import { ContextDescriptor } from './ContextDescriptor';
@@ -65,6 +66,8 @@ export abstract class Context {
 
     public initialized: boolean = false;
 
+    private objectSorts: Map<string, [string, boolean]> = new Map();
+
     public constructor(
         public descriptor: ContextDescriptor,
         protected objectId: string | number = null,
@@ -105,15 +108,19 @@ export abstract class Context {
             this.eventSubscriber = {
                 eventSubscriberId: this.instanceId,
                 eventPublished: async (data: any, eventId: string): Promise<void> => {
-                    const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
-                        data?.instanceId === this.instanceId;
-
-                    const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
-                    const objectDelete = eventId === ApplicationEvent.OBJECT_DELETED && data?.objectType;
-
                     if (this.descriptor.contextMode !== ContextMode.SEARCH) {
+                        const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
+                            data?.instanceId === this.instanceId;
 
-                        TableFactoryService.getInstance().deleteContextTables(this.contextId, data?.objectType);
+                        const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
+                        const objectDelete = eventId === ApplicationEvent.OBJECT_DELETED && data?.objectType;
+                        const reloadObjectList = eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED &&
+                            Array.isArray(data?.widgets) &&
+                            Array.isArray(this.configuration?.tableWidgetInstanceIds);
+
+                        TableFactoryService.getInstance().deleteContextTables(
+                            this.contextId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
+                        );
 
                         if (objectUpdate || objectDelete) {
                             if (this.objectLists.has(data.objectType)) {
@@ -130,6 +137,8 @@ export abstract class Context {
 
                         } else if (contextUpdateRequired) {
                             this.deleteObjectLists();
+                        } else if (reloadObjectList) {
+                            this.reloadRelevantObjectLists(data.widgets);
                         }
                     }
                 }
@@ -138,13 +147,44 @@ export abstract class Context {
             EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
             EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.eventSubscriber);
             EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
+            EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.eventSubscriber);
         }
+    }
+
+    private reloadRelevantObjectLists(widgets: ConfiguredWidget[]): void {
+        const objectTypes = [];
+        widgets?.forEach((w) => {
+            const objectType = this.getObjectTypeFromConfig(w.configuration);
+            if (objectType && !objectTypes.some((ot) => ot === objectType)) {
+                objectTypes.push(objectType);
+            }
+        });
+        if (objectTypes.length) {
+            this.configuration.tableWidgetInstanceIds.forEach((mapping) => {
+                if (Array.isArray(mapping) && objectTypes.some((ot) => ot === mapping[0])) {
+                    this.reloadObjectList(mapping[0]);
+                }
+            });
+        }
+    }
+
+    private getObjectTypeFromConfig(config): KIXObjectType {
+        let objectType;
+        if (config) {
+            if (config['objectType']) {
+                objectType = config['objectType'];
+            } else {
+                objectType = this.getObjectTypeFromConfig(config.configuration);
+            }
+        }
+        return objectType;
     }
 
     public async destroy(): Promise<void> {
         EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
         EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.eventSubscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.eventSubscriber);
 
         await this.formManager?.destroy();
 
@@ -400,7 +440,10 @@ export abstract class Context {
             );
         }
 
-        const userWidgets = await this.getUserWidgetList('content');
+        let userWidgets = [];
+        if (this.configuration.customizable) {
+            userWidgets = await this.getUserWidgetList('content');
+        }
         const widgets = this.mergeWidgetLists(content, userWidgets);
 
         const allowedWidgets = await this.filterAllowedWidgets(widgets);
@@ -446,17 +489,19 @@ export abstract class Context {
 
     private async getUserWidgetList(contextWidgetList: string): Promise<Array<string | ConfiguredWidget>> {
         let widgets: ConfiguredWidget[] = [];
-        const currentUser = await AgentService.getInstance().getCurrentUser();
-        const widgetListPreference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
-        if (widgetListPreference && widgetListPreference.Value) {
-            try {
-                const value = JSON.parse(widgetListPreference.Value);
-                const contextLists = value[this.descriptor.contextId];
-                if (contextLists) {
-                    widgets = contextLists[contextWidgetList] || [];
+        if (this.configuration?.customizable) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            const widgetListPreference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
+            if (widgetListPreference && widgetListPreference.Value) {
+                try {
+                    const value = JSON.parse(widgetListPreference.Value);
+                    const contextLists = value[this.descriptor.contextId];
+                    if (contextLists) {
+                        widgets = contextLists[contextWidgetList] || [];
+                    }
+                } catch (error) {
+                    console.error(error);
                 }
-            } catch (error) {
-                console.error(error);
             }
         }
 
@@ -573,23 +618,25 @@ export abstract class Context {
     private async getUserWidgetConfiguration(instanceId: string): Promise<ConfiguredWidget> {
         let widget: ConfiguredWidget;
 
-        const currentUser = await AgentService.getInstance().getCurrentUser();
-        const widgetListPreference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
-        if (widgetListPreference && widgetListPreference.Value) {
-            const value = JSON.parse(widgetListPreference.Value);
-            const contextLists = value[this.descriptor.contextId];
-            if (contextLists) {
-                for (const contextWidgetList in contextLists) {
-                    if (Array.isArray(contextLists[contextWidgetList])) {
-                        const widgets: Array<string | ConfiguredWidget> = contextLists[contextWidgetList];
+        if (this.configuration?.customizable) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            const widgetListPreference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
+            if (widgetListPreference && widgetListPreference.Value) {
+                const value = JSON.parse(widgetListPreference.Value);
+                const contextLists = value[this.descriptor.contextId];
+                if (contextLists) {
+                    for (const contextWidgetList in contextLists) {
+                        if (Array.isArray(contextLists[contextWidgetList])) {
+                            const widgets: Array<string | ConfiguredWidget> = contextLists[contextWidgetList];
 
-                        widget = widgets
-                            .filter((w) => typeof w !== 'string')
-                            .map((w): ConfiguredWidget => w as ConfiguredWidget)
-                            .find((w) => w.instanceId === instanceId);
+                            widget = widgets
+                                .filter((w) => typeof w !== 'string')
+                                .map((w): ConfiguredWidget => w as ConfiguredWidget)
+                                .find((w) => w.instanceId === instanceId);
 
-                        if (widget) {
-                            break;
+                            if (widget) {
+                                break;
+                            }
                         }
                     }
                 }
@@ -732,67 +779,150 @@ export abstract class Context {
         return contextId === this.descriptor.contextId && objectId === contextObjectId;
     }
 
-    protected prepareContextLoadingOptions(
+    public async prepareContextLoadingOptions(
         type: KIXObjectType | string, loadingOptions: KIXObjectLoadingOptions
-    ): void {
+    ): Promise<void> {
         loadingOptions.filter ||= [];
         loadingOptions.includes ||= [];
         loadingOptions.expands ||= [];
         loadingOptions.query ||= [];
 
-        const contextLoadingOptionsIndex = Array.isArray(this.configuration?.loadingOptions) ?
-            this.configuration.loadingOptions.findIndex((lo) => Array.isArray(lo) && lo[0] === type) : -1;
-        const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
-            this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
-
+        const contextLoadingOptions = this.getContextLoadingOptions(type);
         if (contextLoadingOptions) {
             if (Array.isArray(contextLoadingOptions.filter)) {
                 loadingOptions.filter.push(...contextLoadingOptions.filter);
             }
-            if (contextLoadingOptions.sortOrder) {
-                loadingOptions.sortOrder = this.getSortOrder(type);
-            }
+
             if (Array.isArray(contextLoadingOptions.includes)) {
                 loadingOptions.includes.push(...contextLoadingOptions.includes);
             }
+
             if (Array.isArray(contextLoadingOptions.expands)) {
                 loadingOptions.expands.push(...contextLoadingOptions.expands);
             }
+
             if (Array.isArray(contextLoadingOptions.query)) {
                 loadingOptions.query = contextLoadingOptions.query;
             }
-            if (contextLoadingOptions.searchLimit) {
-                loadingOptions.searchLimit = contextLoadingOptions.searchLimit;
-            }
+        }
 
-            // if no limit given - e.g. initial call, use configuration, else it will possible
-            // be set because of load more
-            if (typeof loadingOptions.limit === 'undefined' || loadingOptions.limit === null) {
-                loadingOptions.limit = this.getPageSize(type);
-            }
-        } else if (typeof loadingOptions.limit === 'undefined' || loadingOptions.limit === null) {
-            loadingOptions.limit = this.getPageSize(type);
+        // if no limit given - e.g. initial call, use configurations, else it will possible
+        // be set because of load more
+        if (typeof loadingOptions.limit === 'undefined' || loadingOptions.limit === null) {
+            loadingOptions.limit = await this.getPageSize(type);
+        }
+
+        const searchLimit = await this.getSearchLimit(type);
+        if (typeof searchLimit !== 'undefined') {
+            loadingOptions.searchLimit = searchLimit;
+        }
+
+        const sortOrder = await this.getSortOrder(type);
+        if (sortOrder) {
+            loadingOptions.sortOrder = sortOrder;
         }
     }
 
-    public getPageSize(type: KIXObjectType | string): number {
-        const contextLoadingOptionsIndex = Array.isArray(this.configuration?.loadingOptions) ?
-            this.configuration.loadingOptions.findIndex((lo) => Array.isArray(lo) && lo[0] === type) : -1;
-        const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
-            this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
-        return contextLoadingOptions?.limit || this.defaultPageSize;
+    public async getPageSize(type: KIXObjectType | string): Promise<number> {
+        const tableLoadingOptions = await this.getTableLoadingOptions(type);
+        if (tableLoadingOptions?.limit !== null && typeof tableLoadingOptions?.limit !== 'undefined') {
+            return tableLoadingOptions.limit;
+        }
+
+        const contextLoadingOptions = this.getContextLoadingOptions(type);
+        if (contextLoadingOptions?.limit !== null && typeof contextLoadingOptions?.limit !== 'undefined') {
+            return contextLoadingOptions.limit;
+        }
+
+        return this.defaultPageSize;
     }
 
-    public getSortOrder(type: KIXObjectType | string): string {
-        const contextLoadingOptionsIndex = Array.isArray(this.configuration?.loadingOptions) ?
-            this.configuration.loadingOptions.findIndex((lo) => Array.isArray(lo) && lo[0] === type) : -1;
-        const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
-            this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
+    public async getSearchLimit(type: KIXObjectType | string): Promise<number> {
+        const tableLoadingOptions = await this.getTableLoadingOptions(type);
+        if (tableLoadingOptions?.searchLimit !== null && typeof tableLoadingOptions?.searchLimit !== 'undefined') {
+            return tableLoadingOptions.searchLimit;
+        }
+
+        const contextLoadingOptions = this.getContextLoadingOptions(type);
+        if (contextLoadingOptions?.searchLimit !== null && typeof contextLoadingOptions?.searchLimit !== 'undefined') {
+            return contextLoadingOptions.searchLimit;
+        }
+
+        return;
+    }
+
+    private async getTableLoadingOptions(type: KIXObjectType | string): Promise<KIXObjectLoadingOptions> {
+        let loadingOptions;
+        if (type && Array.isArray(this.configuration.tableWidgetInstanceIds)) {
+            const configuredTableWidgetInstanceId = this.configuration.tableWidgetInstanceIds.find(
+                (mapping) => mapping[0] === type
+            );
+            if (Array.isArray(configuredTableWidgetInstanceId) && configuredTableWidgetInstanceId[1]) {
+                const configuredWidget = await this.getConfiguredWidget(configuredTableWidgetInstanceId[1]);
+                if (configuredWidget) {
+                    const tableConfig = configuredWidget.configuration?.configuration?.configuration;
+                    loadingOptions = tableConfig ? (tableConfig as TableConfiguration).loadingOptions : undefined;
+                }
+            }
+        }
+        return loadingOptions;
+    }
+
+    private getContextLoadingOptions(type: string): KIXObjectLoadingOptions {
+        let contextLoadingOptions: KIXObjectLoadingOptions;
+
+        if (type && Array.isArray(this.configuration?.loadingOptions)) {
+            const clo = this.configuration.loadingOptions.find((lo) => Array.isArray(lo) && lo[0] === type);
+            contextLoadingOptions = Array.isArray(clo) ? clo[1] : null;
+        }
+
+        return contextLoadingOptions;
+    }
+
+    public async setSortOrder(
+        type: string, property: string, descanding: boolean, reload: boolean = true, limit?: number
+    ): Promise<void> {
+        if (type) {
+            const sort: [string, boolean] = [property, descanding];
+            this.objectSorts.set(type, sort);
+            if (reload) {
+                await this.reloadObjectList(type, undefined, limit);
+            }
+        }
+    }
+
+    public getSort(type: string): [string, boolean] {
+        if (this.objectSorts.has(type)) {
+            const sort = this.objectSorts.get(type);
+            if (sort?.length) {
+                return sort;
+            }
+        }
+        return;
+    }
+
+    public async getSortOrder(type: string): Promise<string> {
+        if (this.objectSorts.has(type)) {
+            const sort = this.objectSorts.get(type);
+            if (sort?.length) {
+                return KIXObjectService.getSortOrder(sort[0], sort[1], type);
+            }
+        }
+
+        const contextLoadingOptions = this.getContextLoadingOptions(type);
         let sortOrder = contextLoadingOptions?.sortOrder;
         if (sortOrder && !sortOrder.match(/^.+\..+/)) {
             sortOrder = type + '.' + sortOrder;
         }
         return sortOrder;
+    }
+
+    public supportsBackendSort(type: string): boolean {
+        return true;
+    }
+
+    public getCollectionId(): string {
+        return;
     }
 
 }
