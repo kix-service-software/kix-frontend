@@ -56,41 +56,10 @@ export class TicketTypeAPIService extends KIXObjectAPIService {
 
         let objectResponse = new ObjectResponse<TicketType>();
         if (objectType === KIXObjectType.TICKET_TYPE) {
-            const hasValidFilter = loadingOptions?.filter?.length === 1 &&
-                loadingOptions.filter[0].property === KIXObjectProperty.VALID_ID;
-            const hasNameFilter = loadingOptions?.filter?.length === 1 &&
-                loadingOptions.filter[0].property === TicketTypeProperty.NAME;
-            const hasTypeNameFilter = loadingOptions?.filter?.length === 1 &&
-                loadingOptions.filter[0].property === TicketTypeProperty.TYPE_NAME;
-
             objectResponse = await super.load<TicketType>(
-                token, KIXObjectType.TICKET_TYPE, this.RESOURCE_URI, null, null,
+                token, KIXObjectType.TICKET_TYPE, this.RESOURCE_URI, loadingOptions, objectIds,
                 KIXObjectType.TICKET_TYPE, clientRequestId, TicketType
             ).catch((): ObjectResponse<TicketType> => new ObjectResponse());
-
-            if (hasValidFilter) {
-                objectResponse.objects = objectResponse?.objects?.filter(
-                    (o) => o.ValidID === loadingOptions.filter[0].value
-                );
-            }
-
-            if (hasNameFilter) {
-                objectResponse.objects = objectResponse?.objects?.filter(
-                    (o) => o.Name === loadingOptions.filter[0].value
-                );
-            }
-
-            if (hasTypeNameFilter) {
-                objectResponse.objects = objectResponse?.objects?.filter(
-                    (o) => o.TypeName === loadingOptions.filter[0].value
-                );
-            }
-
-            if (objectIds && objectIds.length) {
-                objectResponse.objects = objectResponse?.objects?.filter(
-                    (t) => objectIds.some((oid) => oid?.toString() === t.ID?.toString())
-                );
-            }
         }
 
         return objectResponse as any;
