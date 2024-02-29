@@ -13,8 +13,8 @@
         "test-cucumber-dev": "rm -Rf dist/ && tsc --project tsconfig-cucumber.json && cp -R features/ dist/  && ./node_modules/cucumber/bin/cucumber-js dist/features/",
         "test": "export http_proxy= && export https_proxy= && export NODE_ENV=test && sleep 1 && ./node_modules/.bin/nyc --report-dir=quality/code-coverage --reporter=text-summary --reporter cobertura --reporter html ./node_modules/.bin/mocha --reporter mocha-multi-reporters --reporter-options configFile=mocha.json --require ts-node/register --require source-map-support/register --full-trace --exit \"./{,!(node_modules)/**/}*.test.ts\"",
         "test-plugin": "export http_proxy= && export https_proxy= && export NODE_ENV=test && sleep 1 && ./node_modules/.bin/nyc --report-dir=quality/code-coverage --reporter cobertura --reporter html --include \"src/plugins/${PLUGIN:-KIXPro}\" ./node_modules/.bin/mocha --preserve-symlinks --reporter mocha-multi-reporters --reporter-options configFile=mocha.json --require ts-node/register --require source-map-support/register --full-trace --exit \"src/plugins/${PLUGIN:-KIXPro}/**/*.test.ts\"",
-        "bundle": "rm -f ${npm_package_config_bundlefile} && tar cfz ${npm_package_config_bundlefile} --exclude-from=.bundleignore --exclude-vcs --exclude ${npm_package_config_bundlefile} ./",
-        "bundle-integration": "rm -f kix-frontend-integrationtest.tar.gz && tar cfz kix-frontend-integrationtest.tar.gz --exclude-from=.bundleignore-integration --exclude-vcs --exclude kix-frontend-integrationtest.tar.gz ./",
+        "bundle": "rm -f ${npm_package_config_bundlefile} && tar cfz ${npm_package_config_bundlefile} --ignore-failed-read --warning=no-file-changed --exclude-from=.bundleignore --exclude-vcs --exclude=${npm_package_config_bundlefile} ./",
+        "bundle-integration": "rm -f kix-frontend-integrationtest.tar.gz && tar cfz kix-frontend-integrationtest.tar.gz --ignore-failed-read --warning=no-file-changed --exclude-from=.bundleignore-integration --exclude-vcs --exclude=kix-frontend-integrationtest.tar.gz ./",
         "extract-translatables": "./extract-translatables.sh",
         "build-doc": "raml2html --template ./doc/_raml2html_template/index.nunjucks ./doc/index.raml > ./doc/index.html",
         "generate-3rd-party-licenses": "./node_modules/license-checker/bin/license-checker --production --out LICENSE-Third-Party --relativeLicensePath",
@@ -93,7 +93,7 @@
         "@babel/core": "^7.15.5",
         "@babel/node": "^7.15.4",
         "@babel/preset-env": "^7.15.4",
-        "@babel/preset-typescript": "^7.15.0",
+        "@babel/preset-typescript": "7.15.0",
         "@istanbuljs/nyc-config-typescript": "^1.0.1",
         "@types/chai": "^4.2.21",
         "@types/chai-as-promised": "^7.1.4",
@@ -130,7 +130,7 @@
         "nyc": "^15.1.0",
         "raml2html": "7.8.0",
         "source-map-support": "^0.5.19",
-        "ts-node": "^10.1.0",
+        "ts-node": "10.1.0",
         "typescript": "4.3.5",
         "typescript-coverage-report": "^0.8.0"
     }
