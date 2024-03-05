@@ -14,7 +14,6 @@ import { Version } from '../../../model/Version';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { VersionProperty } from '../../../model/VersionProperty';
-import { ConfigItemVersionLoadingOptions } from '../../../model/ConfigItemVersionLoadingOptions';
 import { PreparedData } from '../../../model/PreparedData';
 import { ConfigItemAttachment } from '../../../model/ConfigItemAttachment';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';

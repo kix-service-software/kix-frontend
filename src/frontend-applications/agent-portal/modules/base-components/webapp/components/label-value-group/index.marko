@@ -33,7 +33,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <if(group.value.attachment)>
                         <file-entry
                             attachment=(group.value.attachment)
-                            on-fileClicked("fileClicked", index)
+                            on-fileClicked(
+                                "fileClicked",
+                                group.value.attachment,
+                            )
                         />
                     </if>
                     <else>
@@ -87,7 +90,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         toggleButtonVisible=state.toggleButtonVisible
                         groups=group.sub
                         level=state.level + 1
-                        on-fileClicked("fileClicked", null)
+                        on-fileClicked("fileClicked")
                     />
                 </div>
             </if>
