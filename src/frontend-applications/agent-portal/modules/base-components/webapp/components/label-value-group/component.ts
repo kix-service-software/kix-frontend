@@ -64,11 +64,9 @@ export class Component {
         return columnString + ';';
     }
 
-    public fileClicked(force: boolean, groupIndex: number = null, attachment: any = null): void {
-        if (groupIndex !== null && this.state.groups[groupIndex]) {
-            (this as any).emit('fileClicked', force, this.state.groups[groupIndex].value.attachment);
-        } else if (attachment) {
-            (this as any).emit('fileClicked', force, attachment);
+    public fileClicked(attachment: any = null, force: boolean): void {
+        if (attachment) {
+            (this as any).emit('fileClicked', attachment, force);
         }
     }
 }
