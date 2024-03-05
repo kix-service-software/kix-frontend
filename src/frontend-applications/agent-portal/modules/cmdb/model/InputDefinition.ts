@@ -19,4 +19,6 @@ export class InputDefinition {
 
     public RegExErrorMessage: string;
 
+    public GUIReadOnly: boolean;
+
 }
