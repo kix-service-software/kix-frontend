@@ -179,35 +179,31 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.clearSchedules();
 
-        if (this.calendar) {
-            this.calendar.destroy();
-            this.calendar = null;
+        if (!this.calendar) {
             const calendar = document.getElementById('calendar');
             if (calendar) {
-                calendar.innerHTML = '';
+                this.calendar = new Calendar('#calendar', {
+                    defaultView: 'month',
+                    useDetailPopup: true,
+                    taskView: [],
+                    calendars,
+                    month: {
+                        moreLayerSize: {
+                            height: 'auto'
+                        },
+                        narrowWeekend: true,
+                        startDayOfWeek: 1, // monday
+                        visibleScheduleCount: 10,
+                        daynames: dayNames,
+                    },
+                    week: {
+                        narrowWeekend: true,
+                        startDayOfWeek: 1, // monday
+                        daynames: dayNames,
+                    }
+                });
             }
         }
-
-        this.calendar = new Calendar('#calendar', {
-            defaultView: 'month',
-            useDetailPopup: true,
-            taskView: [],
-            calendars,
-            month: {
-                moreLayerSize: {
-                    height: 'auto'
-                },
-                narrowWeekend: true,
-                startDayOfWeek: 1, // monday
-                visibleScheduleCount: 10,
-                daynames: dayNames,
-            },
-            week: {
-                narrowWeekend: true,
-                startDayOfWeek: 1, // monday
-                daynames: dayNames,
-            }
-        });
 
         await this.updateCalendarSchedules(tickets);
 
@@ -238,7 +234,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async updateCalendarSchedules(tickets: Ticket[]): Promise<void> {
         this.schedules = await this.createSchedules(tickets);
-        this.calendar.createSchedules(this.schedules);
+        this.calendar.createSchedules(this.schedules.filter((s) => s));
         this.state.loading = false;
     }
 
@@ -257,39 +253,46 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         for (const ticket of tickets) {
-            const title = await LabelService.getInstance().getObjectText(ticket, true);
-            const isPending = ticket.StateType === 'pending reminder';
-            const bgColor = BrowserUtil.getUserColor(ticket.OwnerID);
-            const schedule: any = {
-                id: ticket.TicketID,
-                calendarId: ticket.OwnerID,
-                title,
-                category: 'time',
-                raw: ticket,
-                borderColor: bgColor,
-            };
+            schedules.push(
+                new Promise(async (resolve) => {
 
-            if (isPending) {
-                const pendingSchedule = { ...schedule };
-                pendingSchedule.id = 'pending-' + pendingSchedule.id;
+                    const title = await LabelService.getInstance().getObjectText(ticket, true);
+                    const isPending = ticket.StateType === 'pending reminder';
+                    const bgColor = BrowserUtil.getUserColor(ticket.OwnerID);
+                    const schedule: any = {
+                        id: ticket.TicketID,
+                        calendarId: ticket.OwnerID,
+                        title,
+                        category: 'time',
+                        raw: ticket,
+                        borderColor: bgColor,
+                    };
 
-                const pendingDate = new Date(ticket.PendingTime);
-                if (!isNaN(pendingDate.getTime())) {
-                    pendingSchedule.start = pendingDate;
-                    const endDate = new Date(pendingDate);
-                    endDate.setHours(endDate.getHours() + 1);
+                    if (isPending) {
+                        const pendingSchedule = { ...schedule };
+                        pendingSchedule.id = 'pending-' + pendingSchedule.id;
 
-                    pendingSchedule.end = pendingDate;
-                    schedules.push(pendingSchedule);
-                }
-            }
+                        const pendingDate = new Date(ticket.PendingTime);
+                        if (!isNaN(pendingDate.getTime())) {
+                            pendingSchedule.start = pendingDate;
+                            const endDate = new Date(pendingDate);
+                            endDate.setHours(endDate.getHours() + 1);
 
-            if (await this.setScheduleDates(ticket, schedule)) {
-                schedules.push(schedule);
-            }
+                            pendingSchedule.end = pendingDate;
+                            schedules.push(pendingSchedule);
+                        }
+                    }
+
+                    if (await this.setScheduleDates(ticket, schedule)) {
+                        resolve(schedule);
+                    } else {
+                        resolve(null);
+                    }
+                })
+            );
         }
 
-        return schedules;
+        return Promise.all(schedules);
     }
 
     private async setScheduleDates(ticket: Ticket, schedule: any): Promise<boolean> {
