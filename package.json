@@ -122,7 +122,7 @@
         "gulp-header-license": "1.0.12",
         "gulp-less": "5.0.0",
         "gulp-sourcemaps": "^3.0.0",
-        "gulp-typescript": "^6.0.0-alpha.1",
+        "gulp-typescript": "6.0.0-alpha.1",
         "license-checker": "^25.0.1",
         "mocha": "^9.0.3",
         "mocha-junit-reporter": "2.0.0",
