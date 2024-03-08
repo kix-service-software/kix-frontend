@@ -102,7 +102,7 @@ export class TicketSearchFormManager extends SearchFormManager {
                     operations = SearchDefinition.getDateTimeOperators();
                     break;
                 case SearchProperty.FULLTEXT:
-                    operations = [SearchOperator.CONTAINS];
+                    operations = [SearchOperator.LIKE];
                     break;
                 default:
                     operations = await super.getOperations(property);

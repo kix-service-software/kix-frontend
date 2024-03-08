@@ -129,7 +129,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
         const dateTimeOperators = SearchDefinition.getDateTimeOperators();
 
         if (property === SearchProperty.FULLTEXT) {
-            operations = [SearchOperator.CONTAINS];
+            operations = [SearchOperator.LIKE];
         } else if (property === ConfigItemProperty.NAME || property === VersionProperty.NUMBER) {
             operations = stringOperators;
         } else if (property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH) {
