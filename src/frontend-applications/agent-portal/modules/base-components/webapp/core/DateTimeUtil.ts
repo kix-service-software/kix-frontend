@@ -271,7 +271,7 @@ export class DateTimeUtil {
     }
 
     public static calculateRelativeDate(value: string): string {
-        const parts = value.split(/(\d+)/);
+        const parts = value?.split(/(\d+)/) || [];
         if (value && parts.length === 3) {
             value = DateTimeUtil.calculateDate(Number(parts[1]), parts[2].toString());
         }
