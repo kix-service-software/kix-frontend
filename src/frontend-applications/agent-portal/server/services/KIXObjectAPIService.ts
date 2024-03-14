@@ -516,9 +516,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                         (c.operator === SearchOperator.IN || c.operator === SearchOperator.NOT_IN)
                         && Array.isArray(c.value)
                     ) {
-                        result = c.value.some((v) => v === '' || isNaN(Number(v)));
+                        result = c.value.some((v) => {
+                            return !v?.toString().match(/(<|&lt;)(TR_|NT_)?KIX_.+?(>|&gt;)/g)
+                                && (v === '' || isNaN(Number(v)));
+                        });
                     } else {
-                        result = c.type === FilterDataType.NUMERIC && (c.value === '' || isNaN(Number(c.value)));
+                        result = c.type === FilterDataType.NUMERIC
+                            && !c.value?.toString().match(/(<|&lt;)(TR_|NT_)?KIX_.+?(>|&gt;)/g)
+                            && (c.value === '' || isNaN(Number(c.value)));
                     }
                 }
                 return result;
