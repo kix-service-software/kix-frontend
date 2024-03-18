@@ -28,7 +28,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async load(): Promise<TreeNode[]> {
-        const bookmarks = await SearchService.getInstance().getSearchBookmarks();
+        const bookmarks = await SearchService.getInstance().getSearchBookmarks(false, true);
         const nodes = bookmarks.map((b) => new TreeNode(b.actionData.id, b.title, b.icon));
 
         const context = ContextService.getInstance().getActiveContext<SearchContext>();
@@ -60,6 +60,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.name = event && event.target && event.target.value !== '' ? event.target.value : null;
     }
 
+    public shareChanged(event: any): void {
+        this.state.share = event.target.checked;
+    }
+
     public async keyPressed(event: any): Promise<void> {
         if (event.key === 'Enter') {
             this.closeOverlay(true);
@@ -79,7 +83,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.nameInvalid = false;
 
                 const context = ContextService.getInstance().getActiveContext<SearchContext>();
-                await context?.saveCache(this.state.name);
+                await context?.saveCache(this.state.name, this.state.share);
                 BrowserUtil.openSuccessOverlay('Translatable#Search successfully saved.');
 
                 EventService.getInstance().publish(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, context);
