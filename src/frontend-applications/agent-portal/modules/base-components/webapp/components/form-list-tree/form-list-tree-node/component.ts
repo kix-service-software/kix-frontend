@@ -53,7 +53,7 @@ class TreeNodeComponent {
 
     public getLabel(): string {
         let title = this.state.node.label;
-        if (this.state.node.properties) {
+        if (this.state.node?.properties?.length) {
             const values = this.state.node.properties.map((prop) => prop.value);
             title += ' (' + values.join('|') + ')';
         }

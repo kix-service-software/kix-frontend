@@ -39,7 +39,7 @@ export class SearchSocketClient extends SocketClient {
         super('search');
     }
 
-    public async saveSearch(search: SearchCache): Promise<void> {
+    public async saveSearch(search: SearchCache, share?: boolean): Promise<void> {
         this.checkSocketConnection();
 
         const socketTimeout = ClientStorageService.getSocketTimeout();
@@ -47,7 +47,7 @@ export class SearchSocketClient extends SocketClient {
             const requestId = IdService.generateDateBasedId();
 
             const request = new SaveSearchRequest(
-                requestId, ClientStorageService.getClientRequestId(), search
+                requestId, ClientStorageService.getClientRequestId(), search, share
             );
 
             const timeout = window.setTimeout(() => {
@@ -74,7 +74,13 @@ export class SearchSocketClient extends SocketClient {
         });
     }
 
-    public async loadSearch(): Promise<SearchCache[]> {
+    public async loadAllSearches(): Promise<SearchCache[]> {
+        const searches = await this.loadSearches().catch(() => []) || [];
+        const sharedSearches = await this.loadSharedSearches().catch(() => []) || [];
+        return [...searches, ...sharedSearches];
+    }
+
+    public async loadSearches(): Promise<SearchCache[]> {
         this.checkSocketConnection();
 
         const socketTimeout = ClientStorageService.getSocketTimeout();
@@ -111,6 +117,40 @@ export class SearchSocketClient extends SocketClient {
             };
             this.socket.emit(
                 SearchEvent.LOAD_SEARCH, request
+            );
+        });
+    }
+
+    public async loadSharedSearches(): Promise<SearchCache[]> {
+        this.checkSocketConnection();
+
+        return new Promise<SearchCache[]>((resolve, reject) => {
+
+            const requestId = IdService.generateDateBasedId('search-');
+
+            this.socket.on(SearchEvent.SHARED_SEARCHES_LOADED, (result: LoadSearchResponse) => {
+                if (result.requestId === requestId) {
+                    const searches: SearchCache[] = [];
+                    if (Array.isArray(result.search)) {
+                        result.search.forEach((s) => searches.push(SearchCache.create(s)));
+                    }
+                    resolve(searches);
+                }
+            });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            const request: ISocketRequest = {
+                clientRequestId: ClientStorageService.getClientRequestId(),
+                requestId
+            };
+            this.socket.emit(
+                SearchEvent.LOAD_SHARED_SEARCHES, request
             );
         });
     }

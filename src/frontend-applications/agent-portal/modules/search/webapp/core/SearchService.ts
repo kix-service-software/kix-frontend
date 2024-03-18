@@ -42,6 +42,8 @@ import { StringContent } from '../../../base-components/webapp/core/StringConten
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
+import { UserLabelProvider } from '../../../user/webapp/core/UserLabelProvider';
 
 export class SearchService {
 
@@ -147,7 +149,7 @@ export class SearchService {
     }
 
     public async searchObjectsFromSearchId(id: string): Promise<KIXObject[]> {
-        const search = await SearchSocketClient.getInstance().loadSearch();
+        const search = await SearchSocketClient.getInstance().loadSearches();
         const searchCache = search?.find((s) => s.id === id);
         return this.searchObjects(searchCache);
     }
@@ -439,12 +441,26 @@ export class SearchService {
         }
     }
 
-    public async getSearchBookmarks(publish?: boolean): Promise<Bookmark[]> {
-        const search = await SearchSocketClient.getInstance().loadSearch();
-        search.sort((s1, s2) => SortUtil.compareString(s1.name, s2.name));
-        const bookmarks = search.map((s) => new Bookmark(
-            s.name, this.getSearchIcon(s.objectType), 'load-search-action', { id: s.id, name: s.name })
-        );
+    public async getSearchBookmarks(publish?: boolean, userOnly?: boolean): Promise<Bookmark[]> {
+        let searches = await SearchSocketClient.getInstance().loadAllSearches() || [];
+
+        searches.sort((s1, s2) => SortUtil.compareString(s1.name, s2.name));
+
+        if (userOnly) {
+            const user = await AgentSocketClient.getInstance().getCurrentUser();
+            searches = searches.filter((s) => !s.userId || s.userId === user.UserID);
+        }
+
+        const bookmarks = searches.map((s) => {
+            let searchDisplayText = s.name;
+            if (s.userDisplayText) {
+                searchDisplayText = `(${s.userDisplayText}) - ${s.name}`;
+            }
+            return new Bookmark(
+                searchDisplayText, this.getSearchIcon(s.objectType), 'load-search-action', { id: s.id, name: s.name }, [],
+                s.userId ? 'Translatable#Shared Search' : 'Translatable#Searches'
+            );
+        });
 
         if (publish) {
             BookmarkService.getInstance().publishBookmarks('search', bookmarks);
@@ -473,7 +489,7 @@ export class SearchService {
         id?: string, name?: string, cache?: SearchCache, context?: SearchContext, setSearchContext?: boolean,
         additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean]
     ): Promise<KIXObject[]> {
-        const search = await SearchSocketClient.getInstance().loadSearch();
+        const search = await SearchSocketClient.getInstance().loadAllSearches();
         let searchCache = cache || search.find((s) => s.id === id);
         if (!searchCache && name) {
             searchCache = search.find((s) => s.name === name);
@@ -510,7 +526,7 @@ export class SearchService {
     }
 
     public async loadSearchCache(id: string): Promise<SearchCache> {
-        const search = await SearchSocketClient.getInstance().loadSearch();
+        const search = await SearchSocketClient.getInstance().loadSearches();
         let searchCache = search.find((s) => s.id === id);
         if (searchCache) {
             searchCache = SearchCache.create(searchCache);
@@ -519,8 +535,8 @@ export class SearchService {
         return searchCache;
     }
 
-    public async createTableWidget(id: string, name: string): Promise<ConfiguredWidget> {
-        const search = await SearchSocketClient.getInstance().loadSearch();
+    public async createSearchTableWidget(id: string, name: string): Promise<ConfiguredWidget> {
+        const search = await SearchSocketClient.getInstance().loadAllSearches();
         const searchCache = search.find((s) => s.id === id);
 
         let widget: ConfiguredWidget;

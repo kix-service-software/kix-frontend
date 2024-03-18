@@ -13,6 +13,7 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { SaveSearchAction, DeleteSearchAction, LoadSearchAction } from './actions';
 import { SearchService } from './SearchService';
+import { SharedSearchEventHandler } from './SharedSearchEventHandler';
 
 export class UIModule implements IUIModule {
 
@@ -21,7 +22,7 @@ export class UIModule implements IUIModule {
     public name: string = 'SearchUIModule';
 
     public async register(): Promise<void> {
-        return;
+        SharedSearchEventHandler.getInstance();
     }
 
     public async registerExtensions(): Promise<void> {

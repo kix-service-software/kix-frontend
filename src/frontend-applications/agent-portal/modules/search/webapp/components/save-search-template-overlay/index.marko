@@ -7,53 +7,72 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.form.search-template-form>
-    <div.form-field.show-object() title=state.translations['Translatable#Search']>
-        <div.field-label>
-            <span.label-text>
-                <translation-string pattern='Translatable#Search'/>
-            </span>
+<form>
+    <div class="row">
+        <div class="mb-3">
+            <label for="search-select" class="form-label">
+                <translation-string pattern="Translatable#Search"/>
+            </label>
+            <form-list
+                placeholder="Translatable#Save new search"
+                loadNodes=state.loadNodes
+                on-nodesChanged("nodesChanged")
+            />
         </div>
-        <div.field-icon/>
-        <div.field-input>
-            <form-list placeholder='Translatable#Save new search' loadNodes=state.loadNodes on-nodesChanged('nodesChanged')/>
-        </div>
-    </div>
-    <div.form-field.show-object() title=state.translations['Translatable#Title']>
-        <div.field-label>
-            <span.label-text>
-                <translation-string pattern='Translatable#Title'/>
-            </span>
-        </div>
-        <div.field-icon/>
-        <div.field-input>
-            <input.input-style
-                class={
-                    invalid: state.nameInvalid
-                }
-                type='text'
+        <div class="mb-3">
+            <label for="search-select" class="form-label">
+                <translation-string pattern="Translatable#Title"/>
+            </label>
+            <input
+                class=[
+                    {
+                        "is-invalid": state.nameInvalid,
+                    },
+                    "form-control",
+                ]
+                type="text"
                 value=state.name
-                placeholder=state.translations['Translatable#Search Title']
-                on-input('nameChanged')
-                on-keydown('keyPressed')
-                on-click('inputClicked')/>
+                placeholder=(state.translations["Translatable#Search Title"])
+                on-input("nameChanged")
+                on-keydown("keyPressed")
+                on-click("inputClicked")
+            >
         </div>
     </div>
-    <translation-string pattern='Translatable#Find this saved search within the Dropdown Bookmarks, located in the header menu right besides the New-button'/>
-    <div.overlay-buttons>
-        <button.kix-button.cancel-button
-            type='button'
-            on-click('closeOverlay', false)
-            title=state.translations['Translatable#Cancel']>
-            <span.kix-icon-close/>
-            <translation-string pattern='Translatable#Cancel'/>
+    <div class="form-check form-switch">
+        <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            value=""
+            id="share-search"
+            checked=state.share
+            on-change("shareChanged")
+        >
+        <label class="form-check-label" for="share-search">
+            <translation-string pattern="Translatable#Share_Search_Template"/>
+        </label>
+        <p/>
+    </div>
+    <translation-string pattern="Translatable#Find this saved search within the Dropdown Bookmarks, located in the header menu right besides the New-button"/>
+    <div class="row p-0 m-0 mt-3">
+        <button
+            type="button"
+            on-click("closeOverlay", false)
+            title=(state.translations["Translatable#Cancel"])
+            class="kix-button cancel-button me-3"
+        >
+            <span class="kix-icon-close"/>
+            <translation-string pattern="Translatable#Cancel"/>
         </button>
-        <button.kix-button.submit-button
-            type='button'
-            on-click('closeOverlay', true)
-            title=state.translations['Translatable#Save']>
-            <span.kix-icon-check/>
-            <translation-string pattern='Translatable#Save'/>
+        <button
+            type="button"
+            on-click("closeOverlay", true)
+            title=(state.translations["Translatable#Save"])
+            class="kix-button submit-button"
+        >
+            <span class="kix-icon-check"/>
+            <translation-string pattern="Translatable#Save"/>
         </button>
     </div>
-</div>
+</form>

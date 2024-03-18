@@ -117,11 +117,26 @@ class Component {
     private async loadSearchTemplates(): Promise<void> {
         const searchBookmarks = await SearchService.getInstance().getSearchBookmarks();
 
-        const nodes = searchBookmarks.map((b) => new TreeNode(b.actionData?.id, b.title, b.icon));
+        const groupNodes: TreeNode[] = [];
+        for (const b of searchBookmarks) {
+            let groupNode = groupNodes.find((gn) => gn.id === b.group);
+            if (!groupNode) {
+                const label = await TranslationService.translate(b.group);
+                groupNode = new TreeNode(b.group, label, 'kix-icon-folder');
+                groupNode.expandOnClick = true;
+                groupNode.expanded = true;
+                groupNode.selectable = false;
+                groupNodes.push(groupNode);
+            }
+
+            const title = await TranslationService.translate(b.title);
+            const node = new TreeNode(b.actionData?.id, title, b.icon);
+            groupNode.children.push(node);
+        }
 
         this.searchBookmarksTreeHandler = TreeService.getInstance().getTreeHandler(this.state.searchBookmarkTreeId);
         if (this.searchBookmarksTreeHandler) {
-            this.searchBookmarksTreeHandler.setTree(nodes, null, true);
+            this.searchBookmarksTreeHandler.setTree(groupNodes, null, true);
         }
     }
 
@@ -190,7 +205,7 @@ class Component {
         if (this.searchBookmarksTreeHandler) {
             const nodes = this.searchBookmarksTreeHandler.getSelectedNodes();
             if (nodes.length) {
-                const widget = await SearchService.getInstance().createTableWidget(nodes[0].id, nodes[0].label);
+                const widget = await SearchService.getInstance().createSearchTableWidget(nodes[0].id, nodes[0].label);
                 if (widget) {
                     this.state.widgets.push(widget);
                     this.modifiedWidgets.push(widget);

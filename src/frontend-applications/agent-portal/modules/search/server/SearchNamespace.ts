@@ -25,6 +25,9 @@ import * as cookie from 'cookie';
 import { IdService } from '../../../model/IdService';
 import { SearchCache } from '../model/SearchCache';
 import { Socket } from 'socket.io';
+import { ClientNotificationService } from '../../../server/services/ClientNotificationService';
+import { BackendNotification } from '../../../model/BackendNotification';
+import { ObjectUpdatedEvent } from '../../../model/ObjectUpdatedEvent';
 
 export class SearchNamespace extends SocketNameSpace {
 
@@ -48,6 +51,7 @@ export class SearchNamespace extends SocketNameSpace {
     protected registerEvents(client: Socket): void {
         this.registerEventHandler(client, SearchEvent.SAVE_SEARCH, this.saveSearch.bind(this));
         this.registerEventHandler(client, SearchEvent.LOAD_SEARCH, this.loadSearch.bind(this));
+        this.registerEventHandler(client, SearchEvent.LOAD_SHARED_SEARCHES, this.loadSharedSearch.bind(this));
         this.registerEventHandler(client, SearchEvent.DELETE_SEARCH, this.deleteSearch.bind(this));
     }
 
@@ -56,7 +60,7 @@ export class SearchNamespace extends SocketNameSpace {
         const token = parsedCookie ? parsedCookie.token : '';
 
         if (data.search) {
-            await this.saveUserSearch(data.search, token);
+            await this.saveUserSearch(data.search, data.share, token);
             return new SocketResponse(SearchEvent.SAVE_SEARCH_FINISHED, { requestId: data.requestId });
         } else {
             return new SocketResponse(
@@ -65,27 +69,67 @@ export class SearchNamespace extends SocketNameSpace {
         }
     }
 
-    private async saveUserSearch(search: SearchCache, token: string): Promise<void> {
+    private async saveUserSearch(search: SearchCache, share: boolean, token: string): Promise<void> {
         const user = await UserService.getInstance().getUserByToken(token)
             .catch((): User => null);
 
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + 'searchprofiles';
-
-        const searchPreference = user.Preferences.find((p) => p.ID === preferenceId);
-        let searchConfig = {};
-
-        if (searchPreference) {
-            searchConfig = JSON.parse(searchPreference.Value);
-            delete searchConfig[search.id];
-        }
         if (!search.id) {
             search.id = IdService.generateDateBasedId('SearchCache');
         }
-        searchConfig[search.id] = search;
 
-        const value = JSON.stringify(searchConfig);
-        await UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
+        delete search['originalCriteria'];
+
+        if (share) {
+            this.shareSearchCache(search, user);
+        } else {
+            this.deleteSharedSearch(search.id);
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + 'searchprofiles';
+
+            const searchPreference = user.Preferences.find((p) => p.ID === preferenceId);
+            let searchConfig = {};
+
+            if (searchPreference) {
+                searchConfig = JSON.parse(searchPreference.Value);
+                delete searchConfig[search.id];
+            }
+
+            searchConfig[search.id] = search;
+
+            const value = JSON.stringify(searchConfig);
+            await UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
+        }
+
+        const event = new BackendNotification();
+        event.ObjectID = 'SharedSearch';
+        event.Namespace = 'Search.Shared';
+        event.Event = ObjectUpdatedEvent.UPDATE;
+        ClientNotificationService.getInstance().queueNotifications([event]);
+    }
+
+    private shareSearchCache(search: SearchCache, user: User): void {
+        const fileName = 'shared_searches.json';
+        const sharedSearches: SearchCache[] = ConfigurationService.getInstance().getDataFileContent(
+            fileName, []
+        ) || [];
+
+        const searchIndex = sharedSearches.findIndex((ss) => ss.id === search.id);
+        if (searchIndex !== -1) {
+            const existingSearch = sharedSearches[searchIndex];
+
+            if (existingSearch?.userId !== user.UserID) {
+                // do not overwrite a search from another user
+                return;
+            }
+
+            sharedSearches.splice(searchIndex, 1);
+        }
+
+        search.userId = user.UserID;
+        search.userDisplayText = user.UserLogin;
+        sharedSearches.push(search);
+
+        ConfigurationService.getInstance().saveDataFileContent(fileName, sharedSearches);
     }
 
     private async loadSearch(data: ISocketRequest, client: Socket): Promise<SocketResponse> {
@@ -93,35 +137,46 @@ export class SearchNamespace extends SocketNameSpace {
         const token = parsedCookie ? parsedCookie.token : '';
 
         const user = await UserService.getInstance().getUserByToken(token);
-        if (user) {
-            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-            const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + 'searchprofiles';
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+        const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + 'searchprofiles';
 
-            const searchPreference = user.Preferences.find((p) => p.ID === preferenceId);
+        const searchPreference = user?.Preferences?.find((p) => p.ID === preferenceId);
 
-            const searchConfigs = [];
-            if (searchPreference) {
-                const search = JSON.parse(searchPreference.Value);
-                const deleteSearches: string[] = [];
-                for (const s in search) {
-                    if (search[s]) {
-                        if (!search[s].id) {
-                            search[s].id = IdService.generateDateBasedId('SearchCache');
-                            deleteSearches.push(s);
-                            await this.saveUserSearch(search[s], token);
-                        }
-                        searchConfigs.push(search[s]);
+        const searchConfigs = [];
+        if (searchPreference) {
+            const search = JSON.parse(searchPreference.Value);
+            const deleteSearches: string[] = [];
+            for (const s in search) {
+                if (search[s]) {
+                    if (!search[s].id) {
+                        search[s].id = IdService.generateDateBasedId('SearchCache');
+                        deleteSearches.push(s);
+                        await this.saveUserSearch(search[s], false, token);
                     }
-                }
-
-                for (const s of deleteSearches) {
-                    await this.deleteUserSearch(s, token);
+                    searchConfigs.push(search[s]);
                 }
             }
 
-            const response = new LoadSearchResponse(data.requestId, searchConfigs);
-            return new SocketResponse(SearchEvent.SEARCH_LOADED, response);
+            for (const s of deleteSearches) {
+                await this.deleteUserSearch(s, token);
+            }
         }
+
+        const response = new LoadSearchResponse(data.requestId, searchConfigs);
+        return new SocketResponse(SearchEvent.SEARCH_LOADED, response);
+    }
+
+    private async loadSharedSearch(data: ISocketRequest, client: Socket): Promise<SocketResponse> {
+        const response = new LoadSearchResponse(data.requestId, this.getSharedSearces());
+        return new SocketResponse(SearchEvent.SHARED_SEARCHES_LOADED, response);
+    }
+
+    private getSharedSearces(): SearchCache[] {
+        const fileName = 'shared_searches.json';
+        const sharedSearches: SearchCache[] = ConfigurationService.getInstance().getDataFileContent(
+            fileName, []
+        ) || [];
+        return sharedSearches;
     }
 
     private async deleteSearch(data: DeleteSearchRequest, client: Socket): Promise<SocketResponse> {
@@ -129,6 +184,7 @@ export class SearchNamespace extends SocketNameSpace {
         const token = parsedCookie ? parsedCookie.token : '';
 
         await this.deleteUserSearch(data.id, token);
+        this.deleteSharedSearch(data.id);
 
         const response: ISocketResponse = { requestId: data.requestId };
         return new SocketResponse(SearchEvent.SEARCH_DELETED, response);
@@ -152,5 +208,19 @@ export class SearchNamespace extends SocketNameSpace {
                 }
             }
         }
+    }
+
+    private deleteSharedSearch(id: string): void {
+        const fileName = 'shared_searches.json';
+        const sharedSearches: SearchCache[] = ConfigurationService.getInstance().getDataFileContent(
+            fileName, []
+        ) || [];
+
+        const searchIndex = sharedSearches.findIndex((ss) => ss.id === id);
+        if (searchIndex !== -1) {
+            sharedSearches.splice(searchIndex, 1);
+        }
+
+        ConfigurationService.getInstance().saveDataFileContent(fileName, sharedSearches);
     }
 }
