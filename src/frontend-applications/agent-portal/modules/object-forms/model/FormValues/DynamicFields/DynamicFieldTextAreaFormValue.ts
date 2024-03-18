@@ -32,15 +32,14 @@ export class DynamicFieldTextAreaFormValue extends ObjectFormValue<string> {
         const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
         const config = dynamicField?.Config;
 
-        const regexList = config?.RegExList || [];
-        this.regExList = regexList.map((ri) => {
-            return { regEx: ri.Value, errorMessage: ri.ErrorMessage };
-        });
+        this.regExList = config?.RegExList?.map(
+            (ri) => { return { regEx: ri.Value, errorMessage: ri.ErrorMessage }; }
+        ) || [];
 
-        this.value = this.object[this.property];
         this.setValueByDefault(config);
 
         await super.initFormValue();
+        this.value = this.object[this.property];
     }
 
     private setValueByDefault(config: any): void {

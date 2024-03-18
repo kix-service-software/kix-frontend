@@ -30,8 +30,6 @@ import { ObjectIcon } from '../../icon/model/ObjectIcon';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
 import { SearchProperty } from '../../search/model/SearchProperty';
-import { CacheService } from '../../../server/services/cache';
-import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
@@ -188,7 +186,7 @@ export class ContactAPIService extends KIXObjectAPIService {
     ): Promise<string | number> {
         let userId;
         const userParameter = this.getUserParameters(parameter);
-        if (userParameter.length) {
+        if (userParameter.length > 1) {
             const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
             userId = await this.createOrUpdateUser(token, clientRequestId, userParameter, assignedUserId).catch(
                 (error: Error) => {
