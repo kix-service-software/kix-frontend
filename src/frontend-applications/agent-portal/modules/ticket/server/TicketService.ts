@@ -401,17 +401,13 @@ export class TicketAPIService extends KIXObjectAPIService {
 
         let articleParameter: Array<[string, any]>;
         if (channelId && subject && body) {
-            let from = this.getParameterValue(parameter, ArticleProperty.FROM);
-            if (!from) {
-                const user = await UserService.getInstance().getUserByToken(token);
-                from = user.Contact ? user.Contact.Email : null;
-            }
 
             let senderType = this.getParameterValue(parameter, ArticleProperty.SENDER_TYPE_ID);
             if (!senderType) {
                 senderType = 1;
             }
 
+            let from;
             let to = this.getParameterValue(parameter, ArticleProperty.TO);
             if (!to && contactId && senderType !== 3) {
                 if (!isNaN(contactId)) {
@@ -428,11 +424,14 @@ export class TicketAPIService extends KIXObjectAPIService {
                 }
 
                 // switch To and From with external sendertype by channel note on new ticket (= incomming call)
-                // - so ticket "is" from customer
+                // - so ticket "is" from customer to agent
                 if (!ticketId && channelId === 1) {
-                    const oldFrom = from;
                     from = to;
-                    to = oldFrom;
+                    const user = await UserService.getInstance().getUserByToken(token);
+                    to = user.Contact ? user.Contact.Email : '';
+                    if (!to.match(/.+\s<.+>/) && user.Contact) {
+                        to = `"${user.Contact.Firstname} ${user.Contact.Lastname}" <${to}>`;
+                    }
                     senderType = 3;
                 }
             }
@@ -597,16 +596,6 @@ export class TicketAPIService extends KIXObjectAPIService {
     }
 
     private async prepareArticle(token: string, ticket: Ticket, article: Article): Promise<void> {
-        if (!article.From) {
-            const user = await UserService.getInstance().getUserByToken(token);
-            if (user.Contact) {
-                article.From = user.Contact.Email;
-                if (!article.From.match(/.+\s<.+>/)) {
-                    article.From = `"${user.Contact.Firstname} ${user.Contact.Lastname}" <${article.From}>`;
-                }
-            }
-        }
-
         if (!article.SenderTypeID) {
             article.SenderTypeID = 1;
         }
@@ -632,9 +621,12 @@ export class TicketAPIService extends KIXObjectAPIService {
             // switch To and From with external sendertype by channel note on new ticket (= incomming call)
             // - so ticket "is" from customer
             if (!ticket.TicketID && Number(article.ChannelID) === 1) {
-                const oldFrom = article.From;
                 article.From = article.To;
-                article.To = oldFrom;
+                const user = await UserService.getInstance().getUserByToken(token);
+                article.To = user.Contact ? user.Contact.Email : '';
+                if (!article.To.match(/.+\s<.+>/) && user.Contact) {
+                    article.To = `"${user.Contact.Firstname} ${user.Contact.Lastname}" <${article.To}>`;
+                }
                 article.SenderTypeID = 3;
             }
         }
