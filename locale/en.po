@@ -2492,6 +2492,9 @@ msgstr ""
 msgid "Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint"
 msgstr ""
 
+msgid "Helptext_PersonalSettings_article_from_format"
+msgstr "Format of the real name part of a communication sent in channel "e-mail". The actual, technical From-address will always be the teams mail address."
+
 msgid "Helptext_PersonalSettings_article_sort_order_Hint"
 msgstr ""
 

@@ -14,7 +14,6 @@ import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
-import { FormValueProperty } from '../../../../../object-forms/model/FormValueProperty';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
@@ -25,7 +24,6 @@ import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { Channel } from '../../../../model/Channel';
 import { ArticleAttachmentFormValue } from './ArticleAttachmentFormValue';
 import { CustomerVisibleFormValue } from './CustomerVisibleFormValue';
-import { FromObjectFormValue } from './FromObjectFormValue';
 import { IncomingTimeFormValue } from './IncomingTimeFormValue';
 import { RecipientFormValue } from './RecipientFormValue';
 
@@ -118,9 +116,6 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             case ArticleProperty.BCC:
                 formValue = new RecipientFormValue(property, article, this.objectValueMapper, this);
                 break;
-            case ArticleProperty.FROM:
-                formValue = new FromObjectFormValue(property, article, this.objectValueMapper, this);
-                break;
             case ArticleProperty.CUSTOMER_VISIBLE:
                 formValue = new CustomerVisibleFormValue(property, article, this.objectValueMapper, this);
                 break;
@@ -165,7 +160,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     protected async setChannelFields(channelId: number): Promise<void> {
         const allFields = [
             ArticleProperty.CUSTOMER_VISIBLE,
-            ArticleProperty.FROM, ArticleProperty.TO, ArticleProperty.CC, ArticleProperty.BCC,
+            ArticleProperty.TO, ArticleProperty.CC, ArticleProperty.BCC,
             ArticleProperty.SUBJECT, ArticleProperty.BODY, ArticleProperty.ATTACHMENTS
         ];
         if (channelId) {
@@ -182,7 +177,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
             const mailFields = [
                 ArticleProperty.CUSTOMER_VISIBLE,
-                ArticleProperty.FROM, ArticleProperty.CC, ArticleProperty.BCC,
+                ArticleProperty.CC, ArticleProperty.BCC,
                 ArticleProperty.SUBJECT, ArticleProperty.BODY, ArticleProperty.ATTACHMENTS,
                 ArticleProperty.TO
             ];
@@ -232,7 +227,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 }
 
                 // make sure relevant properties are always required
-                if (formValue.property === ArticleProperty.FROM || formValue.property === ArticleProperty.TO) {
+                if (formValue.property === ArticleProperty.TO) {
                     formValue.required = channelName === 'email' && this.visible;
                 }
 

@@ -29,6 +29,8 @@ export enum PersonalSettingsProperty {
 
     ARTICLE_SORT_ORDER = 'ArticleSortOrder',
 
-    MESSAGE_COMPACT_VIEW = 'MessageCompactView'
+    MESSAGE_COMPACT_VIEW = 'MessageCompactView',
+
+    ARTICLE_FROM_FORMAT = 'ArticleFromFormat'
 
 }
