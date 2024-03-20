@@ -18,8 +18,10 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { SortUtil } from '../../../../model/SortUtil';
 import { ObjectReferenceUtil } from '../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { IKIXObjectService } from '../../../base-components/webapp/core/IKIXObjectService';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { TreeHandler, TreeNode, TreeService, TreeUtil } from '../../../base-components/webapp/core/tree';
@@ -450,6 +452,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 ? Array.isArray(this.value) ? this.value : [this.value]
                 : null;
 
+            nodes = await this.prepareOverlayIcon(nodes, this.property);
             if (Array.isArray(value)) {
                 for (const v of value) {
                     const node = TreeUtil.findNode(nodes, v);
@@ -574,6 +577,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             this.treeHandler?.selectNone(true);
         }
 
+        selectedNodes = await this.prepareOverlayIcon(selectedNodes, this.property);
         this.selectedNodes = selectedNodes.sort((a, b) => a.id - b.id);
     }
 
@@ -684,5 +688,24 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     public async update(): Promise<void> {
         await this.loadSelectableValues();
         await this.loadSelectedValues();
+    }
+
+    private async prepareOverlayIcon(nodes: TreeNode[], property: string): Promise<TreeNode[]> {
+        if (nodes && nodes.length) {
+            const context = ContextService.getInstance().getActiveContext();
+            const form = context?.getFormManager()?.getForm();
+            if (form?.objectType === KIXObjectType.TICKET) {
+                for (const node of nodes) {
+                    const overlay = await LabelService.getInstance().getOverlayIconForType(
+                        form.objectType, node.id, property
+                    );
+                    if (overlay) {
+                        node.overlay = overlay;
+                    }
+                }
+            }
+        }
+
+        return nodes;
     }
 }

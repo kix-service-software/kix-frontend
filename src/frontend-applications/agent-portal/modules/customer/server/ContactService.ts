@@ -243,6 +243,8 @@ export class ContactAPIService extends KIXObjectAPIService {
                 p[0] === PersonalSettingsProperty.MY_QUEUES ||
                 p[0] === PersonalSettingsProperty.NOTIFICATIONS ||
                 p[0] === PersonalSettingsProperty.USER_LANGUAGE ||
+                p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_END ||
+                p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_START ||
                 p[0] === KIXObjectProperty.VALID_ID // use contact valid also as user valid
             );
         }

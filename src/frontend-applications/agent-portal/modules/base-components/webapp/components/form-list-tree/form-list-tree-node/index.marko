@@ -8,37 +8,76 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.node.visible)>
-    <li.tree-node
-        class={
+    <li
+        class=[
+            "tree-node",
+            {
                 active: state.node.selected,
                 "navigation-node": state.node.navigationNode,
                 "show-as-invalid": state.node.showAsInvalid,
-                "not-clickable": !state.node.selectable
-            }
+                "not-clickable": !state.node.selectable,
+            },
+        ]
         id=state.nodeId
-        key=state.nodeId>
-        <span.tree-icon>
+        key=state.nodeId
+    >
+        <span class="tree-icon">
             <if(component.hasChildren())>
-                <span id="tree-expand" class=(state.node.expanded ? "kix-icon-minus" : "kix-icon-plus-blank") on-click("toggleNode")/>
+                <span
+                    id="tree-expand"
+                    class=(
+                        state.node.expanded
+                            ? "kix-icon-minus"
+                            : "kix-icon-plus-blank"
+                    )
+                    on-click("toggleNode")
+                />
             </if>
         </span>
-        <div.node-value on-click("nodeClicked") title=component.getToolTip()>
-            <icon icon=state.node.icon showUnknown=true/>
-            <span.node-title class=(state.node.expanded ? "expanded" : "")>
-                ${state.node.label}<if(state.node.properties)>
-                    (<for|prop, index| of=state.node.properties>
-                        <if(index != 0)>|</if>
-                        <span title=prop.title class=(prop.cssClass ? prop.cssClass : "")>${prop.value}</span>
-                    </for>)
+        <div
+            on-click("nodeClicked")
+            title=component.getToolTip()
+            class="node-value"
+        >
+            <icon icon=(state.node.icon) showUnknown/>
+            <span class=["node-title", state.node.expanded ? "expanded" : ""]>
+                ${state.node.label}
+                <if(state.node.properties)>
+                    (
+                    <for|prop, index| of=(state.node.properties)>
+                        <if(index != 0)>
+                            |
+                        </if>
+                        <span
+                            title=prop.title
+                            class=(prop.cssClass ? prop.cssClass : "")
+                        >
+                            ${prop.value}
+                        </span>
+                    </for>
+                     )
                 </if>
             </span>
             <if(state.node.secondaryIcon)>
-                <icon icon=state.node.secondaryIcon/>
+                <icon icon=(state.node.secondaryIcon)/>
+            </if>
+            <if(state.node.overlay)>
+                <overlay-icon
+                    title=(state.node.overlay.Title)
+                    icon=(state.node.overlay.Icon)
+                    content=(state.node.overlay.Content)
+                    isHint=(state.node.overlay.IsHint)
+                    isCustom=(state.node.overlay.IsCustom)
+                    data={
+                        object: state.node.overlay.Data,
+                        properties: state.node.overlay.Data.Properties,
+                    }
+                />
             </if>
         </div>
         <if(state.node.expanded)>
-            <ul.form-list-tree>
-                <for|node| of=state.node.children>
+            <ul class="form-list-tree">
+                <for|node| of=(state.node.children)>
                     <form-list-tree-node node=node treeId=input.treeId/>
                 </for>
             </ul>

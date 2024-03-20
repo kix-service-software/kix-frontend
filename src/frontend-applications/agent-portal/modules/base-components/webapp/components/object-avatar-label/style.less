@@ -38,11 +38,29 @@
         align-self: start;
         max-height: 10rem;
         overflow: auto;
+        grid-row: 2;
+        grid-column: 2;
     }
 
     .user-avatar-description {
-        font-style: italic;
-        color: @secondary-0;
+        grid-column: 2;
+        grid-row: 1;
+        display: grid;
         align-self: end;
+        grid-template-columns: min-content auto;
+        grid-column-gap: 0.5rem;
+
+            .user-avatar-description-text {
+                grid-column: 1;
+                font-style: italic;
+                color: @secondary-0;
+            }
+
+            .overlay-icon {
+                grid-column: 2;
+                align-self: center;
+                justify-self: start;
+                color: @tertiary-1;
+            }
     }
 }

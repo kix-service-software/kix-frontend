@@ -7,11 +7,10 @@
  * --
  */
 
-.table-cell-content {
-    >.overlay-icon {
-        grid-column: 2;
-        justify-self: center;
-        align-self: center;
-        color: @tertiary-1;
-    }
+export enum OutOfOfficeProperty {
+
+    END = 'End',
+
+    START = 'Start',
+
 }

@@ -39,6 +39,7 @@ export class ObjectPropertyLabelComponent {
         if (this.object !== input.object) {
             this.object = input.object;
             this.prepareDisplayText();
+            this.prepareOverlayIcon();
         }
     }
 
@@ -110,6 +111,17 @@ export class ObjectPropertyLabelComponent {
     public getValueClasses(): string {
         const classes = LabelService.getInstance().getDisplayTextClasses(this.object, this.property);
         return classes ? classes.join(',') : '';
+    }
+
+    private async prepareOverlayIcon(): Promise<void> {
+        if (this.object && this.property) {
+            const overlay = await LabelService.getInstance().getOverlayIcon(
+                this.object, this.property, this.object[this.property]
+            );
+            if (overlay !== null) {
+                this.state.overlay = overlay;
+            }
+        }
     }
 
 }

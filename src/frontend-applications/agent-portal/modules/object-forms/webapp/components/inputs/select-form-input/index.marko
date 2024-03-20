@@ -31,6 +31,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <icon icon=node.icon withoutStyle class="me-2"/>
                      </if>
                      ${node.label}
+                     <if(node.overlay)>
+                        <overlay-icon
+                           title=(node.overlay.Title)
+                           icon=(node.overlay.Icon)
+                           content=(node.overlay.Content)
+                           isHint=(node.overlay.IsHint)
+                           isCustom=(node.overlay.IsCustom)
+                           data={
+                              object: node.overlay.Data,
+                              properties: node.overlay.Data.Properties,
+                           }
+                        />
+                     </if>
                      <if(!state.readonly)>
                         <i
                            on-click("removeValue", node)

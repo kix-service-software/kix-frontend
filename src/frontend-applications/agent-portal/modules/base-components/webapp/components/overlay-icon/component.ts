@@ -23,6 +23,7 @@ class Component {
     private state: ComponentState;
     private listenerId: string;
     private isHintOverlay: boolean;
+    private isCustomOverlay: boolean;
     private content: StringContent<any> | ComponentContent<any>;
     private instanceId: string;
     private title: string;
@@ -35,6 +36,7 @@ class Component {
 
     public onInput(input: any): void {
         this.isHintOverlay = input.isHint || false;
+        this.isCustomOverlay = input.isCustom || false;
         this.large = typeof input.large !== 'undefined' ? input.large : false;
         if (this.isHintOverlay) {
             this.content = new StringContent(input.content);
@@ -86,6 +88,9 @@ class Component {
         let classes = 'kix-icon-icircle';
         if (this.isHintOverlay) {
             classes = 'kix-icon-question hint-icon';
+        }
+        else if (this.isCustomOverlay) {
+            classes = this.icon + ' hint-icon';
         }
         return classes;
     }

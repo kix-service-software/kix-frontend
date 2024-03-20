@@ -8,6 +8,7 @@
  */
 
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { OverlayIcon } from '../../core/OverlayIcon';
 
 
 export class ComponentState {
@@ -17,7 +18,8 @@ export class ComponentState {
         public propertyName: string = '',
         public propertyIcon: string | ObjectIcon = null,
         public hasText: boolean = true,
-        public showLabel: boolean = true
+        public showLabel: boolean = true,
+        public overlay: OverlayIcon = null
     ) { }
 
 }

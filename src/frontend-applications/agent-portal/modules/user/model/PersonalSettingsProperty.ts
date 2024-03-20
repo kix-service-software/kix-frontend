@@ -31,6 +31,10 @@ export enum PersonalSettingsProperty {
 
     MESSAGE_COMPACT_VIEW = 'MessageCompactView',
 
+    OUT_OF_OFFICE_START = 'OutOfOfficeStart',
+
+    OUT_OF_OFFICE_END = 'OutOfOfficeEnd',
+
     ARTICLE_FROM_FORMAT = 'ArticleFromFormat'
 
 }

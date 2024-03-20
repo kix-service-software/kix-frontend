@@ -23,6 +23,9 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { OutOfOffice } from '../../model/OutOfOffice';
+import { OutOfOfficeProperty } from '../../model/OutOfOfficeProperty';
+import { OverlayIcon } from '../../../base-components/webapp/core/OverlayIcon';
 
 
 export class UserLabelProvider extends LabelProvider<User> {
@@ -30,9 +33,34 @@ export class UserLabelProvider extends LabelProvider<User> {
     public kixObjectType: KIXObjectType | string = KIXObjectType.USER;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof User || object?.KIXObjectType === this.kixObjectType;
+        return object instanceof User
+            || object?.KIXObjectType === this.kixObjectType
+            || object?.KIXObjectType === KIXObjectType.USER_PREFERENCE;
     }
 
+    public isLabelProviderForType(objectType: KIXObjectType | string): boolean {
+        return objectType === this.kixObjectType
+            || objectType === KIXObjectType.USER_PREFERENCE;
+    }
+
+    public getSupportedProperties(): string[] {
+        return [
+            UserProperty.USER_ID,
+            UserProperty.IS_AGENT,
+            UserProperty.IS_CUSTOMER,
+            UserProperty.USER_LOGIN,
+            UserProperty.USER_LAST_LOGIN,
+            UserProperty.USER_COMMENT,
+            UserProperty.USER_ACCESS,
+            UserProperty.USER_FULLNAME,
+            UserProperty.USER_VALID,
+            UserProperty.PREFERENCES,
+            UserProperty.CONTACT,
+            UserProperty.ROLE_IDS,
+            UserProperty.USER_FULLNAME,
+            UserProperty.USER_PASSWORD
+        ];
+    }
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
@@ -62,6 +90,12 @@ export class UserLabelProvider extends LabelProvider<User> {
                 break;
             case UserProperty.IS_CUSTOMER:
                 displayValue = 'Translatable#Customer Login';
+                break;
+            case OutOfOfficeProperty.START:
+                displayValue = 'Translatable#From';
+                break;
+            case OutOfOfficeProperty.END:
+                displayValue = 'Translatable#Till';
                 break;
             default:
                 if (this.isContactProperty(property)) {
@@ -164,6 +198,10 @@ export class UserLabelProvider extends LabelProvider<User> {
                 displayValue = userIsA.join(', ');
                 translatable = false;
                 break;
+            case OutOfOfficeProperty.START:
+            case OutOfOfficeProperty.END:
+                displayValue = await DateTimeUtil.getLocalDateString(user[property]);
+                break;
             default:
                 if (this.isContactProperty(property) || property === 'ContactID') {
                     let contact = user.Contact;
@@ -261,4 +299,53 @@ export class UserLabelProvider extends LabelProvider<User> {
         return icons;
     }
 
+    public async getOverlayIcon(user?: User, objectId?: number): Promise<OverlayIcon> {
+        let overlay = null;
+
+        if (!user && !isNaN(objectId)) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, [UserProperty.PREFERENCES]
+            );
+            const users = await KIXObjectService.loadObjects<User>(
+                KIXObjectType.USER, [objectId], loadingOptions, null, true, true, true
+            ).catch(() => [] as User[]);
+            user = users && users.length ? users[0] : null;
+        }
+
+        if (user?.Preferences?.length) {
+            const outOfOffice = await this.getOutOfOffice(user);
+            if (outOfOffice) {
+                const title = await TranslationService.translate(
+                    'Translatable#Out Of Office', undefined, undefined, false
+                );
+                overlay = new OverlayIcon(
+                    undefined, title, 'object-information',
+                    'fas fa-user-slash', outOfOffice, false, true
+                );
+            }
+        }
+        return overlay;
+    }
+    private async getOutOfOffice(object: User): Promise<OutOfOffice> {
+        let outOfOffice = null;
+
+        if (object && object?.Preferences?.length) {
+            const start = object.Preferences.find((p) => p.ObjectId === UserProperty.OUT_OF_OFFICE_START);
+            const end = object.Preferences.find((p) => p.ObjectId === UserProperty.OUT_OF_OFFICE_END);
+            if (
+                start?.Value
+                && end?.Value
+            ) {
+                if (
+                    DateTimeUtil.betweenDays(new Date(start.Value), new Date(end.Value))
+                ) {
+                    outOfOffice = new OutOfOffice(
+                        undefined, start?.Value, end?.Value
+                    );
+                    return outOfOffice;
+                }
+            }
+        }
+        return outOfOffice;
+    }
 }

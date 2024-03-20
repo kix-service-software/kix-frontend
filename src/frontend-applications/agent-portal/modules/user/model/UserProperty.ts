@@ -44,6 +44,10 @@ export enum UserProperty {
 
     USER_ACCESS = 'USER_ACCESS',
 
-    EXEC_GENERATE_TOKEN = 'ExecGenerateToken'
+    EXEC_GENERATE_TOKEN = 'ExecGenerateToken',
+
+    OUT_OF_OFFICE_START = 'OutOfOfficeStart',
+
+    OUT_OF_OFFICE_END = 'OutOfOfficeEnd'
 
 }
