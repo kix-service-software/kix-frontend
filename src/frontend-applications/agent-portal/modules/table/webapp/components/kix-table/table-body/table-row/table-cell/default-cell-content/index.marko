@@ -7,23 +7,42 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.table-cell-content
-    class={
-        "with-icons": state.showIcons,
-        "with-text": state.showText
-    }
+<div
+    class=[
+        "table-cell-content",
+        {
+            "with-icons": state.showIcons,
+            "with-text": state.showText,
+        },
+    ]
     style={
-        height: input.height
+        height: input.height,
     }
-    title=(state.cell.getValue() ? state.cell.getDisplayValue() : "")>
+    title=(state.cell.getValue() ? state.cell.getDisplayValue() : "")
+>
     <if(state.showIcons && state.cell && state.cell.getValue().displayIcons)>
         <span>
-            <for|icon| of=state.cell.getValue().displayIcons>
-                <icon icon=icon showUnknown=true/>
+            <for|icon| of=(state.cell.getValue().displayIcons)>
+                <icon icon=icon showUnknown/>
             </for>
         </span>
     </if>
     <if(state.showText && state.cell.getValue())>
-        <span.text.cell-display-text dir=(state.rtl ? 'rtl' : 'ltr')>${state.cell.getDisplayValue()}</span>
+        <span class="text cell-display-text" dir=(state.rtl ? "rtl" : "ltr")>
+            ${state.cell.getDisplayValue()}
+        </span>
+    </if>
+    <if((state.showText || state.showIcons) && state.cell && state.overlay)>
+        <overlay-icon
+            title=(state.overlay.Title)
+            icon=(state.overlay.Icon)
+            content=(state.overlay.Content)
+            isHint=(state.overlay.IsHint)
+            isCustom=(state.overlay.IsCustom)
+            data={
+                object: state.overlay.Data,
+                properties: state.overlay.Data.Properties,
+            }
+        />
     </if>
 </div>

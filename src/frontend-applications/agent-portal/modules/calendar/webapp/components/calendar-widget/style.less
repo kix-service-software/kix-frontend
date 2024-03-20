@@ -94,6 +94,9 @@
                 border-left: 1rem solid;
                 margin-bottom: @margin-small;
                 padding-left: @margin-small;
+                display: grid;
+                grid-template-columns: max-content auto;
+                grid-column-gap: 0.5rem;
 
                 &.inactive {
                     opacity: 0.5;
@@ -102,6 +105,13 @@
                 &:hover {
                     cursor: pointer;
                     background-color: @secondary-3;
+                }
+
+                >span.overlay-icon {
+                    grid-column: 2;
+                    align-self: center;
+                    justify-self: start;
+                    color: @tertiary-1;
                 }
             }
         }

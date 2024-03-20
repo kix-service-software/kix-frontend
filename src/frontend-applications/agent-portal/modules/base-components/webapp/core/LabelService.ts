@@ -16,6 +16,7 @@ import { KIXObjectService } from './KIXObjectService';
 import { ILabelProvider } from './ILabelProvider';
 import { LabelProvider } from './LabelProvider';
 import { EventService } from './EventService';
+import { OverlayIcon } from './OverlayIcon';
 
 export class LabelService {
 
@@ -564,5 +565,38 @@ export class LabelService {
         return;
     }
 
+    public async getOverlayIcon<T extends KIXObject>(
+        object: T, property: string, objectId?: number
+    ): Promise<OverlayIcon> {
+        const labelProvider = this.getLabelProviderForProperty(object, property);
 
+        if (labelProvider) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getOverlayIcon(object, objectId, property);
+                if (result) {
+                    return result;
+                }
+            }
+
+            return await labelProvider.getOverlayIcon(object, objectId, property);
+        }
+        return null;
+    }
+    public async getOverlayIconForType<T extends KIXObject>(
+        objectType: KIXObjectType | string, objectId?: number, property?: string, object?: T
+    ): Promise<OverlayIcon> {
+        const labelProvider = this.getLabelProviderForType(objectType);
+
+        if (labelProvider) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getOverlayIcon(object, objectId, property);
+                if (result) {
+                    return result;
+                }
+            }
+
+            return await labelProvider.getOverlayIcon(object, objectId, property);
+        }
+        return null;
+    }
 }

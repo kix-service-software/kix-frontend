@@ -9,8 +9,10 @@
 
 import { TreeNodeProperty } from './TreeNodeProperty';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { OverlayIcon } from '../OverlayIcon';
 
 export class TreeNode {
+    LabelService: any;
     public constructor(
         public id: any = null,
         public label: string = null,
@@ -30,6 +32,7 @@ export class TreeNode {
         public navigationNode: boolean = false,
         public selected: boolean = false,
         public showAsInvalid: boolean = !selectable,
-        public rank: Number = null
+        public rank: Number = null,
+        public overlay: OverlayIcon = null
     ) { }
 }

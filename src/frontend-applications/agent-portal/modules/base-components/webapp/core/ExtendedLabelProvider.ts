@@ -13,6 +13,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { Label } from './Label';
+import { OverlayIcon } from './OverlayIcon';
 
 export abstract class ExtendedLabelProvider<T extends KIXObject = KIXObject> implements ILabelProvider<T> {
 
@@ -112,4 +113,13 @@ export abstract class ExtendedLabelProvider<T extends KIXObject = KIXObject> imp
         return null;
     }
 
+    public getOverlayIcon(object?: T, objectId?: number, property?: string): Promise<OverlayIcon> {
+        return null;
+    }
+
+    public getOverlayIconForType(
+        objectType: KIXObjectType | string, objectId?: number, property?: string, object?: T
+    ): Promise<OverlayIcon> {
+        return null;
+    }
 }

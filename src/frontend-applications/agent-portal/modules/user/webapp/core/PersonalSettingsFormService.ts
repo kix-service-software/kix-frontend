@@ -11,6 +11,7 @@ import { FormContext } from '../../../../model/configuration/FormContext';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
 import { AgentService } from './AgentService';
@@ -52,6 +53,12 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
             case PersonalSettingsProperty.DONT_ASK_DIALOG_ON_CLOSE:
                 value = Boolean(Number(value));
                 break;
+            case PersonalSettingsProperty.OUT_OF_OFFICE_START:
+            case PersonalSettingsProperty.OUT_OF_OFFICE_END:
+                if (value) {
+                    value = DateTimeUtil.getKIXDateString(value);
+                }
+                break;
             default:
                 break;
         }
@@ -87,7 +94,7 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
             const notificationPreference = {};
             if (Array.isArray(notificationParameter[1])) {
                 notificationParameter[1].forEach((e) => {
-                    const eventKey = `Notification-${ e }-${ transport }`;
+                    const eventKey = `Notification-${e}-${transport}`;
                     notificationPreference[eventKey] = 1;
                 });
 
@@ -99,6 +106,23 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
         const dontAskValue = parameter.find((p) => p[0] === PersonalSettingsProperty.DONT_ASK_DIALOG_ON_CLOSE);
         if (dontAskValue) {
             dontAskValue[1] = Number(dontAskValue[1]);
+        }
+
+        const outOfOfficeStartParameter = parameter.find(
+            (p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_START
+        );
+        if (outOfOfficeStartParameter) {
+            outOfOfficeStartParameter[1] = outOfOfficeStartParameter[1]
+                ? DateTimeUtil.getKIXDateString(outOfOfficeStartParameter[1])
+                : '';
+        }
+        const outOfOfficeEndParameter = parameter.find(
+            (p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_END
+        );
+        if (outOfOfficeEndParameter) {
+            outOfOfficeEndParameter[1] = outOfOfficeEndParameter[1]
+                ? DateTimeUtil.getKIXDateString(outOfOfficeEndParameter[1])
+                : '';
         }
 
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);

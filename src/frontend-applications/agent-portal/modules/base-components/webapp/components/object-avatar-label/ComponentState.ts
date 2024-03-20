@@ -8,14 +8,18 @@
  */
 
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public displayText: string = '',
         public description: string = '',
         public icon: ObjectIcon | string = null,
-        public rtl: boolean = false
-    ) { }
+        public rtl: boolean = false,
+        public overlay: any = null,
+    ) {
+        super();
+    }
 
 }

@@ -153,17 +153,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         const calendars = [];
-        userIds.forEach((fullName: string, uid: number) => {
-            const bgColor = BrowserUtil.getUserColor(uid);
+        for (const u of userIds) {
+            const bgColor = BrowserUtil.getUserColor(u[0]);
+            const overlay = await LabelService.getInstance().getOverlayIconForType(
+                KIXObjectType.USER, u[0]
+            );
             calendars.push({
-                id: uid,
-                name: fullName,
+                id: u[0],
+                name: u[1],
                 color: '#ffffff',
                 bgColor,
                 borderColor: bgColor,
-                visible: true
+                visible: true,
+                overlay: overlay || null
             });
-        });
+        }
 
         this.state.calendars = calendars;
 

@@ -32,6 +32,26 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
     public getPersonalSettings(): PersonalSetting[] {
         return [
             new PersonalSetting(
+                'Translatable#Out Of Office',
+                PersonalSettingsProperty.OUT_OF_OFFICE_START,
+                'Translatable#From',
+                'Translatable#Helptext_PersonalSettings_OutOfOfficeStart_Hint',
+                'date-time-input', null, null,
+                [
+                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE)
+                ]
+            ),
+            new PersonalSetting(
+                'Translatable#Out Of Office',
+                PersonalSettingsProperty.OUT_OF_OFFICE_END,
+                'Translatable#Till',
+                'Translatable#Helptext_PersonalSettings_OutOfOfficeEnd_Hint',
+                'date-time-input', null, null,
+                [
+                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE)
+                ]
+            ),
+            new PersonalSetting(
                 'Translatable#Change Password',
                 PersonalSettingsProperty.CURRENT_PASSWORD,
                 'Translatable#Current Password',

@@ -29,6 +29,7 @@ import { Article } from '../../model/Article';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
+import { OverlayIcon } from '../../../base-components/webapp/core/OverlayIcon';
 import { QueueService } from './admin';
 import { ObjectResponse } from '../../../../server/services/ObjectResponse';
 import { QueueLabelProvider } from './QueueLabelProvider';
@@ -645,6 +646,19 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             default:
                 return true;
         }
+    }
+
+    public async getOverlayIcon(object?: Ticket, objectId?: number, property?: string): Promise<OverlayIcon> {
+        let overlay = null;
+
+        switch (property) {
+            case TicketProperty.OWNER_ID:
+            case TicketProperty.RESPONSIBLE_ID:
+                overlay = await LabelService.getInstance().getOverlayIconForType(KIXObjectType.USER, objectId);
+                break;
+            default:
+        }
+        return overlay;
     }
 
 }
