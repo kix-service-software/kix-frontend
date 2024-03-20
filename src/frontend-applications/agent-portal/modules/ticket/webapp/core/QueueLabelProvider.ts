@@ -125,6 +125,9 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
     ): Promise<string> {
         let displayValue = value;
         switch (property) {
+            case QueueProperty.FULLNAME:
+                displayValue = await QueueLabelProvider.getQueueFullname(null, value?.toString());
+                break;
             case QueueProperty.SYSTEM_ADDRESS_ID:
                 if (value) {
                     const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
@@ -221,6 +224,17 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
             return [new ObjectIcon(null, 'FollowUpType', value)];
         }
         return null;
+    }
+
+    public static async getQueueFullname(queue?: Queue, fullname?: string): Promise<string> {
+        const split = queue?.Fullname?.split('::') || fullname?.split('::') || [];
+
+        const nameParts: string[] = [];
+        for (const s of split) {
+            const value = await TranslationService.translate(s);
+            nameParts.push(value);
+        }
+        return nameParts.join(' / ');
     }
 
 }

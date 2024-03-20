@@ -29,6 +29,9 @@ import { Article } from '../../model/Article';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
+import { QueueService } from './admin';
+import { ObjectResponse } from '../../../../server/services/ObjectResponse';
+import { QueueLabelProvider } from './QueueLabelProvider';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -63,7 +66,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             TicketProperty.WATCHERS,
             TicketProperty.UNSEEN,
             TicketProperty.ARCHIVE_FLAG,
-            'Queue.FollowUpID'
+            'Queue.FollowUpID',
+            TicketProperty.QUEUE_FULLNAME
         ];
     }
 
@@ -77,6 +81,13 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 if (value) {
                     displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.QUEUE, value);
                 }
+                break;
+            case TicketProperty.QUEUE_FULLNAME:
+                const queues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, [value])
+                    .catch((): Queue[] => []);
+                displayValue = queues?.length
+                    ? await QueueLabelProvider.getQueueFullname(queues[0])
+                    : value;
                 break;
             case TicketProperty.CREATED_STATE_ID:
             case TicketProperty.STATE_ID:
@@ -218,6 +229,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.QUEUE:
                 displayValue = 'Translatable#Queue';
                 break;
+            case TicketProperty.QUEUE_FULLNAME:
+                displayValue = 'Translatable#Queue Fullname';
+                break;
             case TicketProperty.STATE_ID:
             case TicketProperty.STATE:
                 displayValue = 'Translatable#State';
@@ -339,8 +353,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
 
             switch (property) {
                 case TicketProperty.CREATED_QUEUE_ID:
+                case TicketProperty.QUEUE_FULLNAME:
                     displayValue = await this.getPropertyValueDisplayText(
-                        TicketProperty.QUEUE_ID, ticket.QueueID, translatable
+                        property, ticket.QueueID, translatable
                     );
                     break;
                 case TicketProperty.CREATED_STATE_ID:

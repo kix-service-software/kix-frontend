@@ -17,7 +17,8 @@ export class ComponentState {
         public displayText: string = null,
         public cell: Cell = null,
         public showIcons: boolean = true,
-        public showText: boolean = true
+        public showText: boolean = true,
+        public rtl: boolean = false
     ) { }
 
 }

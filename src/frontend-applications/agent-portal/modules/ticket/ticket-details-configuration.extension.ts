@@ -512,7 +512,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
-                            'application': 'agent-portal'
+                            'application': 'agent-portal',
+                            'rtl': false
                         },
                         {
                             'id': null,
@@ -535,7 +536,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
-                            'application': 'agent-portal'
+                            'application': 'agent-portal',
+                            'rtl': false
                         },
                         {
                             'id': null,
@@ -558,7 +560,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
-                            'application': 'agent-portal'
+                            'application': 'agent-portal',
+                            'rtl': false
                         },
                         {
                             'id': null,
@@ -581,7 +584,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
-                            'application': 'agent-portal'
+                            'application': 'agent-portal',
+                            'rtl': false
                         },
                         {
                             'id': null,
@@ -604,7 +608,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
-                            'application': 'agent-portal'
+                            'application': 'agent-portal',
+                            'rtl': false
                         },
                         {
                             'id': null,
@@ -627,7 +632,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
-                            'application': 'agent-portal'
+                            'application': 'agent-portal',
+                            'rtl': false
                         },
                     ],
                     null, false, false, null, null, 1.75, 1.75, 'Translatable#0 data sets found.', null, false

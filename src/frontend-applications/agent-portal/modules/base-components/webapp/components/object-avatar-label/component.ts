@@ -28,6 +28,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.text = input.text;
         this.description = input.description;
         this.state.icon = input.icon;
+        this.state.rtl = input.rtl;
         this.update();
     }
 

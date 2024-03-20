@@ -24,6 +24,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </span>
     </if>
     <if(state.showText && state.cell.getValue())>
-        <span.text.cell-display-text>${state.cell.getDisplayValue()}</span>
+        <span.text.cell-display-text dir=(state.rtl ? 'rtl' : 'ltr')>${state.cell.getDisplayValue()}</span>
     </if>
 </div>

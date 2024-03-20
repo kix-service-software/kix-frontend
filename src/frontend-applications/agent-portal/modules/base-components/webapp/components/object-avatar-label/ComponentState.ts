@@ -14,7 +14,8 @@ export class ComponentState {
     public constructor(
         public displayText: string = '',
         public description: string = '',
-        public icon: ObjectIcon | string = null
+        public icon: ObjectIcon | string = null,
+        public rtl: boolean = false
     ) { }
 
 }

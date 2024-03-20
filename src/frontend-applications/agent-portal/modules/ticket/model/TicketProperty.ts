@@ -27,6 +27,8 @@ export enum TicketProperty {
     QUEUE_ID = 'QueueID',
     QUEUE = 'Queue',
 
+    QUEUE_FULLNAME = 'QueueFullname',
+
     ORGANISATION_ID = 'OrganisationID',
     ORGANISATION = 'Organisation',
 
