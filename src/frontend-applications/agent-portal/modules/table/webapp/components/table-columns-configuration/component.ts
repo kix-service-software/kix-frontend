@@ -52,7 +52,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 'Translatable#Translatable Title',
                 'Translatable#Size (px)',
                 'Translatable#Component ID',
-                'Translatable#Column Title'
+                'Translatable#Column Title',
+                'Translatable#RTL'
             ]
         );
         this.updatePropertyNodes();

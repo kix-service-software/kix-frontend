@@ -26,6 +26,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const config = this.state.cell?.getColumnConfiguration();
         this.state.showIcons = config?.showIcon;
         this.state.showText = config?.showText;
+        this.state.rtl = config?.rtl;
     }
 
     public onDestroy(): void {

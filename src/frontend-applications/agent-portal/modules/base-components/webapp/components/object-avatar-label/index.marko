@@ -13,6 +13,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <icon icon=state.icon/>
         </div>
         <div.user-avatar-description style=input.descriptionStyle title=state.description>${state.description}</div>
-        <div.user-avatar-text style=input.textStyle title=state.displayText>${state.displayText}</div>
+        <div.user-avatar-text style=input.textStyle title=state.displayText dir=(state.rtl ? 'rtl' : 'ltr')>${state.displayText}</div>
     </div>
 </if>
