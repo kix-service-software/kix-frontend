@@ -153,6 +153,8 @@ export class TicketSearchFormManager extends SearchFormManager {
             property === TicketProperty.LOCK_ID
             || property === 'Queue.FollowUpID'
             || property === ArticleProperty.CUSTOMER_VISIBLE
+            || property === TicketProperty.OWNER_OOO
+            || property === TicketProperty.RESPONSIBLE_OOO
         ) {
             return false;
         }
@@ -176,6 +178,8 @@ export class TicketSearchFormManager extends SearchFormManager {
                     nodes = await KIXObjectService.prepareTree(organisations);
                 }
                 break;
+            case TicketProperty.OWNER_OOO:
+            case TicketProperty.RESPONSIBLE_OOO:
             case ArticleProperty.CUSTOMER_VISIBLE:
                 const no = await TranslationService.translate('No');
                 const yes = await TranslationService.translate('Yes');

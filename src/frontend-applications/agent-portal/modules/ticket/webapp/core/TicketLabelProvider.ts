@@ -317,6 +317,12 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.WATCHER_USER_ID:
                 displayValue = 'Translatable#Watch User';
                 break;
+            case TicketProperty.OWNER_OOO:
+                displayValue = 'Translatable#Owner Out Of Office';
+                break;
+            case TicketProperty.RESPONSIBLE_OOO:
+                displayValue = 'Translatable#Responsible Out Of Office';
+                break;
             default:
                 if (Article.isArticleProperty(property)) {
                     displayValue = await LabelService.getInstance().getPropertyText(

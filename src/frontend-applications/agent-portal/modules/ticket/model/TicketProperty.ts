@@ -37,12 +37,14 @@ export enum TicketProperty {
 
     OWNER_ID = 'OwnerID',
     OWNER = 'Owner',
+    OWNER_OOO = 'OwnerOutOfOffice',
 
     TYPE_ID = 'TypeID',
     TYPE = 'Type',
 
     RESPONSIBLE_ID = 'ResponsibleID',
     RESPONSIBLE = 'Responsible',
+    RESPONSIBLE_OOO = 'ResponsibleOutOfOffice',
 
     AGE = 'Age',
 
