@@ -523,6 +523,20 @@ export class Ticket extends KIXObject {
             APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.DROPDOWN
+        },
+        {
+            Property: TicketProperty.OWNER_OOO,
+            Operations: [SearchOperator.EQUALS],
+            APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.DROPDOWN
+        },
+        {
+            Property: TicketProperty.RESPONSIBLE_OOO,
+            Operations: [SearchOperator.EQUALS],
+            APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.DROPDOWN
         }
     ];
 }
