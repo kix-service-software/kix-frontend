@@ -426,19 +426,6 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         }
     }
 
-    public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
-        const superProperties = await super.getObjectProperties(objectType);
-        const objectProperties: string[] = [];
-        if (objectType === KIXObjectType.CONFIG_ITEM) {
-            for (const property in ConfigItemProperty) {
-                if (ConfigItemProperty[property]) {
-                    objectProperties.push(ConfigItemProperty[property]);
-                }
-            }
-        }
-        return [...objectProperties, ...superProperties];
-    }
-
     public async getClasses(valid: boolean = true): Promise<ConfigItemClass[]> {
         let loadingOptions: KIXObjectLoadingOptions;
         if (valid) {
@@ -529,5 +516,30 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
             default:
         }
         return super.getSortAttribute(attribute);
+    }
+
+    public async getObjectProperties(objectType: KIXObjectType, dependencyIds: string[] = []): Promise<string[]> {
+        const superProperties = await super.getObjectProperties(objectType);
+        const objectProperties: string[] = [];
+        if (objectType === KIXObjectType.CONFIG_ITEM) {
+            for (const property in ConfigItemProperty) {
+                if (ConfigItemProperty[property]) {
+                    objectProperties.push(ConfigItemProperty[property]);
+                }
+            }
+        }
+
+        if (dependencyIds?.length) {
+            const classAttributes = await ConfigItemClassAttributeUtil.getMergedClassAttributeIds(
+                dependencyIds.map((d) => Number(d))
+            );
+            objectProperties.push(...classAttributes.map((a) => a[0]));
+        }
+
+        return [...objectProperties, ...superProperties];
+    }
+
+    public async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
+        return this.getClasses();
     }
 }

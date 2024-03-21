@@ -61,7 +61,6 @@ import { ContactProperty } from '../../../customer/model/ContactProperty';
 import { TicketHistory } from '../../model/TicketHistory';
 import { ArticleColorsConfiguration } from '../../model/ArticleColorsConfiguration';
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
-import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { Counter } from '../../../user/model/Counter';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
@@ -901,5 +900,9 @@ export class TicketService extends KIXObjectService<Ticket> {
             default:
         }
         return super.getSortAttribute(attribute);
+    }
+
+    public getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
+        return KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE);
     }
 }

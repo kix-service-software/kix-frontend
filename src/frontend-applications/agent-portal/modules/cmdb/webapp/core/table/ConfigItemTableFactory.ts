@@ -22,6 +22,9 @@ import { SearchCache } from '../../../../search/model/SearchCache';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { Table } from '../../../../table/model/Table';
 import { ToggleOptions } from '../../../../table/model/ToggleOptions';
+import { VersionProperty } from '../../../model/VersionProperty';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class ConfigItemTableFactory extends TableFactory {
 
@@ -40,9 +43,32 @@ export class ConfigItemTableFactory extends TableFactory {
         table.setContentProvider(
             new ConfigItemTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
         );
-        table.setColumnConfiguration(tableConfiguration.tableColumns);
+
+        const tableColumns = this.filterColumns(contextId, tableConfiguration);
+        table.setColumnConfiguration(tableColumns);
+
+        if (
+            tableConfiguration.tableColumns.some(
+                (tc) => !tc.property.startsWith('DynamicFields.') && tc.property.indexOf('.') !== -1
+            )
+        ) {
+            this.addAdditionalInclude([
+                VersionProperty.DATA, VersionProperty.PREPARED_DATA, ConfigItemProperty.CURRENT_VERSION
+            ]);
+        }
 
         return table;
+    }
+
+    private addAdditionalInclude(properties: string[]): void {
+        const context = ContextService.getInstance().getActiveContext();
+        const includes = context?.getAdditionalInformation(AdditionalContextInformation.INCLUDES) || [];
+        for (const property of properties) {
+            if (!includes.some((i) => i === property)) {
+                includes.push(property);
+            }
+        }
+        context?.setAdditionalInformation(AdditionalContextInformation.INCLUDES, includes);
     }
 
     protected setDefaultTableConfiguration(
@@ -114,5 +140,16 @@ export class ConfigItemTableFactory extends TableFactory {
             ...ticketColumns,
             ...superColumns.filter((c) => !ticketColumns.some((tc) => tc.property === c.property))
         ];
+    }
+
+    public filterColumns(contextId: string, tableConfiguration: TableConfiguration): IColumnConfiguration[] {
+        const columns = super.filterColumns(contextId, tableConfiguration);
+
+        const index = columns.findIndex((c) => c.property === 'ClassIDs');
+        if (index !== -1) {
+            columns.splice(index, 1);
+        }
+
+        return columns;
     }
 }

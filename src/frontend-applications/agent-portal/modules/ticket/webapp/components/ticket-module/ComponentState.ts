@@ -15,7 +15,8 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public contentWidgets: ConfiguredWidget[] = [],
         public filterValue: string = null,
-        public placeholder: string = 'Please enter a search term.'
+        public placeholder: string = 'Please enter a search term.',
+        public prepared: boolean = false
     ) {
         super();
     }

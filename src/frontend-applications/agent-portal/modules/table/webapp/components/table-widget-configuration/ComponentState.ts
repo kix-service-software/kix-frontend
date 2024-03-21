@@ -17,7 +17,8 @@ export class ComponentState extends AbstractComponentState {
         public tableConfigurationTemplate: any = null,
         public configuration: TableWidgetConfiguration = null,
         public sortTreeId: string = IdService.generateDateBasedId(),
-        public isDESC: boolean = false
+        public isDESC: boolean = false,
+        public prepared: boolean = false
     ) {
         super();
     }

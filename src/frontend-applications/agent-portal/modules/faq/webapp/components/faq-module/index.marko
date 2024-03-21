@@ -7,9 +7,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<for|kixWidget| of=state.contentWidgets>
-    <${component.getTemplate(kixWidget)} ...{
-        instanceId: kixWidget.instanceId,
-        contextType: "MAIN"
-    }/>
-</for>
+<if(state.prepared)>
+    <widget-container widgets=state.contentWidgets contextWidgetList="content"/>
+</if>

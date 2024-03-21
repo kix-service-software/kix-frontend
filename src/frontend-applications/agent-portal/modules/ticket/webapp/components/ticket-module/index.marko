@@ -7,26 +7,40 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.ticket-dashboard>
-    <div.ticket-search>
-        <input.input-style
+<div class="ticket-dashboard">
+    <div class="ticket-search">
+        <input
             type="text"
             on-keyup("keyUp")
             value=state.filterValue
-            placeholder=state.placeholder/>
-        <button.kix-button.button.button-without-text
+            placeholder=state.placeholder
+            class="input-style"
+        >
+        <button
             type="button"
-            title=state.translations["Translatable#Help"]
-            on-click("showCommandHelp", false)>
+            title=(state.translations["Translatable#Help"])
+            on-click("showCommandHelp", false)
+            class="kix-button button button-without-text"
+        >
             <overlay-icon
-                isHint=true
+                isHint
                 content="Translatable#Helptext_Ticket_Dashboard_Search"
-                title=state.translations["Translatable#Search"]/>
+                title=(state.translations["Translatable#Search"])
+            />
         </button>
-        <button.kix-button.submit-button type="button" on-click("search")>
-            <span.kix-icon-search/>
+        <button
+            type="button"
+            on-click("search")
+            class="kix-button submit-button"
+        >
+            <span class="kix-icon-search"/>
             <translation-string pattern="Translatable#Search"/>
         </button>
     </div>
-    <widget-container widgets=state.contentWidgets contextWidgetList="content"/>
+    <if(state.prepared)>
+        <widget-container
+            widgets=state.contentWidgets
+            contextWidgetList="content"
+        />
+    </if>
 </div>

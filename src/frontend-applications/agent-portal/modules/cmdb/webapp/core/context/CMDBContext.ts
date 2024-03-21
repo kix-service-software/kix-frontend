@@ -26,6 +26,7 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextPreference } from '../../../../../model/ContextPreference';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class CMDBContext extends Context {
 
@@ -100,6 +101,8 @@ export class CMDBContext extends Context {
         if (isStored) {
             ContextService.getInstance().updateStorage(this.instanceId);
         }
+
+        this.setAdditionalInformation(AdditionalContextInformation.OBJECT_DEPENDENCY, this.classId);
     }
 
     public async setFilterValue(filterValue: string, history: boolean = true, reload: boolean = true): Promise<void> {
@@ -209,6 +212,14 @@ export class CMDBContext extends Context {
         this.classId = contextPreference['CLASS_ID'];
         this.setAdditionalInformation(ConfigItemProperty.CLASS_ID, this.classId);
         this.filterValue = contextPreference['FILTER_VALUE'];
+    }
+
+    public getAdditionalInformation(key: string): any {
+        if (key === AdditionalContextInformation.OBJECT_DEPENDENCY) {
+            return this.classId;
+        }
+
+        return super.getAdditionalInformation(key);
     }
 
 }

@@ -296,4 +296,8 @@ export class FAQService extends KIXObjectService {
         }
         return super.getSortAttribute(attribute);
     }
+
+    public getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
+        return KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
+    }
 }
