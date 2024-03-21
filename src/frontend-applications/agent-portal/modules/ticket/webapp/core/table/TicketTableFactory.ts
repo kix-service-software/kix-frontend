@@ -45,7 +45,9 @@ export class TicketTableFactory extends TableFactory {
         );
 
         table.setContentProvider(contentProvider);
-        table.setColumnConfiguration(tableConfiguration.tableColumns);
+
+        const tableColumns = this.filterColumns(contextId, tableConfiguration);
+        table.setColumnConfiguration(tableColumns);
 
         return table;
     }

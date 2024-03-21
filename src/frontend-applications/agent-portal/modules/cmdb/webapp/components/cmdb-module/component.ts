@@ -11,10 +11,15 @@ import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { CMDBContext } from '../../core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { IdService } from '../../../../../model/IdService';
 
 class Component {
 
     private state: ComponentState;
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -22,7 +27,6 @@ class Component {
 
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext() as CMDBContext;
-        this.state.contentWidgets = await context.getContent();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Search',
             'Translatable#Help'
@@ -30,6 +34,25 @@ class Component {
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
         this.state.filterValue = context.filterValue;
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (): void => {
+                this.prepareWidgets();
+            }
+        };
+        this.prepareWidgets();
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
+    }
+
+    private async prepareWidgets(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.prepared = false;
+        setTimeout(async () => {
+            this.state.contentWidgets = await context.getContent();
+            this.state.prepared = true;
+        }, 100);
     }
 
     public keyUp(event: any): void {

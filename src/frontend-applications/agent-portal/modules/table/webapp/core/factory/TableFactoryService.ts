@@ -20,6 +20,7 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { Table } from '../../../model/Table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class TableFactoryService {
 
@@ -93,6 +94,9 @@ export class TableFactoryService {
         let tableContextId: string;
         if (context) {
             tableContextId = context.contextId;
+            const dependency = context.getAdditionalInformation(AdditionalContextInformation.OBJECT_DEPENDENCY);
+            recreate = recreate || dependency !== null && typeof dependency !== 'undefined';
+
             if (!recreate && this.contextTableInstances.has(tableContextId)) {
                 const tableInstances = this.contextTableInstances.get(tableContextId);
                 if (tableInstances.has(tableKey)) {

@@ -744,29 +744,53 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return objectType;
     }
 
-    public static async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+    public static async getObjectProperties(
+        objectType: KIXObjectType, dependencyIds: string[] = []
+    ): Promise<string[]> {
         let properties: string[] = [];
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
         if (service) {
-            properties = await service.getObjectProperties(objectType);
+            properties = await service.getObjectProperties(objectType, dependencyIds);
         }
 
         return properties;
     }
 
-    public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+    public static async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
+        let dependencies: KIXObject[] = [];
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
+        if (service) {
+            dependencies = await service.getObjectDependencies(objectType);
+        }
+
+        return dependencies;
+    }
+
+    public async getObjectProperties(objectType: KIXObjectType, dependencyIds: string[] = []): Promise<string[]> {
         let properties: string[] = [];
         const dynamicFields: DynamicField[] = await KIXObjectService.loadDynamicFields(objectType);
         if (Array.isArray(dynamicFields) && dynamicFields.length) {
             properties = dynamicFields.map((df) => df.Name);
         }
         for (const extendedService of this.extendedServices) {
-            const extendedNodes = await extendedService.getObjectProperties(objectType);
+            const extendedNodes = await extendedService.getObjectProperties(objectType, dependencyIds);
             if (extendedNodes?.length) {
                 properties.push(...extendedNodes);
             }
         }
         return properties;
+    }
+
+    public async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
+        let dependencies: KIXObject[] = [];
+
+        for (const extendedService of this.extendedServices) {
+            const extendedDependencies = await extendedService.getObjectDependencies(objectType);
+            if (extendedDependencies?.length) {
+                dependencies.push(...extendedDependencies);
+            }
+        }
+        return dependencies;
     }
 
     protected async shouldPreload(objectType: KIXObjectType | string): Promise<boolean> {

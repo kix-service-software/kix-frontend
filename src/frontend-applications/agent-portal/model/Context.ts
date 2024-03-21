@@ -821,6 +821,9 @@ export abstract class Context {
         if (sortOrder) {
             loadingOptions.sortOrder = sortOrder;
         }
+
+        const additionalIncludes = this.getAdditionalInformation(AdditionalContextInformation.INCLUDES) || [];
+        loadingOptions.includes.push(...additionalIncludes);
     }
 
     public async getPageSize(type: KIXObjectType | string): Promise<number> {

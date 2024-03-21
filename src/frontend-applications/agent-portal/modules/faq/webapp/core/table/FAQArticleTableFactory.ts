@@ -46,7 +46,9 @@ export class FAQArticleTableFactory extends TableFactory {
         );
 
         table.setContentProvider(contentProvider);
-        table.setColumnConfiguration(tableConfiguration.tableColumns);
+
+        const tableColumns = super.filterColumns(contextId, tableConfiguration);
+        table.setColumnConfiguration(tableColumns);
 
         return table;
     }

@@ -10,18 +10,28 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <h2 class="configuration-title">
     <translation-string pattern="Translatable#Table Columns"/>
 </h2>
-<div class="property-chooser">
-    <form-list treeId=state.propertyTreeId multiselect freeText/>
-    <button
-        type="button"
-        on-click("addColumn")
-        title=(state.translations["Translatable#Add Column(s)"])
-        class="kix-button submit-button"
-    >
-        <span class="kix-icon-plus-blank"/>
-        <translation-string pattern="Translatable#Add Column(s)"/>
-    </button>
+<div class="row">
+    <div class="col-6">
+        <div class="property-chooser">
+            <form-list treeId=state.dependencyTreeId multiselect/>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="property-chooser">
+            <form-list treeId=state.propertyTreeId multiselect freeText/>
+            <button
+                type="button"
+                on-click("addColumn")
+                title=(state.translations["Translatable#Add Column(s)"])
+                class="kix-button submit-button"
+            >
+                <span class="kix-icon-plus-blank"/>
+                <translation-string pattern="Translatable#Add Column(s)"/>
+            </button>
+        </div>
+    </div>
 </div>
+
 <table class="kix-table configuration-table">
     <thead>
         <tr>
@@ -31,6 +41,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     class="table-head-cell"
                 >
                     ${state.translations["Translatable#Property"]}
+                </th>
+                <th
+                    title=(state.translations["Translatable#Dependency"])
+                    class="table-head-cell"
+                >
+                    ${state.translations["Translatable#Dependency"]}
                 </th>
             </if>
             <th
@@ -76,7 +92,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 >
                     ${state.translations["Translatable#Filter List"]}
                 </th>
-
                 <th
                     title=(state.translations["Translatable#Resizable"])
                     class="table-head-cell boolean-value"
@@ -139,6 +154,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         class="content-cell"
                     >
                         <span>${state.columnNames[column.property]}</span>
+                    </td>
+                    <td
+                        title=(state.columnDependencyNames[column.property])
+                        class="content-cell"
+                    >
+                        <span>
+                            ${state.columnDependencyNames[column.property]}
+                        </span>
                     </td>
                 </if>
                 <td
@@ -213,12 +236,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         class="content-cell boolean-value"
                     >
                         <input type="checkbox" checked=column.titleTranslatable>
-                    </td>
-                    <td
-                        on-click("booleanValueChanged", "rtl", column)
-                        class="content-cell boolean-value"
-                    >
-                        <input type="checkbox" checked=column.rtl>
                     </td>
                     <td class="content-cell">
                         <input
