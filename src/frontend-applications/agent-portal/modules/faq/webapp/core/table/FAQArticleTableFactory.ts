@@ -63,7 +63,7 @@ export class FAQArticleTableFactory extends TableFactory {
                 KIXObjectType.FAQ_ARTICLE, null, null, tableColumns, [], true, false
             );
             defaultRouting = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!tableConfiguration.tableColumns?.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 

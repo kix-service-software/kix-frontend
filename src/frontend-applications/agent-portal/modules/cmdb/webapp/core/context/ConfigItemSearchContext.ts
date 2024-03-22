@@ -7,8 +7,10 @@
  * --
  */
 
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { SearchContext } from '../../../../search/webapp/core';
+import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 
 
 export class ConfigItemSearchContext extends SearchContext {
@@ -17,5 +19,14 @@ export class ConfigItemSearchContext extends SearchContext {
 
     public getIcon(): string | ObjectIcon {
         return 'kix-icon-search-ci';
+    }
+
+    public getAdditionalInformation(key: string): any {
+        if (key === AdditionalContextInformation.OBJECT_DEPENDENCY) {
+            const queueCriterion = this.searchCache?.criteria?.find((c) => c.property === ConfigItemProperty.CLASS_ID);
+            return queueCriterion?.value || [];
+        }
+
+        return super.getAdditionalInformation(key);
     }
 }

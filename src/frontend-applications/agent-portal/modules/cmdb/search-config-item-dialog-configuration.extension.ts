@@ -9,9 +9,16 @@
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { TableConfiguration } from '../../model/configuration/TableConfiguration';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { TableHeaderHeight } from '../table/model/TableHeaderHeight';
+import { TableRowHeight } from '../table/model/TableRowHeight';
 import { ConfigItemSearchContext } from './webapp/core';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
@@ -23,9 +30,31 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
 
+        const tableConfig = new TableConfiguration(
+            'cmdb-search-table-config', 'CMDB Table Configuration', ConfigurationType.Table,
+            KIXObjectType.CONFIG_ITEM, null, null, null, [], true, true, null, null, TableHeaderHeight.LARGE,
+            TableRowHeight.LARGE
+        );
+
+        const tableWidgetConfig = new TableWidgetConfiguration(
+            'cmdb-search-ci-table-widget', 'CI Search Table Widget', ConfigurationType.TableWidget,
+            KIXObjectType.CONFIG_ITEM, null, null, tableConfig
+        );
+
+        const ciListWidget = new WidgetConfiguration(
+            'cmdb-search-ci-list-widget', 'CI Search List', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Search Results: Config Items',
+            ['bulk-action', 'csv-export-action'],
+            null, tableWidgetConfig, false, false, 'kix-icon-ci', true
+        );
+
         configurations.push(
             new ContextConfiguration(
-                this.getModuleId(), 'Config Item Search', ConfigurationType.Context, this.getModuleId(), [], []
+                this.getModuleId(), 'Config Item Search', ConfigurationType.Context, this.getModuleId(),
+                [], [], [],
+                [
+                    new ConfiguredWidget('cmdb-search-ci-list-widget', null, ciListWidget)
+                ]
             )
         );
 
