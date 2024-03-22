@@ -69,8 +69,7 @@ class WidgetComponent implements IEventSubscriber {
             this.state.widgetConfiguration = config;
         }
 
-        this.state.minimizable = this.state.widgetConfiguration?.minimizable;
-        if (this.state.widgetType !== WidgetType.SIDEBAR) {
+        if (this.state.widgetType !== WidgetType.SIDEBAR && this.state.widgetConfiguration) {
             this.state.minimized = this.state.widgetConfiguration?.minimized;
         }
 

@@ -59,7 +59,7 @@ export class ContactTableFactory extends TableFactory {
             tableConfiguration.enableSelection = true;
             tableConfiguration.toggle = false;
             defaultRouting = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!tableConfiguration?.tableColumns?.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 

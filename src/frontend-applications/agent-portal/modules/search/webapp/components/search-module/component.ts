@@ -8,7 +8,7 @@
  */
 
 import { ConfigurationType } from '../../../../../model/configuration/ConfigurationType';
-import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
+import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { Context } from '../../../../../model/Context';
 import { IdService } from '../../../../../model/IdService';
@@ -37,25 +37,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.context = ContextService.getInstance().getActiveContext<SearchContext>();
         const searchCache = this.context?.getSearchCache();
 
-        this.state.icon = LabelService.getInstance().getObjectIconForType(searchCache.objectType);
+        await this.initContentWidgets();
         await this.setTitle(searchCache.objectType);
-
-        const widgetConfiguration = new WidgetConfiguration(
-            'search-result-widget-' + searchCache.name, searchCache.name, ConfigurationType.TableWidget,
-            'table-widget', searchCache.name, ['bulk-action', 'csv-export-action'], null,
-            new TableWidgetConfiguration('', '', null, searchCache.objectType),
-            false, false, this.state.icon, true
-        );
-
-        this.state.instanceId = this.context.getTableId(searchCache.objectType);
-        this.state.objectType = searchCache.objectType;
-        this.state.configuration = widgetConfiguration;
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (context: Context): void => {
                 if (context.instanceId === this.context?.instanceId) {
-                    this.setTitle();
+                    this.setTitle(searchCache.objectType);
                 }
             }
         };
@@ -69,7 +58,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
     }
 
-    private async setTitle(objectType: KIXObjectType | string = this.state.objectType): Promise<void> {
+    private async initContentWidgets(): Promise<void> {
+        const criteriaWidget = new ConfiguredWidget(
+            'search-criteria-widget', null, new WidgetConfiguration(
+                'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
+                'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
+            )
+        );
+        const contentWidgets = [criteriaWidget];
+        const content = await this.context?.getContent();
+        contentWidgets.push(...content);
+
+        this.state.contentWidgets = contentWidgets;
+    }
+
+    private async setTitle(objectType: KIXObjectType | string): Promise<void> {
         const objectName = await LabelService.getInstance().getObjectName(objectType, true);
         let title = await TranslationService.translate('Translatable#Search Results: {0}', [objectName]);
 

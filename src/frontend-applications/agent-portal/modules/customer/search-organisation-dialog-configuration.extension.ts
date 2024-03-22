@@ -9,8 +9,13 @@
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { TableConfiguration } from '../../model/configuration/TableConfiguration';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 import { OrganisationSearchContext } from './webapp/core/context/OrganisationSearchContext';
 
@@ -24,9 +29,30 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
 
+        const tableConfig = new TableConfiguration(
+            'organisation-search-table', 'Organisation Search Table', ConfigurationType.Table, KIXObjectType.ORGANISATION
+        );
+        configurations.push(tableConfig);
+
+        const tableWidget = new TableWidgetConfiguration(
+            'organisation-search-table-widget', 'Organisation Search Table Widget', ConfigurationType.TableWidget,
+            KIXObjectType.ORGANISATION, null, null, tableConfig
+        );
+        configurations.push(tableWidget);
+
+        const listWidget = new WidgetConfiguration(
+            'organisation-search-widget', 'Organisation Search Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Search Results: Organisations', ['csv-export-action'],
+            null, tableWidget, false, false, 'kix-icon-man-house', true
+        );
+
         configurations.push(
             new ContextConfiguration(
-                this.getModuleId(), 'Organisation Search', ConfigurationType.Context, this.getModuleId(), [], []
+                this.getModuleId(), 'Organisation Search', ConfigurationType.Context, this.getModuleId(),
+                [], [], [],
+                [
+                    new ConfiguredWidget('organisation-search-widget', null, listWidget)
+                ]
             )
         );
 
