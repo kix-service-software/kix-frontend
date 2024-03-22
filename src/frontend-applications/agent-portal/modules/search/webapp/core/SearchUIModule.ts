@@ -13,6 +13,7 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { SaveSearchAction, DeleteSearchAction, LoadSearchAction } from './actions';
 import { SearchService } from './SearchService';
+import { SaveUserDefaultSearchAction } from './actions/SaveUserDefaultSearchAction';
 import { SharedSearchEventHandler } from './SharedSearchEventHandler';
 
 export class UIModule implements IUIModule {
@@ -31,6 +32,9 @@ export class UIModule implements IUIModule {
             ActionFactory.getInstance().registerAction('save-search-action', SaveSearchAction);
             ActionFactory.getInstance().registerAction('delete-search-action', DeleteSearchAction);
             ActionFactory.getInstance().registerAction('load-search-action', LoadSearchAction);
+            ActionFactory.getInstance().registerAction(
+                'save-user-default-search-action', SaveUserDefaultSearchAction
+            );
         }
 
         await SearchService.getInstance().getSearchBookmarks(true);

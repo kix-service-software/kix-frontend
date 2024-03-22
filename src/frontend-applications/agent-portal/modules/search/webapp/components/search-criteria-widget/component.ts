@@ -24,6 +24,8 @@ import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { TreeHandler, TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { SearchFormManager } from '../../../../base-components/webapp/core/SearchFormManager';
+import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
+import { SysConfigService } from '../../../../sysconfig/webapp/core';
 
 class Component {
 
@@ -85,6 +87,8 @@ class Component {
         await this.initManager();
         await this.initSort();
 
+        this.setCanSearch();
+
         this.managerListenerId = IdService.generateDateBasedId('search-criteria-widget');
         this.state.manager?.registerListener(this.managerListenerId, async () => {
             if (this.valueChangedTimeout) {
@@ -92,10 +96,10 @@ class Component {
             }
 
             this.valueChangedTimeout = setTimeout(() => {
-                const values = this.state.manager.getValues();
-                this.state.canSearch = values.length > 0;
+                this.setCanSearch();
 
                 const criteria: FilterCriteria[] = [];
+                const values = this.state.manager.getValues();
                 for (const v of values) {
                     criteria.push(searchDefinition.getFilterCriteria(v));
                 }
@@ -107,6 +111,16 @@ class Component {
         EventService.getInstance().subscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
         EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
         EventService.getInstance().subscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
+
+        const groupComponent = (this as any).getComponent(this.state.instanceId);
+        if (groupComponent) {
+            groupComponent.setMinizedState(false);
+        }
+    }
+
+    private setCanSearch(): void {
+        const values = this.state.manager.getValues();
+        this.state.canSearch = values.length > 0;
     }
 
     public onDestroy(): void {
@@ -177,7 +191,7 @@ class Component {
 
     private async prepareActions(): Promise<void> {
         this.state.contentActions = await ActionFactory.getInstance().generateActions(
-            ['save-search-action', 'delete-search-action']
+            ['save-search-action', 'save-user-default-search-action', 'delete-search-action']
         );
     }
 
@@ -191,6 +205,13 @@ class Component {
         }
         await SearchService.getInstance().searchObjects(context?.getSearchCache());
         BrowserUtil.toggleLoadingShield('SEARCH_CRITERIA_SHIELD', false);
+
+        const agentPortalConfig = await SysConfigService.getInstance()
+            .getPortalConfiguration<AgentPortalConfiguration>();
+        const groupComponent = (this as any).getComponent(this.state.instanceId);
+        if (agentPortalConfig.minimizeSearchCriteriaWidget && groupComponent) {
+            groupComponent.setMinizedState(true);
+        }
     }
 
     public sortAttributeChanged(nodes: TreeNode[]): void {

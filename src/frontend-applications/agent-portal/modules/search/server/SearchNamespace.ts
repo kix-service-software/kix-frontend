@@ -25,6 +25,8 @@ import * as cookie from 'cookie';
 import { IdService } from '../../../model/IdService';
 import { SearchCache } from '../model/SearchCache';
 import { Socket } from 'socket.io';
+import { LoadSearchDefaultRequest } from '../model/LoadSearchDefaultRequest';
+import { LoadSearchDefaultResponse } from '../model/LoadSearchDefaultResponse';
 import { ClientNotificationService } from '../../../server/services/ClientNotificationService';
 import { BackendNotification } from '../../../model/BackendNotification';
 import { ObjectUpdatedEvent } from '../../../model/ObjectUpdatedEvent';
@@ -50,6 +52,15 @@ export class SearchNamespace extends SocketNameSpace {
 
     protected registerEvents(client: Socket): void {
         this.registerEventHandler(client, SearchEvent.SAVE_SEARCH, this.saveSearch.bind(this));
+        this.registerEventHandler(
+            client, SearchEvent.SAVE_SEARCH_AS_DEFAULT, this.saveSearchAsDefault.bind(this)
+        );
+        this.registerEventHandler(
+            client, SearchEvent.DELETE_SEARCH_DEFAULT, this.deleteUserSearchDefault.bind(this)
+        );
+        this.registerEventHandler(
+            client, SearchEvent.LOAD_SEARCH_DEFAULT, this.loadSearchDefault.bind(this)
+        );
         this.registerEventHandler(client, SearchEvent.LOAD_SEARCH, this.loadSearch.bind(this));
         this.registerEventHandler(client, SearchEvent.LOAD_SHARED_SEARCHES, this.loadSharedSearch.bind(this));
         this.registerEventHandler(client, SearchEvent.DELETE_SEARCH, this.deleteSearch.bind(this));
@@ -67,6 +78,88 @@ export class SearchNamespace extends SocketNameSpace {
                 SocketEvent.ERROR, new SocketErrorResponse(data.requestId, 'No user or search available.')
             );
         }
+    }
+
+    private async saveSearchAsDefault(data: SaveSearchRequest, client: Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        if (data.search) {
+            const user = await UserService.getInstance().getUserByToken(token);
+            this.saveUserSearchAsDefault(data.search, user);
+            return new SocketResponse(SearchEvent.SAVE_SEARCH_AS_DEFAULT_FINISHED, { requestId: data.requestId });
+        } else {
+            return new SocketResponse(
+                SocketEvent.ERROR, new SocketErrorResponse(data.requestId, 'No user or search available.')
+            );
+        }
+    }
+
+    private saveUserSearchAsDefault(search: SearchCache, user: User): void {
+        const fileName = `${user.UserID}_default_search.json`;
+        const defaultSearches: SearchCache[] = ConfigurationService.getInstance().getDataFileContent(
+            fileName, []
+        ) || [];
+
+        const searchIndex = defaultSearches.findIndex((ss) => ss.objectType === search.objectType);
+        if (searchIndex !== -1) {
+            defaultSearches.splice(searchIndex, 1);
+        }
+
+        delete search.result;
+        delete search['originalCriteria'];
+
+        defaultSearches.push(search);
+        ConfigurationService.getInstance().saveDataFileContent(fileName, defaultSearches);
+    }
+
+    private async deleteUserSearchDefault(data: DeleteSearchRequest, client: Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        if (data.id) {
+            const user = await UserService.getInstance().getUserByToken(token);
+            this.deleteDefault(data.id, user);
+            return new SocketResponse(SearchEvent.DELETE_SEARCH_DEFAULT_FINISHED, { requestId: data.requestId });
+        } else {
+            return new SocketResponse(
+                SocketEvent.ERROR, new SocketErrorResponse(data.requestId, 'No user or search available.')
+            );
+        }
+    }
+
+    private deleteDefault(objectType: string, user: User): void {
+        const fileName = `${user.UserID}_default_search.json`;
+        const defaultSearches: SearchCache[] = ConfigurationService.getInstance().getDataFileContent(
+            fileName, []
+        ) || [];
+
+        const searchIndex = defaultSearches.findIndex((ss) => ss.objectType === objectType);
+        if (searchIndex !== -1) {
+            defaultSearches.splice(searchIndex, 1);
+        }
+
+        ConfigurationService.getInstance().saveDataFileContent(fileName, defaultSearches);
+    }
+
+    private async loadSearchDefault(data: LoadSearchDefaultRequest, client: Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const user = await UserService.getInstance().getUserByToken(token);
+        const defaultSearch = this.loadUserSearchDefault(data.objectType, user);
+        return new SocketResponse(
+            SearchEvent.SEARCH_DEFAULT_LOADED, new LoadSearchDefaultResponse(data.requestId, defaultSearch)
+        );
+    }
+
+    private loadUserSearchDefault(objectType: string, user: User): SearchCache {
+        const fileName = `${user.UserID}_default_search.json`;
+        const defaultSearches: SearchCache[] = ConfigurationService.getInstance().getDataFileContent(
+            fileName, []
+        ) || [];
+
+        return defaultSearches.find((ds) => ds.objectType === objectType);
     }
 
     private async saveUserSearch(search: SearchCache, share: boolean, token: string): Promise<void> {
@@ -189,7 +282,6 @@ export class SearchNamespace extends SocketNameSpace {
         const response: ISocketResponse = { requestId: data.requestId };
         return new SocketResponse(SearchEvent.SEARCH_DELETED, response);
     }
-
 
     private async deleteUserSearch(id: string, token: string): Promise<void> {
         const user = await UserService.getInstance().getUserByToken(token);

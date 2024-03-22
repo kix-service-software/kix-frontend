@@ -569,4 +569,8 @@ export class SearchService {
         return widget;
     }
 
+    public async setSearchCacheAsDefault(search: SearchCache): Promise<void> {
+        SearchSocketClient.getInstance().saveSearchAsDefault(search);
+    }
+
 }
