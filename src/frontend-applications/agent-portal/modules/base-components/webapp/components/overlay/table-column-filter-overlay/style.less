@@ -7,9 +7,15 @@
  * --
  */
 
- .table-reset-filter {
-    cursor: pointer;
- }
-.filter-action-list {
-    min-width: 25px;
+.overlay>.overlay-content.table-column-filter-overlay>.overlay-widget>.widget-content {
+    >div:has(.filter-autocomplete) {
+        max-height: 22rem;
+    }
+
+    .filter-autocomplete {
+        .form-list .value-list {
+            position: unset;
+            width: unset;
+        }
+    }
 }

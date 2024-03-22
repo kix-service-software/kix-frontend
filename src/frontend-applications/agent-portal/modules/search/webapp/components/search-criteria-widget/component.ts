@@ -26,6 +26,7 @@ import { TreeHandler, TreeNode, TreeService } from '../../../../base-components/
 import { SearchFormManager } from '../../../../base-components/webapp/core/SearchFormManager';
 import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
 import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component {
 
@@ -202,6 +203,7 @@ class Component {
         const cache = context?.getSearchCache();
         if (cache) {
             context.setSortOrder(cache.objectType, cache.sortAttribute, cache.sortDescending, false);
+            TableFactoryService.getInstance().resetFilterOfContextTables(context.contextId, cache.objectType);
         }
         await SearchService.getInstance().searchObjects(context?.getSearchCache());
         BrowserUtil.toggleLoadingShield('SEARCH_CRITERIA_SHIELD', false);

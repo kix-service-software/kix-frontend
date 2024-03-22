@@ -37,6 +37,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'contact-search-table-widget', 'Contact Search Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.CONTACT, null, null, tableConfig
         );
+        tableWidget.showFilter = false;
+
         configurations.push(tableWidget);
 
         const contactListWidget = new WidgetConfiguration(

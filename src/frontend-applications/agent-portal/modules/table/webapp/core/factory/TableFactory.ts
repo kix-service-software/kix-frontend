@@ -23,6 +23,7 @@ import { Row } from '../../../model/Row';
 import { Table } from '../../../model/Table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { DefaultDepColumnConfiguration } from '../../../model/DefaultDepColumnConfiguration';
 
 export abstract class TableFactory {
 
@@ -46,21 +47,21 @@ export abstract class TableFactory {
 
     public filterColumns(contextId: string, tableConfiguration: TableConfiguration): IColumnConfiguration[] {
         let tableColumns: IColumnConfiguration[] = JSON.parse(JSON.stringify(tableConfiguration.tableColumns));
-        const context = ContextService.getInstance().getActiveContext();
+        this.prepareDepColumns(tableColumns);
+
+        const context = contextId ? ContextService.getInstance().getActiveContext() : null;
         const dependency = context?.getAdditionalInformation('OBJECT_DEPENDENCY');
         tableColumns = tableColumns.filter((tc) => {
             if (tc.property.startsWith('DynamicFields.')) {
                 return true;
             }
 
-            if (!tc.property.startsWith('DynamicFields.') && tc.property.indexOf('.') !== -1) {
-                const split = tc.property.split('.');
-                const dep = split[0];
-                split.splice(0, 1);
-                tc.property = split.join('.');
-                if (dependency) {
-                    return dep?.toString() === dependency?.toString();
-                }
+            if (tc instanceof DefaultDepColumnConfiguration) {
+                return Array.isArray(dependency) ?
+                    dependency.some((d) => d.toString() === tc.dep.toString()) :
+                    dependency ?
+                        tc.dep.toString() === dependency.toString() :
+                        false;
             }
 
             if (tc.property.indexOf('.') === -1) {
@@ -71,6 +72,24 @@ export abstract class TableFactory {
         });
 
         return tableColumns;
+    }
+
+    private prepareDepColumns(tableColumns: DefaultColumnConfiguration[]): void {
+        const depColumns: Map<number, DefaultDepColumnConfiguration> = new Map();
+        tableColumns.forEach((tc, index) => {
+            if (tc.property.indexOf('.') !== -1 && !tc.property.startsWith('DynamicFields.')) {
+                const split = tc.property.split('.');
+                const dep = split.splice(0, 1)[0];
+                const depColumn = new DefaultDepColumnConfiguration(tc, dep);
+                depColumn.property = split.join('.');
+                depColumns.set(index, depColumn);
+            }
+        });
+        if (depColumns.size) {
+            depColumns.forEach((depColumn, index) => {
+                tableColumns.splice(index, 1, depColumn);
+            });
+        }
     }
 
     public getDefaultColumnConfiguration(property: string, translatable: boolean = true): IColumnConfiguration {

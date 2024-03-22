@@ -33,6 +33,7 @@ import { ContextFormManager } from './ContextFormManager';
 import { ContextMode } from './ContextMode';
 import { ContextPreference } from './ContextPreference';
 import { ContextStorageManager } from './ContextStorageManager';
+import { FilterCriteria } from './FilterCriteria';
 import { IdService } from './IdService';
 import { KIXObject } from './kix/KIXObject';
 import { KIXObjectType } from './kix/KIXObjectType';
@@ -67,6 +68,8 @@ export abstract class Context {
     public initialized: boolean = false;
 
     protected objectSorts: Map<string, [string, boolean]> = new Map();
+
+    private objectFilter: Map<string, FilterCriteria[]> = new Map();
 
     public constructor(
         public descriptor: ContextDescriptor,
@@ -789,10 +792,6 @@ export abstract class Context {
 
         const contextLoadingOptions = this.getContextLoadingOptions(type);
         if (contextLoadingOptions) {
-            if (Array.isArray(contextLoadingOptions.filter)) {
-                loadingOptions.filter.push(...contextLoadingOptions.filter);
-            }
-
             if (Array.isArray(contextLoadingOptions.includes)) {
                 loadingOptions.includes.push(...contextLoadingOptions.includes);
             }
@@ -804,6 +803,11 @@ export abstract class Context {
             if (Array.isArray(contextLoadingOptions.query)) {
                 loadingOptions.query = contextLoadingOptions.query;
             }
+        }
+
+        const contextFilter = this.getFilter(type);
+        if (contextFilter?.length) {
+            loadingOptions.filter.push(...contextFilter);
         }
 
         // if no limit given - e.g. initial call, use configurations, else it will possible
@@ -924,8 +928,45 @@ export abstract class Context {
         return true;
     }
 
+    public supportsBackendFilter(type: string): boolean {
+        return true;
+    }
+
+    public async supportsBackendFilterForProperty(type: string, property: string, dep?: string): Promise<boolean> {
+        return KIXObjectService.isBackendFilterSupportedForProperty(type, property, dep) || false;
+    }
+
     public getCollectionId(): string {
         return;
+    }
+
+    public async setFilterCriteria(
+        type: string, criteria: FilterCriteria[], reload: boolean = true, limit?: number
+    ): Promise<void> {
+        if (type) {
+            if (criteria) {
+                this.objectFilter.set(type, criteria);
+            } else {
+                this.objectFilter.delete(type);
+            }
+            if (reload) {
+                await this.reloadObjectList(type, undefined, limit);
+            }
+        }
+    }
+
+    public getFilter(type: string): FilterCriteria[] {
+        let filter = [];
+        if (this.objectFilter.has(type)) {
+            filter = [...this.objectFilter.get(type)];
+        }
+
+        const contextLoadingOptions = this.getContextLoadingOptions(type);
+        if (contextLoadingOptions?.filter) {
+            filter.push(...contextLoadingOptions.filter);
+        }
+
+        return filter;
     }
 
 }

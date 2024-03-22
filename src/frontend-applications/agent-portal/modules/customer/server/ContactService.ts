@@ -276,16 +276,41 @@ export class ContactAPIService extends KIXObjectAPIService {
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        const searchCriteria = criteria.filter((f) => f.property !== SearchProperty.PRIMARY);
+        let searchCriteria = criteria.filter((f) => f.property !== SearchProperty.PRIMARY);
 
-        const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
-        if (primary) {
-            const primarySearch = new FilterCriteria(
-                ContactProperty.EMAILS, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, primary.value
-            );
-            searchCriteria.push(primarySearch);
+        const primary = criteria.filter((f) => f.property === SearchProperty.PRIMARY);
+        if (primary?.length) {
+            primary.forEach((c) => {
+                const primarySearch = new FilterCriteria(
+                    ContactProperty.EMAILS, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, c.value
+                );
+                searchCriteria.push(primarySearch);
+            });
         }
+
+        [UserProperty.IS_AGENT, UserProperty.IS_CUSTOMER].forEach((p) => {
+            const isAC = criteria.filter((sc) => sc.property === p);
+            isAC.forEach((c) => {
+                if (Array.isArray(c.value)) {
+
+                    // only one (valid) value is possible in backend
+                    // both possible values (yes/no) are not supported and not needed, same as no filter
+                    if (
+                        c.value.length === 1 &&
+                        c.value[0] !== null && typeof c.value[0] !== 'undefined'
+                    ) {
+                        c.operator = SearchOperator.EQUALS;
+                        c.value = c.value[0];
+                    } else {
+                        c.property = 'REMOVE ME';
+                    }
+                } else {
+                    c.operator = SearchOperator.EQUALS;
+                }
+            });
+        });
+        searchCriteria = searchCriteria.filter((sC) => sC.property !== 'REMOVE ME');
 
         return searchCriteria;
     }

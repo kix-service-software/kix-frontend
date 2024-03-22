@@ -7,7 +7,7 @@
  * --
  */
 
-import { SortDataType } from '../../../model/SortDataType';
+import { BackendSearchDataType } from '../../../model/BackendSearchDataType';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
@@ -29,7 +29,7 @@ export class ObjectSearch extends KIXObject {
 
     public Property: string;
 
-    public ValueType: SortDataType | string;
+    public ValueType: BackendSearchDataType;
 
     public constructor(objectSearch?: ObjectSearch) {
         super(objectSearch);
@@ -48,7 +48,7 @@ export class ObjectSearch extends KIXObject {
             }
             this.Property = property;
 
-            this.ValueType = objectSearch.ValueType || SortDataType.TEXTUAL;
+            this.ValueType = objectSearch.ValueType || BackendSearchDataType.TEXTUAL;
         }
     }
 

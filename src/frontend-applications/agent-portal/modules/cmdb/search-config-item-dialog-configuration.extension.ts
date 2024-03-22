@@ -40,6 +40,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'cmdb-search-ci-table-widget', 'CI Search Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.CONFIG_ITEM, null, null, tableConfig
         );
+        tableWidgetConfig.showFilter = false;
 
         const ciListWidget = new WidgetConfiguration(
             'cmdb-search-ci-list-widget', 'CI Search List', ConfigurationType.Widget,

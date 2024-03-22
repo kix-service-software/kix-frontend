@@ -92,7 +92,27 @@ export class Column<T extends KIXObject = any> {
         return values;
     }
 
-    public async filter(filterValues?: T[], textValue?: string): Promise<void> {
+    public async filter(filterValues?: T[], textValue?: string, doFilter: boolean = true): Promise<void> {
+        this.setFilter(filterValues, textValue);
+
+        if (!this.getColumnConfiguration()?.hasListFilter && !this.getTable().isBackendFilterSupported()) {
+            const rows = this.getTable().getRows(true);
+            const promises = [];
+            rows.forEach((r) => promises.push(r.getCell(this.getColumnId()).initDisplayValue()));
+            await Promise.all(promises);
+        }
+
+        if (doFilter) {
+            await this.getTable().filter();
+        }
+
+        EventService.getInstance().publish(
+            TableEvent.COLUMN_FILTERED,
+            new TableEventData(this.getTable().getTableId(), null, this.getColumnId())
+        );
+    }
+
+    private setFilter(filterValues?: T[], textValue?: string): void {
         const criteria: UIFilterCriterion[] = [];
 
         if (filterValues && filterValues.length) {
@@ -104,13 +124,6 @@ export class Column<T extends KIXObject = any> {
         this.filterValue = textValue;
         this.filterCriteria = criteria;
 
-        if (!this.getColumnConfiguration()?.hasListFilter) {
-            const rows = this.getTable().getRows(true);
-            const promises = [];
-            rows.forEach((r) => promises.push(r.getCell(this.getColumnId()).initDisplayValue()));
-            await Promise.all(promises);
-        }
-
         const filterDefinition = { filterValue: this.filterValue, filterCriteria: this.filterCriteria };
         try {
             ClientStorageService.setOption(this.getConfigurationKey('filter'), JSON.stringify(filterDefinition));
@@ -118,13 +131,6 @@ export class Column<T extends KIXObject = any> {
             console.error('Could not save filter definition for column.');
             console.error(e);
         }
-
-        await this.getTable().filter();
-
-        EventService.getInstance().publish(
-            TableEvent.COLUMN_FILTERED,
-            new TableEventData(this.getTable().getTableId(), null, this.getColumnId())
-        );
     }
 
     public getFilter(): [string, UIFilterCriterion[]] {

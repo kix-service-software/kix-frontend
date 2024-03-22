@@ -35,22 +35,34 @@ export class ConfigItemClassAttributeUtil {
     }
 
     public static async getAttributeType(property: string, classIds?: number | number[]): Promise<string> {
-        const ciClasses = await this.loadCIClasses(classIds);
+        let ciClasses = await this.loadCIClasses(classIds);
         if (ciClasses && ciClasses.length) {
-            const attribute = this.getAttribute(ciClasses[0].CurrentDefinition.Definition, property);
-            if (attribute && attribute.Input) {
-                return attribute.Input.Type;
+            if (classIds) {
+                ciClasses = [ciClasses[0]];
             }
+            for (const ciClass of ciClasses) {
+                const attribute = this.getAttribute(ciClass.CurrentDefinition.Definition, property);
+                if (attribute && attribute.Input) {
+                    return attribute.Input.Type;
+                }
+            };
         }
 
         return DataType.STRING;
     }
 
     public static async getAttributePath(property: string, classIds?: number | number[]): Promise<string> {
-        const ciClasses = await this.loadCIClasses(classIds);
+        let ciClasses = await this.loadCIClasses(classIds);
         if (ciClasses && ciClasses.length) {
-            const path = this.getPath(ciClasses[0].CurrentDefinition.Definition, property);
-            return path;
+            if (classIds) {
+                ciClasses = [ciClasses[0]];
+            }
+            for (const ciClass of ciClasses) {
+                const path = this.getPath(ciClass.CurrentDefinition.Definition, property);
+                if (path) {
+                    return path;
+                }
+            }
         }
 
         return null;
@@ -92,11 +104,16 @@ export class ConfigItemClassAttributeUtil {
     }
 
     public static async getAttributeInput(property: string, classIds?: number | number[]): Promise<InputDefinition> {
-        const ciClasses = await this.loadCIClasses(classIds);
+        let ciClasses = await this.loadCIClasses(classIds);
         if (ciClasses && ciClasses.length) {
-            const attribute = this.getAttribute(ciClasses[0].CurrentDefinition.Definition, property);
-            if (attribute && attribute.Input) {
-                return attribute.Input;
+            if (classIds) {
+                ciClasses = [ciClasses[0]];
+            }
+            for (const ciClass of ciClasses) {
+                const attribute = this.getAttribute(ciClass.CurrentDefinition.Definition, property);
+                if (attribute && attribute.Input) {
+                    return attribute.Input;
+                }
             }
         }
 

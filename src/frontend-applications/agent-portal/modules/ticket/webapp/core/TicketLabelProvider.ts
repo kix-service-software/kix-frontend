@@ -115,12 +115,12 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.ORGANISATION_ID:
-                if (!isNaN(Number(value))) {
+                if (value !== null && !isNaN(Number(value))) {
                     displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.ORGANISATION, value);
                 }
                 break;
             case TicketProperty.CONTACT_ID:
-                if (!isNaN(Number(value))) {
+                if (value !== null && !isNaN(Number(value))) {
                     displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.CONTACT, value);
                 }
                 break;
@@ -542,17 +542,17 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.CONTACT_ID:
-                if (ticket && ticket.ContactID) {
+                if (value) {
                     icons.push(new ObjectIcon(
-                        null, KIXObjectType.CONTACT, ticket.ContactID, null, null,
+                        null, KIXObjectType.CONTACT, value, null, null,
                         LabelService.getInstance().getObjectTypeIcon(KIXObjectType.CONTACT)
                     ));
                 }
                 break;
             case TicketProperty.ORGANISATION_ID:
-                if (ticket && ticket.OrganisationID) {
+                if (value) {
                     icons.push(new ObjectIcon(
-                        null, KIXObjectType.ORGANISATION, ticket.OrganisationID, null, null,
+                        null, KIXObjectType.ORGANISATION, value, null, null,
                         LabelService.getInstance().getObjectTypeIcon(KIXObjectType.ORGANISATION)
                     ));
                 }
@@ -574,9 +574,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.OWNER_ID:
-                if (ticket && ticket.OwnerID) {
+                if (value) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [ticket.OwnerID],
+                        KIXObjectType.USER, [value],
                         new KIXObjectLoadingOptions(
                             null, null, 1, [UserProperty.CONTACT]
                         ), null, true, true, true
@@ -590,9 +590,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.RESPONSIBLE_ID:
-                if (ticket && ticket.ResponsibleID) {
+                if (value) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [ticket.ResponsibleID],
+                        KIXObjectType.USER, [value],
                         new KIXObjectLoadingOptions(
                             null, null, 1, [UserProperty.CONTACT]
                         ), null, true, true, true

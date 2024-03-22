@@ -31,9 +31,14 @@ import { PlaceholderService } from '../../../base-components/webapp/core/Placeho
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
+    private classObjectType: RegExp = new RegExp(`${KIXObjectType.CONFIG_ITEM}\\..+`);
 
     public isLabelProviderForDFType(dfFieldType: string): boolean {
         return dfFieldType === DynamicFieldTypes.CI_REFERENCE || super.isLabelProviderForDFType(dfFieldType);
+    }
+
+    public isLabelProviderForType(objectType: KIXObjectType | string): boolean {
+        return objectType === this.kixObjectType || Boolean(objectType?.match(this.classObjectType));
     }
 
     public async getPropertyValueDisplayText(
@@ -184,7 +189,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 translatable = false;
                 break;
             default:
-                const attributes = configItem.getPreparedData(property);
+                const attributes = typeof configItem.getPreparedData === 'function' ? configItem.getPreparedData(property) : null;
                 if (attributes && attributes.length > 0) {
                     if (attributes.length > 1) {
                         displayValue = attributes.map((a) => `[${a.DisplayValue}]`).join(' ');

@@ -28,6 +28,7 @@ export class FAQArticleTableContentProvider extends TableContentProvider<FAQArti
     ) {
         super(KIXObjectType.FAQ_ARTICLE, table, objectIds, loadingOptions, contextId, objects);
         this.useBackendSort = true;
+        this.useBackendFilter = true;
     }
 
     protected async prepareSpecificValues(values: TableValue[], faqArticle: FAQArticle): Promise<void> {

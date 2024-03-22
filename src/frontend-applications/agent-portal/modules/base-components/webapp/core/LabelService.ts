@@ -494,6 +494,16 @@ export class LabelService {
         return this.getDisplayText(object as any, property, value?.toString(), translatable);
     }
 
+    public async getPropertyValueIcons(
+        objectType: KIXObjectType | string, property: string, value: string | number, object?: KIXObject
+    ): Promise<Array<string | ObjectIcon>> {
+        if (!object) {
+            object ||= { KIXObjectType: objectType } as KIXObject;
+            object[property] = value;
+        }
+        return this.getIcons(object as any, property, value?.toString());
+    }
+
     public async getIconsForType<T extends KIXObject>(
         objectType: KIXObjectType | string, object: T, property: string, value?: string | number, forTable?: boolean
     ): Promise<Array<string | ObjectIcon>> {

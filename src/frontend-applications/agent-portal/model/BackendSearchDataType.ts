@@ -7,17 +7,17 @@
  * --
  */
 
-export enum SortDataType {
+export enum BackendSearchDataType {
 
-    TEXTUAL = 'textual',
+    TEXTUAL = 'TEXTUAL',
 
-    NUMERIC = 'numeric',
+    NUMERIC = 'NUMERIC',
 
-    DATE = 'date',
+    DATE = 'DATE',
 
-    DATETIME = 'datetime',
+    DATETIME = 'DATETIME',
 
     // currently not used
-    // NATURAL = 'natural'
+    // NATURAL = 'NATURAL'
 
 }

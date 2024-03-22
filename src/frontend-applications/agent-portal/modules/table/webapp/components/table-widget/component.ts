@@ -51,6 +51,8 @@ class Component {
     private context: Context;
     private formBindingIds: Map<string, string>;
 
+    public resetFilterTitle: string;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -70,6 +72,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.state.filterPlaceholder = await TranslationService.translate(this.state.filterPlaceholder);
+        this.resetFilterTitle = await TranslationService.translate('Translatable#Reset table filters');
         this.additionalFilterCriteria = [];
         this.context = ContextService.getInstance().getActiveContext();
 
@@ -100,24 +103,34 @@ class Component {
             eventPublished: async (data: any, eventId: string): Promise<void> => {
                 if (data?.tableId === this.state.table?.getTableId()) {
                     const isdependent = this.state.widgetConfiguration.contextDependent;
-                    if (eventId === TableEvent.COLUMN_FILTERED && isdependent) {
+                    if (eventId === TableEvent.TABLE_FILTERED) {
+                        this.state.showFilterReset = this.state.table.isFiltered();
+                    } else if (eventId === TableEvent.COLUMN_FILTERED && isdependent) {
                         this.setFilteredObjectListToContext();
                     } else if (eventId === TableEvent.RELOADED) {
-                        if (settings && settings.resetFilterOnReload) {
+                        this.state.showFilterReset = this.state.table.isFiltered();
+                        if (
+                            settings && settings.resetFilterOnReload &&
+                            !this.state.table.isBackendFilterSupported()
+                        ) {
                             const filterComponent = (this as any).getComponent('table-widget-filter');
-                            filterComponent?.reset();
+                            if (filterComponent) {
+                                filterComponent.reset();
+                            }
                         }
 
                         this.prepareTitle();
                     } else {
                         if (eventId === TableEvent.TABLE_READY) {
+                            this.state.showFilterReset = this.state.table.isFiltered();
                             if (this.state.table.isFiltered()) {
                                 this.state.filterCount = this.state.table.getRowCount();
                                 this.state.filterValue = this.state.table.getFilterValue();
-                                this.prepareTitle();
                             } else {
                                 this.state.filterCount = null;
+                                this.state.filterValue = null;
                             }
+                            this.prepareTitle();
                         }
                         WidgetService.getInstance().updateActions(this.state.instanceId);
                     }
@@ -134,12 +147,24 @@ class Component {
         EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
         EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(TableEvent.RELOADED, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this.subscriber);
     }
 
     private async prepare(): Promise<void> {
         this.prepareHeader();
         await this.prepareTable();
         this.prepareActions();
+        this.prepareTitle();
+    }
+
+    public resetFilter(): void {
+        this.state.table.resetFilter(true);
+        const filterComponent = (this as any).getComponent('table-widget-filter');
+        if (filterComponent) {
+            filterComponent.reset();
+        }
+        this.state.filterCount = null;
+        this.state.filterValue = null;
         this.prepareTitle();
     }
 
@@ -184,12 +209,12 @@ class Component {
     private async reloadTable(settings: TableWidgetConfiguration): Promise<void> {
         const activeContext = ContextService.getInstance().getActiveContext();
         if (this.context.instanceId === activeContext.instanceId) {
-            if (this.state.table.isFiltered()) {
-                if (settings?.resetFilterOnReload) {
-                    this.state.table?.resetFilter();
+            if (this.state.table?.isFiltered()) {
+                if (settings?.resetFilterOnReload && !this.state.table.isBackendFilterSupported()) {
+                    this.state.table.resetFilter();
                     const filterComponent = (this as any).getComponent('table-widget-filter');
                     filterComponent?.reset();
-                } else if (this.state.table) {
+                } else {
                     this.state.filterValue = this.state.table.getFilterValue();
                 }
             }
@@ -269,6 +294,7 @@ class Component {
         EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.COLUMN_FILTERED, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this.subscriber);
 
         const context = ContextService.getInstance().getActiveContext();
         if (context) {

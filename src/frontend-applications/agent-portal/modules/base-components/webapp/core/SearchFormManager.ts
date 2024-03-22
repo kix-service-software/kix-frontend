@@ -14,7 +14,7 @@ import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
 import { TreeNode } from './tree';
 import { LabelService } from './LabelService';
-import { SortDataType } from '../../../../model/SortDataType';
+import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 
 export class SearchFormManager extends AbstractDynamicFormManager {
 
@@ -87,6 +87,6 @@ export class SearchFormManager extends AbstractDynamicFormManager {
     public async getSortAttributeType(attribute: string): Promise<string> {
         const supportedAttributes = await KIXObjectService.getSortableAttributes(this.objectType);
         const relevantAttribute = supportedAttributes.find((sA) => sA.Property === attribute);
-        return relevantAttribute?.ValueType || SortDataType.TEXTUAL;
+        return relevantAttribute?.ValueType || BackendSearchDataType.TEXTUAL;
     }
 }

@@ -240,7 +240,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'ticket-dashboard-table-widget-settings', 'Ticket Table Widget Settings', ConfigurationType.TableWidget,
             KIXObjectType.TICKET, null,
             new ConfigurationDefinition('ticket-dashboard-table-config', ConfigurationType.Table), null,
-            null, true, null, predefinedTicketFilter
+            null, false, null, predefinedTicketFilter
         );
         configurations.push(tableWidgetConfig);
 
