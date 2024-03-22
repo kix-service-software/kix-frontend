@@ -58,7 +58,10 @@ export abstract class SearchContext extends Context {
                 }
             }
         } else {
-            this.searchCache = new SearchCache(
+            const defaultSearch = await SearchSocketClient.getInstance().loadDefaultUserSearch(
+                this.descriptor.kixObjectTypes[0]
+            );
+            this.searchCache = defaultSearch || new SearchCache(
                 IdService.generateDateBasedId(), this.descriptor.contextId, this.descriptor.kixObjectTypes[0],
                 [], [], null
             );

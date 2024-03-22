@@ -39,7 +39,9 @@ export class SearchCache<T extends KIXObject = KIXObject> {
             this.id = IdService.generateDateBasedId('SearchCache');
         }
 
-        this.originalCriteria = [...this.criteria];
+        this.originalCriteria = Array.isArray(this.criteria)
+            ? [...this.criteria]
+            : [];
         this.originalFulltextValue = this.fulltextValue;
         this.originalPrimaryValue = this.primaryValue;
         this.originalLimit = this.limit;
@@ -57,11 +59,12 @@ export class SearchCache<T extends KIXObject = KIXObject> {
     }
 
     public static create(searchCache: SearchCache, createNew?: boolean): SearchCache {
-        const id = createNew ? IdService.generateDateBasedId('SearchCache') : searchCache.id;
+        const id = createNew ? IdService.generateDateBasedId('SearchCache') : searchCache?.id;
         return new SearchCache(
             id, searchCache.contextId,
-            searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, searchCache.primaryValue,
-            searchCache.name, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescending,
+            searchCache.objectType, searchCache.criteria || [], [],
+            searchCache.fulltextValue, searchCache.primaryValue, searchCache.name,
+            searchCache.limit, searchCache.sortAttribute, searchCache.sortDescending,
             searchCache.userId, searchCache.userDisplayText
         );
     }
