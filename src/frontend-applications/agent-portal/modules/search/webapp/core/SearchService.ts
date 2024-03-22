@@ -158,6 +158,7 @@ export class SearchService {
         searchCache: SearchCache,
         context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>(),
         additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean],
+        additionalFilter?: FilterCriteria[],
         setResult: boolean = true
     ): Promise<KIXObject[]> {
         if (!searchCache) {
@@ -218,6 +219,10 @@ export class SearchService {
 
         if (sort?.length) {
             loadingOptions.sortOrder = await KIXObjectService.getSortOrder(sort[0], sort[1], searchCache.objectType);
+        }
+
+        if (additionalFilter?.length) {
+            loadingOptions.filter.push(...additionalFilter);
         }
 
         loadingOptions.searchLimit = searchLimit || searchCache.limit || loadingOptions.searchLimit;
@@ -285,7 +290,7 @@ export class SearchService {
         searchCache.primaryValue = searchValue;
 
         const objects = await this.searchObjects(
-            searchCache, undefined, undefined, undefined, undefined, undefined, false
+            searchCache, undefined, undefined, undefined, undefined, undefined, undefined, false
         );
 
         if (Array.isArray(objects) && objects.length === 1) {
@@ -334,7 +339,7 @@ export class SearchService {
         }
 
         const objects = await this.searchObjects(
-            searchCache, context, undefined, undefined, undefined, undefined, setContext
+            searchCache, context, undefined, undefined, undefined, undefined, undefined, setContext
         );
         return (objects as any);
     }
@@ -487,7 +492,8 @@ export class SearchService {
 
     public async executeSearchCache(
         id?: string, name?: string, cache?: SearchCache, context?: SearchContext, setSearchContext?: boolean,
-        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean]
+        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean],
+        additionalFilter?: FilterCriteria[]
     ): Promise<KIXObject[]> {
         const search = await SearchSocketClient.getInstance().loadAllSearches();
         let searchCache = cache || search.find((s) => s.id === id);
@@ -507,7 +513,9 @@ export class SearchService {
             });
         }
 
-        return await this.searchObjects(searchCache, context, additionalIncludes, limit, searchLimit, sort);
+        return await this.searchObjects(
+            searchCache, context, additionalIncludes, limit, searchLimit, sort, additionalFilter
+        );
     }
 
     private async setSearchContext(

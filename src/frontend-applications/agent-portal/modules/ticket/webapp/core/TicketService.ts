@@ -65,6 +65,7 @@ import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil'
 import { Counter } from '../../../user/model/Counter';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -648,42 +649,35 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
         const superProperties = await super.getObjectProperties(objectType);
-        const objectProperties: string[] = [];
 
-        const ignoreProperties = [
-            TicketProperty.STATE_TYPE,
-            TicketProperty.STATE_TYPE_ID,
-            TicketProperty.CREATED_PRIORITY_ID,
-            TicketProperty.CREATED_QUEUE_ID,
-            TicketProperty.CREATED_STATE_ID,
-            TicketProperty.CREATED_TIME_UNIX,
-            TicketProperty.CREATED_TYPE_ID,
-            TicketProperty.CREATED_USER_ID,
-            TicketProperty.ARTICLES,
-            TicketProperty.ARTICLE_CREATE_TIME,
-            TicketProperty.CHANGE_TIME,
-            TicketProperty.LAST_CHANGE_TIME,
-            TicketProperty.LINKED_AS,
-            TicketProperty.TICKET_NOTES,
-            TicketProperty.ARCHIVE_FLAG,
-            TicketProperty.WATCHER_USER_ID,
-            TicketProperty.HISTORY,
-            TicketProperty.LINK,
-            TicketProperty.TICKET_FLAG,
-            TicketProperty.ARTICLE_FLAG,
-            TicketProperty.PENDING_TIME_UNIX,
-            TicketProperty.UNTIL_TIME,
-            TicketProperty.CLOSE_TIME,
-            TicketProperty.CREATE_TIME,
-            TicketProperty.ATTACHMENT_NAME,
-            TicketProperty.STATE
+        const objectProperties = [
+            TicketProperty.AGE,
+            TicketProperty.CONTACT_ID,
+            TicketProperty.LOCK_ID,
+            TicketProperty.ORGANISATION_ID,
+            TicketProperty.OWNER_ID,
+            TicketProperty.PENDING_TIME,
+            TicketProperty.PRIORITY_ID,
+            // TicketProperty.CREATED_PRIORITY_ID,
+            TicketProperty.RESPONSIBLE_ID,
+            TicketProperty.STATE_ID,
+            // TicketProperty.CREATED_STATE_ID,
+            TicketProperty.QUEUE_ID,
+            TicketProperty.QUEUE_FULLNAME,
+            // TicketProperty.CREATED_QUEUE_ID,
+            TicketProperty.TICKET_NUMBER,
+            TicketProperty.TITLE,
+            TicketProperty.TYPE_ID,
+            // TicketProperty.CREATED_TYPE_ID,
+            TicketProperty.UNSEEN,
+            // TicketProperty.STATE_TYPE_ID,
+
+            TicketProperty.CHANGED,
+            KIXObjectProperty.CHANGE_BY,
+            TicketProperty.CREATED,
+            KIXObjectProperty.CREATE_BY
         ];
 
-        for (const property in TicketProperty) {
-            if (TicketProperty[property] && !ignoreProperties.some((p) => p === TicketProperty[property])) {
-                objectProperties.push(TicketProperty[property]);
-            }
-        }
         return [...objectProperties, ...superProperties];
     }
 
@@ -794,7 +788,6 @@ export class TicketService extends KIXObjectService<Ticket> {
         return color;
     }
 
-
     public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
         let objectType = await super.getObjectTypeForProperty(property);
 
@@ -872,7 +865,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             supportedAttributes;
     }
 
-    protected getSortAttribute(attribute: string): string {
+    public getSortAttribute(attribute: string, dep?: string): string {
         switch (attribute) {
             case TicketProperty.CONTACT_ID:
                 return TicketProperty.CONTACT;
@@ -885,6 +878,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.PRIORITY_ID:
                 return TicketProperty.PRIORITY;
             case TicketProperty.QUEUE_ID:
+            case TicketProperty.QUEUE_FULLNAME:
                 return TicketProperty.QUEUE;
             case TicketProperty.RESPONSIBLE_ID:
                 return TicketProperty.RESPONSIBLE;
@@ -899,7 +893,59 @@ export class TicketService extends KIXObjectService<Ticket> {
                 return TicketProperty.LAST_CHANGE_TIME;
             default:
         }
-        return super.getSortAttribute(attribute);
+        return super.getSortAttribute(attribute, dep);
+    }
+
+    public async getFilterAttribute(attribute: string, dep?: string): Promise<string> {
+        switch (attribute) {
+            case TicketProperty.CREATED:
+                return KIXObjectProperty.CREATE_TIME;
+            case TicketProperty.CHANGED:
+            case KIXObjectProperty.CHANGE_TIME:
+                return TicketProperty.LAST_CHANGE_TIME;
+            case TicketProperty.QUEUE_FULLNAME:
+                return TicketProperty.QUEUE_ID;
+            default:
+        }
+        return super.getFilterAttribute(attribute, dep);
+    }
+
+    protected async isBackendFilterSupportedForProperty(
+        objectType: KIXObjectType | string, property: string, supportedAttributes: ObjectSearch[], dep?: string
+    ): Promise<boolean> {
+        const filterList = [
+            // TODO: currently date/time is not supported (in FE)
+            TicketProperty.CREATED,
+            TicketProperty.CREATED_TIME_UNIX,
+            TicketProperty.CHANGED,
+            TicketProperty.LAST_CHANGE_TIME,
+            TicketProperty.ARTICLE_CREATE_TIME,
+            TicketProperty.PENDING_TIME,
+            TicketProperty.PENDING_TIME_UNIX,
+            TicketProperty.UNTIL_TIME,
+            TicketProperty.AGE,
+
+            'OrganisationNumber'
+        ];
+        if (filterList.some((f) => f === property)) {
+            return false;
+        }
+        return super.isBackendFilterSupportedForProperty(objectType, property, supportedAttributes, dep);
+    }
+
+    protected async getBackendFilterType(property: string, dep?: string): Promise<BackendSearchDataType | string> {
+        switch (property) {
+            case TicketProperty.CONTACT_ID:
+            case TicketProperty.ORGANISATION_ID:
+            case TicketProperty.OWNER_ID:
+            case TicketProperty.RESPONSIBLE_ID:
+                return 'Autocomplete';
+            // use dropdown (Open, Closed)
+            case TicketProperty.STATE_TYPE:
+                return BackendSearchDataType.NUMERIC;
+            default:
+        }
+        return super.getBackendFilterType(property, dep);
     }
 
     public getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {

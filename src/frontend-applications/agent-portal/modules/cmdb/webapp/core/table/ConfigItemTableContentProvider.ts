@@ -23,6 +23,7 @@ export class ConfigItemTableContentProvider extends TableContentProvider<ConfigI
     ) {
         super(KIXObjectType.CONFIG_ITEM, table, objectIds, loadingOptions, contextId);
         this.useBackendSort = true;
+        this.useBackendFilter = true;
     }
 
 }

@@ -76,7 +76,7 @@ class OverlayComponent {
             this.closeOverlay();
         }
         this.state.show = false;
-        this.keepShow = true;
+        this.keepShow = false;
         if (autoClose) {
             this.clickListener = (event: any): void => {
                 if (!this.keepShow && !this.showShield() && event.button === 0) {

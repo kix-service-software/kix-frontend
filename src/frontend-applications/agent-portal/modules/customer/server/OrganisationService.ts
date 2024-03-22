@@ -160,13 +160,15 @@ export class OrganisationAPIService extends KIXObjectAPIService {
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const searchCriteria = criteria.filter((c) => c.property !== SearchProperty.PRIMARY);
 
-        const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
-        if (primary) {
-            const primaryFilter = new FilterCriteria(
-                OrganisationProperty.NUMBER, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, primary.value
-            );
-            searchCriteria.push(primaryFilter);
+        const primary = criteria.filter((f) => f.property === SearchProperty.PRIMARY);
+        if (primary?.length) {
+            primary.forEach((c) => {
+                const primaryFilter = new FilterCriteria(
+                    OrganisationProperty.NUMBER, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, c.value
+                );
+                searchCriteria.push(primaryFilter);
+            });
         }
 
         return searchCriteria;

@@ -760,72 +760,72 @@ export class TicketAPIService extends KIXObjectAPIService {
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         let searchCriteria = criteria.filter((f) =>
-            Ticket.SEARCH_PROPERTIES.some((sp) => sp.Property === f.property &&
-                (sp.APIOperations?.includes(f.operator as SearchOperator) ||
-                    sp.Operations?.includes(f.operator as SearchOperator)
-                )
-            ) ||
-            f.property === KIXObjectProperty.CREATE_BY || f.property === KIXObjectProperty.CHANGE_BY ||
-            f.property === KIXObjectProperty.CREATE_TIME || f.property === KIXObjectProperty.CHANGE_TIME
+            f.property !== SearchProperty.PRIMARY && f.property !== SearchProperty.FULLTEXT
         );
 
         await this.setUserID(searchCriteria, token);
 
-        const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
-        if (primary) {
-            const primarySearch = [
-                new FilterCriteria(
-                    TicketProperty.TICKET_NUMBER, SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
-                ),
-            ];
-            searchCriteria = [...searchCriteria, ...primarySearch];
+        const primary = criteria.filter((f) => f.property === SearchProperty.PRIMARY);
+        if (primary?.length) {
+            primary.forEach((c) => {
+                const primarySearch = [
+                    new FilterCriteria(
+                        TicketProperty.TICKET_NUMBER, SearchOperator.LIKE,
+                        FilterDataType.STRING, FilterType.OR, `${c.value}`
+                    ),
+                ];
+                searchCriteria = [...searchCriteria, ...primarySearch];
+            });
         }
 
-        const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
-        if (fulltext) {
-            const fulltextSearch = this.getFulltextSearch(fulltext);
-            searchCriteria = [...searchCriteria, ...fulltextSearch];
+        const fulltext = criteria.filter((f) => f.property === SearchProperty.FULLTEXT);
+        if (fulltext?.length) {
+            fulltext.forEach((c) => {
+                const fulltextSearch = this.getFulltextSearch(c);
+                searchCriteria = [...searchCriteria, ...fulltextSearch];
+            });
         }
 
-        const createdCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.CREATED);
-        if (createdCriteria) {
-            createdCriteria.property = KIXObjectProperty.CREATE_TIME;
+        const createdCriteria = searchCriteria.filter((sc) => sc.property === TicketProperty.CREATED);
+        if (createdCriteria?.length) {
+            createdCriteria.forEach((c) => c.property = KIXObjectProperty.CREATE_TIME);
         }
 
-        const changedCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.CHANGED);
-        if (changedCriteria) {
-            changedCriteria.property = KIXObjectProperty.CHANGE_TIME;
+        const changedCriteria = searchCriteria.filter((sc) => sc.property === TicketProperty.CHANGED);
+        if (changedCriteria?.length) {
+            changedCriteria.forEach((c) => c.property = KIXObjectProperty.CHANGE_TIME);
         }
 
-        const visibleCriteria = searchCriteria.find((sc) => sc.property === ArticleProperty.CUSTOMER_VISIBLE);
-        if (
-            visibleCriteria
-            && Array.isArray(visibleCriteria.value)
-            && visibleCriteria.operator === SearchOperator.EQUALS
-        ) {
-            visibleCriteria.value = visibleCriteria.value[0];
+        const visibleCriteria = searchCriteria.filter((sc) => sc.property === ArticleProperty.CUSTOMER_VISIBLE);
+        if (visibleCriteria?.length) {
+            visibleCriteria.forEach((c) => {
+                if (Array.isArray(c.value) && c.operator === SearchOperator.EQUALS) {
+                    c.value = c.value[0];
+                }
+            });
         }
 
-        const lockCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.LOCK_ID);
-        if (
-            lockCriteria
-            && Array.isArray(lockCriteria.value)
-            && lockCriteria.operator === SearchOperator.EQUALS
-        ) {
-            lockCriteria.value = lockCriteria.value[0];
+        const lockCriteria = searchCriteria.filter((sc) => sc.property === TicketProperty.LOCK_ID);
+        if (lockCriteria?.length) {
+            lockCriteria.forEach((c) => {
+                if (Array.isArray(c.value) && c.operator === SearchOperator.EQUALS) {
+                    c.value = c.value[0];
+                }
+            });
         }
 
-        const ticketNumberCriterion = searchCriteria.find((c) => c.property === TicketProperty.TICKET_NUMBER);
-        if (ticketNumberCriterion) {
+        const ticketNumberCriterion = searchCriteria.filter((c) => c.property === TicketProperty.TICKET_NUMBER);
+        if (ticketNumberCriterion?.length) {
+            // remove hook and divider if necessary
             const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                 token, 'TicketService', KIXObjectType.SYS_CONFIG_OPTION,
                 [SysConfigKey.TICKET_HOOK, SysConfigKey.TICKET_HOOK_DIVIDER], null, null
             );
-
             const options = objectResponse?.objects || [];
-            for (const o of options) {
-                ticketNumberCriterion.value = ticketNumberCriterion.value?.toString()?.replace(o.Value, '');
+            if (options?.length) {
+                ticketNumberCriterion.forEach((c) => {
+                    options.forEach((o) => c.value = c.value?.toString()?.replace(o.Value, ''));
+                });
             }
         }
 

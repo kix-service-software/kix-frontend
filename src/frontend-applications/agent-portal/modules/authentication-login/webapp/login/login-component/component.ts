@@ -141,7 +141,7 @@ class Component {
     public getString(pattern: string): string {
         if (typeof window !== 'undefined' && window?.navigator) {
             const userLang = window.navigator.language;
-            if (userLang.indexOf('de') >= 0 && this.translations.some((t) => t[0] === pattern)) {
+            if (userLang.indexOf('de') >= 0 && this.translations?.some((t) => t[0] === pattern)) {
                 const translation = this.translations.find((t) => t[0] === pattern);
                 return translation[1];
             }

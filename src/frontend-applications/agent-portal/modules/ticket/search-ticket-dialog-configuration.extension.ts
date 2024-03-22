@@ -20,12 +20,10 @@ import { ContextConfiguration } from '../../model/configuration/ContextConfigura
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
-import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
 import { TableHeaderHeight } from '../table/model/TableHeaderHeight';
 import { TableRowHeight } from '../table/model/TableRowHeight';
-import { ToggleOptions } from '../table/model/ToggleOptions';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
@@ -48,6 +46,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'ticket-search-table-widget-settings', 'Ticket Search Table Widget Settings',
             ConfigurationType.TableWidget, KIXObjectType.TICKET, null, null, tableConfig
         );
+        tableWidgetConfig.showFilter = false;
+
         configurations.push(tableWidgetConfig);
 
         const ticketListConfig = new WidgetConfiguration(

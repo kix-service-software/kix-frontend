@@ -8,6 +8,8 @@
  */
 
 import { IdService } from '../../../../../../model/IdService';
+import { AutoCompleteConfiguration } from '../../../../../../model/configuration/AutoCompleteConfiguration';
+import { TreeNode } from '../../../core/tree';
 
 export class ComponentState {
 
@@ -16,7 +18,10 @@ export class ComponentState {
         public placeholder: string = '',
         public filterText: string = '',
         public treeId: string = IdService.generateDateBasedId('table-column-filter-'),
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public isAutocompleteFilter: boolean = false,
+        public autoCompleteConfiguration = new AutoCompleteConfiguration(),
+        public autoCompleteCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null
     ) { }
 
 }

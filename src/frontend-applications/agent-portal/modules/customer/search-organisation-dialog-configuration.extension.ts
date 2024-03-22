@@ -38,6 +38,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'organisation-search-table-widget', 'Organisation Search Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.ORGANISATION, null, null, tableConfig
         );
+        tableWidget.showFilter = false;
+
         configurations.push(tableWidget);
 
         const listWidget = new WidgetConfiguration(

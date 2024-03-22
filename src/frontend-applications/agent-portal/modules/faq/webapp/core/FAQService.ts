@@ -34,6 +34,7 @@ import { RoutingConfiguration } from '../../../../model/configuration/RoutingCon
 import { ContextMode } from '../../../../model/ContextMode';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
+import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 
 
 export class FAQService extends KIXObjectService {
@@ -124,6 +125,7 @@ export class FAQService extends KIXObjectService {
                 nodes = await super.getTreeNodes(KIXObjectProperty.CHANGE_BY, showInvalid, invalidClickable, filterIds);
                 break;
             case FAQArticleProperty.CUSTOMER_VISIBLE:
+            case FAQArticleProperty.APPROVED:
                 const yesText = await TranslationService.translate('Translatable#Yes');
                 const noText = await TranslationService.translate('Translatable#No');
                 nodes = [
@@ -252,13 +254,42 @@ export class FAQService extends KIXObjectService {
 
     public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
         const superProperties = await super.getObjectProperties(objectType);
-        const objectProperties: string[] = [];
-        for (const property in FAQArticleProperty) {
-            if (FAQArticleProperty[property]) {
-                objectProperties.push(FAQArticleProperty[property]);
+        const objectProperties: string[] = [
+            FAQArticleProperty.NUMBER,
+            FAQArticleProperty.TITLE,
+            FAQArticleProperty.CUSTOMER_VISIBLE,
+            FAQArticleProperty.LANGUAGE,
+            FAQArticleProperty.RATING,
+            FAQArticleProperty.CATEGORY_ID,
+            FAQArticleProperty.FIELD_1,
+            FAQArticleProperty.FIELD_2,
+            FAQArticleProperty.FIELD_3,
+            FAQArticleProperty.FIELD_6,
+            FAQArticleProperty.KEYWORDS,
+            FAQArticleProperty.APPROVED,
+
+            FAQArticleProperty.CHANGED,
+            FAQArticleProperty.CHANGED_BY,
+            FAQArticleProperty.CREATED,
+            FAQArticleProperty.CREATED_BY,
+            KIXObjectProperty.VALID_ID
+        ];
+        return [...objectProperties, ...superProperties];
+    }
+
+    public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
+        let objectType = await super.getObjectTypeForProperty(property);
+
+        if (objectType === this.objectType) {
+            switch (property) {
+                case FAQArticleProperty.CREATED_BY:
+                case FAQArticleProperty.CHANGED_BY:
+                    objectType = KIXObjectType.USER;
+                    break;
+                default:
             }
         }
-        return [...objectProperties, ...superProperties];
+        return objectType;
     }
 
     public async getSortableAttributes(filtered: boolean = true
@@ -280,7 +311,7 @@ export class FAQService extends KIXObjectService {
             supportedAttributes;
     }
 
-    protected getSortAttribute(attribute: string): string {
+    public getSortAttribute(attribute: string, dep?: string): string {
         switch (attribute) {
             case FAQArticleProperty.CATEGORY_ID:
                 return FAQArticleProperty.CATEGORY;
@@ -294,7 +325,51 @@ export class FAQService extends KIXObjectService {
                 return KIXObjectProperty.CREATE_TIME;
             default:
         }
-        return super.getSortAttribute(attribute);
+        return super.getSortAttribute(attribute, dep);
+    }
+
+    protected async isBackendFilterSupportedForProperty(
+        objectType: KIXObjectType | string, property: string, supportedAttributes: ObjectSearch[], dep?: string
+    ): Promise<boolean> {
+        const filterList = [
+            // TODO: currently date/time is not supported (in FE)
+            FAQArticleProperty.CREATED,
+            FAQArticleProperty.CHANGED,
+
+            FAQArticleProperty.RATING
+        ];
+        if (filterList.some((f) => f === property)) {
+            return false;
+        }
+        return super.isBackendFilterSupportedForProperty(objectType, property, supportedAttributes, dep);
+    }
+
+    protected async getBackendFilterType(property: string, dep?: string): Promise<BackendSearchDataType | string> {
+        switch (property) {
+            case FAQArticleProperty.LANGUAGE:
+            case FAQArticleProperty.CATEGORY_ID:
+            case FAQArticleProperty.CUSTOMER_VISIBLE:
+                return BackendSearchDataType.NUMERIC;
+            default:
+        }
+        return super.getBackendFilterType(property, dep);
+    }
+
+    public async getFilterAttribute(attribute: string, dep?: string): Promise<string> {
+        switch (attribute) {
+            case FAQArticleProperty.CHANGED_BY:
+                // TODO: when supported use CHANGE_BY_ID
+                return KIXObjectProperty.CHANGE_BY;
+            case FAQArticleProperty.CHANGED:
+                return KIXObjectProperty.CHANGE_TIME;
+            case FAQArticleProperty.CREATED_BY:
+                // TODO: when supported use CREATE_BY_ID
+                return KIXObjectProperty.CREATE_BY;
+            case FAQArticleProperty.CREATED:
+                return KIXObjectProperty.CREATE_TIME;
+            default:
+        }
+        return super.getFilterAttribute(attribute, dep);
     }
 
     public getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {

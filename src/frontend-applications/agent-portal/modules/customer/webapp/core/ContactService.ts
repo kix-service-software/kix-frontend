@@ -25,6 +25,9 @@ import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpec
 import { NewContactDialogContext } from './context/NewContactDialogContext';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 import { UserProperty } from '../../../user/model/UserProperty';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class ContactService extends KIXObjectService<Contact> {
 
@@ -115,6 +118,24 @@ export class ContactService extends KIXObjectService<Contact> {
         let nodes: TreeNode[] = [];
 
         switch (property) {
+            case UserProperty.IS_AGENT:
+            case UserProperty.IS_CUSTOMER:
+                const yesText = await TranslationService.translate('Translatable#Yes');
+                const noText = await TranslationService.translate('Translatable#No');
+                nodes = [
+                    new TreeNode(0, noText, 'kix-icon-close'),
+                    new TreeNode(1, yesText, 'kix-icon-check')
+                ];
+                break;
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+            case ContactProperty.ORGANISATION_IDS:
+                if (Array.isArray(filterIds)) {
+                    const organisations = await KIXObjectService.loadObjects(
+                        KIXObjectType.ORGANISATION, filterIds
+                    );
+                    nodes = await KIXObjectService.prepareTree(organisations);
+                }
+                break;
             default:
                 nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
         }
@@ -163,13 +184,56 @@ export class ContactService extends KIXObjectService<Contact> {
 
     public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
         const superProperties = await super.getObjectProperties(objectType);
-        const objectProperties: string[] = [];
-        for (const property in ContactProperty) {
-            if (ContactProperty[property]) {
-                objectProperties.push(ContactProperty[property]);
+        const objectProperties: string[] = [
+            ContactProperty.TITLE,
+            ContactProperty.FIRSTNAME,
+            ContactProperty.LASTNAME,
+            ContactProperty.EMAIL,
+            ContactProperty.EMAIL1,
+            ContactProperty.EMAIL2,
+            ContactProperty.EMAIL3,
+            ContactProperty.EMAIL4,
+            ContactProperty.EMAIL5,
+            ContactProperty.COMMENT,
+            ContactProperty.STREET,
+            ContactProperty.ZIP,
+            ContactProperty.CITY,
+            ContactProperty.COUNTRY,
+            ContactProperty.PHONE,
+            ContactProperty.MOBILE,
+            ContactProperty.FAX,
+            ContactProperty.PRIMARY_ORGANISATION_ID,
+            ContactProperty.ORGANISATION_IDS,
+
+            KIXObjectProperty.CHANGE_TIME,
+            KIXObjectProperty.CHANGE_BY,
+            KIXObjectProperty.CREATE_TIME,
+            KIXObjectProperty.CREATE_BY,
+            KIXObjectProperty.VALID_ID,
+
+            UserProperty.USER_LOGIN,
+            UserProperty.IS_AGENT,
+            UserProperty.IS_CUSTOMER
+        ];
+        return [...objectProperties, ...superProperties];
+    }
+
+    public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
+        let objectType = await super.getObjectTypeForProperty(property);
+
+        if (objectType === this.objectType) {
+            switch (property) {
+                case ContactProperty.ASSIGNED_USER_ID:
+                    objectType = KIXObjectType.USER;
+                    break;
+                case ContactProperty.PRIMARY_ORGANISATION_ID:
+                case ContactProperty.ORGANISATION_IDS:
+                    objectType = KIXObjectType.ORGANISATION;
+                    break;
+                default:
             }
         }
-        return [...objectProperties, ...superProperties];
+        return objectType;
     }
 
     public async getSortableAttributes(filtered: boolean = true
@@ -184,7 +248,7 @@ export class ContactService extends KIXObjectService<Contact> {
             'OrganisationID',
             'OrganisationNumber',
             ContactProperty.PRIMARY_ORGANISATION,
-            'PrimaryOrganisationNumber',
+            ContactProperty.PRIMARY_ORGANISATION_NUMBER,
             'Login',
             'UserID'
         ];
@@ -210,12 +274,47 @@ export class ContactService extends KIXObjectService<Contact> {
         return sort;
     }
 
-    protected getSortAttribute(attribute: string): string {
+    public getSortAttribute(attribute: string, dep?: string): string {
         switch (attribute) {
             case ContactProperty.PRIMARY_ORGANISATION_ID:
                 return ContactProperty.PRIMARY_ORGANISATION;
+            case ContactProperty.ORGANISATION_IDS:
+                return 'Organisation';
             default:
         }
-        return super.getSortAttribute(attribute);
+        return super.getSortAttribute(attribute, dep);
+    }
+
+    protected async isBackendFilterSupportedForProperty(
+        objectType: KIXObjectType | string, property: string, supportedAttributes: ObjectSearch[], dep?: string
+    ): Promise<boolean> {
+        const filterList = [
+            ContactProperty.ASSIGNED_USER_ID,
+            ContactProperty.ASSIGNED_CONFIG_ITEMS,
+            ContactProperty.PRIMARY_ORGANISATION_NUMBER,
+            ContactProperty.PRIMARY_ORGANISATION,
+            ContactProperty.ORGANISATIONS,
+            ContactProperty.USER,
+            ContactProperty.TICKET_STATS,
+            ContactProperty.REMINDER_TICKETS_COUNT,
+            ContactProperty.OPEN_TICKETS_COUNT,
+            ContactProperty.ESCALATED_TICKETS_COUNT,
+            ContactProperty.CREATE_NEW_TICKET,
+            ContactProperty.VALID
+        ];
+        if (filterList.some((f) => f === property)) {
+            return false;
+        }
+        return super.isBackendFilterSupportedForProperty(objectType, property, supportedAttributes, dep);
+    }
+
+    protected async getBackendFilterType(property: string, dep?: string): Promise<BackendSearchDataType | string> {
+        switch (property) {
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+            case ContactProperty.ORGANISATION_IDS:
+                return 'Autocomplete';
+            default:
+        }
+        return super.getBackendFilterType(property, dep);
     }
 }

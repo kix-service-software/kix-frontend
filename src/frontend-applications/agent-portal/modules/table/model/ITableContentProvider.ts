@@ -10,6 +10,7 @@
 import { RowObject } from './RowObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { SortOrder } from '../../../model/SortOrder';
+import { FilterCriteria } from '../../../model/FilterCriteria';
 
 export interface ITableContentProvider<T = any> {
 
@@ -34,6 +35,12 @@ export interface ITableContentProvider<T = any> {
 
     isBackendSortSupported(): boolean
 
-    isBackendSortSupportedForProperty(property: string): Promise<boolean>;
+    isBackendSortSupportedForProperty(property: string, dep?: string): Promise<boolean>;
+
+    setFilter(criteria: FilterCriteria[], reload?: boolean): Promise<void>;
+
+    isBackendFilterSupported(): boolean
+
+    isBackendFilterSupportedForProperty(property: string, dep?: string): Promise<boolean>;
 
 }

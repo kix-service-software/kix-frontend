@@ -43,6 +43,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'faq-search-article-table-widget', 'FAQ Article Search Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.FAQ_ARTICLE, null, null, tableConfig
         );
+        tableWidget.showFilter = false;
 
         const articleListWidget = new WidgetConfiguration(
             'faq-search-article-widget', 'FAQ Article Search Widget', ConfigurationType.Widget,

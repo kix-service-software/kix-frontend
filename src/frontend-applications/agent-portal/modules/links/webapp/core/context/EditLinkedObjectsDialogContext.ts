@@ -36,14 +36,14 @@ export class EditLinkedObjectsDialogContext extends Context {
         let objects;
         if (loadingOptions) {
             this.loadingOptions.set(objectType, loadingOptions);
+            const loadingOptionsToUse = KIXObjectLoadingOptions.clone(loadingOptions);
+            loadingOptionsToUse.limit = limit;
+            loadingOptionsToUse.searchLimit = 150;
 
-            loadingOptions.limit = limit;
-            loadingOptions.searchLimit = 150;
-
-            await this.prepareContextLoadingOptions(objectType, loadingOptions);
+            await this.prepareContextLoadingOptions(objectType, loadingOptionsToUse);
 
             objects = await KIXObjectService.loadObjects(
-                objectType, null, loadingOptions, null, true,
+                objectType, null, loadingOptionsToUse, null, true,
                 undefined, undefined, this.contextId + objectType
             ).catch(() => []);
 
