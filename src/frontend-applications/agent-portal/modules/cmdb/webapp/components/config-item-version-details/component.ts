@@ -31,6 +31,7 @@ import { OrganisationDetailsContext } from '../../../../customer/webapp/core/con
 import { ContactDetailsContext } from '../../../../customer/webapp/core/context/ContactDetailsContext';
 import { ConfigItemDetailsContext } from '../../core';
 import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 
 class Component {
 
@@ -124,20 +125,20 @@ class Component {
                     new ImageViewerEventData(images, attachment.ID)
                 );
             } else {
+                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                    loading: true, hint: 'Translatable#Prepare File Download'
+                });
                 const attachments = await KIXObjectService.loadObjects<ConfigItemAttachment>(
                     KIXObjectType.CONFIG_ITEM_ATTACHMENT, [attachment.ID], undefined,
-                    new AttachmentLoadingOptions(this.state.version.ConfigItemID, this.state.version.VersionID)
+                    new AttachmentLoadingOptions(this.state.version.ConfigItemID, this.state.version.VersionID, true),
+                    undefined, false
                 );
 
-                if (attachments && attachments.length) {
-                    if (!force && attachments[0].ContentType === 'application/pdf') {
-                        BrowserUtil.openPDF(attachments[0].Content, attachments[0].Filename);
-                    } else {
-                        BrowserUtil.startBrowserDownload(
-                            attachments[0].Filename, attachments[0].Content, attachments[0].ContentType
-                        );
-                    }
+                if (attachments?.length) {
+                    BrowserUtil.startFileDownload(attachments[0]);
                 }
+
+                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
             }
         }
     }

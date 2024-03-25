@@ -99,6 +99,8 @@ export enum KIXObjectType {
 
     LOG_FILE = 'LogFile',
 
+    LOG_FILE_DOWNLOAD = 'LOG_FILE_DOWNLOAD',
+
     MACRO = 'Macro',
 
     MACRO_ACTION = 'MacroAction',

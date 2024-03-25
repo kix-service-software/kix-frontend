@@ -137,9 +137,11 @@ export class TicketService extends KIXObjectService<Ticket> {
         return 'Ticket';
     }
 
-    public async loadArticleAttachment(ticketId: number, articleId: number, attachmentId: number): Promise<Attachment> {
+    public async loadArticleAttachment(
+        ticketId: number, articleId: number, attachmentId: number, asDownload?: boolean
+    ): Promise<Attachment> {
         const attachment = await TicketSocketClient.getInstance().loadArticleAttachment(
-            ticketId, articleId, attachmentId
+            ticketId, articleId, attachmentId, asDownload
         );
         return attachment;
     }
@@ -951,4 +953,5 @@ export class TicketService extends KIXObjectService<Ticket> {
     public getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
         return KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE);
     }
+
 }

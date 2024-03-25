@@ -7,15 +7,15 @@
  * --
  */
 
-export class LoadArticleAttachmentRequest {
+import { IDownloadableFile } from '../../../model/IDownloadableFile';
+import { ISocketRequest } from '../../base-components/webapp/core/ISocketRequest';
+
+export class UploadFileRequest implements ISocketRequest {
 
     public constructor(
         public requestId: string,
-        public ticketId: number,
-        public articleId: number,
-        public attachmentId: number,
-        public relevantOrganisationId?: number,
-        public asDownload?: boolean
+        public clientRequestId: string,
+        public file: IDownloadableFile
     ) { }
 
 }

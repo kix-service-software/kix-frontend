@@ -375,4 +375,5 @@ export class FAQService extends KIXObjectService {
     public getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
         return KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
     }
+
 }

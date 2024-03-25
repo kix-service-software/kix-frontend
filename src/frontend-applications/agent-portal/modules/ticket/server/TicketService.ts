@@ -55,6 +55,7 @@ import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { ObjectSearchAPIService } from '../../object-search/server/ObjectSearchAPIService';
 import { ObjectSearchLoadingOptions } from '../../object-search/model/ObjectSearchLoadingOptions';
 import { Counter } from '../../user/model/Counter';
+import { FileService } from '../../file/server/FileService';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -634,6 +635,23 @@ export class TicketAPIService extends KIXObjectAPIService {
         article.ContentType = 'text/html; charset=utf-8';
         article.MimeType = 'text/html';
         article.Charset = 'utf-8';
+
+        await this.prepareArticleAttachments(article, token);
+    }
+
+    private async prepareArticleAttachments(article: Article, token: string): Promise<void> {
+        if (Array.isArray(article.Attachments)) {
+            for (const attachment of article.Attachments) {
+                if (!attachment.Content) {
+                    const crypto = require('crypto');
+                    const md5 = crypto.createHash('md5').update(token).digest('hex');
+                    const filename = `${md5}-${attachment.Filename}`;
+                    const content = FileService.getFileContent(filename, false);
+                    attachment.Content = content;
+                    FileService.removeFile(filename, false);
+                }
+            }
+        }
     }
 
     public async deleteObject(
@@ -647,7 +665,7 @@ export class TicketAPIService extends KIXObjectAPIService {
 
     public async loadArticleAttachment(
         token: string, ticketId: number, articleId: number, attachmentId: number,
-        relevantOrganisationId?: number
+        relevantOrganisationId?: number, asDownload?: boolean
     ): Promise<Attachment> {
 
         const uri = this.buildUri(
@@ -658,7 +676,14 @@ export class TicketAPIService extends KIXObjectAPIService {
             include: 'Content',
             RelevantOrganisationID: relevantOrganisationId
         }, KIXObjectType.ATTACHMENT);
-        return response?.responseData?.Attachment;
+
+        const user = await UserService.getInstance().getUserByToken(token);
+        let attachment = response?.responseData?.Attachment;
+        if (asDownload) {
+            attachment = new Attachment(attachment);
+            FileService.prepareFileForDownload(user?.UserID, attachment);
+        }
+        return attachment;
     }
 
     public async loadArticleZipAttachment(
