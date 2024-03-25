@@ -7,15 +7,9 @@
  * --
  */
 
-export class LoadArticleAttachmentRequest {
+export enum FileEvent {
 
-    public constructor(
-        public requestId: string,
-        public ticketId: number,
-        public articleId: number,
-        public attachmentId: number,
-        public relevantOrganisationId?: number,
-        public asDownload?: boolean
-    ) { }
+    UPLOAD_FILE = 'UPLOAD_FILE',
+    UPLOAD_FILE_FINISHED = 'UPLOAD_FILE_FINISHED'
 
 }

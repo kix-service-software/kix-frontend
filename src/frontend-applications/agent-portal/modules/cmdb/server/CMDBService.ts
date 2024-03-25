@@ -48,6 +48,9 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { HTTPResponse } from '../../../server/services/HTTPResponse';
 import { GeneralCatalogService } from '../../general-catalog/server/GeneralCatalogService';
+import { FileService } from '../../file/server/FileService';
+import { Attachment } from '../../../model/kix/Attachment';
+import { UserService } from '../../user/server/UserService';
 
 
 export class CMDBAPIService extends KIXObjectAPIService {
@@ -253,10 +256,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
         let attachments: ConfigItemAttachment[] = [];
 
-        if (
-            attachmentIds && attachmentIds.length &&
-            objectLoadingOptions.configItemId && objectLoadingOptions.versionId
-        ) {
+        if (attachmentIds?.length && objectLoadingOptions.configItemId && objectLoadingOptions.versionId) {
             const subResource = this.buildUri(
                 'configitems', objectLoadingOptions.configItemId,
                 'versions', objectLoadingOptions.versionId,
@@ -281,7 +281,18 @@ export class CMDBAPIService extends KIXObjectAPIService {
             }
         }
 
-        return attachments.map((a) => new ConfigItemAttachment(a));
+        if (objectLoadingOptions.asDownload) {
+            const preparedAttachments: ConfigItemAttachment[] = [];
+            const user = await UserService.getInstance().getUserByToken(token);
+            for (const a of attachments) {
+                const attachment = new ConfigItemAttachment(a);
+                FileService.prepareFileForDownload(user?.UserID, attachment);
+                preparedAttachments.push(attachment);
+            }
+            attachments = preparedAttachments;
+        }
+
+        return attachments;
     }
 
     public async createObject(

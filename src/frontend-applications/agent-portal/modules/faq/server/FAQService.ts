@@ -22,8 +22,10 @@ import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecifi
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { FileService } from '../../file/server/FileService';
 import { SearchOperator } from '../../search/model/SearchOperator';
 import { SearchProperty } from '../../search/model/SearchProperty';
+import { UserService } from '../../user/server/UserService';
 import { CreateFAQVoteOptions } from '../model/CreateFAQVoteOptions';
 import { FAQArticle } from '../model/FAQArticle';
 import { FAQArticleAttachmentLoadingOptions } from '../model/FAQArticleAttachmentLoadingOptions';
@@ -151,6 +153,15 @@ export class FAQService extends KIXObjectAPIService {
 
         const newAttachments = attachments ? attachments.filter((a) => !a.ID) : [];
         for (const attachment of newAttachments) {
+            if (!attachment.Content) {
+                const crypto = require('crypto');
+                const md5 = crypto.createHash('md5').update(token).digest('hex');
+                const filename = `${md5}-${attachment.Filename}`;
+                const content = FileService.getFileContent(filename, false);
+                attachment.Content = content;
+                FileService.removeFile(filename, false);
+            }
+
             const parameter: Array<[string, any]> = [];
             for (const p in attachment) {
                 if (attachment[p]) {
@@ -171,6 +182,21 @@ export class FAQService extends KIXObjectAPIService {
         token: string, clientRequestId: string, parameter: Array<[string, any]>
     ): Promise<number> {
         const createParameter = parameter.filter((p) => p[0] !== KIXObjectProperty.LINKS);
+
+        const attachmentParameter = parameter.find((p) => p[0] === FAQArticleProperty.ATTACHMENTS);
+        if (Array.isArray(attachmentParameter) && Array.isArray(attachmentParameter[1])) {
+            const attachments: Attachment[] = attachmentParameter[1];
+            for (const attachment of attachments) {
+                if (!attachment.Content) {
+                    const crypto = require('crypto');
+                    const md5 = crypto.createHash('md5').update(token).digest('hex');
+                    const filename = `${md5}-${attachment.Filename}`;
+                    const content = FileService.getFileContent(filename, false);
+                    attachment.Content = content;
+                    FileService.removeFile(filename, false);
+                }
+            }
+        }
 
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, createParameter, this.RESOURCE_URI, this.objectType, 'FAQArticleID', true
@@ -263,7 +289,20 @@ export class FAQService extends KIXObjectAPIService {
             const objectResponse = await super.load<Attachment>(
                 token, null, uri, loadingOptions, null, 'Attachment', 'FAQService', Attachment
             );
-            return objectResponse.objects || [];
+            let attachments = objectResponse.objects || [];
+
+            if (objectLoadingOptions.asDownload) {
+                const preparedAttachments: Attachment[] = [];
+                const user = await UserService.getInstance().getUserByToken(token);
+                for (const a of attachments) {
+                    const attachment = new Attachment(a);
+                    FileService.prepareFileForDownload(user?.UserID, attachment);
+                    preparedAttachments.push(attachment);
+                }
+                attachments = preparedAttachments;
+            }
+
+            return attachments;
         } else {
             const error = 'No FAQArticleAttachmentLoadingOptions given.';
             throw error;

@@ -160,17 +160,6 @@ export class ApplicationRouter extends KIXRouter {
         return components;
     }
 
-    private clearRequireCache(configPath: string): void {
-        try {
-            const config = require.resolve(configPath);
-            if (require.cache[config]) {
-                delete require.cache[config];
-            }
-        } catch (error) {
-            return;
-        }
-    }
-
     public setUpdate(update: boolean): void {
         this.update = update;
     }

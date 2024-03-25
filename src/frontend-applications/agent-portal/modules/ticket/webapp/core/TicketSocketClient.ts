@@ -38,12 +38,14 @@ export class TicketSocketClient extends SocketClient {
         super('tickets');
     }
 
-    public async loadArticleAttachment(ticketId: number, articleId: number, attachmentId: number): Promise<Attachment> {
+    public async loadArticleAttachment(
+        ticketId: number, articleId: number, attachmentId: number, asDownload?: boolean
+    ): Promise<Attachment> {
         this.checkSocketConnection();
 
         const cacheKey = `${ticketId}-${articleId}-${attachmentId}`;
 
-        if (BrowserCacheService.getInstance().has(cacheKey, KIXObjectType.ATTACHMENT)) {
+        if (!asDownload && BrowserCacheService.getInstance().has(cacheKey, KIXObjectType.ATTACHMENT)) {
             return BrowserCacheService.getInstance().get(cacheKey, KIXObjectType.ATTACHMENT);
         }
 
@@ -53,7 +55,7 @@ export class TicketSocketClient extends SocketClient {
             const requestId = IdService.generateDateBasedId();
             const organisationId = ClientStorageService.getOption('RelevantOrganisationID');
             const request = new LoadArticleAttachmentRequest(
-                requestId, ticketId, articleId, attachmentId, Number(organisationId)
+                requestId, ticketId, articleId, attachmentId, Number(organisationId), asDownload
             );
 
             const timeout = window.setTimeout(() => {

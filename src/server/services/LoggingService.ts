@@ -19,6 +19,7 @@ import { IServerConfiguration } from '../model/IServerConfiguration';
 import { LogLevel } from '../model/LogLevel';
 import { ServerUtil } from '../ServerUtil';
 import { ConfigurationService } from './ConfigurationService';
+import { IDownloadableFile } from '../../frontend-applications/agent-portal/model/IDownloadableFile';
 
 
 export class LoggingService {
@@ -119,13 +120,14 @@ export class LoggingService {
         const logFiles: LogFile[] = [];
         for (const f of fileNames) {
             const logFile = await this.getLogFile(f);
+            logFile.path = 'logs';
             logFiles.push(logFile);
         }
         return logFiles;
     }
 
     public async getLogFile(
-        logFileName: string, withContent?: boolean, tailCount?: number, logLevel: string[] = []
+        logFileName: string, tailCount?: number, logLevel: string[] = []
     ): Promise<LogFile> {
         const logFile = new LogFile();
         logFile.Filename = logFileName;
@@ -140,17 +142,13 @@ export class LoggingService {
         logFile.Filesize = Attachment.getHumanReadableContentSize(stats.size);
         logFile.ModifyTime = stats.mtime.toISOString();
 
-        if (withContent) {
-            if (tailCount) {
-                let content = await this.tailLogFile(logFilePath, tailCount);
-                if (logLevel && logLevel.length) {
-                    content = content.filter((c) => logLevel.some((ll) => c.indexOf(ll) !== -1));
-                }
-                const stringContent = content.join('\n');
-                logFile.Content = Buffer.from(stringContent).toString('base64');
-            } else {
-                logFile.Content = fs.readFileSync(logFilePath, { encoding: 'base64' });
+        if (tailCount) {
+            let content = await this.tailLogFile(logFilePath, tailCount);
+            if (logLevel && logLevel.length) {
+                content = content.filter((c) => logLevel.some((ll) => c.indexOf(ll) !== -1));
             }
+            const stringContent = content.join('\n');
+            logFile.Content = Buffer.from(stringContent).toString('base64');
         }
 
         return logFile;

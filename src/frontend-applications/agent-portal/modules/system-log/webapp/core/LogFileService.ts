@@ -28,7 +28,8 @@ export class LogFileService extends KIXObjectService {
     }
 
     public isServiceFor(kixObjectType: KIXObjectType | string): boolean {
-        return kixObjectType === KIXObjectType.LOG_FILE;
+        return kixObjectType === KIXObjectType.LOG_FILE ||
+            kixObjectType === KIXObjectType.LOG_FILE_DOWNLOAD;
     }
 
     public getLinkObjectName(): string {

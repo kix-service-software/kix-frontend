@@ -15,9 +15,9 @@ export class KIXObjectLoadingOptions {
         public filter?: FilterCriteria[],
         public sortOrder?: string,
         public limit?: number,
-        public includes?: string[],
-        public expands?: string[],
-        public query?: Array<[string, string]>,
+        public includes: string[] = [],
+        public expands: string[] = [],
+        public query: Array<[string, string]> = [],
         public cacheType?: string,
         public searchLimit?: number
     ) { }

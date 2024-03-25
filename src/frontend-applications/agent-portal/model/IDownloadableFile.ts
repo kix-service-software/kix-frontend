@@ -7,15 +7,23 @@
  * --
  */
 
-export class LoadArticleAttachmentRequest {
+import { KIXObject } from './kix/KIXObject';
 
-    public constructor(
-        public requestId: string,
-        public ticketId: number,
-        public articleId: number,
-        public attachmentId: number,
-        public relevantOrganisationId?: number,
-        public asDownload?: boolean
-    ) { }
+export interface IDownloadableFile extends KIXObject {
 
+    downloadId: string;
+
+    downloadSecret: string;
+
+    Content: string;
+
+    Filename: string;
+
+    FilesizeRaw: number;
+
+    md5Sum: string;
+
+    base64: boolean;
+
+    path: string;
 }

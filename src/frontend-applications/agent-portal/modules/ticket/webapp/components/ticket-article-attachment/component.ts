@@ -16,6 +16,7 @@ import { DisplayImageDescription } from '../../../../base-components/webapp/core
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ImageViewerEvent } from '../../../../agent-portal/model/ImageViewerEvent';
 import { ImageViewerEventData } from '../../../../agent-portal/model/ImageViewerEventData';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 
 class ArticleAttachmentComponent {
 
@@ -50,22 +51,21 @@ class ArticleAttachmentComponent {
                     new ImageViewerEventData(this.images, this.state.attachment.ID)
                 );
             } else {
+                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                    loading: true, hint: 'Translatable#Prepare File Download'
+                });
                 this.state.progress = true;
                 const attachment = await this.loadArticleAttachment(this.state.attachment.ID);
                 this.state.progress = false;
-
-                if (!force && attachment.ContentType === 'application/pdf') {
-                    BrowserUtil.openPDF(attachment.Content, attachment.Filename);
-                } else {
-                    BrowserUtil.startBrowserDownload(attachment.Filename, attachment.Content, attachment.ContentType);
-                }
+                BrowserUtil.startFileDownload(attachment);
+                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
             }
         }
     }
 
     private async loadArticleAttachment(attachmentId: number): Promise<Attachment> {
         const attachment = await TicketService.getInstance().loadArticleAttachment(
-            this.state.article.TicketID, this.state.article.ArticleID, attachmentId
+            this.state.article.TicketID, this.state.article.ArticleID, attachmentId, true
         );
         return attachment;
     }

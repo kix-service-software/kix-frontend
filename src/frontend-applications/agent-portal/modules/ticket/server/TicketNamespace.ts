@@ -59,7 +59,8 @@ export class TicketNamespace extends SocketNameSpace {
         const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const response = await TicketAPIService.getInstance().loadArticleAttachment(
-            token, data.ticketId, data.articleId, data.attachmentId, data.relevantOrganisationId
+            token, data.ticketId, data.articleId, data.attachmentId, data.relevantOrganisationId,
+            data.asDownload
         ).then((attachment) =>
             new SocketResponse(
                 TicketEvent.ARTICLE_ATTACHMENT_LOADED,
