@@ -721,4 +721,8 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         return [...objectProperties, ...superProperties];
     }
 
+    public async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
+        return this.getClasses();
+    }
+
 }
