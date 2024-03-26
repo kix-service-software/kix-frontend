@@ -237,6 +237,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     >
                         <input type="checkbox" checked=column.titleTranslatable>
                     </td>
+                    <td
+                        on-click("booleanValueChanged", "rtl", column)
+                        class="content-cell boolean-value"
+                    >
+                        <input type="checkbox" checked=column.rtl>
+                    </td>
                     <td class="content-cell">
                         <input
                             type="numeric"
