@@ -42,7 +42,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <icon icon=(state.node.icon) showUnknown/>
             <span class=["node-title", state.node.expanded ? "expanded" : ""]>
                 ${state.node.label}
-                <if(state.node.properties)>
+                <if(Array.isArray(state.node.properties) && state.node.properties.length)>
                     (
                     <for|prop, index| of=(state.node.properties)>
                         <if(index != 0)>
