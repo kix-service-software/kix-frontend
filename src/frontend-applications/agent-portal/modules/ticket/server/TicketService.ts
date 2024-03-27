@@ -563,13 +563,6 @@ export class TicketAPIService extends KIXObjectAPIService {
             delete ticket.DynamicFields;
         }
 
-        const response = await this.sendRequest(
-            token, clientRequestId, uri, content, KIXObjectType.TICKET, create, relevantOrganisationId
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
-
         if (!create && articles?.length && ticket.TicketID) {
             for (const article of articles) {
                 let uri, articleCreate;
@@ -592,6 +585,13 @@ export class TicketAPIService extends KIXObjectAPIService {
                 });
             }
         }
+
+        const response = await this.sendRequest(
+            token, clientRequestId, uri, content, KIXObjectType.TICKET, create, relevantOrganisationId
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
 
         return response[TicketProperty.TICKET_ID];
     }
