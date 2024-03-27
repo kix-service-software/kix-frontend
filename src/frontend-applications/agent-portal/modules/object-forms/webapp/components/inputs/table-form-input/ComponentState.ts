@@ -12,7 +12,7 @@ import { AbstractComponentState } from '../../../../../base-components/webapp/co
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public value: Array<string[]> = [],
+        public value: Array<string[]> = null,
         public prepared: boolean = false,
         public columns: string[] = [],
         public hasAction: boolean = true,

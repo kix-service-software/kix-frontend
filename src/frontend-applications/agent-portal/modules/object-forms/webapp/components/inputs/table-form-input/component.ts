@@ -49,6 +49,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.bindingIds.push(
             this.formValue.addPropertyBinding(FormValueProperty.VALUE, (formValue: ObjectFormValue) => {
                 this.state.value = this.createNewTable(formValue.value);
+                if (!this.state.value) {
+                    this.removeTable();
+                }
             })
         );
 
