@@ -56,23 +56,27 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </div>
     <translation-string pattern="Translatable#Find this saved search within the Dropdown Bookmarks, located in the header menu right besides the New-button"/>
     <div class="row p-0 m-0 mt-3">
-        <button
-            type="button"
-            on-click("closeOverlay", false)
-            title=(state.translations["Translatable#Cancel"])
-            class="kix-button cancel-button me-3"
-        >
-            <span class="kix-icon-close"/>
-            <translation-string pattern="Translatable#Cancel"/>
-        </button>
-        <button
-            type="button"
-            on-click("closeOverlay", true)
-            title=(state.translations["Translatable#Save"])
-            class="kix-button submit-button"
-        >
-            <span class="kix-icon-check"/>
-            <translation-string pattern="Translatable#Save"/>
-        </button>
+        <div class="col-6 text-end p-0 pe-2">
+            <button
+                type="button"
+                on-click("closeOverlay", false)
+                title=(state.translations["Translatable#Cancel"])
+                class="kix-button cancel-button"
+            >
+                <span class="kix-icon-close"/>
+                <translation-string pattern="Translatable#Cancel"/>
+            </button>
+        </div>
+        <div class="col-6 p-0 ">
+            <button
+                type="button"
+                on-click("closeOverlay", true)
+                title=(state.translations["Translatable#Save"])
+                class="kix-button submit-button"
+            >
+                <span class="kix-icon-check"/>
+                <translation-string pattern="Translatable#Save"/>
+            </button>
+        </div>
     </div>
 </form>
