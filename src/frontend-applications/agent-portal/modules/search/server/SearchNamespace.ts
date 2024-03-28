@@ -187,6 +187,8 @@ export class SearchNamespace extends SocketNameSpace {
                 delete searchConfig[search.id];
             }
 
+            delete search.userId;
+            delete search.userDisplayText;
             searchConfig[search.id] = search;
 
             const value = JSON.stringify(searchConfig);
