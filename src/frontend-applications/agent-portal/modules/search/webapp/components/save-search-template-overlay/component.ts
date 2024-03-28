@@ -83,7 +83,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.nameInvalid = false;
 
                 const context = ContextService.getInstance().getActiveContext<SearchContext>();
-                await context?.saveCache(this.state.name, this.state.share);
+                await context?.saveCache(this.currentSearch, this.state.name, this.state.share);
                 BrowserUtil.openSuccessOverlay('Translatable#Search successfully saved.');
 
                 EventService.getInstance().publish(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, context);

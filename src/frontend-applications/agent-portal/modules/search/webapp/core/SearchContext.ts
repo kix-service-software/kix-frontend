@@ -119,11 +119,15 @@ export abstract class SearchContext extends Context {
         return title;
     }
 
-    public async saveCache(name: string, share?: boolean): Promise<void> {
+    public async saveCache(id: string, name: string, share?: boolean): Promise<void> {
         if (this.searchCache) {
-            const createNew = this.searchCache.name !== name;
+            const createNew = !id && this.searchCache.name !== name;
             const search = SearchCache.create(this.searchCache, createNew);
             search.name = name;
+
+            if (id) {
+                search.id = id;
+            }
 
             await SearchSocketClient.getInstance().saveSearch(search, share)
                 .catch((error: Error) => BrowserUtil.openErrorOverlay(error.message));
