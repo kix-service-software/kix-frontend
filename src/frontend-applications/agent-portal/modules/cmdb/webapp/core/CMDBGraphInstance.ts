@@ -19,6 +19,7 @@ import { OverlayService } from '../../../base-components/webapp/core/OverlayServ
 import { OverlayType } from '../../../base-components/webapp/core/OverlayType';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { Graph } from '../../../graph/model/Graph';
+import { GraphNode } from '../../../graph/model/GraphNode';
 import { GraphOption } from '../../../graph/model/GraphOption';
 import { GraphInstance } from '../../../graph/webapp/core/GraphInstance';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
@@ -82,25 +83,40 @@ export class CMDBGraphInstance extends GraphInstance<CID3Node, CID3Link, ConfigI
                 }
 
                 const node = new CID3Node(n.NodeID, n.Object.Name, n.Object.ClassID, bgColor);
-                if (!this.icons.has(n.Object.ClassID)) {
-                    const loadingOptions = new ObjectIconLoadingOptions(
-                        KIXObjectType.GENERAL_CATALOG_ITEM, n.Object.ClassID
-                    );
-                    const icons = await KIXObjectService.loadObjects<ObjectIcon>(
-                        KIXObjectType.OBJECT_ICON, null, null, loadingOptions
-                    );
-                    if (Array.isArray(icons) && icons.length) {
-                        this.icons.set(n.Object.ClassID, icons[0]);
-                        node.image = true;
-                    }
+                if (this.icons.has(n.Object.ClassID)) {
+                    node.icon = this.icons.get(n.Object.ClassID).ContentType === 'text' || this.icons.get(n.Object.ClassID).ContentType === 'text/plain';
+                    node.image = !node.icon;
                 } else {
-                    node.image = true;
+                    await this.prepareIcons(n, node);
                 }
                 d3Nodes.push(node);
             }
         }
 
         return d3Nodes;
+    }
+
+    private async prepareIcons(graphNode: GraphNode<ConfigItem>, node: CID3Node): Promise<void> {
+        const icons = await KIXObjectService.loadObjects<ObjectIcon>(
+            KIXObjectType.OBJECT_ICON, null, null,
+            new ObjectIconLoadingOptions(
+                KIXObjectType.GENERAL_CATALOG_ITEM, graphNode.Object.ClassID
+            )
+        ).catch(() => [] as ObjectIcon[]);
+        if (icons?.length && icons[0].ContentType) {
+            this.icons.set(graphNode.Object.ClassID, icons[0]);
+            if (icons[0].ContentType === 'text' || icons[0].ContentType === 'text/plain') {
+                node.icon = true;
+            } else {
+                node.image = true;
+            }
+        } else {
+            this.icons.set(
+                graphNode.Object.ClassID,
+                new ObjectIcon(null, null, null, 'text', 'fas fa-archive')
+            );
+            node.icon = true;
+        }
     }
 
     protected async createD3Links(graph: Graph, nodes: CID3Node[]): Promise<CID3Link[]> {
@@ -118,15 +134,34 @@ export class CMDBGraphInstance extends GraphInstance<CID3Node, CID3Link, ConfigI
 
         node.append('image')
             .attr('xlink:href', (d: CID3Node) => {
-                const contentType = this.icons.get(d.classId).ContentType || 'png';
-                const content = this.icons.get(d.classId)?.Content;
-                return `data:image/${contentType};base64, ${content}`;
+                const image = d.image && d.classId ? this.icons.get(d.classId) : null;
+                if (image) {
+                    const contentType = image.ContentType || 'image/png';
+                    const content = image.Content;
+                    return `data:${contentType};base64, ${content}`;
+                }
+                return null;
             })
             .attr('x', '-12px')
             .attr('y', '-12px')
             .attr('width', '24px')
             .attr('height', '24px')
             .style('display', (d: CID3Node) => d.image ? 'block' : 'none');
+
+        node.append('foreignObject')
+            .html(
+                (d: CID3Node) => d.icon ?
+                    (
+                        `<span class="${this.icons.get(d.classId)?.Content}" style="font-size:1.75rem">`
+                        + '<span class="path1"></span><span class="path2"></span><span class="path3"></span>'
+                        + '<span class="path4"></span><span class="path5"></span></span>'
+                    ) : ''
+            )
+            .attr('x', '-12px')
+            .attr('y', '-12px')
+            .attr('width', '24px')
+            .attr('height', '24px')
+            .style('display', (d: CID3Node) => d.icon ? 'block' : 'none');
 
         return node;
     }
