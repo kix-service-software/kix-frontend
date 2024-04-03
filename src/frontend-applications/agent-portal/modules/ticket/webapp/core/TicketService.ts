@@ -660,24 +660,19 @@ export class TicketService extends KIXObjectService<Ticket> {
             TicketProperty.OWNER_ID,
             TicketProperty.PENDING_TIME,
             TicketProperty.PRIORITY_ID,
-            // TicketProperty.CREATED_PRIORITY_ID,
             TicketProperty.RESPONSIBLE_ID,
             TicketProperty.STATE_ID,
-            // TicketProperty.CREATED_STATE_ID,
             TicketProperty.QUEUE_ID,
             TicketProperty.QUEUE_FULLNAME,
-            // TicketProperty.CREATED_QUEUE_ID,
             TicketProperty.TICKET_NUMBER,
             TicketProperty.TITLE,
             TicketProperty.TYPE_ID,
-            // TicketProperty.CREATED_TYPE_ID,
             TicketProperty.UNSEEN,
-            // TicketProperty.STATE_TYPE_ID,
-
             TicketProperty.CHANGED,
             KIXObjectProperty.CHANGE_BY,
             TicketProperty.CREATED,
-            KIXObjectProperty.CREATE_BY
+            KIXObjectProperty.CREATE_BY,
+            TicketProperty.WATCHER_ID
         ];
 
         return [...objectProperties, ...superProperties];
