@@ -174,7 +174,7 @@ export class SearchService {
             preparedCriteria, null, searchCache.sortAttribute, searchCache.sortDescending
         );
 
-        if (limit) {
+        if (typeof limit !== 'undefined' && limit !== null) {
             loadingOptions.limit = limit;
         }
 
@@ -213,7 +213,8 @@ export class SearchService {
             await context.prepareContextLoadingOptions(searchCache.objectType, loadingOptions);
         }
 
-        if (!loadingOptions.limit) {
+        // use "old" searchCache limit as fallback (in most cases not necessary, because of context default)
+        if (typeof loadingOptions.limit === 'undefined' || loadingOptions.limit === null) {
             loadingOptions.limit = searchCache.limit;
         }
 
@@ -225,7 +226,10 @@ export class SearchService {
             loadingOptions.filter.push(...additionalFilter);
         }
 
-        loadingOptions.searchLimit = searchLimit || searchCache.limit || loadingOptions.searchLimit;
+        // use given limit but ignore completely limit from searchCache (as searchLimit) - not needed anymore
+        if (typeof searchLimit !== 'undefined' && searchLimit !== null) {
+            loadingOptions.searchLimit = searchLimit;
+        }
 
         const objects = await KIXObjectService.loadObjects(
             searchCache.objectType, null, loadingOptions, null, false, undefined, undefined, searchCache.id
