@@ -1,0 +1,6 @@
+{
+    "dependencies": [
+        "require ./core/VirtualFSService",
+        "require ./core/VirtualFSUIModule"
+    ]
+}

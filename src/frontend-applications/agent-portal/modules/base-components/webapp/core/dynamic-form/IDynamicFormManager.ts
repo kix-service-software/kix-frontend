@@ -58,7 +58,7 @@ export interface IDynamicFormManager {
 
     getObjectReferenceObjectType(property: string): Promise<KIXObjectType | string>;
 
-    getSpecificInput(property: string): string;
+    getSpecificInput(property: string): Promise<string>;
 
     getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>>;
 
