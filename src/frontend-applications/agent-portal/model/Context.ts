@@ -111,15 +111,15 @@ export abstract class Context {
             this.eventSubscriber = {
                 eventSubscriberId: this.instanceId,
                 eventPublished: async (data: any, eventId: string): Promise<void> => {
+                    const reloadObjectList = eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED &&
+                        Array.isArray(data?.widgets) &&
+                        Array.isArray(this.configuration?.tableWidgetInstanceIds);
                     if (this.descriptor.contextMode !== ContextMode.SEARCH) {
                         const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
                             data?.instanceId === this.instanceId;
 
                         const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
                         const objectDelete = eventId === ApplicationEvent.OBJECT_DELETED && data?.objectType;
-                        const reloadObjectList = eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED &&
-                            Array.isArray(data?.widgets) &&
-                            Array.isArray(this.configuration?.tableWidgetInstanceIds);
 
                         TableFactoryService.getInstance().deleteContextTables(
                             this.contextId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
@@ -143,6 +143,8 @@ export abstract class Context {
                         } else if (reloadObjectList) {
                             this.reloadRelevantObjectLists(data.widgets);
                         }
+                    } else if (reloadObjectList) {
+                        this.reloadRelevantObjectLists(data.widgets);
                     }
                 }
             };

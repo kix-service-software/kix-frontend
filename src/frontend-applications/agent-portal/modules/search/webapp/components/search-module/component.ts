@@ -59,17 +59,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initContentWidgets(): Promise<void> {
-        const criteriaWidget = new ConfiguredWidget(
-            'search-criteria-widget', null, new WidgetConfiguration(
-                'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
-                'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
-            )
-        );
-        const contentWidgets = [criteriaWidget];
-        const content = await this.context?.getContent();
-        contentWidgets.push(...content);
-
-        this.state.contentWidgets = contentWidgets;
+        this.state.contentWidgets = await this.context?.getContent();
     }
 
     private async setTitle(objectType: KIXObjectType | string): Promise<void> {
