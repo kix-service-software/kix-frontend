@@ -54,7 +54,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 this.getModuleId(), 'Config Item Search', ConfigurationType.Context, this.getModuleId(),
                 [], [], [],
                 [
+                    new ConfiguredWidget(
+                        'search-criteria-widget', null, new WidgetConfiguration(
+                            'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
+                            'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
+                        )
+                    ),
                     new ConfiguredWidget('cmdb-search-ci-list-widget', null, ciListWidget)
+                ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                [
+                    [KIXObjectType.CONFIG_ITEM, 'cmdb-search-ci-list-widget']
                 ]
             )
         );

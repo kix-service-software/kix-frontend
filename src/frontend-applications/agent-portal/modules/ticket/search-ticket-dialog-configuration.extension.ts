@@ -61,7 +61,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 this.getModuleId(), 'Ticket Search', ConfigurationType.Context, this.getModuleId(),
                 [], [], [],
                 [
+                    new ConfiguredWidget(
+                        'search-criteria-widget', null, new WidgetConfiguration(
+                            'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
+                            'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
+                        )
+                    ),
                     new ConfiguredWidget('ticket-search-ticket-list-widget', null, ticketListConfig)
+                ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                [
+                    [KIXObjectType.TICKET, 'ticket-search-ticket-list-widget']
                 ]
             )
         );

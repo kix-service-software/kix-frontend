@@ -52,7 +52,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 this.getModuleId(), 'Contact Search', ConfigurationType.Context, this.getModuleId(),
                 [], [], [],
                 [
+                    new ConfiguredWidget(
+                        'search-criteria-widget', null, new WidgetConfiguration(
+                            'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
+                            'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
+                        )
+                    ),
                     new ConfiguredWidget('contact-search-widget', null, contactListWidget)
+                ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                [
+                    [KIXObjectType.CONTACT, 'contact-search-widget']
                 ]
             )
         );

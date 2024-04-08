@@ -108,11 +108,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
             </if>
             <div.widget-specific-configuration>
-                <${component.getConfigurationComponent()}
-                    configuration=(state.widget.configuration.configuration)
-                    advancedSettings=state.advancedSettings
-                    on-configurationChanged("configurationChanged")
-                />
+                <if(component.getConfigurationComponent())>
+                    <${component.getConfigurationComponent()}
+                        configuration=(state.widget.configuration.configuration)
+                        advancedSettings=state.advancedSettings
+                        on-configurationChanged("configurationChanged")
+                    />
+                </if>
             </div>
         </div>
     </if>
