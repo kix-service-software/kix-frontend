@@ -187,6 +187,8 @@ export enum KIXObjectType {
 
     VALID_OBJECT = 'ValidObject',
 
+    VIRTUAL_FS = 'VirtualFS',
+
     WATCHER = 'Watcher',
 
     PERSONAL_SETTINGS = 'PERSONAL_SETTINGS',

@@ -366,7 +366,7 @@ export class DynamicFormFieldValue {
 
             this.isSpecificInput = inputType === 'SPECIFIC';
             if (this.isSpecificInput) {
-                const specificInputType = this.manager.getSpecificInput(property);
+                const specificInputType = await this.manager.getSpecificInput(property);
                 if (specificInputType) {
                     this.specificInputType = KIXModulesService.getComponentTemplate(specificInputType);
                 }
