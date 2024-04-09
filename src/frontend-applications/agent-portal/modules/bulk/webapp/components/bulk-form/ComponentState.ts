@@ -23,7 +23,8 @@ export class ComponentState extends AbstractComponentState {
         public tableTitle: string = '',
         public canRun: boolean = false,
         public run: boolean = false,
-        public componentId: string = IdService.generateDateBasedId()
+        public componentId: string = IdService.generateDateBasedId(),
+        public prepared: boolean = false
     ) {
         super();
     }

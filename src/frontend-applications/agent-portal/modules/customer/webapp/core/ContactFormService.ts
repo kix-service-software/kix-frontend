@@ -40,6 +40,7 @@ import { Role } from '../../../user/model/Role';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { PersonalSettingsFormService } from '../../../user/webapp/core/PersonalSettingsFormService';
 import { IdService } from '../../../../model/IdService';
+import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 
 export class ContactFormService extends KIXObjectFormService {
 
@@ -279,6 +280,10 @@ export class ContactFormService extends KIXObjectFormService {
         );
 
         if (accesses && accesses.some((a) => a === UserProperty.IS_AGENT)) {
+
+            const outOfOfficeField = await this.getOutOfOfficeField(formInstance);
+            preferencesField.children.push(outOfOfficeField);
+
             const queueField = await this.getQueueField(formInstance);
             preferencesField.children.push(queueField);
 
@@ -318,6 +323,40 @@ export class ContactFormService extends KIXObjectFormService {
         );
         languageField.instanceId = IdService.generateDateBasedId();
         return languageField;
+    }
+
+    private async getOutOfOfficeField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
+        const tillValue = formInstance
+            ? await formInstance.getFormFieldValueByProperty(UserProperty.OUT_OF_OFFICE_END)
+            : null;
+        const fromValue = formInstance
+            ? await formInstance.getFormFieldValueByProperty(UserProperty.OUT_OF_OFFICE_START)
+            : null;
+        const outOfOfficeStartField = new FormFieldConfiguration(
+            'contact-form-field-user-out-of-office', 'Translatable#From', PersonalSettingsProperty.OUT_OF_OFFICE_START,
+            'date-time-input', false, 'Translatable#Helptext_User_UserCreateEdit_Preferences_OutOfOfficeStart',
+            [
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE)
+            ], fromValue
+        );
+        outOfOfficeStartField.instanceId = IdService.generateDateBasedId();
+
+        const outOfOfficeEndField = new FormFieldConfiguration(
+            'contact-form-field-user-out-of-office', 'Translatable#Till', PersonalSettingsProperty.OUT_OF_OFFICE_END,
+            'date-time-input', false, 'Translatable#Helptext_User_UserCreateEdit_Preferences_OutOfOfficeEnd',
+            [
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE)
+            ], tillValue
+        );
+        outOfOfficeEndField.instanceId = IdService.generateDateBasedId();
+
+        const outOfOfficeField = new FormFieldConfiguration(
+            'contact-form-field-outofoffice-container', 'Translatable#Out Of Office', 'OUT_OF_OFFICE_CONTAINER', null,
+            false, null, null, null, null, [outOfOfficeStartField, outOfOfficeEndField], null, null, null, null, null,
+            null, null, true, true
+        );
+        outOfOfficeField.instanceId = IdService.generateDateBasedId();
+        return outOfOfficeField;
     }
 
     private async getQueueField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
@@ -451,6 +490,23 @@ export class ContactFormService extends KIXObjectFormService {
             notificationParameter[1] = JSON.stringify(notificationPreference);
         }
 
+        const outOfOfficeStartParameter = parameter.find(
+            (p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_START
+        );
+        if (outOfOfficeStartParameter) {
+            outOfOfficeStartParameter[1] = Array.isArray(outOfOfficeStartParameter[1])
+                ? DateTimeUtil.getLocalDateString(outOfOfficeStartParameter[1])
+                : '';
+        }
+        const outOfOfficeEndParameter = parameter.find(
+            (p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_END
+        );
+        if (outOfOfficeEndParameter) {
+            outOfOfficeEndParameter[1] = Array.isArray(outOfOfficeEndParameter[1])
+                ? DateTimeUtil.getLocalDateString(outOfOfficeEndParameter[1])
+                : '';
+        }
+
         return parameter;
     }
 
@@ -526,6 +582,15 @@ export class ContactFormService extends KIXObjectFormService {
                         (p) => p.ID === PersonalSettingsProperty.USER_TOKEN
                     );
                     value = tokenValue?.Value;
+                }
+                break;
+            case PersonalSettingsProperty.OUT_OF_OFFICE_START:
+            case PersonalSettingsProperty.OUT_OF_OFFICE_END:
+                if (formContext === FormContext.EDIT) {
+                    const dateValue = user.Preferences.find(
+                        (p) => p.ID === property
+                    );
+                    value = dateValue?.Value;
                 }
                 break;
             default:

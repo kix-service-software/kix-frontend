@@ -29,15 +29,15 @@ export class UIModule implements IUIModule {
 
     public priority: number = 201;
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         await this.registerContexts();
         this.registerActions();
 
         BulkService.getInstance().registerBulkManager(new ConfigItemBulkManager());
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
     private async registerContexts(): Promise<void> {

@@ -58,7 +58,10 @@ export abstract class SearchContext extends Context {
                 }
             }
         } else {
-            this.searchCache = new SearchCache(
+            const defaultSearch = await SearchSocketClient.getInstance().loadDefaultUserSearch(
+                this.descriptor.kixObjectTypes[0]
+            );
+            this.searchCache = defaultSearch || new SearchCache(
                 IdService.generateDateBasedId(), this.descriptor.contextId, this.descriptor.kixObjectTypes[0],
                 [], [], null
             );
@@ -116,12 +119,17 @@ export abstract class SearchContext extends Context {
         return title;
     }
 
-    public async saveCache(name: string): Promise<void> {
+    public async saveCache(id: string, name: string, share?: boolean): Promise<void> {
         if (this.searchCache) {
-            const search = SearchCache.create(this.searchCache);
+            const createNew = !id && this.searchCache.name !== name;
+            const search = SearchCache.create(this.searchCache, createNew);
             search.name = name;
 
-            await SearchSocketClient.getInstance().saveSearch(search)
+            if (id) {
+                search.id = id;
+            }
+
+            await SearchSocketClient.getInstance().saveSearch(search, share)
                 .catch((error: Error) => BrowserUtil.openErrorOverlay(error.message));
 
             this.searchCache.name = name;

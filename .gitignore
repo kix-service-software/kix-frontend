@@ -19,6 +19,7 @@ logs
 
 coverage
 .nyc_output
+quality
 
 src/plugins/*
 !src/plugins/readme.md

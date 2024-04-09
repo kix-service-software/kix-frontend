@@ -9,19 +9,24 @@
 
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { Context } from '../../../../../model/Context';
+import { IdService } from '../../../../../model/IdService';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { BrowserCacheService } from '../../../../base-components/webapp/core/CacheService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { PlaceholderService } from '../../../../base-components/webapp/core/PlaceholderService';
+import { FileService } from '../../../../file/webapp/core/FileService';
 import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { Article } from '../../../model/Article';
 import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../model/ArticleProperty';
@@ -79,28 +84,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
              * not being in the commitment for the other browser
              */
             for (const article of ticket.Articles) {
-                delete article.ticket;
-                delete article.ChangedBy;
-                delete article.Comment;
-                delete article.CreatedBy;
-                delete article.Flags;
-                delete article.Links;
-                delete article.Plain;
-                delete article.References;
-                delete article.SenderType;
-                delete article.bccList;
-                delete article.bodyAttachment;
-                delete article.ccList;
-                delete article.senderType;
-                delete article.toList;
-
-                delete article.FromRealname;
-                delete article.CcRealname;
-                delete article.BccRealname;
-                delete article.ToRealname;
-
+                this.deleteArticleProperties(article);
                 this.deleteCommonProperties(article, true);
-                delete article.ValidID;
 
                 if (forCommit) {
                     // FIXME: array handling
@@ -114,32 +99,13 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                     const ticketOrQueueId = ticket.QueueID ? ticket : orgTicketQueueID;
                     article.Body = await this.addQueueSignature(ticketOrQueueId, article.Body, article.ChannelID);
 
-                    const referencedArticleId = context?.getAdditionalInformation(
-                        ArticleProperty.REFERENCED_ARTICLE_ID
-                    );
-                    if (referencedArticleId) {
-                        const referencedArticle = await this.loadReferencedArticle(
-                            ticket.TicketID, referencedArticleId
-                        );
-                        if (referencedArticle) {
-                            article.InReplyTo = referencedArticle.MessageID?.toString();
-                            article.References = `${referencedArticle.References} ${referencedArticle.MessageID}`;
-                        }
-                    }
+                    await this.prepareReferencedArticle(article, ticket);
                 } else {
                     article.Attachments = null;
                     article.Body = article.Body?.replace(/<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g, '');
                 }
 
-                if (Array.isArray(article.From)) {
-                    article.From = article.From.join(',');
-                }
-                if (Array.isArray(article.Cc)) {
-                    article.Cc = article.Cc.join(',');
-                }
-                if (Array.isArray(article.Bcc)) {
-                    article.Bcc = article.Bcc.join(',');
-                }
+                this.prepareRecipients(article);
             }
         }
 
@@ -148,6 +114,55 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         }
     }
 
+    private deleteArticleProperties(article: Article): void {
+        delete article.ticket;
+        delete article.ChangedBy;
+        delete article.Comment;
+        delete article.CreatedBy;
+        delete article.Flags;
+        delete article.Links;
+        delete article.Plain;
+        delete article.References;
+        delete article.SenderType;
+        delete article.bccList;
+        delete article.bodyAttachment;
+        delete article.ccList;
+        delete article.senderType;
+        delete article.toList;
+        delete article.FromRealname;
+        delete article.CcRealname;
+        delete article.BccRealname;
+        delete article.ToRealname;
+        delete article.ValidID;
+    }
+
+    private async prepareReferencedArticle(article: Article, ticket: Ticket): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        const referencedArticleId = context?.getAdditionalInformation(
+            ArticleProperty.REFERENCED_ARTICLE_ID
+        );
+        if (referencedArticleId) {
+            const referencedArticle = await this.loadReferencedArticle(
+                ticket.TicketID, referencedArticleId
+            );
+            if (referencedArticle) {
+                article.InReplyTo = referencedArticle.MessageID?.toString();
+                article.References = `${referencedArticle.References} ${referencedArticle.MessageID}`;
+            }
+        }
+    }
+
+    private prepareRecipients(article: Article): void {
+        if (Array.isArray(article.From)) {
+            article.From = article.From.join(',');
+        }
+        if (Array.isArray(article.Cc)) {
+            article.Cc = article.Cc.join(',');
+        }
+        if (Array.isArray(article.Bcc)) {
+            article.Bcc = article.Bcc.join(',');
+        }
+    }
 
     public async addQueueSignature(ticketOrQueueId: number | Ticket, body: string, channelId: number): Promise<string> {
         const queueId = typeof ticketOrQueueId === 'number' ? ticketOrQueueId : ticketOrQueueId?.QueueID;
@@ -174,13 +189,32 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     }
 
     private async prepareAttachments(files: Array<Attachment | File>): Promise<Attachment[]> {
-        let attachments = null;
+        let attachments = [];
+
+        let loadingHint = await TranslationService.translate('Translatable#Prepare Attachments (0/{0})', [files.length]);
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+            loading: true, hint: loadingHint
+        });
+
+        let index = 0;
         for (let f of files) {
+
+            index++;
+            let loadingHint = await TranslationService.translate(
+                'Translatable#Prepare Attachments ({0}/{1})', [index, files.length]
+            );
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: loadingHint
+            });
+
             if (f instanceof File) {
+                const fileId = IdService.generateDateBasedId(f.name);
                 const attachment = new Attachment();
                 attachment.ContentType = f.type !== '' ? f.type : 'text/plain';
                 attachment.Filename = f.name;
-                attachment.Content = await BrowserUtil.readFile(f);
+                attachment.downloadId = fileId;
+
+                await FileService.uploadFile(f);
                 f = attachment;
             }
             this.deleteCommonProperties(f, true);
@@ -190,12 +224,12 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             delete f.KIXObjectType;
             delete f.ID;
 
-            if (!attachments) {
-                attachments = [];
-            }
-
             attachments.push(f);
         }
+
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+            loading: false
+        });
         return attachments;
     }
 
@@ -216,7 +250,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
     private prepareTicket(ticket: Ticket): void {
 
-        if (ticket.LockID === 2 && (!ticket.OwnerID || ticket.OwnerID === 1)) {
+        if (ticket.LockID === 2 && ticket.OwnerID === 1) {
             delete ticket.LockID;
         }
 

@@ -55,6 +55,7 @@ import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { ObjectSearchAPIService } from '../../object-search/server/ObjectSearchAPIService';
 import { ObjectSearchLoadingOptions } from '../../object-search/model/ObjectSearchLoadingOptions';
 import { Counter } from '../../user/model/Counter';
+import { FileService } from '../../file/server/FileService';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -401,17 +402,13 @@ export class TicketAPIService extends KIXObjectAPIService {
 
         let articleParameter: Array<[string, any]>;
         if (channelId && subject && body) {
-            let from = this.getParameterValue(parameter, ArticleProperty.FROM);
-            if (!from) {
-                const user = await UserService.getInstance().getUserByToken(token);
-                from = user.Contact ? user.Contact.Email : null;
-            }
 
             let senderType = this.getParameterValue(parameter, ArticleProperty.SENDER_TYPE_ID);
             if (!senderType) {
                 senderType = 1;
             }
 
+            let from;
             let to = this.getParameterValue(parameter, ArticleProperty.TO);
             if (!to && contactId && senderType !== 3) {
                 if (!isNaN(contactId)) {
@@ -428,11 +425,14 @@ export class TicketAPIService extends KIXObjectAPIService {
                 }
 
                 // switch To and From with external sendertype by channel note on new ticket (= incomming call)
-                // - so ticket "is" from customer
+                // - so ticket "is" from customer to agent
                 if (!ticketId && channelId === 1) {
-                    const oldFrom = from;
                     from = to;
-                    to = oldFrom;
+                    const user = await UserService.getInstance().getUserByToken(token);
+                    to = user.Contact ? user.Contact.Email : '';
+                    if (!to.match(/.+\s<.+>/) && user.Contact) {
+                        to = `"${user.Contact.Firstname} ${user.Contact.Lastname}" <${to}>`;
+                    }
                     senderType = 3;
                 }
             }
@@ -563,13 +563,6 @@ export class TicketAPIService extends KIXObjectAPIService {
             delete ticket.DynamicFields;
         }
 
-        const response = await this.sendRequest(
-            token, clientRequestId, uri, content, KIXObjectType.TICKET, create, relevantOrganisationId
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
-
         if (!create && articles?.length && ticket.TicketID) {
             for (const article of articles) {
                 let uri, articleCreate;
@@ -593,20 +586,17 @@ export class TicketAPIService extends KIXObjectAPIService {
             }
         }
 
+        const response = await this.sendRequest(
+            token, clientRequestId, uri, content, KIXObjectType.TICKET, create, relevantOrganisationId
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
         return response[TicketProperty.TICKET_ID];
     }
 
     private async prepareArticle(token: string, ticket: Ticket, article: Article): Promise<void> {
-        if (!article.From) {
-            const user = await UserService.getInstance().getUserByToken(token);
-            if (user.Contact) {
-                article.From = user.Contact.Email;
-                if (!article.From.match(/.+\s<.+>/)) {
-                    article.From = `"${user.Contact.Firstname} ${user.Contact.Lastname}" <${article.From}>`;
-                }
-            }
-        }
-
         if (!article.SenderTypeID) {
             article.SenderTypeID = 1;
         }
@@ -632,9 +622,12 @@ export class TicketAPIService extends KIXObjectAPIService {
             // switch To and From with external sendertype by channel note on new ticket (= incomming call)
             // - so ticket "is" from customer
             if (!ticket.TicketID && Number(article.ChannelID) === 1) {
-                const oldFrom = article.From;
                 article.From = article.To;
-                article.To = oldFrom;
+                const user = await UserService.getInstance().getUserByToken(token);
+                article.To = user.Contact ? user.Contact.Email : '';
+                if (!article.To.match(/.+\s<.+>/) && user.Contact) {
+                    article.To = `"${user.Contact.Firstname} ${user.Contact.Lastname}" <${article.To}>`;
+                }
                 article.SenderTypeID = 3;
             }
         }
@@ -642,6 +635,23 @@ export class TicketAPIService extends KIXObjectAPIService {
         article.ContentType = 'text/html; charset=utf-8';
         article.MimeType = 'text/html';
         article.Charset = 'utf-8';
+
+        await this.prepareArticleAttachments(article, token);
+    }
+
+    private async prepareArticleAttachments(article: Article, token: string): Promise<void> {
+        if (Array.isArray(article.Attachments)) {
+            for (const attachment of article.Attachments) {
+                if (!attachment.Content) {
+                    const crypto = require('crypto');
+                    const md5 = crypto.createHash('md5').update(token).digest('hex');
+                    const filename = `${md5}-${attachment.Filename}`;
+                    const content = FileService.getFileContent(filename, false);
+                    attachment.Content = content;
+                    FileService.removeFile(filename, false);
+                }
+            }
+        }
     }
 
     public async deleteObject(
@@ -655,7 +665,7 @@ export class TicketAPIService extends KIXObjectAPIService {
 
     public async loadArticleAttachment(
         token: string, ticketId: number, articleId: number, attachmentId: number,
-        relevantOrganisationId?: number
+        relevantOrganisationId?: number, asDownload?: boolean
     ): Promise<Attachment> {
 
         const uri = this.buildUri(
@@ -666,7 +676,14 @@ export class TicketAPIService extends KIXObjectAPIService {
             include: 'Content',
             RelevantOrganisationID: relevantOrganisationId
         }, KIXObjectType.ATTACHMENT);
-        return response?.responseData?.Attachment;
+
+        const user = await UserService.getInstance().getUserByToken(token);
+        let attachment = response?.responseData?.Attachment;
+        if (asDownload) {
+            attachment = new Attachment(attachment);
+            FileService.prepareFileForDownload(user?.UserID, attachment);
+        }
+        return attachment;
     }
 
     public async loadArticleZipAttachment(
@@ -768,93 +785,73 @@ export class TicketAPIService extends KIXObjectAPIService {
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         let searchCriteria = criteria.filter((f) =>
-            Ticket.SEARCH_PROPERTIES.some((sp) => sp.Property === f.property &&
-                (sp.APIOperations?.includes(f.operator as SearchOperator) ||
-                    sp.Operations?.includes(f.operator as SearchOperator)
-                )
-            ) ||
-            f.property === KIXObjectProperty.CREATE_BY || f.property === KIXObjectProperty.CHANGE_BY ||
-            f.property === KIXObjectProperty.CREATE_TIME || f.property === KIXObjectProperty.CHANGE_TIME
+            f.property !== SearchProperty.PRIMARY && f.property !== SearchProperty.FULLTEXT
         );
 
         await this.setUserID(searchCriteria, token);
 
-        const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
-        if (primary) {
-            const primarySearch = [
-                new FilterCriteria(
-                    TicketProperty.TICKET_NUMBER, SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
-                ),
-            ];
-            searchCriteria = [...searchCriteria, ...primarySearch];
+        const primary = criteria.filter((f) => f.property === SearchProperty.PRIMARY);
+        if (primary?.length) {
+            primary.forEach((c) => {
+                const primarySearch = [
+                    new FilterCriteria(
+                        TicketProperty.TICKET_NUMBER, SearchOperator.LIKE,
+                        FilterDataType.STRING, FilterType.OR, `${c.value}`
+                    ),
+                ];
+                searchCriteria = [...searchCriteria, ...primarySearch];
+            });
         }
 
-        const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
-        if (fulltext) {
-            const fulltextSearch = this.getFulltextSearch(fulltext);
-            searchCriteria = [...searchCriteria, ...fulltextSearch];
+        const fulltext = criteria.filter((f) => f.property === SearchProperty.FULLTEXT);
+        if (fulltext?.length) {
+            fulltext.forEach((c) => {
+                const fulltextSearch = this.getFulltextSearch(c);
+                searchCriteria = [...searchCriteria, ...fulltextSearch];
+            });
         }
 
-        const createdCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.CREATED);
-        if (createdCriteria) {
-            createdCriteria.property = KIXObjectProperty.CREATE_TIME;
+        const createdCriteria = searchCriteria.filter((sc) => sc.property === TicketProperty.CREATED);
+        if (createdCriteria?.length) {
+            createdCriteria.forEach((c) => c.property = KIXObjectProperty.CREATE_TIME);
         }
 
-        const changedCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.CHANGED);
-        if (changedCriteria) {
-            changedCriteria.property = KIXObjectProperty.CHANGE_TIME;
+        const changedCriteria = searchCriteria.filter((sc) => sc.property === TicketProperty.CHANGED);
+        if (changedCriteria?.length) {
+            changedCriteria.forEach((c) => c.property = KIXObjectProperty.CHANGE_TIME);
         }
 
-        const visibleCriteria = searchCriteria.find((sc) => sc.property === ArticleProperty.CUSTOMER_VISIBLE);
-        if (
-            visibleCriteria
-            && Array.isArray(visibleCriteria.value)
-            && visibleCriteria.operator === SearchOperator.EQUALS
-        ) {
-            visibleCriteria.value = visibleCriteria.value[0];
+        const visibleCriteria = searchCriteria.filter((sc) => sc.property === ArticleProperty.CUSTOMER_VISIBLE);
+        if (visibleCriteria?.length) {
+            visibleCriteria.forEach((c) => {
+                if (Array.isArray(c.value) && c.operator === SearchOperator.EQUALS) {
+                    c.value = c.value[0];
+                }
+            });
         }
 
-        const lockCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.LOCK_ID);
-        if (
-            lockCriteria
-            && Array.isArray(lockCriteria.value)
-            && lockCriteria.operator === SearchOperator.EQUALS
-        ) {
-            lockCriteria.value = lockCriteria.value[0];
+        const lockCriteria = searchCriteria.filter((sc) => sc.property === TicketProperty.LOCK_ID);
+        if (lockCriteria?.length) {
+            lockCriteria.forEach((c) => {
+                if (Array.isArray(c.value) && c.operator === SearchOperator.EQUALS) {
+                    c.value = c.value[0];
+                }
+            });
         }
 
-        const ticketNumberCriterion = searchCriteria.find((c) => c.property === TicketProperty.TICKET_NUMBER);
-        if (ticketNumberCriterion) {
+        const ticketNumberCriterion = searchCriteria.filter((c) => c.property === TicketProperty.TICKET_NUMBER);
+        if (ticketNumberCriterion?.length) {
+            // remove hook and divider if necessary
             const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                 token, 'TicketService', KIXObjectType.SYS_CONFIG_OPTION,
                 [SysConfigKey.TICKET_HOOK, SysConfigKey.TICKET_HOOK_DIVIDER], null, null
             );
-
             const options = objectResponse?.objects || [];
-            for (const o of options) {
-                ticketNumberCriterion.value = ticketNumberCriterion.value?.toString()?.replace(o.Value, '');
+            if (options?.length) {
+                ticketNumberCriterion.forEach((c) => {
+                    options.forEach((o) => c.value = c.value?.toString()?.replace(o.Value, ''));
+                });
             }
-        }
-
-        const hasStateSearch = searchCriteria.some((c) =>
-            c.property === TicketProperty.STATE_ID ||
-            c.property === TicketProperty.STATE_TYPE ||
-            c.property === TicketProperty.STATE_TYPE_ID
-        );
-
-        const hasTicketSearch = searchCriteria.some((c) =>
-            c.property === TicketProperty.TICKET_NUMBER ||
-            c.property === TicketProperty.TICKET_ID
-        );
-
-        if (!hasStateSearch && !hasTicketSearch) {
-            searchCriteria.push(
-                new FilterCriteria(
-                    TicketProperty.STATE_TYPE, SearchOperator.IN,
-                    FilterDataType.STRING, FilterType.AND, ['Open']
-                )
-            );
         }
 
         return searchCriteria;

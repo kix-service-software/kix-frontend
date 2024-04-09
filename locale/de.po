@@ -2658,6 +2658,9 @@ msgstr ""
 "Bei Abbruch einer Bearbeitung (Schließen eines Dialogs) keine Bestätigung "
 "abfragen."
 
+msgid "Helptext_PersonalSettings_article_from_format"
+msgstr "Format des Namensteils der Absendeadresse im Kanal "E-Mail". Die eigentliche, technische Email-Adresse wird immer die des jeweiligen Teams sein."
+
 msgid "Helptext_PersonalSettings_article_sort_order_Hint"
 msgstr "Definiert die Reihenfolge der Artikel in der Kommunikationshistorie."
 
@@ -3193,6 +3196,9 @@ msgstr "Schlagworte"
 
 msgid "KIX"
 msgstr "KIX"
+
+msgid "<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname> via Sender Address"
+msgstr "<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname> via Absendeadresse"
 
 msgid "KIX Forum"
 msgstr "KIX Forum"
@@ -4546,6 +4552,9 @@ msgstr "Senden"
 
 msgid "Send despite out of office"
 msgstr "Trotz „nicht im Büro“"
+
+msgid "Sender Address"
+msgstr "Absendeadresse"
 
 msgid "Sender Address (Email)"
 msgstr "Absender E-Mail"

@@ -33,10 +33,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'GeneralCatalogUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
         ServiceRegistry.registerServiceInstance(GeneralCatalogFormService.getInstance());
@@ -67,6 +63,9 @@ export class UIModule implements IUIModule {
             'Translatable#Edit General Catalog', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editGeneralCatalogDialogContext);
+    }
 
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 }

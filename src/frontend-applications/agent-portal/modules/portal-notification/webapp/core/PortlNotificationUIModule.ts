@@ -19,8 +19,8 @@ export class UIModule implements IUIModule {
         // register some module stuff, e.g. Context, LabelProvider, TableFactory, Actions, ...
     }
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

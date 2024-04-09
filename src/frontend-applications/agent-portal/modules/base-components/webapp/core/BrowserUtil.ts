@@ -25,7 +25,7 @@ import { ContextService } from './ContextService';
 import { PlaceholderService } from './PlaceholderService';
 import { InlineContent } from './InlineContent';
 import { AgentService } from '../../../user/webapp/core/AgentService';
-
+import { IDownloadableFile } from '../../../../model/IDownloadableFile';
 
 export class BrowserUtil {
 
@@ -106,6 +106,17 @@ export class BrowserUtil {
             const file = new File([blob], fileName, { type: contentType });
             FileSaver.saveAs(file);
         }
+    }
+
+    public static async startFileDownload(file: IDownloadableFile): Promise<void> {
+        const user = await AgentService.getInstance().getCurrentUser();
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = `files/download/${file.downloadId}?userid=${user?.UserID}`;
+        a.download = file.Filename;
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
     }
 
     public static openPDF(content: string, name?: string): void {
@@ -423,6 +434,20 @@ export class BrowserUtil {
                 resolve(false);
             }, 175);
         });
+    }
+
+    public static isBooleanTrue(value: string): boolean {
+        let result = false;
+
+        if (typeof value === 'string') {
+            result = value && value !== '0' && value !== 'false';
+        } else if (typeof value === 'number') {
+            result = Boolean(value);
+        } else if (typeof value === 'boolean') {
+            result = value;
+        }
+
+        return result;
     }
 
 }

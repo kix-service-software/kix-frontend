@@ -19,18 +19,35 @@ import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/
 import { Error } from '../../../../../../../server/model/Error';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { SearchContext } from '../SearchContext';
+import { AgentSocketClient } from '../../../../user/webapp/core/AgentSocketClient';
+import { User } from '../../../../user/model/User';
+import { SearchCache } from '../../../model/SearchCache';
 
 export class DeleteSearchAction extends AbstractAction {
+
+    private user: User;
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Delete Search';
         this.icon = 'kix-icon-trash';
+        this.user = await AgentSocketClient.getInstance().getCurrentUser();
     }
 
     public canRun(): boolean {
+        return this.isDeletable();
+    }
+
+    public async canShow(): Promise<boolean> {
+        return this.isDeletable();
+    }
+
+    private isDeletable(): boolean {
         const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        const cache = context?.getSearchCache();
-        return typeof cache !== 'undefined' && cache !== null && cache.name !== null;
+        const search = context?.getSearchCache();
+
+        const isUserSearch = !search.userId || search.userId === this.user.UserID;
+
+        return search?.name && isUserSearch;
     }
 
     public async run(): Promise<void> {

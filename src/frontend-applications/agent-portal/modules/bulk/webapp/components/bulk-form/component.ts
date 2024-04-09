@@ -58,7 +58,9 @@ class Component {
         ]);
 
         this.state.bulkManager?.registerListener('bulk-dialog-listener', async () => {
+            this.state.prepared = false;
             this.setCanRun();
+            setTimeout(() => this.state.prepared = true, 150);
         });
 
         const bulkService = BulkService.getInstance();
@@ -78,6 +80,8 @@ class Component {
         this.state.linkManager?.registerListener('bulk-dialog-link-listener', async () => {
             this.setCanRun();
         });
+
+        this.state.prepared = true;
     }
 
     public onDestroy(): void {

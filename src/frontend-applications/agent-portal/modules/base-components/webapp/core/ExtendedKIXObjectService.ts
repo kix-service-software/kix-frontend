@@ -20,10 +20,16 @@ import { IAutofillConfiguration } from './IAutofillConfiguration';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { ServiceType } from './ServiceType';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
+import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 
 export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
-    public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+    public async getObjectProperties(objectType: KIXObjectType, dependencyIds: string[] = []): Promise<string[]> {
+        return [];
+    }
+
+    public async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
         return [];
     }
 
@@ -64,7 +70,8 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
 
     public getTreeNodes(
         property: string, showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        additionalData?: any
     ): Promise<TreeNode[]> {
         return null;
     }
@@ -123,7 +130,27 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
         return null;
     }
 
-    public getSortAttribute(attribute: string): string {
+    public getSortAttribute(attribute: string, dep?: string): string {
+        return null;
+    }
+
+    public isBackendFilterSupportedForProperty(property: string, dep?: string): boolean | null {
+        return;
+    }
+
+    public isBackendFilterSupportedForDF(dynamicField: DynamicField): boolean | null {
+        return;
+    }
+
+    public getBackendFilterType(property: string, dep?: string): BackendSearchDataType | string {
+        return;
+    }
+
+    public getBackendFilterTypeForDF(dynamicField: DynamicField, dep?: string): BackendSearchDataType | string {
+        return;
+    }
+
+    public getFilterAttribute(property: string, dep?: string): string {
         return null;
     }
 

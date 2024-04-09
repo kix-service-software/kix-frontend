@@ -7,8 +7,10 @@
  * --
  */
 
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { SearchContext } from '../../../../search/webapp/core';
+import { FAQArticleProperty } from '../../../model/FAQArticleProperty';
 
 export class FAQArticleSearchContext extends SearchContext {
 
@@ -17,4 +19,16 @@ export class FAQArticleSearchContext extends SearchContext {
     public getIcon(): string | ObjectIcon {
         return 'kix-icon-search-faq';
     }
+
+    public getAdditionalInformation(key: string): any {
+        if (key === AdditionalContextInformation.OBJECT_DEPENDENCY) {
+            const criterion = this.searchCache?.criteria?.find(
+                (c) => c.property === FAQArticleProperty.CATEGORY_ID
+            );
+            return criterion?.value || [];
+        }
+
+        return super.getAdditionalInformation(key);
+    }
+
 }

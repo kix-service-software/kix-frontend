@@ -15,6 +15,7 @@ import { ContextService } from '../../../../../../base-components/webapp/core/Co
 import { NewContactDialogContext } from '../../../../../../customer/webapp/core/context/NewContactDialogContext';
 import { FormValueAction } from '../../../../../../object-forms/model/FormValues/FormValueAction';
 import { TicketProperty } from '../../../../../model/TicketProperty';
+import { ContactObjectFormValue } from '../ContactObjectFormValue';
 
 export class CreateContactFormValueAction extends FormValueAction {
 
@@ -30,14 +31,21 @@ export class CreateContactFormValueAction extends FormValueAction {
     }
 
     public async canShow(): Promise<boolean> {
-        const contactValue = this.objectValueMapper?.findFormValue(TicketProperty.CONTACT_ID);
+        const formValue = this.objectValueMapper?.findFormValue(TicketProperty.CONTACT_ID) as ContactObjectFormValue;
         const hasPermissions = await this.hasPermissions();
-        return contactValue?.enabled && contactValue?.visible && !contactValue?.readonly && hasPermissions;
+        return formValue?.enabled
+            && formValue?.visible
+            && !formValue?.readonly
+            && hasPermissions
+            && formValue?.canCreateContact;
     }
 
     public canRun(): boolean {
-        const contactValue = this.objectValueMapper?.findFormValue(TicketProperty.CONTACT_ID);
-        return contactValue?.enabled && contactValue?.visible && !contactValue?.readonly;
+        const formValue = this.objectValueMapper?.findFormValue(TicketProperty.CONTACT_ID) as ContactObjectFormValue;
+        return formValue?.enabled
+            && formValue?.visible
+            && !formValue?.readonly
+            && formValue?.canCreateContact;
     }
 
     public async run(event: any): Promise<void> {

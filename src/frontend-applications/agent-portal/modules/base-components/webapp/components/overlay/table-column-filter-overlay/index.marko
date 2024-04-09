@@ -9,15 +9,30 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.prepared)>
     <if(state.hasListFilter)>
-        <form-list-tree treeId=state.treeId on-nodeClicked("nodeClicked")/>
+        <form-list-tree treeId=state.treeId/>
     </if>
+    <else-if(state.isAutocompleteFilter)>
+        <div class="filter-autocomplete">
+            <form-list
+                treeId=state.treeId
+                canRemoveNode
+                multiselect
+                autoCompleteConfiguration=state.autoCompleteConfiguration
+                searchCallback=state.autoCompleteCallback
+                hideSubmitButton
+                expanded
+            />
+        </div>
+    </else-if>
     <else>
-        <input.input-style
+        <input
             type="text"
             placeholder=state.placeholder
             value=state.filterText
             on-change("textFilterValueChanged")
             on-keydown("filterKeyDown")
-            key="column-filter-input"/>
+            key="column-filter-input"
+            class="input-style"
+        >
     </else>
 </if>

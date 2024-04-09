@@ -97,8 +97,6 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                 const node = new TreeNode(contactId, contactId?.toString());
                 this.possibleValues = [contactId];
                 this.treeHandler.setTree([node]);
-            } else {
-                this.clearPossibleValuesAndNodes();
             }
         }
     }

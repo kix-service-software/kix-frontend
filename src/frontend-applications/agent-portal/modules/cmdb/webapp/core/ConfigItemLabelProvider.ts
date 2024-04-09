@@ -31,9 +31,14 @@ import { PlaceholderService } from '../../../base-components/webapp/core/Placeho
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
+    private classObjectType: RegExp = new RegExp(`${KIXObjectType.CONFIG_ITEM}\\..+`);
 
     public isLabelProviderForDFType(dfFieldType: string): boolean {
         return dfFieldType === DynamicFieldTypes.CI_REFERENCE || super.isLabelProviderForDFType(dfFieldType);
+    }
+
+    public isLabelProviderForType(objectType: KIXObjectType | string): boolean {
+        return objectType === this.kixObjectType || Boolean(objectType?.match(this.classObjectType));
     }
 
     public async getPropertyValueDisplayText(
@@ -83,7 +88,9 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(
+        property: string, short?: boolean, translatable: boolean = true, configItem?: ConfigItem
+    ): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ConfigItemProperty.CLASS:
@@ -116,7 +123,12 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = 'Translatable#Include Previous Version';
                 break;
             default:
-                displayValue = await super.getPropertyText(property, short, translatable);
+                const attributes = configItem?.getPreparedData(property);
+                if (attributes && attributes.length > 0) {
+                    displayValue = attributes[0].Label;
+                } else {
+                    displayValue = await super.getPropertyText(property, short, translatable);
+                }
         }
 
         if (displayValue) {
@@ -177,7 +189,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 translatable = false;
                 break;
             default:
-                const attributes = configItem.getPreparedData(property);
+                const attributes = typeof configItem.getPreparedData === 'function' ? configItem.getPreparedData(property) : null;
                 if (attributes && attributes.length > 0) {
                     if (attributes.length > 1) {
                         displayValue = attributes.map((a) => `[${a.DisplayValue}]`).join(' ');

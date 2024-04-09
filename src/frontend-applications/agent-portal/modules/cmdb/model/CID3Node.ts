@@ -16,9 +16,10 @@ export class CID3Node extends GraphD3Node {
         public name: string,
         public classId: number,
         public bgColor?: string,
-        public image?: boolean
+        public image?: boolean,
+        public icon?: boolean
     ) {
-        super(id, name, bgColor, image);
+        super(id, name, bgColor, image, icon);
     }
 
 }

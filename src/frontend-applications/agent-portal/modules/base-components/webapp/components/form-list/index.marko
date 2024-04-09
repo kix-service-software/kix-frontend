@@ -43,7 +43,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         freeText=input.freeText
                         key=("form-list-input-" + state.listId)/>
                     <form-list-tree key=state.treeId treeId=state.treeId tabIndex=-1/>
-                    <if(state.multiselect)>
+                    <if(state.multiselect && !input.hideSubmitButton)>
                         <dropdown-button-bar treeId=state.treeId on-submit("submitClicked") key=("buttonbar" + state.listId)/>
                     </if>
                 </div>

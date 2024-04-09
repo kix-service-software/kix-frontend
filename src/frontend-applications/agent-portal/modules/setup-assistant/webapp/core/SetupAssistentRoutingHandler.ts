@@ -7,6 +7,7 @@
  * --
  */
 
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
@@ -33,12 +34,20 @@ export class SetupAssistentRoutingHandler extends AdditionalRoutingHandler {
         const isSetupNeeded = await this.isSetupNeeded();
 
         if (isSetupNeeded) {
-            await ContextService.getInstance().setActiveContext('admin');
-            const context = ContextService.getInstance().getActiveContext();
-            if (context instanceof AdminContext) {
-                context.setAdminModule('setup-assistant');
+            routed = await this.routeToSetupAssistant();
+            if (!routed) {
+                ContextService.getInstance().registerListener({
+                    constexServiceListenerId: 'SetupAssistentRoutingHandlerListener',
+                    contextChanged: () => null,
+                    contextRegistered: (descriptor: ContextDescriptor) => {
+                        if (descriptor.contextId === AdminContext.CONTEXT_ID) {
+                            this.routeToSetupAssistant();
+                            ContextService.getInstance().unregisterListener('SetupAssistentRoutingHandlerListener');
+                        }
+                    },
+                    beforeDestroy: () => null
+                });
             }
-            routed = true;
         }
 
         return routed;
@@ -77,6 +86,17 @@ export class SetupAssistentRoutingHandler extends AdditionalRoutingHandler {
         }
 
         return isAllowedUser;
+    }
+
+    private async routeToSetupAssistant(): Promise<boolean> {
+        let routed = false;
+        await ContextService.getInstance().setActiveContext(AdminContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
+        if (context instanceof AdminContext) {
+            context.setAdminModule('setup-assistant');
+            routed = true;
+        }
+        return routed;
     }
 
 }

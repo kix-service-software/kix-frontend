@@ -26,16 +26,16 @@ export class UIModule implements IUIModule {
 
     public priority: number = 102;
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         // FIXME: switch validator for new object form handling
         // FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
 
         this.registerContexts();
         this.registerTicketActions();
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
     private async registerContexts(): Promise<void> {

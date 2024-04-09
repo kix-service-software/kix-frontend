@@ -22,26 +22,21 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
         return [
             new AdminModuleCategory(
                 null, 'kix', 'Translatable#KIX', null, [
-                new AdminModuleCategory(
-                    null, 'communication', 'Translatable#Communication', null,
-                    [
-                        new AdminModuleCategory(
-                            null, 'communication_email', 'Translatable#Email', null, [],
-                            [
-                                new AdminModule(
-                                    null, 'oauth2', 'Translatable#OAuth2 Profiles', null,
-                                    KIXObjectType.OAUTH2_PROFILE, 'admin-oauth2-profiles',
-                                    [
-                                        new UIComponentPermission(
-                                            'system/oauth2/profiles', [CRUD.CREATE], true
-                                        )
-                                    ]
-                                )
-                            ]
-                        )
-                    ]
-                )
-            ])
+                    new AdminModuleCategory(
+                        null, 'system', 'Translatable#System', null, [], [
+                            new AdminModule(
+                                null, 'oauth2', 'Translatable#OAuth2 Profiles', null,
+                                KIXObjectType.OAUTH2_PROFILE, 'admin-oauth2-profiles',
+                                [
+                                    new UIComponentPermission(
+                                        'system/oauth2/profiles', [CRUD.CREATE], true
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ]
+            )
         ];
     }
 

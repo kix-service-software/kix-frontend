@@ -15,7 +15,8 @@ export class AttachmentLoadingOptions extends KIXObjectSpecificLoadingOptions {
 
     public constructor(
         public configItemId: number,
-        public versionId: number
+        public versionId: number,
+        public asDownload?: boolean
     ) {
         super();
     }

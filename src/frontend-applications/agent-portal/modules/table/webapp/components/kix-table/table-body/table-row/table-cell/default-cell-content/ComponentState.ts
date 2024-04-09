@@ -7,17 +7,20 @@
  * --
  */
 
+import { OverlayIcon } from '../../../../../../../../base-components/webapp/core/OverlayIcon';
 import { ObjectIcon } from '../../../../../../../../icon/model/ObjectIcon';
 import { Cell } from '../../../../../../../model/Cell';
 
 export class ComponentState {
 
-    public constructor(
-        public icons: Array<string | ObjectIcon> = null,
-        public displayText: string = null,
-        public cell: Cell = null,
-        public showIcons: boolean = true,
-        public showText: boolean = true
-    ) { }
+        public constructor(
+                public icons: Array<string | ObjectIcon> = null,
+                public displayText: string = null,
+                public cell: Cell = null,
+                public showIcons: boolean = true,
+                public showText: boolean = true,
+                public overlay: OverlayIcon = null,
+                public rtl: boolean = false
+        ) { }
 
 }

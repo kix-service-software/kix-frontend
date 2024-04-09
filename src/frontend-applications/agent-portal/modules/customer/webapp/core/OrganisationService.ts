@@ -22,6 +22,7 @@ import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpec
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { OrganisationProperty } from '../../model/OrganisationProperty';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 
@@ -143,19 +144,29 @@ export class OrganisationService extends KIXObjectService<Organisation> {
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, `*${searchValue}*`
             )
         ];
     }
 
     public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
         const superProperties = await super.getObjectProperties(objectType);
-        const objectProperties: string[] = [];
-        for (const property in OrganisationProperty) {
-            if (OrganisationProperty[property]) {
-                objectProperties.push(OrganisationProperty[property]);
-            }
-        }
+        const objectProperties: string[] = [
+            OrganisationProperty.NUMBER,
+            OrganisationProperty.NAME,
+            OrganisationProperty.URL,
+            OrganisationProperty.COMMENT,
+            OrganisationProperty.STREET,
+            OrganisationProperty.ZIP,
+            OrganisationProperty.CITY,
+            OrganisationProperty.COUNTRY,
+
+            KIXObjectProperty.CHANGE_TIME,
+            KIXObjectProperty.CHANGE_BY,
+            KIXObjectProperty.CREATE_TIME,
+            KIXObjectProperty.CREATE_BY,
+            KIXObjectProperty.VALID_ID
+        ];
         return [...objectProperties, ...superProperties];
     }
 

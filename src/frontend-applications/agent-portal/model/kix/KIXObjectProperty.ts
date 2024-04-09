@@ -19,9 +19,13 @@ export enum KIXObjectProperty {
 
     CHANGE_BY = 'ChangeBy',
 
+    CHANGE_BY_ID = 'ChangeByID',
+
     CHANGE_TIME = 'ChangeTime',
 
     CREATE_BY = 'CreateBy',
+
+    CREATE_BY_ID = 'CreateByID',
 
     CREATE_TIME = 'CreateTime',
 

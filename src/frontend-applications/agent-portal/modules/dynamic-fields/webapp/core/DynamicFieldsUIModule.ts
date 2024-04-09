@@ -38,6 +38,7 @@ import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { DynamicFieldTableValidator } from './DynamicFieldTableValidator';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ObjectIconService } from '../../../icon/webapp/core';
 
 export class UIModule implements IUIModule {
 
@@ -56,10 +57,6 @@ export class UIModule implements IUIModule {
     private itemSeparatorDescription: string;
     private defaultValueTitle: string;
     private defaultValueDescription: string;
-
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
 
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
@@ -103,6 +100,10 @@ export class UIModule implements IUIModule {
         this.registerSchemas();
     }
 
+    public async registerExtensions(): Promise<void> {
+        return;
+    }
+
     // tslint:disable:max-line-length
     private async registerSchemas(): Promise<void> {
         this.countMinTitle = await TranslationService.translate('Translatable#Count Min');
@@ -132,6 +133,7 @@ export class UIModule implements IUIModule {
         this.registerSchemaForTable();
     }
 
+    // eslint-disable-next-line max-lines-per-function
     private async registerSchemaForText(): Promise<void> {
 
         const regExListTitle: string = await TranslationService.translate('Translatable#RegEx List');
@@ -141,6 +143,7 @@ export class UIModule implements IUIModule {
 
         const schema = {
             type: 'object',
+            format: 'grid-strict',
             properties: {
                 CountMin: {
                     title: this.countMinTitle,
@@ -160,17 +163,24 @@ export class UIModule implements IUIModule {
                 ItemSeparator: {
                     title: this.itemSeparatorTitle,
                     description: this.itemSeparatorDescription,
-                    type: 'string'
+                    type: 'string',
+                    options: {
+                        grid_break: true
+                    }
                 },
                 DefaultValue: {
                     title: this.defaultValueTitle,
                     description: this.defaultValueDescription,
-                    type: 'string'
+                    type: 'string',
+                    options: {
+                        grid_break: true
+                    }
                 },
                 RegExList: {
                     title: regExListTitle,
                     description: regExListDescription,
                     type: 'array',
+                    format: 'table',
                     items: {
                         type: 'object',
                         properties: {
@@ -192,6 +202,7 @@ export class UIModule implements IUIModule {
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.TEXT, schema);
     }
 
+    // eslint-disable-next-line max-lines-per-function
     private async registerSchemaForTextArea(): Promise<void> {
 
         const regExListTitle: string = await TranslationService.translate('Translatable#RegEx List');
@@ -201,6 +212,7 @@ export class UIModule implements IUIModule {
 
         const schema = {
             type: 'object',
+            format: 'grid-strict',
             properties: {
                 CountMin: {
                     title: this.countMinTitle,
@@ -220,17 +232,24 @@ export class UIModule implements IUIModule {
                 ItemSeparator: {
                     title: this.itemSeparatorTitle,
                     description: this.itemSeparatorDescription,
-                    type: 'string'
+                    type: 'string',
+                    options: {
+                        grid_break: true
+                    }
                 },
                 DefaultValue: {
                     title: this.defaultValueTitle,
                     description: this.defaultValueDescription,
-                    type: 'string'
+                    type: 'string',
+                    options: {
+                        grid_break: true
+                    }
                 },
                 RegExList: {
                     title: regExListTitle,
                     description: regExListDescription,
                     type: 'array',
+                    format: 'table',
                     items: {
                         type: 'object',
                         properties: {
@@ -252,6 +271,7 @@ export class UIModule implements IUIModule {
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.TEXT_AREA, schema);
     }
 
+    // eslint-disable-next-line max-lines-per-function
     private async registerSchemaForDate(): Promise<void> {
 
         const yearsInFuture = await TranslationService.translate('Translatable#Years in Future');
@@ -260,6 +280,7 @@ export class UIModule implements IUIModule {
 
         const schema = {
             type: 'object',
+            format: 'grid-strict',
             properties: {
                 CountMin: {
                     title: this.countMinTitle,
@@ -269,12 +290,15 @@ export class UIModule implements IUIModule {
                 CountMax: {
                     title: this.countMaxTitle,
                     description: this.countMaxDescription,
-                    type: 'integer'
+                    type: 'integer',
                 },
                 CountDefault: {
                     title: this.countDefaultTitle,
                     description: this.countDefaultDescription,
-                    type: 'integer'
+                    type: 'integer',
+                    options: {
+                        grid_break: true
+                    }
                 },
                 ItemSeparator: {
                     title: this.itemSeparatorTitle,
@@ -284,7 +308,10 @@ export class UIModule implements IUIModule {
                 DefaultValue: {
                     title: this.defaultValueTitle,
                     description: this.defaultValueDescription,
-                    type: 'string'
+                    type: 'string',
+                    options: {
+                        grid_break: true
+                    }
                 },
                 YearsInFuture: {
                     title: yearsInFuture,
@@ -299,6 +326,7 @@ export class UIModule implements IUIModule {
                 DateRestriction: {
                     title: dateRestriction,
                     type: 'string',
+                    format: 'select',
                     default: 'none',
                     enum: [
                         'none',
@@ -312,6 +340,7 @@ export class UIModule implements IUIModule {
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.DATE, schema);
     }
 
+    // eslint-disable-next-line max-lines-per-function
     private async registerSchemaForDateTime(): Promise<void> {
 
         const defaultValueDescription = await TranslationService.translate('Translatable#Admin_DynamicFieldDateTime_DefaultValue_Description');
@@ -320,59 +349,71 @@ export class UIModule implements IUIModule {
         const dateRestriction = await TranslationService.translate('Translatable#Date Restriction');
 
         const schema = {
-            type: 'object',
-            properties: {
-                CountMin: {
-                    title: this.countMinTitle,
-                    description: this.countMinDescription,
-                    type: 'integer'
+            'type': 'object',
+            'format': 'grid-strict',
+            'properties': {
+                'CountMin': {
+                    'title': this.countMinTitle,
+                    'description': this.countMinDescription,
+                    'type': 'integer'
                 },
-                CountMax: {
-                    title: this.countMaxTitle,
-                    description: this.countMaxDescription,
-                    type: 'integer'
+                'CountMax': {
+                    'title': this.countMaxTitle,
+                    'description': this.countMaxDescription,
+                    'type': 'integer'
                 },
-                CountDefault: {
-                    title: this.countDefaultTitle,
-                    description: this.countDefaultDescription,
-                    type: 'integer'
+                'CountDefault': {
+                    'title': this.countDefaultTitle,
+                    'description': this.countDefaultDescription,
+                    'type': 'integer',
+                    'options': {
+                        'grid_break': true
+                    }
                 },
-                ItemSeparator: {
-                    title: this.itemSeparatorTitle,
-                    description: this.itemSeparatorDescription,
-                    type: 'string'
+                'ItemSeparator': {
+                    'title': this.itemSeparatorTitle,
+                    'description': this.itemSeparatorDescription,
+                    'type': 'string'
                 },
-                DefaultValue: {
-                    title: this.defaultValueTitle,
-                    description: defaultValueDescription,
-                    type: 'string'
+                'DefaultValue': {
+                    'title': this.defaultValueTitle,
+                    'description': defaultValueDescription,
+                    'type': 'string',
+                    'options': {
+                        'grid_break': true
+                    }
                 },
-                YearsInFuture: {
-                    title: yearsInFuture,
-                    description: '',
-                    type: 'integer'
+                'YearsInFuture': {
+                    'title': yearsInFuture,
+                    'description': '',
+                    'type': 'integer'
                 },
-                YearsInPast: {
-                    title: yearsInPast,
-                    description: '',
-                    type: 'integer'
+                'YearsInPast': {
+                    'title': yearsInPast,
+                    'description': '',
+                    'type': 'integer'
                 },
-                DateRestriction: {
-                    title: dateRestriction,
-                    type: 'string',
-                    default: 'none',
-                    enum: [
+                'DateRestriction': {
+                    'title': dateRestriction,
+                    'type': 'string',
+                    'default': 'none',
+                    'enum': [
                         'none',
                         'DisableFutureDates',
                         'DisablePastDates'
                     ]
                 }
             },
-            required: ['CountMin', 'CountMax', 'CountDefault']
+            'required': [
+                'CountMin',
+                'CountMax',
+                'CountDefault'
+            ]
         };
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.DATE_TIME, schema);
     }
 
+    // eslint-disable-next-line max-lines-per-function
     private async registerSchemaForSelection(): Promise<void> {
 
         const translatableValues = await TranslationService.translate('Translatable#Translatable Values');
@@ -380,21 +421,31 @@ export class UIModule implements IUIModule {
 
         const schema = {
             type: 'object',
+            format: 'grid',
             properties: {
                 CountMin: {
                     title: this.countMinTitle,
                     description: this.countMinDescription,
-                    type: 'integer'
+                    type: 'integer',
+                    options: {
+                        grid_columns: 3
+                    }
                 },
                 CountMax: {
                     title: this.countMaxTitle,
                     description: this.countMaxDescription,
-                    type: 'integer'
+                    type: 'integer',
+                    options: {
+                        grid_columns: 3
+                    }
                 },
                 CountDefault: {
                     title: this.countDefaultTitle,
                     description: this.countDefaultDescription,
-                    type: 'integer'
+                    type: 'integer',
+                    options: {
+                        grid_columns: 3
+                    }
                 },
                 ItemSeparator: {
                     title: this.itemSeparatorTitle,
@@ -410,12 +461,16 @@ export class UIModule implements IUIModule {
                     title: translatableValues,
                     description: '',
                     type: 'boolean',
-                    format: 'checkbox'
+                    format: 'checkbox',
+                    options: {
+                        grid_columns: 3
+                    }
                 },
                 PossibleValues: {
                     title: possibleValues,
                     description: '',
                     type: 'array',
+                    format: 'table',
                     items: {
                         type: 'object',
                         properties: {
@@ -437,6 +492,7 @@ export class UIModule implements IUIModule {
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.SELECTION, schema);
     }
 
+    // eslint-disable-next-line max-lines-per-function
     private async registerSchemaForCheckList(): Promise<void> {
 
         const checkListItemTitle = await TranslationService.translate('Translatable#Checklist Item');
@@ -447,28 +503,89 @@ export class UIModule implements IUIModule {
         const itemValue = await TranslationService.translate('Translatable#Value');
         const itemSub = await TranslationService.translate('Translatable#Sub');
 
+        const checklistState = await TranslationService.translate('Translatable#Checklist State');
+        const label = await TranslationService.translate('Translatable#Label');
+        const done = await TranslationService.translate('Translatable#Done');
+        const doneDescription = await TranslationService.translate('Translatable#If true, the value will increase the checklist counter.');
+
+        let icons = await ObjectIconService.getInstance().getAvailableIcons(
+            true, true, false
+        );
+        icons = [
+            '',
+            ...icons?.filter((i) => typeof i === 'string').sort((a, b) => a.toString().localeCompare(b.toString()))
+        ];
+
         const schema = {
             type: 'object',
+            title: 'Checklist',
             definitions: {
+                CommonChecklistState: {
+                    title: checklistState,
+                    type: 'array',
+                    required: false,
+                    format: 'table',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            label: {
+                                title: label,
+                                type: 'string',
+                                options: {
+                                    'grid_columns': 3
+                                }
+                            },
+                            icon: {
+                                title: 'Icon',
+                                type: 'string',
+                                uniqueItems: true,
+                                enum: icons,
+                                options: {
+                                    'grid_columns': 3
+                                }
+                            },
+                            done: {
+                                title: done,
+                                description: doneDescription,
+                                type: 'boolean',
+                                format: 'checkbox',
+                                default: 1,
+                                options: {
+                                    'grid_columns': 3
+                                }
+                            },
+                        }
+                    }
+                },
                 CheckListItem: {
                     title: checkListItemTitle,
                     description: '',
                     type: 'array',
                     required: false,
+                    format: 'tabs',
                     items: {
                         type: 'object',
                         properties: {
                             id: {
                                 title: itemId,
-                                type: 'string'
+                                type: 'string',
+                                options: {
+                                    'grid_columns': 4
+                                }
                             },
                             title: {
                                 title: itemTitle,
-                                type: 'string'
+                                type: 'string',
+                                options: {
+                                    'grid_columns': 4
+                                }
                             },
                             description: {
                                 title: itemDescription,
-                                type: 'string'
+                                type: 'string',
+                                options: {
+                                    'grid_columns': 4
+                                }
                             },
                             input: {
                                 title: itemInput,
@@ -478,11 +595,23 @@ export class UIModule implements IUIModule {
                                     'Text',
                                     'TextArea',
                                     'ChecklistState'
-                                ]
+                                ],
+                                options: {
+                                    'grid_columns': 4
+                                }
                             },
                             value: {
+                                dependencies: {
+                                    input: ['Text', 'TextArea']
+                                },
+                                watch: {
+                                    input: 'input'
+                                },
                                 title: itemValue,
                                 type: 'string'
+                            },
+                            checklistStates: {
+                                $ref: '#/definitions/CommonChecklistState'
                             },
                             sub: {
                                 title: itemSub,
@@ -494,7 +623,6 @@ export class UIModule implements IUIModule {
             },
             properties: {
                 DefaultValue: {
-                    title: this.defaultValueTitle,
                     $ref: '#/definitions/CheckListItem'
                 }
             }
@@ -503,6 +631,7 @@ export class UIModule implements IUIModule {
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.CHECK_LIST, schema);
     }
 
+    // eslint-disable-next-line max-lines-per-function
     private async getSchemaForCIReference(): Promise<any> {
 
         const states = await CMDBService.getInstance().getDeploymentStates();
@@ -517,21 +646,31 @@ export class UIModule implements IUIModule {
 
         const schema = {
             type: 'object',
+            format: 'grid',
             properties: {
                 CountMin: {
                     title: this.countMinTitle,
                     description: this.countMinDescription,
-                    type: 'integer'
+                    type: 'integer',
+                    options: {
+                        grid_columns: 3
+                    }
                 },
                 CountMax: {
                     title: this.countMaxTitle,
                     description: this.countMaxDescription,
-                    type: 'integer'
+                    type: 'integer',
+                    options: {
+                        grid_columns: 3
+                    }
                 },
                 CountDefault: {
                     title: this.countDefaultTitle,
                     description: this.countDefaultDescription,
-                    type: 'integer'
+                    type: 'integer',
+                    options: {
+                        grid_columns: 3
+                    }
                 },
                 ItemSeparator: {
                     title: this.itemSeparatorTitle,
@@ -545,7 +684,7 @@ export class UIModule implements IUIModule {
                 },
                 DeploymentStates: {
                     type: 'array',
-                    format: 'select',
+                    format: 'table',
                     uniqueItems: true,
                     title: deploymentStatesTitle,
                     description: deploymentStatesDescription,
@@ -561,7 +700,7 @@ export class UIModule implements IUIModule {
                 },
                 ITSMConfigItemClasses: {
                     type: 'array',
-                    format: 'select',
+                    format: 'table',
                     uniqueItems: true,
                     title: classesTitle,
                     description: classesDescription,
@@ -581,6 +720,7 @@ export class UIModule implements IUIModule {
         return schema;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     private async registerSchemaForTable(): Promise<void> {
 
         const columns = await TranslationService.translate('Translatable#Columns');
@@ -593,49 +733,53 @@ export class UIModule implements IUIModule {
         const translatableColumns = await TranslationService.translate('Translatable#Translatable Columns');
 
         const schema = {
-            $schema: 'http://json-schema.org/draft-03/schema#',
-            type: 'object',
-            properties: {
-                Columns: {
-                    title: columns,
-                    description: '',
-                    type: 'array',
-                    required: true,
-                    items: {
-                        type: 'string'
+            'type': 'object',
+            'format': 'grid-strict',
+            'properties': {
+                'RowsMin': {
+                    'title': rowsMinTitle,
+                    'description': rowsMinDescription,
+                    'type': 'integer',
+                    'default': '1',
+                    'minimum': '0',
+                    'required': true
+                },
+                'RowsInit': {
+                    'title': rowsinitTitle,
+                    'description': rowsinitDescription,
+                    'type': 'integer',
+                    'default': '1',
+                    'minimum': '0',
+                    'required': true
+                },
+                'RowsMax': {
+                    'title': rowsMaxTitle,
+                    'description': rowsMaxDescription,
+                    'type': 'integer',
+                    'default': '1',
+                    'minimum': '0',
+                    'required': true
+                },
+                'TranslatableColumn': {
+                    'title': translatableColumns,
+                    'description': '',
+                    'type': 'boolean',
+                    'format': 'checkbox',
+                    'required': false,
+                    'options': {
+                        'grid_break': true
                     }
                 },
-                RowsMin: {
-                    title: rowsMinTitle,
-                    description: rowsMinDescription,
-                    type: 'integer',
-                    default: '1',
-                    minimum: '0',
-                    required: true
-                },
-                RowsInit: {
-                    title: rowsinitTitle,
-                    description: rowsinitDescription,
-                    type: 'integer',
-                    default: '1',
-                    minimum: '0',
-                    required: true
-                },
-                RowsMax: {
-                    title: rowsMaxTitle,
-                    description: rowsMaxDescription,
-                    type: 'integer',
-                    default: '1',
-                    minimum: '0',
-                    required: true
-                },
-                TranslatableColumn: {
-                    title: translatableColumns,
-                    description: '',
-                    type: 'boolean',
-                    format: 'checkbox',
-                    required: false
-                },
+                'Columns': {
+                    'title': columns,
+                    'description': '',
+                    'type': 'array',
+                    'required': true,
+                    'format': 'table',
+                    'items': {
+                        'type': 'string'
+                    }
+                }
             }
         };
 

@@ -7,6 +7,7 @@
  * --
  */
 
+import { AuthMethod } from '../../../../../model/AuthMethod';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 import { PortalNotification } from '../../../../portal-notification/model/PortalNotification';
 
@@ -24,6 +25,9 @@ export class ComponentState {
         public notifications: PortalNotification[] = [],
         public passwordFieldType: string = (InputFieldTypes.PASSWORD).toLowerCase(),
         public password: string = '',
+        public hasLogin: boolean = false,
+        public authMethods: AuthMethod[] = null,
+        public prepared: boolean = false
     ) { }
 
 }

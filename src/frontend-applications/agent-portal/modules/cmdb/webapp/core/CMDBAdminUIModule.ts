@@ -29,10 +29,6 @@ export class UIModule implements IUIModule {
 
     public priority: number = 204;
 
-    public unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
 
         ServiceRegistry.registerServiceInstance(ConfigItemClassService.getInstance());
@@ -79,6 +75,10 @@ export class UIModule implements IUIModule {
             'Translatable#Asset Class Details', 'kix-icon-ci'
         );
         ContextService.getInstance().registerContext(configItemClassDetailsContext);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

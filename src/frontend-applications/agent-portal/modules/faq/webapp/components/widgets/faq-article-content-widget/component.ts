@@ -30,6 +30,7 @@ import { FAQArticleHandler } from '../../../core/FAQArticleHandler';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { ImageViewerEvent } from '../../../../../agent-portal/model/ImageViewerEvent';
 import { ImageViewerEventData } from '../../../../../agent-portal/model/ImageViewerEventData';
+import { ApplicationEvent } from '../../../../../base-components/webapp/core/ApplicationEvent';
 
 class Component {
 
@@ -149,24 +150,23 @@ class Component {
                 new ImageViewerEventData(this.images, attachment.ID)
             );
         } else {
-            const attachmentWithContent = await this.loadAttachment(attachment);
-            if (attachmentWithContent) {
-                if (!force && attachmentWithContent.ContentType === 'application/pdf') {
-                    BrowserUtil.openPDF(attachmentWithContent.Content, attachmentWithContent.Filename);
-                } else {
-                    BrowserUtil.startBrowserDownload(
-                        attachmentWithContent.Filename, attachmentWithContent.Content,
-                        attachmentWithContent.ContentType
-                    );
-                }
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: 'Translatable#Prepare File Download'
+            });
+            const downloadableAttachment = await this.loadAttachment(attachment, undefined, true);
+            if (downloadableAttachment) {
+                BrowserUtil.startFileDownload(downloadableAttachment);
             }
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         }
     }
 
-    private async loadAttachment(attachment: Attachment, silent?: boolean): Promise<Attachment> {
+    private async loadAttachment(
+        attachment: Attachment, silent?: boolean, asDownload?: boolean
+    ): Promise<Attachment> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['Content']);
         const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
-            this.state.faqArticle.ID, attachment.ID
+            this.state.faqArticle.ID, attachment.ID, asDownload
         );
         const attachments = await KIXObjectService.loadObjects<Attachment>(
             KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [attachment.ID], loadingOptions, faqArticleAttachmentOptions, silent

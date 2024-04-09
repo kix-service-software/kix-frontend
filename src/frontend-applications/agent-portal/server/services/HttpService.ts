@@ -145,7 +145,7 @@ export class HttpService {
         return response;
     }
 
-    public async post<T>(
+    public async post<T = any>(
         resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = '',
         logError: boolean = true, relevantOrganisationId?: number, headers?: IncomingHttpHeaders
     ): Promise<T> {

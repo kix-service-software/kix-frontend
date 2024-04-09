@@ -31,7 +31,7 @@ export class PermissionManager extends AbstractDynamicFormManager {
         return 'SPECIFIC';
     }
 
-    public getSpecificInput(): string {
+    public async getSpecificInput(): Promise<string> {
         return 'permission-input';
     }
 

@@ -15,6 +15,7 @@ import { ValidationSeverity } from '../../../base-components/webapp/core/Validat
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { MailFilterMatch } from '../../model/MailFilterMatch';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class MailFilterMatchValidator implements IFormFieldValidator {
 
@@ -38,6 +39,12 @@ export class MailFilterMatchValidator implements IFormFieldValidator {
                         } catch (error) {
                             return new ValidationResult(ValidationSeverity.ERROR, error.message);
                         }
+                    } else {
+                        const message = await TranslationService.translate(
+                            'Translatable#{0}: has no value.',
+                            [matchValue.Key]
+                        );
+                        return new ValidationResult(ValidationSeverity.ERROR, message);
                     }
                 }
             }

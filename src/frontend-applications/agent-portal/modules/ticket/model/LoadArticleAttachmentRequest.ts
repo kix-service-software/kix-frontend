@@ -14,7 +14,8 @@ export class LoadArticleAttachmentRequest {
         public ticketId: number,
         public articleId: number,
         public attachmentId: number,
-        public relevantOrganisationId?: number
+        public relevantOrganisationId?: number,
+        public asDownload?: boolean
     ) { }
 
 }

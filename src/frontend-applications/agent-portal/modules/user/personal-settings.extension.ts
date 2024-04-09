@@ -32,6 +32,26 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
     public getPersonalSettings(): PersonalSetting[] {
         return [
             new PersonalSetting(
+                'Translatable#Out Of Office',
+                PersonalSettingsProperty.OUT_OF_OFFICE_START,
+                'Translatable#From',
+                'Translatable#Helptext_PersonalSettings_OutOfOfficeStart_Hint',
+                'date-time-input', null, null,
+                [
+                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE)
+                ]
+            ),
+            new PersonalSetting(
+                'Translatable#Out Of Office',
+                PersonalSettingsProperty.OUT_OF_OFFICE_END,
+                'Translatable#Till',
+                'Translatable#Helptext_PersonalSettings_OutOfOfficeEnd_Hint',
+                'date-time-input', null, null,
+                [
+                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE)
+                ]
+            ),
+            new PersonalSetting(
                 'Translatable#Change Password',
                 PersonalSettingsProperty.CURRENT_PASSWORD,
                 'Translatable#Current Password',
@@ -141,7 +161,7 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                 'user-token-input'
             ),
             new PersonalSetting(
-                'Translatable#Article sort order',
+                'Translatable#Article',
                 PersonalSettingsProperty.ARTICLE_SORT_ORDER,
                 'Translatable#Article sort order',
                 'Translatable#Helptext_PersonalSettings_article_sort_order_Hint',
@@ -152,6 +172,23 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                         [
                             new TreeNode('oldest', 'Translatable#Oldest first'),
                             new TreeNode('newest', 'Translatable#Newest first')
+                        ]
+                    )
+                ]
+            ),
+            new PersonalSetting(
+                'Translatable#Article',
+                PersonalSettingsProperty.ARTICLE_FROM_FORMAT,
+                'Translatable#From format',
+                'Translatable#Helptext_PersonalSettings_article_from_format',
+                'default-select-input',
+                false, new FormFieldValue('SystemAddress'),
+                [
+                    new FormFieldOption(DefaultSelectInputFormOption.NODES,
+                        [
+                            new TreeNode('SystemAddress', 'Translatable#Sender Address'),
+                            new TreeNode('Agent', '<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname>'),
+                            new TreeNode('AgentViaSystemAddress', 'Translatable#<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname> via Sender Address')
                         ]
                     )
                 ]

@@ -7,24 +7,33 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.bookmark-dropdown-container title=state.translations["Translatable#Favorites"]>
-    <div.action-icon>
+<div
+    title=(state.translations["Translatable#Favorites"])
+    class="bookmark-dropdown-container"
+>
+    <div class="action-icon">
         <icon icon="kix-icon-star-fully"/>
     </div>
-    <div.action-text>
+    <div class="action-text">
         <if(state.isMobile)>
             ${state.translations["Translatable#Favorites"] +
             " (" +
-            state.bookmarks.length +
+            state.bookmarksCount +
             ")"}
         </if>
-        <else>${state.bookmarks.length}</else>
+        <else>${state.bookmarksCount}</else>
     </div>
     <ul>
-        <for|bookmark| of=state.bookmarks>
-            <li on-click("bookmarkClicked", bookmark)>
-                <icon icon=bookmark.icon/>${bookmark.title}
+        <for|group| of=state.groups>
+            <li class="fw-bold">
+                <translation-string pattern=group/>
             </li>
+            <for|bookmark| of=component.getBookmarks(group)>
+                <li on-click("bookmarkClicked", bookmark) class="ms-3">
+                    <icon icon=bookmark.icon/>
+                    ${bookmark.title}
+                </li>
+            </for>
         </for>
     </ul>
 </div>

@@ -4,6 +4,7 @@
     ],
     "tags-dir": [
         "./components",
-        "./components/dynamic-field-checklist-input"
+        "./components/dynamic-field-checklist-input",
+        "./components/dynamic-field-checklist-value"
     ]
 }

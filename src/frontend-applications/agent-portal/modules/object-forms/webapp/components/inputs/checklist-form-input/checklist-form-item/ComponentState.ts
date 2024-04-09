@@ -9,7 +9,7 @@
 
 import { IdService } from '../../../../../../../model/IdService';
 import { TreeNode } from '../../../../../../base-components/webapp/core/tree';
-import { CheckListItem } from '../../../../../../dynamic-fields/webapp/core/CheckListItem';
+import { CheckListItem } from '../../../../../../dynamic-fields/model/CheckListItem';
 
 export class ComponentState {
 

@@ -7,14 +7,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<li.tree-node
-    class={
-        active: component.isNodeActive() | component.hasActiveChild(),
-        "show-as-invalid": !state.node.selectable || state.node.showAsInvalid
-    }
+<li
+    class=[
+        "tree-node",
+        {
+            active: component.isNodeActive() | component.hasActiveChild(),
+            "show-as-invalid":
+                !state.node.selectable || state.node.showAsInvalid,
+        },
+    ]
     id=state.nodeId
-    key=state.nodeId>
-    <span.tree-icon>
+    key=state.nodeId
+>
+    <span class="tree-icon">
         <if(component.hasChildren())>
             <span
                 id="tree-expand"
@@ -23,34 +28,44 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         ? "kix-icon-minus"
                         : "kix-icon-plus-blank"
                 )
-                on-click("toggleNode")/>
+                on-click("toggleNode")
+            />
         </if>
     </span>
-    <div.node-value
+    <div
         on-mousemove("nodeHovered")
         on-click("nodeClicked")
-        title=component.getLabel()>
+        title=component.getLabel()
+        class="node-value"
+    >
         <if(state.node.icon)>
-            <icon icon=state.node.icon showUnknown=true/>
+            <icon icon=(state.node.icon) showUnknown/>
         </if>
-        <span.node-title class=(state.node.expanded ? "expanded" : "")>
-            ${state.node.label}<if(state.node.properties)>
-                &nbsp;
-                (<for|prop, index| of=state.node.properties>
-                    <if(index != 0)>|</if>
-                    <span title=prop.title class=(prop.cssClass ? prop.cssClass : "")>
+        <span class=["node-title", state.node.expanded ? "expanded" : ""]>
+            ${state.node.label}
+            <if(Array.isArray(state.node.properties) && state.node.properties.length)>
+                &nbsp; (
+                <for|prop, index| of=(state.node.properties)>
+                    <if(index != 0)>
+                        |
+                    </if>
+                    <span
+                        title=prop.title
+                        class=(prop.cssClass ? prop.cssClass : "")
+                    >
                         ${prop.value}
                     </span>
-                </for>)
+                </for>
+                 )
             </if>
         </span>
         <if(state.node.secondaryIcon)>
-            <icon icon=state.node.secondaryIcon/>
+            <icon icon=(state.node.secondaryIcon)/>
         </if>
     </div>
     <if(state.node.expanded)>
-        <ul.tree-list>
-            <for|node| of=state.node.children>
+        <ul class="tree-list">
+            <for|node| of=(state.node.children)>
                 <if(node.visible)>
                     <tree-node
                         node=node
@@ -59,7 +74,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         expandIfActiveChild=input.expandIfActiveChild
                         on-nodeToggled("childNodeToggled")
                         on-nodeClicked("childNodeClicked")
-                        on-nodeHovered("childNodeHovered")/>
+                        on-nodeHovered("childNodeHovered")
+                    />
                 </if>
             </for>
         </ul>

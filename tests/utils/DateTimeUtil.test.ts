@@ -15,6 +15,7 @@ import { DateTimeUtil } from '../../src/frontend-applications/agent-portal/modul
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
+const assert = chai.assert;
 
 describe('DateTimeUtil', () => {
 
@@ -30,6 +31,52 @@ describe('DateTimeUtil', () => {
         //     expect(localeDate).equals('01.01.2020');
         // });
 
+    });
+
+    describe('betweenDays - check if the current day between the given date range', () => {
+
+        it('Check betweenDays / d1: -1w / d2: current day / withTime: NO / withSeconds: NO / should be true', async () => {
+            const d1 = new Date();
+            const d2 = new Date();
+
+            d1.setDate(d1.getDate() - 7);
+
+            const result = DateTimeUtil.betweenDays(d1, d2);
+            assert.isOk(result);
+        });
+
+        it('Check betweenDays / d1: -1w / d2: -1d / withTime: NO / withSeconds: NO / should be false', async () => {
+            const d1 = new Date();
+            const d2 = new Date();
+
+            d1.setDate(d1.getDate() - 7);
+            d2.setDate(d2.getDate() - 1);
+
+            const result = DateTimeUtil.betweenDays(d1, d2);
+            assert.isNotOk(result);
+        });
+
+        it('Check betweenDays / d1: -1d / d2: +2d / withTime: YES / withSeconds: NO / should be true', async () => {
+            const d1 = new Date();
+            const d2 = new Date();
+
+            d1.setDate(d1.getDate() - 1);
+            d2.setDate(d2.getDate() + 2);
+
+            const result = DateTimeUtil.betweenDays(d1, d2);
+            assert.isOk(result, `${d1} - ${d2}`);
+        });
+
+        it('Check betweenDays / d1: -1d / d2: +1d / withTime: YES / withSeconds: YES / should be true', async () => {
+            const d1 = new Date();
+            const d2 = new Date();
+
+            d1.setDate(d1.getDate() - 1);
+            d2.setDate(d2.getDate() + 1);
+
+            const result = DateTimeUtil.betweenDays(d1, d2);
+            assert.isOk(result);
+        });
     });
 
 });

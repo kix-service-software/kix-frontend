@@ -40,10 +40,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'JobUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(JobService.getInstance());
         ServiceRegistry.registerServiceInstance(JobFormService.getInstance());
@@ -103,13 +99,14 @@ export class UIModule implements IUIModule {
         ContextService.getInstance().registerContext(editJobDialogContext);
 
         JobFormService.getInstance().registerJobFormManager(JobTypes.SYNCHRONISATION, new SyncJobFormManager());
+    }
 
+    public async registerExtensions(): Promise<void> {
         const manager = JobFormService.getInstance().getAllJobFormManager();
         manager.forEach((m) => {
             m.addExtendedJobFormManager(new DynamicFieldSet());
             m.addExtendedJobFormManager(MacroFieldJobFormManager.getInstance());
             m.addExtendedJobFormManager(new AssembleObject());
         });
-
     }
 }

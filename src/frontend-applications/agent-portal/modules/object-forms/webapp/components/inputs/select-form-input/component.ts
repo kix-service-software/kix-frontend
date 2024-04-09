@@ -226,7 +226,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public selectInputClicked(event: any): void {
-        if (this.formValue?.multiselect || this.state.readonly) {
+        if (this.state.prepared && this.formValue?.multiselect || this.state.readonly) {
             this.stopPropagation(event);
         }
     }

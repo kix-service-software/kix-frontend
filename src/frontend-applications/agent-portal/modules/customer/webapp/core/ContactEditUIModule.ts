@@ -32,16 +32,16 @@ export class UIModule implements IUIModule {
 
     public priority: number = 304;
 
-    public unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ImportService.getInstance().registerImportManager(new ContactImportManager());
         ImportService.getInstance().registerImportRunner(new ContactImportRunner());
 
         await this.registerContexts();
         this.registerActions();
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
     private async registerContexts(): Promise<void> {

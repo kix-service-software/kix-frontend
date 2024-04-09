@@ -100,38 +100,6 @@ export abstract class KIXObject extends BindableObject {
         return displayIcons;
     }
 
-    protected handleBetweenValueOnLTE(preparedFilter: any[], filter: any): void {
-        const propertyFilter = preparedFilter.find(
-            (f) => f.Field === filter.Field
-                && f.Operator === SearchOperator.GREATER_THAN_OR_EQUAL
-        );
-        if (propertyFilter) {
-            propertyFilter.Operator = SearchOperator.BETWEEN;
-            propertyFilter.Value = [
-                propertyFilter.Value,
-                filter.Value,
-            ];
-        } else {
-            preparedFilter.push(filter);
-        }
-    }
-
-    protected handleBetweenValueOnGTE(preparedFilter: any[], filter: any): void {
-        const propertyFilter = preparedFilter.find(
-            (f) => f.Field === filter.Field && f.Operator === SearchOperator.LESS_THAN_OR_EQUAL
-        );
-        if (propertyFilter) {
-            propertyFilter.Operator = SearchOperator.BETWEEN;
-            propertyFilter.Value = [
-                filter.Value,
-                propertyFilter.Value
-            ];
-        } else {
-            // just add it unhandled
-            preparedFilter.push(filter);
-        }
-    }
-
     protected prepareObjectFilter(preparedFilter: any[], filter: any): void {
         // prepare the filter and handle BETWEEN and relative time operators
 

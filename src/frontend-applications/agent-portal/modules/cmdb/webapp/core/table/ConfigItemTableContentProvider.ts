@@ -12,7 +12,6 @@ import { ConfigItem } from '../../../model/ConfigItem';
 import { Table } from '../../../../table/model/Table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 
 export class ConfigItemTableContentProvider extends TableContentProvider<ConfigItem> {
 
@@ -24,6 +23,7 @@ export class ConfigItemTableContentProvider extends TableContentProvider<ConfigI
     ) {
         super(KIXObjectType.CONFIG_ITEM, table, objectIds, loadingOptions, contextId);
         this.useBackendSort = true;
+        this.useBackendFilter = true;
     }
 
 }

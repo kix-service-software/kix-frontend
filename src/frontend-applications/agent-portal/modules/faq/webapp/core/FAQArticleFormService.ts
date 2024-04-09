@@ -18,6 +18,10 @@ import { BrowserUtil } from '../../../../modules/base-components/webapp/core/Bro
 import { FAQArticleHandler } from './FAQArticleHandler';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { FileService } from '../../../file/webapp/core/FileService';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class FAQArticleFormService extends KIXObjectFormService {
 
@@ -104,14 +108,35 @@ export class FAQArticleFormService extends KIXObjectFormService {
     private async prepareAttachments(files: Array<File | Attachment>): Promise<Attachment[]> {
         const attachments = [];
         const newFiles = files.filter((f) => f instanceof File);
+
+        let loadingHint = await TranslationService.translate('Translatable#Prepare Attachments (0/{0})', [files.length]);
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+            loading: true, hint: loadingHint
+        });
+
+        let index = 0;
+
         for (const f of newFiles) {
+            index++;
+            let loadingHint = await TranslationService.translate(
+                'Translatable#Prepare Attachments ({0}/{1})', [index, files.length]
+            );
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: loadingHint
+            });
+
             const file = f as File;
             const attachment = new Attachment();
             attachment.ContentType = file.type !== '' ? file.type : 'text';
             attachment.Filename = file.name;
-            attachment.Content = await BrowserUtil.readFile(file);
+            await FileService.uploadFile(file);
             attachments.push(attachment);
         }
+
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+            loading: false
+        });
+
         return [...attachments, ...files.filter((f) => !(f instanceof File))];
     }
 

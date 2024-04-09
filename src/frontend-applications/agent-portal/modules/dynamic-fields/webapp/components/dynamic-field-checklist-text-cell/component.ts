@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { Cell } from '../../../../table/model/Cell';
-import { CheckListItem } from '../../core/CheckListItem';
+import { CheckListItem } from '../../../model/CheckListItem';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

@@ -77,7 +77,7 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
         return null;
     }
 
-    public getSpecificInput(property: string): string {
+    public async getSpecificInput(property: string): Promise<string> {
         return null;
     }
 

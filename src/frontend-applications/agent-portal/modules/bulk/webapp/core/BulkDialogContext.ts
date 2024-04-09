@@ -32,4 +32,8 @@ export class BulkDialogContext extends Context {
         return false;
     }
 
+    public async supportsBackendFilterForProperty(type: string, property: string): Promise<boolean> {
+        return false;
+    }
+
 }

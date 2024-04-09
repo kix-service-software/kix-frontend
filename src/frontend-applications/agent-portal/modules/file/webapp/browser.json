@@ -1,0 +1,6 @@
+{
+    "dependencies": [
+        "require ./core/FileUIModule",
+        "require ./core/FileService"
+    ]
+}

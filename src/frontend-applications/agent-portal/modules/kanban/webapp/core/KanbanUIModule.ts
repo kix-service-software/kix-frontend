@@ -19,10 +19,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'Kanban';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public priority: number = 800;
 
     public async register(): Promise<void> {
@@ -36,5 +32,9 @@ export class UIModule implements IUIModule {
             false, 'kanban-module', ['kanban'], KanbanContext
         );
         ContextService.getInstance().registerContext(kanbanContext);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 }

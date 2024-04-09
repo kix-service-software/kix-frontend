@@ -43,6 +43,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = value.toString();
                 break;
             case FAQArticleProperty.CUSTOMER_VISIBLE:
+            case FAQArticleProperty.APPROVED:
                 displayValue = value ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             default:

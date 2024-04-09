@@ -33,8 +33,8 @@ export class UIModule implements IUIModule {
         ObjectFormRegistry.getInstance().registerObjectFormValueValidator(DynamicFieldChecklistValidator);
     }
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

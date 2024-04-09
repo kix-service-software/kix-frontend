@@ -31,10 +31,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'SystemAddressUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(SystemAddressService.getInstance());
         ServiceRegistry.registerServiceInstance(SystemAddressFormService.getInstance());
@@ -78,5 +74,9 @@ export class UIModule implements IUIModule {
             'Translatable#Email Address Details', 'kix-icon-mail'
         );
         ContextService.getInstance().registerContext(systemAddressDetailsContext);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 }

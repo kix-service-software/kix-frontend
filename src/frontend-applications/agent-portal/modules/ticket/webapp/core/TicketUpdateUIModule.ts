@@ -38,10 +38,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'TicketUpdateUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
 
@@ -62,6 +58,10 @@ export class UIModule implements IUIModule {
 
         this.registerContexts();
         this.registerTicketActions();
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
     private registerContexts(): void {

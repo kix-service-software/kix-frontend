@@ -9,10 +9,12 @@
 
 import { rejects } from 'assert';
 import fs from 'fs';
+import * as readline from 'node:readline';
 import path from 'path';
 /* eslint-disable no-console */
 import winston from 'winston';
 import { Attachment } from '../../frontend-applications/agent-portal/model/kix/Attachment';
+import { DateTimeUtil } from '../../frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
 import { LogFile } from '../../frontend-applications/agent-portal/modules/system-log/model/LogFile';
 import { LogTier } from '../../frontend-applications/agent-portal/modules/system-log/model/LogTier';
 import { IServerConfiguration } from '../model/IServerConfiguration';
@@ -119,13 +121,14 @@ export class LoggingService {
         const logFiles: LogFile[] = [];
         for (const f of fileNames) {
             const logFile = await this.getLogFile(f);
+            logFile.path = 'logs';
             logFiles.push(logFile);
         }
         return logFiles;
     }
 
     public async getLogFile(
-        logFileName: string, withContent?: boolean, tailCount?: number, logLevel: string[] = []
+        logFileName: string, tailCount: number = -1, logLevel: string[] = []
     ): Promise<LogFile> {
         const logFile = new LogFile();
         logFile.Filename = logFileName;
@@ -138,19 +141,22 @@ export class LoggingService {
 
         logFile.FilesizeRaw = stats.size;
         logFile.Filesize = Attachment.getHumanReadableContentSize(stats.size);
-        logFile.ModifyTime = stats.mtime.toISOString();
+        logFile.ModifyTime = DateTimeUtil.getKIXDateTimeString(stats.mtime);
 
-        if (withContent) {
-            if (tailCount) {
-                let content = await this.tailLogFile(logFilePath, tailCount);
-                if (logLevel && logLevel.length) {
-                    content = content.filter((c) => logLevel.some((ll) => c.indexOf(ll) !== -1));
-                }
-                const stringContent = content.join('\n');
-                logFile.Content = Buffer.from(stringContent).toString('base64');
-            } else {
-                logFile.Content = fs.readFileSync(logFilePath, { encoding: 'base64' });
+        let content = [];
+        if (tailCount && tailCount > 0) {
+             content = await this.tailLogFile(logFilePath, tailCount);
+        }
+        else if (tailCount && tailCount === -1) {
+            content = await this.readLogFile(logFilePath);
+        }
+
+        if (content.length) {
+            if (logLevel && logLevel.length) {
+                content = content.filter((c) => logLevel.some((ll) => c.indexOf(ll) !== -1));
             }
+            const stringContent = content.join('\n');
+            logFile.Content = Buffer.from(stringContent).toString('base64');
         }
 
         return logFile;
@@ -267,5 +273,20 @@ export class LoggingService {
         }
 
         return (level <= this.defaultLevelNumber);
+    }
+
+    private async readLogFile(file: string): Promise<string[]> {
+        return await new Promise((resolve, reject) => {
+            let content = [];
+            const readLine = readline.createInterface({
+                input: fs.createReadStream(file),
+                output: process.stdout,
+                terminal: false
+            });
+            readLine.on('line', (line) => content.push(line));
+            readLine.on('close', () => resolve(content));
+            readLine.on('error', (err: Error) => reject(err));
+
+        });
     }
 }

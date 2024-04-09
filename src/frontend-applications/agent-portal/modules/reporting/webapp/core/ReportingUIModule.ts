@@ -45,10 +45,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'ReportingUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(ReportDefinitionService.getInstance());
         ServiceRegistry.registerServiceInstance(ReportService.getInstance());
@@ -107,7 +103,9 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(ReportFormService.getInstance());
 
         JobFormService.getInstance().registerJobFormManager(JobTypes.REPORTING, new ReportingJobFormManager());
+    }
 
+    public async registerExtensions(): Promise<void> {
         const manager = JobFormService.getInstance().getAllJobFormManager();
         manager.forEach((m) => m.addExtendedJobFormManager(new CreateReportActionJobFormManager()));
     }

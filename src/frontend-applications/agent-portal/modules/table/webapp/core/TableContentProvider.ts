@@ -46,6 +46,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public usePaging: boolean = true;
 
     protected useBackendSort: boolean = false;
+    protected useBackendFilter: boolean = false;
 
     protected currentPageIndex: number = 1;
 
@@ -55,8 +56,10 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     public totalCount: number;
     public currentLimit: number;
+    public currentLoadLimit: number;
 
     private sort: [string, boolean];
+    private filter: string;
 
     public constructor(
         protected objectType: KIXObjectType | string,
@@ -159,8 +162,8 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public async loadData(): Promise<Array<RowObject<T>>> {
         let objects = [];
 
-        const pageSize = this.loadingOptions?.limit || (this.isBackendSortSupported() ? 20 : null);
-        this.currentLimit = this.usePaging && pageSize
+        const pageSize = await this.getPageSize();
+        this.currentLoadLimit = this.usePaging && pageSize
             ? this.currentPageIndex * pageSize
             : null;
 
@@ -169,9 +172,10 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         } else if (this.table.getTableConfiguration().searchId) {
             const hasDFColumn = this.hasDFColumnConfigured();
             const includes = hasDFColumn ? [KIXObjectProperty.DYNAMIC_FIELDS] : [];
+            const additionalFilter = this.filter ? JSON.parse(this.filter) : undefined;
             objects = await SearchService.getInstance().executeSearchCache(
                 this.table.getTableConfiguration().searchId, undefined, undefined, undefined, undefined,
-                includes, this.currentLimit, this.loadingOptions?.searchLimit, this.sort
+                includes, this.currentLoadLimit, this.loadingOptions?.searchLimit, this.sort, additionalFilter
             );
             this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
                 this.table.getTableConfiguration().searchId
@@ -182,7 +186,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         } else if (this.contextId && !this.objectIds) {
             const context = ContextService.getInstance().getActiveContext();
             if (context && context.contextId === this.contextId) {
-                objects = await context.getObjectList(this.objectType, this.currentLimit);
+                objects = await context.getObjectList(this.objectType, this.currentLoadLimit);
                 const collectionId = context.getCollectionId() || context.contextId + this.objectType;
                 this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
                     collectionId
@@ -196,7 +200,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             const loadingOptions = await this.prepareLoadingOptions();
 
             if (this.usePaging) {
-                loadingOptions.limit = this.currentLimit;
+                loadingOptions.limit = this.currentLoadLimit;
             }
 
             objects = await KIXObjectService.loadObjects<KIXObject>(
@@ -205,7 +209,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 forceIds, this.useCache, undefined, this.id
             );
 
-            if (this.currentLimit) {
+            if (this.currentLoadLimit) {
                 this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(this.id);
             }
         }
@@ -215,6 +219,19 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         }
 
         return await this.getRowObjects(objects);
+    }
+
+    private async getPageSize(): Promise<number> {
+        if (typeof this.loadingOptions?.limit !== 'undefined' && this.loadingOptions?.limit !== null) {
+            return this.loadingOptions?.limit;
+        } else if (this.isBackendSortSupported()) {
+            if (this.contextId) {
+                const context = ContextService.getInstance().getActiveContext();
+                return await context.getPageSize(this.objectType);
+            }
+            return 20;
+        }
+        return;
     }
 
     public async getRowObjects(objects: T[]): Promise<RowObject<T>[]> {
@@ -306,7 +323,6 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             this.loadingOptions?.searchLimit
         );
 
-
         if (this.useBackendSort && this.objectIds?.length) {
             loadingOptions.filter.push(
                 new FilterCriteria(
@@ -314,6 +330,10 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     FilterDataType.NUMERIC, FilterType.AND, this.objectIds as any
                 )
             );
+        }
+
+        if (this.useBackendFilter && this.filter) {
+            loadingOptions.filter.push(...JSON.parse(this.filter));
         }
 
         const context = ContextService.getInstance().getActiveContext();
@@ -391,7 +411,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     const context = ContextService.getInstance().getActiveContext();
                     if (context && context.contextId === this.contextId) {
                         context.setSortOrder(
-                            this.objectType, property, descanding, reload, this.currentLimit
+                            this.objectType, property, descanding, reload, this.currentLoadLimit
                         );
                     }
                 } else if (reload) {
@@ -415,9 +435,64 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         return supportsBackendSort;
     }
 
-    public async isBackendSortSupportedForProperty(property: string): Promise<boolean> {
+    public async isBackendSortSupportedForProperty(
+        property: string, dep?: string, objectType = this.objectType
+    ): Promise<boolean> {
         if (this.isBackendSortSupported()) {
-            return await KIXObjectService.isBackendSortSupportedForProperty(property, this.objectType) || false;
+            return await KIXObjectService.isBackendSortSupportedForProperty(objectType, property, dep) || false;
+        }
+        return false;
+    }
+
+    public async setFilter(criteria: FilterCriteria[], reload: boolean = true): Promise<void> {
+        if (await this.isBackendFilterSupported()) {
+            let criteriaString: string = '';
+            if (criteria) {
+                try {
+                    criteriaString = JSON.stringify(criteria);
+                } catch {
+                    console.warn('invalid criteria: ', criteria);
+                    criteriaString = '';
+                }
+            }
+            if (!this.filter || this.filter !== criteriaString) {
+                this.filter = criteriaString;
+
+                if (this.contextId) {
+                    const context = ContextService.getInstance().getActiveContext();
+                    if (context && context.contextId === this.contextId) {
+                        context.setFilterCriteria(
+                            this.objectType, criteria, reload, this.currentLoadLimit
+                        );
+                    }
+                } else if (reload) {
+                    await this.table.reload();
+                }
+            }
+        }
+    }
+
+    public isBackendFilterSupported(): boolean {
+        let supportsBackendFilter = this.useBackendSort;
+        if (supportsBackendFilter && this.contextId) {
+            const context = ContextService.getInstance().getActiveContext();
+            if (context && context.contextId === this.contextId) {
+                supportsBackendFilter = context.supportsBackendFilter(this.objectType);
+            }
+        }
+        return supportsBackendFilter;
+    }
+
+    public async isBackendFilterSupportedForProperty(
+        property: string, dep?: string, objectType = this.objectType
+    ): Promise<boolean> {
+        if (this.isBackendFilterSupported()) {
+            const context = ContextService.getInstance().getActiveContext();
+            if (context && context.contextId === this.contextId) {
+                return context.supportsBackendFilterForProperty(objectType, property, dep);
+            } else {
+                return KIXObjectService.isBackendFilterSupportedForProperty(objectType, property, dep) || false;
+            }
         }
         return false;
     }

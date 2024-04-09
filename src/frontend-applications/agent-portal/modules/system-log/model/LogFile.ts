@@ -7,11 +7,12 @@
  * --
  */
 
+import { IDownloadableFile } from '../../../model/IDownloadableFile';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { LogTier } from './LogTier';
 
-export class LogFile extends KIXObject {
+export class LogFile extends KIXObject implements IDownloadableFile {
 
     public ObjectId: string | number;
 
@@ -42,6 +43,16 @@ export class LogFile extends KIXObject {
     public Content: string;
 
     public tier: LogTier;
+
+    public downloadId: string;
+
+    public downloadSecret: string;
+
+    public md5Sum: string;
+
+    public base64: boolean = false;
+
+    public path: string;
 
     public constructor(logFile?: LogFile) {
         super(logFile);

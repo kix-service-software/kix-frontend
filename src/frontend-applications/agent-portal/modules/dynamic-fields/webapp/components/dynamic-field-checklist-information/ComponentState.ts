@@ -8,7 +8,7 @@
  */
 
 import { DynamicField } from '../../../model/DynamicField';
-import { CheckListItem } from '../../core/CheckListItem';
+import { CheckListItem } from '../../../model/CheckListItem';
 import { Table } from '../../../../table/model/Table';
 
 export class ComponentState {

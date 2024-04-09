@@ -7,53 +7,64 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.bulk-form>
+<div class="bulk-form">
     <if(state.bulkManager)>
-        <h3><translation-string pattern="Translatable#Properties"/></h3>
-        <dynamic-form-field-container
-            manager=state.bulkManager
-            key=state.componentId
-        />
-        <if(state.linkManager)>
-            <h3><translation-string pattern="Translatable#Links"/></h3>
+        <h3 class="mt-3 fw-bold">
+            <translation-string pattern="Translatable#Properties"/>
+        </h3>
+        <if(state.prepared)>
             <dynamic-form-field-container
-                manager=state.linkManager
-                key=(state.componentId + "LinkManager")
+                manager=state.bulkManager
+                key=state.componentId
             />
         </if>
-        <div.dialog-button-container>
-            <button.kix-button.form-blank-cancel-button
+        <if(state.linkManager)>
+            <h3 class="mt-3 fw-bold">
+                <translation-string pattern="Translatable#Links"/>
+            </h3>
+            <dynamic-form-field-container
+                manager=state.linkManager
+                key=state.componentId + "LinkManager"
+            />
+        </if>
+        <div class="dialog-button-container">
+            <button
                 type="button"
                 on-click("reset")
                 title=(state.translations["Translatable#Reset data"])
+                class="kix-button form-blank-cancel-button"
             >
-                <span.kix-icon-delete/>
+                <span class="kix-icon-delete"/>
                 <translation-string pattern="Translatable#Reset data"/>
             </button>
         </div>
         <if(state.table)>
-            <div.object-table>
-                <div.object-table-head><span>${state.tableTitle}</span></div>
+            <div class="object-table">
+                <div class="object-table-head">
+                    <span>${state.tableTitle}</span>
+                </div>
                 <kix-table table=state.table/>
             </div>
         </if>
-        <div.dialog-control>
-            <div.dialog-button-container>
-                <button.kix-button.cancel-button
+        <div class="dialog-control">
+            <div class="dialog-button-container">
+                <button
                     type="button"
                     on-click("cancel")
                     title=(state.translations["Translatable#Cancel"])
+                    class="kix-button cancel-button"
                 >
-                    <span.kix-icon-close/>
+                    <span class="kix-icon-close"/>
                     <translation-string pattern="Translatable#Cancel"/>
                 </button>
-                <button.kix-button.submit-button
+                <button
                     type="button"
                     on-click("run")
                     title=(state.translations["Translatable#Execute now"])
                     disabled=!state.canRun
+                    class="kix-button submit-button"
                 >
-                    <span.kix-icon-edit/>
+                    <span class="kix-icon-edit"/>
                     <translation-string pattern="Translatable#Execute now"/>
                 </button>
             </div>

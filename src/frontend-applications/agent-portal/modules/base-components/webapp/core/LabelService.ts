@@ -16,6 +16,7 @@ import { KIXObjectService } from './KIXObjectService';
 import { ILabelProvider } from './ILabelProvider';
 import { LabelProvider } from './LabelProvider';
 import { EventService } from './EventService';
+import { OverlayIcon } from './OverlayIcon';
 
 export class LabelService {
 
@@ -412,7 +413,8 @@ export class LabelService {
     }
 
     public async getPropertyText(
-        property: string, objectType: KIXObjectType | string, short: boolean = false, translatable: boolean = true
+        property: string, objectType: KIXObjectType | string, short: boolean = false, translatable: boolean = true,
+        object?: KIXObject
     ): Promise<string> {
         const labelProvider = this.getLabelProviderForType(objectType);
 
@@ -424,7 +426,7 @@ export class LabelService {
                 }
             }
 
-            return await labelProvider.getPropertyText(property, short, translatable);
+            return await labelProvider.getPropertyText(property, short, translatable, object);
         }
         return null;
     }
@@ -490,6 +492,16 @@ export class LabelService {
             object[property] = value;
         }
         return this.getDisplayText(object as any, property, value?.toString(), translatable);
+    }
+
+    public async getPropertyValueIcons(
+        objectType: KIXObjectType | string, property: string, value: string | number, object?: KIXObject
+    ): Promise<Array<string | ObjectIcon>> {
+        if (!object) {
+            object ||= { KIXObjectType: objectType } as KIXObject;
+            object[property] = value;
+        }
+        return this.getIcons(object as any, property, value?.toString());
     }
 
     public async getIconsForType<T extends KIXObject>(
@@ -563,5 +575,38 @@ export class LabelService {
         return;
     }
 
+    public async getOverlayIcon<T extends KIXObject>(
+        object: T, property: string, objectId?: number
+    ): Promise<OverlayIcon> {
+        const labelProvider = this.getLabelProviderForProperty(object, property);
 
+        if (labelProvider) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getOverlayIcon(object, objectId, property);
+                if (result) {
+                    return result;
+                }
+            }
+
+            return await labelProvider.getOverlayIcon(object, objectId, property);
+        }
+        return null;
+    }
+    public async getOverlayIconForType<T extends KIXObject>(
+        objectType: KIXObjectType | string, objectId?: number, property?: string, object?: T
+    ): Promise<OverlayIcon> {
+        const labelProvider = this.getLabelProviderForType(objectType);
+
+        if (labelProvider) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getOverlayIcon(object, objectId, property);
+                if (result) {
+                    return result;
+                }
+            }
+
+            return await labelProvider.getOverlayIcon(object, objectId, property);
+        }
+        return null;
+    }
 }

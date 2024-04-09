@@ -13,7 +13,8 @@ export class GraphD3Node {
         public id: string,
         public name: string,
         public bgColor?: string,
-        public image?: boolean
+        public image?: boolean,
+        public icon?: boolean
     ) { }
 
 }

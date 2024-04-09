@@ -27,6 +27,8 @@ export enum TicketProperty {
     QUEUE_ID = 'QueueID',
     QUEUE = 'Queue',
 
+    QUEUE_FULLNAME = 'QueueFullname',
+
     ORGANISATION_ID = 'OrganisationID',
     ORGANISATION = 'Organisation',
 
@@ -35,12 +37,14 @@ export enum TicketProperty {
 
     OWNER_ID = 'OwnerID',
     OWNER = 'Owner',
+    OWNER_OOO = 'OwnerOutOfOffice',
 
     TYPE_ID = 'TypeID',
     TYPE = 'Type',
 
     RESPONSIBLE_ID = 'ResponsibleID',
     RESPONSIBLE = 'Responsible',
+    RESPONSIBLE_OOO = 'ResponsibleOutOfOffice',
 
     AGE = 'Age',
 

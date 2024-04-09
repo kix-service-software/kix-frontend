@@ -78,13 +78,17 @@ class Component extends FormInputComponent<JSON, ComponentState> {
                 if (element) {
                     const JSONSchemaEditor = require('@json-editor/json-editor');
                     this.editor = new JSONSchemaEditor.JSONEditor(element, {
+                        theme: 'bootstrap5',
+                        iconlib: 'fontawesome4',
                         schema: this.schema,
                         disable_edit_json: true,
                         disable_properties: true,
-                        array_controls_top: true,
+                        array_controls_top: false,
                         disable_array_delete_last_row: true,
                         disable_array_delete_all_rows: true,
-                        disable_array_reorder: true
+                        disable_array_reorder: false,
+                        remove_button_labels: true,
+                        disable_collapse: true
                     });
 
                     this.editor.on('ready', () => {

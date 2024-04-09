@@ -12,6 +12,7 @@
                 "require ./components/dynamic-field-value",
                 "require ./components/dynamic-field-table-view",
                 "require ./components/dynamic-field-table-input",
-                "require ./components/dynamic-field-checklist-text-cell"
+                "require ./components/dynamic-field-checklist-text-cell",
+                "require ./components/dynamic-field-checklist-value"
         ]
 }
