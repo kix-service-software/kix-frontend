@@ -12,7 +12,7 @@ import { ChecklistState } from './ChecklistState';
 
 export class CheckListItem {
 
-    public Id: string;
+    public id: string;
 
     public title: string;
 
@@ -30,6 +30,7 @@ export class CheckListItem {
 
     public constructor(item: CheckListItem) {
         if (item) {
+            this.id = item.id;
             this.title = item.title;
             this.description = item.description;
             this.input = item.input;
