@@ -233,7 +233,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.columns[newPosition] = this.dragColumn;
 
         this.emitConfigurationChanged();
+        this.state.columns = this.columns;
         (this as any).setStateDirty('columns');
+
         event.stopPropagation();
     }
 
