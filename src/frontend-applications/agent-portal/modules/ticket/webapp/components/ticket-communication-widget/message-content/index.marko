@@ -105,8 +105,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </else>
                 <div class="message-footer">
                     <div class="attachments-control">
-                        <div class="attachments-list">
-                            <if(Array.isArray(state.articleAttachments))>
+                        <if(Array.isArray(state.articleAttachments) && state.articleAttachments.length)>
+                            <div class={"attachments-list": true, "one-column-layout": state.oneColumnLayout} on-click("switchAttachmentLayout")>
                                 <for|attachment| of=state.articleAttachments>
                                     <ticket-article-attachment
                                         article=state.article
@@ -115,8 +115,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         useReadonlyStyle=false
                                     />
                                 </for>
-                            </if>
-                        </div>
+                            </div>
+                        </if>
                         <if(state.hasInlineAttachments)>
                             <a
                                 on-click("toggleAttachments")

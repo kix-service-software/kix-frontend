@@ -349,6 +349,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             });
         }
     }
+
+    public async switchAttachmentLayout(event: any): Promise<void> {
+        event.stopPropagation();
+        event.preventDefault();
+        this.state.oneColumnLayout = !this.state.oneColumnLayout;
+    }
+
 }
 
 module.exports = Component;
