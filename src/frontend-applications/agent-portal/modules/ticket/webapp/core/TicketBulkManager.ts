@@ -293,6 +293,7 @@ export class TicketBulkManager extends BulkManager {
                     DateTimeUtil.getKIXDateTimeString(pendingDate),
                     [], false, true, null, true, true
                 );
+                value.locked = true;
                 if (pendingValueIndex === -1) {
                     const index = this.values.findIndex((bv) => bv.property === TicketProperty.STATE_ID);
                     this.values.splice(index + 1, 0, value);
