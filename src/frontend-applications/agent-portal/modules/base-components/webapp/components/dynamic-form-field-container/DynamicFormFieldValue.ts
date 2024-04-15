@@ -211,7 +211,7 @@ export class DynamicFormFieldValue {
             }
             // remember instanceId if property is not allowed anmyore (not found in nodes)
             // (Used elsewhere to delete the node.)
-            else {
+            else if (!this.value.locked) {
                 return this.instanceId;
             }
         }
