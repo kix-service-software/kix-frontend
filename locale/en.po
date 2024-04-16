@@ -29,11 +29,17 @@ msgstr "Nothing found."
 msgid "{0} File(s) added"
 msgstr "{0} File(s) added"
 
+msgid "{0}: has no value."
+msgstr ""
+
 msgid "{0} imported"
 msgstr "{0} imported"
 
 msgid "{0} is required."
 msgstr "{0} is required."
+
+msgid "{0}: just white spaces as value is not allowed."
+msgstr ""
 
 msgid "{0} Link created"
 msgstr "{0} Link created"
@@ -163,8 +169,8 @@ msgstr ""
 msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
 msgstr ""
 "Default value is used to initialize the field when first displayed; It is "
-"specified as an offset at the time the field is displayed (0=now; 3600=now+"
-"1h, blank=no initialization)."
+"specified as an offset at the time the field is displayed (0=now; 3600=now"
+"+1h, blank=no initialization)."
 
 msgid "Admin_DynamicField_Edit_Name_Hint"
 msgstr ""
@@ -521,6 +527,9 @@ msgid "Checklist Item"
 msgstr ""
 
 msgid "Checklists"
+msgstr ""
+
+msgid "Checklist State"
 msgstr ""
 
 msgid "Child Tickets"
@@ -913,6 +922,9 @@ msgstr ""
 msgid "Delete Search"
 msgstr ""
 
+msgid "Dependency"
+msgstr ""
+
 msgid "Deployment state"
 msgstr ""
 
@@ -938,6 +950,9 @@ msgid "Dispatching"
 msgstr ""
 
 msgid "Display Name"
+msgstr ""
+
+msgid "Done"
 msgstr ""
 
 msgid ""
@@ -1462,6 +1477,9 @@ msgstr ""
 msgid "From external"
 msgstr ""
 
+msgid "From format"
+msgstr ""
+
 msgid "From internal"
 msgstr ""
 
@@ -1549,7 +1567,8 @@ msgid "Helptext_Admin_DynamicFieldCreate_Validity"
 msgstr "The dynamic field can only be used within the system if set \"valid\"."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgstr ""
@@ -1573,7 +1592,8 @@ msgstr ""
 "correspond to an Asset class value."
 
 msgid "Helptext_Admin_GeneralCatalogCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_GeneralCatalogCreate_Name"
 msgstr ""
@@ -1598,7 +1618,8 @@ msgstr ""
 "set, this action will not be run."
 
 msgid "Helptext_Admin_JobCreateEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_JobCreateEdit_Days"
 msgstr "Choose the day(s) the job is supposed to run. Multiselect possible."
@@ -1622,7 +1643,8 @@ msgid "Helptext_Admin_JobCreateEdit_Time"
 msgstr "Choose the time(s) the job is supposed to run. Multiselect possible."
 
 msgid "Helptext_Admin_JobCreateEdit_Type"
-msgstr "Choose the purpose for the job. The form will be completed accordingly."
+msgstr ""
+"Choose the purpose for the job. The form will be completed accordingly."
 
 msgid "Helptext_Admin_JobCreateEdit_Validity"
 msgstr ""
@@ -1636,7 +1658,8 @@ msgstr ""
 "options are configured."
 
 msgid "Helptext_Admin_MailAccountCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailAccountCreate_Dispachting"
 msgstr ""
@@ -1658,7 +1681,8 @@ msgid "Helptext_Admin_MailAccountCreate_OAuth2_Profile"
 msgstr ""
 
 msgid "Helptext_Admin_MailAccountCreate_Password"
-msgstr "Insert the password for the account to enable connection with the host."
+msgstr ""
+"Insert the password for the account to enable connection with the host."
 
 msgid "Helptext_Admin_MailAccountCreate_Type."
 msgstr ""
@@ -1668,14 +1692,15 @@ msgstr ""
 
 msgid "Helptext_Admin_MailAccountCreate_UserName"
 msgstr ""
-"Login name of the mail account, from which you want to retrieve e-mails, "
-"e.g. yourdemo@kix.cloud."
+"Login name of the mail account, from which you want to retrieve e-mails, e."
+"g. yourdemo@kix.cloud."
 
 msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgstr "The email account can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_MailFilterCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailFilterCreate_FilterConditions"
 msgstr "At least one filter condition is necessary for the filter to work."
@@ -1734,7 +1759,8 @@ msgstr ""
 "defined above."
 
 msgid "Helptext_Admin_NotificationCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_NotificationCreate_CreateArticle"
 msgstr ""
@@ -1820,7 +1846,8 @@ msgstr ""
 "further recipients, additionally to the criteria defined above."
 
 msgid "Helptext_Admin_NotificationEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_NotificationEdit_CreateArticle"
 msgstr ""
@@ -1964,13 +1991,14 @@ msgstr ""
 "modified values as well as \"!modified\" to find all unmodified values."
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_SystemAddressCreate_DisplayName"
 msgstr ""
 "Insert a display name for the email address. For an outgoing email, the "
-"display name can be used instead or together with the email address. Example:"
-" “Example KG Support”"
+"display name can be used instead or together with the email address. "
+"Example: “Example KG Support”"
 
 msgid "Helptext_Admin_SystemAddressCreate_Name"
 msgstr ""
@@ -1985,7 +2013,8 @@ msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr "The email address can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_TextModuleCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_TextModuleCreate_Keywords"
 msgstr "Keywords allow to quickly find and choose text modules."
@@ -2009,7 +2038,8 @@ msgstr ""
 "within the application."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Icon"
 msgstr ""
@@ -2023,7 +2053,8 @@ msgid "Helptext_Admin_Tickets_PriorityCreate_Valid"
 msgstr "The priority can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_FollowUp"
 msgstr ""
@@ -2064,7 +2095,8 @@ msgid "Helptext_Admin_Tickets_QueueCreate_Validity"
 msgstr "The team can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Icon"
 msgstr ""
@@ -2081,7 +2113,8 @@ msgid "Helptext_Admin_Tickets_StateCreate_Valid"
 msgstr "The state can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Icon"
 msgstr ""
@@ -2103,7 +2136,8 @@ msgid "Helptext_Admin_Users_RoleCreate_AllowAdminModule"
 msgstr ""
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_RoleCreate_Name"
 msgstr ""
@@ -2170,7 +2204,8 @@ msgstr ""
 "If this option is activated, the form titel will be shown in the webform."
 
 msgid "Helptext_Admin_WebformCreateEdit_StateID"
-msgstr "Tickets created via webform will be assigned to the state you set here."
+msgstr ""
+"Tickets created via webform will be assigned to the state you set here."
 
 msgid "Helptext_Admin_WebformCreateEdit_SuccessMessage"
 msgstr ""
@@ -2188,7 +2223,8 @@ msgid "Helptext_Admin_WebformCreateEdit_Validity"
 msgstr "To use the webform it has to be set \"valid\"."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Definition"
 msgstr ""
@@ -2246,8 +2282,8 @@ msgid "Helptext_Customer_Dashboard_Search"
 msgstr ""
 "If the tables are dependend, only Organisations are searchable. If the "
 "dependency is removed, Organisations and Contacts are searchable. The "
-"following Organisation attributes are considered: \"CNO\", \"Name\", \"URL\""
-", \"Street\", \"ZIP\", \"City\" and \"Country\". The following Contact "
+"following Organisation attributes are considered: \"CNO\", \"Name\", \"URL"
+"\", \"Street\", \"ZIP\", \"City\" and \"Country\". The following Contact "
 "attributes are considered: \"Login Name\", \"Email\", \"First Name\", \"Last "
 "Name\", \"Title\", \"Phone\", \"Fax\", \"Mobile\", \"Street\", \"City\", "
 "\"County\". It is possible to use Wildcards (*). See FAQ article \"How to "
@@ -2265,7 +2301,8 @@ msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Customers_ContactCreate_Country"
 msgstr ""
@@ -2332,8 +2369,8 @@ msgstr ""
 msgid "Helptext_Customers_OrganisationCreate_Avatar."
 msgstr ""
 "Upload an avatar (picture or icon). Depending on the configuration of your "
-"KIX Agent Portal the avatar can be shown together with the organisation, "
-"e.g. in a sidebar."
+"KIX Agent Portal the avatar can be shown together with the organisation, e."
+"g. in a sidebar."
 
 msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
@@ -2491,6 +2528,12 @@ msgstr ""
 "Choose from the listed notifications which one you want to receive. Move the "
 "pointer over an entry to see further information."
 
+msgid "Helptext_PersonalSettings_OutOfOfficeEnd_Hint"
+msgstr ""
+
+msgid "Helptext_PersonalSettings_OutOfOfficeStart_Hint"
+msgstr ""
+
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr "Choose the language you want to use for this application."
 
@@ -2575,10 +2618,10 @@ msgstr "Name of the parameter, as used in the SQL statement."
 msgid "Helptext_Reporting_ReportCreate_ParameterPossibleValues"
 msgstr ""
 "Specifies the values selectable in the form when actually creating a report, "
-"based on the data source selected in \"references\". (e.g. if "
-"Organisation.ID is choosen this can be restricted further). If nothin is "
-"specified all objects are available when creating a report. See admin "
-"manuall for further information."
+"based on the data source selected in \"references\". (e.g. if Organisation."
+"ID is choosen this can be restricted further). If nothin is specified all "
+"objects are available when creating a report. See admin manuall for further "
+"information."
 
 msgid "Helptext_Reporting_ReportCreate_ParameterReadonly"
 msgstr ""
@@ -2587,9 +2630,9 @@ msgstr ""
 
 msgid "Helptext_Reporting_ReportCreate_ParameterReferences"
 msgstr ""
-"Specificataion of the data source the parameter refers to. Syntax: "
-"Object.Attribute (e.g. the Organisation ID: \"Organisation.ID\"). See admin "
-"manuall for further information."
+"Specificataion of the data source the parameter refers to. Syntax: Object."
+"Attribute (e.g. the Organisation ID: \"Organisation.ID\"). See admin manuall "
+"for further information."
 
 msgid "Helptext_Reporting_ReportCreate_ParameterRequired"
 msgstr ""
@@ -2654,8 +2697,8 @@ msgstr ""
 
 msgid "Helptext_Tickets_Link_FullText"
 msgstr ""
-"Search the following ticket attributes: Ticket Number, Ticket Title ("
-"=subject first article), Article content, From, To, CC"
+"Search the following ticket attributes: Ticket Number, Ticket Title "
+"(=subject first article), Article content, From, To, CC"
 
 msgid "Helptext_Tickets_Link_Number"
 msgstr "Insert the ticket number or a part of the ticket number."
@@ -2700,7 +2743,8 @@ msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
 msgstr "Defines whether this article is shown in the customer portal."
 
 msgid "Helptext_Tickets_TicketCreate_Organisation"
-msgstr "Organisation is assigned autoamtically depending on the chosen contact."
+msgstr ""
+"Organisation is assigned autoamtically depending on the chosen contact."
 
 msgid "Helptext_Tickets_TicketCreate_Owner"
 msgstr ""
@@ -2792,6 +2836,12 @@ msgstr ""
 "Set the default notifications for the agent (= a contact with access to "
 "agent portal). An agent can change this setting in their preferences."
 
+msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeEnd"
+msgstr ""
+
+msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeStart"
+msgstr ""
+
 msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
 msgstr ""
 "Set the user's default language, for when they log in KIX for the first "
@@ -2834,6 +2884,9 @@ msgid "Id"
 msgstr ""
 
 msgid "ID"
+msgstr ""
+
+msgid "If true, the value will increase the checklist counter."
 msgstr ""
 
 msgid "Ignore"
@@ -2977,6 +3030,9 @@ msgid "Keywords"
 msgstr ""
 
 msgid "KIX"
+msgstr ""
+
+msgid "<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname> via Sender Address"
 msgstr ""
 
 msgid "KIX Forum"
@@ -3405,6 +3461,9 @@ msgstr ""
 msgid "No {0} found (add at least {1} characters)."
 msgstr ""
 
+msgid "No Access"
+msgstr ""
+
 msgid "No Article"
 msgstr ""
 
@@ -3624,6 +3683,9 @@ msgstr ""
 msgid "Outbox"
 msgstr ""
 
+msgid "Out Of Office"
+msgstr ""
+
 msgid "Output Format"
 msgstr ""
 
@@ -3680,6 +3742,9 @@ msgstr ""
 
 msgid "Owner"
 msgstr "Owner"
+
+msgid "Owner Out Of Office"
+msgstr ""
 
 msgid "Page Size"
 msgstr ""
@@ -3813,6 +3878,15 @@ msgstr ""
 msgid "Prepare asset for print"
 msgstr ""
 
+msgid "Prepare Attachments (0/{0})"
+msgstr ""
+
+msgid "Prepare Attachments ({0}/{1})"
+msgstr ""
+
+msgid "Prepare File Download"
+msgstr ""
+
 msgid "Prepare selection for print"
 msgstr ""
 
@@ -3875,6 +3949,9 @@ msgstr "Property"
 
 msgid "Queue"
 msgstr "Team"
+
+msgid "Queue Fullname"
+msgstr ""
 
 msgid "Queue Information"
 msgstr "Team Information"
@@ -4131,6 +4208,15 @@ msgstr ""
 msgid "Reset Preference"
 msgstr ""
 
+msgid "Reset Search To Default"
+msgstr ""
+
+msgid "Reset specific user settings"
+msgstr ""
+
+msgid "Reset table filters"
+msgstr ""
+
 msgid "Reset to Default"
 msgstr ""
 
@@ -4144,6 +4230,9 @@ msgid "responsibility by me"
 msgstr ""
 
 msgid "Responsible"
+msgstr ""
+
+msgid "Responsible Out Of Office"
 msgstr ""
 
 msgid "Result names"
@@ -4183,6 +4272,9 @@ msgid "Row Number"
 msgstr ""
 
 msgid "Row Selection"
+msgstr ""
+
+msgid "RTL"
 msgstr ""
 
 msgid "Run"
@@ -4245,13 +4337,22 @@ msgstr ""
 msgid "Search {0} will be deleted. Are you sure?"
 msgstr ""
 
+msgid "Search defaults for {0} reseted."
+msgstr ""
+
 msgid "Search error!"
+msgstr ""
+
+msgid "Searches"
 msgstr ""
 
 msgid "Search Limit"
 msgstr ""
 
 msgid "Search menu"
+msgstr ""
+
+msgid "Search Object"
 msgstr ""
 
 msgid "SEARCH_OPERATOR_WITHIN_LAST"
@@ -4264,6 +4365,21 @@ msgid "Search Results ({0})"
 msgstr ""
 
 msgid "Search Results: {0}"
+msgstr ""
+
+msgid "Search Results: Config Items"
+msgstr ""
+
+msgid "Search Results: Contacts"
+msgstr ""
+
+msgid "Search Results: FAQ"
+msgstr ""
+
+msgid "Search Results: Organisations"
+msgstr ""
+
+msgid "Search Results: Tickets"
 msgstr ""
 
 msgid "Search successfully saved."
@@ -4326,6 +4442,9 @@ msgstr ""
 msgid "Send despite out of office"
 msgstr ""
 
+msgid "Sender Address"
+msgstr ""
+
 msgid "Sender Address (Email)"
 msgstr ""
 
@@ -4342,6 +4461,9 @@ msgid "send to background"
 msgstr ""
 
 msgid "Send to these agents"
+msgstr ""
+
+msgid "Set as Default"
 msgstr ""
 
 msgid "Set Email Header"
@@ -4387,8 +4509,8 @@ msgstr ""
 
 msgid "setup_assistant_system_settings_text"
 msgstr ""
-"Please add basic system settings according to your system setup. For "
-"kix.cloud users please check your notification email. For on-premise-"
+"Please add basic system settings according to your system setup. For kix."
+"cloud users please check your notification email. For on-premise-"
 "installations: frontend refers to FQDN+port where the agent portal may be "
 "reached (e.g. \"your.docker.host:20001\"). Backend refers to FQDN+port where "
 "the KIX REST-API can be reached (e.g. \"your.docker.host:20000\"). Customer "
@@ -4410,6 +4532,12 @@ msgstr ""
 "information."
 
 msgid "Set Value"
+msgstr ""
+
+msgid "Shared Search"
+msgstr ""
+
+msgid "Share_Search_Template"
 msgstr ""
 
 msgid "Show all"
@@ -4837,6 +4965,9 @@ msgid "Ticket: Types"
 msgstr ""
 
 msgid "Ticket unlocked."
+msgstr ""
+
+msgid "Till"
 msgstr ""
 
 msgid "Time"

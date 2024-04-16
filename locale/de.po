@@ -29,11 +29,17 @@ msgstr "Nichts gefunden."
 msgid "{0} File(s) added"
 msgstr "{0} Datei(en) angehangen"
 
+msgid "{0}: has no value."
+msgstr ""
+
 msgid "{0} imported"
 msgstr "{0} importiert"
 
 msgid "{0} is required."
 msgstr "{0} ist ein Pflichtfeld."
+
+msgid "{0}: just white spaces as value is not allowed."
+msgstr ""
 
 msgid "{0} Link created"
 msgstr "{0} Verknüpfung(en) angelegt"
@@ -127,7 +133,8 @@ msgstr ""
 "Wenn angegeben, stehen nur Assets in diesen Verwendungsstatus zur Auswahl."
 
 msgid "Admin_DynamicField_Config_CIRef_IncidentStates"
-msgstr "Wenn angegeben, stehen nur Assets in diesen Vorfallsstatus zur Auswahl."
+msgstr ""
+"Wenn angegeben, stehen nur Assets in diesen Vorfallsstatus zur Auswahl."
 
 msgid "Admin_DynamicField_Config_CountDefault"
 msgstr ""
@@ -546,6 +553,9 @@ msgstr "Checklisteneintrag"
 msgid "Checklists"
 msgstr "Checklisten"
 
+msgid "Checklist State"
+msgstr ""
+
 msgid "Child Tickets"
 msgstr "Kindtickets"
 
@@ -936,6 +946,9 @@ msgstr "Berichtsdefinition wird gelöscht"
 msgid "Delete Search"
 msgstr "Suche löschen"
 
+msgid "Dependency"
+msgstr ""
+
 msgid "Deployment state"
 msgstr "Verwendungsstatus"
 
@@ -962,6 +975,9 @@ msgstr "Verteilung"
 
 msgid "Display Name"
 msgstr "Anzeigename"
+
+msgid "Done"
+msgstr ""
 
 msgid ""
 "Do not forget to replace the <YOUR_FRONTEND_HOST> placeholder (if it is not "
@@ -1491,6 +1507,9 @@ msgstr "Von"
 msgid "From external"
 msgstr "von extern"
 
+msgid "From format"
+msgstr ""
+
 msgid "From internal"
 msgstr "von intern"
 
@@ -1600,7 +1619,8 @@ msgstr ""
 "wollen, wählen Sie das hier aus."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Validity"
-msgstr "Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+msgstr ""
+"Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_GeneralCatalogCreate_Class"
 msgstr ""
@@ -1792,16 +1812,16 @@ msgid "Helptext_Admin_MailFilter_Sidebar"
 msgstr ""
 "Einkommende Mails können anhand von E-Mail-Kopfzeilen verteilt oder "
 "gefiltert werden. Für die Suche sind reguläre Ausdrücke zulässig. Wenn nur "
-"eine E-Mail-Adresse gesucht wird, dann benutzen Sie EMAILADDRESS:info@"
-"example.com in From, To oder Cc. Wenn Sie reguläre Ausdrücke verwenden, "
+"eine E-Mail-Adresse gesucht wird, dann benutzen Sie EMAILADDRESS:"
+"info@example.com in From, To oder Cc. Wenn Sie reguläre Ausdrücke verwenden, "
 "können Sie die unter „Filterbedingungen“ gefundenen Werte in „()“ setzen und "
 "mit „[***]“ in der Aktion \"Wert setzen\" verwenden. (nur für eine „()“-"
 "Bedingung möglich)"
 
 msgid "Helptext_Admin_NotificationCreate_AdditionalRecipient"
 msgstr ""
-"Wählen Sie weitere Kontakte aus oder tragen Sie eine syntaktisch korrekte E"
-"-Mail-Adresse ein, an welche die Benachrichtigung zusätzlich zu den oben "
+"Wählen Sie weitere Kontakte aus oder tragen Sie eine syntaktisch korrekte E-"
+"Mail-Adresse ein, an welche die Benachrichtigung zusätzlich zu den oben "
 "definierten Empfängern versendet werden soll."
 
 msgid "Helptext_Admin_NotificationCreate_Comment"
@@ -2059,8 +2079,8 @@ msgstr ""
 msgid "Helptext_Admin_SysConfigEdit_Value"
 msgstr ""
 "Wert der Konfiguration. Der Wert der Konfiguration ist eine einfache "
-"Zeichenkette, Zahl oder im Falle eines komplexen Schlüssels ein JSON-String -"
-" siehe jeweiliger Standardwert."
+"Zeichenkette, Zahl oder im Falle eines komplexen Schlüssels ein JSON-String "
+"- siehe jeweiliger Standardwert."
 
 msgid "Helptext_Admin_SysConfigSearch"
 msgstr ""
@@ -2083,9 +2103,9 @@ msgstr ""
 
 msgid "Helptext_Admin_SystemAddressCreate_Name"
 msgstr ""
-"Geben Sie eine syntaktisch korrekte E-Mail-Adresse ein. Beispiel: „support"
-"@muster-kg.com“ Diese muss zu einem in KIX konfigurierten Konto passen, wenn "
-"Antworten an diese Adresse im KIX an Tickets ankommen sollen."
+"Geben Sie eine syntaktisch korrekte E-Mail-Adresse ein. Beispiel: "
+"„support@muster-kg.com“ Diese muss zu einem in KIX konfigurierten Konto "
+"passen, wenn Antworten an diese Adresse im KIX an Tickets ankommen sollen."
 
 msgid "Helptext_Admin_SystemAddressCreate_Queue"
 msgstr ""
@@ -2100,7 +2120,8 @@ msgstr ""
 "Bereich angezeigt werden."
 
 msgid "Helptext_Admin_TextModuleCreate_Keywords"
-msgstr "Schlagworte helfen, einen Textbaustein schnell zu finden & auszuwählen."
+msgstr ""
+"Schlagworte helfen, einen Textbaustein schnell zu finden & auszuwählen."
 
 msgid "Helptext_Admin_TextModuleCreate_Language"
 msgstr "Geben Sie die Sprache an, in jener der Textbaustein angelegt ist."
@@ -2138,7 +2159,8 @@ msgid "Helptext_Admin_Tickets_PriorityCreate_Name"
 msgstr ""
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Valid"
-msgstr "Die Priorität kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+msgstr ""
+"Die Priorität kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Comment"
 msgstr ""
@@ -2177,8 +2199,8 @@ msgstr ""
 msgid "Helptext_Admin_Tickets_QueueCreate_UnlockTimeout"
 msgstr ""
 "Wenn ein Agent ein Ticket sperrt und es vor Ablauf der Entsperrzeit nicht "
-"schließt, wird es entsperrt und wieder für andere Agenten verfügbar gemacht ("
-"Eingabe in Minuten)."
+"schließt, wird es entsperrt und wieder für andere Agenten verfügbar gemacht "
+"(Eingabe in Minuten)."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Validity"
 msgstr "Das Team kann nur verwendet werden, wenn es „gültig“ gesetzt ist."
@@ -2257,8 +2279,8 @@ msgstr ""
 
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
-"Die Verwendung von RegEx ist möglich. Für Aufzählungen nutzen Sie \"|\" ("
-"ohne Leerzeichen) und setzen Sie die gesamte Liste in Klammern."
+"Die Verwendung von RegEx ist möglich. Für Aufzählungen nutzen Sie \"|"
+"\" (ohne Leerzeichen) und setzen Sie die gesamte Liste in Klammern."
 
 msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
 msgstr ""
@@ -2268,8 +2290,8 @@ msgstr ""
 msgid "Helptext_Admin_WebformCreateEdit_AssignedAgent"
 msgstr ""
 "Damit über das Webformular Tickets im KIX erstellt werden können, muss am "
-"Formular ein Agent zugeordnet sein, der mindestens die Rolle \"Ticket "
-"Creator\" hat."
+"Formular ein Agent zugeordnet sein, der mindestens die Rolle \"Ticket Creator"
+"\" hat."
 
 msgid "Helptext_Admin_WebformCreateEdit_AssignedAgentPassword"
 msgstr ""
@@ -2341,8 +2363,8 @@ msgstr ""
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Definition"
 msgstr ""
-"Die Klassendefinition muss ein Liste von Attribut-Objekten in Perl-Notation ("
-"\"Array of Hashes\") enthalten. Wenn die Klassendefinition General Catalog "
+"Die Klassendefinition muss ein Liste von Attribut-Objekten in Perl-Notation "
+"(\"Array of Hashes\") enthalten. Wenn die Klassendefinition General Catalog "
 "Referenzen enthält, können für diese im Modul \"General Catalog\" "
 "Auswahlwerte definiert werden."
 
@@ -2400,12 +2422,12 @@ msgid "Helptext_Customer_Dashboard_Search"
 msgstr ""
 "Wenn die Tabellen abhängig sind, wird nur nach Organisationen gesucht. Ist "
 "die Abhängigkeit aufgelöst, wird nach Organisationen und Kontakten gesucht. "
-"Durchsuchbar sind die Organisations-Eigenschaften \"KNR\", \"Name\", \"URL\""
-", \"Straße\", \"PLZ\", \"Stadt\" und \"Land\" und die Kontakt-Eigenschaften "
-"\"Nutzername\", \"E-Mail\", \"Vorname\", \"Nachname\", \"Titel\", \"Telefon\""
-", \"Fax\", \"Mobil\", \"Straße\", \"Stadt\", \"Land\". Verwendung von "
-"Wildcards (*) ist möglich. Die Nutzung weiterer Sonderzeichen ist im FAQ "
-"Artikel \"Wie suche ich in KIX 18\" zu finden."
+"Durchsuchbar sind die Organisations-Eigenschaften \"KNR\", \"Name\", \"URL"
+"\", \"Straße\", \"PLZ\", \"Stadt\" und \"Land\" und die Kontakt-"
+"Eigenschaften \"Nutzername\", \"E-Mail\", \"Vorname\", \"Nachname\", \"Titel"
+"\", \"Telefon\", \"Fax\", \"Mobil\", \"Straße\", \"Stadt\", \"Land\". "
+"Verwendung von Wildcards (*) ist möglich. Die Nutzung weiterer Sonderzeichen "
+"ist im FAQ Artikel \"Wie suche ich in KIX 18\" zu finden."
 
 msgid "Helptext_Customers_ContactCreate_Avatar."
 msgstr ""
@@ -2483,9 +2505,9 @@ msgstr ""
 "Attribute: *PrimaryOrganisationID – Zahl (vorhanden, wenn Datei aus KIX-"
 "Kontakt-Export stammt) ODER *PrimaryOrganisationNumber - KNR der "
 "zugeordneten Organisation (muss bereits im KIX vorhanden sein); Firstname – "
-"Vorname; Lastname – Nachname; Title – Titel; *Email – E-Mail Adresse; Phone –"
-" Telefonnummer; Mobile – Handynummer; Fax – Faxnummer; Street - Straße; City "
-"– Stadt; ZIP - PLZ; Country – Land; Comment – Kommentar; *ValidID – "
+"Vorname; Lastname – Nachname; Title – Titel; *Email – E-Mail Adresse; Phone "
+"– Telefonnummer; Mobile – Handynummer; Fax – Faxnummer; Street - Straße; "
+"City – Stadt; ZIP - PLZ; Country – Land; Comment – Kommentar; *ValidID – "
 "Gültigkeit (1=gültig; 2=ungültig; 3=temporär ungültig) ODER *Validity - "
 "Gültigkeit (valid=gültig; invalid=ungültig; invalid-temporarily=temporär "
 "ungültig) Enthält der Datensatz keine Gültigkeit, wird dieses Attribut über "
@@ -2520,8 +2542,8 @@ msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Type"
 msgstr ""
-"Der Typ der Organisation - handelt es sich um einen Leistungsbezieher (Kunde)"
-", Lieferant/Partner oder Leistungserbringer (meist Betreiber dieses "
+"Der Typ der Organisation - handelt es sich um einen Leistungsbezieher "
+"(Kunde), Lieferant/Partner oder Leistungserbringer (meist Betreiber dieses "
 "Servicemanagementsystems)."
 
 msgid "Helptext_Customers_OrganisationCreate_URL"
@@ -2643,8 +2665,8 @@ msgstr ""
 msgid "Helptext_Jobs_Create_ResultNames"
 msgstr ""
 "Optional können Sie hier einen Variablen-Name für das Ergebnis der Macro-"
-"Action hinterlegen. Diese Variable kann als spezieller Platzhalter \""
-"${VariableName}\" in folgenden Aktionen verwendet werden."
+"Action hinterlegen. Diese Variable kann als spezieller Platzhalter "
+"\"${VariableName}\" in folgenden Aktionen verwendet werden."
 
 msgid "Helptext_Organisation_Address_Domain_Pattern"
 msgstr ""
@@ -2673,6 +2695,12 @@ msgstr ""
 "möchten. Gehen Sie mit dem Mauszeiger über den Eintrag, um weitere "
 "Informationen zur Benachrichtigung zu erhalten."
 
+msgid "Helptext_PersonalSettings_OutOfOfficeEnd_Hint"
+msgstr ""
+
+msgid "Helptext_PersonalSettings_OutOfOfficeStart_Hint"
+msgstr ""
+
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr ""
 "Ändern Sie hier die Sprache in der das Self-Service-Portal dargestellt wird."
@@ -2700,8 +2728,8 @@ msgstr ""
 
 msgid "Helptext_Reporting_ReportCreate_Datasource"
 msgstr ""
-"Angabe der Datenquelle der Berichtsdefinition. Aktuell ist nur \"GenericSQL\""
-" möglich."
+"Angabe der Datenquelle der Berichtsdefinition. Aktuell ist nur \"GenericSQL"
+"\" möglich."
 
 msgid "Helptext_Reporting_ReportCreate_Datasource_DBMS"
 msgstr ""
@@ -2776,8 +2804,8 @@ msgstr ""
 
 msgid "Helptext_Reporting_ReportCreate_ParameterReferences"
 msgstr ""
-"Angabe der Datenquelle, auf die der Parameter referenziert. Syntax: "
-"Objekt.Attribut (z.B.: die ID der Organistation: \"Organisation.ID\"). "
+"Angabe der Datenquelle, auf die der Parameter referenziert. Syntax: Objekt."
+"Attribut (z.B.: die ID der Organistation: \"Organisation.ID\"). "
 "Detailiertere Informationen finden Sie im Handbuch."
 
 msgid "Helptext_Reporting_ReportCreate_ParameterRequired"
@@ -2851,8 +2879,8 @@ msgstr "Zusammenfassung/Titel der anzulegenden Nachricht/Notiz"
 
 msgid "Helptext_Tickets_Link_FullText"
 msgstr ""
-"Durchsucht die folgenden Ticket Attribute: Ticket Nummer, Titel des Tickets ("
-"=Betreff erster Artikel), Artikelinhalt, Von, An, CC"
+"Durchsucht die folgenden Ticket Attribute: Ticket Nummer, Titel des Tickets "
+"(=Betreff erster Artikel), Artikelinhalt, Von, An, CC"
 
 msgid "Helptext_Tickets_Link_Number"
 msgstr "Geben Sie die Ticket Nummer oder einen Teil der Ticket Nummer ein."
@@ -3002,6 +3030,12 @@ msgstr ""
 "Zugang zum Agentenportal hat) standardmäßig erhält. Der Agent kann diese "
 "Einstellung auch selbst in seinen persönlichen Einstellungen ändern."
 
+msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeEnd"
+msgstr ""
+
+msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeStart"
+msgstr ""
+
 msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
 msgstr ""
 "Legen Sie fest, in welcher Sprache ein Nutzer KIX sieht, wenn er sich das "
@@ -3049,6 +3083,9 @@ msgstr "Id"
 
 msgid "ID"
 msgstr "ID"
+
+msgid "If true, the value will increase the checklist counter."
+msgstr ""
 
 msgid "Ignore"
 msgstr "Ignorieren"
@@ -3624,6 +3661,9 @@ msgstr "Nr."
 msgid "No {0} found (add at least {1} characters)."
 msgstr "Keine {0} gefunden (mind. {1} Zeichen eingeben)."
 
+msgid "No Access"
+msgstr ""
+
 msgid "No Article"
 msgstr "Kein Artikel"
 
@@ -3843,6 +3883,9 @@ msgstr "andere"
 msgid "Outbox"
 msgstr "Postausgang"
 
+msgid "Out Of Office"
+msgstr ""
+
 msgid "Output Format"
 msgstr "Ausgabeformat"
 
@@ -3899,6 +3942,9 @@ msgstr "in Bearbeitung durch mich"
 
 msgid "Owner"
 msgstr "Bearbeiter"
+
+msgid "Owner Out Of Office"
+msgstr ""
 
 msgid "Page Size"
 msgstr "Seitengröße"
@@ -4033,6 +4079,15 @@ msgstr "Artikel für Druck vorbereiten"
 msgid "Prepare asset for print"
 msgstr "Bereite Assetdaten zum Druck auf"
 
+msgid "Prepare Attachments (0/{0})"
+msgstr ""
+
+msgid "Prepare Attachments ({0}/{1})"
+msgstr ""
+
+msgid "Prepare File Download"
+msgstr ""
+
 msgid "Prepare selection for print"
 msgstr "Bereite Auswahl zum Druck auf"
 
@@ -4095,6 +4150,9 @@ msgstr "Eigenschaft"
 
 msgid "Queue"
 msgstr "Team"
+
+msgid "Queue Fullname"
+msgstr ""
 
 msgid "Queue Information"
 msgstr "Team-Informationen"
@@ -4354,6 +4412,15 @@ msgstr "Daten zurücksetzen"
 msgid "Reset Preference"
 msgstr "Einstellung zurücksetzen"
 
+msgid "Reset Search To Default"
+msgstr ""
+
+msgid "Reset specific user settings"
+msgstr ""
+
+msgid "Reset table filters"
+msgstr ""
+
 msgid "Reset to Default"
 msgstr "Auf Vorgabe zurücksetzen"
 
@@ -4368,6 +4435,9 @@ msgstr "verantwortet durch mich"
 
 msgid "Responsible"
 msgstr "Verantwortlicher"
+
+msgid "Responsible Out Of Office"
+msgstr ""
 
 msgid "Result names"
 msgstr "Ergebnisbezeichnungen"
@@ -4409,6 +4479,9 @@ msgstr "Zeilennummer"
 
 msgid "Row Selection"
 msgstr "Spaltenauswahl"
+
+msgid "RTL"
+msgstr ""
 
 msgid "Run"
 msgstr "Ausführen"
@@ -4470,14 +4543,23 @@ msgstr "Suche: {0}"
 msgid "Search {0} will be deleted. Are you sure?"
 msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
 
+msgid "Search defaults for {0} reseted."
+msgstr ""
+
 msgid "Search error!"
 msgstr "Fehler bei Suche!"
+
+msgid "Searches"
+msgstr ""
 
 msgid "Search Limit"
 msgstr "Suchlimit"
 
 msgid "Search menu"
 msgstr "Suchmenü"
+
+msgid "Search Object"
+msgstr ""
 
 msgid "SEARCH_OPERATOR_WITHIN_LAST"
 msgstr "der letzten"
@@ -4490,6 +4572,21 @@ msgstr "Suchergebnisse ({0})"
 
 msgid "Search Results: {0}"
 msgstr "Suchergebnisse: {0}"
+
+msgid "Search Results: Config Items"
+msgstr ""
+
+msgid "Search Results: Contacts"
+msgstr ""
+
+msgid "Search Results: FAQ"
+msgstr ""
+
+msgid "Search Results: Organisations"
+msgstr ""
+
+msgid "Search Results: Tickets"
+msgstr ""
 
 msgid "Search successfully saved."
 msgstr "Suche wurde gespeichert."
@@ -4572,6 +4669,9 @@ msgstr "im Hintergrund ausführen"
 msgid "Send to these agents"
 msgstr "Senden an Agenten"
 
+msgid "Set as Default"
+msgstr ""
+
 msgid "Set Email Header"
 msgstr "E-Mail-Header setzen"
 
@@ -4587,8 +4687,8 @@ msgstr "Setup Assistent"
 msgid "setup_assistant_add_mail_account_text"
 msgstr ""
 "Richten Sie ein E-Mail-Konto ein, von dem Sie E-Mails abrufen möchten. "
-"Weitere Konten können im Admin-Bereich \"Kommunikation/E-Mail/E-Mail-Konten\""
-" hinzugefügt werden. Bitte beachten Sie, dass E-Mails unabhängig vom "
+"Weitere Konten können im Admin-Bereich \"Kommunikation/E-Mail/E-Mail-Konten"
+"\" hinzugefügt werden. Bitte beachten Sie, dass E-Mails unabhängig vom "
 "gewählten Kontentyp aus dem Postfach abgeholt und gelöscht werden!"
 
 msgid "setup_assistant_change_admin_password_text"
@@ -4621,8 +4721,8 @@ msgstr ""
 "Agentenportal erreichbar ist (z.B. \"your.docker.host:20001\"). Backend "
 "bezieht sich auf FQDN+Port, über den die KIX REST-API erreichbar ist (z.B. "
 "\"your.docker.host:20000\"). Das Customer Frontend sollte entsprechend "
-"eingestellt werden, wenn Sie das KIX Self Service Portal nutzen möchten ("
-"z.B. \"your.docker.host:20002\")."
+"eingestellt werden, wenn Sie das KIX Self Service Portal nutzen möchten (z."
+"B. \"your.docker.host:20002\")."
 
 msgid "setup_assistant_welcome_text"
 msgstr ""
@@ -4641,6 +4741,12 @@ msgstr ""
 
 msgid "Set Value"
 msgstr "Wert setzen"
+
+msgid "Shared Search"
+msgstr ""
+
+msgid "Share_Search_Template"
+msgstr ""
 
 msgid "Show all"
 msgstr "Alles anzeigen"
@@ -5085,6 +5191,9 @@ msgstr "Ticket: Typen"
 
 msgid "Ticket unlocked."
 msgstr "Ticket entsperrt."
+
+msgid "Till"
+msgstr ""
 
 msgid "Time"
 msgstr "Zeit"
