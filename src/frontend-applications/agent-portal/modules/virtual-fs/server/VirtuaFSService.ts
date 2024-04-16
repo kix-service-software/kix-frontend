@@ -14,17 +14,17 @@ import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions'
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { FileService } from '../../file/server/FileService';
 import { UserService } from '../../user/server/UserService';
-import { VirutalFSAttachmentLoadingOptions } from '../model/VirutalFSAttachmentLoadingOptions';
+import { VirtualFSAttachmentLoadingOptions } from '../model/VirtualFSAttachmentLoadingOptions';
 
-export class VirutalFSAPIService extends KIXObjectAPIService {
+export class VirtualFSAPIService extends KIXObjectAPIService {
 
-    private static INSTANCE: VirutalFSAPIService;
+    private static INSTANCE: VirtualFSAPIService;
 
-    public static getInstance(): VirutalFSAPIService {
-        if (!VirutalFSAPIService.INSTANCE) {
-            VirutalFSAPIService.INSTANCE = new VirutalFSAPIService();
+    public static getInstance(): VirtualFSAPIService {
+        if (!VirtualFSAPIService.INSTANCE) {
+            VirtualFSAPIService.INSTANCE = new VirtualFSAPIService();
         }
-        return VirutalFSAPIService.INSTANCE;
+        return VirtualFSAPIService.INSTANCE;
     }
 
     protected RESOURCE_URI: string = 'virtualfs';
@@ -42,7 +42,7 @@ export class VirutalFSAPIService extends KIXObjectAPIService {
 
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
-        loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: VirutalFSAttachmentLoadingOptions
+        loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: VirtualFSAttachmentLoadingOptions
     ): Promise<ObjectResponse<T>> {
 
         let objectResponse = new ObjectResponse([], 0);

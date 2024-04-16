@@ -10,12 +10,12 @@
 import { IServiceExtension } from '../../server/extensions/IServiceExtension';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
-import { VirutalFSAPIService } from './server/VirtuaFSService';
+import { VirtualFSAPIService } from './server/VirtuaFSService';
 
 class Extension extends KIXExtension implements IServiceExtension {
 
     public async initServices(): Promise<void> {
-        VirutalFSAPIService.getInstance();
+        VirtualFSAPIService.getInstance();
     }
 
 }
