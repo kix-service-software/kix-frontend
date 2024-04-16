@@ -135,6 +135,16 @@ export class UserService extends KIXObjectAPIService {
                 preferences.push({ ID: PersonalSettingsProperty.NOTIFICATIONS, Value: notifications[1] });
             }
 
+            const outOfOfficeStart = parameter.find((p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_START);
+            if (outOfOfficeStart) {
+                preferences.push({ ID: PersonalSettingsProperty.OUT_OF_OFFICE_START, Value: outOfOfficeStart[1] });
+            }
+
+            const outOfOfficeEnd = parameter.find((p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_END);
+            if (outOfOfficeEnd) {
+                preferences.push({ ID: PersonalSettingsProperty.OUT_OF_OFFICE_END, Value: outOfOfficeEnd[1] });
+            }
+
             createParameter.push([UserProperty.PREFERENCES, preferences]);
 
             const id = await super.executeUpdateOrCreateRequest(
