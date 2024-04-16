@@ -37,8 +37,8 @@ export class HTTPRequestLogger {
 
     private requests: Map<string, RequestEntry> = new Map();
 
-    public start(method: string, resource: string, parameter: string): string {
-        const entry = new RequestEntry(method, resource, parameter);
+    public start(method: string, resource: string, parameter: string, clientId: string): string {
+        const entry = new RequestEntry(method, resource, parameter, clientId);
         this.requests.set(entry.id, entry);
         return entry.id;
     }
@@ -80,7 +80,7 @@ export class HTTPRequestLogger {
                         const minutes = date.getMinutes().toString().padStart(2, '0');
                         const seconds = date.getSeconds().toString().padStart(2, '0');
 
-                        return `${month}-${day}-${year} ${hours}:${minutes}:${seconds}`;
+                        return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
                     }
                 }),
                 winston.format.printf((info) => {
@@ -88,8 +88,9 @@ export class HTTPRequestLogger {
                         timestamp, level, message, ...args
                     } = info;
 
-                    return `${timestamp}\t${level}\t${message}` +
-                        `${Object.keys(args).length ? JSON.stringify(args, null, 2) : ''}`;
+                    let params = Object.keys(args).length ? JSON.stringify(args, null, 2) : '';
+                    params = params.replace((/[\t\n\r]/gm), '');
+                    return `${timestamp}\t${level}\t${message}\t${params}`;
                 }),
             ),
             transports: [
@@ -116,7 +117,8 @@ class RequestEntry {
     public constructor(
         public method: string,
         public resource: string,
-        public parameter: string
+        public parameter: string,
+        public clientId: string
     ) {
         this.id = `${Date.now()}-${method}-${resource}`;
         this.parameter = this.parameter.replace(new RegExp('"Content":".*=?(\\n)?"'), '"Content":"..."');
