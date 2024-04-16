@@ -10,7 +10,7 @@
 import { IServiceExtension } from '../../server/extensions/IServiceExtension';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
-import { VirtualFSAPIService } from './server/VirtuaFSService';
+import { VirtualFSAPIService } from './server/VirtualFSService';
 
 class Extension extends KIXExtension implements IServiceExtension {
 
