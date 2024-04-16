@@ -81,7 +81,7 @@ export class FileService {
 
         const file = FileService.getDownloadFile(downloadId, userId);
         if (file) {
-            res.download(FileService.getFilePath(file.Filename), (err) => {
+            res.download(FileService.getFilePath(file.Filename, file.path), (err) => {
                 if (err) {
                     LoggingService.getInstance().error('Error while download file to client.', err);
                 } else {
