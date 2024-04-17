@@ -109,21 +109,9 @@ export class DynamicFieldFormService extends KIXObjectFormService {
 
     public static prepareChecklistConfig(checklist: CheckListItem[]): void {
         for (const ci of checklist) {
-
-            if (ci.inputStates) {
-                ci.checklistStates = [];
-                for (const key in ci.inputStates) {
-                    if (ci.inputStates[key]) {
-                        const state = ci.inputStates[key];
-                        ci.checklistStates.push(new ChecklistState(key, state.icon, state.done, state.order));
-                    }
-                }
-
-                delete ci.inputStates;
-            }
-
-            if (ci.input === CheckListInputType.ChecklistState && !ci.checklistStates?.length) {
-                ci.checklistStates = DynamicFieldFormUtil.getDefaultChecklistStates();
+            if (ci.input === CheckListInputType.ChecklistState && !ci.inputStates?.length) {
+                ci.inputStates = DynamicFieldFormUtil.getDefaultChecklistStates();
+                ci.inputStates.forEach(((is) => is.order = 0));
             }
 
             if (!ci.sub) {
@@ -152,7 +140,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                 configParameter[1].PossibleValues = possibleValueHash;
             } else if (fieldTypeParameter[1] === DynamicFieldTypes.CHECK_LIST) {
                 const checklist = configParameter[1].DefaultValue;
-                this.prepareChecklistValue(checklist);
+                DynamicFieldFormService.prepareChecklistConfig(checklist);
                 configParameter[1].DefaultValue = JSON.stringify(checklist);
             }
         }
@@ -163,34 +151,6 @@ export class DynamicFieldFormService extends KIXObjectFormService {
         }
 
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
-    }
-
-    private prepareChecklistValue(checklist: CheckListItem[]): void {
-        for (const ci of checklist) {
-
-            if (!ci.checklistStates || ci.checklistStates.length === 0) {
-                ci.checklistStates = DynamicFieldFormUtil.getDefaultChecklistStates() || [];
-            }
-
-            if (Array.isArray(ci.checklistStates)) {
-                ci.inputStates = {};
-                for (const state of ci.checklistStates) {
-                    ci.inputStates[state.label] = {
-                        order: state.order,
-                        icon: state.icon,
-                        done: state.done
-                    };
-                }
-            }
-
-            delete ci.checklistStates;
-
-            if (!ci.sub) {
-                ci.sub = [];
-            } else {
-                this.prepareChecklistValue(ci.sub);
-            }
-        }
     }
 
 }

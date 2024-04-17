@@ -494,8 +494,8 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                     item.value = '-';
                 }
 
-                const states = item.checklistStates || DynamicFieldFormUtil.getDefaultChecklistStates();
-                const state = states.find((cs) => cs.label === item.value);
+                const states = item.inputStates || DynamicFieldFormUtil.getDefaultChecklistStates();
+                const state = states.find((cs) => cs.value === item.value);
                 if (state?.done) {
                     value[0]++;
                 }

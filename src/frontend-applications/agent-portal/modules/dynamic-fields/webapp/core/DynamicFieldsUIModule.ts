@@ -528,11 +528,11 @@ export class UIModule implements IUIModule {
                     items: {
                         type: 'object',
                         properties: {
-                            label: {
+                            value: {
                                 title: label,
                                 type: 'string',
                                 options: {
-                                    'grid_columns': 3
+                                    'grid_columns': 4
                                 }
                             },
                             icon: {
@@ -541,7 +541,7 @@ export class UIModule implements IUIModule {
                                 uniqueItems: true,
                                 enum: icons,
                                 options: {
-                                    'grid_columns': 3
+                                    'grid_columns': 4
                                 }
                             },
                             done: {
@@ -551,9 +551,9 @@ export class UIModule implements IUIModule {
                                 format: 'checkbox',
                                 default: 1,
                                 options: {
-                                    'grid_columns': 3
+                                    'grid_columns': 4
                                 }
-                            },
+                            }
                         }
                     }
                 },
@@ -610,7 +610,7 @@ export class UIModule implements IUIModule {
                                 title: itemValue,
                                 type: 'string'
                             },
-                            checklistStates: {
+                            inputStates: {
                                 $ref: '#/definitions/CommonChecklistState'
                             },
                             sub: {
