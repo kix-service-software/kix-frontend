@@ -411,6 +411,8 @@ export class ObjectFormValue<T = any> {
                     this.additionalValues.push(av);
                 }
             }
+
+            await this.applyPossibleValues();
         }
     }
 
@@ -424,6 +426,8 @@ export class ObjectFormValue<T = any> {
         } else {
             this.forbiddenValues = values;
         }
+
+        await this.applyPossibleValues();
     }
 
     public setValidationResult(validationResult: ValidationResult[] = []): void {
