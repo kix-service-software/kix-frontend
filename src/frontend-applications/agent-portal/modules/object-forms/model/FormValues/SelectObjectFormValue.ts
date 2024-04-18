@@ -708,4 +708,14 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
         return nodes;
     }
+
+    public async addPossibleValues(values: T[]): Promise<void> {
+        await super.addPossibleValues(values);
+        await this.loadSelectableValues();
+    }
+
+    public async removePossibleValues(values: T[]): Promise<void> {
+        await super.removePossibleValues(values);
+        await this.loadSelectableValues();
+    }
 }
