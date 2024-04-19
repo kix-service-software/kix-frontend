@@ -945,8 +945,12 @@ export class TicketService extends KIXObjectService<Ticket> {
         return super.getBackendFilterType(property, dep);
     }
 
-    public getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
+    public async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
         return KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE);
+    }
+
+    public async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
+        return LabelService.getInstance().getPropertyText(TicketProperty.QUEUE, objectType);
     }
 
 }
