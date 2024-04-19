@@ -38,7 +38,8 @@ export class ComponentState extends AbstractComponentState {
         public loadingContent: boolean = false,
         public showContent: boolean = false,
         public unseen: number = 1,
-        public oneColumnLayout: boolean = false
+        public oneColumnLayout: boolean = false,
+        public switchAttachmentListTooltip: string = 'Translatable#Switch attachment list layout'
     ) {
         super();
     }
