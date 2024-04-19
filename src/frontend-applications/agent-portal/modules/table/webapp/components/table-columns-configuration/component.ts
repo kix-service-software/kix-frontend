@@ -66,6 +66,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.loading = true;
 
         const dependencies = await KIXObjectService.getObjectDependencies(this.objectType);
+        this.state.dependencyName = await KIXObjectService.getObjectDependencyName(this.objectType);
 
         for (const c of this.columns) {
             let prop = c.property;

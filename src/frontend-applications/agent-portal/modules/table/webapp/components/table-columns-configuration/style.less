@@ -14,9 +14,14 @@
     .property-chooser {
         display: grid;
         grid-auto-flow: column;
-        grid-template-columns: minmax(5rem, 35rem) max-content;
+        grid-template-columns: min-content minmax(5rem, 35rem) max-content;
         grid-column-gap: @margin-small;
         padding: 1rem;
+
+        label {
+            align-self: center;
+            text-wrap: nowrap;
+        }
     }
 
     .configuration-table {

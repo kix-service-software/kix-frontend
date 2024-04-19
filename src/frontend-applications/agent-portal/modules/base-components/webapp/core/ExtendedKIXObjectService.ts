@@ -33,6 +33,10 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
         return [];
     }
 
+    public async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
+        return;
+    }
+
     public getObjectConstructors(): Array<new (object?: KIXObject) => KIXObject> {
         return [];
     }

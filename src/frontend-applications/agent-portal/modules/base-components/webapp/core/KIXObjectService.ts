@@ -801,6 +801,26 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return dependencies;
     }
 
+    public static async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
+        let dependencyName: string = '';
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
+        if (service) {
+            dependencyName = await service.getObjectDependencyName(objectType);
+        }
+
+        return dependencyName;
+    }
+
+    public async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
+        for (const extendedService of this.extendedServices) {
+            const extendedName = await extendedService.getObjectDependencyName(objectType);
+            if (extendedName) {
+                return extendedName;
+            }
+        }
+        return objectType;
+    }
+
     protected async shouldPreload(objectType: KIXObjectType | string): Promise<boolean> {
         let preload = false;
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.SYS_CONFIG_OPTION);
