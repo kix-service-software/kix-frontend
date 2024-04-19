@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2024-04-16 14:38+0000\n"
-"Last-Translator: jbrueckner <Joerg.Brueckner@kixdesk.com>\n"
+"PO-Revision-Date: 2024-04-19 12:38+0000\n"
+"Last-Translator: fkrahl <Frank.Krahl@kixdesk.com>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -30,7 +30,7 @@ msgid "{0} File(s) added"
 msgstr "{0} Datei(en) angehangen"
 
 msgid "{0}: has no value."
-msgstr ""
+msgstr "{0}: hat keinen Wert."
 
 msgid "{0} imported"
 msgstr "{0} importiert"
@@ -322,7 +322,7 @@ msgid "Apply"
 msgstr "Anwenden"
 
 msgid "Apply Table"
-msgstr ""
+msgstr "Tabelle hinzufügen"
 
 msgid "Approved"
 msgstr "Genehmigt"
@@ -554,7 +554,7 @@ msgid "Checklists"
 msgstr "Checklisten"
 
 msgid "Checklist State"
-msgstr ""
+msgstr "Checklisten-Status"
 
 msgid "Child Tickets"
 msgstr "Kindtickets"
@@ -947,7 +947,7 @@ msgid "Delete Search"
 msgstr "Suche löschen"
 
 msgid "Dependency"
-msgstr ""
+msgstr "Abhängigkeit"
 
 msgid "Deployment state"
 msgstr "Verwendungsstatus"
@@ -977,7 +977,7 @@ msgid "Display Name"
 msgstr "Anzeigename"
 
 msgid "Done"
-msgstr ""
+msgstr "Fertig"
 
 msgid ""
 "Do not forget to replace the <YOUR_FRONTEND_HOST> placeholder (if it is not "
@@ -1185,7 +1185,7 @@ msgid "Email Address Details"
 msgstr "Emailadressdetails"
 
 msgid "Email Address Domain"
-msgstr ""
+msgstr "E-Mail-Adressen-Domain"
 
 msgid "Email Addresses"
 msgstr "E-Mail-Adressen"
@@ -1392,10 +1392,10 @@ msgid "Field {0} has an invalid value ({1})."
 msgstr "Feld {0} enthält einen ungültigen Wert ({1})."
 
 msgid "Field {0} has an invalid value (max date: {1})."
-msgstr ""
+msgstr "Feld {0} hat einen üngültigen Wert (max. Datum: {1})."
 
 msgid "Field {0} has an invalid value (min date: {2})."
-msgstr ""
+msgstr "Feld {0} hat einen üngültigen Wert (min. Datum: {2})."
 
 msgid "Field Agent App"
 msgstr "Field Agent App"
@@ -1508,7 +1508,7 @@ msgid "From external"
 msgstr "von extern"
 
 msgid "From format"
-msgstr ""
+msgstr "Von-Format"
 
 msgid "From internal"
 msgstr "von intern"
@@ -3085,7 +3085,7 @@ msgid "ID"
 msgstr "ID"
 
 msgid "If true, the value will increase the checklist counter."
-msgstr ""
+msgstr "Wenn gesetzt, wird der Wert den Checklisten-Zähler erhöhen."
 
 msgid "Ignore"
 msgstr "Ignorieren"
@@ -3148,7 +3148,7 @@ msgid "Incident State"
 msgstr "Vorfallsstatus"
 
 msgid "Include Previous Version"
-msgstr ""
+msgstr "Vorhergehende Version einschließen"
 
 msgid "Include this code into the <head> area of your webpage."
 msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
@@ -3662,7 +3662,7 @@ msgid "No {0} found (add at least {1} characters)."
 msgstr "Keine {0} gefunden (mind. {1} Zeichen eingeben)."
 
 msgid "No Access"
-msgstr ""
+msgstr "Kein Zugriff"
 
 msgid "No Article"
 msgstr "Kein Artikel"
@@ -3677,7 +3677,7 @@ msgid "No data available."
 msgstr "Keine Angaben verfügbar."
 
 msgid "No form available. Please contact your administrator."
-msgstr ""
+msgstr "Kein formular verfügbar. Bitte kontaktieren Sie ihren Administrator."
 
 msgid "No objects available."
 msgstr "Keine Objekte verfügbar."
@@ -3944,7 +3944,7 @@ msgid "Owner"
 msgstr "Bearbeiter"
 
 msgid "Owner Out Of Office"
-msgstr ""
+msgstr "Bearbeiter Out Of Office"
 
 msgid "Page Size"
 msgstr "Seitengröße"
@@ -4080,13 +4080,13 @@ msgid "Prepare asset for print"
 msgstr "Bereite Assetdaten zum Druck auf"
 
 msgid "Prepare Attachments (0/{0})"
-msgstr ""
+msgstr "Vorbereitung Anlagen ({0}/{0})"
 
 msgid "Prepare Attachments ({0}/{1})"
-msgstr ""
+msgstr "Vorbereitung Anlagen ({0}/{1})"
 
 msgid "Prepare File Download"
-msgstr ""
+msgstr "Vorbereitung Datei-Download"
 
 msgid "Prepare selection for print"
 msgstr "Bereite Auswahl zum Druck auf"
@@ -4233,7 +4233,7 @@ msgid "Recently Closed"
 msgstr "Kürzlich Geschlossen"
 
 msgid "recipient addresses (To, Cc, etc.)"
-msgstr ""
+msgstr "Empfängeradressen (Von, Cc, etc.)"
 
 msgid "Recipients"
 msgstr "Empfänger"
@@ -4413,13 +4413,13 @@ msgid "Reset Preference"
 msgstr "Einstellung zurücksetzen"
 
 msgid "Reset Search To Default"
-msgstr ""
+msgstr "Suche auf Default zurücksetzen"
 
 msgid "Reset specific user settings"
-msgstr ""
+msgstr "Spezifische Nutzereinstellungen zurücksetzen"
 
 msgid "Reset table filters"
-msgstr ""
+msgstr "Tabellenfilter zurücksetzen"
 
 msgid "Reset to Default"
 msgstr "Auf Vorgabe zurücksetzen"
@@ -4550,7 +4550,7 @@ msgid "Search error!"
 msgstr "Fehler bei Suche!"
 
 msgid "Searches"
-msgstr ""
+msgstr "Suchen"
 
 msgid "Search Limit"
 msgstr "Suchlimit"
@@ -4559,7 +4559,7 @@ msgid "Search menu"
 msgstr "Suchmenü"
 
 msgid "Search Object"
-msgstr ""
+msgstr "Suchobjekt"
 
 msgid "SEARCH_OPERATOR_WITHIN_LAST"
 msgstr "der letzten"
@@ -4574,19 +4574,19 @@ msgid "Search Results: {0}"
 msgstr "Suchergebnisse: {0}"
 
 msgid "Search Results: Config Items"
-msgstr ""
+msgstr "Suchergebnisse: Assets"
 
 msgid "Search Results: Contacts"
-msgstr ""
+msgstr "Suchergebnisse: Kontakte"
 
 msgid "Search Results: FAQ"
-msgstr ""
+msgstr "Suchergebnisse: FAQ"
 
 msgid "Search Results: Organisations"
-msgstr ""
+msgstr "Suchergebnisse: Organisationen"
 
 msgid "Search Results: Tickets"
-msgstr ""
+msgstr "Suchergebnisse: Tickets"
 
 msgid "Search successfully saved."
 msgstr "Suche wurde gespeichert."
@@ -4670,7 +4670,7 @@ msgid "Send to these agents"
 msgstr "Senden an Agenten"
 
 msgid "Set as Default"
-msgstr ""
+msgstr "als Default setzen"
 
 msgid "Set Email Header"
 msgstr "E-Mail-Header setzen"
@@ -4743,10 +4743,10 @@ msgid "Set Value"
 msgstr "Wert setzen"
 
 msgid "Shared Search"
-msgstr ""
+msgstr "Geteilte Suche"
 
 msgid "Share_Search_Template"
-msgstr ""
+msgstr "Suchvorlage teilen"
 
 msgid "Show all"
 msgstr "Alles anzeigen"
@@ -5193,7 +5193,7 @@ msgid "Ticket unlocked."
 msgstr "Ticket entsperrt."
 
 msgid "Till"
-msgstr ""
+msgstr "Bis"
 
 msgid "Time"
 msgstr "Zeit"
