@@ -20,6 +20,7 @@ import { IContextListener } from '../../../../../base-components/webapp/core/ICo
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { KIXModulesService } from '../../../../../base-components/webapp/core/KIXModulesService';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
+import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { Article } from '../../../../model/Article';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { TicketDetailsContext, TicketService } from '../../../core';
@@ -65,6 +66,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.prepareObserver();
 
         this.state.unseen = this.state.article.Unseen;
+        this.state.switchAttachmentListTooltip = await TranslationService.translate('Translatable#Switch attachment list layout');
 
         this.contextListenerId = IdService.generateDateBasedId('message-content-' + this.article?.ArticleID);
         this.contextListener = {

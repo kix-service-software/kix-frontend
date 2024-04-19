@@ -196,20 +196,36 @@
          .attachments-control {
             display: grid;
 
-            .attachments-list {
+            .attachments-list-container {
                margin-top: 1rem;
-               padding: 0.5rem;
                background-color: fade(#777, 8%);
                border-radius: @border-radius;
+               display: grid;
+               grid-template-columns: auto min-content;
 
-               &:not(.one-column-layout) {
-                  display: grid;
-                  column-gap: 0.75rem;
-                  grid-template-columns: repeat(auto-fit, minmax(15rem, 0fr));
+               .attachments-list {
+                  padding: 0.5rem;
+
+                  &:not(.one-column-layout) {
+                     display: grid;
+                     column-gap: 0.75rem;
+                     grid-template-columns: repeat(auto-fit, minmax(15rem, 0fr));
+                  }
+
+                  &.one-column-layout div.attachment {
+                     max-width: fit-content;
+                  }
                }
 
-               &.one-column-layout div.attachment {
-                  max-width: fit-content;
+               .attachment-list-layout-switch {
+                  justify-self: end;
+                  font-size: 1.125rem;
+                  margin-top: 0.35rem;
+                  margin-right: 0.35rem;
+
+                  span {
+                     cursor: pointer;
+                  }
                }
             }
 
