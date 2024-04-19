@@ -4931,6 +4931,9 @@ msgstr "Sonntag"
 msgid "Superuser Account"
 msgstr "Nutzer Superuser"
 
+msgid "Switch attachment list layout"
+msgstr ""
+
 msgid "switch_column_order_action"
 msgstr "Tauschen"
 

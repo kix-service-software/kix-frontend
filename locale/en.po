@@ -4723,6 +4723,9 @@ msgstr ""
 msgid "Superuser Account"
 msgstr ""
 
+msgid "Switch attachment list layout"
+msgstr ""
+
 msgid "switch_column_order_action"
 msgstr "Switch"
 
