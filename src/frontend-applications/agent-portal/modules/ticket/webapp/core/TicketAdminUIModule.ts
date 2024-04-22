@@ -29,6 +29,7 @@ import { QueueDuplicateAction } from './admin';
 import { UIModule as TicketReadUIModule } from './TicketReadUIModule';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { QueueDeleteAction } from './admin/actions/ticket-queue/QueueDeleteAction';
 
 export class UIModule extends TicketReadUIModule {
 
@@ -153,6 +154,7 @@ export class UIModule extends TicketReadUIModule {
     private async registerTicketQueuesAdmin(): Promise<void> {
 
         ActionFactory.getInstance().registerAction('ticket-admin-queue-create', TicketQueueCreateAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-queue-delete', QueueDeleteAction);
 
         const newQueueContext = new ContextDescriptor(
             NewQueueDialogContext.CONTEXT_ID, [KIXObjectType.QUEUE],
