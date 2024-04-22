@@ -47,6 +47,7 @@ export class FileRouter extends KIXRouter {
                 const token: string = req.cookies.token;
                 const crypto = require('crypto');
                 const md5 = crypto.createHash('md5').update(token).digest('hex');
+                file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8');
                 cb(null, `${md5}-${file.originalname}`, cb);
             }
         });
