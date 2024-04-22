@@ -20,7 +20,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: States',
             [
-                'ticket-admin-state-create', 'csv-export-action'
+                'ticket-admin-state-create', 'csv-export-action', 'ticket-admin-state-delete'
             ], null,
             new TableWidgetConfiguration(
                 null, null, null,

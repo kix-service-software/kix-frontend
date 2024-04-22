@@ -89,6 +89,7 @@ export class UIModule extends TicketReadUIModule {
     private async registerTicketStatesAdmin(): Promise<void> {
 
         ActionFactory.getInstance().registerAction('ticket-admin-state-create', TicketStateCreateAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-state-delete', TicketStateTableDeleteAction);
 
         const newTicketStateContext = new ContextDescriptor(
             NewTicketStateDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
