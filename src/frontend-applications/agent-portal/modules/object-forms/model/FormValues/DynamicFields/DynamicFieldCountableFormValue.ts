@@ -104,14 +104,25 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
         if (force) {
+            this.clearFormValues();
+
             this.value = value;
-            this.formValues = [];
+
             if (this.initialized) {
                 await this.initCountValues();
             }
         } else {
             super.setFormValue(value, force);
         }
+    }
+
+    protected clearFormValues(): void {
+        for (const formValue of this.formValues) {
+            formValue.destroy();
+        }
+
+        this.dfValues = [];
+        this.formValues = [];
     }
 
     public async initCountValues(): Promise<void> {
