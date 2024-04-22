@@ -28,6 +28,7 @@ import { ServerExtensions } from './model/ServerExtensions';
 import { IFrontendServerExtension } from './model/IFrontendServerExtension';
 import { ServerManager } from './ServerManager';
 import { ClientNotificationService } from '../frontend-applications/agent-portal/server/services/ClientNotificationService';
+import { FileService } from '../frontend-applications/agent-portal/modules/file/server/FileService';
 
 const path = require('path');
 
@@ -38,6 +39,8 @@ async function initializeServer(): Promise<void> {
     const certDir = path.join(__dirname, '..', '..', 'cert');
     const dataDir = path.join(__dirname, '..', '..', 'data');
     ConfigurationService.getInstance().init(configDir, certDir, dataDir);
+
+    FileService.initialize();
 
     LoggingService.getInstance().info('[SERVER] Start');
 
