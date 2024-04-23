@@ -30,6 +30,8 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
     private initialized: boolean;
 
+    protected field: FormFieldConfiguration;
+
     public constructor(
         public property: string,
         protected object: DynamicFieldValue,
@@ -100,6 +102,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         await super.initFormValueByField(field);
         this.defaultValue = this.value;
         this.formValuesVisible = this.visible;
+        this.field = field;
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
@@ -190,6 +193,11 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
             const fv = new this.formValueConstructor('Value', dfValue, this.objectValueMapper, this, this.dfName);
             fv.parent = this;
+
+            if (this.field) {
+                await fv.initFormValueByField(this.field);
+            }
+
             fv.enabled = this.enabled;
             fv.isSetInBackground = this.isSetInBackground;
             if (!fv.isSetInBackground) {
@@ -206,6 +214,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             (fv as any).IS_COUNTABLE = true;
 
             await fv.initFormValue();
+
             this.formValues = [...this.formValues, fv];
 
             fv.setInitialState();
