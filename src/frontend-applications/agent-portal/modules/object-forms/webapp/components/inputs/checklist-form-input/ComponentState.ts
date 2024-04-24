@@ -9,7 +9,7 @@
 
 import { IdService } from '../../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
-import { CheckListItem } from '../../../../../dynamic-fields/webapp/core/CheckListItem';
+import { CheckListItem } from '../../../../../dynamic-fields/model/CheckListItem';
 
 export class ComponentState extends AbstractComponentState {
 

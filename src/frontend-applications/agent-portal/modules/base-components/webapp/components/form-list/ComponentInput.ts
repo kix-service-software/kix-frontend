@@ -37,4 +37,6 @@ export class ComponentInput {
 
     public canRemoveNode: boolean;
 
+    public expanded: boolean;
+
 }

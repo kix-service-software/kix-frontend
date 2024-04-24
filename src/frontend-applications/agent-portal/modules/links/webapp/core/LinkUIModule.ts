@@ -27,10 +27,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'LinkUIUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public priority: number = 800;
 
     public async register(): Promise<void> {
@@ -52,6 +48,10 @@ export class UIModule implements IUIModule {
             'Translatable#Edit Links', 'kix-icon-link'
         );
         ContextService.getInstance().registerContext(editLinkObjectDialogContext);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

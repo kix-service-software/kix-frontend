@@ -78,6 +78,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
                         setTimeout(() => {
                             this.state.prepared = true;
+                            this.kanban = null;
                             setTimeout(() => {
                                 this.createKanbanBoard();
                             }, 50);

@@ -44,7 +44,7 @@ export class CKEditorConfiguration {
     autoGrow_minHeight: number = 125;
     autoGrow_maxHeight: number = 2000;
     autoGrow_onStartup: boolean = true;
-    extraAllowedContent: string = 'b; h1 h2 h3 ul li; div[type]{*}; img[*]{*}; col[width]; style[*]{*}; *[id](*)';
+    extraAllowedContent: string = 'b; h1 h2 h3 ul li; div[type]{*}; img[*]{*}; col[width]; style[*]{*}; *[id](*); table{background}; tr{font-size};';
     toolbarCanCollapse: boolean = true;
     removeButtons: string = '';
     removePlugins: string = 'pastefromexcel,elementspath';

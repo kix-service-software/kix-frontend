@@ -33,6 +33,7 @@ import { ContextFormManager } from './ContextFormManager';
 import { ContextMode } from './ContextMode';
 import { ContextPreference } from './ContextPreference';
 import { ContextStorageManager } from './ContextStorageManager';
+import { FilterCriteria } from './FilterCriteria';
 import { IdService } from './IdService';
 import { KIXObject } from './kix/KIXObject';
 import { KIXObjectType } from './kix/KIXObjectType';
@@ -66,7 +67,9 @@ export abstract class Context {
 
     public initialized: boolean = false;
 
-    private objectSorts: Map<string, [string, boolean]> = new Map();
+    protected objectSorts: Map<string, [string, boolean]> = new Map();
+
+    private objectFilter: Map<string, FilterCriteria[]> = new Map();
 
     public constructor(
         public descriptor: ContextDescriptor,
@@ -108,15 +111,15 @@ export abstract class Context {
             this.eventSubscriber = {
                 eventSubscriberId: this.instanceId,
                 eventPublished: async (data: any, eventId: string): Promise<void> => {
+                    const reloadObjectList = eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED &&
+                        Array.isArray(data?.widgets) &&
+                        Array.isArray(this.configuration?.tableWidgetInstanceIds);
                     if (this.descriptor.contextMode !== ContextMode.SEARCH) {
                         const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
                             data?.instanceId === this.instanceId;
 
                         const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
                         const objectDelete = eventId === ApplicationEvent.OBJECT_DELETED && data?.objectType;
-                        const reloadObjectList = eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED &&
-                            Array.isArray(data?.widgets) &&
-                            Array.isArray(this.configuration?.tableWidgetInstanceIds);
 
                         TableFactoryService.getInstance().deleteContextTables(
                             this.contextId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
@@ -140,6 +143,8 @@ export abstract class Context {
                         } else if (reloadObjectList) {
                             this.reloadRelevantObjectLists(data.widgets);
                         }
+                    } else if (reloadObjectList) {
+                        this.reloadRelevantObjectLists(data.widgets);
                     }
                 }
             };
@@ -789,10 +794,6 @@ export abstract class Context {
 
         const contextLoadingOptions = this.getContextLoadingOptions(type);
         if (contextLoadingOptions) {
-            if (Array.isArray(contextLoadingOptions.filter)) {
-                loadingOptions.filter.push(...contextLoadingOptions.filter);
-            }
-
             if (Array.isArray(contextLoadingOptions.includes)) {
                 loadingOptions.includes.push(...contextLoadingOptions.includes);
             }
@@ -804,6 +805,11 @@ export abstract class Context {
             if (Array.isArray(contextLoadingOptions.query)) {
                 loadingOptions.query = contextLoadingOptions.query;
             }
+        }
+
+        const contextFilter = this.getFilter(type);
+        if (contextFilter?.length) {
+            loadingOptions.filter.push(...contextFilter);
         }
 
         // if no limit given - e.g. initial call, use configurations, else it will possible
@@ -821,6 +827,9 @@ export abstract class Context {
         if (sortOrder) {
             loadingOptions.sortOrder = sortOrder;
         }
+
+        const additionalIncludes = this.getAdditionalInformation(AdditionalContextInformation.INCLUDES) || [];
+        loadingOptions.includes.push(...additionalIncludes);
     }
 
     public async getPageSize(type: KIXObjectType | string): Promise<number> {
@@ -868,7 +877,7 @@ export abstract class Context {
         return loadingOptions;
     }
 
-    private getContextLoadingOptions(type: string): KIXObjectLoadingOptions {
+    protected getContextLoadingOptions(type: string): KIXObjectLoadingOptions {
         let contextLoadingOptions: KIXObjectLoadingOptions;
 
         if (type && Array.isArray(this.configuration?.loadingOptions)) {
@@ -921,8 +930,45 @@ export abstract class Context {
         return true;
     }
 
+    public supportsBackendFilter(type: string): boolean {
+        return true;
+    }
+
+    public async supportsBackendFilterForProperty(type: string, property: string, dep?: string): Promise<boolean> {
+        return KIXObjectService.isBackendFilterSupportedForProperty(type, property, dep) || false;
+    }
+
     public getCollectionId(): string {
         return;
+    }
+
+    public async setFilterCriteria(
+        type: string, criteria: FilterCriteria[], reload: boolean = true, limit?: number
+    ): Promise<void> {
+        if (type) {
+            if (criteria) {
+                this.objectFilter.set(type, criteria);
+            } else {
+                this.objectFilter.delete(type);
+            }
+            if (reload) {
+                await this.reloadObjectList(type, undefined, limit);
+            }
+        }
+    }
+
+    public getFilter(type: string): FilterCriteria[] {
+        let filter = [];
+        if (this.objectFilter.has(type)) {
+            filter = [...this.objectFilter.get(type)];
+        }
+
+        const contextLoadingOptions = this.getContextLoadingOptions(type);
+        if (contextLoadingOptions?.filter) {
+            filter.push(...contextLoadingOptions.filter);
+        }
+
+        return filter;
     }
 
 }

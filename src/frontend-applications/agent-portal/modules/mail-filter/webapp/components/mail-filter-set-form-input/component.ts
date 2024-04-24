@@ -44,7 +44,8 @@ class Component extends FormInputComponent<any[], ComponentState> {
                 if (await this.state.setManager.hasDefinedValues()) {
                     const values = await this.state.setManager.getEditableValues();
                     values.forEach((v) => {
-                        if (v.property && v.value && v.value) {
+                        // do not check value just use it, validator will reject if necessary
+                        if (v.property) {
                             setValues.push(
                                 new MailFilterSet(
                                     v.property,

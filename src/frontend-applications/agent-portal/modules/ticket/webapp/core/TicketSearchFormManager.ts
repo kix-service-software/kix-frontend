@@ -29,8 +29,6 @@ import { Ticket } from '../../model/Ticket';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
-import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { ConfigItemProperty } from '../../../cmdb/model/ConfigItemProperty';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -102,7 +100,7 @@ export class TicketSearchFormManager extends SearchFormManager {
                     operations = SearchDefinition.getDateTimeOperators();
                     break;
                 case SearchProperty.FULLTEXT:
-                    operations = [SearchOperator.CONTAINS];
+                    operations = [SearchOperator.LIKE];
                     break;
                 default:
                     operations = await super.getOperations(property);
@@ -153,6 +151,8 @@ export class TicketSearchFormManager extends SearchFormManager {
             property === TicketProperty.LOCK_ID
             || property === 'Queue.FollowUpID'
             || property === ArticleProperty.CUSTOMER_VISIBLE
+            || property === TicketProperty.OWNER_OOO
+            || property === TicketProperty.RESPONSIBLE_OOO
         ) {
             return false;
         }
@@ -176,6 +176,8 @@ export class TicketSearchFormManager extends SearchFormManager {
                     nodes = await KIXObjectService.prepareTree(organisations);
                 }
                 break;
+            case TicketProperty.OWNER_OOO:
+            case TicketProperty.RESPONSIBLE_OOO:
             case ArticleProperty.CUSTOMER_VISIBLE:
                 const no = await TranslationService.translate('No');
                 const yes = await TranslationService.translate('Yes');
@@ -234,15 +236,5 @@ export class TicketSearchFormManager extends SearchFormManager {
         }
 
         await super.setValue(newValue, silent);
-    }
-
-    public async prepareLoadingOptions(
-        value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<KIXObjectLoadingOptions> {
-        if (value.property === 'DynamicFields.AffectedServices') {
-            loadingOptions.filter = loadingOptions.filter?.filter(
-                (filter) => filter.property !== ConfigItemProperty.CUR_DEPL_STATE_ID);
-        }
-        return loadingOptions;
     }
 }

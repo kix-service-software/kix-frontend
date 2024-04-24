@@ -46,7 +46,9 @@ export class FAQArticleTableFactory extends TableFactory {
         );
 
         table.setContentProvider(contentProvider);
-        table.setColumnConfiguration(tableConfiguration.tableColumns);
+
+        const tableColumns = super.filterColumns(contextId, tableConfiguration);
+        table.setColumnConfiguration(tableColumns);
 
         return table;
     }
@@ -61,7 +63,7 @@ export class FAQArticleTableFactory extends TableFactory {
                 KIXObjectType.FAQ_ARTICLE, null, null, tableColumns, [], true, false
             );
             defaultRouting = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!tableConfiguration.tableColumns?.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 

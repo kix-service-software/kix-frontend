@@ -46,7 +46,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const formHandler = await context.getFormManager().getObjectFormHandler();
             this.formValue = formHandler?.objectFormValueMapper?.findFormValue('DynamicField.AffectedAsset');
             this.formValueBindingId = this.formValue?.addPropertyBinding(FormValueProperty.VALUE, (value: any) => {
-                this.setStates(value);
+                this.setStates(value?.value);
             });
         }
 

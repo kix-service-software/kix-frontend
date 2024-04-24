@@ -28,5 +28,6 @@ export interface IColumnConfiguration extends IConfiguration {
     translatable: boolean;
     titleTranslatable: boolean;
     useObjectServiceForFilter: boolean;
+    rtl: boolean;
 
 }

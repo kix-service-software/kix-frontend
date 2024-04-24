@@ -488,6 +488,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                 searchCriteria = [...searchCriteria, ...extendedCriteria];
             }
         }
+        searchCriteria = searchCriteria.filter((sC) => sC.property !== 'REMOVE ME');
+
         const dynamicFieldCriteria = criteria.filter(
             // eslint-disable-next-line no-useless-escape
             (c) => c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))

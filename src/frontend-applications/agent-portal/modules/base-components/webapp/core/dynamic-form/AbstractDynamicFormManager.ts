@@ -302,9 +302,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return null;
     }
 
-    public getSpecificInput(property: string): string {
+    public async getSpecificInput(property: string): Promise<string> {
         for (const extendedManager of this.extendedFormManager) {
-            const result = extendedManager.getSpecificInput(property);
+            const result = await extendedManager.getSpecificInput(property);
             if (result) {
                 return result;
             }

@@ -8,6 +8,7 @@
  */
 
 import { Error } from '../../../../../../../server/model/Error';
+import { ContextMode } from '../../../../../model/ContextMode';
 import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
@@ -25,6 +26,9 @@ import { ValidationResult } from '../../../../../modules/base-components/webapp/
 import { ValidationSeverity } from '../../../../../modules/base-components/webapp/core/ValidationSeverity';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { SearchSocketClient } from '../../../../search/webapp/core';
 import { PersonalSetting } from '../../../model/PersonalSetting';
 import { AgentService } from '../../core/AgentService';
 import { ComponentState } from './ComponentState';
@@ -33,6 +37,7 @@ import { ComponentState } from './ComponentState';
 class Component {
 
     private state: ComponentState;
+    private searchObject: KIXObjectType | string;
 
     public async onCreate(input: any): Promise<void> {
         this.state = new ComponentState(input.instanceId);
@@ -41,7 +46,7 @@ class Component {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject(
-            ['Translatable#Cancel', 'Translatable#Save']
+            ['Translatable#Cancel', 'Translatable#Save', 'Translatable#Reset Search To Default']
         );
 
         await this.prepareForm();
@@ -138,6 +143,33 @@ class Component {
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, content, toastTitle, null, true
         );
+    }
+
+    public async loadSearchObjectNodes(): Promise<TreeNode[]> {
+        const descriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
+        const objectTypes = descriptors
+            .map((d) => d.kixObjectTypes?.length ? d.kixObjectTypes[0] : null)
+            .filter((o) => o);
+
+        const nodes: TreeNode[] = [];
+        for (const ot of objectTypes) {
+            const objectName = await LabelService.getInstance().getObjectName(ot, true);
+            const icon = await LabelService.getInstance().getObjectIconForType(ot);
+            nodes.push(new TreeNode(ot, objectName, icon));
+        }
+        return nodes;
+    }
+
+    public searchObjectChanged(nodes: TreeNode[]): void {
+        this.searchObject = nodes?.length ? nodes[0].id : null;
+    }
+
+    public async resetSearchDefaults(): Promise<void> {
+        await SearchSocketClient.getInstance().deleteUserDefaultSearch(this.searchObject);
+        const message = await TranslationService.translate(
+            'Translatable#Search defaults for {0} reseted.', [this.searchObject]
+        );
+        BrowserUtil.openSuccessOverlay(message);
     }
 }
 

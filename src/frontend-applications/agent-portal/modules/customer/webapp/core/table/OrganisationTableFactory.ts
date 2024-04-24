@@ -22,7 +22,6 @@ import { IColumnConfiguration } from '../../../../../model/configuration/IColumn
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { SearchCache } from '../../../../search/model/SearchCache';
 import { OrganisationDetailsContext } from '../context/OrganisationDetailsContext';
-import { DataType } from '../../../../../model/DataType';
 
 export class OrganisationTableFactory extends TableFactory {
 
@@ -54,7 +53,7 @@ export class OrganisationTableFactory extends TableFactory {
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
             defaultRouting = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!tableConfiguration.tableColumns?.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 

@@ -62,6 +62,14 @@ export class ExtendedDynamicFieldPlaceholderHandler implements IPlaceholderHandl
         return null;
     }
 
+    public async handleObjectValue(object: KIXObject, dfOptions: string = '', dfValue: DynamicFieldValue): Promise<string> {
+        return null;
+    }
+
+    public async handleObject(object: KIXObject, dfOptions: string = '', dfValue: DynamicFieldValue): Promise<string> {
+        return null;
+    }
+
     public getChecklistStringValue(dfValue: DynamicFieldValue): string {
         return null;
     }

@@ -23,15 +23,15 @@ export class UIModule implements IUIModule {
 
     public name: string = 'ArticleCreateUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ObjectFormRegistry.getInstance().registerObjectFormValueValidator(EmailRecipientValidator);
         TicketFormService.getInstance();
 
         this.registerTicketActions();
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 

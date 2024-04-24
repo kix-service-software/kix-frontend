@@ -15,6 +15,7 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { ObjectReferenceLabelProvider } from '../../../base-components/webapp/core/ObjectReferenceLabelProvider';
 import { DynamicFieldType } from '../../../dynamic-fields/model/DynamicFieldType';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
+import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { ConfigItem } from '../../model/ConfigItem';
 import { ConfigItemProperty } from '../../model/ConfigItemProperty';
@@ -48,5 +49,11 @@ export class ConfigItemReferenceLabelProvider extends ObjectReferenceLabelProvid
             objectIcon = 'kix-icon-ci';
         }
         return objectIcon;
+    }
+
+    public createLabelsFromDFValue(dfValue: DynamicFieldValue): Promise<Label[]> {
+        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CONFIG_ITEM);
+        const labels = labelProvider?.createLabelsFromDFValue(dfValue);
+        return labels;
     }
 }

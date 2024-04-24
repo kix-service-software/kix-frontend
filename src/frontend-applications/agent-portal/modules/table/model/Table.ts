@@ -45,6 +45,7 @@ import { ContextMode } from '../../../model/ContextMode';
 import { SearchCache } from '../../search/model/SearchCache';
 import { DataType } from '../../../model/DataType';
 import { IdService } from '../../../model/IdService';
+import { DefaultDepColumnConfiguration } from './DefaultDepColumnConfiguration';
 
 export class Table implements Table {
 
@@ -197,28 +198,11 @@ export class Table implements Table {
 
             await this.prepareAdditionalSearchColumns();
 
-            // get sort by state or by context or from configured column
-            const hasSortByTableState = this.hasSortByTableState();
-            if (hasSortByTableState) {
-                const column = this.getColumn(this.sortColumnId);
-                if (column) {
-                    column.setSortOrder(this.sortOrder);
-                }
-            } else if (this.contextId) {
-                await this.setSortByContext();
-            }
+            // set sort for backend handling (before loadRowData)
+            await this.initSort();
 
-            if (!this.sortColumnId) {
-                const sortColumn = this.columns.find((c) => c.getSortOrder());
-                if (sortColumn) {
-                    this.sortColumnId = sortColumn.getColumnConfiguration().property;
-                    this.sortOrder = sortColumn.getSortOrder();
-                }
-            }
-
-            if (this.sortColumnId && this.sortOrder) {
-                await this.getContentProvider().setSort(this.sortColumnId, this.sortOrder, false);
-            }
+            // set filter for backend handling (before loadRowData)
+            const filtered = await this.initFilter();
 
             await this.loadRowData();
 
@@ -232,12 +216,13 @@ export class Table implements Table {
 
             await this.initDisplayRows();
 
-            // sort in frontend if data is not already sorted
-            if (this.sortColumnId && this.sortOrder && !this.getContentProvider()?.isBackendSortSupported()) {
+            // sort in frontend if loaded data is not already sorted
+            if (this.sortColumnId && this.sortOrder && !this.isBackendSortSupported()) {
                 await this.sort(this.sortColumnId, this.sortOrder, true);
             }
 
-            if (this.filterValue || this.filterCriteria?.length || this.columns.some((c) => c.isFiltered())) {
+            // filter in frontend if loaded data is not already filtered
+            if (filtered && !this.isBackendFilterSupported()) {
                 await this.filter(true);
             }
 
@@ -313,6 +298,43 @@ export class Table implements Table {
             const columns = await searchDefinition.getTableColumnConfiguration(parameter);
             await this.addAdditionalColumns(columns);
         }
+    }
+
+    private async initSort(): Promise<void> {
+
+        // get sort by state or by context or from configured column
+        const hasSortByTableState = this.hasSortByTableState();
+        if (hasSortByTableState) {
+            const column = this.getColumn(this.sortColumnId);
+            if (column) {
+                column.setSortOrder(this.sortOrder);
+            }
+        } else if (this.contextId) {
+            await this.setSortByContext();
+        }
+
+        if (!this.sortColumnId) {
+            const sortColumn = this.columns.find((c) => c.getSortOrder());
+            if (sortColumn) {
+                this.sortColumnId = sortColumn.getColumnConfiguration().property;
+                this.sortOrder = sortColumn.getSortOrder();
+            }
+        }
+
+        if (this.sortColumnId && this.sortOrder && this.isBackendSortSupported() && !this.hasAdditionalHandler()) {
+            await this.getContentProvider().setSort(this.sortColumnId, this.sortOrder, false);
+        }
+    }
+
+    private async initFilter(): Promise<boolean> {
+        const filtered = this.filterValue || this.filterCriteria?.length ||
+            this.columns.some((c) => c.isFiltered());
+
+        if (filtered && this.isBackendFilterSupported() && !this.hasAdditionalHandler()) {
+            const criteria: FilterCriteria[] = await this.prepareBackendFilterCriteria();
+            await this.getContentProvider().setFilter(criteria, false);
+        }
+        return Boolean(filtered);
     }
 
     private toggleFirstRow(): void {
@@ -426,9 +448,14 @@ export class Table implements Table {
         }
 
         if (canCreate) {
-            if (columnConfiguration.sortable && this.getContentProvider()?.isBackendSortSupported()) {
+            if (columnConfiguration.sortable && this.isBackendSortSupported()) {
                 columnConfiguration.sortable = await this.getContentProvider()?.isBackendSortSupportedForProperty(
-                    columnConfiguration.property
+                    columnConfiguration.property, (columnConfiguration as DefaultDepColumnConfiguration).dep
+                );
+            }
+            if (columnConfiguration.filterable && this.isBackendFilterSupported()) {
+                columnConfiguration.filterable = await this.getContentProvider()?.isBackendFilterSupportedForProperty(
+                    columnConfiguration.property, (columnConfiguration as DefaultDepColumnConfiguration).dep
                 );
             }
             column = new Column(this, columnConfiguration);
@@ -644,24 +671,35 @@ export class Table implements Table {
     }
 
     public async filter(silent?: boolean): Promise<void> {
-        if (this.isFilterDefined(this.filterValue, this.filterCriteria)) {
-            this.filteredRows = [];
-            const rows = [...this.rows];
-            for (const row of rows) {
-                const match = await row.filter(this.filterValue, this.filterCriteria);
-                if (match) {
-                    this.filteredRows.push(row);
+        if (this.isBackendFilterSupported() && !this.hasAdditionalHandler()) {
+            EventService.getInstance().publish(
+                TableEvent.TABLE_WAITING_START, new TableEventData(this.getTableId())
+            );
+            const criteria: FilterCriteria[] = await this.prepareBackendFilterCriteria();
+            await this.getContentProvider().setFilter(criteria);
+            EventService.getInstance().publish(
+                TableEvent.TABLE_WAITING_END, new TableEventData(this.getTableId())
+            );
+        } else {
+            if (this.isFilterDefined(this.filterValue, this.filterCriteria)) {
+                this.filteredRows = [];
+                const rows = [...this.rows];
+                for (const row of rows) {
+                    const match = await row.filter(this.filterValue, this.filterCriteria);
+                    if (match) {
+                        this.filteredRows.push(row);
+                    }
+                }
+            } else {
+                this.filteredRows = null;
+                for (const row of this.rows) {
+                    await row.filter(null, null);
                 }
             }
-        } else {
-            this.filteredRows = null;
-            for (const row of this.rows) {
-                await row.filter(null, null);
-            }
+
+            await this.filterColumns();
+
         }
-
-        await this.filterColumns();
-
         EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
         EventService.getInstance().publish(TableEvent.TABLE_FILTERED, new TableEventData(this.getTableId()));
     }
@@ -691,6 +729,62 @@ export class Table implements Table {
         return (value && value !== '') || (criteria && criteria.length !== 0);
     }
 
+    private async prepareBackendFilterCriteria(): Promise<FilterCriteria[]> {
+        const criteria: FilterCriteria[] = [];
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(this.getObjectType());
+        if (this.filterValue) {
+            if (service) {
+                const fulltextFilter = await service.prepareFullTextFilter(this.filterValue);
+                if (fulltextFilter) {
+                    criteria.push(...fulltextFilter);
+                }
+            }
+        }
+        if (this.filterCriteria) {
+            criteria.push(...this.filterCriteria.map(
+                (c) => new FilterCriteria(c.property, c.operator, undefined, FilterType.AND, c.value)
+            ));
+        }
+        for (const column of this.getColumns()) {
+            const filter: [string, UIFilterCriterion[]] = column.getFilter();
+            if (this.isFilterDefined(filter[0], filter[1])) {
+                if (filter[0]) {
+                    let property = column.getColumnId();
+                    // switch to "real" search property if needed (e.g. TypeID => Type)
+                    if (service) {
+                        property = await service.getFilterAttribute(
+                            property,
+                            (column.getColumnConfiguration() as DefaultDepColumnConfiguration).dep
+                        );
+                    }
+                    criteria.push(new FilterCriteria(
+                        property, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, filter[0]
+                    ));
+                }
+                if (filter[1]) {
+                    const criteriaPromises = [];
+                    filter[1].forEach((c) => {
+                        criteriaPromises.push(
+                            new Promise(async (resolve) => {
+                                // switch to "real" search property if needed
+                                let property = c.property;
+                                if (service) {
+                                    property = await service.getFilterAttribute(
+                                        property,
+                                        (column.getColumnConfiguration() as DefaultDepColumnConfiguration).dep
+                                    );
+                                }
+                                resolve(new FilterCriteria(property, c.operator, undefined, FilterType.AND, c.value));
+                            })
+                        );
+                    });
+                    criteria.push(...await Promise.all(criteriaPromises));
+                };
+            }
+        }
+        return criteria;
+    }
+
     public async setSort(columnId: string, sortOrder: SortOrder): Promise<void> {
         if (this.sortColumnId !== columnId || this.sortOrder !== sortOrder) {
             this.sortColumnId = columnId;
@@ -709,7 +803,7 @@ export class Table implements Table {
         this.setSort(columnId, sortOrder);
 
         // with handler a combined request is not supported now, so use "frontend sort"
-        if (this.getContentProvider()?.isBackendSortSupported() && !this.hasAdditionalHandler()) {
+        if (this.isBackendSortSupported() && !this.hasAdditionalHandler()) {
             EventService.getInstance().publish(
                 TableEvent.TABLE_WAITING_START, new TableEventData(this.getTableId(), null, columnId)
             );
@@ -860,13 +954,17 @@ export class Table implements Table {
             }
 
             if (
-                (!this.getContentProvider()?.isBackendSortSupported() || this.hasAdditionalHandler()) &&
+                (!this.isBackendSortSupported() || this.hasAdditionalHandler()) &&
                 sort && this.sortColumnId && this.sortOrder
             ) {
                 await this.sort(this.sortColumnId, this.sortOrder);
             }
 
-            if (this.isFiltered()) {
+            // prevent reload loop if backend filtering is used
+            if (
+                (!this.isBackendFilterSupported() || this.hasAdditionalHandler()) &&
+                this.isFiltered()
+            ) {
                 this.filter();
             }
 
@@ -892,9 +990,15 @@ export class Table implements Table {
         EventService.getInstance().publish(TableEvent.RERENDER_TABLE, new TableEventData(this.getTableId()));
     }
 
-    public resetFilter(): void {
+    public resetFilter(doFilter?: boolean): void {
         this.setFilter(null, null);
-        this.getColumns().forEach((c) => c.filter(null, null));
+        this.getColumns().forEach((c) => c.filter(null, null, false));
+        if (this.isBackendFilterSupported() && !this.hasAdditionalHandler()) {
+            // filter if necessary else prevent it, but set it anyway
+            this.getContentProvider().setFilter(null, doFilter || false);
+        } else if (doFilter) {
+            this.filter();
+        }
     }
 
     public isFiltered(): boolean {
@@ -971,11 +1075,21 @@ export class Table implements Table {
         EventService.getInstance().publish(
             TableEvent.TABLE_WAITING_START, new TableEventData(this.getTableId())
         );
-        this.resetFilter();
+        if (!this.isBackendFilterSupported()) {
+            this.resetFilter();
+        }
         await this.contentProvider.loadMore();
         EventService.getInstance().publish(
             TableEvent.TABLE_WAITING_END, new TableEventData(this.getTableId())
         );
+    }
+
+    public isBackendSortSupported(): boolean {
+        return this.getContentProvider()?.isBackendSortSupported();
+    }
+
+    public isBackendFilterSupported(): boolean {
+        return this.getContentProvider()?.isBackendFilterSupported();
     }
 
 }

@@ -23,6 +23,7 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextPreference } from '../../../../../model/ContextPreference';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class FAQContext extends Context {
 
@@ -87,6 +88,8 @@ export class FAQContext extends Context {
         if (isStored) {
             ContextService.getInstance().updateStorage(this.instanceId);
         }
+
+        this.setAdditionalInformation(AdditionalContextInformation.OBJECT_DEPENDENCY, this.categoryId);
     }
 
     private async loadFAQArticles(limit?: number): Promise<void> {
@@ -137,6 +140,14 @@ export class FAQContext extends Context {
     public async loadAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
         super.loadAdditionalInformation(contextPreference);
         this.categoryId = contextPreference['CATEGORY_ID'];
+    }
+
+    public getAdditionalInformation(key: string): any {
+        if (key === AdditionalContextInformation.OBJECT_DEPENDENCY) {
+            return this.categoryId;
+        }
+
+        return super.getAdditionalInformation(key);
     }
 
 }

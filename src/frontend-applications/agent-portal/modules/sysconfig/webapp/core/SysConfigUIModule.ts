@@ -33,10 +33,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'SysconfigUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public priority: number = 100;
 
     public async register(): Promise<void> {
@@ -65,6 +61,10 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('activate-configuration', ReloadConfigurationCacheAction);
 
         PlaceholderService.getInstance().registerPlaceholderHandler(new SysConfigPlaceholderHandler());
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

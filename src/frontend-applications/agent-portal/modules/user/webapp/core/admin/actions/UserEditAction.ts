@@ -43,7 +43,8 @@ export class UserEditAction extends AbstractAction {
             if (userId) {
                 const contactId = await this.getContactId(userId);
                 const additionalInformation: Array<[string, any]> = [
-                    ['CONTACT_ID', contactId]
+                    ['CONTACT_ID', contactId],
+                    ['USE_SOURCE_CONTEXT', true]
                 ];
                 await ContextService.getInstance().setActiveContext(
                     EditContactDialogContext.CONTEXT_ID, contactId, null, additionalInformation

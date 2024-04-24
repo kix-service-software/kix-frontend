@@ -48,6 +48,9 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { HTTPResponse } from '../../../server/services/HTTPResponse';
 import { GeneralCatalogService } from '../../general-catalog/server/GeneralCatalogService';
+import { FileService } from '../../file/server/FileService';
+import { Attachment } from '../../../model/kix/Attachment';
+import { UserService } from '../../user/server/UserService';
 
 
 export class CMDBAPIService extends KIXObjectAPIService {
@@ -253,10 +256,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
         let attachments: ConfigItemAttachment[] = [];
 
-        if (
-            attachmentIds && attachmentIds.length &&
-            objectLoadingOptions.configItemId && objectLoadingOptions.versionId
-        ) {
+        if (attachmentIds?.length && objectLoadingOptions.configItemId && objectLoadingOptions.versionId) {
             const subResource = this.buildUri(
                 'configitems', objectLoadingOptions.configItemId,
                 'versions', objectLoadingOptions.versionId,
@@ -281,7 +281,18 @@ export class CMDBAPIService extends KIXObjectAPIService {
             }
         }
 
-        return attachments.map((a) => new ConfigItemAttachment(a));
+        if (objectLoadingOptions.asDownload) {
+            const preparedAttachments: ConfigItemAttachment[] = [];
+            const user = await UserService.getInstance().getUserByToken(token);
+            for (const a of attachments) {
+                const attachment = new ConfigItemAttachment(a);
+                FileService.prepareFileForDownload(user?.UserID, attachment);
+                preparedAttachments.push(attachment);
+            }
+            attachments = preparedAttachments;
+        }
+
+        return attachments;
     }
 
     public async createObject(
@@ -341,6 +352,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
             return c.property !== ConfigItemProperty.NUMBER &&
                 c.property !== ConfigItemProperty.NAME &&
                 c.property !== ConfigItemProperty.CLASS_ID &&
+                c.property !== ConfigItemProperty.CLASS &&
                 c.property !== 'InciStateIDs' &&
                 c.property !== 'DeplStateIDs' &&
                 c.property !== ConfigItemProperty.CUR_DEPL_STATE_ID &&
@@ -351,49 +363,41 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 c.property !== ConfigItemProperty.ASSIGNED_CONTACT &&
                 c.property !== ConfigItemProperty.ASSIGNED_ORGANISATION &&
                 c.property !== ConfigItemProperty.PREVIOUS_VERSION_SEARCH &&
-                c.property !== 'ID';
+                c.property !== 'ID' &&
+                c.property !== KIXObjectProperty.CHANGE_BY &&
+                c.property !== KIXObjectProperty.CREATE_BY;
         });
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
-        if (primary) {
-            const primarySearch = [
-                new FilterCriteria(
-                    ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
-                ),
-            ];
-            criteria = [...criteria, ...primarySearch];
-        }
-
-        const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
-        if (fulltext) {
-            const fulltextSearch = [
-                new FilterCriteria(
-                    ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, `*${fulltext.value}*`
-                ),
-                new FilterCriteria(
-                    ConfigItemProperty.NAME, SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, `*${fulltext.value}*`
-                )
-            ];
-            criteria = [...criteria, ...fulltextSearch];
-        }
-
-        // add class id search if class filter is given to consider limit in core search
-        const classFilter = criteria.find((f) => f.property === ConfigItemProperty.CLASS);
-        if (classFilter && classFilter.value) {
-            const classIds = await this.getClassIds(token, classFilter);
-            if (classIds.length) {
-                criteria.push(
+        const primary = criteria.filter((f) => f.property === SearchProperty.PRIMARY);
+        if (primary?.length) {
+            primary.forEach((c) => {
+                const primarySearch = [
                     new FilterCriteria(
-                        ConfigItemProperty.CLASS_ID, SearchOperator.IN,
-                        FilterDataType.NUMERIC, classFilter.filterType, classIds
+                        ConfigItemProperty.NUMBER, SearchOperator.LIKE,
+                        FilterDataType.STRING, FilterType.OR, `${c.value}`
+                    ),
+                ];
+                criteria = [...criteria, ...primarySearch];
+            });
+        }
+
+        const fulltext = criteria.filter((f) => f.property === SearchProperty.FULLTEXT);
+        if (fulltext?.length) {
+            fulltext.forEach((c) => {
+                const fulltextSearch = [
+                    new FilterCriteria(
+                        ConfigItemProperty.NUMBER, SearchOperator.LIKE,
+                        FilterDataType.STRING, FilterType.OR, `*${c.value}*`
+                    ),
+                    new FilterCriteria(
+                        ConfigItemProperty.NAME, SearchOperator.LIKE,
+                        FilterDataType.STRING, FilterType.OR, `*${c.value}*`
                     )
-                );
-            }
+                ];
+                criteria = [...criteria, ...fulltextSearch];
+            });
         }
 
         const newCriteria = criteria.filter((c) =>
@@ -405,13 +409,16 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property === ConfigItemProperty.CUR_DEPL_STATE_ID ||
             c.property === ConfigItemProperty.CUR_INCI_STATE_ID ||
             c.property === ConfigItemProperty.CLASS_ID ||
+            c.property === ConfigItemProperty.CLASS ||
             c.property === 'ClassIDs' ||
             c.property.startsWith('Data') ||
             c.property.startsWith('CurrentVersion') ||
             c.property === ConfigItemProperty.ASSIGNED_CONTACT ||
             c.property === ConfigItemProperty.ASSIGNED_ORGANISATION ||
             c.property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH ||
-            c.property === 'ID'
+            c.property === 'ID' ||
+            c.property === KIXObjectProperty.CHANGE_BY ||
+            c.property === KIXObjectProperty.CREATE_BY
         );
 
         for (const searchCriteria of newCriteria) {
@@ -443,29 +450,5 @@ export class CMDBAPIService extends KIXObjectAPIService {
             }
         }
         return newCriteria;
-    }
-
-    private async getClassIds(token: string, classFilter: FilterCriteria): Promise<number[]> {
-        const classIds = [];
-        const classNames = Array.isArray(classFilter.value) ? classFilter.value : [classFilter.value];
-        if (classNames.length) {
-            const service = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.CONFIG_ITEM_CLASS);
-            if (service) {
-                const objectResponse = await service.loadObjects(
-                    token, null, KIXObjectType.CONFIG_ITEM_CLASS, null, null, null
-                ).catch(() => new ObjectResponse<ConfigItemClass>());
-
-                const classes = objectResponse?.objects || [];
-                if (classes.length) {
-                    classNames.forEach((cn) => {
-                        const relevantClass = classes.find((c) => c.Name === cn);
-                        if (relevantClass) {
-                            classIds.push(relevantClass.ID);
-                        }
-                    });
-                }
-            }
-        }
-        return classIds;
     }
 }

@@ -123,7 +123,7 @@ class Component {
                     new ObjectPropertyValue(
                         v.property, v.operator, v.value, v.options, v.required, v.valid,
                         v.objectType, v.readonly, v.changeable, v.id, v.additionalOptions,
-                        v.validErrorMessages, v.hint
+                        v.validErrorMessages, v.hint, v.locked
                     ),
                     v.id
                 );
@@ -189,7 +189,7 @@ class Component {
     }
 
     public dateValueChanged(value: DynamicFormFieldValue, event: any): void {
-        this.timoutTimer.restartTimer(() => this.setDateValue(value, event));
+        this.timoutTimer.restartTimer(() => this.setDateValue(value, event), 1200);
     }
 
     private setDateValue(value: DynamicFormFieldValue, event: any): void {
@@ -199,9 +199,12 @@ class Component {
     }
 
     public setTimeValue(value: DynamicFormFieldValue, event: any): void {
-        const newValue = event.target.value;
-        value.setTimeValue(newValue);
-        this.provideValue(value);
+        this.timoutTimer.restartTimer(() => {
+            const newValue = event.target.value;
+            value.setTimeValue(newValue);
+            this.provideValue(value);
+        }, 1200);
+
     }
 
     public setRelativeTimeValue(value: DynamicFormFieldValue, event: any): void {
@@ -247,7 +250,11 @@ class Component {
         this.provideValue(value);
     }
 
-    public setBetweenEndDateValue(value: DynamicFormFieldValue, event: any): void {
+    public betweenDateValueChanged(value: DynamicFormFieldValue, event: any): void {
+        this.timoutTimer.restartTimer(() => this.setBetweenEndDateValue(value, event), 1200);
+    }
+
+    private setBetweenEndDateValue(value: DynamicFormFieldValue, event: any): void {
         const date = event.target.value;
         value.setBetweenEndDateValue(date);
         this.provideValue(value);

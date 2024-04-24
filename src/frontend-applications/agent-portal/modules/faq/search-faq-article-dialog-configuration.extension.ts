@@ -21,6 +21,10 @@ import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { TableConfiguration } from '../../model/configuration/TableConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -31,9 +35,38 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
 
+        const tableConfig = new TableConfiguration(
+            'faq-search-article-table', 'FAQ Article Search Table', ConfigurationType.Table, KIXObjectType.FAQ_ARTICLE
+        );
+
+        const tableWidget = new TableWidgetConfiguration(
+            'faq-search-article-table-widget', 'FAQ Article Search Table Widget', ConfigurationType.TableWidget,
+            KIXObjectType.FAQ_ARTICLE, null, null, tableConfig
+        );
+        tableWidget.showFilter = false;
+
+        const articleListWidget = new WidgetConfiguration(
+            'faq-search-article-widget', 'FAQ Article Search Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Search Results: FAQ', ['csv-export-action'],
+            null, tableWidget, false, false, 'kix-icon-faq', true
+        );
+
         configurations.push(
             new ContextConfiguration(
-                this.getModuleId(), 'FAQ Search', ConfigurationType.Context, this.getModuleId(), [], []
+                this.getModuleId(), 'FAQ Search', ConfigurationType.Context, this.getModuleId(),
+                [], [], [],
+                [
+                    new ConfiguredWidget(
+                        'search-criteria-widget', null, new WidgetConfiguration(
+                            'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
+                            'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
+                        )
+                    ),
+                    new ConfiguredWidget('faq-search-article-widget', null, articleListWidget)
+                ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                [
+                    [KIXObjectType.FAQ_ARTICLE, 'faq-search-article-widget']
+                ]
             )
         );
 

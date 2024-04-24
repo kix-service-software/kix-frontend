@@ -7,21 +7,14 @@
  * --
  */
 
-import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
-import { IdService } from '../../../../../model/IdService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
-import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 export class ComponentState extends AbstractComponentState {
     public constructor(
-        public componentKey: string = IdService.generateDateBasedId(),
-        public instanceId: string = IdService.generateDateBasedId('search-widget'),
-        public title: string = '',
-        public icon: string | ObjectIcon = null,
-        public configuration: WidgetConfiguration = null,
-        public objectType: KIXObjectType | string = null,
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public contentWidgets: ConfiguredWidget[] = [],
+        public title: string = ''
     ) {
         super();
     }

@@ -9,18 +9,20 @@
 
 import { TreeNodeProperty } from './TreeNodeProperty';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { OverlayIcon } from '../OverlayIcon';
 
 export class TreeNode {
+    LabelService: any;
     public constructor(
         public id: any = null,
         public label: string = null,
         public icon: string | ObjectIcon = null,
         public secondaryIcon: string | ObjectIcon = null,
-        public children?: TreeNode[],
+        public children: TreeNode[] = [],
         public parent?: TreeNode,
         public nextNode?: TreeNode,
         public previousNode?: TreeNode,
-        public properties?: TreeNodeProperty[],
+        public properties: TreeNodeProperty[] = [],
         public expanded: boolean = false,
         public visible: boolean = true,
         public expandOnClick: boolean = false,
@@ -29,6 +31,8 @@ export class TreeNode {
         public flags: string[] = [],
         public navigationNode: boolean = false,
         public selected: boolean = false,
-        public showAsInvalid: boolean = !selectable
+        public showAsInvalid: boolean = !selectable,
+        public rank: Number = null,
+        public overlay: OverlayIcon = null
     ) { }
 }

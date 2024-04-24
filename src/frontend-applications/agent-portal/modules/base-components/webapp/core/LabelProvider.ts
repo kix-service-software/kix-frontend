@@ -25,6 +25,7 @@ import { DynamicFieldFormUtil } from './DynamicFieldFormUtil';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { ExtendedLabelProvider } from './ExtendedLabelProvider';
 import { Label } from './Label';
+import { OverlayIcon } from './OverlayIcon';
 
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 
@@ -424,4 +425,13 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return null;
     }
 
+    public async getOverlayIcon(object?: T, objectId?: number, property?: string): Promise<OverlayIcon> {
+        return null;
+    }
+
+    public async getOverlayIconForType(
+        objectType: KIXObjectType | string, objectId: number, propert?: string, object?: T
+    ): Promise<OverlayIcon> {
+        return null;
+    }
 }

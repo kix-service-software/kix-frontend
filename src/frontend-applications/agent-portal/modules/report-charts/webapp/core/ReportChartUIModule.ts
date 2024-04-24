@@ -21,8 +21,8 @@ export class UIModule implements IUIModule {
         ChartWidgetService.getInstance().registerChartDataMapper('CSV', new CSVChartDataMapper());
     }
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

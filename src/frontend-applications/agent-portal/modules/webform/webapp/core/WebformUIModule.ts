@@ -28,10 +28,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'WebformUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public priority: number = 9999;
 
     public async register(): Promise<void> {
@@ -70,6 +66,10 @@ export class UIModule implements IUIModule {
 
         FormValidationService.getInstance().registerValidator(new WebformAcceptedDomainsValidator());
         FormService.getInstance().addFormFieldValueHandler(new WebformFormFieldValueHandler());
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

@@ -15,6 +15,6 @@ export interface IUIModule {
 
     register(): Promise<void>;
 
-    unRegister(): Promise<void>;
+    registerExtensions(): Promise<void>;
 
 }

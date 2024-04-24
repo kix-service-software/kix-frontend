@@ -11,6 +11,8 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { Label } from './Label';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { OverlayIcon } from './OverlayIcon';
 
 export interface ILabelProvider<T = any> {
 
@@ -28,7 +30,7 @@ export interface ILabelProvider<T = any> {
 
     getObjectName(plural?: boolean, translatable?: boolean): Promise<string>;
 
-    getPropertyText(property: string, short?: boolean, translatable?: boolean): Promise<string>;
+    getPropertyText(property: string, short?: boolean, translatable?: boolean, object?: KIXObject): Promise<string>;
 
     getExportPropertyText(property: string, useDisplayText?: boolean): Promise<string>;
 
@@ -63,5 +65,11 @@ export interface ILabelProvider<T = any> {
     getDFDisplayValues(fieldValue: DynamicFieldValue, short?: boolean): Promise<[string[], string, string[]]>;
 
     createLabelsFromDFValue(fieldValue: DynamicFieldValue): Promise<Label[]>;
+
+    getOverlayIcon(object?: T, objectId?: number, property?: string): Promise<OverlayIcon>;
+
+    getOverlayIconForType(
+        objectType: KIXObjectType | string, objectId: number, property?: string, object?: T
+    ): Promise<OverlayIcon>;
 
 }

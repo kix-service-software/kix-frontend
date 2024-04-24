@@ -104,7 +104,7 @@ export class ContactSearchFormManager extends SearchFormManager {
                     operations = [SearchOperator.IN];
                     break;
                 case SearchProperty.FULLTEXT:
-                    operations = [SearchOperator.CONTAINS];
+                    operations = [SearchOperator.LIKE];
                     break;
                 default:
                     operations = await super.getOperations(property);

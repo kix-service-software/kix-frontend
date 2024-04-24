@@ -22,6 +22,8 @@ import { Column } from '../../../model/Column';
 import { Row } from '../../../model/Row';
 import { Table } from '../../../model/Table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { DefaultDepColumnConfiguration } from '../../../model/DefaultDepColumnConfiguration';
 
 export abstract class TableFactory {
 
@@ -42,6 +44,53 @@ export abstract class TableFactory {
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): Promise<Table>;
+
+    public filterColumns(contextId: string, tableConfiguration: TableConfiguration): IColumnConfiguration[] {
+        let tableColumns: IColumnConfiguration[] = JSON.parse(JSON.stringify(tableConfiguration.tableColumns));
+        this.prepareDepColumns(tableColumns);
+
+        const context = contextId ? ContextService.getInstance().getActiveContext() : null;
+        const dependency = context?.getAdditionalInformation('OBJECT_DEPENDENCY');
+        tableColumns = tableColumns.filter((tc) => {
+            if (tc.property.startsWith('DynamicFields.')) {
+                return true;
+            }
+
+            if (tc instanceof DefaultDepColumnConfiguration) {
+                return Array.isArray(dependency) ?
+                    dependency.some((d) => d.toString() === tc.dep.toString()) :
+                    dependency ?
+                        tc.dep.toString() === dependency.toString() :
+                        false;
+            }
+
+            if (tc.property.indexOf('.') === -1) {
+                return true;
+            }
+
+            return false;
+        });
+
+        return tableColumns;
+    }
+
+    private prepareDepColumns(tableColumns: DefaultColumnConfiguration[]): void {
+        const depColumns: Map<number, DefaultDepColumnConfiguration> = new Map();
+        tableColumns.forEach((tc, index) => {
+            if (tc.property.indexOf('.') !== -1 && !tc.property.startsWith('DynamicFields.')) {
+                const split = tc.property.split('.');
+                const dep = split.splice(0, 1)[0];
+                const depColumn = new DefaultDepColumnConfiguration(tc, dep);
+                depColumn.property = split.join('.');
+                depColumns.set(index, depColumn);
+            }
+        });
+        if (depColumns.size) {
+            depColumns.forEach((depColumn, index) => {
+                tableColumns.splice(index, 1, depColumn);
+            });
+        }
+    }
 
     public getDefaultColumnConfiguration(property: string, translatable: boolean = true): IColumnConfiguration {
         let config;
@@ -107,47 +156,45 @@ export abstract class TableFactory {
     public static getColumnFilterValues<T extends KIXObject = any>(
         rows: Row[], column: Column, values: Array<[T, number]> = []
     ): Array<[T, number]> {
-        rows.forEach((r) => {
+        for (const r of rows) {
+            let cellValues = [];
             const cell = r.getCell(column.getColumnId());
-            if (cell) {
-                let cellValues = [];
-                const cellValue = cell.getValue();
-                if (Array.isArray(cellValue.objectValue)) {
-                    cellValues = cellValue.objectValue;
-                } else if (cellValue.objectValue !== null && typeof cellValue.objectValue !== 'undefined') {
-                    cellValues.push(cellValue.objectValue);
-                } else if (cellValue.displayValue) {
-                    cellValues.push(cellValue.displayValue);
-                }
+            const cellValue = cell?.getValue();
+            if (Array.isArray(cellValue?.objectValue)) {
+                cellValues = cellValue?.objectValue;
+            } else if (cellValue?.objectValue !== null && typeof cellValue?.objectValue !== 'undefined') {
+                cellValues.push(cellValue?.objectValue);
+            } else if (cellValue?.displayValue) {
+                cellValues.push(cellValue?.displayValue);
+            }
 
-                cellValues.forEach((value) => {
-                    const existingValue = values.find((ev) => {
-                        if (ev[0] instanceof KIXObject) {
-                            return ev[0].equals(value);
-                        }
-                        return ev[0] === value;
-                    });
-                    if (existingValue) {
-                        existingValue[1] = existingValue[1] + 1;
-                    } else {
-                        values.push([value, 1]);
+            for (const value of cellValues) {
+                const existingValue = values.find((ev) => {
+                    if (ev[0] instanceof KIXObject) {
+                        return ev[0].equals(value);
                     }
+                    return ev[0] === value;
                 });
 
+                if (existingValue) {
+                    existingValue[1] = existingValue[1] + 1;
+                } else {
+                    values.push([value, 1]);
+                }
             }
-            const childRows = r.getChildren();
-            if (childRows && !!childRows.length) {
-                TableFactory.getColumnFilterValues(childRows, column, values);
-            }
-        });
+
+            const childRows = r.getChildren() || [];
+            TableFactory.getColumnFilterValues(childRows, column, values);
+        }
 
         return values;
     }
 
-    public async getDefaultColumnConfigurations(searchCache: SearchCache): Promise<IColumnConfiguration[]> {
+    public async getDefaultColumnConfigurations(searchCache?: SearchCache): Promise<IColumnConfiguration[]> {
         const columns: IColumnConfiguration[] = [];
 
-        const criteria = searchCache.criteria.filter((c) => {
+        let criteria = searchCache?.criteria || [];
+        criteria = criteria.filter((c) => {
             return c.property !== SearchProperty.FULLTEXT
                 && c.property !== SearchProperty.PRIMARY
                 && c.property !== TicketProperty.CLOSE_TIME

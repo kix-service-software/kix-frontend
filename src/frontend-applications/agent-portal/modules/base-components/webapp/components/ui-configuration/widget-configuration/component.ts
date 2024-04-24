@@ -104,7 +104,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.emitConfigurationChanged();
     }
     public getTitle(): string {
-        return this.state.widget.configuration.title.replace('Translatable#', '');
+        return this.state.widget?.configuration?.title?.replace('Translatable#', '') || '';
     }
 
     public titleChanged(event: any): void {

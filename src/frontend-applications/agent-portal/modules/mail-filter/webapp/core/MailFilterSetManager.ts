@@ -25,7 +25,7 @@ export class MailFilterSetManager extends AbstractDynamicFormManager {
         return InputFieldTypes.TEXT;
     }
 
-    public getSpecificInput(): string {
+    public async getSpecificInput(): Promise<string> {
         return;
     }
 

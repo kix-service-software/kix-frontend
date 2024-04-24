@@ -1,0 +1,15 @@
+{
+    "name": "kix-module-virtual-fs",
+    "extensions": {
+        "kix:services": {
+            "virtual-fs-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "virtual-fs-module": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}

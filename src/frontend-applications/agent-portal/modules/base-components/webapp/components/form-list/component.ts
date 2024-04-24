@@ -43,6 +43,9 @@ class Component {
         const canRemove = typeof input.canRemoveNode !== 'undefined' ? input.canRemoveNode : true;
         this.state.removeNodes = canRemove && !this.state.readonly;
         this.state.actions = typeof input.actions !== 'undefined' ? input.actions : [];
+        if (input.expanded) {
+            this.state.expanded = true;
+        }
 
         this.update(input);
     }

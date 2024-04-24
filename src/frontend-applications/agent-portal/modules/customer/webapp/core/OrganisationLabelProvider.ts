@@ -92,13 +92,13 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
                 translatable = false;
                 break;
             case OrganisationProperty.OPEN_TICKETS_COUNT:
-                displayValue = organisation.TicketStats.OpenCount.toString();
+                displayValue = organisation?.TicketStats?.OpenCount?.toString();
                 break;
             case OrganisationProperty.ESCALATED_TICKETS_COUNT:
-                displayValue = organisation.TicketStats.EscalatedCount.toString();
+                displayValue = organisation?.TicketStats?.EscalatedCount?.toString();
                 break;
             case OrganisationProperty.REMINDER_TICKETS_COUNT:
-                displayValue = organisation.TicketStats.PendingReminderCount.toString();
+                displayValue = organisation?.TicketStats?.PendingReminderCount?.toString();
                 break;
             case OrganisationProperty.VALID:
                 displayValue = await this.getPropertyValueDisplayText(

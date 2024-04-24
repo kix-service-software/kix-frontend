@@ -1,0 +1,21 @@
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.overlay>.overlay-content.table-column-filter-overlay>.overlay-widget>.widget-content {
+    >div:has(.filter-autocomplete) {
+        max-height: 22rem;
+    }
+
+    .filter-autocomplete {
+        .form-list .value-list {
+            position: unset;
+            width: unset;
+        }
+    }
+}

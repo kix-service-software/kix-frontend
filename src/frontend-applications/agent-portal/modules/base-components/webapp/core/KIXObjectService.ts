@@ -48,7 +48,7 @@ import { ContactProperty } from '../../../customer/model/ContactProperty';
 import { KIXObjectFormService } from './KIXObjectFormService';
 import { ObjectSearchLoadingOptions } from '../../../object-search/model/ObjectSearchLoadingOptions';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
-import { SortDataType } from '../../../../model/SortDataType';
+import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -354,11 +354,13 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public async getTreeNodes(
         property: string, showInvalid?: boolean, invalidClickable?: boolean,
         filterIds?: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions,
-        objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+        objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        additionalData?: any
     ): Promise<TreeNode[]> {
         for (const extendedService of this.extendedServices) {
             const extendedNodes = await extendedService.getTreeNodes(
-                property, showInvalid, invalidClickable, filterIds, loadingOptions, objectLoadingOptions
+                property, showInvalid, invalidClickable, filterIds, loadingOptions, objectLoadingOptions,
+                additionalData
             );
             if (extendedNodes) {
                 return extendedNodes;
@@ -697,15 +699,21 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static async searchObjectTree(
         objectType: KIXObjectType | string, property: string, searchValue: string,
-        loadingOptions: KIXObjectLoadingOptions
+        loadingOptions?: KIXObjectLoadingOptions, additionalData?: any
     ): Promise<TreeNode[]> {
 
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         if (service) {
-            const objectTypeForSearch = await service.getObjectTypeForProperty(property);
-            const objects = await KIXObjectService.search(objectTypeForSearch, searchValue, loadingOptions);
-            return KIXObjectService.prepareTree(objects);
+            return service.searchObjectTree(property, searchValue, loadingOptions);
         }
+    }
+
+    public async searchObjectTree(
+        property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<TreeNode[]> {
+        const objectTypeForSearch = await this.getObjectTypeForProperty(property);
+        const objects = await KIXObjectService.search(objectTypeForSearch, searchValue, loadingOptions);
+        return KIXObjectService.prepareTree(objects);
     }
 
     public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
@@ -744,29 +752,73 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return objectType;
     }
 
-    public static async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+    public static async getObjectProperties(
+        objectType: KIXObjectType, dependencyIds: string[] = []
+    ): Promise<string[]> {
         let properties: string[] = [];
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
         if (service) {
-            properties = await service.getObjectProperties(objectType);
+            properties = await service.getObjectProperties(objectType, dependencyIds);
         }
 
         return properties;
     }
 
-    public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+    public static async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
+        let dependencies: KIXObject[] = [];
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
+        if (service) {
+            dependencies = await service.getObjectDependencies(objectType);
+        }
+
+        return dependencies;
+    }
+
+    public async getObjectProperties(objectType: KIXObjectType, dependencyIds: string[] = []): Promise<string[]> {
         let properties: string[] = [];
         const dynamicFields: DynamicField[] = await KIXObjectService.loadDynamicFields(objectType);
         if (Array.isArray(dynamicFields) && dynamicFields.length) {
             properties = dynamicFields.map((df) => df.Name);
         }
         for (const extendedService of this.extendedServices) {
-            const extendedNodes = await extendedService.getObjectProperties(objectType);
+            const extendedNodes = await extendedService.getObjectProperties(objectType, dependencyIds);
             if (extendedNodes?.length) {
                 properties.push(...extendedNodes);
             }
         }
         return properties;
+    }
+
+    public async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
+        let dependencies: KIXObject[] = [];
+
+        for (const extendedService of this.extendedServices) {
+            const extendedDependencies = await extendedService.getObjectDependencies(objectType);
+            if (extendedDependencies?.length) {
+                dependencies.push(...extendedDependencies);
+            }
+        }
+        return dependencies;
+    }
+
+    public static async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
+        let dependencyName: string = '';
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
+        if (service) {
+            dependencyName = await service.getObjectDependencyName(objectType);
+        }
+
+        return dependencyName;
+    }
+
+    public async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
+        for (const extendedService of this.extendedServices) {
+            const extendedName = await extendedService.getObjectDependencyName(objectType);
+            if (extendedName) {
+                return extendedName;
+            }
+        }
+        return objectType;
     }
 
     protected async shouldPreload(objectType: KIXObjectType | string): Promise<boolean> {
@@ -837,25 +889,25 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return `${this.objectType}.${descanding ? '-' : ''}${property}:${sortType}`;
     }
 
-    protected async getSortType(property: string, objectType: KIXObjectType | string): Promise<SortDataType> {
-        let sortType = SortDataType.TEXTUAL;
+    protected async getSortType(property: string, objectType: KIXObjectType | string): Promise<BackendSearchDataType> {
+        let sortType = BackendSearchDataType.TEXTUAL;
         const supportedAttributes = await KIXObjectService.getSortableAttributes(objectType);
         if (supportedAttributes?.length) {
-            const knownTypes = Object.keys(SortDataType);
+            const knownTypes = Object.keys(BackendSearchDataType);
             const relevantAttribute = supportedAttributes.find((sA) => sA.Property === property);
             if (relevantAttribute) {
-                sortType = relevantAttribute.ValueType as SortDataType;
+                sortType = relevantAttribute.ValueType as BackendSearchDataType;
                 if (!knownTypes.some((t) => t === sortType)) {
-                    sortType = SortDataType.TEXTUAL;
+                    sortType = BackendSearchDataType.TEXTUAL;
                 }
             }
         }
         return sortType;
     }
 
-    protected getSortAttribute(attribute: string): string {
+    public getSortAttribute(attribute: string, dep?: string): string {
         for (const extendedService of this.extendedServices) {
-            const extendedAttribute = extendedService.getSortAttribute(attribute);
+            const extendedAttribute = extendedService.getSortAttribute(attribute, dep);
             if (extendedAttribute) {
                 return extendedAttribute;
             }
@@ -871,17 +923,201 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async isBackendSortSupportedForProperty(
-        property: string, objectType: KIXObjectType | string
+        objectType: KIXObjectType | string, property: string, dep?: string
     ): Promise<boolean> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         if (service) {
-            const supportedAttributes = await KIXObjectService.getSortableAttributes(objectType, false);
+            const supportedAttributes = await service.getSortableAttributes(false);
             if (supportedAttributes?.length) {
-                const sortProperty = service.getSortAttribute(property);
+                const sortProperty = service.getSortAttribute(property, dep);
                 return supportedAttributes.some((sA) => sA.Property === sortProperty);
             }
         }
         return false;
+    }
+
+    public static async getFilterableAttributes(
+        objectType: KIXObjectType | string, filtered: boolean = true
+    ): Promise<ObjectSearch[]> {
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+        let attributes = [];
+        if (service) {
+            attributes = await service.getFilterableAttributes(filtered);
+        } else {
+            const errorMessage = `No service registered for object type ${objectType}`;
+            console.warn(errorMessage);
+        }
+        return attributes;
+    }
+
+    public async getFilterableAttributes(filtered: boolean = true): Promise<ObjectSearch[]> {
+        const supportedAttributes = await KIXObjectService.loadObjects<ObjectSearch>(
+            KIXObjectType.OBJECT_SEARCH, undefined, undefined,
+            new ObjectSearchLoadingOptions(this.objectType), true
+        ).catch(() => [] as ObjectSearch[]);
+        return supportedAttributes.filter((sA) => sA.IsSearchable);
+    }
+
+    public async getFilterAttributeForFilter(attribute: string, dep?: string): Promise<string> {
+        return this.getFilterAttribute(attribute, dep);
+    }
+
+    public async getFilterAttribute(attribute: string, dep?: string): Promise<string> {
+        for (const extendedService of this.extendedServices) {
+            const filterAttribute = extendedService.getFilterAttribute(attribute, dep);
+            if (typeof filterAttribute !== 'undefined' && filterAttribute !== null) {
+                return filterAttribute;
+            }
+        }
+
+        switch (attribute) {
+            // TODO: currently not supported by some objects
+            // case KIXObjectProperty.CREATE_BY:
+            //     return KIXObjectProperty.CREATE_BY_ID;
+            // case KIXObjectProperty.CHANGE_BY:
+            //     return KIXObjectProperty.CHANGE_BY_ID;
+            default:
+        }
+        return attribute;
+    }
+
+    public static async getBackendFilterType(
+        objectType: KIXObjectType | string, property: string, dep?: string
+    ): Promise<BackendSearchDataType | string> {
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+        if (service) {
+            return service.getBackendFilterType(property, dep);
+        }
+        return;
+    }
+
+    protected async getBackendFilterType(property: string, dep?: string): Promise<BackendSearchDataType | string> {
+        for (const extendedService of this.extendedServices) {
+            const extendedSupport = extendedService.getBackendFilterType(property, dep);
+            if (typeof extendedSupport !== 'undefined' && extendedSupport !== null) {
+                return extendedSupport;
+            }
+        }
+
+        const dfType = await this.getBackendFilterTypeForDF(property, dep);
+        if (typeof dfType !== 'undefined' && dfType !== null) {
+            return dfType;
+        }
+
+        property = await this.getFilterAttribute(property, dep);
+        switch (property) {
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CHANGE_BY:
+            case KIXObjectProperty.CREATE_BY_ID:
+            case KIXObjectProperty.CHANGE_BY_ID:
+                return 'Autocomplete';
+            default:
+        }
+
+        const supportedAttributes = await this.getFilterableAttributes(false);
+        const attribute = supportedAttributes.find((sa) => sa.Property === property);
+        return attribute?.ValueType || BackendSearchDataType.TEXTUAL;
+    }
+
+    protected async getBackendFilterTypeForDF(property: string, dep?: string): Promise<BackendSearchDataType | string> {
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+            for (const extendedService of this.extendedServices) {
+                const extendedSupport = extendedService.getBackendFilterTypeForDF(dynamicField, dep);
+                if (typeof extendedSupport !== 'undefined' && extendedSupport !== null) {
+                    return extendedSupport;
+                }
+            }
+
+            switch (dynamicField.FieldType) {
+                case DynamicFieldTypes.SELECTION:
+                    return BackendSearchDataType.NUMERIC;
+                case DynamicFieldTypes.CI_REFERENCE:
+                    return 'Autocomplete';
+                default:
+            }
+        }
+        return;
+    }
+
+    public static async isBackendFilterSupportedForProperty(
+        objectType: KIXObjectType | string, property: string, dep?: string
+    ): Promise<boolean> {
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+        if (service) {
+            const supportedAttributes = await service.getFilterableAttributes(false);
+            if (supportedAttributes?.length) {
+                return service.isBackendFilterSupportedForProperty(objectType, property, supportedAttributes, dep);
+            }
+        }
+        return false;
+    }
+
+    protected async isBackendFilterSupportedForProperty(
+        objectType: KIXObjectType | string, property: string, supportedAttributes: ObjectSearch[], dep?: string
+    ): Promise<boolean> {
+        const filterList = [
+            'ID',
+
+            // TODO: currently date/time is not supported (in FE)
+            KIXObjectProperty.CREATE_TIME,
+            KIXObjectProperty.CHANGE_TIME
+        ];
+
+        // ignore id property
+        const constructors = this.getObjectConstructors(objectType);
+        if (constructors?.length && constructors[0]) {
+            const object = new constructors[0]();
+            if (typeof object.getIdPropertyName === 'function') {
+                const idProperty = object.getIdPropertyName();
+                if (idProperty) {
+                    filterList.push(idProperty);
+                }
+            }
+        }
+
+        if (filterList.some((f) => f === property)) {
+            return false;
+        }
+
+        for (const extendedService of this.extendedServices) {
+            const extendedSupport = extendedService.isBackendFilterSupportedForProperty(property, dep);
+            if (typeof extendedSupport !== 'undefined' && extendedSupport !== null) {
+                return extendedSupport;
+            }
+        }
+
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const dfSupport = await this.isBackendFilterSupportedForDF(dfName);
+            if (typeof dfSupport !== 'undefined' && dfSupport !== null) {
+                return dfSupport;
+            }
+        }
+
+        property = await this.getFilterAttribute(property, dep);
+        return supportedAttributes.some((sA) => sA.Property === property);
+    }
+
+    public async isBackendFilterSupportedForDF(dfName: string): Promise<boolean> {
+        const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+        for (const extendedService of this.extendedServices) {
+            const extendedSupport = extendedService.isBackendFilterSupportedForDF(dynamicField);
+            if (typeof extendedSupport !== 'undefined' && extendedSupport !== null) {
+                return extendedSupport;
+            }
+        }
+        switch (dynamicField.FieldType) {
+            case DynamicFieldTypes.DATE:
+            case DynamicFieldTypes.DATE_TIME:
+            case DynamicFieldTypes.CHECK_LIST:
+            case DynamicFieldTypes.TABLE:
+            // FIXME: disable or enable DataSource in KIXConnect
+            case 'DataSource':
+                return false;
+            default:
+        }
     }
 
 

@@ -98,6 +98,8 @@ export class TicketContext extends Context {
                 ContextService.getInstance().updateStorage(this.instanceId);
             }
         }
+
+        this.setAdditionalInformation(AdditionalContextInformation.OBJECT_DEPENDENCY, this.queueId);
     }
 
     public async setFilterValue(filterValue: string, history: boolean = true): Promise<void> {
@@ -159,9 +161,6 @@ export class TicketContext extends Context {
             ));
         }
 
-        const additionalIncludes = this.getAdditionalInformation(AdditionalContextInformation.INCLUDES) || [];
-        loadingOptions.includes.push(...additionalIncludes);
-
         await this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
 
         const tickets = await KIXObjectService.loadObjects(
@@ -193,6 +192,14 @@ export class TicketContext extends Context {
         super.loadAdditionalInformation(contextPreference);
         this.queueId = contextPreference['QUEUE_ID'];
         this.filterValue = contextPreference['FILTER_VALUE'];
+    }
+
+    public getAdditionalInformation(key: string): any {
+        if (key === AdditionalContextInformation.OBJECT_DEPENDENCY) {
+            return this.queueId;
+        }
+
+        return super.getAdditionalInformation(key);
     }
 
 }
