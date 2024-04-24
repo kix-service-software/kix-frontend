@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2024-04-22 13:38+0000\n"
+"PO-Revision-Date: 2024-04-24 12:33+0000\n"
 "Last-Translator: fkrahl <Frank.Krahl@kixdesk.com>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -39,7 +39,7 @@ msgid "{0} is required."
 msgstr "{0} ist ein Pflichtfeld."
 
 msgid "{0}: just white spaces as value is not allowed."
-msgstr ""
+msgstr "{0}: nur Leerzeichen als Wert sind nicht zulässig."
 
 msgid "{0} Link created"
 msgstr "{0} Verknüpfung(en) angelegt"
@@ -1158,19 +1158,19 @@ msgid "Email"
 msgstr "E-Mail"
 
 msgid "Email1"
-msgstr ""
+msgstr "E-Mail 1"
 
 msgid "Email2"
-msgstr ""
+msgstr "E-Mail 2"
 
 msgid "Email3"
-msgstr ""
+msgstr "E-Mail 3"
 
 msgid "Email4"
-msgstr ""
+msgstr "E-Mail 4"
 
 msgid "Email5"
-msgstr ""
+msgstr "E-Mail 5"
 
 msgid "Email Account"
 msgstr "E-Mail-Konto"
@@ -4437,7 +4437,7 @@ msgid "Responsible"
 msgstr "Verantwortlicher"
 
 msgid "Responsible Out Of Office"
-msgstr ""
+msgstr "Verantwortlicher Out Of Office"
 
 msgid "Result names"
 msgstr "Ergebnisbezeichnungen"
@@ -4544,7 +4544,7 @@ msgid "Search {0} will be deleted. Are you sure?"
 msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
 
 msgid "Search defaults for {0} reseted."
-msgstr ""
+msgstr "Standard-Sucheinstellungen für {0} zurückgesetzt."
 
 msgid "Search error!"
 msgstr "Fehler bei Suche!"
@@ -4932,7 +4932,7 @@ msgid "Superuser Account"
 msgstr "Nutzer Superuser"
 
 msgid "Switch attachment list layout"
-msgstr ""
+msgstr "Layout der Anlagenliste ändern"
 
 msgid "switch_column_order_action"
 msgstr "Tauschen"
