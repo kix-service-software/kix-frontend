@@ -16,7 +16,6 @@ import { TableConfiguration } from '../../../../../model/configuration/TableConf
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 
-
 export class ComponentState {
 
     public constructor(
@@ -24,7 +23,8 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: Queues',
             [
-                'ticket-admin-queue-create', 'ticket-admin-queue-duplicate', 'csv-export-action'
+                'ticket-admin-queue-create', 'ticket-admin-queue-duplicate', 'csv-export-action',
+                'ticket-admin-queue-delete'
             ], null,
             new TableWidgetConfiguration(
                 null, null, null,
