@@ -10,9 +10,9 @@
 export class ChecklistState {
 
     public constructor(
-        public label: string,
+        public value: string,
         public icon?: string,
         public done: boolean = true,
-        public order?: number
+        public order: number = 0
     ) { }
 }

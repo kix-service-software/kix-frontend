@@ -13,11 +13,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <div class="row">
     <div class="col-6">
         <div class="property-chooser">
+            <label>${state.translations["Translatable#Dependency"] + (state.dependencyName ? ` (${state.dependencyName})` : "")}</label>
             <form-list treeId=state.dependencyTreeId multiselect/>
         </div>
     </div>
     <div class="col-6">
         <div class="property-chooser">
+            <label>${state.translations["Translatable#Property"]}</label>
             <form-list treeId=state.propertyTreeId multiselect freeText/>
             <button
                 type="button"

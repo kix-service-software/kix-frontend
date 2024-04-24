@@ -76,4 +76,6 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
 
     getObjectDependencies(objectType: KIXObjectType | string): Promise<KIXObject[]>;
 
+    getObjectDependencyName(objectType: KIXObjectType | string): Promise<string>;
+
 }

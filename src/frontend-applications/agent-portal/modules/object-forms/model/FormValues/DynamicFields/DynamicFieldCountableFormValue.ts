@@ -28,6 +28,8 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
     protected defaultValue: any;
 
+    private initialized: boolean;
+
     public constructor(
         public property: string,
         protected object: DynamicFieldValue,
@@ -71,6 +73,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
                 this.countMin = Number(config?.CountMin) || 0;
 
                 await this.initCountValues();
+                this.initialized = true;
                 await super.initFormValue();
 
                 if (this.enabled && this.formValues?.length) {
@@ -97,6 +100,29 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         await super.initFormValueByField(field);
         this.defaultValue = this.value;
         this.formValuesVisible = this.visible;
+    }
+
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        if (force) {
+            this.clearFormValues();
+
+            this.value = value;
+
+            if (this.initialized) {
+                await this.initCountValues();
+            }
+        } else {
+            super.setFormValue(value, force);
+        }
+    }
+
+    protected clearFormValues(): void {
+        for (const formValue of this.formValues) {
+            formValue.destroy();
+        }
+
+        this.dfValues = [];
+        this.formValues = [];
     }
 
     public async initCountValues(): Promise<void> {
@@ -185,7 +211,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             fv.setInitialState();
             await fv.setFormValue(value || this.defaultValue, force);
 
-            this.setDFValue(true);
+            this.setDFValue();
 
             await this.setVisibility(this.formValuesVisible);
 
@@ -255,6 +281,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         this.formValues = [];
         this.value = [];
         this.dfValues = [];
+        this.initialized = true;
     }
 
     public async show(): Promise<void> {

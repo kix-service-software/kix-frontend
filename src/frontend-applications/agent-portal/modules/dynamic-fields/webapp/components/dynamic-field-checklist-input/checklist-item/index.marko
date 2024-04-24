@@ -7,33 +7,41 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.checklist-item>
+<div class="checklist-item">
     <if(state.item && state.prepared)>
         <if(state.item.input === "Text")>
-            <div.checklist-item-title>
+            <div class="checklist-item-title">
                 <div>${state.item.title}</div>
-                <div.checklist-item-description>${state.item.description}</div>
+                <div class="checklist-item-description">
+                    ${state.item.description}
+                </div>
             </div>
-            <input.input-style.checklist-item-text
+            <input
                 type="text"
                 value=(state.item.value)
                 on-change("valueChanged")
+                class="input-style checklist-item-text"
             >
         </if>
         <else-if(state.item.input === "TextArea")>
-            <div.checklist-item-title>
+            <div class="checklist-item-title">
                 <div>${state.item.title}</div>
-                <div.checklist-item-description>${state.item.description}</div>
+                <div class="checklist-item-description">
+                    ${state.item.description}
+                </div>
             </div>
-            <textarea.input-style.checklist-item-text
+            <textarea
                 value=(state.item.value)
                 on-change("valueChanged")
-            />
+                class="input-style checklist-item-text"
+            >${state.item.value}</textarea>
         </else-if>
         <else>
-            <div.checklist-item-title>
+            <div class="checklist-item-title">
                 <div>${state.item.title}</div>
-                <div.checklist-item-description>${state.item.description}</div>
+                <div class="checklist-item-description">
+                    ${state.item.description}
+                </div>
             </div>
             <form-list
                 treeId=state.treeId
@@ -43,7 +51,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             />
         </else>
         <if(state.item.sub)>
-            <div.checklist-sub-item-container>
+            <div class="checklist-sub-item-container">
                 <for|subItem| of=(state.item.sub)>
                     <checklist-item
                         item=subItem

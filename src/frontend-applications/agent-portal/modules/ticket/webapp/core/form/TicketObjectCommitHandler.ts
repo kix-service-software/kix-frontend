@@ -188,7 +188,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         return body;
     }
 
-    private async prepareAttachments(files: Array<Attachment | File>): Promise<Attachment[]> {
+    protected async prepareAttachments(files: Array<Attachment | File>): Promise<Attachment[]> {
         let attachments = [];
 
         let loadingHint = await TranslationService.translate('Translatable#Prepare Attachments (0/{0})', [files.length]);

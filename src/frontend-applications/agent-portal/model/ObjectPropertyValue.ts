@@ -29,7 +29,8 @@ export class ObjectPropertyValue {
         public id: string = IdService.generateDateBasedId('value-'),
         public additionalOptions: FormFieldOption[] = null,
         public validErrorMessages: string[] = [],
-        public hint: string = ''
+        public hint: string = '',
+        public locked?: boolean
     ) { }
 
 }

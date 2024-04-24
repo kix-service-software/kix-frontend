@@ -28,8 +28,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public getStateIcon(item: CheckListItem): string {
-        const states = item.checklistStates || DynamicFieldFormUtil.getDefaultChecklistStates();
-        const state = states?.find((s) => s.label === item.value);
+        const states = item.inputStates || DynamicFieldFormUtil.getDefaultChecklistStates();
+        const state = states?.find((s) => s.value === item.value);
         return state?.icon;
     }
 

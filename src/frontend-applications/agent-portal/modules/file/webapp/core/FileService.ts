@@ -15,7 +15,7 @@ export class FileService {
 
         const request = {
             method: 'POST',
-            body: formData
+            body: formData,
         };
 
         const url = location.protocol + '//' + location.host;

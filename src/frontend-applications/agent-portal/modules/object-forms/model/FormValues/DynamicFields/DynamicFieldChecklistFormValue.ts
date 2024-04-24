@@ -57,9 +57,6 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
     public async setObjectValue(value: CheckListItem[]): Promise<void> {
         let v: string | CheckListItem[] = value;
         if (Array.isArray(v)) {
-            for (const checklistItem of v) {
-                (checklistItem as CheckListItem)?.mapInputStates();
-            }
             v = JSON.stringify(value);
         }
         await super.setObjectValue(v);

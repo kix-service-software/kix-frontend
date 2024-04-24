@@ -725,4 +725,8 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         return this.getClasses();
     }
 
+    public async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
+        return LabelService.getInstance().getPropertyText(ConfigItemProperty.CLASS, objectType);
+    }
+
 }

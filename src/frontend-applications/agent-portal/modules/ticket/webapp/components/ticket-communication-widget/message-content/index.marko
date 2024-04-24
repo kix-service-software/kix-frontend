@@ -105,18 +105,36 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </else>
                 <div class="message-footer">
                     <div class="attachments-control">
-                        <div class="attachments-list">
-                            <if(Array.isArray(state.articleAttachments))>
-                                <for|attachment| of=state.articleAttachments>
-                                    <ticket-article-attachment
-                                        article=state.article
-                                        attachment=attachment
-                                        images=state.images
-                                        useReadonlyStyle=false
-                                    />
-                                </for>
-                            </if>
-                        </div>
+                        <if(Array.isArray(state.articleAttachments) && state.articleAttachments.length)>
+                            <div class="attachments-list-container">
+                                <div class={"attachments-list": true, "one-column-layout": state.oneColumnLayout}>
+                                    <for|attachment| of=state.articleAttachments>
+                                        <ticket-article-attachment
+                                            article=state.article
+                                            attachment=attachment
+                                            images=state.images
+                                            useReadonlyStyle=false
+                                        />
+                                    </for>
+                                </div>
+                                <span class="attachment-list-layout-switch" on-click("switchAttachmentLayout")>
+                                    <if(state.oneColumnLayout)>
+                                        <icon
+                                            icon="fas fa-angle-double-up"
+                                            tooltip=state.switchAttachmentListTooltip
+                                            class="as-button"
+                                        />
+                                    </if>
+                                    <else>
+                                        <icon
+                                            icon="fas fa-angle-double-down"
+                                            tooltip=state.switchAttachmentListTooltip
+                                            class="as-button"
+                                        />
+                                    </else>
+                                </span>
+                            </div>
+                        </if>
                         <if(state.hasInlineAttachments)>
                             <a
                                 on-click("toggleAttachments")
