@@ -21,8 +21,8 @@ import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { CheckListItem } from '../../model/CheckListItem';
 import { DynamicFieldFormUtil } from '../../../base-components/webapp/core/DynamicFieldFormUtil';
-import { ChecklistState } from '../../model/ChecklistState';
 import { CheckListInputType } from '../../model/CheckListInputType';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class DynamicFieldFormService extends KIXObjectFormService {
 
@@ -53,7 +53,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
             if (dynamicField || f.defaultValue) {
                 let value = await this.getValue(
                     f.property,
-                    dynamicField && formContext === FormContext.EDIT
+                    dynamicField
                         ? dynamicField[f.property]
                         : f.defaultValue ? f.defaultValue.value : null,
                     dynamicField,
@@ -61,7 +61,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                 );
 
                 if (f.property === 'ICON') {
-                    if (dynamicField && formContext === FormContext.EDIT) {
+                    if (dynamicField) {
                         const icon = LabelService.getInstance().getObjectIcon(dynamicField);
                         if (icon instanceof ObjectIcon) {
                             value = icon;
@@ -93,7 +93,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                         value.DefaultValue = checklist;
                     }
                 }
-                formFieldValue = dynamicField && formContext === FormContext.EDIT
+                formFieldValue = dynamicField
                     ? new FormFieldValue(value)
                     : new FormFieldValue(value, f.defaultValue ? f.defaultValue.valid : undefined);
             } else {
@@ -151,6 +151,25 @@ export class DynamicFieldFormService extends KIXObjectFormService {
         }
 
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
+    }
+
+    protected async getValue(
+        property: string, value: any, dynamicField: DynamicField,
+        formField: FormFieldConfiguration, formContext: FormContext
+    ): Promise<any> {
+        switch (property) {
+            case DynamicFieldProperty.NAME:
+                if (formContext === FormContext.NEW && dynamicField) {
+                    value = await TranslationService.translate(
+                        'Translatable#Copy of {0}', [value]
+                    );
+                }
+                break;
+            default:
+                value = super.getValue(property, value, dynamicField, formField, formContext);
+        }
+
+        return value;
     }
 
 }
