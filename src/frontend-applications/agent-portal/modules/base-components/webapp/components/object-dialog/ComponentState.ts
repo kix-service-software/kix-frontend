@@ -20,7 +20,8 @@ export class ComponentState extends AbstractComponentState {
         public sidebars: ConfiguredWidget[] = [],
         public contextType: ContextType = null,
         public isContextCustomizable: boolean = false,
-        public submitButtonText: string = null
+        public submitButtonText: string = null,
+        public canSubmit = true
     ) {
         super();
     }
