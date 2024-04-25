@@ -589,7 +589,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return nodes;
     }
 
-    public static async loadDynamicField(name: string, id?: number | string): Promise<DynamicField> {
+    public static async loadDynamicField(name: string, id?: number | string, valid?: boolean): Promise<DynamicField> {
         let dynamicField: DynamicField;
         if (name || id) {
             const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
@@ -606,6 +606,11 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 dynamicField = dynamicFields.find((df) => df.Name.toString() === name.toString());
             }
         }
+
+        if (valid && dynamicField.ValidID !== 1) {
+            dynamicField = null;
+        }
+
         return dynamicField;
     }
 
