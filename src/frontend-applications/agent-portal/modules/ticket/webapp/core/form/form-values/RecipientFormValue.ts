@@ -92,7 +92,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
 
             selectedNodes = selectedNodes.filter((n, index) => {
                 const findIndex = selectedNodes.findIndex(
-                    (v) => v.id.toLocaleLowerCase() === n.id.toLocaleLowerCase()
+                    (v) => v.id.toString().toLocaleLowerCase() === n.id.toString().toLocaleLowerCase()
                 );
                 return findIndex === index;
             });
@@ -150,10 +150,11 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
             for (const o of contacts) {
                 const label = await LabelService.getInstance().getObjectText(o, null, null, false);
                 const icon = LabelService.getInstance().getObjectIcon(o);
-                nodes.push(new TreeNode(o.Email, label, icon, null, null, null,
+                const node = new TreeNode(o.ID, label, icon, null, null, null,
                     null, null, null, null, undefined, undefined, undefined,
                     `"${o.Firstname} ${o.Lastname}" <${o.Email}>`
-                ));
+                );
+                nodes.push(node);
             }
         }
         return nodes;
@@ -234,9 +235,12 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
         const contactIds: number[] = [];
         const placeholders: string[] = [];
         for (let value of contactValues) {
-            value = value.replace(/^(.*?),$/, '$1');
 
-            if (value.match(/(<|&lt;)KIX_/)) {
+            if (isNaN(value)) {
+                value = value.replace(/^(.*?),$/, '$1');
+            }
+
+            if (typeof value === 'string' && value.match(/(<|&lt;)KIX_/)) {
                 placeholders.push(value);
             } else if (isNaN(value)) {
                 emailAddresses.push(...this.parseAddresses(value));
