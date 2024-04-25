@@ -36,11 +36,7 @@ export class JobRunHistoryContentProvider extends TableContentProvider<JobRun> {
             const jobId = await context.getObjectId();
             if (jobId) {
                 const jobRuns = await KIXObjectService.loadObjects<JobRun>(
-                    KIXObjectType.JOB_RUN, undefined,
-                    new KIXObjectLoadingOptions(
-                        null, null, null, [JobRunProperty.LOGS]
-                    ),
-                    { id: jobId }
+                    KIXObjectType.JOB_RUN, null, null, { id: jobId }
                 ).catch(() => [] as JobRun[]);
 
                 if (jobRuns && jobRuns.length) {

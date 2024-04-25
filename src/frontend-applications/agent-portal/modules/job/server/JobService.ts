@@ -31,6 +31,8 @@ import { CacheService } from '../../../server/services/cache';
 import { IdService } from '../../../model/IdService';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { MacroType } from '../model/MacroType';
+import { JobRunLog } from '../model/JobRunLog';
+import { RunLogLoadingOptions } from '../model/RunLogLoadingOptions';
 
 export class JobAPIService extends KIXObjectAPIService {
 
@@ -60,6 +62,7 @@ export class JobAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.JOB
             || kixObjectType === KIXObjectType.JOB_TYPE
             || kixObjectType === KIXObjectType.JOB_RUN
+            || kixObjectType === KIXObjectType.JOB_RUN_LOG
             || kixObjectType === KIXObjectType.EXEC_PLAN
             || kixObjectType === KIXObjectType.MACRO
             || kixObjectType === KIXObjectType.MACRO_ACTION_TYPE
@@ -116,6 +119,14 @@ export class JobAPIService extends KIXObjectAPIService {
             objectResponse = await super.load<MacroType>(
                 token, KIXObjectType.MACRO_TYPE, this.RESOURCE_URI_MACRO_TYPE, loadingOptions,
                 null, 'MacroType', clientRequestId, MacroType
+            );
+        } else if (objectType === KIXObjectType.JOB_RUN_LOG) {
+            const runLogLoadingOptions = objectLoadingOptions as RunLogLoadingOptions;
+            const jobId = runLogLoadingOptions?.jobId;
+            const runId = runLogLoadingOptions?.runId;
+            const uri = this.buildUri('system', 'automation', 'jobs', jobId, 'runs', runId, 'logs');
+            objectResponse = await super.load<JobRunLog>(
+                token, KIXObjectType.MACRO_TYPE, uri, null, null, 'JobRunLog', clientRequestId, JobRunLog
             );
         }
 

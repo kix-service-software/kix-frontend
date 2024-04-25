@@ -66,6 +66,7 @@ export class JobService extends KIXObjectService<Job> {
         return kixObjectType === KIXObjectType.JOB
             || kixObjectType === KIXObjectType.JOB_TYPE
             || kixObjectType === KIXObjectType.JOB_RUN
+            || kixObjectType === KIXObjectType.JOB_RUN_LOG
             || kixObjectType === KIXObjectType.EXEC_PLAN
             || kixObjectType === KIXObjectType.MACRO
             || kixObjectType === KIXObjectType.MACRO_ACTION_TYPE
