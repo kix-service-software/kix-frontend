@@ -27,6 +27,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private subscriber: IEventSubscriber;
     private formhandler: ObjectFormHandler;
 
+    private submitTimeout: any;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -121,7 +123,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async sendSubmit(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            setTimeout(async () => {
+            if (this.submitTimeout) {
+                clearTimeout(this.submitTimeout);
+            }
+            this.submitTimeout = setTimeout(async () => {
                 this.state.prepared = false;
 
                 try {
