@@ -36,6 +36,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.submitButtonText = await TranslationService.translate(submitButtonText);
             }
             this.state.widgets = await context.getContent();
+
+            const canSubmit = context.getAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_ENABLED);
+            if (typeof canSubmit === 'boolean') {
+                this.state.canSubmit = canSubmit;
+            }
         }
     }
 
