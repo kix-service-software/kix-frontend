@@ -9,7 +9,6 @@
 
 import { rejects } from 'assert';
 import fs from 'fs';
-import * as readline from 'node:readline';
 import path from 'path';
 /* eslint-disable no-console */
 import winston from 'winston';
@@ -120,7 +119,7 @@ export class LoggingService {
 
         const logFiles: LogFile[] = [];
         for (const f of fileNames) {
-            const logFile = await this.getLogFile(f);
+            const logFile = await this.getLogFile(f).catch();
             logFile.path = 'logs';
             logFiles.push(logFile);
         }
@@ -128,7 +127,7 @@ export class LoggingService {
     }
 
     public async getLogFile(
-        logFileName: string, tailCount: number = -1, logLevel: string[] = []
+        logFileName: string, tailCount?: number, logLevel: string[] = []
     ): Promise<LogFile> {
         const logFile = new LogFile();
         logFile.Filename = logFileName;
@@ -143,16 +142,16 @@ export class LoggingService {
         logFile.Filesize = Attachment.getHumanReadableContentSize(stats.size);
         logFile.ModifyTime = DateTimeUtil.getKIXDateTimeString(stats.mtime);
 
-        let content = [];
-        if (tailCount && tailCount > 0) {
-             content = await this.tailLogFile(logFilePath, tailCount);
-        }
-        else if (tailCount && tailCount === -1) {
-            content = await this.readLogFile(logFilePath);
-        }
+        if (tailCount || tailCount === -1) {
+            let content = [];
+            if (tailCount === -1) {
+                const contentString = fs.readFileSync(logFilePath, 'utf8');
+                content = contentString.split(/\n/);
+            } else {
+                content = await this.tailLogFile(logFilePath, tailCount);
+            }
 
-        if (content.length) {
-            if (logLevel && logLevel.length) {
+            if (logLevel?.length) {
                 content = content.filter((c) => logLevel.some((ll) => c.indexOf(ll) !== -1));
             }
             const stringContent = content.join('\n');
@@ -275,18 +274,4 @@ export class LoggingService {
         return (level <= this.defaultLevelNumber);
     }
 
-    private async readLogFile(file: string): Promise<string[]> {
-        return await new Promise((resolve, reject) => {
-            let content = [];
-            const readLine = readline.createInterface({
-                input: fs.createReadStream(file),
-                output: process.stdout,
-                terminal: false
-            });
-            readLine.on('line', (line) => content.push(line));
-            readLine.on('close', () => resolve(content));
-            readLine.on('error', (err: Error) => reject(err));
-
-        });
-    }
 }

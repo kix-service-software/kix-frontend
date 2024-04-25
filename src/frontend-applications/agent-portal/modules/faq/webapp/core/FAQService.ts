@@ -35,6 +35,7 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
 
 
 export class FAQService extends KIXObjectService {
@@ -372,8 +373,12 @@ export class FAQService extends KIXObjectService {
         return super.getFilterAttribute(attribute, dep);
     }
 
-    public getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
+    public async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
         return KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
+    }
+
+    public async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
+        return LabelService.getInstance().getPropertyText(FAQArticleProperty.CATEGORY, objectType);
     }
 
 }

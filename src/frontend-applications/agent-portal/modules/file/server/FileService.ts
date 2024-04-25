@@ -18,6 +18,16 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 
 export class FileService {
 
+    public static initialize(): void {
+        const folder = ['downloads', 'uploads'];
+        for (const f of folder) {
+            let folderPath = path.join(__dirname, '..', '..', '..', '..', '..', '..', 'data', f);
+            if (!fs.existsSync(folderPath)) {
+                fs.mkdirSync(folderPath);
+            }
+        }
+    }
+
     public static prepareFileForDownload(userId: number, file: IDownloadableFile): void {
         const downloads = this.getDownloads(userId);
         const fileName = `${userId}_downloads.json`;
@@ -81,7 +91,7 @@ export class FileService {
 
         const file = FileService.getDownloadFile(downloadId, userId);
         if (file) {
-            res.download(FileService.getFilePath(file.Filename), (err) => {
+            res.download(FileService.getFilePath(file.Filename, file.path), (err) => {
                 if (err) {
                     LoggingService.getInstance().error('Error while download file to client.', err);
                 } else {

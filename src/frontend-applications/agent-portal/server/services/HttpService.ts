@@ -274,7 +274,7 @@ export class HttpService {
 
         // start profiling
         const profileTaskId = HTTPRequestLogger.getInstance().start(
-            options.method, resource, parameter
+            options.method, resource, parameter, clientRequestId
         );
 
         let response: AxiosResponse | HTTPResponse = await this.axios(options).catch((error: AxiosError) => {
@@ -400,7 +400,7 @@ export class HttpService {
 
             // start profiling
             const profileTaskId = HTTPRequestLogger.getInstance().start(
-                options.method, uri, JSON.stringify(params)
+                options.method, uri, JSON.stringify(params), userId
             );
 
             const response = await this.axios(options)
