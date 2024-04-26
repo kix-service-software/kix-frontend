@@ -25,6 +25,7 @@ import { ToggleOptions } from '../../../../table/model/ToggleOptions';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class TicketTableFactory extends TableFactory {
 
@@ -183,6 +184,11 @@ export class TicketTableFactory extends TableFactory {
         if (property === TicketProperty.PENDING_TIME) {
             config = new DefaultColumnConfiguration(null, null, null,
                 TicketProperty.PENDING_TIME, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
+            );
+        } else if (property === `${KIXObjectProperty.DYNAMIC_FIELDS}.AffectedAsset`) {
+            config = new DefaultColumnConfiguration(null, null, null,
+                'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true,
+                true, undefined, true, 'label-list-cell-content'
             );
         }
 

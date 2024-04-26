@@ -29,6 +29,7 @@ import { SearchFormManager } from '../../../base-components/webapp/core/SearchFo
 import { SearchCache } from '../../model/SearchCache';
 import { SearchProperty } from '../../model/SearchProperty';
 import { TicketProperty } from '../../../ticket/model/TicketProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export abstract class SearchDefinition {
 
@@ -80,7 +81,7 @@ export abstract class SearchDefinition {
         criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescending?: boolean
     ): Promise<KIXObjectLoadingOptions> {
         const sortOrder = await KIXObjectService.getSortOrder(sortAttribute, sortDescending, this.objectType);
-        return new KIXObjectLoadingOptions(criteria, sortOrder, limit);
+        return new KIXObjectLoadingOptions(criteria, sortOrder, limit, [KIXObjectProperty.DYNAMIC_FIELDS]);
     }
 
     public async prepareFormFilterCriteria(
