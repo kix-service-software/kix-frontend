@@ -51,7 +51,9 @@ export class FAQContext extends Context {
     }
 
     private handleURLParams(urlParams: URLSearchParams): void {
-        this.setFAQCategoryId(urlParams?.has('categoryId') ? Number(urlParams.get('categoryId')) : null, false);
+        if (urlParams) {
+            this.setFAQCategoryId(urlParams?.has('categoryId') ? Number(urlParams.get('categoryId')) : null, false);
+        }
     }
 
     public async getUrl(): Promise<string> {

@@ -39,6 +39,7 @@ import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { DynamicFieldTableValidator } from './DynamicFieldTableValidator';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectIconService } from '../../../icon/webapp/core';
+import { DynamicFieldDuplicateAction } from './DynamicFieldDuplicateAction';
 
 export class UIModule implements IUIModule {
 
@@ -70,6 +71,7 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new DynamicFieldTypeLabelProvider());
 
         ActionFactory.getInstance().registerAction('dynamic-field-create-action', DynamicFieldCreateAction);
+        ActionFactory.getInstance().registerAction('dynamic-field-duplicate-action', DynamicFieldDuplicateAction);
 
         const newDynamicFieldContext = new ContextDescriptor(
             NewDynamicFieldDialogContext.CONTEXT_ID, [KIXObjectType.DYNAMIC_FIELD],
