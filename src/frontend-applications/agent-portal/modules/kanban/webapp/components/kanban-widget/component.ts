@@ -30,6 +30,7 @@ import { TicketStateProperty } from '../../../../ticket/model/TicketStatePropert
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { Ticket } from '../../../../ticket/model/Ticket';
 import { TicketStateService } from '../../../../ticket/webapp/core';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 declare const jKanban: any;
 
@@ -315,6 +316,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         const loadingOptions = new KIXObjectLoadingOptions(filter);
+        loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
 
         if (!useUser) {
             loadingOptions.limit = 100;
