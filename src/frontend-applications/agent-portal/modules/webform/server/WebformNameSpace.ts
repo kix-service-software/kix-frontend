@@ -19,6 +19,7 @@ import { UserService } from '../../user/server/UserService';
 import { CreateObjectResponse } from '../../../modules/base-components/webapp/core/CreateObjectResponse';
 
 import * as cookie from 'cookie';
+import { ISocketResponse } from '../../base-components/webapp/core/ISocketResponse';
 
 export class WebformNameSpace extends SocketNameSpace {
 
@@ -42,6 +43,7 @@ export class WebformNameSpace extends SocketNameSpace {
     protected registerEvents(client: Socket): void {
         this.registerEventHandler(client, WebformEvent.LOAD_WEBFORMS, this.loadWebforms.bind(this));
         this.registerEventHandler(client, WebformEvent.SAVE_WEBFORM, this.saveWebform.bind(this));
+        this.registerEventHandler(client, WebformEvent.DELETE_WEBFORM, this.deleteWebform.bind(this));
     }
 
     private async loadWebforms(data: ISocketRequest, client: Socket): Promise<SocketResponse> {
@@ -68,5 +70,15 @@ export class WebformNameSpace extends SocketNameSpace {
         );
 
         return new SocketResponse(WebformEvent.WEBFORM_SAVED, new CreateObjectResponse(data.requestId, objectId));
+    }
+
+    private async deleteWebform(data: SaveWebformRequest, client: Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        await WebformService.getInstance().deleteWebform(token, data.webformId);
+
+        const response: ISocketResponse = { requestId: data.requestId };
+        return new SocketResponse(WebformEvent.WEBFORM_DELETED, response);
     }
 }
