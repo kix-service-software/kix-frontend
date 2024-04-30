@@ -186,14 +186,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async createColumn(property: string): Promise<IColumnConfiguration> {
+        const dynamicField = await KIXObjectService.loadDynamicField(property);
+        if (dynamicField) {
+            property = `DynamicFields.${property}`;
+        }
+
         let column = TableFactoryService.getInstance().getDefaultColumnConfiguration(
             this.objectType, property
         );
-
-        const dynamicField = await KIXObjectService.loadDynamicField(property);
-        if (dynamicField) {
-            column.property = `DynamicFields.${property}`;
-        }
 
         if (!column) {
             column = new DefaultColumnConfiguration(null, null, null, property);
