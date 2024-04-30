@@ -9,6 +9,7 @@
 
 import { ConfigurationType } from '../../../../../model/configuration/ConfigurationType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { IdService } from '../../../../../model/IdService';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
@@ -37,15 +38,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         let tableConfiguration = this.state.configuration.configuration as TableConfiguration;
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                `${this.state.configuration.id}-table`, `${this.state.configuration.id}-table`, ConfigurationType.Table
+            const table = await TableFactoryService.getInstance().createTable(
+                IdService.generateDateBasedId(), this.state.configuration.objectType
             );
-            tableConfiguration.objectType = this.state.configuration.objectType;
-
+            tableConfiguration = table.getTableConfiguration();
             this.state.configuration.configuration = tableConfiguration;
         }
 
-        if (!tableConfiguration.tableColumns?.length) {
+        if (!tableConfiguration?.tableColumns?.length) {
             const factory = TableFactoryService.getInstance().getTableFactory(this.state.configuration.objectType);
             tableConfiguration.tableColumns = await factory.getDefaultColumnConfigurations(null);
         }
