@@ -44,7 +44,7 @@
     },
     "author": "KIX Service Software GmbH",
     "dependencies": {
-        "@json-editor/json-editor": "^2.13.2",
+        "@json-editor/json-editor": "2.13.2",
         "@lasso/marko-taglib": "^2.0.3",
         "@marko/express": "^1.0.0",
         "@socket.io/cluster-adapter": "^0.2.0",
