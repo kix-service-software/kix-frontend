@@ -22,6 +22,7 @@ import { EventService } from '../../../base-components/webapp/core/EventService'
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
+import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 
 export class WebformSocketClient extends SocketClient {
 
@@ -111,6 +112,43 @@ export class WebformSocketClient extends SocketClient {
             });
 
             this.socket.emit(WebformEvent.SAVE_WEBFORM, request);
+        });
+    }
+
+    public async deleteWebform(formId?: number): Promise<number> {
+        this.checkSocketConnection();
+
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<number>((resolve, reject) => {
+            const requestId = IdService.generateDateBasedId();
+            const request = new SaveWebformRequest(
+                requestId, ClientStorageService.getClientRequestId(), null, formId
+            );
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + WebformEvent.DELETE_WEBFORM);
+            }, socketTimeout);
+
+            this.socket.on(WebformEvent.WEBFORM_DELETED, async (result: CreateObjectResponse) => {
+                if (requestId === result.requestId) {
+                    window.clearTimeout(timeout);
+                    BrowserCacheService.getInstance().deleteKeys(KIXObjectType.WEBFORM);
+                    EventService.getInstance().publish(
+                        ApplicationEvent.OBJECT_DELETED, { objectType: KIXObjectType.WEBFORM }
+                    );
+                    resolve(result.result);
+                }
+            });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            this.socket.emit(WebformEvent.DELETE_WEBFORM, request);
         });
     }
 

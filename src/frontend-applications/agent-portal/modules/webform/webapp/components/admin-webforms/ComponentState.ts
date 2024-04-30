@@ -18,7 +18,7 @@ export class ComponentState {
     public constructor(
         public instanceId: string = 'admin-communication-webforms-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
-            'table-widget', 'Translatable#Communication: Webform', ['webform-create-action'], null,
+            'table-widget', 'Translatable#Communication: Webform', ['webform-create-action', 'webform-delete-action'], null,
             new TableWidgetConfiguration(null, null, null,
                 KIXObjectType.WEBFORM,
                 [WebformProperty.TITLE, SortOrder.UP]

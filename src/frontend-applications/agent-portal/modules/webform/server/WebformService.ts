@@ -112,6 +112,32 @@ export class WebformService {
         return webform.ObjectId;
     }
 
+    public async deleteWebform(token: string, webformId?: number): Promise<void> {
+        const date = DateTimeUtil.getKIXDateTimeString(new Date());
+
+        const webforms = await this.loadWebforms(token, true);
+
+        const index = webforms.findIndex((wf) => wf.ObjectId === webformId);
+        if (index !== -1) {
+            webforms.splice(index, 1);
+        }
+
+        const config = {
+            id: 'kix-customer-portal-light-webforms',
+            name: 'customer portal light webforms configuration',
+            type: 'Webform',
+            webforms,
+            application: 'agent-portal',
+            valid: true
+        };
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            token, config, SysConfigAccessLevel.CONFIDENTIAL
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(error.Message, error);
+        });
+    }
+
     public async createTicket(request: CreateWebformTicketRequest, formId: number, language?: string): Promise<number> {
         let errorString = await this.checkRequest(request, language);
         if (formId && !errorString) {
