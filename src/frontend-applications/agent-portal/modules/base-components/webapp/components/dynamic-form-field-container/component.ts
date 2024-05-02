@@ -44,10 +44,6 @@ class Component {
         this.onMount();
     }
 
-    public updateUI(): void {
-        (this as any).setStateDirty('dynamicValues');
-    }
-
     public async updateValues(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             if (this.updateTimeout) {
@@ -297,7 +293,7 @@ class Component {
         if (!this.provideTimeout) {
             this.provideTimeout = setTimeout(async () => {
                 this.provideTimeout = null;
-                await this.updateUI();
+                await this.updateValues();
             }, 50);
         }
     }
