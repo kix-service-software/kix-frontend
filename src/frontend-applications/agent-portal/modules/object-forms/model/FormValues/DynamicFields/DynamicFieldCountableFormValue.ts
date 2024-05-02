@@ -111,6 +111,8 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             if (this.initialized) {
                 await this.initCountValues();
             }
+
+            this.setVisibility(true);
         } else {
             super.setFormValue(value, force);
         }
