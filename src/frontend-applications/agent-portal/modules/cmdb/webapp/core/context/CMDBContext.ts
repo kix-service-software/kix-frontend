@@ -89,7 +89,7 @@ export class CMDBContext extends Context {
             EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
 
             if (reload) {
-                this.loadConfigItems();
+                await this.loadConfigItems();
             }
 
             if (history) {

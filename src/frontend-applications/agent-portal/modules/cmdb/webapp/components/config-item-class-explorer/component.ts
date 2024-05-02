@@ -107,15 +107,26 @@ export class Component {
     }
 
     public async activeNodeChanged(node: TreeNode): Promise<void> {
+        if (this.state.loading) {
+            return;
+        }
+
         this.state.activeNode = node;
         const context = ContextService.getInstance().getActiveContext();
         if (context instanceof CMDBContext) {
+            this.state.loading = true;
             context.setAdditionalInformation('STRUCTURE', [node.label]);
-            context.setCIClass(node.id);
+            await context.setCIClass(node.id);
+
+            this.state.loading = false;
         }
     }
 
     public async showAll(): Promise<void> {
+        if (this.state.loading) {
+            return;
+        }
+
         const context = ContextService.getInstance().getActiveContext();
 
         if (context instanceof CMDBContext) {
