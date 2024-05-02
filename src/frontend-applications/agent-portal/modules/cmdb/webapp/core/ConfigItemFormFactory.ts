@@ -148,8 +148,16 @@ export class ConfigItemFormFactory {
                         new FilterCriteria(
                             GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
                             FilterType.AND, 'ITSM::Core::IncidentState'
+                        ),
+                        new FilterCriteria(
+                            `${GeneralCatalogItemProperty.PREFERENCES}.Name`, SearchOperator.EQUALS,
+                            FilterDataType.STRING, FilterType.AND, 'Functionality'
+                        ),
+                        new FilterCriteria(
+                            `${GeneralCatalogItemProperty.PREFERENCES}.Value`, SearchOperator.IN,
+                            FilterDataType.STRING, FilterType.AND, ['incident', 'operational']
                         )
-                    ])
+                    ], null, null, [GeneralCatalogItemProperty.PREFERENCES])
                 ),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
             ],
