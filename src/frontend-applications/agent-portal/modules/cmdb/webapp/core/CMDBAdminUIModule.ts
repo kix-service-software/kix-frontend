@@ -20,6 +20,7 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { ConfigItemClassDuplicateAction } from './admin/actions/ConfigItemClassDuplicateAction';
 
 
 
@@ -40,6 +41,7 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new ConfigItemClassDefinitionLabelProvider());
 
         ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-create', ConfigItemClassCreateAction);
+        ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-duplicate', ConfigItemClassDuplicateAction);
 
         const newConfigItemClassDetailsContext = new ContextDescriptor(
             NewConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],

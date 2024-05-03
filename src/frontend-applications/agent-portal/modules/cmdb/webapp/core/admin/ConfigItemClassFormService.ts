@@ -11,6 +11,9 @@ import { KIXObjectFormService } from '../../../../../modules/base-components/web
 import { ConfigItemClass } from '../../../model/ConfigItemClass';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ConfigItemClassProperty } from '../../../model/ConfigItemClassProperty';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { FormContext } from '../../../../../model/configuration/FormContext';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 
 export class ConfigItemClassFormService extends KIXObjectFormService {
 
@@ -32,10 +35,20 @@ export class ConfigItemClassFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.CONFIG_ITEM_CLASS;
     }
 
-    protected async getValue(property: string, value: any, ciClass: ConfigItemClass): Promise<any> {
+    protected async getValue(
+        property: string, value: any, ciClass: ConfigItemClass,
+        formField: FormFieldConfiguration, formContext: FormContext
+    ): Promise<any> {
         if (property === ConfigItemClassProperty.DEFINITION_STRING && ciClass && ciClass.CurrentDefinition) {
             value = ciClass.CurrentDefinition.DefinitionString;
+        } else if (property === ConfigItemClassProperty.NAME && formContext === FormContext.NEW && ciClass) {
+            value = await TranslationService.translate(
+                'Translatable#Copy of {0}', [value]
+            );
+        } else {
+            value = super.getValue(property, value, ciClass, formField, formContext);
         }
+
         return value;
     }
 }
