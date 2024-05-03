@@ -8,6 +8,7 @@
  */
 
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
@@ -16,6 +17,7 @@ import { ObjectFormValue } from '../ObjectFormValue';
 export class DynamicFieldTextAreaFormValue extends ObjectFormValue<string> {
 
     public isEmpty: boolean = false;
+    public rowCount: number = 5;
 
     public constructor(
         public property: string,
@@ -63,6 +65,10 @@ export class DynamicFieldTextAreaFormValue extends ObjectFormValue<string> {
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         this.isEmpty = field?.empty || false;
+        const rowCountOption = field?.options?.find((o) => o.option === FormFieldOptions.ROWS);
+        if (rowCountOption) {
+            this.rowCount = Number(rowCountOption?.value) || 5;
+        }
         await super.initFormValueByField(field);
     }
 }

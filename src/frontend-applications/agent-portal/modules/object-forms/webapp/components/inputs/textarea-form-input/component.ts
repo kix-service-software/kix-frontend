@@ -51,6 +51,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         this.state.value = this.formValue?.value;
+
+        if (this.formValue && this.formValue['rowCount']) {
+            this.state.rowCount = Number(this.formValue['rowCount']) || 5;
+        }
+
         this.state.prepared = true;
     }
 
