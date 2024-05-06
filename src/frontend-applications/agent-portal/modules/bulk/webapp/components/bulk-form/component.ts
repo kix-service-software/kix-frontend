@@ -40,6 +40,8 @@ class Component {
 
     private tableSubscriber: IEventSubscriber;
 
+    private updateRunning = false;
+
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
@@ -58,9 +60,13 @@ class Component {
         ]);
 
         this.state.bulkManager?.registerListener('bulk-dialog-listener', async () => {
-            this.state.prepared = false;
+            const component = (this as any).getComponent(this.state.componentId);
+            if (component && !this.updateRunning) {
+                this.updateRunning = true;
+                await component.updateValues();
+                this.updateRunning = false;
+            }
             this.setCanRun();
-            setTimeout(() => this.state.prepared = true, 150);
         });
 
         const bulkService = BulkService.getInstance();
