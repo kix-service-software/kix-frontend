@@ -607,7 +607,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             }
         }
 
-        if (valid && dynamicField.ValidID !== 1) {
+        if (valid && dynamicField?.ValidID !== 1) {
             dynamicField = null;
         }
 
