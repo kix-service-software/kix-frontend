@@ -366,10 +366,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             new UIComponentPermission('/tickets', [CRUD.READ])
                         ]),
                     new ConfiguredWidget(
-                        'ticket-edit-affected-asset-tickets', 'ticket-edit-affected-asset-tickets'
+                        'ticket-edit-affected-asset-tickets', 'ticket-edit-affected-asset-tickets', null,
+                        [
+                            new UIComponentPermission('cmdb/configitems', [CRUD.READ])
+                        ]
                     ),
                     new ConfiguredWidget(
-                        'ticket-edit-dialog-suggested-faq-widget', 'ticket-edit-dialog-suggested-faq-widget'
+                        'ticket-edit-dialog-suggested-faq-widget', 'ticket-edit-dialog-suggested-faq-widget', null,
+                        [
+                            new UIComponentPermission('faq/articles', [CRUD.READ])
+                        ]
                     )
                 ],
                 [], [],

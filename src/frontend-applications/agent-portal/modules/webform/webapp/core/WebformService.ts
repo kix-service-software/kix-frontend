@@ -25,6 +25,7 @@ import { Error } from '../../../../../../server/model/Error';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../../../modules/base-components/webapp/core/ServiceType';
 import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
 
 export class WebformService extends KIXObjectService<Webform> {
 
@@ -129,6 +130,13 @@ export class WebformService extends KIXObjectService<Webform> {
     private getParameterValue(parameter: Array<[string, any]>, property: string): any {
         const param = parameter.find((p) => p[0] === property);
         return param && param.length ? param[1] : null;
+    }
+
+    public async deleteObject(
+        objectType: string, objectId: string | number,
+        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix?: string
+    ): Promise<void> {
+        await WebformSocketClient.getInstance().deleteWebform(Number(objectId));
     }
 
 }

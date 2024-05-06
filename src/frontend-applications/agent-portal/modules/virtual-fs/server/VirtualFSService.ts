@@ -48,28 +48,11 @@ export class VirtualFSAPIService extends KIXObjectAPIService {
         let objectResponse = new ObjectResponse([], 0);
         if (objectType === KIXObjectType.VIRTUAL_FS) {
 
-            const includes = [];
-            const expands = [];
-
-            if (!loadingOptions) {
-                loadingOptions = new KIXObjectLoadingOptions(null, null, null, includes, expands);
-            } else {
-                if (loadingOptions.includes) {
-                    loadingOptions.includes = [...loadingOptions.includes, ...includes];
+            if (objectLoadingOptions.asDownload) {
+                if (!loadingOptions) {
+                    loadingOptions = new KIXObjectLoadingOptions();
                 }
-                else {
-                    loadingOptions.includes = includes;
-                }
-
-                if (loadingOptions.expands) {
-                    loadingOptions.expands = [...loadingOptions.expands, ...expands];
-                } else {
-                    loadingOptions.expands = expands;
-                }
-            }
-
-            if (!loadingOptions.query) {
-                loadingOptions.query = [];
+                loadingOptions.includes?.push('Content');
             }
 
             objectResponse = await super.load(

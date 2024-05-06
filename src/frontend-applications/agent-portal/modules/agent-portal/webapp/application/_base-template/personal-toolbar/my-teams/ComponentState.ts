@@ -7,15 +7,15 @@
  * --
  */
 
-import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
+import { AbstractComponentState } from '../../../../../../base-components/webapp/core/AbstractComponentState';
+import { QueueInformation } from './QueueInformation';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public value: any = null,
+        public queues: QueueInformation[] = [],
         public prepared: boolean = false,
-        public readonly: boolean = false,
-        public rowCount: number = 5
+        public isMobile: boolean = false
     ) {
         super();
     }

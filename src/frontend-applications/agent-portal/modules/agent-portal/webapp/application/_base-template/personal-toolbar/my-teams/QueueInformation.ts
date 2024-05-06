@@ -7,18 +7,15 @@
  * --
  */
 
-export enum WebformEvent {
+import { ObjectIcon } from '../../../../../../icon/model/ObjectIcon';
 
-    LOAD_WEBFORMS = 'LOAD_WEBFORMS',
+export class QueueInformation {
 
-    LOAD_WEBFORMS_FINISHED = 'LOAD_WEBFORMS_FINISHED',
-
-    SAVE_WEBFORM = 'SAVE_WEBFORM',
-
-    WEBFORM_SAVED = 'WEBFORM_SAVED',
-
-    DELETE_WEBFORM = 'DELETE_WEBFORM',
-
-    WEBFORM_DELETED = 'WEBFORM_DELETED'
+    public constructor(
+        public queueId: number,
+        public name: string,
+        public icon: string | ObjectIcon,
+        public ticketCount: number
+    ) { }
 
 }

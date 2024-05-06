@@ -7,15 +7,13 @@
  * --
  */
 
-import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 
-export class ComponentState extends AbstractComponentState {
+export class RunLogLoadingOptions extends KIXObjectSpecificLoadingOptions {
 
     public constructor(
-        public value: any = null,
-        public prepared: boolean = false,
-        public readonly: boolean = false,
-        public rowCount: number = 5
+        public jobId: number,
+        public runId: number
     ) {
         super();
     }

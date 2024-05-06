@@ -46,6 +46,7 @@ import { RoleService } from './admin/RoleService';
 import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { UserPreferencesEventHandler } from './UserPreferencesEventHandler';
+import { UserRoleDeleteAction } from './admin/actions/UserRoleDeleteAction';
 
 
 export class UIModule implements IUIModule {
@@ -134,6 +135,7 @@ export class UIModule implements IUIModule {
     private registerRole(): void {
 
         ActionFactory.getInstance().registerAction('user-admin-role-create-action', UserRoleCreateAction);
+        ActionFactory.getInstance().registerAction('user-admin-role-delete-action', UserRoleDeleteAction);
 
         const newUserRoleContext = new ContextDescriptor(
             NewUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],

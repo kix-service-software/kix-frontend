@@ -17,9 +17,9 @@ export class RuleResult {
 
     public constructor(result: any) {
         if (result?.EvaluationResult) {
-            this.InputOrder = result.InputOrder || [];
-
             const evaluationResult = result.EvaluationResult;
+
+            this.InputOrder = evaluationResult?.InputOrder || [];
 
             for (const value in evaluationResult) {
                 if (Object.prototype.hasOwnProperty.call(evaluationResult, value) && value !== 'InputOrder') {

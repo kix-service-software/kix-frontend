@@ -22,7 +22,7 @@ export class ComponentState {
             'table-widget', 'Translatable#User Management: Roles',
             [
                 'user-admin-role-create-action', 'user-admin-role-table-delete-action',
-                'import-action', 'csv-export-action'
+                'import-action', 'csv-export-action', 'user-admin-role-delete-action'
             ],
             null,
             new TableWidgetConfiguration(

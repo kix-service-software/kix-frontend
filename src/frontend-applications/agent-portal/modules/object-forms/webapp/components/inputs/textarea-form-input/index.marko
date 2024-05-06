@@ -11,7 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
    <if(!state.readonly)>
       <textarea
          type="text"
-         rows=5
+         rows=state.rowCount
          value=state.value
          on-change("valueChanged")
          class="form-control"
@@ -20,7 +20,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
    <else-if(state.readonly)>
       <textarea
          type="text"
-         rows=5
+         rows=state.rowCount
          value=state.value
          on-change("valueChanged")
          disabled=state.readonly

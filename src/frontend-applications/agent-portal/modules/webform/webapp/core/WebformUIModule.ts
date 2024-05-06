@@ -23,6 +23,7 @@ import { WebformAcceptedDomainsValidator } from './WebformAcceptedDomainsValidat
 import { FormValidationService } from '../../../base-components/webapp/core/FormValidationService';
 import { FormService } from '../../../base-components/webapp/core/FormService';
 import { WebformFormFieldValueHandler } from './WebformFormFieldValueHandler';
+import { WebformDeleteAction } from './actions/WebformDeleteAction';
 
 export class UIModule implements IUIModule {
 
@@ -33,6 +34,7 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ActionFactory.getInstance().registerAction('webform-create-action', WebformCreateAction);
         ActionFactory.getInstance().registerAction('webform-edit-action', WebformEditAction);
+        ActionFactory.getInstance().registerAction('webform-delete-action', WebformDeleteAction);
 
         ServiceRegistry.registerServiceInstance(WebformService.getInstance());
         ServiceRegistry.registerServiceInstance(WebformFormService.getInstance());
@@ -40,6 +42,17 @@ export class UIModule implements IUIModule {
         TableFactoryService.getInstance().registerFactory(new WebformTableFactory());
         LabelService.getInstance().registerLabelProvider(new WebformLabelProvider());
 
+        this.registerContext();
+
+        FormValidationService.getInstance().registerValidator(new WebformAcceptedDomainsValidator());
+        FormService.getInstance().addFormFieldValueHandler(new WebformFormFieldValueHandler());
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
+    }
+
+    private registerContext(): void {
         const newWebformDialogContext = new ContextDescriptor(
             NewWebformDialogContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
@@ -63,13 +76,6 @@ export class UIModule implements IUIModule {
             'Translatable#Edit Webform', 'kix-icon-gear', WebformDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editWebformDialogContext);
-
-        FormValidationService.getInstance().registerValidator(new WebformAcceptedDomainsValidator());
-        FormService.getInstance().addFormFieldValueHandler(new WebformFormFieldValueHandler());
-    }
-
-    public async registerExtensions(): Promise<void> {
-        return;
     }
 
 }

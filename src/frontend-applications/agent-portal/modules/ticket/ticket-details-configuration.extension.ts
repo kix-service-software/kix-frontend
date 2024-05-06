@@ -993,21 +993,30 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 this.getModuleId(),
                 [
                     new ConfiguredWidget(
-                        'ticket-details-contact-card-widget', 'ticket-details-contact-card-widget'
+                        'ticket-details-contact-card-widget', 'ticket-details-contact-card-widget', null,
+                        [
+                            new UIComponentPermission('contacts', [CRUD.READ])
+                        ]
                     ),
                     new ConfiguredWidget(
                         'ticket-details-assigned-assets', 'ticket-details-assigned-assets', undefined,
                         [
-                            new UIComponentPermission('/cmdb/configitems', [CRUD.READ]),
-                            new UIComponentPermission('/tickets', [CRUD.READ])
+                            new UIComponentPermission('cmdb/configitems', [CRUD.READ]),
+                            new UIComponentPermission('tickets', [CRUD.READ])
                         ]
                     ),
                     new ConfiguredWidget(
-                        'ticket-details-affected-asset-tickets', 'ticket-details-affected-asset-tickets'
+                        'ticket-details-affected-asset-tickets', 'ticket-details-affected-asset-tickets', null,
+                        [
+                            new UIComponentPermission('cmdb/configitems', [CRUD.READ])
+                        ]
                     ),
                     new ConfiguredWidget('ticket-details-contact-tickets', 'ticket-details-contact-tickets'),
                     new ConfiguredWidget(
-                        'ticket-details-suggested-faq-widget', 'ticket-details-suggested-faq-widget'
+                        'ticket-details-suggested-faq-widget', 'ticket-details-suggested-faq-widget', null,
+                        [
+                            new UIComponentPermission('faq/articles', [CRUD.READ])
+                        ]
                     )
                 ],
                 [],
