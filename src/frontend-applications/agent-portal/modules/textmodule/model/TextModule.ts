@@ -33,27 +33,18 @@ export class TextModule extends KIXObject {
 
     public keywordsDisplayString: string;
 
+    public QueueIDs: number[];
+
+    public TicketTypeIDs: number[];
+
     public equals(textModule: TextModule): boolean {
         return this.ID === textModule.ID;
     }
 
     public constructor(textModule?: TextModule) {
-        super();
+        super(textModule);
         if (textModule) {
-            this.ID = textModule.ID;
-            this.ObjectId = this.ID;
-            this.Name = textModule.Name;
-            this.Text = textModule.Text;
-            this.Keywords = textModule.Keywords;
-            this.Comment = textModule.Comment;
-            this.Subject = textModule.Subject;
-            this.Language = textModule.Language;
-            this.ValidID = textModule.ValidID;
-            this.CreateBy = textModule.CreateBy;
-            this.CreateTime = textModule.CreateTime;
-            this.ChangeBy = textModule.ChangeBy;
-            this.ChangeTime = textModule.ChangeTime;
-
+            this.ObjectId = textModule.ID;
             this.keywordsDisplayString = this.Keywords?.join(', ');
         }
     }
