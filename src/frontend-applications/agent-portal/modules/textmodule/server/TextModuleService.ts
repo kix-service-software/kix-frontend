@@ -16,6 +16,9 @@ import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIServic
 import { Error } from '../../../../../server/model/Error';
 import { TextModule } from '../model/TextModule';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { TextModuleProperty } from '../model/TextModuleProperty';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 
 export class TextModuleAPIService extends KIXObjectAPIService {
 
@@ -86,6 +89,26 @@ export class TextModuleAPIService extends KIXObjectAPIService {
         });
 
         return id;
+    }
+
+    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        const searchProperties = [
+            TextModuleProperty.QUEUE_IDS,
+            TextModuleProperty.TICKET_TYPE_IDS,
+            KIXObjectProperty.VALID_ID,
+            'WithDependencies'
+        ];
+
+        return criteria.filter((c) => searchProperties.some((p) => p === c.property));
+    }
+
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        const filterProperties = [
+            TextModuleProperty.NAME,
+            TextModuleProperty.LANGUAGE,
+            TextModuleProperty.KEYWORDS
+        ];
+        return criteria.filter((c) => filterProperties.some((p) => p === c.property));
     }
 
 }

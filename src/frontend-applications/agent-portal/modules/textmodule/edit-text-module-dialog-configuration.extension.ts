@@ -65,86 +65,86 @@ class Extension extends KIXExtension implements IConfigurationExtension {
     }
 
     public async getFormConfigurations(): Promise<IConfiguration[]> {
-        const configurations = [];
-        const formId = 'text-module-edit-form';
-
-        configurations.push(
+        const formFields = [
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-name',
                 'Translatable#Name', TextModuleProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_TextModuleCreate_Name'
-            )
-        );
-        configurations.push(
+            ),
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-keywords',
                 'Translatable#Keywords', TextModuleProperty.KEYWORDS, null, false,
                 'Translatable#Helptext_Admin_TextModuleCreate_Keywords'
-            )
-        );
-        configurations.push(
+            ),
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-text',
                 'Translatable#Text', TextModuleProperty.TEXT, 'rich-text-input', true,
                 'Translatable#Helptext_Admin_TextModuleCreate_Text'
-            )
-        );
-        configurations.push(
+            ),
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-language',
                 'Translatable#Language', TextModuleProperty.LANGUAGE, 'language-input', true,
                 'Translatable#Helptext_Admin_TextModuleCreate_Language'
-            )
-        );
-        configurations.push(
+            ),
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-comment',
                 'Translatable#Comment', TextModuleProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_TextModuleCreate_Comment', null, null, null,
                 null, null, null, null, null, 250
-            )
-        );
-        configurations.push(
+            ),
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
-                'object-reference-input', true, 'Translatable#Helptext_Admin_TextModuleCreate_Validity', [
-                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-            ], new FormFieldValue(1)
+                'object-reference-input', true, 'Translatable#Helptext_Admin_TextModuleCreate_Validity',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                ], new FormFieldValue(1)
             )
+        ];
+
+        const fieldGroup = new FormGroupConfiguration(
+            'text-modules-edit-form-group-module', 'Translatable#Text Module', [], null, formFields
         );
 
-        configurations.push(
-            new FormGroupConfiguration(
-                'text-modules-edit-form-group-module', 'Translatable#Text Module',
+        const dependencyFields = [
+            new FormFieldConfiguration(
+                'text-modules-edit-form-field-queue-ids',
+                'Translatable#Queues', TextModuleProperty.QUEUE_IDS,
+                'object-reference-input', false, 'Translatable#Helptext_Admin_TextModuleCreate_QueueIDs',
                 [
-                    'text-modules-edit-form-field-name',
-                    'text-modules-edit-form-field-keywords',
-                    'text-modules-edit-form-field-text',
-                    'text-modules-edit-form-field-language',
-                    'text-modules-edit-form-field-comment',
-                    'text-modules-edit-form-field-valid'
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true)
+                ]
+            ),
+            new FormFieldConfiguration(
+                'text-modules-edit-form-field-ticket-type-ids',
+                'Translatable#Types', TextModuleProperty.TICKET_TYPE_IDS,
+                'object-reference-input', false, 'Translatable#Helptext_Admin_TextModuleCreate_TicketTypeIDs',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_TYPE),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
                 ]
             )
+        ];
+
+        const dependencyGroup = new FormGroupConfiguration(
+            'text-modules-edit-form-group-dependencies', 'Translatable#Dependencies', [], null, dependencyFields
         );
 
-        configurations.push(
-            new FormPageConfiguration(
-                'text-modules-edit-form-page', 'Translatable#Edit Text Module',
-                ['text-modules-edit-form-group-module']
-            )
+        const page = new FormPageConfiguration(
+            'text-modules-edit-form-page', 'Translatable#Edit Text Module', [],
+            true, false, [fieldGroup, dependencyGroup]
         );
 
-        configurations.push(
-            new FormConfiguration(
-                formId, 'Translatable#Edit Text Module',
-                ['text-modules-edit-form-page'],
-                KIXObjectType.TEXT_MODULE, true, FormContext.EDIT
-            )
+        const formId = 'text-module-edit-form';
+        const formConfig = new FormConfiguration(
+            formId, 'Translatable#Edit Text Module', [], KIXObjectType.TEXT_MODULE, true, FormContext.EDIT
         );
+        formConfig.pages.push(page);
         ModuleConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.TEXT_MODULE, formId);
 
-        return configurations;
+        return [formConfig];
     }
 }
 
