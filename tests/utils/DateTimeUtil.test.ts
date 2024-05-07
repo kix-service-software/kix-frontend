@@ -15,7 +15,6 @@ import { DateTimeUtil } from '../../src/frontend-applications/agent-portal/modul
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
-const assert = chai.assert;
 
 describe('DateTimeUtil', () => {
 
@@ -42,7 +41,7 @@ describe('DateTimeUtil', () => {
             d1.setDate(d1.getDate() - 7);
 
             const result = DateTimeUtil.betweenDays(d1, d2);
-            assert.isOk(result);
+            expect(result).true;
         });
 
         it('Check betweenDays / d1: -1w / d2: -1d / withTime: NO / withSeconds: NO / should be false', async () => {
@@ -53,7 +52,7 @@ describe('DateTimeUtil', () => {
             d2.setDate(d2.getDate() - 1);
 
             const result = DateTimeUtil.betweenDays(d1, d2);
-            assert.isNotOk(result);
+            expect(result).false;
         });
 
         it('Check betweenDays / d1: -1d / d2: +2d / withTime: YES / withSeconds: NO / should be true', async () => {
@@ -64,7 +63,7 @@ describe('DateTimeUtil', () => {
             d2.setDate(d2.getDate() + 2);
 
             const result = DateTimeUtil.betweenDays(d1, d2);
-            assert.isOk(result, `${d1} - ${d2}`);
+            expect(result, `${d1} - ${d2}`).true;
         });
 
         it('Check betweenDays / d1: -1d / d2: +1d / withTime: YES / withSeconds: YES / should be true', async () => {
@@ -75,7 +74,7 @@ describe('DateTimeUtil', () => {
             d2.setDate(d2.getDate() + 1);
 
             const result = DateTimeUtil.betweenDays(d1, d2);
-            assert.isOk(result);
+            expect(result).true;
         });
     });
 
