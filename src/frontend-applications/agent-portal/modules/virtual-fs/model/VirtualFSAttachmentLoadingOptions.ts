@@ -9,7 +9,7 @@
 
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 
-export class VirutalFSAttachmentLoadingOptions extends KIXObjectSpecificLoadingOptions {
+export class VirtualFSAttachmentLoadingOptions extends KIXObjectSpecificLoadingOptions {
 
     public constructor(
         public virtualFSId: number,
