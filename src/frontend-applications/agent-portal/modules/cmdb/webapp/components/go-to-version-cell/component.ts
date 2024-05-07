@@ -22,7 +22,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.cell = input.cell;
         if (this.state.cell) {
             const value = this.state.cell.getValue().objectValue;
-            this.state.isActive = value !== undefined && value !== null && value !== 0;
+            this.state.isActive = !isNaN(value);
         }
     }
 
