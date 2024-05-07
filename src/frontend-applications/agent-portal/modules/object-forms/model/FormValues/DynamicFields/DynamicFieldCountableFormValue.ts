@@ -303,6 +303,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     public async hide(): Promise<void> {
         await super.hide();
         this.formValuesVisible = false;
+        await this.setVisibility(false);
     }
 
     private async setVisibility(show?: boolean): Promise<void> {
