@@ -356,6 +356,22 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 case TicketProperty.TICKET_ID:
                     result = ticket[attribute] ? ticket[attribute].toString() : '';
                     break;
+                case TicketProperty.STATE_PREVIOUS:
+                case TicketProperty.STATE_ID_PREVIOUS:
+                    // load the ticket with included previous state
+                    const tickets = await KIXObjectService.loadObjects(
+                        KIXObjectType.TICKET, [ticket.TicketID],
+                        new KIXObjectLoadingOptions(null, null, null, [TicketProperty.STATE_PREVIOUS]), null, true
+                    ).catch((error) => []);
+                    if (tickets && !!tickets.length) {
+                        result = attribute === TicketProperty.STATE_PREVIOUS ?
+                            tickets[0].StatePrevious.toString() : tickets[0].StateIDPrevious.toString();
+                    }
+                    if (!result) {
+                        result = attribute === TicketProperty.STATE_PREVIOUS ?
+                            ticket[TicketProperty.STATE].toString() : ticket[TicketProperty.STATE_ID].toString();
+                    }
+                    break;
                 case TicketProperty.CREATED:
                 case TicketProperty.CHANGED:
                 case TicketProperty.PENDING_TIME:

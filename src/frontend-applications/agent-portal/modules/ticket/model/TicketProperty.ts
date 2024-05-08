@@ -18,6 +18,9 @@ export enum TicketProperty {
     STATE_ID = 'StateID',
     STATE = 'State',
 
+    STATE_ID_PREVIOUS = 'StateIDPrevious',
+    STATE_PREVIOUS = 'StatePrevious',
+
     PRIORITY_ID = 'PriorityID',
     PRIORITY = 'Priority',
 
