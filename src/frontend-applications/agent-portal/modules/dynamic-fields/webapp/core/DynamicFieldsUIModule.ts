@@ -40,6 +40,7 @@ import { DynamicFieldTableValidator } from './DynamicFieldTableValidator';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectIconService } from '../../../icon/webapp/core';
 import { DynamicFieldDuplicateAction } from './DynamicFieldDuplicateAction';
+import { DynamicFieldDeleteAction } from './DynamicFieldDeleteAction';
 
 export class UIModule implements IUIModule {
 
@@ -72,6 +73,7 @@ export class UIModule implements IUIModule {
 
         ActionFactory.getInstance().registerAction('dynamic-field-create-action', DynamicFieldCreateAction);
         ActionFactory.getInstance().registerAction('dynamic-field-duplicate-action', DynamicFieldDuplicateAction);
+        ActionFactory.getInstance().registerAction('dynamic-field-delete-action', DynamicFieldDeleteAction);
 
         const newDynamicFieldContext = new ContextDescriptor(
             NewDynamicFieldDialogContext.CONTEXT_ID, [KIXObjectType.DYNAMIC_FIELD],
