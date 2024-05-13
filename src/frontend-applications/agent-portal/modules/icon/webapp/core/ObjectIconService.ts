@@ -87,7 +87,7 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
         }
 
         if (fontAwesome) {
-            for (const [key, value] of Object.entries(FontawesomeIcon.icons)) {
+            for (const key of FontawesomeIcon.getIcons()) {
                 icons.push(key);
             }
         }
