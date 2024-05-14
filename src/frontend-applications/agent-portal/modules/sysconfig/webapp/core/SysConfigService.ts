@@ -69,15 +69,20 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
     }
 
     public async getPortalConfiguration<T = any>(): Promise<T> {
-        let config: AgentPortalConfiguration;
+        const config = this.getUIConfiguration<T>(AgentPortalConfiguration.CONFIGURATION_ID);
+        return config as any;
+    }
 
-        const value = await this.getSysConfigOptionValue(AgentPortalConfiguration.CONFIGURATION_ID)
+    public async getUIConfiguration<T = any>(configurationId: string): Promise<T> {
+        let config: T;
+
+        const value = await this.getSysConfigOptionValue(configurationId)
             .catch(() => null);
         if (value) {
             try {
                 config = JSON.parse(value);
             } catch (error) {
-                console.error('Could not parse Agent Portal Configuration');
+                console.error('Could not parse configuration');
             }
         }
 
