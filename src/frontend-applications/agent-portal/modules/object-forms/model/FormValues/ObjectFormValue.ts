@@ -475,4 +475,10 @@ export class ObjectFormValue<T = any> {
         await this.applyPossibleValues();
     }
 
+    public isValidValue(value: any): boolean {
+        const hasPossibleValue = this.possibleValues?.some((v) => v.toString() === value?.toString());
+        const hasAdditionalValue = this.additionalValues?.some((v) => v.toString() === value?.toString());
+        return hasPossibleValue || hasAdditionalValue;
+    }
+
 }
