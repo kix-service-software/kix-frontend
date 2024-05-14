@@ -14,6 +14,7 @@ import { FilterDataType } from '../../model/FilterDataType';
 import { FilterType } from '../../model/FilterType';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { AgentPortalConfiguration } from '../../model/configuration/AgentPortalConfiguration';
+import { DefaultColorConfiguration } from '../../model/configuration/DefaultColorConfiguration';
 import { DisplayValueConfiguration } from '../../model/configuration/DisplayValueConfiguration';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
@@ -45,7 +46,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const agentPortalConfig = new AgentPortalConfiguration();
         agentPortalConfig.adminRoleIds = roles.objects?.map((r) => r.ID);
 
-        return [agentPortalConfig, new DisplayValueConfiguration()];
+        return [agentPortalConfig, new DisplayValueConfiguration(), new DefaultColorConfiguration()];
     }
 
     public async getFormConfigurations(): Promise<IConfiguration[]> {
