@@ -15,7 +15,6 @@ import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public prepared: boolean = false,
         public formValue: ObjectFormValue = null,
         public inputTemplate: any = null,
         public valid: boolean = true,
