@@ -66,6 +66,9 @@
             },
             "edit-ticket-queue-dialog-configuration": {
                 "module": "edit-ticket-queue-dialog-configuration.extension"
+            },
+            "ticket-module-configuration": {
+                "module": "ticket-module-configuration.extension"
             }
         },
         "kix:socket:namespace": {

@@ -17,11 +17,26 @@ import { Queue } from '../model/Queue';
 import { Ticket } from '../model/Ticket';
 import { TicketProperty } from '../model/TicketProperty';
 import { TicketObjectCommitHandler } from '../webapp/core/form/TicketObjectCommitHandler';
+import { TicketService } from '../webapp/core';
+import { TicketModuleConfiguration } from '../model/TicketModuleConfiguration';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 describe('ObjectCommitHandler', () => {
+
+    const ticketModuleConfig = new TicketModuleConfiguration()
+
+    let originalMethod;
+
+    before(() => {
+        originalMethod = TicketService.getTicketModuleConfiguration;
+        TicketService.getTicketModuleConfiguration = async (): Promise<TicketModuleConfiguration> => ticketModuleConfig;
+    });
+
+    after(() => {
+        TicketService.getTicketModuleConfiguration = originalMethod;
+    });
 
     describe('Remove all not relevant properties', () => {
 
@@ -142,6 +157,69 @@ describe('ObjectCommitHandler', () => {
 
             expect(ticket.Articles[0].ChannelID).equal(2);
             expect(Boolean(ticket.Articles[0].Body.match(testRegex)), 'First article (email) should have the signature attached').true;
+
+            expect(ticket.Articles[1].ChannelID).equal(1);
+            expect(Boolean(ticket.Articles[1].Body.match(testRegex)), 'Second article (note) should NOT have the signature attached').false;
+        });
+
+        after(() => {
+            KIXObjectService.loadObjects = orgLoadObjectsFunction;
+        })
+    });
+
+    describe('Do not add queue signature if not enabled', () => {
+        let ticket: Ticket;
+        let orgLoadObjectsFunction: any;
+        const signature: string = '<p>This is the signature</p>';
+        const testRegex: RegExp = new RegExp(`.*${signature}.*`);
+
+        before(async () => {
+            ticketModuleConfig.addQueueSignature = false;
+
+            orgLoadObjectsFunction = KIXObjectService.loadObjects;
+            KIXObjectService.loadObjects = async <T>(objectType: KIXObjectType | string, objectIds?: Array<number | string>): Promise<T> => {
+                let objects;
+                if (objectType === KIXObjectType.CHANNEL) {
+                    const isEmail = objectIds && objectIds[0] === 2;
+                    objects = [
+                        new Channel({
+                            ID: isEmail ? 2 : 1,
+                            Name: isEmail ? "email" : 'note'
+                        } as Channel)
+                    ];
+                } else if (objectType === KIXObjectType.QUEUE) {
+                    objects = [
+                        new Queue({
+                            QueueID: 1,
+                            Name: 'Test team', Fullname: 'Test team',
+                            Signature: signature
+                        } as Queue)
+                    ];
+                }
+                return objects;
+            };
+
+            ticket = new Ticket();
+            ticket.QueueID = 1;
+
+            const emailArticle = new Article(null, ticket);
+            emailArticle.ChannelID = 2;
+            emailArticle.Body = 'test body';
+            const noteArticle = new Article(null, ticket);
+            noteArticle.ChannelID = 1;
+            noteArticle.Body = 'test body';
+            ticket.Articles = [emailArticle, noteArticle];
+
+            const commitHandler = new TicketObjectCommitHandler(null);
+            ticket = await commitHandler.prepareObject(ticket, null, true);
+        });
+
+        it('Ticket should have two articles without a signature', () => {
+            expect(ticket.Articles).exist;
+            expect(Array.isArray(ticket.Articles), 'Ticket should have two articles').true;
+
+            expect(ticket.Articles[0].ChannelID).equal(2);
+            expect(Boolean(ticket.Articles[0].Body.match(testRegex)), 'First article (email) should NOT have the signature attached').false;
 
             expect(ticket.Articles[1].ChannelID).equal(1);
             expect(Boolean(ticket.Articles[1].Body.match(testRegex)), 'Second article (note) should NOT have the signature attached').false;

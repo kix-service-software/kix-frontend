@@ -34,6 +34,7 @@ import { Channel } from '../../../model/Channel';
 import { Queue } from '../../../model/Queue';
 import { Ticket } from '../../../model/Ticket';
 import { TicketProperty } from '../../../model/TicketProperty';
+import { TicketService } from '../TicketService';
 
 export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
@@ -166,7 +167,9 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
     public async addQueueSignature(ticketOrQueueId: number | Ticket, body: string, channelId: number): Promise<string> {
         const queueId = typeof ticketOrQueueId === 'number' ? ticketOrQueueId : ticketOrQueueId?.QueueID;
-        if (channelId && queueId) {
+        const config = await TicketService.getTicketModuleConfiguration();
+
+        if (channelId && queueId && config?.addQueueSignature) {
             const channels = await KIXObjectService.loadObjects<Channel>(
                 KIXObjectType.CHANNEL, [channelId], null, null, true
             ).catch(() => []);

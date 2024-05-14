@@ -66,6 +66,8 @@ import { Counter } from '../../../user/model/Counter';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
+import { TicketModuleConfiguration } from '../../model/TicketModuleConfiguration';
+import { SysConfigService } from '../../../sysconfig/webapp/core';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -951,6 +953,23 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
         return LabelService.getInstance().getPropertyText(TicketProperty.QUEUE, objectType);
+    }
+
+    public static async getTicketModuleConfiguration(): Promise<TicketModuleConfiguration> {
+        let config: TicketModuleConfiguration;
+
+        const value = await SysConfigService.getInstance().getSysConfigOptionValue(
+            TicketModuleConfiguration.CONFIGURATION_ID
+        ).catch(() => null);
+        if (value) {
+            try {
+                config = JSON.parse(value);
+            } catch (error) {
+                console.error('Could not parse Ticket Module Configuration');
+            }
+        }
+
+        return config as any;
     }
 
 }
