@@ -60,10 +60,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'TicketReadUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public priority: number = 100;
 
     protected doRegisterContexts: boolean = true;
@@ -115,6 +111,15 @@ export class UIModule implements IUIModule {
 
         JobFormService.getInstance().registerJobFormManager(JobTypes.TICKET, new TicketJobFormManager());
 
+        DoNotSentEventHandler.getInstance();
+        UserCounterEventHandler.getInstance();
+
+        if (this.doRegisterContexts) {
+            await this.registerContexts();
+        }
+    }
+
+    public async registerExtensions(): Promise<void> {
         const ticketManager = JobFormService.getInstance().getJobFormManager(JobTypes.TICKET);
         if (ticketManager) {
             ticketManager.addExtendedJobFormManager(new TicketArticleCreate());
@@ -122,13 +127,6 @@ export class UIModule implements IUIModule {
             ticketManager.addExtendedJobFormManager(new TicketCreateDynamicFields());
             ticketManager.addExtendedJobFormManager(new TicketStateSet());
             ticketManager.addExtendedJobFormManager(new TeamSet());
-        }
-
-        DoNotSentEventHandler.getInstance();
-        UserCounterEventHandler.getInstance();
-
-        if (this.doRegisterContexts) {
-            await this.registerContexts();
         }
     }
 

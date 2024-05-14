@@ -26,10 +26,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'FAQEditUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         await this.registerContexts();
         this.registerActions();
@@ -55,6 +51,10 @@ export class UIModule implements IUIModule {
             'Translatable#FAQ', 'kix-icon-gear', FAQDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editFAQArticleContext);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
     private registerActions(): void {

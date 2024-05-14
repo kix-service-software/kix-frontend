@@ -8,6 +8,7 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { LabelService } from '../../../../../../../../base-components/webapp/core/LabelService';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -22,15 +23,31 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.update();
     }
 
-    private update(): void {
+    private async update(): Promise<void> {
         const config = this.state.cell?.getColumnConfiguration();
         this.state.showIcons = config?.showIcon;
         this.state.showText = config?.showText;
+        this.state.rtl = config?.rtl;
+        await this.getOverlay();
     }
 
     public onDestroy(): void {
         // nothing
     }
+
+    private async getOverlay(): Promise<void> {
+        const object = this.state.cell.getRow().getRowObject().getObject();
+
+        if (object?.KIXObjectType) {
+            const value = this.state.cell.getValue();
+            if (value?.objectValue && Number(value?.objectValue)) {
+                this.state.overlay = await LabelService.getInstance().getOverlayIconForType(
+                    object?.KIXObjectType, value.objectValue, value.property
+                );
+            }
+        }
+    }
+
 }
 
 module.exports = Component;

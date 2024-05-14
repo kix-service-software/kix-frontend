@@ -99,6 +99,8 @@ export enum KIXObjectType {
 
     LOG_FILE = 'LogFile',
 
+    LOG_FILE_DOWNLOAD = 'LOG_FILE_DOWNLOAD',
+
     MACRO = 'Macro',
 
     MACRO_ACTION = 'MacroAction',
@@ -185,6 +187,8 @@ export enum KIXObjectType {
 
     VALID_OBJECT = 'ValidObject',
 
+    VIRTUAL_FS = 'VirtualFS',
+
     WATCHER = 'Watcher',
 
     PERSONAL_SETTINGS = 'PERSONAL_SETTINGS',
@@ -207,6 +211,8 @@ export enum KIXObjectType {
 
     USER_TICKETS = 'USER_TICKETS',
 
-    USER_COUNTER = 'USER_COUNTER'
+    USER_COUNTER = 'USER_COUNTER',
+
+    OVERLAY_ICON = 'OVERLAY_ICON'
 
 }

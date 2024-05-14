@@ -20,12 +20,14 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { Table } from '../../../model/Table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class TableFactoryService {
 
     private static INSTANCE: TableFactoryService;
 
     private subscriber: IEventSubscriber;
+    private tableDeps: Map<string, string>;
 
     public static getInstance(): TableFactoryService {
         if (!TableFactoryService.INSTANCE) {
@@ -43,6 +45,7 @@ export class TableFactoryService {
             }
         };
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
+        this.tableDeps = new Map();
     }
 
     public deleteContextTables(contextId: string, objectType?: KIXObjectType | string, keepState?: boolean): void {
@@ -58,6 +61,21 @@ export class TableFactoryService {
                     if (!keepState) {
                         table.deleteTableState();
                     }
+                }
+            });
+            this.contextTableInstances.delete(contextId);
+        }
+    }
+
+    public resetFilterOfContextTables(
+        contextId: string, objectType?: KIXObjectType | string
+    ): void {
+        if (this.contextTableInstances.has(contextId)) {
+            this.contextTableInstances.get(contextId).forEach((table) => {
+                if (!objectType) {
+                    table.resetFilter();
+                } else if (table.getObjectType() === objectType) {
+                    table.resetFilter();
                 }
             });
             this.contextTableInstances.delete(contextId);
@@ -93,6 +111,16 @@ export class TableFactoryService {
         let tableContextId: string;
         if (context) {
             tableContextId = context.contextId;
+
+            let dependency = context.getAdditionalInformation(AdditionalContextInformation.OBJECT_DEPENDENCY);
+            if (Array.isArray(dependency)) {
+                dependency = dependency.toString();
+            }
+            if (dependency !== this.tableDeps.get(tableKey)) {
+                this.tableDeps.set(tableKey, dependency);
+                recreate = true;
+            }
+
             if (!recreate && this.contextTableInstances.has(tableContextId)) {
                 const tableInstances = this.contextTableInstances.get(tableContextId);
                 if (tableInstances.has(tableKey)) {

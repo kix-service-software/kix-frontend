@@ -7,13 +7,13 @@
  * --
  */
 
-import { Bookmark } from '../../../../../../../model/Bookmark';
 import { AbstractComponentState } from '../../../../../../base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public bookmarks: Bookmark[] = []
+        public groups: string[] = [],
+        public bookmarksCount: number = 0
     ) {
         super();
     }

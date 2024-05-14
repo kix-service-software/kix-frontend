@@ -21,7 +21,8 @@ import { ISocketRequest } from '../../../../modules/base-components/webapp/core/
 import { DeleteSearchRequest } from '../../model/DeleteSearchRequest';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
-import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
+import { LoadSearchDefaultRequest } from '../../model/LoadSearchDefaultRequest';
+import { LoadSearchDefaultResponse } from '../../model/LoadSearchDefaultResponse';
 
 export class SearchSocketClient extends SocketClient {
 
@@ -39,7 +40,7 @@ export class SearchSocketClient extends SocketClient {
         super('search');
     }
 
-    public async saveSearch(search: SearchCache): Promise<void> {
+    public async saveSearch(search: SearchCache, share?: boolean): Promise<void> {
         this.checkSocketConnection();
 
         const socketTimeout = ClientStorageService.getSocketTimeout();
@@ -47,7 +48,7 @@ export class SearchSocketClient extends SocketClient {
             const requestId = IdService.generateDateBasedId();
 
             const request = new SaveSearchRequest(
-                requestId, ClientStorageService.getClientRequestId(), search
+                requestId, ClientStorageService.getClientRequestId(), search, share
             );
 
             const timeout = window.setTimeout(() => {
@@ -74,7 +75,80 @@ export class SearchSocketClient extends SocketClient {
         });
     }
 
-    public async loadSearch(): Promise<SearchCache[]> {
+    public async saveSearchAsDefault(search: SearchCache): Promise<void> {
+        const defaultSearch = SearchCache.create(search, true);
+
+        this.checkSocketConnection();
+
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<void>((resolve, reject) => {
+            const requestId = IdService.generateDateBasedId();
+
+            const request = new SaveSearchRequest(
+                requestId, ClientStorageService.getClientRequestId(), defaultSearch
+            );
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + SearchEvent.SAVE_SEARCH_AS_DEFAULT);
+            }, socketTimeout);
+
+            this.socket.on(SearchEvent.SAVE_SEARCH_AS_DEFAULT_FINISHED, (result: ISocketResponse) => {
+                if (result.requestId === requestId) {
+                    BrowserCacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+                    window.clearTimeout(timeout);
+                    resolve();
+                }
+            });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            this.socket.emit(SearchEvent.SAVE_SEARCH_AS_DEFAULT, request);
+        });
+    }
+
+    public async loadDefaultUserSearch(objectType: KIXObjectType | string): Promise<SearchCache> {
+        this.checkSocketConnection();
+
+        return new Promise<SearchCache>((resolve, reject) => {
+            const requestId = IdService.generateDateBasedId();
+
+            const request = new LoadSearchDefaultRequest(
+                requestId, objectType
+            );
+
+            this.socket.on(SearchEvent.SEARCH_DEFAULT_LOADED, (result: LoadSearchDefaultResponse) => {
+                if (result.requestId === requestId) {
+                    const search = result.search
+                        ? SearchCache.create(result.search)
+                        : null;
+                    resolve(search);
+                }
+            });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            this.socket.emit(SearchEvent.LOAD_SEARCH_DEFAULT, request);
+        });
+    }
+
+    public async loadAllSearches(): Promise<SearchCache[]> {
+        const searches = await this.loadSearches().catch(() => []) || [];
+        const sharedSearches = await this.loadSharedSearches().catch(() => []) || [];
+        return [...searches, ...sharedSearches];
+    }
+
+    public async loadSearches(): Promise<SearchCache[]> {
         this.checkSocketConnection();
 
         const socketTimeout = ClientStorageService.getSocketTimeout();
@@ -115,6 +189,40 @@ export class SearchSocketClient extends SocketClient {
         });
     }
 
+    public async loadSharedSearches(): Promise<SearchCache[]> {
+        this.checkSocketConnection();
+
+        return new Promise<SearchCache[]>((resolve, reject) => {
+
+            const requestId = IdService.generateDateBasedId('search-');
+
+            this.socket.on(SearchEvent.SHARED_SEARCHES_LOADED, (result: LoadSearchResponse) => {
+                if (result.requestId === requestId) {
+                    const searches: SearchCache[] = [];
+                    if (Array.isArray(result.search)) {
+                        result.search.forEach((s) => searches.push(SearchCache.create(s)));
+                    }
+                    resolve(searches);
+                }
+            });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            const request: ISocketRequest = {
+                clientRequestId: ClientStorageService.getClientRequestId(),
+                requestId
+            };
+            this.socket.emit(
+                SearchEvent.LOAD_SHARED_SEARCHES, request
+            );
+        });
+    }
+
     public async deleteSearch(id: string): Promise<void> {
         this.checkSocketConnection();
 
@@ -144,6 +252,31 @@ export class SearchSocketClient extends SocketClient {
 
             const request = new DeleteSearchRequest(requestId, ClientStorageService.getClientRequestId(), id);
             this.socket.emit(SearchEvent.DELETE_SEARCH, request);
+        });
+    }
+
+    public async deleteUserDefaultSearch(objectType: string): Promise<void> {
+        this.checkSocketConnection();
+
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<void>((resolve, reject) => {
+            const requestId = IdService.generateDateBasedId('search-');
+
+            this.socket.on(SearchEvent.DELETE_SEARCH_DEFAULT_FINISHED, (result: ISocketResponse) => {
+                if (result.requestId === requestId) {
+                    resolve();
+                }
+            });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            const request = new DeleteSearchRequest(requestId, ClientStorageService.getClientRequestId(), objectType);
+            this.socket.emit(SearchEvent.DELETE_SEARCH_DEFAULT, request);
         });
     }
 

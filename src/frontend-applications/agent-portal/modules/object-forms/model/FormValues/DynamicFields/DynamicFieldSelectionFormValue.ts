@@ -118,11 +118,19 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
         const dynamicField = await KIXObjectService.loadDynamicField(this.object?.Name);
         const possibleValues = dynamicField?.Config?.PossibleValues;
         if (possibleValues) {
-            const nodes: TreeNode[] = [];
+            let nodes: TreeNode[] = [];
             for (const pv in possibleValues) {
-                if (possibleValues[pv] && this.possibleValues?.some((v) => v.toString() === pv.toString())) {
-                    const node = await this.createNode(pv, possibleValues[pv]);
-                    nodes.push(node);
+                if (possibleValues[pv]) {
+                    if (this.isValidValue(pv)) {
+                        const node = await this.createNode(pv, possibleValues[pv]);
+                        nodes.push(node);
+                    }
+
+                    if (Array.isArray(this.forbiddenValues)) {
+                        nodes = nodes.filter(
+                            (n) => !this.forbiddenValues?.some((fv) => fv?.toString() === n.id?.toString())
+                        );
+                    }
                 }
             }
 
@@ -141,7 +149,7 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
             if (possibleValues) {
                 for (const key of this.value) {
                     const value = possibleValues[key];
-                    if (value && this.possibleValues?.some((v) => v.toString() === key.toString())) {
+                    if (this.isValidValue(key)) {
                         const node = await this.createNode(key, value);
                         selectedNodes.push(node);
                     }

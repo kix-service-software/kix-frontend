@@ -40,6 +40,7 @@ import { VersionProperty } from '../../model/VersionProperty';
 import { Context } from '../../../../model/Context';
 import { DateInputDefinition } from '../../model/DateInputDefinition';
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
+import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 
 export class ConfigItemFormFactory {
 
@@ -226,6 +227,10 @@ export class ConfigItemFormFactory {
         }
 
         formField.instanceId = IdService.generateDateBasedId();
+
+        if (BrowserUtil.isBooleanTrue(ad.Input.GUIReadOnly?.toString())) {
+            formField.readonly = true;
+        }
 
         if (ad.Sub) {
             formField.children = ad.Sub.map((subField) => this.getFormField(subField, formField.instanceId, formField));

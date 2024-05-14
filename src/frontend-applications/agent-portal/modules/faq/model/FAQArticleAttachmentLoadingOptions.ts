@@ -13,7 +13,8 @@ export class FAQArticleAttachmentLoadingOptions extends KIXObjectSpecificLoading
 
     public constructor(
         public faqArticleId: number,
-        public attachmentId: number
+        public attachmentId: number,
+        public asDownload?: boolean
     ) {
         super();
     }

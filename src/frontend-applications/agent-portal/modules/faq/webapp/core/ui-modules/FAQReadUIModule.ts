@@ -37,10 +37,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'FAQReadUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         PlaceholderService.getInstance().registerPlaceholderHandler(new FAQArticlePlaceholderHandler());
 
@@ -59,6 +55,10 @@ export class UIModule implements IUIModule {
 
         await this.registerContexts();
         this.registerActions();
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
     private async registerContexts(): Promise<void> {

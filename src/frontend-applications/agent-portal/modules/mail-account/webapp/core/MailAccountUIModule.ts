@@ -34,10 +34,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'MailAccountUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(MailAccountService.getInstance());
         ServiceRegistry.registerServiceInstance(MailAccountFormService.getInstance());
@@ -82,7 +78,9 @@ export class UIModule implements IUIModule {
             'Translatable#Mail Account Details', 'kix-icon-mail'
         );
         ContextService.getInstance().registerContext(mailAccountDetailsContext);
+    }
 
+    public async registerExtensions(): Promise<void> {
         SetupService.getInstance().registerSetupStep(
             new SetupStep('setup-sending-email', 'Translatable#Outbox', 'setup-sending-email',
                 [

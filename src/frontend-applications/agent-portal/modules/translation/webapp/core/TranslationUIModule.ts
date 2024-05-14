@@ -31,10 +31,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'TranslationUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public priority: number = 75;
 
     public async register(): Promise<void> {
@@ -71,5 +67,9 @@ export class UIModule implements IUIModule {
             'Translatable#Edit Translation', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editTranslationDialogContext);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 }

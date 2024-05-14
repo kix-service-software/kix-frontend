@@ -15,6 +15,7 @@ import { KIXModulesService } from '../../../../base-components/webapp/core/KIXMo
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TreeHandler, TreeNode, TreeService, TreeUtil } from '../../../../base-components/webapp/core/tree';
+import { TableFactoryService } from '../../core/factory/TableFactoryService';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -26,15 +27,35 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.state.configuration = { ...input.configuration };
-        this.updateSortConfiguration();
+        if (!this.state.configuration) {
+            this.state.configuration = { ...input.configuration };
+        }
     }
 
     public async onMount(): Promise<void> {
+
+        let tableConfiguration = this.state.configuration.configuration as TableConfiguration;
+
+        if (!tableConfiguration) {
+            tableConfiguration = new TableConfiguration(
+                `${this.state.configuration.id}-table`, `${this.state.configuration.id}-table`, ConfigurationType.Table
+            );
+            tableConfiguration.objectType = this.state.configuration.objectType;
+
+            this.state.configuration.configuration = tableConfiguration;
+        }
+
+        if (!tableConfiguration.tableColumns?.length) {
+            const factory = TableFactoryService.getInstance().getTableFactory(this.state.configuration.objectType);
+            tableConfiguration.tableColumns = await factory.getDefaultColumnConfigurations(null);
+        }
+
         this.state.tableConfigurationTemplate = KIXModulesService.getConfigurationComponentTemplate(
             ConfigurationType.Table
         );
-        this.updateSortConfiguration();
+        await this.updateSortConfiguration();
+
+        setTimeout(() => this.state.prepared = true, 20);
     }
 
     private async updateSortConfiguration(): Promise<void> {
@@ -42,24 +63,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.isDESC = this.state.configuration.sort[1] === SortOrder.DOWN;
         }
 
-        const tableConfiguration = this.state.configuration.configuration as TableConfiguration;
-        const supportedAttributes = await KIXObjectService.getSortableAttributes(tableConfiguration.objectType);
+        const supportedAttributes = await KIXObjectService.getSortableAttributes(this.state.configuration.objectType);
         let nodes: TreeNode[] = [];
         if (Array.isArray(supportedAttributes)) {
-            const labelPromises = [];
-            for (const sA of supportedAttributes) {
-                labelPromises.push(
-                    new Promise<void>(async (resolve) => {
-                        const label = await LabelService.getInstance().getPropertyText(
-                            sA.Property, tableConfiguration.objectType
-                        );
-                        nodes.push(new TreeNode(sA.Property, label));
-                        resolve();
-                    })
-                );
-            }
-            await Promise.all(labelPromises);
+            const labelPromises: Array<Promise<string>> = supportedAttributes.map((sa) =>
+                LabelService.getInstance().getPropertyText(sa.Property, this.state.configuration.objectType)
+            );
+            const labels = await Promise.all(labelPromises);
+            nodes = labels.map((l, index) => new TreeNode(supportedAttributes[index].Property, l));
         }
+
         nodes = nodes.sort((a, b) => a.label.localeCompare(b.label));
 
         this.sortColumnTreeHandler = TreeService.getInstance().getTreeHandler(this.state.sortTreeId);

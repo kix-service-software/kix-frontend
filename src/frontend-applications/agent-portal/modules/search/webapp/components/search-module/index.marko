@@ -7,18 +7,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.search-dashboard>
-    <search-criteria-widget key=state.componentKey/>
-    <div.search-result-widget>
-        <if(state.prepared)>
-            <table-widget
-                key="search-result-table-" + state.objectType
-                instanceId=state.instanceId
-                useContext=false
-                widgetConfiguration=state.configuration
-                title=state.title
-                icon=state.icon
-            />
-        </if>
-    </div>
-</div>
+<if(state.prepared)>
+    <widget-container widgets=state.contentWidgets contextWidgetList="content"/>
+</if>

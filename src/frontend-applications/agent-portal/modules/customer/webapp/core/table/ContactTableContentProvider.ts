@@ -33,6 +33,7 @@ export class ContactTableContentProvider extends TableContentProvider<Contact> {
     ) {
         super(KIXObjectType.CONTACT, table, objectIds, loadingOptions, contextId);
         this.useBackendSort = true;
+        this.useBackendFilter = true;
     }
 
     public async loadData(): Promise<Array<RowObject<Contact>>> {

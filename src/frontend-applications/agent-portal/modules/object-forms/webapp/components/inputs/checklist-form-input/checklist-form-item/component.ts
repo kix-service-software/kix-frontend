@@ -8,8 +8,9 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { DynamicFieldFormUtil } from '../../../../../../base-components/webapp/core/DynamicFieldFormUtil';
 import { TreeNode } from '../../../../../../base-components/webapp/core/tree';
-import { CheckListItem } from '../../../../../../dynamic-fields/webapp/core/CheckListItem';
+import { CheckListItem } from '../../../../../../dynamic-fields/model/CheckListItem';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -23,16 +24,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.state.nodes = [
-            new TreeNode('OK', 'OK', 'kix-icon-check'),
-            new TreeNode('NOK', 'NOK', 'kix-icon-exclamation'),
-            new TreeNode('pending', 'pending', 'kix-icon-time-wait'),
-            new TreeNode('n.a.', 'n.a.', 'kix-icon-unknown'),
-            new TreeNode('-', '-')
-        ];
-
-        this.state.selectedNode = this.state.nodes.find((n) => n.id.toLowerCase() === this.state.item?.value.toLowerCase() && n.id !== '-');
-
+        const states = this.state.item.inputStates || DynamicFieldFormUtil.getDefaultChecklistStates();
+        this.state.nodes = states.map((s) => new TreeNode(s.value, s.value, s.icon));
+        this.state.selectedNode = this.state.nodes.find(
+            (n) => n.id.toLowerCase() === this.state.item?.value.toLowerCase() && n.id !== '-'
+        );
         this.state.prepared = true;
     }
 

@@ -41,6 +41,9 @@ import { OverlayType } from '../../../base-components/webapp/core/OverlayType';
 import { StringContent } from '../../../base-components/webapp/core/StringContent';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
+import { UserLabelProvider } from '../../../user/webapp/core/UserLabelProvider';
 
 export class SearchService {
 
@@ -60,6 +63,8 @@ export class SearchService {
     private formSearches: Map<KIXObjectType | string, (formId: string) => Promise<any[]>> = new Map();
     private formTableConfigs: Map<KIXObjectType | string, Table> = new Map();
     private searchDefinitions: SearchDefinition[] = [];
+
+    private readonly TICKET_SEARCH_CONTEXTID = 'search-ticket-context';
 
     public registerFormSearch<T extends KIXObject>(
         objectType: KIXObjectType | string,
@@ -144,7 +149,7 @@ export class SearchService {
     }
 
     public async searchObjectsFromSearchId(id: string): Promise<KIXObject[]> {
-        const search = await SearchSocketClient.getInstance().loadSearch();
+        const search = await SearchSocketClient.getInstance().loadSearches();
         const searchCache = search?.find((s) => s.id === id);
         return this.searchObjects(searchCache);
     }
@@ -152,7 +157,9 @@ export class SearchService {
     public async searchObjects(
         searchCache: SearchCache,
         context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>(),
-        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean]
+        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean],
+        additionalFilter?: FilterCriteria[],
+        setResult: boolean = true
     ): Promise<KIXObject[]> {
         if (!searchCache) {
             throw new Error('No search available');
@@ -167,7 +174,7 @@ export class SearchService {
             preparedCriteria, null, searchCache.sortAttribute, searchCache.sortDescending
         );
 
-        if (limit) {
+        if (typeof limit !== 'undefined' && limit !== null) {
             loadingOptions.limit = limit;
         }
 
@@ -206,7 +213,8 @@ export class SearchService {
             await context.prepareContextLoadingOptions(searchCache.objectType, loadingOptions);
         }
 
-        if (!loadingOptions.limit) {
+        // use "old" searchCache limit as fallback (in most cases not necessary, because of context default)
+        if (typeof loadingOptions.limit === 'undefined' || loadingOptions.limit === null) {
             loadingOptions.limit = searchCache.limit;
         }
 
@@ -214,18 +222,63 @@ export class SearchService {
             loadingOptions.sortOrder = await KIXObjectService.getSortOrder(sort[0], sort[1], searchCache.objectType);
         }
 
-        loadingOptions.searchLimit = searchLimit || searchCache.limit || loadingOptions.searchLimit;
+        if (additionalFilter?.length) {
+            loadingOptions.filter.push(...additionalFilter);
+        }
+
+        // use given limit but ignore completely limit from searchCache (as searchLimit) - not needed anymore
+        if (typeof searchLimit !== 'undefined' && searchLimit !== null) {
+            loadingOptions.searchLimit = searchLimit;
+        }
 
         const objects = await KIXObjectService.loadObjects(
             searchCache.objectType, null, loadingOptions, null, false, undefined, undefined, searchCache.id
         );
 
-        if (context instanceof SearchContext) {
-            context.setSearchCache(searchCache);
-            context.setSearchResult(objects);
+        if (setResult && context instanceof SearchContext) {
+            setTimeout(() => {
+                context.setSearchCache(searchCache);
+                context.setSearchResult(objects);
+            }, 1000);
         }
 
         return objects;
+    }
+
+    public async executeUserFulltextSearch(value?: string): Promise<void> {
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Search' }
+        );
+
+        const searchDescriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
+        const searchContextDescriptor = this.getSearchContextDescriptor();
+        const hasTicketSearchContext = searchDescriptors.some((sd) => sd.contextId === this.TICKET_SEARCH_CONTEXTID);
+
+        let contextId: string = searchContextDescriptor?.contextId;
+        if (!searchContextDescriptor && hasTicketSearchContext) {
+            contextId = this.TICKET_SEARCH_CONTEXTID;
+        } else if (!searchContextDescriptor && searchDescriptors.length) {
+            contextId = searchDescriptors[0].contextId;
+        }
+
+        const descriptor = searchContextDescriptor || ContextService.getInstance().getContextDescriptor(contextId);
+        if (descriptor && value) {
+            await this.executePrimarySearch(descriptor.kixObjectTypes[0], value).catch((error) => {
+                OverlayService.getInstance().openOverlay(
+                    OverlayType.WARNING, null, new StringContent(error), 'Translatable#Search error!',
+                    null, true
+                );
+            });
+        }
+    }
+
+    private getSearchContextDescriptor(): ContextDescriptor {
+        const context = ContextService.getInstance().getActiveContext();
+        const searchDescriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
+        const searchContextDescriptor = searchDescriptors.find(
+            (sd) => sd.kixObjectTypes.some((ot) => ot === context.descriptor.kixObjectTypes[0])
+        );
+        return searchContextDescriptor;
     }
 
     public async executePrimarySearch<T extends KIXObject>(
@@ -240,40 +293,37 @@ export class SearchService {
 
         searchCache.primaryValue = searchValue;
 
-        const searchContext = await this.setSearchContext(searchCache?.objectType);
-        const objects = await this.searchObjects(searchCache);
+        const objects = await this.searchObjects(
+            searchCache, undefined, undefined, undefined, undefined, undefined, undefined, false
+        );
 
         if (Array.isArray(objects) && objects.length === 1) {
             const contextService = ContextService.getInstance();
             const contextDescriptors = contextService.getContextDescriptors(ContextMode.DETAILS);
             const detailContextId = contextDescriptors.find(
                 (cd) => cd.kixObjectTypes.some((ot) =>
-                    ot === searchContext?.descriptor.kixObjectTypes[0])
+                    ot === objectType)
             );
             if (detailContextId) {
                 contextService.toggleActiveContext();
                 contextService.setActiveContext(detailContextId.contextId, objects[0].ObjectId);
             }
         } else {
-            await SearchService.getInstance().executeFullTextSearch(
-                objectType, searchValue
-            ).catch((error) => {
+            await SearchService.getInstance().executeFullTextSearch(objectType, searchValue, true).catch((error) => {
                 OverlayService.getInstance().openOverlay(
                     OverlayType.WARNING, null, new StringContent(error), 'Translatable#Search error!',
                     null, true
                 );
             });
 
-            EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
-            );
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
         }
 
         return (objects as any);
     }
 
     public async executeFullTextSearch<T extends KIXObject>(
-        objectType: KIXObjectType | string, searchValue: string
+        objectType: KIXObjectType | string, searchValue: string, setContext?: boolean
     ): Promise<T[]> {
         const searchCache = new SearchCache<T>(null, null, objectType, [], []);
         searchCache.criteria = [
@@ -287,7 +337,14 @@ export class SearchService {
         const searchDefinition = this.getSearchDefinition(objectType);
         searchDefinition?.appendFullTextCriteria(searchCache.criteria);
 
-        const objects = await this.searchObjects(searchCache);
+        let context;
+        if (setContext) {
+            context = await this.setSearchContext(objectType);
+        }
+
+        const objects = await this.searchObjects(
+            searchCache, context, undefined, undefined, undefined, undefined, undefined, setContext
+        );
         return (objects as any);
     }
 
@@ -393,12 +450,26 @@ export class SearchService {
         }
     }
 
-    public async getSearchBookmarks(publish?: boolean): Promise<Bookmark[]> {
-        const search = await SearchSocketClient.getInstance().loadSearch();
-        search.sort((s1, s2) => SortUtil.compareString(s1.name, s2.name));
-        const bookmarks = search.map((s) => new Bookmark(
-            s.name, this.getSearchIcon(s.objectType), 'load-search-action', { id: s.id, name: s.name })
-        );
+    public async getSearchBookmarks(publish?: boolean, userOnly?: boolean): Promise<Bookmark[]> {
+        let searches = await SearchSocketClient.getInstance().loadAllSearches() || [];
+
+        searches.sort((s1, s2) => SortUtil.compareString(s1.name, s2.name));
+
+        if (userOnly) {
+            const user = await AgentSocketClient.getInstance().getCurrentUser();
+            searches = searches.filter((s) => !s.userId || s.userId === user.UserID);
+        }
+
+        const bookmarks = searches.map((s) => {
+            let searchDisplayText = s.name;
+            if (s.userDisplayText) {
+                searchDisplayText = `(${s.userDisplayText}) - ${s.name}`;
+            }
+            return new Bookmark(
+                searchDisplayText, this.getSearchIcon(s.objectType), 'load-search-action', { id: s.id, name: s.name }, [],
+                s.userId ? 'Translatable#Shared Search' : 'Translatable#Searches'
+            );
+        });
 
         if (publish) {
             BookmarkService.getInstance().publishBookmarks('search', bookmarks);
@@ -425,9 +496,10 @@ export class SearchService {
 
     public async executeSearchCache(
         id?: string, name?: string, cache?: SearchCache, context?: SearchContext, setSearchContext?: boolean,
-        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean]
+        additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean],
+        additionalFilter?: FilterCriteria[]
     ): Promise<KIXObject[]> {
-        const search = await SearchSocketClient.getInstance().loadSearch();
+        const search = await SearchSocketClient.getInstance().loadAllSearches();
         let searchCache = cache || search.find((s) => s.id === id);
         if (!searchCache && name) {
             searchCache = search.find((s) => s.name === name);
@@ -445,7 +517,9 @@ export class SearchService {
             });
         }
 
-        return await this.searchObjects(searchCache, context, additionalIncludes, limit, searchLimit, sort);
+        return await this.searchObjects(
+            searchCache, context, additionalIncludes, limit, searchLimit, sort, additionalFilter
+        );
     }
 
     private async setSearchContext(
@@ -464,7 +538,7 @@ export class SearchService {
     }
 
     public async loadSearchCache(id: string): Promise<SearchCache> {
-        const search = await SearchSocketClient.getInstance().loadSearch();
+        const search = await SearchSocketClient.getInstance().loadSearches();
         let searchCache = search.find((s) => s.id === id);
         if (searchCache) {
             searchCache = SearchCache.create(searchCache);
@@ -473,8 +547,8 @@ export class SearchService {
         return searchCache;
     }
 
-    public async createTableWidget(id: string, name: string): Promise<ConfiguredWidget> {
-        const search = await SearchSocketClient.getInstance().loadSearch();
+    public async createSearchTableWidget(id: string, name: string): Promise<ConfiguredWidget> {
+        const search = await SearchSocketClient.getInstance().loadAllSearches();
         const searchCache = search.find((s) => s.id === id);
 
         let widget: ConfiguredWidget;
@@ -505,6 +579,10 @@ export class SearchService {
 
         }
         return widget;
+    }
+
+    public async setSearchCacheAsDefault(search: SearchCache): Promise<void> {
+        SearchSocketClient.getInstance().saveSearchAsDefault(search);
     }
 
 }

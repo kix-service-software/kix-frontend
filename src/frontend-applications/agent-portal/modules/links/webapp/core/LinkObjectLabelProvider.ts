@@ -78,8 +78,11 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
     public async getDisplayText(
         linkObject: LinkObject, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
+        const noAccess = await TranslationService.translate('Translatable#No Access');
+
         let displayValue = typeof linkObject[property] !== 'undefined'
-            ? await this.getPropertyValueDisplayText(property, linkObject[property], translatable) : property;
+            ? await this.getPropertyValueDisplayText(property, linkObject[property], translatable)
+            : noAccess;
 
         if (displayValue) {
             displayValue = await TranslationService.translate(

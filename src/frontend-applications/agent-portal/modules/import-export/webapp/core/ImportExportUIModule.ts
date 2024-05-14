@@ -25,10 +25,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'ImportExportUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(ImportExportService.getInstance());
 
@@ -40,5 +36,9 @@ export class UIModule implements IUIModule {
 
         ActionFactory.getInstance().registerAction('template-import-action', TemplateImportAction);
         ActionFactory.getInstance().registerAction('template-export-action', TemplateExportAction);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 }

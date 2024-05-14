@@ -55,6 +55,11 @@ export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
                     case ContactProperty.ZIP:
                         result = await LabelService.getInstance().getDisplayText(contact, attribute, undefined, false);
                         break;
+                    case 'Login':
+                        result = await LabelService.getInstance().getDisplayText(
+                            contact, UserProperty.USER_LOGIN, undefined, false
+                        );
+                        break;
                     case ContactProperty.EMAIL:
                     case ContactProperty.EMAIL1:
                     case ContactProperty.EMAIL2:
@@ -86,7 +91,8 @@ export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
         knownProperties = [
             ...knownProperties,
             ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p]),
-            ...Object.keys(UserProperty).map((p) => UserProperty[p])
+            ...Object.keys(UserProperty).map((p) => UserProperty[p]),
+            'Login'
         ];
         return knownProperties.some((p) => p === property);
     }

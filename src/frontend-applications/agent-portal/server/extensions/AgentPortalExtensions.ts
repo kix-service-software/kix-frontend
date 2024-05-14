@@ -35,6 +35,8 @@ export enum AgentPortalExtensions {
 
     MODIFY_CONFIGURATION = 'kix:modify-configuration',
 
-    MIGRATION = 'kix:migration'
+    MIGRATION = 'kix:migration',
+
+    AUTH_ROUTER_HANDLER = 'kix:auth-router:handler'
 
 }

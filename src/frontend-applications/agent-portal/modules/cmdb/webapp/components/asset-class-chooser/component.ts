@@ -59,9 +59,9 @@ export class Component {
         const formInstance = await this.context.getFormManager().getFormInstance();
         const classId = this.context.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
         if (classId) {
-            this.activeNodeChanged(this.state.nodes.find((n) => n.id === classId));
+            this.state.activeNode = this.state.nodes.find((n) => n.id === classId);
         } else if (!formInstance && this.state.nodes?.length) {
-            this.activeNodeChanged(this.state.nodes[0]);
+            this.state.activeNode = this.state.nodes[0];
         } else if (this.state.nodes?.length) {
             const classIdValue = await formInstance.getFormFieldValueByProperty(ConfigItemProperty.CLASS_ID);
             if (classIdValue?.value) {

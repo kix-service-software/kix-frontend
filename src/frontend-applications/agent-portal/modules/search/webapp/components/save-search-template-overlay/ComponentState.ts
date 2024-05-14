@@ -15,7 +15,8 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public loadNodes: () => Promise<TreeNode[]> = null,
         public name: string = '',
-        public nameInvalid: boolean = false
+        public nameInvalid: boolean = false,
+        public share: boolean = false
     ) {
         super();
     }

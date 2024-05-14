@@ -24,6 +24,7 @@ import { Socket } from 'socket.io';
 import { LoggingService } from './LoggingService';
 import { HTTPResponse } from '../../frontend-applications/agent-portal/server/services/HTTPResponse';
 import { IncomingHttpHeaders } from 'node:http';
+import { AuthMethod } from '../../frontend-applications/agent-portal/model/AuthMethod';
 
 export class AuthenticationService {
 
@@ -134,9 +135,19 @@ export class AuthenticationService {
 
     public async login(
         login: string, password: string, userType: UserType, negotiateToken: string,
-        clientRequestId: string, headers: IncomingHttpHeaders, fakeLogin?: boolean
+        clientRequestId: string, headers: IncomingHttpHeaders, fakeLogin?: boolean,
+        additionalData?: any
     ): Promise<string> {
         const userLogin = new UserLogin(login, password, userType, negotiateToken);
+
+        if (additionalData) {
+            for (const key in additionalData) {
+                if (additionalData[key]) {
+                    userLogin[key] = additionalData[key];
+                }
+            }
+        }
+
         const response = await HttpService.getInstance().post<LoginResponse>(
             'auth', userLogin, null, clientRequestId, undefined, false, null, headers
         );
@@ -161,5 +172,28 @@ export class AuthenticationService {
         const backendToken = this.getBackendToken(token);
         const tokenValue = this.decodeToken(backendToken);
         return tokenValue.UserType;
+    }
+
+    public async getAuthMethods(userType: UserType = UserType.AGENT): Promise<AuthMethod[]> {
+        const authMethods: AuthMethod[] = [];
+        const response = await HttpService.getInstance().get(
+            'auth', { UserType: userType }, null, 'AuthenticationService', 'AuthMethods', false
+        );
+
+        if (response?.responseData) {
+            const methods = response.responseData['AuthMethods'];
+            if (Array.isArray(methods)) {
+                for (const method of methods) {
+                    authMethods.push(new AuthMethod(method.Type, Boolean(method.PreAuth), method.Data));
+                }
+            }
+        }
+
+        return authMethods;
+    }
+
+    public async getAuthMethod(name: string, userType: UserType = UserType.AGENT): Promise<AuthMethod> {
+        const methods = await this.getAuthMethods(userType);
+        return methods?.find((m) => m.name === name);
     }
 }

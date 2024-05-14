@@ -71,6 +71,8 @@ export enum SysConfigKey {
 
     DYNAMIC_FIELD_OBJECT_TYPE = 'DynamicFields::ObjectType',
 
+    HTTP_TYPE = 'HttpType',
+
     FQDN = 'FQDN',
 
     GENERAL_CATALOG_PREFERENCES = 'GeneralCatalogPreferences',

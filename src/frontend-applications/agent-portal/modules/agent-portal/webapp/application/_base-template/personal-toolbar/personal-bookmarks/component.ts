@@ -17,11 +17,14 @@ import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
+    private bookmarks: Bookmark[] = [];
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        this.bookmarks = [];
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Favorites'
         ]);
@@ -44,7 +47,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 availableBookmarks.push(b);
             }
         }
-        this.state.bookmarks = availableBookmarks;
+        this.bookmarks = availableBookmarks;
+        this.state.bookmarksCount = this.bookmarks.length;
+
+        this.initBookmarkGroups();
+    }
+
+    private initBookmarkGroups(): void {
+        const groups: string[] = [];
+        for (const b of this.bookmarks) {
+            if (!groups.some((g) => g === b.group)) {
+                groups.push(b.group);
+            }
+        }
+
+        groups.sort((a, b) => a.localeCompare(b));
+        this.state.groups = groups;
     }
 
     public async bookmarkClicked(bookmark: Bookmark): Promise<void> {
@@ -59,6 +77,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
         }
+    }
+
+    public getBookmarks(group: string): Bookmark[] {
+        return this.bookmarks.filter((b) => b.group === group);
     }
 }
 

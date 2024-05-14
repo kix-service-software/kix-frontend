@@ -20,6 +20,7 @@ import { LogFile } from '../../../model/LogFile';
 import { LogFileProperty } from '../../../model/LogFileProperty';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { LogFileTableFactory } from '../../core/table/LogFileTableFactory';
+import { IDownloadableFile } from '../../../../../model/IDownloadableFile';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -53,15 +54,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async downloadLogFile(logFile: LogFile): Promise<void> {
         const loadingOptions = new KIXObjectLoadingOptions();
-        loadingOptions.includes = [LogFileProperty.CONTENT];
         loadingOptions.query = [['tier', logFile.tier]];
 
-        const files = await KIXObjectService.loadObjects<LogFile>(
-            KIXObjectType.LOG_FILE, [logFile.ID], loadingOptions, null, false, false
+        const files = await KIXObjectService.loadObjects<IDownloadableFile>(
+            KIXObjectType.LOG_FILE_DOWNLOAD, [logFile.ID], loadingOptions, null, false, false
         );
 
         if (files && files.length) {
-            BrowserUtil.startBrowserDownload(files[0].Filename, files[0].Content, 'text/plain');
+            BrowserUtil.startFileDownload(files[0]);
         }
     }
 

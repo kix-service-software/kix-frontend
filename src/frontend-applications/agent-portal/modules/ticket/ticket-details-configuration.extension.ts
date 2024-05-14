@@ -471,8 +471,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'ticket-details-parent-child-table-widget', 'Child Tickets', ConfigurationType.TableWidget, 'Ticket',
                 null, null, new TableConfiguration(
                     'ticket-details-parent-child-table-config', 'Child Tickets', ConfigurationType.Table, 'Ticket',
-                    {
-                        'filter': [
+                    new KIXObjectLoadingOptions(
+                        [
                             {
                                 'property': 'TicketID',
                                 'operator': 'IN',
@@ -488,7 +488,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 'value': '<KIX_TICKET_TicketID>'
                             }
                         ]
-                    },
+                    ),
                     10,
                     [
                         {
@@ -512,7 +512,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
-                            'application': 'agent-portal'
+                            'application': 'agent-portal',
+                            'rtl': false
                         },
                         {
                             'id': null,
@@ -535,7 +536,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
-                            'application': 'agent-portal'
+                            'application': 'agent-portal',
+                            'rtl': false
                         },
                         {
                             'id': null,
@@ -558,7 +560,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
-                            'application': 'agent-portal'
+                            'application': 'agent-portal',
+                            'rtl': false
                         },
                         {
                             'id': null,
@@ -581,7 +584,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
-                            'application': 'agent-portal'
+                            'application': 'agent-portal',
+                            'rtl': false
                         },
                         {
                             'id': null,
@@ -604,7 +608,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
-                            'application': 'agent-portal'
+                            'application': 'agent-portal',
+                            'rtl': false
                         },
                         {
                             'id': null,
@@ -627,7 +632,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
-                            'application': 'agent-portal'
+                            'application': 'agent-portal',
+                            'rtl': false
                         },
                     ],
                     null, false, false, null, null, 1.75, 1.75, 'Translatable#0 data sets found.', null, false

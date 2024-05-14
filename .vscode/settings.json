@@ -8,10 +8,8 @@
     "**/.DS_Store": true,
     "node_modules": true,
     ".cache": true,
-    "dist": false,
     ".nyc_output": true,
-    "allure-results": true,
-    "coverage": true
+    "allure-results": true
   },
   "editor.tabSize": 4,
   "editor.formatOnSave": true,

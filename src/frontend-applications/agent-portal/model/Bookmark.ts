@@ -17,7 +17,8 @@ export class Bookmark {
         public icon: string | ObjectIcon,
         public actionId: string,
         public actionData: any = null,
-        public permissions: UIComponentPermission[] = []
+        public permissions: UIComponentPermission[] = [],
+        public group: string = ''
     ) { }
 
 }

@@ -241,7 +241,6 @@ export class ObjectFormValue<T = any> {
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
-        const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
 
         const defaultValue = field.defaultValue?.value;
         let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null && defaultValue !== '');
@@ -251,7 +250,7 @@ export class ObjectFormValue<T = any> {
 
         if (field.empty) {
             this.setFormValue(null, true);
-        } else if ((!this.value || isEdit) && hasDefaultValue && !field.empty) {
+        } else if ((!this.value || field.readonly) && hasDefaultValue) {
             const value = await this.handlePlaceholders(field.defaultValue?.value);
             this.setFormValue(value, true);
         }
@@ -412,6 +411,8 @@ export class ObjectFormValue<T = any> {
                     this.additionalValues.push(av);
                 }
             }
+
+            await this.applyPossibleValues();
         }
     }
 
@@ -425,6 +426,8 @@ export class ObjectFormValue<T = any> {
         } else {
             this.forbiddenValues = values;
         }
+
+        await this.applyPossibleValues();
     }
 
     public setValidationResult(validationResult: ValidationResult[] = []): void {
@@ -470,6 +473,12 @@ export class ObjectFormValue<T = any> {
 
     public async update(): Promise<void> {
         await this.applyPossibleValues();
+    }
+
+    public isValidValue(value: any): boolean {
+        const hasPossibleValue = this.possibleValues?.some((v) => v.toString() === value?.toString());
+        const hasAdditionalValue = this.additionalValues?.some((v) => v.toString() === value?.toString());
+        return hasPossibleValue || hasAdditionalValue;
     }
 
 }

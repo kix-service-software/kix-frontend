@@ -7,22 +7,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.login-wrapper>
-    <div.login-page.clearfix>
-        <div.login-background/>
+<div class="login-wrapper">
+    <div class="login-page clearfix">
+        <div class="login-background"/>
+        <if(!state.loading && state.prepared)>
+            <div class="login-dialog">
 
-        <if(!state.loading)>
-            <div.login-dialog>
                 <if(
                     Array.isArray(state.notifications) &&
                     state.notifications.length
                 )>
-                    <div.portal-notifications>
+                    <div class="portal-notifications">
                         <login-notification-list notifications=state.notifications/>
                     </div>
                 </if>
-                <div.dialog-header>
-                    <div#kix-logo>
+                <div class="dialog-header">
+                    <div id="kix-logo">
                         <if(input.logo)>
                             <img
                                 alt="kix-logo"
@@ -45,95 +45,126 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
 
                 <if(state.error || state.logout || state.unsupportedBrowser)>
-                    <div.dialog-message-area>
+                    <div class="dialog-message-area">
                         <if(state.unsupportedBrowser)>
-                            <div.message.message-hint>
+                            <div class="message message-hint">
                                 ${component.getString(
-                                    "Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox."
+                                    "Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox.",
                                 )}
                             </div>
                         </if>
                         <if(state.error)>
-                            <div.message.message-error>
-                                <span.kix-icon-warnsign/>
+                            <div class="message message-error">
+                                <span class="kix-icon-warnsign"/>
                                 ${component.getString("Login failed")}
                             </div>
                         </if>
                         <else-if(state.logout)>
-                            <div.message.message-success>
-                                <span.kix-icon-icircle/>
-
+                            <div class="message message-success">
+                                <span class="kix-icon-icircle"/>
                                 ${component.getString(
-                                    "You have successfully logged out."
+                                    "You have successfully logged out.",
                                 )}
                             </div>
                         </else-if>
                     </div>
                 </if>
                 <if(state.loginProcess)>
-                    <div.loading-container>
-                        <div.login-loading>
-                            <div.loading-dots>
-                                <div.loading-dots--dot/>
-                                <div.loading-dots--dot/>
-                                <div.loading-dots--dot/>
+                    <div class="loading-container">
+                        <div class="login-loading">
+                            <div class="loading-dots">
+                                <div class="loading-dots--dot"/>
+                                <div class="loading-dots--dot"/>
+                                <div class="loading-dots--dot"/>
                             </div>
                         </div>
                     </div>
                 </if>
                 <else>
-                    <div.dialog-content on-keydown("keyDown")>
-                        <label>
-                            <span>${component.getString("Login Name")}:</span>
-                            <input.input-style
-                                type="text"
-                                name="username"
-                                tabindex="1"
-                                value=state.userName
-                                on-input("userNameChanged")
-                                key="login-user-name"
-                            >
-                        </label>
-                        <label>
-                            <span>${component.getString("Password")}:</span>
-                            <input.input-style
-                                type=state.passwordFieldType
-                                name="password"
-                                tabindex="2"
-                                value=state.password
-                                on-input("passwordChanged")
-                                key="login-password"
-                            >
-                            <div.d-flex.align-items-center.justify-content-center.px-2
-                                role="button"
-                                on-click("togglePasswordVisibility")
-                            >
-                                <i.far class={
-                                    "fa-eye":  state.passwordFieldType === "text",
-                                    "fa-eye-slash": state.passwordFieldType === "password",
-                                }/>
+                    <if(state.hasLogin)>
+                        <div on-keydown("keyDown") class="dialog-content">
+                            <label>
+                                <span>
+                                    ${component.getString("Login Name")}:
+                                </span>
+                                <input
+                                    type="text"
+                                    name="username"
+                                    tabindex="1"
+                                    value=state.userName
+                                    on-input("userNameChanged")
+                                    key="login-user-name"
+                                    class="input-style"
+                                >
+                            </label>
+                            <label>
+                                <span>${component.getString("Password")}:</span>
+                                <input
+                                    type=state.passwordFieldType
+                                    name="password"
+                                    tabindex="2"
+                                    value=state.password
+                                    on-input("passwordChanged")
+                                    key="login-password"
+                                    class="input-style"
+                                >
+                                <div
+                                    role="button"
+                                    on-click("togglePasswordVisibility")
+                                    class="d-flex align-items-center justify-content-center px-2"
+                                >
+                                    <i class=[
+                                        "far",
+                                        {
+                                            "fa-eye":
+                                                state.passwordFieldType ===
+                                                "text",
+                                            "fa-eye-slash":
+                                                state.passwordFieldType ===
+                                                "password",
+                                        },
+                                    ]/>
+                                </div>
+                            </label>
+                            <div class="dialog-buttons">
+                                <button
+                                    type="button"
+                                    on-click("login")
+                                    tabindex="3"
+                                    class="kix-button special-button"
+                                >
+                                    <span class="kix-icon-check"/>
+                                    ${component.getString("Login")}
+                                </button>
                             </div>
-                        </label>
-                        <div.dialog-buttons>
-                            <button.kix-button.special-button
-                                type="button"
-                                on-click("login")
-                                tabindex="3"
-                            >
-                                <span.kix-icon-check/>
-                                ${component.getString("Login")}
-                            </button>
                         </div>
-                    </div>
+                    </if>
+                    <if(
+                        Array.isArray(state.authMethods) &&
+                        state.authMethods.length
+                    )>
+                        <hr>
+                        <div class="d-grid gap-2 col-6 mx-auto my-4">
+                            <for|method| of=state.authMethods>
+                                <button
+                                    class="btn btn-outline-secondary"
+                                    type="button"
+                                    on-click("authMethodClicked", method)
+                                >
+                                    ${method.name}
+                                </button>
+                            </for>
+                        </div>
+                    </if>
                 </else>
             </div>
-            <if(input.releaseInfo)>
-                <login-footer
-                    releaseInfo=input.releaseInfo
-                    imprintLink=input.imprintLink
-                    unauthorized
-                />
-            </if>
+        </if>
+        <if(input.releaseInfo)>
+            <login-footer
+                releaseInfo=input.releaseInfo
+                imprintLink=input.imprintLink
+                unauthorized
+            />
         </if>
     </div>
 </div>

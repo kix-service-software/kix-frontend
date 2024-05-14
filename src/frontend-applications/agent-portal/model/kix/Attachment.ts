@@ -7,10 +7,11 @@
  * --
  */
 
+import { IDownloadableFile } from '../IDownloadableFile';
 import { KIXObject } from './KIXObject';
 import { KIXObjectType } from './KIXObjectType';
 
-export class Attachment extends KIXObject {
+export class Attachment extends KIXObject implements IDownloadableFile {
 
     public ObjectId: string | number;
 
@@ -36,6 +37,16 @@ export class Attachment extends KIXObject {
 
     public charset: string;
 
+    public downloadId: string;
+
+    public downloadSecret: string;
+
+    public md5Sum: string;
+
+    public base64: boolean = true;
+
+    public path: string;
+
     public constructor(attachment?: Attachment) {
         super(attachment);
         if (attachment) {
@@ -49,6 +60,7 @@ export class Attachment extends KIXObject {
             this.FilesizeRaw = attachment.FilesizeRaw;
             this.Content = attachment.Content;
             this.Disposition = attachment.Disposition;
+            this.base64 = true;
 
             this.prepareContentType();
         }

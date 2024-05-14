@@ -13,6 +13,7 @@ import path from 'path';
 /* eslint-disable no-console */
 import winston from 'winston';
 import { Attachment } from '../../frontend-applications/agent-portal/model/kix/Attachment';
+import { DateTimeUtil } from '../../frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
 import { LogFile } from '../../frontend-applications/agent-portal/modules/system-log/model/LogFile';
 import { LogTier } from '../../frontend-applications/agent-portal/modules/system-log/model/LogTier';
 import { IServerConfiguration } from '../model/IServerConfiguration';
@@ -118,14 +119,15 @@ export class LoggingService {
 
         const logFiles: LogFile[] = [];
         for (const f of fileNames) {
-            const logFile = await this.getLogFile(f);
+            const logFile = await this.getLogFile(f).catch();
+            logFile.path = 'logs';
             logFiles.push(logFile);
         }
         return logFiles;
     }
 
     public async getLogFile(
-        logFileName: string, withContent?: boolean, tailCount?: number, logLevel: string[] = []
+        logFileName: string, tailCount?: number, logLevel: string[] = []
     ): Promise<LogFile> {
         const logFile = new LogFile();
         logFile.Filename = logFileName;
@@ -138,19 +140,22 @@ export class LoggingService {
 
         logFile.FilesizeRaw = stats.size;
         logFile.Filesize = Attachment.getHumanReadableContentSize(stats.size);
-        logFile.ModifyTime = stats.mtime.toISOString();
+        logFile.ModifyTime = DateTimeUtil.getKIXDateTimeString(stats.mtime);
 
-        if (withContent) {
-            if (tailCount) {
-                let content = await this.tailLogFile(logFilePath, tailCount);
-                if (logLevel && logLevel.length) {
-                    content = content.filter((c) => logLevel.some((ll) => c.indexOf(ll) !== -1));
-                }
-                const stringContent = content.join('\n');
-                logFile.Content = Buffer.from(stringContent).toString('base64');
+        if (tailCount || tailCount === -1) {
+            let content = [];
+            if (tailCount === -1) {
+                const contentString = fs.readFileSync(logFilePath, 'utf8');
+                content = contentString.split(/\n/);
             } else {
-                logFile.Content = fs.readFileSync(logFilePath, { encoding: 'base64' });
+                content = await this.tailLogFile(logFilePath, tailCount);
             }
+
+            if (logLevel?.length) {
+                content = content.filter((c) => logLevel.some((ll) => c.indexOf(ll) !== -1));
+            }
+            const stringContent = content.join('\n');
+            logFile.Content = Buffer.from(stringContent).toString('base64');
         }
 
         return logFile;
@@ -268,4 +273,5 @@ export class LoggingService {
 
         return (level <= this.defaultLevelNumber);
     }
+
 }

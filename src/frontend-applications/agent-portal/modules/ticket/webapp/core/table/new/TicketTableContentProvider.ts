@@ -25,6 +25,7 @@ export class TicketTableContentProvider extends TableContentProvider<Ticket> {
     ) {
         super(KIXObjectType.TICKET, table, objectIds, loadingOptions, contextId, objects);
         this.useBackendSort = true;
+        this.useBackendFilter = true;
     }
 
     protected async prepareLoadingOptions(): Promise<KIXObjectLoadingOptions> {

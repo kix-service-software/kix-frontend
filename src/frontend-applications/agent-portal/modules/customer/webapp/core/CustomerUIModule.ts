@@ -23,10 +23,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'CustomerUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         const organisationListContext = new ContextDescriptor(
             OrganisationContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.MAIN, ContextMode.DASHBOARD,
@@ -38,6 +34,10 @@ export class UIModule implements IUIModule {
             'Translatable#Organisations Dashboard', 'kix-icon-man-bubble'
         );
         ContextService.getInstance().registerContext(organisationListContext);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

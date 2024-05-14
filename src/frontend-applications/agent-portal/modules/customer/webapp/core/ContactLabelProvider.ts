@@ -227,6 +227,14 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case ContactProperty.TITLE:
                 translatable = false;
                 break;
+            case ContactProperty.FULLNAME:
+                if (contact.Fullname) {
+                    displayValue = contact.Fullname;
+                } else {
+                    displayValue = `${contact.Firstname} ${contact.Lastname}`;
+                }
+                translatable = false;
+                break;
             case ContactProperty.CREATE_NEW_TICKET:
                 if (contact.ValidID === 1) {
                     const newTicketLabel = await TranslationService.translate('Translatable#New Ticket');

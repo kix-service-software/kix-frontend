@@ -12,7 +12,7 @@ import { KIXObjectService } from '../../../base-components/webapp/core/KIXObject
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { DynamicFieldTypes } from '../../model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../model/DynamicFieldValue';
-import { CheckListItem } from './CheckListItem';
+import { CheckListItem } from '../../model/CheckListItem';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { ExtendedDynamicFieldPlaceholderHandler } from './ExtendedDynamicFieldPlaceholderHandler';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
@@ -117,25 +117,9 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
         } else if (dfValue && dfOptions && dfOptions.match(/^Short$/i)) {
             result = await this.handleShortValue(object, dfValue);
         } else if (dfOptions && dfOptions.match(/^ObjectValue.*$/i)) {
-            const valueIndex = dfOptions.replace(/^ObjectValue_(\d+?)$/, '$1');
-            if (valueIndex === 'ObjectValue') {
-                result = dfValue ? dfValue.Value : [];
-            } else if (!isNaN(Number(valueIndex))) {
-                result = dfValue &&
-                    typeof dfValue.Value[valueIndex] !== 'undefined' &&
-                    dfValue.Value[valueIndex] !== null ?
-                    dfValue.Value[valueIndex] : '';
-            }
+            result = await this.handleObjectValue(object, dfOptions, dfValue);
         } else if (dfOptions && dfOptions.match(/^Object_\d+_.+$/i) && dfValue?.Value?.length) {
-            const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name, dfValue.ID);
-            if (dynamicField) {
-                const attributePath = dfOptions.replace(/^Object_(\d+_.+)/, '$1');
-                result = await PlaceholderService.getInstance().replaceDFObjectPlaceholder(
-                    attributePath,
-                    dynamicField.FieldType,
-                    dfValue.Value
-                );
-            }
+            result = await this.handleObject(object, dfOptions, dfValue);
         } else if (dfValue && (dfOptions === '' || dfOptions.match(/^Value$/i))) {
             result = await this.handleValue(object, dfValue);
         }
@@ -240,6 +224,48 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
             } else {
                 result = await this.handleValue(object, dfValue);
             }
+        }
+        return result;
+    }
+
+    private async handleObjectValue(object: KIXObject, dfOptions: string = '', dfValue: DynamicFieldValue): Promise<string | any> {
+        for (const extendedHandler of this.extendedPlaceholderHandler) {
+            const value = await extendedHandler.handleObjectValue(object, dfOptions, dfValue);
+            if (value) {
+                return value;
+            }
+        }
+
+        let result;
+        const valueIndex = dfOptions.replace(/^ObjectValue_(\d+?)$/, '$1');
+        if (valueIndex === 'ObjectValue') {
+            result = dfValue ? dfValue.Value : [];
+        } else if (!isNaN(Number(valueIndex))) {
+            result = dfValue &&
+                typeof dfValue.Value[valueIndex] !== 'undefined' &&
+                dfValue.Value[valueIndex] !== null ?
+                dfValue.Value[valueIndex] : '';
+        }
+        return result;
+    }
+
+    private async handleObject(object: KIXObject, dfOptions: string = '', dfValue: DynamicFieldValue): Promise<string> {
+        for (const extendedHandler of this.extendedPlaceholderHandler) {
+            const value = await extendedHandler.handleObject(object, dfOptions, dfValue);
+            if (value) {
+                return value;
+            }
+        }
+
+        let result: string = '';
+        const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name, dfValue.ID);
+        if (dynamicField) {
+            const attributePath = dfOptions.replace(/^Object_(\d+_.+)/, '$1');
+            result = await PlaceholderService.getInstance().replaceDFObjectPlaceholder(
+                attributePath,
+                dynamicField.FieldType,
+                dfValue.Value
+            );
         }
         return result;
     }

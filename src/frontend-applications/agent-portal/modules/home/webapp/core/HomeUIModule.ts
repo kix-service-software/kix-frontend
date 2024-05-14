@@ -21,16 +21,16 @@ export class UIModule implements IUIModule {
 
     public name: string = 'HomeUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         const homeContext = new ContextDescriptor(
             HomeContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'home', ['home'], HomeContext
         );
         ContextService.getInstance().registerContext(homeContext);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

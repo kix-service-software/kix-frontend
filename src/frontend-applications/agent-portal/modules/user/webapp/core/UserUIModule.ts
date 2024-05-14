@@ -54,10 +54,6 @@ export class UIModule implements IUIModule {
 
     public priority: number = 50;
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         PlaceholderService.getInstance().registerPlaceholderHandler(new UserPlaceholderHandler());
 
@@ -91,6 +87,10 @@ export class UIModule implements IUIModule {
 
         FormValidationService.getInstance().registerValidator(new UserPasswordValidator());
 
+        UserPreferencesEventHandler.getInstance();
+    }
+
+    public async registerExtensions(): Promise<void> {
         SetupService.getInstance().registerSetupStep(
             new SetupStep(
                 'SuperUserAccount', 'Translatable#Superuser Account', 'setup-superuser',
@@ -113,8 +113,6 @@ export class UIModule implements IUIModule {
                 'kix-icon-admin', 20
             )
         );
-
-        UserPreferencesEventHandler.getInstance();
     }
 
     private registerUser(): void {

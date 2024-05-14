@@ -7,32 +7,46 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.key-value-pair class={
-    "show-object": state.propertyDisplayText !== null || !state.hasText
-}>
-    <div.key class={
-        "no-label": !state.showLabel
-    }>
+<div class=[
+    "key-value-pair",
+    {
+        "show-object": state.propertyDisplayText !== null || !state.hasText,
+    },
+]>
+    <div class=[
+        "key",
+        {
+            "no-label": !state.showLabel,
+        },
+    ]>
         <if(!state.propertyName && state.showLabel)>
-            <span.property-name title=input.propertyValue>
+            <span title=input.propertyValue class="property-name">
                 <${input.propertyValue}/>
             </span>
         </if>
         <else-if(state.showLabel)>
-            <span.property-name title=state.propertyName>${state.propertyName}</span>
+            <span title=state.propertyName class="property-name">
+                ${state.propertyName}
+            </span>
         </else-if>
     </div>
-    <div.info>
+    <div class="info">
         <if(input.info && state.propertyDisplayText !== null)>
             <${input.info}/>
         </if>
     </div>
-    <div.value title=(!input.noValueTitle ? state.propertyDisplayText : "") class=component.getValueClasses()>
+    <div
+        title=(!input.noValueTitle ? state.propertyDisplayText : "")
+        class=["value", component.getValueClasses()]
+    >
         <if(input.value)>
             <${input.value}/>
         </if>
         <else-if(state.propertyDisplayText !== null)>
-            <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
+            <link-target
+                routingConfiguration=input.routingConfiguration
+                objectId=input.objectId
+            >
                 <@content>
                     <if(state.hasText)>
                         <span>${state.propertyDisplayText}</span>
@@ -41,6 +55,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </link-target>
             <if(state.propertyIcon)>
                 <icon icon=state.propertyIcon/>
+            </if>
+            <if(state.overlay)>
+                <overlay-icon
+                    title=(state.overlay.Title)
+                    icon=(state.overlay.Icon)
+                    content=(state.overlay.Content)
+                    isHint=(state.overlay.IsHint)
+                    isCustom=(state.overlay.IsCustom)
+                    data={
+                        object: state.overlay.Data,
+                        properties: state.overlay.Data.Properties,
+                    }
+                />
             </if>
         </else-if>
     </div>

@@ -145,7 +145,7 @@ export class HttpService {
         return response;
     }
 
-    public async post<T>(
+    public async post<T = any>(
         resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = '',
         logError: boolean = true, relevantOrganisationId?: number, headers?: IncomingHttpHeaders
     ): Promise<T> {
@@ -274,7 +274,7 @@ export class HttpService {
 
         // start profiling
         const profileTaskId = HTTPRequestLogger.getInstance().start(
-            options.method, resource, parameter
+            options.method, resource, parameter, clientRequestId
         );
 
         let response: AxiosResponse | HTTPResponse = await this.axios(options).catch((error: AxiosError) => {
@@ -400,7 +400,7 @@ export class HttpService {
 
             // start profiling
             const profileTaskId = HTTPRequestLogger.getInstance().start(
-                options.method, uri, JSON.stringify(params)
+                options.method, uri, JSON.stringify(params), userId
             );
 
             const response = await this.axios(options)

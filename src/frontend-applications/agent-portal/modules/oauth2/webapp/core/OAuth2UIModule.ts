@@ -34,10 +34,6 @@ export class UIModule implements IUIModule {
 
     public name: string = 'OAuth2UIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
 
         BrowserCacheService.getInstance().addDependencies(
@@ -74,5 +70,9 @@ export class UIModule implements IUIModule {
             'Translatable#Edit Profile', 'fas fa-file-contract'
         );
         ContextService.getInstance().registerContext(editProfileDialogContext);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 }

@@ -27,6 +27,8 @@ export enum AdditionalContextInformation {
 
     LOADING = 'LOADING',
 
-    INCLUDES = 'INCLUDES'
+    INCLUDES = 'INCLUDES',
+
+    OBJECT_DEPENDENCY = 'OBJECT_DEPENDENCY'
 
 }

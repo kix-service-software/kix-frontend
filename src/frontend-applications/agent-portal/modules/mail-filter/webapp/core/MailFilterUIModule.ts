@@ -29,6 +29,7 @@ import { MailFilterMatchValidator } from './MailFilterMatchValidator';
 import { MailFilterTableDeleteAction } from './actions/MailFilterTableDeleteAction';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { MailFilterSetValidator } from './MailFilterSetValidator';
 
 
 export class UIModule implements IUIModule {
@@ -36,10 +37,6 @@ export class UIModule implements IUIModule {
     public priority: number = 10000;
 
     public name: string = 'MailFilterUIModule';
-
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
 
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(MailFilterService.getInstance());
@@ -68,6 +65,7 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('mail-filter-edit', MailFilterEditAction);
 
         FormValidationService.getInstance().registerValidator(new MailFilterMatchValidator());
+        FormValidationService.getInstance().registerValidator(new MailFilterSetValidator());
 
         const editMailFilterDialogContext = new ContextDescriptor(
             EditMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
@@ -93,5 +91,9 @@ export class UIModule implements IUIModule {
             'Translatable#Mail Filter Details', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(mailFilterDetailsContext);
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 }

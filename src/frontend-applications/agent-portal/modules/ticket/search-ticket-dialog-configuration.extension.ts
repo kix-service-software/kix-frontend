@@ -19,6 +19,12 @@ import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { TableConfiguration } from '../../model/configuration/TableConfiguration';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { TableHeaderHeight } from '../table/model/TableHeaderHeight';
+import { TableRowHeight } from '../table/model/TableRowHeight';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -29,9 +35,43 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
 
+        const tableConfig = new TableConfiguration(
+            'ticket-search-table-config', 'Ticket Search Table Configuration', ConfigurationType.Table,
+            KIXObjectType.TICKET, null, null, null, [], true, true, null, null, TableHeaderHeight.LARGE,
+            TableRowHeight.LARGE
+        );
+        configurations.push(tableConfig);
+
+        const tableWidgetConfig = new TableWidgetConfiguration(
+            'ticket-search-table-widget-settings', 'Ticket Search Table Widget Settings',
+            ConfigurationType.TableWidget, KIXObjectType.TICKET, null, null, tableConfig
+        );
+        tableWidgetConfig.showFilter = false;
+
+        configurations.push(tableWidgetConfig);
+
+        const ticketListConfig = new WidgetConfiguration(
+            'ticket-search-ticket-list-widget', 'Ticket Search List Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Search Results: Tickets', ['bulk-action', 'csv-export-action'],
+            null, tableWidgetConfig, false, false, 'kix-icon-ticket', true
+        );
+
         configurations.push(
             new ContextConfiguration(
-                this.getModuleId(), 'Ticket Search', ConfigurationType.Context, this.getModuleId(), [], []
+                this.getModuleId(), 'Ticket Search', ConfigurationType.Context, this.getModuleId(),
+                [], [], [],
+                [
+                    new ConfiguredWidget(
+                        'search-criteria-widget', null, new WidgetConfiguration(
+                            'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
+                            'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
+                        )
+                    ),
+                    new ConfiguredWidget('ticket-search-ticket-list-widget', null, ticketListConfig)
+                ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                [
+                    [KIXObjectType.TICKET, 'ticket-search-ticket-list-widget']
+                ]
             )
         );
 

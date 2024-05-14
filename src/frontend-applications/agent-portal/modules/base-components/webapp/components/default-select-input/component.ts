@@ -17,6 +17,7 @@ import { EventService } from '../../core/EventService';
 import { FormEvent } from '../../core/FormEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
+import { PlaceholderService } from '../../core/PlaceholderService';
 
 class Component extends FormInputComponent<string | number | string[] | number[], CompontentState> {
 
@@ -192,13 +193,17 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     private async getNodes(nodes: TreeNode[], translatable: boolean = true): Promise<TreeNode[]> {
         const newNodes = [];
         for (const node of nodes) {
-            const label = translatable
+            let label = translatable
                 ? await TranslationService.translate(node.label)
                 : await TranslationService.translate(node.label, null, undefined, true);
 
             const tooltip = translatable
                 ? await TranslationService.translate(node.tooltip)
                 : await TranslationService.translate(node.tooltip, null, undefined, true);
+
+            if (PlaceholderService.getInstance().extractPlaceholders(label)) {
+                label = await PlaceholderService.getInstance().replacePlaceholders(label);
+            }
 
             newNodes.push(
                 new TreeNode(

@@ -98,14 +98,20 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
-                                        property: OrganisationProperty.URL
-                                    }
-                                },
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
                                         property: KIXObjectProperty.VALID_ID
                                     }
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        style: '',
+                        separator: true,
+                        values: [
+                            [
+                                {
+                                    text: '<KIX_ORG_Url>',
+                                    linkSrc: '<KIX_ORG_Url>'
                                 }
                             ]
                         ]

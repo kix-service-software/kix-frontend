@@ -25,8 +25,8 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 import { FormValidationService } from './FormValidationService';
 import { ValidationResult } from './ValidationResult';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
-import { CheckListInputType } from '../../../dynamic-fields/webapp/core/CheckListInputType';
-import { CheckListItem } from '../../../dynamic-fields/webapp/core/CheckListItem';
+import { CheckListInputType } from '../../../dynamic-fields/model/CheckListInputType';
+import { CheckListItem } from '../../../dynamic-fields/model/CheckListItem';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
@@ -40,6 +40,7 @@ import { IDynamicFieldFormUtil } from './IDynamicFieldFormUtil';
 import { ExtendedDynamicFieldFormUtil } from './ExtendedDynamicFieldFormUtil';
 import { KIXObjectFormService } from './KIXObjectFormService';
 import { ContextService } from './ContextService';
+import { ChecklistState } from '../../../dynamic-fields/model/ChecklistState';
 
 export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
@@ -486,18 +487,20 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     }
 
     public countValues(checklist: CheckListItem[]): [number, number] {
-        const value: [number, number] = [0, 0];
+        const value: [number, number] = [0, checklist.length];
         for (const item of checklist) {
             if (item.input === CheckListInputType.ChecklistState) {
-                value[1]++;
-
                 if (!item.value) {
                     item.value = '-';
                 }
 
-                if (item.value === 'OK' || item.value === 'NOK' || item.value === 'n.a.') {
+                const states = item.inputStates || DynamicFieldFormUtil.getDefaultChecklistStates();
+                const state = states.find((cs) => cs.value === item.value);
+                if (state?.done) {
                     value[0]++;
                 }
+            } else if (item.value?.length > 0) {
+                value[0]++;
             }
 
             if (item.sub && item.sub.length) {
@@ -508,6 +511,16 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
         }
 
         return value;
+    }
+
+    public static getDefaultChecklistStates(): ChecklistState[] {
+        return [
+            new ChecklistState('OK', 'kix-icon-check'),
+            new ChecklistState('NOK', 'kix-icon-exclamation'),
+            new ChecklistState('pending', 'kix-icon-time-wait', false),
+            new ChecklistState('n.a.', 'kix-icon-unknown'),
+            new ChecklistState('-', null, false),
+        ];
     }
 
     public async handleDynamicFieldValue(formField: FormFieldConfiguration, value?: any): Promise<any> {

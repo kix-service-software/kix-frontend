@@ -19,17 +19,11 @@ export class UIModule implements IUIModule {
 
     public name: string = 'Calendar';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
+
 
     public priority: number = 800;
 
     public async register(): Promise<void> {
-        this.registerContexts();
-    }
-
-    private registerContexts(): void {
         const calendarContext = new ContextDescriptor(
             CalendarContext.CONTEXT_ID, [KIXObjectType.ANY],
             ContextType.MAIN, ContextMode.DASHBOARD,
@@ -37,4 +31,9 @@ export class UIModule implements IUIModule {
         );
         ContextService.getInstance().registerContext(calendarContext);
     }
+
+    public async registerExtensions(): Promise<void> {
+        return;
+    }
+
 }

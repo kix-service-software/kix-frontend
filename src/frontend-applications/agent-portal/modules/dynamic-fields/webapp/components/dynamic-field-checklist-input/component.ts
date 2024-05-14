@@ -9,7 +9,7 @@
 
 import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
 import { ComponentState } from './ComponentState';
-import { CheckListItem } from '../../core/CheckListItem';
+import { CheckListItem } from '../../../model/CheckListItem';
 
 import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/DynamicFieldFormUtil';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';

@@ -19,10 +19,6 @@ export class UIModule implements IUIModule {
 
     public priority: number = 9999;
 
-    public unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         [
             KIXObjectType.DYNAMIC_FIELD_TYPE,
@@ -37,6 +33,10 @@ export class UIModule implements IUIModule {
                 (labelProvider as LabelProvider).addExtendedLabelProvider(new ConfigItemReferenceLabelProvider());
             }
         });
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

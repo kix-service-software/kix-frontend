@@ -105,7 +105,7 @@ export class FAQArticleSearchFormManager extends SearchFormManager {
         if (property === FAQArticleProperty.CUSTOMER_VISIBLE) {
             operations = [SearchOperator.EQUALS];
         } else if (property === SearchProperty.FULLTEXT) {
-            operations = [SearchOperator.CONTAINS];
+            operations = [SearchOperator.LIKE];
         } else if (this.isDropDown(property)) {
             operations = [SearchOperator.IN];
         } else if (this.isDateTime(property)) {

@@ -23,6 +23,9 @@ import { SearchCache } from '../../../../search/model/SearchCache';
 import { Table } from '../../../../table/model/Table';
 import { ToggleOptions } from '../../../../table/model/ToggleOptions';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class TicketTableFactory extends TableFactory {
 
@@ -45,7 +48,9 @@ export class TicketTableFactory extends TableFactory {
         );
 
         table.setContentProvider(contentProvider);
-        table.setColumnConfiguration(tableConfiguration.tableColumns);
+
+        const tableColumns = this.filterColumns(contextId, tableConfiguration);
+        table.setColumnConfiguration(tableColumns);
 
         return table;
     }
@@ -180,6 +185,11 @@ export class TicketTableFactory extends TableFactory {
             config = new DefaultColumnConfiguration(null, null, null,
                 TicketProperty.PENDING_TIME, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
             );
+        } else if (property === `${KIXObjectProperty.DYNAMIC_FIELDS}.AffectedAsset`) {
+            config = new DefaultColumnConfiguration(null, null, null,
+                'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true,
+                true, undefined, true, 'label-list-cell-content'
+            );
         }
 
         if (!config) {
@@ -202,6 +212,8 @@ export class TicketTableFactory extends TableFactory {
             if (!tableConfiguration.loadingOptions.includes?.some((i) => i === TicketProperty.UNSEEN)) {
                 tableConfiguration.loadingOptions.includes.push(TicketProperty.UNSEEN);
             }
+
+            this.addAdditionalInclude(TicketProperty.UNSEEN);
         }
 
         const watcherColumn = tableConfiguration.tableColumns.find(
@@ -220,6 +232,17 @@ export class TicketTableFactory extends TableFactory {
             if (!tableConfiguration.loadingOptions.includes?.some((i) => i === TicketProperty.WATCHER_ID)) {
                 tableConfiguration.loadingOptions.includes.push(TicketProperty.WATCHER_ID);
             }
+
+            this.addAdditionalInclude(TicketProperty.WATCHER_ID);
+        }
+    }
+
+    private addAdditionalInclude(property: string): void {
+        const context = ContextService.getInstance().getActiveContext();
+        const includes = context?.getAdditionalInformation(AdditionalContextInformation.INCLUDES) || [];
+        if (!includes.some((i) => i === property)) {
+            includes.push(property);
+            context?.setAdditionalInformation(AdditionalContextInformation.INCLUDES, includes);
         }
     }
 

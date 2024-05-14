@@ -4,22 +4,33 @@
     "plugins": [
         "@typescript-eslint"
     ],
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended"
-    ],
+    "extends": [],
     "rules": {
-        "array-type": 0,
-        "no-unused-vars": [
-            1,
+        "max-lines-per-function": [
+            "warn",
             {
-                "vars": "all",
-                "args": "none",
-                "ignoreRestSiblings": false,
-                "caughtErrors": "none"
+                "max": 30,
+                "skipBlankLines": true,
+                "skipComments": true,
+                "IIFEs": true
             }
         ],
+        "max-depth": [
+            "warn",
+            {
+                "max": 4
+            }
+        ],
+        "max-nested-callbacks": [
+            "warn",
+            3
+        ],
+        "max-params": [
+            "warn",
+            5
+        ],
+        "array-type": 0,
+        "no-unused-vars": 0,
         "@typescript-eslint/explicit-function-return-type": 2,
         "@typescript-eslint/no-inferrable-types": 0,
         "member-ordering": 0,
@@ -55,9 +66,6 @@
             "single"
         ],
         "no-trailing-spaces": 2,
-        "no-console": [
-            1
-        ],
         "object-literal-sort-keys": [
             0
         ],
@@ -71,7 +79,7 @@
         "semi": 2,
         "@typescript-eslint/semi": 2,
         "@typescript-eslint/naming-convention": [
-            1,
+            "error",
             {
                 "selector": "variable",
                 "format": [

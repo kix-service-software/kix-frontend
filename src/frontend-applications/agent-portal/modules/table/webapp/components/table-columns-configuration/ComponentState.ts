@@ -16,8 +16,11 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public columns: IColumnConfiguration[] = [],
         public propertyTreeId: string = IdService.generateDateBasedId('propertyTree'),
+        public dependencyTreeId: string = IdService.generateDateBasedId('dependencyTree'),
         public loading: boolean = false,
-        public columnNames: any = {}
+        public columnNames: any = {},
+        public columnDependencyNames: any = {},
+        public dependencyName: string = ''
     ) {
         super();
     }

@@ -11,6 +11,7 @@ import { IConfiguration } from './IConfiguration';
 import { FormFieldOption } from './FormFieldOption';
 import { FormFieldValue } from './FormFieldValue';
 import { ConfigurationType } from './ConfigurationType';
+import { BrowserUtil } from '../../modules/base-components/webapp/core/BrowserUtil';
 
 export class FormFieldConfiguration implements IConfiguration {
 
@@ -54,5 +55,10 @@ export class FormFieldConfiguration implements IConfiguration {
         public countSeparatorString: string = null
     ) {
         this.instanceId = existingFieldId ? existingFieldId : null;
+
+        const requiredDefined = typeof required !== undefined && required !== null;
+        if (requiredDefined && typeof required === 'string') {
+            this.required = BrowserUtil.isBooleanTrue(required);
+        }
     }
 }

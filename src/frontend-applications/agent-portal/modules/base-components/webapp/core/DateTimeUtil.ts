@@ -178,7 +178,7 @@ export class DateTimeUtil {
         return kixTimeString;
     }
 
-    public static getTimestampNumbersOnly(date: Date, withSeconds?: boolean): string {
+    public static getTimestampNumbersOnly(date: Date, withSeconds?: boolean, dateOnly?: boolean): string {
         if (date) {
             if (typeof date === 'string') {
                 date = new Date(date);
@@ -189,6 +189,11 @@ export class DateTimeUtil {
             const hours = DateTimeUtil.padZero(date.getHours());
             const minutes = DateTimeUtil.padZero(date.getMinutes());
             const seconds = DateTimeUtil.padZero(date.getSeconds());
+
+            if (dateOnly) {
+                return `${year}${month}${day}`;
+            }
+
             return `${year}${month}${day}${hours}${minutes}${withSeconds ? seconds : ''}`;
         }
 
@@ -199,6 +204,15 @@ export class DateTimeUtil {
         return d1.getFullYear() === d2.getFullYear() &&
             d1.getMonth() === d2.getMonth() &&
             d1.getDate() === d2.getDate();
+    }
+
+    public static betweenDays(d1: Date, d2: Date, withTime?: boolean, withSeconds?: boolean): boolean {
+        const currDate = new Date();
+        const currStamp = this.getTimestampNumbersOnly(currDate, withSeconds, !withTime);
+        const d1Stamp = this.getTimestampNumbersOnly(d1, withSeconds, !withTime);
+        const d2Stamp = this.getTimestampNumbersOnly(d2, withSeconds, !withTime);
+
+        return currStamp >= d1Stamp && currStamp <= d2Stamp;
     }
 
     public static getTimeByMillisec(millisec: number): string {

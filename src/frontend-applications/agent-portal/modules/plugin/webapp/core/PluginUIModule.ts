@@ -21,16 +21,14 @@ export class UIModule implements IUIModule {
 
     public name: string = 'PluginUIModule';
 
-    public async unRegister(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(PluginService.getInstance());
-
         TableFactoryService.getInstance().registerFactory(new PluginTableFactory());
-
         LabelService.getInstance().registerLabelProvider(new PluginLabelProvider());
+    }
+
+    public async registerExtensions(): Promise<void> {
+        return;
     }
 
 }

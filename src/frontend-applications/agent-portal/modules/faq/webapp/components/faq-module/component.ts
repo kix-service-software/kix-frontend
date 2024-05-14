@@ -12,10 +12,16 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { FAQContext } from '../../core/context/FAQContext';
+import { IdService } from '../../../../../model/IdService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 class Component {
 
     private state: ComponentState;
+    private subscriber: IEventSubscriber;
+
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -24,7 +30,25 @@ class Component {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext() as FAQContext;
         const widgets = await context.getContent();
-        this.state.contentWidgets = widgets ? widgets.filter((w) => Boolean(w.configuration)) : [];
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (): void => {
+                this.prepareWidgets();
+            }
+        };
+        this.prepareWidgets();
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
+    }
+
+    private async prepareWidgets(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.prepared = false;
+        setTimeout(async () => {
+            this.state.contentWidgets = await context.getContent();
+            this.state.prepared = true;
+        }, 100);
     }
 
     public getTemplate(widget: ConfiguredWidget): any {

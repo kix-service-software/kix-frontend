@@ -24,6 +24,9 @@ import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { TreeHandler, TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { SearchFormManager } from '../../../../base-components/webapp/core/SearchFormManager';
+import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
+import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component {
 
@@ -69,10 +72,6 @@ class Component {
             }
         };
 
-        EventService.getInstance().subscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
-        EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
-        EventService.getInstance().subscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
-
         this.keyListenerElement = (this as any).getEl('search-criteria-container');
         if (this.keyListenerElement) {
             this.keyListener = this.keyDown.bind(this);
@@ -85,9 +84,11 @@ class Component {
             context.descriptor.kixObjectTypes[0]
         );
         this.state.manager = (searchDefinition?.formManager as SearchFormManager);
-        this.setTitle();
-        this.initManager();
-        this.initSort();
+        await this.setTitle();
+        await this.initManager();
+        await this.initSort();
+
+        this.setCanSearch();
 
         this.managerListenerId = IdService.generateDateBasedId('search-criteria-widget');
         this.state.manager?.registerListener(this.managerListenerId, async () => {
@@ -96,10 +97,10 @@ class Component {
             }
 
             this.valueChangedTimeout = setTimeout(() => {
-                const values = this.state.manager.getValues();
-                this.state.canSearch = values.length > 0;
+                this.setCanSearch();
 
                 const criteria: FilterCriteria[] = [];
+                const values = this.state.manager.getValues();
                 for (const v of values) {
                     criteria.push(searchDefinition.getFilterCriteria(v));
                 }
@@ -107,6 +108,20 @@ class Component {
                 context?.getSearchCache()?.setCriteria(criteria);
             }, 100);
         });
+
+        EventService.getInstance().subscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
+        EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
+        EventService.getInstance().subscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
+
+        const groupComponent = (this as any).getComponent(this.state.instanceId);
+        if (groupComponent) {
+            groupComponent.setMinizedState(false);
+        }
+    }
+
+    private setCanSearch(): void {
+        const values = this.state.manager.getValues();
+        this.state.canSearch = values.length > 0;
     }
 
     public onDestroy(): void {
@@ -177,7 +192,7 @@ class Component {
 
     private async prepareActions(): Promise<void> {
         this.state.contentActions = await ActionFactory.getInstance().generateActions(
-            ['save-search-action', 'delete-search-action']
+            ['save-search-action', 'save-user-default-search-action', 'delete-search-action']
         );
     }
 
@@ -188,9 +203,17 @@ class Component {
         const cache = context?.getSearchCache();
         if (cache) {
             context.setSortOrder(cache.objectType, cache.sortAttribute, cache.sortDescending, false);
+            TableFactoryService.getInstance().resetFilterOfContextTables(context.contextId, cache.objectType);
         }
         await SearchService.getInstance().searchObjects(context?.getSearchCache());
         BrowserUtil.toggleLoadingShield('SEARCH_CRITERIA_SHIELD', false);
+
+        const agentPortalConfig = await SysConfigService.getInstance()
+            .getPortalConfiguration<AgentPortalConfiguration>();
+        const groupComponent = (this as any).getComponent(this.state.instanceId);
+        if (agentPortalConfig.minimizeSearchCriteriaWidget && groupComponent) {
+            groupComponent.setMinizedState(true);
+        }
     }
 
     public sortAttributeChanged(nodes: TreeNode[]): void {

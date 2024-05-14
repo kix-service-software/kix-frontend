@@ -7,6 +7,7 @@
  * --
  */
 
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 import { ContextService } from '../../core/ContextService';
 import { LabelService } from '../../core/LabelService';
@@ -28,6 +29,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.text = input.text;
         this.description = input.description;
         this.state.icon = input.icon;
+        this.state.rtl = input.rtl;
         this.update();
     }
 
@@ -52,8 +54,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
 
                 this.state.description = await LabelService.getInstance().getPropertyText(
-                    this.property, contextObject.KIXObjectType
+                    this.property, contextObject.KIXObjectType, undefined, undefined, contextObject
                 );
+
+                await this.getOverlayIcon(this.property, contextObject);
 
                 hasValue = this.state.displayText && this.state.displayText.length > 0 ||
                     icons && icons.length > 0;
@@ -75,6 +79,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private updateParent(property: string, hasValue: boolean): void {
         (this as any).emit('setDataMapValue', [property, hasValue]);
+    }
+
+    private async getOverlayIcon(property: string, object: KIXObject): Promise<void> {
+        if (object[property]) {
+            const overlay = await LabelService.getInstance().getOverlayIconForType(
+                object?.KIXObjectType, object[property], property
+            );
+            if (overlay !== null) {
+                this.state.overlay = overlay;
+            }
+        }
     }
 }
 

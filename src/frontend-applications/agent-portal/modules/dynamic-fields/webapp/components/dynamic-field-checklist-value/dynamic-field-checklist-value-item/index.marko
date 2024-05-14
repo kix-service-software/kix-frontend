@@ -1,0 +1,62 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div
+    role="button"
+    on-click("toggleExpanded")
+    class="checklist-value-item d-flex flex-row justify-content-between align-items-center p-2"
+>
+
+    <div class="d-flex align-items-center">
+        <if(input.item.sub && input.item.sub.length > 0)>
+            <i class=[
+                "me-2 fas",
+                {
+                    "fa-chevron-down": !state.expanded,
+                    "fa-chevron-up": state.expanded,
+                },
+            ]/>
+        </if>
+        <div
+            title=(input.item.description)
+            class="d-flex flex-row justify-content-between align-items-center bg-light rounded-3 p-2"
+        >
+            <i class=[
+                "far h4 m-0 me-3",
+                {
+                    "fa-clipboard": input.item.input !== "Text",
+                    "fa-file-alt": input.item.input === "Text",
+                },
+            ]/>
+            ${input.item.title}
+        </div>
+    </div>
+    <if(input.item.input === "ChecklistState")>
+        <div style="width:28px" class="d-flex justify-content-center">
+            <i
+                class=["h3", component.getStateIcon(input.item)]
+                title=(input.item.value)
+            />
+        </div>
+    </if>
+    <else>
+        <span title=(input.item.value)>
+            <pre>${input.item.value}</pre>
+        </span>
+    </else>
+</div>
+<if(input.item.sub && input.item.sub.length > 0 && state.expanded)>
+    <div>
+        <for|item, index| of=(input.item.sub)>
+            <div class="ps-4">
+                <dynamic-field-checklist-value-item item=item/>
+            </div>
+        </for>
+    </div>
+</if>

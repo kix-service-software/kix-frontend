@@ -66,31 +66,10 @@ export class TicketStateAPIService extends KIXObjectAPIService {
 
         let objectResponse = new ObjectResponse<TicketState | TicketStateType>();
         if (objectType === KIXObjectType.TICKET_STATE) {
-            const hasValidFilter = loadingOptions?.filter?.length === 1 &&
-                loadingOptions.filter[0].property === KIXObjectProperty.VALID_ID;
-            const hasNameFilter = loadingOptions?.filter?.length === 1 &&
-                loadingOptions.filter[0].property === TicketStateProperty.NAME;
-
             objectResponse = await super.load<TicketState>(
-                token, KIXObjectType.TICKET_STATE, this.RESOURCE_URI, null, null,
+                token, KIXObjectType.TICKET_STATE, this.RESOURCE_URI, loadingOptions, objectIds,
                 KIXObjectType.TICKET_STATE, clientRequestId, TicketState
             );
-
-            if (hasValidFilter) {
-                objectResponse.objects = objectResponse.objects?.filter(
-                    (o) => o.ValidID === loadingOptions.filter[0].value
-                );
-            } else if (hasNameFilter) {
-                objectResponse.objects = objectResponse?.objects?.filter(
-                    (o) => o.Name === loadingOptions.filter[0].value
-                );
-            }
-
-            if (objectIds && objectIds.length) {
-                objectResponse.objects = objectResponse.objects?.filter(
-                    (t) => objectIds.some((oid) => oid?.toString() === t.ID?.toString())
-                );
-            }
         } else if (objectType === KIXObjectType.TICKET_STATE_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'types');
             objectResponse = await super.load<StateType>(

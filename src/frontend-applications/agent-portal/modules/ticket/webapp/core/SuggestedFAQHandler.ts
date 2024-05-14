@@ -20,9 +20,7 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
-import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 import { AdditionalTableObjectsHandlerConfiguration } from '../../../base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
-import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
@@ -41,27 +39,12 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
         let articles = [];
 
         if (handlerConfig && Array.isArray(handlerConfig.dependencyProperties)) {
-            const context = ContextService.getInstance().getActiveContext();
-            const ticket = await context.getObject<Ticket>();
-            const formHandler = await context.getFormManager().getObjectFormHandler();
-            const filter: FilterCriteria[] = await this.getFilter(handlerConfig, ticket, formHandler);
+            const filter: FilterCriteria[] = await this.getFilter(handlerConfig);
+            if (filter?.length) {
+                this.applyValidFilter(handlerConfig, filter);
 
-            if (filter && filter.length) {
-                if (
-                    handlerConfig.handlerConfiguration
-                    && handlerConfig.handlerConfiguration.onlyValid
-                ) {
-                    filter.push(
-                        new FilterCriteria(
-                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
-                            FilterDataType.NUMERIC, FilterType.AND, 1
-                        )
-                    );
-                }
-
-                const preparedLoadingOptions = new KIXObjectLoadingOptions(
-                    filter, null, loadingOptions?.limit, loadingOptions?.includes, loadingOptions?.expands
-                );
+                loadingOptions.filter = filter;
+                const preparedLoadingOptions = KIXObjectLoadingOptions.clone(loadingOptions);
                 articles = await KIXObjectService.loadObjects<FAQArticle>(
                     KIXObjectType.FAQ_ARTICLE, null, preparedLoadingOptions
                 ).catch(() => []);
@@ -70,27 +53,39 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
         return articles;
     }
 
-    private async getFilter(
-        handlerConfig: AdditionalTableObjectsHandlerConfiguration,
-        ticket: Ticket, formHandler?: ObjectFormHandler
-    ): Promise<FilterCriteria[]> {
+    private applyValidFilter(
+        handlerConfig: AdditionalTableObjectsHandlerConfiguration, filter: FilterCriteria[]
+    ): void {
+        const needValid = handlerConfig.handlerConfiguration && handlerConfig.handlerConfiguration.onlyValid;
+        if (needValid) {
+            filter.push(
+                new FilterCriteria(
+                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                    FilterDataType.NUMERIC, FilterType.AND, 1
+                )
+            );
+        }
+    }
+
+    private async getFilter(handlerConfig: AdditionalTableObjectsHandlerConfiguration): Promise<FilterCriteria[]> {
+
+        const context = ContextService.getInstance().getActiveContext();
+        const ticket = await context.getObject<Ticket>();
+        const formHandler = await context.getFormManager().getObjectFormHandler();
+
         let filter: FilterCriteria[] = [];
 
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.FAQ_ARTICLE);
         if (service) {
-            const minLength = handlerConfig.handlerConfiguration
-                && handlerConfig.handlerConfiguration.minLenght
-                ? handlerConfig.handlerConfiguration.minLenght : 3;
+            const minLength = handlerConfig?.handlerConfiguration?.minLenght || 3;
             const stopWords = await this.getStopWords();
-            if (handlerConfig.dependencyProperties?.length) {
-                for (const p of handlerConfig.dependencyProperties) {
-                    if (ticket && ticket[p] && typeof ticket[p] === 'string') {
-                        filter = await this.setFilter(filter, ticket[p], service, minLength, stopWords);
-                    } else if (formHandler) {
-                        const formValue = formHandler.getObjectFormCreator().findFormValue(p);
-                        if (formValue && formValue.value && typeof formValue.value === 'string') {
-                            filter = await this.setFilter(filter, formValue.value, service, minLength, stopWords);
-                        }
+            for (const p of handlerConfig?.dependencyProperties || []) {
+                if (ticket && ticket[p] && typeof ticket[p] === 'string') {
+                    filter = await this.setFilter(filter, ticket[p], service, minLength, stopWords);
+                } else if (formHandler) {
+                    const formValue = formHandler.getObjectFormCreator().findFormValue(p);
+                    if (typeof formValue?.value === 'string') {
+                        filter = await this.setFilter(filter, formValue.value, service, minLength, stopWords);
                     }
                 }
             }

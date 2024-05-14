@@ -15,7 +15,8 @@ export class SaveSearchRequest implements ISocketRequest {
     public constructor(
         public requestId: string,
         public clientRequestId: string,
-        public search: SearchCache
+        public search: SearchCache,
+        public share?: boolean
     ) { }
 
 }

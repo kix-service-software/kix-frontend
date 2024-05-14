@@ -33,7 +33,7 @@ export class TicketListContext extends Context {
         loadingOptions.includes = [TicketProperty.WATCHERS, TicketProperty.STATE_TYPE, TicketProperty.UNSEEN];
         loadingOptions.limit = limit;
 
-        this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
+        await this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
         loadingOptions.query = [['Counter', ticketStatsProperty]];
 
         const tickets = await KIXObjectService.loadObjects<Ticket>(
