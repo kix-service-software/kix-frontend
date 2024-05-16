@@ -41,7 +41,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.initQueues();
 
         this.subscriber = {
-            eventSubscriberId: 'personal-toolbar-subscriber',
+            eventSubscriberId: 'personal-toolbar-my-teams-subscriber',
             eventPublished: (): void => {
                 this.initQueues();
             }
