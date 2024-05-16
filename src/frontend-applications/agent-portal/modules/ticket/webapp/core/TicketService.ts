@@ -68,6 +68,7 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 import { TicketModuleConfiguration } from '../../model/TicketModuleConfiguration';
 import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -156,15 +157,15 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
-        await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId)
+        await AgentSocketClient.getInstance().markAsSeen(KIXObjectType.ARTICLE, [articleId])
+            .then(() => EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR))
             .catch((error) => console.error(error));
-        EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
     public async markTicketAsSeen(ticketId: number): Promise<void> {
-        await KIXObjectService.updateObject(
-            KIXObjectType.TICKET, [['MarkAsSeen', 1]], ticketId
-        );
+        await AgentSocketClient.getInstance().markAsSeen(KIXObjectType.TICKET, [ticketId])
+            .then(() => EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR))
+            .catch((error) => console.error(error));
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {

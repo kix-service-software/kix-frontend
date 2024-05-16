@@ -24,6 +24,8 @@ import { SetPreferencesRequest } from '../../../../modules/base-components/webap
 import { SetPreferencesResponse } from '../../../../modules/base-components/webapp/core/SetPreferencesResponse';
 import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
 import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
+import { MarkObjectAsSeenRequest } from '../../../base-components/webapp/core/MarkObjectAsSeenRequest';
+import { MarkObjectAsSeenResponse } from '../../../base-components/webapp/core/MarkObjectAsSeenResponse';
 
 export class AgentSocketClient extends SocketClient {
 
@@ -182,6 +184,50 @@ export class AgentSocketClient extends SocketClient {
             });
 
             this.socket.emit(AgentEvent.SET_PREFERENCES, preferencesRequest);
+        });
+    }
+
+    public async markAsSeen(objectType: KIXObjectType | string, objectIds: any[]): Promise<any> {
+        this.checkSocketConnection();
+
+        const requestId = IdService.generateDateBasedId();
+
+        const markAsSeenRequest = new MarkObjectAsSeenRequest(
+            requestId,
+            ClientStorageService.getClientRequestId(),
+            objectType,
+            objectIds
+        );
+
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+
+        return new Promise((resolve, reject) => {
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + AgentEvent.MARK_OBJECT_AS_SEEN);
+            }, socketTimeout);
+
+            this.socket.on(
+                AgentEvent.MARK_OBJECT_AS_SEEN_FINISHED, async (result: MarkObjectAsSeenResponse) => {
+                    if (result.requestId === requestId) {
+                        BrowserCacheService.getInstance().deleteKeys(KIXObjectType.USER_COUNTER);
+                        BrowserCacheService.getInstance().deleteKeys(objectType);
+
+                        window.clearTimeout(timeout);
+                        resolve(result);
+                    }
+                });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error('Socket Error: mark object as seen', objectType, objectIds);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            this.socket.emit(AgentEvent.MARK_OBJECT_AS_SEEN, markAsSeenRequest);
         });
     }
 

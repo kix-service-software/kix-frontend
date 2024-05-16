@@ -28,6 +28,9 @@ import { Socket } from 'socket.io';
 import { CacheService } from '../../../server/services/cache';
 import { PersonalSettingsProperty } from '../model/PersonalSettingsProperty';
 import { HttpService } from '../../../server/services/HttpService';
+import { MarkObjectAsSeenRequest } from '../../base-components/webapp/core/MarkObjectAsSeenRequest';
+import { MarkObjectAsSeenResponse } from '../../base-components/webapp/core/MarkObjectAsSeenResponse';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class AgentNamespace extends SocketNameSpace {
 
@@ -52,6 +55,7 @@ export class AgentNamespace extends SocketNameSpace {
         this.registerEventHandler(client, AgentEvent.GET_PERSONAL_SETTINGS, this.getPersonalSettings.bind(this));
         this.registerEventHandler(client, AgentEvent.SET_PREFERENCES, this.setPreferences.bind(this));
         this.registerEventHandler(client, AgentEvent.GET_CURRENT_USER, this.getCurrentUser.bind(this));
+        this.registerEventHandler(client, AgentEvent.MARK_OBJECT_AS_SEEN, this.markObjectAsSeen.bind(this));
     }
 
     private async getPersonalSettings(data: ISocketRequest, client: Socket): Promise<SocketResponse> {
@@ -116,5 +120,32 @@ export class AgentNamespace extends SocketNameSpace {
             response = new SocketResponse(SocketEvent.ERROR, 'User token required!');
         }
         return response;
+    }
+    private async markObjectAsSeen(data: MarkObjectAsSeenRequest, client: Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
+
+        const user = await UserService.getInstance().getUserByToken(token)
+            .catch((): User => null);
+
+        if (user) {
+            const response = await UserService.getInstance().markObjectAsSeen(
+                token, data.clientRequestId, data.objectType, data.objectIds
+            ).then(() => {
+                CacheService.getInstance().deleteKeys(`${KIXObjectType.USER_COUNTER}_${user.UserID}`);
+                CacheService.getInstance().deleteKeys(data.objectType);
+                if (data.objectType === KIXObjectType.TICKET) {
+                    CacheService.getInstance().deleteKeys(`${KIXObjectType.USER_TICKETS}_${user.UserID}`);
+                }
+                return new SocketResponse(
+                    AgentEvent.MARK_OBJECT_AS_SEEN_FINISHED, new MarkObjectAsSeenResponse(data.requestId)
+                );
+            }).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
+            return response;
+        }
+
+        return new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, 'No user available'));
     }
 }

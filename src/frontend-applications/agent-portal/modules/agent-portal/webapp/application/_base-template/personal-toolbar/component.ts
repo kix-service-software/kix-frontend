@@ -21,6 +21,7 @@ import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEv
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { AgentService } from '../../../../../user/webapp/core/AgentService';
 import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
+import { BackendNotification } from '../../../../../../model/BackendNotification';
 
 class Component {
 
@@ -35,8 +36,10 @@ class Component {
     public async onMount(): Promise<void> {
         this.subscriber = {
             eventSubscriberId: 'personal-toolbar-subscriber',
-            eventPublished: (): void => {
-                this.initTicketActions();
+            eventPublished: (data: any, eventId: string): void => {
+                if (eventId === ApplicationEvent.REFRESH_TOOLBAR) {
+                    this.initTicketActions();
+                }
             }
         };
 
@@ -56,8 +59,6 @@ class Component {
     public onDestroy(): void {
         window.removeEventListener('resize', this.resizeHandling.bind(this), false);
         if (this.subscriber) {
-            EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
-            EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
             EventService.getInstance().unsubscribe(ApplicationEvent.REFRESH_TOOLBAR, this.subscriber);
         }
     }

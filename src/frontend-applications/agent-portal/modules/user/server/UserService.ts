@@ -369,6 +369,24 @@ export class UserService extends KIXObjectAPIService {
         }
     }
 
+    public async markObjectAsSeen(
+        token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: any[]
+    ): Promise<void> {
+        const parameter: Array<[string, any]> = [
+            ['ObjectType', objectType],
+            ['IDs', objectIds]
+        ];
+
+        await this.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter,
+            this.buildUri('session', 'markobjectasseen'), 'MarkObjectAsSeen', null,
+            true
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+    }
+
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const filterProperties = [
             KIXObjectProperty.VALID_ID,
