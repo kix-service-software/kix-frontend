@@ -58,6 +58,10 @@ export class ActionFactory<T extends AbstractAction> {
     }
 
     public async generateActions(actionIds: string[] = [], data?: any): Promise<AbstractAction[]> {
+        if (!Array.isArray(actionIds)) {
+            actionIds = [];
+        }
+
         const actions = [];
         for (const actionId of actionIds) {
             if (this.actionInstances.has(actionId)) {
