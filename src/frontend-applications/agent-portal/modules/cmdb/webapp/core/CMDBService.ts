@@ -141,9 +141,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'ITSM::ConfigItem::DeploymentState'),
-            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Name`, SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.AND, 'Functionality'),
-            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Value`, SearchOperator.NOT_EQUALS, FilterDataType.STRING,
+            new FilterCriteria('Functionality', SearchOperator.NOT_EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'postproductive')
         ], undefined, undefined, [GeneralCatalogItemProperty.PREFERENCES]);
 
@@ -158,9 +156,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'ITSM::Core::IncidentState'),
-            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Name`, SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.AND, 'Functionality'),
-            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Value`, SearchOperator.IN, FilterDataType.STRING,
+            new FilterCriteria('Functionality', SearchOperator.IN, FilterDataType.STRING,
                 FilterType.AND, ['warning', 'incident'])
         ], undefined, undefined, [GeneralCatalogItemProperty.PREFERENCES]);
 

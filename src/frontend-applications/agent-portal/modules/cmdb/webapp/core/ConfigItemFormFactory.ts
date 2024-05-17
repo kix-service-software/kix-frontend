@@ -150,11 +150,7 @@ export class ConfigItemFormFactory {
                             FilterType.AND, 'ITSM::Core::IncidentState'
                         ),
                         new FilterCriteria(
-                            `${GeneralCatalogItemProperty.PREFERENCES}.Name`, SearchOperator.EQUALS,
-                            FilterDataType.STRING, FilterType.AND, 'Functionality'
-                        ),
-                        new FilterCriteria(
-                            `${GeneralCatalogItemProperty.PREFERENCES}.Value`, SearchOperator.IN,
+                            'Functionality', SearchOperator.IN,
                             FilterDataType.STRING, FilterType.AND, ['incident', 'operational']
                         )
                     ], null, null, [GeneralCatalogItemProperty.PREFERENCES])

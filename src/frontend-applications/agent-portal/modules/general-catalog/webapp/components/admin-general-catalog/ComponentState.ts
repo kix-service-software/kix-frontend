@@ -25,7 +25,8 @@ export class ComponentState {
             new TableWidgetConfiguration(
                 null, null, null,
                 KIXObjectType.GENERAL_CATALOG_ITEM,
-                [GeneralCatalogItemProperty.NAME, SortOrder.UP]
+                [GeneralCatalogItemProperty.NAME, SortOrder.UP],
+                undefined, undefined, undefined, false
             ), false, false, 'kix-icon-gears')
     ) { }
 
