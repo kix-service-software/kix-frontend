@@ -850,10 +850,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return attributes;
     }
 
-    public async getSortableAttributes(filtered: boolean = true): Promise<ObjectSearch[]> {
+    public async getSortableAttributes(
+        filtered: boolean = true, objectType: KIXObjectType | string = this.objectType
+    ): Promise<ObjectSearch[]> {
         const supportedAttributes = await KIXObjectService.loadObjects<ObjectSearch>(
             KIXObjectType.OBJECT_SEARCH, undefined, undefined,
-            new ObjectSearchLoadingOptions(this.objectType), true
+            new ObjectSearchLoadingOptions(objectType), true
         ).catch(() => [] as ObjectSearch[]);
         const sortableAttributes = supportedAttributes.filter((sA) => sA.IsSortable);
 
@@ -955,10 +957,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return attributes;
     }
 
-    public async getFilterableAttributes(filtered: boolean = true): Promise<ObjectSearch[]> {
+    public async getFilterableAttributes(
+        filtered: boolean = true, objectType: KIXObjectType | string = this.objectType
+    ): Promise<ObjectSearch[]> {
         const supportedAttributes = await KIXObjectService.loadObjects<ObjectSearch>(
             KIXObjectType.OBJECT_SEARCH, undefined, undefined,
-            new ObjectSearchLoadingOptions(this.objectType), true
+            new ObjectSearchLoadingOptions(objectType), true
         ).catch(() => [] as ObjectSearch[]);
         return supportedAttributes.filter((sA) => sA.IsSearchable);
     }
