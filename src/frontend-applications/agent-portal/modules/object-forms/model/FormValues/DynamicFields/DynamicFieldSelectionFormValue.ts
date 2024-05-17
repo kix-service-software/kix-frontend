@@ -121,9 +121,7 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
             let nodes: TreeNode[] = [];
             for (const pv in possibleValues) {
                 if (possibleValues[pv]) {
-
-                    const hasValue = this.possibleValues?.some((v) => v.toString() === pv.toString());
-                    if (hasValue) {
+                    if (this.isValidValue(pv)) {
                         const node = await this.createNode(pv, possibleValues[pv]);
                         nodes.push(node);
                     }
@@ -151,7 +149,7 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
             if (possibleValues) {
                 for (const key of this.value) {
                     const value = possibleValues[key];
-                    if (value && this.possibleValues?.some((v) => v.toString() === key.toString())) {
+                    if (this.isValidValue(key)) {
                         const node = await this.createNode(key, value);
                         selectedNodes.push(node);
                     }
