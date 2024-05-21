@@ -60,7 +60,7 @@ class Component extends FormInputComponent<[string, string], ComponentState> {
         let nodes: TreeNode[];
         if (dynamicFields) {
             const names = await TranslationService.createTranslationObject(dynamicFields.map((df) => df.Label));
-            nodes = dynamicFields.map((df) => new TreeNode(df.Name, names[df.Label]));
+            nodes = dynamicFields.map((df) => new TreeNode(df.Name, `${df.Name} (${names[df.Label]})`));
         }
 
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
