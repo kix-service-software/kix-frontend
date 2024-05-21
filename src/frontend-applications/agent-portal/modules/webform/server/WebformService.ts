@@ -98,7 +98,8 @@ export class WebformService {
             type: 'Webform',
             webforms,
             application: 'agent-portal',
-            valid: true
+            valid: true,
+            roleIds: []
         };
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -128,7 +129,8 @@ export class WebformService {
             type: 'Webform',
             webforms,
             application: 'agent-portal',
-            valid: true
+            valid: true,
+            roleIds: []
         };
 
         await ModuleConfigurationService.getInstance().saveConfiguration(

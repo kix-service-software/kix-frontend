@@ -22,6 +22,7 @@ export abstract class AbstractConfiguration implements IConfiguration {
         public subConfigurationDefinition?: ConfigurationDefinition,
         public configuration?: IConfiguration,
         public valid: boolean = true,
+        public roleIds: number[] = []
     ) { }
 
 }

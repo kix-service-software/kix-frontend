@@ -46,13 +46,15 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     {
                         style: '',
                         separator: true,
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: FAQArticleProperty.CATEGORY_ID
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -60,7 +62,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: FAQArticleProperty.CUSTOMER_VISIBLE
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -68,7 +71,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: KIXObjectProperty.VALID_ID
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ]
                         ]
@@ -76,13 +80,15 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     {
                         style: '',
                         separator: true,
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: FAQArticleProperty.CREATED
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -90,7 +96,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: FAQArticleProperty.CREATED_BY
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -98,7 +105,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: FAQArticleProperty.CHANGED
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -106,7 +114,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: FAQArticleProperty.CHANGED_BY
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ]
                         ]
@@ -115,6 +124,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                         title: 'Translatable#References',
                         style: '',
                         separator: false,
+                        roleIds: [],
                         values: [
                             [
                                 {
@@ -132,7 +142,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ]
                         ]

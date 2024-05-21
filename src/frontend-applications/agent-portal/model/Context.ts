@@ -22,6 +22,7 @@ import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
 import { TableFactoryService } from '../modules/table/webapp/core/factory/TableFactoryService';
 import { TranslationService } from '../modules/translation/webapp/core/TranslationService';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
+import { AgentSocketClient } from '../modules/user/webapp/core/AgentSocketClient';
 import { ConfiguredWidget } from './configuration/ConfiguredWidget';
 import { ContextConfiguration } from './configuration/ContextConfiguration';
 import { TableConfiguration } from './configuration/TableConfiguration';
@@ -480,12 +481,20 @@ export abstract class Context {
     private async filterAllowedWidgets(widgets: ConfiguredWidget[]): Promise<ConfiguredWidget[]> {
         const allowedWidgets: ConfiguredWidget[] = [];
         for (const widget of widgets) {
-            if (Array.isArray(widget.permissions)) {
-                const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(widget.permissions);
-                if (allowed) {
-                    allowedWidgets.push(widget);
-                }
-            } else {
+            let allowedPermissions = true;
+            if (widget.permissions?.length) {
+                allowedPermissions = await AuthenticationSocketClient.getInstance().checkPermissions(
+                    widget.permissions
+                );
+            }
+
+            let allowedRoles = true;
+            if (widget.roleIds?.length) {
+                const currentUser = await AgentService.getInstance().getCurrentUser();
+                allowedRoles = AgentService.userHasRole(widget.roleIds, currentUser);
+            }
+
+            if (allowedPermissions && allowedRoles) {
                 allowedWidgets.push(widget);
             }
         }
@@ -610,8 +619,16 @@ export abstract class Context {
             }
         }
 
-        if (configuration && Array.isArray(configuration.permissions)) {
+        if (configuration?.permissions?.length) {
             const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(configuration.permissions);
+            if (!allowed) {
+                return null;
+            }
+        }
+
+        if (configuration?.roleIds?.length) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            const allowed = AgentService.userHasRole(configuration.roleIds, currentUser);
             if (!allowed) {
                 return null;
             }

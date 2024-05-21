@@ -162,4 +162,13 @@ export class AgentService extends KIXObjectService<User> {
             .catch((): Counter[] => []);
         return counter?.length ? counter[0] : new Counter();
     }
+
+    public static userHasRole(roleIds: number[], user: User): boolean {
+        if (user.UserID === 1) {
+            return true;
+        }
+
+        const allowed = roleIds?.length ? roleIds.some((rid) => user.RoleIDs?.includes(Number(rid))) : true;
+        return allowed;
+    }
 }

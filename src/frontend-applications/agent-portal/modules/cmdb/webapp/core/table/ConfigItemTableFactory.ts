@@ -44,7 +44,7 @@ export class ConfigItemTableFactory extends TableFactory {
             new ConfigItemTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
         );
 
-        const tableColumns = this.filterColumns(contextId, tableConfiguration);
+        const tableColumns = await this.filterColumns(contextId, tableConfiguration);
         table.setColumnConfiguration(tableColumns);
 
         if (
@@ -142,8 +142,10 @@ export class ConfigItemTableFactory extends TableFactory {
         ];
     }
 
-    public filterColumns(contextId: string, tableConfiguration: TableConfiguration): IColumnConfiguration[] {
-        const columns = super.filterColumns(contextId, tableConfiguration);
+    public async filterColumns(
+        contextId: string, tableConfiguration: TableConfiguration
+    ): Promise<IColumnConfiguration[]> {
+        const columns = await super.filterColumns(contextId, tableConfiguration);
 
         const index = columns.findIndex((c) => c.property === 'ClassIDs');
         if (index !== -1) {
