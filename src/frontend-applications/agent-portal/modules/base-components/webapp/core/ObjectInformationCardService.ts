@@ -9,6 +9,7 @@
 
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { AgentService } from '../../../user/webapp/core/AgentService';
 import { InformationConfiguration, InformationRowConfiguration, ObjectInformationCardConfiguration } from '../components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { FilterUtil } from './FilterUtil';
 import { ObjectInformationComponentHandler } from './ObjectInformationComponentHandler';
@@ -43,11 +44,22 @@ export class ObjectInformationCardService {
             config.avatar = [config.avatar];
         }
 
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+
         const information: InformationRowConfiguration[] = [];
         if (config?.rows?.length) {
             for (const row of config.rows.filter((r) => r.values?.length)) {
+                if (!AgentService.userHasRole(row.roleIds, currentUser)) {
+                    continue;
+                }
+
                 const infoRow = new InformationRowConfiguration([], row.title, row.style, row.separator);
                 for (const value of row.values) {
+                    if (value?.length) {
+                        if (!AgentService.userHasRole(row.roleIds, currentUser)) {
+                            continue;
+                        }
+                    }
                     await this.prepareValue(value, object, infoRow);
                 }
 

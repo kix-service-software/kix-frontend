@@ -20,6 +20,7 @@ export class TicketModuleConfiguration implements IConfiguration {
         public name: string = 'Ticket Module Configuration',
         public type: string = 'Ticket Module',
         public valid: boolean = true,
-        public addQueueSignature: boolean = true
+        public addQueueSignature: boolean = true,
+        public roleIds: number[] = []
     ) { }
 }

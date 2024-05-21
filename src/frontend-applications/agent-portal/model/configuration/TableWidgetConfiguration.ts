@@ -19,6 +19,8 @@ export class TableWidgetConfiguration implements IConfiguration {
 
     public application: string = 'agent-portal';
 
+    public roleIds: number[] = [];
+
     public constructor(
         public id: string,
         public name: string,

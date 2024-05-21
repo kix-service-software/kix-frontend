@@ -58,6 +58,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     {
                         style: '',
                         separator: true,
+                        roleIds: [],
                         values: [
                             [
                                 {
@@ -67,7 +68,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             null, KIXObjectType.ORGANISATION, '<KIX_ORGANISATION_ID>', null, null, 'kix-icon-man-house'
                                         ),
                                         style: 'width: 5rem;height:5rem;font-size:5rem;'
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -75,7 +77,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: OrganisationProperty.NUMBER
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -83,7 +86,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: OrganisationProperty.NAME
-                                    }
+                                    },
+                                    roleIds: []
                                 },
                             ],
                             [
@@ -91,7 +95,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: 'DynamicFields.Type'
-                                    }
+                                    },
+                                    roleIds: []
                                 },
                             ],
                             [
@@ -99,7 +104,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: KIXObjectProperty.VALID_ID
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ]
                         ]
@@ -107,11 +113,13 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     {
                         style: '',
                         separator: true,
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     text: '<KIX_ORG_Url>',
-                                    linkSrc: '<KIX_ORG_Url>'
+                                    linkSrc: '<KIX_ORG_Url>',
+                                    roleIds: []
                                 }
                             ]
                         ]
@@ -119,13 +127,15 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     {
                         style: '',
                         separator: true,
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: OrganisationProperty.STREET
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -133,7 +143,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: OrganisationProperty.ZIP
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -141,7 +152,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: OrganisationProperty.CITY
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -149,7 +161,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: OrganisationProperty.COUNTRY
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ]
                         ]
@@ -157,13 +170,15 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     {
                         style: '',
                         separator: true,
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: KIXObjectProperty.CREATE_TIME
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -171,7 +186,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: KIXObjectProperty.CREATE_BY
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -179,7 +195,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: KIXObjectProperty.CHANGE_TIME
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -187,7 +204,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: KIXObjectProperty.CHANGE_BY
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ]
                         ]
@@ -195,13 +213,15 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     {
                         style: '',
                         separator: false,
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: OrganisationProperty.COMMENT
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ]
                         ]

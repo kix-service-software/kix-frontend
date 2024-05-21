@@ -71,65 +71,77 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     {
                         separator: false,
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Firstname> <KIX_CONTACT_Lastname>',
-                                    linkSrc: null
+                                    linkSrc: null,
+                                    roleIds: []
                                 },
                                 {
                                     icon: new ObjectIcon(
                                         null, 'Organisation', '<KIX_ORG_ID>', null, null, 'kix-icon-man-house'
                                     ),
                                     text: '<KIX_ORG_Name>',
-                                    linkSrc: null
+                                    linkSrc: null,
+                                    roleIds: []
                                 }
                             ]
                         ],
                     },
                     {
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     icon: 'kix-icon-call',
                                     text: '<KIX_CONTACT_Phone>',
-                                    linkSrc: 'tel:<KIX_CONTACT_Phone>'
+                                    linkSrc: 'tel:<KIX_CONTACT_Phone>',
+                                    roleIds: []
                                 },
                                 {
                                     icon: 'kix-icon-mail',
                                     text: '<KIX_CONTACT_Email>',
-                                    linkSrc: null
+                                    linkSrc: null,
+                                    roleIds: []
                                 }
                             ]
                         ]
                     },
                     {
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     icon: 'kix-icon-compass',
                                     text: '<KIX_CONTACT_Street>',
-                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>',
+                                    roleIds: []
                                 },
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Zip> <KIX_CONTACT_City>',
-                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>',
+                                    roleIds: []
                                 },
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Country>',
-                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>',
+                                    roleIds: []
                                 }
                             ]
                         ]
                     },
                     {
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     icon: 'kix-icon-ticket',
+                                    roleIds: [],
                                     text: 'Translatable#Open Tickets of Contact',
                                     routingConfiguration: new RoutingConfiguration(
                                         TicketSearchContext.CONTEXT_ID, null,
@@ -163,6 +175,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 },
                                 {
                                     icon: 'kix-icon-ticket',
+                                    roleIds: [],
                                     text: 'Translatable#Open Tickets of Organisation',
                                     routingConfiguration: new RoutingConfiguration(
                                         TicketSearchContext.CONTEXT_ID, null,

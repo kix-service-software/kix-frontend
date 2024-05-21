@@ -30,7 +30,8 @@ export class InformationRowConfiguration {
         public values?: Array<InformationConfiguration[]>,
         public title?: string,
         public style?: string,
-        public separator?: boolean
+        public separator?: boolean,
+        public roleIds: number[] = []
     ) { }
 
 }
@@ -53,7 +54,8 @@ export class InformationConfiguration {
         public routingObjectId?: string,
         public preparedText?: string,
         public preparedLinkSrc?: string,
-        public multiline?: boolean
+        public multiline?: boolean,
+        public roleIds: number[] = []
     ) { }
 
     public static clone(value: InformationConfiguration): InformationConfiguration {

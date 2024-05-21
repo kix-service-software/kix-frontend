@@ -49,7 +49,7 @@ export class TicketTableFactory extends TableFactory {
 
         table.setContentProvider(contentProvider);
 
-        const tableColumns = this.filterColumns(contextId, tableConfiguration);
+        const tableColumns = await this.filterColumns(contextId, tableConfiguration);
         table.setColumnConfiguration(tableColumns);
 
         return table;

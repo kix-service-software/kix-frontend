@@ -22,6 +22,7 @@ export class DefaultColorConfiguration implements IConfiguration {
         public name: string = 'Default Colors Configuration',
         public type: string = 'Default Color',
         public valid: boolean = true,
+        public roleIds: number[] = [],
         public defaultColors: string[] = [
             '#EC9073', '#6BAD54', '#E2F626', '#0F22E4', '#1FE362', '#C5F566', '#8D23A8',
             '#78A7FC', '#DFC01B', '#43B261', '#53758D', '#C1AE45', '#6CD13D', '#E0CA0E',
