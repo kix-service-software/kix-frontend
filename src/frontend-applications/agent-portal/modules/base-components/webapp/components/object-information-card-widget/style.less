@@ -48,10 +48,6 @@
             font-weight: bold;
             font-size: 1.25rem;
             width: @basic-column-width;
-
-            &.no-value {
-                display: none;
-            }
         }
 
         .info-row-content {
@@ -61,10 +57,6 @@
 
             &.created-by-row>.info-group>.info-value {
                 grid-template-columns: auto;
-            }
-
-            &.no-value {
-                display: none;
             }
 
             &.no-title {
@@ -83,10 +75,6 @@
                 align-items: start;
                 overflow: auto;
 
-                &.no-value {
-                    display: none;
-                }
-
                 &.only-icon {
                     align-content: center;
                     justify-content: center;
@@ -99,18 +87,8 @@
                 .info-value {
                     display: grid;
                     align-items: center;
-
-                    &:not(.no-component-values) {
-                        grid-template-columns: 4rem auto;
-                    }
-
-                    &.no-component-values {
-                        grid-template-columns: fit-content(1.5rem) auto;
-
-                        &.with-icon {
-                            column-gap: @margin-small;
-                        }
-                    }
+                    grid-template-columns: fit-content(1.5rem) auto;
+                    column-gap: @margin-small;
 
                     .icon {
                         font-size: 1.5rem;
