@@ -15,7 +15,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IdService } from '../../../../../model/IdService';
 import { ObjectInformationCardConfiguration } from './ObjectInformationCardConfiguration';
 import { Context } from '../../../../../model/Context';
-import { ObjectInformationCardDataHandler } from '../../core/ObjectInformationCardDataHandler';
+import { ObjectInformationCardService } from '../../core/ObjectInformationCardService';
 import { KIXModulesService } from '../../core/KIXModulesService';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
@@ -27,11 +27,8 @@ class Component {
 
     private context: Context;
 
-    private valueDataMap: Map<string, boolean>;
-
     public onCreate(): void {
         this.state = new ComponentState();
-        this.valueDataMap = new Map<string, boolean>();
     }
 
     public onInput(input: any): void {
@@ -81,67 +78,14 @@ class Component {
 
     private async prepareInformation(config: ObjectInformationCardConfiguration, object: KIXObject): Promise<void> {
         this.state.valuesReady = false;
-        this.state.hasComponentValues = false;
-        this.state.information = await ObjectInformationCardDataHandler.prepareInformation(config, object);
-        const hasComponentValues = ObjectInformationCardDataHandler.hasComponentValues(this.state.information);
-        if (hasComponentValues) {
-            this.state.hasComponentValues = true;
-        }
-        this.setDataMapValues(this.state.information);
+        this.state.information = await ObjectInformationCardService.getInstance().prepareInformation(config, object);
         this.state.valuesReady = true;
-    }
-
-    private setDataMapValues(information: InformationRowConfiguration[]): void {
-        information.forEach((row) => {
-            row.values.forEach((group) => {
-                group.forEach((infoValue) => {
-                    const data: [string, boolean] = (this.state.widgetType === 2) ? [infoValue.text, true] :
-                        [infoValue.componentData.property, true];
-                    this.setDataMapValue(data);
-                });
-            });
-        });
-    }
-
-    public hasRowValue(row: InformationRowConfiguration): boolean {
-        let hasValue = false;
-        for (const value of row.values) {
-            hasValue = this.hasValue(value);
-            if (hasValue) {
-                break;
-            }
-        }
-        return hasValue;
-    }
-
-    // function also needed for object-avatar-label
-    public setDataMapValue(value: [string, boolean]): void {
-        const previousValue = this.valueDataMap.get(value[0]);
-        if (previousValue !== value[1]) {
-            this.state.valuesReady = false;
-            this.valueDataMap.set(value[0], value[1]);
-            this.state.valuesReady = true;
-        }
-    }
-
-    public hasValue(group: InformationConfiguration[]): boolean {
-        if (this.state.widgetType === 2) {
-            if (group.some((value) => this.valueDataMap.get(value.text))) {
-                return true;
-            }
-        }
-        else {
-            if (group.some((value) => this.valueDataMap.get(value.componentData.property))) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public getCustomRowStyle(index: number): string {
         const row = this.state.information[index] as InformationRowConfiguration;
         if (
-            !this.hasRowValue(row) || this.isRowWithCreatedBy(index) ||
+            this.isRowWithCreatedBy(index) ||
             this.context.openSidebarWidgets.some((osw) => osw === this.state.instanceId)
         ) {
             return;
@@ -149,11 +93,9 @@ class Component {
         const basicColumnWidth = 15;
         let largestFactor = 1;
         row.values.forEach((value) => {
-            if (this.hasValue(value)) {
-                const newLargestFactor = this.getLargestWidthFactor(value);
-                if (newLargestFactor > largestFactor) {
-                    largestFactor = newLargestFactor;
-                }
+            const newLargestFactor = this.getLargestWidthFactor(value);
+            if (newLargestFactor > largestFactor) {
+                largestFactor = newLargestFactor;
             }
         });
         const size = largestFactor * basicColumnWidth + (largestFactor - 1);

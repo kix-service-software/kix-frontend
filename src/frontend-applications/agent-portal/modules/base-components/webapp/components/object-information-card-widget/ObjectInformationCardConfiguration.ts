@@ -56,5 +56,25 @@ export class InformationConfiguration {
         public multiline?: boolean
     ) { }
 
+    public static clone(value: InformationConfiguration): InformationConfiguration {
+        return new InformationConfiguration(
+            value.componentId,
+            value.componentData ? value.componentData : {},
+            [],
+            value.icon,
+            null,
+            value.text,
+            value.textPlaceholder,
+            value.textStyle,
+            value.detailViewWidthFactor,
+            value.linkSrc,
+            value.routingConfiguration,
+            value.routingObjectId,
+            '',
+            '',
+            value.multiline
+        );
+    }
+
 }
 

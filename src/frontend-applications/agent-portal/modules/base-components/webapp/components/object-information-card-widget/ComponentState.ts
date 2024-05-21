@@ -19,7 +19,6 @@ export class ComponentState extends WidgetComponentState {
         public information: InformationRowConfiguration[] = [],
         public templates: any = {},
         public valuesReady: boolean = false,
-        public hasComponentValues: boolean = false,
         public widgetType: WidgetType = null,
     ) {
         super();

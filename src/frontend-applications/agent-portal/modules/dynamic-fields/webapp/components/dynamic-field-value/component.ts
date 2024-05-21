@@ -124,12 +124,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public labelClicked(label: Label): void {
         if (label?.id && label?.object) {
-            const contextDescriptorList = ContextService.getInstance().getContextDescriptors(ContextMode.DETAILS);
-            for (const contextDescriptor of (contextDescriptorList)) {
-                if(contextDescriptor.isContextFor(label.object.KIXObjectType)) {
-                    ContextService.getInstance().setActiveContext(contextDescriptor.contextId, label.id);
-                    return;
-                }
+            const contextDescriptorList = ContextService.getInstance().getContextDescriptors(
+                ContextMode.DETAILS, label.object?.KIXObjectType
+            );
+
+            if (contextDescriptorList?.length) {
+                ContextService.getInstance().setActiveContext(contextDescriptorList[0].contextId, label.id);
             }
         }
     }

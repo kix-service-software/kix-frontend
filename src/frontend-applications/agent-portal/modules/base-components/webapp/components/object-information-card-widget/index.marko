@@ -11,84 +11,136 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     instanceId=state.instanceId
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions
-    icon=(state.widgetConfiguration ? state.widgetConfiguration.icon : null)>
+    icon=(state.widgetConfiguration ? state.widgetConfiguration.icon : null)
+>
     <@content>
-        <div.info-container>
-            <div.info-avatar class={
-                "no-avatar":
-                    !state.avatar || !Array.isArray(state.avatar) || !state.avatar.length
-            }>
+        <div class="info-container">
+            <div class=[
+                "info-avatar",
+                {
+                    "no-avatar":
+                        !state.avatar ||
+                        !Array.isArray(state.avatar) ||
+                        !state.avatar.length,
+                },
+            ]>
                 <if(Array.isArray(state.avatar) && state.avatar.length)>
                     <for|avatar| of=state.avatar>
                         <icon icon=avatar/>
                     </for>
                 </if>
                 <else-if(state.avatar && !Array.isArray(state.avatar))>
-                     <icon icon=avatar/>
+                    <icon icon=avatar/>
                 </else-if>
             </div>
             <if(state.valuesReady)>
-                <div.info-rows>
+                <div class="info-rows">
                     <for|row, index| of=state.information>
                         <if(row.title)>
-                            <div.info-row-title class={
-                                "no-value": !component.hasRowValue(row),
-                                separator: row.separator
-                            }>
+                            <div class=[
+                                "info-row-title",
+                                {
+                                    separator: row.separator,
+                                },
+                            ]>
                                 <translation-string pattern=row.title/>
                             </div>
                         </if>
-                        <div.info-row-content class={
-                            "no-title": !row.title,
-                            "no-value": !component.hasRowValue(row),
-                            "created-by-row": component.isRowWithCreatedBy(index),
-                            separator: row.separator
-                        } style=component.getCustomRowStyle(index)
+                        <div
+                            class=[
+                                "info-row-content",
+                                {
+                                    "no-title": !row.title,
+                                    "created-by-row":
+                                        component.isRowWithCreatedBy(index),
+                                    separator: row.separator,
+                                },
+                            ]
+                            style=component.getCustomRowStyle(index)
                         >
                             <for|group, groupIndex| of=row.values>
-                                <div.info-group class={
-                                    "no-value": !component.hasValue(group),
-                                    "only-icon": group.length === 1 && group[0].componentId === 'icon',
-                                    "me-2": groupIndex === row.values.length - 1
-                                }>
+                                <div class=[
+                                    "info-group",
+                                    {
+                                        "only-icon":
+                                            group.length === 1 &&
+                                            group[0].componentId === "icon",
+                                        "me-2":
+                                            groupIndex ===
+                                            row.values.length - 1,
+                                    },
+                                ]>
                                     <for|info| of=group>
                                         <if(info.componentId)>
                                             <div>
-                                                <div title=info.preparedText style=info.textStyle>${info.preparedText}</div>
-                                                <div.component-value>
+                                                <div
+                                                    title=info.preparedText
+                                                    style=info.textStyle
+                                                >
+                                                    ${info.preparedText}
+                                                </div>
+                                                <div class="component-value">
                                                     <link-target
                                                         routingConfiguration=info.routingConfiguration
-                                                        objectId=info.routingObjectId>
+                                                        objectId=info.routingObjectId
+                                                    >
                                                         <@content>
-                                                            <${component.getTemplate(info.componentId)} ...info.componentData on-setDataMapValue('setDataMapValue')/>
+                                                            <${
+                                                                component.getTemplate(
+                                                                    info.componentId,
+                                                                )
+                                                            } ...info.componentData/>
                                                         </@content>
                                                     </link-target>
                                                 </div>
                                             </div>
                                         </if>
                                         <else-if(info.preparedText)>
-                                            <div.info-value class={"no-component-values": !state.hasComponentValues, "with-icon": info.icon}>
-                                                <div style=info.iconStyle title=info.preparedText>
+                                            <div class=[
+                                                "info-value",
+                                                {
+                                                    "with-icon": info.icon,
+                                                },
+                                            ]>
+                                                <div
+                                                    style=info.iconStyle
+                                                    title=info.preparedText
+                                                >
                                                     <icon icon=info.icon/>
                                                 </div>
-                                                <span style=info.textStyle title=info.preparedText>
-                                                    <if(info.routingConfiguration)>
+                                                <span
+                                                    style=info.textStyle
+                                                    title=info.preparedText
+                                                >
+                                                    <if(
+                                                        info.routingConfiguration
+                                                    )>
                                                         <link-target
                                                             routingConfiguration=info.routingConfiguration
-                                                            objectId=info.routingObjectId>
-                                                            <@content>${info.preparedText}</@content>
+                                                            objectId=info.routingObjectId
+                                                        >
+                                                            <@content>
+                                                                ${info.preparedText}
+                                                            </@content>
                                                         </link-target>
                                                     </if>
                                                     <else-if(
                                                         info.linkSrc &&
                                                         info.preparedLinkSrc
                                                     )>
-                                                        <a href=info.preparedLinkSrc target="_blank">${info.preparedText}</a>
+                                                        <a
+                                                            href=info.preparedLinkSrc
+                                                            target="_blank"
+                                                        >
+                                                            ${info.preparedText}
+                                                        </a>
                                                     </else-if>
                                                     <else-if(info.multiline)>
                                                         <pre>${info.preparedText}</pre>
                                                     </else-if>
-                                                    <else>${info.preparedText}</else>
+                                                    <else>
+                                                        ${info.preparedText}
+                                                    </else>
                                                 </span>
                                             </div>
                                         </else-if>
