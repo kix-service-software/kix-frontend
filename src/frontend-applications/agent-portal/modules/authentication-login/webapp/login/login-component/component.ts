@@ -58,7 +58,7 @@ class Component {
 
         if (this.authMethods?.length) {
             this.state.hasLogin = this.authMethods.some((am) => am.type === 'LOGIN');
-            this.state.authMethods = this.authMethods.filter((am) => am.type !== 'LOGIN');
+            this.state.authMethods = this.authMethods.filter((am) => am.type !== 'LOGIN' && am.preAuth);
         }
 
         setTimeout(() => {
