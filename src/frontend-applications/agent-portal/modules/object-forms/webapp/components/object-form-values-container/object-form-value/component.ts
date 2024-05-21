@@ -146,8 +146,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         };
         EventService.getInstance().subscribe(ObjectFormEvent.SCROLL_TO_FORM_VALUE, this.subscriber);
-
-        this.state.prepared = true;
     }
 
     public onDestroy(): void {
