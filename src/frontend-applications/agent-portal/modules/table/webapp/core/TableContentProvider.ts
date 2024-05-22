@@ -176,7 +176,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             objects = await SearchService.getInstance().executeSearchCache(
                 this.table.getTableConfiguration().searchId, undefined, undefined, undefined, undefined,
                 includes, this.currentLoadLimit, this.loadingOptions?.searchLimit, this.sort, additionalFilter
-            );
+            ).catch(() => []);
             this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
                 this.table.getTableConfiguration().searchId
             );
@@ -207,7 +207,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 this.objectType, !this.useBackendSort ? this.objectIds : null,
                 loadingOptions, this.specificLoadingOptions,
                 forceIds, this.useCache, undefined, this.id
-            );
+            ).catch(() => []);
 
             if (this.currentLoadLimit) {
                 this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(this.id);
@@ -237,7 +237,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public async getRowObjects(objects: T[]): Promise<RowObject<T>[]> {
         const rowObjectPromises: Array<Promise<RowObject<T>>> = [];
         const rowObjects: Array<RowObject<T>> = [];
-        if (objects) {
+        if (Array.isArray(objects)) {
             for (const o of objects) {
 
                 if (this.reloadInProgress) {
