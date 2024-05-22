@@ -57,6 +57,8 @@ export class TextModulesTableFactory extends TableFactory {
                 this.getDefaultColumnConfiguration(TextModuleProperty.KEYWORDS),
                 this.getDefaultColumnConfiguration(TextModuleProperty.LANGUAGE),
                 this.getDefaultColumnConfiguration(TextModuleProperty.COMMENT),
+                this.getDefaultColumnConfiguration(TextModuleProperty.QUEUE_IDS),
+                this.getDefaultColumnConfiguration(TextModuleProperty.TICKET_TYPE_IDS),
                 this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
                 this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
                 this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
@@ -94,6 +96,8 @@ export class TextModulesTableFactory extends TableFactory {
                 );
                 break;
             case TextModuleProperty.KEYWORDS:
+            case TextModuleProperty.QUEUE_IDS:
+            case TextModuleProperty.TICKET_TYPE_IDS:
                 config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 250, true, true,
                     false, DataType.STRING, true, 'label-list-cell-content', null, false

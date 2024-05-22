@@ -14,6 +14,8 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { TextModule } from '../../model/TextModule';
 import { TextModuleProperty } from '../../model/TextModuleProperty';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 
 export class TextModuleLabelProvider extends LabelProvider<TextModule> {
 
@@ -34,6 +36,12 @@ export class TextModuleLabelProvider extends LabelProvider<TextModule> {
                 break;
             case TextModuleProperty.KEYWORDS:
                 displayValue = 'Translatable#Tags';
+                break;
+            case TextModuleProperty.QUEUE_IDS:
+                displayValue = 'Translatable#Queues';
+                break;
+            case TextModuleProperty.TICKET_TYPE_IDS:
+                displayValue = 'Translatable#Types';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
@@ -60,6 +68,22 @@ export class TextModuleLabelProvider extends LabelProvider<TextModule> {
         switch (property) {
             case TextModuleProperty.ID:
                 displayValue = textModule.Name;
+                break;
+            case TextModuleProperty.QUEUE_IDS:
+            case TextModuleProperty.TICKET_TYPE_IDS:
+                if (Array.isArray(displayValue)) {
+                    const type = property === TextModuleProperty.QUEUE_IDS ?
+                        KIXObjectType.QUEUE : KIXObjectType.TICKET_TYPE;
+                    const objects = await KIXObjectService.loadObjects(type, displayValue).catch(() => []);
+                    if (objects?.length) {
+                        const labelPromises = [];
+                        objects.forEach((o) => {
+                            labelPromises.push(LabelService.getInstance().getObjectText(o));
+                        });
+                        displayValue = await Promise.all(labelPromises);
+                    }
+                }
+                translatable = false;
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
