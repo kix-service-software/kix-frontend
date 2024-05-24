@@ -25,8 +25,6 @@ import { DynamicFieldType } from '../model/DynamicFieldType';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
-
-
 export class DynamicFieldAPIService extends KIXObjectAPIService {
 
     protected RESOURCE_URI: string = 'system/dynamicfields';
