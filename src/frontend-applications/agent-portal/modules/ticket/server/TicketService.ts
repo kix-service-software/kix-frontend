@@ -248,7 +248,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         let objectResponse = new ObjectResponse([], 0);
         if (objectType === KIXObjectType.TICKET) {
 
-            const includes = [TicketProperty.STATE_TYPE, TicketProperty.UNSEEN];
+            const includes = [TicketProperty.STATE, TicketProperty.STATE_TYPE, TicketProperty.UNSEEN];
             const expands = [];
 
             if (!loadingOptions) {

@@ -90,6 +90,8 @@ export class Ticket extends KIXObject {
 
     public Watchers: Watcher[];
 
+    public UntilTime: number;
+
     // refrenced objects
     public Contact: Contact;
     public TicketLock: TicketLock;

@@ -20,7 +20,29 @@ export class TicketModuleConfiguration implements IConfiguration {
         public name: string = 'Ticket Module Configuration',
         public type: string = 'Ticket Module',
         public valid: boolean = true,
+        public roleIds: number[] = [],
         public addQueueSignature: boolean = true,
-        public roleIds: number[] = []
+        public ticketColors: TicketColorConfiguration = new TicketColorConfiguration()
+    ) { }
+}
+
+
+export class TicketColorConfiguration {
+
+    public constructor(
+        public stateTypes: any = {
+            open: null,
+            new: null,
+            closed: 'color:#9e9e9e;',
+            'pending reminder': 'background-color:#008dd2 !important;color:#ffffff',
+            'pending reminder reached': 'background-color:#e31e24 !important;color:#ffffff',
+            'pending auto': 'background-color:#008dd2 !important;color:#ffffff',
+            'pending auto reached': 'background-color:#e31e24 !important;color:#ffffff',
+            removed: 'color:#9e9e9e',
+            merged: 'color:#9e9e9e'
+        },
+        public states: any = {
+            unseen: 'font-weight:bold;'
+        }
     ) { }
 }
