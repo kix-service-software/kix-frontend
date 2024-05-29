@@ -63,11 +63,25 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext<TicketDetailsContext>();
-        this.prepareObserver();
+
+        this.state.expanded = this.getArticleToggleState();
+        this.state.show = this.state.expanded;
+        this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
+        await this.prepareObserver();
+        await this.toggleArticleContent(false);
+
+        const focusedArticleId = this.context.getAdditionalInformation('CURRENT_ARTICLE_FOCUS');
+        if (focusedArticleId === this.article.ArticleID) {
+            setTimeout(() => this.scrollToArticle(), 500);
+        }
 
         this.state.unseen = this.state.article.Unseen;
         this.state.switchAttachmentListTooltip = await TranslationService.translate('Translatable#Switch attachment list layout');
 
+        this.registerContextListener();
+    }
+
+    private registerContextListener(): void {
         this.contextListenerId = IdService.generateDateBasedId('message-content-' + this.article?.ArticleID);
         this.contextListener = {
             sidebarLeftToggled: (): void => { return; },
@@ -100,7 +114,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private prepareObserver(): void {
+    private async prepareObserver(): Promise<void> {
         if (!this.state.show && this.supportsIntersectionObserver()) {
             const row = (this as any).getEl();
             if (row) {
@@ -111,7 +125,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.observer.observe(row);
             }
         } else {
-            this.loadArticle();
+            await this.loadArticle();
         }
     }
 
@@ -255,7 +269,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async toggleArticleContent(): Promise<void> {
+    private async toggleArticleContent(setFocus: boolean = true): Promise<void> {
         if (this.state.expanded) {
             this.state.loadingContent = true;
 
@@ -278,7 +292,32 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             this.state.loadingContent = false;
             this.state.showContent = true;
+
+            this.context.setAdditionalInformation('CURRENT_ARTICLE_FOCUS', this.article.ArticleID);
         }
+
+        this.saveArticleToggleState();
+    }
+
+    private saveArticleToggleState(): void {
+        let toggleState: Map<number, boolean> = this.context.getAdditionalInformation('ARTICLE_TOGGLE_STATE');
+        if (!toggleState) {
+            toggleState = new Map();
+        }
+
+        toggleState.set(this.article.ArticleID, this.state.expanded);
+
+        this.context.setAdditionalInformation('ARTICLE_TOGGLE_STATE', toggleState);
+    }
+
+    private getArticleToggleState(): boolean {
+        let toggled: boolean = false;
+        const toggleState: Map<number, boolean> = this.context.getAdditionalInformation('ARTICLE_TOGGLE_STATE');
+        if (toggleState?.has(this.article.ArticleID)) {
+            toggled = toggleState.get(this.article.ArticleID);
+        }
+
+        return toggled;
     }
 
     private prepareAttachments(): void {
