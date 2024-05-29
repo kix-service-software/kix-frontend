@@ -490,7 +490,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const ticketHistoryWidget = new WidgetConfiguration(
             'ticket-details-history-widget', 'History Widget', ConfigurationType.Widget,
-            'ticket-history-widget', 'Translatable#History', [],
+            'ticket-history-widget', 'Translatable#History', ['csv-export-action'],
             new ConfigurationDefinition('ticket-details-history-config', ConfigurationType.Table),
             null, false, false, null, false
         );
