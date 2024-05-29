@@ -52,15 +52,15 @@ class Component {
 
     private async initWidget(ticket: Ticket): Promise<void> {
         if (ticket) {
-            this.prepareActions(ticket);
             await this.prepareTable();
+            this.prepareActions(ticket);
         }
     }
 
     private async prepareActions(ticket: Ticket): Promise<void> {
         if (this.state.widgetConfiguration && ticket) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [ticket]
+                this.state.widgetConfiguration.actions, this.state.table
             );
         }
     }
