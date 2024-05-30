@@ -285,6 +285,10 @@ export class DateTimeUtil {
     }
 
     public static calculateRelativeDate(value: string): string {
+        if (Array.isArray(value)) {
+            value = value.length ? value[0] : null;
+        }
+
         const parts = value?.split(/(\d+)/) || [];
         if (value && parts.length === 3) {
             value = DateTimeUtil.calculateDate(Number(parts[1]), parts[2].toString());

@@ -40,7 +40,8 @@ export class ContextFormManager {
 
     private storageTimeout: any;
 
-    private createObjectHandlerPromise: Promise<ObjectFormHandler>;
+    private createObjectHandlerPromise: Promise<void>;
+    private handler: ObjectFormHandler;
     public useObjectForms: boolean;
 
     public constructor(protected context?: Context) {
@@ -89,30 +90,32 @@ export class ContextFormManager {
     }
 
     public async getObjectFormHandler(createNewInstance?: boolean): Promise<ObjectFormHandler> {
-        if (createNewInstance && this.createObjectHandlerPromise) {
-            const handler = await this.createObjectHandlerPromise;
-            handler.destroy();
+        if (this.formId && createNewInstance) {
+            this.handler?.destroy();
+
+            if (!this.createObjectHandlerPromise) {
+                this.createObjectHandlerPromise = this.createObjectFormhandler();
+            }
+
+            await this.createObjectHandlerPromise;
+            this.createObjectHandlerPromise = null;
         }
 
-        if (this.formId && (!this.createObjectHandlerPromise || createNewInstance)) {
-            this.createObjectHandlerPromise = this.createObjectFormhandler(createNewInstance);
-        }
-        return this.createObjectHandlerPromise;
+        return this.handler;
     }
 
-    private async createObjectFormhandler(createNewInstance: boolean): Promise<ObjectFormHandler> {
+    private async createObjectFormhandler(): Promise<void> {
         this.form = await FormService.getInstance().getForm(this.formId);
 
         const start = Date.now();
 
-        const objectFormHandler = new ObjectFormHandler(this.context);
-        await objectFormHandler.loadForm(createNewInstance);
-
+        this.handler = new ObjectFormHandler(this.context);
         EventService.getInstance().publish(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.context);
+
+        await this.handler.loadForm(true);
 
         const end = Date.now();
         console.debug(`ObjectFormHandler created: ${(end - start)}ms`);
-        return objectFormHandler;
     }
 
     public getForm(): FormConfiguration {

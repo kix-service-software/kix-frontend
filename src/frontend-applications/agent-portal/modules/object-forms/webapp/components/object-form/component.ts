@@ -27,6 +27,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private subscriber: IEventSubscriber;
     private formhandler: ObjectFormHandler;
 
+    private updateTimeout: any;
+    private handlerChangeInProgress: boolean = true;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -55,27 +58,41 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.submitPattern = submitButtonText;
         }
 
-        await this.setFormValues();
+        this.formhandler = await this.context.getFormManager().getObjectFormHandler();
+        this.setFormValues(true, false);
 
+        setTimeout(() => {
+            this.registerEventHandler();
+            this.state.prepared = true;
+        }, 500);
+    }
+
+    private registerEventHandler(): void {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('object-form'),
             eventPublished: async (data: Context | any, eventId: string): Promise<void> => {
+                let updateNeeded = false;
+
                 if (eventId === ObjectFormEvent.BLOCK_FORM) {
                     this.state.blocked = data.blocked;
+                } else if (eventId === FormEvent.OBJECT_FORM_HANDLER_CHANGED) {
+                    this.state.prepared = false;
+                    this.handlerChangeInProgress = true;
                 } else if (
-                    (
-                        eventId === FormEvent.OBJECT_FORM_HANDLER_CHANGED ||
-                        eventId === ObjectFormEvent.FORM_VALUE_ADDED
-                    ) &&
+                    eventId === ObjectFormEvent.FORM_VALUE_ADDED &&
                     data.instanceId === this.context.instanceId
                 ) {
-                    this.state.prepared = false;
-                    await this.setFormValues();
-                    setTimeout(() => this.state.prepared = true, 35);
+                    updateNeeded = true;
                 } else if (eventId === ObjectFormEvent.FIELD_ORDER_CHANGED) {
-                    this.state.prepared = false;
-                    await this.setFormValues();
-                    setTimeout(() => this.state.prepared = true, 35);
+                    updateNeeded = true;
+                } else if (eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED) {
+                    this.handlerChangeInProgress = false;
+                    updateNeeded = true;
+                }
+
+                if (updateNeeded && !this.handlerChangeInProgress) {
+                    this.formhandler = await this.context.getFormManager().getObjectFormHandler();
+                    this.setFormValues(false, true);
                 }
             }
         };
@@ -84,8 +101,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(ObjectFormEvent.FIELD_ORDER_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
-
-        setTimeout(() => this.state.prepared = true, 250);
+        EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
     }
 
     public onDestroy(): void {
@@ -93,15 +109,26 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(ObjectFormEvent.FIELD_ORDER_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
     }
 
-    private async setFormValues(): Promise<void> {
-        this.formhandler = await this.context.getFormManager().getObjectFormHandler();
-        if (this.formhandler) {
-            this.state.formValues = this.formhandler?.getFormValues() || [];
-        } else {
-            this.state.error = 'Translatable#No form available. Please contact your administrator.';
+    private setFormValues(force?: boolean, setPrepared?: boolean): void {
+        if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout);
         }
+
+        this.updateTimeout = setTimeout(() => {
+            if (this.formhandler) {
+                this.state.formValues = this.formhandler?.getFormValues() || [];
+            } else {
+                this.state.error = 'Translatable#No form available. Please contact your administrator.';
+            }
+
+            if (setPrepared) {
+                this.state.prepared = true;
+            }
+
+        }, force ? 0 : 350);
     }
 
     public async submit(): Promise<void> {
