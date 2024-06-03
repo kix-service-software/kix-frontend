@@ -10,7 +10,7 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { FormValidationService } from './FormValidationService';
-import { KIXObjectPlaceholderHandler } from './KIXObjectPlaceholderHandler';
+import { CommonPlaceholderHandler } from './CommonPlaceholderHandler';
 import { ObjectAvatarInformationHandler } from './ObjectAvatarInformationHandler';
 import { ObjectInformationCardService } from './ObjectInformationCardService';
 import { ObjectReferenceCountValidator } from './ObjectReferenceCountValidator';
@@ -26,7 +26,7 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ActionFactory.getInstance().registerAction('reset-user-context-widget-list', ResetUserContextWidgetListAction);
         FormValidationService.getInstance().registerValidator(new ObjectReferenceCountValidator());
-        PlaceholderService.getInstance().registerPlaceholderHandler(new KIXObjectPlaceholderHandler());
+        PlaceholderService.getInstance().registerPlaceholderHandler(new CommonPlaceholderHandler());
 
         ObjectInformationCardService.getInstance().registerObjectInformationComponentHandler(
             'object-avatar-label', new ObjectAvatarInformationHandler()

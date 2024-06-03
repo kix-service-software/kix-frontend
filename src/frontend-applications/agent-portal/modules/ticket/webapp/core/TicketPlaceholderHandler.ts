@@ -85,12 +85,12 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         placeholder: string, ticket?: Ticket, language?: string, forRichtext?: boolean
     ): Promise<string> {
         let result = '';
-        const objectString = PlaceholderService.getInstance().getObjectString(placeholder);
-        if (this.isHandlerFor(objectString)) {
+        if (this.isHandlerFor(placeholder)) {
             if (!ticket) {
                 ticket = await this.getTicket();
             }
             if (ticket) {
+                const objectString = PlaceholderService.getInstance().getObjectString(placeholder);
                 const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
                 if (attribute) {
                     switch (objectString) {
