@@ -30,6 +30,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private submitTimeout: any;
 
     private updateTimeout: any;
+    private handlerChangeInProgress: boolean = true;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -60,7 +61,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.formhandler = await this.context.getFormManager().getObjectFormHandler();
-        this.setFormValues(true);
+        this.setFormValues(true, false);
 
         setTimeout(() => {
             this.registerEventHandler();
@@ -71,25 +72,29 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private registerEventHandler(): void {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('object-form'),
-            eventPublished: (data: Context | any, eventId: string): void => {
+            eventPublished: async (data: Context | any, eventId: string): Promise<void> => {
                 let updateNeeded = false;
 
                 if (eventId === ObjectFormEvent.BLOCK_FORM) {
                     this.state.blocked = data.blocked;
+                } else if (eventId === FormEvent.OBJECT_FORM_HANDLER_CHANGED) {
+                    this.state.prepared = false;
+                    this.handlerChangeInProgress = true;
                 } else if (
-                    (
-                        eventId === FormEvent.OBJECT_FORM_HANDLER_CHANGED ||
-                        eventId === ObjectFormEvent.FORM_VALUE_ADDED
-                    ) &&
+                    eventId === ObjectFormEvent.FORM_VALUE_ADDED &&
                     data.instanceId === this.context.instanceId
                 ) {
                     updateNeeded = true;
                 } else if (eventId === ObjectFormEvent.FIELD_ORDER_CHANGED) {
                     updateNeeded = true;
+                } else if (eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED) {
+                    this.handlerChangeInProgress = false;
+                    updateNeeded = true;
                 }
 
-                if (updateNeeded) {
-                    this.setFormValues();
+                if (updateNeeded && !this.handlerChangeInProgress) {
+                    this.formhandler = await this.context.getFormManager().getObjectFormHandler();
+                    this.setFormValues(false, true);
                 }
             }
         };
@@ -98,6 +103,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(ObjectFormEvent.FIELD_ORDER_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+        EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
     }
 
     public onDestroy(): void {
@@ -105,9 +111,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(ObjectFormEvent.FIELD_ORDER_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
     }
 
-    private setFormValues(force?: boolean): void {
+    private setFormValues(force?: boolean, setPrepared?: boolean): void {
         if (this.updateTimeout) {
             clearTimeout(this.updateTimeout);
         }
@@ -118,6 +125,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             } else {
                 this.state.error = 'Translatable#No form available. Please contact your administrator.';
             }
+
+            if (setPrepared) {
+                this.state.prepared = true;
+            }
+
         }, force ? 0 : 350);
     }
 

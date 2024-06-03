@@ -39,11 +39,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
                <if(state.hint)>
                   <span class="object-forms-component input-group-text hint-wrapper rounded-0 border-start-0">
-                     <overlay-icon
-                        isHint
-                        content=state.hint
-                        title=state.label
-                     />
+                     <overlay-icon isHint content=state.hint title=state.label/>
                   </span>
                </if>
             </div>
@@ -80,8 +76,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                   <actions-container
                      actions=(state.formValue.actions)
                      isSelectInput=(
-                        state.formValue.inputComponentId ===
-                        "select-form-input"
+                        state.formValue.inputComponentId === "select-form-input"
                      )
                   />
                </div>
