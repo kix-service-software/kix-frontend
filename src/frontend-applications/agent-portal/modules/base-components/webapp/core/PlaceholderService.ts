@@ -46,7 +46,7 @@ export class PlaceholderService {
     public extractPlaceholders(text: string): string[] {
         let placeholders: string[] = [];
         if (text && typeof text === 'string' && text !== '') {
-            const result = text.match(/(<|&lt;)(TR_|NT_)?KIX_.+?(>|&gt;)/g);
+            const result = text.match(/(<|&lt;)(TR_|NT_)?KIX_.+?!?(>|&gt;)/g);
             if (Array.isArray(result)) {
                 placeholders = result.filter((p) => p.match(this.getPlaceholderRegex()));
             }
@@ -84,8 +84,7 @@ export class PlaceholderService {
 
         for (const placeholder of placeholders) {
             if (!replacedPlaceholders.has(placeholder)) {
-                const objectString = this.getObjectString(placeholder);
-                const handler = objectString ? this.getHandler(placeholder) : null;
+                const handler = this.getHandler(placeholder) || null;
                 if (this.doNotTranslatePlaceholder(placeholder)) {
                     language = await TranslationService.getSystemDefaultLanguage();
                 }
@@ -132,10 +131,10 @@ export class PlaceholderService {
     }
 
     public getPlaceholderRegex(
-        objectString: string = '(.+?)', attributeString: string = '(.+)', single: boolean = true
+        objectString: string = '([^_]+?)', attributeString: string = '(.+?)', single: boolean = true
     ): RegExp {
         return new RegExp(
-            `${single ? '^' : ''}(?:<|&lt;)(?:TR_|NT_)?KIX_${objectString}_${attributeString}(>|&gt;)${single ? '$' : ''}`,
+            `${single ? '^' : ''}(?:<|&lt;)(?:TR_|NT_)?KIX_${objectString}(?:_${attributeString})?!?(>|&gt;)${single ? '$' : ''}`,
             'g'
         );
     }
@@ -166,7 +165,7 @@ export class PlaceholderService {
     }
 
     public doNotTranslatePlaceholder(placeholder): boolean {
-        return Boolean(placeholder.match(/NT_KIX_/));
+        return Boolean(placeholder.match(/NT_KIX_/)) || Boolean(placeholder.match(/.+!(>|&gt;)$/));
     }
 
     public isDynamicFieldAttribute(attributeString: string): boolean {
