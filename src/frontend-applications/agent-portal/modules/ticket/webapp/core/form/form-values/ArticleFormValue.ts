@@ -13,6 +13,7 @@ import { Ticket } from '../../../../model/Ticket';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ChannelFormValue } from './ChannelFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 
 export class ArticleFormValue extends ObjectFormValue<Article[]> {
 
@@ -35,6 +36,8 @@ export class ArticleFormValue extends ObjectFormValue<Article[]> {
 
         if (!article) {
             article = new Article(null, ticket);
+            const context = ContextService.getInstance().getActiveContext();
+            article.ArticleID = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
             ticket.Articles.push(article);
         }
 

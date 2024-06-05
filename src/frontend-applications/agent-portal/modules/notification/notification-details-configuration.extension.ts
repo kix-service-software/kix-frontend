@@ -118,7 +118,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             KIXObjectType.NOTIFICATION,
             [
                 NotificationProperty.DATA_RECIPIENT_EMAIL,
-                NotificationProperty.DATA_RECIPIENT_SUBJECT
+                NotificationProperty.DATA_RECIPIENT_SUBJECT,
+                NotificationProperty.DATA_EMAIL_SECURITIY
             ]
         );
         configurations.push(methodsInfoConfig);

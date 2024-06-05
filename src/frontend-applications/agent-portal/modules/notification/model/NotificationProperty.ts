@@ -43,6 +43,8 @@ export enum NotificationProperty {
 
     DATA_SEND_ONCE_A_DAY = 'OncePerDay',
 
+    DATA_EMAIL_SECURITIY = 'EmailSecurity',
+
     FILTER = 'Filter',
 
     DATA_CREATE_ARTICLE = 'CreateArticle'

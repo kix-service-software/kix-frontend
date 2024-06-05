@@ -74,7 +74,7 @@ describe('FormValue Binding', () => {
 
         it('Should have binding for form value properties', () => {
             expect(formValue['bindings']).an('array');
-            expect(formValue['bindings'].length).equals(11);
+            expect(formValue['bindings'].length).equals(12);
         });
 
         it('Should have binding for PossibleValues', () => {
@@ -114,6 +114,11 @@ describe('FormValue Binding', () => {
 
         it('Should have binding for Enabled', () => {
             const binding = formValue['bindings'].find((b) => b.property === FormValueProperty.ENABLED);
+            expect(binding).exist;
+        });
+
+        it('Should have binding for Label', () => {
+            const binding = formValue['bindings'].find((b) => b.property === FormValueProperty.LABEL);
             expect(binding).exist;
         });
 

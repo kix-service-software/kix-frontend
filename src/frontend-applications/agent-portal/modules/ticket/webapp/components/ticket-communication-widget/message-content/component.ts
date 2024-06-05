@@ -197,6 +197,21 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (this.state.article) {
             this.state.backgroundColor = await TicketService.getInstance().getChannelColor(this.state.article.Channel);
+
+            if (this.state.article.SMIMESigned) {
+                const property = this.state.isExternal ? ArticleProperty.SMIME_VERIFIED : ArticleProperty.SMIME_SIGNED;
+                this.state.smimeSignedTooltip = await LabelService.getInstance().getDisplayText(
+                    this.state.article, property
+                );
+                if (!this.state.article[property]) {
+                    this.state.smimeSignedTooltip += ` (${this.state.article.SMIMESignedError})`;
+                }
+                const icons = await LabelService.getInstance().getIcons(
+                    this.state.article, property
+                );
+                this.state.smimeSignedIcon = icons?.length ? icons[0] : null;
+                this.state.smimeSigned = this.state.article[property];
+            }
         }
 
         this.eventSubscriber = {
@@ -209,6 +224,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
         };
+
         EventService.getInstance().subscribe('TOGGLE_ARTICLE', this.eventSubscriber);
     }
 

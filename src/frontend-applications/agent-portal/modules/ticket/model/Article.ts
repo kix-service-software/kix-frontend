@@ -83,7 +83,19 @@ export class Article extends KIXObject {
     public Plain: string = null;
 
     public Unseen: number = 0;
+
+    public NotSent: number = 0;
     public NotSentError: string = '';
+
+    public SMIMESigned: number = 0;
+    public SMIMESignedError: string = '';
+    public smimeVerified: boolean = true;
+    public smimeSigned: boolean = true;
+
+    public SMIMEEncrypted: number = 0;
+    public SMIMEEncryptedError: string = '';
+    public smimeDecrypted: boolean = true;
+    public smimeEncrypted: boolean = true;
 
     // UI Properties
 
@@ -99,6 +111,7 @@ export class Article extends KIXObject {
         super(article);
 
         this.ticket = ticket;
+        this.TicketID = this.ticket?.TicketID;
 
         if (article) {
             this.TicketID = article.TicketID;
@@ -135,7 +148,16 @@ export class Article extends KIXObject {
             this.CreatedBy = article.CreatedBy;
             this.Plain = article.Plain;
             this.Unseen = Number(article.Unseen);
+            this.NotSent = Number(article.NotSent);
             this.NotSentError = article.NotSentError;
+            this.SMIMESigned = Number(article.SMIMESigned);
+            this.SMIMESignedError = article.SMIMESignedError;
+            this.smimeVerified = this.SenderType === 'external' && this.SMIMESigned && !Boolean(this.SMIMESignedError);
+            this.smimeSigned = this.SenderType !== 'external' && this.SMIMESigned && !Boolean(this.SMIMESignedError);
+            this.SMIMEEncrypted = Number(article.SMIMEEncrypted);
+            this.SMIMEEncryptedError = article.SMIMEEncryptedError;
+            this.smimeDecrypted = this.SenderType === 'external' && this.SMIMEEncrypted && !Boolean(this.SMIMEEncryptedError);
+            this.smimeEncrypted = this.SenderType !== 'external' && this.SMIMEEncrypted && !Boolean(this.SMIMEEncryptedError);
 
             this.bodyAttachment = article.bodyAttachment;
 

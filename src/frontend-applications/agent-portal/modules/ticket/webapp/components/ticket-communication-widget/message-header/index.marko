@@ -24,7 +24,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 />
             </if>
             <if(state.channelIcon)>
-                <icon icon=state.channelIcon tooltip=state.channelTooltip/>
+                <span class="channel-icon">
+                    <icon icon=state.channelIcon tooltip=state.channelTooltip/>
+                    <if(state.smimeEncryptedIcon)>
+                        <icon icon=state.smimeEncryptedIcon tooltip=state.smimeEncryptedTooltip class={"smime-decrypted-icon": true, "smime-not-decrypted": !state.smimeDecrypted}/>
+                    </if>
+                </span>
             </if>
             <if(state.attachmentCount > 0)>
                 <div

@@ -39,7 +39,10 @@ export class ComponentState extends AbstractComponentState {
         public showContent: boolean = false,
         public unseen: number = 1,
         public oneColumnLayout: boolean = false,
-        public switchAttachmentListTooltip: string = 'Translatable#Switch attachment list layout'
+        public switchAttachmentListTooltip: string = 'Translatable#Switch attachment list layout',
+        public smimeSignedIcon: ObjectIcon | string = null,
+        public smimeSignedTooltip: string = null,
+        public smimeSigned: boolean = true
     ) {
         super();
     }

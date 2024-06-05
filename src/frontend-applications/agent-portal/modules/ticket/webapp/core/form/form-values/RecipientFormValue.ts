@@ -79,11 +79,11 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
         if (valueDefined && this.treeHandler) {
             const emailValues: [Contact[], string[], string[]] = await this.getEmailValues(this.value);
 
-            if (emailValues[0]) {
+            if (emailValues[0]?.length) {
                 selectedNodes = await this.getContactNodes(emailValues[0]);
             }
 
-            if (emailValues[1]) {
+            if (emailValues[1]?.length) {
                 selectedNodes = await this.addEmailAddressNodes(emailValues[1], selectedNodes);
             }
 

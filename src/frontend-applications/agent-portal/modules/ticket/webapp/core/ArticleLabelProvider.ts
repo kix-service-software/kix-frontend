@@ -71,6 +71,9 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
             case ArticleProperty.BODY:
                 displayValue = 'Translatable#Body';
                 break;
+            case ArticleProperty.ENCRYPT_IF_POSSIBLE:
+                displayValue = 'Translatable#Encrypt if possible';
+                break;
             default:
                 displayValue = property;
         }
@@ -139,6 +142,42 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 if (article) {
                     const date = new Date(Number(article.IncomingTime) * 1000);
                     displayValue = await DateTimeUtil.getLocalDateTimeString(date.getTime());
+                }
+                break;
+            case ArticleProperty.SMIME_VERIFIED:
+                if (article?.SMIMESigned) {
+                    if (article.smimeVerified) {
+                        displayValue = 'Sender verified';
+                    } else {
+                        displayValue = 'Sender not verified';
+                    }
+                }
+                break;
+            case ArticleProperty.SMIME_SIGNED:
+                if (article?.SMIMESigned) {
+                    if (article.smimeSigned) {
+                        displayValue = 'Message successfully signed';
+                    } else {
+                        displayValue = 'Message not signed';
+                    }
+                }
+                break;
+            case ArticleProperty.SMIME_DECRYPTED:
+                if (article?.SMIMEEncrypted) {
+                    if (article.smimeDecrypted) {
+                        displayValue = 'Message decrypted';
+                    } else {
+                        displayValue = 'Message not decrypted';
+                    }
+                }
+                break;
+            case ArticleProperty.SMIME_ENCRYPTED:
+                if (article?.SMIMEEncrypted) {
+                    if (article.smimeEncrypted) {
+                        displayValue = 'Message successfully encrypted';
+                    } else {
+                        displayValue = 'Message not encrypted';
+                    }
                 }
                 break;
             default:
@@ -286,21 +325,40 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 break;
             case ArticleProperty.CHANNEL_ID:
                 if (channelID) {
-                    if (article) {
-                        const channels = await KIXObjectService.loadObjects<Channel>(
-                            KIXObjectType.CHANNEL, [channelID]
-                        );
-                        if (channels && channels.length && channels[0].Name === 'email') {
-                            const mailIcon = article && article.isUnsent()
-                                ? 'kix-icon-mail-warning'
-                                : new ObjectIcon(null, 'Channel', channelID);
-                            icons.push(mailIcon);
-                        } else {
-                            icons.push(new ObjectIcon(null, 'Channel', channelID));
-                        }
+                    icons.push(new ObjectIcon(null, 'Channel', channelID));
+                }
+                break;
+            case 'Unsent':
+                if (article?.isUnsent()) {
+                    icons.push('kix-icon-mail-warning');
+                }
+                break;
+            case ArticleProperty.SMIME_VERIFIED:
+                if (article?.SMIMESigned) {
+                    if (!article.smimeVerified) {
+                        icons.push('kix-icon-query');
                     } else {
-                        icons.push(new ObjectIcon(null, 'Channel', channelID));
+                        icons.push('fas fa-check');
                     }
+                }
+                break;
+            case ArticleProperty.SMIME_SIGNED:
+                if (article?.SMIMESigned) {
+                    if (!article.smimeSigned) {
+                        icons.push('kix-icon-query');
+                    } else {
+                        icons.push('fas fa-check');
+                    }
+                }
+                break;
+            case ArticleProperty.SMIME_DECRYPTED:
+                if (article?.SMIMEEncrypted) {
+                    icons.push('fas fa-lock-open');
+                }
+                break;
+            case ArticleProperty.SMIME_ENCRYPTED:
+                if (article?.SMIMEEncrypted) {
+                    icons.push('fas fa-lock');
                 }
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:

@@ -75,5 +75,12 @@ export enum ArticleProperty {
     REFERENCED_ARTICLE_ID = 'ReferencedArticleID',
 
     BODY_RICHTEXT = 'BodyRichtext',
-    BODY_RICHTEXT_NO_INLINE = 'BodyRichtextNoInline'
+    BODY_RICHTEXT_NO_INLINE = 'BodyRichtextNoInline',
+
+    SMIME_VERIFIED = 'smimeVerified',
+    SMIME_SIGNED = 'smimeSigned',
+    SMIME_DECRYPTED = 'smimeDecrypted',
+    SMIME_ENCRYPTED = 'smimeEncrypted',
+
+    ENCRYPT_IF_POSSIBLE = 'EncryptIfPossible'
 }
