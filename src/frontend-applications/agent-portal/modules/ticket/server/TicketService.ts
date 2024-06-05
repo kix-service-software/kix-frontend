@@ -786,7 +786,6 @@ export class TicketAPIService extends KIXObjectAPIService {
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         let searchCriteria = criteria.filter((f) =>
             f.property !== SearchProperty.PRIMARY
-            && f.property !== SearchProperty.FULLTEXT
             && f.property !== 'Queue.FollowUpID'
         );
 
@@ -802,14 +801,6 @@ export class TicketAPIService extends KIXObjectAPIService {
                     ),
                 ];
                 searchCriteria = [...searchCriteria, ...primarySearch];
-            });
-        }
-
-        const fulltext = criteria.filter((f) => f.property === SearchProperty.FULLTEXT);
-        if (fulltext?.length) {
-            fulltext.forEach((c) => {
-                const fulltextSearch = this.getFulltextSearch(c);
-                searchCriteria = [...searchCriteria, ...fulltextSearch];
             });
         }
 
@@ -876,39 +867,6 @@ export class TicketAPIService extends KIXObjectAPIService {
         if (responsibleCriteria) {
             responsibleCriteria.value = user.UserID;
         }
-    }
-
-    private getFulltextSearch(fulltextFilter: FilterCriteria): FilterCriteria[] {
-        return [
-            new FilterCriteria(
-                TicketProperty.TICKET_NUMBER, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                TicketProperty.TITLE, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                ArticleProperty.SUBJECT, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                ArticleProperty.BODY, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                ArticleProperty.FROM, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                ArticleProperty.TO, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                ArticleProperty.CC, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            )
-        ];
     }
 
     public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {

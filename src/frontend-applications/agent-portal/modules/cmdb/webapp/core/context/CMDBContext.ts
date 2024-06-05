@@ -27,6 +27,7 @@ import { LabelService } from '../../../../base-components/webapp/core/LabelServi
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextPreference } from '../../../../../model/ContextPreference';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { SearchProperty } from '../../../../search/model/SearchProperty';
 
 export class CMDBContext extends Context {
 
@@ -147,12 +148,8 @@ export class CMDBContext extends Context {
 
         if (this.filterValue) {
             loadingOptions.filter.push(new FilterCriteria(
-                ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${this.filterValue}*`
-            ));
-            loadingOptions.filter.push(new FilterCriteria(
-                ConfigItemProperty.NAME, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${this.filterValue}*`
+                SearchProperty.FULLTEXT, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.AND, `${this.filterValue}`
             ));
         }
 

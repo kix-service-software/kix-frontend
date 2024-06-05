@@ -135,7 +135,7 @@ export class TicketContext extends Context {
 
         if (this.filterValue) {
             const fulltextFilter = new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.EQUALS, FilterDataType.STRING,
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING,
                 FilterType.AND, this.filterValue
             );
             loadingOptions.filter.push(fulltextFilter);

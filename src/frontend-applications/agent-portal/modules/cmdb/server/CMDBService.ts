@@ -381,23 +381,6 @@ export class CMDBAPIService extends KIXObjectAPIService {
             });
         }
 
-        const fulltext = criteria.filter((f) => f.property === SearchProperty.FULLTEXT);
-        if (fulltext?.length) {
-            fulltext.forEach((c) => {
-                const fulltextSearch = [
-                    new FilterCriteria(
-                        ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                        FilterDataType.STRING, FilterType.OR, `*${c.value}*`
-                    ),
-                    new FilterCriteria(
-                        ConfigItemProperty.NAME, SearchOperator.LIKE,
-                        FilterDataType.STRING, FilterType.OR, `*${c.value}*`
-                    )
-                ];
-                criteria = [...criteria, ...fulltextSearch];
-            });
-        }
-
         const newCriteria = criteria.filter((c) =>
             (c.property === ConfigItemProperty.CONFIG_ITEM_ID && c.operator !== SearchOperator.NOT_EQUALS) ||
             c.property === ConfigItemProperty.NUMBER ||
@@ -416,7 +399,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH ||
             c.property === 'ID' ||
             c.property === KIXObjectProperty.CHANGE_BY ||
-            c.property === KIXObjectProperty.CREATE_BY
+            c.property === KIXObjectProperty.CREATE_BY ||
+            c.property === SearchProperty.FULLTEXT
         );
 
         for (const searchCriteria of newCriteria) {
