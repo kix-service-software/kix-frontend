@@ -40,6 +40,7 @@ export class Notification extends KIXObject {
     public SendOnOutOfOffice: boolean;
     public OncePerDay: boolean;
     public CreateArticle: boolean;
+    public EmailSecurity: number;
 
     public constructor(notification?: Notification) {
         super(notification);
@@ -54,48 +55,59 @@ export class Notification extends KIXObject {
             this.prepareFilter();
 
             if (notification.Data) {
-                for (const key in notification.Data) {
-                    if (key && Array.isArray(notification.Data[key])) {
-                        const value = notification.Data[key];
-                        switch (key) {
-                            case NotificationProperty.DATA_VISIBLE_FOR_AGENT:
-                                this.VisibleForAgent = Boolean(Number(value[0]));
-                                break;
-                            case NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP:
-                                this.VisibleForAgentTooltip = value[0];
-                                break;
-                            case NotificationProperty.DATA_RECIPIENTS:
-                                this.Recipients = value;
-                                break;
-                            case NotificationProperty.DATA_EVENTS:
-                                this.Events = value;
-                                break;
-                            case NotificationProperty.DATA_RECIPIENT_AGENTS:
-                                this.RecipientAgents = value.map((v) => Number(v));
-                                break;
-                            case NotificationProperty.DATA_RECIPIENT_EMAIL:
-                                this.RecipientEmail = value[0].split(/,\s?/);
-                                break;
-                            case NotificationProperty.DATA_RECIPIENT_ROLES:
-                                this.RecipientRoles = value.map((v) => Number(v));
-                                break;
-                            case NotificationProperty.DATA_RECIPIENT_SUBJECT:
-                                this.RecipientSubject = Boolean(Number(value[0]));
-                                break;
-                            case NotificationProperty.DATA_SEND_DESPITE_OOO:
-                                this.SendOnOutOfOffice = Boolean(Number(value[0]));
-                                break;
-                            case NotificationProperty.DATA_SEND_ONCE_A_DAY:
-                                this.OncePerDay = Boolean(Number(value[0]));
-                                break;
-                            case NotificationProperty.DATA_CREATE_ARTICLE:
-                                this.CreateArticle = Boolean(Number(value[0]));
-                                break;
-                            default:
-                        }
-                    }
+                this.prepareDataValues(notification);
+            }
+        }
+    }
+
+    private prepareDataValues(notification: Notification): void {
+        for (const key in notification.Data) {
+            if (key && Array.isArray(notification.Data[key])) {
+                const value = notification.Data[key];
+                switch (key) {
+                    case NotificationProperty.DATA_VISIBLE_FOR_AGENT:
+                        this.VisibleForAgent = Boolean(Number(value[0]));
+                        break;
+                    case NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP:
+                        this.VisibleForAgentTooltip = value[0];
+                        break;
+                    case NotificationProperty.DATA_RECIPIENTS:
+                        this.Recipients = value;
+                        break;
+                    case NotificationProperty.DATA_EVENTS:
+                        this.Events = value;
+                        break;
+                    case NotificationProperty.DATA_RECIPIENT_AGENTS:
+                        this.RecipientAgents = value.map((v) => Number(v));
+                        break;
+                    case NotificationProperty.DATA_RECIPIENT_EMAIL:
+                        this.RecipientEmail = value[0].split(/,\s?/);
+                        break;
+                    case NotificationProperty.DATA_RECIPIENT_ROLES:
+                        this.RecipientRoles = value.map((v) => Number(v));
+                        break;
+                    case NotificationProperty.DATA_RECIPIENT_SUBJECT:
+                        this.RecipientSubject = Boolean(Number(value[0]));
+                        break;
+                    case NotificationProperty.DATA_SEND_DESPITE_OOO:
+                        this.SendOnOutOfOffice = Boolean(Number(value[0]));
+                        break;
+                    case NotificationProperty.DATA_SEND_ONCE_A_DAY:
+                        this.OncePerDay = Boolean(Number(value[0]));
+                        break;
+                    case NotificationProperty.DATA_CREATE_ARTICLE:
+                        this.CreateArticle = Boolean(Number(value[0]));
+                        break;
+                    case NotificationProperty.DATA_EMAIL_SECURITIY:
+                        this.EmailSecurity = Number(value[0]);
+                        break;
+                    default:
                 }
             }
+        }
+        // make sure it has a value
+        if (!this.EmailSecurity) {
+            this.EmailSecurity = 0;
         }
     }
 

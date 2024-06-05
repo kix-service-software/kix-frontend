@@ -91,18 +91,45 @@
       height: 100%;
       align-content: center;
 
-      .contact-avatar {
-         width: 3rem;
-         height: 3rem;
-         font-size: 2rem;
-         justify-self: center;
-         align-self: center;
-         border: 5px solid @secondary-6;
-         border-radius: 50%;
-         display: grid;
-         overflow: hidden;
+      .avatar-container {
+         position: relative;
 
-         .message-shadow();
+         .contact-avatar {
+            width: 3rem;
+            height: 3rem;
+            font-size: 2rem;
+            justify-self: center;
+            align-self: center;
+            border: 5px solid @secondary-6;
+            border-radius: 50%;
+            display: grid;
+            overflow: hidden;
+
+            .message-shadow();
+         }
+
+         .smime-signed-background {
+            position: absolute;
+            top: -0.25rem;
+            right: -0.75rem;
+            font-size: 1.5rem;
+
+            &:not(.smime-not-signed) {
+               color: @tertiary-5;
+            }
+
+            &.smime-not-signed {
+               color: @tertiary-0;
+            }
+         }
+
+         .smime-signed-icon {
+            position: absolute;
+            top: 0;
+            right: -0.5rem;
+            font-size: 1rem;
+            color: @secondary-6;
+         }
       }
 
       .speech-bubble {

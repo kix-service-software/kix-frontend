@@ -33,4 +33,6 @@ export enum FormValueProperty {
 
     REG_EX_LIST = 'regExList',
 
+    LABEL = 'label'
+
 }

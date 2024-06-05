@@ -20,7 +20,12 @@ export class ComponentState extends AbstractComponentState {
         public createTimeString: string = null,
         public channelTooltip: string = '',
         public timeUnits: string = null,
-        public changeTitle: string = null
+        public changeTitle: string = null,
+        public smimeSignedIcons: Array<ObjectIcon | string> = [],
+        public smimeSignedTooltip: string = null,
+        public smimeEncryptedIcon: ObjectIcon | string = null,
+        public smimeEncryptedTooltip: string = null,
+        public smimeDecrypted: boolean = true
     ) {
         super();
     }
