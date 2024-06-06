@@ -17,13 +17,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <if(state.show && state.article)>
         <div class="left-avatar">
             <if(state.isExternal)>
-                <div title=state.fromDisplayName class="contact-avatar">
-                    <if(state.contactIcon)>
-                        <icon icon=state.contactIcon/>
+                <div class="avatar-container">
+                    <div title=state.fromDisplayName class="contact-avatar">
+                        <if(state.contactIcon)>
+                            <icon icon=state.contactIcon/>
+                        </if>
+                        <else>
+                            <loading-spinner/>
+                        </else>
+                    </div>
+                    <if(state.smimeSignedIcon)>
+                        <icon icon="fas fa-certificate" tooltip=state.smimeSignedTooltip class={"smime-signed-background": true, "smime-not-signed": !state.smimeSigned}/>
+                        <icon icon=state.smimeSignedIcon tooltip=state.smimeSignedTooltip class="smime-signed-icon"/>
                     </if>
-                    <else>
-                        <loading-spinner/>
-                    </else>
                 </div>
                 <div
                     style=`background-color: ${state.backgroundColor};`
@@ -165,13 +171,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     style=`background-color: ${state.backgroundColor};`
                     class="speech-bubble"
                 />
-                <div title=state.fromDisplayName class="contact-avatar">
-                    <if(state.contactIcon)>
-                        <icon icon=state.contactIcon/>
+                <div class="avatar-container">
+                    <div title=state.fromDisplayName class="contact-avatar">
+                        <if(state.contactIcon)>
+                            <icon icon=state.contactIcon/>
+                        </if>
+                        <else>
+                            <loading-spinner/>
+                        </else>
+                    </div>
+                    <if(state.smimeSignedIcon)>
+                        <icon icon="fas fa-certificate" tooltip=state.smimeSignedTooltip class={"smime-signed-background": true, "smime-not-signed": !state.smimeSigned}/>
+                        <icon icon=state.smimeSignedIcon tooltip=state.smimeSignedTooltip class="smime-signed-icon"/>
                     </if>
-                    <else>
-                        <loading-spinner/>
-                    </else>
                 </div>
             </if>
         </div>

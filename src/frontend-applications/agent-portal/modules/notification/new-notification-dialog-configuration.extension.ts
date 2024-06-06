@@ -278,6 +278,24 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                         'checkbox-input', false,
                         'Translatable#Helptext_Admin_NotificationCreate_SubjectWithTicketNumber',
                         undefined, new FormFieldValue(true)
+                    ),
+                    new FormFieldConfiguration(
+                        'notification-new-form-field-email-security',
+                        'Translatable#Email Security', NotificationProperty.DATA_EMAIL_SECURITIY,
+                        'default-select-input', false,
+                        'Translatable#Helptext_Admin_NotificationCreate_EmailSecurity',
+                        [
+                            new FormFieldOption(
+                                DefaultSelectInputFormOption.NODES,
+                                [
+                                    new TreeNode(1, 'Translatable#Encrypt or do not send'),
+                                    new TreeNode(2, 'Translatable#Encrypt if possible'),
+                                    new TreeNode(0, 'Translatable#No encryption')
+                                ]
+                            ),
+                            new FormFieldOption(DefaultSelectInputFormOption.MULTI, false)
+                        ],
+                        new FormFieldValue(0)
                     )
                 ],
                 null, null, null, null, null, null, null, true, true

@@ -357,6 +357,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 nodes.push(new TreeNode(3, external));
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:
+            case ArticleProperty.ENCRYPT_IF_POSSIBLE:
                 const yes = await TranslationService.translate('Translatable#Yes');
                 const no = await TranslationService.translate('Translatable#No');
                 nodes.push(new TreeNode(0, no));

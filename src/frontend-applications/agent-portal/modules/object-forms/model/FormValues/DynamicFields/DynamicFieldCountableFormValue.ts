@@ -26,8 +26,6 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
     private formValuesVisible: boolean = false;
 
-    protected defaultValue: any;
-
     private initialized: boolean;
 
     protected field: FormFieldConfiguration;
@@ -100,7 +98,6 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
-        this.defaultValue = this.value;
         this.formValuesVisible = this.visible;
         this.field = field;
     }

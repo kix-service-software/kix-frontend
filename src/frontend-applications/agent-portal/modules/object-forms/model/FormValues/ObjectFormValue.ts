@@ -31,6 +31,7 @@ export class ObjectFormValue<T = any> {
     protected bindings: FormValueBinding[] = [];
 
     public value: T;
+    public defaultValue: T;
     public formValues: ObjectFormValue[] = [];
     public label: string = this.property;
     public hint: string;
@@ -173,7 +174,8 @@ export class ObjectFormValue<T = any> {
                 new FormValueBinding(this, FormValueProperty.ENABLED, object, property),
                 new FormValueBinding(this, FormValueProperty.COUNT_MAX, object, property),
                 new FormValueBinding(this, FormValueProperty.REG_EX_LIST, object, property),
-                new FormValueBinding(this, FormValueProperty.FORM_VALUES, object, property)
+                new FormValueBinding(this, FormValueProperty.FORM_VALUES, object, property),
+                new FormValueBinding(this, FormValueProperty.LABEL, object, property)
             );
 
             this.addPropertyBinding(FormValueProperty.REG_EX_LIST, () => {
@@ -252,6 +254,7 @@ export class ObjectFormValue<T = any> {
             this.setFormValue(null, true);
         } else if (hasDefaultValue) {
             const value = await this.handlePlaceholders(field.defaultValue?.value);
+            this.defaultValue = value;
             this.setFormValue(value, true);
         }
 
@@ -283,7 +286,10 @@ export class ObjectFormValue<T = any> {
         if (!this.value && this.object[this.property]) {
             this.setFormValue(this.object[this.property]);
         }
+        return this.prepareLabel();
+    }
 
+    public async prepareLabel(): Promise<void> {
         if (!this.label || this.label === this.property) {
             this.label = await LabelService.getInstance().getPropertyText(
                 this.property, this.object?.KIXObjectType

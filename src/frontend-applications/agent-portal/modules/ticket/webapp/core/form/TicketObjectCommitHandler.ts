@@ -89,10 +89,6 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 this.deleteCommonProperties(article, true);
 
                 if (forCommit) {
-                    // FIXME: array handling
-                    const context = ContextService.getInstance().getActiveContext();
-                    article.ArticleID = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
-
                     if (article.Attachments?.length) {
                         article.Attachments = await this.prepareAttachments(article.Attachments);
                     }
@@ -135,6 +131,12 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         delete article.BccRealname;
         delete article.ToRealname;
         delete article.ValidID;
+        delete article.smimeDecrypted;
+        delete article.smimeVerified;
+        delete article.SMIMEEncrypted;
+        delete article.SMIMEEncryptedError;
+        delete article.SMIMESigned;
+        delete article.SMIMESignedError;
     }
 
     private async prepareReferencedArticle(article: Article, ticket: Ticket): Promise<void> {

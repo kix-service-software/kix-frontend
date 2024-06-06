@@ -24,13 +24,13 @@ import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { Channel } from '../../../../model/Channel';
 import { ArticleAttachmentFormValue } from './ArticleAttachmentFormValue';
 import { CustomerVisibleFormValue } from './CustomerVisibleFormValue';
+import { EncryptIfPossibleFormValue } from './EncryptIfPossibleFormValue';
 import { IncomingTimeFormValue } from './IncomingTimeFormValue';
 import { RecipientFormValue } from './RecipientFormValue';
 
 export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public noChannelSelectable: boolean = false;
-    private hasChannelField: boolean = false;
 
     public constructor(
         property: string,
@@ -84,8 +84,6 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
 
-        this.hasChannelField = true;
-
         const noChannelOption = field.options.find((o) => o.option === 'NO_CHANNEL');
         if (noChannelOption) {
             this.noChannelSelectable = noChannelOption?.value;
@@ -104,7 +102,18 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             }
 
             this.createArticleFormValue(property, article);
+        }
 
+        // property only needed for article create
+        if (!ContextService.getInstance().getActiveContext()?.getAdditionalInformation('ARTICLE_UPDATE_ID')) {
+            const encyptFormValue = new EncryptIfPossibleFormValue(
+                ArticleProperty.ENCRYPT_IF_POSSIBLE, article, this.objectValueMapper, this
+            );
+            encyptFormValue.visible = true;
+            encyptFormValue.isSortable = false;
+            // add it after recipents
+            const bccIndex = this.formValues.findIndex((fv) => fv.property === ArticleProperty.BCC);
+            this.formValues.splice(bccIndex + 1, 0, encyptFormValue);
         }
     }
 
@@ -161,14 +170,16 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         const allFields = [
             ArticleProperty.CUSTOMER_VISIBLE,
             ArticleProperty.TO, ArticleProperty.CC, ArticleProperty.BCC,
-            ArticleProperty.SUBJECT, ArticleProperty.BODY, ArticleProperty.ATTACHMENTS
+            ArticleProperty.SUBJECT, ArticleProperty.BODY, ArticleProperty.ATTACHMENTS,
+            ArticleProperty.ENCRYPT_IF_POSSIBLE
         ];
         if (channelId) {
             const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL, [channelId])
                 .catch((): Channel[] => []);
             const channel = Array.isArray(channels) && channels.length ? channels[0] : null;
-            const context = this.objectValueMapper.objectFormHandler.context;
-            const articleUpdateID = await context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+
+            const context = ContextService.getInstance().getActiveContext();
+            const articleUpdateID = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
 
             const noteFields = [
                 ArticleProperty.CUSTOMER_VISIBLE, ArticleProperty.SUBJECT,
@@ -177,14 +188,16 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
             const mailFields = [
                 ArticleProperty.CUSTOMER_VISIBLE,
-                ArticleProperty.CC, ArticleProperty.BCC,
-                ArticleProperty.SUBJECT, ArticleProperty.BODY, ArticleProperty.ATTACHMENTS,
-                ArticleProperty.TO
+                ArticleProperty.TO, ArticleProperty.CC, ArticleProperty.BCC,
+                ArticleProperty.SUBJECT, ArticleProperty.BODY, ArticleProperty.ATTACHMENTS
             ];
 
             if (articleUpdateID) {
                 noteFields.push(ArticleProperty.INCOMING_TIME);
                 mailFields.push(ArticleProperty.INCOMING_TIME);
+            } else {
+                // add encrypt field for new article, not on article update
+                mailFields.push(ArticleProperty.ENCRYPT_IF_POSSIBLE);
             }
 
             let submitPattern = 'Translatable#Save';
@@ -233,6 +246,11 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
                 if (formValue.property === ArticleProperty.SUBJECT || formValue.property === ArticleProperty.BODY) {
                     formValue.required = true;
+                }
+
+                // use default if given
+                if (!formValue.value && formValue.defaultValue) {
+                    formValue.value = formValue.defaultValue;
                 }
             }
         }
