@@ -152,7 +152,7 @@ export class ContactService extends KIXObjectService<Contact> {
     public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, `*${searchValue}*`
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, `${searchValue}`
             )
         ];
     }
