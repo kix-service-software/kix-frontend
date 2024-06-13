@@ -141,7 +141,7 @@ export class DynamicFormFieldValue {
 
     public clearValue(): void {
         this.value.value = null;
-        if (this.isDropdown) {
+        if (this.isDropdown && this.valueTreeHandler) {
             this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, false, true);
         }
     }

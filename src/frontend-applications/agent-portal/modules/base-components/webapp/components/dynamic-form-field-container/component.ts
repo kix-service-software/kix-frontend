@@ -57,6 +57,8 @@ class Component {
                     (dv) => currentValues.some((cv) => cv.id === dv.id)
                 );
 
+                // use index, to keep sort order
+                let index = 0;
                 for (const cv of currentValues) {
                     const existingValue = this.state.dynamicValues.find((bv) => bv.value.id === cv.id);
                     if (existingValue) {
@@ -80,8 +82,9 @@ class Component {
                     } else {
                         const value = new DynamicFormFieldValue(this.manager, cv, cv.id);
                         await value.init();
-                        this.state.dynamicValues.push(value);
+                        this.state.dynamicValues.splice(index, 0, value);
                     }
+                    index++;
                 }
 
                 this.state.dynamicValues.forEach((v) => {
@@ -108,7 +111,7 @@ class Component {
 
                 (this as any).setStateDirty('dynamicValues');
                 resolve();
-            }, 1000);
+            }, 800);
 
         });
     }
@@ -308,12 +311,17 @@ class Component {
 
     private async addEmptyValue(): Promise<void> {
         const canAddEmptyValue = await this.manager.shouldAddEmptyField();
-        const hasEmptyValue = this.state.dynamicValues.some((sv) => sv.getValue().property === null);
+        const emptyValueIndex = this.state.dynamicValues.findIndex((sv) => sv.getValue().property === null);
 
-        if (canAddEmptyValue && !hasEmptyValue) {
-            const emptyField = new DynamicFormFieldValue(this.manager);
-            await emptyField.init();
-            this.state.dynamicValues.push(emptyField);
+        if (canAddEmptyValue) {
+            if (emptyValueIndex === -1) {
+                const emptyField = new DynamicFormFieldValue(this.manager);
+                await emptyField.init();
+                this.state.dynamicValues.push(emptyField);
+            } else if (emptyValueIndex < this.state.dynamicValues.length - 1) {
+                const emptyField = this.state.dynamicValues.splice(emptyValueIndex, 1);
+                this.state.dynamicValues.push(...emptyField);
+            }
         }
 
         (this as any).setStateDirty('dynamicValues');
