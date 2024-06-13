@@ -26,11 +26,11 @@ import { FilterType } from '../../../../model/FilterType';
 import { QueueService, TicketService } from '.';
 import { BulkManager } from '../../../bulk/webapp/core';
 import { UserProperty } from '../../../user/model/UserProperty';
-import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { User } from '../../../user/model/User';
 
 export class TicketBulkManager extends BulkManager {
 
@@ -95,28 +95,6 @@ export class TicketBulkManager extends BulkManager {
         return inputFieldType;
     }
 
-    public async getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>> {
-        const options = await super.getInputTypeOptions(property, operator);
-
-        if (property === TicketProperty.OWNER_ID || property === TicketProperty.RESPONSIBLE_ID) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                        FilterType.AND, 1
-                    ),
-                    new FilterCriteria(
-                        UserProperty.USAGE_CONTEXT, SearchOperator.IN, FilterDataType.NUMERIC,
-                        FilterType.AND, [1, 3]
-                    )
-                ]
-            );
-            options.push([ObjectReferenceOptions.LOADINGOPTIONS, loadingOptions]);
-        }
-
-        return options;
-    }
-
     public async getProperties(): Promise<Array<[string, string]>> {
         let properties: Array<[string, string]> = [
             [
@@ -179,6 +157,8 @@ export class TicketBulkManager extends BulkManager {
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
         switch (property) {
+            // TODO: probably not used anymore (see isHiddenProperty)
+            // but could be necessary for checkContactValue (possible values)
             case TicketProperty.ORGANISATION_ID:
                 const organisationValue = this.values.find((bv) => bv.property === TicketProperty.ORGANISATION_ID);
                 if (organisationValue) {
@@ -203,24 +183,6 @@ export class TicketBulkManager extends BulkManager {
                     }
                 }
                 break;
-            case TicketProperty.OWNER_ID:
-            case TicketProperty.RESPONSIBLE_ID:
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    [
-                        new FilterCriteria(
-                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                            FilterType.AND, 1
-                        ),
-                        new FilterCriteria(
-                            UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                            FilterType.AND, 1
-                        )
-                    ], undefined, undefined, undefined, undefined
-                );
-                nodes = await TicketService.getInstance().getTreeNodes(
-                    property, false, false, undefined, loadingOptions
-                );
-                break;
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['CREATE']);
                 nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy);
@@ -234,9 +196,14 @@ export class TicketBulkManager extends BulkManager {
         return nodes;
     }
 
-    protected async checkProperties(): Promise<void> {
-        await this.checkContactValue();
-        await this.checkStateValue();
+    protected async checkProperties(property: string): Promise<void> {
+        if (property === TicketProperty.CONTACT_ID) {
+            await this.checkContactValue();
+        } else if (property === TicketProperty.STATE_ID) {
+            await this.checkStateValue();
+        } else if (property === TicketProperty.QUEUE_ID) {
+            await this.checkOwnerResponsibleValue();
+        }
     }
 
     private async checkContactValue(): Promise<void> {
@@ -307,6 +274,38 @@ export class TicketBulkManager extends BulkManager {
         }
     }
 
+    private async checkOwnerResponsibleValue(): Promise<void> {
+        const ownerValue = this.values.find((bv) => bv.property === TicketProperty.OWNER_ID);
+        const responsibleValue = this.values.find((bv) => bv.property === TicketProperty.RESPONSIBLE_ID);
+        if (ownerValue?.value || responsibleValue?.value) {
+            const loadingOptions = this.setLoadingOptions();
+            const users = await KIXObjectService.loadObjects<User>(
+                KIXObjectType.USER, undefined, loadingOptions
+            ).catch(() => [] as User[]);
+            if (ownerValue?.value) {
+                const ownerId = Array.isArray(ownerValue.value) ? ownerValue.value[0] : ownerValue?.value;
+                if (ownerId && !users.some((u) => u.UserID === ownerId)) {
+
+                    // generate new id ("reset" owner field - possible values in tree component)
+                    const newOwnerValue = new ObjectPropertyValue(undefined, undefined, undefined);
+                    ownerValue.id = newOwnerValue.id;
+                    ownerValue.value = null;
+                }
+            }
+            if (responsibleValue?.value) {
+                const responsible = Array.isArray(responsibleValue.value) ? responsibleValue.value[0]
+                    : responsibleValue?.value;
+                if (responsible && !users.some((u) => u.UserID === responsible)) {
+
+                    // generate new id ("reset" responsible field - possible values in tree component)
+                    const newOwnerValue = new ObjectPropertyValue(undefined, undefined, undefined);
+                    ownerValue.id = newOwnerValue.id;
+                    ownerValue.value = null;
+                }
+            }
+        }
+    }
+
     private async deleteValue(property: string): Promise<void> {
         const value = this.values.find((bv) => bv.property === property);
         if (value) {
@@ -357,29 +356,49 @@ export class TicketBulkManager extends BulkManager {
         value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
     ): Promise<KIXObjectLoadingOptions> {
         if (value.property === TicketProperty.OWNER_ID || TicketProperty.RESPONSIBLE_ID) {
-
-            const queueValue = this.getValues()?.find((v) => v.property === TicketProperty.QUEUE_ID);
-            if (queueValue) {
-                const queueId = Array.isArray(queueValue.value)
-                    ? queueValue.value[0]
-                    : queueValue.value;
-
-                const requiredPermission = {
-                    Object: KIXObjectType.QUEUE,
-                    ObjectID: queueId,
-                    Permission: 'WRITE,READ'
-                };
-
-                const query: [string, string][] = [
-                    ['requiredPermission', JSON.stringify(requiredPermission)]
-                ];
-
-                loadingOptions.query = query;
-            } else {
-                loadingOptions.query = [];
-            }
+            this.setLoadingOptions(loadingOptions);
         }
         return loadingOptions;
     }
 
+
+    private setLoadingOptions(
+        loadingOptions: KIXObjectLoadingOptions = new KIXObjectLoadingOptions()
+    ): KIXObjectLoadingOptions {
+        if (!Array.isArray(loadingOptions.filter)) {
+            loadingOptions.filter = [];
+        }
+        loadingOptions.filter.push(...[
+            new FilterCriteria(
+                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                FilterType.AND, 1
+            ),
+            new FilterCriteria(
+                UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                FilterType.AND, 1
+            )
+        ]);
+
+        const queueValue = this.getValues()?.find((v) => v.property === TicketProperty.QUEUE_ID);
+
+        const queueId = queueValue?.value
+            ? Array.isArray(queueValue.value)
+                ? queueValue.value[0]
+                : queueValue.value
+            : null;
+
+        const requiredPermission = {
+            Object: KIXObjectType.QUEUE,
+            ObjectID: queueId,
+            Permission: 'WRITE,READ'
+        };
+
+        const query: [string, string][] = [
+            ['requiredPermission', JSON.stringify(requiredPermission)]
+        ];
+
+        loadingOptions.query = query;
+
+        return loadingOptions;
+    }
 }

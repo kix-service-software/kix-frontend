@@ -236,7 +236,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             this.values.push(newValue);
         }
 
-        await this.checkProperties();
+        await this.checkProperties(newValue.property);
 
         // reset context information
         const context = ContextService.getInstance().getActiveContext();
@@ -262,7 +262,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             this.values.splice(index, 1);
         }
 
-        await this.checkProperties();
+        await this.checkProperties(importValue.property);
 
         // reset context information
         const context = ContextService.getInstance().getActiveContext();
@@ -280,7 +280,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         this.notifyListeners();
     }
 
-    protected async checkProperties(): Promise<void> {
+    protected async checkProperties(property: string): Promise<void> {
         return;
     }
 
