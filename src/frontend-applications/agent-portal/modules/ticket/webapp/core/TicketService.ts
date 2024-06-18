@@ -171,7 +171,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         const filter = [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, searchValue
             )
         ];
 
