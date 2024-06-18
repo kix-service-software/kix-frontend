@@ -94,9 +94,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                     this.treeHandler.setTree(nodes);
                 }
             } else if (typeof contactId === 'string') {
-                const node = new TreeNode(contactId, contactId?.toString());
-                this.possibleValues = [contactId];
-                this.treeHandler.setTree([node]);
+                this.clearPossibleValuesAndNodes();
             }
         }
     }
@@ -134,19 +132,11 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
             }
         }
 
-        // else use it as simple string value (unknown contact => unknown organisation)
         else if (typeof contactId === 'string') {
-            const node = this.treeHandler.getTree().find((n) => n.id === contactId);
-            if (node) {
-                organisationId = contactId;
-                this.treeHandler.setTree([node]);
-                this.treeHandler.setSelection([node], true, false, true);
-            }
+            // ignore string (unknown contact) value, do nothing
         }
 
-        if (!init) {
-            await this.setFormValue(organisationId, true);
-        }
+        await this.setFormValue(organisationId, true);
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
@@ -164,9 +154,13 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     }
 
     private clearPossibleValuesAndNodes(): void {
-        this.possibleValues = [];
-        this.treeHandler.setTree([]);
-        this.treeHandler.setSelection([]);
+        // clear only if necessary
+        if (this.possibleValues?.length) {
+            this.possibleValues = [];
+        }
+        if (this.treeHandler?.getTree()) {
+            this.treeHandler.setTree([]);
+        }
     }
 
     public async setPossibleValues(): Promise<void> {
