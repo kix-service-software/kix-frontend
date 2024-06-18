@@ -61,12 +61,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.formhandler = await this.context.getFormManager().getObjectFormHandler();
-        this.setFormValues(true, false);
+        this.setFormValues(false);
 
+        this.registerEventHandler();
+
+        // make sure prepare is set, if not by OBJECT_FORM_VALUE_MAPPER_INITIALIZED
+        // but give some time (keep loading spinner long enough)
         setTimeout(() => {
-            this.registerEventHandler();
             this.state.prepared = true;
-        }, 500);
+        }, 2500);
     }
 
     private registerEventHandler(): void {
@@ -81,11 +84,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     this.state.prepared = false;
                     this.handlerChangeInProgress = true;
                 } else if (
+                    this.formhandler.objectFormValueMapper.initialized &&
                     eventId === ObjectFormEvent.FORM_VALUE_ADDED &&
-                    data.instanceId === this.context.instanceId
+                    data?.instanceId === this.context.instanceId
                 ) {
                     updateNeeded = true;
-                } else if (eventId === ObjectFormEvent.FIELD_ORDER_CHANGED) {
+                } else if (
+                    this.formhandler.objectFormValueMapper.initialized &&
+                    eventId === ObjectFormEvent.FIELD_ORDER_CHANGED
+                ) {
                     updateNeeded = true;
                 } else if (eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED) {
                     this.handlerChangeInProgress = false;
@@ -94,7 +101,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
                 if (updateNeeded && !this.handlerChangeInProgress) {
                     this.formhandler = await this.context.getFormManager().getObjectFormHandler();
-                    this.setFormValues(false, true);
+                    this.setFormValues(true);
                 }
             }
         };
@@ -114,7 +121,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
     }
 
-    private setFormValues(force?: boolean, setPrepared?: boolean): void {
+    private setFormValues(setPrepared?: boolean): void {
         if (this.updateTimeout) {
             clearTimeout(this.updateTimeout);
         }
@@ -124,13 +131,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.formValues = this.formhandler?.getFormValues() || [];
             } else {
                 this.state.error = 'Translatable#No form available. Please contact your administrator.';
+                console.error('No form available. Please contact your administrator.');
             }
 
             if (setPrepared) {
                 this.state.prepared = true;
             }
 
-        }, force ? 0 : 350);
+        }, 350);
     }
 
     public async submit(): Promise<void> {
