@@ -103,7 +103,7 @@ export class TicketSearchDefinition extends SearchDefinition {
         const criteria: FilterCriteria[] = [];
         if (value) {
             criteria.push(new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, value
             ));
         }
         return criteria;
