@@ -25,6 +25,8 @@ import { LoggingService } from './LoggingService';
 import { HTTPResponse } from '../../frontend-applications/agent-portal/server/services/HTTPResponse';
 import { IncomingHttpHeaders } from 'node:http';
 import { AuthMethod } from '../../frontend-applications/agent-portal/model/AuthMethod';
+import { ObjectResponse } from '../../frontend-applications/agent-portal/server/services/ObjectResponse';
+import { MFAToken } from '../../frontend-applications/agent-portal/modules/multifactor-authentication/model/MFAToken';
 
 export class AuthenticationService {
 
@@ -134,11 +136,11 @@ export class AuthenticationService {
     }
 
     public async login(
-        login: string, password: string, userType: UserType, negotiateToken: string,
+        login: string, password: string, userType: UserType, negotiateToken: string, mfaToken: MFAToken,
         clientRequestId: string, headers: IncomingHttpHeaders, fakeLogin?: boolean,
         additionalData?: any
     ): Promise<string> {
-        const userLogin = new UserLogin(login, password, userType, negotiateToken);
+        const userLogin = new UserLogin(login, password, userType, negotiateToken, mfaToken);
 
         if (additionalData) {
             for (const key in additionalData) {
@@ -146,6 +148,10 @@ export class AuthenticationService {
                     userLogin[key] = additionalData[key];
                 }
             }
+        }
+
+        if (!mfaToken) {
+            delete userLogin.MFAToken;
         }
 
         const response = await HttpService.getInstance().post<LoginResponse>(
@@ -178,13 +184,19 @@ export class AuthenticationService {
         const authMethods: AuthMethod[] = [];
         const response = await HttpService.getInstance().get(
             'auth', { UserType: userType }, null, 'AuthenticationService', 'AuthMethods', false
-        );
+        ).catch((e) => {
+            LoggingService.getInstance().error(e);
+            return new HTTPResponse(null, new Map());
+        });
 
         if (response?.responseData) {
             const methods = response.responseData['AuthMethods'];
             if (Array.isArray(methods)) {
                 for (const method of methods) {
-                    authMethods.push(new AuthMethod(method.Type, Boolean(method.PreAuth), method.Data));
+                    const authMethod = new AuthMethod(
+                        method.Type, Boolean(method.PreAuth), method.Data, method.Name, method.MFA
+                    );
+                    authMethods.push(authMethod);
                 }
             }
         }
@@ -196,4 +208,5 @@ export class AuthenticationService {
         const methods = await this.getAuthMethods(userType);
         return methods?.find((m) => m.name === name);
     }
+
 }

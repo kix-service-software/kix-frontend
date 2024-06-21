@@ -7,17 +7,13 @@
  * --
  */
 
-import { MFAToken } from '../../multifactor-authentication/model/MFAToken';
-import { UserType } from './UserType';
+import { ISocketResponse } from '../../base-components/webapp/core/ISocketResponse';
 
-export class UserLogin {
+export class MFARequiredForUserResponse implements ISocketResponse {
 
     public constructor(
-        public UserLogin: string,
-        public Password: string,
-        public UserType: UserType,
-        public NegotiateToken: string,
-        public MFAToken: MFAToken
+        public requestId: string,
+        public isMFARequired: boolean
     ) { }
 
 }

@@ -109,14 +109,16 @@ export class UserService extends KIXObjectAPIService {
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.USER) {
-            const preferences = [];
+
+            const preferences = this.getParameterValue(parameter, UserProperty.PREFERENCES) || [];
 
             const createParameter = parameter.filter((p) =>
                 p[0] !== PersonalSettingsProperty.USER_LANGUAGE &&
                 p[0] !== PersonalSettingsProperty.MY_QUEUES &&
                 p[0] !== PersonalSettingsProperty.NOTIFICATIONS &&
                 p[0] !== PersonalSettingsProperty.OUT_OF_OFFICE_END &&
-                p[0] !== PersonalSettingsProperty.OUT_OF_OFFICE_START
+                p[0] !== PersonalSettingsProperty.OUT_OF_OFFICE_START &&
+                p[0] !== UserProperty.PREFERENCES
             );
 
             const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
@@ -239,6 +241,12 @@ export class UserService extends KIXObjectAPIService {
                 await this.setPreferences(token, clientRequestId, [contextWIdgetLists], userId);
             }
 
+            const preferences = this.getParameterValue(parameter, UserProperty.PREFERENCES);
+            if (preferences?.length) {
+                const preferenceValue = preferences.map((p): [string, any] => [p.ID, p.Value]);
+                await this.setPreferences(token, clientRequestId, preferenceValue, userId);
+            }
+
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             let uri = this.buildUri('session', 'user', 'preferences', objectId);
@@ -260,6 +268,10 @@ export class UserService extends KIXObjectAPIService {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
             });
+
+            const user = await this.getUserByToken(token);
+            CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_${user.UserID}`);
+
             return id;
         }
     }

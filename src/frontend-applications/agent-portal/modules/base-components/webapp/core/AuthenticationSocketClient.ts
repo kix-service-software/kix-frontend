@@ -19,6 +19,8 @@ import { IdService } from '../../../../model/IdService';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { BrowserCacheService } from './CacheService';
 import { UserType } from '../../../user/model/UserType';
+import { LoginResult } from '../../model/LoginResult';
+import { MFAToken } from '../../../multifactor-authentication/model/MFAToken';
 
 export class AuthenticationSocketClient extends SocketClient {
 
@@ -38,12 +40,12 @@ export class AuthenticationSocketClient extends SocketClient {
 
     public async login(
         userName: string, password: string, negotiateToken: string, redirectUrl: string,
-        fakeLogin?: boolean, userType = UserType.AGENT
-    ): Promise<boolean> {
+        mfaToken?: MFAToken, fakeLogin?: boolean, userType = UserType.AGENT
+    ): Promise<LoginResult> {
         this.checkSocketConnection();
 
         const socketTimeout = ClientStorageService.getSocketTimeout();
-        return new Promise<boolean>((resolve, reject) => {
+        return new Promise<LoginResult>((resolve, reject) => {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + AuthenticationEvent.LOGIN);
@@ -58,19 +60,26 @@ export class AuthenticationSocketClient extends SocketClient {
                         document.cookie = ClientStorageService.tokenPrefix + 'token=' + result.token;
                         window.location.replace(result.redirectUrl);
                     }
-                    resolve(true);
+                    resolve(new LoginResult(true));
                 }
             });
 
             this.socket.on(AuthenticationEvent.UNAUTHORIZED, (result: AuthenticationResult) => {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
-                    resolve(false);
+                    resolve(new LoginResult(false, false));
+                }
+            });
+
+            this.socket.on(AuthenticationEvent.OTP_REQUIRED, (result: AuthenticationResult) => {
+                if (result.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    resolve(new LoginResult(true, true));
                 }
             });
 
             const request = new LoginRequest(
-                userName, password, userType, negotiateToken, redirectUrl, requestId,
+                userName, password, userType, negotiateToken, redirectUrl, mfaToken, requestId,
                 ClientStorageService.getClientRequestId()
             );
             this.socket.emit(AuthenticationEvent.LOGIN, request);

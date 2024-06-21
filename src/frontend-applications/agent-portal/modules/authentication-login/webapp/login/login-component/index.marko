@@ -80,6 +80,33 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         </div>
                     </div>
                 </if>
+                <else-if(state.showMFA)>
+                    <div on-keydown("keyDownMFA") class="dialog-content">
+                        <label>
+                            <span>${component.getString("Token")}:</span>
+                            <input
+                                type="text"
+                                name="mfatoken"
+                                tabindex="1"
+                                value=state.mfaToken
+                                on-input("mfaTokenChanged")
+                                key="mfa-token"
+                                class="input-style"
+                            >
+                        </label>
+                        <div class="dialog-buttons">
+                            <button
+                                type="button"
+                                on-click("login", true)
+                                tabindex="3"
+                                class="kix-button special-button"
+                            >
+                                <span class="kix-icon-check"/>
+                                ${component.getString("Login")}
+                            </button>
+                        </div>
+                    </div>
+                </else-if>
                 <else>
                     <if(state.hasLogin)>
                         <div on-keydown("keyDown") class="dialog-content">
@@ -129,7 +156,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <div class="dialog-buttons">
                                 <button
                                     type="button"
-                                    on-click("login")
+                                    on-click("login", false)
                                     tabindex="3"
                                     class="kix-button special-button"
                                 >

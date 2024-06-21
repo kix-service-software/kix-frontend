@@ -436,7 +436,7 @@ export class BrowserUtil {
         });
     }
 
-    public static isBooleanTrue(value: string): boolean {
+    public static isBooleanTrue(value?: string): boolean {
         let result = false;
 
         if (typeof value === 'string') {
