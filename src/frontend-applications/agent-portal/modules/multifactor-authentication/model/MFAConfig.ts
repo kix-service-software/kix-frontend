@@ -7,17 +7,13 @@
  * --
  */
 
-import { MFAToken } from '../../multifactor-authentication/model/MFAToken';
-import { UserType } from './UserType';
-
-export class UserLogin {
+export class MFAConfig {
 
     public constructor(
-        public UserLogin: string,
-        public Password: string,
-        public UserType: UserType,
-        public NegotiateToken: string,
-        public MFAToken: MFAToken
+        public authType: string,
+        public name: string,
+        public usageContext: string,
+        public enabled: boolean
     ) { }
 
 }

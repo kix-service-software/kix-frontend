@@ -17,6 +17,9 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 import { AuthMethod } from '../../../../../model/AuthMethod';
 import { UserType } from '../../../../user/model/UserType';
+import { MFASocketClient } from '../../../../multifactor-authentication/webapp/core/MFASocketClient';
+import { MFAToken } from '../../../../multifactor-authentication/model/MFAToken';
+import { MFAConfig } from '../../../../multifactor-authentication/model/MFAConfig';
 
 declare const window: Window;
 
@@ -29,6 +32,7 @@ class Component {
     private subscriber: IEventSubscriber;
 
     private authMethods: AuthMethod[];
+    private mfaConfig: MFAConfig;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -39,6 +43,7 @@ class Component {
         this.redirectUrl = input.redirectUrl;
         this.authMethods = input.authMethods || [];
         this.state.error = input.error;
+        this.mfaConfig = input.mfaConfig;
     }
 
     public async onMount(): Promise<void> {
@@ -111,20 +116,39 @@ class Component {
         this.state.password = event?.target?.value;
     }
 
-    private async login(event: any): Promise<void> {
+    public mfaTokenChanged(event: any): void {
+        this.state.mfaToken = event?.target?.value;
+    }
+
+    private async login(requireMFAToken: boolean): Promise<void> {
         this.state.logout = false;
 
-        if (this.state.userName) {
+        const userMFARequired = await MFASocketClient.getInstance().isMFAEnabled(
+            this.state.userName, UserType.AGENT, this.mfaConfig
+        );
+        if (!requireMFAToken && userMFARequired) {
+            this.state.showMFA = true;
+            this.state.loginProcess = false;
+        } else if (this.state.userName) {
             this.state.loginProcess = true;
             this.state.error = false;
 
+            let mfaToken: MFAToken;
+            if (userMFARequired) {
+                mfaToken = new MFAToken();
+                mfaToken.Value = this.state.mfaToken;
+                mfaToken.Type = 'TOTP';
+
+            }
             const login = await AgentService.getInstance().login(
-                this.state.userName, this.state.password, this.redirectUrl
+                this.state.userName, this.state.password, this.redirectUrl, mfaToken
             );
 
-            if (!login) {
+            if (!login.success) {
                 this.state.loginProcess = false;
                 this.state.error = true;
+                this.state.mfaToken = null;
+                this.state.showMFA = false;
             }
         } else {
             this.state.error = true;
@@ -132,9 +156,14 @@ class Component {
     }
 
     public keyDown(event: any): void {
-        // 13 == Enter
         if (event.keyCode === 13 || event.key === 'Enter') {
-            this.login(event);
+            this.login(false);
+        }
+    }
+
+    public keyDownMFA(event: any): void {
+        if (event.keyCode === 13 || event.key === 'Enter') {
+            this.login(true);
         }
     }
 

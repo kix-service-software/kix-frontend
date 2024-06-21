@@ -27,6 +27,8 @@ import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { UserPreference } from '../../model/UserPreference';
 import { Counter } from '../../model/Counter';
+import { LoginResult } from '../../../base-components/model/LoginResult';
+import { MFAToken } from '../../../multifactor-authentication/model/MFAToken';
 
 export class AgentService extends KIXObjectService<User> {
 
@@ -82,8 +84,10 @@ export class AgentService extends KIXObjectService<User> {
         return 'User';
     }
 
-    public async login(userName: string, password: string, redirectUrl: string): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().login(userName, password, null, redirectUrl);
+    public async login(
+        userName: string, password: string, redirectUrl: string, mfaToken?: MFAToken
+    ): Promise<LoginResult> {
+        return await AuthenticationSocketClient.getInstance().login(userName, password, null, redirectUrl, mfaToken);
     }
 
     public async getPersonalSettings(): Promise<PersonalSetting[]> {
@@ -118,7 +122,10 @@ export class AgentService extends KIXObjectService<User> {
 
     public async checkPassword(password: string): Promise<boolean> {
         const user = await this.getCurrentUser();
-        return await AuthenticationSocketClient.getInstance().login(user.UserLogin, password, null, null, true);
+        const result = await AuthenticationSocketClient.getInstance().login(
+            user.UserLogin, password, null, null, null, true
+        );
+        return result.success;
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {

@@ -62,7 +62,7 @@ export class AuthenticationNamespace extends SocketNameSpace {
     private async login(data: LoginRequest, client: Socket): Promise<SocketResponse> {
         const response = await AuthenticationService.getInstance()
             .login(
-                data.userName, data.password, data.userType, data.negotiateToken,
+                data.userName, data.password, data.userType, data.negotiateToken, data.mfaToken,
                 data.clientRequestId, client.handshake.headers
             ).then(async (token: string) => {
                 await TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null)

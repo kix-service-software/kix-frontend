@@ -7,20 +7,14 @@
  * --
  */
 
-import { MFA } from '../modules/multifactor-authentication/model/MFA';
+import { FormInputComponentState } from '../../../../base-components/webapp/core/FormInputComponentState';
 
-export class AuthMethod {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
-        public type: string,
-        public preAuth: boolean,
-        public data: any,
-        public name?: string,
-        public MFA: MFA[] = []
+        public currentValue: string = null,
     ) {
-        if (!name) {
-            this.name = data?.AuthName ? data.AuthName : this.type;
-        }
+        super();
     }
 
 }

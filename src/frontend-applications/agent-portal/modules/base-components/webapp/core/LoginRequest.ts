@@ -7,6 +7,7 @@
  * --
  */
 
+import { MFAToken } from '../../../multifactor-authentication/model/MFAToken';
 import { UserType } from '../../../user/model/UserType';
 
 export class LoginRequest {
@@ -17,6 +18,7 @@ export class LoginRequest {
                 public userType: UserType,
                 public negotiateToken: string,
                 public redirectUrl: string,
+                public mfaToken: MFAToken,
                 public requestId: string,
                 public clientRequestId: string
         ) { }

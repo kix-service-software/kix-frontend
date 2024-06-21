@@ -26,6 +26,7 @@ import { AuthenticationService } from '../../../../server/services/Authenticatio
 import { UserType } from '../../modules/user/model/UserType';
 import { ObjectResponse } from '../services/ObjectResponse';
 import { IRouterHandler } from '../model/IRouterHandler';
+import { MFAService } from '../../modules/multifactor-authentication/server/MFAService';
 
 export class AuthenticationRouter extends KIXRouter {
 
@@ -127,7 +128,7 @@ export class AuthenticationRouter extends KIXRouter {
         if (user || negotiationToken) {
             let success = true;
             const token = await AuthenticationService.getInstance().login(
-                user, null, UserType.AGENT, negotiationToken, null, null, false
+                user, null, UserType.AGENT, negotiationToken, null, null, null, false
             ).catch((e) => {
                 LoggingService.getInstance().error('Error when trying to login with ' + authType);
                 success = false;
@@ -192,9 +193,13 @@ export class AuthenticationRouter extends KIXRouter {
                 const error = !!req.query['error'];
 
                 const authMethods = await AuthenticationService.getInstance().getAuthMethods();
+                const mfaEnabled = MFAService.getInstance().isMFAEnabled(authMethods);
+                const mfaConfigs = await MFAService.getInstance().loadMFAConfigs();
+                const mfaConfig = mfaEnabled ? mfaConfigs?.find((mfac) => mfac.enabled) : null;
 
                 (res as any).marko(template, {
-                    login: true, logout, releaseInfo, imprintLink, redirectUrl, favIcon, logo, authMethods, error
+                    login: true, logout, releaseInfo, imprintLink, redirectUrl,
+                    favIcon, logo, authMethods, mfaConfig, error
                 });
             } catch (error) {
                 console.error(error);
