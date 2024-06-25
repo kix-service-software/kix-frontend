@@ -99,7 +99,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private setProgressValues(): void {
         const values = DynamicFieldFormUtil.getInstance().countValues(this.state.value);
-        if (values[0] > 0) {
+        if (values[1] > 0) {
             this.state.progressValue = Math.round(values[0] / values[1] * 100);
         }
         this.state.progressText = `${values[0]}/${values[1]}`;
