@@ -169,8 +169,7 @@ export class DynamicFormFieldValue {
 
         // get label (needed if field is required)
         if (this.required) {
-            const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
-            this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
+            await this.setLabel();
         }
 
         await this.manager.setValue(this.value, silent);
@@ -180,6 +179,13 @@ export class DynamicFormFieldValue {
         await this.setRelativeTimeUnitTree();
         await this.setWithinTrees();
         await this.createValueInput();
+    }
+
+    public async setLabel(): Promise<void> {
+        if (!this.label) {
+            const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
+            this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
+        }
     }
 
     public async setPropertyTree(): Promise<string> {
