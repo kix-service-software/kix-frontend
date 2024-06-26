@@ -487,26 +487,28 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     }
 
     public countValues(checklist: CheckListItem[]): [number, number] {
-        const value: [number, number] = [0, checklist.length];
-        for (const item of checklist) {
-            if (item.input === CheckListInputType.ChecklistState) {
-                if (!item.value) {
-                    item.value = '-';
-                }
+        const value: [number, number] = [0, checklist?.length || 0];
+        if (checklist?.length) {
+            for (const item of checklist) {
+                if (item.input === CheckListInputType.ChecklistState) {
+                    if (!item.value) {
+                        item.value = '-';
+                    }
 
-                const states = item.inputStates || DynamicFieldFormUtil.getDefaultChecklistStates();
-                const state = states.find((cs) => cs.value === item.value);
-                if (state?.done) {
+                    const states = item.inputStates || DynamicFieldFormUtil.getDefaultChecklistStates();
+                    const state = states.find((cs) => cs.value === item.value);
+                    if (state?.done) {
+                        value[0]++;
+                    }
+                } else if (item.value?.length > 0) {
                     value[0]++;
                 }
-            } else if (item.value?.length > 0) {
-                value[0]++;
-            }
 
-            if (item.sub && item.sub.length) {
-                const subCount = this.countValues(item.sub);
-                value[0] = value[0] + subCount[0];
-                value[1] = value[1] + subCount[1];
+                if (item.sub && item.sub.length) {
+                    const subCount = this.countValues(item.sub);
+                    value[0] = value[0] + subCount[0];
+                    value[1] = value[1] + subCount[1];
+                }
             }
         }
 
