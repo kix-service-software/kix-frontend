@@ -355,7 +355,7 @@ export class TicketBulkManager extends BulkManager {
     public async prepareLoadingOptions(
         value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
     ): Promise<KIXObjectLoadingOptions> {
-        if (value.property === TicketProperty.OWNER_ID || TicketProperty.RESPONSIBLE_ID) {
+        if (value.property === TicketProperty.OWNER_ID || value.property === TicketProperty.RESPONSIBLE_ID) {
             this.setLoadingOptions(loadingOptions);
         }
         return loadingOptions;
