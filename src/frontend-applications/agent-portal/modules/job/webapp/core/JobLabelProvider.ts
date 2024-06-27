@@ -57,6 +57,9 @@ export class JobLabelProvider extends LabelProvider {
             case JobProperty.LAST_EXEC_TIME:
                 displayValue = 'Translatable#Last executed at';
                 break;
+            case JobProperty.IS_ASYNCHRONOUS:
+                displayValue = 'Translatable#Is asynchronous';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, false, translatable);
         }
@@ -94,6 +97,11 @@ export class JobLabelProvider extends LabelProvider {
                     }
                 }
                 break;
+            case JobProperty.IS_ASYNCHRONOUS:
+            case JobProperty.HAS_TRIGGER_EVENTS:
+            case JobProperty.HAS_TRIGGER_TIMES:
+                displayValue = value ? 'Translatable#Yes' : 'Translatable#No';
+                break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
@@ -112,7 +120,7 @@ export class JobLabelProvider extends LabelProvider {
         let displayValue = typeof defaultValue !== 'undefined' && defaultValue !== null
             ? defaultValue : job[property];
 
-        const existingValue = job.displayValues.find((dv) => dv[0] === property);
+        const existingValue = job.displayValues?.find((dv) => dv[0] === property);
         if (existingValue) {
             displayValue = existingValue[1];
         } else {
@@ -141,20 +149,28 @@ export class JobLabelProvider extends LabelProvider {
                     }
                     break;
                 case JobProperty.HAS_TRIGGER_EVENTS:
-                    const eventExecPlans: ExecPlan[] = await JobService.getExecPlansOfJob(job);
-                    const hasEvents: boolean = eventExecPlans && eventExecPlans.some(
-                        (ep) => ep.Parameters && Array.isArray(ep.Parameters.Event) && !!ep.Parameters.Event.length
-                    );
-                    displayValue = hasEvents ? 'Translatable#Yes' : 'Translatable#No';
+                    if (job[JobProperty.HAS_TRIGGER_EVENTS]) {
+                        displayValue = job[JobProperty.HAS_TRIGGER_EVENTS];
+                    } else {
+                        const eventExecPlans: ExecPlan[] = await JobService.getExecPlansOfJob(job);
+                        const hasEvents: boolean = eventExecPlans && eventExecPlans.some(
+                            (ep) => ep.Parameters && Array.isArray(ep.Parameters.Event) && !!ep.Parameters.Event.length
+                        );
+                        displayValue = hasEvents ? 'Translatable#Yes' : 'Translatable#No';
+                    }
                     break;
                 case JobProperty.HAS_TRIGGER_TIMES:
-                    const timeExecPlans: ExecPlan[] = await JobService.getExecPlansOfJob(job);
-                    const hasTimes: boolean = timeExecPlans && timeExecPlans.some(
-                        (ep) => ep.Parameters
-                            && Array.isArray(ep.Parameters.Weekday) && !!ep.Parameters.Weekday.length
-                            && Array.isArray(ep.Parameters.Time) && !!ep.Parameters.Time.length
-                    );
-                    displayValue = hasTimes ? 'Translatable#Yes' : 'Translatable#No';
+                    if (job[JobProperty.HAS_TRIGGER_TIMES]) {
+                        displayValue = job[JobProperty.HAS_TRIGGER_TIMES];
+                    } else {
+                        const timeExecPlans: ExecPlan[] = await JobService.getExecPlansOfJob(job);
+                        const hasTimes: boolean = timeExecPlans && timeExecPlans.some(
+                            (ep) => ep.Parameters
+                                && Array.isArray(ep.Parameters.Weekday) && !!ep.Parameters.Weekday.length
+                                && Array.isArray(ep.Parameters.Time) && !!ep.Parameters.Time.length
+                        );
+                        displayValue = hasTimes ? 'Translatable#Yes' : 'Translatable#No';
+                    }
                     break;
                 default:
                     displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
@@ -202,9 +218,9 @@ export class JobLabelProvider extends LabelProvider {
                 }
             } else if (value && value === 'Yes') {
                 icons.push('kix-icon-check');
-            } else if (value && value === 'No') {
-                icons.push('kix-icon-close');
             }
+        } else if (property === JobProperty.IS_ASYNCHRONOUS && value) {
+            icons.push('kix-icon-check');
         }
 
         return icons;

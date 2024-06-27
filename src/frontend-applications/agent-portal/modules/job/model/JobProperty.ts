@@ -29,6 +29,8 @@ export enum JobProperty {
 
     EXEC = 'Exec',
 
+    IS_ASYNCHRONOUS = 'IsAsynchronous',
+
     // ui properties
     ACTION_COUNT = 'ACTION_COUNT',
     MACRO_ACTIONS = 'MACRO_ACTIONS',
