@@ -52,6 +52,7 @@ export class JobTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(JobProperty.NAME),
             this.getDefaultColumnConfiguration(JobProperty.HAS_TRIGGER_EVENTS),
             this.getDefaultColumnConfiguration(JobProperty.HAS_TRIGGER_TIMES),
+            this.getDefaultColumnConfiguration(JobProperty.IS_ASYNCHRONOUS),
             this.getDefaultColumnConfiguration(JobProperty.ACTION_COUNT),
             this.getDefaultColumnConfiguration(JobProperty.LAST_EXEC_TIME),
             this.getDefaultColumnConfiguration(KIXObjectProperty.COMMENT),
@@ -115,6 +116,11 @@ export class JobTableFactory extends TableFactory {
                 break;
             case JobProperty.NAME:
                 config = super.getDefaultColumnConfiguration(property, false);
+                break;
+            case JobProperty.IS_ASYNCHRONOUS:
+                config = new DefaultColumnConfiguration(
+                    null, null, null,
+                    property, false, true, true, false, 150, true, true, true);
                 break;
             default:
                 config = super.getDefaultColumnConfiguration(property);

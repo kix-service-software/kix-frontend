@@ -103,6 +103,13 @@ export class AbstractJobFormManager {
                             null, null, null, null, null, 250
                         ),
                         new FormFieldConfiguration(
+                            'job-new-form-field-asynchronous',
+                            'Translatable#Run asynchronously', JobProperty.IS_ASYNCHRONOUS,
+                            'checkbox-input', false,
+                            'Translatable#Helptext_Admin_JobCreateEdit_Asynchronous', undefined,
+                            new FormFieldValue(false)
+                        ),
+                        new FormFieldConfiguration(
                             'job-new-form-field-valid',
                             'Translatable#Validity', KIXObjectProperty.VALID_ID,
                             'object-reference-input', true, 'Translatable#Helptext_Admin_JobCreateEdit_Validity',

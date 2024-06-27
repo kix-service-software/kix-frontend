@@ -38,6 +38,8 @@ export class Job extends KIXObject {
 
     public Filter: any[];
 
+    public IsAsynchronous: boolean;
+
     public constructor(job?: Job) {
         super(job);
         if (job) {
@@ -50,6 +52,7 @@ export class Job extends KIXObject {
             this.ExecPlanIDs = job.ExecPlanIDs;
             this.ExecPlans = job.ExecPlans ? job.ExecPlans.map((e) => new ExecPlan(e)) : [];
             this.LastExecutionTime = job.LastExecutionTime;
+            this.IsAsynchronous = Boolean(job.IsAsynchronous);
             this.Filter = job.Filter && !Array.isArray(job.Filter) ?
                 [job.Filter] : job.Filter;
 
