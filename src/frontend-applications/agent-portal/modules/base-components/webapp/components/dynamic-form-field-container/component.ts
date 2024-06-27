@@ -29,6 +29,7 @@ class Component {
     private additionalOptionsTimeout: any;
     private timoutTimer: TimeoutTimer;
     private updateTimeout: any;
+    private updatePromiseResolve: () => void;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -45,10 +46,15 @@ class Component {
     }
 
     public async updateValues(): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (this.updateTimeout) {
-                clearTimeout(this.updateTimeout);
+        if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout);
+            // resolve potential previous promise
+            if (this.updatePromiseResolve) {
+                this.updatePromiseResolve();
             }
+        }
+        return new Promise<void>((resolve, reject) => {
+            this.updatePromiseResolve = resolve;
             this.updateTimeout = setTimeout(async () => {
 
                 const currentValues = this.manager.getValues();
@@ -77,6 +83,10 @@ class Component {
                         }
 
                         existingValue.required = cv.required;
+                        if (existingValue.required) {
+                            await existingValue.setLabel();
+                        }
+
                         existingValue.value.valid = cv.valid;
                         existingValue.value.validErrorMessages = cv.validErrorMessages;
                     } else {
@@ -110,9 +120,9 @@ class Component {
                 }
 
                 (this as any).setStateDirty('dynamicValues');
+                this.updatePromiseResolve = undefined;
                 resolve();
             }, 800);
-
         });
     }
 
