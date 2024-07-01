@@ -78,7 +78,7 @@ export class TicketTableCSSHandler implements ITableCSSHandler<Ticket> {
         }
 
         if (ticket.Unseen) {
-            styles.push(config.states.unseen);
+            styles.push(config.flags.unseen);
         }
 
         styles = styles.filter((s) => typeof s === 'string' && s !== '');

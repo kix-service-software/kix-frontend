@@ -34,14 +34,15 @@ export class TicketColorConfiguration {
             open: null,
             new: null,
             closed: 'color:#9e9e9e;',
-            'pending reminder': 'background-color:#008dd2 !important;color:#ffffff',
-            'pending reminder reached': 'background-color:#e31e24 !important;color:#ffffff',
-            'pending auto': 'background-color:#008dd2 !important;color:#ffffff',
-            'pending auto reached': 'background-color:#e31e24 !important;color:#ffffff',
+            'pending reminder': null,
+            'pending reminder reached': null,
+            'pending auto': null,
+            'pending auto reached': null,
             removed: 'color:#9e9e9e',
             merged: 'color:#9e9e9e'
         },
-        public states: any = {
+        public states: any = {},
+        public flags: any = {
             unseen: 'font-weight:bold;'
         }
     ) { }
