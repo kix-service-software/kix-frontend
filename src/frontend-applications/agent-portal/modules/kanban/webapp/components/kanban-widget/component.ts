@@ -31,6 +31,7 @@ import { WidgetConfiguration } from '../../../../../model/configuration/WidgetCo
 import { Ticket } from '../../../../ticket/model/Ticket';
 import { TicketStateService } from '../../../../ticket/webapp/core';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { Context } from '../../../../../model/Context';
 
 declare const jKanban: any;
 
@@ -49,6 +50,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private kanban: any;
 
+    private context: Context;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -58,49 +61,50 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            await context.reloadObjectList(KIXObjectType.TICKET);
+        this.context = ContextService.getInstance().getActiveContext();
+        if (this.context) {
+            await this.context.reloadObjectList(KIXObjectType.TICKET);
 
-            this.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
+            this.widgetConfiguration = await this.context.getWidgetConfiguration(this.state.instanceId);
             if (this.widgetConfiguration && this.widgetConfiguration.configuration) {
                 this.kanbanConfig = (this.widgetConfiguration.configuration as KanbanConfiguration);
                 this.state.prepared = true;
-                setTimeout(() => this.createKanbanBoard(), 50);
+                setTimeout(async (): Promise<void> => {
+                    await this.createKanbanBoard();
+                    this.registerContextListener();
+                }, 50);
             }
+        }
+    }
 
-            if (this.widgetConfiguration.contextDependent) {
-                this.contextListenerId = 'kanban-widget' + this.widgetConfiguration.instanceId;
-                context.registerListener(this.contextListenerId, {
-                    additionalInformationChanged: () => null,
-                    sidebarLeftToggled: () => null,
-                    filteredObjectListChanged: () => {
-                        this.state.prepared = false;
+    private registerContextListener(): void {
+        if (this.widgetConfiguration?.contextDependent) {
+            this.contextListenerId = 'kanban-widget' + this.widgetConfiguration.instanceId;
+            this.context.registerListener(this.contextListenerId, {
+                additionalInformationChanged: () => null,
+                sidebarLeftToggled: () => null,
+                filteredObjectListChanged: () => {
+                    this.state.prepared = false;
 
+                    setTimeout(() => {
+                        this.state.prepared = true;
+                        this.kanban = null;
                         setTimeout(() => {
-                            this.state.prepared = true;
-                            this.kanban = null;
-                            setTimeout(() => {
-                                this.createKanbanBoard();
-                            }, 50);
+                            this.createKanbanBoard();
                         }, 50);
+                    }, 50);
 
-                    },
-                    objectChanged: () => null,
-                    objectListChanged: () => null,
-                    scrollInformationChanged: () => null,
-                    sidebarRightToggled: () => null
-                });
-            }
-
+                },
+                objectChanged: () => null,
+                objectListChanged: () => null,
+                scrollInformationChanged: () => null,
+                sidebarRightToggled: () => null
+            });
         }
     }
 
     public onDestroy(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.unregisterListener(this.contextListenerId);
-        }
+        this.context?.unregisterListener(this.contextListenerId);
     }
 
     private async createKanbanBoard(): Promise<void> {
