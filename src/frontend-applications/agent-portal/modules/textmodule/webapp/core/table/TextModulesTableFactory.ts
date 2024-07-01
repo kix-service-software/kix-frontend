@@ -100,7 +100,7 @@ export class TextModulesTableFactory extends TableFactory {
             case TextModuleProperty.TICKET_TYPE_IDS:
                 config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 250, true, true,
-                    false, DataType.STRING, true, 'label-list-cell-content', null, false
+                    true, DataType.STRING, true, 'label-list-cell-content', null, false
                 );
                 break;
             case TextModuleProperty.LANGUAGE:
