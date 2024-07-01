@@ -71,7 +71,8 @@ export class TextModuleLabelProvider extends LabelProvider<TextModule> {
                 break;
             case TextModuleProperty.QUEUE_IDS:
             case TextModuleProperty.TICKET_TYPE_IDS:
-                if (Array.isArray(displayValue)) {
+                if (displayValue) {
+                    displayValue = Array.isArray(displayValue) ? displayValue : [displayValue];
                     const type = property === TextModuleProperty.QUEUE_IDS ?
                         KIXObjectType.QUEUE : KIXObjectType.TICKET_TYPE;
                     const objects = await KIXObjectService.loadObjects(type, displayValue).catch(() => []);
