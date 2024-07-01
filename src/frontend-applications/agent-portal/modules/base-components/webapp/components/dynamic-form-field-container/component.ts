@@ -301,9 +301,14 @@ class Component {
         this.provideValue(value);
     }
 
-    public async provideValue(value: DynamicFormFieldValue): Promise<void> {
+    public async provideValue(value: DynamicFormFieldValue, updateValues: boolean = true): Promise<void> {
         await this.manager.setValue(value.getValue());
-        if (!this.provideTimeout) {
+
+        if (updateValues) {
+            if (this.provideTimeout) {
+                clearTimeout(this.provideTimeout);
+            }
+
             this.provideTimeout = setTimeout(async () => {
                 this.provideTimeout = null;
                 await this.updateValues();
@@ -490,7 +495,7 @@ class Component {
         this.timoutTimer.restartTimer(() => {
             const hint = event.target.value;
             value.value.hint = hint;
-            this.provideValue(value);
+            this.provideValue(value, false);
         }, 500);
     }
 
