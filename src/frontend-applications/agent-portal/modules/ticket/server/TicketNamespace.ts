@@ -22,6 +22,7 @@ import { CacheService } from '../../../server/services/cache';
 
 import cookie from 'cookie';
 import { Socket } from 'socket.io';
+import { Attachment } from '../../../model/kix/Attachment';
 
 export class TicketNamespace extends SocketNameSpace {
 
@@ -58,13 +59,13 @@ export class TicketNamespace extends SocketNameSpace {
         const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
         const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
-        const response = await TicketAPIService.getInstance().loadArticleAttachment(
-            token, data.ticketId, data.articleId, data.attachmentId, data.relevantOrganisationId,
+        const response = await TicketAPIService.getInstance().loadArticleAttachments(
+            token, data.ticketId, data.articleId, data.attachmentIds, data.relevantOrganisationId,
             data.asDownload
-        ).then((attachment) =>
+        ).then((attachments: Attachment[]) =>
             new SocketResponse(
                 TicketEvent.ARTICLE_ATTACHMENT_LOADED,
-                new LoadArticleAttachmentResponse(data.requestId, attachment)
+                new LoadArticleAttachmentResponse(data.requestId, attachments)
             )
         ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
@@ -81,10 +82,10 @@ export class TicketNamespace extends SocketNameSpace {
 
         const response = await TicketAPIService.getInstance().loadArticleZipAttachment(
             token, data.ticketId, data.articleId, data.relevantOrganisationId
-        ).then((attachment) =>
+        ).then((attachments) =>
             new SocketResponse(
                 TicketEvent.ARTICLE_ZIP_ATTACHMENT_LOADED,
-                new LoadArticleAttachmentResponse(data.requestId, attachment)
+                new LoadArticleAttachmentResponse(data.requestId, attachments[0])
             )
         ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
