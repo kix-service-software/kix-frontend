@@ -90,7 +90,7 @@ export class ContextFormManager {
     }
 
     public async getObjectFormHandler(createNewInstance?: boolean): Promise<ObjectFormHandler> {
-        if (this.formId && createNewInstance) {
+        if (this.formId && (createNewInstance || !this.handler)) {
             this.handler?.destroy();
 
             if (!this.createObjectHandlerPromise) {
