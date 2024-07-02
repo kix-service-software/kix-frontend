@@ -18,7 +18,7 @@ import { SearchEvent } from '../../../model/SearchEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { SearchContext } from '../../core';
+import { SearchContext, SearchDefinition } from '../../core';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
@@ -43,6 +43,8 @@ class Component {
     private valueChangedTimeout: any;
 
     private sortAttributeTreeHandler: TreeHandler;
+    private context: SearchContext;
+    private searchDefinition: SearchDefinition;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -78,17 +80,18 @@ class Component {
             this.keyListenerElement.addEventListener('keydown', this.keyListener);
         }
 
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        this.contextInstanceId = context?.instanceId;
-        const searchDefinition = SearchService.getInstance().getSearchDefinition(
-            context.descriptor.kixObjectTypes[0]
+        this.context = ContextService.getInstance().getActiveContext<SearchContext>();
+        this.contextInstanceId = this.context?.instanceId;
+        this.searchDefinition = SearchService.getInstance().getSearchDefinition(
+            this.context.descriptor.kixObjectTypes[0]
         );
-        this.state.manager = (searchDefinition?.formManager as SearchFormManager);
+        this.state.manager = (this.searchDefinition?.formManager as SearchFormManager);
         await this.setTitle();
         await this.initManager();
         await this.initSort();
 
         this.setCanSearch();
+        this.provideCriteria();
 
         this.managerListenerId = IdService.generateDateBasedId('search-criteria-widget');
         this.state.manager?.registerListener(this.managerListenerId, async () => {
@@ -98,14 +101,7 @@ class Component {
 
             this.valueChangedTimeout = setTimeout(() => {
                 this.setCanSearch();
-
-                const criteria: FilterCriteria[] = [];
-                const values = this.state.manager.getValues();
-                for (const v of values) {
-                    criteria.push(searchDefinition.getFilterCriteria(v));
-                }
-
-                context?.getSearchCache()?.setCriteria(criteria);
+                this.provideCriteria();
             }, 100);
         });
 
@@ -122,6 +118,16 @@ class Component {
     private setCanSearch(): void {
         const values = this.state.manager.getValues();
         this.state.canSearch = values.length > 0;
+    }
+
+    private provideCriteria(): void {
+        const criteria: FilterCriteria[] = [];
+        const values = this.state.manager.getValues();
+        for (const v of values) {
+            criteria.push(this.searchDefinition.getFilterCriteria(v));
+        }
+
+        this.context?.getSearchCache()?.setCriteria(criteria);
     }
 
     public onDestroy(): void {

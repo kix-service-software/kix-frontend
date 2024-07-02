@@ -38,9 +38,9 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
 
 
     public async prepareFormFilterCriteria(
-        criteria: FilterCriteria[], forSearch: boolean = true
+        criteria: FilterCriteria[], forSearch: boolean = true, allowEmptyValue?: boolean
     ): Promise<FilterCriteria[]> {
-        criteria = await super.prepareFormFilterCriteria(criteria, forSearch);
+        criteria = await super.prepareFormFilterCriteria(criteria, forSearch, allowEmptyValue);
         const fulltextCriteriaIndex = criteria.findIndex((c) => c.property === SearchProperty.FULLTEXT);
         if (fulltextCriteriaIndex !== -1) {
             const value = criteria[fulltextCriteriaIndex].value;

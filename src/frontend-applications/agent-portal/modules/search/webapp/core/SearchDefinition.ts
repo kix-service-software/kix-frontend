@@ -85,15 +85,18 @@ export abstract class SearchDefinition {
     }
 
     public async prepareFormFilterCriteria(
-        criteria: FilterCriteria[], forSearch: boolean = true
+        criteria: FilterCriteria[], forSearch: boolean = true, allowEmptyValue?: boolean
     ): Promise<FilterCriteria[]> {
-        const filteredCriteria = criteria.filter((c) => {
-            if (Array.isArray(c.value)) {
-                return c.value.length > 0;
-            } else {
-                return c.value !== null && c.value !== undefined && c.value !== '';
-            }
-        });
+        let filteredCriteria = criteria;
+        if (!allowEmptyValue) {
+            filteredCriteria = criteria.filter((c) => {
+                if (Array.isArray(c.value)) {
+                    return c.value.length > 0;
+                } else {
+                    return c.value !== null && c.value !== undefined && c.value !== '';
+                }
+            });
+        }
 
         for (const c of filteredCriteria) {
             const dfName = KIXObjectService.getDynamicFieldName(c.property);
