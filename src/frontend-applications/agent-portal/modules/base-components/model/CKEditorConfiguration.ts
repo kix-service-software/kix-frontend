@@ -52,5 +52,5 @@ export class CKEditorConfiguration {
     disableNativeSpellChecker: boolean = false;
     enterMode: number = 2; // CKEDITOR.ENTER_BR,
     shiftEnterMode: number = 2; // CKEDITOR.ENTER_BR,
-    versioncheck: false;
+    versionCheck: false;
 }
