@@ -138,11 +138,13 @@ class EditorComponent {
 
                 if (this.inline) {
                     this.editor = CKEDITOR.inline(this.state.id, {
-                        ...editorConfig
+                        ...editorConfig,
+                        versionCheck: false
                     });
                 } else {
                     this.editor = CKEDITOR.replace(this.state.id, {
-                        ...editorConfig
+                        ...editorConfig,
+                        versionCheck: false
                     });
                 }
 
