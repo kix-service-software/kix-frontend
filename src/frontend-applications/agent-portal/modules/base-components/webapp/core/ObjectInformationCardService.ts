@@ -42,6 +42,8 @@ export class ObjectInformationCardService {
 
         if (!Array.isArray(config.avatar) && config.avatar) {
             config.avatar = [config.avatar];
+        } else if (Array.isArray(config.avatar) && !config.avatar.length) {
+            config.avatar = null;
         }
 
         const currentUser = await AgentService.getInstance().getCurrentUser();

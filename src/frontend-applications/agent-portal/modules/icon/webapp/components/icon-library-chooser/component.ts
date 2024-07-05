@@ -66,33 +66,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async setIcons(): Promise<void> {
-        this.state.icons = await ObjectIconService.getInstance().getAvailableIcons(
-            this.state.kixFont, this.state.fontAwesome, this.state.kixIcons
-        );
         this.filter();
     }
 
-    private filter(): void {
+    private async filter(): Promise<void> {
         let filterValue = this.state.iconFilterValue;
-        let icons = this.state.icons;
-        if (filterValue) {
-            filterValue = filterValue.toLocaleLowerCase();
-            icons = icons.filter((i) => {
-                let match = false;
-
-                if (typeof i === 'string') {
-                    match = i.indexOf(filterValue) !== -1;
-                } else if (i instanceof ObjectIcon) {
-                    const objectMatch = i.Object?.toLocaleLowerCase().indexOf(filterValue) !== -1;
-                    const idMatch = i.ObjectID?.toString()?.toLocaleLowerCase().indexOf(filterValue) !== -1;
-                    match = objectMatch || idMatch;
-                }
-
-                return match;
-            });
-        }
-
-        this.state.filteredIcons = icons.slice(0, this.iconCount);
+        this.state.filteredIcons = await ObjectIconService.getInstance().getAvailableIcons(
+            this.state.kixFont, this.state.fontAwesome, this.state.kixIcons, filterValue, this.iconCount
+        );
     }
 
 }
