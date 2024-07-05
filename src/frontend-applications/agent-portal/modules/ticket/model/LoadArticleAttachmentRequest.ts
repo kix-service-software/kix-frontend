@@ -13,7 +13,7 @@ export class LoadArticleAttachmentRequest {
         public requestId: string,
         public ticketId: number,
         public articleId: number,
-        public attachmentId: number,
+        public attachmentIds: number[],
         public relevantOrganisationId?: number,
         public asDownload?: boolean
     ) { }

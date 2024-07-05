@@ -161,8 +161,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 return body?.match(new RegExp(this.state.filterValue, 'ig')) ||
                     a.Subject?.match(new RegExp(this.state.filterValue, 'ig')) ||
                     a.To?.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.Cc?.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.From?.match(new RegExp(this.state.filterValue, 'ig'));
+                    a.Cc?.match(new RegExp(this.state.filterValue, 'ig'));
+                //a.From?.match(new RegExp(this.state.filterValue, 'ig'));
             });
             isFiltered = true;
         }

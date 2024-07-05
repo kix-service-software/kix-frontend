@@ -309,19 +309,17 @@ export class TicketAPIService extends KIXObjectAPIService {
                 token, KIXObjectType.TICKET_LOCK, uri, null, null, 'Lock', clientRequestId, TicketLock
             );
         } else if (objectType === KIXObjectType.ARTICLE) {
-            if (objectLoadingOptions) {
-                if (!(objectLoadingOptions as ArticleLoadingOptions).ticketId) {
-                    LoggingService.getInstance().error('Need ticketId to load articles');
-                    throw new Error('', 'Need ticketId to load articles');
-                }
-                const uri = this.buildUri(
-                    this.RESOURCE_URI, (objectLoadingOptions as ArticleLoadingOptions).ticketId, 'articles'
-                );
-                objectResponse = await super.load(
-                    token, KIXObjectType.ARTICLE, uri, loadingOptions, objectIds, 'Article',
-                    clientRequestId, Article
-                );
+            if (!(objectLoadingOptions as ArticleLoadingOptions)?.ticketId) {
+                LoggingService.getInstance().error('Need ticketId to load articles');
+                throw new Error('', 'Need ticketId to load articles');
             }
+            const uri = this.buildUri(
+                this.RESOURCE_URI, (objectLoadingOptions as ArticleLoadingOptions).ticketId, 'articles'
+            );
+            objectResponse = await super.load(
+                token, KIXObjectType.ARTICLE, uri, loadingOptions, objectIds, 'Article',
+                clientRequestId, Article
+            );
         } else if (objectType === KIXObjectType.TICKET_HISTORY) {
             if (objectIds?.length) {
                 const uri = this.buildUri(
@@ -663,13 +661,13 @@ export class TicketAPIService extends KIXObjectAPIService {
         }
     }
 
-    public async loadArticleAttachment(
-        token: string, ticketId: number, articleId: number, attachmentId: number,
+    public async loadArticleAttachments(
+        token: string, ticketId: number, articleId: number, attachmentIds: number[],
         relevantOrganisationId?: number, asDownload?: boolean
-    ): Promise<Attachment> {
+    ): Promise<Attachment[]> {
 
         const uri = this.buildUri(
-            this.RESOURCE_URI, ticketId, 'articles', articleId, 'attachments', attachmentId
+            this.RESOURCE_URI, ticketId, 'articles', articleId, 'attachments', attachmentIds.join(',')
         );
 
         const response = await this.getObjectByUri<any>(token, uri, 'TicketService', {
@@ -678,12 +676,22 @@ export class TicketAPIService extends KIXObjectAPIService {
         }, KIXObjectType.ATTACHMENT);
 
         const user = await UserService.getInstance().getUserByToken(token);
-        let attachment = response?.responseData?.Attachment;
-        if (asDownload) {
-            attachment = new Attachment(attachment);
-            FileService.prepareFileForDownload(user?.UserID, attachment);
+        let attachments = attachmentIds?.length === 1
+            ? [response?.responseData?.Attachment]
+            : response?.responseData?.Attachment;
+
+
+        if (asDownload && Array.isArray(attachments)) {
+            const preparedAttachments = [];
+            for (const a of attachments) {
+                const preparedAttachment = new Attachment(a);
+                preparedAttachments.push(preparedAttachment);
+                FileService.prepareFileForDownload(user?.UserID, preparedAttachment);
+            }
+            attachments = preparedAttachments;
         }
-        return attachment;
+
+        return attachments as Attachment[];
     }
 
     public async loadArticleZipAttachment(
@@ -783,9 +791,15 @@ export class TicketAPIService extends KIXObjectAPIService {
         return filterCriteria;
     }
 
-    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPISearch(
+        criteria: FilterCriteria[], token: string, objectType?: string
+    ): Promise<FilterCriteria[]> {
         let searchCriteria = criteria.filter((f) =>
-            f.property !== SearchProperty.PRIMARY && f.property !== SearchProperty.FULLTEXT
+            f.property !== SearchProperty.PRIMARY
+            && (
+                f.property !== SearchProperty.FULLTEXT
+                || objectType !== this.objectType
+            )
         );
 
         await this.setUserID(searchCriteria, token);
@@ -804,7 +818,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         }
 
         const fulltext = criteria.filter((f) => f.property === SearchProperty.FULLTEXT);
-        if (fulltext?.length) {
+        if (fulltext?.length && objectType === KIXObjectType.TICKET) {
             fulltext.forEach((c) => {
                 const fulltextSearch = this.getFulltextSearch(c);
                 searchCriteria = [...searchCriteria, ...fulltextSearch];

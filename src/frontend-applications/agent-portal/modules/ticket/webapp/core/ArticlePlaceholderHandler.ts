@@ -126,7 +126,8 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         );
 
                         // use To value if From is a system address
-                        const fromValue = article.From.replace(/.+ <(.+)>/, '$1');
+                        let fromValue = typeof article.From === 'string' ? article.From : article.From.Email;
+                        fromValue = fromValue.replace(/.+ <(.+)>/, '$1');
                         const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
                             KIXObjectType.SYSTEM_ADDRESS, null
                         ).catch(() => [] as SystemAddress[]);

@@ -15,27 +15,28 @@ import { Article } from '../../../model/Article';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { PersonalSettingsProperty } from '../../../../user/model/PersonalSettingsProperty';
-import { SortUtil } from '../../../../../model/SortUtil';
-import { ArticleProperty } from '../../../model/ArticleProperty';
-import { DataType } from '../../../../../model/DataType';
-import { SortOrder } from '../../../../../model/SortOrder';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { TicketService } from '../../core';
+import { TicketDetailsContext, TicketService } from '../../core';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
 import { BackendNotification } from '../../../../../model/BackendNotification';
 import { TicketUIEvent } from '../../../model/TicketUIEvent';
+import { Ticket } from '../../../model/Ticket';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { SortOrder } from '../../../../../model/SortOrder';
+import { ArticleFilter } from '../../core/context/ArticleFilter';
+import { ArticleLoader } from '../../core/context/ArticleLoader';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private readonly displayView = 'selectedListView';
-    private context: Context;
+    private context: TicketDetailsContext;
     private sortOrder: string;
-    private loadTimeout: any;
     private subscriber: IEventSubscriber;
+    private articleIds: number[];
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -61,14 +62,42 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         ) : null;
         this.state.selectedCompactView = !listViewPreference?.Value || listViewPreference?.Value === 'Compact';
 
-        this.state.translations = await TranslationService.createTranslationObject(
-            ['Translatable#Go to top', 'Translatable#Read all', 'Translatable#Collapse all',
-                'Translatable#Preview List', 'Translatable#Compact View', 'Translatable#Change sort direction']);
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Go to top', 'Translatable#Read all', 'Translatable#Collapse all',
+            'Translatable#Preview List', 'Translatable#Compact View', 'Translatable#Change sort direction'
+        ]);
 
-        if (!this.state.articles?.length) {
-            await this.loadFilteredArticles();
+        await this.setArticleIDs();
+
+        this.prepareFilter();
+        this.initListener();
+    }
+
+    private prepareFilter(): void {
+        const filterComponent = (this as any).getComponent('article-filter');
+        if (filterComponent) {
+            filterComponent.filter = async (): Promise<void> => {
+                const articleFilter = new ArticleFilter();
+                articleFilter.filterAttachments = filterComponent?.state?.filterAttachment;
+                articleFilter.filterExternal = filterComponent?.state?.filterExternal;
+                articleFilter.filterInternal = filterComponent?.state?.filterInternal;
+                articleFilter.filterCustomer = filterComponent?.state?.filterCustomer;
+                articleFilter.filterUnread = filterComponent?.state?.filterUnread;
+                articleFilter.filterMyArticles = filterComponent?.state?.myArticles;
+                articleFilter.fulltext = filterComponent?.state?.filterValue;
+                articleFilter.filterDateBefore = filterComponent?.state?.isFilterDateBefore;
+                articleFilter.filterDate = filterComponent?.state?.selectedDate;
+
+                const result = await ArticleLoader.searchArticles(
+                    Number(this.context?.getObjectId()), articleFilter
+                );
+
+                this.state.articleIds = Array.isArray(result) ? result : this.articleIds;
+            };
         }
+    }
 
+    private initListener(): void {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('communication-widget'),
             eventPublished: (data: any, eventId: string): void => {
@@ -86,14 +115,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.context.registerListener('communication-widget', {
                 filteredObjectListChanged: (objectType: KIXObjectType) => {
                     if (objectType === KIXObjectType.ARTICLE) {
-                        this.setFilteredArticles();
+                        this.setArticleIDs();
                     }
                 },
-                objectListChanged: (objectType: KIXObjectType) => {
-                    // if (objectType === KIXObjectType.ARTICLE) {
-                    //     this.setFilteredArticles();
-                    // }
-                },
+                objectListChanged: (objectType: KIXObjectType) => null,
                 additionalInformationChanged: () => null,
                 objectChanged: () => null,
                 scrollInformationChanged: () => null,
@@ -103,14 +128,33 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }, 1000);
     }
 
+    public onDestroy(): void {
+        this.context.unregisterListener('communication-widget');
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.subscriber);
+        EventService.getInstance().unsubscribe(TicketUIEvent.SCROLL_TO_ARTICLE, this.subscriber);
+    }
+
+    private async setArticleIDs(): Promise<void> {
+        const ticket = await this.context?.getObject<Ticket>(KIXObjectType.TICKET);
+        let articleIds = ticket?.ArticleIDs || [];
+        const sortOrder = this.sortOrder === 'newest' ? SortOrder.DOWN : SortOrder.UP;
+        articleIds = articleIds.sort((a, b) => SortUtil.compareNumber(a, b, sortOrder));
+        this.articleIds = articleIds;
+        this.state.articleIds = articleIds;
+
+        const title = await TranslationService.translate(this.state.widgetConfiguration?.title);
+        this.state.widgetTitle = `${title} (${this.state.articleIds?.length})`;
+    }
+
     private handleObjectDeleted(data: BackendNotification): void {
         const isArticleDelete = data?.Event === 'DELETE' && data?.Namespace === 'Ticket.Article';
         if (isArticleDelete) {
             const objectIds = data?.ObjectID?.split('::');
             if (objectIds?.length === 2) {
-                const hasArticle = this.state.articles.some((a) => a.ArticleID.toString() === objectIds[1]);
-                if (hasArticle) {
-                    this.loadFilteredArticles();
+                const articleIndex = this.state.articleIds.findIndex((a) => a.toString() === objectIds[1].toString());
+                if (articleIndex !== -1) {
+                    this.state.articleIds.splice(articleIndex, 1);
+                    (this as any).setStateDirty('articleIds');
                 }
             }
         }
@@ -126,68 +170,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async enableReadAction(): Promise<void> {
-        // enable read action
-        const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
-        if (allArticles.length) {
-            this.state.activeUnreadAction = allArticles.some((a) => a.isUnread());
-        }
-    }
-
-    private async setFilteredArticles(): Promise<void> {
-        if (this.loadTimeout) {
-            window.clearTimeout(this.loadTimeout);
-        }
-
-        this.loadTimeout = setTimeout(() => this.loadFilteredArticles(), 250);
-    }
-
-    private async loadFilteredArticles(): Promise<void> {
-        let articles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
-        const filteredArticles = this.context.getFilteredObjectList<Article>(KIXObjectType.ARTICLE) || articles;
-
-        const sortOrder = this.sortOrder === 'newest' ? SortOrder.DOWN : SortOrder.UP;
-
-        articles = SortUtil.sortObjects(
-            [...articles], ArticleProperty.INCOMING_TIME, DataType.INTEGER, sortOrder
-        );
-
-        articles.forEach((a, index) => {
-            a['countNumber'] = sortOrder === SortOrder.UP
-                ? index + 1
-                : articles.length - index;
-        });
-
-        this.state.articles = articles.filter((a) => filteredArticles.find((fa) => a.ArticleID === fa.ArticleID));
-
-        this.enableReadAction();
-
-        // change widget title
-        const preCountText = (filteredArticles?.length < articles?.length ? filteredArticles.length + '/' : '');
-        const articleLengthText = preCountText + articles?.length;
-
-        const title = await TranslationService.translate(this.state.widgetConfiguration?.title);
-        this.state.widgetTitle = `${title} (${articleLengthText})`;
-
-        if (this.state.articles?.length) {
-            const article = this.state.articles[0];
-            let component = (this as any).getComponent('article-' + article.ArticleID);
-            if (!component) {
-                setTimeout(() => {
-                    component = (this as any).getComponent('article-' + article.ArticleID);
-                    component?.toggleArticleCompactView();
-                }, 150);
-            } else {
-                component?.toggleArticleCompactView();
-            }
-        }
-    }
-
-    public onDestroy(): void {
-        this.context.unregisterListener('communication-widget');
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.subscriber);
-    }
-
     public async readAll(): Promise<void> {
         if (this.state.activeUnreadAction && this.context.getObjectId()) {
             EventService.getInstance().publish(
@@ -195,11 +177,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             );
 
             await TicketService.getInstance().markTicketAsSeen(Number(this.context.getObjectId()));
-
-            // FIXME: reload list (Ticket.Article.Flag updates are filtered from notification events)
-            this.state.articles = [];
-            await this.context.reloadObjectList(KIXObjectType.ARTICLE);
-            await this.loadFilteredArticles();
 
             setTimeout(() => {
                 EventService.getInstance().publish(
@@ -221,10 +198,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public collapseAll(): void {
-        for (const article of this.state.articles) {
-            EventService.getInstance().publish(
-                'TOGGLE_ARTICLE', { articleId: article.ArticleID, expanded: false }
-            );
+        for (const articleId of this.state.articleIds) {
+            EventService.getInstance().publish('TOGGLE_ARTICLE', { articleId, expanded: false });
         }
     }
 
@@ -239,10 +214,22 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public changeSortDirection(): void {
-        if (this.sortOrder === 'newest') this.sortOrder = 'odlest';
-        else this.sortOrder = 'newest';
+        if (this.sortOrder === 'newest') {
+            this.sortOrder = 'odlest';
+        } else {
+            this.sortOrder = 'newest';
+        }
         AgentService.getInstance().setPreferences([[PersonalSettingsProperty.ARTICLE_SORT_ORDER, this.sortOrder]]);
-        this.loadFilteredArticles();
+        this.state.articleIds = this.state.articleIds.reverse();
+        (this as any).setStateDirty('articleIds');
+    }
+
+    public getArticleCountNumber(articleId: number): number {
+        let index = this.state.articleIds.findIndex((aid) => aid === articleId) + 1;
+        if (this.sortOrder === 'newest') {
+            index = this.state.articleIds.length - index;
+        }
+        return index;
     }
 }
 

@@ -55,7 +55,7 @@ export class TicketSocketClient extends SocketClient {
             const requestId = IdService.generateDateBasedId();
             const organisationId = ClientStorageService.getOption('RelevantOrganisationID');
             const request = new LoadArticleAttachmentRequest(
-                requestId, ticketId, articleId, attachmentId, Number(organisationId), asDownload
+                requestId, ticketId, articleId, [attachmentId], Number(organisationId), asDownload
             );
 
             const timeout = window.setTimeout(() => {
@@ -65,7 +65,7 @@ export class TicketSocketClient extends SocketClient {
             this.socket.on(TicketEvent.ARTICLE_ATTACHMENT_LOADED, (result: LoadArticleAttachmentResponse) => {
                 if (requestId === result.requestId) {
                     window.clearTimeout(timeout);
-                    resolve(new Attachment(result.attachment));
+                    resolve(new Attachment(result.attachments[0]));
                 }
             });
 
@@ -102,7 +102,7 @@ export class TicketSocketClient extends SocketClient {
             this.socket.on(TicketEvent.ARTICLE_ZIP_ATTACHMENT_LOADED, (result: LoadArticleAttachmentResponse) => {
                 if (requestId === result.requestId) {
                     window.clearTimeout(timeout);
-                    resolve(result.attachment);
+                    resolve(result.attachments[0]);
                 }
             });
 
@@ -117,6 +117,53 @@ export class TicketSocketClient extends SocketClient {
             this.socket.emit(TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT, request);
         });
     }
+
+    public async loadArticleAttachments(
+        ticketId: number, articleId: number, attachmentIds: number[]
+    ): Promise<Attachment[]> {
+        this.checkSocketConnection();
+
+        const cacheKey = `${ticketId}-${articleId}-${attachmentIds.join(',')}`;
+
+        if (BrowserCacheService.getInstance().has(cacheKey, KIXObjectType.ATTACHMENT)) {
+            return BrowserCacheService.getInstance().get(cacheKey, KIXObjectType.ATTACHMENT);
+        }
+
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+
+        const requestPromise = new Promise<Attachment[]>((resolve, reject) => {
+            const requestId = IdService.generateDateBasedId();
+            const organisationId = ClientStorageService.getOption('RelevantOrganisationID');
+            const request = new LoadArticleAttachmentRequest(
+                requestId, ticketId, articleId, attachmentIds, Number(organisationId)
+            );
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + TicketEvent.LOAD_ARTICLE_ATTACHMENT);
+            }, socketTimeout);
+
+            this.socket.on(TicketEvent.ARTICLE_ATTACHMENT_LOADED, (result: LoadArticleAttachmentResponse) => {
+                if (requestId === result.requestId) {
+                    window.clearTimeout(timeout);
+                    resolve(result.attachments.map((a) => new Attachment(a)));
+                }
+            });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error);
+                }
+            });
+
+            this.socket.emit(TicketEvent.LOAD_ARTICLE_ATTACHMENT, request);
+        });
+
+        BrowserCacheService.getInstance().set(cacheKey, requestPromise, KIXObjectType.ATTACHMENT);
+        return await requestPromise;
+    }
+
 
     public async setArticleSeenFlag(ticketId, articleId): Promise<void> {
         this.checkSocketConnection();
