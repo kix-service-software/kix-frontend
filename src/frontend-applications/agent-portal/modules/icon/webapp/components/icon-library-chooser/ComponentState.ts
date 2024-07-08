@@ -13,7 +13,6 @@ import { ObjectIcon } from '../../../model/ObjectIcon';
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public icons: Array<ObjectIcon | string> = [],
         public filteredIcons: Array<ObjectIcon | string> = [],
         public iconFilterValue: string = '',
         public kixFont: boolean = true,
