@@ -36,10 +36,11 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
     public async getObjectIcon(
         object: string | KIXObjectType, objectId: string | number
     ): Promise<ObjectIcon | string> {
-        const icons = await this.loadObjects(null, null, null, new ObjectIconLoadingOptions(object, objectId));
-        return Array.isArray(icons) && icons.length
-            ? icons[0] as any
-            : null;
+        const icons = await this.loadObjects(
+            KIXObjectType.OBJECT_ICON, null, null, new ObjectIconLoadingOptions(object, objectId)
+        );
+
+        return icons?.length ? icons[0] as any : null;
     }
 
     public isServiceFor(kixObjectType: KIXObjectType | string): boolean {
