@@ -484,7 +484,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             if (match && match.length >= 3) {
                 content = match[2];
             } else if (attachmentWithContent.Filename !== 'file-2') {
-                content = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
+                content = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>\n');
             }
 
             const inlineContent: InlineContent[] = [];
@@ -510,7 +510,7 @@ export class TicketService extends KIXObjectService<Ticket> {
 
             return [content, inlineContent];
         } else {
-            const body = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
+            const body = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br>\n');
             return [body, null];
         }
     }
