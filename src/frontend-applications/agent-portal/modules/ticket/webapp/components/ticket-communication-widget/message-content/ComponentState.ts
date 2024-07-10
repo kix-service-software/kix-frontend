@@ -8,6 +8,7 @@
  */
 
 import { Attachment } from '../../../../../../model/kix/Attachment';
+import { ObjectInformationCardConfiguration } from '../../../../../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { AbstractAction } from '../../../../../base-components/webapp/core/AbstractAction';
 import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
@@ -42,7 +43,8 @@ export class ComponentState extends AbstractComponentState {
         public switchAttachmentListTooltip: string = 'Translatable#Switch attachment list layout',
         public smimeSignedIcon: ObjectIcon | string = null,
         public smimeSignedTooltip: string = null,
-        public smimeSigned: boolean = true
+        public smimeSigned: boolean = true,
+        public informationConfig: ObjectInformationCardConfiguration = null
     ) {
         super();
     }

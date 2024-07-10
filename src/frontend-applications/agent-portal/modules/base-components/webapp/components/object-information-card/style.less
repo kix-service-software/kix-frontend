@@ -1,0 +1,181 @@
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+@basic-column-width: 15rem;
+
+.info-container {
+   display: grid;
+   grid-template-columns: min-content auto;
+
+   .info-avatar {
+      display: grid;
+      align-items: start;
+      grid-auto-flow: row;
+      grid-auto-rows: fit-content(100%);
+      grid-row-gap: @margin-small;
+
+      font-size: 5rem;
+
+      margin-right: 1rem;
+      padding: @margin-small;
+
+      &.no-avatar {
+         border: 0;
+         margin: 0;
+         padding: 0;
+      }
+
+      >.icon {
+         >.svg-icon {
+            height: 5rem;
+            width: auto;
+         }
+      }
+   }
+
+   .info-rows {
+      display: grid;
+      grid-template-columns: auto 5fr;
+      grid-row-gap: 1rem;
+
+      .info-row-title {
+         font-weight: bold;
+         font-size: 1.25rem;
+         width: @basic-column-width;
+      }
+
+      .info-row-content {
+         display: grid;
+         grid-auto-flow: dense;
+         grid-gap: 1rem;
+
+         &.created-by-row>.info-group>.info-value {
+            grid-template-columns: auto;
+         }
+
+         &.no-title {
+            grid-column: 1 /span 2;
+         }
+
+         &.separator {
+            border-bottom: 1px solid @secondary-2;
+            padding-bottom: 1rem;
+         }
+
+         .info-group {
+            display: grid;
+            grid-auto-rows: min-content;
+            grid-row-gap: @margin-small;
+            align-items: start;
+            overflow: auto;
+
+            &.only-icon {
+               align-content: center;
+               justify-content: center;
+
+               .icon {
+                  justify-content: center;
+               }
+            }
+
+            .info-value {
+               display: grid;
+               align-items: center;
+               grid-template-columns: fit-content(1.5rem) auto;
+               column-gap: @margin-small;
+
+               .icon {
+                  font-size: 1.5rem;
+
+                  >.svg-icon {
+                     height: 1.5rem;
+                  }
+               }
+            }
+
+            .icon {
+               justify-content: start;
+            }
+
+            div {
+
+               .component-value {
+                  a {
+                     // color: @secondary-7; // show links
+                     text-decoration: none;
+
+                     &:visited,
+                     &:hover {
+                        // color: @secondary-7; // show links
+                        text-decoration: none;
+                     }
+                  }
+               }
+
+               .label-list {
+                  border: 0;
+                  margin: 0;
+                  padding: 0;
+                  min-height: 0;
+               }
+
+               .key-value-pair {
+                  grid-template-columns: unset;
+                  display: grid;
+                  grid-auto-columns: fit-content(100%);
+                  grid-auto-flow: column;
+               }
+
+            }
+         }
+      }
+   }
+}
+
+@smaller-info-breakpoint: 1280px; // have to be px (used for calculations)
+
+@media only screen and (min-width: (@smaller-info-breakpoint + 1px)) {
+   .info-container {
+      .info-rows {
+         .info-row-title.separator {
+            border-bottom: 1px solid @secondary-2;
+            padding-bottom: 1rem;
+         }
+      }
+   }
+}
+
+// TODO: use "display: block", -> reducing to one grid column and even "grid-auto-flow: column" does not work (why?)
+@media only screen and (max-width: @smaller-info-breakpoint) {
+   .info-container {
+      display: block;
+
+      .info-rows {
+         display: block;
+
+         >div:not(:last-of-type) {
+            margin-bottom: 1rem;
+         }
+      }
+   }
+}
+
+@media only screen and (max-width: (@smaller-info-breakpoint/2)) {
+   .info-container {
+      .info-rows {
+         .info-row-content {
+            display: block;
+
+            >div:not(:last-of-type) {
+               margin-bottom: 1rem;
+            }
+         }
+      }
+   }
+}

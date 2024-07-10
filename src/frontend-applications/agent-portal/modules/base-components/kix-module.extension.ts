@@ -78,6 +78,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'object-information-widget', '/kix-module-base-components$0/webapp/components/object-information-widget', []
         ),
         new UIComponent(
+            'object-information-card',
+            '/kix-module-base-components$0/webapp/components/object-information-card',
+            []
+        ),
+        new UIComponent(
             'object-information-card-widget',
             '/kix-module-base-components$0/webapp/components/object-information-card-widget',
             []

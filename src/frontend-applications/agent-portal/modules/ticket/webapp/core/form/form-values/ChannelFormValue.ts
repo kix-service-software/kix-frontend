@@ -10,10 +10,12 @@
 import { AutocompleteOption } from '../../../../../../model/AutocompleteOption';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
+import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
+import { DynamicFieldObjectFormValue } from '../../../../../object-forms/model/FormValues/DynamicFieldObjectFormValue';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
@@ -58,7 +60,13 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         if (this.value) {
             await this.setChannelFields(this.value);
         } else {
-            this.formValues.forEach((fv) => fv.enabled = false);
+            for (const fv of this.formValues) {
+                if (fv.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                    fv.formValues?.forEach((dfv) => dfv.enabled = false);
+                } else {
+                    fv.enabled = false;
+                }
+            }
         }
 
         this.object?.addBinding(ArticleProperty.CHANNEL_ID, async (value: number) => {
@@ -104,6 +112,14 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             this.createArticleFormValue(property, article);
         }
 
+        const index = this.formValues.findIndex((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS);
+        if (index !== -1) {
+            const dfFormValue = this.formValues.splice(index, 1);
+            dfFormValue[0].isSortable = false;
+            dfFormValue[0].disable();
+            this.formValues.push(dfFormValue[0]);
+        }
+
         // property only needed for article create
         if (!ContextService.getInstance().getActiveContext()?.getAdditionalInformation('ARTICLE_UPDATE_ID')) {
             const encyptFormValue = new EncryptIfPossibleFormValue(
@@ -118,7 +134,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     }
 
     protected createArticleFormValue(property: string, article: Article): void {
-        let formValue;
+        let formValue: ObjectFormValue;
         switch (property) {
             case ArticleProperty.TO:
             case ArticleProperty.CC:
@@ -144,6 +160,11 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 break;
             case ArticleProperty.INCOMING_TIME:
                 formValue = new IncomingTimeFormValue(property, article, this.objectValueMapper, this);
+                break;
+            case KIXObjectProperty.DYNAMIC_FIELDS:
+                formValue = new DynamicFieldObjectFormValue(
+                    KIXObjectProperty.DYNAMIC_FIELDS, article, this.objectValueMapper, this
+                );
                 break;
             default:
         }
@@ -173,6 +194,9 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             ArticleProperty.SUBJECT, ArticleProperty.BODY, ArticleProperty.ATTACHMENTS,
             ArticleProperty.ENCRYPT_IF_POSSIBLE
         ];
+
+        const dfFormValue = this.formValues.find((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS);
+
         if (channelId) {
             const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL, [channelId])
                 .catch((): Channel[] => []);
@@ -211,8 +235,16 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             }
 
             context.setAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT, submitPattern);
+
+            for (const fv of dfFormValue?.formValues) {
+                await fv.enable();
+                fv.isSortable = false;
+            }
         } else {
             this.disableChannelFormValues(allFields);
+            for (const fv of dfFormValue?.formValues) {
+                await fv.disable();
+            }
         }
     }
 

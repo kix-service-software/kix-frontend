@@ -12,6 +12,7 @@ import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -67,7 +68,7 @@ export class ArticleLoader {
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.includes = [
             ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, 'ObjectActions',
-            KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON
+            KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON, KIXObjectProperty.DYNAMIC_FIELDS
         ];
         loadingOptions.expands = [
             ArticleProperty.CREATED_BY, ArticleProperty.FROM
@@ -265,6 +266,19 @@ export class ArticleLoader {
         }
 
         return useFilter ? articles?.map((a) => Number(a.ArticleID)) || [] : null;
+    }
+
+    public static async loadArticle(articleId: number, ticketId: number): Promise<Article> {
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.includes = [
+            ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, KIXObjectProperty.DYNAMIC_FIELDS
+        ];
+
+        const articles = await KIXObjectService.loadObjects<Article>(
+            KIXObjectType.ARTICLE, [articleId], loadingOptions, new ArticleLoadingOptions(ticketId)
+        ).catch((): Article[] => []);
+
+        return articles?.length ? articles[0] : null;
     }
 
 }

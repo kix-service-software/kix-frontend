@@ -104,7 +104,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                         new TreeNode(KIXObjectType.CONTACT, 'Contact', 'kix-icon-man-bubble'),
                         new TreeNode(KIXObjectType.FAQ_ARTICLE, 'FAQ', 'kix-icon-faq'),
                         new TreeNode(KIXObjectType.ORGANISATION, 'Organisation', 'kix-icon-organisation'),
-                        new TreeNode(KIXObjectType.TICKET, 'Ticket', 'kix-icon-ticket')
+                        new TreeNode(KIXObjectType.TICKET, 'Ticket', 'kix-icon-ticket'),
+                        new TreeNode(KIXObjectType.ARTICLE, 'Article', 'kix-icon-note')
                     ])
                 ]
             )

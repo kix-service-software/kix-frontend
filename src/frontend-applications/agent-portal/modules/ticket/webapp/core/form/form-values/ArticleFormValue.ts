@@ -27,17 +27,23 @@ export class ArticleFormValue extends ObjectFormValue<Article[]> {
 
         let article: Article;
 
+        const context = ContextService.getInstance().getActiveContext();
+        const updateArticleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+
         const hasArticles = ticket.Articles?.length > 0;
         if (hasArticles) {
-            article = ticket.Articles.find((a) => !a.ArticleID);
+            if (updateArticleId) {
+                article = ticket.Articles.find((a) => a.ArticleID === updateArticleId);
+            } else {
+                article = ticket.Articles.find((a) => !a.ArticleID);
+            }
         } else {
             ticket.Articles = [];
         }
 
         if (!article) {
             article = new Article(null, ticket);
-            const context = ContextService.getInstance().getActiveContext();
-            article.ArticleID = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+            article.ArticleID = updateArticleId;
             ticket.Articles.push(article);
         }
 

@@ -202,6 +202,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         });
 
         let index = 0;
+
+        files = files.filter((f: any) => f.Disposition !== 'inline');
         for (let f of files) {
 
             index++;

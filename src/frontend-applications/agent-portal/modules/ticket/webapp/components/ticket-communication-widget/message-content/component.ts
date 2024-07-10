@@ -48,6 +48,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async update(input: any): Promise<void> {
         this.articleId = input.articleId;
+        this.state.informationConfig = input.informationConfig;
         this.state.selectedCompactView = typeof input.selectedCompactView !== 'undefined' ? input.selectedCompactView : true;
     }
 

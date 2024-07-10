@@ -40,6 +40,7 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         super(property, object, objectValueMapper, parent);
         this.visible = false;
         this.enabled = true;
+        this.isSortable = true;
     }
 
     public async createDFFormValues(): Promise<void> {
@@ -69,6 +70,14 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         } else {
             console.warn(`Could not find/create form value for dynamic field ${nameOption?.value}`);
             console.warn(field);
+        }
+    }
+
+    public async disable(): Promise<void> {
+        if (Array.isArray(this.formValues)) {
+            for (const fv of this.formValues) {
+                await fv.disable();
+            }
         }
     }
 
@@ -142,6 +151,7 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         }
 
         if (formValue) {
+            formValue.isSortable = this.isSortable;
             formValue.label = await TranslationService.translate(dynamicField.Label);
 
             if (addFormValue) {

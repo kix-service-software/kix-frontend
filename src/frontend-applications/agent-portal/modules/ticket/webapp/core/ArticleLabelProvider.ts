@@ -29,7 +29,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
         return objectType === this.kixObjectType;
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue;
         switch (property) {
             case ArticleProperty.TO:
@@ -75,7 +75,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 displayValue = 'Translatable#Encrypt if possible';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {

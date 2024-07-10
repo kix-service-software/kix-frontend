@@ -137,6 +137,7 @@ export class TicketDetailsContext extends Context {
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.sortOrder = 'Article.IncomingTime';
         loadingOptions.limit = 0;
+        loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
 
         const articles: Article[] = await KIXObjectService.loadObjects<Article>(
             KIXObjectType.ARTICLE, null, loadingOptions, new ArticleLoadingOptions(this.objectId)

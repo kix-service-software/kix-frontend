@@ -27,8 +27,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         </else>
                     </div>
                     <if(state.smimeSignedIcon)>
-                        <icon icon="fas fa-certificate" tooltip=state.smimeSignedTooltip class={"smime-signed-background": true, "smime-not-signed": !state.smimeSigned}/>
-                        <icon icon=state.smimeSignedIcon tooltip=state.smimeSignedTooltip class="smime-signed-icon"/>
+                        <icon
+                            icon="fas fa-certificate"
+                            tooltip=state.smimeSignedTooltip
+                            class={
+                                "smime-signed-background": true,
+                                "smime-not-signed": !state.smimeSigned,
+                            }
+                        />
+                        <icon
+                            icon=state.smimeSignedIcon
+                            tooltip=state.smimeSignedTooltip
+                            class="smime-signed-icon"
+                        />
                     </if>
                 </div>
                 <div
@@ -110,11 +121,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </div>
                 </else>
                 <div class="message-footer">
-                    <div class="attachments-control">
-                        <if(Array.isArray(state.articleAttachments) && state.articleAttachments.length)>
+                    <div class="row attachments-control">
+                        <if(
+                            Array.isArray(state.articleAttachments) &&
+                            state.articleAttachments.length
+                        )>
                             <div class="attachments-list-container">
-                                <div class={"attachments-list": true, "one-column-layout": state.oneColumnLayout}>
-                                    <for|attachment| of=state.articleAttachments>
+                                <div class={
+                                    "attachments-list": true,
+                                    "one-column-layout": state.oneColumnLayout,
+                                }>
+                                    <for|
+                                        attachment,
+                                    | of=state.articleAttachments>
                                         <ticket-article-attachment
                                             article=state.article
                                             attachment=attachment
@@ -123,7 +142,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         />
                                     </for>
                                 </div>
-                                <span class="attachment-list-layout-switch" on-click("switchAttachmentLayout")>
+                                <span
+                                    class="attachment-list-layout-switch"
+                                    on-click("switchAttachmentLayout")
+                                >
                                     <if(state.oneColumnLayout)>
                                         <icon
                                             icon="fas fa-angle-double-up"
@@ -154,9 +176,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             </a>
                         </if>
                     </div>
+                    <if(state.informationConfig)>
+                        <div class="bg-white my-2 p-2">
+                            <object-information-card
+                                object=state.article
+                                config=state.informationConfig
+                            />
+                        </div>
+                    </if>
                     <div
                         style=`background-color: ${state.backgroundColor};`
-                        class="actions-list"
+                        class="row actions-list"
                     >
                         <if(state.actions && state.actions.length)>
                             <action-list list=state.actions/>
@@ -181,8 +211,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         </else>
                     </div>
                     <if(state.smimeSignedIcon)>
-                        <icon icon="fas fa-certificate" tooltip=state.smimeSignedTooltip class={"smime-signed-background": true, "smime-not-signed": !state.smimeSigned}/>
-                        <icon icon=state.smimeSignedIcon tooltip=state.smimeSignedTooltip class="smime-signed-icon"/>
+                        <icon
+                            icon="fas fa-certificate"
+                            tooltip=state.smimeSignedTooltip
+                            class={
+                                "smime-signed-background": true,
+                                "smime-not-signed": !state.smimeSigned,
+                            }
+                        />
+                        <icon
+                            icon=state.smimeSignedIcon
+                            tooltip=state.smimeSignedTooltip
+                            class="smime-signed-icon"
+                        />
                     </if>
                 </div>
             </if>
