@@ -24,6 +24,7 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { IdService } from '../../../../../model/IdService';
 import { BackendNotification } from '../../../../../model/BackendNotification';
 import { TicketUIEvent } from '../../../model/TicketUIEvent';
+import { TicketCommunicationConfiguration } from '../../../model/TicketCommunicationConfiguration';
 import { Ticket } from '../../../model/Ticket';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { SortOrder } from '../../../../../model/SortOrder';
@@ -36,6 +37,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private context: TicketDetailsContext;
     private sortOrder: string;
     private subscriber: IEventSubscriber;
+    private communicationConfig: TicketCommunicationConfiguration;
     private articleIds: number[];
 
     public onCreate(): void {
@@ -49,6 +51,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
+        this.communicationConfig = this.state.widgetConfiguration?.configuration as TicketCommunicationConfiguration;
+
+        this.state.informationConfig = this.communicationConfig?.articleInformationConfiguration;
 
         const user = await AgentService.getInstance().getCurrentUser();
 

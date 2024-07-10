@@ -8,18 +8,16 @@
  */
 
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
-import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-import { InformationRowConfiguration } from './ObjectInformationCardConfiguration';
+import { ObjectInformationCardConfiguration } from './ObjectInformationCardConfiguration';
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public avatar: Array<ObjectIcon | string> = [],
-        public information: InformationRowConfiguration[] = [],
-        public templates: any = {},
-        public valuesReady: boolean = false,
         public widgetType: WidgetType = null,
+        public object: KIXObject = null,
+        public config: ObjectInformationCardConfiguration = null
     ) {
         super();
     }

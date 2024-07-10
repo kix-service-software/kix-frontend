@@ -46,6 +46,7 @@ import { ConfigItemProperty } from '../cmdb/model/ConfigItemProperty';
 import { SortOrder } from '../../model/SortOrder';
 import { ArticleColorsConfiguration } from './model/ArticleColorsConfiguration';
 import { DataType } from '../../model/DataType';
+import { TicketCommunicationConfiguration } from './model/TicketCommunicationConfiguration';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -911,6 +912,13 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const communicationWidget = new WidgetConfiguration(
             'ticket-communication-widget', 'Communication Widget', ConfigurationType.Widget,
             'ticket-communication-widget', 'Translatable#Communication History', [], null, null, false, true, null, true
+        );
+
+        const articleInformation = new ObjectInformationCardConfiguration(null, []);
+
+        communicationWidget.configuration = new TicketCommunicationConfiguration(
+            'ticket-communication-configuration', 'Ticket Communication COnfiguration', 'CommunicationConfig',
+            articleInformation
         );
         configurations.push(communicationWidget);
 

@@ -149,17 +149,15 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     protected async initFormValues(formValues = this.formValues): Promise<Promise<void>> {
-        for (const fv of formValues) {
-            if (fv.enabled) {
-                const start = Date.now();
-                await fv.initFormValue();
-                const end = Date.now();
+        for (const fv of formValues.filter((fv) => fv.enabled)) {
+            const start = Date.now();
+            await fv.initFormValue();
+            const end = Date.now();
 
-                console.debug(`Init Formvalue (${fv.property} - ${(fv as any).dfName}): ${end - start}ms`);
+            console.debug(`Init Formvalue (${fv.property} - ${(fv as any).dfName}): ${end - start}ms`);
 
-                if (fv.formValues?.length) {
-                    await this.initFormValues(fv.formValues);
-                }
+            if (fv.formValues?.length) {
+                await this.initFormValues(fv.formValues);
             }
         }
     }
@@ -199,26 +197,30 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
     protected async mapFormField(field: FormFieldConfiguration, object: T): Promise<void> {
         const startMapFormField = Date.now();
-        let formValue = this.findFormValue(field.property);
-        if (!formValue) {
-            const startCreateFormValue = Date.now();
-            if (field.property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                const dfValue = this.findFormValue(KIXObjectProperty.DYNAMIC_FIELDS);
-                const nameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
-                if (nameOption) {
-                    formValue = dfValue?.findFormValue(nameOption.value);
-                    if (!formValue) {
-                        formValue = await (dfValue as DynamicFieldObjectFormValue)?.createFormValue(nameOption.value);
-                    }
-                }
-            } else {
-                formValue = await this.createFormValue(field.property, object);
-            }
 
-            const endCreateFormValue = Date.now();
-            if (formValue) {
-                console.debug(`createFormValue (${formValue.property} - ${(formValue as any).dfName}): ${endCreateFormValue - startCreateFormValue}ms`);
+        const startCreateFormValue = Date.now();
+        let formValue: ObjectFormValue;
+        if (field.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+            const nameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+            if (nameOption) {
+                const dfName = nameOption.value;
+                const dfValue = await this.getDynamicFieldFormValue(dfName);
+                formValue = dfValue?.findFormValue(dfName);
+                if (!formValue) {
+                    formValue = await dfValue?.createFormValue(dfName);
+                }
             }
+        } else {
+            formValue = this.findFormValue(field.property);
+        }
+
+        if (!formValue) {
+            formValue = await this.createFormValue(field.property, object);
+        }
+
+        const endCreateFormValue = Date.now();
+        if (formValue) {
+            console.debug(`createFormValue (${formValue.property} - ${(formValue as any).dfName}): ${endCreateFormValue - startCreateFormValue}ms`);
         }
 
         if (formValue) {
@@ -397,7 +399,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         if (!formValue) {
             const dfName = KIXObjectService.getDynamicFieldName(instruction.property);
             if (dfName) {
-                const dfFormValue = this.findFormValue(KIXObjectProperty.DYNAMIC_FIELDS);
+                const dfFormValue = await this.getDynamicFieldFormValue(dfName);
                 if (dfFormValue) {
                     formValue = await (dfFormValue as DynamicFieldObjectFormValue)?.createFormValue(dfName);
                 }
@@ -539,46 +541,9 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
     }
 
-    private mapInstructionPropertiesToFormValueProperties(instructionOrder: InstructionProperty[]): string[] {
-        const properties: string[] = [];
-        for (const property of instructionOrder) {
-            switch (property) {
-                case InstructionProperty.POSSIBLE_VALUES_ADD:
-                case InstructionProperty.POSSIBLE_VALUES:
-                case InstructionProperty.POSSIBLE_VALUES_REMOVE:
-                    properties.push(FormValueProperty.POSSIBLE_VALUES);
-                    break;
-
-                case InstructionProperty.READ_ONLY:
-                case InstructionProperty.WRITEABLE:
-                    properties.push(FormValueProperty.READ_ONLY);
-                    break;
-
-                case InstructionProperty.SHOW:
-                case InstructionProperty.HIDE:
-                    properties.push(FormValueProperty.VISIBLE);
-                    break;
-
-                case InstructionProperty.REQUIRED:
-                case InstructionProperty.OPTIONAL:
-                    properties.push(FormValueProperty.VISIBLE);
-                    break;
-
-                case InstructionProperty.ENABLE:
-                case InstructionProperty.DISABLE:
-                    properties.push(FormValueProperty.ENABLED);
-                    break;
-
-                case InstructionProperty.COUNT_MAX:
-                    properties.push(FormValueProperty.COUNT_MAX);
-                    break;
-
-                default:
-                    properties.push(property);
-            }
-
-            return properties;
-        }
+    protected async getDynamicFieldFormValue(dfName: string): Promise<DynamicFieldObjectFormValue> {
+        const dfFormValue = this.findFormValue(KIXObjectProperty.DYNAMIC_FIELDS);
+        return dfFormValue as DynamicFieldObjectFormValue;
     }
 
     public getValidationResults(formValues: ObjectFormValue[] = this.formValues): ValidationResult[] {

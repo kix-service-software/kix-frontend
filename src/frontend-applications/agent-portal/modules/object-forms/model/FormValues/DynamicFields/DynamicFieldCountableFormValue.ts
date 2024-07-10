@@ -47,6 +47,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         super(property, object, objectValueMapper, parent);
         this.inputComponentId = 'count-handler-form-input';
         this.addBindings();
+        this.isSortable = parent?.isSortable;
     }
 
     public findFormValue(property: string): ObjectFormValue {
