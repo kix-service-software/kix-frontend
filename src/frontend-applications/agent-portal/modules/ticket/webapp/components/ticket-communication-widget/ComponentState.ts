@@ -13,7 +13,7 @@ import { Article } from '../../../model/Article';
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public articles: Article[] = [],
+        public articleIds: number[] = [],
         public widgetTitle: string = '',
         public newestArticleId: number = null,
         public expanded: boolean = false,

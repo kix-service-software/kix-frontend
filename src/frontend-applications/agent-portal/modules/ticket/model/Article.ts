@@ -16,6 +16,8 @@ import { ArticleReceiver } from './ArticleReceiver';
 import { ArticleProperty } from './ArticleProperty';
 import addrparser from 'address-rfc2822';
 import { Ticket } from './Ticket';
+import { User } from '../../user/model/User';
+import { Contact } from '../../customer/model/Contact';
 
 export class Article extends KIXObject {
 
@@ -29,7 +31,7 @@ export class Article extends KIXObject {
 
     public CustomerVisible: boolean = null;
 
-    public From: string = null;
+    public From: string | Contact = null;
 
     public FromRealname: string = null;
 
@@ -77,7 +79,7 @@ export class Article extends KIXObject {
 
     public Flags: ArticleFlag[] = null;
 
-    public CreatedBy: number = null;
+    public CreatedBy: User | number = null;
     public ChangedBy: number = null;
 
     public Plain: string = null;
@@ -160,6 +162,18 @@ export class Article extends KIXObject {
             this.smimeEncrypted = this.SenderType !== 'external' && this.SMIMEEncrypted && !Boolean(this.SMIMEEncryptedError);
 
             this.bodyAttachment = article.bodyAttachment;
+
+            if (typeof article.From === 'object' && !Array.isArray(article.From)) {
+                this.From = new Contact(article.From);
+            }
+
+            if (Array.isArray(article.From)) {
+                this.From = article.From?.length > 0 ? article.From[0] : '';
+            }
+
+            if (typeof article.CreatedBy === 'object') {
+                this.CreatedBy = new User(article.CreatedBy);
+            }
 
             if (this.Attachments) {
                 let attachmentIndex = article.Attachments.findIndex(

@@ -159,7 +159,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 token, uri, clientRequestId, query
             );
         } else if (loadingOptions.filter) {
-            const success = await this.buildFilter(loadingOptions.filter, 'ConfigItem', query, token);
+            const success = await this.buildFilter(loadingOptions.filter, 'ConfigItem', query, token, this.objectType);
             if (!success) {
                 LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
                 return new ObjectResponse([], 0);
@@ -223,7 +223,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 }
 
             } else if (loadingOptions.filter) {
-                const success = await this.buildFilter(loadingOptions.filter, 'Image', query, token);
+                const success = await this.buildFilter(loadingOptions.filter, 'Image', query, token, this.objectType);
                 if (!success) {
                     LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
                     return [];
