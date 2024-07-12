@@ -302,12 +302,8 @@ export class SearchService {
         if (Array.isArray(objects) && objects.length === 1) {
             const contextService = ContextService.getInstance();
             const contextDescriptors = contextService.getContextDescriptors(ContextMode.DETAILS);
-            const detailContextId = contextDescriptors.find(
-                (cd) => cd.kixObjectTypes.some((ot) =>
-                    ot === objectType)
-            );
+            const detailContextId = contextDescriptors.find((d) => d.kixObjectTypes.some((ot) => ot === objectType));
             if (detailContextId) {
-                contextService.toggleActiveContext();
                 contextService.setActiveContext(detailContextId.contextId, objects[0].ObjectId);
             }
         } else {
