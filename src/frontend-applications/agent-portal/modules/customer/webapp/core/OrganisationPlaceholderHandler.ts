@@ -24,7 +24,10 @@ export class OrganisationPlaceholderHandler extends AbstractPlaceholderHandler {
     protected objectStrings: string[] = ['ORGANISATION'];
 
 
-    public async replace(placeholder: string, organisation?: Organisation, language?: string): Promise<string> {
+    public async replace(
+        placeholder: string, organisation?: Organisation, language?: string, forRichtext?: boolean,
+        translate: boolean = true
+    ): Promise<string> {
         let result = '';
         if (organisation) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
@@ -34,8 +37,9 @@ export class OrganisationPlaceholderHandler extends AbstractPlaceholderHandler {
                 DynamicFieldValuePlaceholderHandler
             ) {
                 const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
-                result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(organisation,
-                    optionsString);
+                result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(
+                    organisation, optionsString, language, forRichtext, translate
+                );
             }
             else if (attribute && this.isKnownProperty(attribute)) {
                 switch (attribute) {
@@ -55,14 +59,19 @@ export class OrganisationPlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case KIXObjectProperty.CREATE_TIME:
                     case KIXObjectProperty.CHANGE_TIME:
-                        result = await DateTimeUtil.getLocalDateTimeString(organisation[attribute], language);
+                        if (translate) {
+                            result = await DateTimeUtil.getLocalDateTimeString(organisation[attribute], language);
+                        } else {
+                            result = organisation[attribute];
+                        }
                         break;
                     default:
                         result = await LabelService.getInstance().getDisplayText(
                             organisation, attribute, undefined, false
                         );
                         result = typeof result !== 'undefined' && result !== null
-                            ? await TranslationService.translate(result.toString(), undefined, language) : '';
+                            ? translate ? await TranslationService.translate(result.toString(), undefined, language)
+                                : result.toString() : '';
                 }
             }
         }
