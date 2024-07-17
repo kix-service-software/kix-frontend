@@ -111,23 +111,28 @@ export class MFAContactFormService extends ExtendedContactFormService {
         parameter: [string, any][], createOptions?: KIXObjectSpecificCreateOptions,
         formContext?: FormContext, formInstance?: FormInstance
     ): Promise<[string, any][]> {
-        let preferencesValue = parameter.find((p) => p[0] === UserProperty.PREFERENCES);
-        if (!preferencesValue) {
-            preferencesValue = [UserProperty.PREFERENCES, []];
-            parameter.push(preferencesValue);
-        }
+        const isAgentParameter = parameter.find((p) => p[0] === UserProperty.IS_AGENT);
+        const isCustomerParameter = parameter.find((p) => p[0] === UserProperty.IS_CUSTOMER);
 
-        if (!Array.isArray(preferencesValue[1])) {
-            preferencesValue[1] = [];
-        }
+        if (isAgentParameter || isCustomerParameter) {
+            let preferencesValue = parameter.find((p) => p[0] === UserProperty.PREFERENCES);
+            if (!preferencesValue) {
+                preferencesValue = [UserProperty.PREFERENCES, []];
+                parameter.push(preferencesValue);
+            }
 
-        const preferences = preferencesValue[1];
+            if (!Array.isArray(preferencesValue[1])) {
+                preferencesValue[1] = [];
+            }
 
-        const mfaConfigs = await MFAService.getInstance().loadMFAConfigs();
-        for (const mfaConfig of mfaConfigs) {
-            const mfaProperty = MFAService.getInstance().getMFAPreference(mfaConfig, false);
-            const mfaValue = await formInstance.getFormFieldValueByProperty(mfaProperty);
-            preferences.push({ID: mfaProperty, Value: mfaValue?.value});
+            const preferences = preferencesValue[1];
+
+            const mfaConfigs = await MFAService.getInstance().loadMFAConfigs();
+            for (const mfaConfig of mfaConfigs) {
+                const mfaProperty = MFAService.getInstance().getMFAPreference(mfaConfig, false);
+                const mfaValue = await formInstance.getFormFieldValueByProperty(mfaProperty);
+                preferences.push({ ID: mfaProperty, Value: mfaValue?.value });
+            }
         }
 
         return parameter;
