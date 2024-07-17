@@ -10,56 +10,66 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
-import { BrowserUtil } from '../../core/BrowserUtil';
 import { RoutingService } from '../../core/RoutingService';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 class Component {
 
     private state: ComponentState;
+    private routingConfiguration: RoutingConfiguration;
+    private objectId: number;
+    private object: KIXObject;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public onInput(input: ComponentState): void {
-        this.state.routingConfiguration = input.routingConfiguration ? { ...input.routingConfiguration } : null;
-        this.state.objectId = input.objectId || this.state.routingConfiguration?.replaceObjectId;
-        this.state.object = input.object;
+    public onInput(input: any): void {
+        this.routingConfiguration = input.routingConfiguration ? { ...input.routingConfiguration } : null;
+        this.objectId = input.objectId || this.routingConfiguration?.replaceObjectId;
+        this.object = input.object;
         this.setURL();
     }
 
     private async setURL(): Promise<void> {
         this.state.loading = true;
-        if (this.state.routingConfiguration) {
+
+        if (this.routingConfiguration?.url) {
+            this.state.url = this.routingConfiguration.url;
+            this.state.isExternalUrl = true;
+        } else if (this.routingConfiguration) {
             this.setContextIdIfNecessary();
             this.state.url = await ContextService.getInstance().getURI(
-                this.state.routingConfiguration.contextId, this.state.objectId,
-                this.state.routingConfiguration.params
+                this.routingConfiguration.contextId, this.objectId,
+                this.routingConfiguration.params
             );
-        } else if (this.state.object) {
-            const url = await KIXObjectService.getObjectUrl(this.state.object);
+        } else if (this.object) {
+            const url = await KIXObjectService.getObjectUrl(this.object);
             if (url) {
                 this.state.url = '/' + url;
             }
         }
 
-        this.state.isExternalUrl = this.state.url?.toLowerCase().startsWith('http');
+        if (!this.routingConfiguration.url) {
+            this.state.isExternalUrl = this.state.url?.toLowerCase().startsWith('http');
+        }
 
         this.state.loading = false;
     }
 
     private setContextIdIfNecessary(): void {
-        if (!this.state.routingConfiguration.contextId &&
-            this.state.routingConfiguration.contextMode &&
-            this.state.routingConfiguration.objectType
+        if (!this.routingConfiguration.contextId &&
+            this.routingConfiguration.contextMode &&
+            this.routingConfiguration.objectType
         ) {
             const descriptors = ContextService.getInstance().getContextDescriptors(
-                this.state.routingConfiguration.contextMode,
-                this.state.routingConfiguration.objectType
+                this.routingConfiguration.contextMode,
+                this.routingConfiguration.objectType
             );
             // use id of first found
             if (descriptors?.length) {
-                this.state.routingConfiguration.contextId = descriptors[0].contextId;
+                this.routingConfiguration.contextId = descriptors[0].contextId;
             }
         }
     }
@@ -69,8 +79,8 @@ class Component {
             event.preventDefault();
         }
 
-        if (this.state.routingConfiguration?.contextId) {
-            RoutingService.getInstance().routeTo(this.state.routingConfiguration, this.state.objectId);
+        if (this.routingConfiguration?.contextId) {
+            RoutingService.getInstance().routeTo(this.routingConfiguration, this.objectId);
         }
     }
 
