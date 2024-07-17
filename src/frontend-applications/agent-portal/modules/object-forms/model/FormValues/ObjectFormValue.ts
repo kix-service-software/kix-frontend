@@ -369,10 +369,10 @@ export class ObjectFormValue<T = any> {
     }
 
     protected isSameValue(value: any): boolean {
-        if (
-            !this.hasValue(this.value) &&
-            !this.hasValue(value)
-        ) return true;
+        if (!this.hasValue(this.value) && !this.hasValue(value)) {
+            return true;
+        }
+
         let isSameValue = false;
         if (Array.isArray(this.value) && Array.isArray(value)) {
             isSameValue = this.value.length === value.length;

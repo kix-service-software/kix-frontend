@@ -86,10 +86,9 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
                 this.initPromise = null;
 
-                await this.setVisibility(this.formValuesVisible);
+                await this.setDFValue(true);
 
                 this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
-
                 resolve();
             });
         }
@@ -117,6 +116,14 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         } else {
             super.setFormValue(value, force);
         }
+    }
+
+    public async setObjectValue(value: any): Promise<void> {
+        for (const fv of this.formValues) {
+            await fv.setObjectValue(value);
+        }
+
+        super.setObjectValue(value);
     }
 
     protected clearFormValues(): void {
@@ -220,8 +227,6 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             fv.setInitialState();
             await fv.setFormValue(value || this.defaultValue, force);
 
-            this.setDFValue();
-
             await this.setVisibility(this.formValuesVisible);
 
             fv.addPropertyBinding(FormValueProperty.VALUE, () => {
@@ -250,7 +255,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
     }
 
-    public setDFValue(force?: boolean): void {
+    public async setDFValue(force?: boolean): Promise<void> {
         const value = [];
         const dfValues = this.dfValues;
         if (Array.isArray(dfValues)) {
@@ -265,7 +270,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             }
         }
 
-        this.setFormValue(value, force);
+        await this.setFormValue(value, force);
     }
 
     protected async applyCountMax(): Promise<void> {
