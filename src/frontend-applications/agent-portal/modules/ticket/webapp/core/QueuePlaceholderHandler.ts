@@ -23,7 +23,10 @@ export class QueuePlaceholderHandler extends AbstractPlaceholderHandler {
 
     public handlerId: string = '300-QueuePlaceholderHandler';
 
-    public async replace(placeholder: string, ticket?: Ticket, language?: string): Promise<string> {
+    public async replace(
+        placeholder: string, ticket?: Ticket, language?: string, forRichtext?: boolean,
+        translate: boolean = true
+    ): Promise<string> {
         let result = '';
         const queue = await this.getQueue(ticket);
         if (queue) {
@@ -43,17 +46,22 @@ export class QueuePlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case KIXObjectProperty.CREATE_TIME:
                     case KIXObjectProperty.CHANGE_TIME:
-                        result = await DateTimeUtil.getLocalDateTimeString(queue[attribute], language);
+                        if (translate) {
+                            result = await DateTimeUtil.getLocalDateTimeString(queue[attribute], language);
+                        } else {
+                            result = queue[attribute];
+                        }
                         break;
                     case QueueProperty.SUB_QUEUES:
                         break;
                     case QueueProperty.SIGNATURE:
-                        result = await this.prepareSignature(queue, ticket, attribute, language);
+                        result = await this.prepareSignature(queue, ticket, attribute, language, forRichtext);
                         break;
                     default:
                         result = await LabelService.getInstance().getDisplayText(queue, attribute, undefined, false);
                         result = typeof result !== 'undefined' && result !== null
-                            ? await TranslationService.translate(result.toString(), undefined, language) : '';
+                            ? translate ? await TranslationService.translate(result.toString(), undefined, language)
+                                : result.toString() : '';
                 }
             }
         }
@@ -77,7 +85,9 @@ export class QueuePlaceholderHandler extends AbstractPlaceholderHandler {
         return queue;
     }
 
-    private async prepareSignature(queue: Queue, ticket: Ticket, attribute: string, language: string): Promise<string> {
+    private async prepareSignature(
+        queue: Queue, ticket: Ticket, attribute: string, language: string, forRichtext?: boolean
+    ): Promise<string> {
         let result = await LabelService.getInstance().getDisplayText(queue, attribute, undefined, false);
         const signatureRegex = PlaceholderService.getInstance().getPlaceholderRegex(
             'QUEUE', QueueProperty.SIGNATURE, false
@@ -86,7 +96,7 @@ export class QueuePlaceholderHandler extends AbstractPlaceholderHandler {
             result = result.replace(signatureRegex, '');
         }
         result = await PlaceholderService.getInstance().replacePlaceholders(
-            result, ticket, language
+            result, ticket, language, forRichtext
         );
         return result;
     }

@@ -49,7 +49,7 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     public async replace(
-        placeholder: string, article: Article, language?: string, forRichtext?: boolean
+        placeholder: string, article: Article, language?: string, forRichtext?: boolean, translate: boolean = true
     ): Promise<string> {
         let result = '';
         if (article) {
@@ -62,7 +62,7 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                     (ph) => ph.isHandlerFor(placeholder)
                 );
                 if (handler) {
-                    result = await handler.replace(placeholder, article, language);
+                    result = await handler.replace(placeholder, article, language, forRichtext, translate);
                     normalArticleAttribut = false;
                 }
             }
@@ -143,7 +143,11 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case KIXObjectProperty.CREATE_TIME:
                     case KIXObjectProperty.CHANGE_TIME:
-                        result = await DateTimeUtil.getLocalDateTimeString(article[attribute], language);
+                        if (translate) {
+                            result = await DateTimeUtil.getLocalDateTimeString(article[attribute], language);
+                        } else {
+                            article[attribute];
+                        }
                         break;
                     default:
                         if (attribute === ArticleProperty.CUSTOMER_VISIBLE && optionsString && optionsString === 'ObjectValue') {
@@ -151,7 +155,8 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         }
                         result = await LabelService.getInstance().getDisplayText(article, attribute, undefined, false);
                         result = typeof result !== 'undefined' && result !== null
-                            ? await TranslationService.translate(result.toString(), undefined, language) : '';
+                            ? translate ? await TranslationService.translate(result.toString(), undefined, language)
+                                : result.toString() : '';
                 }
             }
         }

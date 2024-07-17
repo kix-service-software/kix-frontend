@@ -62,7 +62,9 @@ export interface ILabelProvider<T = any> {
 
     canShow(property: string, object: T): boolean;
 
-    getDFDisplayValues(fieldValue: DynamicFieldValue, short?: boolean): Promise<[string[], string, string[]]>;
+    getDFDisplayValues(
+        fieldValue: DynamicFieldValue, short?: boolean, language?: string
+    ): Promise<[string[], string, string[]]>;
 
     createLabelsFromDFValue(fieldValue: DynamicFieldValue): Promise<Label[]>;
 
