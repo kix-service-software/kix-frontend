@@ -13,6 +13,7 @@ import { Macro } from './Macro';
 import { ExecPlan } from './ExecPlan';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { JobTypes } from './JobTypes';
+import { JobSortOrder } from './JobSortOrder';
 
 export class Job extends KIXObject {
 
@@ -38,6 +39,7 @@ export class Job extends KIXObject {
 
     public Filter: any[];
 
+    public SortOrder: JobSortOrder;
     public IsAsynchronous: boolean;
 
     public constructor(job?: Job) {
@@ -63,6 +65,8 @@ export class Job extends KIXObject {
             this.ExecPlans = job.ExecPlans
                 ? job.ExecPlans.map((ep) => new ExecPlan(ep))
                 : null;
+
+            this.SortOrder = new JobSortOrder(job.SortOrder);
 
             this.prepareFilter();
         }

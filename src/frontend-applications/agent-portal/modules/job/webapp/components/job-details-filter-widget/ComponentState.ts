@@ -19,6 +19,9 @@ export class ComponentState extends WidgetComponentState {
         public show: boolean = true,
         public tables: Table[] = [],
         public title: string = '',
+        public sortAttribute: string = '',
+        public sortDescending: boolean = false,
+        public sortDescendingTooltip: string = ''
     ) {
         super();
     }

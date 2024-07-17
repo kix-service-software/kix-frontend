@@ -20,6 +20,8 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -62,18 +64,36 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const manager = JobFormService.getInstance().getJobFormManager(job.Type);
         if (manager && manager.supportFilter() && this.state.widgetConfiguration) {
             this.state.title = this.state.widgetConfiguration.title;
-            if (Array.isArray(job.Filter)) {
-                const tablePromises = [];
-                job.Filter.forEach((orFilter, index) => {
-                    if (typeof orFilter === 'object') {
-                        tablePromises.push(this.prepareTable(job.ID, index));
-                    }
-                });
-                this.state.tables = (await Promise.all(tablePromises)).filter((t) => t);
-                setTimeout(() => this.state.prepared = true, 50);
-            }
+            await this.prepareFilter(job);
+            await this.prepareSort(job);
         } else {
             this.state.show = false;
+        }
+    }
+
+    private async prepareFilter(job: Job): Promise<void> {
+        if (Array.isArray(job.Filter)) {
+            const tablePromises = [];
+            job.Filter.forEach((orFilter, index) => {
+                if (typeof orFilter === 'object') {
+                    tablePromises.push(this.prepareTable(job.ID, index));
+                }
+            });
+            this.state.tables = (await Promise.all(tablePromises)).filter((t) => t);
+            setTimeout(() => this.state.prepared = true, 50);
+        }
+    }
+
+    private async prepareSort(job: Job): Promise<void> {
+        if (job.SortOrder?.Field) {
+            this.state.sortDescending = Boolean(job.SortOrder?.Direction === 'descending');
+            this.state.sortDescendingTooltip = await TranslationService.translate(
+                this.state.sortDescending ? 'Translatable#descending' : 'Translatable#ascending'
+            );
+
+            this.state.sortAttribute = await LabelService.getInstance().getPropertyText(
+                job.SortOrder.Field, job.Type
+            );
         }
     }
 
