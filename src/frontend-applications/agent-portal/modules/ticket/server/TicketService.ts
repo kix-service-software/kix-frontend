@@ -705,7 +705,14 @@ export class TicketAPIService extends KIXObjectAPIService {
             include: 'Content',
             RelevantOrganisationID: relevantOrganisationId
         });
-        return response?.responseData?.Attachment;
+
+        const attachment = response?.responseData?.Attachment;
+        const preparedAttachment = new Attachment(attachment);
+
+        const user = await UserService.getInstance().getUserByToken(token);
+        FileService.prepareFileForDownload(user?.UserID, preparedAttachment);
+
+        return preparedAttachment;
     }
 
     public async setArticleSeenFlag(

@@ -124,7 +124,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             const attachment = await TicketService.getInstance().loadArticleZipAttachment(
                 this.state.article.TicketID, this.state.article.ArticleID
             );
-            BrowserUtil.startBrowserDownload(attachment.Filename, attachment.Content, attachment.ContentType);
+            BrowserUtil.startFileDownload(attachment);
         }
     }
 }
