@@ -36,13 +36,13 @@ class Component {
         this.state.loading = true;
 
         if (this.routingConfiguration?.url) {
-            this.state.url = this.routingConfiguration.url;
+            this.state.url = this.routingConfiguration?.url;
             this.state.isExternalUrl = true;
         } else if (this.routingConfiguration) {
             this.setContextIdIfNecessary();
             this.state.url = await ContextService.getInstance().getURI(
-                this.routingConfiguration.contextId, this.objectId,
-                this.routingConfiguration.params
+                this.routingConfiguration?.contextId, this.objectId,
+                this.routingConfiguration?.params
             );
         } else if (this.object) {
             const url = await KIXObjectService.getObjectUrl(this.object);
@@ -51,7 +51,7 @@ class Component {
             }
         }
 
-        if (!this.routingConfiguration.url) {
+        if (!this.routingConfiguration?.url) {
             this.state.isExternalUrl = this.state.url?.toLowerCase().startsWith('http');
         }
 
@@ -59,13 +59,13 @@ class Component {
     }
 
     private setContextIdIfNecessary(): void {
-        if (!this.routingConfiguration.contextId &&
-            this.routingConfiguration.contextMode &&
-            this.routingConfiguration.objectType
+        if (!this.routingConfiguration?.contextId &&
+            this.routingConfiguration?.contextMode &&
+            this.routingConfiguration?.objectType
         ) {
             const descriptors = ContextService.getInstance().getContextDescriptors(
-                this.routingConfiguration.contextMode,
-                this.routingConfiguration.objectType
+                this.routingConfiguration?.contextMode,
+                this.routingConfiguration?.objectType
             );
             // use id of first found
             if (descriptors?.length) {
