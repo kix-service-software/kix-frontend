@@ -257,8 +257,8 @@ export class ContactService extends KIXObjectService<Contact> {
             supportedAttributes;
     }
 
-    protected async getSortOrder(property: string, descanding: boolean, orgProperty: string): Promise<string> {
-        let sort = await super.getSortOrder(property, descanding, orgProperty);
+    protected async getSortOrder(property: string, descending: boolean, orgProperty: string): Promise<string> {
+        let sort = await super.getSortOrder(property, descending, orgProperty);
 
         // add second sort with counterpart to prevent mixed results on "is not ... and has no user"
         // result should be like "is agent, then all is not agent and then all without user" or vice versa
@@ -268,7 +268,7 @@ export class ContactService extends KIXObjectService<Contact> {
             );
             if (counterpart) {
                 const sortType = await this.getSortType(counterpart, this.objectType);
-                sort = `${sort},${this.objectType}.${descanding ? '-' : ''}${counterpart}:${sortType}`;
+                sort = `${sort},${this.objectType}.${descending ? '-' : ''}${counterpart}:${sortType}`;
             }
         }
         return sort;

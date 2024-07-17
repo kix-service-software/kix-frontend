@@ -11,12 +11,34 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <widget instanceId=state.instanceId title=state.title>
         <@content>
             <if(state.prepared)>
-                <for|table,index| of=state.tables>
+                <for|table, index| of=state.tables>
                     <kix-table table=table/>
-                    <if(index+1 < state.tables.length)>
-                        <p.filter-separator><translation-string pattern="or"/></p>
+                    <if(index + 1 < state.tables.length)>
+                        <p class="filter-separator">
+                            <translation-string pattern="or"/>
+                        </p>
                     </if>
                 </for>
+                <if(state.sortAttribute)>
+                    <div class="job-sort-order-details">
+
+                        <span>
+                            <translation-string pattern="Translatable#Sort order:"/>
+                        </span>
+                        <span class="sort-order-container">
+                            ${state.sortAttribute}
+                            <icon
+                                icon=(
+                                    state.sortDescending
+                                        ? "kix-icon-sort-down"
+                                        : "kix-icon-sort-up"
+                                )
+                                tooltip=state.sortDescendingTooltip
+                            />
+                        </span>
+                        <span>(${state.sortDescendingTooltip})</span>
+                    </div>
+                </if>
             </if>
         </@content>
     </widget>

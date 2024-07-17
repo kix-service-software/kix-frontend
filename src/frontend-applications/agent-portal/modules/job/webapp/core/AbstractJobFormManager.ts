@@ -42,6 +42,7 @@ export class AbstractJobFormManager {
     protected execPageId: string = 'job-form-page-execution-plan';
     protected filterPageId: string = 'job-form-page-filters';
     protected actionPageId: string = 'job-form-page-actions';
+    protected supportsSort: boolean = false;
 
     public getFilterManager(): AbstractDynamicFormManager {
         return;
@@ -206,10 +207,20 @@ export class AbstractJobFormManager {
             1, 10, 0
         );
         filters.countSeparatorString = 'or';
+
         const filterGroup = new FormGroupConfiguration(
             'job-new-form-group-filters', 'Translatable#Filter',
             undefined, undefined, [filters]
         );
+
+        if (this.supportsSort) {
+            const sortOrder = new FormFieldConfiguration(
+                'job-form-field-sortOrder',
+                'Translatable#Sort order', JobProperty.SORT_ORDER, 'job-input-sortOrder', false,
+                'Translatable#Helptext_Admin_JobCreateEdit_SortOrder', undefined,
+            );
+            filterGroup.formFields.push(sortOrder);
+        }
 
         return new FormPageConfiguration(
             this.filterPageId, 'Translatable#Filter',

@@ -23,6 +23,8 @@ import { TicketSearchFormManager } from './TicketSearchFormManager';
 
 export class TicketJobFormManager extends AbstractJobFormManager {
 
+    protected supportsSort: boolean = true;
+
     public getFilterManager(): AbstractDynamicFormManager {
         let filterManager;
         const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
