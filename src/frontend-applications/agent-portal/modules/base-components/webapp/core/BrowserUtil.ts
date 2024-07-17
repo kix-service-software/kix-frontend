@@ -31,6 +31,8 @@ export class BrowserUtil {
 
     private static userColors: Map<number, string> = new Map();
 
+    public static readonly URL_REGEX = /(https?|ftps?|sftp):\/\/[^\s]+/;
+
     public static openErrorOverlay(error: string): void {
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', null, true
