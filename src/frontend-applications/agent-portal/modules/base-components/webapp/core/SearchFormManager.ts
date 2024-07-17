@@ -63,21 +63,27 @@ export class SearchFormManager extends AbstractDynamicFormManager {
         return operations.filter((o, index) => operations.indexOf(o) === index);
     }
 
-    public async getSortAttributeTree(withDynamicFields: boolean = true): Promise<TreeNode[]> {
+    public async getSortAttributeTree(
+        withDynamicFields: boolean = true, useRealSortAttribute?: boolean
+    ): Promise<TreeNode[]> {
         const supportedAttributes = await KIXObjectService.getSortableAttributes(this.objectType);
         const nodes: TreeNode[] = [];
         if (Array.isArray(supportedAttributes)) {
             const labelPromises = [];
             for (const sA of supportedAttributes) {
-                labelPromises.push(
-                    new Promise<void>(async (resolve) => {
-                        const label = await LabelService.getInstance().getPropertyText(
-                            sA.Property, this.objectType
-                        );
-                        nodes.push(new TreeNode(sA.Property, label));
-                        resolve();
-                    })
-                );
+                if (sA) {
+                    const property = useRealSortAttribute ?
+                        KIXObjectService.getSortAttribute(this.objectType, sA.Property) : sA.Property;
+                    labelPromises.push(
+                        new Promise<void>(async (resolve) => {
+                            const label = await LabelService.getInstance().getPropertyText(
+                                property, this.objectType
+                            );
+                            nodes.push(new TreeNode(property, label));
+                            resolve();
+                        })
+                    );
+                }
             }
             await Promise.all(labelPromises);
         }

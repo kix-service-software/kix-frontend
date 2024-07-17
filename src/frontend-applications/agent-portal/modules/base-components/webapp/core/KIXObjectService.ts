@@ -867,13 +867,13 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async getSortOrder(
-        property: string, descanding: boolean = false, objectType: KIXObjectType | string
+        property: string, descending: boolean = false, objectType: KIXObjectType | string
     ): Promise<string> {
         let sortOrder = null;
         if (property) {
             const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
             if (service) {
-                sortOrder = await service.getSortOrder(property, descanding, objectType);
+                sortOrder = await service.getSortOrder(property, descending, objectType);
             } else {
                 const errorMessage = `No service registered for object type ${objectType}`;
                 console.warn(errorMessage);
@@ -884,7 +884,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     protected async getSortOrder(
-        property: string, descanding: boolean, objectType: KIXObjectType | string
+        property: string, descending: boolean, objectType: KIXObjectType | string
     ): Promise<string> {
         property = this.getSortAttribute(property);
         const sortType = await this.getSortType(property, objectType);
@@ -893,7 +893,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 /^DynamicFields\.(.+)$/, 'DynamicField_$1'
             );
         }
-        return `${this.objectType}.${descanding ? '-' : ''}${property}:${sortType}`;
+        return `${this.objectType}.${descending ? '-' : ''}${property}:${sortType}`;
     }
 
     protected async getSortType(property: string, objectType: KIXObjectType | string): Promise<BackendSearchDataType> {
@@ -910,6 +910,20 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             }
         }
         return sortType;
+    }
+
+    public static getSortAttribute(objectType: KIXObjectType | string, attribute: string, dep?: string): string {
+        if (attribute) {
+            const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+            if (service) {
+                attribute = service.getSortAttribute(attribute, dep);
+            } else {
+                const errorMessage = `No service registered for object type ${objectType}`;
+                console.warn(errorMessage);
+            }
+        }
+
+        return attribute;
     }
 
     public getSortAttribute(attribute: string, dep?: string): string {

@@ -906,10 +906,10 @@ export abstract class Context {
     }
 
     public async setSortOrder(
-        type: string, property: string, descanding: boolean, reload: boolean = true, limit?: number
+        type: string, property: string, descending: boolean, reload: boolean = true, limit?: number
     ): Promise<void> {
         if (type) {
-            const sort: [string, boolean] = [property, descanding];
+            const sort: [string, boolean] = [property, descending];
             this.objectSorts.set(type, sort);
             if (reload) {
                 await this.reloadObjectList(type, undefined, limit);

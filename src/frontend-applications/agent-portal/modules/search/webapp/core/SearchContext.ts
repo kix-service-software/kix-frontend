@@ -158,9 +158,9 @@ export abstract class SearchContext extends Context {
     }
 
     public async setSortOrder(
-        type: string, property: string, descanding: boolean, reload: boolean = true, limit?: number
+        type: string, property: string, descending: boolean, reload: boolean = true, limit?: number
     ): Promise<void> {
-        super.setSortOrder(type, property, descanding, false, limit);
+        super.setSortOrder(type, property, descending, false, limit);
         if (reload) {
             await SearchService.getInstance().searchObjects(
                 this.searchCache, undefined, undefined, limit, undefined

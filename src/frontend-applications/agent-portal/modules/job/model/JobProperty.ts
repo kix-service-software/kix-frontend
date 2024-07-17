@@ -27,6 +27,8 @@ export enum JobProperty {
 
     FILTER = 'Filter',
 
+    SORT_ORDER = 'SortOrder',
+
     EXEC = 'Exec',
 
     IS_ASYNCHRONOUS = 'IsAsynchronous',
