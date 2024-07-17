@@ -82,10 +82,10 @@ export class TicketNamespace extends SocketNameSpace {
 
         const response = await TicketAPIService.getInstance().loadArticleZipAttachment(
             token, data.ticketId, data.articleId, data.relevantOrganisationId
-        ).then((attachments) =>
+        ).then((attachment) =>
             new SocketResponse(
                 TicketEvent.ARTICLE_ZIP_ATTACHMENT_LOADED,
-                new LoadArticleAttachmentResponse(data.requestId, attachments[0])
+                new LoadArticleAttachmentResponse(data.requestId, [attachment])
             )
         ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
