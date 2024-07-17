@@ -82,7 +82,8 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     public async replace(
-        placeholder: string, ticket?: Ticket, language?: string, forRichtext?: boolean
+        placeholder: string, ticket?: Ticket, language?: string, forRichtext?: boolean,
+        translate: boolean = true
     ): Promise<string> {
         let result = '';
         if (this.isHandlerFor(placeholder)) {
@@ -95,40 +96,55 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 if (attribute) {
                     switch (objectString) {
                         case 'TICKET':
-                            result = await this.handleTicket(attribute, ticket, language, placeholder);
+                            result = await this.handleTicket(
+                                attribute, ticket, language, placeholder, forRichtext, translate
+                            );
                             break;
                         case 'FIRST':
                         case 'LAST':
                             result = await this.handleFLArticle(
-                                ticket, objectString, result, placeholder, language, forRichtext
+                                ticket, objectString, placeholder, language, forRichtext, translate
                             );
                             break;
                         case 'CUSTOMER':
                         case 'AGENT':
                             result = await this.handleCAArticle(
-                                ticket, objectString, result, placeholder, language, forRichtext
+                                ticket, objectString, placeholder, language, forRichtext, translate
                             );
                             break;
                         case 'ARTICLE':
-                            result = await this.handleArticle(ticket, result, placeholder, language, forRichtext);
+                            result = await this.handleArticle(
+                                ticket, placeholder, language, forRichtext, translate
+                            );
                             break;
                         case 'OWNER':
                         case 'TICKETOWNER':
-                            result = await this.handleOwner(ticket, result, placeholder, language, forRichtext);
+                            result = await this.handleOwner(
+                                ticket, placeholder, language, forRichtext, translate
+
+                            );
                             break;
                         case 'RESPONSIBLE':
                         case 'TICKETRESPONSIBLE':
-                            result = await this.handleResponsible(ticket, result, placeholder, language, forRichtext);
+                            result = await this.handleResponsible(
+                                ticket, placeholder, language, forRichtext, translate
+                            );
                             break;
                         case 'CONTACT':
-                            result = await this.handleContact(ticket, result, placeholder, language, forRichtext);
+                            result = await this.handleContact(
+                                ticket, placeholder, language, forRichtext, translate
+                            );
                             break;
                         case 'ORG':
-                            result = await this.handleOrganisation(ticket, result, placeholder, language);
+                            result = await this.handleOrganisation(
+                                ticket, placeholder, language, forRichtext, translate
+                            );
                             break;
                         case 'QUEUE':
                             if (ticket.QueueID) {
-                                result = await QueuePlaceholderHandler.prototype.replace(placeholder, ticket, language);
+                                result = await QueuePlaceholderHandler.prototype.replace(
+                                    placeholder, ticket, language, forRichtext, translate
+                                );
                             }
                             break;
                         default:
@@ -140,7 +156,8 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     private async handleOrganisation(
-        ticket: Ticket, result: string, placeholder: string, language: string
+        ticket: Ticket, placeholder: string, language: string, forRichtext?: boolean,
+        translate?: boolean
     ): Promise<string> {
         let organisation: Organisation;
         if (ticket.OrganisationID && !isNaN(Number(ticket.OrganisationID))) {
@@ -153,17 +170,20 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         } else if (ticket instanceof Organisation) {
             organisation = ticket;
         }
+        let result = '';
         if (organisation) {
             result = await OrganisationPlaceholderHandler.prototype.replace(
-                placeholder, organisation, language
+                placeholder, organisation, language, forRichtext, translate
             );
         }
         return result;
     }
 
     private async handleContact(
-        ticket: Ticket, result: string, placeholder: string, language: string, forRichtext?: boolean
+        ticket: Ticket, placeholder: string, language: string, forRichtext?: boolean,
+        translate?: boolean
     ): Promise<string> {
+        let result = '';
         let contact: Contact;
         if (ticket.ContactID && !isNaN(Number(ticket.ContactID))) {
             const contacts = await KIXObjectService.loadObjects(
@@ -177,15 +197,17 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         }
         if (contact) {
             result = await ContactPlaceholderHandler.prototype.replace(
-                placeholder, contact, language, forRichtext
+                placeholder, contact, language, forRichtext, translate
             );
         }
         return result;
     }
 
     private async handleResponsible(
-        ticket: Ticket, result: string, placeholder: string, language: string, forRichtext?: boolean
+        ticket: Ticket, placeholder: string, language: string, forRichtext?: boolean,
+        translate?: boolean
     ): Promise<string> {
+        let result = '';
         if (ticket.ResponsibleID && !isNaN(Number(ticket.ResponsibleID))) {
             const loadingOptions = new KIXObjectLoadingOptions(
                 null, null, null, null, ['Preferences']
@@ -195,7 +217,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             ).catch((error) => [] as User[]);
             if (users && !!users.length) {
                 result = await UserPlaceholderHandler.prototype.replace(
-                    placeholder, users[0], language, forRichtext
+                    placeholder, users[0], language, forRichtext, translate
                 );
             }
         }
@@ -203,8 +225,10 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     private async handleOwner(
-        ticket: Ticket, result: string, placeholder: string, language: string, forRichtext?: boolean
+        ticket: Ticket, placeholder: string, language: string, forRichtext?: boolean,
+        translate?: boolean
     ): Promise<string> {
+        let result = '';
         if (ticket.OwnerID && !isNaN(Number(ticket.OwnerID))) {
             const loadingOptions = new KIXObjectLoadingOptions(
                 null, null, null,
@@ -216,7 +240,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             ).catch((error) => [] as User[]);
             if (users && !!users.length) {
                 result = await UserPlaceholderHandler.prototype.replace(
-                    placeholder, users[0], language, forRichtext
+                    placeholder, users[0], language, forRichtext, translate
                 );
             }
         }
@@ -224,8 +248,10 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     private async handleArticle(
-        ticket: Ticket, result: string, placeholder: string, language: string, forRichtext?: boolean
+        ticket: Ticket, placeholder: string, language: string, forRichtext?: boolean,
+        translate?: boolean
     ): Promise<string> {
+        let result = '';
         const dialogContext = ContextService.getInstance().getActiveContext();
         if (dialogContext) {
             const articleId = dialogContext.getAdditionalInformation(
@@ -239,7 +265,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 }
                 if (referencedArticle) {
                     result = await ArticlePlaceholderHandler.getInstance().replace(
-                        placeholder, referencedArticle, language, forRichtext
+                        placeholder, referencedArticle, language, forRichtext, translate
                     );
                 }
             }
@@ -248,9 +274,10 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     private async handleCAArticle(
-        ticket: Ticket, objectString: string, result: string, placeholder: string, language: string,
-        forRichtext?: boolean
+        ticket: Ticket, objectString: string, placeholder: string, language: string, forRichtext?: boolean,
+        translate?: boolean
     ): Promise<string> {
+        let result = '';
         const caArticles = await this.getArticles(ticket);
         if (caArticles && !!caArticles.length) {
             const relevantArticles = caArticles.filter(
@@ -261,7 +288,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             )[0];
             if (lastArticle) {
                 result = await ArticlePlaceholderHandler.getInstance().replace(
-                    placeholder, lastArticle, language, forRichtext
+                    placeholder, lastArticle, language, forRichtext, translate
                 );
             }
         }
@@ -269,9 +296,10 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     private async handleFLArticle(
-        ticket: Ticket, objectString: string, result: string, placeholder: string, language: string,
-        forRichtext?: boolean
+        ticket: Ticket, objectString: string, placeholder: string, language: string, forRichtext?: boolean,
+        translate?: boolean
     ): Promise<string> {
+        let result = '';
         const flArticles = await this.getArticles(ticket);
         if (flArticles && !!flArticles.length) {
             const article = SortUtil.sortObjects(
@@ -280,7 +308,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             )[0];
             if (article) {
                 result = await ArticlePlaceholderHandler.getInstance().replace(
-                    placeholder, article, language, forRichtext
+                    placeholder, article, language, forRichtext, translate
                 );
             }
         }
@@ -313,7 +341,8 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     private async handleTicket(
-        attribute: string, ticket?: Ticket, language?: string, placeholder?: string
+        attribute: string, ticket?: Ticket, language?: string, placeholder?: string, forRichtext?: boolean,
+        translate?: boolean
     ): Promise<string> {
         let result = '';
         let normalTicketAttribute: boolean = true;
@@ -322,14 +351,16 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         if (
             PlaceholderService.getInstance().isDynamicFieldAttribute(attribute) && DynamicFieldValuePlaceholderHandler
         ) {
-            result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(ticket, optionsString);
+            result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(
+                ticket, optionsString, language, forRichtext, translate
+            );
             normalTicketAttribute = false;
         } else if (this.extendedPlaceholderHandler.length && placeholder) {
             const handler = SortUtil.sortObjects(this.extendedPlaceholderHandler, 'handlerId').find(
                 (ph) => ph.isHandlerFor(placeholder)
             );
             if (handler) {
-                result = await handler.replace(placeholder, ticket, language);
+                result = await handler.replace(placeholder, ticket, language, forRichtext, translate);
                 normalTicketAttribute = false;
             }
         }
@@ -363,29 +394,39 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                         KIXObjectType.TICKET, [ticket.TicketID],
                         new KIXObjectLoadingOptions(null, null, null, [TicketProperty.STATE_PREVIOUS]), null, true
                     ).catch((error) => []);
-                    if (tickets && !!tickets.length) {
+                    if (tickets?.length) {
                         result = attribute === TicketProperty.STATE_PREVIOUS ?
                             tickets[0].StatePrevious.toString() : tickets[0].StateIDPrevious.toString();
                     }
                     if (!result) {
                         result = attribute === TicketProperty.STATE_PREVIOUS ?
-                            ticket[TicketProperty.STATE].toString() : ticket[TicketProperty.STATE_ID].toString();
+                            ticket.State.toString() : ticket.StateID.toString();
                     }
                     break;
                 case TicketProperty.CREATED:
                 case TicketProperty.CHANGED:
                 case TicketProperty.PENDING_TIME:
-                    result = await DateTimeUtil.getLocalDateTimeString(ticket[attribute], language);
+                    if (translate) {
+                        result = await DateTimeUtil.getLocalDateTimeString(ticket[attribute], language);
+                    } else {
+                        result = ticket[attribute];
+                    }
                     break;
                 case TicketProperty.CREATED_TIME_UNIX:
                     if (Number.isInteger(Number(ticket[attribute]))) {
-                        result = await DateTimeUtil.getLocalDateTimeString(Number(ticket[attribute]) * 1000, language);
+                        if (translate) {
+                            result = await DateTimeUtil.getLocalDateTimeString(
+                                Number(ticket[attribute]) * 1000, language
+                            );
+                        } else {
+                            result = ticket[attribute].toString();
+                        }
                     }
                     break;
                 case TicketProperty.TITLE:
                     result = typeof ticket.Title !== 'undefined' ? ticket.Title : await this.getArticleSubject();
                     if (optionsString && Number.isInteger(Number(optionsString))) {
-                        result = result.substr(0, Number(optionsString));
+                        result = result.substring(0, Number(optionsString));
                     }
                     break;
                 case TicketProperty.ARTICLES:
@@ -407,7 +448,8 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                     attribute = this.relevantIdAttribut[attribute] || attribute;
                     result = await LabelService.getInstance().getDisplayText(ticket, attribute, undefined, false);
                     result = typeof result !== 'undefined' && result !== null
-                        ? await TranslationService.translate(result.toString(), undefined, language) : '';
+                        ? translate ? await TranslationService.translate(result.toString(), undefined, language)
+                            : result.toString() : '';
             }
         }
         return result;
