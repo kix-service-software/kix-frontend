@@ -148,6 +148,8 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                 } else {
                     newValue = value;
                 }
+            } else {
+                newValue = '';
             }
             super.setFormValue(newValue, force);
         }, 350);
