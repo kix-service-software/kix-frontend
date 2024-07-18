@@ -141,6 +141,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async setArticleIDs(): Promise<void> {
         const ticket = await this.context?.getObject<Ticket>(KIXObjectType.TICKET);
+
+        this.state.activeUnreadAction = Number(ticket.Unseen) === 1;
+
         let articleIds = ticket?.ArticleIDs || [];
         const sortOrder = this.sortOrder === 'newest' ? SortOrder.DOWN : SortOrder.UP;
         articleIds = articleIds.sort((a, b) => SortUtil.compareNumber(a, b, sortOrder));
@@ -182,6 +185,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             );
 
             await TicketService.getInstance().markTicketAsSeen(Number(this.context.getObjectId()));
+            await this.setArticleIDs();
 
             setTimeout(() => {
                 EventService.getInstance().publish(
