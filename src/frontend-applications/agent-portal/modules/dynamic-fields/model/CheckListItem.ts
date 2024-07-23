@@ -7,6 +7,7 @@
  * --
  */
 
+import { BrowserUtil } from '../../base-components/webapp/core/BrowserUtil';
 import { CheckListInputType } from './CheckListInputType';
 import { ChecklistState } from './ChecklistState';
 
@@ -26,6 +27,8 @@ export class CheckListItem {
 
     public inputStates: ChecklistState[];
 
+    public done: boolean;
+
     public constructor(item: CheckListItem) {
         if (item) {
             this.id = item.id;
@@ -33,9 +36,20 @@ export class CheckListItem {
             this.description = item.description;
             this.input = item.input;
             this.value = item.value;
-            this.sub = item.sub || [];
-            this.inputStates = item.inputStates;
-        }
-    }
+            this.done = typeof item.done !== 'undefined' && item.done !== null
+                ? BrowserUtil.isBooleanTrue(item.done?.toString())
+                : true;
+            this.inputStates = item.inputStates?.map((is) => new ChecklistState(is)) || [];
 
+            this.sub = item.sub || [];
+            if (this.sub && !Array.isArray(this.sub)) {
+                this.sub = [this.sub];
+            }
+
+            if (this.sub?.length) {
+                this.sub = this.sub.map((s) => new CheckListItem(s));
+            }
+        }
+
+    }
 }

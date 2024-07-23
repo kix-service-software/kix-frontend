@@ -27,7 +27,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const states = this.state.item.inputStates || DynamicFieldFormUtil.getDefaultChecklistStates();
         this.state.nodes = states.map((s) => new TreeNode(s.value, s.value, s.icon));
         this.state.selectedNode = this.state.nodes.find(
-            (n) => n.id.toLowerCase() === this.state.item?.value.toLowerCase() && n.id !== '-'
+            (n) => n.id.toLowerCase() === this.state.item?.value?.toLowerCase() && n.id !== '-'
         );
         this.state.prepared = true;
     }
