@@ -62,7 +62,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         await this.toggleArticleContent(false);
 
         const focusedArticleId = this.context.getAdditionalInformation('CURRENT_ARTICLE_FOCUS');
-        if (focusedArticleId === this.article?.ArticleID) {
+        if (focusedArticleId === this.articleId) {
             setTimeout(() => this.scrollToArticle(), 500);
         }
 
@@ -72,7 +72,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private registerContextListener(): void {
-        this.contextListenerId = IdService.generateDateBasedId('message-content-' + this.article?.ArticleID);
+        this.contextListenerId = IdService.generateDateBasedId('message-content-' + this.articleId);
         this.contextListener = {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
@@ -82,7 +82,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             scrollInformationChanged: (objectType: KIXObjectType | string, objectId: string | number): void => {
                 if (
                     objectType === KIXObjectType.ARTICLE &&
-                    this.article?.ArticleID.toString() === objectId.toString()
+                    this.articleId.toString() === objectId.toString()
                 ) {
                     this.scrollToArticle();
                 }
@@ -236,7 +236,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async toggleArticleContent(setFocus: boolean = true): Promise<void> {
-        if (this.state.expanded) {
+        if (this.state.expanded && this.state.article) {
             this.state.loadingContent = true;
 
             this.prepareAttachments();
@@ -259,7 +259,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.loadingContent = false;
             this.state.showContent = true;
 
-            this.context.setAdditionalInformation('CURRENT_ARTICLE_FOCUS', this.article?.ArticleID);
+            this.context.setAdditionalInformation('CURRENT_ARTICLE_FOCUS', this.articleId);
         }
 
         this.saveArticleToggleState();
@@ -271,8 +271,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             toggleState = new Map();
         }
 
-        if (this.article?.ArticleID) {
-            toggleState.set(this.article?.ArticleID, this.state.expanded);
+        if (this.articleId) {
+            toggleState.set(this.articleId, this.state.expanded);
         }
 
         this.context.setAdditionalInformation('ARTICLE_TOGGLE_STATE', toggleState);
@@ -281,8 +281,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private getArticleToggleState(): boolean {
         let toggled: boolean = false;
         const toggleState: Map<number, boolean> = this.context.getAdditionalInformation('ARTICLE_TOGGLE_STATE');
-        if (toggleState?.has(this.article?.ArticleID)) {
-            toggled = toggleState.get(this.article?.ArticleID);
+        if (toggleState?.has(this.articleId)) {
+            toggled = toggleState.get(this.articleId);
         }
 
         return toggled;

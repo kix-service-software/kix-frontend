@@ -28,7 +28,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.config = input.config;
+        if (input.config) {
+            this.config = JSON.parse(JSON.stringify(input.config));
+        }
         this.state.object = input.object;
         this.widgetInstanceId = input.widgetInstanceId;
     }
