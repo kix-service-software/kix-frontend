@@ -487,10 +487,12 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     }
 
     public countValues(checklist: CheckListItem[]): [number, number] {
-        const value: [number, number] = [0, checklist?.length || 0];
+        const value: [number, number] = [0, 0];
         if (checklist?.length) {
             for (const item of checklist) {
                 if (item.input === CheckListInputType.ChecklistState) {
+                    value[1]++;
+
                     if (!item.value) {
                         item.value = '-';
                     }
@@ -500,8 +502,11 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                     if (state?.done) {
                         value[0]++;
                     }
-                } else if (item.value?.length > 0) {
-                    value[0]++;
+                } else if (item.done) {
+                    value[1]++;
+                    if (item.value?.length > 0) {
+                        value[0]++;
+                    }
                 }
 
                 if (item.sub && item.sub.length) {
@@ -517,11 +522,11 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
     public static getDefaultChecklistStates(): ChecklistState[] {
         return [
-            new ChecklistState('OK', 'kix-icon-check'),
-            new ChecklistState('NOK', 'kix-icon-exclamation'),
-            new ChecklistState('pending', 'kix-icon-time-wait', false),
-            new ChecklistState('n.a.', 'kix-icon-unknown'),
-            new ChecklistState('-', null, false),
+            new ChecklistState(null, 'OK', 'kix-icon-check'),
+            new ChecklistState(null, 'NOK', 'kix-icon-exclamation'),
+            new ChecklistState(null, 'pending', 'kix-icon-time-wait', false),
+            new ChecklistState(null, 'n.a.', 'kix-icon-unknown'),
+            new ChecklistState(null, '-', null, false),
         ];
     }
 

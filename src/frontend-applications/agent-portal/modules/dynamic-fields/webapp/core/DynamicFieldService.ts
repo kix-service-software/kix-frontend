@@ -20,6 +20,8 @@ import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { Error } from '../../../../../../server/model/Error';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { CheckListItem } from '../../model/CheckListItem';
+import { DynamicFieldFormService } from './DynamicFieldFormService';
 
 export class DynamicFieldService extends KIXObjectService<DynamicField> {
 
@@ -142,5 +144,25 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
             }
         }
         return nodes;
+    }
+
+    public static parseChecklist(value: any): CheckListItem[] {
+        let newValue: CheckListItem[] = [];
+        if (typeof value === 'string') {
+            newValue = JSON.parse(value);
+        } else {
+            newValue = value;
+        }
+
+        if (Array.isArray(newValue)) {
+            const checklist = [];
+            for (const checklistItem of newValue) {
+                checklist.push(new CheckListItem(checklistItem));
+            }
+            newValue = checklist;
+            DynamicFieldFormService.prepareChecklistConfig(newValue);
+        }
+
+        return newValue;
     }
 }

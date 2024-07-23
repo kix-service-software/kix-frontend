@@ -12,7 +12,7 @@ import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicField
 import { CheckListItem } from '../../../../dynamic-fields/model/CheckListItem';
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { ObjectFormValue } from '../ObjectFormValue';
-import { DynamicFieldFormService } from '../../../../dynamic-fields/webapp/core';
+import { DynamicFieldService } from '../../../../dynamic-fields/webapp/core/DynamicFieldService';
 
 export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListItem[]> {
 
@@ -64,21 +64,7 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
         try {
-            let newValue;
-            if (typeof value === 'string') {
-                newValue = JSON.parse(value);
-            } else {
-                newValue = value;
-            }
-
-            if (Array.isArray(newValue)) {
-                const checklist = [];
-                for (const checklistItem of newValue) {
-                    checklist.push(new CheckListItem(checklistItem));
-                }
-                newValue = checklist;
-                DynamicFieldFormService.prepareChecklistConfig(newValue);
-            }
+            const newValue = DynamicFieldService.parseChecklist(value);
 
             await super.setFormValue(newValue, force);
             await this.setObjectValue(newValue);

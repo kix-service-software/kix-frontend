@@ -591,6 +591,16 @@ export class UIModule implements IUIModule {
                                     'grid_columns': 4
                                 }
                             },
+                            done: {
+                                title: done,
+                                description: doneDescription,
+                                type: 'boolean',
+                                format: 'checkbox',
+                                default: 1,
+                                options: {
+                                    'grid_columns': 4
+                                }
+                            },
                             input: {
                                 title: itemInput,
                                 type: 'string',
