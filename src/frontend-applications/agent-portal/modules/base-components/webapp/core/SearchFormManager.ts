@@ -30,32 +30,32 @@ export class SearchFormManager extends AbstractDynamicFormManager {
         let operations: Array<string | SearchOperator> = [];
 
         const superOperations = await super.getOperations(property);
-        if (superOperations) {
-            operations = superOperations;
-        } else {
-            const dfName = KIXObjectService.getDynamicFieldName(property);
-            if (dfName) {
-                const field = await KIXObjectService.loadDynamicField(dfName);
-                if (field) {
-                    switch (field.FieldType) {
-                        case DynamicFieldTypes.TEXT:
-                        case DynamicFieldTypes.TEXT_AREA:
-                            operations = SearchDefinition.getStringOperators();
-                            break;
-                        case DynamicFieldTypes.TABLE:
-                            operations = [SearchOperator.CONTAINS, SearchOperator.LIKE];
-                            break;
-                        case DynamicFieldTypes.SELECTION:
-                        case DynamicFieldTypes.CI_REFERENCE:
-                        case DynamicFieldTypes.TICKET_REFERENCE:
-                            operations = [SearchOperator.IN];
-                            break;
-                        case DynamicFieldTypes.DATE:
-                        case DynamicFieldTypes.DATE_TIME:
-                            operations = SearchDefinition.getDateTimeOperators();
-                            break;
-                        default:
-                    }
+        if (superOperations?.length) {
+            operations.push(...superOperations);
+        }
+
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const field = await KIXObjectService.loadDynamicField(dfName);
+            if (field) {
+                switch (field.FieldType) {
+                    case DynamicFieldTypes.TEXT:
+                    case DynamicFieldTypes.TEXT_AREA:
+                        operations.push(...SearchDefinition.getStringOperators());
+                        break;
+                    case DynamicFieldTypes.TABLE:
+                        operations.push(SearchOperator.CONTAINS, SearchOperator.LIKE);
+                        break;
+                    case DynamicFieldTypes.SELECTION:
+                    case DynamicFieldTypes.CI_REFERENCE:
+                    case DynamicFieldTypes.TICKET_REFERENCE:
+                        operations.push(SearchOperator.IN);
+                        break;
+                    case DynamicFieldTypes.DATE:
+                    case DynamicFieldTypes.DATE_TIME:
+                        operations.push(...SearchDefinition.getDateTimeOperators());
+                        break;
+                    default:
                 }
             }
         }

@@ -69,11 +69,6 @@ class TicketJobFilterFormManager extends TicketSearchFormManager {
     // do not mark viewable states as required
     public handleViewableStateType: boolean = false;
 
-    // TODO: extend Operators, remove if Operators are not limited anymore (Ticket.ts -> SEARCH_PROPERTIES)
-    public async getOperations(property: string): Promise<Array<string | SearchOperator>> {
-        return await super.getOperations(property);
-    }
-
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
         let nodes = [];
         switch (property) {
