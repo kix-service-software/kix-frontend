@@ -26,6 +26,7 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { MacroType } from '../../model/MacroType';
+import { JobRunLog } from '../../model/JobRunLog';
 
 export class JobService extends KIXObjectService<Job> {
 
@@ -45,6 +46,7 @@ export class JobService extends KIXObjectService<Job> {
         this.objectConstructors.set(KIXObjectType.JOB, [Job]);
         this.objectConstructors.set(KIXObjectType.JOB_TYPE, [JobType]);
         this.objectConstructors.set(KIXObjectType.JOB_RUN, [JobRun]);
+        this.objectConstructors.set(KIXObjectType.JOB_RUN_LOG, [JobRunLog]);
         this.objectConstructors.set(KIXObjectType.EXEC_PLAN, [ExecPlan]);
         this.objectConstructors.set(KIXObjectType.MACRO, [Macro]);
         this.objectConstructors.set(KIXObjectType.MACRO_ACTION_TYPE, [MacroActionType]);
