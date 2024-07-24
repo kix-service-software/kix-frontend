@@ -43,8 +43,7 @@ import { GraphService } from '../../../graph/webapp/core/GraphService';
 import { SearchService } from '../../../search/webapp/core';
 import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
-import ConfigItemPrintAction from './actions/ConfigItemPrintAction';
-import ConfigItemPrintSelectionAction from './actions/ConfigItemPrintSelectionAction';
+import { ConfigItemPrintAction } from './actions/ConfigItemPrintAction';
 import { CMDBGraphInstance } from './CMDBGraphInstance';
 import { ConfigItemPlaceholderHandler } from './ConfigItemPlaceholderHandler';
 import { PostproductivCSSHandler } from './table/PostproductivCSSHandler';
@@ -132,7 +131,6 @@ export class UIModule implements IUIModule {
             'config-item-version-compare-action', ConfigItemVersionCompareAction
         );
         ActionFactory.getInstance().registerAction('config-item-print-action', ConfigItemPrintAction);
-        ActionFactory.getInstance().registerAction('config-item-print-selection-action', ConfigItemPrintSelectionAction);
     }
 
 }
