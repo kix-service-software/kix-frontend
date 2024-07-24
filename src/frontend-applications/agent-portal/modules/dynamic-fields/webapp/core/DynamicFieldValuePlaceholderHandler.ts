@@ -20,6 +20,7 @@ import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { DynamicFieldService } from './DynamicFieldService';
 
 export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -318,7 +319,7 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
 
         let result = `${dfValue.Name}</br >`;
         for (const v of dfValue.Value) {
-            const checklist: CheckListItem[] = JSON.parse(v);
+            const checklist: CheckListItem[] = DynamicFieldService.parseChecklist(v);
             const checkListItems = this.getChecklistItems(checklist);
             if (checkListItems.length) {
                 checkListItems.forEach((cl) => {
