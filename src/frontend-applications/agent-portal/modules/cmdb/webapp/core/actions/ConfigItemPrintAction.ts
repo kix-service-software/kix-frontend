@@ -8,19 +8,37 @@
  */
 
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
-import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { Table } from '../../../../table/model/Table';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { ConfigItem } from '../../../model/ConfigItem';
 
+export class ConfigItemPrintAction extends AbstractAction {
 
-export default class ConfigItemPrintAction extends AbstractAction<Table> {
-
-    public hasLink = false;
+    public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
-        this.text = 'Translatable#Print asset';
+        this.text = 'Translatable#Print';
         this.icon = 'kix-icon-print';
+    }
+
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`cmdb/configitems/${objectId}`, [CRUD.READ])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
     }
 
     public async run(event: any): Promise<void> {
@@ -28,26 +46,33 @@ export default class ConfigItemPrintAction extends AbstractAction<Table> {
         const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
-            const assetId = context.getObjectId();
-            const printFrame: any = document.createElement('iframe');
-            printFrame.src = `/cmdb/configitems/${assetId}/print`;
-            document.body.appendChild(printFrame);
+            BrowserUtil.openInfoOverlay('Translatable#Prepare Asset for print');
 
-            EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Prepare asset for print' }
+            const configItem = await context.getObject<ConfigItem>();
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            const assetId = context.getObjectId();
+
+            const file = await KIXObjectService.loadObjects(
+                KIXObjectType.HTML_TO_PDF, null,
+                new KIXObjectLoadingOptions(
+                    null, null, null, null, null,
+                    [
+                        ['TemplateName', configItem.Class],
+                        ['IdentifierType', 'IDKey'],
+                        ['IdentifierIDorNumber', assetId.toString()],
+                        ['UserID', currentUser.UserID.toString()],
+                        ['Filename', 'Asset_<KIX_ASSET_Number>_<TIME_YYMMDD_hhmm>'],
+                        ['FallbackTemplate', 'Asset']
+                    ]
+                ), null, null, false
             );
 
-            printFrame.onload = (): void => {
-                setTimeout(() => {
-                    window.frames[window.frames.length - 1].focus();
-                    window.frames[window.frames.length - 1].print();
-                    document.body.removeChild(printFrame);
-                    EventService.getInstance().publish(
-                        ApplicationEvent.APP_LOADING, { loading: false }
-                    );
-                }, 5000);
-            };
+            if (file && file[0]) {
+                BrowserUtil.openSuccessOverlay('Translatable#Asset has printed');
+                BrowserUtil.startBrowserDownload(
+                    file[0]['Filename'], file[0]['Content'], file[0]['ContentType'], true
+                );
+            }
         }
     }
-
 }
