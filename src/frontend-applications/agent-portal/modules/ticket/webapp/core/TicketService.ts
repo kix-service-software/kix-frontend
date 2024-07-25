@@ -119,6 +119,18 @@ export class TicketService extends KIXObjectService<Ticket> {
             objects = await super.loadObjects<O>(objectType, null, loadingOptions, null, false);
         } else {
             superLoad = true;
+
+            // get ticket id if necessary
+            // (e.g. if article is loaded with DFs by FilterUtil=>checkCriteriaByPropertyValue)
+            if (objectType === KIXObjectType.ARTICLE && !objectLoadingOptions) {
+                const context = ContextService.getInstance().getActiveContext();
+                if (
+                    context.descriptor.kixObjectTypes.includes(KIXObjectType.TICKET)
+                    && context.descriptor.contextMode === ContextMode.DETAILS
+                ) {
+                    objectLoadingOptions = new ArticleLoadingOptions(context.getObjectId());
+                }
+            }
             objects = await super.loadObjects<O>(
                 objectType, objectIds, loadingOptions, objectLoadingOptions, cache, forceIds, silent, collectionId
             );

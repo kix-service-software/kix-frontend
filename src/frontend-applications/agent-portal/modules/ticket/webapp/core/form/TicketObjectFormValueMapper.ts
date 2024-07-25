@@ -29,6 +29,7 @@ import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicField } from '../../../../dynamic-fields/model/DynamicField';
 import { DynamicFieldObjectFormValue } from '../../../../object-forms/model/FormValues/DynamicFieldObjectFormValue';
 import { ArticleLoader } from '../context/ArticleLoader';
+import { Article } from '../../../model/Article';
 
 export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
 
@@ -77,7 +78,8 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
                 if (articleId) {
                     const article = await ArticleLoader.loadArticle(articleId, ticket?.TicketID);
                     if (article) {
-                        ticket.Articles = [article];
+                        // recreate article - do not overwrite reference
+                        ticket.Articles = [new Article(article, ticket)];
                     }
                 }
                 this.formValues.push(new ArticleFormValue(property, ticket, this, null));

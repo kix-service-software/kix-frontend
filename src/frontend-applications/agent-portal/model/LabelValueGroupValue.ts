@@ -19,11 +19,13 @@ export class LabelValueGroupValue {
         public attachment?: Attachment,
         public routingConfiguration: RoutingConfiguration = null
     ) {
-        const matches = value?.match(BrowserUtil.URL_REGEX);
-        if (matches?.length) {
-            this.routingConfiguration = new RoutingConfiguration();
-            this.routingConfiguration.externalLink = true;
-            this.routingConfiguration.url = matches[0];
+        if (value && typeof value === 'string') {
+            const matches = value.match(BrowserUtil.URL_REGEX);
+            if (matches?.length) {
+                this.routingConfiguration = new RoutingConfiguration();
+                this.routingConfiguration.externalLink = true;
+                this.routingConfiguration.url = matches[0];
+            }
         }
     }
 

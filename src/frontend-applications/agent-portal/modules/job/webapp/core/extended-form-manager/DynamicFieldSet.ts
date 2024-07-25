@@ -19,22 +19,36 @@ export class DynamicFieldSet extends ExtendedJobFormManager {
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
         jobType: string
     ): Promise<FormFieldConfiguration> {
-        if (
-            jobType === JobTypes.TICKET
-            && actionType === 'DynamicFieldSet'
-            && option.Name === 'DynamicFieldAppend'
-        ) {
-            let defaultValue;
-            if (action && action.Parameters) {
-                defaultValue = Boolean(action.Parameters[option.Name]);
+        let field;
+        if (jobType === JobTypes.TICKET && actionType === 'DynamicFieldSet') {
+            if (option.Name === 'DynamicFieldAppend') {
+                field = this.prepareAppendParameter(action, option, actionType, actionFieldInstanceId);
+            } else if (option.Name === 'ObjectID') {
+                field = this.prepareObjectIDParameter(action, option, actionType, actionFieldInstanceId);
             }
-
-            return this.getOptionField(
-                option, actionType, actionFieldInstanceId, 'checkbox-input',
-                defaultValue
-            );
         }
-        return;
+        return field;
+    }
+
+    private prepareAppendParameter(
+        action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string
+    ): FormFieldConfiguration {
+        let defaultValue;
+        if (action && action.Parameters) {
+            defaultValue = Boolean(action.Parameters[option.Name]);
+        }
+
+        return this.getOptionField(option, actionType, actionFieldInstanceId, 'checkbox-input', defaultValue);
+    }
+
+    private prepareObjectIDParameter(
+        action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string
+    ): FormFieldConfiguration {
+        let defaultValue = '${ObjectID}';
+        if (action && action.Parameters) {
+            defaultValue = action.Parameters[option.Name];
+        }
+        return this.getOptionField(option, actionType, actionFieldInstanceId, null, defaultValue);
     }
 
     public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: any): any {

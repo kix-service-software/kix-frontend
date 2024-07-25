@@ -47,10 +47,14 @@ class Component extends FormInputComponent<[string, string], ComponentState> {
     }
 
     private async load(): Promise<void> {
+
+        const typeOption = this.state.field.options?.find((o) => o.option === 'ObjectType');
+        const objectType = typeOption?.value || KIXObjectType.TICKET;
+
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.AND, KIXObjectType.TICKET
+                FilterType.AND, objectType
             )
         ]);
         const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(

@@ -24,6 +24,8 @@ import { TicketService } from './TicketService';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
 
 export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -67,7 +69,18 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                 }
             }
 
-            if (normalArticleAttribut && attribute && this.isKnownProperty(attribute)) {
+            if (
+                PlaceholderService.getInstance().isDynamicFieldAttribute(attribute) &&
+                DynamicFieldValuePlaceholderHandler
+            ) {
+                if (article.DynamicFields?.length || article.TicketID) {
+                    const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
+                    result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(
+                        article, optionsString, language, forRichtext, translate,
+                        new ArticleLoadingOptions(article.TicketID)
+                    );
+                }
+            } else if (normalArticleAttribut && attribute && this.isKnownProperty(attribute)) {
                 switch (attribute) {
                     case 'ID':
                         result = article.ArticleID.toString();

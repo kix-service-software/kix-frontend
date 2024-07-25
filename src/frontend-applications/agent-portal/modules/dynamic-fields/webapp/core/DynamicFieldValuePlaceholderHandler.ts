@@ -19,6 +19,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHandler {
@@ -60,13 +61,16 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
     }
 
     public async replaceDFValue(
-        object: KIXObject, optionString: string, language?: string, forRichtext?: boolean, translate?: boolean
+        object: KIXObject, optionString: string,
+        language?: string, forRichtext?: boolean, translate?: boolean,
+        objectSpecificLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<string> {
         let objectWithDF = object;
         if (object && (!object.DynamicFields) || !object.DynamicFields.length) {
             const objects = await KIXObjectService.loadObjects(
                 object.KIXObjectType, [object.ObjectId],
-                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
+                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]),
+                objectSpecificLoadingOptions
             );
 
             if (Array.isArray(objects) && objects.length) {

@@ -176,7 +176,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             </a>
                         </if>
                     </div>
-                    <if(state.informationConfig)>
+                    <if(
+                        state.informationConfig &&
+                        Array.isArray(state.informationConfig.rows) &&
+                        state.informationConfig.rows.length
+                    )>
                         <div class="bg-white my-2 p-2">
                             <object-information-card
                                 object=state.article
