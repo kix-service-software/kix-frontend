@@ -55,7 +55,8 @@ export class InformationConfiguration {
         public preparedText?: string,
         public preparedLinkSrc?: string,
         public multiline?: boolean,
-        public roleIds: number[] = []
+        public roleIds: number[] = [],
+        public renderHTML?: boolean
     ) { }
 
     public static clone(value: InformationConfiguration): InformationConfiguration {
@@ -74,7 +75,9 @@ export class InformationConfiguration {
             value.routingObjectId,
             '',
             '',
-            value.multiline
+            value.multiline,
+            value.roleIds,
+            value.renderHTML
         );
     }
 
