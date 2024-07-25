@@ -58,7 +58,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
 
         if (this.value) {
-            await this.setChannelFields(this.value);
+            await this.setChannelFields(this.value, true);
         } else {
             for (const fv of this.formValues) {
                 if (fv.property === KIXObjectProperty.DYNAMIC_FIELDS) {
@@ -92,14 +92,20 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
 
-        const noChannelOption = field.options.find((o) => o.option === 'NO_CHANNEL');
-        if (noChannelOption) {
-            this.noChannelSelectable = noChannelOption?.value;
+        // do not show in article edit forms
+        if ((this.object as Article).ArticleID) {
+            this.visible = false;
+            this.readonly = true;
         } else {
-            this.noChannelSelectable =
-                this.objectValueMapper.formContext === FormContext.EDIT
-                && !this.required
-                && !this.readonly;
+            const noChannelOption = field.options.find((o) => o.option === 'NO_CHANNEL');
+            if (noChannelOption) {
+                this.noChannelSelectable = noChannelOption?.value;
+            } else {
+                this.noChannelSelectable =
+                    this.objectValueMapper.formContext === FormContext.EDIT
+                    && !this.required
+                    && !this.readonly;
+            }
         }
     }
 
@@ -187,7 +193,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     }
 
-    protected async setChannelFields(channelId: number): Promise<void> {
+    protected async setChannelFields(channelId: number, byInit?: boolean): Promise<void> {
         const allFields = [
             ArticleProperty.CUSTOMER_VISIBLE,
             ArticleProperty.TO, ArticleProperty.CC, ArticleProperty.BCC,
@@ -236,14 +242,19 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
             context.setAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT, submitPattern);
 
-            for (const fv of dfFormValue?.formValues) {
-                await fv.enable();
-                fv.isSortable = false;
+            // handle enable only on channel switch
+            if (dfFormValue?.formValues && !byInit) {
+                for (const fv of dfFormValue.formValues) {
+                    await fv.enable();
+                    fv.isSortable = false;
+                }
             }
         } else {
             this.disableChannelFormValues(allFields);
-            for (const fv of dfFormValue?.formValues) {
-                await fv.disable();
+            if (dfFormValue?.formValues) {
+                for (const fv of dfFormValue.formValues) {
+                    await fv.disable();
+                }
             }
         }
     }

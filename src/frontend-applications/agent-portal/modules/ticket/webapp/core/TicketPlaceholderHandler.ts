@@ -254,18 +254,17 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         let result = '';
         const dialogContext = ContextService.getInstance().getActiveContext();
         if (dialogContext) {
+
+            // TODO: currently only referenced article supported => article (values) of a dialog are not possible
+            // which article is expected when "KIX_ARTICLE" is used => currently referenced article ...
             const articleId = dialogContext.getAdditionalInformation(
                 ArticleProperty.REFERENCED_ARTICLE_ID
             );
-            let referencedArticle;
             if (articleId) {
                 const articles = await this.getArticles(ticket, Number(articleId));
                 if (articles && articles.length) {
-                    referencedArticle = articles[0];
-                }
-                if (referencedArticle) {
                     result = await ArticlePlaceholderHandler.getInstance().replace(
-                        placeholder, referencedArticle, language, forRichtext, translate
+                        placeholder, articles[0], language, forRichtext
                     );
                 }
             }

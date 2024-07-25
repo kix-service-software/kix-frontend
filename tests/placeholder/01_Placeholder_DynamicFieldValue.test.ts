@@ -31,7 +31,7 @@ describe('Placeholder replacement for dynamic field values', () => {
     let object: KIXObject;
     let dFValuePlaceholderHandler: DynamicFieldValuePlaceholderHandler = DynamicFieldValuePlaceholderHandler.getInstance();
     let testDFValues: DynamicFieldValue[];
-    let orgFuntion;
+    let orgFunction;
     let sepatator: string = '###';
     before(() => {
         object = someTestFunctions.prepareObject();
@@ -41,7 +41,7 @@ describe('Placeholder replacement for dynamic field values', () => {
 
         testDFValues = someTestFunctions.getDynamicFieldValues();
 
-        orgFuntion = KIXObjectService.loadDynamicField;
+        orgFunction = KIXObjectService.loadDynamicField;
         KIXObjectService.loadDynamicField = (dfName: string): Promise<DynamicField> => {
             let dynamicField: DynamicField;
             if (dfName) {
@@ -71,7 +71,7 @@ describe('Placeholder replacement for dynamic field values', () => {
     });
 
     after(() => {
-        KIXObjectService.loadDynamicField = orgFuntion;
+        KIXObjectService.loadDynamicField = orgFunction;
         LabelService.getInstance()['objectLabelProvider'] = [];
         LabelService.getInstance()['propertiesLabelProvider'].clear();
         (TranslationService.getInstance() as any).translations = null;
