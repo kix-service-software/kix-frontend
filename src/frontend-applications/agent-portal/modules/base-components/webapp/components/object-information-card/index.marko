@@ -7,6 +7,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
+<macro|{ info }| name="show-text">
+   <if(info.renderHTML)>
+      $!{info.preparedText}
+   </if>
+   <else>${info.preparedText}</else>
+</macro>
+
 <div class="info-container">
    <div class=[
       "info-avatar",
@@ -76,7 +83,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                           component.getTemplate(
                                              info.componentId,
                                           )
-                                       } ...info.componentData, object=state.object,/>
+                                       }
+                                          ...info.componentData
+                                          object=state.object
+                                       />
                                     </@content>
                                  </link-target>
                               </div>
@@ -101,7 +111,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                        routingConfiguration=info.routingConfiguration
                                        objectId=info.routingObjectId
                                     >
-                                       <@content>${info.preparedText}</@content>
+                                       <@content>
+                                          <show-text info=info/>
+                                       </@content>
                                     </link-target>
                                  </if>
                                  <else-if(info.linkSrc && info.preparedLinkSrc)>
@@ -109,13 +121,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                        href=info.preparedLinkSrc
                                        target="_blank"
                                     >
-                                       ${info.preparedText}
+                                       <show-text info=info/>
                                     </a>
                                  </else-if>
                                  <else-if(info.multiline)>
-                                    <pre>${info.preparedText}</pre>
+                                    <pre><show-text info=info/></pre>
                                  </else-if>
-                                 <else>${info.preparedText}</else>
+                                 <else>
+                                    <show-text info=info/>
+                                 </else>
                               </span>
                            </div>
                         </else-if>
