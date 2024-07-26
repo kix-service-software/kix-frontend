@@ -511,6 +511,8 @@ export class UIModule implements IUIModule {
         const label = await TranslationService.translate('Translatable#Label');
         const done = await TranslationService.translate('Translatable#Done');
         const doneDescription = await TranslationService.translate('Translatable#If true, the value will increase the checklist counter.');
+        const showLastChangeDate = await TranslationService.translate('Translatable#Show Last Change Date');
+        const showChangeDateDescription = await TranslationService.translate('Translatable#If checked, the last change date will be displayed for this item.');
 
         let icons = await ObjectIconService.getInstance().getAvailableIcons(
             true, true, false
@@ -597,6 +599,16 @@ export class UIModule implements IUIModule {
                                 type: 'boolean',
                                 format: 'checkbox',
                                 default: 1,
+                                options: {
+                                    'grid_columns': 4
+                                }
+                            },
+                            showLastChangeDate: {
+                                title: showLastChangeDate,
+                                description: showChangeDateDescription,
+                                type: 'boolean',
+                                format: 'checkbox',
+                                default: 0,
                                 options: {
                                     'grid_columns': 4
                                 }

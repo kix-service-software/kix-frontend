@@ -29,6 +29,10 @@ export class CheckListItem {
 
     public done: boolean;
 
+    public lastChangeDate: number;
+
+    public showLastChangeDate: boolean;
+
     public constructor(item: CheckListItem) {
         if (item) {
             this.id = item.id;
@@ -39,6 +43,10 @@ export class CheckListItem {
             this.done = typeof item.done !== 'undefined' && item.done !== null
                 ? BrowserUtil.isBooleanTrue(item.done?.toString())
                 : true;
+            this.showLastChangeDate = typeof item.showLastChangeDate !== 'undefined' && item.showLastChangeDate !== null
+                ? BrowserUtil.isBooleanTrue(item.showLastChangeDate?.toString())
+                : false;
+            this.lastChangeDate = item.lastChangeDate;
             this.inputStates = item.inputStates?.map((is) => new ChecklistState(is)) || [];
 
             this.sub = item.sub || [];
