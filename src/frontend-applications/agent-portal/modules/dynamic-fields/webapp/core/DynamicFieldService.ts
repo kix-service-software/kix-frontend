@@ -154,6 +154,10 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
             newValue = value;
         }
 
+        if (!Array.isArray(newValue) && newValue) {
+            newValue = [newValue];
+        }
+
         if (Array.isArray(newValue)) {
             const checklist = [];
             for (const checklistItem of newValue) {
