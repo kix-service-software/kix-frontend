@@ -656,20 +656,19 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ARTICLE_EVENTS], null, null, true
         ).catch((error): SysConfigOption[] => []);
 
-        const loadingOptions = new KIXObjectLoadingOptions([
-            new FilterCriteria(
-                DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.AND, KIXObjectType.TICKET
-            )
-        ]);
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [
+                new FilterCriteria(
+                    DynamicFieldProperty.OBJECT_TYPE, SearchOperator.IN, FilterDataType.STRING,
+                    FilterType.AND, [KIXObjectType.TICKET, KIXObjectType.ARTICLE]
+                )
+            ], undefined, 0
+        );
         const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
             KIXObjectType.DYNAMIC_FIELD, null, loadingOptions, null, true
         ).catch(() => [] as DynamicField[]);
 
-        const dfEvents = dynamicFields ? dynamicFields.map((d) => `TicketDynamicFieldUpdate_${d.Name}`) : [];
-
-        // TODO: there is currently only one article df event
-        dfEvents.push('ArticleDynamicFieldUpdate');
+        const dfEvents = dynamicFields ? dynamicFields.map((d) => `${d.ObjectType}DynamicFieldUpdate_${d.Name}`) : [];
 
         return this.prepareEventTree(ticketEvents, articleEvents, dfEvents);
     }
@@ -694,7 +693,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         if (dfEvents && dfEvents.length) {
             nodes = [
                 ...nodes,
-                ...dfEvents.map((event: string) => {
+                ...dfEvents.sort().map((event: string) => {
                     return new TreeNode(event, event);
                 })
             ];
