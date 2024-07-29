@@ -322,14 +322,6 @@ export class ConfigItemFormFactory {
                         new FilterCriteria(
                             ConfigItemProperty.CLASS, SearchOperator.IN,
                             FilterDataType.STRING, FilterType.AND, classes
-                        ),
-                        new FilterCriteria(
-                            ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                            FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
-                        ),
-                        new FilterCriteria(
-                            ConfigItemProperty.NAME, SearchOperator.LIKE,
-                            FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
                         )
                     ])
                 )
