@@ -27,6 +27,8 @@ class Component {
 
     private context: Context;
 
+    private updateTimeout: any;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -34,6 +36,12 @@ class Component {
     public onInput(input: any): void {
         if (this.state.instanceId !== input.instanceId) {
             this.state.instanceId = input.instanceId;
+
+            if (this.updateTimeout) {
+                clearTimeout(this.updateTimeout);
+            }
+
+            this.updateTimeout = setTimeout(() => this.initWidget(), 50);
         }
     }
 
@@ -52,10 +60,6 @@ class Component {
             additionalInformationChanged: (): void => { return; }
         });
 
-        this.state.widgetConfiguration = this.context
-            ? await this.context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
-
         this.initWidget();
     }
 
@@ -67,6 +71,10 @@ class Component {
         this.state.config = null;
 
         this.state.object = await this.context.getObject();
+
+        this.state.widgetConfiguration = this.context
+            ? await this.context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         setTimeout(() => {
             this.state.config = this.state.widgetConfiguration?.configuration as ObjectInformationCardConfiguration;
