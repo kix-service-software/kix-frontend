@@ -87,6 +87,8 @@ export enum SysConfigKey {
 
     TICKET_QUEUE_DEFAULT = 'Ticket::Queue::Default',
 
-    TICKET_PLACEHOLDER_BODYRICHTEXT_LINECOUNT = 'Ticket::Placeholder::BodyRichtext::DefaultLineCount'
+    TICKET_PLACEHOLDER_BODYRICHTEXT_LINECOUNT = 'Ticket::Placeholder::BodyRichtext::DefaultLineCount',
+
+    USER_PASSWORD_RESET_ENABLED = 'User::Password::Reset::Enabled'
 
 }

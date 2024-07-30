@@ -20,6 +20,10 @@ import { UserType } from '../../../../user/model/UserType';
 import { MFASocketClient } from '../../../../multifactor-authentication/webapp/core/MFASocketClient';
 import { MFAToken } from '../../../../multifactor-authentication/model/MFAToken';
 import { MFAConfig } from '../../../../multifactor-authentication/model/MFAConfig';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 declare const window: Window;
 
@@ -44,6 +48,8 @@ class Component {
         this.authMethods = input.authMethods || [];
         this.state.error = input.error;
         this.mfaConfig = input.mfaConfig;
+        this.state.pwResetEnabled = input.pwResetEnabled;
+        this.state.pwResetState = input.pwResetState;
     }
 
     public async onMount(): Promise<void> {
@@ -64,6 +70,16 @@ class Component {
         if (this.authMethods?.length) {
             this.state.hasLogin = this.authMethods.some((am) => am.type === 'LOGIN');
             this.state.authMethods = this.authMethods.filter((am) => am.type !== 'LOGIN' && am.preAuth);
+        }
+
+        if (!this.state.pwResetEnabled) {
+            const passwordResetEnabled = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, ['User::Password::Reset::Enabled']
+            );
+
+            if (passwordResetEnabled && passwordResetEnabled.length) {
+                this.state.pwResetEnabled = passwordResetEnabled[UserType.AGENT].Value.toString() === '1';
+            }
         }
 
         setTimeout(() => {
@@ -88,13 +104,18 @@ class Component {
             [
                 'Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox.',
                 'Hinweis: Für die optimale Nutzung von KIX  empfehlen wir alternative Browser wie Chromium oder Firefox.'
-            ]
-            ,
+            ],
             ['Login failed', 'Anmeldung fehlgeschlagen'],
             ['You have successfully logged out.', 'Sie haben sich erfolgreich abgemeldet.'],
             ['Login Name', 'Nutzername'],
             ['Password', 'Passwort'],
-            ['Login', 'Anmelden']
+            ['Login', 'Anmelden'],
+            ['Forgot Password?', 'Passwort vergessen?'],
+            ['Submit', 'Absenden'],
+            ['Back', 'Zurück'],
+            ['An Email has been sent to you.', 'Eine Email wurde an Sie versandt.'],
+            ['Your new Password was emailed to you.', 'Ihr neues Passwort wurde per Mail versandt.'],
+            ['Invalid or expired token. Please send a new request.', 'Ungültiger oder abgelaufener Token. Bitte senden Sie eine neue Anfrage.']
         ];
     }
 
@@ -187,6 +208,20 @@ class Component {
         this.state.loginProcess = true;
         const url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
         window.location.href = `${url}?authmethod=${JSON.stringify(method)}&usertype=${UserType.AGENT}&returnUrl=${encodeURIComponent(url)}&redirectUrl=${encodeURIComponent(this.redirectUrl)}`;
+    }
+
+    public togglePWResetDialog(): void {
+        this.state.showPWResetDialog = !this.state.showPWResetDialog;
+    }
+
+    public sendPasswordChangeRequest(): void {
+        AuthenticationSocketClient.getInstance().createPasswordResetRequest(this.state.userName);
+
+        // show login form again
+        this.state.showPWResetDialog = false;
+
+        //show success notification
+        this.state.pwResetState = 'requested';
     }
 }
 
