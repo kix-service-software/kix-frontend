@@ -243,17 +243,6 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
         const isMultiSelect = field?.countMax !== null && (field?.countMax < 0 || field?.countMax > 1);
 
-        const defaultFilter = [
-            new FilterCriteria(
-                ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
-            ),
-            new FilterCriteria(
-                ConfigItemProperty.NAME, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
-            )
-        ];
-
         const dfFilter = [];
         if (dynamicField.Config) {
             const classes = dynamicField.Config.ITSMConfigItemClasses;
@@ -281,9 +270,8 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
         }
 
         if (!field?.options?.some((o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS)) {
-            defaultFilter.push(...dfFilter);
             options.push(
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions(defaultFilter))
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions(dfFilter))
             );
         } else {
             const option = field?.options?.find((o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS);
@@ -291,8 +279,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
             if (Array.isArray(loadingOptions.filter)) {
                 loadingOptions.filter.push(...dfFilter);
             } else {
-                defaultFilter.push(...dfFilter);
-                loadingOptions.filter = defaultFilter;
+                loadingOptions.filter = dfFilter;
             }
 
             options.push(option);
