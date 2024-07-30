@@ -81,25 +81,18 @@ export class JobService extends KIXObjectService<Job> {
 
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        silent: boolean = false, cache: boolean = true, forceIds?: boolean, collectionId?: string
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
         let objects: O[];
         if (objectType === KIXObjectType.JOB_TYPE || objectType === KIXObjectType.MACRO_TYPE) {
-            objects = await super.loadObjects<O>(
-                objectType, null, loadingOptions, objectLoadingOptions,
-                cache, forceIds, silent, collectionId
-            );
+            objects = await super.loadObjects<O>(objectType, null, loadingOptions, objectLoadingOptions);
             if (objectIds) {
                 objects = objects.filter(
                     (c) => objectIds.map((id) => isNaN(Number(id)) ? id : Number(id)).some((oid) => c.ObjectId === oid)
                 );
             }
         } else {
-            objects = await super.loadObjects(
-                objectType, objectIds, loadingOptions, objectLoadingOptions,
-                cache, forceIds, silent, collectionId
-            );
+            objects = await super.loadObjects(objectType, objectIds, loadingOptions, objectLoadingOptions);
         }
 
         return objects as any[];

@@ -18,7 +18,6 @@ import { JobRunProperty } from '../../../model/JobRunProperty';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { Table } from '../../../../table/model/Table';
 import { ToggleOptions } from '../../../../table/model/ToggleOptions';
-import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 export class JobRunHistoryTableFactory extends TableFactory {
 
@@ -32,11 +31,7 @@ export class JobRunHistoryTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        table.setContentProvider(
-            new JobRunHistoryContentProvider(
-                table, null, tableConfiguration.loadingOptions, contextId
-            )
-        );
+        table.setContentProvider(new JobRunHistoryContentProvider(table, null, null, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -66,12 +61,8 @@ export class JobRunHistoryTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.JOB_RUN,
-                new KIXObjectLoadingOptions(
-                    null, 'JobRun.-StartTime:datetime', 20
-                ),
-                10, tableColumns, [], null, null, null,
-                null, TableHeaderHeight.SMALL
+                KIXObjectType.JOB_RUN, null, null, tableColumns, [], null, null, null, null,
+                TableHeaderHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
