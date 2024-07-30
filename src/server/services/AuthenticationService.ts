@@ -27,6 +27,7 @@ import { IncomingHttpHeaders } from 'node:http';
 import { AuthMethod } from '../../frontend-applications/agent-portal/model/AuthMethod';
 import { ObjectResponse } from '../../frontend-applications/agent-portal/server/services/ObjectResponse';
 import { MFAToken } from '../../frontend-applications/agent-portal/modules/multifactor-authentication/model/MFAToken';
+import { PasswordResetRequest } from '../../frontend-applications/agent-portal/modules/user/model/PasswordResetRequest';
 
 export class AuthenticationService {
 
@@ -207,6 +208,12 @@ export class AuthenticationService {
     public async getAuthMethod(name: string, userType: UserType = UserType.AGENT): Promise<AuthMethod> {
         const methods = await this.getAuthMethods(userType);
         return methods?.find((m) => m.name === name);
+    }
+
+    public async createPasswordResetRequest(userLogin: string, userType: UserType = UserType.AGENT): Promise<any> {
+        return await HttpService.getInstance().post(
+            'auth/password-reset', { UserLogin: userLogin, UserType: userType }, null, null
+        );
     }
 
 }

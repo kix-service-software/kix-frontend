@@ -29,7 +29,10 @@ export class ComponentState {
         public authMethods: AuthMethod[] = null,
         public prepared: boolean = false,
         public showMFA: boolean = false,
-        public mfaToken: string = null
+        public mfaToken: string = null,
+        public pwResetEnabled: boolean = false,
+        public showPWResetDialog: boolean = false,
+        public pwResetState: string = '',
     ) { }
 
 }

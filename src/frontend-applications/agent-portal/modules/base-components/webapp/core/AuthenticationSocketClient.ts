@@ -21,6 +21,7 @@ import { BrowserCacheService } from './CacheService';
 import { UserType } from '../../../user/model/UserType';
 import { LoginResult } from '../../model/LoginResult';
 import { MFAToken } from '../../../multifactor-authentication/model/MFAToken';
+import { PasswordResetRequest } from '../../../user/model/PasswordResetRequest';
 
 export class AuthenticationSocketClient extends SocketClient {
 
@@ -200,4 +201,11 @@ export class AuthenticationSocketClient extends SocketClient {
             this.socket.emit(AuthenticationEvent.PERMISSION_CHECK, request);
         });
     }
+
+    public createPasswordResetRequest(userName: string, userType: UserType = UserType.AGENT): void {
+        this.checkSocketConnection();
+        const request = new PasswordResetRequest(userName, userType);
+        this.socket.emit(AuthenticationEvent.PASSWORD_RESET_REQUEST, request);
+    }
+
 }
