@@ -13,10 +13,10 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { JobRun } from '../../../model/JobRun';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { JobRunProperty } from '../../../model/JobRunProperty';
 import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
 import { TableValue } from '../../../../table/model/TableValue';
+import { KIXObjectSocketClient } from '../../../../base-components/webapp/core/KIXObjectSocketClient';
 
 export class JobRunHistoryContentProvider extends TableContentProvider<JobRun> {
 
@@ -33,10 +33,27 @@ export class JobRunHistoryContentProvider extends TableContentProvider<JobRun> {
         const rowObjects = [];
         if (this.contextId) {
             const context = ContextService.getInstance().getActiveContext();
-            const jobId = await context.getObjectId();
+            const collectionId = context.getCollectionId() || this.contextId + this.objectType;
+            const jobId = context.getObjectId();
             if (jobId) {
+
+                let pageSize = 20;
+                if (typeof this.loadingOptions?.limit !== 'undefined' && this.loadingOptions?.limit !== null) {
+                    pageSize = this.loadingOptions?.limit;
+                }
+                this.currentLoadLimit = this.usePaging && pageSize
+                    ? this.currentPageIndex * pageSize
+                    : null;
+
+                const loadingOptions = await this.prepareLoadingOptions();
+
+                if (this.usePaging) {
+                    loadingOptions.limit = this.currentLoadLimit;
+                }
+
                 const jobRuns = await KIXObjectService.loadObjects<JobRun>(
-                    KIXObjectType.JOB_RUN, null, null, { id: jobId }
+                    KIXObjectType.JOB_RUN, null, loadingOptions, { id: jobId },
+                    undefined, undefined, undefined, collectionId
                 ).catch(() => [] as JobRun[]);
 
                 if (jobRuns && jobRuns.length) {
@@ -53,6 +70,13 @@ export class JobRunHistoryContentProvider extends TableContentProvider<JobRun> {
                     }
                 }
             }
+
+            this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
+                collectionId
+            ) || 0;
+            this.currentLimit = KIXObjectSocketClient.getInstance().getCollectionsLimit(
+                collectionId
+            ) || 0;
         }
 
         return rowObjects;
