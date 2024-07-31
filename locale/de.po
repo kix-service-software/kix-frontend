@@ -201,8 +201,8 @@ msgstr "Admin Passwort"
 msgid "Advanced"
 msgstr "Erweitert"
 
-msgid ">> Advanced Options"
-msgstr ">> Erweiterte Optionen"
+msgid "Advanced Options:"
+msgstr "Erweiterte Optionen:"
 
 msgid "Affected Assets"
 msgstr "Betroffene Assets"
@@ -1407,9 +1407,6 @@ msgstr "Field Agent App (iOS)"
 
 msgid "Field Information"
 msgstr "Feld Informationen"
-
-msgid "<< Field Options:"
-msgstr "<< Feld Optionen:"
 
 msgid "Field Type"
 msgstr "Feldtyp"
@@ -5802,9 +5799,6 @@ msgstr "PLZ"
 
 #~ msgid "Features"
 #~ msgstr "Funktionen"
-
-#~ msgid "Field Options:"
-#~ msgstr "Feld Optionen:"
 
 #~ msgid "Here you will find the KIX 18 manuals for users and administrators"
 #~ msgstr ""

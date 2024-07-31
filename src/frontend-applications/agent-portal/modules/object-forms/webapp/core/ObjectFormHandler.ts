@@ -101,9 +101,10 @@ export class ObjectFormHandler<T extends KIXObject = any> {
         if (commitHandler) {
             id = await commitHandler.commitObject()
                 .catch(async (error: Error) => {
+                    const title = await TranslationService.translate('Translatable#Error on create:');
                     const content = new ComponentContent('list-with-title',
                         {
-                            title: 'Translatable#Error on create:',
+                            title: title,
                             list: [`${error.Code}: ${error.Message}`]
                         }
                     );
