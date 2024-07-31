@@ -76,6 +76,7 @@ export class Article extends KIXObject {
     public IncomingTime: number = null;
 
     public Attachments: Attachment[] = null;
+    public AttachmentCount: number = 0;
 
     public Flags: ArticleFlag[] = null;
 

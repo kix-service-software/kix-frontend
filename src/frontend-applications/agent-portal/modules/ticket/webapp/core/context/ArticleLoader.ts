@@ -40,7 +40,7 @@ export class ArticleLoader {
 
     private articleColorConfiguration: any;
 
-    public constructor(private ticketId: number, private context: Context) { }
+    public constructor(private ticketId: number, private context: Context, private loadArticleDetails: boolean) { }
 
     public queueArticle(articleId: number, cb: (article: Article) => void): void {
         this.articleIds.set(articleId, cb);
@@ -66,13 +66,15 @@ export class ArticleLoader {
         this.articleIds = new Map();
 
         const loadingOptions = new KIXObjectLoadingOptions();
-        loadingOptions.includes = [
-            ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, 'ObjectActions',
-            KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON, KIXObjectProperty.DYNAMIC_FIELDS
-        ];
-        loadingOptions.expands = [
-            ArticleProperty.CREATED_BY, ArticleProperty.FROM
-        ];
+        loadingOptions.includes = [KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON];
+
+        if (this.loadArticleDetails) {
+            loadingOptions.includes.push(
+                ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN, 'ObjectActions', KIXObjectProperty.DYNAMIC_FIELDS
+            );
+        }
+
+        loadingOptions.expands = [ArticleProperty.CREATED_BY, ArticleProperty.FROM];
 
         const articleIds = [...articleIdMap.keys()];
         const articles = await KIXObjectService.loadObjects<Article>(

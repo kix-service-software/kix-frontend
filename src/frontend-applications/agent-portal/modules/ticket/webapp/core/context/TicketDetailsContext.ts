@@ -30,9 +30,11 @@ export class TicketDetailsContext extends Context {
 
     public static CONTEXT_ID = 'ticket-details';
     public articleLoader: ArticleLoader;
+    public articleDetailsLoader: ArticleLoader;
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        this.articleLoader = new ArticleLoader(Number(this.objectId), this);
+        this.articleLoader = new ArticleLoader(Number(this.objectId), this, false);
+        this.articleDetailsLoader = new ArticleLoader(Number(this.objectId), this, true);
     }
 
     public getIcon(): string {
