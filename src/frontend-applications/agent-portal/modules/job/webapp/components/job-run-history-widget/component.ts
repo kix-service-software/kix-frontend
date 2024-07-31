@@ -71,8 +71,6 @@ class Component {
         const table = await TableFactoryService.getInstance().createTable(
             'job-run-history', KIXObjectType.JOB_RUN, null, null, JobDetailsContext.CONTEXT_ID
         );
-        table.sort(JobRunProperty.START_TIME, SortOrder.UP);
-
         this.state.table = table;
     }
 
