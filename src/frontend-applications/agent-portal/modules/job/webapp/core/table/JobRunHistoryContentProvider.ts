@@ -10,13 +10,12 @@
 import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { JobRun } from '../../../model/JobRun';
-import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { JobRunProperty } from '../../../model/JobRunProperty';
 import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
 import { TableValue } from '../../../../table/model/TableValue';
+import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 export class JobRunHistoryContentProvider extends TableContentProvider<JobRun> {
 
@@ -24,35 +23,28 @@ export class JobRunHistoryContentProvider extends TableContentProvider<JobRun> {
         table: Table,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
-        contextId?: string
+        contextId?: string,
+        objects?: KIXObject[],
+        specificLoadingOptions?: KIXObjectSpecificLoadingOptions
     ) {
-        super(KIXObjectType.JOB_RUN, table, objectIds, loadingOptions, contextId);
+        super(
+            KIXObjectType.JOB_RUN, table, objectIds, loadingOptions, contextId,
+            objects, specificLoadingOptions
+        );
     }
 
-    public async loadData(): Promise<Array<RowObject<JobRun>>> {
+    public async getRowObjects(objects: JobRun[]): Promise<RowObject[]> {
         const rowObjects = [];
-        if (this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            const jobId = await context.getObjectId();
-            if (jobId) {
-                const jobRuns = await KIXObjectService.loadObjects<JobRun>(
-                    KIXObjectType.JOB_RUN, null, null, { id: jobId }
-                ).catch(() => [] as JobRun[]);
+        for (const o of objects) {
+            const values: TableValue[] = [];
 
-                if (jobRuns && jobRuns.length) {
-                    for (const run of jobRuns) {
-                        const values: TableValue[] = [];
-
-                        const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
-                        for (const column of columns) {
-                            const tableValue = new TableValue(column.property, run[column.property]);
-                            values.push(tableValue);
-                        }
-
-                        rowObjects.push(new RowObject<JobRun>(values, run));
-                    }
-                }
+            const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
+            for (const column of columns) {
+                const tableValue = new TableValue(column.property, o[column.property]);
+                values.push(tableValue);
             }
+
+            rowObjects.push(new RowObject<JobRun>(values, o));
         }
 
         return rowObjects;
