@@ -15,7 +15,6 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public article: Article = null,
-        public attachmentCount: number = 0,
         public channelIcon: ObjectIcon | string = null,
         public createTimeString: string = null,
         public channelTooltip: string = '',

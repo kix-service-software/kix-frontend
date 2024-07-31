@@ -35,9 +35,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.state.article?.ChangeTime !== input.article?.ChangeTime) {
             this.updateArticleData();
         }
-
-        const attachments = this.state.article?.Attachments || [];
-        this.state.attachmentCount = attachments.filter((a) => !a.Filename.match(/^file-(1|2)$/)).length;
     }
 
     public async onMount(): Promise<void> {

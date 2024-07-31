@@ -27,11 +27,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <span class="channel-icon">
                     <icon icon=state.channelIcon tooltip=state.channelTooltip/>
                     <if(state.smimeEncryptedIcon)>
-                        <icon icon=state.smimeEncryptedIcon tooltip=state.smimeEncryptedTooltip class={"smime-decrypted-icon": true, "smime-not-decrypted": !state.smimeDecrypted}/>
+                        <icon
+                            icon=state.smimeEncryptedIcon
+                            tooltip=state.smimeEncryptedTooltip
+                            class={
+                                "smime-decrypted-icon": true,
+                                "smime-not-decrypted": !state.smimeDecrypted,
+                            }
+                        />
                     </if>
                 </span>
             </if>
-            <if(state.attachmentCount > 0)>
+            <if(state.article.AttachmentCount > 0)>
                 <div
                     on-click("attachmentsClicked")
                     title=(
@@ -42,7 +49,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     class="zip-download"
                 >
                     <span class="kix-icon-attachement"/>
-                     (${state.attachmentCount})
+                     (${state.article.AttachmentCount})
                 </div>
             </if>
             <if(state.createTimeString)>

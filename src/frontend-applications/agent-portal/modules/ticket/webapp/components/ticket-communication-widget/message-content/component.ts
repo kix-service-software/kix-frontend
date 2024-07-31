@@ -31,9 +31,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private contextListener: IContextListener;
     private contextListenerId: string;
     private articleId: number;
-    private article: Article;
     private articleLoaded: boolean = false;
     private articleIndex: number;
+    private detailedArticle: Article;
 
     private observer: IntersectionObserver;
 
@@ -148,19 +148,26 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 }
 
                 this.state.unseen = this.state.article?.Unseen;
-
-                this.state.actions = await this.context?.articleLoader?.prepareArticleActions(this.state.article);
-                this.prepareAttachments();
-                if (!this.state.selectedCompactView) {
-                    await this.prepareImages();
-                }
-
                 await this.prepareArticleData();
 
-                this.observer?.disconnect();
+                if (!this.state.selectedCompactView) {
+                    this.loadDetailedArticle();
+                }
 
+                this.observer?.disconnect();
                 this.state.show = true;
             });
+        }
+    }
+
+    private loadDetailedArticle(): void {
+        if (!this.detailedArticle) {
+            this.context?.articleDetailsLoader?.queueArticle(this.articleId, (a: Article) => {
+                this.detailedArticle = a;
+                this.prepareArticleContent();
+            });
+        } else {
+            this.prepareArticleContent();
         }
     }
 
@@ -210,7 +217,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private filterAttachments(): void {
         this.state.articleAttachments = this.context?.articleLoader?.filterAttachments(
-            this.state.article, this.state.showAllAttachments
+            this.detailedArticle, this.state.showAllAttachments
         );
     }
 
@@ -236,33 +243,39 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async toggleArticleContent(setFocus: boolean = true): Promise<void> {
-        if (this.state.expanded && this.state.article) {
+        if (this.state.expanded) {
             this.state.loadingContent = true;
 
-            this.prepareAttachments();
-
-            if (this.state.compactViewExpanded) {
-                await this.prepareImages();
-            }
-
-            this.state.articleTo = await LabelService.getInstance().getDisplayText(
-                this.state.article, ArticleProperty.TO, undefined, undefined, false
-            );
-            this.state.articleCc = await LabelService.getInstance().getDisplayText(
-                this.state.article, ArticleProperty.CC, undefined, false, false
-            );
-
-            await this.setArticleSeen(undefined, true);
-
-            this.state.unseen = 0;
-
-            this.state.loadingContent = false;
-            this.state.showContent = true;
+            this.loadDetailedArticle();
 
             this.context.setAdditionalInformation('CURRENT_ARTICLE_FOCUS', this.articleId);
         }
 
         this.saveArticleToggleState();
+    }
+
+    private async prepareArticleContent(): Promise<void> {
+        this.prepareAttachments();
+
+        if (this.state.compactViewExpanded) {
+            await this.prepareImages();
+        }
+
+        this.state.articleTo = await LabelService.getInstance().getDisplayText(
+            this.detailedArticle, ArticleProperty.TO, undefined, undefined, false
+        );
+        this.state.articleCc = await LabelService.getInstance().getDisplayText(
+            this.detailedArticle, ArticleProperty.CC, undefined, false, false
+        );
+
+        await this.setArticleSeen();
+
+        this.state.unseen = 0;
+
+        this.state.loadingContent = false;
+        this.state.showContent = true;
+
+        this.state.actions = await this.context?.articleLoader?.prepareArticleActions(this.detailedArticle);
     }
 
     private saveArticleToggleState(): void {
@@ -292,7 +305,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (!this.state.selectedCompactView || this.state.compactViewExpanded) {
             this.filterAttachments();
 
-            const attachments = this.state.article?.Attachments || [];
+            const attachments = this.detailedArticle?.Attachments || [];
             this.state.hasInlineAttachments = attachments.some((a) => a.Disposition === 'inline' && a.ContentID);
         }
     }
@@ -303,7 +316,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (imageAttachments?.length) {
             const attachments = await TicketService.getInstance().loadArticleAttachments(
-                this.state.article.TicketID, this.state.article.ArticleID, imageAttachments.map((a) => a.ID)
+                this.detailedArticle?.TicketID, this.detailedArticle?.ArticleID, imageAttachments.map((a) => a.ID)
             ).catch((): Attachment[] => []);
 
             if (attachments?.length) {
@@ -319,12 +332,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.images = images;
     }
 
-    private async setArticleSeen(
-        article: Article = this.state.article || this.article, silent?: boolean
-    ): Promise<void> {
-        if (article?.isUnread()) {
+    private async setArticleSeen(): Promise<void> {
+        if (this.state.article?.isUnread()) {
             await TicketService.getInstance().setArticleSeenFlag(
-                article.TicketID, article.ArticleID
+                this.state.article.TicketID, this.state.article.ArticleID
             );
             this.context.reloadObjectList(KIXObjectType.ARTICLE, true);
         }
