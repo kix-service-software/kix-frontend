@@ -198,7 +198,7 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-msgid ">> Advanced Options"
+msgid "Advanced Options:"
 msgstr ""
 
 msgid "Affected Assets"
@@ -1426,9 +1426,6 @@ msgid "Field Agent App (iOS)"
 msgstr ""
 
 msgid "Field Information"
-msgstr ""
-
-msgid "<< Field Options:"
 msgstr ""
 
 msgid "Field Type"

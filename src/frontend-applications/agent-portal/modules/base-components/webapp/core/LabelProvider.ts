@@ -170,7 +170,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                     const fieldValue = object.DynamicFields?.find((dfv) => dfv.Name === dfName);
                     if (isKey && fieldValue?.Value) {
                         newValue = fieldValue.Value.join(':KEYSEPARATOR:');
-                    } else {
+                    } else if (fieldValue) {
                         // remove prepared value so code have to prepare it itself (CIRef)
                         fieldValue.PreparedValue = null;
                         newValue = await this.getDisplayText(object, property);

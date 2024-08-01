@@ -71,10 +71,17 @@
             grid-column: 1;
             color: @primary-0;
             align-self: start;
+            display: flex;
+            gap: @margin-small;
 
             &:hover {
                 color: @primary-4;
                 cursor: pointer;
+            }
+
+            >.icon {
+                font-size: 0.75rem;
+                margin-top: -0.125rem;
             }
         }
 
