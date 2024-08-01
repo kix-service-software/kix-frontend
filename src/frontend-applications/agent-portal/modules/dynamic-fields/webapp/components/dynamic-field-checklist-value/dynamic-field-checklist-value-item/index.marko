@@ -37,19 +37,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             ${input.item.title}
         </div>
     </div>
-    <if(input.item.input === "ChecklistState")>
-        <div style="width:28px" class="d-flex justify-content-center">
-            <i
-                class=["h3", component.getStateIcon(input.item)]
-                title=(input.item.value)
-            />
-        </div>
-    </if>
-    <else>
+    <div class="d-flex align-items-center">
+        <if(input.item.input === "ChecklistState")>
+            <div style="width:28px" class="d-flex justify-content-center">
+                <i
+                    class=["h3", component.getStateIcon(input.item)]
+                    title=(input.item.value)
+                />
+            </div>
+        </if>
         <span title=(input.item.value)>
             <pre>${input.item.value}</pre>
         </span>
-    </else>
+    </div>
 </div>
 <if(input.item.sub && input.item.sub.length > 0 && state.expanded)>
     <div>
