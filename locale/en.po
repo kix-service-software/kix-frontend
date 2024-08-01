@@ -340,6 +340,9 @@ msgstr ""
 msgid "Article Text"
 msgstr ""
 
+msgid "ascending"
+msgstr ""
+
 msgid "Asset"
 msgstr ""
 
@@ -350,6 +353,9 @@ msgid "Asset Classes"
 msgstr ""
 
 msgid "Asset Graph"
+msgstr ""
+
+msgid "Asset has printed"
 msgstr ""
 
 msgid "Assets"
@@ -916,6 +922,9 @@ msgstr ""
 msgid "Delete all selected reports?"
 msgstr ""
 
+msgid "Delete all selected webforms?"
+msgstr ""
+
 msgid "Deleted"
 msgstr ""
 
@@ -931,6 +940,12 @@ msgstr ""
 msgid "Delete Search"
 msgstr ""
 
+msgid "Delete Webform"
+msgstr ""
+
+msgid "Dependencies"
+msgstr ""
+
 msgid "Dependency"
 msgstr ""
 
@@ -944,6 +959,9 @@ msgid "Deployment States"
 msgstr ""
 
 msgid "DESC"
+msgstr ""
+
+msgid "descending"
 msgstr ""
 
 msgid "Descending:"
@@ -1000,6 +1018,9 @@ msgid "DynamicField"
 msgstr ""
 
 msgid "Dynamic Fields"
+msgstr ""
+
+msgid "Dynamic Fields successfully removed."
 msgstr ""
 
 msgid "Dynamic Field Type"
@@ -1194,10 +1215,22 @@ msgstr ""
 msgid "Email Information"
 msgstr ""
 
+msgid "Email Security"
+msgstr ""
+
 msgid "Empty Result Hint"
 msgstr ""
 
 msgid "Enable attachments"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Encrypt if possible"
+msgstr ""
+
+msgid "Encrypt or do not send"
 msgstr ""
 
 msgid "End date/time is not given"
@@ -1255,6 +1288,9 @@ msgid "Error while deleting Report."
 msgstr ""
 
 msgid "Error while deleting Report Definition."
+msgstr ""
+
+msgid "Error while deleting Webform."
 msgstr ""
 
 msgid "Escalated Tickets"
@@ -1510,7 +1546,13 @@ msgstr ""
 msgid "General Catalog Items"
 msgstr ""
 
+msgid "Generate New Secret"
+msgstr ""
+
 msgid "Generate New Token"
+msgstr ""
+
+msgid "Generate new user secret"
 msgstr ""
 
 msgid "Generate new user token"
@@ -1626,6 +1668,9 @@ msgstr ""
 "Here you can temporarily deactivate this action: As long as this checkbox is "
 "set, this action will not be run."
 
+msgid "Helptext_Admin_JobCreateEdit_Asynchronous"
+msgstr ""
+
 msgid "Helptext_Admin_JobCreateEdit_Comment"
 msgstr ""
 "Insert additional information (only displayed within the admin module)."
@@ -1647,6 +1692,9 @@ msgstr ""
 
 msgid "Helptext_Admin_JobCreateEdit_Name"
 msgstr "The job name needs to be unique."
+
+msgid "Helptext_Admin_JobCreateEdit_SortOrder"
+msgstr ""
 
 msgid "Helptext_Admin_JobCreateEdit_Time"
 msgstr "Choose the time(s) the job is supposed to run. Multiselect possible."
@@ -1776,6 +1824,9 @@ msgstr ""
 "If this option is active an article will be created at the corresponding "
 "ticket with sending the notification."
 
+msgid "Helptext_Admin_NotificationCreate_EmailSecurity"
+msgstr ""
+
 msgid "Helptext_Admin_NotificationCreate_Event"
 msgstr ""
 "Choose from the list which ticket or article events are supposed to trigger "
@@ -1862,6 +1913,9 @@ msgid "Helptext_Admin_NotificationEdit_CreateArticle"
 msgstr ""
 "If this option is active an article will be created at the corresponding "
 "ticket with sending the notification."
+
+msgid "Helptext_Admin_NotificationEdit_EmailSecurity"
+msgstr ""
 
 msgid "Helptext_Admin_NotificationEdit_Event"
 msgstr ""
@@ -2034,9 +2088,15 @@ msgstr "Insert the language of the text module."
 msgid "Helptext_Admin_TextModuleCreate_Name"
 msgstr ""
 
+msgid "Helptext_Admin_TextModuleCreate_QueueIDs"
+msgstr ""
+
 msgid "Helptext_Admin_TextModuleCreate_Text"
 msgstr ""
 "Insert the text you want to use as a text module. You can use placeholders."
+
+msgid "Helptext_Admin_TextModuleCreate_TicketTypeIDs"
+msgstr ""
 
 msgid "Helptext_Admin_TextModuleCreate_Validity"
 msgstr "The text module can only be used within the system if set “valid”."
@@ -2751,6 +2811,9 @@ msgstr ""
 msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
 msgstr "Defines whether this article is shown in the customer portal."
 
+msgid "Helptext_Tickets_TicketCreate_EncryptIfPossible"
+msgstr ""
+
 msgid "Helptext_Tickets_TicketCreate_Organisation"
 msgstr ""
 "Organisation is assigned autoamtically depending on the chosen contact."
@@ -2834,6 +2897,9 @@ msgstr ""
 "An agent (= a contact with access to agent portal) can change their password "
 "settings in their preferences."
 
+msgid "Helptext_User_UserCreateEdit_Preferences_MFAOTPEnabled"
+msgstr ""
+
 msgid "Helptext_User_UserCreateEdit_Preferences_MyQueues"
 msgstr ""
 "Set the default teams the agent (= a contact with access to agent portal) "
@@ -2855,6 +2921,9 @@ msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
 msgstr ""
 "Set the user's default language, for when they log in KIX for the first "
 "time. A user can change their language settings in their preferences."
+
+msgid "Helptext_User_UserCreateEdit_Preferences_UserSecret"
+msgstr ""
 
 msgid "Helptext_User_UserCreateEdit_Preferences_UserToken"
 msgstr ""
@@ -2893,6 +2962,9 @@ msgid "Id"
 msgstr ""
 
 msgid "ID"
+msgstr ""
+
+msgid "If checked, the last change date will be displayed for this item."
 msgstr ""
 
 msgid "If true, the value will increase the checklist counter."
@@ -3011,6 +3083,9 @@ msgstr ""
 msgid "Invalid date for pending date."
 msgstr ""
 
+msgid "Is asynchronous"
+msgstr ""
+
 msgid "is to large (max {0})."
 msgstr ""
 
@@ -3068,8 +3143,8 @@ msgstr ""
 msgid "Large View"
 msgstr ""
 
-msgid "Last changed time"
-msgstr "Last changed at"
+msgid "(Last Change: {0})"
+msgstr ""
 
 msgid "Last executed at"
 msgstr ""
@@ -3246,6 +3321,9 @@ msgid "Month(s)"
 msgstr ""
 
 msgid "more than ago"
+msgstr ""
+
+msgid "Multifactor Authentication"
 msgstr ""
 
 msgid "Multiple"
@@ -3483,6 +3561,9 @@ msgid "No Channel"
 msgstr ""
 
 msgid "No data available."
+msgstr ""
+
+msgid "No encryption"
 msgstr ""
 
 msgid "No form available. Please contact your administrator."
@@ -3884,7 +3965,7 @@ msgstr ""
 msgid "Prepare Article for print"
 msgstr ""
 
-msgid "Prepare asset for print"
+msgid "Prepare Asset for print"
 msgstr ""
 
 msgid "Prepare Attachments (0/{0})"
@@ -3894,9 +3975,6 @@ msgid "Prepare Attachments ({0}/{1})"
 msgstr ""
 
 msgid "Prepare File Download"
-msgstr ""
-
-msgid "Prepare selection for print"
 msgstr ""
 
 msgid "Prepare Ticket for print"
@@ -3921,12 +3999,6 @@ msgid "Primary Organisation"
 msgstr ""
 
 msgid "Print"
-msgstr ""
-
-msgid "Print asset"
-msgstr ""
-
-msgid "Print selection"
 msgstr ""
 
 msgid "Prio"
@@ -3967,6 +4039,9 @@ msgstr "Team Information"
 
 msgid "Queues"
 msgstr "Teams"
+
+msgid "Queues successfully removed."
+msgstr ""
 
 msgid "Quick Start Guide"
 msgstr ""
@@ -4097,6 +4172,9 @@ msgstr "Remove Adress(es)"
 msgid "Remove dependency to organisation"
 msgstr ""
 
+msgid "Remove Dynamic Fields"
+msgstr ""
+
 msgid "Remove FAQ Article(s)"
 msgstr ""
 
@@ -4128,6 +4206,12 @@ msgid "Remove Priorities"
 msgstr ""
 
 msgid "Remove Profiles"
+msgstr ""
+
+msgid "Remove Queues"
+msgstr ""
+
+msgid "Remove Roles"
 msgstr ""
 
 msgid "Remove States"
@@ -4271,6 +4355,9 @@ msgstr ""
 msgid "Roles/Permissions"
 msgstr ""
 
+msgid "Roles successfully removed."
+msgstr ""
+
 msgid "Row"
 msgstr ""
 
@@ -4287,6 +4374,9 @@ msgid "RTL"
 msgstr ""
 
 msgid "Run"
+msgstr ""
+
+msgid "Run asynchronously"
 msgstr ""
 
 msgid "running"
@@ -4567,6 +4657,9 @@ msgstr ""
 msgid "Show in Customer Portal"
 msgstr "Show in Customer Portal"
 
+msgid "Show Last Change Date"
+msgstr ""
+
 msgid "Show title in form"
 msgstr ""
 
@@ -4616,6 +4709,12 @@ msgid "Sortable"
 msgstr ""
 
 msgid "Sort attribute:"
+msgstr ""
+
+msgid "Sort order"
+msgstr ""
+
+msgid "Sort order:"
 msgstr ""
 
 msgid "Source"
@@ -5152,6 +5251,9 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
+msgid "User Secret"
+msgstr ""
+
 msgid "User Token"
 msgstr ""
 
@@ -5222,6 +5324,9 @@ msgid "Webform Details"
 msgstr ""
 
 msgid "Webform Options"
+msgstr ""
+
+msgid "Webform(s) deleted."
 msgstr ""
 
 msgid "Wednesday"
@@ -5319,6 +5424,9 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Last changed time"
+#~ msgstr "Last changed at"
 
 #~ msgid "Limit:"
 #~ msgstr "Limit (Search Results):"
