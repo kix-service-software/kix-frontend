@@ -29,6 +29,7 @@ import { SearchFormManager } from '../../../base-components/webapp/core/SearchFo
 import { SearchCache } from '../../model/SearchCache';
 import { SearchProperty } from '../../model/SearchProperty';
 import { TicketProperty } from '../../../ticket/model/TicketProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export abstract class SearchDefinition {
 
@@ -80,19 +81,22 @@ export abstract class SearchDefinition {
         criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescending?: boolean
     ): Promise<KIXObjectLoadingOptions> {
         const sortOrder = await KIXObjectService.getSortOrder(sortAttribute, sortDescending, this.objectType);
-        return new KIXObjectLoadingOptions(criteria, sortOrder, limit);
+        return new KIXObjectLoadingOptions(criteria, sortOrder, limit, [KIXObjectProperty.DYNAMIC_FIELDS]);
     }
 
     public async prepareFormFilterCriteria(
-        criteria: FilterCriteria[], forSearch: boolean = true
+        criteria: FilterCriteria[], forSearch: boolean = true, allowEmptyValue?: boolean
     ): Promise<FilterCriteria[]> {
-        const filteredCriteria = criteria.filter((c) => {
-            if (Array.isArray(c.value)) {
-                return c.value.length > 0;
-            } else {
-                return c.value !== null && c.value !== undefined && c.value !== '';
-            }
-        });
+        let filteredCriteria = criteria;
+        if (!allowEmptyValue) {
+            filteredCriteria = criteria.filter((c) => {
+                if (Array.isArray(c.value)) {
+                    return c.value.length > 0;
+                } else {
+                    return c.value !== null && c.value !== undefined && c.value !== '';
+                }
+            });
+        }
 
         for (const c of filteredCriteria) {
             const dfName = KIXObjectService.getDynamicFieldName(c.property);

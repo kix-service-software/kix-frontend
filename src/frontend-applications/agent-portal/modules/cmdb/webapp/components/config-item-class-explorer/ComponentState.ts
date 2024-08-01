@@ -17,7 +17,8 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = null,
         public nodes: TreeNode[] = [],
         public activeNode: TreeNode = null,
-        public filterValue: string = null
+        public filterValue: string = null,
+        public loading: boolean = false
     ) { }
 
 }

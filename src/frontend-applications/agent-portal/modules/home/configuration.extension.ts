@@ -96,7 +96,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const newTicketsLoadingOptions = new KIXObjectLoadingOptions();
         newTicketsLoadingOptions.filter = [
             new FilterCriteria(
-                TicketProperty.STATE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.OR, 1
+                TicketProperty.STATE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
             )
         ];
         newTicketsLoadingOptions.sortOrder = 'Ticket.-CreateTime:datetime';

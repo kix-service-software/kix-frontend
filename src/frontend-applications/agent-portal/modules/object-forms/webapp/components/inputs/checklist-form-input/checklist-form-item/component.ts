@@ -8,6 +8,7 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { DateTimeUtil } from '../../../../../../base-components/webapp/core/DateTimeUtil';
 import { DynamicFieldFormUtil } from '../../../../../../base-components/webapp/core/DynamicFieldFormUtil';
 import { TreeNode } from '../../../../../../base-components/webapp/core/tree';
 import { CheckListItem } from '../../../../../../dynamic-fields/model/CheckListItem';
@@ -27,8 +28,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const states = this.state.item.inputStates || DynamicFieldFormUtil.getDefaultChecklistStates();
         this.state.nodes = states.map((s) => new TreeNode(s.value, s.value, s.icon));
         this.state.selectedNode = this.state.nodes.find(
-            (n) => n.id.toLowerCase() === this.state.item?.value.toLowerCase() && n.id !== '-'
+            (n) => n.id.toLowerCase() === this.state.item?.value?.toLowerCase() && n.id !== '-'
         );
+
+
+        if (this.state.item.showLastChangeDate && this.state.item.lastChangeDate) {
+            const changeDate = new Date(this.state.item.lastChangeDate);
+            this.state.lastChangeDate = await DateTimeUtil.getLocalDateTimeString(changeDate);
+        }
+
         this.state.prepared = true;
     }
 
@@ -42,6 +50,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.state.item.value = event.target.value;
+        this.setChangeDate();
         (this as any).emit('itemValueChanged', this.state.item);
     }
 
@@ -52,11 +61,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         } else {
             this.state.item.value = '-';
         }
+        this.setChangeDate();
         (this as any).emit('itemValueChanged', this.state.item);
     }
 
     public itemValueChanged(item: CheckListItem): void {
         (this as any).emit('itemValueChanged', item);
+    }
+
+    private async setChangeDate(): Promise<void> {
+        const changeDate = new Date();
+        this.state.item.lastChangeDate = changeDate.getTime();
+        this.state.lastChangeDate = await DateTimeUtil.getLocalDateTimeString(changeDate);
     }
 
 }

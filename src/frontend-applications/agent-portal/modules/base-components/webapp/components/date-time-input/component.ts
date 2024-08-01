@@ -100,7 +100,7 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
     }
 
     private setValue(): void {
-        const dateValue = this.state.dateValue || '2000-01-01';
+        const dateValue = this.state.dateValue;
 
         const date = new Date(
             dateValue + (

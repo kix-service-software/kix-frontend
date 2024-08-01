@@ -7,20 +7,17 @@
  * --
  */
 
+import { MFAToken } from '../../multifactor-authentication/model/MFAToken';
 import { UserType } from './UserType';
 
 export class UserLogin {
 
-    public UserLogin: string;
-    public Password: string;
-    public UserType: UserType;
-    public NegotiateToken: string;
-
-    public constructor(userName: string, password: string, userType: UserType, negotiateToken: string) {
-        this.UserLogin = userName;
-        this.Password = password;
-        this.UserType = userType;
-        this.NegotiateToken = negotiateToken;
-    }
+    public constructor(
+        public UserLogin: string,
+        public Password: string,
+        public UserType: UserType,
+        public NegotiateToken: string,
+        public MFAToken: MFAToken
+    ) { }
 
 }

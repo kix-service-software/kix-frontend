@@ -31,6 +31,7 @@ import { FAQArticle } from '../model/FAQArticle';
 import { FAQArticleAttachmentLoadingOptions } from '../model/FAQArticleAttachmentLoadingOptions';
 import { FAQArticleProperty } from '../model/FAQArticleProperty';
 import { FAQCategory } from '../model/FAQCategory';
+import { FAQCategoryProperty } from '../model/FAQCategoryProperty';
 
 
 export class FAQService extends KIXObjectAPIService {
@@ -310,7 +311,7 @@ export class FAQService extends KIXObjectAPIService {
     }
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        return [];
+        return criteria.filter((c) => c.property === FAQCategoryProperty.PARENT_ID);
     }
 
     public async deleteObject(

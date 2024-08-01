@@ -29,10 +29,12 @@ import { TicketProperty } from '../../../model/TicketProperty';
 export class TicketDetailsContext extends Context {
 
     public static CONTEXT_ID = 'ticket-details';
-    private articleLoader: ArticleLoader;
+    public articleLoader: ArticleLoader;
+    public articleDetailsLoader: ArticleLoader;
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        this.articleLoader = new ArticleLoader(Number(this.objectId));
+        this.articleLoader = new ArticleLoader(Number(this.objectId), this, false);
+        this.articleDetailsLoader = new ArticleLoader(Number(this.objectId), this, true);
     }
 
     public getIcon(): string {
@@ -99,12 +101,10 @@ export class TicketDetailsContext extends Context {
     }
 
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null,
-            [
-                'StateType', 'ObjectActions', 'SLACriteria', KIXObjectProperty.DYNAMIC_FIELDS,
-                TicketProperty.WATCHER_ID, KIXObjectProperty.LINK_COUNT
-            ]
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.includes.push(
+            'StateType', 'ObjectActions', 'SLACriteria', KIXObjectProperty.DYNAMIC_FIELDS,
+            TicketProperty.WATCHER_ID, KIXObjectProperty.LINK_COUNT, TicketProperty.ARTICLE_IDS
         );
 
         const ticket = this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
@@ -139,6 +139,7 @@ export class TicketDetailsContext extends Context {
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.sortOrder = 'Article.IncomingTime';
         loadingOptions.limit = 0;
+        loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
 
         const articles: Article[] = await KIXObjectService.loadObjects<Article>(
             KIXObjectType.ARTICLE, null, loadingOptions, new ArticleLoadingOptions(this.objectId)
@@ -154,7 +155,4 @@ export class TicketDetailsContext extends Context {
         return ticketHistory;
     }
 
-    public loadArticle(articleId: number, cb: (article: Article) => void): void {
-        this.articleLoader?.queueArticle(articleId, cb);
-    }
 }

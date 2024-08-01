@@ -14,10 +14,22 @@ import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { DynamicField } from '../../model/DynamicField';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class EditDynamicFieldDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-dynamic-field-dialog-context';
+
+    public async postInit(): Promise<void> {
+        await super.postInit();
+
+        const object = await this.getObject<DynamicField>();
+        if (object?.InternalField) {
+            this.setAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_ENABLED, false);
+            const formInstance = await this.getFormManager().getFormInstance();
+            formInstance.setFormReadonly(true);
+        }
+    }
 
     public async getObject<O extends KIXObject>(
         kixObjectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD

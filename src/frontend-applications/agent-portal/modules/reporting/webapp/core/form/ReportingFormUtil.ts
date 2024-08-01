@@ -7,6 +7,7 @@
  * --
  */
 
+import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
 import { DefaultSelectInputFormOption } from '../../../../../model/configuration/DefaultSelectInputFormOption';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
@@ -58,6 +59,8 @@ export class ReportingFormUtil {
                         typeof multiple === 'boolean' ? multiple : Boolean(parameter.Multiple))
                     );
                     field.options.push(new FormFieldOption(FormFieldOptions.SHOW_INVALID, false));
+                    const autocompleteConfig = new AutoCompleteConfiguration(0);
+                    field.options.push(new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, autocompleteConfig));
 
                     if (filterPossibleValues) {
                         field.options.push(

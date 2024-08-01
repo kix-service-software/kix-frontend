@@ -37,12 +37,15 @@ export class AbstractPlaceholderHandler implements IPlaceholderHandler {
     }
 
     public async replaceDFObjectPlaceholder(
-        attributePath: string, objectId: number, language?: string
+        attributePath: string, objectId: number, language?: string, forRichtext?: boolean, translate?: boolean
     ): Promise<string> {
         return;
     }
 
-    public async replace(placeholder: string, object?: KIXObject, language?: string): Promise<string> {
+    public async replace(
+        placeholder: string, object?: KIXObject, language?: string, forRichtext?: boolean,
+        translate?: boolean
+    ): Promise<string> {
         return '';
     }
 

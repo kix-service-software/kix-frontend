@@ -26,15 +26,16 @@ const placeholder_2 = '<KIX_TESTHANDLER_Attribute_2>';
 const value_2 = 'Value_2';
 const placeholder_3 = '<KIX_TESTHANDLER_Attribute_3>';
 const value_3 = 'Value_3';
+const placeholder_4 = '<KIX_TESTHANDLERSHORT>';
+const value_4 = 'Value_4';
 const unknownPlaceholder = '<KIX_UNKNOWN_placeholder>';
 const invalidPlaceholder = '<kix_wrong_placeholder>';
-const invalidPlaceholder_2 = '<KIX_TESTHANDLER>';
-const invalidPlaceholder_3 = '<KIX_TESTHANDLER_>';
+const invalidPlaceholder_2 = '<KIX_TESTHANDLER_>';
 
 describe('Placeholder replacement', () => {
 
     describe('General placeholder handling', () => {
-        const text = `Text with placeholder 1: ${placeholder_1} and placeholder 3: ${placeholder_3} and some invalid placeholders ${invalidPlaceholder} and ${invalidPlaceholder_2} and ${invalidPlaceholder_3} and another valid placeholder: ${placeholder_2}.`;
+        const text = `Text with placeholder 1: ${placeholder_1} and placeholder 3: ${placeholder_3} and placeholder without attribute ${placeholder_4} and some invalid placeholders ${invalidPlaceholder} and ${invalidPlaceholder_2} and another valid placeholder: ${placeholder_2}.`;
         let testHandler: TestPlaceholderHandler;
         let testHandler2: TestPlaceholderHandlerSecond;
 
@@ -52,13 +53,13 @@ describe('Placeholder replacement', () => {
             const placeholders: string[] = PlaceholderService.getInstance().extractPlaceholders(text);
 
             expect(Array.isArray(placeholders), 'should found placeholders').is.true;
-            expect(placeholders.length).equal(3);
+            expect(placeholders.length).equal(4);
             expect(placeholders.some((ph) => ph === placeholder_1)).is.true;
             expect(placeholders.some((ph) => ph === placeholder_2)).is.true;
             expect(placeholders.some((ph) => ph === placeholder_3)).is.true;
+            expect(placeholders.some((ph) => ph === placeholder_4)).is.true;
             expect(placeholders.some((ph) => ph === invalidPlaceholder), 'invalid placeholder should not be found as placeholder').is.false;
             expect(placeholders.some((ph) => ph === invalidPlaceholder_2), 'invalid placeholder 2 should not be found as placeholder').is.false;
-            expect(placeholders.some((ph) => ph === invalidPlaceholder_3), 'invalid placeholder 3 should not be found as placeholder').is.false;
         });
 
         it('Should extract correct placeholder (use of &lt; and &gt; for < and >)', () => {
@@ -95,7 +96,7 @@ describe('Placeholder replacement', () => {
         });
 
         it('Should correctly replace placeholders', async () => {
-            const expectedText = `Text with placeholder 1: ${value_1} and placeholder 3: ${value_3} and some invalid placeholders ${invalidPlaceholder} and ${invalidPlaceholder_2} and ${invalidPlaceholder_3} and another valid placeholder: ${value_2}.`;
+            const expectedText = `Text with placeholder 1: ${value_1} and placeholder 3: ${value_3} and placeholder without attribute ${value_4} and some invalid placeholders ${invalidPlaceholder} and ${invalidPlaceholder_2} and another valid placeholder: ${value_2}.`;
             const result: string = await PlaceholderService.getInstance().replacePlaceholders(text);
             expect(result).exist;
             expect(!!result.length).is.true;
@@ -149,7 +150,7 @@ class TestPlaceholderHandler extends AbstractPlaceholderHandler {
     public handlerId: string = '123-test-handler';
 
     protected objectStrings: string[] = [
-        'TESTHANDLER'
+        'TESTHANDLER', 'TESTHANDLERSHORT'
     ];
 
     public async replace(placeholder: string, object: KIXObject): Promise<string> {
@@ -160,8 +161,11 @@ class TestPlaceholderHandler extends AbstractPlaceholderHandler {
                 return value_2
             case placeholder_3:
                 return value_3
+            case placeholder_4:
+                return value_4;
             default:
         }
+        return '';
     }
 }
 

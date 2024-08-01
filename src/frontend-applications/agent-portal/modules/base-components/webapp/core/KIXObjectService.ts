@@ -589,7 +589,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return nodes;
     }
 
-    public static async loadDynamicField(name: string, id?: number | string): Promise<DynamicField> {
+    public static async loadDynamicField(name: string, id?: number | string, valid?: boolean): Promise<DynamicField> {
         let dynamicField: DynamicField;
         if (name || id) {
             const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
@@ -606,6 +606,11 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 dynamicField = dynamicFields.find((df) => df.Name.toString() === name.toString());
             }
         }
+
+        if (valid && dynamicField?.ValidID !== 1) {
+            dynamicField = null;
+        }
+
         return dynamicField;
     }
 
@@ -651,20 +656,19 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ARTICLE_EVENTS], null, null, true
         ).catch((error): SysConfigOption[] => []);
 
-        const loadingOptions = new KIXObjectLoadingOptions([
-            new FilterCriteria(
-                DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.AND, KIXObjectType.TICKET
-            )
-        ]);
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [
+                new FilterCriteria(
+                    DynamicFieldProperty.OBJECT_TYPE, SearchOperator.IN, FilterDataType.STRING,
+                    FilterType.AND, [KIXObjectType.TICKET, KIXObjectType.ARTICLE]
+                )
+            ], undefined, 0
+        );
         const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
             KIXObjectType.DYNAMIC_FIELD, null, loadingOptions, null, true
         ).catch(() => [] as DynamicField[]);
 
-        const dfEvents = dynamicFields ? dynamicFields.map((d) => `TicketDynamicFieldUpdate_${d.Name}`) : [];
-
-        // TODO: there is currently only one article df event
-        dfEvents.push('ArticleDynamicFieldUpdate');
+        const dfEvents = dynamicFields ? dynamicFields.map((d) => `${d.ObjectType}DynamicFieldUpdate_${d.Name}`) : [];
 
         return this.prepareEventTree(ticketEvents, articleEvents, dfEvents);
     }
@@ -689,7 +693,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         if (dfEvents && dfEvents.length) {
             nodes = [
                 ...nodes,
-                ...dfEvents.map((event: string) => {
+                ...dfEvents.sort().map((event: string) => {
                     return new TreeNode(event, event);
                 })
             ];
@@ -845,10 +849,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return attributes;
     }
 
-    public async getSortableAttributes(filtered: boolean = true): Promise<ObjectSearch[]> {
+    public async getSortableAttributes(
+        filtered: boolean = true, objectType: KIXObjectType | string = this.objectType
+    ): Promise<ObjectSearch[]> {
         const supportedAttributes = await KIXObjectService.loadObjects<ObjectSearch>(
             KIXObjectType.OBJECT_SEARCH, undefined, undefined,
-            new ObjectSearchLoadingOptions(this.objectType), true
+            new ObjectSearchLoadingOptions(objectType), true
         ).catch(() => [] as ObjectSearch[]);
         const sortableAttributes = supportedAttributes.filter((sA) => sA.IsSortable);
 
@@ -860,13 +866,13 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async getSortOrder(
-        property: string, descanding: boolean = false, objectType: KIXObjectType | string
+        property: string, descending: boolean = false, objectType: KIXObjectType | string
     ): Promise<string> {
         let sortOrder = null;
         if (property) {
             const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
             if (service) {
-                sortOrder = await service.getSortOrder(property, descanding, objectType);
+                sortOrder = await service.getSortOrder(property, descending, objectType);
             } else {
                 const errorMessage = `No service registered for object type ${objectType}`;
                 console.warn(errorMessage);
@@ -877,7 +883,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     protected async getSortOrder(
-        property: string, descanding: boolean, objectType: KIXObjectType | string
+        property: string, descending: boolean, objectType: KIXObjectType | string
     ): Promise<string> {
         property = this.getSortAttribute(property);
         const sortType = await this.getSortType(property, objectType);
@@ -886,7 +892,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 /^DynamicFields\.(.+)$/, 'DynamicField_$1'
             );
         }
-        return `${this.objectType}.${descanding ? '-' : ''}${property}:${sortType}`;
+        return `${this.objectType}.${descending ? '-' : ''}${property}:${sortType}`;
     }
 
     protected async getSortType(property: string, objectType: KIXObjectType | string): Promise<BackendSearchDataType> {
@@ -903,6 +909,20 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             }
         }
         return sortType;
+    }
+
+    public static getSortAttribute(objectType: KIXObjectType | string, attribute: string, dep?: string): string {
+        if (attribute) {
+            const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+            if (service) {
+                attribute = service.getSortAttribute(attribute, dep);
+            } else {
+                const errorMessage = `No service registered for object type ${objectType}`;
+                console.warn(errorMessage);
+            }
+        }
+
+        return attribute;
     }
 
     public getSortAttribute(attribute: string, dep?: string): string {
@@ -950,10 +970,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return attributes;
     }
 
-    public async getFilterableAttributes(filtered: boolean = true): Promise<ObjectSearch[]> {
+    public async getFilterableAttributes(
+        filtered: boolean = true, objectType: KIXObjectType | string = this.objectType
+    ): Promise<ObjectSearch[]> {
         const supportedAttributes = await KIXObjectService.loadObjects<ObjectSearch>(
             KIXObjectType.OBJECT_SEARCH, undefined, undefined,
-            new ObjectSearchLoadingOptions(this.objectType), true
+            new ObjectSearchLoadingOptions(objectType), true
         ).catch(() => [] as ObjectSearch[]);
         return supportedAttributes.filter((sA) => sA.IsSearchable);
     }

@@ -19,6 +19,7 @@ import { LabelService } from '../../../../base-components/webapp/core/LabelServi
 import { DynamicFieldTypes } from '../../../model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
 import { ComponentState } from './ComponentState';
+import { DynamicFieldService } from '../../core/DynamicFieldService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -112,7 +113,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private setCheckListValues(dfValue: DynamicFieldValue): void {
         if (dfValue.Value && Array.isArray(dfValue.Value) && dfValue.Value[0]) {
-            this.state.checklist = JSON.parse(dfValue.Value[0]);
+            this.state.checklist = DynamicFieldService.parseChecklist(dfValue.Value[0]);
         }
     }
 
@@ -126,7 +127,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (label?.id && label?.object) {
             const contextDescriptorList = ContextService.getInstance().getContextDescriptors(ContextMode.DETAILS);
             for (const contextDescriptor of (contextDescriptorList)) {
-                if(contextDescriptor.isContextFor(label.object.KIXObjectType)) {
+                if (contextDescriptor.isContextFor(label.object.KIXObjectType)) {
                     ContextService.getInstance().setActiveContext(contextDescriptor.contextId, label.id);
                     return;
                 }

@@ -8,17 +8,15 @@
  */
 
 import { IdService } from '../../../../../../model/IdService';
+import { Attachment } from '../../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { SortUtil } from '../../../../../../model/SortUtil';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ActionFactory } from '../../../../../base-components/webapp/core/ActionFactory';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IContextListener } from '../../../../../base-components/webapp/core/IContextListener';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
-import { KIXModulesService } from '../../../../../base-components/webapp/core/KIXModulesService';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { Article } from '../../../../model/Article';
@@ -32,8 +30,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private eventSubscriber: IEventSubscriber;
     private contextListener: IContextListener;
     private contextListenerId: string;
-    private article: Article;
+    private articleId: number;
     private articleLoaded: boolean = false;
+    private articleIndex: number;
+    private detailedArticle: Article;
 
     private observer: IntersectionObserver;
 
@@ -43,32 +43,36 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.update(input);
+        this.articleIndex = input.articleIndex;
     }
 
     private async update(input: any): Promise<void> {
-        const oldChangeTime = this.article?.ChangeTime;
-        const currChangeTime = input.article?.ChangeTime;
-        this.article = input.article;
-
-        // on update, some article was already loaded
-        if (this.state.article && this.state.article.ArticleID !== this.article.ArticleID) {
-            await this.loadArticle();
-        } else if (oldChangeTime !== currChangeTime) {
-            this.state.article = this.article;
-            this.prepareArticleData();
-        }
-
+        this.articleId = input.articleId;
+        this.state.informationConfig = input.informationConfig;
         this.state.selectedCompactView = typeof input.selectedCompactView !== 'undefined' ? input.selectedCompactView : true;
     }
 
     public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext<TicketDetailsContext>();
-        this.prepareObserver();
 
-        this.state.unseen = this.state.article.Unseen;
+        this.state.expanded = this.getArticleToggleState();
+        this.state.show = this.state.expanded;
+        this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
+        await this.prepareObserver();
+        await this.toggleArticleContent(false);
+
+        const focusedArticleId = this.context.getAdditionalInformation('CURRENT_ARTICLE_FOCUS');
+        if (focusedArticleId === this.articleId) {
+            setTimeout(() => this.scrollToArticle(), 500);
+        }
+
         this.state.switchAttachmentListTooltip = await TranslationService.translate('Translatable#Switch attachment list layout');
 
-        this.contextListenerId = IdService.generateDateBasedId('message-content-' + this.article?.ArticleID);
+        this.registerContextListener();
+    }
+
+    private registerContextListener(): void {
+        this.contextListenerId = IdService.generateDateBasedId('message-content-' + this.articleId);
         this.contextListener = {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
@@ -78,7 +82,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             scrollInformationChanged: (objectType: KIXObjectType | string, objectId: string | number): void => {
                 if (
                     objectType === KIXObjectType.ARTICLE &&
-                    this.article?.ArticleID.toString() === objectId.toString()
+                    this.articleId.toString() === objectId.toString()
                 ) {
                     this.scrollToArticle();
                 }
@@ -100,7 +104,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private prepareObserver(): void {
+    private async prepareObserver(): Promise<void> {
         if (!this.state.show && this.supportsIntersectionObserver()) {
             const row = (this as any).getEl();
             if (row) {
@@ -111,7 +115,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.observer.observe(row);
             }
         } else {
-            this.loadArticle();
+            await this.loadArticle();
         }
     }
 
@@ -125,12 +129,46 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         entries.forEach(async (entry) => {
             if (entry.isIntersecting && entry.intersectionRatio > 0) {
                 this.loadArticle();
-                if (this.state.expanded) {
-                    this.toggleArticleContent();
-                }
-                this.observer.disconnect();
+            } else if (entry.intersectionRatio === 0) {
+                this.context?.articleLoader?.dequeueArticle(this.articleId);
             }
         });
+    }
+
+    private async loadArticle(): Promise<void> {
+        if (!this.articleLoaded) {
+            this.context?.articleLoader?.queueArticle(this.articleId, async (a: Article) => {
+                const countNumber = this.articleId;
+                this.state.article = a;
+                this.state.article['countNumber'] = countNumber;
+                this.articleLoaded = true;
+
+                if (this.articleIndex === 0) {
+                    this.toggleArticleCompactView(true);
+                }
+
+                this.state.unseen = this.state.article?.Unseen;
+                await this.prepareArticleData();
+
+                if (!this.state.selectedCompactView) {
+                    this.loadDetailedArticle();
+                }
+
+                this.observer?.disconnect();
+                this.state.show = true;
+            });
+        }
+    }
+
+    private loadDetailedArticle(): void {
+        if (!this.detailedArticle) {
+            this.context?.articleDetailsLoader?.queueArticle(this.articleId, (a: Article) => {
+                this.detailedArticle = a;
+                this.prepareArticleContent();
+            });
+        } else {
+            this.prepareArticleContent();
+        }
     }
 
     public scrollToArticle(): void {
@@ -140,53 +178,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async prepareActions(): Promise<void> {
-        if (!this.context) {
-            this.context = ContextService.getInstance().getActiveContext();
-        }
-        const actions = await this.context.getAdditionalActions(this.state.article) || [];
-
-        const hasKIXPro = await KIXModulesService.getInstance().hasPlugin('KIXPro');
-        if (!hasKIXPro) {
-            const startActions = ['article-reply-action', 'article-forward-action'];
-            const actionInstance = await ActionFactory.getInstance().generateActions(
-                startActions, this.state.article
-            );
-            actions.push(...actionInstance);
-        }
-
-        const plainTextAction = await ActionFactory.getInstance().generateActions(['article-get-plain-action'], this.state.article);
-        if (plainTextAction?.length) {
-            plainTextAction[0].setData(this.state.article);
-            actions.push(...plainTextAction);
-        }
-
-        const printAction = await ActionFactory.getInstance().generateActions(['article-print-action'], this.state.article);
-        if (printAction?.length) {
-            printAction[0].setData(this.state.article);
-            actions.push(...printAction);
-        }
-
-        const filteredActions = [];
-        for (const a of actions) {
-            if (await a.canShow()) {
-                filteredActions.push(a);
-            }
-        }
-        this.state.actions = filteredActions;
-    }
-
     private async prepareArticleData(): Promise<void> {
         this.state.isExternal = this.state.article?.SenderType === 'external';
 
-        const contact = await TicketService.getContactForArticle(this.state.article);
+        const contact = await this.context?.articleLoader?.getContactForArticle(this.state.article);
         if (contact) {
             this.state.contactIcon = LabelService.getInstance().getObjectIcon(contact);
 
             if (!this.state.isExternal) {
                 this.state.fromDisplayName = await LabelService.getInstance().getObjectText(contact, false, true);
             }
-        } else {
+        }
+
+        if (!this.state.contactIcon) {
             this.state.contactIcon = LabelService.getInstance().getObjectIconForType(KIXObjectType.CONTACT);
         }
 
@@ -195,43 +199,26 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.shortMessage += '...';
         }
 
-        if (this.state.article) {
-            this.state.backgroundColor = await TicketService.getInstance().getChannelColor(this.state.article.Channel);
-        }
+        this.state.backgroundColor = await this.context?.articleLoader?.getChannelColor(this.state.article?.Channel);
 
         this.eventSubscriber = {
-            eventSubscriberId: 'message-content-' + this.state.article?.ArticleID,
+            eventSubscriberId: 'message-content-' + this.articleId,
             eventPublished: (data: any, eventId: string): void => {
-                if (eventId === 'TOGGLE_ARTICLE' && data.articleId === this.article.ArticleID) {
+                if (eventId === 'TOGGLE_ARTICLE' && data.articleId === this.articleId) {
                     this.state.expanded = data.expanded;
                     this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
                     this.toggleArticleContent();
                 }
             }
         };
+
         EventService.getInstance().subscribe('TOGGLE_ARTICLE', this.eventSubscriber);
     }
 
     private filterAttachments(): void {
-        let attachments = (this.state.article?.Attachments || []);
-
-        attachments = attachments.filter(
-            (a) => !a.Filename.match(/^file-(1|2)$/) &&
-                (this.state.showAllAttachments || a.Disposition !== 'inline')
+        this.state.articleAttachments = this.context?.articleLoader?.filterAttachments(
+            this.detailedArticle, this.state.showAllAttachments
         );
-
-        attachments.sort((a, b) => {
-            if (!this.state.showAllAttachments) return SortUtil.compareString(a.Filename, b.Filename);
-
-            let result = -1;
-            if (a.Disposition === b.Disposition) {
-                result = SortUtil.compareString(a.Filename, b.Filename);
-            } else if (a.Disposition === 'inline') {
-                result = 1;
-            }
-            return result;
-        });
-        this.state.articleAttachments = attachments;
     }
 
     public toggleArticleListView(event?: any): void {
@@ -255,71 +242,100 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async toggleArticleContent(): Promise<void> {
+    private async toggleArticleContent(setFocus: boolean = true): Promise<void> {
         if (this.state.expanded) {
             this.state.loadingContent = true;
 
-            this.prepareAttachments();
+            this.loadDetailedArticle();
 
-            if (this.state.compactViewExpanded) {
-                await this.prepareImages();
-            }
-
-            this.state.articleTo = await LabelService.getInstance().getDisplayText(
-                this.state.article, ArticleProperty.TO, undefined, undefined, false
-            );
-            this.state.articleCc = await LabelService.getInstance().getDisplayText(
-                this.state.article, ArticleProperty.CC, undefined, false, false
-            );
-
-            await this.setArticleSeen(undefined, true);
-
-            this.state.unseen = 0;
-
-            this.state.loadingContent = false;
-            this.state.showContent = true;
+            this.context.setAdditionalInformation('CURRENT_ARTICLE_FOCUS', this.articleId);
         }
+
+        this.saveArticleToggleState();
+    }
+
+    private async prepareArticleContent(): Promise<void> {
+        this.prepareAttachments();
+
+        if (this.state.compactViewExpanded) {
+            await this.prepareImages();
+        }
+
+        this.state.articleTo = await LabelService.getInstance().getDisplayText(
+            this.detailedArticle, ArticleProperty.TO, undefined, undefined, false
+        );
+        this.state.articleCc = await LabelService.getInstance().getDisplayText(
+            this.detailedArticle, ArticleProperty.CC, undefined, false, false
+        );
+
+        await this.setArticleSeen();
+
+        this.state.unseen = 0;
+
+        this.state.loadingContent = false;
+        this.state.showContent = true;
+
+        this.state.actions = await this.context?.articleLoader?.prepareArticleActions(this.detailedArticle);
+    }
+
+    private saveArticleToggleState(): void {
+        let toggleState: Map<number, boolean> = this.context.getAdditionalInformation('ARTICLE_TOGGLE_STATE');
+        if (!toggleState) {
+            toggleState = new Map();
+        }
+
+        if (this.articleId) {
+            toggleState.set(this.articleId, this.state.expanded);
+        }
+
+        this.context.setAdditionalInformation('ARTICLE_TOGGLE_STATE', toggleState);
+    }
+
+    private getArticleToggleState(): boolean {
+        let toggled: boolean = false;
+        const toggleState: Map<number, boolean> = this.context.getAdditionalInformation('ARTICLE_TOGGLE_STATE');
+        if (toggleState?.has(this.articleId)) {
+            toggled = toggleState.get(this.articleId);
+        }
+
+        return toggled;
     }
 
     private prepareAttachments(): void {
         if (!this.state.selectedCompactView || this.state.compactViewExpanded) {
             this.filterAttachments();
 
-            const attachments = this.state.article?.Attachments || [];
+            const attachments = this.detailedArticle?.Attachments || [];
             this.state.hasInlineAttachments = attachments.some((a) => a.Disposition === 'inline' && a.ContentID);
         }
     }
 
     private async prepareImages(): Promise<void> {
-        const attachmentPromises: Array<Promise<DisplayImageDescription>> = [];
         const imageAttachments = this.state.articleAttachments.filter((a) => a.ContentType.match(/^image\//));
-        if (imageAttachments && imageAttachments.length) {
-            for (const imageAttachment of imageAttachments) {
-                attachmentPromises.push(new Promise<DisplayImageDescription>(async (resolve, reject) => {
-                    const attachment = await TicketService.getInstance().loadArticleAttachment(
-                        this.state.article.TicketID, this.state.article.ArticleID, imageAttachment.ID
-                    ).catch(() => null);
+        let images: DisplayImageDescription[] = [];
 
-                    if (attachment) {
-                        const content = `data:${attachment.ContentType};base64,${attachment.Content}`;
-                        resolve(new DisplayImageDescription(
-                            attachment.ID, content, attachment.Comment ? attachment.Comment : attachment.Filename
-                        ));
-                    } else {
-                        resolve(null);
-                    }
-                }));
+        if (imageAttachments?.length) {
+            const attachments = await TicketService.getInstance().loadArticleAttachments(
+                this.detailedArticle?.TicketID, this.detailedArticle?.ArticleID, imageAttachments.map((a) => a.ID)
+            ).catch((): Attachment[] => []);
+
+            if (attachments?.length) {
+                for (const attachment of attachments) {
+                    const content = `data:${attachment.ContentType};base64,${attachment.Content}`;
+                    const displayImage = new DisplayImageDescription(
+                        attachment.ID, content, attachment.Comment ? attachment.Comment : attachment.Filename
+                    );
+                    images.push(displayImage);
+                }
             }
         }
-        this.state.images = (await Promise.all(attachmentPromises)).filter((i) => i);
+        this.state.images = images;
     }
 
-    private async setArticleSeen(
-        article: Article = this.state.article || this.article, silent?: boolean
-    ): Promise<void> {
-        if (article?.isUnread()) {
+    private async setArticleSeen(): Promise<void> {
+        if (this.state.article?.isUnread()) {
             await TicketService.getInstance().setArticleSeenFlag(
-                article.TicketID, article.ArticleID
+                this.state.article.TicketID, this.state.article.ArticleID
             );
             this.context.reloadObjectList(KIXObjectType.ARTICLE, true);
         }
@@ -329,27 +345,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         e.stopPropagation();
         this.state.showAllAttachments = !this.state.showAllAttachments;
         this.filterAttachments();
-    }
-
-    private async loadArticle(): Promise<void> {
-        if (!this.articleLoaded) {
-            this.context.loadArticle(this.article.ArticleID, async (a: Article) => {
-                const countNumber = this.state.article['countNumber'];
-                this.state.article = a;
-                this.state.article['countNumber'] = countNumber;
-                this.articleLoaded = true;
-
-                await this.prepareActions();
-                this.prepareAttachments();
-                if (!this.state.selectedCompactView) {
-                    await this.prepareImages();
-                }
-
-                await this.prepareArticleData();
-
-                this.state.show = true;
-            });
-        }
     }
 
     public async switchAttachmentLayout(event: any): Promise<void> {

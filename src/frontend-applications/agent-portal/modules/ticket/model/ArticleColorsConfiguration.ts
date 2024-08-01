@@ -20,6 +20,8 @@ export class ArticleColorsConfiguration implements IConfiguration {
 
     public application: string = 'agent-portal';
 
+    public roleIds: number[] = [];
+
     public constructor(
         public note: string = '#fbf7e2',
         public email: string = '#e1eaeb'

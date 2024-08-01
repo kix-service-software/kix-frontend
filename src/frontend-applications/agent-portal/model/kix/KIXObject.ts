@@ -14,6 +14,7 @@ import { SearchOperator } from '../../modules/search/model/SearchOperator';
 import { ObjectIcon } from '../../modules/icon/model/ObjectIcon';
 import { SortUtil } from '../SortUtil';
 import { BindableObject } from '../BindableObject';
+import { User } from '../../modules/user/model/User';
 
 export abstract class KIXObject extends BindableObject {
 
@@ -55,12 +56,8 @@ export abstract class KIXObject extends BindableObject {
                 }
             }
 
-            if (Array.isArray(this.DynamicFields)) {
-                this.DynamicFields = this.DynamicFields.map((dfv) => new DynamicFieldValue(dfv));
-            }
-
             this.displayValues = object.displayValues ? object.displayValues : [];
-            this.DynamicFields = object.DynamicFields
+            this.DynamicFields = Array.isArray(object.DynamicFields)
                 ? object.DynamicFields.map((df) => new DynamicFieldValue(df))
                 : [];
 

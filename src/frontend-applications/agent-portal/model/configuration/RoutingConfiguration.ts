@@ -16,7 +16,7 @@ export class RoutingConfiguration {
     public contextType: ContextType = ContextType.MAIN;
 
     public constructor(
-        public contextId: string,
+        public contextId?: string,
         public objectType?: KIXObjectType | string,
         public contextMode?: ContextMode,
         public objectIdProperty?: string,
@@ -25,7 +25,8 @@ export class RoutingConfiguration {
         public replaceObjectId?: string | number,
         public resetContext: boolean = true,
         public params: Array<[string, any]> = null,
-        public additionalInformation: Array<[string, any]> = []
+        public additionalInformation: Array<[string, any]> = [],
+        public url?: string
     ) { }
 
 }

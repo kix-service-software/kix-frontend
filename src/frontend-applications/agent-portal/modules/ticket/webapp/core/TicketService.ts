@@ -56,16 +56,16 @@ import { TicketTypeProperty } from '../../model/TicketTypeProperty';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { CreateTicketArticleOptions } from '../../model/CreateTicketArticleOptions';
 import { Error } from '../../../../../../server/model/Error';
-import { Contact } from '../../../customer/model/Contact';
-import { ContactProperty } from '../../../customer/model/ContactProperty';
 import { TicketHistory } from '../../model/TicketHistory';
-import { ArticleColorsConfiguration } from '../../model/ArticleColorsConfiguration';
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { Counter } from '../../../user/model/Counter';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
+import { TicketModuleConfiguration } from '../../model/TicketModuleConfiguration';
+import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -78,8 +78,6 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         return TicketService.INSTANCE;
     }
-
-    private articleColorConfiguration: any;
 
     private constructor() {
         super(KIXObjectType.TICKET);
@@ -121,6 +119,18 @@ export class TicketService extends KIXObjectService<Ticket> {
             objects = await super.loadObjects<O>(objectType, null, loadingOptions, null, false);
         } else {
             superLoad = true;
+
+            // get ticket id if necessary
+            // (e.g. if article is loaded with DFs by FilterUtil=>checkCriteriaByPropertyValue)
+            if (objectType === KIXObjectType.ARTICLE && !objectLoadingOptions) {
+                const context = ContextService.getInstance().getActiveContext();
+                if (
+                    context.descriptor.kixObjectTypes.includes(KIXObjectType.TICKET)
+                    && context.descriptor.contextMode === ContextMode.DETAILS
+                ) {
+                    objectLoadingOptions = new ArticleLoadingOptions(context.getObjectId());
+                }
+            }
             objects = await super.loadObjects<O>(
                 objectType, objectIds, loadingOptions, objectLoadingOptions, cache, forceIds, silent, collectionId
             );
@@ -153,22 +163,31 @@ export class TicketService extends KIXObjectService<Ticket> {
         return attachment;
     }
 
+    public async loadArticleAttachments(
+        ticketId: number, articleId: number, attachmentIds: number[]
+    ): Promise<Attachment[]> {
+        const attachments = await TicketSocketClient.getInstance().loadArticleAttachments(
+            ticketId, articleId, attachmentIds
+        );
+        return attachments;
+    }
+
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
-        await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId)
+        await AgentSocketClient.getInstance().markAsSeen(KIXObjectType.ARTICLE, [articleId])
+            .then(() => EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR))
             .catch((error) => console.error(error));
-        EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
     public async markTicketAsSeen(ticketId: number): Promise<void> {
-        await KIXObjectService.updateObject(
-            KIXObjectType.TICKET, [['MarkAsSeen', 1]], ticketId
-        );
+        await AgentSocketClient.getInstance().markAsSeen(KIXObjectType.TICKET, [ticketId])
+            .then(() => EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR))
+            .catch((error) => console.error(error));
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         const filter = [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, searchValue
             )
         ];
 
@@ -354,6 +373,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 nodes.push(new TreeNode(3, external));
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:
+            case ArticleProperty.ENCRYPT_IF_POSSIBLE:
                 const yes = await TranslationService.translate('Translatable#Yes');
                 const no = await TranslationService.translate('Translatable#No');
                 nodes.push(new TreeNode(0, no));
@@ -458,71 +478,65 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async getPreparedArticleBodyContent(
         article: Article, removeInlineImages: boolean = false
     ): Promise<[string, InlineContent[]]> {
-        article = await this.getArticleWithAttachments(article);
         if (article.bodyAttachment) {
-            const attachmentWithContent = await this.loadArticleAttachment(
-                article.TicketID, article.ArticleID, article.bodyAttachment.ID
+            const inlineAttachments = article.getAttachments(true) || [];
+
+            const attachmentIds = [article.bodyAttachment.ID, ...inlineAttachments.map((a) => a.ID)];
+            const attachments = await this.loadArticleAttachments(
+                article.TicketID, article.ArticleID, attachmentIds
             );
 
-            let buffer = Buffer.from(attachmentWithContent.Content, 'base64');
-            const encoding = attachmentWithContent.charset ? attachmentWithContent.charset : 'utf8';
-            if (encoding !== 'utf8' && encoding !== 'utf-8') {
-                const iconv = require('iconv-lite');
-                try {
-                    buffer = iconv.decode(buffer, encoding);
-                } catch (e) {
-                    // do nothing
-                }
-            }
+            const contentAttachment = attachments.find((a) => a.ID === article.bodyAttachment.ID);
+            let content = this.getContent(contentAttachment);
 
-            let content = buffer.toString('utf8');
-            const match = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
-            if (match && match.length >= 3) {
-                content = match[2];
-            } else if (attachmentWithContent.Filename !== 'file-2') {
-                content = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
-            }
-
-            const inlineContent: InlineContent[] = [];
-            if (!removeInlineImages) {
-                const inlineAttachments = article.getAttachments(true);
-                for (const inlineAttachment of inlineAttachments) {
-                    const attachment = await this.loadArticleAttachment(
-                        article.TicketID, article.ArticleID, inlineAttachment.ID
-                    );
-                    if (attachment) {
-                        inlineAttachment.Content = attachment.Content;
-                    }
-                }
-
-                inlineAttachments.forEach(
-                    (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
-                );
-            } else {
-
+            let inlineContent = [];
+            if (removeInlineImages) {
                 // remove inline images
                 content = content.replace(/<img.+?src="cid:.+?>/g, '');
+            } else {
+                const inline = attachments?.filter((a) => a.ID !== article.bodyAttachment.ID);
+                inlineContent = await this.prepareInlineContent(inline);
             }
 
             return [content, inlineContent];
         } else {
-            const body = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
+            const body = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br>\n');
             return [body, null];
         }
     }
 
-    private async getArticleWithAttachments(article: Article): Promise<Article> {
-        if (!article.bodyAttachment && !article.Attachments?.length) {
-            const articles = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, [article.ArticleID],
-                new KIXObjectLoadingOptions(null, null, null, [ArticleProperty.ATTACHMENTS]),
-                new ArticleLoadingOptions(article.TicketID)
-            );
-            if (articles.length && articles[0]) {
-                article = articles[0];
+    private getContent(contentAttachment: Attachment): string {
+        let buffer = Buffer.from(contentAttachment.Content, 'base64');
+        const encoding = contentAttachment.charset ? contentAttachment.charset : 'utf8';
+        if (encoding !== 'utf8' && encoding !== 'utf-8') {
+            const iconv = require('iconv-lite');
+            try {
+                buffer = iconv.decode(buffer, encoding);
+            } catch (e) {
+                // do nothing
             }
         }
-        return article;
+
+        let content = buffer.toString('utf8');
+        const match = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
+        if (match && match.length >= 3) {
+            content = match[2];
+        } else if (contentAttachment.Filename !== 'file-2') {
+            content = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
+        }
+
+        return content;
+    }
+
+    private async prepareInlineContent(inlineAttachments: Attachment[]): Promise<InlineContent[]> {
+        const inlineContent: InlineContent[] = [];
+
+        for (const attachment of inlineAttachments) {
+            const content = new InlineContent(attachment.ContentID, attachment.Content, attachment.ContentType);
+            inlineContent.push(content);
+        }
+
+        return inlineContent;
     }
 
     protected getResource(objectType: KIXObjectType): string {
@@ -678,43 +692,6 @@ export class TicketService extends KIXObjectService<Ticket> {
         return [...objectProperties, ...superProperties];
     }
 
-    public static async getContactForArticle(article: Article): Promise<Contact> {
-        let contact: Contact;
-        if (article) {
-            if (article.SenderType === 'external') {
-                const matches = article.From.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/);
-                if (matches?.length) {
-                    const email = matches[0];
-                    const loadingOptions = new KIXObjectLoadingOptions([
-                        new FilterCriteria(
-                            ContactProperty.EMAIL, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, email
-                        )
-                    ]);
-                    const contacts = await KIXObjectService.loadObjects<Contact>(
-                        KIXObjectType.CONTACT, null, loadingOptions
-                    ).catch((): Contact[] => []);
-
-                    if (contacts?.length) {
-                        contact = contacts[0];
-                    }
-                }
-            } else {
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    null, null, null, [UserProperty.CONTACT], [UserProperty.CONTACT]
-                );
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [article.CreatedBy], loadingOptions
-                ).catch((): User[] => []);
-
-                if (users?.length) {
-                    contact = users[0].Contact;
-                }
-            }
-        }
-
-        return contact;
-    }
-
     public static async getPendingDateDiff(value?: any): Promise<Date> {
         let offset: number;
         let date: Date;
@@ -751,38 +728,6 @@ export class TicketService extends KIXObjectService<Ticket> {
         const date = new Date();
         date.setSeconds(date.getSeconds() + offset);
         return date;
-    }
-
-    public async getChannelColor(channel: string): Promise<string> {
-        if (!this.articleColorConfiguration) {
-            const options = await KIXObjectService.loadObjects<SysConfigOption>(
-                KIXObjectType.SYS_CONFIG_OPTION, [ArticleColorsConfiguration.CONFIGURATION_ID]
-            ).catch((): SysConfigOption[] => []);
-
-            if (Array.isArray(options) && options.length) {
-                try {
-                    this.articleColorConfiguration = JSON.parse(options[0].Value);
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-        }
-
-        return this.articleColorConfiguration
-            ? this.articleColorConfiguration[channel] || this.getFallbackColor(channel)
-            : this.getFallbackColor(channel);
-    }
-
-    private getFallbackColor(channel: string): string {
-        let color = '#fff';
-
-        if (channel === 'note') {
-            color = '#fbf7e2';
-        } else if (channel === 'email') {
-            color = '#e1eaeb';
-        }
-
-        return color;
     }
 
     public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
@@ -951,6 +896,23 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
         return LabelService.getInstance().getPropertyText(TicketProperty.QUEUE, objectType);
+    }
+
+    public static async getTicketModuleConfiguration(): Promise<TicketModuleConfiguration> {
+        let config: TicketModuleConfiguration;
+
+        const value = await SysConfigService.getInstance().getSysConfigOptionValue(
+            TicketModuleConfiguration.CONFIGURATION_ID
+        ).catch(() => null);
+        if (value) {
+            try {
+                config = JSON.parse(value);
+            } catch (error) {
+                console.error('Could not parse Ticket Module Configuration');
+            }
+        }
+
+        return config as any;
     }
 
 }

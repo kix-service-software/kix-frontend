@@ -16,6 +16,8 @@ import { ArticleReceiver } from './ArticleReceiver';
 import { ArticleProperty } from './ArticleProperty';
 import addrparser from 'address-rfc2822';
 import { Ticket } from './Ticket';
+import { User } from '../../user/model/User';
+import { Contact } from '../../customer/model/Contact';
 
 export class Article extends KIXObject {
 
@@ -29,7 +31,7 @@ export class Article extends KIXObject {
 
     public CustomerVisible: boolean = null;
 
-    public From: string = null;
+    public From: string | Contact = null;
 
     public FromRealname: string = null;
 
@@ -74,16 +76,29 @@ export class Article extends KIXObject {
     public IncomingTime: number = null;
 
     public Attachments: Attachment[] = null;
+    public AttachmentCount: number = 0;
 
     public Flags: ArticleFlag[] = null;
 
-    public CreatedBy: number = null;
+    public CreatedBy: User | number = null;
     public ChangedBy: number = null;
 
     public Plain: string = null;
 
     public Unseen: number = 0;
+
+    public NotSent: number = 0;
     public NotSentError: string = '';
+
+    public SMIMESigned: number = 0;
+    public SMIMESignedError: string = '';
+    public smimeVerified: boolean = true;
+    public smimeSigned: boolean = true;
+
+    public SMIMEEncrypted: number = 0;
+    public SMIMEEncryptedError: string = '';
+    public smimeDecrypted: boolean = true;
+    public smimeEncrypted: boolean = true;
 
     // UI Properties
 
@@ -99,6 +114,7 @@ export class Article extends KIXObject {
         super(article);
 
         this.ticket = ticket;
+        this.TicketID = this.ticket?.TicketID;
 
         if (article) {
             this.TicketID = article.TicketID;
@@ -135,9 +151,30 @@ export class Article extends KIXObject {
             this.CreatedBy = article.CreatedBy;
             this.Plain = article.Plain;
             this.Unseen = Number(article.Unseen);
+            this.NotSent = Number(article.NotSent);
             this.NotSentError = article.NotSentError;
+            this.SMIMESigned = Number(article.SMIMESigned);
+            this.SMIMESignedError = article.SMIMESignedError;
+            this.smimeVerified = this.SenderType === 'external' && this.SMIMESigned && !Boolean(this.SMIMESignedError);
+            this.smimeSigned = this.SenderType !== 'external' && this.SMIMESigned && !Boolean(this.SMIMESignedError);
+            this.SMIMEEncrypted = Number(article.SMIMEEncrypted);
+            this.SMIMEEncryptedError = article.SMIMEEncryptedError;
+            this.smimeDecrypted = this.SenderType === 'external' && this.SMIMEEncrypted && !Boolean(this.SMIMEEncryptedError);
+            this.smimeEncrypted = this.SenderType !== 'external' && this.SMIMEEncrypted && !Boolean(this.SMIMEEncryptedError);
 
             this.bodyAttachment = article.bodyAttachment;
+
+            if (typeof article.From === 'object' && !Array.isArray(article.From)) {
+                this.From = new Contact(article.From);
+            }
+
+            if (Array.isArray(article.From)) {
+                this.From = article.From?.length > 0 ? article.From[0] : '';
+            }
+
+            if (typeof article.CreatedBy === 'object') {
+                this.CreatedBy = new User(article.CreatedBy);
+            }
 
             if (this.Attachments) {
                 let attachmentIndex = article.Attachments.findIndex(

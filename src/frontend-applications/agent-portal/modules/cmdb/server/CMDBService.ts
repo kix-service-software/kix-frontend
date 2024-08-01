@@ -84,9 +84,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'ITSM::ConfigItem::DeploymentState'),
-            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Name`, SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.AND, 'Functionality'),
-            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Value`, SearchOperator.NOT_EQUALS, FilterDataType.STRING,
+            new FilterCriteria('Functionality', SearchOperator.NOT_EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'postproductive')
         ], undefined, undefined, [GeneralCatalogItemProperty.PREFERENCES]);
 
@@ -161,7 +159,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 token, uri, clientRequestId, query
             );
         } else if (loadingOptions.filter) {
-            const success = await this.buildFilter(loadingOptions.filter, 'ConfigItem', query, token);
+            const success = await this.buildFilter(loadingOptions.filter, 'ConfigItem', query, token, this.objectType);
             if (!success) {
                 LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
                 return new ObjectResponse([], 0);
@@ -225,7 +223,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 }
 
             } else if (loadingOptions.filter) {
-                const success = await this.buildFilter(loadingOptions.filter, 'Image', query, token);
+                const success = await this.buildFilter(loadingOptions.filter, 'Image', query, token, this.objectType);
                 if (!success) {
                     LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
                     return [];
@@ -383,23 +381,6 @@ export class CMDBAPIService extends KIXObjectAPIService {
             });
         }
 
-        const fulltext = criteria.filter((f) => f.property === SearchProperty.FULLTEXT);
-        if (fulltext?.length) {
-            fulltext.forEach((c) => {
-                const fulltextSearch = [
-                    new FilterCriteria(
-                        ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                        FilterDataType.STRING, FilterType.OR, `*${c.value}*`
-                    ),
-                    new FilterCriteria(
-                        ConfigItemProperty.NAME, SearchOperator.LIKE,
-                        FilterDataType.STRING, FilterType.OR, `*${c.value}*`
-                    )
-                ];
-                criteria = [...criteria, ...fulltextSearch];
-            });
-        }
-
         const newCriteria = criteria.filter((c) =>
             (c.property === ConfigItemProperty.CONFIG_ITEM_ID && c.operator !== SearchOperator.NOT_EQUALS) ||
             c.property === ConfigItemProperty.NUMBER ||
@@ -418,7 +399,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH ||
             c.property === 'ID' ||
             c.property === KIXObjectProperty.CHANGE_BY ||
-            c.property === KIXObjectProperty.CREATE_BY
+            c.property === KIXObjectProperty.CREATE_BY ||
+            c.property === SearchProperty.FULLTEXT
         );
 
         for (const searchCriteria of newCriteria) {

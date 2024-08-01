@@ -51,5 +51,6 @@ export class CKEditorConfiguration {
     codeSnippet_theme: string = 'github';
     disableNativeSpellChecker: boolean = false;
     enterMode: number = 2; // CKEDITOR.ENTER_BR,
-    shiftEnterMode: number = 2; // CKEDITOR.ENTER_BR
+    shiftEnterMode: number = 2; // CKEDITOR.ENTER_BR,
+    versionCheck: boolean = false;
 }

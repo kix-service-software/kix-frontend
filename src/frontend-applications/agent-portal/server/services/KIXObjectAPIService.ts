@@ -99,10 +99,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     ): Promise<ObjectResponse<O>> {
         const query = await this.prepareQuery(loadingOptions, objectType, token);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
-            const success = await this.buildFilter(loadingOptions.filter, responseProperty, query, token);
+            const success = await this.buildFilter(loadingOptions.filter, responseProperty, query, token, objectType);
 
             if (!success) {
-                LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
+                LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter).replace(/\n/g, ''));
                 return new ObjectResponse([], 0);
             }
 
@@ -448,7 +448,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     }
 
     public async buildFilter(
-        criteria: FilterCriteria[], objectProperty: string, query: any, token: string
+        criteria: FilterCriteria[], objectProperty: string, query: any, token: string, objectType: string
     ): Promise<boolean> {
         criteria = criteria.filter((c) => c?.property);
 
@@ -457,9 +457,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             (c) => !c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
 
-        let filterCriteria = await this.prepareAPIFilter(nonDynamicFieldCriteria, token);
+        let filterCriteria = await this.prepareAPIFilter(nonDynamicFieldCriteria, token, objectType);
         for (const service of this.extendedServices) {
-            const extendedCriteria = await service.prepareAPIFilter(nonDynamicFieldCriteria, token);
+            const extendedCriteria = await service.prepareAPIFilter(nonDynamicFieldCriteria, token, objectType);
             if (extendedCriteria) {
                 filterCriteria = [...filterCriteria, ...extendedCriteria];
             }
@@ -481,9 +481,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             query.filter = JSON.stringify(apiFilter);
         }
 
-        let searchCriteria = await this.prepareAPISearch(nonDynamicFieldCriteria, token);
+        let searchCriteria = await this.prepareAPISearch(nonDynamicFieldCriteria, token, objectType);
         for (const service of this.extendedServices) {
-            const extendedCriteria = await service.prepareAPISearch(nonDynamicFieldCriteria, token);
+            const extendedCriteria = await service.prepareAPISearch(nonDynamicFieldCriteria, token, objectType);
             if (extendedCriteria) {
                 searchCriteria = [...searchCriteria, ...extendedCriteria];
             }
@@ -560,11 +560,15 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         return true;
     }
 
-    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPIFilter(
+        criteria: FilterCriteria[], token: string, objectType?: string
+    ): Promise<FilterCriteria[]> {
         return criteria;
     }
 
-    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPISearch(
+        criteria: FilterCriteria[], token: string, objectType?: string
+    ): Promise<FilterCriteria[]> {
         return criteria;
     }
 

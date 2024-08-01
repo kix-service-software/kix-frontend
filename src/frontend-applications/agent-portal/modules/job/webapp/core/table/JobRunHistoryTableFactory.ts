@@ -18,6 +18,8 @@ import { JobRunProperty } from '../../../model/JobRunProperty';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { Table } from '../../../../table/model/Table';
 import { ToggleOptions } from '../../../../table/model/ToggleOptions';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 export class JobRunHistoryTableFactory extends TableFactory {
 
@@ -27,11 +29,18 @@ export class JobRunHistoryTableFactory extends TableFactory {
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
+        const context = ContextService.getInstance().getActiveContext();
+        const jobId = context?.getObjectId();
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        table.setContentProvider(new JobRunHistoryContentProvider(table, null, null, contextId));
+        table.setContentProvider(
+            new JobRunHistoryContentProvider(
+                table, null, tableConfiguration.loadingOptions, null,
+                null, { id: jobId }
+            )
+        );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -61,8 +70,12 @@ export class JobRunHistoryTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.JOB_RUN, null, null, tableColumns, [], null, null, null, null,
-                TableHeaderHeight.SMALL
+                KIXObjectType.JOB_RUN,
+                new KIXObjectLoadingOptions(
+                    null, 'JobRun.-StartTime:datetime', 20
+                ),
+                10, tableColumns, [], null, null, null,
+                null, TableHeaderHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;

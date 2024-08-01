@@ -54,19 +54,22 @@ export class ConfigItemPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     public async replaceDFObjectPlaceholder(
-        attributePath: string, assetId: number, language?: string
+        attributePath: string, assetId: number, language?: string, forRichtext?: boolean, translate?: boolean
     ): Promise<string> {
         let result: string = '';
         if (assetId) {
             const asset = await this.loadAssetWithCurrentVersion(assetId);
             if (asset) {
-                result = await this.replace(`<KIX_ASSET_${attributePath}>`, asset, language);
+                result = await this.replace(`<KIX_ASSET_${attributePath}>`, asset, language, forRichtext, translate);
             }
         }
         return result;
     }
 
-    public async replace(placeholder: string, asset?: ConfigItem, language?: string): Promise<string> {
+    public async replace(
+        placeholder: string, asset?: ConfigItem, language?: string, forRichtext?: boolean,
+        translate: boolean = true
+    ): Promise<string> {
         let result = '';
         const objectString = PlaceholderService.getInstance().getObjectString(placeholder);
         if (asset && this.isHandlerFor(objectString)) {
@@ -91,7 +94,7 @@ export class ConfigItemPlaceholderHandler extends AbstractPlaceholderHandler {
                             (ph) => ph.isHandlerFor(placeholder)
                         );
                         if (handler) {
-                            result = await handler.replace(placeholder, asset, language);
+                            result = await handler.replace(placeholder, asset, language, forRichtext, translate);
                             handlerHandledId = true;
                         }
                     }
@@ -121,7 +124,7 @@ export class ConfigItemPlaceholderHandler extends AbstractPlaceholderHandler {
                             case ConfigItemProperty.CREATE_BY:
                             case ConfigItemProperty.CREATE_TIME:
                                 result = await LabelService.getInstance().getDisplayText(
-                                    asset, attribute, undefined, false
+                                    asset, attribute, undefined, translate
                                 );
                                 break;
                             default:
@@ -130,7 +133,9 @@ export class ConfigItemPlaceholderHandler extends AbstractPlaceholderHandler {
                                 if (!version && asset.Versions?.length && asset.LastVersionID) {
                                     version = asset.Versions.find((v) => v.VersionID === asset.LastVersionID);
                                 }
-                                await this.preparedData(version?.PreparedData, placeholderMap);
+                                await this.preparedData(
+                                    version?.PreparedData, placeholderMap, undefined, translate
+                                );
                                 if (placeholderMap.has(attribute)) {
                                     result = placeholderMap.get(attribute);
                                 }
@@ -159,7 +164,9 @@ export class ConfigItemPlaceholderHandler extends AbstractPlaceholderHandler {
 
     }
 
-    public async preparedData(data: PreparedData[], resultData: Map<string, string>, parent: string = ''): Promise<void> {
+    public async preparedData(
+        data: PreparedData[], resultData: Map<string, string>, parent: string = '', translate?: boolean
+    ): Promise<void> {
         if (data) {
             const attributeCounter = new Map();
             const preparePromises = [];
@@ -171,7 +178,7 @@ export class ConfigItemPlaceholderHandler extends AbstractPlaceholderHandler {
                 const attributeNameIndex = `${parent}${attribute.Key}_${counter}`;
 
                 preparePromises.push(
-                    this.getPreparePromise(attribute, resultData, attributeNameIndex, attributeName)
+                    this.getPreparePromise(attribute, resultData, attributeNameIndex, attributeName, translate)
                 );
             });
             await Promise.all(preparePromises);
@@ -179,7 +186,8 @@ export class ConfigItemPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     private getPreparePromise(
-        attribute: PreparedData, resultData: Map<string, string>, attributeNameIndex: string, attributeName: string
+        attribute: PreparedData, resultData: Map<string, string>, attributeNameIndex: string, attributeName: string,
+        translate?: boolean
     ): Promise<void> {
         return new Promise<void>(async (resolve) => {
             let key: string;
@@ -192,17 +200,19 @@ export class ConfigItemPlaceholderHandler extends AbstractPlaceholderHandler {
             } else if (attribute.Value) {
                 value = attribute.DisplayValue;
                 key = attribute.Value;
-                if (attribute.Type === 'Date') {
-                    value = await DateTimeUtil.getLocalDateString(value);
-                } else if (attribute.Type === 'DateTime') {
-                    value = await DateTimeUtil.getLocalDateTimeString(value);
-                } else if (![
-                    'Text', 'TextArea',
-                    'CIClassReference', 'TicketReference',
-                    'Contact', 'Organisation', 'User',
-                    'EncryptedText'
-                ].includes(attribute.Type)) {
-                    value = await TranslationService.translate(value);
+                if (translate) {
+                    if (attribute.Type === 'Date') {
+                        value = await DateTimeUtil.getLocalDateString(value);
+                    } else if (attribute.Type === 'DateTime') {
+                        value = await DateTimeUtil.getLocalDateTimeString(value);
+                    } else if (![
+                        'Text', 'TextArea',
+                        'CIClassReference', 'TicketReference',
+                        'Contact', 'Organisation', 'User',
+                        'EncryptedText'
+                    ].includes(attribute.Type)) {
+                        value = await TranslationService.translate(value);
+                    }
                 }
             }
 
@@ -224,7 +234,7 @@ export class ConfigItemPlaceholderHandler extends AbstractPlaceholderHandler {
             }
 
             if (attribute.Sub) {
-                await this.preparedData(attribute.Sub, resultData, `${attributeNameIndex}_`);
+                await this.preparedData(attribute.Sub, resultData, `${attributeNameIndex}_`, translate);
             }
             resolve();
         });

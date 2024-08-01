@@ -11,6 +11,6 @@ import { Attachment } from '../../../model/kix/Attachment';
 
 export class LoadArticleAttachmentResponse {
 
-    public constructor(public requestId: string, public attachment: Attachment) { }
+    public constructor(public requestId: string, public attachments: Attachment[]) { }
 
 }

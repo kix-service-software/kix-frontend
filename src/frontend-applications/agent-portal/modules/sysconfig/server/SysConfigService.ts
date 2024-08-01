@@ -181,20 +181,29 @@ export class SysConfigService extends KIXObjectAPIService {
     }
 
     public async getPortalConfiguration(token: string): Promise<AgentPortalConfiguration> {
-        const response = await this.loadObjects<SysConfigOption>(
-            token, '', KIXObjectType.SYS_CONFIG_OPTION, [AgentPortalConfiguration.CONFIGURATION_ID], null, null
-        ).catch((): ObjectResponse<SysConfigOption> => new ObjectResponse([]));
-
         let config: AgentPortalConfiguration = new AgentPortalConfiguration();
-        if (response?.objects?.length) {
-            try {
-                config = JSON.parse(response?.objects[0].Value);
-            } catch (error) {
-                LoggingService.getInstance().error(error);
-            }
+        try {
+            let value = await this.getSysConfigOptionValue(token, AgentPortalConfiguration.CONFIGURATION_ID);
+            config = JSON.parse(value);
+        } catch (error) {
+            LoggingService.getInstance().error(error);
         }
 
         return config;
+    }
+
+    public async getSysConfigOptionValue(token: string, id: string): Promise<any> {
+        let value;
+
+        const response = await this.loadObjects<SysConfigOption>(
+            token, '', KIXObjectType.SYS_CONFIG_OPTION, [id], null, null
+        ).catch((): ObjectResponse<SysConfigOption> => new ObjectResponse([]));
+
+        if (response?.objects?.length) {
+            value = response?.objects[0].Value;
+        }
+
+        return value;
     }
 
 }

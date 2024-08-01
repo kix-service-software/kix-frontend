@@ -362,6 +362,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         if (!this.multiselect) {
             if (selectedNodes.length) {
                 newValue.push(selectedNodes[0].id);
+            } else if (value?.length) {
+                newValue.push(value[0]);
             }
         } else if (Array.isArray(value)) {
             // keep current values

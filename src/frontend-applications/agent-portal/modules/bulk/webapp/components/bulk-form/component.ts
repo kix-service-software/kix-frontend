@@ -58,9 +58,7 @@ class Component {
         ]);
 
         this.state.bulkManager?.registerListener('bulk-dialog-listener', async () => {
-            this.state.prepared = false;
             this.setCanRun();
-            setTimeout(() => this.state.prepared = true, 150);
         });
 
         const bulkService = BulkService.getInstance();

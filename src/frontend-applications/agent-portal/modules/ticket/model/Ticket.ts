@@ -86,9 +86,13 @@ export class Ticket extends KIXObject {
 
     public Articles: Article[];
 
+    public ArticleIDs: number[];
+
     public History: TicketHistory[];
 
     public Watchers: Watcher[];
+
+    public UntilTime: number;
 
     // refrenced objects
     public Contact: Contact;

@@ -28,13 +28,12 @@ class Component {
     private optionEditor: Map<string, any>;
     private additionalOptionsTimeout: any;
     private timoutTimer: TimeoutTimer;
-
-    private hintTimeoutTimer: TimeoutTimer;
+    private updateTimeout: any;
+    private updatePromiseResolve: () => void;
 
     public onCreate(): void {
         this.state = new ComponentState();
         this.timoutTimer = new TimeoutTimer();
-        this.hintTimeoutTimer = new TimeoutTimer();
     }
 
     public onInput(input: any): void {
@@ -47,62 +46,84 @@ class Component {
     }
 
     public async updateValues(): Promise<void> {
-        const currentValues = this.manager.getValues();
-
-        this.state.dynamicValues = this.state.dynamicValues.filter(
-            (dv) => currentValues.some((cv) => cv.id === dv.id)
-        );
-
-        for (const cv of currentValues) {
-            const existingValue = this.state.dynamicValues.find((bv) => bv.value.id === cv.id);
-            if (existingValue) {
-
-                if (existingValue.value.operator !== cv.operator) {
-                    await existingValue.setOperator(cv.operator);
-                }
-
-                if (!existingValue.value.operator) {
-                    existingValue.setOperationTree();
-                }
-
-                if (existingValue.value.value !== cv.value) {
-                    existingValue.setValue(cv.value);
-                    existingValue.setCurrentValue(true);
-                }
-
-                existingValue.required = cv.required;
-                existingValue.value.valid = cv.valid;
-                existingValue.value.validErrorMessages = cv.validErrorMessages;
-            } else {
-                const value = new DynamicFormFieldValue(this.manager, cv, cv.id);
-                await value.init();
-                this.state.dynamicValues.push(value);
+        if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout);
+            // resolve potential previous promise
+            if (this.updatePromiseResolve) {
+                this.updatePromiseResolve();
             }
         }
+        return new Promise<void>((resolve, reject) => {
+            this.updatePromiseResolve = resolve;
+            this.updateTimeout = setTimeout(async () => {
 
-        this.state.dynamicValues.forEach((v) => {
-            if (!this.advancedOptionsMap.has(v.instanceId)) {
-                this.advancedOptionsMap.set(v.instanceId, false);
-            }
+                const currentValues = this.manager.getValues();
+
+                this.state.dynamicValues = this.state.dynamicValues.filter(
+                    (dv) => currentValues.some((cv) => cv.id === dv.id)
+                );
+
+                // use index, to keep sort order
+                let index = 0;
+                for (const cv of currentValues) {
+                    const existingValue = this.state.dynamicValues.find((bv) => bv.value.id === cv.id);
+                    if (existingValue) {
+
+                        if (existingValue.value.operator !== cv.operator) {
+                            await existingValue.setOperator(cv.operator);
+                        }
+
+                        if (!existingValue.value.operator) {
+                            existingValue.setOperationTree();
+                        }
+
+                        if (existingValue.value.value !== cv.value) {
+                            existingValue.setValue(cv.value);
+                            existingValue.setCurrentValue(true);
+                        }
+
+                        existingValue.required = cv.required;
+                        if (existingValue.required) {
+                            await existingValue.setLabel();
+                        }
+
+                        existingValue.value.valid = cv.valid;
+                        existingValue.value.validErrorMessages = cv.validErrorMessages;
+                    } else {
+                        const value = new DynamicFormFieldValue(this.manager, cv, cv.id);
+                        await value.init();
+                        this.state.dynamicValues.splice(index, 0, value);
+                    }
+                    index++;
+                }
+
+                this.state.dynamicValues.forEach((v) => {
+                    if (!this.advancedOptionsMap.has(v.instanceId)) {
+                        this.advancedOptionsMap.set(v.instanceId, false);
+                    }
+                });
+
+                await this.addEmptyValue();
+
+                let removeInstanceIds = [];
+                if (this.manager.uniqueProperties) {
+                    const updatePromises = [];
+                    this.state.dynamicValues.forEach((dv) => updatePromises.push(dv.updateProperties()));
+                    removeInstanceIds = await Promise.all(updatePromises);
+                }
+
+                const toRemove = this.state.dynamicValues.filter(
+                    (dv) => removeInstanceIds.some((ri) => ri === dv.instanceId)
+                );
+                if (toRemove.length) {
+                    toRemove.forEach((p) => this.removeValue(p, false));
+                }
+
+                (this as any).setStateDirty('dynamicValues');
+                this.updatePromiseResolve = undefined;
+                resolve();
+            }, 800);
         });
-
-        await this.addEmptyValue();
-
-        let removeInstanceIds = [];
-        if (this.manager.uniqueProperties) {
-            const updatePromises = [];
-            this.state.dynamicValues.forEach((dv) => updatePromises.push(dv.updateProperties()));
-            removeInstanceIds = await Promise.all(updatePromises);
-        }
-
-        const toRemove = this.state.dynamicValues.filter(
-            (dv) => removeInstanceIds.some((ri) => ri === dv.instanceId)
-        );
-        if (toRemove.length) {
-            toRemove.forEach((p) => this.removeValue(p, false));
-        }
-
-        (this as any).setStateDirty('dynamicValues');
     }
 
     public async onMount(): Promise<void> {
@@ -199,11 +220,9 @@ class Component {
     }
 
     public setTimeValue(value: DynamicFormFieldValue, event: any): void {
-        this.timoutTimer.restartTimer(() => {
-            const newValue = event.target.value;
-            value.setTimeValue(newValue);
-            this.provideValue(value);
-        }, 1200);
+        const newValue = event.target.value;
+        value.setTimeValue(newValue);
+        this.provideValue(value);
 
     }
 
@@ -282,9 +301,14 @@ class Component {
         this.provideValue(value);
     }
 
-    public async provideValue(value: DynamicFormFieldValue): Promise<void> {
+    public async provideValue(value: DynamicFormFieldValue, updateValues: boolean = true): Promise<void> {
         await this.manager.setValue(value.getValue());
-        if (!this.provideTimeout) {
+
+        if (updateValues) {
+            if (this.provideTimeout) {
+                clearTimeout(this.provideTimeout);
+            }
+
             this.provideTimeout = setTimeout(async () => {
                 this.provideTimeout = null;
                 await this.updateValues();
@@ -302,12 +326,17 @@ class Component {
 
     private async addEmptyValue(): Promise<void> {
         const canAddEmptyValue = await this.manager.shouldAddEmptyField();
-        const hasEmptyValue = this.state.dynamicValues.some((sv) => sv.getValue().property === null);
+        const emptyValueIndex = this.state.dynamicValues.findIndex((sv) => sv.getValue().property === null);
 
-        if (canAddEmptyValue && !hasEmptyValue) {
-            const emptyField = new DynamicFormFieldValue(this.manager);
-            await emptyField.init();
-            this.state.dynamicValues.push(emptyField);
+        if (canAddEmptyValue) {
+            if (emptyValueIndex === -1) {
+                const emptyField = new DynamicFormFieldValue(this.manager);
+                await emptyField.init();
+                this.state.dynamicValues.push(emptyField);
+            } else if (emptyValueIndex < this.state.dynamicValues.length - 1) {
+                const emptyField = this.state.dynamicValues.splice(emptyValueIndex, 1);
+                this.state.dynamicValues.push(...emptyField);
+            }
         }
 
         (this as any).setStateDirty('dynamicValues');
@@ -466,7 +495,7 @@ class Component {
         this.timoutTimer.restartTimer(() => {
             const hint = event.target.value;
             value.value.hint = hint;
-            this.provideValue(value);
+            this.provideValue(value, false);
         }, 500);
     }
 

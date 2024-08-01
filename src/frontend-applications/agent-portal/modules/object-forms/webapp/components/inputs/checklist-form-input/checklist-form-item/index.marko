@@ -63,7 +63,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         withoutStyle
                                         class="me-2"
                                     />
-                                     ${state.selectedNode.label}
+                                    ${state.selectedNode.label}
                                 </li>
                             </if>
                         </ul>
@@ -89,6 +89,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
         </else>
     </div>
+    <if(state.item.showLastChangeDate && state.lastChangeDate)>
+        <div class="ps-2 pe-2">
+            <translation-string
+                pattern="Translatable#(Last Change: {0})"
+                placeholders=[state.lastChangeDate]
+            />
+        </div>
+    </if>
     <span class="ps-2 pe-2">
         <i>${state.item.description}</i>
     </span>

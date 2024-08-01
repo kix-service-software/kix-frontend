@@ -43,7 +43,9 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
-import { UserLabelProvider } from '../../../user/webapp/core/UserLabelProvider';
+import { PortalNotificationService } from '../../../portal-notification/webapp/core/PortalNotificationService';
+import { PortalNotification } from '../../../portal-notification/model/PortalNotification';
+import { PortalNotificationType } from '../../../portal-notification/model/PortalNotificationType';
 
 export class SearchService {
 
@@ -300,12 +302,8 @@ export class SearchService {
         if (Array.isArray(objects) && objects.length === 1) {
             const contextService = ContextService.getInstance();
             const contextDescriptors = contextService.getContextDescriptors(ContextMode.DETAILS);
-            const detailContextId = contextDescriptors.find(
-                (cd) => cd.kixObjectTypes.some((ot) =>
-                    ot === objectType)
-            );
+            const detailContextId = contextDescriptors.find((d) => d.kixObjectTypes.some((ot) => ot === objectType));
             if (detailContextId) {
-                contextService.toggleActiveContext();
                 contextService.setActiveContext(detailContextId.contextId, objects[0].ObjectId);
             }
         } else {
@@ -328,7 +326,7 @@ export class SearchService {
         const searchCache = new SearchCache<T>(null, null, objectType, [], []);
         searchCache.criteria = [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, searchValue
             )
         ];
 
@@ -515,6 +513,18 @@ export class SearchService {
                     resolve(objects);
                 }, 500);
             });
+        }
+
+        if (!searchCache) {
+            PortalNotificationService.getInstance().publishNotifications([
+                new PortalNotification(
+                    IdService.generateDateBasedId('search-error'), 'error',
+                    PortalNotificationType.IMPORTANT,
+                    'Error Loading Search', new Date().toLocaleString(), true, false,
+                    `No search ${name} available`,
+                    `Invalid search template ${name} - please update your dashboard configuration.`
+                )
+            ]);
         }
 
         return await this.searchObjects(

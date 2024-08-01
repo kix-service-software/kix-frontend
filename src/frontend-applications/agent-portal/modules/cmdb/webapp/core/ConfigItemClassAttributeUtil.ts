@@ -41,7 +41,7 @@ export class ConfigItemClassAttributeUtil {
                 ciClasses = [ciClasses[0]];
             }
             for (const ciClass of ciClasses) {
-                const attribute = this.getAttribute(ciClass.CurrentDefinition.Definition, property);
+                const attribute = this.getAttribute(ciClass?.CurrentDefinition?.Definition, property);
                 if (attribute && attribute.Input) {
                     return attribute.Input.Type;
                 }
@@ -58,7 +58,7 @@ export class ConfigItemClassAttributeUtil {
                 ciClasses = [ciClasses[0]];
             }
             for (const ciClass of ciClasses) {
-                const path = this.getPath(ciClass.CurrentDefinition.Definition, property);
+                const path = this.getPath(ciClass?.CurrentDefinition?.Definition, property);
                 if (path) {
                     return path;
                 }
@@ -72,13 +72,13 @@ export class ConfigItemClassAttributeUtil {
         let attributes;
         const ciClasses = await this.loadCIClasses(classIds);
         if (ciClasses && ciClasses.length) {
-            if (ciClasses[0].CurrentDefinition) {
-                attributes = ciClasses[0].CurrentDefinition.Definition.map((d) => new AttributeDefinition(d));
+            if (ciClasses[0]?.CurrentDefinition) {
+                attributes = ciClasses[0]?.CurrentDefinition?.Definition.map((d) => new AttributeDefinition(d));
                 if (ciClasses.length > 1) {
                     for (let i = 1; i < ciClasses.length; i++) {
-                        const definition = ciClasses[i].CurrentDefinition;
-                        if (definition && definition.Definition) {
-                            this.compareTrees(attributes, definition.Definition);
+                        const definition = ciClasses[i]?.CurrentDefinition;
+                        if (definition && definition?.Definition) {
+                            this.compareTrees(attributes, definition?.Definition);
                         }
                     }
                 }
@@ -110,7 +110,7 @@ export class ConfigItemClassAttributeUtil {
                 ciClasses = [ciClasses[0]];
             }
             for (const ciClass of ciClasses) {
-                const attribute = this.getAttribute(ciClass.CurrentDefinition.Definition, property);
+                const attribute = this.getAttribute(ciClass?.CurrentDefinition?.Definition, property);
                 if (attribute && attribute.Input) {
                     return attribute.Input;
                 }

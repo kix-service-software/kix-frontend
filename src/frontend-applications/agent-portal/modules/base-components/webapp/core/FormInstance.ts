@@ -47,6 +47,59 @@ export class FormInstance {
 
     public constructor(public context: Context) { }
 
+    public hasPage(pageId: string): boolean {
+        return this.form.pages.some((p) => p.id === pageId);
+    }
+
+    public addPage(page: FormPageConfiguration, index?: number): void {
+        if (page) {
+
+            if (page.groups.length) {
+                page.groups.forEach((g) => this.setDefaultValueAndParent(g.formFields));
+            }
+
+            if (!isNaN(index)) {
+                this.form.pages.splice(index, 0, page);
+            } else {
+                this.form.pages.push(page);
+            }
+
+            EventService.getInstance().publish(FormEvent.FORM_PAGE_ADDED, { formInstance: this, page });
+        }
+    }
+
+    public async removePages(pageIds: string[], protectedPages: string[] = []): Promise<void> {
+        if (!pageIds) {
+            pageIds = this.form.pages.map((p) => p.id);
+        }
+
+        if (Array.isArray(pageIds)) {
+            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+                this.form.objectType, ServiceType.FORM
+            );
+            for (const pageId of pageIds) {
+                if (protectedPages?.some((id) => id === pageId)) {
+                    continue;
+                }
+
+                pageIds = pageIds
+                    .filter((pageId) => !protectedPages.some((id) => id === pageId))
+                    .filter((pageId) => this.form.pages.some((p) => p.id === pageId));
+
+                for (const pageId of pageIds) {
+                    const index = this.form.pages.findIndex((p) => p.id === pageId);
+                    const deletedPage = this.form.pages.splice(index, 1);
+                    for (const group of deletedPage[0].groups) {
+                        group.formFields?.forEach((f) => this.deleteFieldValues(f));
+                        await service?.updateFields(group.formFields, this);
+                    }
+                }
+
+                EventService.getInstance().publish(FormEvent.FORM_PAGES_REMOVED, { formInstance: this, pageIds });
+            }
+        }
+    }
+
     public setPossibleValue(property: string, value: FormFieldValue<any>): void {
         this.possibleValues.set(property, value);
         EventService.getInstance().publish(
@@ -243,38 +296,6 @@ export class FormInstance {
         }
     }
 
-    public async removePages(pageIds: string[], protectedPages: string[] = []): Promise<void> {
-        if (!pageIds) {
-            pageIds = this.form.pages.map((p) => p.id);
-        }
-
-        if (Array.isArray(pageIds)) {
-            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
-                this.form.objectType, ServiceType.FORM
-            );
-            for (const pageId of pageIds) {
-                if (protectedPages?.some((id) => id === pageId)) {
-                    continue;
-                }
-
-                pageIds = pageIds
-                    .filter((pageId) => !protectedPages.some((id) => id === pageId))
-                    .filter((pageId) => this.form.pages.some((p) => p.id === pageId));
-
-                for (const pageId of pageIds) {
-                    const index = this.form.pages.findIndex((p) => p.id === pageId);
-                    const deletedPage = this.form.pages.splice(index, 1);
-                    for (const group of deletedPage[0].groups) {
-                        group.formFields?.forEach((f) => this.deleteFieldValues(f));
-                        await service?.updateFields(group.formFields, this);
-                    }
-                }
-
-                EventService.getInstance().publish(FormEvent.FORM_PAGES_REMOVED, { formInstance: this, pageIds });
-            }
-        }
-    }
-
     public getFields(formField: FormFieldConfiguration): FormFieldConfiguration[] {
         let fields: FormFieldConfiguration[];
 
@@ -371,23 +392,6 @@ export class FormInstance {
             this.setDefaultValueAndParent(children, parent);
 
             EventService.getInstance().publish(FormEvent.FIELD_CHILDREN_ADDED, { formInstance: this, parent });
-        }
-    }
-
-    public addPage(page: FormPageConfiguration, index?: number): void {
-        if (page) {
-
-            if (page.groups.length) {
-                page.groups.forEach((g) => this.setDefaultValueAndParent(g.formFields));
-            }
-
-            if (!isNaN(index)) {
-                this.form.pages.splice(index, 0, page);
-            } else {
-                this.form.pages.push(page);
-            }
-
-            EventService.getInstance().publish(FormEvent.FORM_PAGE_ADDED, { formInstance: this, page });
         }
     }
 

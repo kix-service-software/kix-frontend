@@ -18,27 +18,33 @@ import { JobFormService } from './JobFormService';
 export class MacroObjectCreator {
 
     public static async createMacro(
-        macroField: FormFieldConfiguration, formInstance: FormInstance
+        macroField: FormFieldConfiguration, formInstance: FormInstance, macroComment?: string
     ): Promise<Macro> {
         const macro = new Macro();
 
         const macroIdOption = macroField.options.find((o) => o.option === 'MacroId');
         macro.ID = macroIdOption ? macroIdOption.value : null;
 
-        const jobNameValue = await formInstance.getFormFieldValueByProperty(JobProperty.NAME);
+        if (!macroComment) {
+            const jobNameValue = await formInstance.getFormFieldValueByProperty(JobProperty.NAME);
+            macroComment = `Macro for Job "${jobNameValue.value}"`;
+        }
         macro.Name = IdService.generateDateBasedId('Macro-');
-        macro.Comment = jobNameValue ? `Macro for Job "${jobNameValue.value}"` : macroField.instanceId;
+        macro.Comment = macroComment || macroField.instanceId;
 
         const typeValue = formInstance.getFormFieldValue<string>(macroField?.instanceId);
         macro.Type = Array.isArray(typeValue?.value) ? typeValue.value[0] : typeValue.value;
 
-        macro.Actions = await this.createActions(macro.ID, macroField.children, formInstance, macro.Type);
+        macro.Actions = await this.createActions(
+            macro.ID, macroField.children, formInstance, macro.Type, macroComment
+        );
 
         return macro.Actions.length ? macro : null;
     }
 
     public static async createActions(
-        macroId: number, actionFields: FormFieldConfiguration[], formInstance: FormInstance, macroType: string
+        macroId: number, actionFields: FormFieldConfiguration[], formInstance: FormInstance, macroType: string,
+        macroComment?: string
     ): Promise<MacroAction[]> {
         const macroActions = [];
 
@@ -62,7 +68,7 @@ export class MacroObjectCreator {
                     );
 
                     action.Parameters = await this.createActionParameter(
-                        action, actionField.children, formInstance, macroType
+                        action, actionField.children, formInstance, macroType, macroComment
                     );
 
                     this.setActionValid(action, actionField.children, formInstance);
@@ -97,7 +103,8 @@ export class MacroObjectCreator {
     }
 
     public static async createActionParameter(
-        action: MacroAction, parameterFields: FormFieldConfiguration[], formInstance: FormInstance, macroType: string
+        action: MacroAction, parameterFields: FormFieldConfiguration[], formInstance: FormInstance, macroType: string,
+        macroComment?: string
     ): Promise<any> {
         const parameter = {};
 
@@ -105,7 +112,7 @@ export class MacroObjectCreator {
             const value = formInstance.getFormFieldValue(parameterField.instanceId);
             const optionNameValue = parameterField.options.find((o) => o.option === 'OptionName');
             if (optionNameValue?.value === 'MacroID') {
-                const macro = await this.createMacro(parameterField, formInstance);
+                const macro = await this.createMacro(parameterField, formInstance, macroComment);
                 macro.Comment += ` - Referenced by Action: ${action.Type}`;
                 parameter[optionNameValue.value] = macro;
             } else if (optionNameValue?.value !== 'Skip') {

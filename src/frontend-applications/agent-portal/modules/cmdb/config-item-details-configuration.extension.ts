@@ -23,11 +23,7 @@ import { WidgetSize } from '../../model/configuration/WidgetSize';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import {
-    InformationConfiguration,
-    InformationRowConfiguration,
-    ObjectInformationCardConfiguration
-} from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
+import { InformationConfiguration, InformationRowConfiguration, ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { ConfigItemProperty } from './model/ConfigItemProperty';
 import { VersionProperty } from './model/VersionProperty';
 import { ConfigItemDetailsContext } from './webapp/core/context/ConfigItemDetailsContext';

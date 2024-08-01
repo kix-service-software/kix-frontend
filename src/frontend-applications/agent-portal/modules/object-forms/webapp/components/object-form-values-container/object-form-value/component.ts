@@ -119,6 +119,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             )
         );
 
+        this.bindingIds.push(
+            this.state.formValue?.addPropertyBinding(
+                FormValueProperty.LABEL, (formValue: ObjectFormValue) => {
+                    this.state.label = formValue.label;
+                }
+            )
+        );
+
         this.state.enabled = this.state.formValue?.enabled;
         this.state.visible = this.state.formValue?.visible;
         this.state.valid = this.state.formValue?.valid;
@@ -146,8 +154,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         };
         EventService.getInstance().subscribe(ObjectFormEvent.SCROLL_TO_FORM_VALUE, this.subscriber);
-
-        this.state.prepared = true;
     }
 
     public onDestroy(): void {

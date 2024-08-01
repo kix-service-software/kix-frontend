@@ -89,7 +89,7 @@ export class ArticleLabelProvider {
                 displayValue = await DateTimeAPIUtil.getLocalDateTimeString(token, article.CreateTime);
                 break;
             case ArticleProperty.FROM:
-                displayValue = article.From;
+                displayValue = typeof article?.From === 'string' ? article?.From : article?.From?.Email;
                 break;
             default:
         }

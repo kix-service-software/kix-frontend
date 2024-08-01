@@ -279,7 +279,7 @@ export class LabelService {
     }
 
     public async getDFDisplayValues(
-        objectType: KIXObjectType | string, fieldValue: DynamicFieldValue, short?: boolean
+        objectType: KIXObjectType | string, fieldValue: DynamicFieldValue, short?: boolean, language?: string
     ): Promise<[string[], string, string[]]> {
         const labelProvider = this.getLabelProviderForType(objectType);
 
@@ -291,7 +291,7 @@ export class LabelService {
                 }
             }
 
-            return labelProvider.getDFDisplayValues(fieldValue, short);
+            return labelProvider.getDFDisplayValues(fieldValue, short, language);
         }
         return null;
     }

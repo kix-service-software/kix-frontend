@@ -12,6 +12,7 @@ import { GeneralCatalogItem } from '../../model/GeneralCatalogItem';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { GeneralCatalogItemProperty } from '../../model/GeneralCatalogItemProperty';
+import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 
 export class GeneralCatalogService extends KIXObjectService<GeneralCatalogItem> {
 
@@ -31,14 +32,17 @@ export class GeneralCatalogService extends KIXObjectService<GeneralCatalogItem> 
 
     public isServiceFor(type: KIXObjectType): boolean {
         return type === KIXObjectType.GENERAL_CATALOG_ITEM
-            || type === KIXObjectType.GENERAL_CATALOG_CLASS;
+            || type === KIXObjectType.GENERAL_CATALOG_CLASS
+            || type === KIXObjectType.GENERAL_CATALOG;
     }
 
     public getLinkObjectName(): string {
         return 'GeneralCatalogItem';
     }
 
-    public async getTreeNodes(property: string, showInvalid: boolean = false): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, showInvalid: boolean = false, invalidClickable?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
         switch (property) {
@@ -47,8 +51,17 @@ export class GeneralCatalogService extends KIXObjectService<GeneralCatalogItem> 
                 nodes = types ? types.map((t) => new TreeNode(t, t.toString())) : [];
                 break;
             default:
+                nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
         }
 
         return nodes;
+    }
+
+    public async getFilterableAttributes(filtered: boolean = true): Promise<ObjectSearch[]> {
+        return super.getFilterableAttributes(filtered, KIXObjectType.GENERAL_CATALOG);
+    }
+
+    public async getSortableAttributes(filtered: boolean = true): Promise<ObjectSearch[]> {
+        return super.getSortableAttributes(filtered, KIXObjectType.GENERAL_CATALOG);
     }
 }

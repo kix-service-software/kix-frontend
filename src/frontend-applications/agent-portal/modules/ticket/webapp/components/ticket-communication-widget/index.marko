@@ -15,7 +15,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <@content>
         <div class="communication-container" id="communication-top">
             <div class="communication-header d-flex flex-row flex-wrap justify-content-between align-items-center px-2 py-2">
-                <message-filter/>
+                <message-filter key="article-filter"/>
                 <div class="icons-wrapper">
                     <i
                         title=(state.translations["Translatable#Read all"])
@@ -64,13 +64,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
             </div>
             <div class="communication-list">
-                <if(state.articles)>
-                    <for|article, index| of=state.articles>
+                <if(state.articleIds)>
+                    <for|articleId, index| of=state.articleIds>
                         <message-content
-                            article=article
-                            articleCountNumber=article.countNumber
+                            articleId=articleId
+                            articleIndex=index
+                            articleCountNumber=component.getArticleCountNumber(
+                                articleId,
+                            )
                             selectedCompactView=state.selectedCompactView
-                            key="article-" + article.ArticleID
+                            key="article-" + articleId
+                            informationConfig=state.informationConfig
                         />
                     </for>
                 </if>
