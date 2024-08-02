@@ -192,6 +192,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
                 );
                 BrowserUtil.openSuccessOverlay('Translatable#Marked all articles as read.');
+
+                EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT);
             }, 50);
         }
     }
