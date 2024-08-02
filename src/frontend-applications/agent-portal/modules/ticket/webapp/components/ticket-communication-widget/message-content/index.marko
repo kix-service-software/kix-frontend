@@ -135,7 +135,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         attachment,
                                     | of=state.articleAttachments>
                                         <ticket-article-attachment
-                                            article=state.article
+                                            article=component.detailedArticle
                                             attachment=attachment
                                             images=state.images
                                             useReadonlyStyle=false
@@ -183,7 +183,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     )>
                         <div class="bg-white my-2 p-2">
                             <object-information-card
-                                object=state.article
+                                object=component.detailedArticle
                                 config=state.informationConfig
                             />
                         </div>
