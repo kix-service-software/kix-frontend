@@ -141,6 +141,7 @@ export class Article extends KIXObject {
             this.MimeType = article.MimeType;
             this.IncomingTime = article.IncomingTime;
             this.Attachments = article.Attachments;
+            this.AttachmentCount = article.AttachmentCount;
             this.Flags = article.Flags;
             this.Channel = article.Channel;
             this.ChannelID = article.ChannelID;
