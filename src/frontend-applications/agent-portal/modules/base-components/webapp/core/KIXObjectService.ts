@@ -720,8 +720,19 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return KIXObjectService.prepareTree(objects);
     }
 
-    public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
-        let objectType = this.objectType;
+    public static async getObjectTypeForProperty(
+        objectType: KIXObjectType | string, property: string, useOwnTypeFallback?: boolean
+    ): Promise<KIXObjectType | string> {
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+        if (service) {
+            return service.getObjectTypeForProperty(property, useOwnTypeFallback);
+        }
+    }
+
+    public async getObjectTypeForProperty(
+        property: string, useOwnTypeFallback: boolean = true
+    ): Promise<KIXObjectType | string> {
+        let objectType = useOwnTypeFallback ? this.objectType : null;
 
         for (const extendedService of this.extendedServices) {
             const extentedObjectType = await extendedService.getObjectTypeForProperty(property);

@@ -299,33 +299,34 @@ export class UserLabelProvider extends LabelProvider<User> {
         return icons;
     }
 
-    public async getOverlayIcon(user?: User, objectId?: number): Promise<OverlayIcon> {
+    public async getOverlayIcon(objectType: KIXObjectType, objectId: number): Promise<OverlayIcon> {
         let overlay = null;
 
-        if (!user && !isNaN(objectId)) {
+        if (objectType === KIXObjectType.USER && !isNaN(objectId)) {
             const loadingOptions = new KIXObjectLoadingOptions(
                 null, null, null, [UserProperty.PREFERENCES]
             );
             const users = await KIXObjectService.loadObjects<User>(
                 KIXObjectType.USER, [objectId], loadingOptions, null, true, true, true
             ).catch(() => [] as User[]);
-            user = users && users.length ? users[0] : null;
-        }
+            const user = users && users.length ? users[0] : null;
 
-        if (user?.Preferences?.length) {
-            const outOfOffice = await this.getOutOfOffice(user);
-            if (outOfOffice) {
-                const title = await TranslationService.translate(
-                    'Translatable#Out Of Office', undefined, undefined, false
-                );
-                overlay = new OverlayIcon(
-                    undefined, title, 'object-information',
-                    'fas fa-user-slash', outOfOffice, false, true
-                );
+            if (user?.Preferences?.length) {
+                const outOfOffice = await this.getOutOfOffice(user);
+                if (outOfOffice) {
+                    const title = await TranslationService.translate(
+                        'Translatable#Out Of Office', undefined, undefined, false
+                    );
+                    overlay = new OverlayIcon(
+                        undefined, title, 'object-information',
+                        'fas fa-user-slash', outOfOffice, false, true
+                    );
+                }
             }
         }
         return overlay;
     }
+
     private async getOutOfOffice(object: User): Promise<OutOfOffice> {
         let outOfOffice = null;
 

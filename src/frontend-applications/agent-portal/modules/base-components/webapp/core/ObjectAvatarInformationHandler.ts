@@ -66,8 +66,8 @@ export class ObjectAvatarInformationHandler extends ObjectInformationComponentHa
     private async getOverlayIcon(property: string, object: KIXObject): Promise<OverlayIcon> {
         let overlayIcon: OverlayIcon;
         if (object[property]) {
-            overlayIcon = await LabelService.getInstance().getOverlayIconForType(
-                object?.KIXObjectType, object[property], property
+            overlayIcon = await LabelService.getInstance().getOverlayIconByProperty(
+                object?.KIXObjectType, property, object[property]
             );
         }
 

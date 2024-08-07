@@ -427,13 +427,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return null;
     }
 
-    public async getOverlayIcon(object?: T, objectId?: number, property?: string): Promise<OverlayIcon> {
-        return null;
-    }
-
-    public async getOverlayIconForType(
-        objectType: KIXObjectType | string, objectId: number, propert?: string, object?: T
-    ): Promise<OverlayIcon> {
+    public async getOverlayIcon(objectType: KIXObjectType | string, objectId: number | string): Promise<OverlayIcon> {
         return null;
     }
 }

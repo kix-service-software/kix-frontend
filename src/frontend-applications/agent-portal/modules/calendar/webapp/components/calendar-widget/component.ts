@@ -155,7 +155,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const calendars = [];
         for (const u of userIds) {
             const bgColor = BrowserUtil.getUserColor(u[0]);
-            const overlay = await LabelService.getInstance().getOverlayIconForType(
+            const overlay = await LabelService.getInstance().getOverlayIcon(
                 KIXObjectType.USER, u[0]
             );
             calendars.push({

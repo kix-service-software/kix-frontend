@@ -454,7 +454,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 ? Array.isArray(this.value) ? this.value : [this.value]
                 : null;
 
-            nodes = await this.prepareOverlayIcon(nodes, this.property);
+            nodes = await this.prepareOverlayIcon(nodes);
             if (Array.isArray(value)) {
                 for (const v of value) {
                     const node = TreeUtil.findNode(nodes, v);
@@ -579,7 +579,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             this.treeHandler?.selectNone(true);
         }
 
-        selectedNodes = await this.prepareOverlayIcon(selectedNodes, this.property);
+        selectedNodes = await this.prepareOverlayIcon(selectedNodes);
         this.selectedNodes = selectedNodes.sort((a, b) => a.id - b.id);
     }
 
@@ -692,14 +692,14 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         await this.loadSelectedValues();
     }
 
-    private async prepareOverlayIcon(nodes: TreeNode[], property: string): Promise<TreeNode[]> {
+    private async prepareOverlayIcon(nodes: TreeNode[]): Promise<TreeNode[]> {
         if (nodes && nodes.length) {
             const context = ContextService.getInstance().getActiveContext();
             const form = context?.getFormManager()?.getForm();
             if (form?.objectType === KIXObjectType.TICKET) {
                 for (const node of nodes) {
-                    const overlay = await LabelService.getInstance().getOverlayIconForType(
-                        form.objectType, node.id, property
+                    const overlay = await LabelService.getInstance().getOverlayIconByProperty(
+                        form.objectType, this.property, node.id
                     );
                     if (overlay) {
                         node.overlay = overlay;

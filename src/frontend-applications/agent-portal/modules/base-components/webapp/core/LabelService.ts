@@ -576,36 +576,28 @@ export class LabelService {
     }
 
     public async getOverlayIcon<T extends KIXObject>(
-        object: T, property: string, objectId?: number
+        objectType: KIXObjectType | string, objectId?: number | string
     ): Promise<OverlayIcon> {
-        const labelProvider = this.getLabelProviderForProperty(object, property);
-
+        const labelProvider = this.getLabelProviderForType(objectType);
         if (labelProvider) {
             for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
-                const result = await extendedLabelProvider.getOverlayIcon(object, objectId, property);
+                const result = await extendedLabelProvider.getOverlayIcon(objectType, objectId);
                 if (result) {
                     return result;
                 }
             }
 
-            return await labelProvider.getOverlayIcon(object, objectId, property);
+            return await labelProvider.getOverlayIcon(objectType, objectId);
         }
         return null;
     }
-    public async getOverlayIconForType<T extends KIXObject>(
-        objectType: KIXObjectType | string, objectId?: number, property?: string, object?: T
+
+    public async getOverlayIconByProperty<T extends KIXObject>(
+        objectType: KIXObjectType | string, property: string, value: any
     ): Promise<OverlayIcon> {
-        const labelProvider = this.getLabelProviderForType(objectType);
-
-        if (labelProvider) {
-            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
-                const result = await extendedLabelProvider.getOverlayIcon(object, objectId, property);
-                if (result) {
-                    return result;
-                }
-            }
-
-            return await labelProvider.getOverlayIcon(object, objectId, property);
+        const propertyObjectType = await KIXObjectService.getObjectTypeForProperty(objectType, property, false);
+        if (propertyObjectType) {
+            return this.getOverlayIcon(propertyObjectType, value);
         }
         return null;
     }
