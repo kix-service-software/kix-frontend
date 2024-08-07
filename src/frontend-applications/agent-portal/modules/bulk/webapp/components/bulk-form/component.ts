@@ -85,7 +85,7 @@ class Component {
     public onDestroy(): void {
         this.state.bulkManager?.unregisterListener('bulk-dialog-listener');
         this.state.linkManager?.unregisterListener('bulk-dialog-link-listener');
-        this.state.linkManager.reset();
+        this.state.linkManager?.reset();
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
     }
 
