@@ -68,10 +68,8 @@ export interface ILabelProvider<T = any> {
 
     createLabelsFromDFValue(fieldValue: DynamicFieldValue): Promise<Label[]>;
 
-    getOverlayIcon(object?: T, objectId?: number, property?: string): Promise<OverlayIcon>;
-
-    getOverlayIconForType(
-        objectType: KIXObjectType | string, objectId: number, property?: string, object?: T
+    getOverlayIcon(
+        objectType: KIXObjectType | string, objectId: number | string
     ): Promise<OverlayIcon>;
 
 }
