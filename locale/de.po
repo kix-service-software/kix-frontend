@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2024-05-21 14:38+0000\n"
-"Last-Translator: dhein <David.Hein@kixdesk.com>\n"
+"PO-Revision-Date: 2024-08-08 16:39+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@kixdesk.com>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -354,7 +354,7 @@ msgid "Article Text"
 msgstr "Artikeltext"
 
 msgid "ascending"
-msgstr ""
+msgstr "aufsteigend"
 
 msgid "Asset"
 msgstr "Asset"
@@ -369,7 +369,7 @@ msgid "Asset Graph"
 msgstr "Asset-Graph"
 
 msgid "Asset has printed"
-msgstr ""
+msgstr "Asset wurde gedruckt"
 
 msgid "Assets"
 msgstr "Assets"
@@ -937,7 +937,7 @@ msgid "Delete all selected reports?"
 msgstr "Ausgewählte Berichte löschen?"
 
 msgid "Delete all selected webforms?"
-msgstr ""
+msgstr "Alle ausgewählten Webformulare löschen?"
 
 msgid "Deleted"
 msgstr "Gelöscht"
@@ -955,10 +955,10 @@ msgid "Delete Search"
 msgstr "Suche löschen"
 
 msgid "Delete Webform"
-msgstr ""
+msgstr "Webformular löschen"
 
 msgid "Dependencies"
-msgstr ""
+msgstr "Abhängigkeiten"
 
 msgid "Dependency"
 msgstr "Abhängigkeit"
@@ -976,7 +976,7 @@ msgid "DESC"
 msgstr "Absteigend"
 
 msgid "descending"
-msgstr ""
+msgstr "absteigend"
 
 msgid "Descending:"
 msgstr "Absteigend:"
@@ -1037,7 +1037,7 @@ msgid "Dynamic Fields"
 msgstr "Dynamische Felder"
 
 msgid "Dynamic Fields successfully removed."
-msgstr ""
+msgstr "Dynamische Felder erfolgreich entfernt."
 
 msgid "Dynamic Field Type"
 msgstr "Dynamischer Feldtyp"
@@ -1232,7 +1232,7 @@ msgid "Email Information"
 msgstr "E-Mail-Informationen"
 
 msgid "Email Security"
-msgstr ""
+msgstr "E-Mail-Sicherheit"
 
 msgid "Empty Result Hint"
 msgstr "Anzeigetext leeres Ergebnis"
@@ -1241,13 +1241,13 @@ msgid "Enable attachments"
 msgstr "Anlagen zulassen"
 
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiviert"
 
 msgid "Encrypt if possible"
-msgstr ""
+msgstr "Wenn möglich verschlüsseln"
 
 msgid "Encrypt or do not send"
-msgstr ""
+msgstr "Verschlüsseln oder nicht senden"
 
 msgid "End date/time is not given"
 msgstr "Enddatum/-zeit fehlt"
@@ -1307,7 +1307,7 @@ msgid "Error while deleting Report Definition."
 msgstr "Beim Löschen der Berichtsdefinition ist ein Fehler aufgetreten."
 
 msgid "Error while deleting Webform."
-msgstr ""
+msgstr "Fehler beim Löschen der Webform."
 
 msgid "Escalated Tickets"
 msgstr "Eskalierte Tickets"
@@ -1564,13 +1564,13 @@ msgid "General Catalog Items"
 msgstr "General Catalog Einträge"
 
 msgid "Generate New Secret"
-msgstr ""
+msgstr "Neues Secret generieren"
 
 msgid "Generate New Token"
 msgstr "Neuen Benutzertoken generieren"
 
 msgid "Generate new user secret"
-msgstr ""
+msgstr "Neues Nutzer Secret generieren"
 
 msgid "Generate new user token"
 msgstr "Erstelle neuen Benutzertoken"
@@ -2752,10 +2752,10 @@ msgstr ""
 "Informationen zur Benachrichtigung zu erhalten."
 
 msgid "Helptext_PersonalSettings_OutOfOfficeEnd_Hint"
-msgstr ""
+msgstr "Letzter Tag der Abwesenheit."
 
 msgid "Helptext_PersonalSettings_OutOfOfficeStart_Hint"
-msgstr ""
+msgstr "Erster Tag der Abwesenheit."
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr ""
@@ -3093,10 +3093,10 @@ msgstr ""
 "Einstellung auch selbst in seinen persönlichen Einstellungen ändern."
 
 msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeEnd"
-msgstr ""
+msgstr "Letzter Tag der Abwesenheit."
 
 msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeStart"
-msgstr ""
+msgstr "Erster Tag der Abwesenheit."
 
 msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
 msgstr ""
@@ -3151,6 +3151,8 @@ msgstr "ID"
 
 msgid "If checked, the last change date will be displayed for this item."
 msgstr ""
+"Wenn diese Option aktiviert ist, wird für diese Checkliste das letzte "
+"Änderungsdatum angezeigt."
 
 msgid "If true, the value will increase the checklist counter."
 msgstr "Wenn gesetzt, wird der Wert den Checklisten-Zähler erhöhen."
@@ -3271,7 +3273,7 @@ msgid "Invalid date for pending date."
 msgstr "Ungültiges Datum bei 'Warten bis'"
 
 msgid "Is asynchronous"
-msgstr ""
+msgstr "Ist asynchron"
 
 msgid "is to large (max {0})."
 msgstr "ist zu lang (max {0})."
@@ -3331,7 +3333,7 @@ msgid "Large View"
 msgstr "Großansicht"
 
 msgid "(Last Change: {0})"
-msgstr ""
+msgstr "(Letzte Änderung: {0})"
 
 msgid "Last executed at"
 msgstr "Zuletzt ausgeführt am"
@@ -3511,7 +3513,7 @@ msgid "more than ago"
 msgstr "vor mehr als"
 
 msgid "Multifactor Authentication"
-msgstr ""
+msgstr "Multifaktor-Authentifizierung"
 
 msgid "Multiple"
 msgstr "Mehrfach"
@@ -3751,7 +3753,7 @@ msgid "No data available."
 msgstr "Keine Angaben verfügbar."
 
 msgid "No encryption"
-msgstr ""
+msgstr "Keine Verschlüsselung"
 
 msgid "No form available. Please contact your administrator."
 msgstr "Kein formular verfügbar. Bitte kontaktieren Sie ihren Administrator."
@@ -4154,7 +4156,7 @@ msgid "Prepare Article for print"
 msgstr "Artikel für Druck vorbereiten"
 
 msgid "Prepare Asset for print"
-msgstr ""
+msgstr "Asset wird zum Druck vorbereitet"
 
 msgid "Prepare Attachments (0/{0})"
 msgstr "Vorbereitung Anlagen ({0}/{0})"
@@ -4229,7 +4231,7 @@ msgid "Queues"
 msgstr "Teams"
 
 msgid "Queues successfully removed."
-msgstr ""
+msgstr "Teams erfolgreich entfernt."
 
 msgid "Quick Start Guide"
 msgstr "Quick Start Guide"
@@ -4364,7 +4366,7 @@ msgid "Remove dependency to organisation"
 msgstr "Abhängigkeit zur Organisation lösen"
 
 msgid "Remove Dynamic Fields"
-msgstr ""
+msgstr "Dynamische Felder entfernen"
 
 msgid "Remove FAQ Article(s)"
 msgstr "FAQ-Artikel entfernen"
@@ -4400,10 +4402,10 @@ msgid "Remove Profiles"
 msgstr "Profil(e) entfernen"
 
 msgid "Remove Queues"
-msgstr ""
+msgstr "Teams entfernen"
 
 msgid "Remove Roles"
-msgstr ""
+msgstr "Rollen entfernen"
 
 msgid "Remove States"
 msgstr "Status löschen"
@@ -4547,7 +4549,7 @@ msgid "Roles/Permissions"
 msgstr "Rollen/Berechtigungen"
 
 msgid "Roles successfully removed."
-msgstr ""
+msgstr "Rollen erfolgreich entfernt."
 
 msgid "Row"
 msgstr "Zeile"
@@ -4570,7 +4572,7 @@ msgid "Run"
 msgstr "Ausführen"
 
 msgid "Run asynchronously"
-msgstr ""
+msgstr "Asynchron ausführen"
 
 msgid "running"
 msgstr "laufend"
@@ -4696,7 +4698,7 @@ msgid "Seconds(s)"
 msgstr "Sekunde(n)"
 
 msgid "Select"
-msgstr ""
+msgstr "Wählen"
 
 msgid "Select all"
 msgstr "Alle auswählen"
@@ -4853,7 +4855,7 @@ msgid "Show in Customer Portal"
 msgstr "Im Kundenportal anzeigen"
 
 msgid "Show Last Change Date"
-msgstr ""
+msgstr "Datum der letzten Änderung anzeigen"
 
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
@@ -4907,10 +4909,10 @@ msgid "Sort attribute:"
 msgstr "Sortierattribut:"
 
 msgid "Sort order"
-msgstr ""
+msgstr "Sortierreihenfolge"
 
 msgid "Sort order:"
-msgstr ""
+msgstr "Sortierreihenfolge:"
 
 msgid "Source"
 msgstr "Quelle"
@@ -5467,7 +5469,7 @@ msgid "Users"
 msgstr "Nutzer"
 
 msgid "User Secret"
-msgstr ""
+msgstr "Nutzer Secret"
 
 msgid "User Token"
 msgstr "Benutzertoken"
@@ -5542,7 +5544,7 @@ msgid "Webform Options"
 msgstr "Webformular Optionen"
 
 msgid "Webform(s) deleted."
-msgstr ""
+msgstr "Webformular(e) gelöscht."
 
 msgid "Wednesday"
 msgstr "Mittwoch"
