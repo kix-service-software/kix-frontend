@@ -41,47 +41,8 @@ export class TicketSocketClient extends SocketClient {
     public async loadArticleAttachment(
         ticketId: number, articleId: number, attachmentId: number, asDownload?: boolean
     ): Promise<Attachment> {
-        this.checkSocketConnection();
-
-        const cacheKey = `${ticketId}-${articleId}-${attachmentId}`;
-
-        if (!asDownload && BrowserCacheService.getInstance().has(cacheKey, KIXObjectType.ATTACHMENT)) {
-            return BrowserCacheService.getInstance().get(cacheKey, KIXObjectType.ATTACHMENT);
-        }
-
-        const socketTimeout = ClientStorageService.getSocketTimeout();
-
-        const requestPromise = new Promise<Attachment>((resolve, reject) => {
-            const requestId = IdService.generateDateBasedId();
-            const organisationId = ClientStorageService.getOption('RelevantOrganisationID');
-            const request = new LoadArticleAttachmentRequest(
-                requestId, ticketId, articleId, [attachmentId], Number(organisationId), asDownload
-            );
-
-            const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + TicketEvent.LOAD_ARTICLE_ATTACHMENT);
-            }, socketTimeout);
-
-            this.socket.on(TicketEvent.ARTICLE_ATTACHMENT_LOADED, (result: LoadArticleAttachmentResponse) => {
-                if (requestId === result.requestId) {
-                    window.clearTimeout(timeout);
-                    resolve(new Attachment(result.attachments[0]));
-                }
-            });
-
-            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
-                if (error.requestId === requestId) {
-                    window.clearTimeout(timeout);
-                    console.error(error.error);
-                    reject(error);
-                }
-            });
-
-            this.socket.emit(TicketEvent.LOAD_ARTICLE_ATTACHMENT, request);
-        });
-
-        BrowserCacheService.getInstance().set(cacheKey, requestPromise, KIXObjectType.ATTACHMENT);
-        return await requestPromise;
+        const attachments = await this.loadArticleAttachments(ticketId, articleId, [attachmentId], asDownload);
+        return Array.isArray(attachments) ? attachments[0] : attachments;
     }
 
     public async loadArticleZipAttachment(ticketId: number, articleId: number): Promise<Attachment> {
@@ -119,13 +80,13 @@ export class TicketSocketClient extends SocketClient {
     }
 
     public async loadArticleAttachments(
-        ticketId: number, articleId: number, attachmentIds: number[]
+        ticketId: number, articleId: number, attachmentIds: number[], asDownload?: boolean
     ): Promise<Attachment[]> {
         this.checkSocketConnection();
 
         const cacheKey = `${ticketId}-${articleId}-${attachmentIds.join(',')}`;
 
-        if (BrowserCacheService.getInstance().has(cacheKey, KIXObjectType.ATTACHMENT)) {
+        if (!asDownload && BrowserCacheService.getInstance().has(cacheKey, KIXObjectType.ATTACHMENT)) {
             return BrowserCacheService.getInstance().get(cacheKey, KIXObjectType.ATTACHMENT);
         }
 
@@ -135,7 +96,7 @@ export class TicketSocketClient extends SocketClient {
             const requestId = IdService.generateDateBasedId();
             const organisationId = ClientStorageService.getOption('RelevantOrganisationID');
             const request = new LoadArticleAttachmentRequest(
-                requestId, ticketId, articleId, attachmentIds, Number(organisationId)
+                requestId, ticketId, articleId, attachmentIds, Number(organisationId), asDownload
             );
 
             const timeout = window.setTimeout(() => {
@@ -161,7 +122,7 @@ export class TicketSocketClient extends SocketClient {
         });
 
         BrowserCacheService.getInstance().set(cacheKey, requestPromise, KIXObjectType.ATTACHMENT);
-        return await requestPromise;
+        return requestPromise;
     }
 
 

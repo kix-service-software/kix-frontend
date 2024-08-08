@@ -124,30 +124,6 @@ export class ArticleLoader {
         return filteredActions;
     }
 
-    public filterAttachments(article: Article, showAll: boolean): Attachment[] {
-        let attachments = (article?.Attachments || []);
-
-        attachments = attachments.filter(
-            (a) => !a.Filename.match(/^file-(1|2)$/) &&
-                (showAll || a.Disposition !== 'inline')
-        );
-
-        attachments.sort((a, b) => {
-            if (!showAll) {
-                return SortUtil.compareString(a.Filename, b.Filename);
-            }
-
-            let result = -1;
-            if (a.Disposition === b.Disposition) {
-                result = SortUtil.compareString(a.Filename, b.Filename);
-            } else if (a.Disposition === 'inline') {
-                result = 1;
-            }
-            return result;
-        });
-        return attachments;
-    }
-
     public async getContactForArticle(article: Article): Promise<Contact> {
         let contact: Contact;
         if (article?.SenderType === 'external') {

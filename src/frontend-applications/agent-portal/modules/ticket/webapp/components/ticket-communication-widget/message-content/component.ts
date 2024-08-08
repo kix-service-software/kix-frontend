@@ -216,8 +216,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private filterAttachments(): void {
-        this.state.articleAttachments = this.context?.articleLoader?.filterAttachments(
-            this.detailedArticle, this.state.showAllAttachments
+        this.state.articleAttachments = this.detailedArticle?.getAttachments(
+            this.state.showAllAttachments
         );
     }
 
