@@ -28,7 +28,6 @@ import { ObjectResponse } from '../services/ObjectResponse';
 import { IRouterHandler } from '../model/IRouterHandler';
 import { MFAService } from '../../modules/multifactor-authentication/server/MFAService';
 import { HttpService } from '../services/HttpService';
-import { PasswordResetRequestConfirmation } from '../../modules/user/model/PasswordResetRequestConfirmation';
 
 export class AuthenticationRouter extends KIXRouter {
 
@@ -190,10 +189,7 @@ export class AuthenticationRouter extends KIXRouter {
                 const pwResetEnabled = await this.getUserPasswordResetEnabled()
                     .catch((e) => false);
 
-                const pwResetState = req.cookies['x-kix-pw-reset-state'] || '';
-                if (pwResetState) {
-                    res.clearCookie('x-kix-pw-reset-state');
-                }
+                const pwResetState = req.query['pwResetState']?.toString();
 
                 const url = req.query['redirectUrl']?.toString();
                 const redirectUrl = decodeURIComponent(url) || '/';
@@ -284,18 +280,19 @@ export class AuthenticationRouter extends KIXRouter {
     }
 
     public async sendPasswordResetRequestConfirmation(req: Request, res: Response): Promise<void> {
-        const ticketID = req.query?.TicketID?.toString();
-        const userType = req.query?.UserType?.toString();
         const resetToken = req.params?.resetToken?.toString();
 
-        if (ticketID && userType === UserType.AGENT && resetToken) {
-            const response = await HttpService.getInstance().patch<any>('auth/password-reset/' + resetToken,
-                { TicketID: ticketID, UserType: userType }, undefined, undefined, undefined, undefined
-            ).catch(() => undefined);
-            res.cookie('x-kix-pw-reset-state', response?.Code === 'Object.Created' ? 'confirmed' : 'rejected');
-        }
-        this.logout(req, res);
+        let pwResetState = 'error';
 
+        if (resetToken) {
+            const response = await HttpService.getInstance().patch<any>('auth/password-reset/' + resetToken,
+                { UserType: UserType.AGENT }, undefined, undefined, undefined, undefined
+            ).catch(() => undefined);
+
+            pwResetState = response?.Code === 'OK' ? 'confirmed' : 'error';
+        }
+
+        res.redirect('/auth?pwResetState=' + pwResetState);
     }
 
 }

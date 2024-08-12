@@ -113,9 +113,9 @@ class Component {
             ['Forgot Password?', 'Passwort vergessen?'],
             ['Submit', 'Absenden'],
             ['Back', 'Zurück'],
-            ['An Email has been sent to you.', 'Eine Email wurde an Sie versandt.'],
-            ['Your new Password was emailed to you.', 'Ihr neues Passwort wurde per Mail versandt.'],
-            ['Invalid or expired token. Please send a new request.', 'Ungültiger oder abgelaufener Token. Bitte senden Sie eine neue Anfrage.']
+            ['Password reset is requested.', 'Passwortrücksetzung ist angefordert.'],
+            ['Requested password reset is confirmed.', 'Angeforderte Passwortrücksetzung ist bestätigt.'],
+            ['Password reset failed.', 'Passwortrücksetzung fehlgeschlagen.'],
         ];
     }
 
@@ -150,9 +150,12 @@ class Component {
         if (!requireMFAToken && userMFARequired) {
             this.state.showMFA = true;
             this.state.loginProcess = false;
+            this.state.error = false;
+            this.state.pwResetState = '';
         } else if (this.state.userName) {
             this.state.loginProcess = true;
             this.state.error = false;
+            this.state.pwResetState = '';
 
             let mfaToken: MFAToken;
             if (userMFARequired) {
@@ -215,9 +218,14 @@ class Component {
     }
 
     public sendPasswordChangeRequest(): void {
+        this.state.pwResetState = '';
+        this.state.error = false;
+        this.state.pwResetProcess = true;
+
         AuthenticationSocketClient.getInstance().createPasswordResetRequest(this.state.userName);
 
         // show login form again
+        this.state.pwResetProcess = false;
         this.state.showPWResetDialog = false;
 
         //show success notification

@@ -41,7 +41,7 @@ export class AuthenticationSocketClient extends SocketClient {
 
     public async login(
         userName: string, password: string, negotiateToken: string, redirectUrl: string,
-        mfaToken?: MFAToken, fakeLogin?: boolean, userType = UserType.AGENT
+        mfaToken?: MFAToken, fakeLogin?: boolean, userType: UserType = UserType.AGENT
     ): Promise<LoginResult> {
         this.checkSocketConnection();
 
