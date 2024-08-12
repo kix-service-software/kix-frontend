@@ -279,8 +279,6 @@ export class Table implements Table {
         const context = ContextService.getInstance().getActiveContext<SearchContext>();
         if (context?.descriptor.contextMode === ContextMode.SEARCH && context?.getSearchCache()) {
             searchCache = context.getSearchCache();
-        } else if (this.tableConfiguration?.searchId) {
-            searchCache = await SearchService.getInstance().loadSearchCache(this.tableConfiguration.searchId);
         }
 
         if (searchCache) {

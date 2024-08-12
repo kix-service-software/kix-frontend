@@ -21,4 +21,8 @@ export class HomeContext extends Context {
         return 'Home';
     }
 
+    public getAdditionalInformation(key: string): any {
+        return key === 'IGNORE_OBJECT_DEPENDENCY_CHECK' ? true : super.getAdditionalInformation(key);
+    }
+
 }
