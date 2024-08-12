@@ -41,7 +41,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return this.state.configuration.rowHeight === TableRowHeight.SMALL;
     }
 
-    public columnCOnfigurationChanged(columns: IColumnConfiguration[]): void {
+    public columnConfigurationChanged(columns: IColumnConfiguration[]): void {
         this.state.configuration.tableColumns = columns;
         this.emitConfigurationChanged();
     }

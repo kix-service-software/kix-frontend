@@ -135,10 +135,16 @@ export class ConfigItemTableFactory extends TableFactory {
 
     public async getDefaultColumnConfigurations(searchCache: SearchCache): Promise<IColumnConfiguration[]> {
         const superColumns = await super.getDefaultColumnConfigurations(searchCache);
-        const ticketColumns = this.getDefaultColumns();
+
+        const index = superColumns.findIndex((c) => c.property === 'ClassIDs');
+        if (index !== -1) {
+            superColumns.splice(index, 1);
+        }
+
+        const columns = this.getDefaultColumns();
         return [
-            ...ticketColumns,
-            ...superColumns.filter((c) => !ticketColumns.some((tc) => tc.property === c.property))
+            ...columns,
+            ...superColumns.filter((c) => !columns.some((tc) => tc.property === c.property))
         ];
     }
 
