@@ -76,7 +76,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 <div class="message message-success">
                                     <span class="kix-icon-icircle"/>
                                     ${component.getString(
-                                        "An Email has been sent to you.",
+                                        "Password reset is requested.",
                                     )}
                                 </div>
                             </else-if>
@@ -84,15 +84,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <div class="message message-success">
                                 <span class="kix-icon-icircle"/>
                                 ${component.getString(
-                                "Your new Password was emailed to you.",
+                                "Requested password reset is confirmed.",
                                 )}
                             </div>
                             </else-if>
-                            <else-if(state.pwResetState === "rejected")>
+                            <else-if(state.pwResetState === "error")>
                             <div class="message message-error">
-                                <span class="kix-icon-icircle"/>
+                                <span class="kix-icon-warnsign"/>
                                 ${component.getString(
-                                "Invalid or expired token. Please send a new request.",
+                                "Password reset failed.",
                                 )}
                             </div>
                             </else-if>
@@ -230,40 +230,53 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </else>
                 </if>
                 <else>
-                    <div on-keydown("keyDown") class="dialog-content">
-                        <label>
-                            <span>${component.getString("Login Name")}:</span>
-                            <input
-                                type="text"
-                                name="username"
-                                tabindex="1"
-                                value=state.userName
-                                on-input("userNameChanged")
-                                key="login-user-name"
-                                class="input-style"
-                            >
-                        </label>
-                        <div class="dialog-buttons">
-                            <button
-                                type="button"
-                                on-click("togglePWResetDialog")
-                                tabindex="4"
-                                class="kix-button submit-button"
-                            >
-                                <span class="kix-icon-arrow-left"/>
-                                ${component.getString("Back")}
-                            </button>
-                            <button
-                                type="button"
-                                on-click("sendPasswordChangeRequest")
-                                tabindex="3"
-                                class="kix-button special-button"
-                            >
-                                <span class="kix-icon-check"/>
-                                ${component.getString("Submit")}
-                            </button>
+                    <if(state.pwResetProcess)>
+                        <div class="loading-container">
+                            <div class="login-loading">
+                                <div class="loading-dots">
+                                    <div class="loading-dots--dot"/>
+                                    <div class="loading-dots--dot"/>
+                                    <div class="loading-dots--dot"/>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </if>
+                    <else>
+                        <div on-keydown("keyDown") class="dialog-content">
+                            <label>
+                                <span>${component.getString("Login Name")}:</span>
+                                <input
+                                    type="text"
+                                    name="username"
+                                    tabindex="1"
+                                    value=state.userName
+                                    on-input("userNameChanged")
+                                    key="login-user-name"
+                                    class="input-style"
+                                >
+                            </label>
+                            <div class="dialog-buttons">
+                                <button
+                                    type="button"
+                                    on-click("togglePWResetDialog")
+                                    tabindex="4"
+                                    class="kix-button submit-button"
+                                >
+                                    <span class="kix-icon-arrow-left"/>
+                                    ${component.getString("Back")}
+                                </button>
+                                <button
+                                    type="button"
+                                    on-click("sendPasswordChangeRequest")
+                                    tabindex="3"
+                                    class="kix-button special-button"
+                                >
+                                    <span class="kix-icon-check"/>
+                                    ${component.getString("Submit")}
+                                </button>
+                            </div>
+                        </div>
+                    </else>
                 </else>
             </div>
         </if>

@@ -33,6 +33,7 @@ export class ComponentState {
         public pwResetEnabled: boolean = false,
         public showPWResetDialog: boolean = false,
         public pwResetState: string = '',
+        public pwResetProcess: boolean = false,
     ) { }
 
 }
