@@ -141,15 +141,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.value = date ? DateTimeUtil.getKIXDateTimeString(date) : null;
-    }
 
-    public async focusLost(event?: any): Promise<void> {
         const hasValue = this.value !== null && this.value !== undefined;
         if (hasValue) {
             this.formValue.setFormValue(this.value);
         }
-
-        if (!this.value) {
+        else {
             this.formHandler.objectFormValidator?.validate(this.formValue, true);
         }
     }
