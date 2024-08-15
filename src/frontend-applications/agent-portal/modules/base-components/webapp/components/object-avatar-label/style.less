@@ -22,10 +22,11 @@
         font-size: 3rem;
         height: 3rem;
 
-        >.icon {
+        > .icon {
             justify-self: center;
             align-self: center;
-            >.svg-icon {
+
+            > .svg-icon {
                 height: auto;
                 width: auto;
                 max-width: 3rem;
@@ -40,27 +41,28 @@
         overflow: auto;
         grid-row: 2;
         grid-column: 2;
+        grid-column-gap: @margin-small;
+        display: grid;
+        grid-template-columns: max-content max-content;
+        align-items: center;
+
+        .overlay-icon {
+            align-self: center;
+            justify-self: start;
+            color: @tertiary-1;
+        }
     }
 
     .object-avatar-description {
         grid-column: 2;
         grid-row: 1;
-        display: grid;
         align-self: end;
-        grid-template-columns: max-content auto;
-        grid-column-gap: 0.5rem;
 
-            .object-avatar-description-text {
-                grid-column: 1;
-                font-style: italic;
-                color: @secondary-0;
-            }
+        .object-avatar-description-text {
+            font-style: italic;
+            color: @secondary-0;
+        }
 
-            .overlay-icon {
-                grid-column: 2;
-                align-self: center;
-                justify-self: start;
-                color: @tertiary-1;
-            }
+
     }
 }
