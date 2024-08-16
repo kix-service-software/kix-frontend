@@ -210,9 +210,6 @@ msgstr ""
 msgid "after"
 msgstr "after/greater than"
 
-msgid "After"
-msgstr ""
-
 msgid "Age"
 msgstr ""
 
@@ -459,9 +456,6 @@ msgstr ""
 
 msgid "before"
 msgstr "before/less than"
-
-msgid "Before"
-msgstr ""
 
 msgid "Begin of Business Day"
 msgstr ""

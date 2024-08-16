@@ -213,9 +213,6 @@ msgstr "Betroffene Services"
 msgid "after"
 msgstr "nach/größer als"
 
-msgid "After"
-msgstr "Nach"
-
 msgid "Age"
 msgstr "Alter"
 
@@ -472,9 +469,6 @@ msgstr "Bcc"
 
 msgid "before"
 msgstr "vor/kleiner als"
-
-msgid "Before"
-msgstr "Bevor"
 
 msgid "Begin of Business Day"
 msgstr "Beginn Servicezeit (\"Business Day\")"
@@ -5641,6 +5635,12 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "After"
+#~ msgstr "Nach"
+
+#~ msgid "Before"
+#~ msgstr "Bevor"
 
 #~ msgid "Last changed time"
 #~ msgstr "Zuletzt geändert am"
