@@ -169,11 +169,11 @@ export class ArticleLoader {
         return color;
     }
 
-    public static async searchArticles(
-        ticketId: number, articleFilter: ArticleFilter
-    ): Promise<number[]> {
+    public static async searchArticles(ticketId: number, articleFilter: ArticleFilter): Promise<Article[]> {
 
         const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.sortOrder = 'Article.IncomingTime,Article.ID';
+        loadingOptions.limit = 0;
         loadingOptions.filter = [];
 
         if (articleFilter?.filterExternal) {
@@ -188,8 +188,8 @@ export class ArticleLoader {
         if (articleFilter?.filterInternal) {
             loadingOptions.filter.push(
                 new FilterCriteria(
-                    ArticleProperty.SENDER_TYPE, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, 'agent'
+                    ArticleProperty.SENDER_TYPE, SearchOperator.NOT_EQUALS,
+                    FilterDataType.STRING, FilterType.AND, 'external'
                 )
             );
         }
@@ -211,7 +211,8 @@ export class ArticleLoader {
             loadingOptions.filter.push(
                 new FilterCriteria(
                     TicketProperty.ARTICLE_CREATE_TIME, operator,
-                    FilterDataType.DATE, FilterType.AND, articleFilter.filterDate
+                    FilterDataType.DATETIME, FilterType.AND,
+                    `${articleFilter.filterDate} ${articleFilter.filterDateBefore ? '23:59:59' : '00:00:00'}`
                 )
             );
         }
@@ -233,17 +234,13 @@ export class ArticleLoader {
                 )
             );
         }
+        loadingOptions.query.push(['fields', 'Article.ArticleID']);
 
-        const useFilter = loadingOptions.filter?.length > 0;
+        let articles: Article[] = await KIXObjectService.loadObjects<Article>(
+            KIXObjectType.ARTICLE, null, loadingOptions, new ArticleLoadingOptions(ticketId)
+        ).catch((): Article[] => []);
 
-        let articles: Article[] = [];
-        if (useFilter) {
-            articles = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, null, loadingOptions, new ArticleLoadingOptions(ticketId)
-            ).catch((): Article[] => []);
-        }
-
-        return useFilter ? articles?.map((a) => Number(a.ArticleID)) || [] : null;
+        return articles;
     }
 
     public static async loadArticle(articleId: number, ticketId: number): Promise<Article> {

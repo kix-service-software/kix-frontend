@@ -105,6 +105,9 @@ export class LabelService {
         object: T, property: string, defaultValue?: string, translatable: boolean = true,
         short?: boolean
     ): Promise<string> {
+        if (!object) {
+            return;
+        }
 
         let displayValue;
         const labelProvider = this.getLabelProvider(object);
@@ -205,6 +208,10 @@ export class LabelService {
     public async getIcons<T extends KIXObject>(
         object: T, property: string, value?: string | number, forTable?: boolean
     ): Promise<Array<string | ObjectIcon>> {
+        if (!object) {
+            return;
+        }
+
         let displayIcons;
 
         if (Object.prototype.hasOwnProperty.call(object, 'getDisplayIcons')) {
