@@ -112,7 +112,7 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
             articleAttachments.forEach((a) => {
                 if (!a.Content) {
                     const attachmentPromise = TicketService.getInstance().loadArticleAttachment(
-                        Number(refTicketId), refArticleId, a.ID
+                        Number(refTicketId), refArticleId, a.ID, true
                     );
                     if (attachmentPromise) {
                         attachmentPromises.push(attachmentPromise);

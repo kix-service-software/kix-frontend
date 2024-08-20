@@ -641,12 +641,21 @@ export class TicketAPIService extends KIXObjectAPIService {
         if (Array.isArray(article.Attachments)) {
             for (const attachment of article.Attachments) {
                 if (!attachment.Content) {
-                    const crypto = require('crypto');
-                    const md5 = crypto.createHash('md5').update(token).digest('hex');
-                    const filename = `${md5}-${attachment.Filename}`;
-                    const content = FileService.getFileContent(filename, false);
+                    let content;
+                    // probably an attachment from a referenced article
+                    if (attachment.Disposition === 'attachment') {
+                        content = FileService.getFileContent(attachment.Filename, true);
+                        FileService.removeFile(attachment.Filename, false);
+                    }
+                    // a new attachment
+                    else {
+                        const crypto = require('crypto');
+                        const md5 = crypto.createHash('md5').update(token).digest('hex');
+                        const filename = `${md5}-${attachment.Filename}`;
+                        content = FileService.getFileContent(filename, false);
+                        FileService.removeFile(filename, false);
+                    }
                     attachment.Content = content;
-                    FileService.removeFile(filename, false);
                 }
             }
         }
