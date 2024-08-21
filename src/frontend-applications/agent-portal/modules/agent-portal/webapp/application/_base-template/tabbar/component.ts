@@ -18,6 +18,7 @@ import { ContextService } from '../../../../../base-components/webapp/core/Conte
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { HomeContext } from '../../../../../home/webapp/core';
+import { MobileShowEvent } from '../../../../model/MobileShowEvent';
 import { ComponentState } from './ComponentState';
 import { ContextTab } from './ContextTab';
 
@@ -173,6 +174,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async closeAllTabs(event: any): Promise<void> {
         event.stopPropagation();
         event.preventDefault();
+
+        EventService.getInstance().publish(MobileShowEvent.CLOSE_ALL_TABS_MOBILE);
 
         this.state.blocked = true;
 

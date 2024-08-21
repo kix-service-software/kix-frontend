@@ -9,6 +9,7 @@
 
 export enum MobileShowEvent {
 
-    SHOW_MOBILE = 'show-mobile'
+    SHOW_MOBILE = 'show-mobile',
+    CLOSE_ALL_TABS_MOBILE = 'close-all-tabs-mobile',
 
 }
