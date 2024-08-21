@@ -97,14 +97,6 @@ class Component {
                     index++;
                 }
 
-                this.state.dynamicValues.forEach((v) => {
-                    if (!this.advancedOptionsMap.has(v.instanceId)) {
-                        this.advancedOptionsMap.set(v.instanceId, false);
-                    }
-                });
-
-                await this.addEmptyValue();
-
                 let removeInstanceIds = [];
                 if (this.manager.uniqueProperties) {
                     const updatePromises = [];
@@ -118,6 +110,16 @@ class Component {
                 if (toRemove.length) {
                     toRemove.forEach((p) => this.removeValue(p, false));
                 }
+
+                this.state.dynamicValues = this.state.dynamicValues.sort((a, b) => a.required ? -1 : 0);
+
+                await this.addEmptyValue();
+
+                this.state.dynamicValues.forEach((v) => {
+                    if (!this.advancedOptionsMap.has(v.instanceId)) {
+                        this.advancedOptionsMap.set(v.instanceId, false);
+                    }
+                });
 
                 (this as any).setStateDirty('dynamicValues');
                 this.updatePromiseResolve = undefined;
