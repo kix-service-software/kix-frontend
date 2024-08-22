@@ -52,6 +52,9 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
         };
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
 
+        // do it now (check after tab change)
+        this.handleArticleProperties();
+
         this.state.prepared = true;
     }
 
@@ -119,6 +122,9 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
                 )
             );
         }
+
+        // mark as invalid if no values are given
+        this.state.manager.validate();
     }
 
     private async unrequireArticleProperties(): Promise<void> {
