@@ -42,6 +42,7 @@
         "require ./object-dialog",
         "require ./object-dialog-form-widget",
         "require ./object-information",
+        "require ./object-information-card",
         "require ./object-information-card-widget",
         "require ./object-information-widget",
         "require ./object-property-label",

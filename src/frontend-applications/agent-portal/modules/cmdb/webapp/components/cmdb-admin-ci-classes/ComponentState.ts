@@ -20,7 +20,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#CMDB: CI Classes',
             [
-                'cmdb-admin-ci-class-create', 'csv-export-action'
+                'cmdb-admin-ci-class-create', 'cmdb-admin-ci-class-duplicate', 'csv-export-action'
             ], null,
             new TableWidgetConfiguration(
                 null, null, null,

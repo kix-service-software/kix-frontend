@@ -37,6 +37,8 @@ export class KIXModulesSocketClient extends SocketClient {
 
     private static INSTANCE: KIXModulesSocketClient = null;
 
+    private loadReleaseInfoPromise: Promise<ReleaseInfo>;
+
     public constructor() {
         super('kixmodules');
     }
@@ -149,26 +151,23 @@ export class KIXModulesSocketClient extends SocketClient {
 
 
     public async loadReleaseConfig(): Promise<ReleaseInfo> {
+        if (this.loadReleaseInfoPromise) {
+            return this.loadReleaseInfoPromise;
+        }
+
         this.checkSocketConnection();
 
-        const socketTimeout = ClientStorageService.getSocketTimeout();
-        return new Promise<ReleaseInfo>((resolve, reject) => {
+        this.loadReleaseInfoPromise = new Promise<ReleaseInfo>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
-
-            const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + KIXModulesEvent.LOAD_RELEASE_INFO);
-            }, socketTimeout);
 
             this.socket.on(KIXModulesEvent.LOAD_RELEASE_INFO_FINISHED, (result: LoadReleaseInfoResponse) => {
                 if (requestId === result.requestId) {
-                    window.clearTimeout(timeout);
                     resolve(result.releaseInfo);
                 }
             });
 
             this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
-                    window.clearTimeout(timeout);
                     console.error(error.error);
                     reject(error.error);
                 }
@@ -180,6 +179,8 @@ export class KIXModulesSocketClient extends SocketClient {
             };
             this.socket.emit(KIXModulesEvent.LOAD_RELEASE_INFO, request);
         });
+
+        return this.loadReleaseInfoPromise;
     }
 
     public async rebuildConfiguration(): Promise<void> {

@@ -25,6 +25,7 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { TranslationAPIService } from '../../modules/translation/server/TranslationService';
 import { ObjectIconService } from '../../modules/icon/server/ObjectIconService';
 import { TicketAPIService } from '../../modules/ticket/server/TicketService';
+import { PasswordResetRequest } from '../../modules/user/model/PasswordResetRequest';
 
 export class AuthenticationNamespace extends SocketNameSpace {
 
@@ -57,12 +58,15 @@ export class AuthenticationNamespace extends SocketNameSpace {
         this.registerEventHandler(client, AuthenticationEvent.LOGOUT, this.logout.bind(this));
         this.registerEventHandler(client, AuthenticationEvent.VALIDATE_TOKEN, this.validateToken.bind(this));
         this.registerEventHandler(client, AuthenticationEvent.PERMISSION_CHECK, this.checkPermissions.bind(this));
+        this.registerEventHandler(client,
+            AuthenticationEvent.PASSWORD_RESET_REQUEST, this.createPasswordResetRequest.bind(this)
+        );
     }
 
     private async login(data: LoginRequest, client: Socket): Promise<SocketResponse> {
         const response = await AuthenticationService.getInstance()
             .login(
-                data.userName, data.password, data.userType, data.negotiateToken,
+                data.userName, data.password, data.userType, data.negotiateToken, data.mfaToken,
                 data.clientRequestId, client.handshake.headers
             ).then(async (token: string) => {
                 await TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null)
@@ -165,6 +169,22 @@ export class AuthenticationNamespace extends SocketNameSpace {
         }
 
         return new SocketResponse(event, { requestId: data.requestId });
+    }
+
+    private async createPasswordResetRequest(data: PasswordResetRequest, client: Socket): Promise<SocketResponse> {
+        const response = await AuthenticationService.getInstance()
+            .createPasswordResetRequest(data.UserLogin, data.UserType)
+            .then(async (token: string) => {
+                return new SocketResponse(
+                    AuthenticationEvent.PASSWORD_RESET_REQUEST_SUCCESS,
+                );
+            }).catch((error: Error) =>
+                new SocketResponse(
+                    AuthenticationEvent.PASSWORD_RESET_REQUEST_ERROR
+                )
+            );
+
+        return response;
     }
 
 }

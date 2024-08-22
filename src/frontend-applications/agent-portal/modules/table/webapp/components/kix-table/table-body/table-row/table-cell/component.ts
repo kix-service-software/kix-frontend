@@ -110,7 +110,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async setValueStateClass(): Promise<void> {
         let classes = [];
-        const state = this.cell.getValue()?.state !== ValueState.NONE
+        const state = this.cell.getValue()?.state && this.cell.getValue()?.state !== ValueState.NONE
             ? this.cell.getValue().state
             : this.cell.getRow().getRowObject().getValueState();
 

@@ -88,6 +88,9 @@ export class NotificationLabelProvider extends LabelProvider {
             case NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP:
                 displayValue = 'Translatable#Agent Preferences Tooltip';
                 break;
+            case NotificationProperty.DATA_EMAIL_SECURITIY:
+                displayValue = 'Translatable#Email Security';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, false, translatable);
         }
@@ -183,6 +186,11 @@ export class NotificationLabelProvider extends LabelProvider {
             case NotificationProperty.MESSAGE_CONTENTTYPE:
                 displayValue = NotificationConfig.getContentType().filter((v) => v.key === value)[0].label;
                 translatable = true;
+                break;
+            case NotificationProperty.DATA_EMAIL_SECURITIY:
+                displayValue = value === 1 ? 'Encrypt or do not send' :
+                    value === 2 ? 'Encrypt if possible' : 'No encryption';
+
                 break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);

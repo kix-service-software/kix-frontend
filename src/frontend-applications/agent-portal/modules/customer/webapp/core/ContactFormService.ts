@@ -41,6 +41,7 @@ import { FormInstance } from '../../../base-components/webapp/core/FormInstance'
 import { PersonalSettingsFormService } from '../../../user/webapp/core/PersonalSettingsFormService';
 import { IdService } from '../../../../model/IdService';
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
+import { ExtendedContactFormService } from './ExtendedContactFormService';
 
 export class ContactFormService extends KIXObjectFormService {
 
@@ -269,7 +270,7 @@ export class ContactFormService extends KIXObjectFormService {
     }
 
     private async addPreferencesFields(
-        accesses: string[], formInstance?: FormInstance
+        accesses: string[], formInstance?: FormInstance, contact?: Contact
     ): Promise<FormFieldConfiguration> {
         const languageField = await this.getLanguageField(formInstance);
 
@@ -295,6 +296,13 @@ export class ContactFormService extends KIXObjectFormService {
                 preferencesField.children.push(userTokenField);
             }
         }
+
+        for (const efs of this.extendedFormServices) {
+            if (efs instanceof ExtendedContactFormService) {
+                await efs.addPreferencesFields(preferencesField, formInstance, contact);
+            }
+        }
+
         preferencesField.instanceId = IdService.generateDateBasedId();
         return preferencesField;
     }

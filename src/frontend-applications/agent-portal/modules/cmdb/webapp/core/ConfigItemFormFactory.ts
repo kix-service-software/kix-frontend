@@ -148,8 +148,12 @@ export class ConfigItemFormFactory {
                         new FilterCriteria(
                             GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
                             FilterType.AND, 'ITSM::Core::IncidentState'
+                        ),
+                        new FilterCriteria(
+                            'Functionality', SearchOperator.IN,
+                            FilterDataType.STRING, FilterType.AND, ['incident', 'operational']
                         )
-                    ])
+                    ], null, null, [GeneralCatalogItemProperty.PREFERENCES])
                 ),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
             ],
@@ -256,7 +260,8 @@ export class ConfigItemFormFactory {
                     ])
                 ),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
-                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE)
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE),
+                new FormFieldOption(ObjectReferenceOptions.KEEP_SELECTION, true)
             ],
             null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax,
             ad.CountMin, ad.Input.MaxLength,
@@ -291,7 +296,8 @@ export class ConfigItemFormFactory {
                 new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
                 new FormFieldOption(ObjectReferenceOptions.UNIQUE, false),
-                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE)
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE),
+                new FormFieldOption(ObjectReferenceOptions.KEEP_SELECTION, true)
             ], null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
@@ -310,19 +316,12 @@ export class ConfigItemFormFactory {
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
                 new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE),
+                new FormFieldOption(ObjectReferenceOptions.KEEP_SELECTION, true),
                 new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                     new KIXObjectLoadingOptions([
                         new FilterCriteria(
                             ConfigItemProperty.CLASS, SearchOperator.IN,
                             FilterDataType.STRING, FilterType.AND, classes
-                        ),
-                        new FilterCriteria(
-                            ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                            FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
-                        ),
-                        new FilterCriteria(
-                            ConfigItemProperty.NAME, SearchOperator.LIKE,
-                            FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
                         )
                     ])
                 )

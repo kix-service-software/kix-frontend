@@ -8,6 +8,8 @@
  */
 
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldOption } from '../../../../../../model/configuration/FormFieldOption';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { JobTypes } from '../../../../../job/model/JobTypes';
 import { MacroAction } from '../../../../../job/model/MacroAction';
 import { MacroActionTypeOption } from '../../../../../job/model/MacroActionTypeOption';
@@ -19,26 +21,29 @@ export class TicketCreateDynamicFields extends ExtendedJobFormManager {
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
         jobType: string
     ): Promise<FormFieldConfiguration> {
-        if (
-            jobType === JobTypes.TICKET
-            && actionType === 'TicketCreate'
-            && option.Name === 'DynamicFieldList'
-        ) {
+        const isDynamicFieldOption = option.Name === 'DynamicFieldList' || option.Name === 'ArticleDynamicFieldList';
+        const isCreateAction = actionType === 'TicketCreate' || actionType === 'ArticleCreate';
+
+        if (jobType === JobTypes.TICKET && isCreateAction && isDynamicFieldOption) {
             let defaultValue;
             if (action && action.Parameters) {
                 defaultValue = action.Parameters[option.Name];
             }
 
+            const objectType = option.Name === 'DynamicFieldList' ? KIXObjectType.TICKET : KIXObjectType.ARTICLE;
             return this.getOptionField(
                 option, actionType, actionFieldInstanceId, 'job-input-ticketCreateDynamicField',
-                defaultValue, 1, 99, 1
+                defaultValue, 1, 99, 1, [new FormFieldOption('ObjectType', objectType)]
             );
         }
         return;
     }
 
     public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: any): any {
-        if (actionType === 'TicketCreate' && optionName === 'DynamicFieldList') {
+        const isDynamicFieldOption = optionName === 'DynamicFieldList' || optionName === 'ArticleDynamicFieldList';
+        const isCreateAction = actionType === 'TicketCreate' || actionType === 'ArticleCreate';
+
+        if (isDynamicFieldOption && isCreateAction) {
             if (Array.isArray(value) && value[0] && value[1] !== '') {
                 return this.valueAsArray(parameter, optionName, value);
             } else {

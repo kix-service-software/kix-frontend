@@ -7,51 +7,67 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.file-upload
-    class={
-        dragging: state.dragging,
-        invalid: input.invalid,
-        readonly: state.readonly
-    }
-    on-drop("drop")>
+<div
+    class=[
+        "file-upload",
+        {
+            dragging: state.dragging,
+            invalid: input.invalid,
+            readonly: state.readonly,
+        },
+    ]
+    on-drop("drop")
+>
     <if(!state.readonly)>
-        <button.kix-button.form-button.file-upload-button
+        <button
             type="button"
             on-click("triggerFileUpload")
-            title=state.translations["Translatable#Select file"]>
-            <span.kix-icon-attachement/>
+            title=(state.translations["Translatable#Select file"])
+            class="kix-button form-button file-upload-button"
+        >
+            <span class="kix-icon-attachement"/>
             <translation-string pattern="Translatable#Select file"/>
-            <input.file-upload-input
+            <input
                 type="file"
                 multiple=state.multiple
                 key="fileUploadInput"
-                on-change("setAttachments")/>
+                on-change("setAttachments")
+                class="file-upload-input"
+            >
         </button>
     </if>
-    <span.file-upload-notice
+    <span
         on-click("minimize")
-        class={
-            "has-text": !!state.count
-        }>
+        class=[
+            "file-upload-notice",
+            {
+                "has-text": !!state.count,
+            },
+        ]
+    >
         <if(!!state.count)>
             <span>
                 <translation-string
                     pattern="Translatable#{0} File(s) added"
-                    placeholders=[state.count]/>
-                <span.kix-icon-check/>
+                    placeholders=[state.count]
+                />
+                <span class="kix-icon-check"/>
             </span>
         </if>
-        <div.toggle>
-            <span.line class={
-                minimized: state.minimized
-            }/>
+        <div class="toggle">
+            <span class=[
+                "line",
+                {
+                    minimized: state.minimized,
+                },
+            ]/>
             <if(state.minimized)>
-                <span.kix-icon-sort-down/>
+                <span class="kix-icon-sort-down"/>
             </if>
             <else>
-                <span.kix-icon-triangle-up>
-                    <span.path1/>
-                    <span.path2/>
+                <span class="kix-icon-triangle-up">
+                    <span class="path1"/>
+                    <span class="path2"/>
                 </span>
             </else>
         </div>
@@ -61,6 +77,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             labels=state.labels
             showUnknownIcon=false
             removeLabels=!state.readonly
-            on-removeLabel("removeFile")/>
+            on-removeLabel("removeFile")
+        />
     </if>
 </div>

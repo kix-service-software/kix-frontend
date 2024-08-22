@@ -16,12 +16,12 @@ import { GeneralCatalogItemProperty } from '../../../model/GeneralCatalogItemPro
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
-import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
-import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
-import { TableValue } from '../../../../table/model/TableValue';
 
 export class GeneralCatalogTableContentProvider extends TableContentProvider<GeneralCatalogItem> {
+
+    private gcSort: [string, boolean];
+    private gcFilter: string;
 
     public constructor(
         table: Table,
@@ -30,42 +30,34 @@ export class GeneralCatalogTableContentProvider extends TableContentProvider<Gen
         contextId?: string
     ) {
         super(KIXObjectType.GENERAL_CATALOG_ITEM, table, objectIds, loadingOptions, contextId);
+        this.useBackendSort = true;
+        this.useBackendFilter = true;
     }
 
-    public async loadData(): Promise<Array<RowObject<GeneralCatalogItem>>> {
+    protected async prepareLoadingOptions(): Promise<KIXObjectLoadingOptions> {
 
-        const definitionFilter = [
-            new FilterCriteria(
-                GeneralCatalogItemProperty.CLASS, SearchOperator.NOT_EQUALS,
-                FilterDataType.STRING, FilterType.AND, 'ITSM::ConfigItem::Class'
-            ),
-        ];
-        const loadingOptions = new KIXObjectLoadingOptions(definitionFilter);
+        const loadingOptions = await super.prepareLoadingOptions();
+        let hasClassFilter = false;
 
-        const sysConfigOptions = await KIXObjectService.loadObjects<GeneralCatalogItem>(
-            KIXObjectType.GENERAL_CATALOG_ITEM, null, this.loadingOptions ? this.loadingOptions : loadingOptions
-        );
-
-        const rowObjects = [];
-        for (const fc of sysConfigOptions) {
-            const row = await this.createRowObject(fc);
-            rowObjects.push(row);
+        if (
+            loadingOptions?.filter
+            && loadingOptions?.filter?.length
+        ) {
+            hasClassFilter = loadingOptions?.filter.some(
+                (f) =>
+                    f.property === GeneralCatalogItemProperty.CLASS && f.value === 'ITSM::ConfigItem::Class'
+            );
         }
 
-        return rowObjects;
-    }
-
-    private async createRowObject(definition: GeneralCatalogItem): Promise<RowObject> {
-        const values: TableValue[] = [];
-
-        const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
-        for (const column of columns) {
-            const tableValue = new TableValue(column.property, definition[column.property]);
-            values.push(tableValue);
+        if (!hasClassFilter) {
+            loadingOptions.filter.push(
+                new FilterCriteria(
+                    GeneralCatalogItemProperty.CLASS, SearchOperator.NOT_EQUALS,
+                    FilterDataType.STRING, FilterType.AND, 'ITSM::ConfigItem::Class'
+                )
+            );
         }
 
-        const rowObject = new RowObject<GeneralCatalogItem>(values, definition);
-
-        return rowObject;
+        return loadingOptions;
     }
 }

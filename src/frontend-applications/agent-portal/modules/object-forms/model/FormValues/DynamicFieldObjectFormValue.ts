@@ -40,6 +40,7 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         super(property, object, objectValueMapper, parent);
         this.visible = false;
         this.enabled = true;
+        this.isSortable = true;
     }
 
     public async createDFFormValues(): Promise<void> {
@@ -72,6 +73,14 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         }
     }
 
+    public async disable(): Promise<void> {
+        if (Array.isArray(this.formValues)) {
+            for (const fv of this.formValues) {
+                await fv.disable();
+            }
+        }
+    }
+
     public async createFormValue(
         dfName: string, dynamicFieldValue?: DynamicFieldValue, addFormValue: boolean = true
     ): Promise<ObjectFormValue> {
@@ -84,12 +93,14 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
             this.value.push(dynamicFieldValue);
         }
 
-        const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+        const dynamicField = await KIXObjectService.loadDynamicField(dfName, null, true);
 
-        for (const mapperExtension of this.objectValueMapper.extensions) {
-            formValue = await mapperExtension.createDynamicFieldFormValue(dynamicField, dynamicFieldValue, this);
-            if (formValue) {
-                break;
+        if (dynamicField) {
+            for (const mapperExtension of this.objectValueMapper.extensions) {
+                formValue = await mapperExtension.createDynamicFieldFormValue(dynamicField, dynamicFieldValue, this);
+                if (formValue) {
+                    break;
+                }
             }
         }
 
@@ -140,6 +151,7 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         }
 
         if (formValue) {
+            formValue.isSortable = this.isSortable;
             formValue.label = await TranslationService.translate(dynamicField.Label);
 
             if (addFormValue) {

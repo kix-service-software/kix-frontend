@@ -24,6 +24,7 @@ import { Table } from '../../../model/Table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { DefaultDepColumnConfiguration } from '../../../model/DefaultDepColumnConfiguration';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
 
 export abstract class TableFactory {
 
@@ -45,18 +46,33 @@ export abstract class TableFactory {
         objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): Promise<Table>;
 
-    public filterColumns(contextId: string, tableConfiguration: TableConfiguration): IColumnConfiguration[] {
+    public async filterColumns(
+        contextId: string, tableConfiguration: TableConfiguration
+    ): Promise<IColumnConfiguration[]> {
         let tableColumns: IColumnConfiguration[] = JSON.parse(JSON.stringify(tableConfiguration.tableColumns));
         this.prepareDepColumns(tableColumns);
 
         const context = contextId ? ContextService.getInstance().getActiveContext() : null;
-        const dependency = context?.getAdditionalInformation('OBJECT_DEPENDENCY');
+        const ignoreDependencyCheck = context?.getAdditionalInformation('IGNORE_OBJECT_DEPENDENCY_CHECK');
+        const dependency = !ignoreDependencyCheck ? context?.getAdditionalInformation('OBJECT_DEPENDENCY') : null;
+
+        const currentUser = await AgentService.getInstance().getCurrentUser();
         tableColumns = tableColumns.filter((tc) => {
+
+            if (tc.roleIds?.length) {
+                if (!AgentService.userHasRole(tc.roleIds, currentUser)) {
+                    return false;
+                }
+            }
+
             if (tc.property.startsWith('DynamicFields.')) {
                 return true;
             }
 
             if (tc instanceof DefaultDepColumnConfiguration) {
+                if (!ignoreDependencyCheck) {
+                    return true;
+                }
                 return Array.isArray(dependency) ?
                     dependency.some((d) => d.toString() === tc.dep.toString()) :
                     dependency ?
@@ -195,7 +211,8 @@ export abstract class TableFactory {
 
         let criteria = searchCache?.criteria || [];
         criteria = criteria.filter((c) => {
-            return c.property !== SearchProperty.FULLTEXT
+            return c.property
+                && c.property !== SearchProperty.FULLTEXT
                 && c.property !== SearchProperty.PRIMARY
                 && c.property !== TicketProperty.CLOSE_TIME
                 && c.property !== TicketProperty.LAST_CHANGE_TIME;

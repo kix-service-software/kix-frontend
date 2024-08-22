@@ -56,12 +56,8 @@ export abstract class KIXObject extends BindableObject {
                 }
             }
 
-            if (Array.isArray(this.DynamicFields)) {
-                this.DynamicFields = this.DynamicFields.map((dfv) => new DynamicFieldValue(dfv));
-            }
-
             this.displayValues = object.displayValues ? object.displayValues : [];
-            this.DynamicFields = object.DynamicFields
+            this.DynamicFields = Array.isArray(object.DynamicFields)
                 ? object.DynamicFields.map((df) => new DynamicFieldValue(df))
                 : [];
 

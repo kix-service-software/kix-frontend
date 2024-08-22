@@ -11,28 +11,42 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     class=component.getWidgetClasses()
     data-widgettype=state.widgetType
     data-instanceid=state.instanceId
-    data-configurationtype=(state.widgetConfiguration ? state.widgetConfiguration.type : "")
-    data-widgetid=(state.widgetConfiguration ? state.widgetConfiguration.widgetid : "")>
-    <div.widget-header
-        class={
-            minimizable: state.minimizable
-        }
+    data-configurationtype=(
+        state.widgetConfiguration ? state.widgetConfiguration.type : ""
+    )
+    data-widgetid=(
+        state.widgetConfiguration ? state.widgetConfiguration.widgetid : ""
+    )
+>
+    <div
+        class=[
+            "widget-header",
+            {
+                minimizable: state.minimizable,
+            },
+        ]
         on-click("minimizeWidget", false)
-        on-mousedown("headerMousedown", false)>
-        <span.header-left>
-            <div.widget-title class={
-                "with-icon": input.icon
-            }>
+        on-mousedown("headerMousedown", false)
+    >
+        <span class="header-left">
+            <div class=[
+                "widget-title",
+                {
+                    "with-icon": input.icon,
+                },
+            ]>
                 <if(input.icon)>
                     <icon
                         icon=input.icon
                         on-click("minimizeWidget", true)
-                        on-mousedown("headerMousedown", true)/>
+                        on-mousedown("headerMousedown", true)
+                    />
                 </if>
                 <h2
                     title=state.title
                     on-click("minimizeWidget", true)
-                    on-mousedown("headerMousedown", true)>
+                    on-mousedown("headerMousedown", true)
+                >
                     <translation-string pattern=state.title/>
                 </h2>
             </div>
@@ -40,38 +54,49 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <${input.headercontent}/>
             </if>
             <if(input.headerfilter)>
-                <div.widget-filter>
+                <div class="widget-filter">
                     <${input.headerfilter}/>
                 </div>
             </if>
         </span>
-        <span.header-right on-click("minimizeWidget", true)>
+        <span on-click("minimizeWidget", true) class="header-right">
             <action-list
                 list=input.actions
                 instanceId=state.instanceId
-                displayText=component.getWidgetTypeActionDisplaySetting()/>
+                displayText=component.getWidgetTypeActionDisplaySetting()
+            />
             <if(state.minimizable)>
-                <span.minimize-icon-wrapper>
+                <span class="minimize-icon-wrapper">
                     <if(state.minimized)>
-                        <span.kix-icon-sort-down.as-button on-click("minimizeWidget", true)/>
+                        <span
+                            on-click("minimizeWidget", true)
+                            class="kix-icon-sort-down as-button"
+                        />
                     </if>
                     <else>
-                        <span.kix-icon-triangle-up.as-button on-click("minimizeWidget", true)>
-                            <span.path1/>
-                            <span.path2/>
+                        <span
+                            on-click("minimizeWidget", true)
+                            class="kix-icon-triangle-up as-button"
+                        >
+                            <span class="path1"/>
+                            <span class="path2"/>
                         </span>
                     </else>
                 </span>
             </if>
             <if(state.closable)>
-                <span.close-icon-wrapper>
-                    <span.kix-icon-close.as-button on-click("closeClicked")/>
+                <span class="close-icon-wrapper">
+                    <span
+                        on-click("closeClicked")
+                        class="kix-icon-close as-button"
+                    />
                 </span>
             </if>
         </span>
     </div>
-    <if(component.isLaneWidget() && !state.minimized)>
-        <if(Array.isArray(input.contentActions))>
+    <!-- TODO: maybe not needed anymore -->
+    <!-- <if(component.isLaneWidget() && !state.minimized)>
+        <if(Array.isArray(input.contentActions) && input.contentActions.length)>
             <ul.lane-content-actions key=("content-actions" + Math.random())>
                 <if(Array.isArray(input.contentActions))>
                     <for|action| of=input.contentActions>
@@ -82,19 +107,26 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </if>
             </ul>
         </if>
-    </if>
+    </if> -->
     <if(!state.minimized)>
-        <div.widget-content key="widget-content">
-            <if(Array.isArray(input.contentActions) && input.contentActions.length)>
-                <!-- TODO: ContentAction analog der "header" Actions umsetzen (über WidgetService) -->
+        <div key="widget-content" class="widget-content">
+            <if(
+                Array.isArray(input.contentActions) &&
+                input.contentActions.length
+            )>
                 <if(component.isContentWidget())>
-                    <div.content-actions key=("content-actions" + Math.random())>
+                    <div
+                        key="content-actions" + Math.random()
+                        class="content-actions"
+                    >
                         <action-list list=input.contentActions/>
                     </div>
                 </if>
             </if>
             <if(input.content)>
-                <${component.isSidebarWidget() ? "div" : null} class="scroll-container">
+                <${
+                    component.isSidebarWidget() ? "div" : null
+                } class="scroll-container">
                     <${input.content} key=state.instanceId/>
                 </>
             </if>

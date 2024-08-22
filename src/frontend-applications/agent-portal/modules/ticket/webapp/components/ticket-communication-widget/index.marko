@@ -64,17 +64,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
             </div>
             <div class="communication-list">
-                <for|articleId, index| of=state.articleIds>
-                    <message-content
-                        articleId=articleId
-                        key="article-" + articleId
-                        articleCountNumber=component.getArticleCountNumber(
-                            articleId,
-                        )
-                        selectedCompactView=state.selectedCompactView
-                        articleIndex=index
-                    />
-                </for>
+                <if(state.articleIds)>
+                    <for|articleId, index| of=state.articleIds>
+                        <message-content
+                            articleId=articleId
+                            articleIndex=index
+                            articleCountNumber=component.getArticleCountNumber(
+                                articleId,
+                            )
+                            selectedCompactView=state.selectedCompactView
+                            key="article-" + articleId
+                            informationConfig=state.informationConfig
+                        />
+                    </for>
+                </if>
                 <a
                     title=(state.translations["Translatable#Go to top"])
                     on-click("scrollToTop")

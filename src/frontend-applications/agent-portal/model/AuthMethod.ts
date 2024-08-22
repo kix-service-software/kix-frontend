@@ -7,13 +7,16 @@
  * --
  */
 
+import { MFA } from '../modules/multifactor-authentication/model/MFA';
+
 export class AuthMethod {
 
     public constructor(
         public type: string,
         public preAuth: boolean,
         public data: any,
-        public name?: string
+        public name?: string,
+        public MFA: MFA[] = []
     ) {
         if (!name) {
             this.name = data?.AuthName ? data.AuthName : this.type;

@@ -111,7 +111,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             key="value-" + dynamicValue.id
                             canRemoveNode=!dynamicValue.readonly ||
                             dynamicValue.changeable
-                            readonly=dynamicValue.readonly
+                            readonly=dynamicValue.readonly &&
+                            !dynamicValue.changeable &&
+                            !dynamicValue.valueChangeable
                             multiselect=dynamicValue.isMultiselect
                             freeText=dynamicValue.isFreeText
                             invalid=(!dynamicValue.value.valid)
@@ -152,8 +154,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <form-list
                                 treeId="withinStartUnit-" + dynamicValue.id
                                 key="withinStartUnit-" + dynamicValue.id
-                                canRemoveNode=false
-                                readonly=dynamicValue.readonly
+                                canRemoveNode=!dynamicValue.readonly ||
+                                dynamicValue.changeable
+                                readonly=dynamicValue.readonly &&
+                                !dynamicValue.changeable
                                 invalid=(!dynamicValue.value.valid)
                                 on-nodesChanged(
                                     "setWithinStartUnit",
@@ -167,8 +171,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <form-list
                                 treeId="withinEndType-" + dynamicValue.id
                                 key="withinEndType-" + dynamicValue.id
-                                canRemoveNode=false
-                                readonly=dynamicValue.readonly
+                                canRemoveNode=!dynamicValue.readonly ||
+                                dynamicValue.changeable
+                                readonly=dynamicValue.readonly &&
+                                !dynamicValue.changeable
                                 invalid=(!dynamicValue.value.valid)
                                 on-nodesChanged(
                                     "setWithinEndType",
@@ -194,8 +200,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <form-list
                                 treeId="withinEndUnit-" + dynamicValue.id
                                 key="withinEndUnit-" + dynamicValue.id
-                                canRemoveNode=false
-                                readonly=dynamicValue.readonly
+                                canRemoveNode=!dynamicValue.readonly ||
+                                dynamicValue.changeable
+                                readonly=dynamicValue.readonly &&
+                                !dynamicValue.changeable
                                 invalid=(!dynamicValue.value.valid)
                                 on-nodesChanged(
                                     "setWithinEndUnit",
@@ -225,7 +233,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 key="relativeTimeUnit-" + dynamicValue.id
                                 canRemoveNode=!dynamicValue.readonly ||
                                 dynamicValue.changeable
-                                readonly=dynamicValue.readonly
+                                readonly=dynamicValue.readonly &&
+                                !dynamicValue.changeable
                                 invalid=(!dynamicValue.value.valid)
                                 on-nodesChanged(
                                     "setRelativeUnitValue",
@@ -261,6 +270,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 </div>
                                 <input
                                     type="date"
+                                    disabled=dynamicValue.readonly &&
+                                    !dynamicValue.changeable
                                     on-change(
                                         "betweenDateValueChanged",
                                         dynamicValue,
@@ -314,6 +325,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 </div>
                                 <input
                                     type="date"
+                                    disabled=dynamicValue.readonly &&
+                                    !dynamicValue.changeable
                                     on-change(
                                         "betweenDateValueChanged",
                                         dynamicValue,
@@ -323,6 +336,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 >
                                 <input
                                     type="time"
+                                    disabled=dynamicValue.readonly &&
+                                    !dynamicValue.changeable
                                     on-change(
                                         "setBetweenEndTimeValue",
                                         dynamicValue,
@@ -358,6 +373,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <input
                             type="checkbox"
                             checked=(dynamicValue.value.value)
+                            disabled=dynamicValue.readonly &&
+                            !dynamicValue.changeable
                             on-click("setCheckboxValue", dynamicValue)
                         >
                     </else-if>
@@ -399,6 +416,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 </div>
                                 <input
                                     type="number"
+                                    disabled=dynamicValue.readonly &&
+                                    !dynamicValue.changeable
                                     on-change("setNumberEndValue", dynamicValue)
                                     value=dynamicValue.betweenEndNumberValue
                                     class="input-style"
@@ -453,7 +472,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         on-click("toggleAdvancedOptions", dynamicValue)
                         class="advanced-options"
                     >
-                        <translation-string pattern="Translatable#<< Field Options:"/>
+                        <icon icon="fa-solid fa-angles-left"/>
+                        <translation-string pattern="Translatable#Advanced Options:"/>
                     </span>
                     <div class="advanced-options-json-editor">
                         <div class="d-flex mb-3">
@@ -477,7 +497,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         on-click("toggleAdvancedOptions", dynamicValue)
                         class="advanced-options"
                     >
-                        <translation-string pattern="Translatable#>> Advanced Options"/>
+                        <icon icon="fa-solid fa-angles-right"/>
+                        <translation-string pattern="Translatable#Advanced Options:"/>
                     </span>
                 </else>
             </if>

@@ -13,9 +13,6 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 export class ComponentState {
 
     public constructor(
-        public routingConfiguration: RoutingConfiguration = null,
-        public objectId: string | number = null,
-        public object: KIXObject = null,
         public url: string = null,
         public isExternalUrl: boolean = false,
         public loading: boolean = false

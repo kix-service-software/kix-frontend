@@ -18,8 +18,6 @@ import { TicketService } from '../../TicketService';
 
 export class PendingTimeFormValue extends DateTimeFormValue {
 
-    private defaultValue: string;
-
     public constructor(
         property: string,
         ticket: Ticket,
@@ -58,7 +56,6 @@ export class PendingTimeFormValue extends DateTimeFormValue {
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
-        this.defaultValue = field.defaultValue?.value;
         return super.initFormValueByField(field);
     }
 

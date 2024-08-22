@@ -41,6 +41,7 @@ import { ContextMode } from '../../../../../model/ContextMode';
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
     public objectType: KIXObjectType | string = KIXObjectType.ANY;
+    public additionalObjectTypes: Array<KIXObjectType | string> = [];
 
     protected values: ObjectPropertyValue[] = [];
 
@@ -88,7 +89,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return [];
     }
 
-    public async getProperties(validDynamicFields: boolean = true): Promise<Array<[string, string]>> {
+    public async getProperties(
+        validDynamicFields: boolean = true, addObjectTypeLabel?: boolean
+    ): Promise<Array<[string, string]>> {
         let properties = [];
 
         for (const manager of this.extendedFormManager) {
@@ -105,8 +108,8 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             const loadingOptions = new KIXObjectLoadingOptions(
                 [
                     new FilterCriteria(
-                        DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.AND, this.objectType
+                        DynamicFieldProperty.OBJECT_TYPE, SearchOperator.IN,
+                        FilterDataType.STRING, FilterType.AND, [this.objectType, ...this.additionalObjectTypes]
                     ),
                     new FilterCriteria(
                         DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
@@ -155,6 +158,11 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                         context?.descriptor.contextMode === ContextMode.EDIT_ADMIN) {
                         label = `${df.Name} (${label})`;
                     }
+
+                    if (addObjectTypeLabel) {
+                        label += ` (${df.ObjectType})`;
+                    }
+
                     properties.push([`${KIXObjectProperty.DYNAMIC_FIELDS}.${df.Name}`, label]);
                 }
             }
@@ -236,7 +244,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             this.values.push(newValue);
         }
 
-        await this.checkProperties();
+        await this.checkProperties(newValue.property);
 
         // reset context information
         const context = ContextService.getInstance().getActiveContext();
@@ -262,7 +270,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             this.values.splice(index, 1);
         }
 
-        await this.checkProperties();
+        await this.checkProperties(importValue.property);
 
         // reset context information
         const context = ContextService.getInstance().getActiveContext();
@@ -280,7 +288,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         this.notifyListeners();
     }
 
-    protected async checkProperties(): Promise<void> {
+    protected async checkProperties(property: string): Promise<void> {
         return;
     }
 

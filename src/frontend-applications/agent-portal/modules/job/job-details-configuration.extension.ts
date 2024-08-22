@@ -39,6 +39,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     JobProperty.NAME,
                     JobProperty.LAST_EXEC_TIME,
                     KIXObjectProperty.COMMENT,
+                    JobProperty.IS_ASYNCHRONOUS,
                     KIXObjectProperty.VALID_ID,
                     KIXObjectProperty.CREATE_TIME,
                     KIXObjectProperty.CREATE_BY,

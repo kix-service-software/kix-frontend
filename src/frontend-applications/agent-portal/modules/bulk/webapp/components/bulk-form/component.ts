@@ -40,8 +40,6 @@ class Component {
 
     private tableSubscriber: IEventSubscriber;
 
-    private updateRunning = false;
-
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
@@ -60,12 +58,6 @@ class Component {
         ]);
 
         this.state.bulkManager?.registerListener('bulk-dialog-listener', async () => {
-            const component = (this as any).getComponent(this.state.componentId);
-            if (component && !this.updateRunning) {
-                this.updateRunning = true;
-                await component.updateValues();
-                this.updateRunning = false;
-            }
             this.setCanRun();
         });
 
@@ -93,7 +85,7 @@ class Component {
     public onDestroy(): void {
         this.state.bulkManager?.unregisterListener('bulk-dialog-listener');
         this.state.linkManager?.unregisterListener('bulk-dialog-link-listener');
-        this.state.linkManager.reset();
+        this.state.linkManager?.reset();
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
     }
 

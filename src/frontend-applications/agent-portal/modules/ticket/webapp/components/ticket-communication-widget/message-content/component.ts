@@ -31,9 +31,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private contextListener: IContextListener;
     private contextListenerId: string;
     private articleId: number;
-    private article: Article;
     private articleLoaded: boolean = false;
     private articleIndex: number;
+    private detailedArticle: Article;
 
     private observer: IntersectionObserver;
 
@@ -48,16 +48,31 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async update(input: any): Promise<void> {
         this.articleId = input.articleId;
+        this.state.informationConfig = input.informationConfig;
         this.state.selectedCompactView = typeof input.selectedCompactView !== 'undefined' ? input.selectedCompactView : true;
     }
 
     public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext<TicketDetailsContext>();
-        this.prepareObserver();
+
+        this.state.expanded = this.getArticleToggleState();
+        this.state.show = this.state.expanded;
+        this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
+        await this.prepareObserver();
+        await this.toggleArticleContent(false);
+
+        const focusedArticleId = this.context.getAdditionalInformation('CURRENT_ARTICLE_FOCUS');
+        if (focusedArticleId === this.articleId) {
+            setTimeout(() => this.scrollToArticle(), 500);
+        }
 
         this.state.switchAttachmentListTooltip = await TranslationService.translate('Translatable#Switch attachment list layout');
 
-        this.contextListenerId = IdService.generateDateBasedId('message-content-' + this.article?.ArticleID);
+        this.registerContextListener();
+    }
+
+    private registerContextListener(): void {
+        this.contextListenerId = IdService.generateDateBasedId('message-content-' + this.articleId);
         this.contextListener = {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
@@ -67,7 +82,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             scrollInformationChanged: (objectType: KIXObjectType | string, objectId: string | number): void => {
                 if (
                     objectType === KIXObjectType.ARTICLE &&
-                    this.article?.ArticleID.toString() === objectId.toString()
+                    this.articleId.toString() === objectId.toString()
                 ) {
                     this.scrollToArticle();
                 }
@@ -89,7 +104,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private prepareObserver(): void {
+    private async prepareObserver(): Promise<void> {
         if (!this.state.show && this.supportsIntersectionObserver()) {
             const row = (this as any).getEl();
             if (row) {
@@ -100,7 +115,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.observer.observe(row);
             }
         } else {
-            this.loadArticle();
+            await this.loadArticle();
         }
     }
 
@@ -133,19 +148,26 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 }
 
                 this.state.unseen = this.state.article?.Unseen;
-
-                this.state.actions = await this.context?.articleLoader?.prepareArticleActions(this.state.article);
-                this.prepareAttachments();
-                if (!this.state.selectedCompactView) {
-                    await this.prepareImages();
-                }
-
                 await this.prepareArticleData();
 
-                this.observer?.disconnect();
+                if (!this.state.selectedCompactView) {
+                    this.loadDetailedArticle();
+                }
 
+                this.observer?.disconnect();
                 this.state.show = true;
             });
+        }
+    }
+
+    private loadDetailedArticle(): void {
+        if (!this.detailedArticle) {
+            this.context?.articleDetailsLoader?.queueArticle(this.articleId, (a: Article) => {
+                this.detailedArticle = a;
+                this.prepareArticleContent();
+            });
+        } else {
+            this.prepareArticleContent();
         }
     }
 
@@ -179,6 +201,21 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.backgroundColor = await this.context?.articleLoader?.getChannelColor(this.state.article?.Channel);
 
+        if (this.state.article.SMIMESigned) {
+            const property = this.state.isExternal ? ArticleProperty.SMIME_VERIFIED : ArticleProperty.SMIME_SIGNED;
+            this.state.smimeSignedTooltip = await LabelService.getInstance().getDisplayText(
+                this.state.article, property
+            );
+            if (!this.state.article[property]) {
+                this.state.smimeSignedTooltip += ` (${this.state.article.SMIMESignedError})`;
+            }
+            const icons = await LabelService.getInstance().getIcons(
+                this.state.article, property
+            );
+            this.state.smimeSignedIcon = icons?.length ? icons[0] : null;
+            this.state.smimeSigned = this.state.article[property];
+        }
+
         this.eventSubscriber = {
             eventSubscriberId: 'message-content-' + this.articleId,
             eventPublished: (data: any, eventId: string): void => {
@@ -189,12 +226,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
         };
+
         EventService.getInstance().subscribe('TOGGLE_ARTICLE', this.eventSubscriber);
     }
 
     private filterAttachments(): void {
-        this.state.articleAttachments = this.context?.articleLoader?.filterAttachments(
-            this.state.article, this.state.showAllAttachments
+        this.state.articleAttachments = this.detailedArticle?.getAttachments(
+            this.state.showAllAttachments
         );
     }
 
@@ -219,37 +257,70 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async toggleArticleContent(): Promise<void> {
+    private async toggleArticleContent(setFocus: boolean = true): Promise<void> {
         if (this.state.expanded) {
             this.state.loadingContent = true;
 
-            this.prepareAttachments();
+            this.loadDetailedArticle();
 
-            if (this.state.compactViewExpanded) {
-                await this.prepareImages();
-            }
-
-            this.state.articleTo = await LabelService.getInstance().getDisplayText(
-                this.state.article, ArticleProperty.TO, undefined, undefined, false
-            );
-            this.state.articleCc = await LabelService.getInstance().getDisplayText(
-                this.state.article, ArticleProperty.CC, undefined, false, false
-            );
-
-            await this.setArticleSeen(undefined, true);
-
-            this.state.unseen = 0;
-
-            this.state.loadingContent = false;
-            this.state.showContent = true;
+            this.context.setAdditionalInformation('CURRENT_ARTICLE_FOCUS', this.articleId);
         }
+
+        this.saveArticleToggleState();
+    }
+
+    private async prepareArticleContent(): Promise<void> {
+        this.prepareAttachments();
+
+        if (this.state.compactViewExpanded) {
+            await this.prepareImages();
+        }
+
+        this.state.articleTo = await LabelService.getInstance().getDisplayText(
+            this.detailedArticle, ArticleProperty.TO, undefined, undefined, false
+        );
+        this.state.articleCc = await LabelService.getInstance().getDisplayText(
+            this.detailedArticle, ArticleProperty.CC, undefined, false, false
+        );
+
+        await this.setArticleSeen();
+
+        this.state.unseen = 0;
+
+        this.state.loadingContent = false;
+        this.state.showContent = true;
+
+        this.state.actions = await this.context?.articleLoader?.prepareArticleActions(this.detailedArticle);
+    }
+
+    private saveArticleToggleState(): void {
+        let toggleState: Map<number, boolean> = this.context.getAdditionalInformation('ARTICLE_TOGGLE_STATE');
+        if (!toggleState) {
+            toggleState = new Map();
+        }
+
+        if (this.articleId) {
+            toggleState.set(this.articleId, this.state.expanded);
+        }
+
+        this.context.setAdditionalInformation('ARTICLE_TOGGLE_STATE', toggleState);
+    }
+
+    private getArticleToggleState(): boolean {
+        let toggled: boolean = false;
+        const toggleState: Map<number, boolean> = this.context.getAdditionalInformation('ARTICLE_TOGGLE_STATE');
+        if (toggleState?.has(this.articleId)) {
+            toggled = toggleState.get(this.articleId);
+        }
+
+        return toggled;
     }
 
     private prepareAttachments(): void {
         if (!this.state.selectedCompactView || this.state.compactViewExpanded) {
             this.filterAttachments();
 
-            const attachments = this.state.article?.Attachments || [];
+            const attachments = this.detailedArticle?.Attachments || [];
             this.state.hasInlineAttachments = attachments.some((a) => a.Disposition === 'inline' && a.ContentID);
         }
     }
@@ -260,7 +331,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (imageAttachments?.length) {
             const attachments = await TicketService.getInstance().loadArticleAttachments(
-                this.state.article.TicketID, this.state.article.ArticleID, imageAttachments.map((a) => a.ID)
+                this.detailedArticle?.TicketID, this.detailedArticle?.ArticleID, imageAttachments.map((a) => a.ID)
             ).catch((): Attachment[] => []);
 
             if (attachments?.length) {
@@ -276,12 +347,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.images = images;
     }
 
-    private async setArticleSeen(
-        article: Article = this.state.article || this.article, silent?: boolean
-    ): Promise<void> {
-        if (article?.isUnread()) {
+    private async setArticleSeen(): Promise<void> {
+        if (this.state.article?.isUnread()) {
             await TicketService.getInstance().setArticleSeenFlag(
-                article.TicketID, article.ArticleID
+                this.state.article.TicketID, this.state.article.ArticleID
             );
             this.context.reloadObjectList(KIXObjectType.ARTICLE, true);
         }

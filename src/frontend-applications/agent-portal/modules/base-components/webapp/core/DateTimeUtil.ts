@@ -57,7 +57,8 @@ export class DateTimeUtil {
             } as const;
 
             if (!language) {
-                language = await TranslationService.getUserLanguage();
+                language = await TranslationService.getUserLanguage()
+                    || await TranslationService.getSystemDefaultLanguage();
             }
             string = language ? date.toLocaleString(language, options) : value;
         }

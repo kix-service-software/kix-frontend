@@ -27,21 +27,26 @@ export class ExtendedDynamicFieldPlaceholderHandler implements IPlaceholderHandl
     }
 
     public async replaceDFObjectPlaceholder(
-        attributePath: string, objectId: number, language?: string
+        attributePath: string, objectId: number, language?: string, forRichtext?: boolean, translate?: boolean
     ): Promise<string> {
         return;
     }
 
-    public async replaceDFValue(object: KIXObject, optionString: string): Promise<string> {
+    public async replaceDFValue(
+        object: KIXObject, optionString: string, language?: string, forRichtext?: boolean, translate?: boolean
+    ): Promise<string> {
         return null;
     }
 
-    public replace(placeholder: string, object?: KIXObject, language?: string): Promise<string> {
+    public replace(
+        placeholder: string, object?: KIXObject, language?: string, forRichtext?: boolean, translate?: boolean
+    ): Promise<string> {
         return null;
     }
 
     public async getDFDisplayValue(
-        object: KIXObject, dfValue: DynamicFieldValue, dfOptions: string = ''
+        object: KIXObject, dfValue: DynamicFieldValue, dfOptions: string = '',
+        language?: string, forRichtext?: boolean, translate?: boolean
     ): Promise<string> {
         return null;
     }
@@ -50,15 +55,15 @@ export class ExtendedDynamicFieldPlaceholderHandler implements IPlaceholderHandl
         return null;
     }
 
-    public async handleValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
+    public async handleValue(object: KIXObject, dfValue: DynamicFieldValue, language?: string): Promise<string> {
         return null;
     }
 
-    public async handleShortValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
+    public async handleShortValue(object: KIXObject, dfValue: DynamicFieldValue, language?: string): Promise<string> {
         return null;
     }
 
-    public async handleHTMLValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
+    public async handleHTMLValue(object: KIXObject, dfValue: DynamicFieldValue, language?: string): Promise<string> {
         return null;
     }
 
@@ -66,7 +71,10 @@ export class ExtendedDynamicFieldPlaceholderHandler implements IPlaceholderHandl
         return null;
     }
 
-    public async handleObject(object: KIXObject, dfOptions: string = '', dfValue: DynamicFieldValue): Promise<string> {
+    public async handleObject(
+        object: KIXObject, dfOptions: string = '', dfValue: DynamicFieldValue,
+        language?: string, translate?: boolean
+    ): Promise<string> {
         return null;
     }
 

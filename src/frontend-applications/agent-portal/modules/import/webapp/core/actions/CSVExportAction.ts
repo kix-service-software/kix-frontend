@@ -24,14 +24,18 @@ export class CSVExportAction extends AbstractAction<Table> {
         let canRun: boolean = false;
         if (this.data) {
             const selectedRows = this.data.getSelectedRows();
-            canRun = selectedRows && !!selectedRows.length;
+            canRun = !Boolean(this.data.getTableConfiguration()?.enableSelection) ||
+                (selectedRows && !!selectedRows.length);
         }
         return canRun;
     }
 
     public async run(): Promise<void> {
         if (this.canRun()) {
-            TableExportUtil.export(this.data);
+            TableExportUtil.export(
+                this.data, undefined, undefined, undefined, undefined,
+                !Boolean(this.data.getTableConfiguration()?.enableSelection)
+            );
         }
     }
 

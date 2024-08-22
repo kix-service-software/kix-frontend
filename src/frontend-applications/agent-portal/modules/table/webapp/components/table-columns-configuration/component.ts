@@ -38,7 +38,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.columns = [];
         this.state.translations = await TranslationService.createTranslationObject(
             [
                 'Translatable#Some Translation', 'Translatable#Add Column(s)', 'Translatable#Property',
@@ -69,18 +68,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.dependencyName = await KIXObjectService.getObjectDependencyName(this.objectType);
 
         for (const c of this.columns) {
-            let prop = c.property;
-            if (!prop.startsWith('DynamicFields.') && prop.indexOf('.') !== -1) {
+            if (c.property) {
+                let prop = c.property;
+                if (!prop.startsWith('DynamicFields.') && prop.indexOf('.') !== -1) {
 
-                const dep = prop.substring(0, prop.indexOf('.'));
-                const dependency = dependencies.find((d) => d.ObjectId.toString() === dep);
-                const text = await LabelService.getInstance().getObjectText(dependency);
-                this.state.columnDependencyNames[c.property] = text;
+                    const dep = prop.substring(0, prop.indexOf('.'));
+                    const dependency = dependencies.find((d) => d.ObjectId.toString() === dep);
+                    const text = await LabelService.getInstance().getObjectText(dependency);
+                    this.state.columnDependencyNames[c.property] = text;
 
-                prop = prop.substring(prop.indexOf('.') + 1, prop.length);
+                    prop = prop.substring(prop.indexOf('.') + 1, prop.length);
+                }
+                const name = await LabelService.getInstance().getPropertyText(prop, this.objectType);
+                this.state.columnNames[c.property] = name;
             }
-            const name = await LabelService.getInstance().getPropertyText(prop, this.objectType);
-            this.state.columnNames[c.property] = name;
         }
 
         this.state.loading = false;
@@ -97,7 +98,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const dependencyIds = dependencyNodes.map((d) => d.id);
 
         let properties = await KIXObjectService.getObjectProperties(this.objectType, dependencyIds);
-        properties = properties.filter((p) => !this.columns?.some((c) => c.property === p));
+        properties = properties.filter((p) => {
+            if (dependencyIds?.length) {
+                return !dependencyIds.every(
+                    (d) => this.columns?.some((c) => c.property === `${d}.${p}`)
+                );
+            } else {
+                return !this.columns?.some((c) => c.property === p);
+            }
+        });
 
         for (const property of properties) {
             const text = await LabelService.getInstance().getPropertyText(property, this.objectType);

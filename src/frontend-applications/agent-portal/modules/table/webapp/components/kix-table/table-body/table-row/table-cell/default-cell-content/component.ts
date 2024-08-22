@@ -41,8 +41,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (object?.KIXObjectType) {
             const value = this.state.cell.getValue();
             if (value?.objectValue && Number(value?.objectValue)) {
-                this.state.overlay = await LabelService.getInstance().getOverlayIconForType(
-                    object?.KIXObjectType, value.objectValue, value.property
+                this.state.overlay = await LabelService.getInstance().getOverlayIconByProperty(
+                    object?.KIXObjectType, value.property, value.objectValue
                 );
             }
         }

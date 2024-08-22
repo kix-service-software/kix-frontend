@@ -12,6 +12,7 @@ import { FormFieldConfiguration } from '../../../../../../model/configuration/Fo
 import { FilterCriteria } from '../../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
+import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
@@ -40,6 +41,9 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
         this.objectType = KIXObjectType.CONTACT;
         this.isAutoComplete = true;
         this.autoCompleteConfiguration = new AutoCompleteConfiguration();
+
+        this.loadingOptions = new KIXObjectLoadingOptions();
+        this.loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS, KIXObjectType.USER];
 
         this.canCreateContact = true;
     }

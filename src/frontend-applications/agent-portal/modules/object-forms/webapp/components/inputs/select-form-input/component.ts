@@ -280,7 +280,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async apply(event: any): Promise<void> {
-        await this.select(event, false);
         const element = document.getElementById(`id_${this.state.searchValueKey}`);
         element?.click();
     }

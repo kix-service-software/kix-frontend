@@ -26,6 +26,7 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { MacroType } from '../../model/MacroType';
+import { JobRunLog } from '../../model/JobRunLog';
 
 export class JobService extends KIXObjectService<Job> {
 
@@ -45,6 +46,7 @@ export class JobService extends KIXObjectService<Job> {
         this.objectConstructors.set(KIXObjectType.JOB, [Job]);
         this.objectConstructors.set(KIXObjectType.JOB_TYPE, [JobType]);
         this.objectConstructors.set(KIXObjectType.JOB_RUN, [JobRun]);
+        this.objectConstructors.set(KIXObjectType.JOB_RUN_LOG, [JobRunLog]);
         this.objectConstructors.set(KIXObjectType.EXEC_PLAN, [ExecPlan]);
         this.objectConstructors.set(KIXObjectType.MACRO, [Macro]);
         this.objectConstructors.set(KIXObjectType.MACRO_ACTION_TYPE, [MacroActionType]);
@@ -66,6 +68,7 @@ export class JobService extends KIXObjectService<Job> {
         return kixObjectType === KIXObjectType.JOB
             || kixObjectType === KIXObjectType.JOB_TYPE
             || kixObjectType === KIXObjectType.JOB_RUN
+            || kixObjectType === KIXObjectType.JOB_RUN_LOG
             || kixObjectType === KIXObjectType.EXEC_PLAN
             || kixObjectType === KIXObjectType.MACRO
             || kixObjectType === KIXObjectType.MACRO_ACTION_TYPE
@@ -78,18 +81,25 @@ export class JobService extends KIXObjectService<Job> {
 
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        cache: boolean = true, forceIds?: boolean, silent: boolean = false, collectionId?: string
     ): Promise<O[]> {
         let objects: O[];
         if (objectType === KIXObjectType.JOB_TYPE || objectType === KIXObjectType.MACRO_TYPE) {
-            objects = await super.loadObjects<O>(objectType, null, loadingOptions, objectLoadingOptions);
+            objects = await super.loadObjects<O>(
+                objectType, null, loadingOptions, objectLoadingOptions,
+                cache, forceIds, silent, collectionId
+            );
             if (objectIds) {
                 objects = objects.filter(
                     (c) => objectIds.map((id) => isNaN(Number(id)) ? id : Number(id)).some((oid) => c.ObjectId === oid)
                 );
             }
         } else {
-            objects = await super.loadObjects(objectType, objectIds, loadingOptions, objectLoadingOptions);
+            objects = await super.loadObjects(
+                objectType, objectIds, loadingOptions, objectLoadingOptions,
+                cache, forceIds, silent, collectionId
+            );
         }
 
         return objects as any[];

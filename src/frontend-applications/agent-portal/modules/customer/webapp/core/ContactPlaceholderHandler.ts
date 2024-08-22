@@ -25,7 +25,7 @@ export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
     protected objectStrings: string[] = ['CONTACT'];
 
     public async replace(
-        placeholder: string, contact?: Contact, language?: string, forRichtext?: boolean
+        placeholder: string, contact?: Contact, language?: string, forRichtext?: boolean, translate: boolean = true
     ): Promise<string> {
         let result = '';
         if (contact) {
@@ -36,7 +36,9 @@ export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
                 DynamicFieldValuePlaceholderHandler
             ) {
                 const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
-                result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(contact, optionsString);
+                result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(
+                    contact, optionsString, language, forRichtext, translate
+                );
             }
             else if (attribute && this.isKnownProperty(attribute)) {
                 switch (attribute) {
@@ -74,12 +76,17 @@ export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case KIXObjectProperty.CREATE_TIME:
                     case KIXObjectProperty.CHANGE_TIME:
-                        result = await DateTimeUtil.getLocalDateTimeString(contact[attribute], language);
+                        if (translate) {
+                            result = await DateTimeUtil.getLocalDateTimeString(contact[attribute], language);
+                        } else {
+                            result = contact[attribute];
+                        }
                         break;
                     default:
                         result = await LabelService.getInstance().getDisplayText(contact, attribute, undefined, false);
                         result = typeof result !== 'undefined' && result !== null
-                            ? await TranslationService.translate(result.toString(), undefined, language) : '';
+                            ? translate ? await TranslationService.translate(result.toString(), undefined, language)
+                                : result.toString() : '';
                 }
             }
         }

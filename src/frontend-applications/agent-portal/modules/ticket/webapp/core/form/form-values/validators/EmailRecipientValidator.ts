@@ -34,8 +34,10 @@ export class EmailRecipientValidator implements ObjectFormValueValidator {
                 const emailAddresses: string[] = [];
                 // TODO: placeholders may be valid sometime - add handling/ignore
                 for (let value of recipientValues) {
-                    value = value.replace(/^(.*?),$/, '$1');
-                    emailAddresses.push(...this.parseAddresses(value));
+                    if (isNaN(value)) {
+                        value = value.replace(/^(.*?),$/, '$1');
+                        emailAddresses.push(...this.parseAddresses(value));
+                    }
                 }
 
                 if (emailAddresses.length) {

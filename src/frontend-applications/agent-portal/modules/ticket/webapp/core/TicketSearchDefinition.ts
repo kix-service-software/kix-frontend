@@ -21,6 +21,7 @@ import { SearchFormManager } from '../../../base-components/webapp/core/SearchFo
 import { Ticket } from '../../model/Ticket';
 import { IColumnConfiguration } from '../../../../model/configuration/IColumnConfiguration';
 import { ArticleProperty } from '../../model/ArticleProperty';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 
 export class TicketSearchDefinition extends SearchDefinition {
 
@@ -47,9 +48,9 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public async prepareFormFilterCriteria(
-        criteria: FilterCriteria[], forSearch: boolean = true
+        criteria: FilterCriteria[], forSearch: boolean = true, allowEmptyValue?: boolean
     ): Promise<FilterCriteria[]> {
-        criteria = await super.prepareFormFilterCriteria(criteria, forSearch);
+        criteria = await super.prepareFormFilterCriteria(criteria, forSearch, allowEmptyValue);
         const fulltextCriteriaIndex = criteria.findIndex((c) => c.property === SearchProperty.FULLTEXT);
         if (fulltextCriteriaIndex !== -1) {
             const value = criteria[fulltextCriteriaIndex].value;
@@ -103,7 +104,7 @@ export class TicketSearchDefinition extends SearchDefinition {
         const criteria: FilterCriteria[] = [];
         if (value) {
             criteria.push(new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, value
             ));
         }
         return criteria;
@@ -128,6 +129,22 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<IColumnConfiguration[]> {
+        const ignoreParameter = [
+            TicketProperty.CLOSE_TIME,
+            TicketProperty.CREATED_PRIORITY_ID, TicketProperty.CREATED_QUEUE_ID, TicketProperty.CREATED_TYPE_ID,
+            TicketProperty.CREATED_USER_ID, TicketProperty.CREATED_STATE_ID, TicketProperty.ARTICLE_CREATE_TIME,
+            TicketProperty.ATTACHMENT_NAME, TicketProperty.WATCHER_USER_ID,
+            TicketProperty.STATE_TYPE, TicketProperty.LAST_CHANGE_TIME
+        ];
+        const articleDFParameter = await this.getArticleDFParameter(searchParameter);
+
+        searchParameter = searchParameter.filter(
+            (sp) =>
+                !ignoreParameter.some((ip) => ip === sp[0])
+                && !this.isArticleProperty(sp[0])
+                && !articleDFParameter.some((dfp) => dfp === sp[0])
+        );
+
         const columns: IColumnConfiguration[] = await super.getTableColumnConfiguration(searchParameter);
         if (columns) {
             for (const column of columns) {
@@ -142,20 +159,26 @@ export class TicketSearchDefinition extends SearchDefinition {
                 }
             }
         }
-        return columns.filter(
-            (c) => c.property !== TicketProperty.CLOSE_TIME
-                && c.property !== TicketProperty.CREATED_PRIORITY_ID
-                && c.property !== TicketProperty.CREATED_QUEUE_ID
-                && c.property !== TicketProperty.CREATED_TYPE_ID
-                && c.property !== TicketProperty.CREATED_USER_ID
-                && c.property !== TicketProperty.CREATED_STATE_ID
-                && c.property !== TicketProperty.ARTICLE_CREATE_TIME
-                && c.property !== TicketProperty.ATTACHMENT_NAME
-                && c.property !== TicketProperty.WATCHER_USER_ID
-                && c.property !== TicketProperty.STATE_TYPE
-                && c.property !== TicketProperty.LAST_CHANGE_TIME
-                && !this.isArticleProperty(c.property)
-        );
+        return columns;
+    }
+
+    private async getArticleDFParameter(searchParameter: [string, any][]): Promise<string[]> {
+        const articleDfPromises = [];
+        searchParameter.forEach((sp) => {
+            articleDfPromises.push(
+                new Promise<string | void>(async (resolve) => {
+                    const dfName = KIXObjectService.getDynamicFieldName(sp[0]);
+                    if (dfName) {
+                        const df = await KIXObjectService.loadDynamicField(dfName);
+                        if (df.ObjectType === KIXObjectType.ARTICLE) {
+                            resolve(sp[0]);
+                        }
+                    }
+                    resolve();
+                })
+            );
+        });
+        return (await Promise.all(articleDfPromises)).filter((dfParameter) => dfParameter);
     }
 
     private isArticleProperty(property: string): boolean {

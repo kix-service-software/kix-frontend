@@ -44,7 +44,7 @@ export class ConfigItemTableFactory extends TableFactory {
             new ConfigItemTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
         );
 
-        const tableColumns = this.filterColumns(contextId, tableConfiguration);
+        const tableColumns = await this.filterColumns(contextId, tableConfiguration);
         table.setColumnConfiguration(tableColumns);
 
         if (
@@ -135,15 +135,23 @@ export class ConfigItemTableFactory extends TableFactory {
 
     public async getDefaultColumnConfigurations(searchCache: SearchCache): Promise<IColumnConfiguration[]> {
         const superColumns = await super.getDefaultColumnConfigurations(searchCache);
-        const ticketColumns = this.getDefaultColumns();
+
+        const index = superColumns.findIndex((c) => c.property === 'ClassIDs');
+        if (index !== -1) {
+            superColumns.splice(index, 1);
+        }
+
+        const columns = this.getDefaultColumns();
         return [
-            ...ticketColumns,
-            ...superColumns.filter((c) => !ticketColumns.some((tc) => tc.property === c.property))
+            ...columns,
+            ...superColumns.filter((c) => !columns.some((tc) => tc.property === c.property))
         ];
     }
 
-    public filterColumns(contextId: string, tableConfiguration: TableConfiguration): IColumnConfiguration[] {
-        const columns = super.filterColumns(contextId, tableConfiguration);
+    public async filterColumns(
+        contextId: string, tableConfiguration: TableConfiguration
+    ): Promise<IColumnConfiguration[]> {
+        const columns = await super.filterColumns(contextId, tableConfiguration);
 
         const index = columns.findIndex((c) => c.property === 'ClassIDs');
         if (index !== -1) {

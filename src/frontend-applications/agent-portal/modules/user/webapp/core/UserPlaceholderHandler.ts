@@ -31,7 +31,9 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
         'CURRENT', 'USER'
     ];
 
-    public async replace(placeholder: string, user?: User, language?: string, forRichtext?: boolean): Promise<string> {
+    public async replace(
+        placeholder: string, user?: User, language?: string, forRichtext?: boolean, translate: boolean = true
+    ): Promise<string> {
         let result = '';
         const objectString = PlaceholderService.getInstance().getObjectString(placeholder);
         if (objectString === 'CURRENT') {
@@ -52,7 +54,7 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
             );
             if (Array.isArray(organisations) && organisations.length) {
                 result = await OrganisationPlaceholderHandler.prototype.replace(
-                    placeholder, organisations[0], language
+                    placeholder, organisations[0], language, forRichtext, translate
                 );
             }
         }
@@ -66,7 +68,7 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
             if (user?.Contact) {
                 const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
                 result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(
-                    user.Contact, optionsString
+                    user.Contact, optionsString, language, forRichtext, translate
                 );
             }
         }
@@ -102,14 +104,19 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
                     break;
                 case KIXObjectProperty.CREATE_TIME:
                 case KIXObjectProperty.CHANGE_TIME:
-                    result = await DateTimeUtil.getLocalDateTimeString(user[attribute], language);
+                    if (translate) {
+                        result = await DateTimeUtil.getLocalDateTimeString(user[attribute], language);
+                    } else {
+                        result = user[attribute];
+                    }
                     break;
                 default:
                     result = await LabelService.getInstance().getDisplayText(
                         user, attribute, undefined, false
                     );
                     result = typeof result !== 'undefined' && result !== null
-                        ? await TranslationService.translate(result.toString(), undefined, language) : '';
+                        ? translate ? await TranslationService.translate(result.toString(), undefined, language)
+                            : result.toString() : '';
             }
         }
         return result;

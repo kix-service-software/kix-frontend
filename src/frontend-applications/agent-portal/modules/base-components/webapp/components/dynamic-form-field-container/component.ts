@@ -29,6 +29,7 @@ class Component {
     private additionalOptionsTimeout: any;
     private timoutTimer: TimeoutTimer;
     private updateTimeout: any;
+    private updatePromiseResolve: () => void;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -45,10 +46,15 @@ class Component {
     }
 
     public async updateValues(): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (this.updateTimeout) {
-                clearTimeout(this.updateTimeout);
+        if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout);
+            // resolve potential previous promise
+            if (this.updatePromiseResolve) {
+                this.updatePromiseResolve();
             }
+        }
+        return new Promise<void>((resolve, reject) => {
+            this.updatePromiseResolve = resolve;
             this.updateTimeout = setTimeout(async () => {
 
                 const currentValues = this.manager.getValues();
@@ -57,6 +63,8 @@ class Component {
                     (dv) => currentValues.some((cv) => cv.id === dv.id)
                 );
 
+                // use index, to keep sort order
+                let index = 0;
                 for (const cv of currentValues) {
                     const existingValue = this.state.dynamicValues.find((bv) => bv.value.id === cv.id);
                     if (existingValue) {
@@ -69,19 +77,29 @@ class Component {
                             existingValue.setOperationTree();
                         }
 
+                        if (cv.reloadValueTree) {
+                            cv.reloadValueTree = undefined;
+                            existingValue.reloadValueTree();
+                        }
+
                         if (existingValue.value.value !== cv.value) {
                             existingValue.setValue(cv.value);
                             existingValue.setCurrentValue(true);
                         }
 
                         existingValue.required = cv.required;
+                        if (existingValue.required) {
+                            await existingValue.setLabel();
+                        }
+
                         existingValue.value.valid = cv.valid;
                         existingValue.value.validErrorMessages = cv.validErrorMessages;
                     } else {
                         const value = new DynamicFormFieldValue(this.manager, cv, cv.id);
                         await value.init();
-                        this.state.dynamicValues.push(value);
+                        this.state.dynamicValues.splice(index, 0, value);
                     }
+                    index++;
                 }
 
                 this.state.dynamicValues.forEach((v) => {
@@ -107,9 +125,9 @@ class Component {
                 }
 
                 (this as any).setStateDirty('dynamicValues');
+                this.updatePromiseResolve = undefined;
                 resolve();
-            }, 1000);
-
+            }, 800);
         });
     }
 
@@ -131,7 +149,7 @@ class Component {
                     new ObjectPropertyValue(
                         v.property, v.operator, v.value, v.options, v.required, v.valid,
                         v.objectType, v.readonly, v.changeable, v.id, v.additionalOptions,
-                        v.validErrorMessages, v.hint, v.locked
+                        v.validErrorMessages, v.hint, v.locked, v.valueChangeable
                     ),
                     v.id
                 );
@@ -288,9 +306,14 @@ class Component {
         this.provideValue(value);
     }
 
-    public async provideValue(value: DynamicFormFieldValue): Promise<void> {
+    public async provideValue(value: DynamicFormFieldValue, updateValues: boolean = true): Promise<void> {
         await this.manager.setValue(value.getValue());
-        if (!this.provideTimeout) {
+
+        if (updateValues) {
+            if (this.provideTimeout) {
+                clearTimeout(this.provideTimeout);
+            }
+
             this.provideTimeout = setTimeout(async () => {
                 this.provideTimeout = null;
                 await this.updateValues();
@@ -308,12 +331,17 @@ class Component {
 
     private async addEmptyValue(): Promise<void> {
         const canAddEmptyValue = await this.manager.shouldAddEmptyField();
-        const hasEmptyValue = this.state.dynamicValues.some((sv) => sv.getValue().property === null);
+        const emptyValueIndex = this.state.dynamicValues.findIndex((sv) => sv.getValue().property === null);
 
-        if (canAddEmptyValue && !hasEmptyValue) {
-            const emptyField = new DynamicFormFieldValue(this.manager);
-            await emptyField.init();
-            this.state.dynamicValues.push(emptyField);
+        if (canAddEmptyValue) {
+            if (emptyValueIndex === -1) {
+                const emptyField = new DynamicFormFieldValue(this.manager);
+                await emptyField.init();
+                this.state.dynamicValues.push(emptyField);
+            } else if (emptyValueIndex < this.state.dynamicValues.length - 1) {
+                const emptyField = this.state.dynamicValues.splice(emptyValueIndex, 1);
+                this.state.dynamicValues.push(...emptyField);
+            }
         }
 
         (this as any).setStateDirty('dynamicValues');
@@ -472,7 +500,7 @@ class Component {
         this.timoutTimer.restartTimer(() => {
             const hint = event.target.value;
             value.value.hint = hint;
-            this.provideValue(value);
+            this.provideValue(value, false);
         }, 500);
     }
 

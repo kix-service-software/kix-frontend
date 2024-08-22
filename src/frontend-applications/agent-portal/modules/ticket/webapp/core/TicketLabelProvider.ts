@@ -654,17 +654,4 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         }
     }
 
-    public async getOverlayIcon(object?: Ticket, objectId?: number, property?: string): Promise<OverlayIcon> {
-        let overlay = null;
-
-        switch (property) {
-            case TicketProperty.OWNER_ID:
-            case TicketProperty.RESPONSIBLE_ID:
-                overlay = await LabelService.getInstance().getOverlayIconForType(KIXObjectType.USER, objectId);
-                break;
-            default:
-        }
-        return overlay;
-    }
-
 }

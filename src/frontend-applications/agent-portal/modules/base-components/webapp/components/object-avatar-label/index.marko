@@ -8,18 +8,26 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.displayText)>
-    <div class="user-avatar-label">
-        <div class="user-avatar-icon">
+    <div class="object-avatar-label">
+        <div class="object-avatar-icon">
             <icon icon=state.icon/>
         </div>
         <div
             style=input.descriptionStyle
             title=state.description
-            class="user-avatar-description"
+            class="object-avatar-description"
         >
-            <span class="user-avatar-description-text">
+            <span class="object-avatar-description-text">
                 ${state.description}
             </span>
+        </div>
+        <div
+            style=input.textStyle
+            title=state.displayText
+            class="object-avatar-text"
+            dir=(state.rtl ? "rtl" : "ltr")
+        >
+            ${state.displayText}
             <if(state.overlay)>
                 <overlay-icon
                     title=(state.overlay.Title)
@@ -33,14 +41,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     }
                 />
             </if>
-        </div>
-        <div
-            style=input.textStyle
-            title=state.displayText
-            class="user-avatar-text"
-            dir=(state.rtl ? "rtl" : "ltr")
-        >
-            ${state.displayText}
         </div>
     </div>
 </if>

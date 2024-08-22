@@ -16,6 +16,8 @@ export class DisplayValueConfiguration implements IConfiguration {
 
     public application: string = 'agent-portal';
 
+    public roleIds: number[] = [];
+
     public constructor(
         public displayValues: DisplayValue[] = [
             new DisplayValue(

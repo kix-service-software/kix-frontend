@@ -63,6 +63,9 @@ import { Counter } from '../../../user/model/Counter';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
+import { TicketModuleConfiguration } from '../../model/TicketModuleConfiguration';
+import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -116,6 +119,18 @@ export class TicketService extends KIXObjectService<Ticket> {
             objects = await super.loadObjects<O>(objectType, null, loadingOptions, null, false);
         } else {
             superLoad = true;
+
+            // get ticket id if necessary
+            // (e.g. if article is loaded with DFs by FilterUtil=>checkCriteriaByPropertyValue)
+            if (objectType === KIXObjectType.ARTICLE && !objectLoadingOptions) {
+                const context = ContextService.getInstance().getActiveContext();
+                if (
+                    context.descriptor.kixObjectTypes.includes(KIXObjectType.TICKET)
+                    && context.descriptor.contextMode === ContextMode.DETAILS
+                ) {
+                    objectLoadingOptions = new ArticleLoadingOptions(context.getObjectId());
+                }
+            }
             objects = await super.loadObjects<O>(
                 objectType, objectIds, loadingOptions, objectLoadingOptions, cache, forceIds, silent, collectionId
             );
@@ -158,21 +173,21 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
-        await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId)
+        await AgentSocketClient.getInstance().markAsSeen(KIXObjectType.ARTICLE, [articleId])
+            .then(() => EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR))
             .catch((error) => console.error(error));
-        EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
     public async markTicketAsSeen(ticketId: number): Promise<void> {
-        await KIXObjectService.updateObject(
-            KIXObjectType.TICKET, [['MarkAsSeen', 1]], ticketId
-        );
+        await AgentSocketClient.getInstance().markAsSeen(KIXObjectType.TICKET, [ticketId])
+            .then(() => EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR))
+            .catch((error) => console.error(error));
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         const filter = [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, searchValue
             )
         ];
 
@@ -358,6 +373,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 nodes.push(new TreeNode(3, external));
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:
+            case ArticleProperty.ENCRYPT_IF_POSSIBLE:
                 const yes = await TranslationService.translate('Translatable#Yes');
                 const no = await TranslationService.translate('Translatable#No');
                 nodes.push(new TreeNode(0, no));
@@ -484,7 +500,7 @@ export class TicketService extends KIXObjectService<Ticket> {
 
             return [content, inlineContent];
         } else {
-            const body = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
+            const body = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br>\n');
             return [body, null];
         }
     }
@@ -880,6 +896,23 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
         return LabelService.getInstance().getPropertyText(TicketProperty.QUEUE, objectType);
+    }
+
+    public static async getTicketModuleConfiguration(): Promise<TicketModuleConfiguration> {
+        let config: TicketModuleConfiguration;
+
+        const value = await SysConfigService.getInstance().getSysConfigOptionValue(
+            TicketModuleConfiguration.CONFIGURATION_ID
+        ).catch(() => null);
+        if (value) {
+            try {
+                config = JSON.parse(value);
+            } catch (error) {
+                console.error('Could not parse Ticket Module Configuration');
+            }
+        }
+
+        return config as any;
     }
 
 }

@@ -65,6 +65,8 @@ export enum KIXObjectType {
 
     FAQ_KEYWORD = 'FAQKeyword',
 
+    GENERAL_CATALOG = 'GeneralCatalog',
+
     GENERAL_CATALOG_ITEM = 'GeneralCatalogItem',
 
     GENERAL_CATALOG_CLASS = 'GeneralCatalogClass',
