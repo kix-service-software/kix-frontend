@@ -94,8 +94,18 @@ export class AuthenticationRouter extends KIXRouter {
 
         let authType = '';
         let negotiationToken = '';
+
         if (ssoEnabled) {
-            if (!req.cookies.authNegotiationDone && !req.cookies.authNoSSO) {
+            // check if we already have a negotiate token
+            const authorization = req.headers['authorization'];
+            if (typeof authorization === 'string' && authorization.split(' ')[0] === 'Negotiate') {
+                // already negotiated (SSO)
+                negotiationToken = authorization.split(' ')[1];
+                authType = 'negotiate token (SSO)';
+                ssoSuccess = true;
+            }
+            else if (!req.cookies.authNegotiationDone && !req.cookies.authNoSSO) {
+                // no token - start the negotiation process
                 res.cookie('authNegotiationDone', true, { httpOnly: true });
                 res.setHeader('WWW-Authenticate', 'Negotiate');
                 res.status(401);
@@ -109,14 +119,6 @@ export class AuthenticationRouter extends KIXRouter {
                         <body></body>
                     </html>`
                 );
-                ssoSuccess = true;
-            } else {
-                const authorization = req.headers['authorization'];
-                if (typeof authorization === 'string' && authorization.split(' ')[0] === 'Negotiate') {
-                    // already negotiated (SSO)
-                    negotiationToken = authorization.split(' ')[1];
-                    authType = 'negotiate token (SSO)';
-                }
             }
         }
 
@@ -142,13 +144,13 @@ export class AuthenticationRouter extends KIXRouter {
                 res.status(200);
                 res.send(
                     `<!DOCTYPE html>
-                            <html lang="en">
-                                <head>
-                                    <title>KIX Agent Portal</title>
-                                    <meta http-equiv="refresh" content="3; URL=/">
-                                </head>
-                                <body></body>
-                            </html>`
+                    <html lang="en">
+                        <head>
+                            <title>KIX Agent Portal</title>
+                            <meta http-equiv="refresh" content="3; URL=/">
+                        </head>
+                        <body></body>
+                    </html>`
                 );
                 ssoSuccess = true;
             }
