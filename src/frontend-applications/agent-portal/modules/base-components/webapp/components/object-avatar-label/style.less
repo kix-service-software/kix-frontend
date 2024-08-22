@@ -22,11 +22,11 @@
         font-size: 3rem;
         height: 3rem;
 
-        > .icon {
+        >.icon {
             justify-self: center;
             align-self: center;
 
-            > .svg-icon {
+            >.svg-icon {
                 height: auto;
                 width: auto;
                 max-width: 3rem;
@@ -43,7 +43,7 @@
         grid-column: 2;
         grid-column-gap: @margin-small;
         display: grid;
-        grid-template-columns: max-content max-content;
+        grid-template-columns: minmax(auto, max-content) max-content;
         align-items: center;
 
         .overlay-icon {
