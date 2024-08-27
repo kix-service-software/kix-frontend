@@ -116,6 +116,14 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         }
     }
 
+    public resetSearch(): void {
+        if (this.isAutoComplete) {
+            this.treeHandler?.setTree([]);
+        } else {
+            this.search();
+        }
+    }
+
     public async setFormValue(value: any, force?: boolean): Promise<void> {
         if (force) {
             if (value !== null && !Array.isArray(value)) {
@@ -474,7 +482,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.prepareSelectableController = null;
     }
 
-    public async search(searchValue: string): Promise<void> {
+    public async search(searchValue?: string): Promise<void> {
         this.searchValue = searchValue;
         if (this.searchValue) {
             if (this.isAutoComplete && this.autoCompleteConfiguration) {
@@ -662,24 +670,25 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     public async removeValue(value: string | number): Promise<void> {
         if (value && this.multiselect && Array.isArray(this.value)) {
-            const index = this.value.findIndex((v: string | number) => v.toString() === value.toString());
-            if (index !== -1) {
-                // set current value to trigger binding
-                const newValue = [...this.value];
-                newValue.splice(index, 1);
-                await this.setFormValue(newValue);
-            }
 
-            // remove node from treeHandler
+            // remove node from treeHandler -
+            // has to be done before value set, else removal of last value could be ignored
             const selectedNodes = this.treeHandler.getSelectedNodes();
             const selectNode = selectedNodes?.find((n) => n.id === value);
             if (selectNode) {
                 this.treeHandler?.setSelection([selectNode], false, true, true, true);
             }
 
+            // set current value to trigger binding
+            const index = this.value.findIndex((v: string | number) => v.toString() === value.toString());
+            if (index !== -1) {
+                const newValue = [...this.value];
+                newValue.splice(index, 1);
+                await this.setFormValue(newValue, true);
+            }
         } else {
-            await this.setFormValue(null);
             this.treeHandler?.selectNone();
+            await this.setFormValue(null, true);
         }
     }
 
