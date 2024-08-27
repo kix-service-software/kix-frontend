@@ -48,10 +48,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             const myDropdown = document.getElementById(`id_${this.state.searchValueKey}`);
             myDropdown?.addEventListener('hidden.bs.dropdown', async () => {
                 await this.formValue?.setSelectedNodes();
-                this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
-                if (this.formValue.isAutoComplete) {
-                    this.formValue?.treeHandler?.setTree([]);
-                }
+
+                // reset filter result
+                this.formValue?.resetSearch();
+
                 const searchInput: any = (this as any).getEl(this.state.searchValueKey);
                 if (searchInput) {
                     searchInput.value = '';
@@ -233,12 +233,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public removeValue(node: TreeNode, event: any): void {
         this.stopPropagation(event);
-        this.formValue.removeValue(node.id);
+        // wait, so event handling for hidden.bs.dropdown will not overwrite this "remove"
+        // the "await this.formValue?.setSelectedNodes()" is done before/during this remove
+        // but we cannot remove this selection handling either because some possible new selections could to be added
+        setTimeout(() => {
+            this.formValue.removeValue(node.id);
+        }, 20);
     }
 
     public clearValue(event: any): void {
         this.stopPropagation(event);
-        this.formValue.removeValue(null);
+        setTimeout(() => {
+            this.formValue.removeValue(null);
+        }, 20);
     }
 
     public selectAll(event: any): void {
@@ -256,7 +263,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public inputClicked(event: any): void {
         if (this.state.readonly) {
             this.stopPropagation(event);
-            event.preventDefault();
         } else {
             setTimeout(() => {
                 const element = (this as any).getEl(this.state.searchValueKey);
