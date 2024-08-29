@@ -102,19 +102,17 @@ export class EncryptIfPossibleFormValue extends BooleanFormValue {
     public handleEnable(): void {
         let recipientCount = 0;
 
-        if (this.object.ChannelID === 2) {
-            if (this.object) {
-                this.relevantArticleEmailProperties.forEach((rp) => {
-                    if (this.object[rp]) {
-                        const recipients = this.parseAddresses(this.object[rp]);
-                        recipientCount += recipients.length;
-                    }
-                });
-            }
+        if (Number(this.object?.ChannelID) === 2) {
+            this.relevantArticleEmailProperties.forEach((rp) => {
+                if (this.object[rp]) {
+                    const recipients = this.parseAddresses(this.object[rp]);
+                    recipientCount += recipients.length;
+                }
+            });
 
             // in new context, check contact (used as To)
             if (
-                this.objectValueMapper.formContext === FormContext.NEW && this.object?.ticket?.ContactID
+                this.objectValueMapper.formContext === FormContext.NEW && this.object.ticket?.ContactID
             ) {
                 recipientCount++;
             }
