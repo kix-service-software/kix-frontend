@@ -450,7 +450,8 @@ export class ObjectFormValue<T = any> {
         if (Array.isArray(value) && (this.possibleValues || this.forbiddenValues)) {
             const newValue = [];
             for (const v of value) {
-                const isPossible = this.possibleValues?.some((pv) => pv.toString() === v.toString());
+                const possibleValueExists = this.possibleValues?.some((pv) => pv.toString() === v.toString());
+                const isPossible = typeof possibleValueExists === 'undefined' ? true : possibleValueExists;
                 const isAdditional = this.additionalValues?.some((pv) => pv.toString() === v.toString());
                 const isForbidden = this.forbiddenValues?.some((pv) => pv.toString() === v.toString());
                 if ((isPossible || isAdditional) && !isForbidden) {
