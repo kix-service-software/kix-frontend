@@ -67,7 +67,7 @@ export class HttpService {
 
     public async get<T>(
         resource: string, queryParameters: any, token: string, clientRequestId: string,
-        cacheKeyPrefix: string = '', useCache: boolean = true
+        cacheKeyPrefix: string = '', useCache: boolean = true, useToken?: boolean
     ): Promise<HTTPResponse<T>> {
         const options = {
             method: RequestMethod.GET,
@@ -76,7 +76,7 @@ export class HttpService {
 
         let cacheKey: string;
         if (useCache) {
-            cacheKey = await this.buildCacheKey(resource, queryParameters, token);
+            cacheKey = await this.buildCacheKey(resource, queryParameters, token, useToken);
             const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
             if (cachedObject) {
                 return cachedObject;
