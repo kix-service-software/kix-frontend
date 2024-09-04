@@ -7,6 +7,7 @@
  * --
  */
 
+import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ObjectFormValue } from '../../../model/FormValues/ObjectFormValue';
@@ -40,6 +41,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             : formValue?.property;
         const isSorted = this.objectFormValueMapper?.isSortedFormValue(property) && formValue.isSortable;
         return isSorted && this.parentFormValue !== null;
+    }
+
+    public getKey(): string {
+        return IdService.generateDateBasedId();
     }
 
 }
