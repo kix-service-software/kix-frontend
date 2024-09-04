@@ -7,13 +7,10 @@
  * --
  */
 
-import { UserType } from './UserType';
+export enum PasswordResetState {
 
-export class PasswordResetRequestConfirmation {
-
-    public constructor(
-        public TicketID: string,
-        public UserType: UserType
-    ) { }
+    REQUESTED = 'requested',
+    CONFIRMED = 'confirmed',
+    ERROR = 'error'
 
 }

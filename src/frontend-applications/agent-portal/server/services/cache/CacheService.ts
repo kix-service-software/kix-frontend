@@ -57,6 +57,7 @@ export class CacheService {
         }
     }
 
+
     public hasCacheBackend(): boolean {
         return this.getCacheBackendInstance() !== null;
     }
