@@ -204,38 +204,42 @@ export class HttpService {
             data: content
         };
 
-        const user = await this.getUserByToken(token);
-        const usageContext = AuthenticationService.getInstance().getUsageContext(token);
-        const cacheId = user.RoleIDs?.sort().join(';') + usageContext;
+        let cacheId = '';
+        if (token) {
+            const user = await this.getUserByToken(token);
+            const usageContext = AuthenticationService.getInstance().getUsageContext(token);
+            cacheId = user.RoleIDs?.sort().join(';') + usageContext;
+        }
 
         const cacheKey = cacheId + resource;
         const cacheType = collection === null || typeof collection === 'undefined' || collection
             ? 'OPTION_COLLECTION'
             : RequestMethod.OPTIONS;
-
-        let headers = await CacheService.getInstance().get(cacheKey, cacheType);
-        if (!headers) {
-            if (!this.requestPromises.has(cacheKey)) {
-                this.requestPromises.set(
-                    cacheKey,
-                    this.executeRequest(
-                        resource, token, clientRequestId, options, true
-                    )
-                );
-            }
-
-            const request = this.requestPromises.get(cacheKey);
-            const response = await request.catch((e) => {
-                this.requestPromises.delete(cacheKey);
-                throw e;
-            });
-
-            headers = response.headers;
-            await CacheService.getInstance().set(cacheKey, headers, cacheType);
-            this.requestPromises.delete(cacheKey);
+        const cachedObject = await CacheService.getInstance().get(cacheKey, cacheType);
+        if (cachedObject) {
+            return cachedObject;
         }
 
-        return new OptionsResponse(headers);
+        if (!this.requestPromises.has(cacheKey)) {
+            this.requestPromises.set(
+                cacheKey,
+                this.executeRequest(
+                    resource, token, clientRequestId, options, true
+                )
+            );
+        }
+
+        const request = this.requestPromises.get(cacheKey);
+        const response = await request.catch((e) => {
+            this.requestPromises.delete(cacheKey);
+            throw e;
+        });
+
+        const optionsResponse = new OptionsResponse(response.headers, response.data);
+        await CacheService.getInstance().set(cacheKey, optionsResponse, cacheType);
+        this.requestPromises.delete(cacheKey);
+
+        return optionsResponse;
     }
 
     private async executeRequest<T = AxiosResponse>(

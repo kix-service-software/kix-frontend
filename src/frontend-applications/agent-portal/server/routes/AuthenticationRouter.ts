@@ -27,7 +27,7 @@ import { UserType } from '../../modules/user/model/UserType';
 import { ObjectResponse } from '../services/ObjectResponse';
 import { IRouterHandler } from '../model/IRouterHandler';
 import { MFAService } from '../../modules/multifactor-authentication/server/MFAService';
-import { HttpService } from '../services/HttpService';
+import { PasswordResetState } from '../../model/PasswordResetState';
 
 export class AuthenticationRouter extends KIXRouter {
 
@@ -55,7 +55,7 @@ export class AuthenticationRouter extends KIXRouter {
         });
 
         this.router.get('/logout', this.logout.bind(this));
-        this.router.get('/password-reset/:resetToken', this.sendPasswordResetRequestConfirmation.bind(this));
+        this.router.get('/password-reset/:resetToken', this.sendUserPasswordResetRequestConfirmation.bind(this));
     }
 
     public getContextId(): string {
@@ -188,8 +188,7 @@ export class AuthenticationRouter extends KIXRouter {
                 const imprintLink = await this.getImprintLink()
                     .catch((e) => '');
 
-                const pwResetEnabled = await this.getUserPasswordResetEnabled()
-                    .catch((e) => false);
+                const pwResetEnabled = await AuthenticationService.getInstance().getUserPasswordResetEnabled();
 
                 const pwResetState = req.query['pwResetState']?.toString();
 
@@ -262,36 +261,15 @@ export class AuthenticationRouter extends KIXRouter {
         return imprintLink;
     }
 
-    private async getUserPasswordResetEnabled(): Promise<boolean> {
-        let isEnabled = false;
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-            config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.USER_PASSWORD_RESET_ENABLED],
-            undefined, undefined
-        ).catch(() => new ObjectResponse<SysConfigOption>());
-
-        const userPasswordResetEnabledConfig = objectResponse?.objects || [];
-
-        if (userPasswordResetEnabledConfig?.length) {
-            const data = userPasswordResetEnabledConfig[0].Value;
-            isEnabled = data[UserType.AGENT].toString() === '1';
-
-        }
-
-        return isEnabled;
-    }
-
-    public async sendPasswordResetRequestConfirmation(req: Request, res: Response): Promise<void> {
+    public async sendUserPasswordResetRequestConfirmation(req: Request, res: Response): Promise<void> {
         const resetToken = req.params?.resetToken?.toString();
 
-        let pwResetState = 'error';
+        let pwResetState = PasswordResetState.ERROR;
 
         if (resetToken) {
-            const response = await HttpService.getInstance().patch<any>('auth/password-reset/' + resetToken,
-                { UserType: UserType.AGENT }, undefined, undefined, undefined, undefined
-            ).catch(() => undefined);
-
-            pwResetState = response?.Code === 'OK' ? 'confirmed' : 'error';
+            pwResetState = await AuthenticationService.getInstance().sendUserPasswordResetRequestConfirmation(
+                resetToken
+            );
         }
 
         res.redirect('/auth?pwResetState=' + pwResetState);

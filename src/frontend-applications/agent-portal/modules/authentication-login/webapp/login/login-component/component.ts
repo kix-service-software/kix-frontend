@@ -16,6 +16,7 @@ import { PortalNotificationEvent } from '../../../../portal-notification/model/P
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 import { AuthMethod } from '../../../../../model/AuthMethod';
+import { PasswordResetState } from '../../../../../model/PasswordResetState';
 import { UserType } from '../../../../user/model/UserType';
 import { MFASocketClient } from '../../../../multifactor-authentication/webapp/core/MFASocketClient';
 import { MFAToken } from '../../../../multifactor-authentication/model/MFAToken';
@@ -222,14 +223,14 @@ class Component {
         this.state.error = false;
         this.state.pwResetProcess = true;
 
-        AuthenticationSocketClient.getInstance().createPasswordResetRequest(this.state.userName);
+        AuthenticationSocketClient.getInstance().createUserPasswordResetRequest(this.state.userName);
 
         // show login form again
         this.state.pwResetProcess = false;
         this.state.showPWResetDialog = false;
 
         //show success notification
-        this.state.pwResetState = 'requested';
+        this.state.pwResetState = PasswordResetState.REQUESTED;
     }
 }
 
