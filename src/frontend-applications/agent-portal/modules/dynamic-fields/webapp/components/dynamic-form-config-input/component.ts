@@ -17,6 +17,7 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
+import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/DynamicFieldFormUtil';
 
 class Component extends FormInputComponent<JSON, ComponentState> {
 
@@ -94,6 +95,11 @@ class Component extends FormInputComponent<JSON, ComponentState> {
                     this.editor.on('ready', () => {
                         if (value) {
                             this.editor.setValue(value);
+                        } else {
+                            const defaultValue = DynamicFieldFormUtil.getConfigDefaultValue(type);
+                            if (defaultValue) {
+                                this.editor.setValue(defaultValue);
+                            }
                         }
                     });
 
