@@ -188,7 +188,6 @@ export class ReportDefinitionFormCreator {
             ],
             new FormFieldValue(outputHandler)
         );
-        outputhandlerField.readonly = true;
         outputhandlerField.instanceId = IdService.generateDateBasedId();
 
         return outputhandlerField;
