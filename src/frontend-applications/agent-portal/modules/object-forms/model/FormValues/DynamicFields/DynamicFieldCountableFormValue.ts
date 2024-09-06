@@ -119,14 +119,6 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         }
     }
 
-    public async setObjectValue(value: any): Promise<void> {
-        for (const fv of this.formValues) {
-            await fv.setObjectValue(value);
-        }
-
-        super.setObjectValue(value);
-    }
-
     protected clearFormValues(): void {
         for (const formValue of this.formValues) {
             formValue.destroy();
