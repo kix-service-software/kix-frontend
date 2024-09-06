@@ -36,7 +36,6 @@ export class ContactImportRunner extends ImportRunner {
     protected async prepareParameter(object: Contact): Promise<Array<[string, any]>> {
         const parameter = await super.prepareParameter(object);
 
-        const existingContact = await this.getExisting(object);
         let existingUser: User | undefined;
         if (object.User?.UserLogin) {
             const result = await KIXObjectService.loadObjects<User>(KIXObjectType.USER, null,
@@ -51,6 +50,7 @@ export class ContactImportRunner extends ImportRunner {
             existingUser = Array.isArray(result) && result.length > 0 ? result[0] : undefined;
 
             if (existingUser) {
+                const existingContact = await this.getExisting(object);
                 if ((existingContact as Contact)?.AssignedUserID &&
                     (existingContact as Contact)?.AssignedUserID !== existingUser.UserID) {
                     throw new Error(
@@ -131,19 +131,30 @@ export class ContactImportRunner extends ImportRunner {
         if (contact.ObjectId) {
             return super.getExisting(contact);
         } else {
+            // try userID at first, if given
+            if (contact.User?.UserLogin) {
+                const filter = [
+                    new FilterCriteria(
+                        UserProperty.USER_LOGIN, SearchOperator.EQUALS,
+                        FilterDataType.STRING, FilterType.AND, contact.User.UserLogin
+                    )
+                ];
+                const loadingOptions = new KIXObjectLoadingOptions(filter);
+                const result = await KIXObjectService.loadObjects<Contact>(
+                    KIXObjectType.CONTACT, null, loadingOptions, null, true
+                );
+
+                let existingContact = Array.isArray(result) && result.length > 0 ? result[0] : undefined;
+                if (existingContact) {
+                    return existingContact;
+                }
+            }
+            // try email
             const filter = [
                 new FilterCriteria(
                     ContactProperty.EMAIL, SearchOperator.EQUALS,
                     FilterDataType.STRING, FilterType.AND, contact.Email
                 ),
-                new FilterCriteria(
-                    ContactProperty.FIRSTNAME, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, contact.Firstname
-                ),
-                new FilterCriteria(
-                    ContactProperty.LASTNAME, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, contact.Lastname
-                )
             ];
             const loadingOptions = new KIXObjectLoadingOptions(filter);
             const contacts = await KIXObjectService.loadObjects(
@@ -152,5 +163,4 @@ export class ContactImportRunner extends ImportRunner {
             return contacts && !!contacts.length ? contacts[0] : null;
         }
     }
-
 }
