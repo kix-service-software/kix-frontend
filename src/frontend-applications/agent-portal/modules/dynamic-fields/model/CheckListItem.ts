@@ -33,7 +33,7 @@ export class CheckListItem {
 
     public showLastChangeDate: boolean;
 
-    public constructor(item: CheckListItem) {
+    public constructor(item?: CheckListItem) {
         if (item) {
             this.id = item.id;
             this.title = item.title;

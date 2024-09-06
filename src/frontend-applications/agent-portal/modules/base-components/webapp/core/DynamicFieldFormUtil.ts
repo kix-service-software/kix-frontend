@@ -549,4 +549,17 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
         return value;
     }
 
+    public static getConfigDefaultValue(type: DynamicFieldTypes | string): any {
+        let config;
+        if (type === DynamicFieldTypes.CHECK_LIST) {
+            const item = new CheckListItem();
+            item.inputStates = this.getDefaultChecklistStates();
+            config = {
+                DefaultValue: [item]
+            };
+        }
+
+        return config;
+    }
+
 }
