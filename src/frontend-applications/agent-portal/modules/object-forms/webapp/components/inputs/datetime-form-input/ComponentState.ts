@@ -7,6 +7,7 @@
  * --
  */
 
+import { IdService } from '../../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
@@ -18,7 +19,8 @@ export class ComponentState extends AbstractComponentState {
         public minDate: string = null,
         public maxDate: string = null,
         public inputType = null,
-        public readonly: boolean = false
+        public readonly: boolean = false,
+        public inputId: string = IdService.generateDateBasedId()
     ) {
         super();
     }
