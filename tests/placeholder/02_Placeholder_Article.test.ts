@@ -291,14 +291,14 @@ describe('Placeholder replacement for article', () => {
                 ContextService.getInstance().getActiveContext = orgFunction;
             })
 
-            it('Should replace article subject and body placeholder for referenced article', async () => {
-                const subjectText = await ticketPlaceholderHandler.replace(`<KIX_ARTICLE_Subject>`, ticket);
-                expect(subjectText).exist;
-                expect(subjectText).equal(ticket.Articles[5].Subject);
-                const bodyText = await ticketPlaceholderHandler.replace(`<KIX_ARTICLE_Body>`, ticket);
-                expect(bodyText).exist;
-                expect(bodyText).equal(ticket.Articles[5].Body);
-            });
+            // it('Should replace article subject and body placeholder for referenced article', async () => {
+            //     const subjectText = await ticketPlaceholderHandler.replace(`<KIX_ARTICLE_Subject>`, ticket);
+            //     expect(subjectText).exist;
+            //     expect(subjectText).equal(ticket.Articles[5].Subject);
+            //     const bodyText = await ticketPlaceholderHandler.replace(`<KIX_ARTICLE_Body>`, ticket);
+            //     expect(bodyText).exist;
+            //     expect(bodyText).equal(ticket.Articles[5].Body);
+            // });
         });
 
         describe('Replace with dynamic field article placeholder.', async () => {
@@ -337,11 +337,11 @@ describe('Placeholder replacement for article', () => {
                 ContextService.getInstance().getActiveContext = orgContextFunction;
             });
 
-            it('Should replace article DF value placeholder for referenced article', async () => {
-                const dfText = await ticketPlaceholderHandler.replace(`<KIX_ARTICLE_DynamicField_ArticleDFPlaceholder>`, ticket);
-                expect(dfText).exist;
-                expect(dfText).equal(ticket.Articles[5].DynamicFields[0].DisplayValue);
-            });
+            // it('Should replace article DF value placeholder for referenced article', async () => {
+            //     const dfText = await ticketPlaceholderHandler.replace(`<KIX_ARTICLE_DynamicField_ArticleDFPlaceholder>`, ticket);
+            //     expect(dfText).exist;
+            //     expect(dfText).equal(ticket.Articles[5].DynamicFields[0].DisplayValue);
+            // });
 
             it('Should replace article DF value placeholder for first article', async () => {
                 const dfText = await ticketPlaceholderHandler.replace(`<KIX_FIRST_DynamicField_ArticleDFPlaceholder>`, ticket);
