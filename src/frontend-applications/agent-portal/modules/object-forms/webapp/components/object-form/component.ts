@@ -80,7 +80,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
                 if (eventId === ObjectFormEvent.BLOCK_FORM) {
                     this.state.blocked = data.blocked;
-                    this.state.prepared = !data.blocked;
                     updateNeeded = !data.blocked;
                 } else if (eventId === FormEvent.OBJECT_FORM_HANDLER_CHANGED) {
                     this.state.prepared = false;
