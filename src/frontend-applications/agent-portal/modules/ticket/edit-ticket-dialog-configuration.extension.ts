@@ -86,41 +86,48 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         ], null, null, false,
                     ),
                     {
+                        roleIds:[],
                         values: [
                             [
                                 {
                                     icon: 'kix-icon-call',
                                     text: '<KIX_CONTACT_Phone>',
-                                    linkSrc: 'tel:<KIX_CONTACT_Phone>'
+                                    linkSrc: 'tel:<KIX_CONTACT_Phone>',
+                                    roleIds:[]
                                 },
                                 {
                                     icon: 'kix-icon-mail',
                                     text: '<KIX_CONTACT_Email>',
-                                    linkSrc: null
+                                    linkSrc: null,
+                                    roleIds:[]
                                 }
                             ]
                         ]
                     },
                     {
+                        roleIds:[],
                         values: [
                             [
                                 {
                                     icon: 'kix-icon-compass',
                                     text: '<KIX_CONTACT_Street>',
                                     // tslint:disable-next-line: max-line-length
-                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>',
+                                    roleIds:[]
                                 },
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Zip> <KIX_CONTACT_City>',
                                     // tslint:disable-next-line: max-line-length
-                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>',
+                                    roleIds:[]
                                 },
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Country>',
                                     // tslint:disable-next-line: max-line-length
-                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>',
+                                    roleIds:[]
                                 }
                             ]
                         ]
@@ -366,10 +373,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             new UIComponentPermission('/tickets', [CRUD.READ])
                         ]),
                     new ConfiguredWidget(
-                        'ticket-edit-affected-asset-tickets', 'ticket-edit-affected-asset-tickets'
+                        'ticket-edit-affected-asset-tickets', 'ticket-edit-affected-asset-tickets', null,
+                        [
+                            new UIComponentPermission('cmdb/configitems', [CRUD.READ])
+                        ]
                     ),
                     new ConfiguredWidget(
-                        'ticket-edit-dialog-suggested-faq-widget', 'ticket-edit-dialog-suggested-faq-widget'
+                        'ticket-edit-dialog-suggested-faq-widget', 'ticket-edit-dialog-suggested-faq-widget', null,
+                        [
+                            new UIComponentPermission('faq/articles', [CRUD.READ])
+                        ]
                     )
                 ],
                 [], [],

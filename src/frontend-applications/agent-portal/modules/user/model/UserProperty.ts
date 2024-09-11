@@ -46,6 +46,8 @@ export enum UserProperty {
 
     EXEC_GENERATE_TOKEN = 'ExecGenerateToken',
 
+    EXEC_GENERATE_OTP_SECRET = 'ExecGenerateOTPSecret',
+
     OUT_OF_OFFICE_START = 'OutOfOfficeStart',
 
     OUT_OF_OFFICE_END = 'OutOfOfficeEnd'

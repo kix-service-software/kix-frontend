@@ -26,4 +26,6 @@ export interface IConfiguration {
 
     valid: boolean;
 
+    roleIds: number[];
+
 }

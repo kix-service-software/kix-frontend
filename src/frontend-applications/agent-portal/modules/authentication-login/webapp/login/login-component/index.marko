@@ -43,50 +43,208 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </div>
                     <h1>${component.getString("Welcome to KIX")}</h1>
                 </div>
-
-                <if(state.error || state.logout || state.unsupportedBrowser)>
-                    <div class="dialog-message-area">
-                        <if(state.unsupportedBrowser)>
-                            <div class="message message-hint">
-                                ${component.getString(
-                                    "Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox.",
-                                )}
-                            </div>
-                        </if>
-                        <if(state.error)>
-                            <div class="message message-error">
-                                <span class="kix-icon-warnsign"/>
-                                ${component.getString("Login failed")}
-                            </div>
-                        </if>
-                        <else-if(state.logout)>
+                <if(!state.showPWResetDialog)>
+                    <if(
+                        state.error ||
+                        state.logout ||
+                        state.unsupportedBrowser ||
+                        state.pwResetState
+                    )>
+                        <div class="dialog-message-area">
+                            <if(state.unsupportedBrowser)>
+                                <div class="message message-hint">
+                                    ${component.getString(
+                                        "Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox.",
+                                    )}
+                                </div>
+                            </if>
+                            <if(state.error)>
+                                <div class="message message-error">
+                                    <span class="kix-icon-warnsign"/>
+                                    ${component.getString("Login failed")}
+                                </div>
+                            </if>
+                            <else-if(state.logout)>
+                                <div class="message message-success">
+                                    <span class="kix-icon-icircle"/>
+                                    ${component.getString(
+                                        "You have successfully logged out.",
+                                    )}
+                                </div>
+                            </else-if>
+                            <else-if(state.pwResetState === "requested")>
+                                <div class="message message-success">
+                                    <span class="kix-icon-icircle"/>
+                                    ${component.getString(
+                                        "Password reset is requested.",
+                                    )}
+                                </div>
+                            </else-if>
+                            <else-if(state.pwResetState === "confirmed")>
                             <div class="message message-success">
                                 <span class="kix-icon-icircle"/>
                                 ${component.getString(
-                                    "You have successfully logged out.",
+                                "Requested password reset is confirmed.",
                                 )}
                             </div>
-                        </else-if>
-                    </div>
-                </if>
-                <if(state.loginProcess)>
-                    <div class="loading-container">
-                        <div class="login-loading">
-                            <div class="loading-dots">
-                                <div class="loading-dots--dot"/>
-                                <div class="loading-dots--dot"/>
-                                <div class="loading-dots--dot"/>
+                            </else-if>
+                            <else-if(state.pwResetState === "error")>
+                            <div class="message message-error">
+                                <span class="kix-icon-warnsign"/>
+                                ${component.getString(
+                                "Password reset failed.",
+                                )}
+                            </div>
+                            </else-if>
+                        </div>
+                    </if>
+                    <if(state.loginProcess)>
+                        <div class="loading-container">
+                            <div class="login-loading">
+                                <div class="loading-dots">
+                                    <div class="loading-dots--dot"/>
+                                    <div class="loading-dots--dot"/>
+                                    <div class="loading-dots--dot"/>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </if>
+                    <else-if(state.showMFA)>
+                        <div on-keydown("keyDownMFA") class="dialog-content">
+                            <label>
+                                <span>${component.getString("Token")}:</span>
+                                <input
+                                    type="text"
+                                    name="mfatoken"
+                                    tabindex="1"
+                                    value=state.mfaToken
+                                    on-input("mfaTokenChanged")
+                                    key="mfa-token"
+                                    class="input-style"
+                                >
+                            </label>
+                            <div class="dialog-buttons">
+                                <button
+                                    type="button"
+                                    on-click("login", true)
+                                    tabindex="3"
+                                    class="kix-button special-button"
+                                >
+                                    <span class="kix-icon-check"/>
+                                    ${component.getString("Login")}
+                                </button>
+                            </div>
+                        </div>
+                    </else-if>
+                    <else>
+                        <if(state.hasLogin)>
+                            <div on-keydown("keyDown") class="dialog-content">
+                                <label>
+                                    <span>
+                                        ${component.getString("Login Name")}:
+                                    </span>
+                                    <input
+                                        type="text"
+                                        name="username"
+                                        tabindex="1"
+                                        value=state.userName
+                                        on-input("userNameChanged")
+                                        key="login-user-name"
+                                        class="input-style"
+                                    >
+                                </label>
+                                <label>
+                                    <span>
+                                        ${component.getString("Password")}:
+                                    </span>
+                                    <input
+                                        type=state.passwordFieldType
+                                        name="password"
+                                        tabindex="2"
+                                        value=state.password
+                                        on-input("passwordChanged")
+                                        key="login-password"
+                                        class="input-style"
+                                    >
+                                    <div
+                                        role="button"
+                                        on-click("togglePasswordVisibility")
+                                        class="d-flex align-items-center justify-content-center px-2"
+                                    >
+                                        <i class=[
+                                            "far",
+                                            {
+                                                "fa-eye":
+                                                    state.passwordFieldType ===
+                                                    "text",
+                                                "fa-eye-slash":
+                                                    state.passwordFieldType ===
+                                                    "password",
+                                            },
+                                        ]/>
+                                    </div>
+                                </label>
+                                <div class="dialog-buttons">
+                                    <if(state.pwResetEnabled)>
+                                        <button
+                                            type="button"
+                                            on-click("togglePWResetDialog")
+                                            tabindex="4"
+                                            class="kix-button submit-button"
+                                        >
+                                            <span class="kix-icon-question"/>
+                                            ${component.getString(
+                                                "Forgot Password?",
+                                            )}
+                                        </button>
+                                    </if>
+                                    <button
+                                        type="button"
+                                        on-click("login", false)
+                                        tabindex="3"
+                                        class="kix-button special-button"
+                                    >
+                                        <span class="kix-icon-check"/>
+                                        ${component.getString("Login")}
+                                    </button>
+                                </div>
+                            </div>
+                        </if>
+                        <if(
+                            Array.isArray(state.authMethods) &&
+                            state.authMethods.length
+                        )>
+                            <hr>
+                            <div class="d-grid gap-2 col-6 mx-auto my-4">
+                                <for|method| of=state.authMethods>
+                                    <button
+                                        class="btn btn-outline-secondary"
+                                        type="button"
+                                        on-click("authMethodClicked", method)
+                                    >
+                                        ${method.name}
+                                    </button>
+                                </for>
+                            </div>
+                        </if>
+                    </else>
                 </if>
                 <else>
-                    <if(state.hasLogin)>
+                    <if(state.pwResetProcess)>
+                        <div class="loading-container">
+                            <div class="login-loading">
+                                <div class="loading-dots">
+                                    <div class="loading-dots--dot"/>
+                                    <div class="loading-dots--dot"/>
+                                    <div class="loading-dots--dot"/>
+                                </div>
+                            </div>
+                        </div>
+                    </if>
+                    <else>
                         <div on-keydown("keyDown") class="dialog-content">
                             <label>
-                                <span>
-                                    ${component.getString("Login Name")}:
-                                </span>
+                                <span>${component.getString("Login Name")}:</span>
                                 <input
                                     type="text"
                                     name="username"
@@ -97,65 +255,28 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     class="input-style"
                                 >
                             </label>
-                            <label>
-                                <span>${component.getString("Password")}:</span>
-                                <input
-                                    type=state.passwordFieldType
-                                    name="password"
-                                    tabindex="2"
-                                    value=state.password
-                                    on-input("passwordChanged")
-                                    key="login-password"
-                                    class="input-style"
-                                >
-                                <div
-                                    role="button"
-                                    on-click("togglePasswordVisibility")
-                                    class="d-flex align-items-center justify-content-center px-2"
-                                >
-                                    <i class=[
-                                        "far",
-                                        {
-                                            "fa-eye":
-                                                state.passwordFieldType ===
-                                                "text",
-                                            "fa-eye-slash":
-                                                state.passwordFieldType ===
-                                                "password",
-                                        },
-                                    ]/>
-                                </div>
-                            </label>
                             <div class="dialog-buttons">
                                 <button
                                     type="button"
-                                    on-click("login")
+                                    on-click("togglePWResetDialog")
+                                    tabindex="4"
+                                    class="kix-button submit-button"
+                                >
+                                    <span class="kix-icon-arrow-left"/>
+                                    ${component.getString("Back")}
+                                </button>
+                                <button
+                                    type="button"
+                                    on-click("sendPasswordChangeRequest")
                                     tabindex="3"
                                     class="kix-button special-button"
                                 >
                                     <span class="kix-icon-check"/>
-                                    ${component.getString("Login")}
+                                    ${component.getString("Submit")}
                                 </button>
                             </div>
                         </div>
-                    </if>
-                    <if(
-                        Array.isArray(state.authMethods) &&
-                        state.authMethods.length
-                    )>
-                        <hr>
-                        <div class="d-grid gap-2 col-6 mx-auto my-4">
-                            <for|method| of=state.authMethods>
-                                <button
-                                    class="btn btn-outline-secondary"
-                                    type="button"
-                                    on-click("authMethodClicked", method)
-                                >
-                                    ${method.name}
-                                </button>
-                            </for>
-                        </div>
-                    </if>
+                    </else>
                 </else>
             </div>
         </if>

@@ -24,6 +24,8 @@ import { TicketService } from './TicketService';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
 
 export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -49,7 +51,7 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     public async replace(
-        placeholder: string, article: Article, language?: string, forRichtext?: boolean
+        placeholder: string, article: Article, language?: string, forRichtext?: boolean, translate: boolean = true
     ): Promise<string> {
         let result = '';
         if (article) {
@@ -62,12 +64,23 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                     (ph) => ph.isHandlerFor(placeholder)
                 );
                 if (handler) {
-                    result = await handler.replace(placeholder, article, language);
+                    result = await handler.replace(placeholder, article, language, forRichtext, translate);
                     normalArticleAttribut = false;
                 }
             }
 
-            if (normalArticleAttribut && attribute && this.isKnownProperty(attribute)) {
+            if (
+                PlaceholderService.getInstance().isDynamicFieldAttribute(attribute) &&
+                DynamicFieldValuePlaceholderHandler
+            ) {
+                if (article.DynamicFields?.length || article.TicketID) {
+                    const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
+                    result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(
+                        article, optionsString, language, forRichtext, translate,
+                        new ArticleLoadingOptions(article.TicketID)
+                    );
+                }
+            } else if (normalArticleAttribut && attribute && this.isKnownProperty(attribute)) {
                 switch (attribute) {
                     case 'ID':
                         result = article.ArticleID.toString();
@@ -143,7 +156,11 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case KIXObjectProperty.CREATE_TIME:
                     case KIXObjectProperty.CHANGE_TIME:
-                        result = await DateTimeUtil.getLocalDateTimeString(article[attribute], language);
+                        if (translate) {
+                            result = await DateTimeUtil.getLocalDateTimeString(article[attribute], language);
+                        } else {
+                            article[attribute];
+                        }
                         break;
                     default:
                         if (attribute === ArticleProperty.CUSTOMER_VISIBLE && optionsString && optionsString === 'ObjectValue') {
@@ -151,7 +168,8 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         }
                         result = await LabelService.getInstance().getDisplayText(article, attribute, undefined, false);
                         result = typeof result !== 'undefined' && result !== null
-                            ? await TranslationService.translate(result.toString(), undefined, language) : '';
+                            ? translate ? await TranslationService.translate(result.toString(), undefined, language)
+                                : result.toString() : '';
                 }
             }
         }

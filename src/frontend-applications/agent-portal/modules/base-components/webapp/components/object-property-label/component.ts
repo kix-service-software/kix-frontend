@@ -114,9 +114,9 @@ export class ObjectPropertyLabelComponent {
     }
 
     private async prepareOverlayIcon(): Promise<void> {
-        if (this.object && this.property) {
-            const overlay = await LabelService.getInstance().getOverlayIcon(
-                this.object, this.property, this.object[this.property]
+        if (this.object?.KIXObjectType && this.property) {
+            const overlay = await LabelService.getInstance().getOverlayIconByProperty(
+                this.object.KIXObjectType, this.property, this.object[this.property]
             );
             if (overlay !== null) {
                 this.state.overlay = overlay;

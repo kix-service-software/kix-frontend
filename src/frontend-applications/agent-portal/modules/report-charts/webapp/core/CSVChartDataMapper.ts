@@ -13,12 +13,20 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 import { CSVFormatConfiguration } from '../../model/CSVFormatConfiguration';
 import { FormatConfiguration } from '../../model/FormatConfiguration';
 import { IReportChartDataMapper } from '../../model/IReportChartDataMapper';
+import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { DefaultColorConfiguration } from '../../../../model/configuration/DefaultColorConfiguration';
+import { config } from 'node:process';
 
 export class CSVChartDataMapper implements IReportChartDataMapper {
 
     public async prepareChartData(
         chartConfig: ChartConfiguration, csvString: string, formatConfiguration: FormatConfiguration
     ): Promise<ChartConfiguration> {
+
+        const colorConfig = await SysConfigService.getInstance().getUIConfiguration<DefaultColorConfiguration>(
+            DefaultColorConfiguration.CONFIGURATION_ID
+        );
+
         const csvFormatConfig = formatConfiguration as CSVFormatConfiguration;
 
         if (csvFormatConfig?.datasetProperties.length !== csvFormatConfig?.valueProperties?.length) {
@@ -51,7 +59,11 @@ export class CSVChartDataMapper implements IReportChartDataMapper {
         const labelIndex = csvData[index].findIndex((d) => d === csvFormatConfig?.labelProperty);
 
         const labels = [];
+        let colorIndex = 0;
         for (let i = index + 1; i < csvData.length; i++) {
+
+            const backgroundColor = colorConfig.defaultColors[colorIndex] || BrowserUtil.getRandomColor();
+
             const label = csvData[i][labelIndex];
             if (!labels.some((l) => l === label)) {
                 const displayValue = await TranslationService.translate(label);
@@ -66,7 +78,7 @@ export class CSVChartDataMapper implements IReportChartDataMapper {
 
                 const value = Number(csvData[i][valueIndexes.get(csvFormatConfig?.valueProperties[0])]);
                 chartConfig.data.datasets[0].data.push(value);
-                (chartConfig.data.datasets[0].backgroundColor as any).push(BrowserUtil.getRandomColor());
+                (chartConfig.data.datasets[0].backgroundColor as any).push(backgroundColor);
             } else {
                 for (let j = 0; j < csvFormatConfig?.datasetProperties.length; j++) {
                     const value = Number(csvData[i][valueIndexes.get(csvFormatConfig?.valueProperties[j])]);
@@ -74,14 +86,15 @@ export class CSVChartDataMapper implements IReportChartDataMapper {
                     const dsLabel = csvData[i][dataSetIndexes.get(csvFormatConfig?.datasetProperties[j])];
                     let dataset = chartConfig.data.datasets.find((ds) => ds.label === dsLabel);
                     if (!dataset) {
-                        dataset = { data: [], label: dsLabel, backgroundColor: BrowserUtil.getRandomColor() };
+                        dataset = { data: [], label: dsLabel, backgroundColor: backgroundColor };
                         chartConfig.data.datasets.push(dataset);
                     }
 
                     dataset.data[labelValueIndex] = value;
                 }
-
             }
+
+            colorIndex = (colorIndex === colorConfig.defaultColors.length - 1) ? 0 : colorIndex + 1;
         }
 
         chartConfig.data.labels = labels;

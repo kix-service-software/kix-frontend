@@ -28,6 +28,7 @@ import addrparser from 'address-rfc2822';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
+import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 
 export class RecipientFormValue extends SelectObjectFormValue<any> {
 
@@ -79,11 +80,11 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
         if (valueDefined && this.treeHandler) {
             const emailValues: [Contact[], string[], string[]] = await this.getEmailValues(this.value);
 
-            if (emailValues[0]) {
+            if (emailValues[0]?.length) {
                 selectedNodes = await this.getContactNodes(emailValues[0]);
             }
 
-            if (emailValues[1]) {
+            if (emailValues[1]?.length) {
                 selectedNodes = await this.addEmailAddressNodes(emailValues[1], selectedNodes);
             }
 
@@ -92,7 +93,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
 
             selectedNodes = selectedNodes.filter((n, index) => {
                 const findIndex = selectedNodes.findIndex(
-                    (v) => v.id.toLocaleLowerCase() === n.id.toLocaleLowerCase()
+                    (v) => v.id.toString().toLocaleLowerCase() === n.id.toString().toLocaleLowerCase()
                 );
                 return findIndex === index;
             });
@@ -117,7 +118,11 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
             [
                 new FilterCriteria(
                     'Email', SearchOperator.IN, FilterDataType.STRING,
-                    FilterType.OR, searchMailAddresses
+                    FilterType.AND, searchMailAddresses
+                ),
+                new FilterCriteria(
+                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                    FilterType.AND, 1
                 )
             ]
         );
@@ -139,7 +144,9 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
             ...nodes,
             ...mailNodes.filter((mn) => !nodes.some((n) => n.id === mn.id)),
             ...unknownMailAddressNodes.filter(
-                (umn) => !nodes.some((n) => n.id === umn.id) && !mailNodes.some((mn) => mn.id === umn.id)
+                (umn) =>
+                    !nodes.some((n) => n.id === umn.id) &&
+                    (!mailContacts || !mailContacts.some((mc) => mc.Email === umn.id))
             )
         ];
     }
@@ -150,10 +157,11 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
             for (const o of contacts) {
                 const label = await LabelService.getInstance().getObjectText(o, null, null, false);
                 const icon = LabelService.getInstance().getObjectIcon(o);
-                nodes.push(new TreeNode(o.Email, label, icon, null, null, null,
+                const node = new TreeNode(o.ID, label, icon, null, null, null,
                     null, null, null, null, undefined, undefined, undefined,
                     `"${o.Firstname} ${o.Lastname}" <${o.Email}>`
-                ));
+                );
+                nodes.push(node);
             }
         }
         return nodes;
@@ -234,9 +242,12 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
         const contactIds: number[] = [];
         const placeholders: string[] = [];
         for (let value of contactValues) {
-            value = value.replace(/^(.*?),$/, '$1');
 
-            if (value.match(/(<|&lt;)KIX_/)) {
+            if (isNaN(value)) {
+                value = value.replace(/^(.*?),$/, '$1');
+            }
+
+            if (typeof value === 'string' && value.match(/(<|&lt;)KIX_/)) {
                 placeholders.push(value);
             } else if (isNaN(value)) {
                 emailAddresses.push(...this.parseAddresses(value));

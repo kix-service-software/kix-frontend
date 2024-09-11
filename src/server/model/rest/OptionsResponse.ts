@@ -12,8 +12,10 @@ import { OptionsResponseHeader } from './OptionsResponseHeader';
 export class OptionsResponse {
 
     public headers: OptionsResponseHeader;
+    public data: any;
 
-    public constructor(headers: any) {
+    public constructor(headers: any, data: any) {
         this.headers = new OptionsResponseHeader(headers);
+        this.data = data;
     }
 }

@@ -240,6 +240,7 @@ export class ContactAPIService extends KIXObjectAPIService {
                 p[0] === UserProperty.IS_AGENT ||
                 p[0] === UserProperty.IS_CUSTOMER ||
                 p[0] === UserProperty.ROLE_IDS ||
+                p[0] === UserProperty.PREFERENCES ||
                 p[0] === PersonalSettingsProperty.MY_QUEUES ||
                 p[0] === PersonalSettingsProperty.NOTIFICATIONS ||
                 p[0] === PersonalSettingsProperty.USER_LANGUAGE ||

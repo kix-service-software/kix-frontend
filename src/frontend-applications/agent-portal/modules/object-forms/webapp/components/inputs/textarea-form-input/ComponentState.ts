@@ -14,7 +14,8 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public value: any = null,
         public prepared: boolean = false,
-        public readonly: boolean = false
+        public readonly: boolean = false,
+        public rowCount: number = 5
     ) {
         super();
     }

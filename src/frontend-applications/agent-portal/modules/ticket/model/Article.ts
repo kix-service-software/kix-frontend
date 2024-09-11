@@ -18,6 +18,7 @@ import addrparser from 'address-rfc2822';
 import { Ticket } from './Ticket';
 import { User } from '../../user/model/User';
 import { Contact } from '../../customer/model/Contact';
+import { SortUtil } from '../../../model/SortUtil';
 
 export class Article extends KIXObject {
 
@@ -76,6 +77,7 @@ export class Article extends KIXObject {
     public IncomingTime: number = null;
 
     public Attachments: Attachment[] = null;
+    public AttachmentCount: number = 0;
 
     public Flags: ArticleFlag[] = null;
 
@@ -85,7 +87,19 @@ export class Article extends KIXObject {
     public Plain: string = null;
 
     public Unseen: number = 0;
+
+    public NotSent: number = 0;
     public NotSentError: string = '';
+
+    public SMIMESigned: number = 0;
+    public SMIMESignedError: string = '';
+    public smimeVerified: boolean = true;
+    public smimeSigned: boolean = true;
+
+    public SMIMEEncrypted: number = 0;
+    public SMIMEEncryptedError: string = '';
+    public smimeDecrypted: boolean = true;
+    public smimeEncrypted: boolean = true;
 
     // UI Properties
 
@@ -101,6 +115,7 @@ export class Article extends KIXObject {
         super(article);
 
         this.ticket = ticket;
+        this.TicketID = this.ticket?.TicketID;
 
         if (article) {
             this.TicketID = article.TicketID;
@@ -127,6 +142,7 @@ export class Article extends KIXObject {
             this.MimeType = article.MimeType;
             this.IncomingTime = article.IncomingTime;
             this.Attachments = article.Attachments;
+            this.AttachmentCount = article.AttachmentCount;
             this.Flags = article.Flags;
             this.Channel = article.Channel;
             this.ChannelID = article.ChannelID;
@@ -137,7 +153,16 @@ export class Article extends KIXObject {
             this.CreatedBy = article.CreatedBy;
             this.Plain = article.Plain;
             this.Unseen = Number(article.Unseen);
+            this.NotSent = Number(article.NotSent);
             this.NotSentError = article.NotSentError;
+            this.SMIMESigned = Number(article.SMIMESigned);
+            this.SMIMESignedError = article.SMIMESignedError;
+            this.smimeVerified = this.SenderType === 'external' && this.SMIMESigned && !Boolean(this.SMIMESignedError);
+            this.smimeSigned = this.SenderType !== 'external' && this.SMIMESigned && !Boolean(this.SMIMESignedError);
+            this.SMIMEEncrypted = Number(article.SMIMEEncrypted);
+            this.SMIMEEncryptedError = article.SMIMEEncryptedError;
+            this.smimeDecrypted = this.SenderType === 'external' && this.SMIMEEncrypted && !Boolean(this.SMIMEEncryptedError);
+            this.smimeEncrypted = this.SenderType !== 'external' && this.SMIMEEncrypted && !Boolean(this.SMIMEEncryptedError);
 
             this.bodyAttachment = article.bodyAttachment;
 
@@ -233,14 +258,35 @@ export class Article extends KIXObject {
         return 'ArticleID';
     }
 
-    public getAttachments(inline?: boolean): Attachment[] {
-        let attachments = this.Attachments;
-        if (inline && Array.isArray(this.Attachments)) {
-            attachments = this.Attachments.filter((a) => a.Disposition === 'inline' && a.ContentID.length > 0);
-        } else if (Array.isArray(this.Attachments)) {
-            attachments = this.Attachments.filter((a) => a.Disposition !== 'inline' || a.ContentID.length === 0 && !a.Filename.match(/^file-(1|2)$/));
-        }
-        return attachments || [];
+    public getAttachments(showAll?: boolean): Attachment[] {
+        let attachments = (this?.Attachments || []);
+
+        attachments = attachments.filter(
+            (a) => !a.Filename.match(/^file-(1|2)$/) &&
+                (showAll || a.Disposition !== 'inline')
+        );
+
+        attachments.sort((a, b) => {
+            if (!showAll) {
+                return SortUtil.compareString(a.Filename, b.Filename);
+            }
+
+            let result = -1;
+            if (a.Disposition === b.Disposition) {
+                result = SortUtil.compareString(a.Filename, b.Filename);
+            } else if (a.Disposition === 'inline') {
+                result = 1;
+            }
+            return result;
+        });
+
+        return attachments;
+    }
+
+    public getInlineAttachments(): Attachment[] {
+        let attachments = (this?.Attachments || []);
+        attachments = attachments.filter((a) => !a.Filename.match(/^file-(1|2)$/) && a.Disposition === 'inline');
+        return attachments;
     }
 
     public static isArticleProperty(property: string): boolean {

@@ -18,7 +18,8 @@ export class ComponentState {
         public nodes: TreeNode[] = [],
         public prepared: boolean = false,
         public dropdownId: string = IdService.generateDateBasedId('-checklist-dropdown'),
-        public selectedNode: TreeNode = null
+        public selectedNode: TreeNode = null,
+        public lastChangeDate: string = null
     ) { }
 
 }

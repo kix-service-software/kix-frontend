@@ -43,6 +43,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private creatingCalendar: boolean;
     private schedules: any[];
     private context: Context;
+    private popupTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -155,7 +156,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const calendars = [];
         for (const u of userIds) {
             const bgColor = BrowserUtil.getUserColor(u[0]);
-            const overlay = await LabelService.getInstance().getOverlayIconForType(
+            const overlay = await LabelService.getInstance().getOverlayIcon(
                 KIXObjectType.USER, u[0]
             );
             calendars.push({
@@ -256,47 +257,49 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
+
+        const promises: Promise<void>[] = [];
         for (const ticket of tickets) {
-            schedules.push(
-                new Promise(async (resolve) => {
+            const promise = new Promise<void>(async (resolve) => {
 
-                    const title = await LabelService.getInstance().getObjectText(ticket, true);
-                    const isPending = ticket.StateType === 'pending reminder';
-                    const bgColor = BrowserUtil.getUserColor(ticket.OwnerID);
-                    const schedule: any = {
-                        id: ticket.TicketID,
-                        calendarId: ticket.OwnerID,
-                        title,
-                        category: 'time',
-                        raw: ticket,
-                        borderColor: bgColor,
-                    };
+                const title = await LabelService.getInstance().getObjectText(ticket, true);
+                const isPending = ticket.StateType === 'pending reminder';
+                const bgColor = BrowserUtil.getUserColor(ticket.OwnerID);
+                const schedule: any = {
+                    id: ticket.TicketID,
+                    calendarId: ticket.OwnerID,
+                    title,
+                    category: 'time',
+                    raw: ticket,
+                    borderColor: bgColor,
+                };
 
-                    if (isPending) {
-                        const pendingSchedule = { ...schedule };
-                        pendingSchedule.id = 'pending-' + pendingSchedule.id;
+                if (isPending) {
+                    const pendingSchedule = { ...schedule };
+                    pendingSchedule.id = 'pending-' + pendingSchedule.id;
 
-                        const pendingDate = new Date(ticket.PendingTime);
-                        if (!isNaN(pendingDate.getTime())) {
-                            pendingSchedule.start = pendingDate;
-                            const endDate = new Date(pendingDate);
-                            endDate.setHours(endDate.getHours() + 1);
+                    const pendingDate = new Date(ticket.PendingTime);
+                    if (!isNaN(pendingDate.getTime())) {
+                        pendingSchedule.start = pendingDate;
+                        const endDate = new Date(pendingDate);
+                        endDate.setHours(endDate.getHours() + 1);
 
-                            pendingSchedule.end = pendingDate;
-                            schedules.push(pendingSchedule);
-                        }
+                        pendingSchedule.end = pendingDate;
+                        schedules.push(pendingSchedule);
                     }
+                }
 
-                    if (await this.setScheduleDates(ticket, schedule)) {
-                        resolve(schedule);
-                    } else {
-                        resolve(null);
-                    }
-                })
-            );
+                if (await this.setScheduleDates(ticket, schedule)) {
+                    schedules.push(schedule);
+                }
+
+                resolve();
+            });
+            promises.push(promise);
         }
 
-        return Promise.all(schedules);
+        await Promise.all(promises);
+        return schedules;
     }
 
     private async setScheduleDates(ticket: Ticket, schedule: any): Promise<boolean> {
@@ -430,19 +433,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             );
 
             if (tickets && tickets.length) {
-                const content = template?.default?.renderSync({
-                    ticket: tickets[0],
-                    calendarConfig: this.calendarConfig,
-                    isPending: isNaN(Number(schedule.id))
-                });
 
-                setTimeout(() => {
+                if (this.popupTimeout) {
+                    clearTimeout(this.popupTimeout);
+                }
+
+                this.popupTimeout = setTimeout(() => {
+                    const content = template?.default?.renderSync({
+                        ticket: tickets[0],
+                        calendarConfig: this.calendarConfig,
+                        isPending: isNaN(Number(schedule.id))
+                    });
+
                     const items = document.getElementsByClassName('tui-full-calendar-popup-container');
-                    if (items && items.length) {
+                    if (items?.length) {
                         items.item(0).innerHTML = '';
                         content.appendTo(items.item(0));
                     }
-                }, 5);
+                }, 50);
             }
         }
     }

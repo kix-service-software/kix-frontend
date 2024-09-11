@@ -19,6 +19,10 @@ export enum TextModuleProperty {
 
     COMMENT = 'Comment',
 
-    LANGUAGE = 'Language'
+    LANGUAGE = 'Language',
+
+    QUEUE_IDS = 'QueueIDs',
+
+    TICKET_TYPE_IDS = 'TicketTypeIDs'
 
 }

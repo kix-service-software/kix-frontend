@@ -20,18 +20,21 @@ import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { TicketService } from '../../TicketService';
 
-export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
+export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
 
     public options: Array<[string, any]> = [];
 
     public constructor(
         public property: string,
-        object: any,
+        article: Article,
         objectValueMapper: ObjectFormValueMapper,
         public parent: ObjectFormValue,
     ) {
-        super(property, object, objectValueMapper, parent);
+        super(property, article, objectValueMapper, parent);
         this.inputComponentId = 'attachment-form-input';
+
+        // FIXME: currently to not use object value (because of missing content) - done in initFormValue
+        this.value = null;
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
@@ -51,24 +54,50 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
 
+        const newValue = [];
+
         const context = ContextService.getInstance().getActiveContext();
+        const updateArticleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+        if (updateArticleId) {
+            const refTicketId = context?.getObjectId();
+            const updateArticle = await this.getUpdateArticle();
+            const updateInlineAttachments = updateArticle.getInlineAttachments();
+            const attachments = await this.getRefAttachments(
+                updateInlineAttachments, updateArticleId, Number(refTicketId)
+            );
+
+            newValue.push(...attachments);
+        }
+
         const useRefArticleAttachments = context?.getAdditionalInformation('USE_REFERENCED_ATTACHMENTS');
         if (useRefArticleAttachments) {
+            // FIXME: referenced article is also relevante article in ArticleEdit (better use ARTICLE_UPDATE_ID)
+            // or use object value (see constructor)
             const article = await this.getReferencedArticle();
             if (article) {
                 const attachments = await this.getRefAttachments(
                     article.getAttachments(), article.ArticleID, article.TicketID
                 );
 
+                newValue.push(...attachments);
                 if (attachments?.length) {
-                    const newValue = attachments;
+
                     if (Array.isArray(this.value) && this.value.length) {
                         newValue.push(...this.value);
                     }
-                    this.setFormValue(newValue, true);
                 }
             }
         }
+
+        this.setFormValue(newValue, true);
+    }
+
+    private async getUpdateArticle(): Promise<Article> {
+        const context = ContextService.getInstance().getActiveContext();
+        const articleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+        const refTicketId = context?.getObjectId();
+        const article = await this.loadReferencedArticle(Number(refTicketId), Number(articleId));
+        return article;
     }
 
     private async getReferencedArticle(): Promise<Article> {
@@ -107,7 +136,7 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
             articleAttachments.forEach((a) => {
                 if (!a.Content) {
                     const attachmentPromise = TicketService.getInstance().loadArticleAttachment(
-                        Number(refTicketId), refArticleId, a.ID
+                        Number(refTicketId), refArticleId, a.ID, true
                     );
                     if (attachmentPromise) {
                         attachmentPromises.push(attachmentPromise);

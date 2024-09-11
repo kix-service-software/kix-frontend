@@ -42,6 +42,7 @@ export class TicketSearchFormManager extends SearchFormManager {
         private validDynamicFields: boolean = true
     ) {
         super();
+        this.additionalObjectTypes.push(KIXObjectType.ARTICLE);
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {

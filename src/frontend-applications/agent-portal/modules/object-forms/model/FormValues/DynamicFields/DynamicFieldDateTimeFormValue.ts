@@ -132,6 +132,11 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
         await super.setFormValue(value, force);
     }
 
+    public async setObjectValue(value: any): Promise<void> {
+        value = DateTimeUtil.calculateRelativeDate(value);
+        await super.setObjectValue(value);
+    }
+
     protected getOffsetValue(offset: number): string {
         const date = new Date();
         date.setSeconds(date.getSeconds() + offset);

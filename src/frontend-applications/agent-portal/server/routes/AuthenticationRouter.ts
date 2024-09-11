@@ -26,6 +26,8 @@ import { AuthenticationService } from '../../../../server/services/Authenticatio
 import { UserType } from '../../modules/user/model/UserType';
 import { ObjectResponse } from '../services/ObjectResponse';
 import { IRouterHandler } from '../model/IRouterHandler';
+import { MFAService } from '../../modules/multifactor-authentication/server/MFAService';
+import { PasswordResetState } from '../../model/PasswordResetState';
 
 export class AuthenticationRouter extends KIXRouter {
 
@@ -53,6 +55,7 @@ export class AuthenticationRouter extends KIXRouter {
         });
 
         this.router.get('/logout', this.logout.bind(this));
+        this.router.get('/password-reset/:resetToken', this.sendUserPasswordResetRequestConfirmation.bind(this));
     }
 
     public getContextId(): string {
@@ -91,8 +94,18 @@ export class AuthenticationRouter extends KIXRouter {
 
         let authType = '';
         let negotiationToken = '';
+
         if (ssoEnabled) {
-            if (!req.cookies.authNegotiationDone && !req.cookies.authNoSSO) {
+            // check if we already have a negotiate token
+            const authorization = req.headers['authorization'];
+            if (typeof authorization === 'string' && authorization.split(' ')[0] === 'Negotiate') {
+                // already negotiated (SSO)
+                negotiationToken = authorization.split(' ')[1];
+                authType = 'negotiate token (SSO)';
+                ssoSuccess = true;
+            }
+            else if (!req.cookies.authNegotiationDone && !req.cookies.authNoSSO) {
+                // no token - start the negotiation process
                 res.cookie('authNegotiationDone', true, { httpOnly: true });
                 res.setHeader('WWW-Authenticate', 'Negotiate');
                 res.status(401);
@@ -106,14 +119,6 @@ export class AuthenticationRouter extends KIXRouter {
                         <body></body>
                     </html>`
                 );
-                ssoSuccess = true;
-            } else {
-                const authorization = req.headers['authorization'];
-                if (typeof authorization === 'string' && authorization.split(' ')[0] === 'Negotiate') {
-                    // already negotiated (SSO)
-                    negotiationToken = authorization.split(' ')[1];
-                    authType = 'negotiate token (SSO)';
-                }
             }
         }
 
@@ -127,7 +132,7 @@ export class AuthenticationRouter extends KIXRouter {
         if (user || negotiationToken) {
             let success = true;
             const token = await AuthenticationService.getInstance().login(
-                user, null, UserType.AGENT, negotiationToken, null, null, false
+                user, null, UserType.AGENT, negotiationToken, null, null, null, false
             ).catch((e) => {
                 LoggingService.getInstance().error('Error when trying to login with ' + authType);
                 success = false;
@@ -139,13 +144,13 @@ export class AuthenticationRouter extends KIXRouter {
                 res.status(200);
                 res.send(
                     `<!DOCTYPE html>
-                            <html lang="en">
-                                <head>
-                                    <title>KIX Agent Portal</title>
-                                    <meta http-equiv="refresh" content="3; URL=/">
-                                </head>
-                                <body></body>
-                            </html>`
+                    <html lang="en">
+                        <head>
+                            <title>KIX Agent Portal</title>
+                            <meta http-equiv="refresh" content="3; URL=/">
+                        </head>
+                        <body></body>
+                    </html>`
                 );
                 ssoSuccess = true;
             }
@@ -183,6 +188,10 @@ export class AuthenticationRouter extends KIXRouter {
                 const imprintLink = await this.getImprintLink()
                     .catch((e) => '');
 
+                const pwResetEnabled = await AuthenticationService.getInstance().getUserPasswordResetEnabled();
+
+                const pwResetState = req.query['pwResetState']?.toString();
+
                 const url = req.query['redirectUrl']?.toString();
                 const redirectUrl = decodeURIComponent(url) || '/';
 
@@ -192,9 +201,13 @@ export class AuthenticationRouter extends KIXRouter {
                 const error = !!req.query['error'];
 
                 const authMethods = await AuthenticationService.getInstance().getAuthMethods();
+                const mfaEnabled = MFAService.getInstance().isMFAEnabled(authMethods);
+                const mfaConfigs = await MFAService.getInstance().loadMFAConfigs();
+                const mfaConfig = mfaEnabled ? mfaConfigs?.find((mfac) => mfac.enabled) : null;
 
                 (res as any).marko(template, {
-                    login: true, logout, releaseInfo, imprintLink, redirectUrl, favIcon, logo, authMethods, error
+                    login: true, logout, releaseInfo, imprintLink, redirectUrl,
+                    favIcon, logo, authMethods, mfaConfig, pwResetEnabled, pwResetState, error
                 });
             } catch (error) {
                 console.error(error);
@@ -246,6 +259,20 @@ export class AuthenticationRouter extends KIXRouter {
         }
 
         return imprintLink;
+    }
+
+    public async sendUserPasswordResetRequestConfirmation(req: Request, res: Response): Promise<void> {
+        const resetToken = req.params?.resetToken?.toString();
+
+        let pwResetState = PasswordResetState.ERROR;
+
+        if (resetToken) {
+            pwResetState = await AuthenticationService.getInstance().sendUserPasswordResetRequestConfirmation(
+                resetToken
+            );
+        }
+
+        res.redirect('/auth?pwResetState=' + pwResetState);
     }
 
 }

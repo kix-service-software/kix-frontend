@@ -10,10 +10,12 @@
 import { AutocompleteOption } from '../../../../../../model/AutocompleteOption';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
+import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
+import { DynamicFieldObjectFormValue } from '../../../../../object-forms/model/FormValues/DynamicFieldObjectFormValue';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
@@ -24,13 +26,13 @@ import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { Channel } from '../../../../model/Channel';
 import { ArticleAttachmentFormValue } from './ArticleAttachmentFormValue';
 import { CustomerVisibleFormValue } from './CustomerVisibleFormValue';
+import { EncryptIfPossibleFormValue } from './EncryptIfPossibleFormValue';
 import { IncomingTimeFormValue } from './IncomingTimeFormValue';
 import { RecipientFormValue } from './RecipientFormValue';
 
 export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public noChannelSelectable: boolean = false;
-    private hasChannelField: boolean = false;
 
     public constructor(
         property: string,
@@ -56,9 +58,15 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
 
         if (this.value) {
-            await this.setChannelFields(this.value);
+            await this.setChannelFields(this.value, true);
         } else {
-            this.formValues.forEach((fv) => fv.enabled = false);
+            for (const fv of this.formValues) {
+                if (fv.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                    fv.formValues?.forEach((dfv) => dfv.enabled = false);
+                } else {
+                    fv.enabled = false;
+                }
+            }
         }
 
         this.object?.addBinding(ArticleProperty.CHANNEL_ID, async (value: number) => {
@@ -84,16 +92,20 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
 
-        this.hasChannelField = true;
-
-        const noChannelOption = field.options.find((o) => o.option === 'NO_CHANNEL');
-        if (noChannelOption) {
-            this.noChannelSelectable = noChannelOption?.value;
+        // do not show in article edit forms
+        if ((this.object as Article).ArticleID) {
+            this.visible = false;
+            this.readonly = true;
         } else {
-            this.noChannelSelectable =
-                this.objectValueMapper.formContext === FormContext.EDIT
-                && !this.required
-                && !this.readonly;
+            const noChannelOption = field.options.find((o) => o.option === 'NO_CHANNEL');
+            if (noChannelOption) {
+                this.noChannelSelectable = noChannelOption?.value;
+            } else {
+                this.noChannelSelectable =
+                    this.objectValueMapper.formContext === FormContext.EDIT
+                    && !this.required
+                    && !this.readonly;
+            }
         }
     }
 
@@ -104,12 +116,31 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             }
 
             this.createArticleFormValue(property, article);
+        }
 
+        const index = this.formValues.findIndex((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS);
+        if (index !== -1) {
+            const dfFormValue = this.formValues.splice(index, 1);
+            dfFormValue[0].isSortable = false;
+            dfFormValue[0].disable();
+            this.formValues.push(dfFormValue[0]);
+        }
+
+        // property only needed for article create
+        if (!ContextService.getInstance().getActiveContext()?.getAdditionalInformation('ARTICLE_UPDATE_ID')) {
+            const encyptFormValue = new EncryptIfPossibleFormValue(
+                ArticleProperty.ENCRYPT_IF_POSSIBLE, article, this.objectValueMapper, this
+            );
+            encyptFormValue.visible = true;
+            encyptFormValue.isSortable = false;
+            // add it after recipents
+            const bccIndex = this.formValues.findIndex((fv) => fv.property === ArticleProperty.BCC);
+            this.formValues.splice(bccIndex + 1, 0, encyptFormValue);
         }
     }
 
     protected createArticleFormValue(property: string, article: Article): void {
-        let formValue;
+        let formValue: ObjectFormValue;
         switch (property) {
             case ArticleProperty.TO:
             case ArticleProperty.CC:
@@ -136,6 +167,11 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             case ArticleProperty.INCOMING_TIME:
                 formValue = new IncomingTimeFormValue(property, article, this.objectValueMapper, this);
                 break;
+            case KIXObjectProperty.DYNAMIC_FIELDS:
+                formValue = new DynamicFieldObjectFormValue(
+                    KIXObjectProperty.DYNAMIC_FIELDS, article, this.objectValueMapper, this
+                );
+                break;
             default:
         }
 
@@ -157,18 +193,23 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     }
 
-    protected async setChannelFields(channelId: number): Promise<void> {
+    protected async setChannelFields(channelId: number, byInit?: boolean): Promise<void> {
         const allFields = [
             ArticleProperty.CUSTOMER_VISIBLE,
             ArticleProperty.TO, ArticleProperty.CC, ArticleProperty.BCC,
-            ArticleProperty.SUBJECT, ArticleProperty.BODY, ArticleProperty.ATTACHMENTS
+            ArticleProperty.SUBJECT, ArticleProperty.BODY, ArticleProperty.ATTACHMENTS,
+            ArticleProperty.ENCRYPT_IF_POSSIBLE
         ];
+
+        const dfFormValue = this.formValues.find((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS);
+
         if (channelId) {
             const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL, [channelId])
                 .catch((): Channel[] => []);
             const channel = Array.isArray(channels) && channels.length ? channels[0] : null;
-            const context = this.objectValueMapper.objectFormHandler.context;
-            const articleUpdateID = await context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+
+            const context = ContextService.getInstance().getActiveContext();
+            const articleUpdateID = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
 
             const noteFields = [
                 ArticleProperty.CUSTOMER_VISIBLE, ArticleProperty.SUBJECT,
@@ -177,14 +218,16 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
             const mailFields = [
                 ArticleProperty.CUSTOMER_VISIBLE,
-                ArticleProperty.CC, ArticleProperty.BCC,
-                ArticleProperty.SUBJECT, ArticleProperty.BODY, ArticleProperty.ATTACHMENTS,
-                ArticleProperty.TO
+                ArticleProperty.TO, ArticleProperty.CC, ArticleProperty.BCC,
+                ArticleProperty.SUBJECT, ArticleProperty.BODY, ArticleProperty.ATTACHMENTS
             ];
 
             if (articleUpdateID) {
                 noteFields.push(ArticleProperty.INCOMING_TIME);
                 mailFields.push(ArticleProperty.INCOMING_TIME);
+            } else {
+                // add encrypt field for new article, not on article update
+                mailFields.push(ArticleProperty.ENCRYPT_IF_POSSIBLE);
             }
 
             let submitPattern = 'Translatable#Save';
@@ -198,8 +241,21 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             }
 
             context.setAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT, submitPattern);
+
+            // handle enable only on channel switch
+            if (dfFormValue?.formValues && !byInit) {
+                for (const fv of dfFormValue.formValues) {
+                    await fv.enable();
+                    fv.isSortable = false;
+                }
+            }
         } else {
             this.disableChannelFormValues(allFields);
+            if (dfFormValue?.formValues) {
+                for (const fv of dfFormValue.formValues) {
+                    await fv.disable();
+                }
+            }
         }
     }
 
@@ -233,6 +289,11 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
                 if (formValue.property === ArticleProperty.SUBJECT || formValue.property === ArticleProperty.BODY) {
                     formValue.required = true;
+                }
+
+                // use default if given
+                if (!formValue.value && formValue.defaultValue) {
+                    formValue.value = formValue.defaultValue;
                 }
             }
         }

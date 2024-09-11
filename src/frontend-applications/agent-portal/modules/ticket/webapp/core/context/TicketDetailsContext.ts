@@ -30,9 +30,11 @@ export class TicketDetailsContext extends Context {
 
     public static CONTEXT_ID = 'ticket-details';
     public articleLoader: ArticleLoader;
+    public articleDetailsLoader: ArticleLoader;
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        this.articleLoader = new ArticleLoader(Number(this.objectId), this);
+        this.articleLoader = new ArticleLoader(Number(this.objectId), this, false);
+        this.articleDetailsLoader = new ArticleLoader(Number(this.objectId), this, true);
     }
 
     public getIcon(): string {
@@ -112,7 +114,9 @@ export class TicketDetailsContext extends Context {
     public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {
         let objects = [];
         if (objectType === KIXObjectType.ARTICLE) {
-            objects = await this.loadArticles();
+
+            // load ticket (get current article id list from it)
+            this.loadTicket();
         } else if (objectType === KIXObjectType.TICKET_HISTORY) {
             objects = await this.loadTicketHistory();
         } else {
@@ -131,18 +135,6 @@ export class TicketDetailsContext extends Context {
         } else {
             return super.reloadObjectList(objectType, silent);
         }
-    }
-
-    private async loadArticles(force?: boolean): Promise<Article[]> {
-        const loadingOptions = new KIXObjectLoadingOptions();
-        loadingOptions.sortOrder = 'Article.IncomingTime';
-        loadingOptions.limit = 0;
-
-        const articles: Article[] = await KIXObjectService.loadObjects<Article>(
-            KIXObjectType.ARTICLE, null, loadingOptions, new ArticleLoadingOptions(this.objectId)
-        ).catch(() => [] as Article[]) || [];
-
-        return articles;
     }
 
     private async loadTicketHistory(): Promise<TicketHistory[]> {

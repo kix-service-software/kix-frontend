@@ -26,9 +26,9 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
     private formValuesVisible: boolean = false;
 
-    protected defaultValue: any;
-
     private initialized: boolean;
+
+    protected field: FormFieldConfiguration;
 
     public constructor(
         public property: string,
@@ -47,6 +47,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         super(property, object, objectValueMapper, parent);
         this.inputComponentId = 'count-handler-form-input';
         this.addBindings();
+        this.isSortable = parent?.isSortable;
     }
 
     public findFormValue(property: string): ObjectFormValue {
@@ -85,10 +86,9 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
                 this.initPromise = null;
 
-                await this.setVisibility(this.formValuesVisible);
+                await this.setDFValue(true);
 
                 this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
-
                 resolve();
             });
         }
@@ -98,8 +98,8 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
-        this.defaultValue = this.value;
         this.formValuesVisible = this.visible;
+        this.field = field;
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
@@ -110,6 +110,9 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
             if (this.initialized) {
                 await this.initCountValues();
+            }
+            if (!this.isSetInBackground) {
+                this.setVisibility(true);
             }
         } else {
             super.setFormValue(value, force);
@@ -190,6 +193,11 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
             const fv = new this.formValueConstructor('Value', dfValue, this.objectValueMapper, this, this.dfName);
             fv.parent = this;
+
+            if (this.field) {
+                await fv.initFormValueByField(this.field);
+            }
+
             fv.enabled = this.enabled;
             fv.isSetInBackground = this.isSetInBackground;
             if (!fv.isSetInBackground) {
@@ -206,12 +214,11 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             (fv as any).IS_COUNTABLE = true;
 
             await fv.initFormValue();
+
             this.formValues = [...this.formValues, fv];
 
             fv.setInitialState();
             await fv.setFormValue(value || this.defaultValue, force);
-
-            this.setDFValue();
 
             await this.setVisibility(this.formValuesVisible);
 
@@ -241,7 +248,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
     }
 
-    public setDFValue(force?: boolean): void {
+    public async setDFValue(force?: boolean): Promise<void> {
         const value = [];
         const dfValues = this.dfValues;
         if (Array.isArray(dfValues)) {
@@ -256,7 +263,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             }
         }
 
-        this.setFormValue(value, force);
+        await this.setFormValue(value, force);
     }
 
     protected async applyCountMax(): Promise<void> {
@@ -292,6 +299,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     public async hide(): Promise<void> {
         await super.hide();
         this.formValuesVisible = false;
+        await this.setVisibility(false);
     }
 
     private async setVisibility(show?: boolean): Promise<void> {

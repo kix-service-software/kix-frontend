@@ -126,8 +126,12 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             new FilterCriteria(
                                 GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
                                 FilterType.AND, 'ITSM::Core::IncidentState'
+                            ),
+                            new FilterCriteria(
+                                'Functionality', SearchOperator.IN,
+                                FilterDataType.STRING, FilterType.AND, ['incident', 'operational']
                             )
-                        ])
+                        ], null, null, [GeneralCatalogItemProperty.PREFERENCES])
                     ),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
                 ],

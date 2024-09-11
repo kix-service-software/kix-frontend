@@ -7,12 +7,22 @@
  * --
  */
 
+import { BrowserUtil } from '../../base-components/webapp/core/BrowserUtil';
+
 export class ChecklistState {
 
     public constructor(
-        public value: string,
+        inputState?: ChecklistState,
+        public value?: string,
         public icon?: string,
         public done: boolean = true,
         public order: number = 0
-    ) { }
+    ) {
+        if (inputState) {
+            this.value = inputState.value;
+            this.icon = inputState.icon;
+            this.done = BrowserUtil.isBooleanTrue(inputState.done?.toString());
+            this.order = inputState.order;
+        }
+    }
 }

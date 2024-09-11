@@ -26,6 +26,10 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { DynamicField } from '../../../../dynamic-fields/model/DynamicField';
+import { DynamicFieldObjectFormValue } from '../../../../object-forms/model/FormValues/DynamicFieldObjectFormValue';
+import { ArticleLoader } from '../context/ArticleLoader';
+import { Article } from '../../../model/Article';
 
 export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
 
@@ -41,6 +45,10 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
 
             await this.mapTicketAttribute(property, ticket);
         }
+
+        const channelFormValue = this.findFormValue(ArticleProperty.CHANNEL_ID);
+        const dfValue = channelFormValue?.formValues.find((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS);
+        await (dfValue as DynamicFieldObjectFormValue)?.createDFFormValues();
     }
 
     protected async mapTicketAttribute(property: string, ticket: Ticket): Promise<void> {
@@ -65,6 +73,15 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
                 this.formValues.push(new TicketStateFormValue(property, ticket, this, null));
                 break;
             case TicketProperty.ARTICLES:
+                const context = ContextService.getInstance().getActiveContext();
+                const articleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+                if (articleId) {
+                    const article = await ArticleLoader.loadArticle(articleId, ticket?.TicketID);
+                    if (article) {
+                        // recreate article - do not overwrite reference
+                        ticket.Articles = [new Article(article, ticket)];
+                    }
+                }
                 this.formValues.push(new ArticleFormValue(property, ticket, this, null));
                 break;
             case TicketProperty.TYPE_ID:
@@ -128,6 +145,20 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
                 this.sourceObject = tickets[0];
             }
         }
+    }
+
+    protected async getDynamicFieldFormValue(dfName: string): Promise<DynamicFieldObjectFormValue> {
+        let formValue: ObjectFormValue;
+        const dynamicField = await KIXObjectService.loadDynamicField(dfName).catch((): DynamicField => null);
+
+        if (dynamicField?.ObjectType === KIXObjectType.TICKET) {
+            formValue = this.formValues.find((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS);
+        } else if (dynamicField?.ObjectType === KIXObjectType.ARTICLE) {
+            const channelFormValue = this.findFormValue(ArticleProperty.CHANNEL_ID);
+            formValue = channelFormValue?.formValues.find((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS);
+        }
+
+        return formValue as DynamicFieldObjectFormValue;
     }
 
 }

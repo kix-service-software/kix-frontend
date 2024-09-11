@@ -18,6 +18,8 @@ import { DefaultColumnConfiguration } from '../../src/frontend-applications/agen
 import { ConfigurationType } from '../../src/frontend-applications/agent-portal/model/configuration/ConfigurationType';
 import { ExtendedTableFactory } from '../../src/frontend-applications/agent-portal/modules/table/webapp/core/factory/ExtendedTableFactory';
 import { TableFactoryService } from '../../src/frontend-applications/agent-portal/modules/table/webapp/core/factory/TableFactoryService';
+import { AgentService } from '../../src/frontend-applications/agent-portal/modules/user/webapp/core/AgentService';
+import { User } from '../../src/frontend-applications/agent-portal/modules/user/model/User';
 
 describe('ExtendedTestTableFactory', () => {
 
@@ -27,6 +29,8 @@ describe('ExtendedTestTableFactory', () => {
         tableFactory = new TicketTableFactory();
         TableFactoryService.getInstance().registerFactory(tableFactory);
         tableFactory.addExtendedTableFactory(new ExtendedTestTableFactory());
+
+        AgentService.getInstance().getCurrentUser = async (): Promise<User> => new User();
     });
 
     describe('Create table with empty columns', () => {

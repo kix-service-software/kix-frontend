@@ -7,16 +7,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.kix-toolbar>
-    <div.toolbar-group>
+<div class="kix-toolbar">
+    <div class="toolbar-group">
+        <my-teams/>
         <personal-bookmarks/>
         <if(state.showTicketActions)>
             <div
                 title=(state.translations["Translatable#Personal Kanban Board"])
                 on-click("showKanban")
             >
-                <div.action-icon><icon icon="kix-icon-kanban"/></div>
-                <div.action-text>
+                <div class="action-icon">
+                    <icon icon="kix-icon-kanban"/>
+                </div>
+                <div class="action-text">
                     <if(state.isMobile)>
                         ${state.translations[
                             "Translatable#Personal Kanban Board"
@@ -34,8 +37,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 )
                 on-click("showCalendar")
             >
-                <div.action-icon><icon icon="kix-icon-calendar"/></div>
-                <div.action-text>
+                <div class="action-icon">
+                    <icon icon="kix-icon-calendar"/>
+                </div>
+                <div class="action-text">
                     <if(state.isMobile)>
                         ${state.translations[
                             "Translatable#Personal Ticket Calendar"
@@ -51,19 +56,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </div>
     <if(state.toolbarGroups.length && state.showTicketActions)>
         <for|group| of=state.toolbarGroups>
-            <div.toolbar-group>
+            <div class="toolbar-group">
                 <for|action| of=group>
                     <div title=action.title on-click("actionClicked", action)>
-                        <div.action-icon>
+                        <div class="action-icon">
                             <icon icon=action.icon showUnknown/>
                         </div>
                         <if(action.infoIcon)>
-                            <span.kix-icon-i-orange.new-icon>
-                                <span.path1/>
-                                <span.path2/>
+                            <span class="kix-icon-i-orange new-icon">
+                                <span class="path1"/>
+                                <span class="path2"/>
                             </span>
                         </if>
-                        <div.action-text>
+                        <div class="action-text">
                             <if(state.isMobile)>
                                 ${action.title + " (" + action.count + ")"}
                             </if>
@@ -75,5 +80,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </for>
     </if>
 
-    <div.toolbar-group><personal-notifications/></div>
+    <div class="toolbar-group">
+        <personal-notifications/>
+    </div>
 </div>

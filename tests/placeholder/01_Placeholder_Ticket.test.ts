@@ -191,27 +191,33 @@ describe('Placeholder replacement for ticket', () => {
     describe('Replace complex ticket attribute placeholder (translatable)', async () => {
 
         it('Should replace ticket pending time by placeholder', async () => {
-            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.PENDING_TIME}>`, ticket);
+            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.PENDING_TIME}>`, ticket, 'en');
             const date = await DateTimeUtil.getLocalDateTimeString(ticket.PendingTime, 'en');
             expect(text, 'date should has en-us format').equal(date);
 
             const germanText = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.PENDING_TIME}>`, ticket, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(ticket.PendingTime, 'de');
-            expect(germanText, 'date should has german format)').equal(germanDate);
+            expect(germanText, 'date should has german format').equal(germanDate);
+
+            const nttext = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.PENDING_TIME}>`, ticket, 'en', undefined, false);
+            expect(nttext, 'date should be not translated').equal(ticket.PendingTime);
         });
 
         it('Should replace ticket create time placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CREATED}>`, ticket, 'en');
             const date = await DateTimeUtil.getLocalDateTimeString(ticket.Created, 'en');
-            expect(text).equal(date);
+            expect(text, 'date should has en-us format').equal(date);
 
             const germanText = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CREATED}>`, ticket, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(ticket.Created, 'de');
-            expect(germanText).equal(germanDate);
+            expect(germanText, 'date should has german format').equal(germanDate);
+
+            const nttext = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CREATED}>`, ticket, 'en', undefined, false);
+            expect(nttext, 'date should be not translated').equal(ticket.Created);
         });
 
         it('Should replace ticket create time unix placeholder', async () => {
-            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CREATED_TIME_UNIX}>`, ticket);
+            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CREATED_TIME_UNIX}>`, ticket, 'en');
             const date = await DateTimeUtil.getLocalDateTimeString(ticket.CreateTimeUnix * 1000, 'en');
             expect(text).equal(date);
 
@@ -221,7 +227,7 @@ describe('Placeholder replacement for ticket', () => {
         });
 
         it('Should replace ticket change time placeholder', async () => {
-            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CHANGED}>`, ticket);
+            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CHANGED}>`, ticket, 'en');
             const date = await DateTimeUtil.getLocalDateTimeString(ticket.Changed, 'en');
             expect(text).equal(date);
 

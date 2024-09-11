@@ -21,6 +21,8 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { TextModuleProperty } from '../../model/TextModuleProperty';
 import { TextModule } from '../../model/TextModule';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { TicketProperty } from '../../../ticket/model/TicketProperty';
 
 export class TextModuleService extends KIXObjectService {
 
@@ -105,23 +107,70 @@ export class TextModuleService extends KIXObjectService {
         let filterCriteria = [];
 
         if (query && query !== '') {
-            filterCriteria = [
+            filterCriteria.push(
                 new FilterCriteria(
                     TextModuleProperty.KEYWORDS, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, query
                 ),
                 new FilterCriteria(
                     TextModuleProperty.NAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, query
                 )
-            ];
+            );
         }
+
+        const queueIds = await this.getDependencyIds(TicketProperty.QUEUE_ID);
+        if (queueIds?.length) {
+            filterCriteria.push(
+                new FilterCriteria(
+                    TextModuleProperty.QUEUE_IDS, SearchOperator.IN,
+                    FilterDataType.NUMERIC, FilterType.AND, queueIds
+                )
+            );
+        }
+
+        const typeIds = await this.getDependencyIds(TicketProperty.TYPE_ID);
+        if (typeIds?.length) {
+            filterCriteria.push(
+                new FilterCriteria(
+                    TextModuleProperty.TICKET_TYPE_IDS, SearchOperator.IN,
+                    FilterDataType.NUMERIC, FilterType.AND, typeIds
+                )
+            );
+        }
+
         filterCriteria.push(new FilterCriteria(
             KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
         ));
+
+        filterCriteria.push(new FilterCriteria(
+            'WithDependencies', SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+        ));
+
         const loadingOptions = new KIXObjectLoadingOptions(filterCriteria, 'TextModule.Name');
         const textModules = await KIXObjectService.loadObjects<TextModule>(
             KIXObjectType.TEXT_MODULE, null, loadingOptions
         );
 
         return textModules;
+    }
+
+    private async getDependencyIds(property: string): Promise<number[]> {
+        let ids: number[];
+        const context = ContextService.getInstance().getActiveContext();
+
+        if (context?.getFormManager()?.useObjectForms) {
+            const formHandler = await context?.getFormManager()?.getObjectFormHandler();
+            const value = formHandler?.objectFormValueMapper?.findFormValue(property);
+            if (value?.value) {
+                ids = Array.isArray(value.value) ? value.value : [value.value];
+            }
+        } else {
+            const formInstance = await context?.getFormManager()?.getFormInstance();
+            const value = await formInstance.getFormFieldValueByProperty(property);
+            if (value?.value) {
+                ids = Array.isArray(value.value) ? value.value : [value.value];
+            }
+        }
+
+        return ids;
     }
 }

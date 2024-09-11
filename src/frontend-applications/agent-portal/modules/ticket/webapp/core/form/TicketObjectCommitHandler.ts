@@ -16,7 +16,6 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
-import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { BrowserCacheService } from '../../../../base-components/webapp/core/CacheService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
@@ -34,6 +33,7 @@ import { Channel } from '../../../model/Channel';
 import { Queue } from '../../../model/Queue';
 import { Ticket } from '../../../model/Ticket';
 import { TicketProperty } from '../../../model/TicketProperty';
+import { TicketService } from '../TicketService';
 
 export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
@@ -88,10 +88,6 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 this.deleteCommonProperties(article, true);
 
                 if (forCommit) {
-                    // FIXME: array handling
-                    const context = ContextService.getInstance().getActiveContext();
-                    article.ArticleID = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
-
                     if (article.Attachments?.length) {
                         article.Attachments = await this.prepareAttachments(article.Attachments);
                     }
@@ -134,6 +130,12 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         delete article.BccRealname;
         delete article.ToRealname;
         delete article.ValidID;
+        delete article.smimeDecrypted;
+        delete article.smimeVerified;
+        delete article.SMIMEEncrypted;
+        delete article.SMIMEEncryptedError;
+        delete article.SMIMESigned;
+        delete article.SMIMESignedError;
     }
 
     private async prepareReferencedArticle(article: Article, ticket: Ticket): Promise<void> {
@@ -166,7 +168,9 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
     public async addQueueSignature(ticketOrQueueId: number | Ticket, body: string, channelId: number): Promise<string> {
         const queueId = typeof ticketOrQueueId === 'number' ? ticketOrQueueId : ticketOrQueueId?.QueueID;
-        if (channelId && queueId) {
+        const config = await TicketService.getTicketModuleConfiguration();
+
+        if (channelId && queueId && config?.addQueueSignature) {
             const channels = await KIXObjectService.loadObjects<Channel>(
                 KIXObjectType.CHANNEL, [channelId], null, null, true
             ).catch(() => []);
@@ -197,6 +201,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         });
 
         let index = 0;
+
+        files = files.filter((f: any) => f.Disposition !== 'inline');
         for (let f of files) {
 
             index++;

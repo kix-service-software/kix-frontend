@@ -27,6 +27,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private subscriber: IEventSubscriber;
     private formhandler: ObjectFormHandler;
 
+    private submitTimeout: any;
+
     private updateTimeout: any;
     private handlerChangeInProgress: boolean = true;
 
@@ -78,6 +80,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
                 if (eventId === ObjectFormEvent.BLOCK_FORM) {
                     this.state.blocked = data.blocked;
+                    updateNeeded = !data.blocked;
                 } else if (eventId === FormEvent.OBJECT_FORM_HANDLER_CHANGED) {
                     this.state.prepared = false;
                     this.handlerChangeInProgress = true;
@@ -99,7 +102,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
                 if (updateNeeded && !this.handlerChangeInProgress) {
                     this.formhandler = await this.context.getFormManager().getObjectFormHandler();
-                    this.setFormValues(true);
+                    if (!this.state.blocked) {
+                        this.setFormValues(true);
+                    }
                 }
             }
         };
@@ -148,7 +153,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.prepared = true;
 
             setTimeout(() => {
-                const invalidFormValue = this.getFirstInvlaidFOrmValue(this.formhandler.getFormValues());
+                const invalidFormValue = this.getFirstInvalidFormValue(this.formhandler.getFormValues());
                 EventService.getInstance().publish(ObjectFormEvent.SCROLL_TO_FORM_VALUE, invalidFormValue?.instanceId);
             }, 25);
         }
@@ -156,7 +161,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async sendSubmit(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            setTimeout(async () => {
+            if (this.submitTimeout) {
+                clearTimeout(this.submitTimeout);
+            }
+            this.submitTimeout = setTimeout(async () => {
                 this.state.prepared = false;
 
                 try {
@@ -177,14 +185,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         });
     }
 
-    private getFirstInvlaidFOrmValue(formValues: ObjectFormValue[]): ObjectFormValue {
+    private getFirstInvalidFormValue(formValues: ObjectFormValue[]): ObjectFormValue {
         for (const fv of formValues) {
             if (!fv.valid) {
                 return fv;
             }
 
             if (fv.formValues?.length) {
-                const subFV = this.getFirstInvlaidFOrmValue(fv.formValues);
+                const subFV = this.getFirstInvalidFormValue(fv.formValues);
                 if (subFV) {
                     return subFV;
                 }

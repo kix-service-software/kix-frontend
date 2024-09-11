@@ -17,6 +17,7 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Error } from '../../../../../server/model/Error';
 import { GeneralCatalogItem } from '../model/GeneralCatalogItem';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { FilterCriteria } from '../../../model/FilterCriteria';
 
 export class GeneralCatalogService extends KIXObjectAPIService {
 
@@ -41,7 +42,8 @@ export class GeneralCatalogService extends KIXObjectAPIService {
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === this.objectType
-            || kixObjectType === KIXObjectType.GENERAL_CATALOG_CLASS;
+            || kixObjectType === KIXObjectType.GENERAL_CATALOG_CLASS
+            || kixObjectType === KIXObjectType.GENERAL_CATALOG;
     }
 
     public async loadObjects<T>(
@@ -97,6 +99,11 @@ export class GeneralCatalogService extends KIXObjectAPIService {
             throw new Error(error.Code, error.Message);
         });
         return id;
+    }
+
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        // TODO: allow nothing at the moment, maybe filter not needed anymore
+        return [];
     }
 
 }

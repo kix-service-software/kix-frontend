@@ -64,6 +64,8 @@ export class ContextService {
 
     private toolbarActions: Map<string, ToolbarAction> = new Map();
 
+    public supportContextStorage: boolean = true;
+
     public registerContext(contextDescriptor: ContextDescriptor): void {
         if (!this.contextDescriptorList.some((d) => d.contextId === contextDescriptor.contextId)) {
             this.contextDescriptorList.push(contextDescriptor);
@@ -72,9 +74,11 @@ export class ContextService {
     }
 
     public async initUserContextInstances(): Promise<void> {
-        const contextList = await this.getStoredContextList();
-        for (const c of contextList) {
-            await this.createStoredContext(c);
+        if (this.supportContextStorage) {
+            const contextList = await this.getStoredContextList();
+            for (const c of contextList) {
+                await this.createStoredContext(c);
+            }
         }
     }
 
@@ -132,7 +136,8 @@ export class ContextService {
 
     private isStorableDialogContext(context: Context): boolean {
         return context?.descriptor?.contextType === ContextType.DIALOG
-            && context?.descriptor?.storeable;
+            && context?.descriptor?.storeable
+            && this.supportContextStorage;
     }
 
     public getContextInstances(type?: ContextType, mode?: ContextMode): Context[] {

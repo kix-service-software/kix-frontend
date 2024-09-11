@@ -19,6 +19,9 @@ import { KIXObjectService } from '../../src/frontend-applications/agent-portal/m
 import { DynamicField } from '../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicField';
 import { DynamicFieldTypes } from '../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldTypes';
 import { TranslationService } from '../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
+import { DateTimeUtil } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
+import { LabelService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
+import { LabelProvider } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelProvider';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -28,7 +31,7 @@ describe('Placeholder replacement for dynamic field values', () => {
     let object: KIXObject;
     let dFValuePlaceholderHandler: DynamicFieldValuePlaceholderHandler = DynamicFieldValuePlaceholderHandler.getInstance();
     let testDFValues: DynamicFieldValue[];
-    let orgFuntion;
+    let orgFunction;
     let sepatator: string = '###';
     before(() => {
         object = someTestFunctions.prepareObject();
@@ -38,7 +41,7 @@ describe('Placeholder replacement for dynamic field values', () => {
 
         testDFValues = someTestFunctions.getDynamicFieldValues();
 
-        orgFuntion = KIXObjectService.loadDynamicField;
+        orgFunction = KIXObjectService.loadDynamicField;
         KIXObjectService.loadDynamicField = (dfName: string): Promise<DynamicField> => {
             let dynamicField: DynamicField;
             if (dfName) {
@@ -54,6 +57,8 @@ describe('Placeholder replacement for dynamic field values', () => {
                     dynamicField.FieldType = DynamicFieldTypes.SELECTION;
                 } else if (dfName === testDFValues[3].Name) {
                     dynamicField.FieldType = DynamicFieldTypes.CI_REFERENCE;
+                } else if (dfName === testDFValues[4].Name) {
+                    dynamicField.FieldType = DynamicFieldTypes.DATE_TIME;
                 }
             }
             return new Promise((resolve, reject) => {
@@ -61,10 +66,14 @@ describe('Placeholder replacement for dynamic field values', () => {
                 reject();
             });
         }
+        const ticketLabelProvider = new AnyLabelProvider();
+        LabelService.getInstance().registerLabelProvider(ticketLabelProvider);
     });
 
     after(() => {
-        KIXObjectService.loadDynamicField = orgFuntion;
+        KIXObjectService.loadDynamicField = orgFunction;
+        LabelService.getInstance()['objectLabelProvider'] = [];
+        LabelService.getInstance()['propertiesLabelProvider'].clear();
         (TranslationService.getInstance() as any).translations = null;
     });
 
@@ -112,10 +121,23 @@ describe('Placeholder replacement for dynamic field values', () => {
             expect(text).equal(fieldValue?.DisplayValue);
         });
 
-        it('Should replace CI refernece placeholder with key string', async () => {
+        it('Should replace CI reference placeholder with key string', async () => {
             const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[3].Name}_Key>`, object);
             const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[3].Name);
             expect(text).equal((fieldValue?.Value as string[]).join(sepatator));
+        });
+
+        it('Should replace date placeholder with value string', async () => {
+            const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[4].Name}>`, object);
+            const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[4].Name);
+            expect(text).equal(fieldValue?.DisplayValue);
+        });
+
+        it('Should replace date placeholder with german value string', async () => {
+            const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[4].Name}>`, object, 'de');
+            const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[4].Name);
+            const expectedValue = await DateTimeUtil.getLocalDateTimeString(fieldValue?.Value[0], 'de')
+            expect(text).equal(expectedValue);
         });
 
         it('Should not replace text placeholder with key string (text does not support "Key" option, use value string instead)', async () => {
@@ -137,6 +159,15 @@ class TextObject extends KIXObject {
     public ObjectId: number;
 
     public KIXObjectType: KIXObjectType = KIXObjectType.ANY;
+}
+
+class AnyLabelProvider extends LabelProvider {
+
+    public kixObjectType: KIXObjectType = KIXObjectType.ANY;
+
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object?.KIXObjectType === this.kixObjectType;
+    }
 }
 
 class someTestFunctions {
@@ -173,7 +204,7 @@ class someTestFunctions {
             new DynamicFieldValue(
                 {
                     ID: 1, Name: 'DateTimeDF', Label: 'Date Time DF',
-                    Value: ['2020-01-13 08:17:30'], DisplayValue: 'ReplaceMe'
+                    Value: ['2020-01-13 08:17:30'], DisplayValue: '01/13/2020 08:17 AM'
                 } as DynamicFieldValue
             ),
         ];

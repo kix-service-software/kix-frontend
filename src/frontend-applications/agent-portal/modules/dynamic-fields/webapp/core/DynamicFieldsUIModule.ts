@@ -39,6 +39,8 @@ import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { DynamicFieldTableValidator } from './DynamicFieldTableValidator';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectIconService } from '../../../icon/webapp/core';
+import { DynamicFieldDuplicateAction } from './DynamicFieldDuplicateAction';
+import { DynamicFieldDeleteAction } from './DynamicFieldDeleteAction';
 
 export class UIModule implements IUIModule {
 
@@ -70,6 +72,8 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new DynamicFieldTypeLabelProvider());
 
         ActionFactory.getInstance().registerAction('dynamic-field-create-action', DynamicFieldCreateAction);
+        ActionFactory.getInstance().registerAction('dynamic-field-duplicate-action', DynamicFieldDuplicateAction);
+        ActionFactory.getInstance().registerAction('dynamic-field-delete-action', DynamicFieldDeleteAction);
 
         const newDynamicFieldContext = new ContextDescriptor(
             NewDynamicFieldDialogContext.CONTEXT_ID, [KIXObjectType.DYNAMIC_FIELD],
@@ -507,6 +511,8 @@ export class UIModule implements IUIModule {
         const label = await TranslationService.translate('Translatable#Label');
         const done = await TranslationService.translate('Translatable#Done');
         const doneDescription = await TranslationService.translate('Translatable#If true, the value will increase the checklist counter.');
+        const showLastChangeDate = await TranslationService.translate('Translatable#Show Last Change Date');
+        const showChangeDateDescription = await TranslationService.translate('Translatable#If checked, the last change date will be displayed for this item.');
 
         let icons = await ObjectIconService.getInstance().getAvailableIcons(
             true, true, false
@@ -583,6 +589,26 @@ export class UIModule implements IUIModule {
                             description: {
                                 title: itemDescription,
                                 type: 'string',
+                                options: {
+                                    'grid_columns': 4
+                                }
+                            },
+                            done: {
+                                title: done,
+                                description: doneDescription,
+                                type: 'boolean',
+                                format: 'checkbox',
+                                default: 1,
+                                options: {
+                                    'grid_columns': 4
+                                }
+                            },
+                            showLastChangeDate: {
+                                title: showLastChangeDate,
+                                description: showChangeDateDescription,
+                                type: 'boolean',
+                                format: 'checkbox',
+                                default: 0,
                                 options: {
                                     'grid_columns': 4
                                 }

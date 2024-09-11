@@ -73,9 +73,9 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
 
 
     public async prepareFormFilterCriteria(
-        criteria: FilterCriteria[], forSearch: boolean = true
+        criteria: FilterCriteria[], forSearch: boolean = true, allowEmptyValue?: boolean
     ): Promise<FilterCriteria[]> {
-        criteria = await super.prepareFormFilterCriteria(criteria, forSearch);
+        criteria = await super.prepareFormFilterCriteria(criteria, forSearch, allowEmptyValue);
 
         const classIdCriteria = criteria.find(
             (c) => c.property === ConfigItemProperty.CLASS_ID || c.property === 'ClassIDs'

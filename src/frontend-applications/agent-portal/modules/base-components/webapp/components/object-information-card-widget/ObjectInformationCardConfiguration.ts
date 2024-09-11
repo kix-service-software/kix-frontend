@@ -30,7 +30,8 @@ export class InformationRowConfiguration {
         public values?: Array<InformationConfiguration[]>,
         public title?: string,
         public style?: string,
-        public separator?: boolean
+        public separator?: boolean,
+        public roleIds: number[] = []
     ) { }
 
 }
@@ -53,8 +54,32 @@ export class InformationConfiguration {
         public routingObjectId?: string,
         public preparedText?: string,
         public preparedLinkSrc?: string,
-        public multiline?: boolean
+        public multiline?: boolean,
+        public roleIds: number[] = [],
+        public renderHTML?: boolean
     ) { }
+
+    public static clone(value: InformationConfiguration): InformationConfiguration {
+        return new InformationConfiguration(
+            value.componentId,
+            value.componentData ? value.componentData : {},
+            [],
+            value.icon,
+            null,
+            value.text,
+            value.textPlaceholder,
+            value.textStyle,
+            value.detailViewWidthFactor,
+            value.linkSrc,
+            value.routingConfiguration,
+            value.routingObjectId,
+            '',
+            '',
+            value.multiline,
+            value.roleIds,
+            value.renderHTML
+        );
+    }
 
 }
 

@@ -248,7 +248,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         let objectResponse = new ObjectResponse([], 0);
         if (objectType === KIXObjectType.TICKET) {
 
-            const includes = [TicketProperty.STATE_TYPE, TicketProperty.UNSEEN];
+            const includes = [TicketProperty.STATE, TicketProperty.STATE_TYPE, TicketProperty.UNSEEN];
             const expands = [];
 
             if (!loadingOptions) {
@@ -276,7 +276,7 @@ export class TicketAPIService extends KIXObjectAPIService {
 
             objectResponse = await super.load(
                 token, KIXObjectType.TICKET, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.TICKET,
-                clientRequestId, Ticket
+                clientRequestId, Ticket, undefined, true
             );
         } else if (objectType === KIXObjectType.USER_TICKETS) {
             const uri = this.buildUri('session', 'user', 'tickets');
@@ -641,12 +641,21 @@ export class TicketAPIService extends KIXObjectAPIService {
         if (Array.isArray(article.Attachments)) {
             for (const attachment of article.Attachments) {
                 if (!attachment.Content) {
-                    const crypto = require('crypto');
-                    const md5 = crypto.createHash('md5').update(token).digest('hex');
-                    const filename = `${md5}-${attachment.Filename}`;
-                    const content = FileService.getFileContent(filename, false);
+                    let content;
+                    // probably an attachment from a referenced article
+                    if (attachment.Disposition === 'attachment') {
+                        content = FileService.getFileContent(attachment.Filename, true);
+                        FileService.removeFile(attachment.Filename, false);
+                    }
+                    // a new attachment
+                    else {
+                        const crypto = require('crypto');
+                        const md5 = crypto.createHash('md5').update(token).digest('hex');
+                        const filename = `${md5}-${attachment.Filename}`;
+                        content = FileService.getFileContent(filename, false);
+                        FileService.removeFile(filename, false);
+                    }
                     attachment.Content = content;
-                    FileService.removeFile(filename, false);
                 }
             }
         }
@@ -705,7 +714,14 @@ export class TicketAPIService extends KIXObjectAPIService {
             include: 'Content',
             RelevantOrganisationID: relevantOrganisationId
         });
-        return response?.responseData?.Attachment;
+
+        const attachment = response?.responseData?.Attachment;
+        const preparedAttachment = new Attachment(attachment);
+
+        const user = await UserService.getInstance().getUserByToken(token);
+        FileService.prepareFileForDownload(user?.UserID, preparedAttachment);
+
+        return preparedAttachment;
     }
 
     public async setArticleSeenFlag(
@@ -796,10 +812,7 @@ export class TicketAPIService extends KIXObjectAPIService {
     ): Promise<FilterCriteria[]> {
         let searchCriteria = criteria.filter((f) =>
             f.property !== SearchProperty.PRIMARY
-            && (
-                f.property !== SearchProperty.FULLTEXT
-                || objectType !== this.objectType
-            )
+            && f.property !== 'Queue.FollowUpID'
         );
 
         await this.setUserID(searchCriteria, token);
@@ -814,14 +827,6 @@ export class TicketAPIService extends KIXObjectAPIService {
                     ),
                 ];
                 searchCriteria = [...searchCriteria, ...primarySearch];
-            });
-        }
-
-        const fulltext = criteria.filter((f) => f.property === SearchProperty.FULLTEXT);
-        if (fulltext?.length && objectType === KIXObjectType.TICKET) {
-            fulltext.forEach((c) => {
-                const fulltextSearch = this.getFulltextSearch(c);
-                searchCriteria = [...searchCriteria, ...fulltextSearch];
             });
         }
 
@@ -888,39 +893,6 @@ export class TicketAPIService extends KIXObjectAPIService {
         if (responsibleCriteria) {
             responsibleCriteria.value = user.UserID;
         }
-    }
-
-    private getFulltextSearch(fulltextFilter: FilterCriteria): FilterCriteria[] {
-        return [
-            new FilterCriteria(
-                TicketProperty.TICKET_NUMBER, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                TicketProperty.TITLE, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                ArticleProperty.SUBJECT, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                ArticleProperty.BODY, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                ArticleProperty.FROM, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                ArticleProperty.TO, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                ArticleProperty.CC, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
-            )
-        ];
     }
 
     public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {

@@ -35,9 +35,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.state.article?.ChangeTime !== input.article?.ChangeTime) {
             this.updateArticleData();
         }
-
-        const attachments = this.state.article?.Attachments || [];
-        this.state.attachmentCount = attachments.filter((a) => !a.Filename.match(/^file-(1|2)$/)).length;
     }
 
     public async onMount(): Promise<void> {
@@ -64,9 +61,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (this.state.article.isUnsent()) {
             this.state.channelTooltip += ` (${this.state.article.getUnsentError()})`;
-            // get channel icon (not by LabelService because of special cache (unsent will be not considered))
+            // get unsent channel icon (unsent is not considered by ChannelID)
             const articleLabelProvider = LabelService.getInstance().getLabelProvider(this.state.article);
-            channelIcons = await articleLabelProvider.getIcons(this.state.article, ArticleProperty.CHANNEL_ID);
+            channelIcons = await LabelService.getInstance().getIcons(this.state.article, 'Unsent');
         }
 
         this.state.channelIcon = channelIcons?.length ? channelIcons[0] : null;
@@ -74,6 +71,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.createTimeString = await LabelService.getInstance().getDisplayText(
             this.state.article, ArticleProperty.INCOMING_TIME
         );
+
+        this.prepareSMIMEIcons();
 
         if (this.state.article.ChangeTime !== this.state.article.CreateTime) {
             const users = await KIXObjectService.loadObjects<User>(
@@ -96,6 +95,24 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+    private async prepareSMIMEIcons(): Promise<void> {
+        if (this.state.article.SMIMEEncrypted) {
+            const property = this.state.article.SenderType === 'external' ?
+                ArticleProperty.SMIME_DECRYPTED : ArticleProperty.SMIME_ENCRYPTED;
+            this.state.smimeEncryptedTooltip = await LabelService.getInstance().getDisplayText(
+                this.state.article, property
+            );
+            if (!this.state.article[property]) {
+                this.state.smimeEncryptedTooltip += ` (${this.state.article.SMIMEEncryptedError})`;
+            }
+            const icons = await LabelService.getInstance().getIcons(
+                this.state.article, property
+            ) || [];
+            this.state.smimeEncryptedIcon = icons?.length ? icons[0] : null;
+            this.state.smimeDecrypted = this.state.article[property];
+        }
+    }
+
     public async attachmentsClicked(event?: any): Promise<void> {
         if (event) {
             event.stopPropagation();
@@ -104,7 +121,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             const attachment = await TicketService.getInstance().loadArticleZipAttachment(
                 this.state.article.TicketID, this.state.article.ArticleID
             );
-            BrowserUtil.startBrowserDownload(attachment.Filename, attachment.Content, attachment.ContentType);
+            BrowserUtil.startFileDownload(attachment);
         }
     }
 }

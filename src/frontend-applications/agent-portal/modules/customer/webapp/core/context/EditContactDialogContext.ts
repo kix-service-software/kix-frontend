@@ -13,6 +13,7 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { UserProperty } from '../../../../user/model/UserProperty';
 
 export class EditContactDialogContext extends Context {
 
@@ -27,7 +28,7 @@ export class EditContactDialogContext extends Context {
         if (objectId) {
             const loadingOptions = new KIXObjectLoadingOptions(
                 null, null, null,
-                [KIXObjectProperty.DYNAMIC_FIELDS]
+                [KIXObjectProperty.DYNAMIC_FIELDS, KIXObjectType.USER, UserProperty.PREFERENCES]
             );
             const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions);
             object = objects && objects.length ? objects[0] : null;

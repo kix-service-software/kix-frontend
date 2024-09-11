@@ -12,6 +12,7 @@ import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -39,7 +40,7 @@ export class ArticleLoader {
 
     private articleColorConfiguration: any;
 
-    public constructor(private ticketId: number, private context: Context) { }
+    public constructor(private ticketId: number, private context: Context, private loadArticleDetails: boolean) { }
 
     public queueArticle(articleId: number, cb: (article: Article) => void): void {
         this.articleIds.set(articleId, cb);
@@ -65,13 +66,15 @@ export class ArticleLoader {
         this.articleIds = new Map();
 
         const loadingOptions = new KIXObjectLoadingOptions();
-        loadingOptions.includes = [
-            ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, 'ObjectActions',
-            KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON
-        ];
-        loadingOptions.expands = [
-            ArticleProperty.CREATED_BY, ArticleProperty.FROM
-        ];
+        loadingOptions.includes = [KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON];
+
+        if (this.loadArticleDetails) {
+            loadingOptions.includes.push(
+                ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN, 'ObjectActions', KIXObjectProperty.DYNAMIC_FIELDS
+            );
+        }
+
+        loadingOptions.expands = [ArticleProperty.CREATED_BY, ArticleProperty.FROM];
 
         const articleIds = [...articleIdMap.keys()];
         const articles = await KIXObjectService.loadObjects<Article>(
@@ -121,30 +124,6 @@ export class ArticleLoader {
         return filteredActions;
     }
 
-    public filterAttachments(article: Article, showAll: boolean): Attachment[] {
-        let attachments = (article?.Attachments || []);
-
-        attachments = attachments.filter(
-            (a) => !a.Filename.match(/^file-(1|2)$/) &&
-                (showAll || a.Disposition !== 'inline')
-        );
-
-        attachments.sort((a, b) => {
-            if (!showAll) {
-                return SortUtil.compareString(a.Filename, b.Filename);
-            }
-
-            let result = -1;
-            if (a.Disposition === b.Disposition) {
-                result = SortUtil.compareString(a.Filename, b.Filename);
-            } else if (a.Disposition === 'inline') {
-                result = 1;
-            }
-            return result;
-        });
-        return attachments;
-    }
-
     public async getContactForArticle(article: Article): Promise<Contact> {
         let contact: Contact;
         if (article?.SenderType === 'external') {
@@ -190,11 +169,11 @@ export class ArticleLoader {
         return color;
     }
 
-    public static async searchArticles(
-        ticketId: number, articleFilter: ArticleFilter
-    ): Promise<number[]> {
+    public static async searchArticles(ticketId: number, articleFilter: ArticleFilter): Promise<Article[]> {
 
         const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.sortOrder = 'Article.IncomingTime,Article.ID';
+        loadingOptions.limit = 0;
         loadingOptions.filter = [];
 
         if (articleFilter?.filterExternal) {
@@ -209,8 +188,8 @@ export class ArticleLoader {
         if (articleFilter?.filterInternal) {
             loadingOptions.filter.push(
                 new FilterCriteria(
-                    ArticleProperty.SENDER_TYPE, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, 'agent'
+                    ArticleProperty.SENDER_TYPE, SearchOperator.NOT_EQUALS,
+                    FilterDataType.STRING, FilterType.AND, 'external'
                 )
             );
         }
@@ -232,7 +211,8 @@ export class ArticleLoader {
             loadingOptions.filter.push(
                 new FilterCriteria(
                     TicketProperty.ARTICLE_CREATE_TIME, operator,
-                    FilterDataType.DATE, FilterType.AND, articleFilter.filterDate
+                    FilterDataType.DATETIME, FilterType.AND,
+                    `${articleFilter.filterDate} ${articleFilter.filterDateBefore ? '23:59:59' : '00:00:00'}`
                 )
             );
         }
@@ -254,17 +234,26 @@ export class ArticleLoader {
                 )
             );
         }
+        loadingOptions.query.push(['fields', 'Article.ArticleID']);
 
-        const useFilter = loadingOptions.filter?.length > 0;
+        let articles: Article[] = await KIXObjectService.loadObjects<Article>(
+            KIXObjectType.ARTICLE, null, loadingOptions, new ArticleLoadingOptions(ticketId)
+        ).catch((): Article[] => []);
 
-        let articles: Article[] = [];
-        if (useFilter) {
-            articles = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, null, loadingOptions, new ArticleLoadingOptions(ticketId)
-            ).catch((): Article[] => []);
-        }
+        return articles;
+    }
 
-        return useFilter ? articles?.map((a) => Number(a.ArticleID)) || [] : null;
+    public static async loadArticle(articleId: number, ticketId: number): Promise<Article> {
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.includes = [
+            ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, KIXObjectProperty.DYNAMIC_FIELDS
+        ];
+
+        const articles = await KIXObjectService.loadObjects<Article>(
+            KIXObjectType.ARTICLE, [articleId], loadingOptions, new ArticleLoadingOptions(ticketId)
+        ).catch((): Article[] => []);
+
+        return articles?.length ? articles[0] : null;
     }
 
 }

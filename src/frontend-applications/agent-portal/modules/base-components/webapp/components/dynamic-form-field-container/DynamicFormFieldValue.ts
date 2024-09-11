@@ -96,6 +96,7 @@ export class DynamicFormFieldValue {
         public removable: boolean = true,
         public readonly: boolean = value.readonly,
         public changeable: boolean = value.changeable,
+        public valueChangeable: boolean = value.valueChangeable,
         public required: boolean = value.required,
     ) {
 
@@ -141,7 +142,7 @@ export class DynamicFormFieldValue {
 
     public clearValue(): void {
         this.value.value = null;
-        if (this.isDropdown) {
+        if (this.isDropdown && this.valueTreeHandler) {
             this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, false, true);
         }
     }
@@ -169,8 +170,7 @@ export class DynamicFormFieldValue {
 
         // get label (needed if field is required)
         if (this.required) {
-            const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
-            this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
+            await this.setLabel();
         }
 
         await this.manager.setValue(this.value, silent);
@@ -180,6 +180,13 @@ export class DynamicFormFieldValue {
         await this.setRelativeTimeUnitTree();
         await this.setWithinTrees();
         await this.createValueInput();
+    }
+
+    public async setLabel(): Promise<void> {
+        if (!this.label) {
+            const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
+            this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
+        }
     }
 
     public async setPropertyTree(): Promise<string> {
@@ -384,6 +391,13 @@ export class DynamicFormFieldValue {
                 const tree = await this.doAutocompleteSearch(10, preloadOption[1].toString());
                 this.valueTreeHandler.setTree(tree);
             }
+        }
+    }
+
+    public async reloadValueTree(): Promise<void> {
+        if (this.value.property && this.isDropdown && !this.isAutocomplete) {
+            const valueNodes = await this.manager.getTreeNodes(this.value.property);
+            this.valueTreeHandler.setTree(valueNodes, undefined, true);
         }
     }
 

@@ -47,10 +47,14 @@ class Component extends FormInputComponent<[string, string], ComponentState> {
     }
 
     private async load(): Promise<void> {
+
+        const typeOption = this.state.field.options?.find((o) => o.option === 'ObjectType');
+        const objectType = typeOption?.value || KIXObjectType.TICKET;
+
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.AND, KIXObjectType.TICKET
+                FilterType.AND, objectType
             )
         ]);
         const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
@@ -60,7 +64,7 @@ class Component extends FormInputComponent<[string, string], ComponentState> {
         let nodes: TreeNode[];
         if (dynamicFields) {
             const names = await TranslationService.createTranslationObject(dynamicFields.map((df) => df.Label));
-            nodes = dynamicFields.map((df) => new TreeNode(df.Name, names[df.Label]));
+            nodes = dynamicFields.map((df) => new TreeNode(df.Name, `${df.Name} (${names[df.Label]})`));
         }
 
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);

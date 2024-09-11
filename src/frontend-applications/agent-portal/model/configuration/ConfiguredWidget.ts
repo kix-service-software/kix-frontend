@@ -18,5 +18,6 @@ export class ConfiguredWidget {
         public configuration?: WidgetConfiguration,
         public permissions: UIComponentPermission[] = [],
         public size: WidgetSize = WidgetSize.LARGE,
+        public roleIds: number[] = []
     ) { }
 }

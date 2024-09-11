@@ -170,7 +170,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                     const fieldValue = object.DynamicFields?.find((dfv) => dfv.Name === dfName);
                     if (isKey && fieldValue?.Value) {
                         newValue = fieldValue.Value.join(':KEYSEPARATOR:');
-                    } else {
+                    } else if (fieldValue) {
                         // remove prepared value so code have to prepare it itself (CIRef)
                         fieldValue.PreparedValue = null;
                         newValue = await this.getDisplayText(object, property);
@@ -304,7 +304,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     }
 
     public async getDFDisplayValues(
-        fieldValue: DynamicFieldValue, short?: boolean
+        fieldValue: DynamicFieldValue, short?: boolean, language?: string
     ): Promise<[string[], string, string[]]> {
         // TODO: loop needed? => LabelService does it already
         for (const elp of this.extendedLabelProvider) {
@@ -329,10 +329,10 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 switch (dynamicField.FieldType) {
                     case DynamicFieldTypes.DATE:
                     case DynamicFieldTypes.DATE_TIME:
-                        values = await LabelProvider.getDFDateDateTimeFieldValues(dynamicField, fieldValue);
+                        values = await LabelProvider.getDFDateDateTimeFieldValues(dynamicField, fieldValue, language);
                         break;
                     case DynamicFieldTypes.SELECTION:
-                        values = await LabelProvider.getDFSelectionFieldValues(dynamicField, fieldValue);
+                        values = await LabelProvider.getDFSelectionFieldValues(dynamicField, fieldValue, language);
                         break;
                     case DynamicFieldTypes.CHECK_LIST:
                         values = LabelProvider.getDFChecklistFieldShortValues(dynamicField, fieldValue);
@@ -348,7 +348,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return [values, values.join(separator), fieldValue.Value];
     }
     public static async getDFDateDateTimeFieldValues(
-        field: DynamicField, fieldValue: DynamicFieldValue
+        field: DynamicField, fieldValue: DynamicFieldValue, language?: string
     ): Promise<string[]> {
         let values;
 
@@ -356,18 +356,18 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             const valuesPromises = [];
             for (const v of fieldValue.Value) {
                 if (field.FieldType === DynamicFieldTypes.DATE) {
-                    valuesPromises.push(DateTimeUtil.getLocalDateString(v));
+                    valuesPromises.push(DateTimeUtil.getLocalDateString(v, language));
                 } else {
-                    valuesPromises.push(DateTimeUtil.getLocalDateTimeString(v));
+                    valuesPromises.push(DateTimeUtil.getLocalDateTimeString(v, language));
                 }
             }
             values = await Promise.all<string>(valuesPromises);
         } else {
             let v: string;
             if (field.FieldType === DynamicFieldTypes.DATE) {
-                v = await DateTimeUtil.getLocalDateString(fieldValue.DisplayValue);
+                v = await DateTimeUtil.getLocalDateString(fieldValue.DisplayValue, language);
             } else {
-                v = await DateTimeUtil.getLocalDateTimeString(fieldValue.DisplayValue);
+                v = await DateTimeUtil.getLocalDateTimeString(fieldValue.DisplayValue, language);
             }
             values = [v];
         }
@@ -376,7 +376,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     }
 
     public static async getDFSelectionFieldValues(
-        field: DynamicField, fieldValue: DynamicFieldValue
+        field: DynamicField, fieldValue: DynamicFieldValue, language?: string
     ): Promise<string[]> {
         let values = fieldValue.PreparedValue;
 
@@ -387,7 +387,9 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             for (const v of fieldValue.Value) {
                 if (field.Config.PossibleValues[v]) {
                     if (translate) {
-                        valuesPromises.push(TranslationService.translate(field.Config.PossibleValues[v]));
+                        valuesPromises.push(
+                            TranslationService.translate(field.Config.PossibleValues[v], undefined, language)
+                        );
                     } else {
                         valuesPromises.push(field.Config.PossibleValues[v]);
                     }
@@ -425,13 +427,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return null;
     }
 
-    public async getOverlayIcon(object?: T, objectId?: number, property?: string): Promise<OverlayIcon> {
-        return null;
-    }
-
-    public async getOverlayIconForType(
-        objectType: KIXObjectType | string, objectId: number, propert?: string, object?: T
-    ): Promise<OverlayIcon> {
+    public async getOverlayIcon(objectType: KIXObjectType | string, objectId: number | string): Promise<OverlayIcon> {
         return null;
     }
 }

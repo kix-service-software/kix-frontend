@@ -1,0 +1,36 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<if(state.prepared)>
+    <div
+        title=(state.translations["Translatable#My Queues"])
+        class="bookmark-dropdown-container"
+    >
+        <div class="action-icon">
+            <icon icon="kix-icon-ticket"/>
+        </div>
+        <div class="action-text">
+            <if(state.isMobile)>
+                ${state.translations["Translatable#My Queues"] +
+                " (" +
+                state.state.queues.length +
+                ")"}
+            </if>
+            <else>${state.queues.length}</else>
+        </div>
+        <ul>
+            <for|queue| of=state.queues>
+                <li on-click("queueClicked", queue) class="ms-3">
+                    <icon icon=queue.icon/>
+                    <translation-string pattern=queue.name/>
+                     (${queue.ticketCount})
+                </li>
+            </for>
+        </ul>
+    </div>
+</if>

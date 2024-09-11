@@ -62,14 +62,14 @@ export interface ILabelProvider<T = any> {
 
     canShow(property: string, object: T): boolean;
 
-    getDFDisplayValues(fieldValue: DynamicFieldValue, short?: boolean): Promise<[string[], string, string[]]>;
+    getDFDisplayValues(
+        fieldValue: DynamicFieldValue, short?: boolean, language?: string
+    ): Promise<[string[], string, string[]]>;
 
     createLabelsFromDFValue(fieldValue: DynamicFieldValue): Promise<Label[]>;
 
-    getOverlayIcon(object?: T, objectId?: number, property?: string): Promise<OverlayIcon>;
-
-    getOverlayIconForType(
-        objectType: KIXObjectType | string, objectId: number, property?: string, object?: T
+    getOverlayIcon(
+        objectType: KIXObjectType | string, objectId: number | string
     ): Promise<OverlayIcon>;
 
 }

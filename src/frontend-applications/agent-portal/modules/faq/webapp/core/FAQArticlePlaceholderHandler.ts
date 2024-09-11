@@ -33,7 +33,10 @@ export class FAQArticlePlaceholderHandler extends AbstractPlaceholderHandler {
         'Category': FAQArticleProperty.CATEGORY_ID
     };
 
-    public async replace(placeholder: string, faqArticle?: FAQArticle, language?: string): Promise<string> {
+    public async replace(
+        placeholder: string, faqArticle?: FAQArticle, language?: string, forRichtext?: boolean,
+        translate: boolean = true
+    ): Promise<string> {
         let result = '';
         if (faqArticle) {
             let attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
@@ -44,7 +47,7 @@ export class FAQArticlePlaceholderHandler extends AbstractPlaceholderHandler {
             ) {
                 const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
                 result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(
-                    faqArticle, optionsString
+                    faqArticle, optionsString, language, forRichtext, translate
                 );
             }
             else if (attribute && this.isKnownProperty(attribute)) {
@@ -73,7 +76,11 @@ export class FAQArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case FAQArticleProperty.CREATED:
                     case FAQArticleProperty.CHANGED:
-                        result = await DateTimeUtil.getLocalDateTimeString(faqArticle[attribute], language);
+                        if (translate) {
+                            result = await DateTimeUtil.getLocalDateTimeString(faqArticle[attribute], language);
+                        } else {
+                            result = faqArticle[attribute];
+                        }
                         break;
                     case FAQArticleProperty.APPROVED:
                     case FAQArticleProperty.CONTENT_TYPE:
@@ -106,7 +113,8 @@ export class FAQArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                             faqArticle, attribute, undefined, false
                         );
                         result = typeof result !== 'undefined' && result !== null
-                            ? await TranslationService.translate(result.toString(), undefined, language) : '';
+                            ? translate ? await TranslationService.translate(result.toString(), undefined, language)
+                                : result.toString() : '';
                 }
             }
         }

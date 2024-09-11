@@ -46,6 +46,7 @@ import { ConfigItemProperty } from '../cmdb/model/ConfigItemProperty';
 import { SortOrder } from '../../model/SortOrder';
 import { ArticleColorsConfiguration } from './model/ArticleColorsConfiguration';
 import { DataType } from '../../model/DataType';
+import { TicketCommunicationConfiguration } from './model/TicketCommunicationConfiguration';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -69,6 +70,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         title: 'Translatable#Summary',
                         style: '',
                         separator: true,
+                        roleIds: [],
                         values: [
                             [
                                 {
@@ -84,13 +86,15 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         false, null, null,
                                         true
                                     ),
-                                    routingObjectId: '<KIX_TICKET_OrganisationID>'
+                                    routingObjectId: '<KIX_TICKET_OrganisationID>',
+                                    roleIds: []
                                 },
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: TicketProperty.TYPE_ID
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -107,13 +111,15 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         false, null, null,
                                         true
                                     ),
-                                    routingObjectId: '<KIX_TICKET_ContactID>'
+                                    routingObjectId: '<KIX_TICKET_ContactID>',
+                                    roleIds: []
                                 },
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: TicketProperty.PRIORITY_ID
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -121,7 +127,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: TicketProperty.STATE_ID
-                                    }
+                                    },
+                                    roleIds: []
                                 },
                                 {
                                     componentId: 'object-avatar-label',
@@ -134,7 +141,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 },
                                 {
                                     componentId: 'object-avatar-label',
@@ -147,7 +155,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ]
                         ],
@@ -156,6 +165,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         title: 'Translatable#Description',
                         style: '',
                         separator: true,
+                        roleIds: [],
                         values: [
                             [
                                 {
@@ -170,7 +180,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ]
                         ],
@@ -179,13 +190,15 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         title: 'Translatable#Assignees',
                         style: '',
                         separator: true,
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: TicketProperty.QUEUE_ID
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -193,7 +206,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: TicketProperty.LOCK_ID
-                                    }
+                                    },
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -210,7 +224,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             useObjectService: false,
                                             useDisplayValue: false
                                         }
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -227,7 +242,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             useObjectService: false,
                                             useDisplayValue: false
                                         }
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ]
                         ],
@@ -236,6 +252,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         title: 'Translatable#Checklists',
                         style: '',
                         separator: true,
+                        roleIds: [],
                         values: [
                             [
                                 {
@@ -252,7 +269,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -270,7 +288,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ]
                         ]
@@ -279,6 +298,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         title: 'Translatable#References',
                         style: '',
                         separator: false,
+                        roleIds: [],
                         values: [
                             [
                                 {
@@ -296,7 +316,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -314,7 +335,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -332,7 +354,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ]
                         ]
@@ -355,11 +378,14 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ]
-                        ]
+                        ],
+                        roleIds: []
                     }, {
+                        roleIds: [],
                         title: 'Translatable#Scheduling',
                         separator: false,
                         values: [
@@ -377,7 +403,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -394,7 +421,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.CONTAINS,
                                             'pending'
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
                             ],
                             [
@@ -411,7 +439,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )
-                                    ]
+                                    ],
+                                    roleIds: []
                                 }
 
                             ],
@@ -434,10 +463,12 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         '<KIX_TICKET_Changed>'
                                     ],
                                     textStyle: 'color:#5b5b5b;font-style:italic',
-                                    linkSrc: null
+                                    linkSrc: null,
+                                    roleIds: []
                                 }
                             ]
-                        ]
+                        ],
+                        roleIds: []
                     }
                 ]
             ),
@@ -460,7 +491,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const ticketHistoryWidget = new WidgetConfiguration(
             'ticket-details-history-widget', 'History Widget', ConfigurationType.Widget,
-            'ticket-history-widget', 'Translatable#History', [],
+            'ticket-history-widget', 'Translatable#History', ['csv-export-action'],
             new ConfigurationDefinition('ticket-details-history-config', ConfigurationType.Table),
             null, false, false, null, false
         );
@@ -513,7 +544,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'useObjectServiceForFilter': false,
                             'valid': true,
                             'application': 'agent-portal',
-                            'rtl': false
+                            'rtl': false,
+                            roleIds: []
                         },
                         {
                             'id': null,
@@ -537,7 +569,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'useObjectServiceForFilter': false,
                             'valid': true,
                             'application': 'agent-portal',
-                            'rtl': false
+                            'rtl': false,
+                            roleIds: []
                         },
                         {
                             'id': null,
@@ -561,7 +594,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'useObjectServiceForFilter': false,
                             'valid': true,
                             'application': 'agent-portal',
-                            'rtl': false
+                            'rtl': false,
+                            roleIds: []
                         },
                         {
                             'id': null,
@@ -585,7 +619,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'useObjectServiceForFilter': false,
                             'valid': true,
                             'application': 'agent-portal',
-                            'rtl': false
+                            'rtl': false,
+                            roleIds: []
                         },
                         {
                             'id': null,
@@ -609,7 +644,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'useObjectServiceForFilter': false,
                             'valid': true,
                             'application': 'agent-portal',
-                            'rtl': false
+                            'rtl': false,
+                            roleIds: []
                         },
                         {
                             'id': null,
@@ -633,7 +669,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'useObjectServiceForFilter': false,
                             'valid': true,
                             'application': 'agent-portal',
-                            'rtl': false
+                            'rtl': false,
+                            roleIds: []
                         },
                     ],
                     null, false, false, null, null, 1.75, 1.75, 'Translatable#0 data sets found.', null, false
@@ -671,67 +708,79 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     {
                         separator: false,
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Firstname> <KIX_CONTACT_Lastname>',
-                                    linkSrc: null
+                                    linkSrc: null,
+                                    roleIds: []
                                 },
                                 {
                                     icon: new ObjectIcon(
                                         null, 'Organisation', '<KIX_ORG_ID>', null, null, 'kix-icon-man-house'
                                     ),
                                     text: '<KIX_ORG_Name>',
-                                    linkSrc: null
+                                    linkSrc: null,
+                                    roleIds: []
                                 }
                             ]
                         ],
                     },
                     {
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     icon: 'kix-icon-call',
                                     text: '<KIX_CONTACT_Phone>',
-                                    linkSrc: 'tel:<KIX_CONTACT_Phone>'
+                                    linkSrc: 'tel:<KIX_CONTACT_Phone>',
+                                    roleIds: []
                                 },
                                 {
                                     icon: 'kix-icon-mail',
                                     text: '<KIX_CONTACT_Email>',
-                                    linkSrc: null
+                                    linkSrc: null,
+                                    roleIds: []
                                 }
                             ]
                         ]
                     },
                     {
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     icon: 'kix-icon-compass',
                                     text: '<KIX_CONTACT_Street>',
                                     // tslint:disable-next-line: max-line-length
-                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>',
+                                    roleIds: []
                                 },
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Zip> <KIX_CONTACT_City>',
                                     // tslint:disable-next-line: max-line-length
-                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>',
+                                    roleIds: []
                                 },
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Country>',
-                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>',
+                                    roleIds: []
                                 }
                             ]
                         ]
                     },
                     {
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     icon: 'kix-icon-ticket',
+                                    roleIds: [],
                                     text: 'Translatable#Open Tickets of Contact',
                                     routingConfiguration: new RoutingConfiguration(
                                         TicketSearchContext.CONTEXT_ID, null,
@@ -765,6 +814,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 },
                                 {
                                     icon: 'kix-icon-ticket',
+                                    roleIds: [],
                                     text: 'Translatable#Open Tickets of Organisation',
                                     routingConfiguration: new RoutingConfiguration(
                                         TicketSearchContext.CONTEXT_ID, null,
@@ -862,6 +912,13 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const communicationWidget = new WidgetConfiguration(
             'ticket-communication-widget', 'Communication Widget', ConfigurationType.Widget,
             'ticket-communication-widget', 'Translatable#Communication History', [], null, null, false, true, null, true
+        );
+
+        const articleInformation = new ObjectInformationCardConfiguration(null, []);
+
+        communicationWidget.configuration = new TicketCommunicationConfiguration(
+            'ticket-communication-configuration', 'Ticket Communication COnfiguration', 'CommunicationConfig',
+            articleInformation
         );
         configurations.push(communicationWidget);
 
@@ -993,21 +1050,30 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 this.getModuleId(),
                 [
                     new ConfiguredWidget(
-                        'ticket-details-contact-card-widget', 'ticket-details-contact-card-widget'
+                        'ticket-details-contact-card-widget', 'ticket-details-contact-card-widget', null,
+                        [
+                            new UIComponentPermission('contacts', [CRUD.READ])
+                        ]
                     ),
                     new ConfiguredWidget(
                         'ticket-details-assigned-assets', 'ticket-details-assigned-assets', undefined,
                         [
-                            new UIComponentPermission('/cmdb/configitems', [CRUD.READ]),
-                            new UIComponentPermission('/tickets', [CRUD.READ])
+                            new UIComponentPermission('cmdb/configitems', [CRUD.READ]),
+                            new UIComponentPermission('tickets', [CRUD.READ])
                         ]
                     ),
                     new ConfiguredWidget(
-                        'ticket-details-affected-asset-tickets', 'ticket-details-affected-asset-tickets'
+                        'ticket-details-affected-asset-tickets', 'ticket-details-affected-asset-tickets', null,
+                        [
+                            new UIComponentPermission('cmdb/configitems', [CRUD.READ])
+                        ]
                     ),
                     new ConfiguredWidget('ticket-details-contact-tickets', 'ticket-details-contact-tickets'),
                     new ConfiguredWidget(
-                        'ticket-details-suggested-faq-widget', 'ticket-details-suggested-faq-widget'
+                        'ticket-details-suggested-faq-widget', 'ticket-details-suggested-faq-widget', null,
+                        [
+                            new UIComponentPermission('faq/articles', [CRUD.READ])
+                        ]
                     )
                 ],
                 [],

@@ -243,17 +243,6 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
         const isMultiSelect = field?.countMax !== null && (field?.countMax < 0 || field?.countMax > 1);
 
-        const defaultFilter = [
-            new FilterCriteria(
-                ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
-            ),
-            new FilterCriteria(
-                ConfigItemProperty.NAME, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
-            )
-        ];
-
         const dfFilter = [];
         if (dynamicField.Config) {
             const classes = dynamicField.Config.ITSMConfigItemClasses;
@@ -281,9 +270,8 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
         }
 
         if (!field?.options?.some((o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS)) {
-            defaultFilter.push(...dfFilter);
             options.push(
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions(defaultFilter))
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions(dfFilter))
             );
         } else {
             const option = field?.options?.find((o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS);
@@ -291,8 +279,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
             if (Array.isArray(loadingOptions.filter)) {
                 loadingOptions.filter.push(...dfFilter);
             } else {
-                defaultFilter.push(...dfFilter);
-                loadingOptions.filter = defaultFilter;
+                loadingOptions.filter = dfFilter;
             }
 
             options.push(option);
@@ -487,26 +474,33 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     }
 
     public countValues(checklist: CheckListItem[]): [number, number] {
-        const value: [number, number] = [0, checklist.length];
-        for (const item of checklist) {
-            if (item.input === CheckListInputType.ChecklistState) {
-                if (!item.value) {
-                    item.value = '-';
+        const value: [number, number] = [0, 0];
+        if (checklist?.length) {
+            for (const item of checklist) {
+                if (item.input === CheckListInputType.ChecklistState) {
+                    value[1]++;
+
+                    if (!item.value) {
+                        item.value = '-';
+                    }
+
+                    const states = item.inputStates || DynamicFieldFormUtil.getDefaultChecklistStates();
+                    const state = states.find((cs) => cs.value === item.value);
+                    if (state?.done) {
+                        value[0]++;
+                    }
+                } else if (item.done) {
+                    value[1]++;
+                    if (item.value?.length > 0) {
+                        value[0]++;
+                    }
                 }
 
-                const states = item.inputStates || DynamicFieldFormUtil.getDefaultChecklistStates();
-                const state = states.find((cs) => cs.value === item.value);
-                if (state?.done) {
-                    value[0]++;
+                if (item.sub && item.sub.length) {
+                    const subCount = this.countValues(item.sub);
+                    value[0] = value[0] + subCount[0];
+                    value[1] = value[1] + subCount[1];
                 }
-            } else if (item.value?.length > 0) {
-                value[0]++;
-            }
-
-            if (item.sub && item.sub.length) {
-                const subCount = this.countValues(item.sub);
-                value[0] = value[0] + subCount[0];
-                value[1] = value[1] + subCount[1];
             }
         }
 
@@ -515,11 +509,11 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
     public static getDefaultChecklistStates(): ChecklistState[] {
         return [
-            new ChecklistState('OK', 'kix-icon-check'),
-            new ChecklistState('NOK', 'kix-icon-exclamation'),
-            new ChecklistState('pending', 'kix-icon-time-wait', false),
-            new ChecklistState('n.a.', 'kix-icon-unknown'),
-            new ChecklistState('-', null, false),
+            new ChecklistState(null, 'OK', 'kix-icon-check'),
+            new ChecklistState(null, 'NOK', 'kix-icon-exclamation'),
+            new ChecklistState(null, 'pending', 'kix-icon-time-wait', false),
+            new ChecklistState(null, 'n.a.', 'kix-icon-unknown'),
+            new ChecklistState(null, '-', null, false),
         ];
     }
 
