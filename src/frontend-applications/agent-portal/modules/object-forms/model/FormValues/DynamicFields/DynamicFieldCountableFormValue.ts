@@ -111,19 +111,12 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             if (this.initialized) {
                 await this.initCountValues();
             }
-
-            this.setVisibility(true);
+            if (!this.isSetInBackground) {
+                this.setVisibility(true);
+            }
         } else {
             super.setFormValue(value, force);
         }
-    }
-
-    public async setObjectValue(value: any): Promise<void> {
-        for (const fv of this.formValues) {
-            await fv.setObjectValue(value);
-        }
-
-        super.setObjectValue(value);
     }
 
     protected clearFormValues(): void {

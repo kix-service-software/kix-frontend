@@ -28,8 +28,6 @@ import { TicketCommunicationConfiguration } from '../../../model/TicketCommunica
 import { Ticket } from '../../../model/Ticket';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { SortOrder } from '../../../../../model/SortOrder';
-import { ArticleFilter } from '../../core/context/ArticleFilter';
-import { ArticleLoader } from '../../core/context/ArticleLoader';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -72,34 +70,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Preview List', 'Translatable#Compact View', 'Translatable#Change sort direction'
         ]);
 
-        await this.setArticleIDs();
-
-        this.prepareFilter();
         this.initListener();
-    }
 
-    private prepareFilter(): void {
-        const filterComponent = (this as any).getComponent('article-filter');
-        if (filterComponent) {
-            filterComponent.filter = async (): Promise<void> => {
-                const articleFilter = new ArticleFilter();
-                articleFilter.filterAttachments = filterComponent?.state?.filterAttachment;
-                articleFilter.filterExternal = filterComponent?.state?.filterExternal;
-                articleFilter.filterInternal = filterComponent?.state?.filterInternal;
-                articleFilter.filterCustomer = filterComponent?.state?.filterCustomer;
-                articleFilter.filterUnread = filterComponent?.state?.filterUnread;
-                articleFilter.filterMyArticles = filterComponent?.state?.myArticles;
-                articleFilter.fulltext = filterComponent?.state?.filterValue;
-                articleFilter.filterDateBefore = filterComponent?.state?.isFilterDateBefore;
-                articleFilter.filterDate = filterComponent?.state?.selectedDate;
-
-                const result = await ArticleLoader.searchArticles(
-                    Number(this.context?.getObjectId()), articleFilter
-                );
-
-                this.state.articleIds = Array.isArray(result) ? result : this.articleIds;
-            };
-        }
+        await this.setArticleIDs();
     }
 
     private initListener(): void {
@@ -114,55 +87,73 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         };
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.subscriber);
+
         EventService.getInstance().subscribe(TicketUIEvent.SCROLL_TO_ARTICLE, this.subscriber);
 
-        setTimeout(() => {
-            this.context.registerListener('communication-widget', {
-                filteredObjectListChanged: (objectType: KIXObjectType) => {
-                    if (objectType === KIXObjectType.ARTICLE) {
-                        this.setArticleIDs();
-                    }
-                },
-                objectListChanged: (objectType: KIXObjectType) => null,
-                additionalInformationChanged: () => null,
-                objectChanged: () => null,
-                scrollInformationChanged: () => null,
-                sidebarLeftToggled: () => null,
-                sidebarRightToggled: () => null
-            });
-        }, 1000);
+        this.context.registerListener('communication-widget', {
+            filteredObjectListChanged: (objectType: KIXObjectType) => {
+                if (objectType === KIXObjectType.ARTICLE) {
+                    this.setArticleIDs();
+                }
+            },
+            objectListChanged: (objectType: KIXObjectType) => {
+                if (objectType === KIXObjectType.ARTICLE) {
+                    this.articleIds = null;
+                    this.setArticleIDs();
+                }
+            },
+            additionalInformationChanged: () => null,
+            objectChanged: () => null,
+            scrollInformationChanged: () => null,
+            sidebarLeftToggled: () => null,
+            sidebarRightToggled: () => null
+        });
     }
 
     public onDestroy(): void {
         this.context.unregisterListener('communication-widget');
         EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.subscriber);
+
         EventService.getInstance().unsubscribe(TicketUIEvent.SCROLL_TO_ARTICLE, this.subscriber);
     }
 
     private async setArticleIDs(): Promise<void> {
-        const ticket = await this.context?.getObject<Ticket>(KIXObjectType.TICKET);
+        if (!this.articleIds) {
+            const ticket = await this.context?.getObject<Ticket>(KIXObjectType.TICKET);
+            this.state.activeUnreadAction = Number(ticket?.Unseen) === 1;
+            this.articleIds = ticket?.ArticleIDs || [];
+        }
 
-        this.state.activeUnreadAction = Number(ticket.Unseen) === 1;
+        const filterComponent = (this as any).getComponent('article-filter');
+        if (filterComponent && filterComponent.isFiltered) {
+            const articles: Article[] = this.context?.getFilteredObjectList(KIXObjectType.ARTICLE) || [];
+            this.state.articleIds = articles.map((a) => a.ArticleID);
+        } else {
+            this.state.articleIds = [...this.articleIds];
+        }
 
-        let articleIds = ticket?.ArticleIDs || [];
-        const sortOrder = this.sortOrder === 'newest' ? SortOrder.DOWN : SortOrder.UP;
-        articleIds = articleIds.sort((a, b) => SortUtil.compareNumber(a, b, sortOrder));
-        this.articleIds = articleIds;
-        this.state.articleIds = articleIds;
+        if (this.sortOrder === 'newest') {
+            this.state.articleIds = this.state.articleIds.reverse();
+        }
 
         const title = await TranslationService.translate(this.state.widgetConfiguration?.title);
-        this.state.widgetTitle = `${title} (${this.state.articleIds?.length})`;
+        let allCountString = '';
+        if (this.state.articleIds && this.articleIds && this.state.articleIds.length < this.articleIds.length) {
+            allCountString = '/' + this.articleIds.length;
+        }
+        this.state.widgetTitle = `${title} (${this.state.articleIds.length}${allCountString})`;
     }
 
     private handleObjectDeleted(data: BackendNotification): void {
-        const isArticleDelete = data?.Event === 'DELETE' && data?.Namespace === 'Ticket.Article';
+        const isArticleDelete = data?.Event === 'DELETE' &&
+            (data?.Namespace === 'Ticket.Article' || data?.Namespace === 'Ticket.Article.Plain');
         if (isArticleDelete) {
             const objectIds = data?.ObjectID?.split('::');
             if (objectIds?.length === 2) {
-                const articleIndex = this.state.articleIds.findIndex((a) => a.toString() === objectIds[1].toString());
-                if (articleIndex !== -1) {
-                    this.state.articleIds.splice(articleIndex, 1);
-                    (this as any).setStateDirty('articleIds');
+                const allArticleIndex = this.articleIds.findIndex((a) => a.toString() === objectIds[1].toString());
+                if (allArticleIndex !== -1) {
+                    this.articleIds.splice(allArticleIndex, 1);
+                    this.setArticleIDs();
                 }
             }
         }
@@ -192,6 +183,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
                 );
                 BrowserUtil.openSuccessOverlay('Translatable#Marked all articles as read.');
+
+                EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT);
             }, 50);
         }
     }
@@ -234,11 +227,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public getArticleCountNumber(articleId: number): number {
-        let index = this.state.articleIds.findIndex((aid) => aid === articleId) + 1;
-        if (this.sortOrder === 'newest') {
-            index = this.state.articleIds.length - index;
-        }
-        return index;
+        return this.articleIds.findIndex((aid) => aid === articleId) + 1;
     }
 }
 

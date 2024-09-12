@@ -41,7 +41,7 @@ export class AuthenticationSocketClient extends SocketClient {
 
     public async login(
         userName: string, password: string, negotiateToken: string, redirectUrl: string,
-        mfaToken?: MFAToken, fakeLogin?: boolean, userType = UserType.AGENT
+        mfaToken?: MFAToken, fakeLogin?: boolean, userType: UserType = UserType.AGENT
     ): Promise<LoginResult> {
         this.checkSocketConnection();
 
@@ -202,7 +202,7 @@ export class AuthenticationSocketClient extends SocketClient {
         });
     }
 
-    public createPasswordResetRequest(userName: string, userType: UserType = UserType.AGENT): void {
+    public createUserPasswordResetRequest(userName: string, userType: UserType = UserType.AGENT): void {
         this.checkSocketConnection();
         const request = new PasswordResetRequest(userName, userType);
         this.socket.emit(AuthenticationEvent.PASSWORD_RESET_REQUEST, request);

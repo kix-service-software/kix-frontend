@@ -314,29 +314,35 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         return result;
     }
 
-    private async getArticles(ticket: Ticket, articleId?: number): Promise<Article[]> {
+    private async getArticles(
+        ticket: Ticket, articleId?: number
+    ): Promise<Article[]> {
         let articles: Article[] = [];
-        if (
-            ticket?.Articles && ticket.Articles.length &&
-            ticket.Articles.every((a) => a.ArticleID)
-        ) {
+        if (ticket?.Articles?.every((a) => a.ArticleID)) {
             if (articleId) {
                 const article = ticket.Articles.find((a) => a.ArticleID === articleId);
-                if (article) {
+                if (article && article.Attachments?.length) {
                     articles = [article];
+                } else {
+                    articles = await this.loadArticle(ticket.TicketID, articleId);
                 }
             } else {
                 articles = ticket.Articles;
             }
-        } else if (ticket.TicketID) {
-            articles = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, articleId ? [articleId] : null,
-                new KIXObjectLoadingOptions(
-                    null, null, null, [ArticleProperty.ATTACHMENTS]
-                ), new ArticleLoadingOptions(ticket.TicketID), true
-            ).catch(() => [] as Article[]);
+        } else if (ticket.TicketID && articleId) {
+            articles = await this.loadArticle(ticket.TicketID, articleId);
         }
         return articles;
+    }
+
+    private async loadArticle(ticketId: number, articleId: number): Promise<Article[]> {
+        return await KIXObjectService.loadObjects<Article>(
+            KIXObjectType.ARTICLE, articleId ? [articleId] : null,
+            new KIXObjectLoadingOptions(
+                null, null, null, [ArticleProperty.ATTACHMENTS]
+            ), new ArticleLoadingOptions(ticketId), true
+        ).catch(() => [] as Article[]);
+
     }
 
     private async handleTicket(

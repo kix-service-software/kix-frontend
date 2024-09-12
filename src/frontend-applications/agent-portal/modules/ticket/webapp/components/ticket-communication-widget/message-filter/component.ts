@@ -9,14 +9,14 @@
 
 import { Context } from '../../../../../../model/Context';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { SortUtil } from '../../../../../../model/SortUtil';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ClientStorageService } from '../../../../../base-components/webapp/core/ClientStorageService';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { TimeoutTimer } from '../../../../../base-components/webapp/core/TimeoutTimer';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
-import { AgentService } from '../../../../../user/webapp/core/AgentService';
 import { Article } from '../../../../model/Article';
+import { ArticleFilter } from '../../../core/context/ArticleFilter';
+import { ArticleLoader } from '../../../core/context/ArticleLoader';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
@@ -24,6 +24,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private context: Context;
     private filterTimeout: any;
     private timoutTimer: TimeoutTimer;
+    public isFiltered: boolean;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -48,7 +49,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         });
 
         this.state.searchPlaceholder = await TranslationService.translate('Search');
-        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Before', 'Translatable#After']);
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#until', 'Translatable#since']);
 
         this.getSettings();
     }
@@ -116,78 +117,31 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         } else if (type === 'myArticles') {
             this.state.filterMyArticles = !this.state.filterMyArticles;
         }
+        this.setSettings();
         this.filter();
     }
 
     private async filter(): Promise<void> {
-        let articles = [...await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || []];
+        let articles: Article[] = null;
 
-        let isFiltered = false;
+        this.isFiltered = Boolean(
+            this.state.filterAttachment || this.state.filterExternal || this.state.filterInternal ||
+            this.state.filterCustomer || this.state.filterUnread || this.state.filterMyArticles ||
+            (this.state.filterValue && this.state.filterValue !== '') || this.state.selectedDate
+        );
 
-        if (this.state.filterAttachment) {
-            articles = articles.filter((a) => Array.isArray(a.Attachments) && a.Attachments.length);
-            isFiltered = true;
+        if (this.isFiltered && this.context?.getObjectId()) {
+            const articleFilter = new ArticleFilter(
+                this.state.filterAttachment, this.state.filterExternal, this.state.filterInternal,
+                this.state.filterCustomer, this.state.filterUnread, this.state.filterMyArticles,
+                this.state.filterValue, this.state.isFilterDateBefore, this.state.selectedDate
+            );
+            articles = await ArticleLoader.searchArticles(
+                Number(this.context.getObjectId()), articleFilter
+            );
         }
 
-        if (this.state.filterExternal) {
-            articles = articles.filter((a) => a.SenderType === 'external');
-            isFiltered = true;
-        }
-
-        if (this.state.filterInternal) {
-            articles = articles.filter((a) => a.SenderType !== 'external');
-            isFiltered = true;
-        }
-
-        if (this.state.filterCustomer) {
-            articles = articles.filter((a) => a.CustomerVisible);
-            isFiltered = true;
-        }
-
-        if (this.state.filterUnread) {
-            articles = articles.filter((a) => a.isUnread());
-            isFiltered = true;
-        }
-
-        if (this.state.filterMyArticles) {
-            const currentUser = await AgentService.getInstance().getCurrentUser();
-            articles = articles.filter((a) => a.CreatedBy === currentUser.UserID);
-            isFiltered = true;
-        }
-
-        if (this.state.filterValue && this.state.filterValue !== '') {
-            articles = articles.filter((a) => {
-                const body = a.Body?.replace(/(?:\r\n|\r|\n)/g, ' ').trim().replace(/\s\s+/g, ' ');
-                return body?.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.Subject?.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.To?.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.Cc?.match(new RegExp(this.state.filterValue, 'ig'));
-                //a.From?.match(new RegExp(this.state.filterValue, 'ig'));
-            });
-            isFiltered = true;
-        }
-
-        if (this.state.selectedDate) {
-            this.state.isFilterDateBefore ?
-                articles = articles.filter((a) => {
-                    const incomingTime = new Date(Number(a.IncomingTime * 1000)).toString();
-                    const result = SortUtil.compareDate(incomingTime, this.state.selectedDate);
-                    return result <= 0;
-                }) :
-                articles = articles.filter((a) => {
-                    const incomingTime = new Date(Number(a.IncomingTime * 1000)).toString();
-                    const result = SortUtil.compareDate(incomingTime, this.state.selectedDate);
-                    return result >= 0;
-                });
-            isFiltered = true;
-        }
-
-        this.setSettings();
-
-        const filteredArticles = this.context.getFilteredObjectList(KIXObjectType.ARTICLE);
-        if (isFiltered || (!isFiltered && Array.isArray(filteredArticles))) {
-            this.context.setFilteredObjectList(KIXObjectType.ARTICLE, isFiltered ? articles : null);
-        }
+        this.context.setFilteredObjectList(KIXObjectType.ARTICLE, articles);
     }
 
     private setSettings(): void {

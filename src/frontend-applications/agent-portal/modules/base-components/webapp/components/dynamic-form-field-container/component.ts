@@ -82,6 +82,11 @@ class Component {
                             existingValue.setOperationTree();
                         }
 
+                        if (cv.reloadValueTree) {
+                            cv.reloadValueTree = undefined;
+                            existingValue.reloadValueTree();
+                        }
+
                         if (existingValue.value.value !== cv.value) {
                             existingValue.setValue(cv.value);
                             existingValue.setCurrentValue(true);
@@ -157,7 +162,7 @@ class Component {
                     new ObjectPropertyValue(
                         v.property, v.operator, v.value, v.options, v.required, v.valid,
                         v.objectType, v.readonly, v.changeable, v.id, v.additionalOptions,
-                        v.validErrorMessages, v.hint, v.locked
+                        v.validErrorMessages, v.hint, v.locked, v.valueChangeable
                     ),
                     v.id
                 );

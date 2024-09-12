@@ -33,6 +33,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private value: string;
 
+    private setValueTimeout: any;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -109,49 +111,50 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
-    public dateChanged(event: any): void {
-        if (event) {
-            this.state.dateValue = event?.target?.value ? event.target.value : null;
-            this.setValue();
+    public setValue(): void {
+        if (this.setValueTimeout) {
+            clearTimeout(this.setValueTimeout);
         }
-    }
 
-    public timeChanged(event: any): void {
-        if (event) {
-            this.state.timeValue = event?.target?.value ? event.target.value : null;
-            this.setValue();
-        }
-    }
-
-    private setValue(): void {
-        let date: Date;
-
-        const isDate = this.formValue.inputType === InputFieldTypes.DATE;
-        const isDateTime = this.formValue.inputType === InputFieldTypes.DATE_TIME;
-
-        if (isDate && this.state.dateValue) {
-            date = new Date(this.state.dateValue);
-            date.setHours(0, 0, 0, 0);
-        } else if (isDateTime) {
-            if (!this.state.timeValue) {
-                this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date());
+        this.setValueTimeout = setTimeout(() => {
+            const dateElement = (this as any).getEl(`date-${this.state.inputId}`);
+            const dateValue = dateElement?.value;
+            if (dateValue) {
+                this.state.dateValue = dateValue;
             }
-            const dateTimeString = `${this.state.dateValue} ${this.state.timeValue}`;
-            date = new Date(dateTimeString);
-        }
 
-        this.value = date ? DateTimeUtil.getKIXDateTimeString(date) : null;
-    }
+            const timeElement = (this as any).getEl(`time-${this.state.inputId}`);
+            const timeValue = timeElement?.value;
+            if (timeValue) {
+                this.state.timeValue = timeValue;
+            }
 
-    public async focusLost(event?: any): Promise<void> {
-        const hasValue = this.value !== null && this.value !== undefined;
-        if (hasValue) {
-            this.formValue.setFormValue(this.value);
-        }
+            let date: Date;
 
-        if (!this.value) {
-            this.formHandler.objectFormValidator?.validate(this.formValue, true);
-        }
+            const isDate = this.formValue.inputType === InputFieldTypes.DATE;
+            const isDateTime = this.formValue.inputType === InputFieldTypes.DATE_TIME;
+
+            if (isDate && this.state.dateValue) {
+                date = new Date(this.state.dateValue);
+                date.setHours(0, 0, 0, 0);
+            } else if (isDateTime) {
+                if (!this.state.timeValue) {
+                    this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date());
+                }
+                const dateTimeString = `${this.state.dateValue} ${this.state.timeValue}`;
+                date = new Date(dateTimeString);
+            }
+
+            this.value = date ? DateTimeUtil.getKIXDateTimeString(date) : null;
+
+            const hasValue = this.value !== null && this.value !== undefined;
+            if (hasValue) {
+                this.formValue.setFormValue(this.value);
+            }
+            else {
+                this.formHandler.objectFormValidator?.validate(this.formValue, true);
+            }
+        }, 250);
     }
 
 }

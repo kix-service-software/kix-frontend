@@ -170,7 +170,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                     const fieldValue = object.DynamicFields?.find((dfv) => dfv.Name === dfName);
                     if (isKey && fieldValue?.Value) {
                         newValue = fieldValue.Value.join(':KEYSEPARATOR:');
-                    } else {
+                    } else if (fieldValue) {
                         // remove prepared value so code have to prepare it itself (CIRef)
                         fieldValue.PreparedValue = null;
                         newValue = await this.getDisplayText(object, property);
@@ -427,13 +427,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return null;
     }
 
-    public async getOverlayIcon(object?: T, objectId?: number, property?: string): Promise<OverlayIcon> {
-        return null;
-    }
-
-    public async getOverlayIconForType(
-        objectType: KIXObjectType | string, objectId: number, propert?: string, object?: T
-    ): Promise<OverlayIcon> {
+    public async getOverlayIcon(objectType: KIXObjectType | string, objectId: number | string): Promise<OverlayIcon> {
         return null;
     }
 }

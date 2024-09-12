@@ -152,8 +152,9 @@ export class MacroFieldCreator {
     public static async createActionField(
         macroField: FormFieldConfiguration, type: JobTypes | string, action: MacroAction, formInstance: FormInstance
     ): Promise<FormFieldConfiguration> {
+        const actionLabel = await TranslationService.translate('Translatable#{0}. Action', [1]);
         const actionField = new FormFieldConfiguration(
-            'job-form-field-actions', '1. Action', JobProperty.MACRO_ACTIONS, 'default-select-input',
+            'job-form-field-actions', actionLabel, JobProperty.MACRO_ACTIONS, 'default-select-input',
             true, 'Translatable#Helptext_Admin_JobCreateEdit_Actions'
         );
 

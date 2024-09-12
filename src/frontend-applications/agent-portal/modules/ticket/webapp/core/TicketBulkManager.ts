@@ -31,7 +31,8 @@ import { ValidationResult } from '../../../base-components/webapp/core/Validatio
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { User } from '../../../user/model/User';
-
+import { Contact } from '../../../customer/model/Contact';
+import { Organisation } from '../../../customer/model/Organisation';
 export class TicketBulkManager extends BulkManager {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
@@ -73,11 +74,11 @@ export class TicketBulkManager extends BulkManager {
         let inputFieldType: InputFieldTypes | string = InputFieldTypes.TEXT;
         switch (property) {
             case TicketProperty.CONTACT_ID:
-            case TicketProperty.ORGANISATION_ID:
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
                 inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
                 break;
+            case TicketProperty.ORGANISATION_ID:
             case TicketProperty.QUEUE_ID:
             case TicketProperty.STATE_ID:
             case TicketProperty.TYPE_ID:
@@ -151,35 +152,47 @@ export class TicketBulkManager extends BulkManager {
     }
 
     public async isHiddenProperty(property: string): Promise<boolean> {
-        return property === TicketProperty.ORGANISATION_ID || property === TicketProperty.PENDING_TIME;
+        // hide organisation if no contact is set
+        if (property === TicketProperty.ORGANISATION_ID) {
+            const contactValue = this.values.find((v) => v.property === TicketProperty.CONTACT_ID);
+            return !Boolean(Array.isArray(contactValue?.value) ? contactValue?.value?.length : contactValue?.value);
+        }
+        return property === TicketProperty.PENDING_TIME;
     }
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
         switch (property) {
-            // TODO: probably not used anymore (see isHiddenProperty)
-            // but could be necessary for checkContactValue (possible values)
             case TicketProperty.ORGANISATION_ID:
                 const organisationValue = this.values.find((bv) => bv.property === TicketProperty.ORGANISATION_ID);
-                if (organisationValue) {
-                    const organisations = await KIXObjectService.loadObjects(
-                        KIXObjectType.ORGANISATION,
-                        Array.isArray(organisationValue.value) ? organisationValue.value : [organisationValue.value],
-                        undefined, undefined, true
-                    ).catch(() => []);
-                    if (organisations && !!organisations.length) {
-                        const displayValue = await LabelService.getInstance().getObjectText(organisations[0]);
-                        nodes.push(new TreeNode(
-                            organisations[0].ID, displayValue,
-                            new ObjectIcon(null, KIXObjectType.ORGANISATION, organisations[0].ID)
-                        ));
-                    } else {
-                        const orgStringValue = Array.isArray(organisationValue.value)
-                            ? organisationValue.value[0].toString() : organisationValue.value.toString();
-                        nodes.push(new TreeNode(
-                            orgStringValue, orgStringValue,
-                            new ObjectIcon(null, KIXObjectType.ORGANISATION, orgStringValue)
-                        ));
+                const contactValue = this.values.find((v) => v.property === TicketProperty.CONTACT_ID);
+                if (organisationValue && contactValue) {
+                    const contactId = contactValue?.value
+                        ? Array.isArray(contactValue.value)
+                            ? contactValue.value[0]
+                            : contactValue.value
+                        : null;
+                    if (contactId) {
+                        const contacts: Contact[] = await KIXObjectService.loadObjects<Contact>(
+                            KIXObjectType.CONTACT, [contactId], undefined, undefined, true
+                        ).catch(() => [] as Contact[]);
+                        if (contacts?.length) {
+                            const orgaIds = Array.isArray(contacts[0].OrganisationIDs)
+                                ? contacts[0].OrganisationIDs
+                                : contacts[0].PrimaryOrganisationID
+                                    ? [contacts[0].PrimaryOrganisationID]
+                                    : null;
+                            nodes = await this.getOrganisationNodes(orgaIds);
+                        }
+                        // use set value as node (probably unknown contact/organisation)
+                        else if (organisationValue.value) {
+                            const orgStringValue = Array.isArray(organisationValue.value)
+                                ? organisationValue.value[0].toString() : organisationValue.value.toString();
+                            nodes.push(new TreeNode(
+                                orgStringValue, orgStringValue,
+                                new ObjectIcon(null, KIXObjectType.ORGANISATION, orgStringValue)
+                            ));
+                        }
                     }
                 }
                 break;
@@ -192,6 +205,33 @@ export class TicketBulkManager extends BulkManager {
                 for (const node of nodes) {
                     node.label = await TranslationService.translate(node.label);
                 }
+        }
+        return nodes;
+    }
+
+    private async getOrganisationNodes(orgaIds: number[]): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
+        if (orgaIds) {
+            const organisations: Organisation[] = await KIXObjectService.loadObjects<Organisation>(
+                KIXObjectType.ORGANISATION, orgaIds, undefined, undefined, true
+            ).catch(() => []);
+            if (organisations?.length) {
+                const nodePromises = [];
+                organisations.forEach((org) => {
+                    nodePromises.push(
+                        new Promise(async (resolve) => {
+                            const displayValue = await LabelService.getInstance().getObjectText(org);
+                            resolve(
+                                new TreeNode(
+                                    org.ID, displayValue,
+                                    new ObjectIcon(null, KIXObjectType.ORGANISATION, org.ID)
+                                )
+                            );
+                        })
+                    );
+                });
+                nodes = await Promise.all(nodePromises);
+            }
         }
         return nodes;
     }
@@ -209,38 +249,65 @@ export class TicketBulkManager extends BulkManager {
     private async checkContactValue(): Promise<void> {
         const contactValue = this.values.find((bv) => bv.property === TicketProperty.CONTACT_ID);
         if (contactValue) {
-            contactValue.objectType = KIXObjectType.CONTACT;
-            const contactValueForUse = !contactValue.value ? null
-                : Array.isArray(contactValue.value) ? contactValue.value : [contactValue.value];
-            if (contactValueForUse && !!contactValueForUse.length) {
-                const contacts = await KIXObjectService.loadObjects(
-                    KIXObjectType.CONTACT, contactValueForUse, undefined, undefined, true
-                ).catch(() => []);
-                let orgId = contactValueForUse[0];
-                if (contacts && !!contacts.length) {
-                    orgId = contacts[0].PrimaryOrganisationID;
-                }
-                const value = new ObjectPropertyValue(
-                    TicketProperty.ORGANISATION_ID, PropertyOperator.CHANGE, orgId, [], false, true,
-                    KIXObjectType.ORGANISATION, true, false
-                );
-                const organisationValueIndex = this.values.findIndex(
+            const contactIds = contactValue.value
+                ? Array.isArray(contactValue.value)
+                    ? contactValue.value :
+                    [contactValue.value]
+                : null;
+            if (contactIds?.length) {
+                const organisationValue = this.values.find(
                     (bv) => bv.property === TicketProperty.ORGANISATION_ID
                 );
-                if (organisationValueIndex === -1) {
-                    const index = this.values.findIndex(
-                        (bv) => bv.property === TicketProperty.CONTACT_ID
-                    );
-                    this.values.splice(index + 1, 0, value);
+                const contacts = await KIXObjectService.loadObjects<Contact>(
+                    KIXObjectType.CONTACT, contactIds, undefined, undefined, true
+                ).catch(() => [] as Contact[]);
+
+                // use primary else use fallback for unknown contact/orga (contact value => organisation value)
+                let orgId = contacts?.length && contacts[0].PrimaryOrganisationID
+                    ? contacts[0].PrimaryOrganisationID : contactIds[0];
+
+                if (organisationValue) {
+                    organisationValue.value = this.getOrgValue(organisationValue, contacts) || orgId;
+                    // trigger reload of possible values (contact changed, so assigned orgas probably changed, too)
+                    organisationValue.reloadValueTree = true;
                 } else {
-                    this.values[organisationValueIndex].value = value.value;
+                    const value = new ObjectPropertyValue(
+                        TicketProperty.ORGANISATION_ID, PropertyOperator.CHANGE, orgId, [], false, true,
+                        null, true, false
+                    );
+                    value.valueChangeable = true;
+                    value.locked = true;
+                    const index = this.values.findIndex((bv) => bv.property === TicketProperty.CONTACT_ID);
+                    this.values.splice(index + 1, 0, value);
                 }
-            } else {
+            }
+            // no contact set, remove organisation value
+            else {
                 await this.deleteValue(TicketProperty.ORGANISATION_ID);
             }
-        } else {
+        }
+        // no contact value, remove organisation value
+        else {
             await this.deleteValue(TicketProperty.ORGANISATION_ID);
         }
+    }
+
+    private getOrgValue(organisationValue: ObjectPropertyValue, contacts: Contact[]): number {
+        const currentValue = Array.isArray(organisationValue.value)
+            ? organisationValue.value[0] : organisationValue.value;
+        if (currentValue && contacts?.length) {
+            // check if current value is still possible
+            if (
+                (
+                    Array.isArray(contacts[0].OrganisationIDs)
+                    && contacts[0].OrganisationIDs.some((oid) => oid === currentValue)
+                )
+                || (contacts[0].PrimaryOrganisationID === currentValue)
+            ) {
+                return currentValue;
+            }
+        }
+        return;
     }
 
     private async checkStateValue(): Promise<void> {

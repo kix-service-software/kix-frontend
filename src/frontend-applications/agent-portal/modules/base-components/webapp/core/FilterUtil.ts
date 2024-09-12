@@ -33,7 +33,7 @@ export class FilterUtil {
         criteria: UIFilterCriterion[], object: KIXObject
     ): Promise<boolean> {
         let match = true;
-        if (Array.isArray(criteria)) {
+        if (object && Array.isArray(criteria)) {
             for (const criterion of criteria) {
                 const value = typeof criterion.value === 'string'
                     ? await PlaceholderService.getInstance().replacePlaceholders(criterion.value, object)

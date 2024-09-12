@@ -59,7 +59,7 @@ export class AuthenticationNamespace extends SocketNameSpace {
         this.registerEventHandler(client, AuthenticationEvent.VALIDATE_TOKEN, this.validateToken.bind(this));
         this.registerEventHandler(client, AuthenticationEvent.PERMISSION_CHECK, this.checkPermissions.bind(this));
         this.registerEventHandler(client,
-            AuthenticationEvent.PASSWORD_RESET_REQUEST, this.createPasswordResetRequest.bind(this)
+            AuthenticationEvent.PASSWORD_RESET_REQUEST, this.createUserPasswordResetRequest.bind(this)
         );
     }
 
@@ -171,9 +171,9 @@ export class AuthenticationNamespace extends SocketNameSpace {
         return new SocketResponse(event, { requestId: data.requestId });
     }
 
-    private async createPasswordResetRequest(data: PasswordResetRequest, client: Socket): Promise<SocketResponse> {
+    private async createUserPasswordResetRequest(data: PasswordResetRequest, client: Socket): Promise<SocketResponse> {
         const response = await AuthenticationService.getInstance()
-            .createPasswordResetRequest(data.UserLogin, data.UserType)
+            .createUserPasswordResetRequest(data.UserLogin, data.UserType)
             .then(async (token: string) => {
                 return new SocketResponse(
                     AuthenticationEvent.PASSWORD_RESET_REQUEST_SUCCESS,

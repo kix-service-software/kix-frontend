@@ -201,6 +201,21 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.backgroundColor = await this.context?.articleLoader?.getChannelColor(this.state.article?.Channel);
 
+        if (this.state.article.SMIMESigned) {
+            const property = this.state.isExternal ? ArticleProperty.SMIME_VERIFIED : ArticleProperty.SMIME_SIGNED;
+            this.state.smimeSignedTooltip = await LabelService.getInstance().getDisplayText(
+                this.state.article, property
+            );
+            if (!this.state.article[property]) {
+                this.state.smimeSignedTooltip += ` (${this.state.article.SMIMESignedError})`;
+            }
+            const icons = await LabelService.getInstance().getIcons(
+                this.state.article, property
+            );
+            this.state.smimeSignedIcon = icons?.length ? icons[0] : null;
+            this.state.smimeSigned = this.state.article[property];
+        }
+
         this.eventSubscriber = {
             eventSubscriberId: 'message-content-' + this.articleId,
             eventPublished: (data: any, eventId: string): void => {
@@ -216,8 +231,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private filterAttachments(): void {
-        this.state.articleAttachments = this.context?.articleLoader?.filterAttachments(
-            this.detailedArticle, this.state.showAllAttachments
+        this.state.articleAttachments = this.detailedArticle?.getAttachments(
+            this.state.showAllAttachments
         );
     }
 

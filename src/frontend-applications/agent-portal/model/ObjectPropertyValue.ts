@@ -30,7 +30,9 @@ export class ObjectPropertyValue {
         public additionalOptions: FormFieldOption[] = null,
         public validErrorMessages: string[] = [],
         public hint: string = '',
-        public locked?: boolean
+        public locked?: boolean,
+        public valueChangeable?: boolean,
+        public reloadValueTree?: boolean
     ) { }
 
 }

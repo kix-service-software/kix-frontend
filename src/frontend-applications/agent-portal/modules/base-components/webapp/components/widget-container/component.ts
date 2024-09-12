@@ -66,7 +66,7 @@ class Component {
             ]
         );
 
-        this.modifiedWidgets = [];
+        this.modifiedWidgets = [...this.state.widgets];
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('widget-container'),
@@ -223,8 +223,25 @@ class Component {
                 const context = ContextService.getInstance().getActiveContext();
                 const widget = await context.getConfiguredWidget(nodes[0].id);
                 if (widget) {
-                    this.state.widgets.push(widget);
-                    this.modifiedWidgets.push(widget);
+                    // Update state widgets
+                    const stateWidgetIndex = this.state.widgets.findIndex((sw) => {
+                        sw.instanceId === widget.instanceId;
+                    });
+                    if (stateWidgetIndex === -1) {
+                        this.state.widgets.push(widget);
+                    } else {
+                        this.state.widgets[stateWidgetIndex] = widget;
+                    }
+                    // Update modified widgets
+                    const modifiedWidgetIndex = this.modifiedWidgets.findIndex((sw) => {
+                        sw.instanceId === widget.instanceId;
+                    });
+                    if (modifiedWidgetIndex === -1) {
+                        this.modifiedWidgets.push(widget);
+                    } else {
+                        this.modifiedWidgets[modifiedWidgetIndex] = widget;
+                    }
+                    // Update finished
                     this.contextTreeHandler.selectNone();
                     await this.loadContextWidgets();
                     (this as any).setStateDirty('widgets');

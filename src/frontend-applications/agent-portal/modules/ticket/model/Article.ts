@@ -18,6 +18,7 @@ import addrparser from 'address-rfc2822';
 import { Ticket } from './Ticket';
 import { User } from '../../user/model/User';
 import { Contact } from '../../customer/model/Contact';
+import { SortUtil } from '../../../model/SortUtil';
 
 export class Article extends KIXObject {
 
@@ -141,6 +142,7 @@ export class Article extends KIXObject {
             this.MimeType = article.MimeType;
             this.IncomingTime = article.IncomingTime;
             this.Attachments = article.Attachments;
+            this.AttachmentCount = article.AttachmentCount;
             this.Flags = article.Flags;
             this.Channel = article.Channel;
             this.ChannelID = article.ChannelID;
@@ -256,14 +258,35 @@ export class Article extends KIXObject {
         return 'ArticleID';
     }
 
-    public getAttachments(inline?: boolean): Attachment[] {
-        let attachments = this.Attachments;
-        if (inline && Array.isArray(this.Attachments)) {
-            attachments = this.Attachments.filter((a) => a.Disposition === 'inline' && a.ContentID.length > 0);
-        } else if (Array.isArray(this.Attachments)) {
-            attachments = this.Attachments.filter((a) => a.Disposition !== 'inline' || a.ContentID.length === 0 && !a.Filename.match(/^file-(1|2)$/));
-        }
-        return attachments || [];
+    public getAttachments(showAll?: boolean): Attachment[] {
+        let attachments = (this?.Attachments || []);
+
+        attachments = attachments.filter(
+            (a) => !a.Filename.match(/^file-(1|2)$/) &&
+                (showAll || a.Disposition !== 'inline')
+        );
+
+        attachments.sort((a, b) => {
+            if (!showAll) {
+                return SortUtil.compareString(a.Filename, b.Filename);
+            }
+
+            let result = -1;
+            if (a.Disposition === b.Disposition) {
+                result = SortUtil.compareString(a.Filename, b.Filename);
+            } else if (a.Disposition === 'inline') {
+                result = 1;
+            }
+            return result;
+        });
+
+        return attachments;
+    }
+
+    public getInlineAttachments(): Attachment[] {
+        let attachments = (this?.Attachments || []);
+        attachments = attachments.filter((a) => !a.Filename.match(/^file-(1|2)$/) && a.Disposition === 'inline');
+        return attachments;
     }
 
     public static isArticleProperty(property: string): boolean {

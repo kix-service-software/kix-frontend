@@ -397,6 +397,8 @@ export class UserService extends KIXObjectAPIService {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
+
+        CacheService.getInstance().deleteKeys(objectType);
     }
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {

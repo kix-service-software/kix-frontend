@@ -25,9 +25,12 @@ import { LoggingService } from './LoggingService';
 import { HTTPResponse } from '../../frontend-applications/agent-portal/server/services/HTTPResponse';
 import { IncomingHttpHeaders } from 'node:http';
 import { AuthMethod } from '../../frontend-applications/agent-portal/model/AuthMethod';
-import { ObjectResponse } from '../../frontend-applications/agent-portal/server/services/ObjectResponse';
+import { PasswordResetState } from '../../frontend-applications/agent-portal/model/PasswordResetState';
 import { MFAToken } from '../../frontend-applications/agent-portal/modules/multifactor-authentication/model/MFAToken';
-import { PasswordResetRequest } from '../../frontend-applications/agent-portal/modules/user/model/PasswordResetRequest';
+import { ClientNotificationService } from '../../frontend-applications/agent-portal/server/services/ClientNotificationService';
+import { BackendNotification } from '../../frontend-applications/agent-portal/model/BackendNotification';
+import { SysConfigKey } from '../../frontend-applications/agent-portal/modules/sysconfig/model/SysConfigKey';
+import { CacheService } from '../../frontend-applications/agent-portal/server/services/cache';
 
 export class AuthenticationService {
 
@@ -45,6 +48,14 @@ export class AuthenticationService {
     private constructor() {
         const config = ConfigurationService.getInstance().getServerConfiguration();
         this.tokenSecret = config?.FRONTEND_TOKEN_SECRET;
+
+        ClientNotificationService.getInstance().registerNotificationListener(this.handleBackendNotification.bind(this));
+    }
+    private async handleBackendNotification(events: BackendNotification[]): Promise<void> {
+        const sysConfigOptionEvents = events?.filter((e) => e.Namespace === 'SysConfigOption');
+        if (sysConfigOptionEvents?.some((sco) => sco.ObjectID === SysConfigKey.USER_PASSWORD_RESET_ENABLED)) {
+            await CacheService.getInstance().deleteKeys('OPTION_COLLECTION');
+        }
     }
 
     private createToken(userLogin: string, backendToken: string): string {
@@ -210,10 +221,41 @@ export class AuthenticationService {
         return methods?.find((m) => m.name === name);
     }
 
-    public async createPasswordResetRequest(userLogin: string, userType: UserType = UserType.AGENT): Promise<any> {
+    public async createUserPasswordResetRequest(userLogin: string, userType: UserType = UserType.AGENT): Promise<any> {
         return await HttpService.getInstance().post(
             'auth/password-reset', { UserLogin: userLogin, UserType: userType }, null, null
         );
+    }
+
+    public async getUserPasswordResetEnabled(userType: UserType = UserType.AGENT): Promise<boolean> {
+        const response = await HttpService.getInstance().options(
+            undefined, 'auth/password-reset', undefined, undefined, undefined
+        ).catch((e) => {
+            LoggingService.getInstance().error(e);
+            return null;
+        });
+
+        if (response?.data?.Methods?.POST?.Parameters?.UserType?.OneOf?.some((am) => am === userType)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public async sendUserPasswordResetRequestConfirmation(
+        resetToken: string, userType: UserType = UserType.AGENT
+    ): Promise<PasswordResetState> {
+        let pwResetState = PasswordResetState.ERROR;
+
+        if (resetToken) {
+            const response = await HttpService.getInstance().patch<any>('auth/password-reset/' + resetToken,
+                { UserType: userType }, undefined, undefined, undefined, undefined
+            ).catch(() => undefined);
+
+            pwResetState = response?.Code === 'OK' ? PasswordResetState.CONFIRMED : PasswordResetState.ERROR;
+        }
+
+        return pwResetState;
     }
 
 }

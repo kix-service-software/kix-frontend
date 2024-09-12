@@ -8,10 +8,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.prepared)>
-   <div.object-form-values-container>
+   <div class="object-form-values-container">
       <for|formValue| of=state.formValues>
          <if(formValue && !component.isSorted(formValue))>
-            <object-form-value formValue=formValue parent=input.parent/>            
+            <object-form-value
+               formValue=formValue
+               parent=input.parent
+               key=component.getKey()
+            />
          </if>
       </for>
    </div>

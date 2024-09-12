@@ -41,7 +41,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initWidget(): Promise<void> {
-        if (this.config) {
+        if (this.config && this.state.object) {
             await this.prepareInformation(this.config, this.state.object);
             if (Array.isArray(this.config.avatar) && (this.config.avatar as Array<string | ObjectIcon>).length > 0) {
                 this.state.avatar = this.config.avatar;

@@ -93,15 +93,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     class=[
                         "fas me-3",
                         {
-                            "fa-chevron-left": state.isFilterDateBefore,
-                            "fa-chevron-right": !state.isFilterDateBefore,
+                            "fa-less-than-equal": state.isFilterDateBefore,
+                            "fa-greater-than-equal": !state.isFilterDateBefore,
                         },
                     ]
                     title=(
                         state.translations[
                             state.isFilterDateBefore
-                                ? "Translatable#Before"
-                                : "Translatable#After"
+                                ? "Translatable#until"
+                                : "Translatable#since"
                         ]
                     )
                     on-click("selectDateOrder")
