@@ -30,6 +30,7 @@ import { ModuleConfigurationService } from '../../server/services/configuration/
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { EditContactDialogContext } from './webapp/core/context/EditContactDialogContext';
+import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -95,7 +96,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true)
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                    new FormFieldOption(FormFieldOptions.SHOW_INVALID, false)
                 ]
             )
         );
