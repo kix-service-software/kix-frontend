@@ -54,8 +54,11 @@ class Component {
 
     private async initWidget(job: Job): Promise<void> {
         if (job) {
+            this.state.prepared = false;
             this.prepareActions(job);
             await this.prepareTable();
+
+            setTimeout(() => this.state.prepared = true, 50);
         }
     }
 
