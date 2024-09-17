@@ -534,16 +534,20 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
     private async handleAffectedAssetValue(value?: any): Promise<any> {
         const context = ContextService.getInstance().getActiveContext();
-        const configItemId = await context?.getAdditionalInformation(`${KIXObjectType.CONFIG_ITEM}-ID`);
+        let configItemIds = await context?.getAdditionalInformation(`${KIXObjectType.CONFIG_ITEM}-ID`);
+
+        if (!Array.isArray(configItemIds) && configItemIds) {
+            configItemIds = [configItemIds];
+        }
 
         // TODO: value validation (class, deplstate) currently not necessary - it's a feature
-        if (configItemId) {
+        if (Array.isArray(configItemIds)) {
             if (Array.isArray(value)) {
-                value.push(configItemId);
+                value.push(...configItemIds);
             } else if (value) {
-                value = [value, configItemId];
+                value = [value, ...configItemIds];
             } else {
-                value = [configItemId];
+                value = configItemIds;
             }
         }
         return value;

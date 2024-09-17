@@ -41,7 +41,7 @@ export class TicketDialogUtil {
 
             const configItem = await context.getObject<ConfigItem>(KIXObjectType.CONFIG_ITEM);
             if (configItem) {
-                additionalInformation.push([`${KIXObjectType.CONFIG_ITEM}-ID`, configItem.ConfigItemID]);
+                additionalInformation.push([`${KIXObjectType.CONFIG_ITEM}-ID`, [configItem.ConfigItemID]]);
             }
         }
 

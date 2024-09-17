@@ -74,7 +74,7 @@ export class ConfigItemTableFactory extends TableFactory {
     protected setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): TableConfiguration {
-        const tableColumns = this.getDefaultColumns();
+        const tableColumns = ConfigItemTableFactory.getDefaultColumns();
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
@@ -105,7 +105,7 @@ export class ConfigItemTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    private getDefaultColumns(): IColumnConfiguration[] {
+    public static getDefaultColumns(): IColumnConfiguration[] {
         const tableColumns = [
             new DefaultColumnConfiguration(
                 null, null, null, ConfigItemProperty.NUMBER, true, false, true, false, 135, true, true),
@@ -141,7 +141,7 @@ export class ConfigItemTableFactory extends TableFactory {
             superColumns.splice(index, 1);
         }
 
-        const columns = this.getDefaultColumns();
+        const columns = ConfigItemTableFactory.getDefaultColumns();
         return [
             ...columns,
             ...superColumns.filter((c) => !columns.some((tc) => tc.property === c.property))
