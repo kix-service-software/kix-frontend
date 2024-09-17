@@ -45,7 +45,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const ciListWidget = new WidgetConfiguration(
             'cmdb-search-ci-list-widget', 'CI Search List', ConfigurationType.Widget,
             'table-widget', 'Translatable#Search Results: Config Items',
-            ['bulk-action', 'csv-export-action'],
+            ['cmdb-ticket-create-action', 'bulk-action', 'csv-export-action'],
             null, tableWidgetConfig, false, false, 'kix-icon-ci', true
         );
 

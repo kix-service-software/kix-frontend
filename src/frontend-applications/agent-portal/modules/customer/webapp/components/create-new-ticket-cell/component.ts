@@ -14,9 +14,12 @@ import { Contact } from '../../../model/Contact';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { NewTicketDialogContext, TicketDialogUtil } from '../../../../ticket/webapp/core';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { ConfigItem } from '../../../../cmdb/model/ConfigItem';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
+    private object: KIXObject;
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -24,22 +27,34 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any): void {
         if (input.cell) {
             const cell: Cell = input.cell;
-            this.state.contact = cell.getRow().getRowObject().getObject();
-            this.update(this.state.contact);
+            this.object = cell.getRow().getRowObject().getObject();
+            this.update(this.object);
 
         }
     }
 
-    private async update(contact: Contact): Promise<void> {
-        this.state.show = contact &&
-            contact instanceof Contact &&
-            ContextService.getInstance().hasContextDescriptor(NewTicketDialogContext.CONTEXT_ID);
+    private async update(object: KIXObject): Promise<void> {
+        const hasContextDescriptor = ContextService.getInstance().hasContextDescriptor(
+            NewTicketDialogContext.CONTEXT_ID
+        );
+        this.state.show = object && hasContextDescriptor;
     }
 
     public labelClicked(event: any): void {
         event.stopPropagation();
         event.preventDefault();
-        TicketDialogUtil.createTicket(null, null, null, null, [[KIXObjectType.CONTACT, this.state.contact as any]]);
+
+        const additionalInformation = [];
+
+        if (this.object instanceof Contact) {
+            additionalInformation.push([KIXObjectType.CONTACT, this.object]);
+        }
+
+        if (this.object instanceof ConfigItem) {
+            additionalInformation.push([`${KIXObjectType.CONFIG_ITEM}-ID`, [this.object.ConfigItemID]]);
+        }
+
+        TicketDialogUtil.createTicket(null, null, null, null, additionalInformation);
     }
 
 }

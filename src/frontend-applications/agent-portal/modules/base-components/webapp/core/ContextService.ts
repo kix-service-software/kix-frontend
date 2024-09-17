@@ -374,25 +374,13 @@ export class ContextService {
         contextId: string, objectId?: string | number, urlParams?: URLSearchParams,
         additionalInformation: Array<[string, any]> = [], history: boolean = true
     ): Promise<Context> {
-        const timeout = setTimeout(() => {
-            EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Loading ...' }
-            );
-        }, 150);
-
         const context = await this.getContextInstance(
             contextId, objectId, additionalInformation, urlParams
         );
+
         if (context) {
             await this.setContextByInstanceId(context.instanceId, objectId, history);
         }
-
-        if (typeof window !== 'undefined') {
-            window.clearTimeout(timeout);
-        }
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING,
-            { loading: false, hint: '' }
-        );
 
         return context;
     }
