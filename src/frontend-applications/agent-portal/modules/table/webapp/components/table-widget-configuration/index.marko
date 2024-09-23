@@ -11,25 +11,25 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <h2 class="configuration-title">
         <translation-string pattern="Translatable#Table Widget"/>
     </h2>
-    <div class="table-widget-configuration-container table-container">
+    <div class="table table-hover table-striped">
         <if(input.advancedSettings)>
             <table class="kix-table configuration-table">
                 <thead>
                     <tr>
-                        <th class="table-head-cell">
+                        <th>
                             <translation-string pattern="Translatable#Option"/>
                         </th>
-                        <th class="table-head-cell">
+                        <th>
                             <translation-string pattern="Translatable#Value"/>
                         </th>
                     </tr>
                 </thead>
                 <tbody class="show-object">
                     <tr>
-                        <td class="content-cell">
+                        <td>
                             <translation-string pattern="Translatable#Show Filter"/>
                         </td>
-                        <td on-click("showFilterChanged") class="content-cell">
+                        <td on-click("showFilterChanged")>
                             <input
                                 type="checkbox"
                                 checked=(state.configuration.showFilter)
@@ -38,10 +38,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </tr>
 
                     <tr>
-                        <td class="content-cell">
+                        <td>
                             <translation-string pattern="Translatable#Sort"/>
                         </td>
-                        <td class="content-cell table-sort">
+                        <td>
                             <form-list
                                 treeId=state.sortTreeId
                                 multiselect=false
