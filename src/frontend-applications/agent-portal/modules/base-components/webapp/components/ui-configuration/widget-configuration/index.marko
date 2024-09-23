@@ -8,63 +8,68 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.widget)>
-    <div.header on-click("minimize")>
+    <div on-click("minimize") class="header">
         <icon icon=(state.widget.configuration.icon)/>
-        <input.input-style
+        <input
             type="text"
             value=component.getTitle(state.widget.configuration.title)
             on-keyup("titleChanged")
             draggable="true"
+            class="input-style"
         >
-        <button.kix-button.form-button
+        <button
             type="button"
             on-click("toggleAdvancedMode")
             title=state.settingsLabel
             draggable="true"
+            class="kix-button form-button"
         >
-            <span.kix-icon-gears/>
+            <span class="kix-icon-gears"/>
             ${state.settingsLabel}
         </button>
-        <span.fas.fa-times.close on-click("removeWidget") draggable="true"/>
+        <span
+            on-click("removeWidget")
+            draggable="true"
+            class="fas fa-times close"
+        />
     </div>
     <if(!state.minimized)>
-        <div.widget-configuration-container draggable="true">
+        <div draggable="true" class="widget-configuration-container">
             <if(state.advancedSettings)>
-                <div.widget-configuration.table-container>
-                    <h2.configuration-title>
+                <div class="widget-configuration table-container">
+                    <h2 class="configuration-title">
                         <translation-string pattern="Translatable#Widget Configuration"/>
                     </h2>
-                    <table.kix-table.configuration-table>
+                    <table class="table table-hover table-striped">
                         <thead>
                             <tr>
-                                <th.table-head-cell>
+                                <th>
                                     <translation-string pattern="Translatable#Option"/>
                                 </th>
-                                <th.table-head-cell>
+                                <th>
                                     <translation-string pattern="Translatable#Value"/>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td.content-cell>
+                                <td>
                                     <translation-string pattern="Translatable#Actions"/>
                                 </td>
-                                <td.content-cell>
+                                <td>
                                     <form-list
                                         treeId=state.actionsTreeId
                                         multiselect
                                         freeText
                                         on-nodesChanged("actionsChanged")
                                     />
-
                                 </td>
                             </tr>
                             <tr>
-                                <td.content-cell>
+                                <td>
                                     <translation-string pattern="Translatable#Small Widget"/>
                                 </td>
-                                <td.content-cell>
+                                <td>
                                     <input
                                         type="checkbox"
                                         on-click("widgetSizeChanged")
@@ -73,10 +78,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 </td>
                             </tr>
                             <tr>
-                                <td.content-cell>
+                                <td>
                                     <translation-string pattern="Translatable#Minimizable"/>
                                 </td>
-                                <td.content-cell>
+                                <td>
                                     <input
                                         type="checkbox"
                                         on-click("minimizableChanged")
@@ -88,10 +93,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 </td>
                             </tr>
                             <tr>
-                                <td.content-cell>
+                                <td>
                                     <translation-string pattern="Translatable#Minimized"/>
                                 </td>
-                                <td.content-cell>
+                                <td>
                                     <input
                                         type="checkbox"
                                         on-click("minimizedChanged")
@@ -104,10 +109,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             </tr>
                         </tbody>
                     </table>
-
                 </div>
             </if>
-            <div.widget-specific-configuration>
+            <div class="widget-specific-configuration">
                 <if(component.getConfigurationComponent())>
                     <${component.getConfigurationComponent()}
                         configuration=(state.widget.configuration.configuration)
