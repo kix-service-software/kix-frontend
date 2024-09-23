@@ -172,7 +172,7 @@ export class SearchService {
         let preparedCriteria = await searchDefinition.prepareFormFilterCriteria([...searchCache.criteria]);
         preparedCriteria = this.prepareCriteria(preparedCriteria);
 
-        const loadingOptions = await searchDefinition.getLoadingOptions(
+        let loadingOptions = await searchDefinition.getLoadingOptions(
             preparedCriteria, null, searchCache.sortAttribute, searchCache.sortDescending
         );
 
@@ -212,7 +212,7 @@ export class SearchService {
         }
 
         if (context) {
-            await context.prepareContextLoadingOptions(searchCache.objectType, loadingOptions);
+            loadingOptions = await context.prepareContextLoadingOptions(searchCache.objectType, loadingOptions);
         }
 
         // use "old" searchCache limit as fallback (in most cases not necessary, because of context default)

@@ -128,7 +128,7 @@ export class CMDBContext extends Context {
     public async loadConfigItems(limit?: number): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.CONFIG_ITEM);
 
-        const loadingOptions = new KIXObjectLoadingOptions([]);
+        let loadingOptions = new KIXObjectLoadingOptions([]);
         loadingOptions.limit = limit;
 
         const deploymentIds = await this.getDeploymentStateIds();
@@ -165,7 +165,7 @@ export class CMDBContext extends Context {
             loadingOptions.sortOrder = 'ConfigItem.ChangeTime:datetime';
         }
 
-        await this.prepareContextLoadingOptions(KIXObjectType.CONFIG_ITEM, loadingOptions);
+        loadingOptions = await this.prepareContextLoadingOptions(KIXObjectType.CONFIG_ITEM, loadingOptions);
 
         const configItems = await KIXObjectService.loadObjects(
             KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false, undefined, undefined,
