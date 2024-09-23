@@ -95,7 +95,7 @@ export class FAQContext extends Context {
     }
 
     private async loadFAQArticles(limit?: number): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions();
+        let loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.limit = limit;
 
         loadingOptions.filter = [
@@ -115,7 +115,7 @@ export class FAQContext extends Context {
             );
         }
 
-        await this.prepareContextLoadingOptions(KIXObjectType.FAQ_ARTICLE, loadingOptions);
+        loadingOptions = await this.prepareContextLoadingOptions(KIXObjectType.FAQ_ARTICLE, loadingOptions);
 
         const faqArticles = await KIXObjectService.loadObjects(
             KIXObjectType.FAQ_ARTICLE, null, loadingOptions, null, false, undefined, undefined,
