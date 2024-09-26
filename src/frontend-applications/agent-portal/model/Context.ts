@@ -751,10 +751,15 @@ export abstract class Context {
                     object = objects?.length ? objects[0] : null;
                 }
                 this.loadingPromise = null;
+                await this.postLoadDetailsObject(object);
                 resolve(object);
             });
         }
         return this.loadingPromise;
+    }
+
+    protected async postLoadDetailsObject(object: KIXObject): Promise<void> {
+        return;
     }
 
     public async addStorableAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
