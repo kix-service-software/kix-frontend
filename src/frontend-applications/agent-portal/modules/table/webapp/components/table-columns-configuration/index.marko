@@ -13,7 +13,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <div class="row">
     <div class="col-6">
         <div class="property-chooser">
-            <label>${state.translations["Translatable#Dependency"] + (state.dependencyName ? ` (${state.dependencyName})` : "")}</label>
+            <label>
+                ${state.translations["Translatable#Dependency"] +
+                (state.dependencyName ? ` (${state.dependencyName})` : "")}
+            </label>
             <form-list treeId=state.dependencyTreeId multiselect/>
         </div>
     </div>
@@ -34,108 +37,60 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </div>
 </div>
 
-<table class="kix-table configuration-table">
+<table class="table table-striped table-hover">
     <thead>
         <tr>
             <if(!state.loading)>
-                <th
-                    title=(state.translations["Translatable#Property"])
-                    class="table-head-cell"
-                >
+                <th title=(state.translations["Translatable#Property"])>
                     ${state.translations["Translatable#Property"]}
                 </th>
-                <th
-                    title=(state.translations["Translatable#Dependency"])
-                    class="table-head-cell"
-                >
+                <th title=(state.translations["Translatable#Dependency"])>
                     ${state.translations["Translatable#Dependency"]}
                 </th>
             </if>
-            <th
-                title=(state.translations["Translatable#Text"])
-                class="table-head-cell boolean-value"
-            >
+            <th title=(state.translations["Translatable#Text"])>
                 ${state.translations["Translatable#Text"]}
             </th>
-            <th
-                title=(state.translations["Translatable#Icon"])
-                class="table-head-cell boolean-value"
-            >
+            <th title=(state.translations["Translatable#Icon"])>
                 ${state.translations["Translatable#Icon"]}
             </th>
             <if(input.advancedSettings)>
-                <th
-                    title=(state.translations["Translatable#Column Title"])
-                    class="table-head-cell boolean-value"
-                >
+                <th title=(state.translations["Translatable#Column Title"])>
                     ${state.translations["Translatable#Column Title"]}
                 </th>
-                <th
-                    title=(state.translations["Translatable#Column Icon"])
-                    class="table-head-cell boolean-value"
-                >
+                <th title=(state.translations["Translatable#Column Icon"])>
                     ${state.translations["Translatable#Column Icon"]}
                 </th>
-                <th
-                    title=(state.translations["Translatable#Sortable"])
-                    class="table-head-cell boolean-value"
-                >
+                <th title=(state.translations["Translatable#Sortable"])>
                     ${state.translations["Translatable#Sortable"]}
                 </th>
-                <th
-                    title=(state.translations["Translatable#Filterable"])
-                    class="table-head-cell boolean-value"
-                >
+                <th title=(state.translations["Translatable#Filterable"])>
                     ${state.translations["Translatable#Filterable"]}
                 </th>
-                <th
-                    title=(state.translations["Translatable#Filter List"])
-                    class="table-head-cell boolean-value"
-                >
+                <th title=(state.translations["Translatable#Filter List"])>
                     ${state.translations["Translatable#Filter List"]}
                 </th>
-                <th
-                    title=(state.translations["Translatable#Resizable"])
-                    class="table-head-cell boolean-value"
-                >
+                <th title=(state.translations["Translatable#Resizable"])>
                     ${state.translations["Translatable#Resizable"]}
                 </th>
-                <th
-                    title=(state.translations["Translatable#Translatable"])
-                    class="table-head-cell boolean-value"
-                >
+                <th title=(state.translations["Translatable#Translatable"])>
                     ${state.translations["Translatable#Translatable"]}
                 </th>
-                <th
-                    title=(
-                        state.translations["Translatable#Translatable Title"]
-                    )
-                    class="table-head-cell boolean-value"
-                >
+                <th title=(
+                    state.translations["Translatable#Translatable Title"]
+                )>
                     ${state.translations["Translatable#Translatable Title"]}
                 </th>
-                <th
-                    title=(state.translations["Translatable#RTL"])
-                    class="table-head-cell boolean-value"
-                >
+                <th title=(state.translations["Translatable#RTL"])>
                     ${state.translations["Translatable#RTL"]}
                 </th>
-                <th
-                    title=(state.translations["Translatable#Size (px)"])
-                    class="table-head-cell"
-                >
+                <th title=(state.translations["Translatable#Size (px)"])>
                     ${state.translations["Translatable#Size (px)"]}
                 </th>
-                <th
-                    title=(state.translations["Translatable#Component ID"])
-                    class="table-head-cell"
-                >
+                <th title=(state.translations["Translatable#Component ID"])>
                     ${state.translations["Translatable#Component ID"]}
                 </th>
-                <th
-                    title=(state.translations["Translatable#Column Title"])
-                    class="table-head-cell"
-                >
+                <th title=(state.translations["Translatable#Column Title"])>
                     ${state.translations["Translatable#Column Title"]}
                 </th>
             </if>
@@ -151,101 +106,66 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 on-drop("rowDroped", column)
             >
                 <if(!state.loading)>
-                    <td
-                        title=(state.columnNames[column.property])
-                        class="content-cell"
-                    >
+                    <td title=(state.columnNames[column.property])>
                         <span>${state.columnNames[column.property]}</span>
                     </td>
-                    <td
-                        title=(state.columnDependencyNames[column.property])
-                        class="content-cell"
-                    >
+                    <td title=(state.columnDependencyNames[column.property])>
                         <span>
                             ${state.columnDependencyNames[column.property]}
                         </span>
                     </td>
                 </if>
-                <td
-                    on-click("booleanValueChanged", "showText", column)
-                    class="content-cell boolean-value"
-                >
+                <td on-click("booleanValueChanged", "showText", column)>
                     <input type="checkbox" checked=column.showText>
                 </td>
-                <td
-                    on-click("booleanValueChanged", "showIcon", column)
-                    class="content-cell boolean-value"
-                >
+                <td on-click("booleanValueChanged", "showIcon", column)>
                     <input type="checkbox" checked=column.showIcon>
                 </td>
                 <if(input.advancedSettings)>
-                    <td
-                        on-click(
-                            "booleanValueChanged",
-                            "showColumnTitle",
-                            column,
-                        )
-                        class="content-cell boolean-value"
-                    >
+                    <td on-click(
+                        "booleanValueChanged",
+                        "showColumnTitle",
+                        column,
+                    )>
                         <input type="checkbox" checked=column.showColumnTitle>
                     </td>
-                    <td
-                        on-click(
-                            "booleanValueChanged",
-                            "showColumnIcon",
-                            column,
-                        )
-                        class="content-cell boolean-value"
-                    >
+                    <td on-click(
+                        "booleanValueChanged",
+                        "showColumnIcon",
+                        column,
+                    )>
                         <input type="checkbox" checked=column.showColumnIcon>
                     </td>
-                    <td
-                        on-click("booleanValueChanged", "sortable", column)
-                        class="content-cell boolean-value"
-                    >
+                    <td on-click("booleanValueChanged", "sortable", column)>
                         <input type="checkbox" checked=column.sortable>
                     </td>
-                    <td
-                        on-click("booleanValueChanged", "filterable", column)
-                        class="content-cell boolean-value"
-                    >
+                    <td on-click("booleanValueChanged", "filterable", column)>
                         <input type="checkbox" checked=column.filterable>
                     </td>
-                    <td
-                        on-click("booleanValueChanged", "hasListFilter", column)
-                        class="content-cell boolean-value"
-                    >
+                    <td on-click(
+                        "booleanValueChanged",
+                        "hasListFilter",
+                        column,
+                    )>
                         <input type="checkbox" checked=column.hasListFilter>
                     </td>
-                    <td
-                        on-click("booleanValueChanged", "resizable", column)
-                        class="content-cell boolean-value"
-                    >
+                    <td on-click("booleanValueChanged", "resizable", column)>
                         <input type="checkbox" checked=column.resizable>
                     </td>
-                    <td
-                        on-click("booleanValueChanged", "translatable", column)
-                        class="content-cell boolean-value"
-                    >
+                    <td on-click("booleanValueChanged", "translatable", column)>
                         <input type="checkbox" checked=column.translatable>
                     </td>
-                    <td
-                        on-click(
-                            "booleanValueChanged",
-                            "titleTranslatable",
-                            column,
-                        )
-                        class="content-cell boolean-value"
-                    >
+                    <td on-click(
+                        "booleanValueChanged",
+                        "titleTranslatable",
+                        column,
+                    )>
                         <input type="checkbox" checked=column.titleTranslatable>
                     </td>
-                    <td
-                        on-click("booleanValueChanged", "rtl", column)
-                        class="content-cell boolean-value"
-                    >
+                    <td on-click("booleanValueChanged", "rtl", column)>
                         <input type="checkbox" checked=column.rtl>
                     </td>
-                    <td class="content-cell">
+                    <td>
                         <input
                             type="numeric"
                             value=column.size
@@ -253,7 +173,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             class="input-style"
                         >
                     </td>
-                    <td class="content-cell">
+                    <td>
                         <input
                             type="text"
                             value=column.componentId
@@ -265,7 +185,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             class="input-style"
                         >
                     </td>
-                    <td class="content-cell">
+                    <td>
                         <input
                             type="text"
                             value=column.defaultText

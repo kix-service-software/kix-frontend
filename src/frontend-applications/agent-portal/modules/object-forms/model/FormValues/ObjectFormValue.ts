@@ -387,14 +387,14 @@ export class ObjectFormValue<T = any> {
     }
 
     protected hasValue(value: any): boolean {
-        if (value !== 0 && (!value || Array.isArray(value) && !value.length)) return false;
-        if (Array.isArray(value) && value.length) {
-            let hasValue = false;
-            value.forEach((v) => {
-                hasValue = hasValue || this.hasValue(v);
-            });
-            return hasValue;
+        if (value === undefined || value === null) {
+            return false;
         }
+
+        if (Array.isArray(value)) {
+            return value.some((v) => this.hasValue(v));
+        }
+
         return true;
     }
 

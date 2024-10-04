@@ -18,7 +18,10 @@ import { EventService } from '../modules/base-components/webapp/core/EventServic
 import { IContextListener } from '../modules/base-components/webapp/core/IContextListener';
 import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
+import { PlaceholderService } from '../modules/base-components/webapp/core/PlaceholderService';
 import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
+import { SearchOperator } from '../modules/search/model/SearchOperator';
+import { SearchProperty } from '../modules/search/model/SearchProperty';
 import { TableFactoryService } from '../modules/table/webapp/core/factory/TableFactoryService';
 import { TranslationService } from '../modules/translation/webapp/core/TranslationService';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
@@ -803,7 +806,7 @@ export abstract class Context {
 
     public async prepareContextLoadingOptions(
         type: KIXObjectType | string, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<void> {
+    ): Promise<KIXObjectLoadingOptions> {
         loadingOptions.filter ||= [];
         loadingOptions.includes ||= [];
         loadingOptions.expands ||= [];
@@ -829,6 +832,8 @@ export abstract class Context {
             loadingOptions.filter.push(...contextFilter);
         }
 
+        loadingOptions = await Context.prepareLoadingOptions(loadingOptions);
+
         // if no limit given - e.g. initial call, use configurations, else it will possible
         // be set because of load more
         if (typeof loadingOptions.limit === 'undefined' || loadingOptions.limit === null) {
@@ -847,6 +852,59 @@ export abstract class Context {
 
         const additionalIncludes = this.getAdditionalInformation(AdditionalContextInformation.INCLUDES) || [];
         loadingOptions.includes.push(...additionalIncludes);
+
+        return loadingOptions;
+    }
+
+    public static async prepareLoadingOptions(
+        loadingOptions: KIXObjectLoadingOptions, searchValue?: string
+    ): Promise<KIXObjectLoadingOptions> {
+
+        let preparedLoadingOptions = new KIXObjectLoadingOptions(
+            [],
+            loadingOptions.sortOrder,
+            loadingOptions.limit,
+            loadingOptions.includes,
+            loadingOptions.expands,
+            [],
+            loadingOptions.cacheType,
+            loadingOptions.searchLimit
+        );
+
+        const context = ContextService.getInstance().getActiveContext();
+        const contextObject = await context.getObject();
+
+        if (Array.isArray(loadingOptions.filter)) {
+            for (const criterion of loadingOptions.filter) {
+                if (typeof criterion.value === 'string') {
+                    const preparedCriterion = new FilterCriteria(
+                        criterion.property, criterion.operator, criterion.type, criterion.filterType, criterion.value
+                    );
+
+                    preparedCriterion.value = await PlaceholderService.getInstance().replacePlaceholders(
+                        criterion.value, contextObject
+                    );
+                    preparedCriterion.value = preparedCriterion.value.replace(SearchProperty.SEARCH_VALUE, searchValue);
+                    if (preparedCriterion.operator === SearchOperator.LIKE) {
+                        preparedCriterion.value = `*${preparedCriterion.value}*`;
+                    }
+                    preparedLoadingOptions.filter.push(preparedCriterion);
+                } else {
+                    preparedLoadingOptions.filter.push(criterion);
+                }
+            }
+        }
+
+        if (Array.isArray(loadingOptions.query)) {
+            for (const q of loadingOptions.query) {
+                const newQuery: [string, string] = [q[0], ''];
+                newQuery[1] = await PlaceholderService.getInstance().replacePlaceholders(q[1], contextObject);
+                newQuery[1] = newQuery[1].replace(SearchProperty.SEARCH_VALUE, searchValue);
+                preparedLoadingOptions.query.push(newQuery);
+            }
+        }
+
+        return preparedLoadingOptions;
     }
 
     public async getPageSize(type: KIXObjectType | string): Promise<number> {
