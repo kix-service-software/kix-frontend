@@ -224,7 +224,7 @@ export class ContextFormManager {
                 );
 
                 const preparedObject = await commitHandler?.prepareObject(
-                    object, formhandler?.objectFormValueMapper, false
+                    object, formhandler?.objectFormValueMapper, false, true
                 );
                 contextPreference.formObject = JSON.stringify(preparedObject);
             }

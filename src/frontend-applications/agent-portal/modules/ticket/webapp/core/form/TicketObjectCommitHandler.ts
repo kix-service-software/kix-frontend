@@ -42,11 +42,11 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     }
 
     public async prepareObject(
-        ticket: Ticket, objectValueMapper?: ObjectFormValueMapper, forCommit: boolean = true
+        ticket: Ticket, objectValueMapper?: ObjectFormValueMapper, forCommit: boolean = true, forStorage?: boolean
     ): Promise<Ticket> {
         const newTicket = await super.prepareObject(ticket, objectValueMapper, forCommit);
 
-        await this.prepareArticles(newTicket, forCommit, ticket.QueueID);
+        await this.prepareArticles(newTicket, forCommit, ticket.QueueID, forStorage);
         await this.prepareTitle(newTicket);
         this.prepareTicket(newTicket);
         this.prepareSpecificAttributes(newTicket);
@@ -76,7 +76,9 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         }
     }
 
-    private async prepareArticles(ticket: Ticket, forCommit: boolean, orgTicketQueueID: number): Promise<void> {
+    private async prepareArticles(
+        ticket: Ticket, forCommit: boolean, orgTicketQueueID: number, forStorage?: boolean
+    ): Promise<void> {
         if (ticket.Articles?.length) {
             ticket.Articles = ticket.Articles.filter((a) => a.ChannelID);
             /**
@@ -98,7 +100,9 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                     await this.prepareReferencedArticle(article, ticket);
                 } else {
                     article.Attachments = null;
-                    article.Body = article.Body?.replace(/<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g, '');
+                    if (!forStorage) {
+                        article.Body = article.Body?.replace(/<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g, '');
+                    }
                 }
 
                 this.prepareRecipients(article);
