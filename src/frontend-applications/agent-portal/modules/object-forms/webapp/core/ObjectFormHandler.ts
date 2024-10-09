@@ -11,6 +11,7 @@ import { Error } from '../../../../../../server/model/Error';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 import { Context } from '../../../../model/Context';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 import { ComponentContent } from '../../../base-components/webapp/core/ComponentContent';
 import { FormFactory } from '../../../base-components/webapp/core/FormFactory';
 import { OverlayService } from '../../../base-components/webapp/core/OverlayService';
@@ -50,9 +51,12 @@ export class ObjectFormHandler<T extends KIXObject = any> {
             this.objectFormValueMapper.formContext = this.form?.formContext;
             this.objectFormValueMapper.setFormConfiguration(this.form);
 
-            const formObject = await this.context.getObject(
-                this.form?.objectType || this.context.descriptor.kixObjectTypes[0], createNewInstance
-            );
+            let formObject = this.context.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
+            if (!formObject) {
+                formObject = await this.context.getObject(
+                    this.form?.objectType || this.context.descriptor.kixObjectTypes[0], createNewInstance
+                );
+            }
 
             const start = Date.now();
             await this.objectFormValueMapper.mapFormValues(formObject).catch((e) => console.error(e));
