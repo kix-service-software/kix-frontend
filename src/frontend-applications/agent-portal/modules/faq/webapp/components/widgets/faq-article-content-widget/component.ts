@@ -153,9 +153,15 @@ class Component {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
                 loading: true, hint: 'Translatable#Prepare File Download'
             });
-            const downloadableAttachment = await this.loadAttachment(attachment, undefined, true);
+            const isPDF = attachment.ContentType === 'application/pdf';
+
+            const downloadableAttachment = await this.loadAttachment(attachment, undefined, !isPDF);
             if (downloadableAttachment) {
-                BrowserUtil.startFileDownload(downloadableAttachment);
+                if (isPDF) {
+                    BrowserUtil.openPDF(downloadableAttachment.Content, downloadableAttachment.Filename);
+                } else {
+                    BrowserUtil.startFileDownload(downloadableAttachment);
+                }
             }
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         }

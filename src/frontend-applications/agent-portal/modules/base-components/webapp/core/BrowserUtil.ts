@@ -128,9 +128,11 @@ export class BrowserUtil {
         if (name) {
             pdfWindow.document.title = name;
         }
+        const pdfBuffer = Buffer.from(content, 'base64');
+        const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
+        const pdfURL = URL.createObjectURL(blob);
         pdfWindow.document.body.innerHTML
-            = '<embed style="height:100%; width:100%" type="application/pdf" src="data:application/pdf;'
-            + ';base64,' + content + '" />';
+            = '<embed style="height:100%; width:100%" type="application/pdf" src="' + pdfURL + '" />';
     }
 
     public static readFile(file: File): Promise<string> {
