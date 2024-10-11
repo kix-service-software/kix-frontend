@@ -70,7 +70,8 @@ class OverlayComponent {
     private openOverlay<T extends KIXObject>(
         type: OverlayType, widgetInstanceId: string, content: ComponentContent<T>, title: string,
         icon: string | ObjectIcon, closeButton: boolean, position: [number, number],
-        newListenerId: string, large: boolean, toastTimeoutMillis: number = 2000, autoClose: boolean = true
+        newListenerId: string, large: boolean, autoSize: boolean, toastTimeoutMillis: number = 2000,
+        autoClose: boolean = true
     ): void {
         if (this.currentListenerId) {
             this.closeOverlay();
@@ -102,7 +103,7 @@ class OverlayComponent {
                 this.position[1] += window.scrollY;
             }
 
-            this.state.overlayClass = this.getOverlayTypeClass(type, large);
+            this.state.overlayClass = this.getOverlayTypeClass(type, large, autoSize);
             this.currentListenerId = newListenerId;
 
             this.applyWidgetConfiguration(widgetInstanceId);
@@ -245,7 +246,9 @@ class OverlayComponent {
         }
     }
 
-    private getOverlayTypeClass(type: OverlayType, large: boolean = false): string {
+    private getOverlayTypeClass(
+        type: OverlayType, large: boolean = false, autoSize: boolean = false
+    ): string {
         switch (type) {
             case OverlayType.HINT:
                 return 'hint-overlay';
@@ -264,7 +267,7 @@ class OverlayComponent {
             case OverlayType.ERROR_TOAST:
                 return 'toast-overlay error-toast';
             case OverlayType.CONTENT_OVERLAY:
-                return 'content-overlay' + (large ? ' large' : '');
+                return 'content-overlay' + (large ? ' large' : '') + (autoSize ? ' size-auto' : '');
             case OverlayType.TABLE_COLUMN_FILTER:
                 return 'table-column-filter-overlay';
             default:
