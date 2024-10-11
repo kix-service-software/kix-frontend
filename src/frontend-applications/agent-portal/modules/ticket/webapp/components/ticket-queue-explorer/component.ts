@@ -45,7 +45,12 @@ export class Component {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (data: any, eventId: string): void => {
-                this.state.activeNode = this.getActiveNode(this.context?.queueId);
+                if (this.context?.queueId) {
+                    this.state.activeNode = this.getActiveNode(this.context?.queueId);
+                } else {
+                    this.state.activeNode = undefined;
+                    this.state.myTeamsActive = this.context?.queueId === 0;
+                }
             }
         };
 
@@ -123,6 +128,13 @@ export class Component {
             context.setQueue(null);
         }
         context.setAdditionalInformation('STRUCTURE', [allText]);
+    }
+
+    public async showMyTeams(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context instanceof TicketContext) {
+            context.setQueue(0);
+        }
     }
 
 }

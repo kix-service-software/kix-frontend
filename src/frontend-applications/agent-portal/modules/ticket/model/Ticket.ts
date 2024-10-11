@@ -442,6 +442,13 @@ export class Ticket extends KIXObject {
             InputType: InputFieldTypes.DROPDOWN
         },
         {
+            Property: TicketProperty.MY_QUEUES,
+            Operations: [SearchOperator.EQUALS],
+            APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.DROPDOWN
+        },
+        {
             Property: TicketProperty.RESPONSIBLE_ID,
             Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
             APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,

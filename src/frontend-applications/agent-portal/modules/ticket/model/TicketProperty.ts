@@ -29,6 +29,7 @@ export enum TicketProperty {
 
     QUEUE_ID = 'QueueID',
     QUEUE = 'Queue',
+    MY_QUEUES = 'MyQueues',
 
     QUEUE_FULLNAME = 'QueueFullname',
 

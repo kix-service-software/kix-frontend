@@ -7,27 +7,44 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.ticket-queue-explorer>
+<div class="ticket-queue-explorer">
     <widget
         instanceId=state.instanceId
         title=(
             state.widgetConfiguration
                 ? state.widgetConfiguration.title
                 : "Queues"
-        )>
+        )
+    >
         <@content>
-            <div.show-all
-                class={
-                    active: !state.activeNode
-                }
-                on-click("showAll")>
+            <div
+                class=[
+                    "show-all",
+                    {
+                        active: !state.activeNode && !state.myTeamsActive,
+                    },
+                ]
+                on-click("showAll")
+            >
                 <translation-string pattern="Translatable#Show Backlog"/>
+            </div>
+            <div
+                class=[
+                    "show-all",
+                    {
+                        active: !state.activeNode && state.myTeamsActive,
+                    },
+                ]
+                on-click("showMyTeams")
+            >
+                <translation-string pattern="Translatable#My Teams"/>
             </div>
             <if(state.nodes)>
                 <tree
                     tree=state.nodes
                     activeNode=state.activeNode
-                    on-nodeClicked("activeNodeChanged")/>
+                    on-nodeClicked("activeNodeChanged")
+                />
             </if>
             <else>
                 <loading-spinner/>

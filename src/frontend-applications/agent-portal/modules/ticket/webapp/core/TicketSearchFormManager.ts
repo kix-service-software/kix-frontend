@@ -154,6 +154,7 @@ export class TicketSearchFormManager extends SearchFormManager {
             || property === ArticleProperty.CUSTOMER_VISIBLE
             || property === TicketProperty.OWNER_OOO
             || property === TicketProperty.RESPONSIBLE_OOO
+            || property === TicketProperty.MY_QUEUES
         ) {
             return false;
         }
@@ -178,6 +179,7 @@ export class TicketSearchFormManager extends SearchFormManager {
                 }
                 break;
             case TicketProperty.OWNER_OOO:
+            case TicketProperty.MY_QUEUES:
             case TicketProperty.RESPONSIBLE_OOO:
             case ArticleProperty.CUSTOMER_VISIBLE:
                 const no = await TranslationService.translate('No');
