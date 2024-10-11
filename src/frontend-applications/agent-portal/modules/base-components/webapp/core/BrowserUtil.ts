@@ -69,7 +69,7 @@ export class BrowserUtil {
             );
             OverlayService.getInstance().openOverlay(
                 OverlayType.CONFIRM, null, content, title, null, closeButton,
-                undefined, undefined, undefined, undefined, undefined
+                undefined, undefined, undefined, undefined, undefined, undefined
             );
         }
     }
@@ -80,7 +80,7 @@ export class BrowserUtil {
         const settings = new RefreshToastSettings(message, reloadApp, objectType);
         const componentContent = new ComponentContent('refresh-app-toast', settings);
         OverlayService.getInstance().openOverlay(
-            OverlayType.HINT_TOAST, null, componentContent, '', null, false, null, null, null, null, true
+            OverlayType.HINT_TOAST, null, componentContent, '', null, false, null, null, null, null, null, true
         );
     }
 
