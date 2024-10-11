@@ -49,108 +49,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
 
-        const stateTypeFilterCriteria = new FilterCriteria(
-            TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
-        );
+        this.createOpenTicketTableWidgetConfiguration(configurations);
+        this.createNewTicketTableWidgetConfiguration(configurations);
+        this.createMyTeamsTicketTableWidgetConfiruation(configurations);
 
-        const openTicketsLoadingOptions = new KIXObjectLoadingOptions();
-        openTicketsLoadingOptions.filter = [
-            new FilterCriteria(
-                TicketProperty.OWNER_ID, SearchOperator.EQUALS,
-                FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
-            ),
-            new FilterCriteria(
-                TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
-                FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
-            ),
-            stateTypeFilterCriteria
-        ];
-        openTicketsLoadingOptions.sortOrder = 'Ticket.CreateTime:datetime';
-        openTicketsLoadingOptions.limit = 10;
-        openTicketsLoadingOptions.searchLimit = 100;
-
-        const tableMyOpenTicketsConfiguration = new TableConfiguration(
-            'home-dashboard-ticket-table-myOpenTickets', 'Translatable#My Open Tickets Table', ConfigurationType.Table,
-            KIXObjectType.TICKET, openTicketsLoadingOptions, null, null, null, true, true,
-            new ToggleOptions('ticket-article-details', 'article', [], true)
-        );
-        configurations.push(tableMyOpenTicketsConfiguration);
-
-        const tableMyOpenTicketsWidgetConfiguration = new TableWidgetConfiguration(
-            'home-dashboard-ticket-table-myOpenTickets-widget', 'Translatable#My Open Tickets Table Widget',
-            ConfigurationType.TableWidget, KIXObjectType.TICKET, null,
-            new ConfigurationDefinition('home-dashboard-ticket-table-myOpenTickets', ConfigurationType.Table)
-        );
-        configurations.push(tableMyOpenTicketsWidgetConfiguration);
-
-        const myOpenTicketsWidget = new WidgetConfiguration(
-            'home-dashboard-myOpenTickets-widget', 'Translatable#My Open Tickets Widget', ConfigurationType.Widget,
-            'table-widget', 'Translatable#My Open Tickets', ['bulk-action', 'csv-export-action'],
-            new ConfigurationDefinition(
-                'home-dashboard-ticket-table-myOpenTickets-widget', ConfigurationType.TableWidget
-            ),
-            null, false, true, 'kix-icon-ticket', false
-        );
-        configurations.push(myOpenTicketsWidget);
-
-        const newTicketsLoadingOptions = new KIXObjectLoadingOptions();
-        newTicketsLoadingOptions.filter = [
-            new FilterCriteria(
-                TicketProperty.STATE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
-            )
-        ];
-        newTicketsLoadingOptions.sortOrder = 'Ticket.-CreateTime:datetime';
-        newTicketsLoadingOptions.limit = 10;
-        newTicketsLoadingOptions.searchLimit = 100;
-
-        const newTicketsTableConfig = new TableConfiguration(
-            'home-dashboard-ticket-table-new', 'Translatable#New Tickets Table', ConfigurationType.Table,
-            KIXObjectType.TICKET, newTicketsLoadingOptions,
-            null,
-            [
-                new DefaultColumnConfiguration(null, null, null,
-                    TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true
-                ),
-                new DefaultColumnConfiguration(null, null, null,
-                    TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                ),
-                new DefaultColumnConfiguration(null, null, null,
-                    TicketProperty.TITLE, true, false, true, true, 463, true, true, false, DataType.STRING,
-                    true, null, null, false
-                ),
-                new DefaultColumnConfiguration(null, null, null,
-                    TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
-                ),
-                new DefaultColumnConfiguration(null, null, null,
-                    TicketProperty.ORGANISATION_ID, true, false, true, true, 225, true, true
-                ),
-                new DefaultColumnConfiguration(null, null, null,
-                    TicketProperty.CREATED, true, false, true, true, 155, true, true, false, DataType.DATE_TIME
-                ),
-                new DefaultColumnConfiguration(null, null, null,
-                    TicketProperty.AGE, true, false, true, true, 90, true, true, false, DataType.NUMBER
-                ),
-            ], null,
-            true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
-        );
-        configurations.push(newTicketsTableConfig);
-
-        const newTicketsTableWidget = new TableWidgetConfiguration(
-            'home-dashboard-ticket-new-table-widget', 'Translatable#New Tickets Table Widget',
-            ConfigurationType.TableWidget,
-            KIXObjectType.TICKET, null,
-            new ConfigurationDefinition('home-dashboard-ticket-table-new', ConfigurationType.Table),
-            null, null, true
-        );
-        configurations.push(newTicketsTableWidget);
-
-        const newTicketsWidget = new WidgetConfiguration(
-            'home-dashboard-new-tickets-widget', 'Translatable#New Tickets Widget', ConfigurationType.Widget,
-            'table-widget', 'Translatable#New Tickets', ['bulk-action', 'csv-export-action'],
-            new ConfigurationDefinition('home-dashboard-ticket-new-table-widget', ConfigurationType.TableWidget),
-            null, false, true, 'kix-icon-ticket', false
-        );
-        configurations.push(newTicketsWidget);
 
         const notesSidebar = new WidgetConfiguration(
             'home-dashboard-notes-widget', 'Translatable#Notes', ConfigurationType.Widget,
@@ -178,6 +80,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     new ConfiguredWidget(
                         'home-dashboard-new-tickets-widget', 'home-dashboard-new-tickets-widget', null,
                         [new UIComponentPermission('tickets', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'home-dashboard-myteams-tickets-widget', null,
+                        configurations.find((c) => c.id === 'home-dashboard-myteams-widget')
                     )
                 ], [], [], [], [], [],
                 true
@@ -301,6 +207,149 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public async getFormConfigurations(): Promise<IConfiguration[]> {
         return [];
+    }
+
+    private createOpenTicketTableWidgetConfiguration(configurations: IConfiguration[]): void {
+        const stateTypeFilterCriteria = new FilterCriteria(
+            TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
+        );
+
+        const openTicketsLoadingOptions = new KIXObjectLoadingOptions();
+        openTicketsLoadingOptions.filter = [
+            new FilterCriteria(
+                TicketProperty.OWNER_ID, SearchOperator.EQUALS,
+                FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
+            ),
+            new FilterCriteria(
+                TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
+                FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
+            ),
+            stateTypeFilterCriteria
+        ];
+        openTicketsLoadingOptions.sortOrder = 'Ticket.CreateTime:datetime';
+        openTicketsLoadingOptions.limit = 10;
+        openTicketsLoadingOptions.searchLimit = 100;
+
+        const tableMyOpenTicketsConfiguration = new TableConfiguration(
+            'home-dashboard-ticket-table-myOpenTickets', 'Translatable#My Open Tickets Table', ConfigurationType.Table,
+            KIXObjectType.TICKET, openTicketsLoadingOptions, null, null, null, true, true,
+            new ToggleOptions('ticket-article-details', 'article', [], true)
+        );
+        configurations.push(tableMyOpenTicketsConfiguration);
+
+        const tableMyOpenTicketsWidgetConfiguration = new TableWidgetConfiguration(
+            'home-dashboard-ticket-table-myOpenTickets-widget', 'Translatable#My Open Tickets Table Widget',
+            ConfigurationType.TableWidget, KIXObjectType.TICKET, null,
+            new ConfigurationDefinition('home-dashboard-ticket-table-myOpenTickets', ConfigurationType.Table)
+        );
+        configurations.push(tableMyOpenTicketsWidgetConfiguration);
+
+        const myOpenTicketsWidget = new WidgetConfiguration(
+            'home-dashboard-myOpenTickets-widget', 'Translatable#My Open Tickets Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#My Open Tickets', ['bulk-action', 'csv-export-action'],
+            new ConfigurationDefinition(
+                'home-dashboard-ticket-table-myOpenTickets-widget', ConfigurationType.TableWidget
+            ),
+            null, false, true, 'kix-icon-ticket', false
+        );
+        configurations.push(myOpenTicketsWidget);
+    }
+
+    private createNewTicketTableWidgetConfiguration(configurations: IConfiguration[]): void {
+        const newTicketsLoadingOptions = new KIXObjectLoadingOptions();
+        newTicketsLoadingOptions.filter = [
+            new FilterCriteria(
+                TicketProperty.STATE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+            )
+        ];
+        newTicketsLoadingOptions.sortOrder = 'Ticket.-CreateTime:datetime';
+        newTicketsLoadingOptions.limit = 10;
+        newTicketsLoadingOptions.searchLimit = 100;
+
+        const newTicketsTableConfig = new TableConfiguration(
+            'home-dashboard-ticket-table-new', 'Translatable#New Tickets Table', ConfigurationType.Table,
+            KIXObjectType.TICKET, newTicketsLoadingOptions,
+            null,
+            [
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.TITLE, true, false, true, true, 463, true, true, false, DataType.STRING,
+                    true, null, null, false
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.ORGANISATION_ID, true, false, true, true, 225, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.CREATED, true, false, true, true, 155, true, true, false, DataType.DATE_TIME
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.AGE, true, false, true, true, 90, true, true, false, DataType.NUMBER
+                ),
+            ], null,
+            true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
+        );
+        configurations.push(newTicketsTableConfig);
+
+        const newTicketsTableWidget = new TableWidgetConfiguration(
+            'home-dashboard-ticket-new-table-widget', 'Translatable#New Tickets Table Widget',
+            ConfigurationType.TableWidget,
+            KIXObjectType.TICKET, null,
+            new ConfigurationDefinition('home-dashboard-ticket-table-new', ConfigurationType.Table),
+            null, null, true
+        );
+        configurations.push(newTicketsTableWidget);
+
+        const newTicketsWidget = new WidgetConfiguration(
+            'home-dashboard-new-tickets-widget', 'Translatable#New Tickets Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#New Tickets', ['bulk-action', 'csv-export-action'],
+            new ConfigurationDefinition('home-dashboard-ticket-new-table-widget', ConfigurationType.TableWidget),
+            null, false, true, 'kix-icon-ticket', false
+        );
+        configurations.push(newTicketsWidget);
+    }
+
+    private createMyTeamsTicketTableWidgetConfiruation(configurations: IConfiguration[]): void {
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.filter = [
+            new FilterCriteria(
+                TicketProperty.MY_QUEUES, SearchOperator.EQUALS,
+                FilterDataType.NUMERIC, FilterType.AND, 1
+            ),
+            new FilterCriteria(
+                TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, 'Open'
+            )
+        ];
+        loadingOptions.sortOrder = 'Ticket.CreateTime:datetime';
+        loadingOptions.limit = 10;
+        loadingOptions.searchLimit = 100;
+
+        const tableConfiguration = new TableConfiguration(
+            'home-dashboard-ticket-table-myteams', 'Translatable#My Teams', ConfigurationType.Table,
+            KIXObjectType.TICKET, loadingOptions, null, null, null, true, true
+        );
+        configurations.push(tableConfiguration);
+
+        const tableWidgetConfiguration = new TableWidgetConfiguration(
+            'home-dashboard-ticket-table-myteams-widget', 'Translatable#My Teams',
+            ConfigurationType.TableWidget, KIXObjectType.TICKET, null, null, tableConfiguration
+        );
+
+        const widgetConfiguration = new WidgetConfiguration(
+            'home-dashboard-myteams-widget', 'Translatable#My Teams', ConfigurationType.Widget,
+            'table-widget', 'Translatable#My Teams', ['bulk-action', 'csv-export-action'],
+            null, tableWidgetConfiguration, false, true, 'kix-icon-ticket', false
+        );
+        widgetConfiguration.valid = false;
+        configurations.push(widgetConfiguration);
     }
 
 }
