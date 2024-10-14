@@ -21,8 +21,6 @@ import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private sortColumnTreeHandler: TreeHandler;
-
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -53,12 +51,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.tableConfigurationTemplate = KIXModulesService.getConfigurationComponentTemplate(
             ConfigurationType.Table
         );
-        await this.updateSortConfiguration();
 
-        setTimeout(() => this.state.prepared = true, 20);
+        this.updateSortConfiguration();
+
+        this.state.prepared = true;
     }
 
     private async updateSortConfiguration(): Promise<void> {
+        const sortColumnTreeHandler = new TreeHandler();
+        sortColumnTreeHandler.setMultiSelect(false);
+        TreeService.getInstance().registerTreeHandler(this.state.sortTreeId, sortColumnTreeHandler);
+
         if (Array.isArray(this.state.configuration.sort)) {
             this.state.isDESC = this.state.configuration.sort[1] === SortOrder.DOWN;
         }
@@ -75,13 +78,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         nodes = nodes.sort((a, b) => a.label.localeCompare(b.label));
 
-        this.sortColumnTreeHandler = TreeService.getInstance().getTreeHandler(this.state.sortTreeId);
-        if (this.sortColumnTreeHandler) {
-            this.sortColumnTreeHandler.setTree(nodes, null, true);
+        if (sortColumnTreeHandler) {
+            sortColumnTreeHandler.setTree(nodes, null, true);
             const selectedNode = Array.isArray(this.state.configuration.sort)
                 ? TreeUtil.findNode(nodes, this.state.configuration.sort[0])
                 : nodes[0];
-            this.sortColumnTreeHandler.setSelection([selectedNode], true);
+            sortColumnTreeHandler.setSelection([selectedNode], true);
         }
     }
 

@@ -120,7 +120,7 @@ export class TicketContext extends Context {
     private async loadTickets(silent: boolean = false, limit?: number): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.TICKET);
 
-        const loadingOptions = new KIXObjectLoadingOptions(
+        let loadingOptions = new KIXObjectLoadingOptions(
             [], null, null, [KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.STATE_TYPE, TicketProperty.UNSEEN]
         );
 
@@ -166,7 +166,7 @@ export class TicketContext extends Context {
             ));
         }
 
-        await this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
+        loadingOptions = await this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
 
         const tickets = await KIXObjectService.loadObjects(
             KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined,
