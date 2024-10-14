@@ -55,6 +55,7 @@ import { TableFactoryService } from '../../../table/webapp/core/factory/TableFac
 import { TicketLockLabelProvider } from './TicketLockLabelProvider';
 import { DoNotSentEventHandler } from './DoNotSentEventHandler';
 import { UserCounterEventHandler } from './UserCounterEventHandler';
+import { TicketBulkPrintAction } from './actions/TicketBulkPrintAction';
 
 export class UIModule implements IUIModule {
 
@@ -138,6 +139,7 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('ticket-watch-action', TicketWatchAction);
         ActionFactory.getInstance().registerAction('ticket-lock-action', TicketLockAction);
         ActionFactory.getInstance().registerAction('ticket-print-action', TicketPrintAction);
+        ActionFactory.getInstance().registerAction('ticket-bulk-print-action', TicketBulkPrintAction);
     }
 
     private async registerContexts(): Promise<void> {
