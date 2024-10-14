@@ -246,7 +246,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const myOpenTicketsWidget = new WidgetConfiguration(
             'home-dashboard-myOpenTickets-widget', 'Translatable#My Open Tickets Widget', ConfigurationType.Widget,
-            'table-widget', 'Translatable#My Open Tickets', ['bulk-action', 'csv-export-action'],
+            'table-widget', 'Translatable#My Open Tickets',
+            [
+                'bulk-action', 'ticket-bulk-print-action', 'csv-export-action'
+            ],
             new ConfigurationDefinition(
                 'home-dashboard-ticket-table-myOpenTickets-widget', ConfigurationType.TableWidget
             ),
@@ -309,7 +312,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const newTicketsWidget = new WidgetConfiguration(
             'home-dashboard-new-tickets-widget', 'Translatable#New Tickets Widget', ConfigurationType.Widget,
-            'table-widget', 'Translatable#New Tickets', ['bulk-action', 'csv-export-action'],
+            'table-widget', 'Translatable#New Tickets',
+            [
+                'bulk-action', 'ticket-bulk-print-action', 'csv-export-action'
+            ],
             new ConfigurationDefinition('home-dashboard-ticket-new-table-widget', ConfigurationType.TableWidget),
             null, false, true, 'kix-icon-ticket', false
         );
@@ -345,7 +351,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const widgetConfiguration = new WidgetConfiguration(
             'home-dashboard-myteams-widget', 'Translatable#My Teams', ConfigurationType.Widget,
-            'table-widget', 'Translatable#My Teams', ['bulk-action', 'csv-export-action'],
+            'table-widget', 'Translatable#My Teams',
+            [
+                'bulk-action', 'ticket-bulk-print-action', 'csv-export-action'
+            ],
             null, tableWidgetConfiguration, false, true, 'kix-icon-ticket', false
         );
         widgetConfiguration.valid = false;
