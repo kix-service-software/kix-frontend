@@ -57,8 +57,9 @@ export class TicketHistoryTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.TICKET_HISTORY, null, null, tableColumns, [], null, null, null, null,
-                TableHeaderHeight.SMALL
+                KIXObjectType.TICKET_HISTORY, null, 20, tableColumns,
+                [], null, null,
+                null, null, TableHeaderHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
