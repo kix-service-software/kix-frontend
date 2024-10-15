@@ -404,6 +404,7 @@ export class ObjectFormValue<T = any> {
 
     public async setPossibleValues(values: T[]): Promise<void> {
         this.possibleValues = Array.isArray(values) ? values : values ? [values] : [];
+        await this.applyPossibleValues();
     }
 
     public async addPossibleValues(values: T[]): Promise<void> {
