@@ -27,6 +27,7 @@ import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTyp
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { ContactProperty } from '../../../customer/model/ContactProperty';
 
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
@@ -142,6 +143,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
     public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
         let icon = property;
+
         switch (property) {
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
                 icon = 'kix-icon-productive_active';
@@ -149,8 +151,12 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             case ConfigItemProperty.CUR_INCI_STATE_ID:
                 icon = 'kix-icon-service_active';
                 break;
+            case ContactProperty.CREATE_NEW_TICKET:
+                icon = 'kix-icon-new-ticket';
+                break;
             default:
         }
+
         return icon;
     }
 

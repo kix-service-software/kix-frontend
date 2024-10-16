@@ -289,6 +289,10 @@ export class ObjectFormValue<T = any> {
         return this.prepareLabel();
     }
 
+    public async postInitFormValue(): Promise<void> {
+        return;
+    }
+
     public async prepareLabel(): Promise<void> {
         if (!this.label || this.label === this.property) {
             this.label = await LabelService.getInstance().getPropertyText(
