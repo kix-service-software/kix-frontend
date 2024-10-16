@@ -16,6 +16,8 @@ import { NewTicketDialogContext, TicketDialogUtil } from '../../../../ticket/web
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ConfigItem } from '../../../../cmdb/model/ConfigItem';
+import { OrganisationDetailsContext } from '../../core/context/OrganisationDetailsContext';
+import { TicketProperty } from '../../../../ticket/model/TicketProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -52,6 +54,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (this.object instanceof ConfigItem) {
             additionalInformation.push([`${KIXObjectType.CONFIG_ITEM}-ID`, [this.object.ConfigItemID]]);
+        }
+
+        const context = ContextService.getInstance().getActiveContext();
+        if (context.contextId === OrganisationDetailsContext.CONTEXT_ID) {
+            additionalInformation.push([TicketProperty.ORGANISATION_ID, context.getObjectId()]);
         }
 
         TicketDialogUtil.createTicket(null, null, null, null, additionalInformation);

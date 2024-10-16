@@ -111,6 +111,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
         const startInitFormValues = Date.now();
         await this.initFormValues();
+        await this.initFormValues(undefined, true);
         const endInitFormValues = Date.now();
         console.debug(`Init Form Values: ${endInitFormValues - startInitFormValues}ms`);
 
@@ -148,16 +149,21 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
     }
 
-    protected async initFormValues(formValues = this.formValues): Promise<Promise<void>> {
+    protected async initFormValues(formValues = this.formValues, postInit?: boolean): Promise<Promise<void>> {
         for (const fv of formValues.filter((fv) => fv.enabled)) {
             const start = Date.now();
-            await fv.initFormValue();
+
+            if (postInit) {
+                await fv.postInitFormValue();
+            } else {
+                await fv.initFormValue();
+            }
             const end = Date.now();
 
-            console.debug(`Init Formvalue (${fv.property} - ${(fv as any).dfName}): ${end - start}ms`);
+            console.debug(`${postInit ? 'Post-' : ''}Init Formvalue (${fv.property} - ${(fv as any).dfName}): ${end - start}ms`);
 
             if (fv.formValues?.length) {
-                await this.initFormValues(fv.formValues);
+                await this.initFormValues(fv.formValues, postInit);
             }
         }
     }
