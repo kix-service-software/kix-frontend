@@ -18,7 +18,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 "col-sm-9": state.item.input === "ChecklistState",
             },
         ]>
-            ${state.item.title}
+            <span class="text-truncate">
+                ${state.item.title}
+            </span>
         </div>
         <if(state.item.input === "Text")>
             <input

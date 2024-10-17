@@ -47,6 +47,7 @@ import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { UserPreferencesEventHandler } from './UserPreferencesEventHandler';
 import { UserRoleDeleteAction } from './admin/actions/UserRoleDeleteAction';
+import { PasswordConfirmValidator } from './PasswordConfirmValidator';
 
 
 export class UIModule implements IUIModule {
@@ -87,6 +88,7 @@ export class UIModule implements IUIModule {
         this.registerRole();
 
         FormValidationService.getInstance().registerValidator(new UserPasswordValidator());
+        FormValidationService.getInstance().registerValidator(new PasswordConfirmValidator());
 
         UserPreferencesEventHandler.getInstance();
     }
