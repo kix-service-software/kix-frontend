@@ -60,13 +60,15 @@ export class ObjectIconService extends KIXObjectAPIService {
             if (objectIds && objectIds.length) {
                 const filteredIcons = objectIcons?.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
                 objectResponse = new ObjectResponse(filteredIcons, filteredIcons.length);
-            } else if (iconLoadingOptions?.object && iconLoadingOptions?.objectId) {
-                const icon = objectIcons.find(
-                    (oi) => oi.Object === iconLoadingOptions.object
-                        && oi.ObjectID.toString() === iconLoadingOptions.objectId.toString()
-                );
-                if (icon) {
-                    objectResponse = new ObjectResponse([icon], 1);
+            } else if (iconLoadingOptions) {
+                if (iconLoadingOptions.object && iconLoadingOptions.objectId) {
+                    const icon = objectIcons.find(
+                        (oi) => oi.Object === iconLoadingOptions.object
+                            && oi.ObjectID.toString() === iconLoadingOptions.objectId.toString()
+                    );
+                    if (icon) {
+                        objectResponse = new ObjectResponse([icon], 1);
+                    }
                 }
             } else {
                 objectResponse = new ObjectResponse<ObjectIcon>(objectIcons, objectIcons.length);
