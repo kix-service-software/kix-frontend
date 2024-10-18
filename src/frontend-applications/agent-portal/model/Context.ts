@@ -125,9 +125,11 @@ export abstract class Context {
                         const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
                         const objectDelete = eventId === ApplicationEvent.OBJECT_DELETED && data?.objectType;
 
-                        TableFactoryService.getInstance().deleteContextTables(
-                            this.contextId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
-                        );
+                        if (data?.contextId === this.contextId) {
+                            TableFactoryService.getInstance().deleteContextTables(
+                                this.contextId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
+                            );
+                        }
 
                         if (objectUpdate || objectDelete) {
                             if (this.objectLists.has(data.objectType)) {

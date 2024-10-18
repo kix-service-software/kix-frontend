@@ -39,4 +39,6 @@ export class ComponentInput {
 
     public expanded: boolean;
 
+    public removeOnClose: boolean;
+
 }
