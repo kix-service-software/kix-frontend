@@ -41,6 +41,7 @@ class Component {
         this.state.multiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
 
         const canRemove = typeof input.canRemoveNode !== 'undefined' ? input.canRemoveNode : true;
+        this.state.removeOnClose = typeof input.removeOnClose !== 'undefined' ? input.removeOnClose : false;
         this.state.removeNodes = canRemove && !this.state.readonly;
         this.state.actions = typeof input.actions !== 'undefined' ? input.actions : [];
         if (input.expanded) {
@@ -154,6 +155,12 @@ class Component {
                         const hiddenInput = (this as any).getEl('hidden-form-list-input');
                         if (hiddenInput && holdFocus) {
                             hiddenInput.focus();
+                        }
+
+                        (this as any).emit('nodesSubmitted', this.treeHandler.getSelectedNodes());
+
+                        if (this.state.removeNodes && this.state.removeOnClose) {
+                            this.treeHandler.selectNone();
                         }
 
                     } else if (!this.state.readonly) {
