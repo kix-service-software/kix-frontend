@@ -6,6 +6,7 @@
         "bundlefile": "kix-frontend.tar.gz"
     },
     "scripts": {
+        "application-prebuild": "rm -rf ./.cache/lasso && node dist/server/ApplicationBuilder.js",
         "start": "node dist/server/index.js",
         "build": "./node_modules/.bin/gulp",
         "lint": "./node_modules/.bin/eslint --quiet --ext .ts ./src/",

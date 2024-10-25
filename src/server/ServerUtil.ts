@@ -7,7 +7,11 @@
  * --
  */
 
+import { MarkoService } from '../frontend-applications/agent-portal/server/services/MarkoService';
 import { Environment } from './model/Environment';
+import { PluginService } from './services/PluginService';
+
+const path = require('path');
 
 export class ServerUtil {
 
@@ -34,4 +38,22 @@ export class ServerUtil {
         return nodeEnv.toLocaleLowerCase();
     }
 
+    public static async buildApplications(): Promise<void> {
+        const pluginDirs = [
+            'frontend-applications',
+            'frontend-applications/agent-portal/modules'
+        ];
+        await PluginService.getInstance().init(pluginDirs.map((pd) => path.join('..', pd)));
+        await MarkoService.getInstance().initializeMarkoApplications();
+    }
+
+
+    public static async initPlugins(): Promise<void> {
+        // load registered plugins
+        const pluginDirs = [
+            'frontend-applications',
+            'frontend-applications/agent-portal/modules'
+        ];
+        await PluginService.getInstance().init(pluginDirs.map((pd) => path.join('..', pd)));
+    }
 }
