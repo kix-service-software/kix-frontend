@@ -20,7 +20,6 @@ import { MigrationService } from '../frontend-applications/agent-portal/migratio
 import { IInitialDataExtension } from '../frontend-applications/agent-portal/model/IInitialDataExtension';
 import { AgentPortalExtensions } from '../frontend-applications/agent-portal/server/extensions/AgentPortalExtensions';
 import { ClientRegistrationService } from '../frontend-applications/agent-portal/server/services/ClientRegistrationService';
-import { MarkoService } from '../frontend-applications/agent-portal/server/services/MarkoService';
 import { PluginService } from './services/PluginService';
 import { IServer } from './model/IServer';
 import { IServiceExtension } from '../frontend-applications/agent-portal/server/extensions/IServiceExtension';
@@ -29,6 +28,7 @@ import { IFrontendServerExtension } from './model/IFrontendServerExtension';
 import { ServerManager } from './ServerManager';
 import { ClientNotificationService } from '../frontend-applications/agent-portal/server/services/ClientNotificationService';
 import { FileService } from '../frontend-applications/agent-portal/modules/file/server/FileService';
+import { ServerUtil } from './ServerUtil';
 
 const path = require('path');
 
@@ -46,7 +46,7 @@ async function initializeServer(): Promise<void> {
 
     const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
-    await initPlugins();
+    await ServerUtil.initPlugins();
     const serviceExtensions = await PluginService.getInstance().getExtensions<IServiceExtension>(
         AgentPortalExtensions.SERVICES
     );
@@ -76,7 +76,7 @@ async function initializeServer(): Promise<void> {
             LoggingService.getInstance().info('CLUSTER - Master start');
 
             await initializeFrontend();
-            await buildApplications();
+            await ServerUtil.buildApplications();
 
             for (const server of servers) {
                 await server.initialize();
@@ -105,7 +105,7 @@ async function initializeServer(): Promise<void> {
         } else {
             LoggingService.getInstance().info(`CLUSTER - Worker ${process.pid} started`);
 
-            await buildApplications();
+            await ServerUtil.buildApplications();
 
             for (const server of servers) {
                 await server.initialize();
@@ -118,7 +118,7 @@ async function initializeServer(): Promise<void> {
         }
     } else {
         await initializeFrontend();
-        await buildApplications();
+        await ServerUtil.buildApplications();
 
         for (const server of servers) {
             await server.initialize();
@@ -129,15 +129,6 @@ async function initializeServer(): Promise<void> {
             );
         }
     }
-}
-
-async function initPlugins(): Promise<void> {
-    // load registered plugins
-    const pluginDirs = [
-        'frontend-applications',
-        'frontend-applications/agent-portal/modules'
-    ];
-    await PluginService.getInstance().init(pluginDirs.map((pd) => path.join('..', pd)));
 }
 
 async function initializeFrontend(): Promise<void> {
@@ -161,16 +152,6 @@ async function initializeFrontend(): Promise<void> {
         process.exit(1);
     }
 }
-
-async function buildApplications(): Promise<void> {
-    const pluginDirs = [
-        'frontend-applications',
-        'frontend-applications/agent-portal/modules'
-    ];
-    await PluginService.getInstance().init(pluginDirs.map((pd) => path.join('..', pd)));
-    await MarkoService.getInstance().initializeMarkoApplications();
-}
-
 
 async function createClientRegistration(): Promise<void> {
     LoggingService.getInstance().info('Create ClientRegsitration');
