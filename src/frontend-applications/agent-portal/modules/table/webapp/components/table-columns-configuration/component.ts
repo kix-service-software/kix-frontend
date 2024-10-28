@@ -70,6 +70,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         for (const c of this.columns) {
             if (c.property) {
                 let prop = c.property;
+                let dependencyIds = [];
                 if (!prop.startsWith('DynamicFields.') && prop.indexOf('.') !== -1) {
 
                     const dep = prop.substring(0, prop.indexOf('.'));
@@ -77,9 +78,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     const text = await LabelService.getInstance().getObjectText(dependency);
                     this.state.columnDependencyNames[c.property] = text;
 
+                    dependencyIds.push(dependency.ObjectId);
                     prop = prop.substring(prop.indexOf('.') + 1, prop.length);
                 }
-                const name = await LabelService.getInstance().getPropertyText(prop, this.objectType);
+                const name = await LabelService.getInstance().getPropertyText(
+                    prop, this.objectType, null, null, null, dependencyIds
+                );
                 this.state.columnNames[c.property] = name;
             }
         }
@@ -109,7 +113,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         });
 
         for (const property of properties) {
-            const text = await LabelService.getInstance().getPropertyText(property, this.objectType);
+            const text = await LabelService.getInstance().getPropertyText(
+                property, this.objectType, null, null, null, dependencyIds
+            );
             if (!nodes.some((n) => n.id === property)) {
                 nodes.push(new TreeNode(property, text));
             }
