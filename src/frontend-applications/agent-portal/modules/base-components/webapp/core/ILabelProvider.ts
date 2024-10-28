@@ -30,7 +30,9 @@ export interface ILabelProvider<T = any> {
 
     getObjectName(plural?: boolean, translatable?: boolean): Promise<string>;
 
-    getPropertyText(property: string, short?: boolean, translatable?: boolean, object?: KIXObject): Promise<string>;
+    getPropertyText(
+        property: string, short?: boolean, translatable?: boolean, object?: KIXObject, objectIds?: string[] | number[]
+    ): Promise<string>;
 
     getExportPropertyText(property: string, useDisplayText?: boolean): Promise<string>;
 
