@@ -250,4 +250,27 @@ export class ConfigItemClassAttributeUtil {
         return null;
     }
 
+    public static async getAttributebyProperty(property: string, classIds: number[]): Promise<AttributeDefinition> {
+        let ciClasses = await this.loadCIClasses(classIds);
+        if (ciClasses && ciClasses.length) {
+            if (classIds) {
+                ciClasses = [ciClasses[0]];
+            }
+            for (const ciClass of ciClasses) {
+                const attribute = this.getAttribute(ciClass?.CurrentDefinition?.Definition, property);
+                if (attribute) {
+                    if (attribute.Sub) {
+                        const subAttribute = this.getAttribute(attribute.Sub, property);
+                        if (subAttribute) {
+                            return subAttribute;
+                        }
+                    }
+                    return attribute;
+                }
+            };
+        }
+
+        return null;
+    }
+
 }

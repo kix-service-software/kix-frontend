@@ -421,19 +421,21 @@ export class LabelService {
 
     public async getPropertyText(
         property: string, objectType: KIXObjectType | string, short: boolean = false, translatable: boolean = true,
-        object?: KIXObject
+        object?: KIXObject, objectIds?: string[] | number[]
     ): Promise<string> {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
             for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
-                const result = await extendedLabelProvider.getPropertyText(property, short, translatable);
+                const result = await extendedLabelProvider.getPropertyText(
+                    property, short, translatable, null, objectIds
+                );
                 if (result) {
                     return result;
                 }
             }
 
-            return await labelProvider.getPropertyText(property, short, translatable, object);
+            return await labelProvider.getPropertyText(property, short, translatable, object, objectIds);
         }
         return null;
     }
