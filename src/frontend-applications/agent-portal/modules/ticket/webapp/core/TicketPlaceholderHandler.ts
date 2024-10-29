@@ -299,7 +299,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         translate?: boolean
     ): Promise<string> {
         let result = '';
-        const flArticles = await this.getArticles(ticket);
+        const flArticles = await this.getArticles(ticket, null, objectString);
         if (flArticles && !!flArticles.length) {
             const article = SortUtil.sortObjects(
                 flArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER,
@@ -315,7 +315,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     private async getArticles(
-        ticket: Ticket, articleId?: number
+        ticket: Ticket, articleId?: number, objectString?: string
     ): Promise<Article[]> {
         let articles: Article[] = [];
         if (ticket?.Articles?.every((a) => a.ArticleID)) {
@@ -331,15 +331,35 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             }
         } else if (ticket.TicketID && articleId) {
             articles = await this.loadArticle(ticket.TicketID, articleId);
+        } else if (
+            ticket.TicketID
+            && (
+                objectString === 'FIRST'
+                || objectString === 'LAST'
+            )
+        ) {
+            articles = await this.loadArticle(ticket.TicketID, null, objectString);
         }
         return articles;
     }
 
-    private async loadArticle(ticketId: number, articleId: number): Promise<Article[]> {
+    private async loadArticle(ticketId: number, articleId: number, objectString?: string): Promise<Article[]> {
+        let limit = null;
+        let sortOrder = null;
+
+        if (objectString === 'LAST') {
+            limit = 1;
+            sortOrder = 'Article.-ID';
+        }
+        else if (objectString === 'FIRST') {
+            limit = 1;
+            sortOrder = 'Article.ID';
+        }
+
         return await KIXObjectService.loadObjects<Article>(
             KIXObjectType.ARTICLE, articleId ? [articleId] : null,
             new KIXObjectLoadingOptions(
-                null, null, null, [ArticleProperty.ATTACHMENTS]
+                null, sortOrder, limit, [ArticleProperty.ATTACHMENTS]
             ), new ArticleLoadingOptions(ticketId), true
         ).catch(() => [] as Article[]);
 
