@@ -49,10 +49,17 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
 
-        const objectName = await LabelService.getInstance().getObjectName(KIXObjectType.CONTACT, true, false);
-        this.autoCompleteConfiguration = new AutoCompleteConfiguration(undefined, undefined, undefined, objectName);
+        if (!this.autoCompleteConfiguration?.noResultsObjectName) {
+            const objectName = await LabelService.getInstance().getObjectName(KIXObjectType.CONTACT, true, false);
+            this.autoCompleteConfiguration.noResultsObjectName = objectName;
+        }
 
-        this.loadingOptions = new KIXObjectLoadingOptions(null, null, 10);
+        if (
+            !this.autoCompleteConfiguration?.limit
+            && this.autoCompleteConfiguration?.limit !== 0
+        ) {
+            this.autoCompleteConfiguration.limit = 10;
+        }
     }
 
     protected async prepareSelectableNodes(objects: Contact[]): Promise<void> {
@@ -194,6 +201,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        await super.initFormValueByField(field);
         const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
         if ((!this.value || isEdit) && field.defaultValue?.value && !field.empty) {
             const value = await this.handlePlaceholders(field.defaultValue?.value);
