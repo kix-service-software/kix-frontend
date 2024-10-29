@@ -38,8 +38,10 @@ const expect = chai.expect;
 
 describe('Placeholder replacement for article', () => {
 
-    let article: Article
+    let article: Article;
+    let ticket: Ticket;
     let articlePlaceholderHandler: ArticlePlaceholderHandler = new ArticlePlaceholderHandler();
+    let ticketPlaceholderHandler: TicketPlaceholderHandler = new TicketPlaceholderHandler();
     let orgPrepareFunction;
     let orgLoadFunction;
     before(() => {
@@ -232,9 +234,6 @@ describe('Placeholder replacement for article', () => {
     });
 
     describe('Replace with right article placeholder.', async () => {
-
-        let ticket: Ticket;
-        let ticketPlaceholderHandler: TicketPlaceholderHandler = new TicketPlaceholderHandler();
         before(() => {
             ticket = someTestFunctions.prepareTicket();
         });
@@ -441,6 +440,96 @@ describe('Placeholder replacement for article', () => {
 </html>
 [...]`);
         });
+
+        it('Should replace first article richtext body placeholder (check if all opened tags are closed - correctly (8))', async () => {
+            const subjectText = await ticketPlaceholderHandler.replace(`<KIX_FIRST_BodyRichtext_8>`, ticket);
+            expect(subjectText).exist;
+            expect(subjectText).equal(`<html>
+    <body>
+        <div>
+            <div>Test</div>
+            <div>
+                <p>
+                    <table>
+                        <tr>
+</tr>
+</table>
+</p>
+</div>
+</div>
+</body>
+</html>
+[...]`);
+        });
+
+        it('Should replace first article richtext body placeholder (check if all opened tags are closed - correctly (10))', async () => {
+            const subjectText = await ticketPlaceholderHandler.replace(`<KIX_FIRST_BodyRichtext_10>`, ticket);
+            expect(subjectText).exist;
+            expect(subjectText).equal(`<html>
+    <body>
+        <div>
+            <div>Test</div>
+            <div>
+                <p>
+                    <table>
+                        <tr>
+                            <td>
+                                <div>Test2</div>
+</td>
+</tr>
+</table>
+</p>
+</div>
+</div>
+</body>
+</html>
+[...]`);
+        });
+
+        it('Should replace last article richtext body placeholder (check if all opened tags are closed - correctly (8))', async () => {
+            const subjectText = await ticketPlaceholderHandler.replace(`<KIX_LAST_BodyRichtext_8>`, ticket);
+            expect(subjectText).exist;
+            expect(subjectText).equal(`<html>
+    <body>
+        <div>
+            <div>Test</div>
+            <div>
+                <p>
+                    <table>
+                        <tr>
+</tr>
+</table>
+</p>
+</div>
+</div>
+</body>
+</html>
+[...]`);
+        });
+
+        it('Should replace last article richtext body placeholder (check if all opened tags are closed - correctly (10))', async () => {
+            const subjectText = await ticketPlaceholderHandler.replace(`<KIX_LAST_BodyRichtext_10>`, ticket);
+            expect(subjectText).exist;
+            expect(subjectText).equal(`<html>
+    <body>
+        <div>
+            <div>Test</div>
+            <div>
+                <p>
+                    <table>
+                        <tr>
+                            <td>
+                                <div>Test2</div>
+</td>
+</tr>
+</table>
+</p>
+</div>
+</div>
+</body>
+</html>
+[...]`);
+        });
     });
 
     describe('Replace limited body richtext article placeholder (special tags).', async () => {
@@ -495,6 +584,62 @@ describe('Placeholder replacement for article', () => {
 </html>
 [...]`);
         });
+
+
+        it('Should replace first article richtext body placeholder (check if multiline tag is closed and some special tags are ingored (not closed))', async () => {
+            const subjectText = await ticketPlaceholderHandler.replace(`<KIX_FIRST_BodyRichtext_16>`, ticket);
+            expect(subjectText).exist;
+            expect(subjectText).equal(`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <link type="text/css">
+        <script scr="some.source"></script>
+    </head>
+    <body>
+        <div class="someClass">
+            <!--
+            <meta>
+            <br>
+            </br>
+            <span
+                class="someClass"
+            >
+                <div>
+</div>
+</span>
+</div>
+</body>
+</html>
+[...]`);
+        });
+
+        it('Should replace last article richtext body placeholder (check if multiline tag is closed and some special tags are ingored (not closed))', async () => {
+            const subjectText = await ticketPlaceholderHandler.replace(`<KIX_LAST_BodyRichtext_16>`, ticket);
+            expect(subjectText).exist;
+            expect(subjectText).equal(`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <link type="text/css">
+        <script scr="some.source"></script>
+    </head>
+    <body>
+        <div class="someClass">
+            <!--
+            <meta>
+            <br>
+            </br>
+            <span
+                class="someClass"
+            >
+                <div>
+</div>
+</span>
+</div>
+</body>
+</html>
+[...]`);
+        });
+
     });
 });
 
