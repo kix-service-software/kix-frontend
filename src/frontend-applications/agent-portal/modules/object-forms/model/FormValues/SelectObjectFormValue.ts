@@ -499,14 +499,17 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         let objects = [];
         if (this.searchValue?.length >= this.autoCompleteConfiguration.charCount) {
             const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(this.objectType);
-            const filter = service && this.searchValue
-                ? await service.prepareFullTextFilter(this.searchValue)
-                : [];
-
             let loadingOptions = new KIXObjectLoadingOptions();
 
             loadingOptions.filter = Array.isArray(this.loadingOptions?.filter) ? [...this.loadingOptions.filter] : [];
-            loadingOptions.filter.push(...filter);
+            if (!loadingOptions.filter.length) {
+                const filter = service && this.searchValue
+                    ? await service.prepareFullTextFilter(this.searchValue)
+                    : [];
+                if (filter) {
+                    loadingOptions.filter.push(...filter);
+                }
+            }
 
             loadingOptions.limit = this.autoCompleteConfiguration?.limit;
             loadingOptions.searchLimit = this.autoCompleteConfiguration?.limit;
