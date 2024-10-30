@@ -313,9 +313,9 @@ export class SearchService {
                     null, true
                 );
             });
-
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
         }
+
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return (objects as any);
     }
