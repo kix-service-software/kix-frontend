@@ -21,22 +21,6 @@
     background-color: @secondary-3;
     z-index: 100;
     padding: 7.5px 10px;
-
-    .btn-outline-danger {
-        border-color: @tertiary-0;
-
-        &:hover {
-            background-color: @tertiary-0;
-        }
-    }
-
-    .btn-outline-success {
-        border-color: @primary-6;
-
-        &:hover {
-            background-color: @primary-6;
-        }
-    }
 }
 
 .btn {
@@ -45,9 +29,32 @@
     &:hover {
         color: @secondary-3;
     }
+
+    &.btn-outline-danger {
+        border-color: @tertiary-0;
+
+        &:hover {
+            background-color: @tertiary-0;
+            border-color: @tertiary-0;
+        }
+    }
+
+    &.btn-outline-success {
+        border-color: @primary-6;
+
+        &:hover {
+            background-color: @primary-6;
+            border-color: @primary-6;
+        }
+    }
 }
 
 .btn-label-mixin {
+    .btn-sm>& {
+        left: -8px;
+        padding: 2px 6px;
+    }
+
     position: relative;
     left: -12px;
     display: inline-block;
@@ -56,6 +63,7 @@
 }
 
 .btn-label {
+
     &-success {
         .btn-label-mixin();
         background-color: @primary-6;

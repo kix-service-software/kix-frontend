@@ -774,6 +774,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
         if (service) {
             properties = await service.getObjectProperties(objectType, dependencyIds);
+            properties = await service.filterObjectProperties(objectType, properties, dependencyIds);
         }
 
         return properties;
@@ -793,13 +794,22 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         let properties: string[] = [];
         const dynamicFields: DynamicField[] = await KIXObjectService.loadDynamicFields(objectType);
         if (Array.isArray(dynamicFields) && dynamicFields.length) {
-            properties = dynamicFields.map((df) => df.Name);
+            properties = dynamicFields.map((df) => `DynamicFields.${df.Name}`);
         }
         for (const extendedService of this.extendedServices) {
             const extendedNodes = await extendedService.getObjectProperties(objectType, dependencyIds);
             if (extendedNodes?.length) {
                 properties.push(...extendedNodes);
             }
+        }
+        return properties;
+    }
+
+    public async filterObjectProperties(
+        objectType: KIXObjectType, properties: string[], dependencyIds: string[] = []
+    ): Promise<string[]> {
+        for (const extendedService of this.extendedServices) {
+            properties = await extendedService.filterObjectProperties(objectType, properties, dependencyIds);
         }
         return properties;
     }
