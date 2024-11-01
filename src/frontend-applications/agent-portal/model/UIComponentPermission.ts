@@ -11,7 +11,7 @@ import { CRUD } from '../../../server/model/rest/CRUD';
 
 export class UIComponentPermission {
 
-    public value: CRUD = 0;
+    public value: CRUD;
 
     public constructor(
         public target: string,

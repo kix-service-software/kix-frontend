@@ -9,8 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
-import { AutocompleteFormFieldOption } from '../../../../../model/AutocompleteFormFieldOption';
 import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<string, ComponentState> {
@@ -32,15 +30,6 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        const autofillOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.AUTO_COMPLETE);
-        if (autofillOption) {
-            const autocompleteOption = (autofillOption.value as AutocompleteFormFieldOption);
-            const component = (this as any).getComponent(this.state.field?.instanceId + '-editor');
-            if (component) {
-                component.setAutocompleteConfiguration(autocompleteOption);
-            }
-        }
     }
 
     public async setCurrentValue(): Promise<void> {

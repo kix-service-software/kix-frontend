@@ -1,7 +1,8 @@
 {
     "taglibImports": [
         "../icon/webapp/marko.json",
-        "../table/webapp/marko.json"
+        "../table/webapp/marko.json",
+        "../ck-editor/webapp/marko.json"
     ],
     "tags-dir": [
         "./webapp/components/",

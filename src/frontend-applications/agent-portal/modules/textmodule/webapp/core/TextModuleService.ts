@@ -88,7 +88,7 @@ export class TextModuleService extends KIXObjectService {
                 ,
                 dataCallback: async (matchInfo, callback): Promise<void> => {
                     const query = matchInfo.query.substring(placeholder.length);
-                    const modules = await this.getTextModules(query);
+                    const modules = await this.searchTextModules(query);
                     modules.forEach((tm) => {
                         tm['id'] = tm.ID;
                         tm['name'] = tm.Name;
@@ -103,7 +103,7 @@ export class TextModuleService extends KIXObjectService {
         return config;
     }
 
-    private async getTextModules(query: string): Promise<TextModule[]> {
+    public async searchTextModules(query: string): Promise<TextModule[]> {
         let filterCriteria = [];
 
         if (query && query !== '') {

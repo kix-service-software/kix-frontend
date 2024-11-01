@@ -60,18 +60,13 @@ export class TranslationCSVExportAction extends AbstractAction<Table> {
                 csvString += translationStrings.join(';') + '\n';
             }
 
-            if (window.navigator.msSaveOrOpenBlob) {
-                const blob = new Blob([csvString]);
-                window.navigator.msSaveBlob(blob, 'Export.csv');
-            } else {
-                const element = document.createElement('a');
-                element.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(csvString);
-                element.download = 'Export.csv';
-                element.style.display = 'none';
-                document.body.appendChild(element);
-                element.click();
-                document.body.removeChild(element);
-            }
+            const element = document.createElement('a');
+            element.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(csvString);
+            element.download = 'Export.csv';
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
         }
     }
 

@@ -15,8 +15,6 @@ export interface IServerConfiguration {
 
     HTTPS_PORT: number;
 
-    USE_SSL: boolean;
-
     FRONTEND_URL: string;
 
     FRONTEND_TOKEN_SECRET: string;
