@@ -7,11 +7,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<editor
-    value=state.content
-    plainText=state.plainText
-    inlineContent=state.inlineContent
-    readOnly
-    useReadonlyStyle=state.useReadonlyStyle
-    style=state.style
-/>
+<div class="main-container" no-update on-click("editorClicked")>
+    <div class="editor-container editor-container_classic-editor editor-container_include-style">
+        <div class="editor-container__editor">
+            <div id=state.id/>
+        </div>
+    </div>
+</div>

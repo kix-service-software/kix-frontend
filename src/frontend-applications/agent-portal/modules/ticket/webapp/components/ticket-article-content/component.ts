@@ -37,6 +37,10 @@ class Component {
             if (this.article.ContentType.startsWith('text/plain') && !this.article.bodyAttachment) {
                 this.state.plainText = this.article.Body;
             }
+
+            if (prepareContent[2]) {
+                this.state.style = prepareContent[2];
+            }
         }
     }
 }
