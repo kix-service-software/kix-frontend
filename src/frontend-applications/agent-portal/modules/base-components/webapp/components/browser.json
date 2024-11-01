@@ -10,7 +10,6 @@
         "require ./default-select-input",
         "require ./default-text-input",
         "require ./dynamic-form-field-container",
-        "require ./editor",
         "require ./field-container",
         "require ./field-container/form-field",
         "require ./file-entry",

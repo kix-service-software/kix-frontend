@@ -7,7 +7,6 @@
  * --
  */
 
-import { CKEditorConfiguration } from '../../modules/base-components/model/CKEditorConfiguration';
 import { KIXObjectType } from '../kix/KIXObjectType';
 import { IConfiguration } from './IConfiguration';
 
@@ -27,7 +26,6 @@ export class AgentPortalConfiguration implements IConfiguration {
                 public name: string = 'Agent Portal Configuration',
                 public type: string = 'Agent Portal',
                 public valid: boolean = true,
-                public ckEditorConfiguration: CKEditorConfiguration = new CKEditorConfiguration(),
                 public minimizeSearchCriteriaWidget: boolean = true
         ) { }
 

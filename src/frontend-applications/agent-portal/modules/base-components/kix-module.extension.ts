@@ -41,7 +41,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'dynamic-form-field-container',
             '/kix-module-base-components$0/webapp/components/dynamic-form-field-container', []
         ),
-        new UIComponent('editor', '/kix-module-base-components$0/webapp/components/editor', []),
         new UIComponent('explorerbar', '/kix-module-base-components$0/webapp/components/explorerbar', []),
         new UIComponent('field-container', '/kix-module-base-components$0/webapp/components/field-container', []),
         new UIComponent('file-entry', '/kix-module-base-components$0/webapp/components/file-entry', []),
