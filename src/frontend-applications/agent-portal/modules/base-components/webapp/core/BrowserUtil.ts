@@ -102,12 +102,9 @@ export class BrowserUtil {
         const FileSaver = require('file-saver');
         const blob = base64 ? this.b64toBlob(content, contentType)
             : new Blob([content], { type: contentType });
-        if (window.navigator.msSaveOrOpenBlob) {
-            FileSaver.saveAs(blob, fileName);
-        } else {
-            const file = new File([blob], fileName, { type: contentType });
-            FileSaver.saveAs(file);
-        }
+
+        const file = new File([blob], fileName, { type: contentType });
+        FileSaver.saveAs(file);
     }
 
     public static async startFileDownload(file: IDownloadableFile): Promise<void> {
@@ -254,18 +251,14 @@ export class BrowserUtil {
     public static async downloadCSVFile(csvString: string, filename: string, withDate: boolean = true): Promise<void> {
         const now = DateTimeUtil.getTimestampNumbersOnly(new Date(Date.now()));
         const fileName = `${filename}${withDate ? '_' + now : ''}.csv`;
-        if (window.navigator.msSaveOrOpenBlob) {
-            const blob = new Blob([csvString], { type: 'text/csv' });
-            window.navigator.msSaveBlob(blob, fileName);
-        } else {
-            const element = document.createElement('a');
-            element.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
-            element.download = fileName;
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        }
+
+        const element = document.createElement('a');
+        element.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
+        element.download = fileName;
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
     }
 
     public static showValidationError(result: ValidationResult[]): void {
@@ -452,6 +445,28 @@ export class BrowserUtil {
         }
 
         return result;
+    }
+
+    public static applyStyle(id: string, style: string): void {
+        id = `ckeditor-style-${id}`;
+        const styleElement = document.getElementById(id);
+        if (styleElement) {
+            styleElement.innerHTML = style;
+        } else {
+            const headElement = document.getElementsByTagName('head');
+            const styleElement = document.createElement('style');
+            styleElement.id = id;
+            styleElement.innerHTML = style;
+            headElement[0].appendChild(styleElement);
+        }
+    }
+
+    public static removeStyle(id: string): void {
+        id = `ckeditor-style-${id}`;
+        const styleElement = document.getElementById(id);
+        if (styleElement) {
+            styleElement.remove();
+        }
     }
 
 }

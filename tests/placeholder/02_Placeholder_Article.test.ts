@@ -56,9 +56,9 @@ describe('Placeholder replacement for article', () => {
 
         orgPrepareFunction = TicketService.getInstance().getPreparedArticleBodyContent;
         TicketService.getInstance().getPreparedArticleBodyContent = (article: Article, removeInlineImages: boolean = false
-        ): Promise<[string, InlineContent[]]> => {
+        ): Promise<[string, InlineContent[], string]> => {
             return new Promise((resolve) => {
-                resolve([`line1<br />\nline2<br />\nline3<br />\nline4<br />\nline5<br />\nline6<br />\n\n\nline7<br />\nline8<br />`, []]);
+                resolve([`line1<br />\nline2<br />\nline3<br />\nline4<br />\nline5<br />\nline6<br />\n\n\nline7<br />\nline8<br />`, [], '']);
             });
         }
         orgLoadFunction = KIXObjectService.loadObjects;
@@ -371,7 +371,7 @@ describe('Placeholder replacement for article', () => {
     describe('Replace limited body richtext article placeholder.', async () => {
         before(() => {
             TicketService.getInstance().getPreparedArticleBodyContent = (article: Article, removeInlineImages: boolean = false
-            ): Promise<[string, InlineContent[]]> => {
+            ): Promise<[string, InlineContent[], string]> => {
                 return new Promise((resolve) => {
                     resolve([`<html>
     <body>
@@ -391,7 +391,7 @@ describe('Placeholder replacement for article', () => {
             </div>
         </div>
     </body>
-</html>`, []]);
+</html>`, [], '']);
                 });
             }
         });
@@ -535,7 +535,7 @@ describe('Placeholder replacement for article', () => {
     describe('Replace limited body richtext article placeholder (special tags).', async () => {
         before(() => {
             TicketService.getInstance().getPreparedArticleBodyContent = (article: Article, removeInlineImages: boolean = false
-            ): Promise<[string, InlineContent[]]> => {
+            ): Promise<[string, InlineContent[], string]> => {
                 return new Promise((resolve) => {
                     resolve([`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -553,7 +553,7 @@ describe('Placeholder replacement for article', () => {
                 class="someClass"
             >
                 <div>
-                    <div>`, []]);
+                    <div>`, [], '']);
                 });
             }
         });

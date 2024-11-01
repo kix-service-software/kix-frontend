@@ -82,37 +82,31 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const selfServiceConfigs = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.SELF_SERVICE_MANUAL]
         );
-        this.state.selfServiceManualLink = selfServiceConfigs && selfServiceConfigs.length
+        const sspLink = selfServiceConfigs && selfServiceConfigs.length
             ? selfServiceConfigs[0].Value
             : null;
-        if (typeof this.state.selfServiceManualLink === 'object') {
-            this.state.selfServiceManualLink = this.state.selfServiceManualLink[language]
-                ? this.state.selfServiceManualLink[language]
-                : this.state.selfServiceManualLink['de'];
+        if (typeof sspLink === 'object') {
+            this.state.selfServiceManualLink = sspLink[language] || sspLink.de;
         }
 
         const userManualConfigs = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.USER_MANUAL]
         );
-        this.state.userManualLink = userManualConfigs && userManualConfigs.length
+        const manualLink = userManualConfigs && userManualConfigs.length
             ? userManualConfigs[0].Value
             : null;
-        if (typeof this.state.userManualLink === 'object') {
-            this.state.userManualLink = this.state.userManualLink[language]
-                ? this.state.userManualLink[language]
-                : this.state.userManualLink['de'];
+        if (typeof manualLink === 'object') {
+            this.state.userManualLink = manualLink[language] || manualLink.de;
         }
 
         const adminManualConfigs = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ADMIN_MANUAL]
         );
-        this.state.adminManualLink = adminManualConfigs && adminManualConfigs.length
+        const adminLink = adminManualConfigs && adminManualConfigs.length
             ? adminManualConfigs[0].Value
             : null;
-        if (typeof this.state.adminManualLink === 'object') {
-            this.state.adminManualLink = this.state.adminManualLink[language]
-                ? this.state.adminManualLink[language]
-                : this.state.adminManualLink['de'];
+        if (typeof adminLink === 'object') {
+            this.state.adminManualLink = adminLink[language] || adminLink.de;
         }
     }
 

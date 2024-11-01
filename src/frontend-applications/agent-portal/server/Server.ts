@@ -48,7 +48,7 @@ export class Server implements IServer {
         });
     }
 
-    private createHTTPServer(ssl: boolean = true): any {
+    private createHTTPServer(): any {
         const app = this.application || express();
         this.httpServer = http.createServer(app);
     }
@@ -73,14 +73,8 @@ export class Server implements IServer {
     }
 
     public getPort(): number {
-        let port = 3001;
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        if (serverConfig.USE_SSL) {
-            port = serverConfig.HTTPS_PORT || 3001;
-        } else {
-            port = serverConfig.HTTP_PORT || 3000;
-        }
-
+        const port = serverConfig.HTTP_PORT || 3000;
         return port;
     }
 
