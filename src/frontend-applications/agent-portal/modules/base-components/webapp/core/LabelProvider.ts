@@ -198,7 +198,10 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 } else if (fieldValue.DisplayValue) {
                     displayValue = fieldValue.DisplayValue.toString();
                 } else {
-                    displayValue = fieldValue.Value.toString();
+                    // if no prepared value and also no DisplayValue given
+                    // then "Value" should not be returned, too
+                    // displayValue = fieldValue.Value.toString();
+                    displayValue = '';
                 }
             }
         } else {
