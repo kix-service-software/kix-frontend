@@ -29,6 +29,12 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
         return [];
     }
 
+    public async filterObjectProperties(
+        objectType: KIXObjectType, properties: string[], dependencyIds: string[] = []
+    ): Promise<string[]> {
+        return properties;
+    }
+
     public async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
         return [];
     }
