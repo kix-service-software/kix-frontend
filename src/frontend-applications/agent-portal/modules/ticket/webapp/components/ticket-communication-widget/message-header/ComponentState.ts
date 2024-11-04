@@ -24,7 +24,8 @@ export class ComponentState extends AbstractComponentState {
         public smimeSignedTooltip: string = null,
         public smimeEncryptedIcon: ObjectIcon | string = null,
         public smimeEncryptedTooltip: string = null,
-        public smimeDecrypted: boolean = true
+        public smimeDecrypted: boolean = true,
+        public from: string = null
     ) {
         super();
     }
