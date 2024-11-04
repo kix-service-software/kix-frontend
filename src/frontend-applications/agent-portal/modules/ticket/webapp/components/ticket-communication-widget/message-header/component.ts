@@ -93,6 +93,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.article, 'TimeUnits'
             );
         }
+        if (typeof this.state.article?.From === 'object') {
+            const contact = this.state.article.From;
+            this.state.from = `${contact.Fullname} <${contact.Email}>`;
+        } else {
+            this.state.from = this.state.article.From;
+        }
     }
 
     private async prepareSMIMEIcons(): Promise<void> {
