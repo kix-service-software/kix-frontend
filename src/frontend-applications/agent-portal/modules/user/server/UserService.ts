@@ -320,7 +320,6 @@ export class UserService extends KIXObjectAPIService {
         const options = new SetPreferenceOptions(userId, bySession);
 
         parameter = parameter.filter((p) =>
-            p[0] !== PersonalSettingsProperty.CURRENT_PASSWORD &&
             p[0] !== PersonalSettingsProperty.USER_PASSWORD_CONFIRM &&
             p[0] !== PersonalSettingsProperty.USER_TOKEN
         );
