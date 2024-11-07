@@ -111,7 +111,7 @@ export class BrowserUtil {
         const user = await AgentService.getInstance().getCurrentUser();
         const a = document.createElement('a');
         a.style.display = 'none';
-        a.href = `files/download/${file.downloadId}?userid=${user?.UserID}`;
+        a.href = `/files/download/${file.downloadId}?userid=${user?.UserID}`;
         a.download = file.Filename;
         a.target = '_blank';
         document.body.appendChild(a);
