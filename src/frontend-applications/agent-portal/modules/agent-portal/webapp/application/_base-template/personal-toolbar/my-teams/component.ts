@@ -93,6 +93,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         context.setQueue(queueInfo.queueId);
     }
 
+    public async openMyTeams(): Promise<void> {
+        const context = await ContextService.getInstance().setActiveContext(TicketContext.CONTEXT_ID) as TicketContext;
+        context.setQueue(0);
+    }
+
     private resizeHandling(): void {
         this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
     }

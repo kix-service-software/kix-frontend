@@ -42,6 +42,8 @@ export class Component {
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         await this.loadQueues(this.context);
 
+        this.state.myTeamsActive = this.context?.queueId === 0;
+
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (data: any, eventId: string): void => {
