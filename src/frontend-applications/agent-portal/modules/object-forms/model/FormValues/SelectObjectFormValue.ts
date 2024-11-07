@@ -25,6 +25,7 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { TreeHandler, TreeNode, TreeService, TreeUtil } from '../../../base-components/webapp/core/tree';
+import { SearchProperty } from '../../../search/model/SearchProperty';
 import { FormValueBinding } from '../FormValueBinding';
 import { FormValueProperty } from '../FormValueProperty';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
@@ -501,15 +502,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(this.objectType);
             let loadingOptions = new KIXObjectLoadingOptions();
 
-            loadingOptions.filter = Array.isArray(this.loadingOptions?.filter) ? [...this.loadingOptions.filter] : [];
-            if (!loadingOptions.filter.length) {
-                const filter = service && this.searchValue
-                    ? await service.prepareFullTextFilter(this.searchValue)
-                    : [];
-                if (filter) {
-                    loadingOptions.filter.push(...filter);
-                }
-            }
+            await this.prepareFilter(loadingOptions, service);
 
             loadingOptions.limit = this.autoCompleteConfiguration?.limit;
             loadingOptions.searchLimit = this.autoCompleteConfiguration?.limit;
@@ -731,5 +724,45 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     public async removePossibleValues(values: T[]): Promise<void> {
         await super.removePossibleValues(values);
         await this.loadSelectableValues();
+    }
+
+    private async prepareFilter(
+        loadingOptions: KIXObjectLoadingOptions, service: IKIXObjectService
+    ): Promise<void> {
+        let usedSearchValue = false;
+        loadingOptions.filter = Array.isArray(this.loadingOptions?.filter) ? [...this.loadingOptions.filter] : [];
+
+        if (loadingOptions.filter.length) {
+            filter:
+            for (const criterion of loadingOptions.filter) {
+                if (
+                    typeof criterion.value === 'string'
+                    && criterion.value.match(SearchProperty.SEARCH_VALUE)
+                ) {
+                    usedSearchValue = true;
+                    break filter;
+                }
+                else if (Array.isArray(criterion.value)) {
+                    for (const value of criterion.value) {
+                        if (value === SearchProperty.SEARCH_VALUE) {
+                            usedSearchValue = true;
+                            break filter;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (
+            !loadingOptions.filter.length
+            || !usedSearchValue
+        ) {
+            const filter = service && this.searchValue
+                ? await service.prepareFullTextFilter(this.searchValue)
+                : [];
+            if (filter) {
+                loadingOptions.filter.push(...filter);
+            }
+        }
     }
 }
