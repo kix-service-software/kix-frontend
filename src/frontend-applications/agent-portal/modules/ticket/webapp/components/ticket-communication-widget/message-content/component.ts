@@ -320,8 +320,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (!this.state.selectedCompactView || this.state.compactViewExpanded) {
             this.filterAttachments();
 
-            const attachments = this.detailedArticle?.Attachments || [];
-            this.state.hasInlineAttachments = attachments.some((a) => a.Disposition === 'inline' && a.ContentID);
+            const attachments = this.detailedArticle?.getAttachments(true) || [];
+            this.state.hasInlineAttachments = attachments.some((a) => a.Disposition === 'inline');
         }
     }
 
