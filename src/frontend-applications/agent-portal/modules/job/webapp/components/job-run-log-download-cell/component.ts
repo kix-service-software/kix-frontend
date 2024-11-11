@@ -20,6 +20,9 @@ import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUt
 import { Cell } from '../../../../table/model/Cell';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { TableExportUtil } from '../../../../table/webapp/core/TableExportUtil';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { JobRunLog } from '../../../model/JobRunLog';
+import { RunLogLoadingOptions } from '../../../model/RunLogLoadingOptions';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -51,9 +54,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         event.preventDefault();
 
         if (this.jobRun) {
+            const runLogs = await KIXObjectService.loadObjects<JobRunLog>(
+                KIXObjectType.JOB_RUN_LOG, null, null, new RunLogLoadingOptions(this.jobRun.JobID, this.jobRun.ID)
+            ).catch((): JobRunLog[] => []);
+
             const table = await TableFactoryService.getInstance().createTable(
                 'job-run-logs-' + this.jobRun.ID, KIXObjectType.JOB_RUN_LOG, null, null, null, false, false, undefined,
-                undefined, undefined, this.jobRun.Logs
+                undefined, undefined, runLogs
             );
             table.sort(JobRunLogProperty.NUMBER, SortOrder.UP);
             await table.initialize();
