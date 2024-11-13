@@ -145,6 +145,9 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case ContactProperty.TITLE:
                 displayValue = 'Translatable#Title';
                 break;
+            case ContactProperty.NEW_TICKETS_COUNT:
+                displayValue = 'Translatable#New Tickets';
+                break;
             case ContactProperty.OPEN_TICKETS_COUNT:
                 displayValue = 'Translatable#Open Tickets';
                 break;
@@ -239,6 +242,11 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 if (contact.ValidID === 1) {
                     const newTicketLabel = await TranslationService.translate('Translatable#New Ticket');
                     displayValue = newTicketLabel;
+                }
+                break;
+            case ContactProperty.NEW_TICKETS_COUNT:
+                if (contact.TicketStats) {
+                    displayValue = contact.TicketStats.NewCount.toString();
                 }
                 break;
             case ContactProperty.OPEN_TICKETS_COUNT:

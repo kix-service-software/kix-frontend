@@ -269,6 +269,12 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(loginColumn);
 
+        const newTicketsCountColumn = new DefaultColumnConfiguration(
+            'organisation-details-assigned-contacts-new-tickets-count', 'New Tickets', ConfigurationType.TableColumn,
+            ContactProperty.NEW_TICKETS_COUNT, true, false, true, true, 150, true, false, false, DataType.NUMBER
+        );
+        configurations.push(newTicketsCountColumn);
+
         const openTicketsColumn = new DefaultColumnConfiguration(
             'organisation-details-assigned-contacts-open-tickets', 'Open Tickets', ConfigurationType.TableColumn,
             ContactProperty.OPEN_TICKETS_COUNT, true, false, true, true, 150, true, false, false, DataType.NUMBER
@@ -302,6 +308,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'organisation-details-assigned-contacts-lastname',
                 'organisation-details-assigned-contacts-email',
                 'organisation-details-assigned-contacts-login',
+                'organisation-details-assigned-contacts-new-tickets-count',
                 'organisation-details-assigned-contacts-open-tickets',
                 'organisation-details-assigned-contacts-reminder-tickets',
                 'organisation-details-assigned-contacts-new-tickets'
