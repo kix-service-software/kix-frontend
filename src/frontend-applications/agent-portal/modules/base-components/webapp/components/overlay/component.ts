@@ -27,6 +27,7 @@ class OverlayComponent {
 
     private state: ComponentState;
     private toastTimeout: any;
+    private hintTimeout: any;
     private currentListenerId: string;
     private startMoveOffset: [number, number] = null;
     private startResizeOffset: [number, number] = null;
@@ -95,6 +96,21 @@ class OverlayComponent {
             this.state.hasCloseButton = closeButton;
             this.state.type = type;
             this.position = position;
+
+            this.state.value = await TranslationService.translate(content.getValue());
+
+            // ToDo: Can be revomed if the css attribut "field-sizing" supported by FireFox and Safari
+            // An adjustment of the Marko and Style is also needed.
+            if (this.isHint()) {
+                if (!CSS.supports('field-sizing', 'content')) {
+                    this.hintTimeout = setTimeout(() => {
+                        const textarea = (this as any).getEl('hint-overlay');
+                        if (textarea) {
+                            this.fieldSizing(textarea);
+                        }
+                    }, 100);
+                }
+            }
 
             if (this.position && this.position[0]) {
                 this.position[0] += window.scrollX;
@@ -363,6 +379,15 @@ class OverlayComponent {
                 }
             }
         }
+    }
+
+    public isHint(): boolean {
+        return this.state.type === OverlayType.HINT;
+    }
+
+    private fieldSizing(textarea): void {
+        clearTimeout(this.hintTimeout);
+        textarea.style.height = `${textarea.scrollHeight}px`;
     }
 
     private async mouseUp(): Promise<void> {
