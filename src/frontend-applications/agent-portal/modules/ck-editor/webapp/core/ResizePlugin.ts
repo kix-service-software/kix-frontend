@@ -27,7 +27,7 @@ export default class ResizePlugin {
                 const css = `
                         .ck.resizable-mode .ck.ck-editor__main {
                             resize: vertical;
-                            overflow: auto;
+                            overflow: hidden;
                             height: 54.8px;
                             min-height: 54.8px;
                             max-height: 100vh;
