@@ -292,9 +292,19 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             case ConfigItemProperty.CUR_INCI_STATE_ID:
                 icons.push(new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, value));
                 break;
+            case ConfigItemProperty.CLASS_ID:
+                const icon = await this.getCIClassIcon(configItem);
+                icons.push(icon);
             default:
         }
         return icons;
+    }
+
+    private async getCIClassIcon(configItem: ConfigItem): Promise<ObjectIcon> {
+        const ciClass = await KIXObjectService.loadObjects<ConfigItemClass>(
+            KIXObjectType.CONFIG_ITEM_CLASS, [configItem.ClassID], null, null, false
+        );
+        return LabelService.getInstance().getObjectIcon(ciClass[0]) as ObjectIcon;
     }
 
     public async createLabelsFromDFValue(dfValue: DynamicFieldValue): Promise<Label[]> {
