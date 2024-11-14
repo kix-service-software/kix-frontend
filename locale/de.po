@@ -488,6 +488,9 @@ msgstr "Sammelaktion"
 msgid "Bulk Action: {0}"
 msgstr "Sammelaktion: {0}"
 
+msgid "Bulk Print"
+msgstr ""
+
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -729,6 +732,9 @@ msgstr "Konfiguration"
 msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
 
+msgid "Confirm Password"
+msgstr ""
+
 msgid "Console"
 msgstr "Konsole"
 
@@ -860,9 +866,6 @@ msgstr "Aktueller Verwendungsstatus"
 
 msgid "Current incident state"
 msgstr "Aktueller Vorfallsstatus"
-
-msgid "Current Password"
-msgstr "Aktuelles Passwort"
 
 msgid "(Current version)"
 msgstr "(aktuelle Version)"
@@ -1134,6 +1137,9 @@ msgstr "Berichtsdefinition bearbeiten"
 
 msgid "Edit Role"
 msgstr "Rolle bearbeiten"
+
+msgid "Edit Ruleset Macro"
+msgstr ""
 
 msgid "Edit Search"
 msgstr "Suche bearbeiten"
@@ -1596,6 +1602,12 @@ msgstr "Hilfe"
 msgid "Help, hints & tricks"
 msgstr "Hilfe, Tipps und Tricks"
 
+msgid "Helptext_Admin_CreateEdit_Actions"
+msgstr ""
+
+msgid "Helptext_Admin_CreateEdit_ActionSkip"
+msgstr ""
+
 msgid "Helptext_Admin_DynamicFieldCreate_Config"
 msgstr ""
 "Nachdem Sie einen Feldtyp gewählt haben, werden die entsprechenden "
@@ -1675,14 +1687,6 @@ msgid "Helptext_Admin_GeneralCatalogCreate_Validity"
 msgstr ""
 "Die General Catalog Klasse kann nur verwendet werden, wenn sie „gültig“ "
 "gesetzt ist."
-
-msgid "Helptext_Admin_JobCreateEdit_Actions"
-msgstr ""
-"Wählen Sie eine Aktion aus der Liste, anschließend werden die dafür nötigen "
-"Formularfelder geladen. Über \"+\" können Sie weiter Aktionen hinzufügen und "
-"diese über \"-\" auch wieder löschen. Die Reihenfolge der Aktionen in der "
-"Liste bestimmt die Reihenfolge der Ausführung im Job. Sie können diese per "
-"Drag&Drop ändern."
 
 msgid "Helptext_Admin_JobCreateEdit_ActionSkip"
 msgstr ""
@@ -2102,6 +2106,33 @@ msgstr ""
 "Gibt an, ob bei einer Rückmeldung am gleichen Ticket dieses auf den letzten "
 "Bearbeiter gesperrt werden soll."
 
+msgid "Helptext_Admin_Ruleset_Macro_Create_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Name"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Scope"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Type"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Scope"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Type"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Validity"
+msgstr ""
+
 msgid "Helptext_Admin_SysConfigEdit_Default_Value"
 msgstr ""
 "Anzeige des initialen Standardwertes der Konfiguration. Dieser kann nicht "
@@ -2406,6 +2437,9 @@ msgid "Helptext_Admin_WebformCreateEdit_Validity"
 msgstr ""
 "Um das Webformular verwenden zu können, muss es \"gültig\" gesetzt sein."
 
+msgid "Helptext_Admin_Workflow_Create_Validity"
+msgstr ""
+
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
@@ -2467,6 +2501,9 @@ msgid "Helptext_CMDB_Dashboard_Search"
 msgstr ""
 "Die angezeigten Assets können durch Eingabe eines Nummern- oder "
 "Namenssuchmusters eingeschränkt werden."
+
+msgid "Helptext_Create_ResultNames"
+msgstr ""
 
 msgid "Helptext_Customer_Dashboard_Search"
 msgstr ""
@@ -2712,12 +2749,6 @@ msgstr ""
 "Ermöglicht es, die einzelnen Attribute einer Zeile voneinander zu trennen. "
 "Falls unbekannt, öffnen Sie die .csv-Datei mit einem Texteditor."
 
-msgid "Helptext_Jobs_Create_ResultNames"
-msgstr ""
-"Optional können Sie hier einen Variablen-Name für das Ergebnis der Macro-"
-"Action hinterlegen. Diese Variable kann als spezieller Platzhalter "
-"\"${VariableName}\" in folgenden Aktionen verwendet werden."
-
 msgid "Helptext_Organisation_Address_Domain_Pattern"
 msgstr ""
 
@@ -2761,9 +2792,6 @@ msgstr ""
 
 msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
 msgstr "Ihr neues Passwort für die Nutzung des Self-Service-Portals"
-
-msgid "Helptext_PersonalSettings_UserPassword_Hint"
-msgstr "Ihr Anmeldepasswort für die Nutzung des Self-Service-Portals"
 
 msgid "Helptext_PersonalSettings_user_token_Hint"
 msgstr ""
@@ -3049,20 +3077,6 @@ msgstr ""
 msgid "Helptext_Tickets_TicketEdit_Title"
 msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
 
-msgid "Helptext_Users_UserCreateEdit_Access"
-msgstr ""
-"Legen Sie fest, ob der Kontakt die Möglichkeit bekommt, sich im "
-"Agentenportal (= Kontakt wird auch ein Agent) und/oder im Self Service "
-"Portal anzumelden. Je nach Auswahl werden weitere Eingabefelder geladen. "
-"Wurde der Zugang für ein Portal einmal gewährt und danach wieder entfernt, "
-"wird der entsprechende Portal-Nutzer auf \"ungültig\" gesetzt."
-
-msgid "Helptext_Users_UserCreateEdit_Roles"
-msgstr ""
-"Einem Agenten (= ein Kontakt, der Zugang zum Agentenportal hat) muss "
-"mindestens die Rolle „AgentUser“ zugeordnet sein, damit er sich einloggen "
-"kann. Es werden nur gültige Rollen angezeigt."
-
 msgid "Helptext_User_UserCreateEdit_Login"
 msgstr "Der Nutzername muss eineindeutig sein."
 
@@ -3071,41 +3085,11 @@ msgstr ""
 "Der Agent (= ein Kontakt, der Zugang zum Agentenportal hat) kann sein "
 "Passwort auch selbst in seinen persönlichen Einstellungen ändern."
 
-msgid "Helptext_User_UserCreateEdit_Preferences_MFAOTPEnabled"
+msgid "Helptext_User_UserCreateEdit_PasswordConfirm"
 msgstr ""
-
-msgid "Helptext_User_UserCreateEdit_Preferences_MyQueues"
-msgstr ""
-"Legen Sie fest, für welche Teams ein Agent (= ein Kontakt, der Zugang zum "
-"Agentenportal hat) standardmäßig Benachrichtigungen erhält. Der Agent kann "
-"diese Einstellung auch selbst in seinen persönlichen Einstellungen ändern."
-
-msgid "Helptext_User_UserCreateEdit_Preferences_Notifications"
-msgstr ""
-"Legen Sie fest, welche Benachrichtigungen ein Agent (= ein Kontakt, der "
-"Zugang zum Agentenportal hat) standardmäßig erhält. Der Agent kann diese "
-"Einstellung auch selbst in seinen persönlichen Einstellungen ändern."
-
-msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeEnd"
-msgstr "Letzter Tag der Abwesenheit."
-
-msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeStart"
-msgstr "Erster Tag der Abwesenheit."
-
-msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
-msgstr ""
-"Legen Sie fest, in welcher Sprache ein Nutzer KIX sieht, wenn er sich das "
-"erste Mal anmeldet. Der Nutzer kann die Sprache auch selbst in seinen "
-"persönlichen Einstellungen ändern."
 
 msgid "Helptext_User_UserCreateEdit_Preferences_UserSecret"
 msgstr ""
-
-msgid "Helptext_User_UserCreateEdit_Preferences_UserToken"
-msgstr ""
-"Dieser persönliche Token ermöglicht den direkten Zugriff auf Berichtsdaten. "
-"Erstellen Sie einen neuen Token, wenn Sie ihn versehentlich weitergegeben "
-"haben sollten."
 
 msgid "HelptImporConfigext_Import_File"
 msgstr ""
@@ -3133,6 +3117,9 @@ msgstr "Host"
 
 msgid "Hour(s)"
 msgstr "Stunden"
+
+msgid "HTTP Type"
+msgstr ""
 
 msgid "Icon"
 msgstr "Icon"
@@ -3437,6 +3424,9 @@ msgstr "Logs"
 msgid "Macro"
 msgstr "Makro"
 
+msgid "Macro Information"
+msgstr ""
+
 msgid "Mail Account Details"
 msgstr "Mailkonto Details"
 
@@ -3539,6 +3529,9 @@ msgstr "Eigene Firma"
 msgid "My Queues"
 msgstr "Meine Teams"
 
+msgid "My Teams"
+msgstr ""
+
 msgid "My Tickets"
 msgstr "Meine Tickets"
 
@@ -3620,6 +3613,9 @@ msgstr "Neuer General Katalog"
 msgid "New Job"
 msgstr "Neuer Job"
 
+msgid "New Macro"
+msgstr ""
+
 msgid "New Mail Account"
 msgstr "Neues Mailkonto"
 
@@ -3652,6 +3648,9 @@ msgstr "Neue Definition"
 
 msgid "New Role"
 msgstr "Neue Rolle"
+
+msgid "New Ruleset Macro"
+msgstr ""
 
 msgid "New Search"
 msgstr "Neue Suche"
@@ -3889,6 +3888,9 @@ msgstr "Objekttyp"
 
 msgid "Observer"
 msgstr "Beobachter"
+
+msgid "OK"
+msgstr ""
 
 msgid "Oldest first"
 msgstr "älteste zuerst"
@@ -4163,6 +4165,9 @@ msgstr "Vorbereitung Datei-Download"
 
 msgid "Prepare Ticket for print"
 msgstr "Ticket für den Druck vorbereiten"
+
+msgid "Prepare Tickets to print & zip"
+msgstr ""
 
 msgid "Preview"
 msgstr "Vorschau"
@@ -4526,9 +4531,6 @@ msgstr "Richtext"
 
 msgid "Role"
 msgstr "Rolle"
-
-msgid "Role Assignment"
-msgstr "Rollenzuordnung"
 
 msgid "Role Details"
 msgstr "Rollendetails"
@@ -5244,9 +5246,6 @@ msgstr "Ticket wird nicht mehr beobachtet."
 msgid "Ticket locked."
 msgstr "Ticket gesperrt."
 
-msgid "Ticket List Filter"
-msgstr "Ticketlistenfilter"
-
 msgid "Ticket Notifications"
 msgstr "Ticketbenachrichtigungen"
 
@@ -5276,6 +5275,9 @@ msgstr "Tickets zu Assets"
 
 msgid "Tickets for Contact"
 msgstr "Tickets zu Kontakt"
+
+msgid "Tickets has been printed and zipped"
+msgstr ""
 
 msgid "Ticket: States"
 msgstr "Ticket: Status"
@@ -5609,14 +5611,8 @@ msgstr "Ja, gerne"
 msgid "You did it!"
 msgstr "Geschafft!"
 
-msgid "You have to confirm your current password."
-msgstr "Bitte geben Sie das aktuelle Passwort ein."
-
 msgid "You have to confirm your password."
 msgstr "Bitte bestätigen Sie das neue Passwort."
-
-msgid "Your current password is wrong."
-msgstr "Das aktuelle Passwort ist falsch."
 
 msgid "Your Permissions have been updated."
 msgstr "Ihre Berechtigungen wurden aktualisiert."
@@ -5638,6 +5634,83 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Current Password"
+#~ msgstr "Aktuelles Passwort"
+
+#~ msgid "Helptext_Admin_JobCreateEdit_Actions"
+#~ msgstr ""
+#~ "Wählen Sie eine Aktion aus der Liste, anschließend werden die dafür "
+#~ "nötigen Formularfelder geladen. Über \"+\" können Sie weiter Aktionen "
+#~ "hinzufügen und diese über \"-\" auch wieder löschen. Die Reihenfolge der "
+#~ "Aktionen in der Liste bestimmt die Reihenfolge der Ausführung im Job. Sie "
+#~ "können diese per Drag&Drop ändern."
+
+#~ msgid "Helptext_Jobs_Create_ResultNames"
+#~ msgstr ""
+#~ "Optional können Sie hier einen Variablen-Name für das Ergebnis der Macro-"
+#~ "Action hinterlegen. Diese Variable kann als spezieller Platzhalter "
+#~ "\"${VariableName}\" in folgenden Aktionen verwendet werden."
+
+#~ msgid "Helptext_PersonalSettings_UserPassword_Hint"
+#~ msgstr "Ihr Anmeldepasswort für die Nutzung des Self-Service-Portals"
+
+#~ msgid "Helptext_Users_UserCreateEdit_Access"
+#~ msgstr ""
+#~ "Legen Sie fest, ob der Kontakt die Möglichkeit bekommt, sich im "
+#~ "Agentenportal (= Kontakt wird auch ein Agent) und/oder im Self Service "
+#~ "Portal anzumelden. Je nach Auswahl werden weitere Eingabefelder geladen. "
+#~ "Wurde der Zugang für ein Portal einmal gewährt und danach wieder "
+#~ "entfernt, wird der entsprechende Portal-Nutzer auf \"ungültig\" gesetzt."
+
+#~ msgid "Helptext_Users_UserCreateEdit_Roles"
+#~ msgstr ""
+#~ "Einem Agenten (= ein Kontakt, der Zugang zum Agentenportal hat) muss "
+#~ "mindestens die Rolle „AgentUser“ zugeordnet sein, damit er sich einloggen "
+#~ "kann. Es werden nur gültige Rollen angezeigt."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_MyQueues"
+#~ msgstr ""
+#~ "Legen Sie fest, für welche Teams ein Agent (= ein Kontakt, der Zugang zum "
+#~ "Agentenportal hat) standardmäßig Benachrichtigungen erhält. Der Agent "
+#~ "kann diese Einstellung auch selbst in seinen persönlichen Einstellungen "
+#~ "ändern."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_Notifications"
+#~ msgstr ""
+#~ "Legen Sie fest, welche Benachrichtigungen ein Agent (= ein Kontakt, der "
+#~ "Zugang zum Agentenportal hat) standardmäßig erhält. Der Agent kann diese "
+#~ "Einstellung auch selbst in seinen persönlichen Einstellungen ändern."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeEnd"
+#~ msgstr "Letzter Tag der Abwesenheit."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeStart"
+#~ msgstr "Erster Tag der Abwesenheit."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
+#~ msgstr ""
+#~ "Legen Sie fest, in welcher Sprache ein Nutzer KIX sieht, wenn er sich das "
+#~ "erste Mal anmeldet. Der Nutzer kann die Sprache auch selbst in seinen "
+#~ "persönlichen Einstellungen ändern."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_UserToken"
+#~ msgstr ""
+#~ "Dieser persönliche Token ermöglicht den direkten Zugriff auf "
+#~ "Berichtsdaten. Erstellen Sie einen neuen Token, wenn Sie ihn "
+#~ "versehentlich weitergegeben haben sollten."
+
+#~ msgid "Role Assignment"
+#~ msgstr "Rollenzuordnung"
+
+#~ msgid "Ticket List Filter"
+#~ msgstr "Ticketlistenfilter"
+
+#~ msgid "You have to confirm your current password."
+#~ msgstr "Bitte geben Sie das aktuelle Passwort ein."
+
+#~ msgid "Your current password is wrong."
+#~ msgstr "Das aktuelle Passwort ist falsch."
 
 #~ msgid "After"
 #~ msgstr "Nach"
