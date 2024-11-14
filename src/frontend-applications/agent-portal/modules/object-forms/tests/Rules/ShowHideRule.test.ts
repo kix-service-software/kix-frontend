@@ -40,7 +40,7 @@ describe('Rule - Show / Hide', () => {
                 (fv as any).initialState.set('visible', false);
             }
 
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should be visible', () => {
@@ -91,7 +91,7 @@ describe('Rule - Show / Hide', () => {
                 (fv as any).initialState.set('visible', true);
             }
 
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should not be visible', () => {

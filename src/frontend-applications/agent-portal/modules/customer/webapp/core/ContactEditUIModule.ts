@@ -25,6 +25,9 @@ import { ContactCreateAction, ContactEditAction } from './actions';
 import { ContactImportDialogContext } from './context/ContactImportDialogContext';
 import { EditContactDialogContext } from './context/EditContactDialogContext';
 import { NewContactDialogContext } from './context/NewContactDialogContext';
+import { ObjectFormRegistry } from '../../../object-forms/webapp/core/ObjectFormRegistry';
+import { ContactObjectFormValueMapper } from './form/ContactObjectFormValueMapper';
+import { ContactObjectCommitHandler } from './form/ContactObjectCommitHandler';
 
 export class UIModule implements IUIModule {
 
@@ -38,6 +41,9 @@ export class UIModule implements IUIModule {
 
         await this.registerContexts();
         this.registerActions();
+
+        ObjectFormRegistry.getInstance().registerObjectFormCreator(KIXObjectType.CONTACT, ContactObjectFormValueMapper);
+        ObjectFormRegistry.getInstance().registerObjectCommitHandler(KIXObjectType.CONTACT, ContactObjectCommitHandler);
     }
 
     public async registerExtensions(): Promise<void> {
@@ -47,7 +53,7 @@ export class UIModule implements IUIModule {
     private async registerContexts(): Promise<void> {
         const newContactContext = new ContextDescriptor(
             NewContactDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.CREATE,
-            false, 'object-dialog', ['contacts'], NewContactDialogContext,
+            false, 'object-form', ['contacts'], NewContactDialogContext,
             [
                 new UIComponentPermission('contacts', [CRUD.CREATE])
             ],
@@ -57,7 +63,7 @@ export class UIModule implements IUIModule {
 
         const editContactContext = new ContextDescriptor(
             EditContactDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.EDIT,
-            false, 'object-dialog', ['contacts'], EditContactDialogContext,
+            false, 'object-form', ['contacts'], EditContactDialogContext,
             [
                 new UIComponentPermission('contacts', [CRUD.CREATE])
             ],

@@ -8,7 +8,6 @@
  */
 
 import { IAdminModuleExtension } from '../admin/server/IAdminModuleExtension';
-import { AdminModuleCategory } from '../admin/model/AdminModuleCategory';
 import { AdminModule } from '../admin/model/AdminModule';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
@@ -18,21 +17,24 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IAdminModuleExtension {
 
-    public getAdminModules(): AdminModuleCategory[] {
+    public getAdminModules(): AdminModule[] {
         return [
-            new AdminModuleCategory(
-                null, 'kix', 'Translatable#KIX', null, [
-                new AdminModuleCategory(
-                    null, 'ticket', 'Translatable#Ticket', null, [], [
+            new AdminModule(
+                null, 'kix', 'Translatable#KIX', null, null, null, [], 0,
+                [
                     new AdminModule(
-                        null, 'text-modules', 'Translatable#Text Modules', null,
-                        KIXObjectType.TEXT_MODULE, 'ticket-admin-text-modules', [
-                        new UIComponentPermission('system/textmodules', [CRUD.CREATE], true)
-                    ]
+                        null, 'ticket', 'Translatable#Ticket', null, null, null, [], 0,
+                        [
+                            new AdminModule(
+                                null, 'text-modules', 'Translatable#Text Modules', null,
+                                KIXObjectType.TEXT_MODULE, 'ticket-admin-text-modules', [
+                                new UIComponentPermission('system/textmodules', [CRUD.CREATE], true)
+                            ]
+                            )
+                        ], true
                     )
-                ]
-                )
-            ])
+                ], true
+            )
         ];
     }
 

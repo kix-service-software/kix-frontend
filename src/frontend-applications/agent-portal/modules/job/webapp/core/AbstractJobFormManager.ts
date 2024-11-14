@@ -26,17 +26,15 @@ import { ExecPlan } from '../../model/ExecPlan';
 import { ExecPlanTypes } from '../../model/ExecPlanTypes';
 import { Job } from '../../model/Job';
 import { JobProperty } from '../../model/JobProperty';
-import { Macro } from '../../model/Macro';
-import { ExtendedJobFormManager } from './ExtendedJobFormManager';
-import { MacroFieldCreator } from './MacroFieldCreator';
+import { Macro } from '../../../macro/model/Macro';
+import { MacroFieldCreator } from '../../../macro/webapp/core/MacroFieldCreator';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
+import { MacroProperty } from '../../../macro/model/MacroProperty';
 
 export class AbstractJobFormManager {
 
     public filterManager: AbstractDynamicFormManager;
-
-    public extendedJobFormManager: ExtendedJobFormManager[] = [];
 
     public job: Job = null;
     protected execPageId: string = 'job-form-page-execution-plan';
@@ -46,10 +44,6 @@ export class AbstractJobFormManager {
 
     public getFilterManager(): AbstractDynamicFormManager {
         return;
-    }
-
-    public addExtendedJobFormManager(manager: ExtendedJobFormManager): void {
-        this.extendedJobFormManager.push(manager);
     }
 
     public reset(): void {
@@ -239,7 +233,7 @@ export class AbstractJobFormManager {
             hasMacro = macros.length > 0;
 
             for (const macro of macros) {
-                const macroField = await MacroFieldCreator.createMacroField(macro, formInstance, this);
+                const macroField = await MacroFieldCreator.createMacroField(macro, formInstance);
                 groups.push(
                     new FormGroupConfiguration(
                         'job-form-group-macro', 'Translatable#Macro',
@@ -251,7 +245,7 @@ export class AbstractJobFormManager {
 
         if (!hasMacro) {
             const macroField = await MacroFieldCreator.createMacroField(
-                null, formInstance, this, undefined, undefined, job?.Type
+                null, formInstance, undefined, undefined, job?.Type
             );
             groups.push(
                 new FormGroupConfiguration(
@@ -327,21 +321,6 @@ export class AbstractJobFormManager {
         return [[property, value]];
     }
 
-    public async postPrepareOptionValue(
-        actionType: string, optionName: string, value: any, parameter: any,
-        field: FormFieldConfiguration, formInstance: FormInstance
-    ): Promise<any> {
-        for (const extendedManager of this.extendedJobFormManager) {
-            const result = await extendedManager.postPrepareOptionValue(
-                actionType, optionName, value, parameter, field, formInstance
-            );
-            if (typeof result !== 'undefined') {
-                return result;
-            }
-        }
-        return;
-    }
-
     public async getEventNodes(): Promise<TreeNode[]> {
         return await JobService.getInstance().getTreeNodes(
             JobProperty.EXEC_PLAN_EVENTS
@@ -350,7 +329,7 @@ export class AbstractJobFormManager {
 
     public async updateFields(fields: FormFieldConfiguration[]): Promise<void> {
         // only actions fields (no results or action-options)
-        if (Array.isArray(fields) && fields.length && fields[0].property === JobProperty.MACRO_ACTIONS) {
+        if (Array.isArray(fields) && fields.length && fields[0].property === MacroProperty.ACTIONS) {
             for (let i = 0; i < fields.length; i++) {
                 const label = await TranslationService.translate('Translatable#{0}. Action', [i + 1]);
                 fields[i].label = label;

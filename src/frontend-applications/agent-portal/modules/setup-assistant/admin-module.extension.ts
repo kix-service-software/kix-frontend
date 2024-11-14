@@ -8,7 +8,6 @@
  */
 
 import { IAdminModuleExtension } from '../admin/server/IAdminModuleExtension';
-import { AdminModuleCategory } from '../admin/model/AdminModuleCategory';
 import { AdminModule } from '../admin/model/AdminModule';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
@@ -17,7 +16,7 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IAdminModuleExtension {
 
-    public getAdminModules(): Array<AdminModuleCategory | AdminModule> {
+    public getAdminModules(): Array<AdminModule> {
         return [
             new AdminModule(
                 null, 'setup-assistant', 'Translatable#Setup Assistant', null,
@@ -25,7 +24,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                 [
                     new UIComponentPermission('system/config', [CRUD.READ]),
                     new UIComponentPermission('system/config/FQDN', [CRUD.UPDATE])
-                ]
+                ], 1000
             )
         ];
     }

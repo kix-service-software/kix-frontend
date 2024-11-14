@@ -27,7 +27,6 @@ import { SearchOperator } from '../../search/model/SearchOperator';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { CacheService } from '../../../server/services/cache';
-import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class UserService extends KIXObjectAPIService {
@@ -425,6 +424,38 @@ export class UserService extends KIXObjectAPIService {
         );
 
         return searchCriteria;
+    }
+
+    public async commitObject(
+        token: string, clientRequestId: string, user: User, relevantOrganisationId: number
+    ): Promise<string | number> {
+
+        const content = { User: user };
+        const create = !(user.UserID > 0);
+
+        let uri = this.RESOURCE_URI;
+
+        if (!create) {
+            uri = this.buildUri(this.RESOURCE_URI, user?.UserID);
+        }
+
+        const response = await this.sendRequest(
+            token, clientRequestId, uri, content, KIXObjectType.CONTACT, create, relevantOrganisationId
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        const userId = response.UserID;
+
+        if (!create && user.Preferences?.length) {
+            const preferences: Array<[string, any]> = user.Preferences.map((p) => {
+                return [p.ID, p.Value];
+            });
+            await this.setPreferences(token, clientRequestId, preferences, userId);
+        }
+
+        return userId;
     }
 
 }

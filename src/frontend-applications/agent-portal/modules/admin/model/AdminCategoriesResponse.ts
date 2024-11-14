@@ -8,14 +8,13 @@
  */
 
 import { ISocketResponse } from '../../../modules/base-components/webapp/core/ISocketResponse';
-import { AdminModuleCategory } from './AdminModuleCategory';
 import { AdminModule } from './AdminModule';
 
 export class AdminCategoriesResponse implements ISocketResponse {
 
     public constructor(
         public requestId: string,
-        public modules: Array<AdminModuleCategory | AdminModule>
+        public modules: Array<AdminModule>
     ) { }
 
 }

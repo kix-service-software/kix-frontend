@@ -18,7 +18,6 @@ import { MarkoService } from '../../../server/services/MarkoService';
 import { AdministrationEvent } from '../model/AdministrationEvent';
 import { AdminCategoriesResponse } from '../model/AdminCategoriesResponse';
 import { AdminModuleService } from './AdminModuleService';
-import { AdminModuleCategory } from '../model/AdminModuleCategory';
 import { AdminModule } from '../model/AdminModule';
 import { Socket } from 'socket.io';
 import cookie from 'cookie';
@@ -58,10 +57,10 @@ export class AdministrationNamespace extends SocketNameSpace {
         const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const adminCategoryResponse = await AdminModuleService.getInstance().getAdminModules(token)
-            .then((categories: Array<AdminModuleCategory | AdminModule>) =>
+            .then((modules: Array<AdminModule>) =>
                 new SocketResponse(
                     AdministrationEvent.ADMIN_CATEGORIES_LOADED,
-                    new AdminCategoriesResponse(data.requestId, categories)
+                    new AdminCategoriesResponse(data.requestId, modules)
                 )
             )
             .catch(

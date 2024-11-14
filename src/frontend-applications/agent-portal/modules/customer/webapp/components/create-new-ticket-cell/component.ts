@@ -30,16 +30,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (input.cell) {
             const cell: Cell = input.cell;
             this.object = cell.getRow().getRowObject().getObject();
-            this.update(this.object);
+            this.update();
 
         }
     }
 
-    private async update(object: KIXObject): Promise<void> {
+    private async update(): Promise<void> {
         const hasContextDescriptor = ContextService.getInstance().hasContextDescriptor(
             NewTicketDialogContext.CONTEXT_ID
         );
-        this.state.show = object && hasContextDescriptor;
+        this.state.show = this.object && hasContextDescriptor;
     }
 
     public labelClicked(event: any): void {

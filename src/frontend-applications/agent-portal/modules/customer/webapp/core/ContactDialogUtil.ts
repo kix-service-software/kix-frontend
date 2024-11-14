@@ -38,9 +38,7 @@ export class ContactDialogUtil {
             contactId = context?.getObjectId();
         }
 
-        const additionalInformation: Array<[string, any]> = [
-            ['CONTACT_ID', contactId]
-        ];
+        const additionalInformation: Array<[string, any]> = [['CONTACT_ID', contactId]];
         ContextService.getInstance().setActiveContext(
             EditContactDialogContext.CONTEXT_ID, contactId, null, additionalInformation
         );

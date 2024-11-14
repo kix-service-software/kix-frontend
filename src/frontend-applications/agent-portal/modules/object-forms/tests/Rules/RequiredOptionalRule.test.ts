@@ -34,7 +34,7 @@ describe('Rule - Required / Optional', () => {
             const object = new TestFormObject();
 
             await objectFormValueMapper.mapFormValues(object);
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should be required', () => {
@@ -85,7 +85,7 @@ describe('Rule - Required / Optional', () => {
                 (fv as any).initialState.set('required', true);
             }
 
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should not be required', () => {

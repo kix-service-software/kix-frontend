@@ -29,6 +29,8 @@ import { UserPreference } from '../../model/UserPreference';
 import { Counter } from '../../model/Counter';
 import { LoginResult } from '../../../base-components/model/LoginResult';
 import { MFAToken } from '../../../multifactor-authentication/model/MFAToken';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class AgentService extends KIXObjectService<User> {
 
@@ -177,5 +179,11 @@ export class AgentService extends KIXObjectService<User> {
 
         const allowed = roleIds?.length ? roleIds.some((rid) => user.RoleIDs?.includes(Number(rid))) : true;
         return allowed;
+    }
+
+    public static async checkPermissions(resource: string, crud: CRUD[] = [CRUD.READ]): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().checkPermissions(
+            [new UIComponentPermission(resource, crud)]
+        );
     }
 }
