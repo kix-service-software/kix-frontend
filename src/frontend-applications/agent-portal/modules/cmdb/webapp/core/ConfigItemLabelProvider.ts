@@ -27,6 +27,8 @@ import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTyp
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { ContactProperty } from '../../../customer/model/ContactProperty';
+import { ConfigItemClassAttributeUtil } from './ConfigItemClassAttributeUtil';
 
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
@@ -89,7 +91,8 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
     }
 
     public async getPropertyText(
-        property: string, short?: boolean, translatable: boolean = true, configItem?: ConfigItem
+        property: string, short?: boolean, translatable: boolean = true, configItem?: ConfigItem,
+        classIds?: number[]
     ): Promise<string> {
         let displayValue = property;
         switch (property) {
@@ -123,10 +126,9 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = 'Translatable#Include Previous Version';
                 break;
             default:
-                const attributes = configItem?.getPreparedData(property);
-                if (attributes && attributes.length > 0) {
-                    displayValue = attributes[0].Label;
-                } else {
+                displayValue = await this.getAttributePropertyText(property, configItem, classIds);
+
+                if (!displayValue) {
                     displayValue = await super.getPropertyText(property, short, translatable);
                 }
         }
@@ -142,6 +144,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
     public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
         let icon = property;
+
         switch (property) {
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
                 icon = 'kix-icon-productive_active';
@@ -149,8 +152,12 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             case ConfigItemProperty.CUR_INCI_STATE_ID:
                 icon = 'kix-icon-service_active';
                 break;
+            case ContactProperty.CREATE_NEW_TICKET:
+                icon = 'kix-icon-new-ticket';
+                break;
             default:
         }
+
         return icon;
     }
 
@@ -285,9 +292,19 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             case ConfigItemProperty.CUR_INCI_STATE_ID:
                 icons.push(new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, value));
                 break;
+            case ConfigItemProperty.CLASS_ID:
+                const icon = await this.getCIClassIcon(configItem);
+                icons.push(icon);
             default:
         }
         return icons;
+    }
+
+    private async getCIClassIcon(configItem: ConfigItem): Promise<ObjectIcon> {
+        const ciClass = await KIXObjectService.loadObjects<ConfigItemClass>(
+            KIXObjectType.CONFIG_ITEM_CLASS, [configItem.ClassID], null, null, false
+        );
+        return LabelService.getInstance().getObjectIcon(ciClass[0]) as ObjectIcon;
     }
 
     public async createLabelsFromDFValue(dfValue: DynamicFieldValue): Promise<Label[]> {
@@ -332,5 +349,30 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             }
         }
         return null;
+    }
+
+    private async getAttributePropertyText(
+        property: string, configItem?: ConfigItem, classIds?: number[]
+    ): Promise<string> {
+        let displayValue = null;
+        if (configItem) {
+            const attributes = configItem?.getPreparedData(property);
+
+            if (attributes?.length) {
+                displayValue = attributes[0].Label;
+            }
+        }
+
+        if (
+            !displayValue
+            && classIds?.length
+        ) {
+            const attribute = await ConfigItemClassAttributeUtil.getAttributebyProperty(property, classIds);
+
+            if (attribute) {
+                displayValue = attribute.Name;
+            }
+        }
+        return displayValue;
     }
 }

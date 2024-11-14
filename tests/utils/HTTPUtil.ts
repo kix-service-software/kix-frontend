@@ -16,7 +16,7 @@ export class HTTPUtil {
     public static createOptionsResponse(methods: RequestMethod[]): OptionsResponse {
         const headers = {};
         headers[ResponseHeader.ALLOW] = methods.join(',');
-        return new OptionsResponse(headers);
+        return new OptionsResponse(headers, null);
     }
 
 }

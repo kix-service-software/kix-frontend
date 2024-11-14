@@ -16,10 +16,15 @@ export class BooleanFormValue extends ObjectFormValue<boolean> {
         property: string,
         object: any,
         objectValueMapper: ObjectFormValueMapper,
-        public parent: ObjectFormValue,
+        public parent: ObjectFormValue
     ) {
         super(property, object, objectValueMapper, parent);
         this.inputComponentId = 'checkbox-form-input';
+    }
+
+    async initFormValue(): Promise<void> {
+        await super.initFormValue();
+        this.setFormValue(this.object[this.property], true);
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {

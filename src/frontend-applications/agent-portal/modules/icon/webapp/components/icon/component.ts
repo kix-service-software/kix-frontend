@@ -64,7 +64,6 @@ class Component {
                 const objectId = await PlaceholderService.getInstance().replacePlaceholders(
                     icon.ObjectId ? icon.ObjectId.toString() : '', contextObject
                 );
-
                 const icons = await KIXObjectService.loadObjects<ObjectIcon>(
                     KIXObjectType.OBJECT_ICON, null, null,
                     new ObjectIconLoadingOptions(object, objectId)

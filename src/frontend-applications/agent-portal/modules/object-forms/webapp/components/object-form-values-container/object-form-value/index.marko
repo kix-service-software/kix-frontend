@@ -56,9 +56,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                <if(state.inputTemplate)>
                   <${state.inputTemplate} formValue=input.formValue/>
                </if>
-               <else>
+               <else-if(!state.isEmpty)>
                   <text-form-input formValue=input.formValue/>
-               </else>
+               </else-if>
             </div>
             <add-remove-form-value-control
                formValue=input.formValue

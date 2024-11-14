@@ -289,11 +289,22 @@ export class Row extends BindableObject {
     }
 
     public updateValues(): void {
+        const newCells: Cell[] = [];
+        this.rowObject.getValues().forEach(
+            (v) => newCells.push(new Cell(this, v))
+        );
+
         this.getTable().getColumns().forEach((c) => {
             const cell = this.getCell(c.getColumnId());
 
             if (!cell) {
                 this.cells.push(new Cell(this, new TableValue(c.getColumnId(), null)));
+            }
+            else {
+                const newCell = newCells.find((nC) => nC.getProperty() === c.getColumnId());
+                if (newCell.getDisplayValue() !== cell.getDisplayValue()) {
+                    cell.setValue(new TableValue(c.getColumnId(), newCell.getDisplayValue()));
+                }
             }
         });
     }

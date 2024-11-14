@@ -136,11 +136,11 @@ export class OrganisationContext extends Context {
             EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.ORGANISATION);
 
             const filter = await OrganisationService.getInstance().prepareFullTextFilter(this.filterValue);
-            const loadingOptions = new KIXObjectLoadingOptions(filter);
+            let loadingOptions = new KIXObjectLoadingOptions(filter);
             loadingOptions.limit = limit;
             loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
 
-            await this.prepareContextLoadingOptions(KIXObjectType.ORGANISATION, loadingOptions);
+            loadingOptions = await this.prepareContextLoadingOptions(KIXObjectType.ORGANISATION, loadingOptions);
 
             const organisations = await KIXObjectService.loadObjects(
                 KIXObjectType.ORGANISATION, null, loadingOptions, null, false, undefined, undefined,
@@ -166,7 +166,7 @@ export class OrganisationContext extends Context {
         );
 
         let contacts = [];
-        const loadingOptions = new KIXObjectLoadingOptions([]);
+        let loadingOptions = new KIXObjectLoadingOptions([]);
         loadingOptions.includes = [ContactProperty.USER, KIXObjectProperty.DYNAMIC_FIELDS];
         loadingOptions.limit = limit;
 
@@ -180,14 +180,14 @@ export class OrganisationContext extends Context {
                     FilterDataType.NUMERIC, FilterType.AND, organisationIds
                 ));
             }
-            await this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
+            loadingOptions = await this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
             contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, undefined, undefined, undefined, undefined, collectionId
             );
         } else if (!isOrganisationDepending && this.filterValue) {
             const filter = await ContactService.getInstance().prepareFullTextFilter(this.filterValue);
             loadingOptions.filter = filter;
-            await this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
+            loadingOptions = await this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
             contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, undefined, undefined, undefined, undefined, collectionId
             );

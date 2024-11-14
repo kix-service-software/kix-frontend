@@ -276,7 +276,7 @@ export class TicketAPIService extends KIXObjectAPIService {
 
             objectResponse = await super.load(
                 token, KIXObjectType.TICKET, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.TICKET,
-                clientRequestId, Ticket
+                clientRequestId, Ticket, undefined, true
             );
         } else if (objectType === KIXObjectType.USER_TICKETS) {
             const uri = this.buildUri('session', 'user', 'tickets');

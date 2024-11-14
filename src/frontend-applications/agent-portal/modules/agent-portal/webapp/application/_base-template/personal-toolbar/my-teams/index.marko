@@ -11,14 +11,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         title=(state.translations["Translatable#My Queues"])
         class="bookmark-dropdown-container"
     >
-        <div class="action-icon">
+        <div class="action-icon" on-click("openMyTeams")>
             <icon icon="kix-icon-ticket"/>
         </div>
         <div class="action-text">
             <if(state.isMobile)>
                 ${state.translations["Translatable#My Queues"] +
                 " (" +
-                state.state.queues.length +
+                state.queues.length +
                 ")"}
             </if>
             <else>${state.queues.length}</else>

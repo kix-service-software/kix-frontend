@@ -8,7 +8,6 @@
  */
 
 import { IAdminModuleExtension } from '../admin/server/IAdminModuleExtension';
-import { AdminModuleCategory } from '../admin/model/AdminModuleCategory';
 import { AdminModule } from '../admin/model/AdminModule';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
@@ -18,26 +17,32 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IAdminModuleExtension {
 
-    public getAdminModules(): AdminModuleCategory[] {
+    public getAdminModules(): AdminModule[] {
         return [
-            new AdminModuleCategory(
-                null, 'kix', 'Translatable#KIX', null, [
-                new AdminModuleCategory(
-                    null, 'user-management', 'Translatable#User Management', null, [], [
+            new AdminModule(
+                null, 'kix', 'Translatable#KIX', null, null, null, [], 0,
+                [
                     new AdminModule(
-                        null, 'users', 'Translatable#Users', null,
-                        KIXObjectType.USER, 'user-admin-users', [
-                        new UIComponentPermission('system/users', [CRUD.CREATE], true)
-                    ]
-                    ),
-                    new AdminModule(
-                        null, 'roles', 'Translatable#Roles/Permissions', null,
-                        KIXObjectType.ROLE, 'user-admin-roles', [
-                        new UIComponentPermission('system/roles', [CRUD.CREATE], true)
-                    ]
-                    ),
-                ])
-            ])
+                        null, 'user-management', 'Translatable#User Management', null, null, null, [], 0,
+                        [
+                            new AdminModule(
+                                null, 'users', 'Translatable#Users', null,
+                                KIXObjectType.USER, 'user-admin-users',
+                                [
+                                    new UIComponentPermission('system/users', [CRUD.CREATE], true)
+                                ]
+                            ),
+                            new AdminModule(
+                                null, 'roles', 'Translatable#Roles/Permissions', null,
+                                KIXObjectType.ROLE, 'user-admin-roles',
+                                [
+                                    new UIComponentPermission('system/roles', [CRUD.CREATE], true)
+                                ]
+                            ),
+                        ], true
+                    )
+                ], true
+            )
         ];
     }
 

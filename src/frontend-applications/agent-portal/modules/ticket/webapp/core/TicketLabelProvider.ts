@@ -323,6 +323,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.RESPONSIBLE_OOO:
                 displayValue = 'Translatable#Responsible Out Of Office';
                 break;
+            case TicketProperty.MY_QUEUES:
+                displayValue = 'Translatable#My Teams';
+                break;
             default:
                 if (Article.isArticleProperty(property)) {
                     displayValue = await LabelService.getInstance().getPropertyText(

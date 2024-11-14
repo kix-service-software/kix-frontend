@@ -8,7 +8,6 @@
  */
 
 import { IAdminModuleExtension } from '../admin/server/IAdminModuleExtension';
-import { AdminModuleCategory } from '../admin/model/AdminModuleCategory';
 import { AdminModule } from '../admin/model/AdminModule';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
@@ -18,12 +17,12 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IAdminModuleExtension {
 
-    public getAdminModules(): AdminModuleCategory[] {
+    public getAdminModules(): AdminModule[] {
         return [
-            new AdminModuleCategory(
-                null, 'kix', 'Translatable#KIX', null, [
-                new AdminModuleCategory(
-                    null, 'automation', 'Translatable#Automation', null, [],
+            new AdminModule(
+                null, 'kix', 'Translatable#KIX', null, null, null, [], 0, [
+                new AdminModule(
+                    null, 'automation', 'Translatable#Automation', null, null, null, [], 0,
                     [
                         new AdminModule(
                             null, 'notifications', 'Translatable#Notifications', null,
@@ -42,9 +41,9 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                                 )
                             ]
                         )
-                    ]
+                    ], true
                 )
-            ])
+            ], true)
         ];
     }
 }

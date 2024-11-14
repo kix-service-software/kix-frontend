@@ -29,6 +29,11 @@ class Component {
     private additionalOptionsTimeout: any;
     private timoutTimer: TimeoutTimer;
     private updateTimeout: any;
+
+    private dragInterval: any;
+    private dragoverListener: any;
+    private mouseY: number;
+
     private updatePromiseResolve: () => void;
 
     public onCreate(): void {
@@ -102,14 +107,6 @@ class Component {
                     index++;
                 }
 
-                this.state.dynamicValues.forEach((v) => {
-                    if (!this.advancedOptionsMap.has(v.instanceId)) {
-                        this.advancedOptionsMap.set(v.instanceId, false);
-                    }
-                });
-
-                await this.addEmptyValue();
-
                 let removeInstanceIds = [];
                 if (this.manager.uniqueProperties) {
                     const updatePromises = [];
@@ -124,6 +121,16 @@ class Component {
                     toRemove.forEach((p) => this.removeValue(p, false));
                 }
 
+                this.state.dynamicValues = this.state.dynamicValues.sort((a, b) => a.required ? -1 : 0);
+
+                await this.addEmptyValue();
+
+                this.state.dynamicValues.forEach((v) => {
+                    if (!this.advancedOptionsMap.has(v.instanceId)) {
+                        this.advancedOptionsMap.set(v.instanceId, false);
+                    }
+                });
+
                 (this as any).setStateDirty('dynamicValues');
                 this.updatePromiseResolve = undefined;
                 resolve();
@@ -132,8 +139,14 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
         this.advancedOptionsMap = new Map();
         this.optionEditor = new Map();
+
+        this.dragoverListener = document.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            this.mouseY = event.clientY;
+        });
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Remove parameter'
@@ -168,6 +181,12 @@ class Component {
             this.state.hasAdditionalOptions = this.manager.hasAdditionalOptions();
 
             await this.addEmptyValue();
+        }
+    }
+
+    public onDestroy(): void {
+        if (this.dragoverListener) {
+            document.removeEventListener('dragover', this.dragoverListener);
         }
     }
 
@@ -426,6 +445,17 @@ class Component {
 
     public handleDragStart(id: string, index: number, event): void {
         event.stopPropagation();
+        const scrollContainer = document.getElementsByClassName('content-wrapper')[0];
+        const topScrollThreshold = 175;
+        const bottomScrollThreshold = 100;
+        const scrollSpeed = 15;
+        this.dragInterval = setInterval(() => {
+            if (this.mouseY < topScrollThreshold) {
+                scrollContainer.scrollBy(0, -scrollSpeed);
+            } else if (window.innerHeight - this.mouseY < bottomScrollThreshold) {
+                scrollContainer.scrollBy(0, scrollSpeed);
+            }
+        }, 20);
 
         const valueElement = (this as any).getEl(id);
         if (valueElement) {
@@ -437,6 +467,11 @@ class Component {
 
     public handleDragEnd(id: string, event): void {
         event.stopPropagation();
+
+        if (this.dragInterval) {
+            clearInterval(this.dragInterval);
+            this.dragInterval = null;
+        }
 
         const valueElement = (this as any).getEl(id);
         if (valueElement) {

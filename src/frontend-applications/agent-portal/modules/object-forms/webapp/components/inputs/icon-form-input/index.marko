@@ -1,0 +1,56 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div class="container-fluid">
+    <ul class="nav nav-tabs">
+        <if(state.libraryEnabled)>
+            <li class="nav-item" on-click("switchMode")>
+                <a
+                    class=[
+                        "nav-link",
+                        {
+                            active: !state.fileUpload,
+                        },
+                    ]
+                    aria-current="page"
+                    href="#"
+                >
+                    <translation-string pattern="Translatable#Library"/>
+                </a>
+            </li>
+        </if>
+        <li class="nav-item" on-click("switchMode")>
+            <a
+                class=[
+                    "nav-link",
+                    {
+                        active: state.fileUpload,
+                    },
+                ]
+                href="#"
+            >
+                <translation-string pattern="Translatable#File Upload"/>
+            </a>
+        </li>
+    </ul>
+
+    <div class="row p-2 border border-top-0">
+        <div class="col-3 icon-preview d-flex align-items-center justify-content-center">
+            <icon icon=state.value/>
+        </div>
+        <div class="col-9">
+            <if(state.fileUpload)>
+                <icon-file-chooser on-iconChanged("iconChanged")/>
+            </if>
+            <else>
+                <icon-library-chooser on-iconChanged("iconChanged")/>
+            </else>
+        </div>
+    </div>
+</div>

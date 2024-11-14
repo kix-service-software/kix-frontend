@@ -53,6 +53,9 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
             case OrganisationProperty.ID:
                 displayValue = 'Translatable#Organisation ID';
                 break;
+            case OrganisationProperty.NEW_TICKETS_COUNT:
+                displayValue = 'Translatable#New Tickets';
+                break;
             case OrganisationProperty.OPEN_TICKETS_COUNT:
                 displayValue = 'Translatable#Open Tickets';
                 break;
@@ -90,6 +93,9 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
             case OrganisationProperty.CITY:
             case OrganisationProperty.COUNTRY:
                 translatable = false;
+                break;
+            case OrganisationProperty.NEW_TICKETS_COUNT:
+                displayValue = organisation?.TicketStats?.NewCount?.toString();
                 break;
             case OrganisationProperty.OPEN_TICKETS_COUNT:
                 displayValue = organisation?.TicketStats?.OpenCount?.toString();

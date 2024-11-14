@@ -82,9 +82,8 @@ export class TicketContext extends Context {
     }
 
     public async setQueue(queueId: number, history: boolean = true): Promise<void> {
-        if (!this.queueId || this.queueId !== queueId) {
+        if (this.queueId !== queueId) {
             this.queueId = queueId;
-
             EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
 
             this.loadTickets();
@@ -121,11 +120,17 @@ export class TicketContext extends Context {
     private async loadTickets(silent: boolean = false, limit?: number): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.TICKET);
 
-        const loadingOptions = new KIXObjectLoadingOptions(
+        let loadingOptions = new KIXObjectLoadingOptions(
             [], null, null, [KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.STATE_TYPE, TicketProperty.UNSEEN]
         );
 
-        if (this.queueId) {
+        if (this.queueId === 0) {
+            const myTeamsFilter = new FilterCriteria(
+                TicketProperty.MY_QUEUES, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                FilterType.AND, 1
+            );
+            loadingOptions.filter.push(myTeamsFilter);
+        } else if (this.queueId) {
             const queueFilter = new FilterCriteria(
                 TicketProperty.QUEUE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                 FilterType.AND, this.queueId
@@ -143,7 +148,7 @@ export class TicketContext extends Context {
 
         loadingOptions.limit = limit;
 
-        if (!this.queueId) {
+        if (!this.queueId && this.queueId !== 0) {
             loadingOptions.sortOrder = 'Ticket.-Age:numeric';
 
             if (!this.filterValue) {
@@ -161,7 +166,7 @@ export class TicketContext extends Context {
             ));
         }
 
-        await this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
+        loadingOptions = await this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
 
         const tickets = await KIXObjectService.loadObjects(
             KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined,

@@ -12,23 +12,23 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <h2 class="configuration-title">
             <translation-string pattern="Translatable#Table Configuration"/>
         </h2>
-        <table class="kix-table configuration-table">
+        <table class="table table-hover table-striped">
             <thead>
                 <tr>
-                    <th class="table-head-cell">
+                    <th>
                         <translation-string pattern="Translatable#Option"/>
                     </th>
-                    <th class="table-head-cell">
+                    <th>
                         <translation-string pattern="Translatable#Value"/>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="content-cell">
+                    <td>
                         <translation-string pattern="Translatable#Table Height (Row Count)"/>
                     </td>
-                    <td class="content-cell">
+                    <td>
                         <input
                             type="number"
                             value=(state.configuration.displayLimit)
@@ -38,10 +38,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </td>
                 </tr>
                 <tr>
-                    <td class="content-cell">
+                    <td>
                         <translation-string pattern="Translatable#Search Limit"/>
                     </td>
-                    <td class="content-cell">
+                    <td>
                         <input
                             type="number"
                             value=state.searchLimit
@@ -51,10 +51,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </td>
                 </tr>
                 <tr>
-                    <td class="content-cell">
+                    <td>
                         <translation-string pattern="Translatable#Page Size"/>
                     </td>
-                    <td class="content-cell">
+                    <td>
                         <input
                             type="number"
                             value=state.limit
@@ -65,10 +65,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </tr>
                 <if(input.advancedSettings)>
                     <tr>
-                        <td class="content-cell">
+                        <td>
                             <translation-string pattern="Translatable#Empty Result Hint"/>
                         </td>
-                        <td class="content-cell">
+                        <td>
                             <input
                                 type="text"
                                 value=(state.configuration.emptyResultHint)
@@ -79,13 +79,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </tr>
 
                     <tr>
-                        <td class="content-cell">
+                        <td>
                             <translation-string pattern="Translatable#Fixed First Column"/>
                         </td>
-                        <td
-                            on-click("booleanValueChanged", "fixedFirstColumn")
-                            class="content-cell"
-                        >
+                        <td on-click("booleanValueChanged", "fixedFirstColumn")>
                             <input
                                 type="checkbox"
                                 checked=(state.configuration.fixedFirstColumn)
@@ -94,13 +91,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </tr>
 
                     <tr>
-                        <td class="content-cell">
+                        <td>
                             <translation-string pattern="Translatable#Row Selection"/>
                         </td>
-                        <td
-                            on-click("booleanValueChanged", "enableSelection")
-                            class="content-cell"
-                        >
+                        <td on-click("booleanValueChanged", "enableSelection")>
                             <input
                                 type="checkbox"
                                 checked=(state.configuration.enableSelection)
@@ -109,10 +103,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </tr>
 
                     <tr>
-                        <td class="content-cell">
+                        <td>
                             <translation-string pattern="Translatable#Small Rows"/>
                         </td>
-                        <td on-click("rowHeightChanged") class="content-cell">
+                        <td on-click("rowHeightChanged")>
                             <input
                                 type="checkbox"
                                 checked=component.isSmallRows()
@@ -121,13 +115,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </tr>
 
                     <tr>
-                        <td class="content-cell">
+                        <td>
                             <translation-string pattern="Translatable#Small Headers"/>
                         </td>
-                        <td
-                            on-click("headerHeightChanged")
-                            class="content-cell"
-                        >
+                        <td on-click("headerHeightChanged")>
                             <input
                                 type="checkbox"
                                 checked=component.isSmallHeaders()

@@ -9,5 +9,5 @@
     ],
     "outputDir": "dist/frontend-applications/agent-portal/static",
     "bundleReadTimeout": 360000,
-    "cacheProfile": "development"
+    "cacheProfile": "production"
 }

@@ -134,7 +134,8 @@ export class TicketSearchDefinition extends SearchDefinition {
             TicketProperty.CREATED_PRIORITY_ID, TicketProperty.CREATED_QUEUE_ID, TicketProperty.CREATED_TYPE_ID,
             TicketProperty.CREATED_USER_ID, TicketProperty.CREATED_STATE_ID, TicketProperty.ARTICLE_CREATE_TIME,
             TicketProperty.ATTACHMENT_NAME, TicketProperty.WATCHER_USER_ID,
-            TicketProperty.STATE_TYPE, TicketProperty.LAST_CHANGE_TIME
+            TicketProperty.STATE_TYPE, TicketProperty.LAST_CHANGE_TIME,
+            TicketProperty.MY_QUEUES
         ];
         const articleDFParameter = await this.getArticleDFParameter(searchParameter);
 

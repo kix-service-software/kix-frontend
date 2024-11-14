@@ -41,6 +41,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.inputTemplate = KIXModulesService.getComponentTemplate(
                     this.state.formValue?.inputComponentId
                 );
+            } else {
+                this.state.isEmpty = true;
             }
         } else {
             const controlComponent = (this as any).getComponent(`control-${input.formValue?.instanceId}`);

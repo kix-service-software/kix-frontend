@@ -41,6 +41,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <link rel="stylesheet" href="/static/font-awesome/css/all.min.css">
         <link rel="stylesheet" href="/static/codemirror/codemirror.css">
         <link rel="stylesheet" href="/static/codemirror/hint/show-hint.css">
+        <link
+            rel="stylesheet"
+            href="/static/thirdparty/ckeditor5/ckeditor5.css"
+        >
         <script src="/static/codemirror/codemirror.js"/>
         <script src="/static/codemirror/hint/show-hint.js"/>
         <script src="/static/codemirror/mode/sql.js"/>
@@ -97,11 +101,212 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             socketTimeout=input.socketTimeout
             modules=input.modules
         />
+        <script type="importmap">
+            
+            
+            
+            {
+                "imports": {
+                    "ckeditor5": "/static/thirdparty/ckeditor5/ckeditor5.js",
+                    "ckeditor5/": "/static/thirdparty/ckeditor5/"
+                }
+            }
+
+
+
+        </script>
+
         <script src="/static/thirdparty/bootstrap-5.3.2/js/bootstrap.bundle.min.js"/>
-        <script src="/static/thirdparty/ckeditor-4.22.1/ckeditor.js"/>
         <script src="/static/thirdparty/chart.min.js"/>
         <script src="/static/thirdparty/d3/d3-min.js"/>
         <script src="/static/thirdparty/d3/d3-selection-multi-min.js"/>
         <lasso-body/>
+
+        <script type="module">
+            import {
+                // editor class
+                ClassicEditor,
+                //Common classes
+                Command,
+                HtmlDataProcessor,
+                ButtonView,
+                createDropdown,
+                ViewModel,
+                addListToDropdown,
+                Plugin,
+                keyCodes,
+                ListView,
+                ListItemView,
+                View,
+                ContextualBalloon,
+                Collection,
+                TextWatcher,
+                clickOutsideHandler,
+                Rect,
+                env,
+                logWarning,
+                toMap,
+                // plugins
+                AccessibilityHelp,
+                Alignment,
+                Autoformat,
+                AutoImage,
+                AutoLink,
+                Autosave,
+                BalloonToolbar,
+                Base64UploadAdapter,
+                BlockQuote,
+                Bold,
+                Code,
+                CodeBlock,
+                Essentials,
+                FindAndReplace,
+                FontBackgroundColor,
+                FontColor,
+                FontFamily,
+                FontSize,
+                GeneralHtmlSupport,
+                Heading,
+                Highlight,
+                HorizontalLine,
+                HtmlEmbed,
+                ImageBlock,
+                ImageCaption,
+                ImageInline,
+                ImageInsert,
+                ImageInsertViaUrl,
+                ImageResize,
+                ImageStyle,
+                ImageTextAlternative,
+                ImageToolbar,
+                ImageUpload,
+                Indent,
+                IndentBlock,
+                Italic,
+                Link,
+                LinkImage,
+                List,
+                ListProperties,
+                MediaEmbed,
+                Mention,
+                Paragraph,
+                PasteFromMarkdownExperimental,
+                PasteFromOffice,
+                RemoveFormat,
+                SelectAll,
+                SourceEditing,
+                SpecialCharacters,
+                SpecialCharactersArrows,
+                SpecialCharactersCurrency,
+                SpecialCharactersEssentials,
+                SpecialCharactersLatin,
+                SpecialCharactersMathematical,
+                SpecialCharactersText,
+                Strikethrough,
+                Style,
+                Subscript,
+                Superscript,
+                Table,
+                TableCaption,
+                TableCellProperties,
+                TableColumnResize,
+                TableProperties,
+                TableToolbar,
+                TextTransformation,
+                Underline,
+                Undo,
+            } from "ckeditor5";
+            window.KIX_CKEDITOR = ClassicEditor;
+            window.KIX_CKEDITOR_CLASSES = {
+                HtmlDataProcessor,
+                Command,
+                ButtonView,
+                createDropdown,
+                ViewModel,
+                addListToDropdown,
+                Plugin,
+                keyCodes,
+                ListView,
+                ListItemView,
+                View,
+                ContextualBalloon,
+                Collection,
+                TextWatcher,
+                clickOutsideHandler,
+                Rect,
+                env,
+                logWarning,
+                toMap,
+            };
+            window.KIX_CKEDITOR_PLUGINS = [
+                ClassicEditor,
+                Alignment,
+                Autoformat,
+                AutoImage,
+                AutoLink,
+                Autosave,
+                BalloonToolbar,
+                Base64UploadAdapter,
+                BlockQuote,
+                Bold,
+                Code,
+                CodeBlock,
+                Essentials,
+                FindAndReplace,
+                FontBackgroundColor,
+                FontColor,
+                FontFamily,
+                FontSize,
+                GeneralHtmlSupport,
+                Heading,
+                Highlight,
+                HorizontalLine,
+                HtmlEmbed,
+                ImageBlock,
+                ImageCaption,
+                ImageInline,
+                ImageInsert,
+                ImageInsertViaUrl,
+                ImageResize,
+                ImageStyle,
+                ImageTextAlternative,
+                ImageToolbar,
+                ImageUpload,
+                Indent,
+                IndentBlock,
+                Italic,
+                Link,
+                LinkImage,
+                List,
+                ListProperties,
+                MediaEmbed,
+                Mention,
+                PasteFromMarkdownExperimental,
+                PasteFromOffice,
+                RemoveFormat,
+                SelectAll,
+                SourceEditing,
+                SpecialCharacters,
+                SpecialCharactersArrows,
+                SpecialCharactersCurrency,
+                SpecialCharactersEssentials,
+                SpecialCharactersLatin,
+                SpecialCharactersMathematical,
+                SpecialCharactersText,
+                Strikethrough,
+                Style,
+                Subscript,
+                Superscript,
+                Table,
+                TableCaption,
+                TableCellProperties,
+                TableColumnResize,
+                TableProperties,
+                TableToolbar,
+                TextTransformation,
+                Underline,
+                Undo,
+            ];
+        </script>
     </body>
 </html>

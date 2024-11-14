@@ -69,7 +69,7 @@ export class BrowserUtil {
             );
             OverlayService.getInstance().openOverlay(
                 OverlayType.CONFIRM, null, content, title, null, closeButton,
-                undefined, undefined, undefined, undefined, undefined
+                undefined, undefined, undefined, undefined, undefined, undefined
             );
         }
     }
@@ -80,7 +80,7 @@ export class BrowserUtil {
         const settings = new RefreshToastSettings(message, reloadApp, objectType);
         const componentContent = new ComponentContent('refresh-app-toast', settings);
         OverlayService.getInstance().openOverlay(
-            OverlayType.HINT_TOAST, null, componentContent, '', null, false, null, null, null, null, true
+            OverlayType.HINT_TOAST, null, componentContent, '', null, false, null, null, null, null, null, true
         );
     }
 
@@ -102,19 +102,16 @@ export class BrowserUtil {
         const FileSaver = require('file-saver');
         const blob = base64 ? this.b64toBlob(content, contentType)
             : new Blob([content], { type: contentType });
-        if (window.navigator.msSaveOrOpenBlob) {
-            FileSaver.saveAs(blob, fileName);
-        } else {
-            const file = new File([blob], fileName, { type: contentType });
-            FileSaver.saveAs(file);
-        }
+
+        const file = new File([blob], fileName, { type: contentType });
+        FileSaver.saveAs(file);
     }
 
     public static async startFileDownload(file: IDownloadableFile): Promise<void> {
         const user = await AgentService.getInstance().getCurrentUser();
         const a = document.createElement('a');
         a.style.display = 'none';
-        a.href = `files/download/${file.downloadId}?userid=${user?.UserID}`;
+        a.href = `/files/download/${file.downloadId}?userid=${user?.UserID}`;
         a.download = file.Filename;
         a.target = '_blank';
         document.body.appendChild(a);
@@ -128,9 +125,11 @@ export class BrowserUtil {
         if (name) {
             pdfWindow.document.title = name;
         }
+        const pdfBuffer = Buffer.from(content, 'base64');
+        const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
+        const pdfURL = URL.createObjectURL(blob);
         pdfWindow.document.body.innerHTML
-            = '<embed style="height:100%; width:100%" type="application/pdf" src="data:application/pdf;'
-            + ';base64,' + content + '" />';
+            = '<embed style="height:100%; width:100%" type="application/pdf" src="' + pdfURL + '" />';
     }
 
     public static readFile(file: File): Promise<string> {
@@ -252,18 +251,14 @@ export class BrowserUtil {
     public static async downloadCSVFile(csvString: string, filename: string, withDate: boolean = true): Promise<void> {
         const now = DateTimeUtil.getTimestampNumbersOnly(new Date(Date.now()));
         const fileName = `${filename}${withDate ? '_' + now : ''}.csv`;
-        if (window.navigator.msSaveOrOpenBlob) {
-            const blob = new Blob([csvString], { type: 'text/csv' });
-            window.navigator.msSaveBlob(blob, fileName);
-        } else {
-            const element = document.createElement('a');
-            element.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
-            element.download = fileName;
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        }
+
+        const element = document.createElement('a');
+        element.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
+        element.download = fileName;
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
     }
 
     public static showValidationError(result: ValidationResult[]): void {
@@ -450,6 +445,28 @@ export class BrowserUtil {
         }
 
         return result;
+    }
+
+    public static applyStyle(id: string, style: string): void {
+        id = `ckeditor-style-${id}`;
+        const styleElement = document.getElementById(id);
+        if (styleElement) {
+            styleElement.innerHTML = style;
+        } else {
+            const headElement = document.getElementsByTagName('head');
+            const styleElement = document.createElement('style');
+            styleElement.id = id;
+            styleElement.innerHTML = style;
+            headElement[0].appendChild(styleElement);
+        }
+    }
+
+    public static removeStyle(id: string): void {
+        id = `ckeditor-style-${id}`;
+        const styleElement = document.getElementById(id);
+        if (styleElement) {
+            styleElement.remove();
+        }
     }
 
 }

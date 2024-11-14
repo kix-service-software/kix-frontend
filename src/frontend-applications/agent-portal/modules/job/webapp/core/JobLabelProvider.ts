@@ -13,14 +13,14 @@ import { Job } from '../../model/Job';
 import { JobProperty } from '../../model/JobProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { Macro } from '../../model/Macro';
+import { Macro } from '../../../macro/model/Macro';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { ExecPlan } from '../../model/ExecPlan';
-import { JobService } from '.';
 import { JobType } from '../../model/JobType';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { JobService } from './JobService';
 
 export class JobLabelProvider extends LabelProvider {
 

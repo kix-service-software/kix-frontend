@@ -57,7 +57,9 @@ class Component {
 
     public async search(): Promise<void> {
         const element = (this as any).getEl('searchObjectInput');
-        await SearchService.getInstance().executeUserFulltextSearch(element?.value);
+        if (element?.value) {
+            await SearchService.getInstance().executeUserFulltextSearch(element?.value);
+        }
     }
 
     public searchValueChanged(event: any, externalFilterText?: string): void {

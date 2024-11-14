@@ -19,6 +19,7 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public type: OverlayType = null,
         public content: ComponentContent<any> = null,
+        public value: string = null,
         public icon: string | ObjectIcon = null,
         public title: string = null,
         public actions: AbstractAction[] = null,

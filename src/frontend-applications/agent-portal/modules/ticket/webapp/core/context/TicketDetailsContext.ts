@@ -25,6 +25,7 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ArticleLoader } from './ArticleLoader';
 import { TicketProperty } from '../../../model/TicketProperty';
+import { TicketService } from '../TicketService';
 
 export class TicketDetailsContext extends Context {
 
@@ -108,7 +109,17 @@ export class TicketDetailsContext extends Context {
         );
 
         const ticket = this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
+
         return ticket;
+    }
+
+    protected async postLoadDetailsObject(ticket: Ticket): Promise<void> {
+        // mark ticket as seen if it is unseen and has no articles
+        // because the "article mark as seen" handling will not trigger without articles
+        if (ticket?.TicketID && Number(ticket?.Unseen) && !ticket?.ArticleIDs?.length) {
+            await TicketService.getInstance().markTicketAsSeen(ticket.TicketID);
+            ticket.Unseen = 0; // just set it seen (reload because of this is not really necessary)
+        }
     }
 
     public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {

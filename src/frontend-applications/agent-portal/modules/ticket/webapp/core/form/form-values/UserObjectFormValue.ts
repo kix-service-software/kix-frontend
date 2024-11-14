@@ -112,6 +112,10 @@ export class UserObjectFormValue extends SelectObjectFormValue {
         await this.loadInitialUser();
     }
 
+    public resetSearch(): void {
+        this.loadInitialUser();
+    }
+
     protected async loadInitialUser(): Promise<void> {
         if (this.enabled) {
             this.loadingOptions.limit = 10;
