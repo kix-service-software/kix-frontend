@@ -8,7 +8,6 @@
  */
 
 import { IAdminModuleExtension } from '../admin/server/IAdminModuleExtension';
-import { AdminModuleCategory } from '../admin/model/AdminModuleCategory';
 import { AdminModule } from '../admin/model/AdminModule';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
@@ -18,20 +17,20 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IAdminModuleExtension {
 
-    public getAdminModules(): AdminModuleCategory[] {
+    public getAdminModules(): AdminModule[] {
         return [
-            new AdminModuleCategory(
-                null, 'kix', 'Translatable#KIX', null, [
-                new AdminModuleCategory(
-                    null, 'knowledge-database', 'Translatable#Knowledge Database', null, [], [
+            new AdminModule(
+                null, 'kix', 'Translatable#KIX', null, null, null, [], 0, [
+                new AdminModule(
+                    null, 'knowledge-database', 'Translatable#Knowledge Database', null, null, null, [], 0, [
                     new AdminModule(
                         null, 'faq-categories', 'Translatable#FAQ Categories', null,
                         KIXObjectType.FAQ_CATEGORY, 'faq-admin-categories', [
                         new UIComponentPermission('system/faq/categories', [CRUD.CREATE], true)
                     ]
                     )
-                ])
-            ])
+                ], true)
+            ], true)
         ];
     }
 

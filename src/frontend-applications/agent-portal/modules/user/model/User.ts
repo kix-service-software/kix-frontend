@@ -32,7 +32,7 @@ export class User extends KIXObject {
     public IsAgent: number;
     public IsCustomer: number;
 
-    public Preferences: UserPreference[];
+    public Preferences: UserPreference[] = [];
     public RoleIDs: number[];
 
     public constructor(user?: User) {

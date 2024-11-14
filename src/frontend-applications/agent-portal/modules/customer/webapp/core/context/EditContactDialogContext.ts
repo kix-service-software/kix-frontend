@@ -14,10 +14,19 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { UserProperty } from '../../../../user/model/UserProperty';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { FormContext } from '../../../../../model/configuration/FormContext';
 
 export class EditContactDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-contact-dialog-context';
+
+    public async postInit(): Promise<void> {
+        await super.postInit();
+
+        const formId = await FormService.getInstance().getFormIdByContext(FormContext.EDIT, KIXObjectType.CONTACT);
+        this.getFormManager().setFormId(formId, null, true);
+    }
 
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType | string = KIXObjectType.CONTACT,
@@ -30,8 +39,9 @@ export class EditContactDialogContext extends Context {
                 null, null, null,
                 [KIXObjectProperty.DYNAMIC_FIELDS, KIXObjectType.USER, UserProperty.PREFERENCES]
             );
-            const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions);
-            object = objects && objects.length ? objects[0] : null;
+            const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions)
+                .catch(() => []);
+            object = objects?.length ? objects[0] : null;
         }
         return object;
     }

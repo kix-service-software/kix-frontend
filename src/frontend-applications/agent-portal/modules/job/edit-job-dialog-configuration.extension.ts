@@ -8,7 +8,6 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { EditJobDialogContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
@@ -21,6 +20,7 @@ import { FormContext } from '../../model/configuration/FormContext';
 import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { EditJobDialogContext } from './webapp/core/context/EditJobDialogContext';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

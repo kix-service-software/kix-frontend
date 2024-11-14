@@ -21,7 +21,9 @@ export class AdminModule {
         public objectType?: KIXObjectType | string,
         public componentId?: string,
         public permissions: UIComponentPermission[] = [],
-        public priority: number = 0
+        public priority: number = 0,
+        public children: AdminModule[] = [],
+        public isCategory: boolean = false
     ) {
         if (adminModule) {
             this.id = adminModule.id;
@@ -29,6 +31,10 @@ export class AdminModule {
             this.icon = adminModule.icon;
             this.objectType = adminModule.objectType;
             this.componentId = adminModule.componentId;
+            this.permissions = adminModule.permissions;
+            this.priority = adminModule.priority;
+            this.children = adminModule.children;
+            this.isCategory = adminModule.isCategory;
         }
     }
 

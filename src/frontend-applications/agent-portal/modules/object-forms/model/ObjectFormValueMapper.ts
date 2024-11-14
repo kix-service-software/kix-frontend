@@ -19,6 +19,7 @@ import { EventService } from '../../base-components/webapp/core/EventService';
 import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
 import { ValidationResult } from '../../base-components/webapp/core/ValidationResult';
 import { DynamicFormFieldOption } from '../../dynamic-fields/webapp/core';
+import { InteractionHandler } from '../webapp/core/InteractionHandler';
 import { ObjectFormHandler } from '../webapp/core/ObjectFormHandler';
 import { ObjectFormRegistry } from '../webapp/core/ObjectFormRegistry';
 import { FormValueProperty } from './FormValueProperty';
@@ -270,7 +271,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         this.formValues?.push(formValue);
     }
 
-    public findFormValue(property: string): ObjectFormValue {
+    public findFormValue<T extends ObjectFormValue = ObjectFormValue>(property: string): T {
         let formValue: ObjectFormValue;
         if (this.formValues) {
             for (const fv of this.formValues) {
@@ -286,7 +287,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 }
             }
         }
-        return formValue;
+        return formValue as T;
     }
 
     public getFormValues(unsorted?: boolean): ObjectFormValue[] {
@@ -313,7 +314,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         this.form = form;
     }
 
-    public async applyPropertyInstructions(result: RuleResult): Promise<void> {
+    public async applyWorkflowResult(result: RuleResult): Promise<void> {
         const debugRules = Boolean(ClientStorageService.getOption('workflow-debug'));
         if (debugRules) {
             console.debug('FormValues before applyPropertyInstructions:');
@@ -322,6 +323,17 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             console.debug(result);
         }
 
+        await this.applyPropertyInstructions(result);
+
+        if (debugRules) {
+            console.debug('FormValues after applyPropertyInstructions:');
+            console.debug(this.formValues);
+        }
+
+        await this.applyInteractions(result);
+    }
+
+    private async applyPropertyInstructions(result: RuleResult): Promise<void> {
         this.setFieldOrder(result?.InputOrder);
 
         await this.resetFormValues(this.formValues, result.propertyInstructions);
@@ -336,10 +348,13 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
 
         EventService.getInstance().publish(ObjectFormEvent.FORM_VALUE_ADDED);
+    }
 
-        if (debugRules) {
-            console.debug('FormValues after applyPropertyInstructions:');
-            console.debug(this.formValues);
+    private async applyInteractions(result: RuleResult): Promise<void> {
+        if (result.interactions?.length) {
+            for (const interaction of result.interactions) {
+                await InteractionHandler.handle(interaction);
+            }
         }
     }
 
@@ -400,6 +415,13 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     private async applyPropertyInstruction(instruction: PropertyInstruction): Promise<void> {
+
+        if (instruction.property === 'Submit') {
+            const canSubmit = instruction.Enable === true;
+            EventService.getInstance().publish(ObjectFormEvent.FORM_SUBMIT_ENABLED, canSubmit);
+            return;
+        }
+
         let formValue = this.findFormValue(instruction.property);
 
         if (!formValue) {

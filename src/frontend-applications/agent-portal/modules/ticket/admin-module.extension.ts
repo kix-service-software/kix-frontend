@@ -8,7 +8,6 @@
  */
 
 import { IAdminModuleExtension } from '../admin/server/IAdminModuleExtension';
-import { AdminModuleCategory } from '../admin/model/AdminModuleCategory';
 import { AdminModule } from '../admin/model/AdminModule';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
@@ -18,42 +17,46 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IAdminModuleExtension {
 
-    public getAdminModules(): AdminModuleCategory[] {
+    public getAdminModules(): AdminModule[] {
         return [
-            new AdminModuleCategory(
-                null, 'kix', 'Translatable#KIX', null, [
-                new AdminModuleCategory(
-                    null, 'ticket', 'Translatable#Ticket', null, [], [
+            new AdminModule(
+                null, 'kix', 'Translatable#KIX', null, null, null, [], 0,
+                [
                     new AdminModule(
-                        null, 'ticket-types', 'Translatable#Types', null,
-                        KIXObjectType.TICKET_TYPE, 'ticket-admin-types',
+                        null, 'ticket', 'Translatable#Ticket', null, null, null, [], 0,
                         [
-                            new UIComponentPermission('system/ticket/types', [CRUD.CREATE], true)
-                        ]
-                    ),
-                    new AdminModule(
-                        null, 'ticket-priorities', 'Translatable#Priorities', null,
-                        KIXObjectType.TICKET_PRIORITY, 'ticket-admin-priorities',
-                        [
-                            new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE], true)
-                        ]
-                    ),
-                    new AdminModule(
-                        null, 'ticket-states', 'Translatable#States', null,
-                        KIXObjectType.TICKET_STATE, 'ticket-admin-states',
-                        [
-                            new UIComponentPermission('system/ticket/states', [CRUD.CREATE], true)
-                        ]
-                    ),
-                    new AdminModule(
-                        null, 'queues', 'Translatable#Queues', null,
-                        KIXObjectType.QUEUE, 'ticket-admin-queues',
-                        [
-                            new UIComponentPermission('system/ticket/queues', [CRUD.CREATE], true)
-                        ]
+                            new AdminModule(
+                                null, 'ticket-types', 'Translatable#Types', null,
+                                KIXObjectType.TICKET_TYPE, 'ticket-admin-types',
+                                [
+                                    new UIComponentPermission('system/ticket/types', [CRUD.CREATE], true)
+                                ]
+                            ),
+                            new AdminModule(
+                                null, 'ticket-priorities', 'Translatable#Priorities', null,
+                                KIXObjectType.TICKET_PRIORITY, 'ticket-admin-priorities',
+                                [
+                                    new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE], true)
+                                ]
+                            ),
+                            new AdminModule(
+                                null, 'ticket-states', 'Translatable#States', null,
+                                KIXObjectType.TICKET_STATE, 'ticket-admin-states',
+                                [
+                                    new UIComponentPermission('system/ticket/states', [CRUD.CREATE], true)
+                                ]
+                            ),
+                            new AdminModule(
+                                null, 'queues', 'Translatable#Queues', null,
+                                KIXObjectType.QUEUE, 'ticket-admin-queues',
+                                [
+                                    new UIComponentPermission('system/ticket/queues', [CRUD.CREATE], true)
+                                ]
+                            )
+                        ], true
                     )
-                ])
-            ])
+                ], true
+            )
         ];
     }
 

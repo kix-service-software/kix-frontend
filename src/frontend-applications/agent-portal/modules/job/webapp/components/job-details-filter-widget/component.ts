@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { JobFormService } from '../../core';
 import { Job } from '../../../model/Job';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
@@ -22,6 +21,7 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { JobFormService } from '../../core/JobFormService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

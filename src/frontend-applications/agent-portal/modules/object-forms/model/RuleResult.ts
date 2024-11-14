@@ -7,6 +7,10 @@
  * --
  */
 
+import { Ask } from './interactions/Ask';
+import { Interaction } from './interactions/Interaction';
+import { InteractionType } from './interactions/InteractionType';
+import { Tell } from './interactions/Tell';
 import { PropertyInstruction } from './PropertyInstruction';
 
 export class RuleResult {
@@ -14,6 +18,7 @@ export class RuleResult {
     public InputOrder: string[];
     public propertyInstructions: PropertyInstruction[] = [];
     public conditionProperties: string[] = [];
+    public interactions: Interaction[] = [];
 
     public constructor(result: any) {
         if (result?.EvaluationResult) {
@@ -28,7 +33,23 @@ export class RuleResult {
             }
 
             this.conditionProperties = result.ConditionProperties || [];
+
+            if (result.Interactions?.length) {
+                this.mapInteractions(result.Interactions);
+            }
         }
+    }
+
+    private mapInteractions(interactions: Interaction[] = []): void {
+        this.interactions = interactions.map((i) => {
+            if (i.Type === InteractionType.TELL) {
+                return new Tell(i);
+            } else if (i.Type === InteractionType.ASK) {
+                return new Ask(i as Ask);
+            }
+
+            return i;
+        });
     }
 
 }
