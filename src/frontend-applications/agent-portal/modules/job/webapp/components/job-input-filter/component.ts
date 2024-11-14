@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { JobProperty } from '../../../model/JobProperty';
-import { JobFormService } from '../../core';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
@@ -25,6 +24,7 @@ import { TreeService } from '../../../../base-components/webapp/core/tree';
 import { IdService } from '../../../../../model/IdService';
 import { FilterType } from '../../../../../model/FilterType';
 import { FilterDataType } from '../../../../../model/FilterDataType';
+import { JobFormService } from '../../core/JobFormService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 

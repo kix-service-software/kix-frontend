@@ -13,11 +13,10 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 import { JobProperty } from '../../model/JobProperty';
 import { ExecPlan } from '../../model/ExecPlan';
-import { JobService } from '.';
 import { ExecPlanTypes } from '../../model/ExecPlanTypes';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
-import { MacroAction } from '../../model/MacroAction';
+import { MacroAction } from '../../../macro/model/MacroAction';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { JobTypes } from '../../model/JobTypes';
@@ -26,10 +25,12 @@ import { FormInstance } from '../../../base-components/webapp/core/FormInstance'
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../base-components/webapp/core/FormValuesChangedEventData';
-import { MacroFieldCreator } from './MacroFieldCreator';
-import { MacroObjectCreator } from './MacroObjectCreator';
+import { MacroFieldCreator } from '../../../macro/webapp/core/MacroFieldCreator';
+import { MacroObjectCreator } from '../../../macro/webapp/core/MacroObjectCreator';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
+import { JobService } from './JobService';
+import { MacroProperty } from '../../../macro/model/MacroProperty';
 
 export class JobFormService extends KIXObjectFormService {
 
@@ -170,7 +171,7 @@ export class JobFormService extends KIXObjectFormService {
     public async getNewFormField(
         formInstance: FormInstance, f: FormFieldConfiguration, parent?: FormFieldConfiguration
     ): Promise<FormFieldConfiguration> {
-        if (f.property === JobProperty.MACRO_ACTIONS) {
+        if (f.property === MacroProperty.ACTIONS) {
             return await MacroFieldCreator.createActionField(f.parent, null, null, formInstance);
         }
 
@@ -204,9 +205,6 @@ export class JobFormService extends KIXObjectFormService {
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
         formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
-        parameter = parameter.filter((p) => !p[0].startsWith('###MACRO###'));
-        parameter = parameter.filter((p) => p[0] !== JobProperty.MACROS || p[1] !== null);
-
         // collect all filter values
         const filterParameter = parameter.filter((p) => p[0] === JobProperty.FILTER);
         parameter = parameter.filter((p) => p[0] !== JobProperty.FILTER);
@@ -230,7 +228,7 @@ export class JobFormService extends KIXObjectFormService {
         if (type) {
             const manager = this.getJobFormManager(type);
             formFields = await MacroFieldCreator.createActionOptionFields(
-                actionType, actionFieldInstanceId, type, formInstance, manager, action
+                actionType, actionFieldInstanceId, type, formInstance, action
             );
         }
         return formFields;

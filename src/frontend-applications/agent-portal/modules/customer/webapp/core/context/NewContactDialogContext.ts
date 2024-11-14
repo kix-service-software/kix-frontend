@@ -14,6 +14,7 @@ import { ContactProperty } from '../../../model/ContactProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { Organisation } from '../../../model/Organisation';
+import { Contact } from '../../../model/Contact';
 
 export class NewContactDialogContext extends Context {
 
@@ -40,14 +41,11 @@ export class NewContactDialogContext extends Context {
         let object;
         const objectId = this.getObjectId();
         if (objectId) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null,
-                [
-                    ContactProperty.USER
-                ]
-            );
-            const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions);
-            object = objects && objects.length ? objects[0] : null;
+            const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [ContactProperty.USER]);
+            const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions).catch(() => []);
+            object = objects?.length ? objects[0] : null;
+        } else {
+            object = new Contact();
         }
         return object;
     }

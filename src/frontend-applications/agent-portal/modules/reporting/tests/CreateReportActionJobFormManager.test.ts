@@ -20,7 +20,7 @@ import { InputFieldTypes } from '../../base-components/webapp/core/InputFieldTyp
 import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../base-components/webapp/core/ObjectReferenceOptions';
 import { ReportDefinitionProperty } from '../model/ReportDefinitionProperty';
-import { CreateReportActionJobFormManager } from '../webapp/core/form/CreateReportActionJobFormManager';
+import { CreateReportOptionFieldHandler } from '../webapp/core/form/CreateReportOptionFieldHandler';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -181,7 +181,7 @@ describe('CreateReportActionJobFormManager', () => {
             let field: FormFieldConfiguration;
 
             before(async () => {
-                const manager = new CreateReportActionJobFormManager();
+                const manager = new CreateReportOptionFieldHandler();
                 field = await manager.createOptionField(null, optionsMock.DefinitionID, 'CreateReport', 'TestId', null, null);
             });
 
@@ -216,7 +216,7 @@ describe('CreateReportActionJobFormManager', () => {
             let field: FormFieldConfiguration;
 
             before(async () => {
-                const manager = new CreateReportActionJobFormManager();
+                const manager = new CreateReportOptionFieldHandler();
                 field = await manager.createOptionField(null, optionsMock.Parameters, 'CreateReport', 'TestId', null, null);
             });
 
@@ -249,7 +249,7 @@ describe('CreateReportActionJobFormManager', () => {
             let field: FormFieldConfiguration;
 
             before(async () => {
-                const manager = new CreateReportActionJobFormManager();
+                const manager = new CreateReportOptionFieldHandler();
                 field = await manager.createOptionField(null, optionsMock.OutputFormat, 'CreateReport', 'TestId', null, null);
             });
 
@@ -279,7 +279,7 @@ describe('CreateReportActionJobFormManager', () => {
             let field: FormFieldConfiguration;
 
             before(async () => {
-                const manager = new CreateReportActionJobFormManager();
+                const manager = new CreateReportOptionFieldHandler();
                 field = await manager.createOptionField(actionMock as any, optionsMock.DefinitionID, 'CreateReport', 'TestId', null, null);
             });
 
@@ -330,7 +330,7 @@ describe('CreateReportActionJobFormManager', () => {
                     return [];
                 }
 
-                const manager = new CreateReportActionJobFormManager();
+                const manager = new CreateReportOptionFieldHandler();
                 const formInstance = new FormInstance(null);
                 field = await manager.createOptionField(actionMock as any, optionsMock.Parameters, 'CreateReport', 'TestId', null, formInstance);
             });
@@ -480,7 +480,7 @@ describe('CreateReportActionJobFormManager', () => {
                     return [];
                 }
 
-                const manager = new CreateReportActionJobFormManager();
+                const manager = new CreateReportOptionFieldHandler();
                 field = await manager.createOptionField(actionMock as any, optionsMock.OutputFormat, 'CreateReport', 'TestId', null, null);
             });
 
