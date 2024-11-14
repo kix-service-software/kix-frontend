@@ -862,26 +862,33 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     protected async isBackendFilterSupportedForProperty(
-        objectType: KIXObjectType | string, property: string, supportedAttributes: ObjectSearch[], dep?: string
+        objectType: KIXObjectType | string,
+        property: string,
+        supportedAttributes: ObjectSearch[],
+        dep?: string,
+        allowDates: boolean = false
     ): Promise<boolean> {
         const filterList = [
             // TODO: currently date/time is not supported (in FE)
-            TicketProperty.CREATED,
+            //TicketProperty.CREATED,
             TicketProperty.CREATED_TIME_UNIX,
-            TicketProperty.CHANGED,
+            //TicketProperty.CHANGED,
             TicketProperty.LAST_CHANGE_TIME,
             TicketProperty.ARTICLE_CREATE_TIME,
-            TicketProperty.PENDING_TIME,
+            //TicketProperty.PENDING_TIME,
             TicketProperty.PENDING_TIME_UNIX,
             TicketProperty.UNTIL_TIME,
             TicketProperty.AGE,
 
             'OrganisationNumber'
         ];
+        if (!allowDates) {
+            filterList.push(...[TicketProperty.CREATED, TicketProperty.CHANGED, TicketProperty.PENDING_TIME]);
+        }
         if (filterList.some((f) => f === property)) {
             return false;
         }
-        return super.isBackendFilterSupportedForProperty(objectType, property, supportedAttributes, dep);
+        return super.isBackendFilterSupportedForProperty(objectType, property, supportedAttributes, dep, allowDates);
     }
 
     protected async getBackendFilterType(property: string, dep?: string): Promise<BackendSearchDataType | string> {
