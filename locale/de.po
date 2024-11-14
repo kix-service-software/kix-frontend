@@ -5244,6 +5244,9 @@ msgstr "Ticket wird nicht mehr beobachtet."
 msgid "Ticket locked."
 msgstr "Ticket gesperrt."
 
+msgid "Ticket List Filter"
+msgstr "Ticketlistenfilter"
+
 msgid "Ticket Notifications"
 msgstr "Ticketbenachrichtigungen"
 

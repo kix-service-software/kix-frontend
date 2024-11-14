@@ -30,6 +30,9 @@ import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXModulesSocketClient } from '../../../../base-components/webapp/core/KIXModulesSocketClient';
+import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
+import { DefaultSelectInputFormOption } from '../../../../../model/configuration/DefaultSelectInputFormOption';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -47,7 +50,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         this.configKeys = [
-            'FQDN'
+            'FQDN',
+            'HttpType'
         ];
 
         this.state.translations = await TranslationService.createTranslationObject([
@@ -59,27 +63,27 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareForm(): Promise<void> {
-        const sysconfigDefinitions = await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
+        const sysConfigDefinitions = await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
             KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, this.configKeys
         );
 
-        const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
+        const sysConfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, this.configKeys
         );
 
-        const fqdnHint = sysconfigDefinitions.find((o) => o.Name === 'FQDN').Description || '';
-        const fqdnReadonly = sysconfigOptions.find((o) => o.Name === 'FQDN').ReadOnly;
+        const fqdnHint = sysConfigDefinitions.find((o) => o.Name === 'FQDN').Description || '';
+        const fqdnReadonly = sysConfigOptions.find((o) => o.Name === 'FQDN').ReadOnly;
 
         const fqdnFrontendField = new FormFieldConfiguration(
-            'FQDN-frontend', 'Translatable#Frontend', 'Frontend', undefined, true, fqdnHint,
+            'FQDN-frontend', 'Translatable#Frontend', 'Frontend', undefined, true, fqdnHint
         );
         fqdnFrontendField.readonly = fqdnReadonly;
         const fqdnBackendField = new FormFieldConfiguration(
-            'FQDN-backend', 'Translatable#Backend', 'Backend', undefined, true, fqdnHint,
+            'FQDN-backend', 'Translatable#Backend', 'Backend', undefined, true, fqdnHint
         );
         fqdnBackendField.readonly = fqdnReadonly;
         const fqdnSSPField = new FormFieldConfiguration(
-            'FQDN-ssp', 'Translatable#SSP', 'SSP', undefined, true, fqdnHint,
+            'FQDN-ssp', 'Translatable#SSP', 'SSP', undefined, true, fqdnHint
         );
         fqdnSSPField.readonly = fqdnReadonly;
 
@@ -87,8 +91,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
         fqdnSSPField.visible = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
 
-        const fqdnValue = sysconfigOptions.find((o) => o.Name === 'FQDN').Value ||
-            sysconfigDefinitions.find((o) => o.Name === 'FQDN').Default;
+        const fqdnValue = sysConfigOptions.find((o) => o.Name === 'FQDN').Value ||
+            sysConfigDefinitions.find((o) => o.Name === 'FQDN').Default;
         if (fqdnValue) {
             const objectValue = typeof fqdnValue === 'string' ? JSON.parse(fqdnValue) : fqdnValue;
             if (typeof objectValue === 'object') {
@@ -98,10 +102,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
+        const httpTypeSettings = sysConfigDefinitions.find((o) => o.Name === 'HttpType').Setting || [];
+        const httpTypeHint = sysConfigDefinitions.find((o) => o.Name === 'HttpType').Description || '';
+        const httpTypeValues =
+            Object.keys(httpTypeSettings).map((key) => new TreeNode(httpTypeSettings[key], key)) || [];
+        const httpTypeValue = sysConfigOptions.find((o) => o.Name === 'HttpType').Value ||
+            sysConfigDefinitions.find((o) => o.Name === 'HttpType').Default;
+        const httpTypeFormFieldValue = httpTypeValue ? new FormFieldValue(httpTypeValue) : new FormFieldValue('http');
+        const httpTypeField = new FormFieldConfiguration(
+            'HttpType', 'Translatable#HTTP Type', 'HttpType', 'default-select-input', true, httpTypeHint,
+            [new FormFieldOption(DefaultSelectInputFormOption.NODES, httpTypeValues)], httpTypeFormFieldValue
+        );
+
         const fqdnGroup = new FormGroupConfiguration(
             'setup-system-settings-fqdn-group', 'Translatable#FQDN', null, null,
             [
-                fqdnFrontendField, fqdnBackendField, fqdnSSPField
+                fqdnFrontendField, fqdnBackendField, fqdnSSPField, httpTypeField
             ]
         );
 
@@ -136,6 +152,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             BrowserUtil.toggleLoadingShield('SETUP_SYSTEM_SETTINGS_SHIELD', true, 'Translatable#Save System Settings');
 
             await this.saveFQDNValue(formInstance).catch(() => null);
+            await this.saveHttpTypeValue(formInstance).catch(() => null);
 
             await SetupService.getInstance().stepCompleted(this.step.id, null);
 
@@ -143,25 +160,39 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async saveFQDNValue(formInstance: FormInstance): Promise<void> {
+    private async saveHttpTypeValue(formInstance: FormInstance): Promise<string | number> {
+        const ffValue = await formInstance.getFormFieldValueByProperty('HttpType');
+        if (ffValue?.value) {
+            return KIXObjectService.updateObject(
+                KIXObjectType.SYS_CONFIG_OPTION,
+                [
+                    [SysConfigOptionProperty.VALUE, ffValue.value],
+                    [KIXObjectProperty.VALID_ID, 1]
+                ],
+                'HttpType'
+            );
+        }
+    }
+
+    private async saveFQDNValue(formInstance: FormInstance): Promise<string | number> {
         const fqdnValue: any = {};
 
-        const formFieldValues = formInstance.getAllFormFieldValues();
-        formFieldValues.forEach((value: FormFieldValue, key: string) => {
-            const field = formInstance.getFormField(key);
-            if (field) {
-                fqdnValue[field.property] = value.value;
+        for (const property of ['Frontend', 'Backend', 'SSP']) {
+            const ffValue = await formInstance.getFormFieldValueByProperty(property);
+            if (ffValue?.value) {
+                fqdnValue[property] = ffValue.value;
             }
-        });
-
-        await KIXObjectService.updateObject(
-            KIXObjectType.SYS_CONFIG_OPTION,
-            [
-                [SysConfigOptionProperty.VALUE, JSON.stringify(fqdnValue)],
-                [KIXObjectProperty.VALID_ID, 1]
-            ],
-            'FQDN'
-        );
+        }
+        if (fqdnValue.length) {
+            return KIXObjectService.updateObject(
+                KIXObjectType.SYS_CONFIG_OPTION,
+                [
+                    [SysConfigOptionProperty.VALUE, JSON.stringify(fqdnValue)],
+                    [KIXObjectProperty.VALID_ID, 1]
+                ],
+                'FQDN'
+            );
+        }
     }
 
     public skip(): void {

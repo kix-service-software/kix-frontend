@@ -283,6 +283,12 @@ export class Article extends KIXObject {
         return attachments;
     }
 
+    public getInlineAttachments(): Attachment[] {
+        let attachments = (this?.Attachments || []);
+        attachments = attachments.filter((a) => !a.Filename.match(/^file-(1|2)$/) && a.Disposition === 'inline');
+        return attachments;
+    }
+
     public static isArticleProperty(property: string): boolean {
         const articleProperty = Object.keys(ArticleProperty).map((p) => ArticleProperty[p]);
         return articleProperty.some((p) => p === property);

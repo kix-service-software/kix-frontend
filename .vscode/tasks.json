@@ -1,16 +1,94 @@
 {
     "tasks": [
         {
+            "label": "clean dist",
+            "command": "rm -rf ./dist",
+            "type": "shell"
+        },
+        {
+            "label": "clean lasso cache",
+            "command": "rm -rf ./.cache/lasso",
+            "type": "shell"
+        },
+        {
             "label": "gulp",
             "command": "./node_modules/.bin/gulp",
             "options": {
                 "env": {
-                    "NODE_ENV": "development",
-                    "http_proxy": "",
-                    "https_proxy": ""
+                    "NODE_ENV": "development"
                 }
             },
             "type": "process"
-        }
+        },
+        {
+            "label": "gulp compile",
+            "command": "./node_modules/.bin/gulp",
+            "options": {
+                "env": {
+                    "NODE_ENV": "development",
+                    "COMPILE_CODE": "1",
+                }
+            },
+            "type": "process"
+        },
+        {
+            "label": "KIX - tsc compiler",
+            "detail": "Starts the Typescript compiler with watch option",
+            "command": "./node_modules/.bin/tsc --incremental -w",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Start Server",
+            "type": "shell",
+            "command": "echo pre tasks done!",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "clean dist",
+                "clean lasso cache",
+                "gulp compile"
+            ]
+        },
+        {
+            "label": "KIX - Prebuild Agent Portal",
+            "command": "export BUILD_MARKO_APPLICATIONS=agent-portal && node dist/server/ApplicationBuilder.js",
+            "type": "shell",
+            "options": {
+                "env": {
+                    "NODE_ENV": "development"
+                }
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "gulp",
+                "clean lasso cache"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "KIX - Prebuild SSP",
+            "command": "export BUILD_MARKO_APPLICATIONS=SSP && node dist/server/ApplicationBuilder.js",
+            "type": "shell",
+            "options": {
+                "env": {
+                    "NODE_ENV": "development"
+                }
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "gulp",
+                "clean lasso cache"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
     ]
 }

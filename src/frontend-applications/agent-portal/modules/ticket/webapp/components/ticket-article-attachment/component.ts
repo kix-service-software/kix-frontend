@@ -54,18 +54,26 @@ class ArticleAttachmentComponent {
                 EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
                     loading: true, hint: 'Translatable#Prepare File Download'
                 });
+                const isPDF = this.state.attachment.ContentType === 'application/pdf';
+
                 this.state.progress = true;
-                const attachment = await this.loadArticleAttachment(this.state.attachment.ID);
+                const attachment = await this.loadArticleAttachment(this.state.attachment.ID, !isPDF);
                 this.state.progress = false;
-                BrowserUtil.startFileDownload(attachment);
+
+                if (isPDF) {
+                    BrowserUtil.openPDF(attachment.Content, attachment.Filename);
+                } else {
+                    BrowserUtil.startFileDownload(attachment);
+                }
+
                 EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
             }
         }
     }
 
-    private async loadArticleAttachment(attachmentId: number): Promise<Attachment> {
+    private async loadArticleAttachment(attachmentId: number, asDownload: boolean): Promise<Attachment> {
         const attachment = await TicketService.getInstance().loadArticleAttachment(
-            this.state.article.TicketID, this.state.article.ArticleID, attachmentId, true
+            this.state.article.TicketID, this.state.article.ArticleID, attachmentId, asDownload
         );
         return attachment;
     }

@@ -17,6 +17,7 @@ import { IEventSubscriber } from '../../../../../../base-components/webapp/core/
 import { LabelService } from '../../../../../../base-components/webapp/core/LabelService';
 import { TableEvent } from '../../../../../model/TableEvent';
 import { TableEventData } from '../../../../../model/TableEventData';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
@@ -61,22 +62,32 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     private async setIconAndTitle(): Promise<void> {
         if (this.state.column) {
+            const columnConfig = this.state.column.getColumnConfiguration();
             const table = this.state.column.getTable();
             const objectType = table ? table.getObjectType() : null;
-            if (objectType && this.state.column.getColumnConfiguration().showColumnIcon) {
+            const objectId = [];
+
+            if (objectType && columnConfig?.showColumnIcon) {
                 this.state.icon = await LabelService.getInstance().getPropertyIcon(
                     this.state.column.getColumnId(), objectType,
                 );
             }
 
-            if (this.state.column.getColumnConfiguration().defaultText) {
+            if (columnConfig?.defaultText) {
                 this.state.title = await TranslationService.translate(
-                    this.state.column.getColumnConfiguration().defaultText
+                    columnConfig.defaultText
                 );
             } else {
+                if (
+                    objectType === KIXObjectType.CONFIG_ITEM
+                    && !isNaN(Number(columnConfig['dep']))
+                ) {
+                    objectId.push(columnConfig['dep']);
+                }
                 this.state.title = await LabelService.getInstance().getPropertyText(
                     this.state.column.getColumnId(), objectType, true,
-                    this.state.column.getColumnConfiguration().titleTranslatable
+                    columnConfig.titleTranslatable, null,
+                    objectId
                 );
             }
         }

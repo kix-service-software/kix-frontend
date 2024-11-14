@@ -16,7 +16,8 @@ export class ComponentState extends WidgetComponentState {
     public constructor(
         public table: Table = null,
         public actions: AbstractAction[] = [],
-        public filterCount: number = null
+        public filterCount: number = null,
+        public prepared: boolean = false
     ) {
         super();
     }

@@ -11,6 +11,7 @@ import { DataType } from '../../../../../../model/DataType';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { SortUtil } from '../../../../../../model/SortUtil';
 import { ObjectReferenceUtil } from '../../../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { TimeoutTimer } from '../../../../../base-components/webapp/core/TimeoutTimer';
 import { TreeNode } from '../../../../../base-components/webapp/core/tree';
@@ -47,7 +48,9 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
         await this.setOrganisationValue(null, true);
+    }
 
+    public async postInitFormValue(): Promise<void> {
         this.objectBindingId = this.objectValueMapper?.object?.addBinding(
             TicketProperty.CONTACT_ID,
             async (value: number) => {
@@ -102,38 +105,44 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     private async setOrganisationValue(contactId?: number, init?: boolean): Promise<void> {
         let organisationId: number | string = null;
 
-        if (!contactId) {
-            const contactFormValue = this.objectValueMapper?.findFormValue(TicketProperty.CONTACT_ID);
-            contactId = contactFormValue?.value;
-        }
-        if (Array.isArray(contactId)) {
-            contactId = contactId[0];
-        }
+        const context = ContextService.getInstance().getActiveContext();
+        const initialOrgId = context.getAdditionalInformation(TicketProperty.ORGANISATION_ID);
+        if (init && initialOrgId) {
+            organisationId = initialOrgId;
+        } else {
+            if (!contactId) {
+                const contactFormValue = this.objectValueMapper?.findFormValue(TicketProperty.CONTACT_ID);
+                contactId = contactFormValue?.value;
+            }
+            if (Array.isArray(contactId)) {
+                contactId = contactId[0];
+            }
 
-        if (!contactId) {
-            this.clearPossibleValuesAndNodes();
-        }
+            if (!contactId) {
+                this.clearPossibleValuesAndNodes();
+            }
 
-        // if contact is an id, get its organisations
-        else if (!isNaN(Number(contactId))) {
-            const contacts = await KIXObjectService.loadObjects<Contact>(
-                KIXObjectType.CONTACT, [contactId], null, null, true
-            ).catch((): Contact[] => []);
+            // if contact is an id, get its organisations
+            else if (!isNaN(Number(contactId))) {
+                const contacts = await KIXObjectService.loadObjects<Contact>(
+                    KIXObjectType.CONTACT, [contactId], null, null, true
+                ).catch((): Contact[] => []);
 
-            if (contacts.length) {
-                const contact = contacts[0];
+                if (contacts.length) {
+                    const contact = contacts[0];
 
-                organisationId = contact.PrimaryOrganisationID;
+                    organisationId = contact.PrimaryOrganisationID;
 
-                // current value is acceptable - do not changed
-                if (this.value && this.possibleValues?.some((pv) => pv?.toString() === this.value?.toString())) {
-                    return;
+                    // current value is acceptable - do not changed
+                    if (this.value && this.possibleValues?.some((pv) => pv?.toString() === this.value?.toString())) {
+                        return;
+                    }
                 }
             }
-        }
 
-        else if (typeof contactId === 'string') {
-            // ignore string (unknown contact) value, do nothing
+            else if (typeof contactId === 'string') {
+                // ignore string (unknown contact) value, do nothing
+            }
         }
 
         await this.setFormValue(organisationId, true);

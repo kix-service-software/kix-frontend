@@ -57,6 +57,7 @@ export class CacheService {
         }
     }
 
+
     public hasCacheBackend(): boolean {
         return this.getCacheBackendInstance() !== null;
     }
@@ -202,6 +203,7 @@ export class CacheService {
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
                 types.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`);
                 types.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`);
+                types.push(KIXObjectType.OBJECT_ICON);
                 types.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.PERSONAL_SETTINGS:

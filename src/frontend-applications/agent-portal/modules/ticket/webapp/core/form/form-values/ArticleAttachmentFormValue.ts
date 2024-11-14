@@ -54,7 +54,21 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
 
+        const newValue = [];
+
         const context = ContextService.getInstance().getActiveContext();
+        const updateArticleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+        if (updateArticleId) {
+            const refTicketId = context?.getObjectId();
+            const updateArticle = await this.getUpdateArticle();
+            const updateInlineAttachments = updateArticle.getInlineAttachments();
+            const attachments = await this.getRefAttachments(
+                updateInlineAttachments, updateArticleId, Number(refTicketId)
+            );
+
+            newValue.push(...attachments);
+        }
+
         const useRefArticleAttachments = context?.getAdditionalInformation('USE_REFERENCED_ATTACHMENTS');
         if (useRefArticleAttachments) {
             // FIXME: referenced article is also relevante article in ArticleEdit (better use ARTICLE_UPDATE_ID)
@@ -65,15 +79,25 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
                     article.getAttachments(), article.ArticleID, article.TicketID
                 );
 
+                newValue.push(...attachments);
                 if (attachments?.length) {
-                    const newValue = attachments;
+
                     if (Array.isArray(this.value) && this.value.length) {
                         newValue.push(...this.value);
                     }
-                    this.setFormValue(newValue, true);
                 }
             }
         }
+
+        this.setFormValue(newValue, true);
+    }
+
+    private async getUpdateArticle(): Promise<Article> {
+        const context = ContextService.getInstance().getActiveContext();
+        const articleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+        const refTicketId = context?.getObjectId();
+        const article = await this.loadReferencedArticle(Number(refTicketId), Number(articleId));
+        return article;
     }
 
     private async getReferencedArticle(): Promise<Article> {

@@ -43,6 +43,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private creatingCalendar: boolean;
     private schedules: any[];
     private context: Context;
+    private popupTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -432,19 +433,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             );
 
             if (tickets && tickets.length) {
-                const content = template?.default?.renderSync({
-                    ticket: tickets[0],
-                    calendarConfig: this.calendarConfig,
-                    isPending: isNaN(Number(schedule.id))
-                });
 
-                setTimeout(() => {
+                if (this.popupTimeout) {
+                    clearTimeout(this.popupTimeout);
+                }
+
+                this.popupTimeout = setTimeout(() => {
+                    const content = template?.default?.renderSync({
+                        ticket: tickets[0],
+                        calendarConfig: this.calendarConfig,
+                        isPending: isNaN(Number(schedule.id))
+                    });
+
                     const items = document.getElementsByClassName('tui-full-calendar-popup-container');
-                    if (items && items.length) {
+                    if (items?.length) {
                         items.item(0).innerHTML = '';
                         content.appendTo(items.item(0));
                     }
-                }, 5);
+                }, 50);
             }
         }
     }

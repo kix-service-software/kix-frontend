@@ -17,8 +17,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             type="date"
             min=state.minDate
             max=state.maxDate
-            on-change("dateChanged")
-            on-blur("dateChanged")
+            on-blur("setValue")
             class="form-control"
             disabled=state.readonly
          >
@@ -28,8 +27,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             key="time-" + state.inputId
             value=state.timeValue
             type="time"
-            on-change("timeChanged")
-            on-blur("timeChanged")
+            on-blur("setValue")
             class="form-control"
             disabled=state.readonly
          >

@@ -5027,6 +5027,9 @@ msgstr ""
 msgid "Ticket locked."
 msgstr ""
 
+msgid "Ticket List Filter"
+msgstr ""
+
 msgid "Ticket Notifications"
 msgstr ""
 

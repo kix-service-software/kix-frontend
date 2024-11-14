@@ -477,7 +477,7 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public async getPreparedArticleBodyContent(
         article: Article, removeInlineImages: boolean = false
-    ): Promise<[string, InlineContent[]]> {
+    ): Promise<[string, InlineContent[], string]> {
         if (article.bodyAttachment) {
             const inlineAttachments = article.getAttachments(true) || [];
 
@@ -487,9 +487,10 @@ export class TicketService extends KIXObjectService<Ticket> {
             );
 
             const contentAttachment = attachments.find((a) => a.ID === article.bodyAttachment.ID);
-            let content = this.getContent(contentAttachment);
+            let mailContent = this.getContent(contentAttachment);
 
             let inlineContent = [];
+            let content: string = mailContent[0];
             if (removeInlineImages) {
                 // remove inline images
                 content = content.replace(/<img.+?src="cid:.+?>/g, '');
@@ -498,14 +499,14 @@ export class TicketService extends KIXObjectService<Ticket> {
                 inlineContent = await this.prepareInlineContent(inline);
             }
 
-            return [content, inlineContent];
+            return [content, inlineContent, mailContent[1]];
         } else {
             const body = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br>\n');
-            return [body, null];
+            return [body, null, null];
         }
     }
 
-    private getContent(contentAttachment: Attachment): string {
+    private getContent(contentAttachment: Attachment): [string, string] {
         let buffer = Buffer.from(contentAttachment.Content, 'base64');
         const encoding = contentAttachment.charset ? contentAttachment.charset : 'utf8';
         if (encoding !== 'utf8' && encoding !== 'utf-8') {
@@ -518,14 +519,22 @@ export class TicketService extends KIXObjectService<Ticket> {
         }
 
         let content = buffer.toString('utf8');
-        const match = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
-        if (match && match.length >= 3) {
-            content = match[2];
+        let htmlContent: string = content;
+        let styleContent: string;
+
+        const bodyMatch = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
+        if (bodyMatch && bodyMatch.length >= 3) {
+            htmlContent = bodyMatch[2];
         } else if (contentAttachment.Filename !== 'file-2') {
-            content = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
+            htmlContent = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
         }
 
-        return content;
+        const styleMatch = content.match(/(<style[^>]*>)([\w|\W]*)(<\/style>)/);
+        if (styleMatch && styleMatch.length >= 3) {
+            styleContent = styleMatch[2];
+        }
+
+        return [htmlContent, styleContent];
     }
 
     private async prepareInlineContent(inlineAttachments: Attachment[]): Promise<InlineContent[]> {
@@ -853,26 +862,33 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     protected async isBackendFilterSupportedForProperty(
-        objectType: KIXObjectType | string, property: string, supportedAttributes: ObjectSearch[], dep?: string
+        objectType: KIXObjectType | string,
+        property: string,
+        supportedAttributes: ObjectSearch[],
+        dep?: string,
+        allowDates: boolean = false
     ): Promise<boolean> {
         const filterList = [
             // TODO: currently date/time is not supported (in FE)
-            TicketProperty.CREATED,
+            //TicketProperty.CREATED,
             TicketProperty.CREATED_TIME_UNIX,
-            TicketProperty.CHANGED,
+            //TicketProperty.CHANGED,
             TicketProperty.LAST_CHANGE_TIME,
             TicketProperty.ARTICLE_CREATE_TIME,
-            TicketProperty.PENDING_TIME,
+            //TicketProperty.PENDING_TIME,
             TicketProperty.PENDING_TIME_UNIX,
             TicketProperty.UNTIL_TIME,
             TicketProperty.AGE,
 
             'OrganisationNumber'
         ];
+        if (!allowDates) {
+            filterList.push(...[TicketProperty.CREATED, TicketProperty.CHANGED, TicketProperty.PENDING_TIME]);
+        }
         if (filterList.some((f) => f === property)) {
             return false;
         }
-        return super.isBackendFilterSupportedForProperty(objectType, property, supportedAttributes, dep);
+        return super.isBackendFilterSupportedForProperty(objectType, property, supportedAttributes, dep, allowDates);
     }
 
     protected async getBackendFilterType(property: string, dep?: string): Promise<BackendSearchDataType | string> {

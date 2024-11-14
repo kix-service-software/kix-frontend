@@ -1,7 +1,6 @@
 ./.allure-cucumber-reporter.js
 ./.babelrc
 ./.bundleignore
-./.cache
 ./.nycrc
 ./allure-result
 ./dist

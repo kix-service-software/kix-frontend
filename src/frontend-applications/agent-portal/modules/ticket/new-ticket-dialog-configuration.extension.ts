@@ -463,7 +463,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-new-form-field-organisation',
-                'Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'object-reference-input', true,
+                'Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'object-reference-input', false,
                 'Translatable#Helptext_Tickets_TicketCreate_Organisation',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),

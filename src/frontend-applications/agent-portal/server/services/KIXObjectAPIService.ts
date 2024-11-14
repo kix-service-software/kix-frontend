@@ -95,7 +95,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         token: string, objectType: KIXObjectType | string, baseUri: string, loadingOptions: KIXObjectLoadingOptions,
         objectIds: Array<number | string>, responseProperty: string, clientRequestId: string,
         objectConstructor?: new (object?: KIXObject) => O,
-        useCache?: boolean
+        useCache?: boolean, useToken?: boolean
     ): Promise<ObjectResponse<O>> {
         const query = await this.prepareQuery(loadingOptions, objectType, token);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
@@ -120,7 +120,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         const cacheType = loadingOptions?.cacheType || objectType;
 
-        const response = await this.getObjectByUri(token, uri, clientRequestId, query, cacheType, useCache);
+        const response = await this.getObjectByUri(token, uri, clientRequestId, query, cacheType, useCache, useToken);
 
         const responseObject = response.responseData[responseProperty];
 
@@ -284,13 +284,13 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     protected getObjectByUri<R>(
         token: string, uri: string, clientRequestId: string, query?: any, cacheKeyPrefix: string = this.objectType,
-        useCache?: boolean
+        useCache?: boolean, useToken?: boolean
     ): Promise<HTTPResponse<R>> {
         if (!query) {
             query = {};
         }
 
-        return this.httpService.get<R>(uri, query, token, clientRequestId, cacheKeyPrefix, useCache);
+        return this.httpService.get<R>(uri, query, token, clientRequestId, cacheKeyPrefix, useCache, useToken);
     }
 
     protected sendRequest(

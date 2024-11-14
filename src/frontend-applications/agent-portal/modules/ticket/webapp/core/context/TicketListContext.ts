@@ -17,6 +17,7 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TicketProperty } from '../../../model/TicketProperty';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class TicketListContext extends Context {
 
@@ -29,11 +30,11 @@ export class TicketListContext extends Context {
     public async loadTickets(limit?: number): Promise<void> {
         const ticketStatsProperty = this.getAdditionalInformation('TicketStatsProperty');
 
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, limit);
+        let loadingOptions = new KIXObjectLoadingOptions(null, null, limit);
         loadingOptions.includes = [TicketProperty.WATCHERS, TicketProperty.STATE_TYPE, TicketProperty.UNSEEN];
         loadingOptions.limit = limit;
 
-        await this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
+        loadingOptions = await this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
         loadingOptions.query = [['Counter', ticketStatsProperty]];
 
         const tickets = await KIXObjectService.loadObjects<Ticket>(

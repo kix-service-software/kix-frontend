@@ -9,20 +9,16 @@
 
 import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
+import { Context } from '../../../../../model/Context';
 import { DataType } from '../../../../../model/DataType';
-import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SortUtil } from '../../../../../model/SortUtil';
-import { SearchOperator } from '../../../../search/model/SearchOperator';
-import { SearchProperty } from '../../../../search/model/SearchProperty';
-import { ContextService } from '../../core/ContextService';
 import { IKIXObjectService } from '../../core/IKIXObjectService';
 import { KIXObjectService } from '../../core/KIXObjectService';
 import { LabelService } from '../../core/LabelService';
 import { ObjectReferenceOptions } from '../../core/ObjectReferenceOptions';
-import { PlaceholderService } from '../../core/PlaceholderService';
 import { ServiceRegistry } from '../../core/ServiceRegistry';
 import { TreeNode } from '../../core/tree';
 import { UIUtil } from '../../core/UIUtil';
@@ -103,49 +99,9 @@ export class ObjectReferenceUtil {
     public static async prepareLoadingOptions(
         loadingOptions: KIXObjectLoadingOptions, searchValue: string
     ): Promise<KIXObjectLoadingOptions> {
-        const preparedLoadingOptions = new KIXObjectLoadingOptions(
-            [],
-            loadingOptions.sortOrder,
-            loadingOptions.limit,
-            loadingOptions.includes,
-            loadingOptions.expands,
-            [],
-            loadingOptions.cacheType,
-            loadingOptions.searchLimit
+        const preparedLoadingOptions = await Context.prepareLoadingOptions(
+            loadingOptions, searchValue
         );
-
-        const context = ContextService.getInstance().getActiveContext();
-        const contextObject = await context.getObject();
-
-        if (Array.isArray(loadingOptions.filter)) {
-            for (const criterion of loadingOptions.filter) {
-                if (typeof criterion.value === 'string') {
-                    const preparedCriterion = new FilterCriteria(
-                        criterion.property, criterion.operator, criterion.type, criterion.filterType, criterion.value
-                    );
-
-                    preparedCriterion.value = await PlaceholderService.getInstance().replacePlaceholders(
-                        criterion.value, contextObject
-                    );
-                    preparedCriterion.value = preparedCriterion.value.replace(SearchProperty.SEARCH_VALUE, searchValue);
-                    if (preparedCriterion.operator === SearchOperator.LIKE) {
-                        preparedCriterion.value = `*${preparedCriterion.value}*`;
-                    }
-                    preparedLoadingOptions.filter.push(preparedCriterion);
-                } else {
-                    preparedLoadingOptions.filter.push(criterion);
-                }
-            }
-        }
-
-        if (Array.isArray(loadingOptions.query)) {
-            for (const q of loadingOptions.query) {
-                const newQuery: [string, string] = [q[0], ''];
-                newQuery[1] = await PlaceholderService.getInstance().replacePlaceholders(q[1], contextObject);
-                newQuery[1] = newQuery[1].replace(SearchProperty.SEARCH_VALUE, searchValue);
-                preparedLoadingOptions.query.push(newQuery);
-            }
-        }
 
         return preparedLoadingOptions;
     }

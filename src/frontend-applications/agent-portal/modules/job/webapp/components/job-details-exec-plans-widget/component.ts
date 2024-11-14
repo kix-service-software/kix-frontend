@@ -12,7 +12,6 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { JobDetailsContext, JobFormService } from '../../core';
 import { Job } from '../../../model/Job';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ExecPlanTypes } from '../../../model/ExecPlanTypes';
@@ -20,6 +19,8 @@ import { ExecPlan } from '../../../model/ExecPlan';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { JobDetailsContext } from '../../core/context/JobDetailsContext';
+import { JobFormService } from '../../core/JobFormService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

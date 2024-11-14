@@ -315,4 +315,54 @@ export class ContactAPIService extends KIXObjectAPIService {
 
         return searchCriteria;
     }
+
+    public async commitObject(
+        token: string, clientRequestId: string, contact: Contact, relevantOrganisationId: number
+    ): Promise<number | string> {
+
+        const icon = contact['ICON'];
+        delete contact['ICON'];
+
+        const content = { Contact: contact };
+        const create = !(contact.ID > 0);
+
+        let uri = this.RESOURCE_URI;
+
+        if (!create) {
+            uri = this.buildUri(this.RESOURCE_URI, contact?.ID);
+        }
+
+        if (!Array.isArray(contact.DynamicFields) || !contact.DynamicFields.length) {
+            delete contact.DynamicFields;
+        }
+
+        let userId = contact.AssignedUserID;
+        if (contact.User) {
+            contact.User.ValidID = contact.ValidID;
+
+            const result = await UserService.getInstance().commitObject(
+                token, clientRequestId, contact.User, relevantOrganisationId
+            );
+
+            userId = Number(result);
+            contact.AssignedUserID = userId;
+
+            delete contact.User;
+        }
+
+        const response = await this.sendRequest(
+            token, clientRequestId, uri, content, KIXObjectType.CONTACT, create, relevantOrganisationId
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        if (icon?.Content) {
+            icon.Object = KIXObjectType.CONTACT;
+            icon.ObjectID = response.ContactID;
+            await this.updateIcon(token, clientRequestId, icon).catch(() => null);
+        }
+
+        return response.ContactID;
+    }
 }
