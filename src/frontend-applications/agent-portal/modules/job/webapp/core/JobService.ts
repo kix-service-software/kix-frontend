@@ -13,10 +13,9 @@ import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { JobProperty } from '../../model/JobProperty';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
-import { MacroActionType } from '../../model/MacroActionType';
 import { Job } from '../../model/Job';
 import { ExecPlan } from '../../model/ExecPlan';
-import { Macro } from '../../model/Macro';
+import { Macro } from '../../../macro/model/Macro';
 import { JobType } from '../../model/JobType';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
@@ -25,7 +24,6 @@ import { JobTypes } from '../../model/JobTypes';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { MacroType } from '../../model/MacroType';
 import { JobRunLog } from '../../model/JobRunLog';
 
 export class JobService extends KIXObjectService<Job> {
@@ -48,9 +46,6 @@ export class JobService extends KIXObjectService<Job> {
         this.objectConstructors.set(KIXObjectType.JOB_RUN, [JobRun]);
         this.objectConstructors.set(KIXObjectType.JOB_RUN_LOG, [JobRunLog]);
         this.objectConstructors.set(KIXObjectType.EXEC_PLAN, [ExecPlan]);
-        this.objectConstructors.set(KIXObjectType.MACRO, [Macro]);
-        this.objectConstructors.set(KIXObjectType.MACRO_ACTION_TYPE, [MacroActionType]);
-        this.objectConstructors.set(KIXObjectType.MACRO_TYPE, [MacroType]);
     }
 
     public addTypeMapping(jobType: JobTypes | string, kixObjectType: KIXObjectType | string): void {
@@ -69,10 +64,7 @@ export class JobService extends KIXObjectService<Job> {
             || kixObjectType === KIXObjectType.JOB_TYPE
             || kixObjectType === KIXObjectType.JOB_RUN
             || kixObjectType === KIXObjectType.JOB_RUN_LOG
-            || kixObjectType === KIXObjectType.EXEC_PLAN
-            || kixObjectType === KIXObjectType.MACRO
-            || kixObjectType === KIXObjectType.MACRO_ACTION_TYPE
-            || kixObjectType === KIXObjectType.MACRO_TYPE;
+            || kixObjectType === KIXObjectType.EXEC_PLAN;
     }
 
     public getLinkObjectName(): string {
@@ -85,7 +77,7 @@ export class JobService extends KIXObjectService<Job> {
         cache: boolean = true, forceIds?: boolean, silent: boolean = false, collectionId?: string
     ): Promise<O[]> {
         let objects: O[];
-        if (objectType === KIXObjectType.JOB_TYPE || objectType === KIXObjectType.MACRO_TYPE) {
+        if (objectType === KIXObjectType.JOB_TYPE) {
             objects = await super.loadObjects<O>(
                 objectType, null, loadingOptions, objectLoadingOptions,
                 cache, forceIds, silent, collectionId
@@ -123,14 +115,6 @@ export class JobService extends KIXObjectService<Job> {
                 break;
             case JobProperty.EXEC_PLAN_EVENTS:
                 nodes = await super.getTicketArticleEventTree();
-                break;
-            case JobProperty.MACRO_ACTIONS:
-                const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
-                    KIXObjectType.MACRO_ACTION_TYPE, undefined, null, objectLoadingOptions, true
-                ).catch((error): MacroActionType[] => []);
-                if (macroActionTypes && !!macroActionTypes.length) {
-                    nodes = macroActionTypes.map((mat) => new TreeNode(mat.Name, mat.DisplayName));
-                }
                 break;
             default:
         }

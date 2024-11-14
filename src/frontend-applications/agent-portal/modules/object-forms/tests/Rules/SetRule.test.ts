@@ -35,7 +35,7 @@ describe('Rule - Set', () => {
 
             await objectFormValueMapper.mapFormValues(object);
 
-            objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should have value', () => {

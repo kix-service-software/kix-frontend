@@ -1,5 +1,6 @@
 {
     "dependencies": [
+        "require ./core/ObjectFormUIModule",
         "require ./components/actions-container",
         "require ./components/object-form",
         "require ./components/object-form-values-container",
@@ -18,6 +19,8 @@
         "require ./components/inputs/text-form-input",
         "require ./components/inputs/textarea-form-input",
         "require ./components/inputs/tree-view",
-        "require ./core/ObjectFormUIModule"
+        "require ./components/inputs/icon-form-input",
+        "require ./components/interaction-tell-modal",
+        "require ./components/interaction-ask-modal"
     ]
 }

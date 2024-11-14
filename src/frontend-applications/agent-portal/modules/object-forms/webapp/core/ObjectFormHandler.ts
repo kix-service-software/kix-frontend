@@ -80,7 +80,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
             this.objectFormValueMapper?.setFieldOrder(ruleResult.InputOrder);
         }
 
-        this.objectFormValueMapper?.applyPropertyInstructions(ruleResult);
+        this.objectFormValueMapper?.applyWorkflowResult(ruleResult);
     }
 
     public async commit(): Promise<string | number> {
