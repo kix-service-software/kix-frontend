@@ -123,6 +123,14 @@ export class MacroAPIService extends KIXObjectAPIService {
 
             const execParameter = this.getParameterValue(parameter, MacroProperty.EXEC);
             if (execParameter) {
+                const uri = this.buildUri(this.RESOURCE_URI, objectId);
+                id = await super.executeUpdateOrCreateRequest(
+                    token, clientRequestId, [[MacroProperty.EXEC, execParameter]], uri, KIXObjectType.MACRO, 'MacroID'
+                ).catch((error: Error) => {
+                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                    throw new Error(error.Code, error.Message);
+                });
+
                 CacheService.getInstance().deleteKeys(KIXObjectType.TICKET);
             }
         }
