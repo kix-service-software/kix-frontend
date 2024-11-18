@@ -117,6 +117,7 @@ class Component {
             ['Password reset is requested.', 'Passwortrücksetzung ist angefordert.'],
             ['Requested password reset is confirmed.', 'Angeforderte Passwortrücksetzung ist bestätigt.'],
             ['Password reset failed.', 'Passwortrücksetzung fehlgeschlagen.'],
+            ['Username is required.', 'Nutzername muss angegeben werden.'],
         ];
     }
 
@@ -172,11 +173,13 @@ class Component {
             if (!login.success) {
                 this.state.loginProcess = false;
                 this.state.error = true;
+                this.state.errorMessage = this.getString('Login failed');
                 this.state.mfaToken = null;
                 this.state.showMFA = false;
             }
         } else {
             this.state.error = true;
+            this.state.errorMessage = this.getString('Login failed');
         }
     }
 
@@ -223,14 +226,18 @@ class Component {
         this.state.error = false;
         this.state.pwResetProcess = true;
 
-        AuthenticationSocketClient.getInstance().createUserPasswordResetRequest(this.state.userName);
-
-        // show login form again
-        this.state.pwResetProcess = false;
-        this.state.showPWResetDialog = false;
-
-        //show success notification
-        this.state.pwResetState = PasswordResetState.REQUESTED;
+        if (this.state.userName) {
+            AuthenticationSocketClient.getInstance().createUserPasswordResetRequest(this.state.userName);
+            // show login form again
+            this.state.pwResetProcess = false;
+            this.state.showPWResetDialog = false;
+            //show success notification
+            this.state.pwResetState = PasswordResetState.REQUESTED;
+        } else {
+            this.state.pwResetProcess = false;
+            this.state.error = true;
+            this.state.errorMessage = this.getString('Username is required.');
+        }
     }
 }
 
