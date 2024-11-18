@@ -46,6 +46,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     ): Promise<Ticket> {
         const newTicket = await super.prepareObject(ticket, objectValueMapper, forCommit);
 
+        if (!newTicket.PendingTime) {
+            delete newTicket.PendingTime;
+        }
+
         await this.prepareArticles(newTicket, forCommit, ticket.QueueID, forStorage);
         await this.prepareTitle(newTicket);
         this.prepareTicket(newTicket);
