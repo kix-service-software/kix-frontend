@@ -839,7 +839,7 @@ export abstract class Context {
             loadingOptions.filter.push(...contextFilter);
         }
 
-        loadingOptions = await Context.prepareLoadingOptions(loadingOptions);
+        loadingOptions = await this.prepareLoadingOptions(loadingOptions);
 
         // if no limit given - e.g. initial call, use configurations, else it will possible
         // be set because of load more
@@ -863,7 +863,7 @@ export abstract class Context {
         return loadingOptions;
     }
 
-    public static async prepareLoadingOptions(
+    public async prepareLoadingOptions(
         loadingOptions: KIXObjectLoadingOptions, searchValue?: string
     ): Promise<KIXObjectLoadingOptions> {
 
@@ -878,8 +878,7 @@ export abstract class Context {
             loadingOptions.searchLimit
         );
 
-        const context = ContextService.getInstance().getActiveContext();
-        const contextObject = await context.getObject();
+        const contextObject = await this.getObject();
 
         if (Array.isArray(loadingOptions.filter)) {
             for (const criterion of loadingOptions.filter) {
