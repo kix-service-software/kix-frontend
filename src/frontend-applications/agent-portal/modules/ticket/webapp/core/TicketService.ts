@@ -479,7 +479,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         article: Article, removeInlineImages: boolean = false
     ): Promise<[string, InlineContent[], string]> {
         if (article.bodyAttachment) {
-            const inlineAttachments = article.getAttachments(true) || [];
+            const inlineAttachments = article.getInlineAttachments() || [];
 
             const attachmentIds = [article.bodyAttachment.ID, ...inlineAttachments.map((a) => a.ID)];
             const attachments = await this.loadArticleAttachments(
@@ -525,7 +525,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         const bodyMatch = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
         if (bodyMatch && bodyMatch.length >= 3) {
             htmlContent = bodyMatch[2];
-        } else if (contentAttachment.Filename !== 'file-2') {
+        } else if (!contentAttachment.Filename.match(/^file-(1|2|1\.html)$/)) {
             htmlContent = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
         }
 
