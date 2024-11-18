@@ -382,32 +382,42 @@ export class TextmodulePlugin {
             }
 
             private _showOrUpdateUI(markerMarker): void {
-                if (this._isUIVisible()) {
-                    this._balloon.updatePosition(
-                        this._getBalloonPanelPositionData(markerMarker, this._textmoduleView.position)
-                    );
-                } else {
-                    this._balloon.add({
-                        view: this._textmoduleView,
-                        position: this._getBalloonPanelPositionData(markerMarker, this._textmoduleView.position),
-                        singleViewMode: true
-                    });
-                }
+                try {
+                    if (this._isUIVisible()) {
+                        this._balloon.updatePosition(
+                            this._getBalloonPanelPositionData(markerMarker, this._textmoduleView.position)
+                        );
+                    } else {
+                        this._balloon.add({
+                            view: this._textmoduleView,
+                            position: this._getBalloonPanelPositionData(markerMarker, this._textmoduleView.position),
+                            singleViewMode: true
+                        });
+                    }
 
-                this._textmoduleView.position = this._balloon.view.position;
-                this._textmoduleView.selectFirst();
+                    this._textmoduleView.position = this._balloon.view.position;
+                    this._textmoduleView.selectFirst();
+                } catch (e) {
+                    console.warn('Textmodule Plugin: Could update UI.');
+                    console.warn(e);
+                }
             }
 
             private _hideUIAndRemoveMarker(): void {
-                if (this._balloon.hasView(this._textmoduleView)) {
-                    this._balloon.remove(this._textmoduleView);
-                }
+                try {
+                    if (this._balloon.hasView(this._textmoduleView)) {
+                        this._balloon.remove(this._textmoduleView);
+                    }
 
-                if (TextmodulePlugin.checkIfStillInCompletionMode(this.editor)) {
-                    this.editor.model.change((writer) => writer.removeMarker('textmodule'));
-                }
+                    if (TextmodulePlugin.checkIfStillInCompletionMode(this.editor)) {
+                        this.editor.model.change((writer) => writer.removeMarker('textmodule'));
+                    }
 
-                this._textmoduleView.position = undefined;
+                    this._textmoduleView.position = undefined;
+                } catch (e) {
+                    console.warn('Textmodule Plugin: Could not remove marker.');
+                    console.warn(e);
+                }
             }
 
             private _renderItem(textmodule): any {
