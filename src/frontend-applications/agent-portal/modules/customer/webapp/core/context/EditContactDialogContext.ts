@@ -37,7 +37,12 @@ export class EditContactDialogContext extends Context {
         if (objectId) {
             const loadingOptions = new KIXObjectLoadingOptions(
                 null, null, null,
-                [KIXObjectProperty.DYNAMIC_FIELDS, KIXObjectType.USER, UserProperty.PREFERENCES]
+                [
+                    KIXObjectProperty.DYNAMIC_FIELDS,
+                    KIXObjectType.USER,
+                    UserProperty.ROLE_IDS,
+                    UserProperty.PREFERENCES
+                ]
             );
             const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions)
                 .catch(() => []);
