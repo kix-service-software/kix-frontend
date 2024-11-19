@@ -1,0 +1,51 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div class="modal fade" id="object-links-modal">
+   <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title fs-5">
+               ${state.title}
+            </h1>
+            <button
+               type="button"
+               class="btn-close"
+               data-bs-dismiss="modal"
+               aria-label="Close"
+            />
+         </div>
+         <div class="modal-body">
+            <input
+               type="text"
+               placeholder=state.filterPlaceholder
+               class="input-style mb-2"
+               on-keydown("filterKeyDown")
+            >
+            <div class="row p-1">
+               <if(state.prepared)>
+                  <kix-table table=state.table/>
+               </if>
+               <else>
+                  <loading-spinner/>
+               </else>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button
+               type="button"
+               class="btn btn-success text-white"
+               data-bs-dismiss="modal"
+            >
+               <translation-string pattern="Translatable#Close"/>
+            </button>
+         </div>
+      </div>
+   </div>
+</div>

@@ -39,6 +39,7 @@ import { TableEvent } from '../../../../table/model/TableEvent';
 import { TableEventData } from '../../../../table/model/TableEventData';
 import { ValueState } from '../../../../table/model/ValueState';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
+import { IdService } from '../../../../../model/IdService';
 
 class Component {
 
@@ -63,6 +64,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        this.state.filterPlaceholder = await TranslationService.translate('Translatable#enter filter value');
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Assign Link', 'Translatable#Delete Link', 'Translatable#Submit'
         ]);
@@ -109,7 +111,9 @@ class Component {
                 await this.prepareTable();
 
                 const previousAddedLinks = context.getAdditionalInformation('CreateLinkDescription') ?? [];
-                if (previousAddedLinks?.length) await this.linksAdded(previousAddedLinks);
+                if (previousAddedLinks?.length) {
+                    await this.linksAdded(previousAddedLinks);
+                }
 
                 this.setLinkDescriptions();
             }
@@ -142,6 +146,7 @@ class Component {
         context.setAdditionalInformation('CreateLinkDescription', result);
         this.linkDescriptions = result[0];
         await this.addNewLinks(result[1]);
+
         this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
         this.setCanSubmit();
         this.setLinkDescriptions();
@@ -227,7 +232,7 @@ class Component {
         this.state.table = null;
 
         const table = await TableFactoryService.getInstance().createTable(
-            'edit-linked-objects-dialog', KIXObjectType.LINK_OBJECT,
+            `${IdService.generateDateBasedId()}-edit-linked-objects-dialog`, KIXObjectType.LINK_OBJECT,
             null, null, EditLinkedObjectsDialogContext.CONTEXT_ID, null, null, null, null, true
         );
 
@@ -253,6 +258,7 @@ class Component {
         EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this.tableSubscriber);
 
+        table.resetFilter();
         this.state.table = table;
     }
 
@@ -287,7 +293,7 @@ class Component {
 
             const context = ContextService.getInstance().getActiveContext();
             context.setObjectList(KIXObjectType.LINK_OBJECT, [...this.availableLinkObjects]);
-            context.getObjectList(KIXObjectType.LINK_OBJECT);
+            context.setObjectList('newLinkObjects', this.newLinkObjects);
 
             this.state.linkObjectCount = this.availableLinkObjects.length;
 
@@ -410,6 +416,16 @@ class Component {
             filteredLinks.push(array.find((item) => item.ObjectId === objectId));
         });
         return filteredLinks;
+    }
+
+    public filterKeyDown(event: any): void {
+        if (event.keyCode === 13) {
+            event.stopPropagation();
+            event.preventDefault();
+            const filterValue = event.target.value;
+            this.state.table.setFilter(filterValue);
+            this.state.table.filter();
+        }
     }
 
 }
