@@ -34,8 +34,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private articleLoaded: boolean = false;
     private articleIndex: number;
     private detailedArticle: Article;
+    private elementInterval: any = null;
 
     private observer: IntersectionObserver;
+    private resizeObserver: ResizeObserver;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -95,8 +97,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public onDestroy(): void {
         EventService.getInstance().unsubscribe('TOGGLE_ARTICLE', this.eventSubscriber);
 
+        if (this.elementInterval) {
+            clearInterval(this.elementInterval);
+        }
+
         if (this.observer) {
             this.observer.disconnect();
+        }
+
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
         }
 
         if (this.context && this.contextListenerId) {
@@ -105,6 +115,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareObserver(): Promise<void> {
+
+        if (window.ResizeObserver) {
+            this.resizeObserver = new ResizeObserver((entries) => {
+                this.resizeHandling();
+            });
+            const rootElement = (this as any).getEl();
+            this.resizeObserver.observe(rootElement);
+        }
+
         if (!this.state.show && this.supportsIntersectionObserver()) {
             const row = (this as any).getEl();
             if (row) {
@@ -158,6 +177,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.show = true;
             });
         }
+
+        this.resizeHandling();
     }
 
     private loadDetailedArticle(): void {
@@ -354,6 +375,31 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             );
             this.context.reloadObjectList(KIXObjectType.ARTICLE, true);
         }
+    }
+
+    private resizeHandling(): void {
+        if (this.elementInterval) {
+            clearTimeout(this.elementInterval);
+        }
+        this.elementInterval = setInterval(() => {
+            const element = (this as any).getEl('message-body');
+            if (element) {
+                const mainelement = element.parentElement.parentElement;
+                if (mainelement) {
+                    const mainWidth = mainelement.clientWidth;
+                    const leftWidth = mainelement?.firstElementChild?.clientWidth || 0;
+                    const rightWidth = mainelement?.lastElementChild?.clientWidth || 0;
+                    const parentStyle = getComputedStyle(mainelement?.firstElementChild?.nextElementSibling);
+                    const padding = (
+                        Number(parentStyle.getPropertyValue('padding').replace('px', ''))
+                        || 0
+                    ) * 2;
+
+                    element.style.width = `${mainWidth - leftWidth - rightWidth - padding}px`;
+                    clearInterval(this.elementInterval);
+                }
+            }
+        }, 100);
     }
 
     public toggleAttachments(e: any): void {
