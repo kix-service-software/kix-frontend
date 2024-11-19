@@ -1267,6 +1267,9 @@ msgstr "Endwert fehlt"
 msgid "Entered date-time value is invalid."
 msgstr "Eingegebener Zeitpunkt ist ungültig."
 
+msgid "enter filter value"
+msgstr ""
+
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
 
@@ -3301,6 +3304,9 @@ msgstr "Wissensdatenbank: FAQ Kategorien"
 msgid "Label"
 msgstr "Label"
 
+msgid "Label / Name"
+msgstr ""
+
 msgid "Lanes"
 msgstr "Lanes"
 
@@ -3363,6 +3369,9 @@ msgstr "FAQ verknüpfen mit"
 
 msgid "Links"
 msgstr "Verknüpfungen"
+
+msgid "Links for {0}"
+msgstr ""
 
 msgid "Links updated."
 msgstr "Verknüpfungen aktualisiert."
@@ -4852,6 +4861,9 @@ msgstr "Im Kundenportal verfügbar"
 
 msgid "Show Last Change Date"
 msgstr "Datum der letzten Änderung anzeigen"
+
+msgid "Show Links"
+msgstr ""
 
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"

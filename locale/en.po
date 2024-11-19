@@ -1251,6 +1251,9 @@ msgstr ""
 msgid "Entered date-time value is invalid."
 msgstr ""
 
+msgid "enter filter value"
+msgstr ""
+
 msgid "Enter search value"
 msgstr ""
 
@@ -3116,6 +3119,9 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
+msgid "Label / Name"
+msgstr ""
+
 msgid "Lanes"
 msgstr ""
 
@@ -3177,6 +3183,9 @@ msgid "Link FAQ with"
 msgstr ""
 
 msgid "Links"
+msgstr ""
+
+msgid "Links for {0}"
 msgstr ""
 
 msgid "Links updated."
@@ -4658,6 +4667,9 @@ msgid "Show in Customer Portal"
 msgstr "Available in Customer Portal"
 
 msgid "Show Last Change Date"
+msgstr ""
+
+msgid "Show Links"
 msgstr ""
 
 msgid "Show title in form"
