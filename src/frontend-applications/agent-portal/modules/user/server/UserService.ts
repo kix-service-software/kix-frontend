@@ -448,7 +448,11 @@ export class UserService extends KIXObjectAPIService {
 
         const userId = response.UserID;
 
-        if (!create && user.Preferences?.length) {
+        if (Array.isArray(user?.RoleIDs)) {
+            await this.updateUserRoles(token, clientRequestId, user.RoleIDs, userId);
+        }
+
+        if (!create && user?.Preferences?.length) {
             const preferences: Array<[string, any]> = user.Preferences.map((p) => {
                 return [p.ID, p.Value];
             });
