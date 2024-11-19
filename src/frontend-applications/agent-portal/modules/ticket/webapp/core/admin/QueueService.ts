@@ -19,6 +19,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { FollowUpType } from '../../../model/FollowUpType';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { AgentSocketClient } from '../../../../user/webapp/core/AgentSocketClient';
+import { IdService } from '../../../../../model/IdService';
 
 export class QueueService extends KIXObjectService<Queue> {
 
@@ -124,7 +125,8 @@ export class QueueService extends KIXObjectService<Queue> {
             ticketStats = await this.getTicketStats(queue);
         }
 
-        const treeNode = new TreeNode(queue.QueueID, label, icon);
+        const queueId = queue.QueueID === -1 ? IdService.generateDateBasedId() : queue.QueueID;
+        const treeNode = new TreeNode(queueId, label, icon);
         treeNode.properties = ticketStats;
         treeNode.selectable = invalidClickable ? true : queue.ValidID === 1;
         treeNode.showAsInvalid = queue.ValidID !== 1;
