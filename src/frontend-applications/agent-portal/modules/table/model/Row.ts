@@ -300,12 +300,6 @@ export class Row extends BindableObject {
             if (!cell) {
                 this.cells.push(new Cell(this, new TableValue(c.getColumnId(), null)));
             }
-            else {
-                const newCell = newCells.find((nC) => nC.getProperty() === c.getColumnId());
-                if (newCell.getDisplayValue() !== cell.getDisplayValue()) {
-                    cell.setValue(new TableValue(c.getColumnId(), newCell.getDisplayValue()));
-                }
-            }
         });
     }
 

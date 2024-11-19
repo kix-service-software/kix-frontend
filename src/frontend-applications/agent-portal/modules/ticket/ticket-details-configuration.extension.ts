@@ -684,7 +684,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'ticket-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
             [
                 'ticket-details-info-card',
-                'ticket-details-linked-objects-widget',
                 'ticket-details-history-widget',
                 'ticket-details-parent-child-widget',
             ]
@@ -1084,7 +1083,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     new ConfiguredWidget('ticket-communication-widget', 'ticket-communication-widget', null)
                 ],
                 [
-                    'ticket-create-action'
+                    'ticket-create-action', 'object-link-modal-action'
                 ],
                 [
                     'ticket-edit-action', 'article-new-action', 'linked-objects-edit-action',

@@ -32,6 +32,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('linked-objects-widget', '/kix-module-links$0/webapp/components/linked-objects-widget', []),
         new UIComponent(
             'edit-linked-objects-dialog', '/kix-module-links$0/webapp/components/edit-linked-objects-dialog', []
+        ),
+        new UIComponent(
+            'object-links-modal',
+            '/kix-module-links$0/webapp/components/object-links-modal',
+            []
         )
     ];
 

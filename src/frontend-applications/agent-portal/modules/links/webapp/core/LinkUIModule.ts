@@ -22,6 +22,7 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { LinkFormService } from './LinkFormService';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { ObjectLinkModalAction } from './actions/ObjectLinkModalAction';
 
 export class UIModule implements IUIModule {
 
@@ -37,6 +38,7 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new LinkObjectLabelProvider());
 
         ActionFactory.getInstance().registerAction('linked-objects-edit-action', LinkedObjectsEditAction);
+        ActionFactory.getInstance().registerAction('object-link-modal-action', ObjectLinkModalAction);
 
         const editLinkObjectDialogContext = new ContextDescriptor(
             EditLinkedObjectsDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
