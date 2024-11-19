@@ -243,24 +243,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
         const isMultiSelect = field?.countMax !== null && (field?.countMax < 0 || field?.countMax > 1);
 
-        const dfFilter = [];
-        if (dynamicField.Config) {
-            const classes = dynamicField.Config.ITSMConfigItemClasses;
-            if (classes && Array.isArray(classes) && classes.length) {
-                dfFilter.push(new FilterCriteria(
-                    ConfigItemProperty.CLASS_ID, SearchOperator.IN,
-                    FilterDataType.NUMERIC, FilterType.AND, classes.map((c) => Number(c))
-                ));
-            }
-
-            const depStates = dynamicField.Config.DeploymentStates;
-            if (depStates && Array.isArray(depStates) && depStates.length) {
-                dfFilter.push(new FilterCriteria(
-                    ConfigItemProperty.CUR_DEPL_STATE_ID, SearchOperator.IN,
-                    FilterDataType.NUMERIC, FilterType.AND, depStates.map((d) => Number(d))
-                ));
-            }
-        }
+        const dfFilter = this.getFilterByConfig(dynamicField);
 
         options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM));
         options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
@@ -296,6 +279,46 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
         options.push(new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, dynamicField?.Name));
 
         return options;
+    }
+
+    public async getDynamicFieldSpecificFilter(property: string): Promise<FilterCriteria[]> {
+        let dfFilter = [];
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const field = await KIXObjectService.loadDynamicField(dfName);
+            if (field) {
+                for (const extendedUtil of this.extendedUtils) {
+                    const extendedFilter = await extendedUtil.getFilterByConfig(field);
+                    if (extendedFilter) {
+                        return extendedFilter;
+                    }
+                }
+                dfFilter = this.getFilterByConfig(field);
+            }
+        }
+        return dfFilter;
+    }
+
+    public getFilterByConfig(dynamicField: DynamicField): FilterCriteria[] {
+        const dfFilter = [];
+        if (dynamicField.Config && dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+            const classes = dynamicField.Config.ITSMConfigItemClasses;
+            if (classes && Array.isArray(classes) && classes.length) {
+                dfFilter.push(new FilterCriteria(
+                    ConfigItemProperty.CLASS_ID, SearchOperator.IN,
+                    FilterDataType.NUMERIC, FilterType.AND, classes.map((c) => Number(c))
+                ));
+            }
+
+            const depStates = dynamicField.Config.DeploymentStates;
+            if (depStates && Array.isArray(depStates) && depStates.length) {
+                dfFilter.push(new FilterCriteria(
+                    ConfigItemProperty.CUR_DEPL_STATE_ID, SearchOperator.IN,
+                    FilterDataType.NUMERIC, FilterType.AND, depStates.map((d) => Number(d))
+                ));
+            }
+        }
+        return dfFilter;
     }
 
     public async handleDynamicFieldValues(
