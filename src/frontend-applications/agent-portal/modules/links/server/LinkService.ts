@@ -21,6 +21,7 @@ import { CreateLinkObjectOptions } from './api/CreateLinkObjectOptions';
 import { LinkObjectProperty } from '../model/LinkObjectProperty';
 import { LinkType } from '../model/LinkType';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { FilterCriteria } from '../../../model/FilterCriteria';
 
 export class LinkAPIService extends KIXObjectAPIService {
 
@@ -54,7 +55,11 @@ export class LinkAPIService extends KIXObjectAPIService {
 
         let objectResponse = new ObjectResponse();
 
-        if (objectType === KIXObjectType.LINK_TYPE) {
+        if (objectType === KIXObjectType.LINK) {
+            objectResponse = await super.load(
+                token, KIXObjectType.LINK, this.RESOURCE_URI, loadingOptions, objectIds, 'Link', clientRequestId, LinkType
+            );
+        } if (objectType === KIXObjectType.LINK_TYPE) {
             const baseUri = this.buildUri(this.RESOURCE_URI, 'types');
             objectResponse = await super.load(
                 token, KIXObjectType.LINK_TYPE, baseUri, loadingOptions, objectIds, 'LinkType', clientRequestId, LinkType
@@ -119,5 +124,16 @@ export class LinkAPIService extends KIXObjectAPIService {
         const uri = this.buildUri(this.RESOURCE_URI, linkId);
         await this.sendDeleteRequest<void>(token, clientRequestId, [uri], this.objectType);
     }
+
+    public async prepareAPIFilter(
+        criteria: FilterCriteria[], token: string, objectType?: string
+    ): Promise<FilterCriteria[]> {
+        if (objectType === KIXObjectType.LINK_TYPE) {
+            return criteria;
+        }
+
+        return [];
+    }
+
 
 }

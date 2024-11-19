@@ -26,7 +26,8 @@ export class ComponentState extends AbstractComponentState {
         public allowCreate: boolean = false,
         public linkDescriptions: CreateLinkDescription[] = [],
         public mainObject: KIXObject = null,
-        public title: string = 'Edit Links'
+        public title: string = 'Edit Links',
+        public filterPlaceholder: string = 'enter filter value'
     ) {
         super();
     }
