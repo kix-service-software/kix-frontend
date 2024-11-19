@@ -168,7 +168,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
             for (const o of contacts) {
                 const label = await LabelService.getInstance().getObjectText(o, null, null, false);
                 const icon = LabelService.getInstance().getObjectIcon(o);
-                const node = new TreeNode(o.ID, label, icon, null, null, null,
+                const node = new TreeNode(o.ID?.toString(), label, icon, null, null, null,
                     null, null, null, null, undefined, undefined, undefined,
                     `"${o.Firstname} ${o.Lastname}" <${o.Email}>`
                 );
@@ -216,6 +216,8 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
         if (!isEdit && this.property === ArticleProperty.TO) {
             this.enabled = true;
         }
+
+        this.freeText = true;
     }
 
     protected async handlePlaceholders(value: any): Promise<any> {
