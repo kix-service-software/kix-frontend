@@ -82,8 +82,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         [new UIComponentPermission('tickets', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
-                        'home-dashboard-myteams-tickets-widget', 'home-dashboard-myteams-widget', null,
-                        [new UIComponentPermission('tickets', [CRUD.READ])]
+                        'home-dashboard-myteams-tickets-widget', null,
+                        configurations.find((c) => c.id === 'home-dashboard-myteams-widget')
                     )
                 ], [], [], [], [], [],
                 true
