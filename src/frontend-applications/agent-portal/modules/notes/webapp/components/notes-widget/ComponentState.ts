@@ -21,7 +21,8 @@ export class ComponentState extends AbstractComponentState {
         public contextId: string = null,
         public actions: AbstractAction[] = [],
         public editorActive: boolean = false,
-        public value: string = null
+        public value: string = null,
+        public editorReady: boolean = false,
     ) {
         super();
     }
