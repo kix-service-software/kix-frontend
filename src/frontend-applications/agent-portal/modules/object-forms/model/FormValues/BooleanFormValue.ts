@@ -33,9 +33,8 @@ export class BooleanFormValue extends ObjectFormValue<boolean> {
         if (Array.isArray(value)) {
             value = value[0];
         }
-        await super.setFormValue(Boolean(value), force);
+        await super.setFormValue(BrowserUtil.isBooleanTrue(value), force);
     }
-
     public async setObjectValue(value: any): Promise<void> {
         await super.setObjectValue(value ? '1' : '0');
     }
