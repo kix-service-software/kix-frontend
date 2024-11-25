@@ -33,6 +33,8 @@ import { OverlayIcon } from '../../../base-components/webapp/core/OverlayIcon';
 import { QueueService } from './admin';
 import { ObjectResponse } from '../../../../server/services/ObjectResponse';
 import { QueueLabelProvider } from './QueueLabelProvider';
+import { Organisation } from '../../../customer/model/Organisation';
+import { Contact } from '../../../customer/model/Contact';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -116,12 +118,26 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.ORGANISATION_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.ORGANISATION, value);
+                    const organisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, [value]
+                    );
+                    if (organisations?.length) {
+                        displayValue = await LabelService.getInstance().getObjectText(organisations[0]);
+                    } else {
+                        displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.ORGANISATION, value);
+                    }
                 }
                 break;
             case TicketProperty.CONTACT_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.CONTACT, value);
+                    const contacts = await KIXObjectService.loadObjects<Contact>(
+                        KIXObjectType.CONTACT, [value]
+                    );
+                    if (contacts?.length) {
+                        displayValue = await LabelService.getInstance().getObjectText(contacts[0]);
+                    } else {
+                        displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.CONTACT, value);
+                    }
                 }
                 break;
             case TicketProperty.CREATED:
