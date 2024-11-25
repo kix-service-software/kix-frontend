@@ -229,7 +229,7 @@ export class QueueService extends KIXObjectService<Queue> {
 
             const pseudoQueues = queues.filter((q) => q.ParentID === -1);
             for (const queue of pseudoQueues) {
-                this.buildPseudoQueueStructure(queue.Fullname, queue, queues);
+                this.buildPseudoQueueStructure(queue, queues);
             }
 
             queueTree = queues.filter((q) => !q.ParentID);
@@ -238,27 +238,54 @@ export class QueueService extends KIXObjectService<Queue> {
         return queueTree;
     }
 
-    private buildPseudoQueueStructure(fullName: string, queue: Queue, queues: Queue[]): void {
-        const names = fullName.split('::').filter((n) => n !== queue.Name);
-        if (names.length && names[0] !== '') {
-            const queueName = names[0];
-            let parent = queues.find((q) => q.Name === queueName);
+    private buildPseudoQueueStructure(queue: Queue, queues: Queue[]): void {
+        // get fullname parts
+        const names = queue.Fullname.split('::');
+
+        // check for more than root level
+        if (names.length > 1) {
+            // remove leaf
+            names.pop();
+
+            // get fullname of topmost parent
+            const parentFullname = names.join('::');
+
+            // check for existing parent
+            let parent = queues.find((q) => q.Fullname === parentFullname);
+
+            // no parent exists
             if (!parent) {
+                // generate parent queue entry
                 parent = new Queue();
                 parent.QueueID = -1;
-                parent.Name = queueName;
+                parent.Name = names[names.length - 1];
+                parent.Fullname = parentFullname;
                 parent.ValidID = 2;
-                parent.SubQueues = [];
-                parent.Fullname = fullName;
-                queues.push(parent);
+                parent.SubQueues = [queue];
+
+                // check if parent queue is not on root level
+                if (names.length > 1) {
+                    // prepare next level
+                    this.buildPseudoQueueStructure(parent, queues);
+                }
+            }
+            // existing parent found
+            else {
+                // init Subqueues array if needed
+                if (!Array.isArray(parent.SubQueues)) {
+                    parent.SubQueues = [];
+                }
+
+                // add queue as sub queue of parent
+                parent.SubQueues.push(queue);
             }
 
-            const newFullname = names.filter((n) => n !== names[0]).join('::');
-            this.buildPseudoQueueStructure(newFullname, queue, parent.SubQueues);
-        } else {
-            queues.push(queue);
-        }
+            // set parent of queue
+            queue.ParentID = parent.QueueID;
 
+            // add queue to queuelist
+            queues.push(parent);
+        }
     }
 
     public async getTreeNodes(
