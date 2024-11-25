@@ -49,6 +49,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+        this.state.currentValue = this.formValue?.value;
     }
 
     public async generateNewSecret(event: any): Promise<void> {

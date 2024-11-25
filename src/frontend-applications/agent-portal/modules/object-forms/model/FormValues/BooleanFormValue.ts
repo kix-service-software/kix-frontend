@@ -7,6 +7,7 @@
  * --
  */
 
+import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
 import { ObjectFormValue } from './ObjectFormValue';
 
@@ -24,7 +25,8 @@ export class BooleanFormValue extends ObjectFormValue<boolean> {
 
     async initFormValue(): Promise<void> {
         await super.initFormValue();
-        this.setFormValue(this.object[this.property], true);
+        const value = BrowserUtil.isBooleanTrue(this.object[this.property]);
+        this.setFormValue(value, true);
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
@@ -35,6 +37,6 @@ export class BooleanFormValue extends ObjectFormValue<boolean> {
     }
 
     public async setObjectValue(value: any): Promise<void> {
-        await super.setObjectValue(typeof value !== undefined ? value : 0);
+        await super.setObjectValue(value ? '1' : '0');
     }
 }

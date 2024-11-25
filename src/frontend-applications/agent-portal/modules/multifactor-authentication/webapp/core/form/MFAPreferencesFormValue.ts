@@ -69,7 +69,7 @@ export class MFAPreferencesFormValue extends ObjectFormValue {
                 );
                 userSecretFormValue.label = 'Translatable#User Secret';
                 userSecretFormValue.inputComponentId = 'user-secret-input';
-                userSecretFormValue['secretPreference'];
+                userSecretFormValue['secretPreference'] = MFAService.getInstance().getMFAPreference(mfaConfig, false);
                 mfaConfigFormValue.formValues.push(userSecretFormValue);
             }
 
