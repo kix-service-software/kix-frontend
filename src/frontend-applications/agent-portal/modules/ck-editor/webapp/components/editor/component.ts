@@ -59,7 +59,7 @@ class EditorComponent {
     }
 
     public editorClicked(event: any): void {
-        if (this.input.readOnly) {
+        if (this.input.readOnly && event?.srcElement?.tagName !== 'A') {
             event.stopPropagation();
             event.preventDefault();
         }
