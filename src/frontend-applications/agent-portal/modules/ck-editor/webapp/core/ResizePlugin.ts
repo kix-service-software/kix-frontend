@@ -27,7 +27,7 @@ export default class ResizePlugin {
                 const css = `
                         .ck.resizable-mode .ck.ck-editor__main {
                             resize: vertical;
-                            overflow: hidden;
+                            overflow: scroll;
                             height: 54.8px;
                             min-height: 54.8px;
                             max-height: 100vh;
@@ -35,7 +35,7 @@ export default class ResizePlugin {
                         .ck.resizable-mode .ck.ck-content.ck-editor__editable,
                         .ck.height-mode .ck.ck-content.ck-editor__editable {
                             height: auto !important;
-                            min-height: 100%;
+                            min-height: 90%;
                         }
                         .ck .ck.ck-editor__main {
                             border-radius: var(--ck-border-radius);
@@ -48,6 +48,7 @@ export default class ResizePlugin {
                         }
                         .ck .ck.ck-content.ck-editor__editable {
                             border: 0 !important;
+                            overflow: visible;
                         }
                     `;
                 const head = document.head || document.getElementsByTagName('head')[0];
