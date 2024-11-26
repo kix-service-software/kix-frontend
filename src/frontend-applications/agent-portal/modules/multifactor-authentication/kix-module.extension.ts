@@ -28,7 +28,12 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     ];
 
     public uiComponents: UIComponent[] = [
-        new UIComponent('user-secret-input', '/kix-module-multifactor-authentication$0/webapp/components/user-secret-input', [])
+        new UIComponent('user-secret-input', '/kix-module-multifactor-authentication$0/webapp/components/user-secret-input', []),
+        new UIComponent(
+            'user-secret-preference-input',
+            '/kix-module-multifactor-authentication$0/webapp/components/user-secret-preference-input',
+            []
+        )
     ];
 
 }
