@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2024-09-10 13:50+0000\n"
-"Last-Translator: tto <Torsten.Thau@kixdesk.com>\n"
+"PO-Revision-Date: 2024-11-27 10:51+0000\n"
+"Last-Translator: jbrueckner <Joerg.Brueckner@kixdesk.com>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Weblate 4.14\n"
 
 msgid "', "
-msgstr ""
+msgstr "', "
 
 msgid "{0}/{1} {2} imported"
 msgstr "{0}/{1} {2} importiert"
@@ -489,7 +489,7 @@ msgid "Bulk Action: {0}"
 msgstr "Sammelaktion: {0}"
 
 msgid "Bulk Print"
-msgstr ""
+msgstr "Sammeldruck"
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -733,7 +733,7 @@ msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
 
 msgid "Confirm Password"
-msgstr ""
+msgstr "Passwort bestätigen"
 
 msgid "Console"
 msgstr "Konsole"
@@ -1139,7 +1139,7 @@ msgid "Edit Role"
 msgstr "Rolle bearbeiten"
 
 msgid "Edit Ruleset Macro"
-msgstr ""
+msgstr "Makro für Ruleset bearbeiten"
 
 msgid "Edit Search"
 msgstr "Suche bearbeiten"
@@ -1268,7 +1268,7 @@ msgid "Entered date-time value is invalid."
 msgstr "Eingegebener Zeitpunkt ist ungültig."
 
 msgid "enter filter value"
-msgstr ""
+msgstr "Filterwert eingeben"
 
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
@@ -2780,10 +2780,10 @@ msgstr ""
 "Informationen zur Benachrichtigung zu erhalten."
 
 msgid "Helptext_PersonalSettings_OutOfOfficeEnd_Hint"
-msgstr "Letzter Tag der Abwesenheit."
+msgstr "Letzter Tag der Abwesenheit"
 
 msgid "Helptext_PersonalSettings_OutOfOfficeStart_Hint"
-msgstr "Erster Tag der Abwesenheit."
+msgstr "Erster Tag der Abwesenheit"
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr ""
@@ -3122,7 +3122,7 @@ msgid "Hour(s)"
 msgstr "Stunden"
 
 msgid "HTTP Type"
-msgstr ""
+msgstr "HTTP Type"
 
 msgid "Icon"
 msgstr "Icon"
@@ -3305,7 +3305,7 @@ msgid "Label"
 msgstr "Label"
 
 msgid "Label / Name"
-msgstr ""
+msgstr "Label / Name"
 
 msgid "Lanes"
 msgstr "Lanes"
@@ -3434,7 +3434,7 @@ msgid "Macro"
 msgstr "Makro"
 
 msgid "Macro Information"
-msgstr ""
+msgstr "Makro Informationen"
 
 msgid "Mail Account Details"
 msgstr "Mailkonto Details"
@@ -3539,7 +3539,7 @@ msgid "My Queues"
 msgstr "Meine Teams"
 
 msgid "My Teams"
-msgstr ""
+msgstr "Meine Teams"
 
 msgid "My Tickets"
 msgstr "Meine Tickets"
@@ -3623,7 +3623,7 @@ msgid "New Job"
 msgstr "Neuer Job"
 
 msgid "New Macro"
-msgstr ""
+msgstr "Neues Macro"
 
 msgid "New Mail Account"
 msgstr "Neues Mailkonto"
@@ -3659,7 +3659,7 @@ msgid "New Role"
 msgstr "Neue Rolle"
 
 msgid "New Ruleset Macro"
-msgstr ""
+msgstr "Neues Makro für Ruleset"
 
 msgid "New Search"
 msgstr "Neue Suche"
@@ -3899,7 +3899,7 @@ msgid "Observer"
 msgstr "Beobachter"
 
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgid "Oldest first"
 msgstr "älteste zuerst"
@@ -3968,7 +3968,7 @@ msgid "Outbox"
 msgstr "Postausgang"
 
 msgid "Out Of Office"
-msgstr ""
+msgstr "Abwesend"
 
 msgid "Output Format"
 msgstr "Ausgabeformat"
@@ -4176,7 +4176,7 @@ msgid "Prepare Ticket for print"
 msgstr "Ticket für den Druck vorbereiten"
 
 msgid "Prepare Tickets to print & zip"
-msgstr ""
+msgstr "Tickets zum Ausdrucken und Zippen vorbereiten"
 
 msgid "Preview"
 msgstr "Vorschau"
@@ -4512,7 +4512,7 @@ msgid "Reset table filters"
 msgstr "Tabellenfilter zurücksetzen"
 
 msgid "Reset to Default"
-msgstr "Auf Vorgabe zurücksetzen"
+msgstr "Auf Vorgabewert zurücksetzen"
 
 msgid "Reset User Widgets"
 msgstr "Nutzer-Widgets zurücksetzen"
@@ -4863,7 +4863,7 @@ msgid "Show Last Change Date"
 msgstr "Datum der letzten Änderung anzeigen"
 
 msgid "Show Links"
-msgstr ""
+msgstr "Zeige Links"
 
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
@@ -5289,7 +5289,7 @@ msgid "Tickets for Contact"
 msgstr "Tickets zu Kontakt"
 
 msgid "Tickets has been printed and zipped"
-msgstr ""
+msgstr "Tickets wurden gedruckt und gepackt"
 
 msgid "Ticket: States"
 msgstr "Ticket: Status"
