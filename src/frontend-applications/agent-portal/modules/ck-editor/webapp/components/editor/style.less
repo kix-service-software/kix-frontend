@@ -34,18 +34,6 @@
         }
     }
 
-    .ck-source-editing-area {
-        textarea {
-            overflow: auto;
-            height: 15rem;
-        }
-    }
-
-    .ck-editor__editable {
-        min-height: 10rem;
-        max-height: 15rem;
-    }
-
     .editor-container_classic-editor .editor-container__editor {
         width: 100%;
     }
@@ -95,5 +83,31 @@
     .ck-content .image-inline img,
     .ck-content .image-inline picture {
         max-width: none;
+    }
+
+    .ck-editor.resizable-mode .ck.ck-editor__main {
+        resize: vertical;
+    }
+
+    .ck-editor .ck.ck-editor__main {
+        border-radius: var(--ck-border-radius);
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border: 1px solid var(--ck-color-base-border);
+    }
+
+    .ck-editor .ck.ck-editor__main.ck-focused {
+        border-color: var(--ck-color-focus-border);
+    }
+
+    .ck-editor .ck.ck-content.ck-editor__editable {
+        min-height: 15rem;
+        border: 0 !important;
+        height: 100%;
+    }
+
+    .ck-editor .ck.ck-editor__main {
+        max-height: 90vh;
+        overflow-y: auto;
     }
 }
