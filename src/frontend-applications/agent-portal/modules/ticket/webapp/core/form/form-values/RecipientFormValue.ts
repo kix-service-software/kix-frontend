@@ -152,7 +152,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
             ...mailNodes.filter((mn) => !nodes.some((n) => n.id === mn.id)),
             ...unknownMailAddressNodes.filter(
                 (umn) =>
-                    !nodes.some((n) => n.id.toLowerCase() === umn.id.toLowerCase())
+                    !nodes.some((n) => n.id.toString().toLowerCase() === umn.id.toLowerCase())
                     && (
                         !mailContacts
                         || !mailContacts.some((mc) =>
@@ -168,7 +168,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
             for (const o of contacts) {
                 const label = await LabelService.getInstance().getObjectText(o, null, null, false);
                 const icon = LabelService.getInstance().getObjectIcon(o);
-                const node = new TreeNode(o.ID?.toString(), label, icon, null, null, null,
+                const node = new TreeNode(o.ID, label, icon, null, null, null,
                     null, null, null, null, undefined, undefined, undefined,
                     `"${o.Firstname} ${o.Lastname}" <${o.Email}>`
                 );
