@@ -124,13 +124,20 @@ export class TicketService extends KIXObjectService<Ticket> {
             // (e.g. if article is loaded with DFs by FilterUtil=>checkCriteriaByPropertyValue)
             if (objectType === KIXObjectType.ARTICLE && !objectLoadingOptions) {
                 const context = ContextService.getInstance().getActiveContext();
-                if (
-                    context.descriptor.kixObjectTypes.includes(KIXObjectType.TICKET)
-                    && context.descriptor.contextMode === ContextMode.DETAILS
-                ) {
-                    objectLoadingOptions = new ArticleLoadingOptions(context.getObjectId());
+                if (context.descriptor.kixObjectTypes.includes(KIXObjectType.TICKET)) {
+                    const ticketId = context.getObjectId();
+                    if (ticketId) {
+                        objectLoadingOptions = new ArticleLoadingOptions(ticketId);
+                    }
+                }
+
+                // if still no option prevent loading of articles, but do not throw an error just a warning
+                if (!objectLoadingOptions) {
+                    console.warn(`Could not determine ticket id to load article(s) with id(s) "${objectIds?.toString()}"`);
+                    return;
                 }
             }
+
             objects = await super.loadObjects<O>(
                 objectType, objectIds, loadingOptions, objectLoadingOptions, cache, forceIds, silent, collectionId
             );
