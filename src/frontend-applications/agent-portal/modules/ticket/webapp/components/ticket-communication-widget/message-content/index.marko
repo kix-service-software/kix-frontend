@@ -87,6 +87,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 <span>${state.articleCc}</span>
                             </div>
                         </if>
+                        <if(state.articleBcc)>
+                            <div class="receiver">
+                                <span class="title">
+                                    <translation-string pattern="Translatable#Bcc"/>
+                                     :
+                                </span>
+                                <span>${state.articleBcc}</span>
+                            </div>
+                        </if>
                     </div>
                     <div class="message-body">
                         <div
