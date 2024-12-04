@@ -152,22 +152,6 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
             ),
             new PersonalSetting(
                 'Translatable#Article',
-                PersonalSettingsProperty.ARTICLE_SORT_ORDER,
-                'Translatable#Article sort order',
-                'Translatable#Helptext_PersonalSettings_article_sort_order_Hint',
-                'default-select-input',
-                false, new FormFieldValue('oldest'),
-                [
-                    new FormFieldOption(DefaultSelectInputFormOption.NODES,
-                        [
-                            new TreeNode('oldest', 'Translatable#Oldest first'),
-                            new TreeNode('newest', 'Translatable#Newest first')
-                        ]
-                    )
-                ]
-            ),
-            new PersonalSetting(
-                'Translatable#Article',
                 PersonalSettingsProperty.ARTICLE_FROM_FORMAT,
                 'Translatable#From format',
                 'Translatable#Helptext_PersonalSettings_article_from_format',
