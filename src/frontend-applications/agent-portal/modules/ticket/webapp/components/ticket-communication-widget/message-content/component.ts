@@ -282,6 +282,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.articleCc = await LabelService.getInstance().getDisplayText(
             this.detailedArticle, ArticleProperty.CC, undefined, false, false
         );
+        this.state.articleBcc = await LabelService.getInstance().getDisplayText(
+            this.detailedArticle, ArticleProperty.BCC, undefined, false, false
+        );
 
         await this.setArticleSeen();
 
