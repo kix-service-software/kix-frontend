@@ -7,7 +7,9 @@
  * --
  */
 
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { BooleanFormValue } from '../../../../../object-forms/model/FormValues/BooleanFormValue';
@@ -25,9 +27,17 @@ export class CustomerVisibleFormValue extends BooleanFormValue {
             this.hint = await TranslationService.translate('Translatable#Helptext_Tickets_TicketCreate_CustomerVisible');
         }
 
-        const article = await this.getReferencedArticle();
-        if (article) {
-            this.value = article?.CustomerVisible;
+        if (this.defaultValue) {
+            if (Array.isArray(this.defaultValue) && this.defaultValue?.length) {
+                await this.setFormValue(this.defaultValue[0]);
+            } else {
+                await this.setFormValue(this.defaultValue);
+            }
+        } else {
+            const article = await this.getReferencedArticle();
+            if (article) {
+                this.value = article?.CustomerVisible;
+            }
         }
     }
 
@@ -54,6 +64,10 @@ export class CustomerVisibleFormValue extends BooleanFormValue {
             article = articles.find((a) => a.ArticleID === refArticleId);
         }
         return article;
+    }
+
+    public async setObjectValue(value: any): Promise<void> {
+        await super.setObjectValue(BrowserUtil.isBooleanTrue(value) ? 1 : 0);
     }
 
 }
