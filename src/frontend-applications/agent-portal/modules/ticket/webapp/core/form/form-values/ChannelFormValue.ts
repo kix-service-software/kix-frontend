@@ -13,6 +13,7 @@ import { FormFieldConfiguration } from '../../../../../../model/configuration/Fo
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
+import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldObjectFormValue } from '../../../../../object-forms/model/FormValues/DynamicFieldObjectFormValue';
@@ -24,6 +25,7 @@ import { Article } from '../../../../model/Article';
 import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { Channel } from '../../../../model/Channel';
+import { TicketService } from '../../TicketService';
 import { ArticleAttachmentFormValue } from './ArticleAttachmentFormValue';
 import { CustomerVisibleFormValue } from './CustomerVisibleFormValue';
 import { EncryptIfPossibleFormValue } from './EncryptIfPossibleFormValue';
@@ -36,7 +38,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public constructor(
         property: string,
-        article: Article,
+        private article: Article,
         objectValueMapper: ObjectFormValueMapper,
         public parent: ObjectFormValue,
     ) {
@@ -289,6 +291,26 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
                 if (formValue.property === ArticleProperty.SUBJECT || formValue.property === ArticleProperty.BODY) {
                     formValue.required = true;
+                }
+
+                if (formValue.property === ArticleProperty.BODY && !formValue.defaultValue) {
+
+                    const inlineAttachments = (this.article.Attachments || []).filter((a) => a.Disposition === 'inline');
+                    const attachments = await TicketService.getInstance().loadArticleAttachments(
+                        this.article.TicketID, this.article.ArticleID, inlineAttachments.map((a) => a.ID)
+                    );
+
+                    for (const attachment of attachments) {
+                        const index = this.article.Attachments.findIndex((a) => a.ID === attachment.ID);
+                        if (index !== -1) {
+                            this.article.Attachments[index] = attachment;
+                        }
+                    }
+                    const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(
+                        this.article
+                    );
+                    let contentString = BrowserUtil.replaceInlineContent(prepareContent[0], prepareContent[1]);
+                    formValue.value = contentString;
                 }
 
                 // use default if given
