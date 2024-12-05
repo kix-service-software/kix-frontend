@@ -58,7 +58,9 @@ export class ObjectIconService extends KIXObjectAPIService {
             const objectIcons = await this.getObjectIcons(token);
 
             if (objectIds && objectIds.length) {
-                const filteredIcons = objectIcons?.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                const filteredIcons = objectIcons?.filter(
+                    (t) => objectIds.some((oid) => oid.toString() === t.ID.toString())
+                );
                 objectResponse = new ObjectResponse(filteredIcons, filteredIcons.length);
             } else if (iconLoadingOptions) {
                 if (iconLoadingOptions.object && iconLoadingOptions.objectId) {
