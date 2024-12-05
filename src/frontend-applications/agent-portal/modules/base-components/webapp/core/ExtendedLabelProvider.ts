@@ -115,6 +115,10 @@ export abstract class ExtendedLabelProvider<T extends KIXObject = KIXObject> imp
         return null;
     }
 
+    public async getLabelByObject(object: KIXObject): Promise<Label> {
+        return null;
+    }
+
     public getOverlayIcon(
         objectType: KIXObjectType | string, objectId?: number | string
     ): Promise<OverlayIcon> {
