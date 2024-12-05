@@ -140,7 +140,7 @@ export class CKEditor5 {
                         const value = this.editor.getData();
                         this.changeListener.forEach((l) => l(value));
                         this.changeTimeout = null;
-                    }, 200);
+                    }, 2000);
                 }
             };
 
