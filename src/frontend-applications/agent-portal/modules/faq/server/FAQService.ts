@@ -361,6 +361,16 @@ export class FAQService extends KIXObjectAPIService {
             changedCriteria.forEach((c) => c.property = KIXObjectProperty.CHANGE_TIME);
         }
 
+        const createdByCriteria = criteria.filter((sc) => sc.property === FAQArticleProperty.CREATED_BY);
+        if (createdByCriteria?.length) {
+            createdByCriteria.forEach((c) => c.property = KIXObjectProperty.CREATE_BY);
+        }
+
+        const changedByCriteria = criteria.filter((sc) => sc.property === FAQArticleProperty.CHANGED_BY);
+        if (changedByCriteria?.length) {
+            changedByCriteria.forEach((c) => c.property = KIXObjectProperty.CHANGE_BY);
+        }
+
         [FAQArticleProperty.APPROVED, FAQArticleProperty.CUSTOMER_VISIBLE].forEach((p) => {
             const faqCriteria = criteria.filter((sc) => sc.property === p);
             faqCriteria.forEach((c) => {
