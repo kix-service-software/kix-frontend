@@ -326,7 +326,7 @@ export class SearchService {
         const searchCache = new SearchCache<T>(null, null, objectType, [], []);
         searchCache.criteria = [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, searchValue
             )
         ];
 
