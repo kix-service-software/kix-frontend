@@ -89,6 +89,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 this.deleteArticleProperties(article);
                 this.deleteCommonProperties(article, true);
 
+                this.prepareDynamicFields(article, forCommit);
+
                 if (forCommit) {
                     if (article.Attachments?.length) {
                         article.Attachments = await this.prepareAttachments(article.Attachments);
