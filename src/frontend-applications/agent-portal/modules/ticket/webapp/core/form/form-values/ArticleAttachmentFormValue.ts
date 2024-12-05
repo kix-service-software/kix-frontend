@@ -34,7 +34,11 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
         this.inputComponentId = 'attachment-form-input';
 
         // FIXME: currently to not use object value (because of missing content) - done in initFormValue
-        this.value = null;
+        if (Array.isArray(this.value) && this.value?.length) {
+            this.value = this.value.filter((v) => v.Disposition === 'inline');
+        } else {
+            this.value = null;
+        }
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
