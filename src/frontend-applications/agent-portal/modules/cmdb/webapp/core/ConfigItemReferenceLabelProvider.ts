@@ -36,18 +36,10 @@ export class ConfigItemReferenceLabelProvider extends ObjectReferenceLabelProvid
     }
 
     protected async getLabel(configItem: ConfigItem): Promise<Label> {
-        let label;
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CONFIG_ITEM);
-        if (labelProvider) {
-            label = await labelProvider.getLabelByObject(configItem);
-        }
-        if (!label) {
-            const title = await LabelService.getInstance().getObjectText(configItem, true) || configItem.Name;
-            label = new Label(
-                configItem, configItem.ConfigItemID, 'kix-icon-ci', title, null, title, true
-            );
-        }
-        return label;
+        const title = await LabelService.getInstance().getObjectText(configItem, true);
+        return new Label(
+            configItem, configItem.ConfigItemID, 'kix-icon-ci', title, null, title, true
+        );
     }
 
     public getObjectIcon(dynamicFieldType?: DynamicFieldType): string | ObjectIcon {
@@ -57,5 +49,11 @@ export class ConfigItemReferenceLabelProvider extends ObjectReferenceLabelProvid
             objectIcon = 'kix-icon-ci';
         }
         return objectIcon;
+    }
+
+    public createLabelsFromDFValue(dfValue: DynamicFieldValue): Promise<Label[]> {
+        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CONFIG_ITEM);
+        const labels = labelProvider?.createLabelsFromDFValue(dfValue);
+        return labels;
     }
 }
