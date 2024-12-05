@@ -433,10 +433,6 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return null;
     }
 
-    public async getLabelByObject(object: KIXObject): Promise<Label> {
-        return null;
-    }
-
     public async getOverlayIcon(objectType: KIXObjectType | string, objectId: number | string): Promise<OverlayIcon> {
         return null;
     }
