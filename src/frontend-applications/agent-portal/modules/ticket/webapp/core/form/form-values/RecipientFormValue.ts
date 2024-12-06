@@ -152,7 +152,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
             ...mailNodes.filter((mn) => !nodes.some((n) => n.id === mn.id)),
             ...unknownMailAddressNodes.filter(
                 (umn) =>
-                    !nodes.some((n) => n.id.toLowerCase() === umn.id.toLowerCase())
+                    !nodes.some((n) => n.id?.toString().toLowerCase() === umn.id?.toString().toLowerCase())
                     && (
                         !mailContacts
                         || !mailContacts.some((mc) =>
