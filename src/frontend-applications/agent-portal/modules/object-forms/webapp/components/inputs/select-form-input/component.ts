@@ -276,13 +276,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public async select(event: any, reopen?: boolean): Promise<void> {
         await this.formValue?.setSelectedNodes();
         this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
-
-        if (reopen) {
-            setTimeout(() => {
-                const element = document.getElementById(`id_${this.state.searchValueKey}`);
-                element?.click();
-            }, 50);
-        }
     }
 
     public async apply(event: any): Promise<void> {
