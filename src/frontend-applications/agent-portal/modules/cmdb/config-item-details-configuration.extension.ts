@@ -147,7 +147,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             'config-item-details-object-info-tab-config', 'Tab Config', ConfigurationType.TabWidget,
             [
                 'config-item-details-object-info',
-                'config-item-details-linked-object-widget',
                 'config-item-details-history-widget'
             ]
         );
@@ -192,7 +191,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     )
                 ],
                 [
-                    'config-item-create-action', 'config-item-create-graph-action'
+                    'config-item-create-action', 'config-item-create-graph-action', 'object-link-modal-action'
                 ],
                 [
                     'config-item-edit-action', 'config-item-duplicate-action',

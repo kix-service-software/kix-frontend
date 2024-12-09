@@ -32,12 +32,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         const results: ReportResult[] = input.cell.getValue().objectValue;
-        this.state.cellLabels = SortUtil.sortObjects(
-            results.map((r) => new Label(
-                r, r.ID, null, r.Format, null, Attachment.getHumanReadableContentSize(r.ContentSize), false
-            )),
-            'text', DataType.STRING
-        );
+        const labels = results?.map((r) => new Label(
+            r, r.ID, null, r.Format, null, Attachment.getHumanReadableContentSize(r.ContentSize), false
+        )) || [];
+        this.state.cellLabels = SortUtil.sortObjects(labels, 'text', DataType.STRING);
     }
 
     public async download(label: Label, event: any): Promise<void> {

@@ -55,7 +55,7 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
     }
 
     public async prepareObject(
-        object: T, objectValueMapper?: ObjectFormValueMapper, forCommit: boolean = true
+        object: T, objectValueMapper?: ObjectFormValueMapper, forCommit: boolean = true, forStorage?: boolean
     ): Promise<T> {
         const newObject = this.cloneObject(object);
 

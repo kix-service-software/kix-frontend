@@ -46,6 +46,7 @@ import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { PortalNotificationService } from '../../../portal-notification/webapp/core/PortalNotificationService';
 import { PortalNotification } from '../../../portal-notification/model/PortalNotification';
 import { PortalNotificationType } from '../../../portal-notification/model/PortalNotificationType';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 
 export class SearchService {
 
@@ -175,6 +176,22 @@ export class SearchService {
         let loadingOptions = await searchDefinition.getLoadingOptions(
             preparedCriteria, null, searchCache.sortAttribute, searchCache.sortDescending
         );
+
+        if (loadingOptions.filter?.length) {
+            for (const criterion of loadingOptions.filter) {
+                if (Array.isArray(criterion.value) && criterion.value.length) {
+                    for (let i = 0; i < criterion.value.length; i++) {
+                        criterion.value[i] = await PlaceholderService.getInstance().replacePlaceholders(
+                            criterion.value[i]?.toString()
+                        );
+                    }
+                } else {
+                    criterion.value = await PlaceholderService.getInstance().replacePlaceholders(
+                        criterion.value?.toString()
+                    );
+                }
+            }
+        }
 
         if (typeof limit !== 'undefined' && limit !== null) {
             loadingOptions.limit = limit;
@@ -313,9 +330,9 @@ export class SearchService {
                     null, true
                 );
             });
-
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
         }
+
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return (objects as any);
     }

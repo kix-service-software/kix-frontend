@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2024-08-08 16:39+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@kixdesk.com>\n"
+"PO-Revision-Date: 2024-09-10 13:50+0000\n"
+"Last-Translator: tto <Torsten.Thau@kixdesk.com>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
 "Language: en\n"
@@ -475,6 +475,9 @@ msgstr ""
 msgid "Bulk Action: {0}"
 msgstr ""
 
+msgid "Bulk Print"
+msgstr ""
+
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -715,6 +718,9 @@ msgstr ""
 msgid "Confirm New Password"
 msgstr ""
 
+msgid "Confirm Password"
+msgstr ""
+
 msgid "Console"
 msgstr ""
 
@@ -845,9 +851,6 @@ msgid "Current deployment state"
 msgstr ""
 
 msgid "Current incident state"
-msgstr ""
-
-msgid "Current Password"
 msgstr ""
 
 msgid "(Current version)"
@@ -1119,6 +1122,9 @@ msgstr ""
 msgid "Edit Role"
 msgstr ""
 
+msgid "Edit Ruleset Macro"
+msgstr ""
+
 msgid "Edit Search"
 msgstr ""
 
@@ -1243,6 +1249,9 @@ msgid "End value is not given"
 msgstr ""
 
 msgid "Entered date-time value is invalid."
+msgstr ""
+
+msgid "enter filter value"
 msgstr ""
 
 msgid "Enter search value"
@@ -1576,6 +1585,12 @@ msgstr ""
 msgid "Help, hints & tricks"
 msgstr ""
 
+msgid "Helptext_Admin_CreateEdit_Actions"
+msgstr ""
+
+msgid "Helptext_Admin_CreateEdit_ActionSkip"
+msgstr ""
+
 msgid "Helptext_Admin_DynamicFieldCreate_Config"
 msgstr ""
 "After choosing a dynamic field type, the related configuration options will "
@@ -1646,13 +1661,6 @@ msgstr ""
 msgid "Helptext_Admin_GeneralCatalogCreate_Validity"
 msgstr ""
 "The General Catalog class can only be used within the system if set “valid”."
-
-msgid "Helptext_Admin_JobCreateEdit_Actions"
-msgstr ""
-"Choose an action from the list, then the required form fields will be "
-"loaded. By clicking \"+\" or \"-\" you can add further actions or remove "
-"them. The order of actions ran by the job is defined by the order of actions "
-"in this list. You can change the order by using drag&drop."
 
 msgid "Helptext_Admin_JobCreateEdit_ActionSkip"
 msgstr ""
@@ -2015,6 +2023,33 @@ msgstr ""
 "States if an answer to the same ticket will lock this ticket for the last "
 "owner."
 
+msgid "Helptext_Admin_Ruleset_Macro_Create_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Name"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Scope"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Type"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Scope"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Type"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Validity"
+msgstr ""
+
 msgid "Helptext_Admin_SysConfigEdit_Default_Value"
 msgstr ""
 "The configuration default value cannot be changed. Click the button “Reset "
@@ -2282,6 +2317,9 @@ msgstr "If this option is activated, the webform will be shown in KIX design."
 msgid "Helptext_Admin_WebformCreateEdit_Validity"
 msgstr "To use the webform it has to be set \"valid\"."
 
+msgid "Helptext_Admin_Workflow_Create_Validity"
+msgstr ""
+
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
 msgstr ""
 "Insert additional information (only displayed within the admin module)."
@@ -2337,6 +2375,9 @@ msgid "Helptext_CMDB_Dashboard_Search"
 msgstr ""
 "Searchable are the following Asset properties: \"Name\" and \"A#\". It is "
 "possible to use Wildcards (*)."
+
+msgid "Helptext_Create_ResultNames"
+msgstr ""
 
 msgid "Helptext_Customer_Dashboard_Search"
 msgstr ""
@@ -2558,12 +2599,6 @@ msgstr ""
 "Separates between the attributes of a row. If unknown, open your .csv-file "
 "with a text editor."
 
-msgid "Helptext_Jobs_Create_ResultNames"
-msgstr ""
-"An optional mapping of named results of the macro action and their variable "
-"names. The variable can be used as special placeholder in following actions "
-"like \"${VariableName}\"."
-
 msgid "Helptext_Organisation_Address_Domain_Pattern"
 msgstr ""
 
@@ -2602,9 +2637,6 @@ msgstr "Confirm your new password."
 
 msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
 msgstr "Set a new password for your user account."
-
-msgid "Helptext_PersonalSettings_UserPassword_Hint"
-msgstr "Insert your current password."
 
 msgid "Helptext_PersonalSettings_user_token_Hint"
 msgstr ""
@@ -2867,19 +2899,6 @@ msgstr "The state marks the recent ticket process state."
 msgid "Helptext_Tickets_TicketEdit_Title"
 msgstr "Briefly summarzie the ticket topic."
 
-msgid "Helptext_Users_UserCreateEdit_Access"
-msgstr ""
-"Set if the contact will be allowed to login to the Agent Portal (= the "
-"contact also becomes an agent) and/or the Self Service Portal. According to "
-"selection, further form fields will be loaded. If an access to one of the "
-"portals was set once and is removed later, the relevant portal user will be "
-"set \"invalid\"."
-
-msgid "Helptext_Users_UserCreateEdit_Roles"
-msgstr ""
-"An agent (= a contact with access to agent portal) needs at least the role "
-"“AgentUser” to successfully login. Only valid roles are available here."
-
 msgid "Helptext_User_UserCreateEdit_Login"
 msgstr "The login name needs to be unique."
 
@@ -2888,35 +2907,10 @@ msgstr ""
 "An agent (= a contact with access to agent portal) can change their password "
 "settings in their preferences."
 
-msgid "Helptext_User_UserCreateEdit_Preferences_MFAOTPEnabled"
+msgid "Helptext_User_UserCreateEdit_PasswordConfirm"
 msgstr ""
-
-msgid "Helptext_User_UserCreateEdit_Preferences_MyQueues"
-msgstr ""
-"Set the default teams the agent (= a contact with access to agent portal) "
-"will receive notifications for. An agent can change this setting in their "
-"preferences."
-
-msgid "Helptext_User_UserCreateEdit_Preferences_Notifications"
-msgstr ""
-"Set the default notifications for the agent (= a contact with access to "
-"agent portal). An agent can change this setting in their preferences."
-
-msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeEnd"
-msgstr "Last day of absence."
-
-msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeStart"
-msgstr "First day of absence."
-
-msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
-msgstr ""
-"Set the user's default language, for when they log in KIX for the first "
-"time. A user can change their language settings in their preferences."
 
 msgid "Helptext_User_UserCreateEdit_Preferences_UserSecret"
-msgstr ""
-
-msgid "Helptext_User_UserCreateEdit_Preferences_UserToken"
 msgstr ""
 
 msgid "HelptImporConfigext_Import_File"
@@ -2945,6 +2939,9 @@ msgstr ""
 
 msgid "Hour(s)"
 msgstr "Stunde(n)"
+
+msgid "HTTP Type"
+msgstr ""
 
 msgid "Icon"
 msgstr ""
@@ -3122,6 +3119,9 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
+msgid "Label / Name"
+msgstr ""
+
 msgid "Lanes"
 msgstr ""
 
@@ -3185,6 +3185,9 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
+msgid "Links for {0}"
+msgstr ""
+
 msgid "Links updated."
 msgstr ""
 
@@ -3243,6 +3246,9 @@ msgid "Logs"
 msgstr ""
 
 msgid "Macro"
+msgstr ""
+
+msgid "Macro Information"
 msgstr ""
 
 msgid "Mail Account Details"
@@ -3347,6 +3353,9 @@ msgstr ""
 msgid "My Queues"
 msgstr "My Teams"
 
+msgid "My Teams"
+msgstr ""
+
 msgid "My Tickets"
 msgstr ""
 
@@ -3428,6 +3437,9 @@ msgstr ""
 msgid "New Job"
 msgstr ""
 
+msgid "New Macro"
+msgstr ""
+
 msgid "New Mail Account"
 msgstr ""
 
@@ -3459,6 +3471,9 @@ msgid "New Report Definition"
 msgstr "New Definition"
 
 msgid "New Role"
+msgstr ""
+
+msgid "New Ruleset Macro"
 msgstr ""
 
 msgid "New Search"
@@ -3696,6 +3711,9 @@ msgid "Object Type"
 msgstr ""
 
 msgid "Observer"
+msgstr ""
+
+msgid "OK"
 msgstr ""
 
 msgid "Oldest first"
@@ -3969,6 +3987,9 @@ msgid "Prepare File Download"
 msgstr ""
 
 msgid "Prepare Ticket for print"
+msgstr ""
+
+msgid "Prepare Tickets to print & zip"
 msgstr ""
 
 msgid "Preview"
@@ -4331,9 +4352,6 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
-msgid "Role Assignment"
-msgstr ""
-
 msgid "Role Details"
 msgstr ""
 
@@ -4646,9 +4664,12 @@ msgid "Show in agent preferences"
 msgstr ""
 
 msgid "Show in Customer Portal"
-msgstr "Show in Customer Portal"
+msgstr "Available in Customer Portal"
 
 msgid "Show Last Change Date"
+msgstr ""
+
+msgid "Show Links"
 msgstr ""
 
 msgid "Show title in form"
@@ -5057,6 +5078,9 @@ msgstr ""
 msgid "Tickets for Contact"
 msgstr ""
 
+msgid "Tickets has been printed and zipped"
+msgstr ""
+
 msgid "Ticket: States"
 msgstr ""
 
@@ -5386,13 +5410,7 @@ msgstr ""
 msgid "You did it!"
 msgstr ""
 
-msgid "You have to confirm your current password."
-msgstr ""
-
 msgid "You have to confirm your password."
-msgstr ""
-
-msgid "Your current password is wrong."
 msgstr ""
 
 msgid "Your Permissions have been updated."
@@ -5415,6 +5433,58 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Helptext_Admin_JobCreateEdit_Actions"
+#~ msgstr ""
+#~ "Choose an action from the list, then the required form fields will be "
+#~ "loaded. By clicking \"+\" or \"-\" you can add further actions or remove "
+#~ "them. The order of actions ran by the job is defined by the order of "
+#~ "actions in this list. You can change the order by using drag&drop."
+
+#~ msgid "Helptext_Jobs_Create_ResultNames"
+#~ msgstr ""
+#~ "An optional mapping of named results of the macro action and their "
+#~ "variable names. The variable can be used as special placeholder in "
+#~ "following actions like \"${VariableName}\"."
+
+#~ msgid "Helptext_PersonalSettings_UserPassword_Hint"
+#~ msgstr "Insert your current password."
+
+#~ msgid "Helptext_Users_UserCreateEdit_Access"
+#~ msgstr ""
+#~ "Set if the contact will be allowed to login to the Agent Portal (= the "
+#~ "contact also becomes an agent) and/or the Self Service Portal. According "
+#~ "to selection, further form fields will be loaded. If an access to one of "
+#~ "the portals was set once and is removed later, the relevant portal user "
+#~ "will be set \"invalid\"."
+
+#~ msgid "Helptext_Users_UserCreateEdit_Roles"
+#~ msgstr ""
+#~ "An agent (= a contact with access to agent portal) needs at least the "
+#~ "role “AgentUser” to successfully login. Only valid roles are available "
+#~ "here."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_MyQueues"
+#~ msgstr ""
+#~ "Set the default teams the agent (= a contact with access to agent portal) "
+#~ "will receive notifications for. An agent can change this setting in their "
+#~ "preferences."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_Notifications"
+#~ msgstr ""
+#~ "Set the default notifications for the agent (= a contact with access to "
+#~ "agent portal). An agent can change this setting in their preferences."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeEnd"
+#~ msgstr "Last day of absence."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeStart"
+#~ msgstr "First day of absence."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
+#~ msgstr ""
+#~ "Set the user's default language, for when they log in KIX for the first "
+#~ "time. A user can change their language settings in their preferences."
 
 #~ msgid "Last changed time"
 #~ msgstr "Last changed at"

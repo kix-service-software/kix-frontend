@@ -14,6 +14,7 @@ import { ContactProperty } from '../../../model/ContactProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { Organisation } from '../../../model/Organisation';
+import { Contact } from '../../../model/Contact';
 
 export class NewContactDialogContext extends Context {
 
@@ -37,19 +38,23 @@ export class NewContactDialogContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONTACT, reload: boolean = false, changedProperties?: string[]
     ): Promise<O> {
-        let object;
+        let contact: Contact;
         const objectId = this.getObjectId();
         if (objectId) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null,
-                [
-                    ContactProperty.USER
-                ]
-            );
-            const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions);
-            object = objects && objects.length ? objects[0] : null;
+            const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [ContactProperty.USER]);
+            const objects = await KIXObjectService.loadObjects<Contact>(
+                objectType, [objectId], loadingOptions
+            ).catch((): Contact[] => []);
+            if (objects?.length) {
+                contact = objects[0];
+                delete contact.ID;
+                delete contact.User?.UserID;
+                delete contact.AssignedUserID;
+            }
+        } else {
+            contact = new Contact();
         }
-        return object;
+        return contact as any;
     }
 
 }

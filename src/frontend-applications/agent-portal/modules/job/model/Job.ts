@@ -9,7 +9,7 @@
 
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { Macro } from './Macro';
+import { Macro } from '../../macro/model/Macro';
 import { ExecPlan } from './ExecPlan';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { JobTypes } from './JobTypes';

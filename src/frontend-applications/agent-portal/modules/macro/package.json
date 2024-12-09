@@ -1,0 +1,23 @@
+{
+    "name": "kix-module-macro",
+    "extensions": {
+        "kix:modules": {
+            "kix-module-macro-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:services": {
+            "macro-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:configuration": {
+            "new-macro-configuration": {
+                "module": "./configuration/new-macro-dialog-configuration.extension"
+            },
+            "edit-macro-configuration": {
+                "module": "./configuration/edit-macro-dialog-configuration.extension"
+            }
+        }
+    }
+}

@@ -116,7 +116,7 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
             if (articleEventsConfig && articleEventsConfig.length) {
                 const articleEvents = articleEventsConfig[0].Value as string[];
                 hasArticleEvent = events.some(
-                    (e) => articleEvents.some((ae) => ae === e) || e === 'ArticleDynamicFieldUpdate'
+                    (e) => articleEvents.some((ae) => ae === e) || e.startsWith('ArticleDynamicFieldUpdate')
                 );
             }
         }

@@ -66,7 +66,7 @@ export class MFAPersonalSettingsFormService extends ExtendedKIXObjectFormService
 
         const secretField = new FormFieldConfiguration(
             'personal-settings-mfa-secret', 'Translatable#User Secret', property,
-            'user-secret-input', false, 'Translatable#Helptext_User_UserCreateEdit_Preferences_UserSecret',
+            'user-secret-preference-input', false, 'Translatable#Helptext_User_UserCreateEdit_Preferences_UserSecret',
             [
                 new FormFieldOption('SecretProperty', secretPreference)
             ]

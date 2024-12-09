@@ -39,14 +39,12 @@ import { SuggestedFAQHandler } from './SuggestedFAQHandler';
 import { TicketHistoryTableFactory } from './table';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
-import { JobFormService } from '../../../job/webapp/core';
 import { JobTypes } from '../../../job/model/JobTypes';
-import { FetchAssetAttributes } from './form/extended-form-manager/FetchAssetAttributes';
-import { TicketArticleCreate } from './form/extended-form-manager/TicketArticleCreate';
-import { TicketCreateDynamicFields } from './form/extended-form-manager/TicketCreateDynamicFields';
+import { TicketArticleCreateOptionFieldHandler } from './form/extended-form-manager/TicketArticleCreateOptionFieldHandler';
+import { TicketCreateDynamicFieldsOptionFieldHandler } from './form/extended-form-manager/TicketCreateDynamicFieldsOptionFieldHandler';
 import { TicketJobFormManager } from './TicketJobFormManager';
-import { TicketStateSet } from './form/extended-form-manager/TicketStateSet';
-import { TeamSet } from './form/extended-form-manager/TeamSet';
+import { TicketStateSetOptionFieldHandler } from './form/extended-form-manager/TicketStateSetOptionFieldHandler';
+import { TeamSetOptionFieldHandler } from './form/extended-form-manager/TeamSetOptionFieldHandler';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
@@ -55,6 +53,10 @@ import { TableFactoryService } from '../../../table/webapp/core/factory/TableFac
 import { TicketLockLabelProvider } from './TicketLockLabelProvider';
 import { DoNotSentEventHandler } from './DoNotSentEventHandler';
 import { UserCounterEventHandler } from './UserCounterEventHandler';
+import { JobFormService } from '../../../job/webapp/core/JobFormService';
+import { MacroService } from '../../../macro/webapp/core/MacroService';
+import { FetchAssetAttributesOptionFieldHandler } from './form/extended-form-manager/FetchAssetAttributesOptionFieldHandler';
+import { TicketBulkPrintAction } from './actions/TicketBulkPrintAction';
 
 export class UIModule implements IUIModule {
 
@@ -120,14 +122,11 @@ export class UIModule implements IUIModule {
     }
 
     public async registerExtensions(): Promise<void> {
-        const ticketManager = JobFormService.getInstance().getJobFormManager(JobTypes.TICKET);
-        if (ticketManager) {
-            ticketManager.addExtendedJobFormManager(new TicketArticleCreate());
-            ticketManager.addExtendedJobFormManager(new FetchAssetAttributes());
-            ticketManager.addExtendedJobFormManager(new TicketCreateDynamicFields());
-            ticketManager.addExtendedJobFormManager(new TicketStateSet());
-            ticketManager.addExtendedJobFormManager(new TeamSet());
-        }
+        MacroService.getInstance().registerOptionFieldHandler(new TicketArticleCreateOptionFieldHandler());
+        MacroService.getInstance().registerOptionFieldHandler(new TicketCreateDynamicFieldsOptionFieldHandler());
+        MacroService.getInstance().registerOptionFieldHandler(new TicketStateSetOptionFieldHandler());
+        MacroService.getInstance().registerOptionFieldHandler(new TeamSetOptionFieldHandler());
+        MacroService.getInstance().registerOptionFieldHandler(new FetchAssetAttributesOptionFieldHandler());
     }
 
     private registerTicketActions(): void {
@@ -138,6 +137,7 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('ticket-watch-action', TicketWatchAction);
         ActionFactory.getInstance().registerAction('ticket-lock-action', TicketLockAction);
         ActionFactory.getInstance().registerAction('ticket-print-action', TicketPrintAction);
+        ActionFactory.getInstance().registerAction('ticket-bulk-print-action', TicketBulkPrintAction);
     }
 
     private async registerContexts(): Promise<void> {

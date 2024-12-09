@@ -7,37 +7,49 @@
  * --
  */
 
-import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { UserProperty } from '../../../../user/model/UserProperty';
 import { ComponentState } from './ComponentState';
 import { MFAService } from '../../core/MFAService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
+import { FormValueProperty } from '../../../../object-forms/model/FormValueProperty';
+import { Contact } from '../../../../customer/model/Contact';
 
-class Component extends FormInputComponent<string, ComponentState> {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private userId: number;
-    private secretPreference: string;
+    private bindingIds: string[];
+    private formValue: ObjectFormValue;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        super.onInput(input);
+        if (this.formValue?.instanceId !== input.formValue?.instanceId) {
+            this.formValue?.removePropertyBinding(this.bindingIds);
+            this.formValue = input.formValue;
+            this.update();
+        }
+    }
+
+    private async update(): Promise<void> {
+        this.bindingIds = [];
+
+        this.bindingIds.push(
+            this.formValue?.addPropertyBinding(
+                FormValueProperty.VALUE, async (formValue: ObjectFormValue) => {
+                    this.state.currentValue = formValue.value;
+                }
+            )
+        );
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        const userIdOption = this.state.field?.options?.find((o) => o.option === UserProperty.USER_ID);
-        this.userId = userIdOption?.value;
-
-        const secretPropertyOption = this.state.field?.options?.find((o) => o.option === 'SecretProperty');
-        this.secretPreference = secretPropertyOption?.value;
-
-        this.setCurrentValue();
+        this.state.currentValue = this.formValue?.value;
     }
 
     public async generateNewSecret(event: any): Promise<void> {
@@ -47,15 +59,18 @@ class Component extends FormInputComponent<string, ComponentState> {
         const hint = await TranslationService.translate('Translatable#Generate new user secret');
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint });
 
-        await MFAService.getInstance().generateTOTPSecret(this.userId, this.secretPreference);
+        const userId = (this.formValue.objectValueMapper.object as Contact)?.User?.UserID;
+
+        await MFAService.getInstance().generateTOTPSecret(userId, this.formValue['secretPreference']);
         await this.setCurrentValue();
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
     }
 
     public async setCurrentValue(): Promise<void> {
-        this.state.currentValue = await MFAService.getInstance().getTOTPSecret(this.userId, this.secretPreference);
-        (this as any).setStateDirty('currentValue');
+        const userId = (this.formValue.objectValueMapper.object as Contact)?.User?.UserID;
+        this.state.currentValue = await MFAService.getInstance().getTOTPSecret(userId, this.formValue['secretPreference']);
+        this.formValue.setFormValue(this.state.currentValue);
     }
 
 }

@@ -53,16 +53,6 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
             ),
             new PersonalSetting(
                 'Translatable#Change Password',
-                PersonalSettingsProperty.CURRENT_PASSWORD,
-                'Translatable#Current Password',
-                'Translatable#Helptext_PersonalSettings_UserPassword_Hint',
-                null, null, null,
-                [
-                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
-                ]
-            ),
-            new PersonalSetting(
-                'Translatable#Change Password',
                 PersonalSettingsProperty.USER_PASSWORD,
                 'Translatable#New Password',
                 'Translatable#Helptext_PersonalSettings_UserNewPassword_Hint',

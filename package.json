@@ -6,6 +6,7 @@
         "bundlefile": "kix-frontend.tar.gz"
     },
     "scripts": {
+        "application-prebuild": "rm -rf ./.cache/lasso && node dist/server/ApplicationBuilder.js",
         "start": "node dist/server/index.js",
         "build": "./node_modules/.bin/gulp",
         "lint": "./node_modules/.bin/eslint --quiet --ext .ts ./src/",
@@ -16,7 +17,6 @@
         "bundle": "rm -fv ${npm_package_config_bundlefile} && touch ${npm_package_config_bundlefile} && tar cfz ${npm_package_config_bundlefile} -v --ignore-failed-read --warning=no-file-changed --exclude-from=.bundleignore --exclude-vcs --exclude=${npm_package_config_bundlefile} ./",
         "bundle-integration": "rm -f kix-frontend-integrationtest.tar.gz && touch kix-frontend-integrationtest.tar.gz && tar cfz kix-frontend-integrationtest.tar.gz --ignore-failed-read --warning=no-file-changed --exclude-from=.bundleignore-integration --exclude-vcs --exclude=kix-frontend-integrationtest.tar.gz ./",
         "extract-translatables": "./extract-translatables.sh",
-        "build-doc": "raml2html --template ./doc/_raml2html_template/index.nunjucks ./doc/index.raml > ./doc/index.html",
         "generate-3rd-party-licenses": "./node_modules/license-checker/bin/license-checker --production --out LICENSE-Third-Party --relativeLicensePath",
         "lint-warn": "./node_modules/.bin/eslint -f node_modules/eslint-html-reporter/reporter-team-city.js -o quality/lint.html --ext .ts ./src/ .",
         "typescript-coverage": "./node_modules/.bin/typescript-coverage-report --outputDir ./quality/coverage-ts"
@@ -61,26 +61,24 @@
         "d3": "^7.1.1",
         "dateformat": "4.5.1",
         "express": "^4.17.1",
-        "express-force-ssl": "0.3.2",
         "file-saver": "^2.0.5",
         "https-proxy-agent": "^5.0.0",
         "js-plugins": "1.0.0",
         "jsonfile": "^6.1.0",
         "jsonwebtoken": "^9.0.2",
-        "lasso": "^3.4.0",
+        "lasso": "^4.0.4",
         "lasso-clean-css": "^2.1.0",
-        "lasso-less": "^4.0.1",
-        "lasso-marko": "^3.1.1",
+        "lasso-less": "^4.0.2",
+        "lasso-marko": "^5.0.1",
         "lasso-minify": "^1.0.4",
         "leaflet.markercluster": "^1.5.1",
         "logform": "2.4.2",
         "marked": "^4.0.19",
-        "marko": "^5.28.0",
+        "marko": "^5.35.10",
         "marko-loader": "^1.5.0",
         "md5": "^2.3.0",
         "multer": "^1.4.5-lts.1",
         "redis": "^3.1.2",
-        "reflect-metadata": "0.1.13",
         "scroll-into-view-if-needed": "^2.2.28",
         "socket.io": "4.1.3",
         "socket.io-client": "4.1.3",
@@ -105,7 +103,7 @@
         "@types/memcached": "^2.2.7",
         "@types/mocha": "^9.0.0",
         "@types/moment-duration-format": "^2.2.3",
-        "@types/node": "16.4.5",
+        "@types/node": "^22.4.1",
         "@types/redis": "^2.8.31",
         "@typescript-eslint/eslint-plugin": "^4.28.5",
         "@typescript-eslint/parser": "^4.28.5",
@@ -130,13 +128,13 @@
         "mocha-junit-reporter": "2.0.0",
         "mocha-multi-reporters": "1.5.1",
         "nyc": "^15.1.0",
-        "raml2html": "7.8.0",
         "source-map-support": "^0.5.19",
         "ts-node": "10.1.0",
-        "typescript": "4.3.5",
+        "typescript": "^5.5.4",
         "typescript-coverage-report": "^0.8.0"
     },
     "overrides": {
-        "logform": "2.4.2"
+        "logform": "2.4.2",
+        "uglify-es": "3.3.9"
     }
 }

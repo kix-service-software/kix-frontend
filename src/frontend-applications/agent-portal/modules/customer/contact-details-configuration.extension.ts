@@ -39,6 +39,7 @@ import { FilterCriteria } from '../../model/FilterCriteria';
 import { FilterDataType } from '../../model/FilterDataType';
 import { FilterType } from '../../model/FilterType';
 import { ContactDetailsContext } from './webapp/core/context/ContactDetailsContext';
+import { ConfigItemTableFactory } from '../cmdb/webapp/core';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -397,6 +398,14 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(organisationStreet);
 
+        const organisationNewTicketCount = new DefaultColumnConfiguration(
+            'contact-details-assigned-organisation-new-tickets',
+            'Organisation New Tickets', ConfigurationType.TableColumn,
+            OrganisationProperty.NEW_TICKETS_COUNT, true, false, true, true, 150,
+            true, false, false, DataType.NUMBER
+        );
+        configurations.push(organisationNewTicketCount);
+
         const organisationOpenTicketCount = new DefaultColumnConfiguration(
             'contact-details-assigned-organisation-open-tickets',
             'Organisation Open Tickets', ConfigurationType.TableColumn,
@@ -427,6 +436,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'contact-details-assigned-organisation-country',
                 'contact-details-assigned-organisation-city',
                 'contact-details-assigned-organisation-street',
+                'contact-details-assigned-organisation-new-tickets',
                 'contact-details-assigned-organisation-open-tickets',
                 'contact-details-assigned-organisation-reminder-tickets'
             ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
@@ -441,14 +451,25 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(assignedOrganisationsLane);
 
+        const assetTableConfiguration = new TableConfiguration(
+            null, null, ConfigurationType.Table,
+            KIXObjectType.CONFIG_ITEM, null, null, null, null, null, null, null, null,
+            TableHeaderHeight.SMALL, TableRowHeight.SMALL
+        );
+
+        assetTableConfiguration.tableColumns = [
+            ...ConfigItemTableFactory.getDefaultColumns(),
+            new DefaultColumnConfiguration(
+                'organisation-details-assigned-contacts-new-tickets', 'New Ticket', ConfigurationType.TableColumn,
+                ContactProperty.CREATE_NEW_TICKET, true, false, false, true, 150,
+                false, false, false, DataType.STRING, false, 'create-new-ticket-cell'
+            )
+        ];
+
         const assignedConfigItemsLane = new WidgetConfiguration(
             'contact-details-assigned-config-items-widget', 'Assigned Assets', ConfigurationType.Widget,
             'contact-assigned-config-items-widget', 'Translatable#Assigned Assets',
-            [], null, new TableConfiguration(
-                null, null, ConfigurationType.Table,
-                KIXObjectType.CONFIG_ITEM, null, null, null, null, null, null, null, null,
-                TableHeaderHeight.SMALL, TableRowHeight.SMALL
-            ), false, true, null, false
+            [], null, assetTableConfiguration, false, true, null, false
         );
         configurations.push(assignedConfigItemsLane);
 

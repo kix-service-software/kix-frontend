@@ -7,18 +7,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<if(state.field)>
-    <div.token-input-container>
-        <input.input-style
-            value=state.currentValue
-            type="text"
-            readonly
-            disabled
-        >
-        <button.kix-button.form-button.file-upload-button on-click(
-            "generateNewSecret",
-        )>
-            <translation-string pattern="Translatable#Generate New Secret"/>
-        </button>
-    </div>
-</if>
+<div.token-input-container>
+    <input.input-style
+        value=state.currentValue
+        type="text"
+        readonly
+        disabled
+    >
+    <button.kix-button.form-button.file-upload-button on-click(
+        "generateNewSecret",
+    )>
+        <translation-string pattern="Translatable#Generate New Secret"/>
+    </button>
+</div>
