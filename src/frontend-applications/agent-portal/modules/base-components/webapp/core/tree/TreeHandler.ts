@@ -298,23 +298,26 @@ export class TreeHandler {
         const node = TreeUtil.findNode(this.tree, nodeId);
         if (node) {
             node.selected = selected;
-            if (selected && !this.selectedNodes.some((sn) => sn.id === nodeId)) {
+            const selectedNodeIndex = this.selectedNodes.findIndex((sn) => sn.id === nodeId);
+            if (selected && selectedNodeIndex === -1) {
                 this.selectedNodes.push(node);
+            } else if (!selected && selectedNodeIndex !== -1) {
+                this.selectedNodes.splice(selectedNodeIndex, 1);
             }
         }
     }
 
     public selectAll(): void {
-        const nodes = TreeUtil.getVisibleNodes(this.tree, this.filterValue);
+        const nodes = this.getVisibleNodes();
         this.setSelection(nodes, true);
     }
 
-    public selectNone(silent: boolean = false): void {
-        const nodes = TreeUtil.getVisibleNodes(this.tree, this.filterValue);
+    public selectNone(silent: boolean = false, onlyVisible?: boolean): void {
+        const nodes = onlyVisible ? this.getVisibleNodes() : this.getSelectedNodes();
         for (const n of nodes) {
             this.setSelectedNode(n.id, false);
         }
-        this.selectedNodes = [];
+
 
         this.listener.forEach((l) => l(this.getSelectedNodes()));
         if (!silent) {

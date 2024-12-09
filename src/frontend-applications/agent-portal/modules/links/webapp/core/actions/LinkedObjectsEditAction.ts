@@ -21,7 +21,7 @@ export class LinkedObjectsEditAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
-        this.text = 'Translatable#Links';
+        this.text = 'Translatable#Edit Links';
         this.icon = 'kix-icon-link';
     }
 

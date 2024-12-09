@@ -286,6 +286,8 @@ export class HttpService {
                 LoggingService.getInstance().error(
                     `Error during HTTP (${resource}) ${options.method} request.`, error
                 );
+
+                LoggingService.getInstance().error(JSON.stringify(error));
             }
             HTTPRequestLogger.getInstance().stop(profileTaskId, error);
             if (error?.response?.status === 403) {

@@ -27,6 +27,7 @@ class OverlayComponent {
 
     private state: ComponentState;
     private toastTimeout: any;
+    private hintTimeout: any;
     private currentListenerId: string;
     private startMoveOffset: [number, number] = null;
     private startResizeOffset: [number, number] = null;
@@ -70,7 +71,8 @@ class OverlayComponent {
     private openOverlay<T extends KIXObject>(
         type: OverlayType, widgetInstanceId: string, content: ComponentContent<T>, title: string,
         icon: string | ObjectIcon, closeButton: boolean, position: [number, number],
-        newListenerId: string, large: boolean, toastTimeoutMillis: number = 2000, autoClose: boolean = true
+        newListenerId: string, large: boolean, autoSize: boolean, toastTimeoutMillis: number = 2000,
+        autoClose: boolean = true
     ): void {
         if (this.currentListenerId) {
             this.closeOverlay();
@@ -95,6 +97,21 @@ class OverlayComponent {
             this.state.type = type;
             this.position = position;
 
+            this.state.value = await TranslationService.translate(content.getValue());
+
+            // ToDo: Can be revomed if the css attribut "field-sizing" supported by FireFox and Safari
+            // An adjustment of the Marko and Style is also needed.
+            if (this.isHint()) {
+                if (!CSS.supports('field-sizing', 'content')) {
+                    this.hintTimeout = setTimeout(() => {
+                        const textarea = (this as any).getEl('hint-overlay');
+                        if (textarea) {
+                            this.fieldSizing(textarea);
+                        }
+                    }, 100);
+                }
+            }
+
             if (this.position && this.position[0]) {
                 this.position[0] += window.scrollX;
             }
@@ -102,7 +119,7 @@ class OverlayComponent {
                 this.position[1] += window.scrollY;
             }
 
-            this.state.overlayClass = this.getOverlayTypeClass(type, large);
+            this.state.overlayClass = this.getOverlayTypeClass(type, large, autoSize);
             this.currentListenerId = newListenerId;
 
             this.applyWidgetConfiguration(widgetInstanceId);
@@ -245,7 +262,9 @@ class OverlayComponent {
         }
     }
 
-    private getOverlayTypeClass(type: OverlayType, large: boolean = false): string {
+    private getOverlayTypeClass(
+        type: OverlayType, large: boolean = false, autoSize: boolean = false
+    ): string {
         switch (type) {
             case OverlayType.HINT:
                 return 'hint-overlay';
@@ -264,7 +283,7 @@ class OverlayComponent {
             case OverlayType.ERROR_TOAST:
                 return 'toast-overlay error-toast';
             case OverlayType.CONTENT_OVERLAY:
-                return 'content-overlay' + (large ? ' large' : '');
+                return 'content-overlay' + (large ? ' large' : '') + (autoSize ? ' size-auto' : '');
             case OverlayType.TABLE_COLUMN_FILTER:
                 return 'table-column-filter-overlay';
             default:
@@ -360,6 +379,15 @@ class OverlayComponent {
                 }
             }
         }
+    }
+
+    public isHint(): boolean {
+        return this.state.type === OverlayType.HINT;
+    }
+
+    private fieldSizing(textarea): void {
+        clearTimeout(this.hintTimeout);
+        textarea.style.height = `${textarea.scrollHeight}px`;
     }
 
     private async mouseUp(): Promise<void> {

@@ -35,7 +35,7 @@ describe('Rule - CountMax', () => {
             const object = new TestFormObject();
 
             await objectFormValueMapper.mapFormValues(object);
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should have countMax = 3', () => {
@@ -86,7 +86,7 @@ describe('Rule - CountMax', () => {
                 (fv as any).initialState.set('countMax', 3);
             }
 
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should not have countMax', () => {

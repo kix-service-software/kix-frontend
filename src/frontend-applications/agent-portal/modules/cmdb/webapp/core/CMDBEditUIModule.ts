@@ -22,6 +22,7 @@ import { ConfigItemDetailsContext } from './context';
 import { ConfigItemCreateGraphAction } from './actions/ConfigItemCreateGraphAction';
 import { BulkService } from '../../../bulk/webapp/core';
 import { ConfigItemBulkManager } from './ConfigItemBulkManager';
+import { CMDBCreateTicketAction } from './actions/CMDBCreateTicketAction';
 
 export class UIModule implements IUIModule {
 
@@ -67,5 +68,6 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('config-item-edit-action', ConfigItemEditAction);
         ActionFactory.getInstance().registerAction('config-item-duplicate-action', ConfigItemDuplicateAction);
         ActionFactory.getInstance().registerAction('config-item-create-graph-action', ConfigItemCreateGraphAction);
+        ActionFactory.getInstance().registerAction('cmdb-ticket-create-action', CMDBCreateTicketAction);
     }
 }

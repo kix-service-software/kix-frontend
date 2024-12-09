@@ -168,6 +168,7 @@ export class UIModule implements IUIModule {
                     title: this.itemSeparatorTitle,
                     description: this.itemSeparatorDescription,
                     type: 'string',
+                    format: 'textarea',
                     options: {
                         grid_break: true
                     }
@@ -237,6 +238,7 @@ export class UIModule implements IUIModule {
                     title: this.itemSeparatorTitle,
                     description: this.itemSeparatorDescription,
                     type: 'string',
+                    format: 'textarea',
                     options: {
                         grid_break: true
                     }
@@ -307,7 +309,8 @@ export class UIModule implements IUIModule {
                 ItemSeparator: {
                     title: this.itemSeparatorTitle,
                     description: this.itemSeparatorDescription,
-                    type: 'string'
+                    type: 'string',
+                    format: 'textarea'
                 },
                 DefaultValue: {
                     title: this.defaultValueTitle,
@@ -377,7 +380,8 @@ export class UIModule implements IUIModule {
                 'ItemSeparator': {
                     'title': this.itemSeparatorTitle,
                     'description': this.itemSeparatorDescription,
-                    'type': 'string'
+                    'type': 'string',
+                    'format': 'textarea'
                 },
                 'DefaultValue': {
                     'title': this.defaultValueTitle,
@@ -454,7 +458,8 @@ export class UIModule implements IUIModule {
                 ItemSeparator: {
                     title: this.itemSeparatorTitle,
                     description: this.itemSeparatorDescription,
-                    type: 'string'
+                    type: 'string',
+                    format: 'textarea'
                 },
                 DefaultValue: {
                     title: this.defaultValueTitle,
@@ -701,7 +706,8 @@ export class UIModule implements IUIModule {
                 ItemSeparator: {
                     title: this.itemSeparatorTitle,
                     description: this.itemSeparatorDescription,
-                    type: 'string'
+                    type: 'string',
+                    format: 'textarea'
                 },
                 DefaultValue: {
                     title: this.defaultValueTitle,

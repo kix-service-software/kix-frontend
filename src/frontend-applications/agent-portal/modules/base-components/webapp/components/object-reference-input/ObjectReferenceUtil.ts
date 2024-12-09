@@ -15,6 +15,7 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SortUtil } from '../../../../../model/SortUtil';
+import { ContextService } from '../../core/ContextService';
 import { IKIXObjectService } from '../../core/IKIXObjectService';
 import { KIXObjectService } from '../../core/KIXObjectService';
 import { LabelService } from '../../core/LabelService';
@@ -99,7 +100,8 @@ export class ObjectReferenceUtil {
     public static async prepareLoadingOptions(
         loadingOptions: KIXObjectLoadingOptions, searchValue: string
     ): Promise<KIXObjectLoadingOptions> {
-        const preparedLoadingOptions = await Context.prepareLoadingOptions(
+        const context = ContextService.getInstance().getActiveContext();
+        const preparedLoadingOptions = await context?.prepareLoadingOptions(
             loadingOptions, searchValue
         );
 

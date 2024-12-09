@@ -52,7 +52,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     protected reloadInProgress: boolean = false;
 
-    private id: string = IdService.generateDateBasedId('TableContentProvider');
+    protected id: string = IdService.generateDateBasedId('TableContentProvider');
 
     public totalCount: number;
     public currentLimit: number;
@@ -221,7 +221,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         return await this.getRowObjects(objects);
     }
 
-    private async getPageSize(): Promise<number> {
+    protected async getPageSize(): Promise<number> {
         if (typeof this.loadingOptions?.limit !== 'undefined' && this.loadingOptions?.limit !== null) {
             return this.loadingOptions?.limit;
         } else if (this.isBackendSortSupported()) {

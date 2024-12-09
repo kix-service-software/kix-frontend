@@ -37,6 +37,7 @@ export class OrganisationTableContentProvider extends TableContentProvider<Organ
             const ticketStatsValue = ro.getValues().find((v) => v[0] === OrganisationProperty.TICKET_STATS);
             if (ticketStatsValue) {
                 const ticketStats: TicketStats = ticketStatsValue[1];
+                ro.addValue(new TableValue(OrganisationProperty.NEW_TICKETS_COUNT, ticketStats.NewCount));
                 ro.addValue(new TableValue(OrganisationProperty.OPEN_TICKETS_COUNT, ticketStats.OpenCount));
                 ro.addValue(new TableValue(OrganisationProperty.ESCALATED_TICKETS_COUNT, ticketStats.EscalatedCount));
                 ro.addValue(

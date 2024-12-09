@@ -149,7 +149,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                         'Translatable#Article Text', ArticleProperty.BODY, undefined, true,
                                         'Translatable#Helptext_Tickets_ArticleCreate_Body', null,
                                         // eslint-disable-next-line max-len
-                                        new FormFieldValue('<p>&nbsp;</p>\n\n<p>&lt;KIX_ARTICLE_From&gt; wrote &lt;KIX_ARTICLE_ChangeTime&gt;:</p>\n\n<div style=\"border-left:2px solid #0a7cb3;padding:10px;\" type=\"cite\">&lt;KIX_ARTICLE_BodyRichtext&gt;</div>')
+                                        new FormFieldValue('<p>&nbsp;</p>\n\n<p>&lt;KIX_ARTICLE_From&gt; wrote &lt;KIX_ARTICLE_ChangeTime&gt;:</p>\n\n<blockquote style=\"border-left:2px solid #0a7cb3;padding:10px;\"><p>&lt;KIX_ARTICLE_BodyRichtext&gt;</p></blockquote>')
                                     )
                                 ]
                             )
@@ -194,7 +194,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                         'Translatable#Article Text', ArticleProperty.BODY, undefined, true,
                                         'Translatable#Helptext_Tickets_ArticleCreate_Body', null,
                                         // eslint-disable-next-line max-len
-                                        new FormFieldValue('<p>&nbsp;</p>\n\n<p>&lt;KIX_ARTICLE_From&gt; wrote &lt;KIX_ARTICLE_ChangeTime&gt;:</p>\n\n<div style=\"border-left:2px solid #0a7cb3;padding:10px;\" type=\"cite\">&lt;KIX_ARTICLE_BodyRichtext&gt;</div>')
+                                        new FormFieldValue('<p>&nbsp;</p>\n\n<p>&lt;KIX_ARTICLE_From&gt; wrote &lt;KIX_ARTICLE_ChangeTime&gt;:</p>\n\n<blockquote style=\"border-left:2px solid #0a7cb3;padding:10px;\"><p>&lt;KIX_ARTICLE_BodyRichtext&gt;</p></div>')
                                     ),
                                     new FormFieldConfiguration(
                                         'article-forward-referenced-attachments',

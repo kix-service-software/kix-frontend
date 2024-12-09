@@ -40,7 +40,7 @@ describe('Rule - MinSelectable / MaxSelectable', () => {
                 (fv as any).initialState.set('MinSelectable', undefined);
             }
 
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should have minSelectionCount', () => {
@@ -90,7 +90,7 @@ describe('Rule - MinSelectable / MaxSelectable', () => {
                 (fv as any).initialState.set('MaxSelectable', undefined);
             }
 
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should have maxSelectionCount', () => {

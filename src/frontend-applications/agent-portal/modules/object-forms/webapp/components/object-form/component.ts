@@ -78,7 +78,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             eventPublished: async (data: Context | any, eventId: string): Promise<void> => {
                 let updateNeeded = false;
 
-                if (eventId === ObjectFormEvent.BLOCK_FORM) {
+                if (eventId === ObjectFormEvent.FORM_SUBMIT_ENABLED) {
+                    this.state.canSubmit = data;
+                } else if (eventId === ObjectFormEvent.BLOCK_FORM) {
                     this.state.blocked = data.blocked;
                     updateNeeded = !data.blocked;
                 } else if (eventId === FormEvent.OBJECT_FORM_HANDLER_CHANGED) {
@@ -114,6 +116,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
+        EventService.getInstance().subscribe(ObjectFormEvent.FORM_SUBMIT_ENABLED, this.subscriber);
     }
 
     public onDestroy(): void {
@@ -122,6 +125,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.FORM_SUBMIT_ENABLED, this.subscriber);
     }
 
     private setFormValues(setPrepared?: boolean): void {

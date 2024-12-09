@@ -56,8 +56,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'job-filter-cell-content',
             '/kix-module-job$0/webapp/components/job-filter-cell-content', []
-        ),
-        new UIComponent('macro-action-details', '/kix-module-job$0/webapp/components/macro-action-details', [])
+        )
     ];
 
     public webDependencies: string[] = [

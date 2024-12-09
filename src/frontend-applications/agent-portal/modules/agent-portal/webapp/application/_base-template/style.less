@@ -83,7 +83,7 @@
 
         ~.overlay,
         ~.overlay-shield {
-            z-index: 650;
+            z-index: 1100;
         }
     }
 
@@ -92,7 +92,7 @@
     }
 
     .overlay {
-        z-index: 550;
+        z-index: 1100;
     }
 }
 
@@ -194,6 +194,7 @@
 @media only screen and (min-width: (@sidebar-right-breakpoint + 1px)) {
     .app-wrapper {
         grid-template-columns: [main-menu] (@main-menu-width) [sidebar-left] max-content [content] minmax(25rem, 1fr) [sidebar-right] max-content;
+
         >.content-wrapper {
             padding-right: 1rem;
         }

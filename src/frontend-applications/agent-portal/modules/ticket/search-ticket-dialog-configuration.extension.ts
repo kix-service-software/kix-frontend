@@ -52,7 +52,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const ticketListConfig = new WidgetConfiguration(
             'ticket-search-ticket-list-widget', 'Ticket Search List Widget', ConfigurationType.Widget,
-            'table-widget', 'Translatable#Search Results: Tickets', ['bulk-action', 'csv-export-action'],
+            'table-widget', 'Translatable#Search Results: Tickets', ['bulk-action', 'ticket-bulk-print-action', 'csv-export-action'],
             null, tableWidgetConfig, false, false, 'kix-icon-ticket', true
         );
 

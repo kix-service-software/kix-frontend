@@ -9,12 +9,10 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { JobService, JobFormService, JobLabelProvider, MacroActionLabelProvider, JobTableFactory, JobDetailsContext, JobExecuteAction, JobCreateAction, NewJobDialogContext, JobEditAction, EditJobDialogContext } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { JobFilterTableFactory } from './table/JobFilterTableFactory';
-import { MacroActionTableFactory } from './table/MacroActionTableFactory';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
@@ -29,10 +27,18 @@ import { JobTableDeleteAction } from './actions/JobTableDeleteAction';
 import { JobRunLogTableFactory } from './table/JobRunLogTableFactory';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
-import { DynamicFieldSet } from './extended-form-manager/DynamicFieldSet';
-import { MacroFieldJobFormManager } from './form/MacroFieldJobFormManager';
-import { AssembleObject } from './extended-form-manager/AssembleObject';
 import { JobTypeLabelProvider } from './JobTypeLabelProvider';
+import { JobFormService } from './JobFormService';
+import { JobLabelProvider } from './JobLabelProvider';
+import { JobService } from './JobService';
+import { JobCreateAction } from './actions/JobCreateAction';
+import { JobEditAction } from './actions/JobEditAction';
+import { JobExecuteAction } from './actions/JobExecuteAction';
+import { EditJobDialogContext } from './context/EditJobDialogContext';
+import { JobDetailsContext } from './context/JobDetailsContext';
+import { NewJobDialogContext } from './context/NewJobDialogContext';
+import { JobTableFactory } from './table/JobTableFactory';
+import { JobMacroActionTableFactory } from './table/JobMacroActionTableFactory';
 
 export class UIModule implements IUIModule {
 
@@ -46,15 +52,14 @@ export class UIModule implements IUIModule {
 
         LabelService.getInstance().registerLabelProvider(new JobLabelProvider());
         LabelService.getInstance().registerLabelProvider(new JobTypeLabelProvider());
-        LabelService.getInstance().registerLabelProvider(new MacroActionLabelProvider());
         LabelService.getInstance().registerLabelProvider(new JobRunLabelProvider());
         LabelService.getInstance().registerLabelProvider(new JobRunLogLabelProvider());
 
         TableFactoryService.getInstance().registerFactory(new JobTableFactory());
         TableFactoryService.getInstance().registerFactory(new JobFilterTableFactory());
-        TableFactoryService.getInstance().registerFactory(new MacroActionTableFactory());
         TableFactoryService.getInstance().registerFactory(new JobRunHistoryTableFactory());
         TableFactoryService.getInstance().registerFactory(new JobRunLogTableFactory());
+        TableFactoryService.getInstance().registerFactory(new JobMacroActionTableFactory());
 
         const jobDetailsContext = new ContextDescriptor(
             JobDetailsContext.CONTEXT_ID, [KIXObjectType.JOB],
@@ -102,11 +107,6 @@ export class UIModule implements IUIModule {
     }
 
     public async registerExtensions(): Promise<void> {
-        const manager = JobFormService.getInstance().getAllJobFormManager();
-        manager.forEach((m) => {
-            m.addExtendedJobFormManager(new DynamicFieldSet());
-            m.addExtendedJobFormManager(MacroFieldJobFormManager.getInstance());
-            m.addExtendedJobFormManager(new AssembleObject());
-        });
+        return;
     }
 }

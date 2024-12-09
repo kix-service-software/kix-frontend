@@ -74,6 +74,8 @@ export class Contact extends KIXObject {
     public constructor(contact?: Contact) {
         super(contact);
 
+        this.KIXObjectType = KIXObjectType.CONTACT;
+
         if (contact) {
             this.ObjectId = this.ID;
             this.AssignedConfigItems ||= [];
@@ -82,6 +84,35 @@ export class Contact extends KIXObject {
             this.Tickets = contact.Tickets
                 ? contact.Tickets.map((t) => new Ticket(t))
                 : [];
+        } else {
+            this.ObjectId = null;
+            this.KIXObjectType = KIXObjectType.CONTACT;
+            this.ID = null;
+            this.AssignedUserID = null;
+            this.AssignedConfigItems = null;
+            this.User = null;
+            this.Firstname = null;
+            this.Fullname = null;
+            this.Lastname = null;
+            this.City = null;
+            this.Street = null;
+            this.Comment = null;
+            this.Country = null;
+            this.Email = null;
+            this.Email1 = null;
+            this.Email2 = null;
+            this.Email3 = null;
+            this.Email4 = null;
+            this.Email5 = null;
+            this.Fax = null;
+            this.Mobile = null;
+            this.Phone = null;
+            this.PrimaryOrganisationID = null;
+            this.OrganisationIDs = null;
+            this.Title = null;
+            this.Zip = null;
+            this.TicketStats = null;
+            this.Tickets = null;
         }
     }
 

@@ -113,6 +113,21 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'add-remove-form-value-control',
             '/kix-module-object-forms$0/webapp/components/inputs/add-remove-form-value-control',
             []
+        ),
+        new UIComponent(
+            'icon-form-input',
+            '/kix-module-object-forms$0/webapp/components/inputs/icon-form-input',
+            []
+        ),
+        new UIComponent(
+            'interaction-tell-modal',
+            '/kix-module-object-forms$0/webapp/components/interaction-tell-modal',
+            []
+        ),
+        new UIComponent(
+            'interaction-ask-modal',
+            '/kix-module-object-forms$0/webapp/components/interaction-ask-modal',
+            []
         )
     ];
 

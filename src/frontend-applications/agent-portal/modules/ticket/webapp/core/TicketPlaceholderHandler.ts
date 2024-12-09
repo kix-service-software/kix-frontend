@@ -8,6 +8,9 @@
  */
 
 import { DataType } from '../../../../model/DataType';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
@@ -26,6 +29,7 @@ import { Organisation } from '../../../customer/model/Organisation';
 import { ContactPlaceholderHandler } from '../../../customer/webapp/core/ContactPlaceholderHandler';
 import { OrganisationPlaceholderHandler } from '../../../customer/webapp/core/OrganisationPlaceholderHandler';
 import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import { SearchOperator } from '../../../search/model/SearchOperator';
 import { User } from '../../../user/model/User';
 import { UserProperty } from '../../../user/model/UserProperty';
 import { UserPlaceholderHandler } from '../../../user/webapp/core/UserPlaceholderHandler';
@@ -277,14 +281,20 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         translate?: boolean
     ): Promise<string> {
         let result = '';
-        const caArticles = await this.getArticles(ticket);
+        const caArticles = await this.getArticles(ticket, null, objectString);
         if (caArticles && !!caArticles.length) {
-            const relevantArticles = caArticles.filter(
-                (a) => a.SenderType === (objectString === 'AGENT' ? 'agent' : 'external')
-            );
-            const lastArticle = SortUtil.sortObjects(
-                relevantArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER, SortOrder.DOWN
-            )[0];
+            let lastArticle: Article;
+            if (caArticles.length > 1) {
+                const relevantArticles = caArticles.filter(
+                    (a) => a.SenderType === (objectString === 'AGENT' ? 'agent' : 'external')
+                );
+                lastArticle = SortUtil.sortObjects(
+                    relevantArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER, SortOrder.DOWN
+                )[0];
+            }
+            else {
+                lastArticle = caArticles[0];
+            }
             if (lastArticle) {
                 result = await ArticlePlaceholderHandler.getInstance().replace(
                     placeholder, lastArticle, language, forRichtext, translate
@@ -299,12 +309,17 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         translate?: boolean
     ): Promise<string> {
         let result = '';
-        const flArticles = await this.getArticles(ticket);
+        const flArticles = await this.getArticles(ticket, null, objectString);
         if (flArticles && !!flArticles.length) {
-            const article = SortUtil.sortObjects(
-                flArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER,
-                objectString === 'FIRST' ? SortOrder.UP : SortOrder.DOWN
-            )[0];
+            let article: Article;
+            if (flArticles.length > 1) {
+                article = SortUtil.sortObjects(
+                    flArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER,
+                    objectString === 'FIRST' ? SortOrder.UP : SortOrder.DOWN
+                )[0];
+            } else {
+                article = flArticles[0];
+            }
             if (article) {
                 result = await ArticlePlaceholderHandler.getInstance().replace(
                     placeholder, article, language, forRichtext, translate
@@ -315,7 +330,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     private async getArticles(
-        ticket: Ticket, articleId?: number
+        ticket: Ticket, articleId?: number, objectString?: string
     ): Promise<Article[]> {
         let articles: Article[] = [];
         if (ticket?.Articles?.every((a) => a.ArticleID)) {
@@ -329,18 +344,21 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             } else {
                 articles = ticket.Articles;
             }
-        } else if (ticket.TicketID && articleId) {
+        } else if (ticket?.TicketID && articleId) {
             articles = await this.loadArticle(ticket.TicketID, articleId);
+        } else if (ticket?.TicketID && objectString) {
+            articles = await this.loadArticle(ticket.TicketID, null, objectString);
         }
         return articles;
     }
 
-    private async loadArticle(ticketId: number, articleId: number): Promise<Article[]> {
+    private async loadArticle(ticketId: number, articleId: number, objectString?: string): Promise<Article[]> {
+
+        const loadingOptions: KIXObjectLoadingOptions = await this.getLoadingOptions(objectString);
+
         return await KIXObjectService.loadObjects<Article>(
             KIXObjectType.ARTICLE, articleId ? [articleId] : null,
-            new KIXObjectLoadingOptions(
-                null, null, null, [ArticleProperty.ATTACHMENTS]
-            ), new ArticleLoadingOptions(ticketId), true
+            loadingOptions, new ArticleLoadingOptions(ticketId), true
         ).catch(() => [] as Article[]);
 
     }
@@ -513,5 +531,45 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             subject = subjectValue && subjectValue.value ? subjectValue.value.toString() : '';
         }
         return subject;
+    }
+
+    private async getLoadingOptions(objectString: string): Promise<KIXObjectLoadingOptions> {
+        const loadingOptions: KIXObjectLoadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, [ArticleProperty.ATTACHMENTS]
+        );
+
+        switch (objectString) {
+            case 'LAST':
+                loadingOptions.limit = 1;
+                loadingOptions.sortOrder = 'Article.-ID';
+                break;
+            case 'FIRST':
+                loadingOptions.limit = 1;
+                loadingOptions.sortOrder = 'Article.ID';
+                break;
+            case 'CUSTOMER':
+                loadingOptions.limit = 1;
+                loadingOptions.sortOrder = 'Article.-ID';
+                loadingOptions.filter = [
+                    new FilterCriteria(
+                        ArticleProperty.SENDER_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
+                        FilterType.AND, 'external'
+                    )
+                ];
+                break;
+            case 'AGENT':
+                loadingOptions.limit = 1;
+                loadingOptions.sortOrder = 'Article.-ID';
+                loadingOptions.filter = [
+                    new FilterCriteria(
+                        ArticleProperty.SENDER_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
+                        FilterType.AND, 'agent'
+                    )
+                ];
+                break;
+            default:
+        }
+
+        return loadingOptions;
     }
 }

@@ -7,9 +7,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.notes-container class={
-    "note-editor-active": state.editorActive
-}>
+<div class=[
+    "notes-container",
+    {
+        "note-editor-active": state.editorActive,
+    },
+]>
     <widget
         instanceId=input.instanceId
         title=(
@@ -21,32 +24,38 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             state.widgetConfiguration && state.widgetConfiguration.icon
                 ? state.widgetConfiguration.icon
                 : "kix-icon-note"
-        )>
+        )
+    >
         <@content>
-            <if(state.value || state.editorActive)>
+            <if((state.value || state.editorActive) && state.editorReady)>
                 <editor
                     value=state.value
                     on-valueChanged("valueChanged")
-                    simple=true
+                    simple
                     readOnly=!state.editorActive
-                    keyValue="notes-sidebar"/>
+                    keyValue="notes-sidebar"
+                />
             </if>
             <else>
-                <div.empty-notes>
+                <div class="empty-notes">
                     <translation-string pattern="Translatable#add notes here"/>
                 </div>
             </else>
             <if(state.editorActive)>
-                <div.notes-editor-buttons>
-                    <button.kix-button.form-button.button-without-text
-                        title=state.translations["Translatable#Cancel"]
-                        on-click("cancelEditor")>
-                        <span.kix-icon-close/>
+                <div class="notes-editor-buttons">
+                    <button
+                        title=(state.translations["Translatable#Cancel"])
+                        on-click("cancelEditor")
+                        class="kix-button form-button button-without-text"
+                    >
+                        <span class="kix-icon-close"/>
                     </button>
-                    <button.kix-button.form-button
-                        title=state.translations["Translatable#Submit"]
-                        on-click("submitEditor")>
-                        <span.kix-icon-check/>
+                    <button
+                        title=(state.translations["Translatable#Submit"])
+                        on-click("submitEditor")
+                        class="kix-button form-button"
+                    >
+                        <span class="kix-icon-check"/>
                         <translation-string pattern="Translatable#Submit"/>
                     </button>
                 </div>

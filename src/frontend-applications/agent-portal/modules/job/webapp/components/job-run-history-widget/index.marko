@@ -14,13 +14,25 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         contentActions=state.actions
     >
         <@content>
-            <div.job-run-history-content>
-                <div.history-filter>
-                    <filter filterCount=state.filterCount on-filter("filter")/>
+            <if(state.prepared)>
+                <div class="job-run-history-content">
+                    <div class="history-filter">
+                        <filter
+                            filterCount=state.filterCount
+                            on-filter("filter")
+                        />
+                    </div>
+                    <div class="history-container">
+                        <kix-table table=state.table/>
+                    </div>
                 </div>
-                <div.history-container><kix-table table=state.table/></div>
-            </div>
+            </if>
+            <else>
+                <loading-spinner/>
+            </else>
         </@content>
     </widget>
 </if>
-<else><table-placeholder/></else>
+<else>
+    <table-placeholder/>
+</else>

@@ -41,17 +41,26 @@ class Component {
         this.eventSubscriber = {
             eventSubscriberId: 'mobile-shields',
             eventPublished: (data, eventId: MobileShowEvent | string): void => {
-                this.state.activeMobile =
-                    (data === MobileShowEventData.SHOW_TOOLBAR || data === MobileShowEventData.SHOW_RIGHT_SIDEBAR) ?
-                        2 : data ? 1 : null;
+                if (eventId === MobileShowEvent.CLOSE_ALL_TABS_MOBILE) {
+                    this.closeMobile();
+                }
+                else {
+                    this.state.activeMobile =
+                        (data === MobileShowEventData.SHOW_TOOLBAR || data === MobileShowEventData.SHOW_RIGHT_SIDEBAR) ?
+                            2 : data ? 1 : null;
+                }
             }
         };
         EventService.getInstance().subscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
+        EventService.getInstance().subscribe(MobileShowEvent.CLOSE_ALL_TABS_MOBILE, this.eventSubscriber);
+
     }
 
     public onDestroy(): void {
         window.removeEventListener('resize', this.resizeHandling.bind(this), false);
         EventService.getInstance().unsubscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
+        EventService.getInstance().unsubscribe(MobileShowEvent.CLOSE_ALL_TABS_MOBILE, this.eventSubscriber);
+
     }
 
     private resizeHandling(): void {

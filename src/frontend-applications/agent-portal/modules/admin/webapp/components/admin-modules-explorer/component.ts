@@ -14,7 +14,6 @@ import { AdministrationSocketClient } from '../../core/AdministrationSocketClien
 import { AdminContext } from '../../core/AdminContext';
 import { AdminModule } from '../../../model/AdminModule';
 import { TreeNode, TreeUtil } from '../../../../base-components/webapp/core/tree';
-import { AdminModuleCategory } from '../../../model/AdminModuleCategory';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
@@ -50,10 +49,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const categories = await AdministrationSocketClient.getInstance().loadAdminCategories();
 
             if (categories) {
-                await this.prepareCategoryTreeNodes(categories);
+                await this.prepareAdminTreeNodes(categories);
+                this.state.nodes = TreeUtil.sortNodes(this.state.nodes);
             }
 
-            TreeUtil.sortNodes(this.state.nodes);
             this.state.prepared = true;
 
             setTimeout(() => {
@@ -91,54 +90,26 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return activeNode;
     }
 
-    private async prepareCategoryTreeNodes(
-        modules: Array<AdminModuleCategory | AdminModule> = [], parent?: TreeNode
+    private async prepareAdminTreeNodes(
+        modules: Array<AdminModule> = [], parent?: TreeNode
     ): Promise<void> {
         for (const m of modules) {
-            if (m instanceof AdminModuleCategory) {
-                const name = await TranslationService.translate(m.name);
-                const categoryNode = new TreeNode(
-                    m.id, name, m.icon, null,
-                    [], null, null, null, null, false, true, true
-                );
-                await this.prepareCategoryTreeNodes(m.children, categoryNode);
-                await this.prepareModuleTreeNodes(m.modules, categoryNode);
-                if (parent) {
-                    parent.children.push(categoryNode);
-                } else {
-                    this.state.nodes.push(categoryNode);
-                }
-            } else {
-                const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(m.permissions);
-                if (allowed) {
-                    const name = await TranslationService.translate(m.name);
-                    this.state.nodes.push(new TreeNode(
-                        m.id, name, m.icon,
-                        undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                        undefined, undefined, undefined,
-                        ['MODULE']
-                    ));
-                }
-            }
-        }
-    }
+            const name = await TranslationService.translate(m.name);
+            const node = new TreeNode(m.id, name);
 
-    private async prepareModuleTreeNodes(modules: AdminModule[], parent?: TreeNode): Promise<void> {
-        for (const m of modules) {
-            const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(m.permissions);
-            if (allowed) {
-                const name = await TranslationService.translate(m.name);
-                const node = new TreeNode(
-                    m.id, name, m.icon,
-                    undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                    undefined, undefined, undefined,
-                    ['MODULE']
-                );
-                if (parent) {
-                    parent.children.push(node);
-                } else {
-                    this.state.nodes.push(node);
-                }
+            if (m.isCategory) {
+                node.expandOnClick = true;
+                node.icon = 'fa-solid fa-folder';
+                node.flags = ['category'];
+            } else {
+                node.flags = ['MODULE'];
+            }
+
+            await this.prepareAdminTreeNodes(m.children, node);
+            if (parent) {
+                parent.children.push(node);
+            } else {
+                this.state.nodes.push(node);
             }
         }
     }

@@ -248,7 +248,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'ticket-dashboard-ticket-list-widget', 'Ticket List Widget', ConfigurationType.Widget,
             'table-widget', 'Translatable#Overview Tickets',
             [
-                'bulk-action', 'csv-export-action'
+                'bulk-action', 'ticket-bulk-print-action', 'csv-export-action'
             ],
             new ConfigurationDefinition('ticket-dashboard-table-widget-settings', ConfigurationType.TableWidget),
             null, false, false, 'kix-icon-ticket', true

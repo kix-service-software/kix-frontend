@@ -8,7 +8,6 @@
         "require ./components/organisation-assigned-contacts-widget",
         "require ./components/organisation-assigned-config-items-widget",
         "require ./components/organisation-module",
-        "require ./components/contact-input-access",
         "require ./components/setup-my-organisation",
         "require ./core/ContactEditUIModule",
         "require ./core/ContactReadUIModule",

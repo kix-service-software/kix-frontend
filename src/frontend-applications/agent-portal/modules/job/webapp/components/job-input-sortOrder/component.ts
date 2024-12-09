@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
 import { JobProperty } from '../../../model/JobProperty';
-import { JobFormService } from '../../core';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
@@ -21,6 +20,7 @@ import { IdService } from '../../../../../model/IdService';
 import { AbstractJobFormManager } from '../../core/AbstractJobFormManager';
 import { JobSortOrder } from '../../../model/JobSortOrder';
 import { SearchFormManager } from '../../../../base-components/webapp/core/SearchFormManager';
+import { JobFormService } from '../../core/JobFormService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 

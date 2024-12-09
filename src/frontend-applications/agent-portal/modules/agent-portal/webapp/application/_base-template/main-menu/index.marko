@@ -8,43 +8,59 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(!state.isMobile || state.showMobile)>
-    <div class=(state.isMobile ? "mobile-main-menu-container" : "main-menu-container")>
+    <div class=(
+        state.isMobile ? "mobile-main-menu-container" : "main-menu-container"
+    )>
         <if(!state.loading)>
-            <ul.menu.main-menu class={
-                "image-only": !state.showText && !state.isMobile
-            }>
+            <ul class=[
+                "menu main-menu",
+                {
+                    "image-only": !state.showText && !state.isMobile,
+                },
+            ]>
                 <for|menuEntry| of=state.primaryMenuEntries>
                     <if(menuEntry.show)>
                         <li
                             key=menuEntry.text
-                            title=state.translations[menuEntry.text]
+                            title=(state.translations[menuEntry.text])
                             class={
-                                active: menuEntry.active
-                            }>
-                            <menu-entry entry=menuEntry isMobile=state.isMobile/>
+                                active: menuEntry.active,
+                            }
+                        >
+                            <menu-entry
+                                entry=menuEntry
+                                isMobile=state.isMobile
+                            />
                         </li>
                     </if>
                 </for>
             </ul>
-            <ul.menu.user-menu class={
-                "image-only": !state.showText && !state.isMobile
-            }>
+            <ul class=[
+                "menu user-menu",
+                {
+                    "image-only": !state.showText && !state.isMobile,
+                },
+            ]>
                 <for|menuEntry| of=state.secondaryMenuEntries>
                     <if(menuEntry.show)>
                         <li
                             key=menuEntry.text
-                            title=state.translations[menuEntry.text]
+                            title=(state.translations[menuEntry.text])
                             class={
-                                active: menuEntry.active
-                            }>
-                            <menu-entry entry=menuEntry isMobile=state.isMobile/>
+                                active: menuEntry.active,
+                            }
+                        >
+                            <menu-entry
+                                entry=menuEntry
+                                isMobile=state.isMobile
+                            />
                         </li>
                     </if>
                 </for>
             </ul>
             <if(state.isMobile)>
-                <div.context-list>
-                    <tabbar/>
+                <div class="context-list">
+                    <tabbar isMobile=state.isMobile/>
                 </div>
             </if>
         </if>

@@ -68,6 +68,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 [
                     new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
                 ]
+            ),
+            new FormFieldConfiguration(
+                'update-admin-password-password-confirm',
+                'Translatable#Confirm Password', UserProperty.USER_PASSWORD + '-confirm', null, true,
+                'Translatable#Helptext_User_UserCreateEdit_PasswordConfirm',
+                [
+                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
+                ]
             )
         ];
 

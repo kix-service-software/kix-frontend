@@ -9,13 +9,11 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { JobDetailsContext } from '../../core/context';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
 import { Job } from '../../../model/Job';
-import { SortOrder } from '../../../../../model/SortOrder';
-import { JobRunProperty } from '../../../model/JobRunProperty';
+import { JobDetailsContext } from '../../core/context/JobDetailsContext';
 
 class Component {
 
@@ -54,8 +52,11 @@ class Component {
 
     private async initWidget(job: Job): Promise<void> {
         if (job) {
+            this.state.prepared = false;
             this.prepareActions(job);
             await this.prepareTable();
+
+            setTimeout(() => this.state.prepared = true, 50);
         }
     }
 

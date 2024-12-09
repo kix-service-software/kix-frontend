@@ -43,6 +43,7 @@ export class ContactTableContentProvider extends TableContentProvider<Contact> {
             const ticketStatsValue = ro.getValues().find((v) => v[0] === ContactProperty.TICKET_STATS);
             if (ticketStatsValue) {
                 const ticketStats: TicketStats = ticketStatsValue[1];
+                ro.addValue(new TableValue(ContactProperty.NEW_TICKETS_COUNT, ticketStats.NewCount));
                 ro.addValue(new TableValue(ContactProperty.OPEN_TICKETS_COUNT, ticketStats.OpenCount));
                 ro.addValue(new TableValue(ContactProperty.ESCALATED_TICKETS_COUNT, ticketStats.EscalatedCount));
                 ro.addValue(new TableValue(ContactProperty.REMINDER_TICKETS_COUNT, ticketStats.PendingReminderCount));
