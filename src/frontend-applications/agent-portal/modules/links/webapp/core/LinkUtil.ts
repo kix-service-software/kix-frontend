@@ -15,8 +15,6 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { Link } from '../../model/Link';
 import { CreateLinkDescription } from '../../server/api/CreateLinkDescription';
 import { LinkTypeDescription } from '../../model/LinkTypeDescription';
-import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 
 export class LinkUtil {
 

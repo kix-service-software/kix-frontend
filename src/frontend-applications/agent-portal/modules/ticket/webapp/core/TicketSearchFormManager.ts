@@ -214,7 +214,11 @@ export class TicketSearchFormManager extends SearchFormManager {
             TicketProperty.OWNER_ID,
             TicketProperty.RESPONSIBLE_ID,
             TicketProperty.CONTACT_ID,
-            TicketProperty.ORGANISATION_ID
+            TicketProperty.ORGANISATION_ID,
+            TicketProperty.CHANGED,
+            KIXObjectProperty.CHANGE_BY,
+            TicketProperty.CREATED,
+            KIXObjectProperty.CREATE_BY
         ];
 
         if (freeTextProperties.some((p) => p === property)) {

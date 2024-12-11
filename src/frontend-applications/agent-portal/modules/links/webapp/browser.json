@@ -4,6 +4,7 @@
         "require ./components/link-object-dialog",
         "require ./components/linked-objects-widget",
         "require ./components/edit-linked-objects-dialog",
+        "require ./components/object-links-modal",
         "require ./core"
     ]
 }

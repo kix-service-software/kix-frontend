@@ -8,14 +8,25 @@
  */
 
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
 import { Contact } from '../../../model/Contact';
+import { NewContactDialogContext } from '../context/NewContactDialogContext';
 
 export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {
 
     public constructor(protected objectValueMapper: ObjectFormValueMapper) {
         super(objectValueMapper, KIXObjectType.CONTACT);
+    }
+
+    public async commitObject(): Promise<string | number> {
+        const id = await super.commitObject();
+        const context = ContextService.getInstance().getActiveContext<NewContactDialogContext>();
+        if (context) {
+            context.contactId = Number(id);
+        }
+        return id;
     }
 
     public async prepareObject(

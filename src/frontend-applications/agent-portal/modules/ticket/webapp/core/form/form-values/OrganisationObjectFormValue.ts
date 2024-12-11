@@ -106,7 +106,12 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
         let organisationId: number | string = null;
 
         const context = ContextService.getInstance().getActiveContext();
-        const initialOrgId = context.getAdditionalInformation(TicketProperty.ORGANISATION_ID);
+        let initialOrgId = context.getAdditionalInformation(TicketProperty.ORGANISATION_ID);
+        if (!initialOrgId) {
+            const contact = context.getAdditionalInformation(KIXObjectType.CONTACT);
+            initialOrgId = contact?.PrimaryOrganisationID;
+        }
+
         if (init && initialOrgId) {
             organisationId = initialOrgId;
         } else {
