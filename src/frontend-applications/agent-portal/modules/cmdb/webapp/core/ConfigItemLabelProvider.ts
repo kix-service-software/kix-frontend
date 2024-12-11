@@ -324,24 +324,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
                 const labels = [];
                 for (const ci of configItems) {
-                    const ciIcon = new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
-                    const incidentIcons = await LabelService.getInstance().getIcons(
-                        ci, ConfigItemProperty.CUR_INCI_STATE_ID
-                    );
-                    const deploymentIcon = await LabelService.getInstance().getIcons(
-                        ci, ConfigItemProperty.CUR_DEPL_STATE_ID
-                    );
-                    const label = new Label(ci, ci.ConfigItemID, ciIcon, ci.Name, null, ci.Name, true, [
-                        ...incidentIcons, ...deploymentIcon
-                    ],
-                        {
-                            title: 'Translatable#Asset',
-                            content: 'config-item-info',
-                            instanceId: 'config-item-info',
-                            data: { configItem: ci },
-                            large: true
-                        }
-                    );
+                    const label = await this.getLabelByObject(ci);
                     labels.push(label);
                 }
 
@@ -349,6 +332,28 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             }
         }
         return null;
+    }
+
+    public async getLabelByObject(ci: ConfigItem): Promise<Label> {
+        const ciIcon = new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
+        const incidentIcons = await LabelService.getInstance().getIcons(
+            ci, ConfigItemProperty.CUR_INCI_STATE_ID
+        );
+        const deploymentIcon = await LabelService.getInstance().getIcons(
+            ci, ConfigItemProperty.CUR_DEPL_STATE_ID
+        );
+        const label = new Label(ci, ci.ConfigItemID, ciIcon, ci.Name, null, ci.Name, true, [
+            ...incidentIcons, ...deploymentIcon
+        ],
+            {
+                title: 'Translatable#Asset',
+                content: 'config-item-info',
+                instanceId: 'config-item-info',
+                data: { configItem: ci },
+                large: true
+            }
+        );
+        return label;
     }
 
     private async getAttributePropertyText(
