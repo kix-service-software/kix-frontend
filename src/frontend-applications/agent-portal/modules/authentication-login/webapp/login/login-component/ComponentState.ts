@@ -18,6 +18,7 @@ export class ComponentState {
         public loginProcess: boolean = false,
         public valid: boolean = false,
         public error: boolean = false,
+        public errorMessage: string = null,
         public doLogin: boolean = false,
         public logout: boolean = false,
         public unsupportedBrowser: boolean = false,

@@ -8,11 +8,10 @@
  */
 
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
-import { SysConfigService } from '../../../sysconfig/webapp/core';
 import { CKEditor5Configuration } from '../../model/CKEditor5Configuration';
 import { CKEditor5Classes } from './CKEditor5Classes';
 import { CKEditorService } from './CKEditorService';
-import ResizePlugin from './ResizePlugin';
+import { ResizePlugin } from './ResizePlugin';
 import { TextmodulePlugin } from './TextmodulePlugin';
 
 export class CKEditor5 {
@@ -22,6 +21,8 @@ export class CKEditor5 {
     private changeTimeout: any;
     private handleOnInputChange: boolean = false;
     private updateTimeout: any;
+
+    private heightSet: boolean = false;
 
     private readOnly: boolean = false;
 
@@ -76,6 +77,7 @@ export class CKEditor5 {
                         // this.editor.setData(contentString);
                         this.handleOnInputChange = false;
                     }
+                    this.adjustEditorHeight();
                 }
 
                 if (typeof input.readOnly !== 'undefined' && input.readOnly !== null) {
@@ -98,6 +100,29 @@ export class CKEditor5 {
             }
             this.editor.enableReadOnlyMode(this.elementId);
         }
+    }
+
+    private async adjustEditorHeight(): Promise<void> {
+        // adjust height only after initial insert, so check if already done
+        if (!this.heightSet) {
+            setTimeout(() => {
+                const editorContentElement = this.getElementByXpath(
+                    `//div[@id="${this.elementId}"]/following-sibling::div//div[contains(@class, "ck ck-content")]`
+                );
+                if (editorContentElement) {
+                    const currentStyle = editorContentElement.getAttribute('style');
+                    editorContentElement.setAttribute(
+                        'style', `${currentStyle ? currentStyle : ''} height: ${editorContentElement.scrollHeight + 2}px;`
+                    );
+                }
+            }, 100);
+        }
+    }
+
+    private getElementByXpath(path: string): HTMLElement {
+        return document.evaluate(
+            path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null
+        ).singleNodeValue as HTMLElement;
     }
 
     public async create(): Promise<void> {

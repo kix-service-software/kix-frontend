@@ -179,16 +179,16 @@ export class Article extends KIXObject {
             }
 
             if (this.Attachments) {
-                let attachmentIndex = article.Attachments.findIndex(
-                    (a) => a.Disposition === 'inline' && a.Filename === 'file-2'
-                );
-
-                if (attachmentIndex === -1) {
-                    const attachmentNames = ['file-1', 'file-1.html'];
-                    attachmentIndex = article.Attachments.findIndex(
-                        (a) => a.Disposition === 'inline' && attachmentNames.some((an) => an === a.Filename)
-                    );
-                }
+                const fileNames = ['file-1.html', 'file-2', 'file-1'];
+                let attachmentIndex = -1;
+                fileNames.forEach((filename) => {
+                    if (attachmentIndex === -1) {
+                        attachmentIndex = article.Attachments.findIndex(
+                            (a) => a.Disposition === 'inline' && a.ContentType?.startsWith('text/html') &&
+                                a.Filename === filename
+                        );
+                    }
+                });
 
                 if (attachmentIndex > -1) {
                     this.bodyAttachment = article.Attachments[attachmentIndex];
@@ -259,12 +259,12 @@ export class Article extends KIXObject {
     }
 
     public getAttachments(showAll?: boolean): Attachment[] {
-        let attachments = (this?.Attachments || []);
+        let attachments = this.getRegularAttachments();
 
-        attachments = attachments.filter(
-            (a) => !a.Filename.match(/^file-(1|2)$/) &&
-                (showAll || a.Disposition !== 'inline')
-        );
+        if (showAll) {
+            const inlineAttachments = this.getInlineAttachments();
+            attachments = [...attachments, ...inlineAttachments];
+        }
 
         attachments.sort((a, b) => {
             if (!showAll) {
@@ -283,9 +283,18 @@ export class Article extends KIXObject {
         return attachments;
     }
 
+    public getRegularAttachments(): Attachment[] {
+        let attachments = (this?.Attachments || []);
+        attachments = attachments.filter((a) => a.Disposition !== 'inline');
+        return attachments;
+    }
+
     public getInlineAttachments(): Attachment[] {
         let attachments = (this?.Attachments || []);
-        attachments = attachments.filter((a) => !a.Filename.match(/^file-(1|2)$/) && a.Disposition === 'inline');
+        attachments = attachments.filter((a) =>
+            a.Disposition === 'inline' &&
+            (!a.ContentType?.startsWith('text/html') || !a.Filename.match(/^file-(1|2|1\.html)$/))
+        );
         return attachments;
     }
 

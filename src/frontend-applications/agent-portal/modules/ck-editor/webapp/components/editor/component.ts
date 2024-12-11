@@ -38,7 +38,9 @@ class EditorComponent {
         this.editor.addChangeListener((value) => (this as any).emit('valueChanged', value));
         this.editor.addFocusListener((value) => (this as any).emit('focusLost', value));
         await this.editor.create();
-        this.editor.update(this.input);
+        if (this.input) {
+            this.editor.update(this.input);
+        }
 
         if (this.input.style) {
             BrowserUtil.applyStyle(this.state.id, this.input.style);
@@ -59,7 +61,7 @@ class EditorComponent {
     }
 
     public editorClicked(event: any): void {
-        if (this.input.readOnly) {
+        if (this.input.readOnly && event?.srcElement?.tagName !== 'A') {
             event.stopPropagation();
             event.preventDefault();
         }

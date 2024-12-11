@@ -82,16 +82,16 @@ export class UserAccessFormValue extends SelectObjectFormValue<string[]> {
             value.push(UserProperty.IS_CUSTOMER);
         }
         this.value = value;
-
-        this.addPropertyBinding(FormValueProperty.VALUE, async (value: UserAccessFormValue) => {
-            await this.setUserFields();
-            await this.setRoles();
-        });
     }
 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
         await this.setUserFields();
+
+        this.addPropertyBinding(FormValueProperty.VALUE, async (value: UserAccessFormValue) => {
+            await this.setUserFields();
+            await this.setRoles();
+        });
     }
 
     private async setUserFields(): Promise<void> {

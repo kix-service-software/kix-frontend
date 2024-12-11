@@ -24,13 +24,7 @@ import { ContactUserFormValue } from './form-values/ContactUserFormValue';
 export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact> {
 
     public async mapObjectValues(contact: Contact): Promise<void> {
-        for (const property in contact) {
-            if (!Object.prototype.hasOwnProperty.call(contact, property)) {
-                continue;
-            }
-
-            await this.mapContactAttribute(property, contact);
-        }
+        await this.mapContactAttributes(contact);
 
         const iconFormValue = new IconFormValue('ICON', contact, this, null);
         await iconFormValue.setFormValue(new ObjectIcon(null, KIXObjectType.CONTACT, contact?.ID));
@@ -42,47 +36,44 @@ export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact>
         await super.mapObjectValues(contact);
     }
 
-    protected async mapContactAttribute(property: string, contact: Contact): Promise<void> {
-        switch (property) {
-            case ContactProperty.ORGANISATION_IDS:
-                const organisationsFormValue = new SelectObjectFormValue(property, contact, this, null);
-                organisationsFormValue.objectType = KIXObjectType.ORGANISATION;
-                organisationsFormValue.isAutoComplete = true;
-                organisationsFormValue.maxSelectCount = -1;
-                this.formValues.push(organisationsFormValue);
-                break;
-            case ContactProperty.PRIMARY_ORGANISATION_ID:
-                const primaryOrganisationFormValue = new PrimaryOrganisationFormValue(property, contact, this, null);
-                primaryOrganisationFormValue.objectType = KIXObjectType.ORGANISATION;
-                this.formValues.push(primaryOrganisationFormValue);
-                break;
-            case ContactProperty.EMAIL:
-                const mailFormValue = new ContactEmailFormValue(property, contact, this, null);
-                this.formValues.push(mailFormValue);
-                break;
-            case ContactProperty.COMMENT:
-                const commentFormValue = new TextAreaFormValue(property, contact, this, null);
-                this.formValues.push(commentFormValue);
-                break;
-            case KIXObjectProperty.VALID_ID:
-                const validFormValue = new SelectObjectFormValue(property, contact, this, null);
-                validFormValue.objectType = KIXObjectType.VALID_OBJECT;
-                this.formValues.push(validFormValue);
-                break;
-            case ContactProperty.FIRSTNAME:
-            case ContactProperty.LASTNAME:
-            case ContactProperty.TITLE:
-            case ContactProperty.CITY:
-            case ContactProperty.STREET:
-            case ContactProperty.COUNTRY:
-            case ContactProperty.FAX:
-            case ContactProperty.MOBILE:
-            case ContactProperty.PHONE:
-            case ContactProperty.ZIP:
-                const formValue = new ObjectFormValue(property, contact, this, null);
-                this.formValues.push(formValue);
-            default:
-        }
+    protected async mapContactAttributes(contact: Contact): Promise<void> {
+        const organisationsFormValue = new SelectObjectFormValue(
+            ContactProperty.ORGANISATION_IDS, contact, this, null
+        );
+        organisationsFormValue.objectType = KIXObjectType.ORGANISATION;
+        organisationsFormValue.isAutoComplete = true;
+        organisationsFormValue.maxSelectCount = -1;
+        this.formValues.push(organisationsFormValue);
+
+        const primaryOrganisationFormValue = new PrimaryOrganisationFormValue(
+            ContactProperty.PRIMARY_ORGANISATION_ID, contact, this, null
+        );
+        primaryOrganisationFormValue.objectType = KIXObjectType.ORGANISATION;
+        this.formValues.push(primaryOrganisationFormValue);
+
+        const mailFormValue = new ContactEmailFormValue(ContactProperty.EMAIL, contact, this, null);
+        this.formValues.push(mailFormValue);
+
+        const commentFormValue = new TextAreaFormValue(ContactProperty.COMMENT, contact, this, null);
+        this.formValues.push(commentFormValue);
+
+        const validFormValue = new SelectObjectFormValue(
+            KIXObjectProperty.VALID_ID, contact, this, null
+        );
+        validFormValue.objectType = KIXObjectType.VALID_OBJECT;
+        this.formValues.push(validFormValue);
+
+        this.formValues.push(new ObjectFormValue(ContactProperty.FIRSTNAME, contact, this, null));
+        this.formValues.push(new ObjectFormValue(ContactProperty.LASTNAME, contact, this, null));
+        this.formValues.push(new ObjectFormValue(ContactProperty.TITLE, contact, this, null));
+        this.formValues.push(new ObjectFormValue(ContactProperty.CITY, contact, this, null));
+        this.formValues.push(new ObjectFormValue(ContactProperty.STREET, contact, this, null));
+        this.formValues.push(new ObjectFormValue(ContactProperty.COUNTRY, contact, this, null));
+        this.formValues.push(new ObjectFormValue(ContactProperty.FAX, contact, this, null));
+        this.formValues.push(new ObjectFormValue(ContactProperty.MOBILE, contact, this, null));
+        this.formValues.push(new ObjectFormValue(ContactProperty.PHONE, contact, this, null));
+        this.formValues.push(new ObjectFormValue(ContactProperty.ZIP, contact, this, null));
+
     }
 
 }

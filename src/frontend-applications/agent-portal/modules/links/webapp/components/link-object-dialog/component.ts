@@ -23,7 +23,6 @@ import { EditLinkedObjectsDialogContext, LinkService } from '../../core';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { SearchService } from '../../../../search/webapp/core';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
@@ -34,6 +33,8 @@ import { TableEvent } from '../../../../table/model/TableEvent';
 import { TableEventData } from '../../../../table/model/TableEventData';
 import { ValueState } from '../../../../table/model/ValueState';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
+import { SearchService } from '../../../../search/webapp/core';
+import { IdService } from '../../../../../model/IdService';
 
 class LinkDialogComponent {
 
@@ -154,7 +155,8 @@ class LinkDialogComponent {
                 formInstance, excludeObjects, null, true
             );
 
-            await context.loadLinkedObjects(formInstance.getObjectType(), loadingOptions);
+            context.setAdditionalInformation('LinkObjectSearchLoadingOptions', loadingOptions);
+            await context.searchObjects(formInstance.getObjectType(), loadingOptions);
 
             await this.prepareResultTable();
             this.setSubmitState();
@@ -176,7 +178,7 @@ class LinkDialogComponent {
             null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await TableFactoryService.getInstance().createTable(
-            `link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
+            `${IdService.generateDateBasedId()}-link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
             EditLinkedObjectsDialogContext.CONTEXT_ID, true, null, true
         );
         await table.addAdditionalColumns([
@@ -204,6 +206,7 @@ class LinkDialogComponent {
         EventService.getInstance().subscribe(TableEvent.REFRESH, this.tableSubscriber);
         EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
 
+        table.resetFilter();
         setTimeout(() => this.state.table = table, 50);
     }
 

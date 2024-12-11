@@ -192,6 +192,7 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
         const formValue = new ObjectFormValue('Value', preference, objectValueMapper, this);
         formValue.label = 'Translatable#User Token';
         formValue.inputComponentId = 'user-token-form-input';
+        formValue.readonly = true;
         this.formValues.push(formValue);
     }
 

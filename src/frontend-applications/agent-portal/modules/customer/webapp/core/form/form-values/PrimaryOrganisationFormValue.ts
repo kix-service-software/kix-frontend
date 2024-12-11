@@ -14,7 +14,7 @@ import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectF
 import { Contact } from '../../../../model/Contact';
 import { ContactProperty } from '../../../../model/ContactProperty';
 
-export class PrimaryOrganisationFormValue extends SelectObjectFormValue {
+export class PrimaryOrganisationFormValue extends SelectObjectFormValue<number> {
 
     private objectBindingId: string;
 
@@ -39,9 +39,12 @@ export class PrimaryOrganisationFormValue extends SelectObjectFormValue {
 
         this.objectBindingId = this.objectValueMapper?.object?.addBinding(
             ContactProperty.ORGANISATION_IDS,
-            (value: number[]) => {
+            async (value: number[]) => {
                 this.possibleValues = this.object?.OrganisationIDs;
-                this.loadSelectedValues();
+                if (!this.value && this.possibleValues?.length) {
+                    await this.setFormValue(this.possibleValues[0], true);
+                }
+                await this.loadSelectedValues();
             }
         );
     }

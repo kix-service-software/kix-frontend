@@ -43,61 +43,60 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </div>
                     <h1>${component.getString("Welcome to KIX")}</h1>
                 </div>
-                <if(!state.showPWResetDialog)>
-                    <if(
-                        state.error ||
-                        state.logout ||
-                        state.unsupportedBrowser ||
-                        state.pwResetState
-                    )>
-                        <div class="dialog-message-area">
-                            <if(state.unsupportedBrowser)>
-                                <div class="message message-hint">
-                                    ${component.getString(
-                                        "Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox.",
-                                    )}
-                                </div>
-                            </if>
-                            <if(state.error)>
-                                <div class="message message-error">
-                                    <span class="kix-icon-warnsign"/>
-                                    ${component.getString("Login failed")}
-                                </div>
-                            </if>
-                            <else-if(state.logout)>
-                                <div class="message message-success">
-                                    <span class="kix-icon-icircle"/>
-                                    ${component.getString(
-                                        "You have successfully logged out.",
-                                    )}
-                                </div>
-                            </else-if>
-                            <else-if(state.pwResetState === "requested")>
-                                <div class="message message-success">
-                                    <span class="kix-icon-icircle"/>
-                                    ${component.getString(
-                                        "Password reset is requested.",
-                                    )}
-                                </div>
-                            </else-if>
-                            <else-if(state.pwResetState === "confirmed")>
+                <if(
+                    state.error ||
+                    state.logout ||
+                    state.unsupportedBrowser ||
+                    state.pwResetState
+                )>
+                    <div class="dialog-message-area">
+                        <if(state.unsupportedBrowser)>
+                            <div class="message message-hint">
+                                ${component.getString(
+                                    "Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox.",
+                                )}
+                            </div>
+                        </if>
+                        <if(state.error)>
+                            <div class="message message-error">
+                                <span class="kix-icon-warnsign"/>
+                                ${state.errorMessage}
+                            </div>
+                        </if>
+                        <else-if(state.logout)>
                             <div class="message message-success">
                                 <span class="kix-icon-icircle"/>
                                 ${component.getString(
-                                "Requested password reset is confirmed.",
+                                    "You have successfully logged out.",
                                 )}
                             </div>
-                            </else-if>
-                            <else-if(state.pwResetState === "error")>
+                        </else-if>
+                        <else-if(state.pwResetState === "requested")>
+                            <div class="message message-success">
+                                <span class="kix-icon-icircle"/>
+                                ${component.getString(
+                                    "Password reset is requested.",
+                                )}
+                            </div>
+                        </else-if>
+                        <else-if(state.pwResetState === "confirmed")>
+                            <div class="message message-success">
+                                <span class="kix-icon-icircle"/>
+                                ${component.getString(
+                                    "Requested password reset is confirmed.",
+                                )}
+                            </div>
+                        </else-if>
+                        <else-if(state.pwResetState === "error")>
                             <div class="message message-error">
                                 <span class="kix-icon-warnsign"/>
-                                ${component.getString(
-                                "Password reset failed.",
-                                )}
+                                ${component.getString("Password reset failed.")}
                             </div>
-                            </else-if>
-                        </div>
-                    </if>
+                        </else-if>
+                    </div>
+                </if>
+                <if(!state.showPWResetDialog)>
+
                     <if(state.loginProcess)>
                         <div class="loading-container">
                             <div class="login-loading">
@@ -244,7 +243,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <else>
                         <div on-keydown("keyDown") class="dialog-content">
                             <label>
-                                <span>${component.getString("Login Name")}:</span>
+                                <span>
+                                    ${component.getString("Login Name")}:
+                                </span>
                                 <input
                                     type="text"
                                     name="username"

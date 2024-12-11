@@ -17,6 +17,7 @@ import { CheckListItem } from '../../../dynamic-fields/model/CheckListItem';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { KIXObjectFormService } from './KIXObjectFormService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
 
 export class ExtendedDynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
@@ -60,4 +61,7 @@ export class ExtendedDynamicFieldFormUtil implements IDynamicFieldFormUtil {
         return false;
     }
 
+    public getFilterByConfig(dynamicField: DynamicField): FilterCriteria[] {
+        return;
+    }
 }

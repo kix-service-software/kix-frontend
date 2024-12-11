@@ -152,7 +152,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
             ...mailNodes.filter((mn) => !nodes.some((n) => n.id === mn.id)),
             ...unknownMailAddressNodes.filter(
                 (umn) =>
-                    !nodes.some((n) => n.id?.toString().toLowerCase() === umn.id?.toString().toLowerCase())
+                    !nodes.some((n) => n.id.toString().toLowerCase() === umn.id.toLowerCase())
                     && (
                         !mailContacts
                         || !mailContacts.some((mc) =>
@@ -216,6 +216,8 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
         if (!isEdit && this.property === ArticleProperty.TO) {
             this.enabled = true;
         }
+
+        this.freeText = true;
     }
 
     protected async handlePlaceholders(value: any): Promise<any> {
