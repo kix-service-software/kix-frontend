@@ -24,7 +24,8 @@
         },
         "lasso-clean-css"
     ],
-    "outputDir": "dist/frontend-applications/agent-portal/static",
+    "outputDir": "dist/frontend-applications/agent-portal/static/applications",
+    "urlPrefix": "/static/applications",
     "bundleReadTimeout": 360000,
     "cacheProfile": "production"
 }
