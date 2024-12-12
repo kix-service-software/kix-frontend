@@ -61,8 +61,9 @@ export class Server implements IServer {
         this.application.use(express.urlencoded({ limit: '50mb', extended: true }));
         this.application.use(cookieParser());
         this.application.use(markoExpress());
-        this.application.use(serveStatic());
-        this.application.use(express.static('../static/'));
+
+        const path = require('path');
+        this.application.use('/static', express.static(path.join(__dirname, '../static/')));
 
         const router = new ServerRouter(this.application);
         await router.initializeRoutes();
