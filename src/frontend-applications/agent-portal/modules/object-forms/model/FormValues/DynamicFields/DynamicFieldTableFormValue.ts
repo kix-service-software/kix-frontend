@@ -14,7 +14,6 @@ import { TableRemoveFormValueAction } from '../actions/TableRemoveFormValueActio
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { FormValueAction } from '../FormValueAction';
 import { ObjectFormValue } from '../ObjectFormValue';
-import { TableApplyAction } from '../actions/TableApplyAction';
 
 export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>> {
 
@@ -26,6 +25,8 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
     public translatableColumn: boolean;
 
     public tableValue: Array<string[]>;
+
+    private setValueTimeout: any;
 
     public constructor(
         public property: string,
@@ -42,7 +43,7 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
     public getValueActionClasses(): Array<new (
         formValue: ObjectFormValue, objectValueMapper: ObjectFormValueMapper
     ) => FormValueAction> {
-        return [TableApplyAction, TableAddFormValueAction, TableRemoveFormValueAction];
+        return [TableAddFormValueAction, TableRemoveFormValueAction];
     }
 
     public findFormValue(property: string): ObjectFormValue {
@@ -114,10 +115,12 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
 
     public setTableValue(value: Array<string[]>): void {
         this.tableValue = value;
-    }
 
-    public apply(): void {
-        this.setFormValue(this.tableValue);
+        if (this.setValueTimeout) {
+            clearTimeout(this.setValueTimeout);
+        }
+
+        this.setValueTimeout = setTimeout(() => this.setFormValue(this.tableValue), 1000);
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
