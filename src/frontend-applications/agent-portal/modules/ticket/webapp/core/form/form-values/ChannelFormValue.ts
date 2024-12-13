@@ -293,7 +293,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                     formValue.required = true;
                 }
 
-                if (formValue.property === ArticleProperty.BODY && !formValue.defaultValue) {
+                if (
+                    formValue.property === ArticleProperty.BODY && !formValue.defaultValue
+                    && this.article?.TicketID && this.article?.ArticleID
+                ) {
 
                     const inlineAttachments = (this.article.Attachments || []).filter((a) => a.Disposition === 'inline');
                     const attachments = await TicketService.getInstance().loadArticleAttachments(
