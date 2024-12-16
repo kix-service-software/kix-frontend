@@ -40,7 +40,7 @@ export class NotificationLabelProvider extends LabelProvider {
     public async getObjectText(
         notification: Notification, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
-        return notification.Name;
+        return await TranslationService.translate(notification.Name);
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
