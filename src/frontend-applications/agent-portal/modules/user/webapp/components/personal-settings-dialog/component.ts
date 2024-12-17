@@ -108,6 +108,7 @@ class Component {
                 .then(async () => {
                     TranslationService.getInstance().resetTranslations();
                     EventService.getInstance().publish('USER_LANGUAGE_CHANGED');
+                    BrowserUtil.handleBeforeUnload();
                     setTimeout(async () => {
                         BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
                         await ContextService.getInstance().toggleActiveContext(null, null, true);

@@ -26,6 +26,8 @@ import { PlaceholderService } from './PlaceholderService';
 import { InlineContent } from './InlineContent';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { IDownloadableFile } from '../../../../model/IDownloadableFile';
+import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
+import { WindowListener } from './WindowListener';
 
 export class BrowserUtil {
 
@@ -466,6 +468,17 @@ export class BrowserUtil {
         const styleElement = document.getElementById(id);
         if (styleElement) {
             styleElement.remove();
+        }
+    }
+
+    public static async handleBeforeUnload(
+        preferenceName: string = PersonalSettingsProperty.DONT_ASK_ON_EXIT
+    ): Promise<void> {
+        const preventExitPopupPref = await AgentService.getInstance().getUserPreference(preferenceName);
+        if (Boolean(Number(preventExitPopupPref?.Value))) {
+            WindowListener.getInstance().removeBrowserListener();
+        } else {
+            WindowListener.getInstance().addBrowserListener();
         }
     }
 
