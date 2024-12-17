@@ -65,12 +65,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             for (const k in TicketProperty) {
                 if (TicketProperty[k]) {
                     const property = TicketProperty[k];
-                    if (
-                        property === TicketProperty.TICKET_ID ||
-                        property === TicketProperty.PENDING_TIME
-                    ) {
+                    if (property === TicketProperty.TICKET_ID) {
                         continue;
                     }
+
                     const hasValue = formValues.some((fv) => fv.property === property && fv.enabled);
                     if (!hasValue) {
                         delete newObject[property];
