@@ -9,10 +9,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <widget instanceId=state.instanceId title="Translatable#Graph Options">
     <@content>
-        <div.graph-explorer-container>
-            <div.graph-options>
+        <div class="graph-explorer-container">
+            <div class="graph-options">
                 <for|option| of=state.options>
-                    <h3><translation-string pattern=option.displayValue/></h3>
+                    <span>
+                        <translation-string pattern=option.displayValue/>
+                    </span>
                     <form-list
                         treeId=option.key
                         freeText=option.freeText
@@ -21,14 +23,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </for>
             </div>
 
-            <div.dialog-control>
-                <div.dialog-button-container>
-                    <button.kix-button.submit-button
+            <div class="dialog-control">
+                <div class="dialog-button-container">
+                    <button
                         type="button"
                         on-click("apply")
                         title=(state.translations["Translatable#Apply"])
+                        class="kix-button submit-button"
                     >
-                        <span.kix-icon-check/>
+                        <span class="kix-icon-check"/>
                         <translation-string pattern="Translatable#Apply"/>
                     </button>
                 </div>
