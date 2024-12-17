@@ -144,6 +144,13 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                 'checkbox-input'
             ),
             new PersonalSetting(
+                'Translatable#Notifications',
+                PersonalSettingsProperty.DONT_ASK_ON_EXIT,
+                'Translatable#Exit KIX without asking',
+                'Translatable#Helptext_PersonalSettings_Dont_Ask_On_Exit',
+                'checkbox-input'
+            ),
+            new PersonalSetting(
                 'Translatable#User Token',
                 PersonalSettingsProperty.USER_TOKEN,
                 'Translatable#User Token',

@@ -12,7 +12,6 @@ import { RoutingService } from './RoutingService';
 import { Context } from '../../../../model/Context';
 import { EventService } from './EventService';
 import { ContextUIEvent } from './ContextUIEvent';
-import { WindowListener } from './WindowListener';
 
 export class ContextHistory {
 
@@ -32,8 +31,6 @@ export class ContextHistory {
             event.preventDefault();
             this.navigateBack(event);
         });
-
-        WindowListener.getInstance();
     }
 
     private navigateBack(event: any): void {
