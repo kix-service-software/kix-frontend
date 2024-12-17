@@ -360,7 +360,7 @@ export class KIXObjectSocketClient extends SocketClient {
                 if (error.requestId === requestObject.requestId) {
                     window.clearTimeout(timeout);
                     const errorMessage = `Socket Error: Event - ${event}, Object - ${requestObject.objectType}`;
-                    if (silent) {
+                    if (!silent) {
                         PortalNotificationService.getInstance().publishNotifications([
                             new PortalNotification(
                                 IdService.generateDateBasedId('socket-error'), 'error',
