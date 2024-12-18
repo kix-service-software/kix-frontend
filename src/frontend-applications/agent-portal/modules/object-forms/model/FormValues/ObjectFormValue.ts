@@ -12,6 +12,8 @@ import { FormFieldConfiguration } from '../../../../model/configuration/FormFiel
 import { IdService } from '../../../../model/IdService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
@@ -246,18 +248,22 @@ export class ObjectFormValue<T = any> {
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
 
-        const defaultValue = field.defaultValue?.value;
-        let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null && defaultValue !== '');
-        if (Array.isArray(defaultValue)) {
-            hasDefaultValue = defaultValue.length > 0;
-        }
+        const context = ContextService.getInstance().getActiveContext();
+        const isRestoredContext = context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
+        if (!isRestoredContext) {
+            const defaultValue = field.defaultValue?.value;
+            let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null && defaultValue !== '');
+            if (Array.isArray(defaultValue)) {
+                hasDefaultValue = defaultValue.length > 0;
+            }
 
-        if (field.empty) {
-            this.setFormValue(null, true);
-        } else if (hasDefaultValue) {
-            const value = await this.handlePlaceholders(field.defaultValue?.value);
-            this.defaultValue = value;
-            this.setFormValue(value, true);
+            if (field.empty) {
+                this.setFormValue(null, true);
+            } else if (hasDefaultValue) {
+                const value = await this.handlePlaceholders(field.defaultValue?.value);
+                this.defaultValue = value;
+                this.setFormValue(value, true);
+            }
         }
 
         this.enabled = true;
