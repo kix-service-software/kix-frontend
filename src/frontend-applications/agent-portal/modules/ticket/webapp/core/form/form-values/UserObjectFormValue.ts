@@ -52,6 +52,7 @@ export class UserObjectFormValue extends SelectObjectFormValue {
                 this.objectBindingIds = [
                     this.objectValueMapper.object.addBinding(TicketProperty.QUEUE_ID, () => {
                         this.setLoadingOptions();
+                        this.loadInitialUser();
                         this.updateValue();
                     })
                 ];
