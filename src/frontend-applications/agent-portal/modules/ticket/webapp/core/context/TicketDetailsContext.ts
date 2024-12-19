@@ -136,7 +136,9 @@ export class TicketDetailsContext extends Context {
         return objects;
     }
 
-    public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
+    public async reloadObjectList(
+        objectType: KIXObjectType | string, silent: boolean = false, limit?: number
+    ): Promise<void> {
         if (objectType === KIXObjectType.ARTICLE) {
 
             // just trigger objectListChanged event
@@ -144,7 +146,7 @@ export class TicketDetailsContext extends Context {
                 this.setObjectList(KIXObjectType.ARTICLE, null);
             }
         } else {
-            return super.reloadObjectList(objectType, silent);
+            return super.reloadObjectList(objectType, silent, limit);
         }
     }
 
