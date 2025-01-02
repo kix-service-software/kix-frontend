@@ -342,29 +342,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
     }
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        return criteria.filter((c) => {
-            if (c.property === ConfigItemProperty.CONFIG_ITEM_ID && c.operator === SearchOperator.NOT_EQUALS) {
-                return true;
-            }
-
-            return c.property !== ConfigItemProperty.NUMBER &&
-                c.property !== ConfigItemProperty.NAME &&
-                c.property !== ConfigItemProperty.CLASS_ID &&
-                c.property !== ConfigItemProperty.CLASS &&
-                c.property !== 'InciStateIDs' &&
-                c.property !== 'DeplStateIDs' &&
-                c.property !== ConfigItemProperty.CUR_DEPL_STATE_ID &&
-                c.property !== ConfigItemProperty.CUR_INCI_STATE_ID &&
-                c.property !== 'ClassIDs' &&
-                !c.property.startsWith('Data') &&
-                !c.property.startsWith('CurrentVersion') &&
-                c.property !== ConfigItemProperty.ASSIGNED_CONTACT &&
-                c.property !== ConfigItemProperty.ASSIGNED_ORGANISATION &&
-                c.property !== ConfigItemProperty.PREVIOUS_VERSION_SEARCH &&
-                c.property !== 'ID' &&
-                c.property !== KIXObjectProperty.CHANGE_BY &&
-                c.property !== KIXObjectProperty.CREATE_BY;
-        });
+        // TODO: allow nothing at the moment, maybe filter not needed anymore
+        return [];
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {

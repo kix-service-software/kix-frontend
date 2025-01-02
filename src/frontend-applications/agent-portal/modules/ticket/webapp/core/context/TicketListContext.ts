@@ -17,6 +17,7 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TicketProperty } from '../../../model/TicketProperty';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class TicketListContext extends Context {
 

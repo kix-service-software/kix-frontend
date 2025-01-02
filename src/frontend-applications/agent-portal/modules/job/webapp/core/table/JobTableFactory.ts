@@ -11,18 +11,18 @@ import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { Table } from '../../../../table/model/Table';
-import { JobTableContentProvider } from '.';
 import { JobProperty } from '../../../model/JobProperty';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
-import { JobDetailsContext } from '..';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../model/DataType';
+import { JobDetailsContext } from '../context/JobDetailsContext';
+import { JobTableContentProvider } from './JobTableContentProvider';
 
 export class JobTableFactory extends TableFactory {
 

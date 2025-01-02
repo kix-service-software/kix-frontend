@@ -1,0 +1,6 @@
+{
+    "dependencies": [
+        "require ./core/MacroUIModule",
+        "require ./components/macro-action-details"
+    ]
+}

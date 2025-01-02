@@ -93,7 +93,6 @@ function compileSrc() {
         .pipe(sourcemaps.init())
         .pipe(tsProject());
 
-
     return result.js
         .pipe(sourcemaps.write({
             // Return relative source map root directories per file.
@@ -164,20 +163,26 @@ gulp.task('license-headers', (done) => {
 });
 
 let build = series(
-    cleanUp,
     lint,
     compileSrc,
     parallel(copyPlugins, buildAgentPortalApp)
 );
 
 if (process.env.NODE_ENV === 'development') {
-    build = series(
-        cleanUp,
-        parallel(licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber),
-        lint,
-        compileSrc,
-        parallel(copyPlugins, buildAgentPortalApp)
-    );
+
+    if (process.env.COMPILE_CODE === '1') {
+        build = series(
+            parallel(licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber),
+            lint,
+            compileSrc,
+            parallel(copyPlugins, buildAgentPortalApp)
+        );
+    } else {
+        build = series(
+            parallel(licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber),
+            parallel(copyPlugins, buildAgentPortalApp)
+        );
+    }
 }
 
 exports.default = build;

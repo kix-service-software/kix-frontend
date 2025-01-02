@@ -15,7 +15,7 @@ export class OptionsResponseHeader {
 
     public Allow: RequestMethod[] = [];
 
-    public AllowPermissionValue: CRUD = 0;
+    public AllowPermissionValue: CRUD;
 
     public constructor(headers: any) {
         if (headers[ResponseHeader.ALLOW]) {

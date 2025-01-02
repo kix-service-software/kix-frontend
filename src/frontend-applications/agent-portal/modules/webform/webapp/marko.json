@@ -1,5 +1,6 @@
 {
     "taglibImports": [
-        "../../base-components/marko.json"
+        "../../base-components/marko.json",
+        "../../ck-editor/webapp/marko.json"
     ]
 }

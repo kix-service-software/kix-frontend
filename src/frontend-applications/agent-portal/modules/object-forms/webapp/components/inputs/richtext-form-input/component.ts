@@ -55,18 +55,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await super.onMount();
 
         this.state.noImages = this.formValue?.noImages;
-
         this.state.prepared = true;
-
-        setTimeout(() => {
-            const autocompleteOption = this.formValue?.autocompleteOption;
-            if (autocompleteOption) {
-                const component = (this as any).getComponent(this.state.editorId);
-                if (component) {
-                    component.setAutocompleteConfiguration(autocompleteOption);
-                }
-            }
-        }, 150);
     }
 
     public async onDestroy(): Promise<void> {

@@ -11,7 +11,7 @@
                 "NODE_OPTIONS": "--inspect",
                 "ENABLE_PROFILING": "true"
             },
-            "name": "KIX",
+            "name": "KIX - Start Server",
             "program": "${workspaceFolder}/src/server/index.ts",
             "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node",
             "runtimeArgs": [
@@ -29,7 +29,36 @@
                 "${workspaceFolder}/dist/server/**/*.js"
             ],
             "console": "integratedTerminal",
-            "preLaunchTask": "gulp"
+            "preLaunchTask": "Start Server"
+        },
+        {
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "NODE_ENV": "development",
+                "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+                "LASSO_TIMEOUT": "360000",
+                "SHOW_MODULE_COMPLAINS": "1",
+                "NODE_OPTIONS": "--inspect",
+                "ENABLE_PROFILING": "true"
+            },
+            "name": "KIX Build Application",
+            "program": "${workspaceFolder}/src/server/ApplicationBuilder.ts",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node",
+            "runtimeArgs": [
+                "-x",
+                ".ts",
+                "--presets",
+                "@babel/preset-env,@babel/preset-typescript",
+                "--preserve-symlinks"
+            ],
+            "request": "launch",
+            "sourceMaps": true,
+            "stopOnEntry": false,
+            "type": "node",
+            "outFiles": [
+                "${workspaceFolder}/dist/server/**/*.js"
+            ],
+            "console": "integratedTerminal"
         },
         {
             "args": [],
@@ -41,7 +70,7 @@
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
                 "LASSO_TIMEOUT": "200000"
             },
-            "name": "KIX quick start",
+            "name": "KIX Restart Server",
             "program": "${workspaceFolder}/src/server/index.ts",
             "request": "launch",
             "sourceMaps": true,
@@ -50,7 +79,8 @@
             "outFiles": [
                 "${workspaceFolder}/dist/server/*.js"
             ],
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "preLaunchTask": "gulp"
         },
         {
             "type": "node",

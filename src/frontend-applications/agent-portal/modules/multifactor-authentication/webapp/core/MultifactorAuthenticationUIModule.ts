@@ -12,8 +12,9 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
-import { MFAContactFormService } from './MFAContactFormService';
+import { ObjectFormRegistry } from '../../../object-forms/webapp/core/ObjectFormRegistry';
 import { MFAPersonalSettingsFormService } from './MFAPersonalSettingsFormService';
+import { ExtendedContactFormObjectValueMapper } from './form/ExtendedContactFormObjectValueMapper';
 
 export class UIModule implements IUIModule {
 
@@ -26,19 +27,14 @@ export class UIModule implements IUIModule {
     }
 
     public async registerExtensions(): Promise<void> {
-        const contactFormService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
-            KIXObjectType.CONTACT, ServiceType.FORM
-        );
-        if (contactFormService) {
-            contactFormService.addExtendedKIXObjectFormService(new MFAContactFormService());
-        }
-
         const personalSettingsFormService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
             KIXObjectType.PERSONAL_SETTINGS, ServiceType.FORM
         );
         if (personalSettingsFormService) {
             personalSettingsFormService.addExtendedKIXObjectFormService(new MFAPersonalSettingsFormService());
         }
+
+        ObjectFormRegistry.getInstance().registerObjectValueMapperExtension(ExtendedContactFormObjectValueMapper);
 
     }
 

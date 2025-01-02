@@ -47,13 +47,13 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
         let displayValue = property;
         switch (property) {
             case LinkObjectProperty.LINKED_OBJECT_TYPE:
-                displayValue = 'Translatable#Object';
+                displayValue = 'Translatable#Type';
                 break;
             case LinkObjectProperty.LINKED_OBJECT_DISPLAY_ID:
                 displayValue = 'Translatable#Object Id';
                 break;
             case LinkObjectProperty.TITLE:
-                displayValue = 'Translatable#Label';
+                displayValue = 'Translatable#Label / Name';
                 break;
             case LinkObjectProperty.LINKED_AS: // != KIXObjectProperty.LINKED_AS (l != L)
                 displayValue = 'Translatable#Linked as';

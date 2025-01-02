@@ -7,11 +7,10 @@
  * --
  */
 
-import { AdminModuleCategory } from '../model/AdminModuleCategory';
 import { AdminModule } from '../model/AdminModule';
 
 export interface IAdminModuleExtension {
 
-    getAdminModules(): Array<AdminModuleCategory | AdminModule>;
+    getAdminModules(): Array<AdminModule>;
 
 }

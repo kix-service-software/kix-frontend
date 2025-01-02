@@ -25,6 +25,7 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { TreeHandler, TreeNode, TreeService, TreeUtil } from '../../../base-components/webapp/core/tree';
+import { SearchProperty } from '../../../search/model/SearchProperty';
 import { FormValueBinding } from '../FormValueBinding';
 import { FormValueProperty } from '../FormValueProperty';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
@@ -113,6 +114,14 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         if (this.enabled) {
             await this.loadSelectableValues();
             await this.loadSelectedValues();
+        }
+    }
+
+    public resetSearch(): void {
+        if (this.isAutoComplete) {
+            this.treeHandler?.setTree([]);
+        } else {
+            this.search();
         }
     }
 
@@ -474,7 +483,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.prepareSelectableController = null;
     }
 
-    public async search(searchValue: string): Promise<void> {
+    public async search(searchValue?: string): Promise<void> {
         this.searchValue = searchValue;
         if (this.searchValue) {
             if (this.isAutoComplete && this.autoCompleteConfiguration) {
@@ -491,14 +500,9 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         let objects = [];
         if (this.searchValue?.length >= this.autoCompleteConfiguration.charCount) {
             const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(this.objectType);
-            const filter = service && this.searchValue
-                ? await service.prepareFullTextFilter(this.searchValue)
-                : [];
-
             let loadingOptions = new KIXObjectLoadingOptions();
 
-            loadingOptions.filter = Array.isArray(this.loadingOptions?.filter) ? [...this.loadingOptions.filter] : [];
-            loadingOptions.filter.push(...filter);
+            await this.prepareFilter(loadingOptions, service);
 
             loadingOptions.limit = this.autoCompleteConfiguration?.limit;
             loadingOptions.searchLimit = this.autoCompleteConfiguration?.limit;
@@ -662,24 +666,25 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     public async removeValue(value: string | number): Promise<void> {
         if (value && this.multiselect && Array.isArray(this.value)) {
-            const index = this.value.findIndex((v: string | number) => v.toString() === value.toString());
-            if (index !== -1) {
-                // set current value to trigger binding
-                const newValue = [...this.value];
-                newValue.splice(index, 1);
-                await this.setFormValue(newValue);
-            }
 
-            // remove node from treeHandler
+            // remove node from treeHandler -
+            // has to be done before value set, else removal of last value could be ignored
             const selectedNodes = this.treeHandler.getSelectedNodes();
             const selectNode = selectedNodes?.find((n) => n.id === value);
             if (selectNode) {
                 this.treeHandler?.setSelection([selectNode], false, true, true, true);
             }
 
+            // set current value to trigger binding
+            const index = this.value.findIndex((v: string | number) => v.toString() === value.toString());
+            if (index !== -1) {
+                const newValue = [...this.value];
+                newValue.splice(index, 1);
+                await this.setFormValue(newValue, true);
+            }
         } else {
-            await this.setFormValue(null);
             this.treeHandler?.selectNone();
+            await this.setFormValue(null, true);
         }
     }
 
@@ -719,5 +724,45 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     public async removePossibleValues(values: T[]): Promise<void> {
         await super.removePossibleValues(values);
         await this.loadSelectableValues();
+    }
+
+    private async prepareFilter(
+        loadingOptions: KIXObjectLoadingOptions, service: IKIXObjectService
+    ): Promise<void> {
+        let usedSearchValue = false;
+        loadingOptions.filter = Array.isArray(this.loadingOptions?.filter) ? [...this.loadingOptions.filter] : [];
+
+        if (loadingOptions.filter.length) {
+            filter:
+            for (const criterion of loadingOptions.filter) {
+                if (
+                    typeof criterion.value === 'string'
+                    && criterion.value.match(SearchProperty.SEARCH_VALUE)
+                ) {
+                    usedSearchValue = true;
+                    break filter;
+                }
+                else if (Array.isArray(criterion.value)) {
+                    for (const value of criterion.value) {
+                        if (value === SearchProperty.SEARCH_VALUE) {
+                            usedSearchValue = true;
+                            break filter;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (
+            !loadingOptions.filter.length
+            || !usedSearchValue
+        ) {
+            const filter = service && this.searchValue
+                ? await service.prepareFullTextFilter(this.searchValue)
+                : [];
+            if (filter) {
+                loadingOptions.filter.push(...filter);
+            }
+        }
     }
 }

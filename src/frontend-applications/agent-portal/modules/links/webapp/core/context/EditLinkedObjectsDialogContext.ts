@@ -11,6 +11,8 @@ import { Context } from '../../../../../model/Context';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 
 
@@ -23,17 +25,31 @@ export class EditLinkedObjectsDialogContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType | string = null, reload: boolean = false, changedProperties?: string[]
     ): Promise<O> {
-        return null;
+        let object: O;
+
+        if (objectType === 'LinkObject') {
+            const sourceContext = this.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
+            if (sourceContext?.instanceId) {
+                const contextInstance = ContextService.getInstance().getContext(sourceContext.instanceId);
+                object = await contextInstance?.getObject();
+            }
+        }
+
+        return object;
     }
 
-    public async loadLinkedObjects(
+    public async reloadObjectList(objectType: string, silent?: boolean, limit?: number): Promise<void> {
+        const loadingOptions = this.getAdditionalInformation('LinkObjectSearchLoadingOptions');
+        await this.searchObjects(objectType, loadingOptions, limit);
+    }
+
+    public async searchObjects(
         objectType: string, loadingOptions: KIXObjectLoadingOptions, limit?: number
-    ): Promise<KIXObject[]> {
+    ): Promise<void> {
         if (!this.loadingOptions) {
             this.loadingOptions = new Map();
         }
 
-        let objects;
         if (loadingOptions) {
             this.loadingOptions.set(objectType, loadingOptions);
             let loadingOptionsToUse = KIXObjectLoadingOptions.clone(loadingOptions);
@@ -42,29 +58,14 @@ export class EditLinkedObjectsDialogContext extends Context {
 
             loadingOptionsToUse = await this.prepareContextLoadingOptions(objectType, loadingOptionsToUse);
 
-            objects = await KIXObjectService.loadObjects(
+            const objects = await KIXObjectService.loadObjects(
                 objectType, null, loadingOptionsToUse, null, true,
                 undefined, undefined, this.contextId + objectType
             ).catch(() => []);
 
             this.setObjectList(objectType, objects);
         }
-        return objects;
     }
 
-    public async setSortOrder(
-        objectType: string, property: string, descending: boolean, reload: boolean = true, limit?: number
-    ): Promise<void> {
-        super.setSortOrder(objectType, property, descending, false, limit);
-        if (reload) {
-            await this.loadLinkedObjects(objectType, this.loadingOptions.get(objectType));
-        }
-    }
-
-    public async reloadObjectList(
-        objectType: KIXObjectType | string, silent: boolean = false, limit?: number
-    ): Promise<void> {
-        await this.loadLinkedObjects(objectType, this.loadingOptions.get(objectType), limit);
-    }
 
 }

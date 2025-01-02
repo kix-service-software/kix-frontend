@@ -24,7 +24,6 @@ import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { ContactService } from './ContactService';
 import { ContactSearchAction, ContactCSVExportAction, ContactTableDependingAction } from './actions';
-import { ContactFormService } from './ContactFormService';
 import { ContactLabelProvider } from './ContactLabelProvider';
 import { ContactSearchDefinition } from './ContactSearchDefinition';
 import { ContactDetailsContext } from './context/ContactDetailsContext';
@@ -33,8 +32,9 @@ import { ContactTableFactory } from './table';
 import { FormService } from '../../../base-components/webapp/core/FormService';
 import { ContactFormFieldValueHandler } from './ContactFormFieldValueHandler';
 import { ContactJobFormManager } from './ContactJobFormManager';
-import { JobFormService } from '../../../job/webapp/core';
 import { JobTypes } from '../../../job/model/JobTypes';
+import { JobFormService } from '../../../job/webapp/core/JobFormService';
+import { ContactFormService } from './form/ContactFormService';
 
 export class UIModule implements IUIModule {
 

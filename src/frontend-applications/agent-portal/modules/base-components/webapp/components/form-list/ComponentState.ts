@@ -27,6 +27,7 @@ export class ComponentState extends AbstractComponentState {
         public prepared: boolean = false,
         public loadNodes: () => Promise<TreeNode[]> = null,
         public removeNodes: boolean = false,
+        public removeOnClose: boolean = false,
         public multiselect: boolean = false,
         public actions: FormInputAction[] = [],
     ) {

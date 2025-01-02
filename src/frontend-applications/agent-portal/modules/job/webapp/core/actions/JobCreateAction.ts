@@ -11,7 +11,7 @@ import { AbstractAction } from '../../../../../modules/base-components/webapp/co
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { NewJobDialogContext } from '../context';
+import { NewJobDialogContext } from '../context/NewJobDialogContext';
 
 export class JobCreateAction extends AbstractAction {
 

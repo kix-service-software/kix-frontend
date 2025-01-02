@@ -40,7 +40,7 @@ describe('Rule - Enable / Disable', () => {
                 (fv as any).initialState.set('enabled', false);
             }
 
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should be enabled', () => {
@@ -91,7 +91,7 @@ describe('Rule - Enable / Disable', () => {
                 (fv as any).initialState.set('enabled', true);
             }
 
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should not be enabled', () => {

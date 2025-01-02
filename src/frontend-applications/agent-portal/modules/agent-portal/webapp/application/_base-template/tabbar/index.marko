@@ -7,17 +7,35 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.tabbar>
-    <div.tab-scroll.left
+<div class="tabbar">
+    <if(input.isMobile)>
+        <div
+            on-click("closeAllTabs")
+            class=[
+                "tab-closeall",
+                {
+                    blocked: state.blocked,
+                },
+            ]
+        >
+            <translation-string pattern="Close all open tabs"/>
+            <span class="fa fa-times"/>
+        </div>
+    </if>
+    <div
         on-click("scrollTabs", true)
-        class={
-            blocked: state.blocked
-        }>
-        <span.fa.fa-caret-left/>
+        class=[
+            "tab-scroll left",
+            {
+                blocked: state.blocked,
+            },
+        ]
+    >
+        <span class="fa fa-caret-left"/>
     </div>
-    <div.tab-content key="tabbar-tab-content">
+    <div key="tabbar-tab-content" class="tab-content">
         <for|tab| of=state.contextTabs>
-            <div.tab
+            <div
                 draggable="true"
                 key=tab.contextInstanceId
                 active=tab.active
@@ -41,42 +59,60 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 )
                 data-objectid=tab.objectid
                 data-contextid=(
-                    tab.contextDescriptor
-                        ? tab.contextDescriptor.contextId
-                        : ""
+                    tab.contextDescriptor ? tab.contextDescriptor.contextId : ""
                 )
-                class={
-                    blocked: state.blocked,
-                    drag: state.dragOverInstanceId === tab.contextInstanceId
-                }>
-                <div.tab-icon-container>
+                class=[
+                    "tab",
+                    {
+                        blocked: state.blocked,
+                        drag:
+                            state.dragOverInstanceId === tab.contextInstanceId,
+                    },
+                ]
+            >
+                <div class="tab-icon-container">
                     <if(tab.refresh)>
-                        <span.kix-icon-arrow-refresh on-click('refreshTab', tab)/>
+                        <span
+                            on-click("refreshTab", tab)
+                            class="kix-icon-arrow-refresh"
+                        />
                     </if>
                     <if(tab.pinned)>
-                        <span.fa.fa-thumbtack/>
+                        <span class="fa fa-thumbtack"/>
                     </if>
                     <icon icon=tab.icon/>
                 </div>
-                <span.display-text>${tab.displayText}</span>
+                <span class="display-text">
+                    ${tab.displayText}
+                </span>
                 <if(!state.blocked && component.canClose())>
-                    <span.fa.fa-times on-click("closeTab", tab)/>
+                    <span on-click("closeTab", tab) class="fa fa-times"/>
                 </if>
             </div>
         </for>
     </div>
-    <div.tab-scroll.right
+    <div
         on-click("scrollTabs", false)
-        class={
-            blocked: state.blocked
-        }>
-        <span.fa.fa-caret-right/>
+        class=[
+            "tab-scroll right",
+            {
+                blocked: state.blocked,
+            },
+        ]
+    >
+        <span class="fa fa-caret-right"/>
     </div>
-    <div.tab-closeall
-        on-click("closeAllTabs")
-        class={
-            blocked: state.blocked
-        }>
-        <span.fa.fa-times/>
-    </div>
+    <if(!input.isMobile)>
+        <div
+            on-click("closeAllTabs")
+            class=[
+                "tab-closeall",
+                {
+                    blocked: state.blocked,
+                },
+            ]
+        >
+            <span class="fa fa-times"/>
+        </div>
+    </if>
 </div>

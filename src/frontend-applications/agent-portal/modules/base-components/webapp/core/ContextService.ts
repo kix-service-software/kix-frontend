@@ -276,7 +276,7 @@ export class ContextService {
         let canRemove = true;
         if (this.contextInstances.length === 1) {
             const context = this.getContext(instanceId);
-            canRemove = context.contextId !== this.DEFAULT_FALLBACK_CONTEXT;
+            canRemove = context?.contextId !== this.DEFAULT_FALLBACK_CONTEXT;
         }
         return canRemove;
     }
@@ -374,25 +374,13 @@ export class ContextService {
         contextId: string, objectId?: string | number, urlParams?: URLSearchParams,
         additionalInformation: Array<[string, any]> = [], history: boolean = true
     ): Promise<Context> {
-        const timeout = setTimeout(() => {
-            EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Loading ...' }
-            );
-        }, 150);
-
         const context = await this.getContextInstance(
             contextId, objectId, additionalInformation, urlParams
         );
+
         if (context) {
             await this.setContextByInstanceId(context.instanceId, objectId, history);
         }
-
-        if (typeof window !== 'undefined') {
-            window.clearTimeout(timeout);
-        }
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING,
-            { loading: false, hint: '' }
-        );
 
         return context;
     }
@@ -533,17 +521,20 @@ export class ContextService {
                             await context.getStorageManager()?.loadStoredValues(contextPreference);
                         }
 
+                        let error = false;
                         await context.initContext(urlParams).catch((e) => {
                             console.error(e);
                             this.removeContext(instanceId);
+                            error = true;
                         });
 
-
-                        const index = this.activeContextIndex >= 0
-                            ? this.activeContextIndex
-                            : this.contextInstances.length - 1;
-                        this.contextInstances.splice(index + 1, 0, context);
-                        EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, context);
+                        if (!error) {
+                            const index = this.activeContextIndex >= 0
+                                ? this.activeContextIndex
+                                : this.contextInstances.length - 1;
+                            this.contextInstances.splice(index + 1, 0, context);
+                            EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, context);
+                        }
                     }
                 }
             }

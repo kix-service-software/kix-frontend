@@ -47,6 +47,8 @@ export class ArticleFormValue extends ObjectFormValue<Article[]> {
             ticket.Articles.push(article);
         }
 
+        delete article.From;
+
         this.object = article;
         this.createBindings(property, article);
 

@@ -16,6 +16,7 @@ allure-results
 test-result.tar.gz
 test-results.xml
 logs
+tsconfig.tsbuildinfo
 
 coverage
 .nyc_output

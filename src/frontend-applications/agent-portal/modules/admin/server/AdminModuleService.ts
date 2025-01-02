@@ -7,7 +7,6 @@
  * --
  */
 
-import { AdminModuleCategory } from '../model/AdminModuleCategory';
 import { PluginService } from '../../../../../server/services/PluginService';
 import { IAdminModuleExtension } from './IAdminModuleExtension';
 import { AdminModule } from '../model/AdminModule';
@@ -27,77 +26,70 @@ export class AdminModuleService {
 
     private constructor() { }
 
-    public async getAdminModules(token: string): Promise<Array<AdminModuleCategory | AdminModule>> {
+    public async getAdminModules(token: string): Promise<Array<AdminModule>> {
         const moduleExtensions = await PluginService.getInstance().getExtensions<IAdminModuleExtension>(
             AgentPortalExtensions.ADMIN_MODULE
         );
 
-        const categories: AdminModuleCategory[] = [];
+        let modules: AdminModule[] = [];
 
         for (const m of moduleExtensions) {
-            const moduleCategories = m.getAdminModules();
-            for (const c of moduleCategories) {
-                await this.mergeCategory(categories, c, token);
+            const adminModules = m.getAdminModules();
+            for (const c of adminModules) {
+                await this.mergeModule(modules, c, token);
             }
         }
 
-        return categories;
+        modules = this.sortModules(modules);
+
+        return modules;
     }
 
-    private async mergeCategory(
-        categories: Array<AdminModuleCategory | AdminModule>, module: AdminModuleCategory | AdminModule,
-        token: string
+    private async mergeModule(
+        categories: Array<AdminModule>, adminModule: AdminModule, token: string
     ): Promise<void> {
-        if (module instanceof AdminModuleCategory) {
-            let category = categories.find((c) => c.id === module.id) as AdminModuleCategory;
-            if (!category) {
-                category = JSON.parse(JSON.stringify(module));
-                category.children = [];
-                category.modules = [];
-                categories.push(category);
+        let existingModule = categories.find((c) => c.id === adminModule.id);
+        if (!existingModule) {
+            existingModule = JSON.parse(JSON.stringify(adminModule));
+            existingModule.children = [];
+
+            let allowed = true;
+            if (!existingModule.isCategory) {
+                allowed = await PermissionService.getInstance().checkPermissions(
+                    token, adminModule.permissions, null, null
+                ).catch(() => false);
             }
-
-            if (module.children) {
-                if (!category.children) {
-                    category.children = [];
-                }
-                for (const c of module.children) {
-                    await this.mergeCategory(category.children, c, token);
-                }
-            }
-
-            if (module.modules) {
-                if (!category.modules) {
-                    category.modules = [];
-                }
-
-                for (const m of module.modules) {
-
-                    const allowed = await PermissionService.getInstance().checkPermissions(
-                        token, m.permissions, null, null
-                    ).catch(() => false);
-
-                    if (allowed) {
-                        category.modules.push(m);
-                    }
-                }
-            }
-
-            if (!category.children?.length && !category.modules?.length) {
-                const index = categories.findIndex((c) => c.id === category.id);
-                if (index !== -1) {
-                    categories.splice(index, 1);
-                }
-            }
-        } else {
-            const allowed = await PermissionService.getInstance().checkPermissions(
-                token, module.permissions, null, null
-            ).catch(() => false);
 
             if (allowed) {
-                categories.push(module);
+                categories.push(existingModule);
             }
         }
+
+        if (adminModule.children?.length) {
+            for (const c of adminModule.children) {
+                await this.mergeModule(existingModule.children, c, token);
+            }
+        }
+
+        if (existingModule.isCategory && !existingModule.children?.length) {
+            const index = categories.findIndex((c) => c.id === existingModule.id);
+            if (index !== -1) {
+                categories.splice(index, 1);
+            }
+        }
+    }
+
+    private sortModules(modules: AdminModule[]): AdminModule[] {
+        modules = modules.sort((a, b) => {
+            if (a.isCategory && !b.isCategory) {
+                return -1;
+            } else if (!a.isCategory && b.isCategory) {
+                return 1;
+            }
+
+            return a.name.localeCompare(b.name);
+        });
+        return modules;
     }
 
 }

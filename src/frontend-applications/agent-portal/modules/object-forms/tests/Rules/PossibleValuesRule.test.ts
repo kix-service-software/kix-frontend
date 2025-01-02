@@ -34,7 +34,7 @@ describe('Rule - PossibleValues / Add / Remove', () => {
             const object = new TestFormObject();
 
             await objectFormValueMapper.mapFormValues(object);
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should have possible values', () => {
@@ -83,7 +83,7 @@ describe('Rule - PossibleValues / Add / Remove', () => {
                 fv.possibleValues = [1, 2, 3];
                 (fv as any).initialState.set('possibleValues', [1, 2, 3]);
             }
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('possible values should be added to defined form values', () => {
@@ -133,7 +133,7 @@ describe('Rule - PossibleValues / Add / Remove', () => {
             const object = new TestFormObject();
 
             await objectFormValueMapper.mapFormValues(object);
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('possible values should be added to defined form values', () => {
@@ -181,7 +181,7 @@ describe('Rule - PossibleValues / Add / Remove', () => {
             const object = new TestFormObject();
 
             await objectFormValueMapper.mapFormValues(object);
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('forbidden values should be set in form values', () => {
@@ -229,7 +229,7 @@ describe('Rule - PossibleValues / Add / Remove', () => {
             const object = new TestFormObject();
 
             await objectFormValueMapper.mapFormValues(object);
-            await objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            await objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('forbidden values should be set in form values', () => {
@@ -295,7 +295,7 @@ describe('Rule - PossibleValues / Add / Remove', () => {
                 (value5 as any).initialState.set('possibleValues', [1, 2, 3]);
                 value5.value = [2, 3];
 
-                objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+                objectFormValueMapper.applyWorkflowResult(readonlyRule);
             });
 
             it('should set value to null', () => {

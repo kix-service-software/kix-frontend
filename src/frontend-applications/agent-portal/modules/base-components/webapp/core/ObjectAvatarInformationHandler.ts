@@ -48,8 +48,11 @@ export class ObjectAvatarInformationHandler extends ObjectInformationComponentHa
     ): Promise<void> {
         const displayText = await LabelService.getInstance().getDisplayText(object, property);
 
-        const icons = await LabelService.getInstance().getIcons(object, property);
-        let icon = icons?.length ? icons[0] : null;
+        if (!infoValue.componentData?.icon) {
+            const icons = await LabelService.getInstance().getIcons(object, property);
+            const icon = icons?.length ? icons[0] : null;
+            infoValue.componentData.icon = icon;
+        }
 
         const description = await LabelService.getInstance().getPropertyText(
             property, object.KIXObjectType, undefined, undefined, object
@@ -58,7 +61,7 @@ export class ObjectAvatarInformationHandler extends ObjectInformationComponentHa
         const overlayIcon = await this.getOverlayIcon(property, object);
 
         infoValue.componentData.displayText = displayText;
-        infoValue.componentData.icon = icon;
+
         infoValue.componentData.description = description;
         infoValue.componentData.overlay = overlayIcon;
     }

@@ -101,6 +101,18 @@ export class ClientStorageService {
         return null;
     }
 
+    public static getAllKeys(startsWith?: string): string[] {
+        const keys: string[] = [];
+        Object.keys(window.localStorage).forEach((key) => {
+            if (!startsWith?.length) {
+                keys.push(key);
+            } else if (key.startsWith(startsWith)) {
+                keys.push(key);
+            }
+        });
+        return keys;
+    }
+
     private static clientRequestId: string;
 
     public static getClientRequestId(): string {
