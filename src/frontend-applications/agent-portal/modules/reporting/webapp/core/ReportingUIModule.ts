@@ -35,9 +35,10 @@ import { EditReportDefinitionContext as EditReportDefinitionDialogContext } from
 import { NewReportDialogContext } from './context/NewReportDialogContext';
 import { ReportFormService } from './form/ReportFormService';
 import { JobTypes } from '../../../job/model/JobTypes';
-import { JobFormService } from '../../../job/webapp/core';
-import { CreateReportActionJobFormManager } from './form/CreateReportActionJobFormManager';
 import { ReportingJobFormManager } from './form/ReportingJobFormManager';
+import { JobFormService } from '../../../job/webapp/core/JobFormService';
+import { MacroService } from '../../../macro/webapp/core/MacroService';
+import { CreateReportOptionFieldHandler } from './form/CreateReportOptionFieldHandler';
 
 export class UIModule implements IUIModule {
 
@@ -106,8 +107,7 @@ export class UIModule implements IUIModule {
     }
 
     public async registerExtensions(): Promise<void> {
-        const manager = JobFormService.getInstance().getAllJobFormManager();
-        manager.forEach((m) => m.addExtendedJobFormManager(new CreateReportActionJobFormManager()));
+        MacroService.getInstance().registerOptionFieldHandler(new CreateReportOptionFieldHandler());
     }
 
 }

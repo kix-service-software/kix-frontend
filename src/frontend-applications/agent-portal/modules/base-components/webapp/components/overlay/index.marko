@@ -35,7 +35,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </if>
                     <else>
                         <div>
-                            <translation-string pattern=state.content.getValue()/>
+                            <if(component.isHint())>
+                                <textarea
+                                    key="hint-overlay"
+                                    id="hint-overlay"
+                                    rows=2
+                                    readonly=true
+                                    disabled=true>${state.value}</textarea>
+                            </if>
+                            <else>
+                                ${state.value}
+                            </else>
                         </div>
                     </else>
                     <if(state.hasCloseButton)>

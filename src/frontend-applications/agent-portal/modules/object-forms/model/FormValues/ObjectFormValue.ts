@@ -12,6 +12,8 @@ import { FormFieldConfiguration } from '../../../../model/configuration/FormFiel
 import { IdService } from '../../../../model/IdService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
@@ -50,7 +52,7 @@ export class ObjectFormValue<T = any> {
     public countMin: number = 1;
     public countMax: number = 1;
 
-    public regExList: Array<{ regEx: string, errorMessage: string }>;
+    public regExList: Array<{ regEx: string, errorMessage: string }> = [];
 
     public inputComponentId = 'text-form-input';
 
@@ -59,6 +61,8 @@ export class ObjectFormValue<T = any> {
     public isSortable: boolean = true;
 
     public isSetInBackground: boolean = false;
+
+    public isPassword: boolean = false;
 
     protected initialState: Map<string, any> = new Map();
 
@@ -244,18 +248,22 @@ export class ObjectFormValue<T = any> {
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
 
-        const defaultValue = field.defaultValue?.value;
-        let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null && defaultValue !== '');
-        if (Array.isArray(defaultValue)) {
-            hasDefaultValue = defaultValue.length > 0;
-        }
+        const context = ContextService.getInstance().getActiveContext();
+        const isRestoredContext = context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
+        if (!isRestoredContext) {
+            const defaultValue = field.defaultValue?.value;
+            let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null && defaultValue !== '');
+            if (Array.isArray(defaultValue)) {
+                hasDefaultValue = defaultValue.length > 0;
+            }
 
-        if (field.empty) {
-            this.setFormValue(null, true);
-        } else if (hasDefaultValue) {
-            const value = await this.handlePlaceholders(field.defaultValue?.value);
-            this.defaultValue = value;
-            this.setFormValue(value, true);
+            if (field.empty) {
+                this.setFormValue(null, true);
+            } else if (hasDefaultValue) {
+                const value = await this.handlePlaceholders(field.defaultValue?.value);
+                this.defaultValue = value;
+                this.setFormValue(value, true);
+            }
         }
 
         this.enabled = true;
@@ -276,6 +284,10 @@ export class ObjectFormValue<T = any> {
             }
         }
 
+        if (field?.regEx) {
+            this.regExList.push({ regEx: field.regEx, errorMessage: field.regExErrorMessage });
+        }
+
         if (!this.hint) {
             this.hint = await TranslationService.translate(field.hint);
         }
@@ -283,10 +295,14 @@ export class ObjectFormValue<T = any> {
 
     public async initFormValue(): Promise<void> {
         this.actions = await ObjectFormRegistry.getInstance().getActions(this, this.objectValueMapper);
-        if (!this.value && this.object[this.property]) {
+        if (this.object && !this.value && this.object[this.property]) {
             this.setFormValue(this.object[this.property]);
         }
         return this.prepareLabel();
+    }
+
+    public async postInitFormValue(): Promise<void> {
+        return;
     }
 
     public async prepareLabel(): Promise<void> {
@@ -404,6 +420,7 @@ export class ObjectFormValue<T = any> {
 
     public async setPossibleValues(values: T[]): Promise<void> {
         this.possibleValues = Array.isArray(values) ? values : values ? [values] : [];
+        await this.applyPossibleValues();
     }
 
     public async addPossibleValues(values: T[]): Promise<void> {
@@ -450,7 +467,8 @@ export class ObjectFormValue<T = any> {
         if (Array.isArray(value) && (this.possibleValues || this.forbiddenValues)) {
             const newValue = [];
             for (const v of value) {
-                const isPossible = this.possibleValues?.some((pv) => pv.toString() === v.toString());
+                const possibleValueExists = this.possibleValues?.some((pv) => pv.toString() === v.toString());
+                const isPossible = typeof possibleValueExists === 'undefined' ? true : possibleValueExists;
                 const isAdditional = this.additionalValues?.some((pv) => pv.toString() === v.toString());
                 const isForbidden = this.forbiddenValues?.some((pv) => pv.toString() === v.toString());
                 if ((isPossible || isAdditional) && !isForbidden) {

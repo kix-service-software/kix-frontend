@@ -8,7 +8,6 @@
  */
 
 import { IAdminModuleExtension } from '../admin/server/IAdminModuleExtension';
-import { AdminModuleCategory } from '../admin/model/AdminModuleCategory';
 import { AdminModule } from '../admin/model/AdminModule';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
@@ -17,12 +16,12 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IAdminModuleExtension {
 
-    public getAdminModules(): AdminModuleCategory[] {
+    public getAdminModules(): AdminModule[] {
         return [
-            new AdminModuleCategory(
-                null, 'kix', 'Translatable#KIX', null, [
-                new AdminModuleCategory(
-                    null, 'cmdb', 'Translatable#Assets', null, [],
+            new AdminModule(
+                null, 'kix', 'Translatable#KIX', null, null, null, [], 0, [
+                new AdminModule(
+                    null, 'cmdb', 'Translatable#Assets', null, null, null, [], 0,
                     [
                         new AdminModule(
                             null, 'cmdb-classes', 'Translatable#CI Classes', null,
@@ -31,8 +30,8 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                                 new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE], true)
                             ]
                         )
-                    ])
-            ])
+                    ], true)
+            ], true)
         ];
     }
 

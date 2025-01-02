@@ -46,10 +46,11 @@ export class LinkObjectTableFactory extends TableFactory {
                 LinkObjectProperty.LINKED_OBJECT_TYPE, true, true, true, true, 200, true, true, true
             ),
             new DefaultColumnConfiguration(null, null, null,
-                LinkObjectProperty.LINKED_OBJECT_DISPLAY_ID, true, false, true, true, 200, true, true
+                LinkObjectProperty.LINKED_OBJECT_DISPLAY_ID, true, false, false, false, 200, true, false
             ),
             new DefaultColumnConfiguration(
-                null, null, null, LinkObjectProperty.TITLE, true, false, true, true, 500, true, true),
+                null, null, null, LinkObjectProperty.TITLE, true, false, true, true, 500, true, false
+            ),
             new DefaultColumnConfiguration(null, null, null,
                 LinkObjectProperty.LINKED_AS, true, false, true, true, 140, true, true, true
             ),

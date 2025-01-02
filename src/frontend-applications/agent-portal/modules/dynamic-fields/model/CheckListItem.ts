@@ -13,27 +13,27 @@ import { ChecklistState } from './ChecklistState';
 
 export class CheckListItem {
 
-    public id: string;
+    public id: string = '';
 
-    public title: string;
+    public title: string = '';
 
-    public description: string;
+    public description: string = '';
 
-    public input: CheckListInputType;
+    public input: CheckListInputType = CheckListInputType.Text;
 
-    public value: string;
+    public value: string = '';
 
     public sub: CheckListItem[];
 
-    public inputStates: ChecklistState[];
+    public inputStates: ChecklistState[] = [];
 
-    public done: boolean;
+    public done: boolean = false;
 
     public lastChangeDate: number;
 
-    public showLastChangeDate: boolean;
+    public showLastChangeDate: boolean = false;
 
-    public constructor(item: CheckListItem) {
+    public constructor(item?: CheckListItem) {
         if (item) {
             this.id = item.id;
             this.title = item.title;

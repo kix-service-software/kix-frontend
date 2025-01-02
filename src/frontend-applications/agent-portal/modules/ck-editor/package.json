@@ -1,0 +1,15 @@
+{
+    "name": "kix-module-ck-editor",
+    "extensions": {
+        "kix:modules": {
+            "kix-module-ck-editor-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:configuration": {
+            "ckeditor5-configuration": {
+                "module": "configuration.extension"
+            }
+        }
+    }
+}

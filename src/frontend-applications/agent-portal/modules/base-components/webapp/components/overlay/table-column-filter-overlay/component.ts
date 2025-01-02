@@ -62,7 +62,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         (this.column.getColumnConfiguration() as DefaultDepColumnConfiguration).dep
                     );
                     const nodes = await service.getTreeNodes(
-                        property, true, true, undefined,
+                        property, false, false, undefined,
                         undefined, undefined, dep ? { dep } : undefined
                     );
                     await this.prepareListFilter(objectType, nodes);
@@ -91,7 +91,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (service) {
                 const dep = (this.column.getColumnConfiguration() as DefaultDepColumnConfiguration).dep;
                 const nodes = await service.getTreeNodes(
-                    this.column.getColumnId(), true, true, filter[1][0].value,
+                    this.column.getColumnId(), false, false, filter[1][0].value,
                     undefined, undefined, dep ? { dep } : undefined
                 );
                 if (nodes) {

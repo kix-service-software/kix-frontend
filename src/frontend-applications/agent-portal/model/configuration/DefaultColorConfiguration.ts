@@ -7,8 +7,6 @@
  * --
  */
 
-import { CKEditorConfiguration } from '../../modules/base-components/model/CKEditorConfiguration';
-import { KIXObjectType } from '../kix/KIXObjectType';
 import { IConfiguration } from './IConfiguration';
 
 export class DefaultColorConfiguration implements IConfiguration {

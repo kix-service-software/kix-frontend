@@ -7,9 +7,9 @@
  * --
  */
 
-import { FormInputComponentState } from '../../../../base-components/webapp/core/FormInputComponentState';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState extends FormInputComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public currentValue: string = null,

@@ -26,6 +26,7 @@ import { SearchProperty } from '../../../search/model/SearchProperty';
 import { ExtendedLabelProvider } from './ExtendedLabelProvider';
 import { Label } from './Label';
 import { OverlayIcon } from './OverlayIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 
@@ -71,7 +72,9 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return '';
     }
 
-    public async getPropertyText(property: string, short?: boolean, translatable?: boolean): Promise<string> {
+    public async getPropertyText(
+        property: string, short?: boolean, translatable?: boolean, object?: KIXObject, objectIds?: string[] | number[]
+    ): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -195,7 +198,10 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 } else if (fieldValue.DisplayValue) {
                     displayValue = fieldValue.DisplayValue.toString();
                 } else {
-                    displayValue = fieldValue.Value.toString();
+                    // if no prepared value and also no DisplayValue given
+                    // then "Value" should not be returned, too
+                    // displayValue = fieldValue.Value.toString();
+                    displayValue = '';
                 }
             }
         } else {

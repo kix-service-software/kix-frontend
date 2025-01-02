@@ -42,6 +42,7 @@ export class Component {
         WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
         this.state.value = await NotesService.getInstance().loadNotes(this.state.contextId);
         this.editorValue = this.state.value;
+        this.state.editorReady = true;
     }
 
     public onDestroy(): void {
@@ -53,7 +54,11 @@ export class Component {
     }
 
     public setEditorActive(): void {
+        this.state.editorReady = false;
         this.state.editorActive = true;
+        setTimeout(() => {
+            this.state.editorReady = true;
+        }, 20);
     }
 
     public cancelEditor(): void {

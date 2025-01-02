@@ -38,7 +38,7 @@ describe('Rule - Clear', () => {
                 fv.value = 'testValue';
             }
 
-            objectFormValueMapper.applyPropertyInstructions(readonlyRule);
+            objectFormValueMapper.applyWorkflowResult(readonlyRule);
         });
 
         it('defined form values should not have value', () => {

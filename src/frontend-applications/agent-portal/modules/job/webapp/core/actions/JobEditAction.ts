@@ -7,11 +7,11 @@
  * --
  */
 
-import { EditJobDialogContext } from '../context';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { EditJobDialogContext } from '../context/EditJobDialogContext';
 
 export class JobEditAction extends AbstractAction {
 

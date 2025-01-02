@@ -8,7 +8,6 @@
  */
 
 import { IAdminModuleExtension } from '../admin/server/IAdminModuleExtension';
-import { AdminModuleCategory } from '../admin/model/AdminModuleCategory';
 import { AdminModule } from '../admin/model/AdminModule';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
@@ -18,15 +17,15 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IAdminModuleExtension {
 
-    public getAdminModules(): AdminModuleCategory[] {
+    public getAdminModules(): AdminModule[] {
         return [
-            new AdminModuleCategory(
-                null, 'kix', 'Translatable#KIX', null, [
-                new AdminModuleCategory(
-                    null, 'communication', 'Translatable#Communication', null,
+            new AdminModule(
+                null, 'kix', 'Translatable#KIX', null, null, null, [], 0, [
+                new AdminModule(
+                    null, 'communication', 'Translatable#Communication', null, null, null, [], 0,
                     [
-                        new AdminModuleCategory(
-                            null, 'communication_email', 'Translatable#Email', null, [],
+                        new AdminModule(
+                            null, 'communication_email', 'Translatable#Email', null, null, null, [], 0,
                             [
                                 new AdminModule(
                                     null, 'mail-account', 'Translatable#Inbox', null,
@@ -46,11 +45,11 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                                         )
                                     ]
                                 )
-                            ]
+                            ], true
                         )
-                    ]
+                    ], true
                 )
-            ])
+            ], true)
         ];
     }
 

@@ -48,7 +48,7 @@ export class VirtualFSAPIService extends KIXObjectAPIService {
         let objectResponse = new ObjectResponse([], 0);
         if (objectType === KIXObjectType.VIRTUAL_FS) {
 
-            if (objectLoadingOptions.asDownload) {
+            if (objectLoadingOptions?.asDownload) {
                 if (!loadingOptions) {
                     loadingOptions = new KIXObjectLoadingOptions();
                 }
@@ -60,7 +60,7 @@ export class VirtualFSAPIService extends KIXObjectAPIService {
                 KIXObjectType.VIRTUAL_FS, clientRequestId
             );
 
-            if (objectLoadingOptions.asDownload) {
+            if (objectLoadingOptions?.asDownload) {
                 let attachments = objectResponse.objects || [];
                 const user = await UserService.getInstance().getUserByToken(token);
                 for (const a of attachments) {

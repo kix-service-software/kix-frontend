@@ -42,11 +42,15 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     }
 
     public async prepareObject(
-        ticket: Ticket, objectValueMapper?: ObjectFormValueMapper, forCommit: boolean = true
+        ticket: Ticket, objectValueMapper?: ObjectFormValueMapper, forCommit: boolean = true, forStorage?: boolean
     ): Promise<Ticket> {
         const newTicket = await super.prepareObject(ticket, objectValueMapper, forCommit);
 
-        await this.prepareArticles(newTicket, forCommit, ticket.QueueID);
+        if (!newTicket.PendingTime) {
+            delete newTicket.PendingTime;
+        }
+
+        await this.prepareArticles(newTicket, forCommit, ticket.QueueID, forStorage);
         await this.prepareTitle(newTicket);
         this.prepareTicket(newTicket);
         this.prepareSpecificAttributes(newTicket);
@@ -61,12 +65,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             for (const k in TicketProperty) {
                 if (TicketProperty[k]) {
                     const property = TicketProperty[k];
-                    if (
-                        property === TicketProperty.TICKET_ID ||
-                        property === TicketProperty.PENDING_TIME
-                    ) {
+                    if (property === TicketProperty.TICKET_ID) {
                         continue;
                     }
+
                     const hasValue = formValues.some((fv) => fv.property === property && fv.enabled);
                     if (!hasValue) {
                         delete newObject[property];
@@ -76,7 +78,9 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         }
     }
 
-    private async prepareArticles(ticket: Ticket, forCommit: boolean, orgTicketQueueID: number): Promise<void> {
+    private async prepareArticles(
+        ticket: Ticket, forCommit: boolean, orgTicketQueueID: number, forStorage?: boolean
+    ): Promise<void> {
         if (ticket.Articles?.length) {
             ticket.Articles = ticket.Articles.filter((a) => a.ChannelID);
             /**
@@ -86,6 +90,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             for (const article of ticket.Articles) {
                 this.deleteArticleProperties(article);
                 this.deleteCommonProperties(article, true);
+
+                this.prepareDynamicFields(article, forCommit);
 
                 if (forCommit) {
                     if (article.Attachments?.length) {
@@ -98,7 +104,9 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                     await this.prepareReferencedArticle(article, ticket);
                 } else {
                     article.Attachments = null;
-                    article.Body = article.Body?.replace(/<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g, '');
+                    if (!forStorage) {
+                        article.Body = article.Body?.replace(/<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g, '');
+                    }
                 }
 
                 this.prepareRecipients(article);
@@ -286,8 +294,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         if ((ticket.ContactID as any) === '') {
             ticket.ContactID = null;
         }
-        if (ticket['TimeUnit'] && ticket.Articles?.length) {
-            ticket.Articles[0]['TimeUnit'] = ticket['TimeUnit'];
+        if (typeof ticket['TimeUnit'] !== undefined && ticket.Articles?.length) {
+            if (!isNaN(Number(ticket['TimeUnit']))) {
+                ticket.Articles[0]['TimeUnit'] = ticket['TimeUnit'];
+            }
             delete ticket['TimeUnit'];
         }
     }

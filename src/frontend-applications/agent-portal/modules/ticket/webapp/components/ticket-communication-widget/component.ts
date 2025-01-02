@@ -9,7 +9,6 @@
 
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { Context } from '../../../../../model/Context';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Article } from '../../../model/Article';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';

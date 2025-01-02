@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2024-08-08 16:39+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@kixdesk.com>\n"
+"PO-Revision-Date: 2024-11-27 10:51+0000\n"
+"Last-Translator: jbrueckner <Joerg.Brueckner@kixdesk.com>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Weblate 4.14\n"
 
 msgid "', "
-msgstr ""
+msgstr "', "
 
 msgid "{0}/{1} {2} imported"
 msgstr "{0}/{1} {2} importiert"
@@ -27,7 +27,7 @@ msgid "0 data sets found."
 msgstr "Nichts gefunden."
 
 msgid "{0} File(s) added"
-msgstr "{0} Datei(en) angehangen"
+msgstr "{0} Datei(en) hinzugefügt"
 
 msgid "{0}: has no value."
 msgstr "{0}: hat keinen Wert."
@@ -488,6 +488,9 @@ msgstr "Sammelaktion"
 msgid "Bulk Action: {0}"
 msgstr "Sammelaktion: {0}"
 
+msgid "Bulk Print"
+msgstr "Sammeldruck"
+
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -729,6 +732,9 @@ msgstr "Konfiguration"
 msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
 
+msgid "Confirm Password"
+msgstr "Passwort bestätigen"
+
 msgid "Console"
 msgstr "Konsole"
 
@@ -860,9 +866,6 @@ msgstr "Aktueller Verwendungsstatus"
 
 msgid "Current incident state"
 msgstr "Aktueller Vorfallsstatus"
-
-msgid "Current Password"
-msgstr "Aktuelles Passwort"
 
 msgid "(Current version)"
 msgstr "(aktuelle Version)"
@@ -1135,6 +1138,9 @@ msgstr "Berichtsdefinition bearbeiten"
 msgid "Edit Role"
 msgstr "Rolle bearbeiten"
 
+msgid "Edit Ruleset Macro"
+msgstr "Makro für Ruleset bearbeiten"
+
 msgid "Edit Search"
 msgstr "Suche bearbeiten"
 
@@ -1169,7 +1175,7 @@ msgid "Edit Webform"
 msgstr "Webformular bearbeiten"
 
 msgid "Email"
-msgstr "E-Mail"
+msgstr "Email"
 
 msgid "Email1"
 msgstr "E-Mail 1"
@@ -1261,6 +1267,9 @@ msgstr "Endwert fehlt"
 msgid "Entered date-time value is invalid."
 msgstr "Eingegebener Zeitpunkt ist ungültig."
 
+msgid "enter filter value"
+msgstr "Filterwert eingeben"
+
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
 
@@ -1289,7 +1298,7 @@ msgid "Error on update:"
 msgstr "Fehler bei Aktualisieren:"
 
 msgid "Error while adding the attachement:"
-msgstr "Fehler beim Hinzufügen von Anlagen:"
+msgstr "Fehler während dem Hinzufügen eines Anhangs:"
 
 msgid "Error while adding the image:"
 msgstr "Fehler beim Hinzufügen des Bildes:"
@@ -1596,6 +1605,12 @@ msgstr "Hilfe"
 msgid "Help, hints & tricks"
 msgstr "Hilfe, Tipps und Tricks"
 
+msgid "Helptext_Admin_CreateEdit_Actions"
+msgstr ""
+
+msgid "Helptext_Admin_CreateEdit_ActionSkip"
+msgstr ""
+
 msgid "Helptext_Admin_DynamicFieldCreate_Config"
 msgstr ""
 "Nachdem Sie einen Feldtyp gewählt haben, werden die entsprechenden "
@@ -1675,14 +1690,6 @@ msgid "Helptext_Admin_GeneralCatalogCreate_Validity"
 msgstr ""
 "Die General Catalog Klasse kann nur verwendet werden, wenn sie „gültig“ "
 "gesetzt ist."
-
-msgid "Helptext_Admin_JobCreateEdit_Actions"
-msgstr ""
-"Wählen Sie eine Aktion aus der Liste, anschließend werden die dafür nötigen "
-"Formularfelder geladen. Über \"+\" können Sie weiter Aktionen hinzufügen und "
-"diese über \"-\" auch wieder löschen. Die Reihenfolge der Aktionen in der "
-"Liste bestimmt die Reihenfolge der Ausführung im Job. Sie können diese per "
-"Drag&Drop ändern."
 
 msgid "Helptext_Admin_JobCreateEdit_ActionSkip"
 msgstr ""
@@ -2102,6 +2109,33 @@ msgstr ""
 "Gibt an, ob bei einer Rückmeldung am gleichen Ticket dieses auf den letzten "
 "Bearbeiter gesperrt werden soll."
 
+msgid "Helptext_Admin_Ruleset_Macro_Create_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Name"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Scope"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Type"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Scope"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Type"
+msgstr ""
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Validity"
+msgstr ""
+
 msgid "Helptext_Admin_SysConfigEdit_Default_Value"
 msgstr ""
 "Anzeige des initialen Standardwertes der Konfiguration. Dieser kann nicht "
@@ -2406,6 +2440,9 @@ msgid "Helptext_Admin_WebformCreateEdit_Validity"
 msgstr ""
 "Um das Webformular verwenden zu können, muss es \"gültig\" gesetzt sein."
 
+msgid "Helptext_Admin_Workflow_Create_Validity"
+msgstr ""
+
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
@@ -2465,8 +2502,11 @@ msgstr "Suchen Sie nach Assets mit dieser Nummer oder Teilen der Nummer."
 
 msgid "Helptext_CMDB_Dashboard_Search"
 msgstr ""
-"Durchsuchbar sind die Asset-Eigenschaften \"Name\" und \"A#\". Verwendung "
-"von Wildcards (*) ist möglich."
+"Die angezeigten Assets können durch Eingabe eines Nummern- oder "
+"Namenssuchmusters eingeschränkt werden."
+
+msgid "Helptext_Create_ResultNames"
+msgstr ""
 
 msgid "Helptext_Customer_Dashboard_Search"
 msgstr ""
@@ -2712,12 +2752,6 @@ msgstr ""
 "Ermöglicht es, die einzelnen Attribute einer Zeile voneinander zu trennen. "
 "Falls unbekannt, öffnen Sie die .csv-Datei mit einem Texteditor."
 
-msgid "Helptext_Jobs_Create_ResultNames"
-msgstr ""
-"Optional können Sie hier einen Variablen-Name für das Ergebnis der Macro-"
-"Action hinterlegen. Diese Variable kann als spezieller Platzhalter "
-"\"${VariableName}\" in folgenden Aktionen verwendet werden."
-
 msgid "Helptext_Organisation_Address_Domain_Pattern"
 msgstr ""
 
@@ -2746,10 +2780,10 @@ msgstr ""
 "Informationen zur Benachrichtigung zu erhalten."
 
 msgid "Helptext_PersonalSettings_OutOfOfficeEnd_Hint"
-msgstr "Letzter Tag der Abwesenheit."
+msgstr "Letzter Tag der Abwesenheit"
 
 msgid "Helptext_PersonalSettings_OutOfOfficeStart_Hint"
-msgstr "Erster Tag der Abwesenheit."
+msgstr "Erster Tag der Abwesenheit"
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr ""
@@ -2761,9 +2795,6 @@ msgstr ""
 
 msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
 msgstr "Ihr neues Passwort für die Nutzung des Self-Service-Portals"
-
-msgid "Helptext_PersonalSettings_UserPassword_Hint"
-msgstr "Ihr Anmeldepasswort für die Nutzung des Self-Service-Portals"
 
 msgid "Helptext_PersonalSettings_user_token_Hint"
 msgstr ""
@@ -3049,20 +3080,6 @@ msgstr ""
 msgid "Helptext_Tickets_TicketEdit_Title"
 msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
 
-msgid "Helptext_Users_UserCreateEdit_Access"
-msgstr ""
-"Legen Sie fest, ob der Kontakt die Möglichkeit bekommt, sich im "
-"Agentenportal (= Kontakt wird auch ein Agent) und/oder im Self Service "
-"Portal anzumelden. Je nach Auswahl werden weitere Eingabefelder geladen. "
-"Wurde der Zugang für ein Portal einmal gewährt und danach wieder entfernt, "
-"wird der entsprechende Portal-Nutzer auf \"ungültig\" gesetzt."
-
-msgid "Helptext_Users_UserCreateEdit_Roles"
-msgstr ""
-"Einem Agenten (= ein Kontakt, der Zugang zum Agentenportal hat) muss "
-"mindestens die Rolle „AgentUser“ zugeordnet sein, damit er sich einloggen "
-"kann. Es werden nur gültige Rollen angezeigt."
-
 msgid "Helptext_User_UserCreateEdit_Login"
 msgstr "Der Nutzername muss eineindeutig sein."
 
@@ -3071,41 +3088,11 @@ msgstr ""
 "Der Agent (= ein Kontakt, der Zugang zum Agentenportal hat) kann sein "
 "Passwort auch selbst in seinen persönlichen Einstellungen ändern."
 
-msgid "Helptext_User_UserCreateEdit_Preferences_MFAOTPEnabled"
+msgid "Helptext_User_UserCreateEdit_PasswordConfirm"
 msgstr ""
-
-msgid "Helptext_User_UserCreateEdit_Preferences_MyQueues"
-msgstr ""
-"Legen Sie fest, für welche Teams ein Agent (= ein Kontakt, der Zugang zum "
-"Agentenportal hat) standardmäßig Benachrichtigungen erhält. Der Agent kann "
-"diese Einstellung auch selbst in seinen persönlichen Einstellungen ändern."
-
-msgid "Helptext_User_UserCreateEdit_Preferences_Notifications"
-msgstr ""
-"Legen Sie fest, welche Benachrichtigungen ein Agent (= ein Kontakt, der "
-"Zugang zum Agentenportal hat) standardmäßig erhält. Der Agent kann diese "
-"Einstellung auch selbst in seinen persönlichen Einstellungen ändern."
-
-msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeEnd"
-msgstr "Letzter Tag der Abwesenheit."
-
-msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeStart"
-msgstr "Erster Tag der Abwesenheit."
-
-msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
-msgstr ""
-"Legen Sie fest, in welcher Sprache ein Nutzer KIX sieht, wenn er sich das "
-"erste Mal anmeldet. Der Nutzer kann die Sprache auch selbst in seinen "
-"persönlichen Einstellungen ändern."
 
 msgid "Helptext_User_UserCreateEdit_Preferences_UserSecret"
 msgstr ""
-
-msgid "Helptext_User_UserCreateEdit_Preferences_UserToken"
-msgstr ""
-"Dieser persönliche Token ermöglicht den direkten Zugriff auf Berichtsdaten. "
-"Erstellen Sie einen neuen Token, wenn Sie ihn versehentlich weitergegeben "
-"haben sollten."
 
 msgid "HelptImporConfigext_Import_File"
 msgstr ""
@@ -3133,6 +3120,9 @@ msgstr "Host"
 
 msgid "Hour(s)"
 msgstr "Stunden"
+
+msgid "HTTP Type"
+msgstr "HTTP Type"
 
 msgid "Icon"
 msgstr "Icon"
@@ -3314,6 +3304,9 @@ msgstr "Wissensdatenbank: FAQ Kategorien"
 msgid "Label"
 msgstr "Label"
 
+msgid "Label / Name"
+msgstr "Label / Name"
+
 msgid "Lanes"
 msgstr "Lanes"
 
@@ -3377,6 +3370,9 @@ msgstr "FAQ verknüpfen mit"
 msgid "Links"
 msgstr "Verknüpfungen"
 
+msgid "Links for {0}"
+msgstr ""
+
 msgid "Links updated."
 msgstr "Verknüpfungen aktualisiert."
 
@@ -3436,6 +3432,9 @@ msgstr "Logs"
 
 msgid "Macro"
 msgstr "Makro"
+
+msgid "Macro Information"
+msgstr "Makro Informationen"
 
 msgid "Mail Account Details"
 msgstr "Mailkonto Details"
@@ -3539,6 +3538,9 @@ msgstr "Eigene Firma"
 msgid "My Queues"
 msgstr "Meine Teams"
 
+msgid "My Teams"
+msgstr "Meine Teams"
+
 msgid "My Tickets"
 msgstr "Meine Tickets"
 
@@ -3620,6 +3622,9 @@ msgstr "Neuer General Katalog"
 msgid "New Job"
 msgstr "Neuer Job"
 
+msgid "New Macro"
+msgstr "Neues Macro"
+
 msgid "New Mail Account"
 msgstr "Neues Mailkonto"
 
@@ -3652,6 +3657,9 @@ msgstr "Neue Definition"
 
 msgid "New Role"
 msgstr "Neue Rolle"
+
+msgid "New Ruleset Macro"
+msgstr "Neues Makro für Ruleset"
 
 msgid "New Search"
 msgstr "Neue Suche"
@@ -3890,6 +3898,9 @@ msgstr "Objekttyp"
 msgid "Observer"
 msgstr "Beobachter"
 
+msgid "OK"
+msgstr "OK"
+
 msgid "Oldest first"
 msgstr "älteste zuerst"
 
@@ -3957,7 +3968,7 @@ msgid "Outbox"
 msgstr "Postausgang"
 
 msgid "Out Of Office"
-msgstr ""
+msgstr "Abwesend"
 
 msgid "Output Format"
 msgstr "Ausgabeformat"
@@ -4163,6 +4174,9 @@ msgstr "Vorbereitung Datei-Download"
 
 msgid "Prepare Ticket for print"
 msgstr "Ticket für den Druck vorbereiten"
+
+msgid "Prepare Tickets to print & zip"
+msgstr "Tickets zum Ausdrucken und Zippen vorbereiten"
 
 msgid "Preview"
 msgstr "Vorschau"
@@ -4498,7 +4512,7 @@ msgid "Reset table filters"
 msgstr "Tabellenfilter zurücksetzen"
 
 msgid "Reset to Default"
-msgstr "Auf Vorgabe zurücksetzen"
+msgstr "Auf Vorgabewert zurücksetzen"
 
 msgid "Reset User Widgets"
 msgstr "Nutzer-Widgets zurücksetzen"
@@ -4526,9 +4540,6 @@ msgstr "Richtext"
 
 msgid "Role"
 msgstr "Rolle"
-
-msgid "Role Assignment"
-msgstr "Rollenzuordnung"
 
 msgid "Role Details"
 msgstr "Rollendetails"
@@ -4710,7 +4721,7 @@ msgid "Selected Versions"
 msgstr "Gewählte Versionen"
 
 msgid "Select file"
-msgstr "Datei wählen"
+msgstr "Datei auswählen"
 
 msgid "Select image file"
 msgstr "Bilddatei wählen"
@@ -4846,10 +4857,13 @@ msgid "Show in agent preferences"
 msgstr "Anzeige Agenteneinstellung"
 
 msgid "Show in Customer Portal"
-msgstr "Im Kundenportal anzeigen"
+msgstr "Im Kundenportal verfügbar"
 
 msgid "Show Last Change Date"
 msgstr "Datum der letzten Änderung anzeigen"
+
+msgid "Show Links"
+msgstr "Zeige Links"
 
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
@@ -5147,7 +5161,7 @@ msgid "The entered date is out of boundaries."
 msgstr "Das eingegebene Datum ist außerhalb des zulässigen Wertebereichs."
 
 msgid "The file {0} has no valid MIME-TYPE."
-msgstr "Die Datei '{0}' hat keinen gültigen MIME-Typ."
+msgstr "Die Datei {0} hat keinen akzeptierten MIME-Type."
 
 msgid "The file size of {0} is too large ({1}). Max.: {2}"
 msgstr "Die Datei {0} ist zu groß ({1}). Max.: {2}"
@@ -5273,6 +5287,9 @@ msgstr "Tickets zu Assets"
 
 msgid "Tickets for Contact"
 msgstr "Tickets zu Kontakt"
+
+msgid "Tickets has been printed and zipped"
+msgstr "Tickets wurden gedruckt und gepackt"
 
 msgid "Ticket: States"
 msgstr "Ticket: Status"
@@ -5606,14 +5623,8 @@ msgstr "Ja, gerne"
 msgid "You did it!"
 msgstr "Geschafft!"
 
-msgid "You have to confirm your current password."
-msgstr "Bitte geben Sie das aktuelle Passwort ein."
-
 msgid "You have to confirm your password."
 msgstr "Bitte bestätigen Sie das neue Passwort."
-
-msgid "Your current password is wrong."
-msgstr "Das aktuelle Passwort ist falsch."
 
 msgid "Your Permissions have been updated."
 msgstr "Ihre Berechtigungen wurden aktualisiert."
@@ -5635,6 +5646,83 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Current Password"
+#~ msgstr "Aktuelles Passwort"
+
+#~ msgid "Helptext_Admin_JobCreateEdit_Actions"
+#~ msgstr ""
+#~ "Wählen Sie eine Aktion aus der Liste, anschließend werden die dafür "
+#~ "nötigen Formularfelder geladen. Über \"+\" können Sie weiter Aktionen "
+#~ "hinzufügen und diese über \"-\" auch wieder löschen. Die Reihenfolge der "
+#~ "Aktionen in der Liste bestimmt die Reihenfolge der Ausführung im Job. Sie "
+#~ "können diese per Drag&Drop ändern."
+
+#~ msgid "Helptext_Jobs_Create_ResultNames"
+#~ msgstr ""
+#~ "Optional können Sie hier einen Variablen-Name für das Ergebnis der Macro-"
+#~ "Action hinterlegen. Diese Variable kann als spezieller Platzhalter "
+#~ "\"${VariableName}\" in folgenden Aktionen verwendet werden."
+
+#~ msgid "Helptext_PersonalSettings_UserPassword_Hint"
+#~ msgstr "Ihr Anmeldepasswort für die Nutzung des Self-Service-Portals"
+
+#~ msgid "Helptext_Users_UserCreateEdit_Access"
+#~ msgstr ""
+#~ "Legen Sie fest, ob der Kontakt die Möglichkeit bekommt, sich im "
+#~ "Agentenportal (= Kontakt wird auch ein Agent) und/oder im Self Service "
+#~ "Portal anzumelden. Je nach Auswahl werden weitere Eingabefelder geladen. "
+#~ "Wurde der Zugang für ein Portal einmal gewährt und danach wieder "
+#~ "entfernt, wird der entsprechende Portal-Nutzer auf \"ungültig\" gesetzt."
+
+#~ msgid "Helptext_Users_UserCreateEdit_Roles"
+#~ msgstr ""
+#~ "Einem Agenten (= ein Kontakt, der Zugang zum Agentenportal hat) muss "
+#~ "mindestens die Rolle „AgentUser“ zugeordnet sein, damit er sich einloggen "
+#~ "kann. Es werden nur gültige Rollen angezeigt."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_MyQueues"
+#~ msgstr ""
+#~ "Legen Sie fest, für welche Teams ein Agent (= ein Kontakt, der Zugang zum "
+#~ "Agentenportal hat) standardmäßig Benachrichtigungen erhält. Der Agent "
+#~ "kann diese Einstellung auch selbst in seinen persönlichen Einstellungen "
+#~ "ändern."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_Notifications"
+#~ msgstr ""
+#~ "Legen Sie fest, welche Benachrichtigungen ein Agent (= ein Kontakt, der "
+#~ "Zugang zum Agentenportal hat) standardmäßig erhält. Der Agent kann diese "
+#~ "Einstellung auch selbst in seinen persönlichen Einstellungen ändern."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeEnd"
+#~ msgstr "Letzter Tag der Abwesenheit."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_OutOfOfficeStart"
+#~ msgstr "Erster Tag der Abwesenheit."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
+#~ msgstr ""
+#~ "Legen Sie fest, in welcher Sprache ein Nutzer KIX sieht, wenn er sich das "
+#~ "erste Mal anmeldet. Der Nutzer kann die Sprache auch selbst in seinen "
+#~ "persönlichen Einstellungen ändern."
+
+#~ msgid "Helptext_User_UserCreateEdit_Preferences_UserToken"
+#~ msgstr ""
+#~ "Dieser persönliche Token ermöglicht den direkten Zugriff auf "
+#~ "Berichtsdaten. Erstellen Sie einen neuen Token, wenn Sie ihn "
+#~ "versehentlich weitergegeben haben sollten."
+
+#~ msgid "Role Assignment"
+#~ msgstr "Rollenzuordnung"
+
+#~ msgid "Ticket List Filter"
+#~ msgstr "Ticketlistenfilter"
+
+#~ msgid "You have to confirm your current password."
+#~ msgstr "Bitte geben Sie das aktuelle Passwort ein."
+
+#~ msgid "Your current password is wrong."
+#~ msgstr "Das aktuelle Passwort ist falsch."
 
 #~ msgid "After"
 #~ msgstr "Nach"

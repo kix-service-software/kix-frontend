@@ -82,6 +82,9 @@ export class ContextFormManager {
             this.formId = formId;
 
             if (this.useObjectForms) {
+                if (!this.formId) {
+                    this.formId = await this.getFormId();
+                }
                 await this.getObjectFormHandler(createNewInstance);
             } else {
                 await this.getFormInstance(true, undefined, kixObject);
@@ -224,7 +227,7 @@ export class ContextFormManager {
                 );
 
                 const preparedObject = await commitHandler?.prepareObject(
-                    object, formhandler?.objectFormValueMapper, false
+                    object, formhandler?.objectFormValueMapper, false, true
                 );
                 contextPreference.formObject = JSON.stringify(preparedObject);
             }

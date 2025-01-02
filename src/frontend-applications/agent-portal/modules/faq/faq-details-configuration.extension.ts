@@ -178,7 +178,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             'faq-article-info-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
             [
                 'faq-article-info-widget',
-                'faq-article-linked-objects-widget',
                 'faq-article-history-widget'
             ]
         );
@@ -211,7 +210,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     new ConfiguredWidget('faq-article-content-widget', 'faq-article-content-widget')
                 ],
                 [
-                    'faq-article-create-action'
+                    'faq-article-create-action', 'object-link-modal-action'
                 ],
                 [
                     'linked-objects-edit-action', 'faq-article-edit-action'

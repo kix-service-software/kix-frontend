@@ -125,9 +125,11 @@ export abstract class Context {
                         const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
                         const objectDelete = eventId === ApplicationEvent.OBJECT_DELETED && data?.objectType;
 
-                        TableFactoryService.getInstance().deleteContextTables(
-                            this.contextId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
-                        );
+                        if (data?.contextId === this.contextId) {
+                            TableFactoryService.getInstance().deleteContextTables(
+                                this.contextId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
+                            );
+                        }
 
                         if (objectUpdate || objectDelete) {
                             if (this.objectLists.has(data.objectType)) {
@@ -754,10 +756,15 @@ export abstract class Context {
                     object = objects?.length ? objects[0] : null;
                 }
                 this.loadingPromise = null;
+                await this.postLoadDetailsObject(object);
                 resolve(object);
             });
         }
         return this.loadingPromise;
+    }
+
+    protected async postLoadDetailsObject(object: KIXObject): Promise<void> {
+        return;
     }
 
     public async addStorableAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
@@ -832,7 +839,7 @@ export abstract class Context {
             loadingOptions.filter.push(...contextFilter);
         }
 
-        loadingOptions = await Context.prepareLoadingOptions(loadingOptions);
+        loadingOptions = await this.prepareLoadingOptions(loadingOptions);
 
         // if no limit given - e.g. initial call, use configurations, else it will possible
         // be set because of load more
@@ -856,7 +863,7 @@ export abstract class Context {
         return loadingOptions;
     }
 
-    public static async prepareLoadingOptions(
+    public async prepareLoadingOptions(
         loadingOptions: KIXObjectLoadingOptions, searchValue?: string
     ): Promise<KIXObjectLoadingOptions> {
 
@@ -871,8 +878,7 @@ export abstract class Context {
             loadingOptions.searchLimit
         );
 
-        const context = ContextService.getInstance().getActiveContext();
-        const contextObject = await context.getObject();
+        const contextObject = await this.getObject();
 
         if (Array.isArray(loadingOptions.filter)) {
             for (const criterion of loadingOptions.filter) {

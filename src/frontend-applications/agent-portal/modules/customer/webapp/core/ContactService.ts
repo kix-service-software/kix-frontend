@@ -297,6 +297,7 @@ export class ContactService extends KIXObjectService<Contact> {
             ContactProperty.USER,
             ContactProperty.TICKET_STATS,
             ContactProperty.REMINDER_TICKETS_COUNT,
+            ContactProperty.NEW_TICKETS_COUNT,
             ContactProperty.OPEN_TICKETS_COUNT,
             ContactProperty.ESCALATED_TICKETS_COUNT,
             ContactProperty.CREATE_NEW_TICKET,

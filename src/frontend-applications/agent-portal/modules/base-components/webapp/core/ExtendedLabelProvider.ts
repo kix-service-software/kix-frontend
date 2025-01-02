@@ -43,7 +43,9 @@ export abstract class ExtendedLabelProvider<T extends KIXObject = KIXObject> imp
         return null;
     }
 
-    public getPropertyText(property: string, short?: boolean, translatable?: boolean): Promise<string> {
+    public getPropertyText(
+        property: string, short?: boolean, translatable?: boolean, object?: T, objectIds?: string[] | number[]
+    ): Promise<string> {
         return null;
     }
 

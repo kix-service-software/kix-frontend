@@ -8,7 +8,6 @@
  */
 
 import { SocketClient } from '../../../../modules/base-components/webapp/core/SocketClient';
-import { AdminModuleCategory } from '../../model/AdminModuleCategory';
 import { IdService } from '../../../../model/IdService';
 import { AdministrationEvent } from '../../model/AdministrationEvent';
 import { AdminCategoriesResponse } from '../../model/AdminCategoriesResponse';
@@ -34,63 +33,46 @@ export class AdministrationSocketClient extends SocketClient {
         super('administration');
     }
 
-    private categories: Array<AdminModuleCategory | AdminModule>;
+    private adminModules: Array<AdminModule>;
 
-    public async getAdminModule(id: string): Promise<AdminModuleCategory | AdminModule> {
+    public async getAdminModule(id: string): Promise<AdminModule> {
         this.checkSocketConnection();
         const categories = await this.loadAdminCategories();
         const module = this.findModule(id, categories);
         return module;
     }
 
-    private findModule(
-        id: string, categories: Array<AdminModuleCategory | AdminModule>
-    ): AdminModuleCategory | AdminModule {
-        for (const c of categories) {
-            if (c.id === id) {
-                return c;
+    private findModule(id: string, modules: Array<AdminModule>): AdminModule {
+        for (const m of modules) {
+            if (m.id === id) {
+                return m;
             }
 
-            if (c instanceof AdminModuleCategory) {
-                const module = this.findModule(id, c.children);
-                if (module) {
-                    return module;
-                }
-
-                for (const m of c.modules) {
-                    if (m.id === id) {
-                        return m;
-                    }
-                }
+            const module = this.findModule(id, m.children);
+            if (module) {
+                return module;
             }
         }
 
         return null;
     }
 
-    public async loadAdminCategories(): Promise<Array<AdminModuleCategory | AdminModule>> {
-        if (this.categories) {
-            return this.categories;
+    public async loadAdminCategories(): Promise<Array<AdminModule>> {
+        if (this.adminModules) {
+            return this.adminModules;
         }
 
         this.checkSocketConnection();
 
-        return new Promise<Array<AdminModuleCategory | AdminModule>>((resolve, reject) => {
+        return new Promise<Array<AdminModule>>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
 
             this.socket.on(
                 AdministrationEvent.ADMIN_CATEGORIES_LOADED,
                 (result: AdminCategoriesResponse) => {
                     if (result.requestId === requestId) {
-                        const categories = result.modules.map((m) => {
-                            if (m['modules']) {
-                                return new AdminModuleCategory(m as AdminModuleCategory);
-                            }
-                            else {
-                                return new AdminModule(m as AdminModule);
-                            }
-                        });
-                        this.categories = categories;
+                        const categories = result.modules.map((m) => new AdminModule(m));
+                        this.adminModules = categories;
                         resolve(categories);
                     }
                 }
