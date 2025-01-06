@@ -708,12 +708,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         if (service) {
-            return service.searchObjectTree(property, searchValue, loadingOptions);
+            return service.searchObjectTree(property, searchValue, loadingOptions, additionalData);
         }
     }
 
     public async searchObjectTree(
-        property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions
+        property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions, additionalData?: any
     ): Promise<TreeNode[]> {
         const objectTypeForSearch = await this.getObjectTypeForProperty(property);
         const objects = await KIXObjectService.search(objectTypeForSearch, searchValue, loadingOptions);

@@ -61,14 +61,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.formhandler = await this.context.getFormManager().getObjectFormHandler();
-        this.setFormValues(false);
-
-        this.registerEventHandler();
 
         // make sure prepare is set, if not by OBJECT_FORM_VALUE_MAPPER_INITIALIZED
         // but give some time (keep loading spinner long enough)
         setTimeout(() => {
+            this.setFormValues(false);
             this.state.prepared = true;
+            this.registerEventHandler();
         }, 2500);
     }
 

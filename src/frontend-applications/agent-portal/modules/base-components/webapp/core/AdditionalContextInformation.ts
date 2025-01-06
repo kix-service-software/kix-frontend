@@ -33,6 +33,8 @@ export enum AdditionalContextInformation {
 
     OBJECT_DEPENDENCY = 'OBJECT_DEPENDENCY',
 
-    FORM_ASK_ANSWERS = 'FORM_ASK_ANSWERS'
+    FORM_ASK_ANSWERS = 'FORM_ASK_ANSWERS',
+
+    IS_RESTORED = 'IS_RESTORED'
 
 }
