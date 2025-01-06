@@ -7,6 +7,7 @@
  * --
  */
 
+import { AdditionalContextInformation } from '../modules/base-components/webapp/core/AdditionalContextInformation';
 import { Context } from './Context';
 import { ContextPreference } from './ContextPreference';
 
@@ -32,6 +33,7 @@ export class ContextStorageManager {
     public async loadStoredValues(contextPreference: ContextPreference): Promise<void> {
         await this.context.loadAdditionalInformation(contextPreference);
         await this.context.getFormManager()?.loadStoredValue(contextPreference);
+        this.context?.setAdditionalInformation(AdditionalContextInformation.IS_RESTORED, true);
     }
 
 }
