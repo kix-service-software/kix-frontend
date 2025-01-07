@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -69,8 +69,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                         continue;
                     }
 
-                    const hasValue = formValues.some((fv) => fv.property === property && fv.enabled);
-                    if (!hasValue) {
+                    const formValue = this.objectValueMapper?.findFormValue(property);
+                    if (!formValue?.enabled) {
                         delete newObject[property];
                     }
                 }
@@ -113,7 +113,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             }
         }
 
-        if (!ticket.Articles.length) {
+        if (!ticket.Articles?.length) {
             delete ticket.Articles;
         }
     }
