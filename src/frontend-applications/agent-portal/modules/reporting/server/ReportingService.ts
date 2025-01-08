@@ -16,6 +16,7 @@ import { Error } from '../../../../../server/model/Error';
 import { ReportDefinition } from '../model/ReportDefinition';
 import { FilterCriteria } from '../../../model/FilterCriteria';
 import { ReportDefinitionProperty } from '../model/ReportDefinitionProperty';
+import { ReportProperty } from '../model/ReportProperty';
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 import { Report } from '../model/Report';
 import { ReportResultLoadingOptions } from '../model/ReportResultLoadingOptions';
@@ -202,10 +203,35 @@ export class ReportingAPIService extends KIXObjectAPIService {
         return super.deleteObject(token, clientRequestId, objectType, objectId, null, objectType, ressourceUri);
     }
 
-    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPIFilter(
+        criteria: FilterCriteria[], token: string, objectType?: string
+    ): Promise<FilterCriteria[]> {
         return criteria.filter(
-            (c) => c.property === ReportDefinitionProperty.NAME
-                || c.property === ReportDefinitionProperty.DATASOURCE
+            (c) => (
+                objectType !== KIXObjectType.REPORT
+                || c.property !== ReportProperty.DEFINITION_ID
+            )
+        );
+    }
+
+    public async prepareAPISearch(
+        criteria: FilterCriteria[], token: string, objectType?: string
+    ): Promise<FilterCriteria[]> {
+        return criteria.filter(
+            (c) => (
+                (
+                    objectType === KIXObjectType.REPORT_DEFINITION
+                    && (
+                        c.property === ReportDefinitionProperty.NAME
+                        || c.property === ReportDefinitionProperty.DATASOURCE
+
+                    )
+                )
+                || (
+                    objectType === KIXObjectType.REPORT
+                    && c.property === ReportProperty.DEFINITION_ID
+                )
+            )
         );
     }
 
