@@ -21,6 +21,7 @@ import { ApplicationEvent } from '../../core/ApplicationEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { ContextEvents } from '../../core/ContextEvents';
 import { BrowserUtil } from '../../core/BrowserUtil';
+import { SysConfigService } from '../../../../sysconfig/webapp/core';
 
 class Component {
 
@@ -150,7 +151,11 @@ class Component {
                 (cw) => !this.state.widgets.some((w) => w.instanceId === cw.instanceId)
             );
             for (const widget of contextWidgets) {
-                const title = await TranslationService.translate(widget.configuration?.title);
+                let title = await TranslationService.translate(widget.configuration?.title);
+                if (!title) {
+                    const config = await SysConfigService.getInstance().getUIConfiguration(widget.configurationId);
+                    title = await TranslationService.translate(config.title);
+                }
                 nodes.push(new TreeNode(widget.instanceId, title, widget.configuration?.icon));
             }
         }
