@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,6 +15,7 @@ import { ClientStorageService } from '../modules/base-components/webapp/core/Cli
 import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
 import { ContextService } from '../modules/base-components/webapp/core/ContextService';
 import { EventService } from '../modules/base-components/webapp/core/EventService';
+import { FilterUtil } from '../modules/base-components/webapp/core/FilterUtil';
 import { IContextListener } from '../modules/base-components/webapp/core/IContextListener';
 import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
@@ -493,13 +494,27 @@ export abstract class Context {
                 );
             }
 
+            if (!allowedPermissions) {
+                continue;
+            }
+
             let allowedRoles = true;
             if (widget.roleIds?.length) {
                 const currentUser = await AgentService.getInstance().getCurrentUser();
                 allowedRoles = AgentService.userHasRole(widget.roleIds, currentUser);
             }
 
-            if (allowedPermissions && allowedRoles) {
+            if (!allowedRoles) {
+                continue;
+            }
+
+            let allowedConditions = true;
+            if (widget.conditions?.length) {
+                const object = await this.getObject();
+                allowedConditions = await FilterUtil.checkCriteriaByPropertyValue(widget.conditions, object);
+            }
+
+            if (allowedConditions) {
                 allowedWidgets.push(widget);
             }
         }
