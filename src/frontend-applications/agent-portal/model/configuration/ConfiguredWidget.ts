@@ -10,6 +10,7 @@
 import { WidgetSize } from './WidgetSize';
 import { WidgetConfiguration } from './WidgetConfiguration';
 import { UIComponentPermission } from '../UIComponentPermission';
+import { UIFilterCriterion } from '../UIFilterCriterion';
 
 export class ConfiguredWidget {
     public constructor(
@@ -18,6 +19,7 @@ export class ConfiguredWidget {
         public configuration?: WidgetConfiguration,
         public permissions: UIComponentPermission[] = [],
         public size: WidgetSize = WidgetSize.LARGE,
-        public roleIds: number[] = []
+        public roleIds: number[] = [],
+        public conditions: UIFilterCriterion[] = []
     ) { }
 }
