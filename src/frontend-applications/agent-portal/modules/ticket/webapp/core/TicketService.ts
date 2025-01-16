@@ -66,6 +66,7 @@ import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 import { TicketModuleConfiguration } from '../../model/TicketModuleConfiguration';
 import { SysConfigService } from '../../../sysconfig/webapp/core';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -482,35 +483,16 @@ export class TicketService extends KIXObjectService<Ticket> {
         return context.descriptor.urlPaths[0] + '/' + id;
     }
 
-    public async getPreparedArticleBodyContent(
-        article: Article, removeInlineImages: boolean = false
-    ): Promise<[string, InlineContent[], string]> {
-        if (article.bodyAttachment) {
-            const inlineAttachments = article.getInlineAttachments() || [];
+    public async getPreparedArticleBodyContent(article: Article): Promise<string> {
 
-            const attachmentIds = [article.bodyAttachment.ID, ...inlineAttachments.map((a) => a.ID)];
-            const attachments = await this.loadArticleAttachments(
-                article.TicketID, article.ArticleID, attachmentIds
-            );
+        const applicationUrl = ClientStorageService.getApplicationUrl();
+        const response = await fetch(`${applicationUrl}/views/tickets/${article.TicketID}/articles/${article.ArticleID}?resolveInlineCSS=1`)
+            .catch((error): Response => {
+                console.error('Fetch error:', error);
+                return new Response();
+            });
 
-            const contentAttachment = attachments.find((a) => a.ID === article.bodyAttachment.ID);
-            let mailContent = this.getContent(contentAttachment);
-
-            let inlineContent = [];
-            let content: string = mailContent[0];
-            if (removeInlineImages) {
-                // remove inline images
-                content = content.replace(/<img.+?src="cid:.+?>/g, '');
-            } else {
-                const inline = attachments?.filter((a) => a.ID !== article.bodyAttachment.ID);
-                inlineContent = await this.prepareInlineContent(inline);
-            }
-
-            return [content, inlineContent, mailContent[1]];
-        } else {
-            const body = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br>\n');
-            return [body, null, null];
-        }
+        return response.text();
     }
 
     private getContent(contentAttachment: Attachment): [string, string] {
