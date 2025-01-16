@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,10 +12,7 @@ import { InlineContent } from '../../../../../modules/base-components/webapp/cor
 export class ComponentState {
 
     public constructor(
-        public content: string = null,
-        public inlineContent: InlineContent[] = [],
-        public plainText: string = null,
-        public useReadonlyStyle: boolean = true,
-        public style: string = null
+        public url: string = null,
+        public frameId: string = null
     ) { }
 }
