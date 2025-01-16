@@ -100,15 +100,13 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case ArticleProperty.BODY_RICHTEXT:
                         const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(article);
-                        result = await this.reduceContent(prepareContent[0] || article.Body, optionsString);
-                        if (prepareContent && prepareContent[1]) {
-                            result = BrowserUtil.replaceInlineContent(result, prepareContent[1]);
-                        }
+                        result = await this.reduceContent(prepareContent, optionsString);
                         break;
                     case ArticleProperty.BODY_RICHTEXT_NO_INLINE:
-                        const prepareContentNoInline =
-                            await TicketService.getInstance().getPreparedArticleBodyContent(article, true);
-                        result = await this.reduceContent(prepareContentNoInline[0] || article.Body, optionsString);
+                        const prepareContentNoInline = await TicketService.getInstance().getPreparedArticleBodyContent(
+                            article
+                        );
+                        result = await this.reduceContent(prepareContentNoInline, optionsString);
                         break;
                     case ArticleProperty.FROM_REALNAME:
                     case ArticleProperty.TO_REALNAME:
