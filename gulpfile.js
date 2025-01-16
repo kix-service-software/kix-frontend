@@ -156,11 +156,11 @@ function buildAgentPortalApp(cb) {
     cb();
 }
 
-gulp.task('license-headers', (done) => {
-    let tasks = [licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber];
-    gulp.series(tasks)();
-    done();
-});
+// gulp.task('license-headers', (done) => {
+//     let tasks = [licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber];
+//     gulp.series(tasks)();
+//     done();
+// });
 
 let build = series(
     lint,
@@ -172,14 +172,14 @@ if (process.env.NODE_ENV === 'development') {
 
     if (process.env.COMPILE_CODE === '1') {
         build = series(
-            parallel(licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber),
+            // parallel(licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber),
             lint,
             compileSrc,
             parallel(copyPlugins, buildAgentPortalApp)
         );
     } else {
         build = series(
-            parallel(licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber),
+            // parallel(licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber),
             parallel(copyPlugins, buildAgentPortalApp)
         );
     }

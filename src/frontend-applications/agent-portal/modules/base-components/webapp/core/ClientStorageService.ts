@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -35,17 +35,23 @@ export class ClientStorageService {
             socketUrl = ClientStorageService.getCookie('frontendSocketUrl');
 
             if (!socketUrl || socketUrl === '') {
-                // use current location as socket URL
-                socketUrl = window.location.protocol + '//' + window.location.hostname;
-
-                const port = window.location.port;
-                if (port) {
-                    socketUrl = socketUrl + ':' + port;
-                }
+                socketUrl = this.getApplicationUrl();
             }
         }
 
         return socketUrl;
+    }
+
+    public static getApplicationUrl(): string {
+        // use current location as socket URL
+        let applicationUrl = window.location.protocol + '//' + window.location.hostname;
+
+        const port = window.location.port;
+        if (port) {
+            applicationUrl = applicationUrl + ':' + port;
+        }
+
+        return applicationUrl;
     }
 
     public static getCookie(name: string): string {

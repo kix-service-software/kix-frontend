@@ -10,6 +10,8 @@
 import { ComponentState } from './ComponentState';
 import { Article } from '../../../model/Article';
 import { TicketService } from '../../core';
+import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
+import { IdService } from '../../../../../model/IdService';
 
 class Component {
 
@@ -19,29 +21,24 @@ class Component {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
-        this.state.useReadonlyStyle = typeof input.useReadonlyStyle !== 'undefined' ? input.useReadonlyStyle : true;
+        this.state.frameId = IdService.generateDateBasedId('article-view-');
     }
 
     public onInput(input: any): void {
         if (this.article?.ChangeTime !== input.article?.ChangeTime) {
             this.article = input.article;
-            this.prepareContent();
+
+            const applicationUrl = ClientStorageService.getApplicationUrl();
+            this.state.url = `${applicationUrl}/views/tickets/${this.article?.TicketID}/articles/${this.article?.ArticleID}`;
         }
     }
 
-    public async prepareContent(): Promise<void> {
-        if (this.article) {
-            const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(this.article);
-            this.state.inlineContent = prepareContent[1];
-            this.state.content = prepareContent[0];
-            if (this.article.ContentType.startsWith('text/plain') && !this.article.bodyAttachment) {
-                this.state.plainText = this.article.Body;
-            }
+    public viewLoaded(event: any): void {
+        const frameDocument = event.target.contentWindow.document;
 
-            if (prepareContent[2]) {
-                this.state.style = prepareContent[2];
-            }
-        }
+        const frame = document.getElementById(this.state.frameId);
+        const frameHeight = frameDocument.documentElement.scrollHeight;
+        frame.style.height = frameHeight + 'px';
     }
 }
 
