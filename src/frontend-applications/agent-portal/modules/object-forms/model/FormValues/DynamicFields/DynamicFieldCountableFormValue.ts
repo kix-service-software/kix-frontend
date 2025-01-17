@@ -321,4 +321,14 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
     }
 
+    public async update(): Promise<void> {
+        if (this.parent.property === 'DynamicFields' && this.formValues?.length) {
+            this.formValues.forEach((fv) => {
+                if (fv.required !== this.required) {
+                    fv.required = this.required;
+                }
+            });
+        }
+        await super.update();
+    }
 }
