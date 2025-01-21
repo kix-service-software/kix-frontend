@@ -70,4 +70,9 @@ export class CustomerVisibleFormValue extends BooleanFormValue {
         await super.setObjectValue(BrowserUtil.isBooleanTrue(value) ? 1 : 0);
     }
 
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        const boolVal = BrowserUtil.isBooleanTrue(value);
+        await super.setFormValue(boolVal, force);
+    }
+
 }
