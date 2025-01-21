@@ -181,7 +181,7 @@ export class QueueService extends KIXObjectService<Queue> {
     }
 
     public async getQueuesHierarchy(
-        withData: boolean = true, queues?: Queue[], permissions: string[] = []
+        withData: boolean = true, queues?: Queue[], permissions: string[] = [], filterIds?: Array<number>
     ): Promise<Queue[]> {
         let queueTree: Queue[] = [];
         if (!queues) {
@@ -206,6 +206,10 @@ export class QueueService extends KIXObjectService<Queue> {
 
             queues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions)
                 .catch((): Queue[] => []);
+        }
+
+        if (filterIds && filterIds.length) {
+            queues = queues.filter((q) => !filterIds.some((fid) => fid === q.QueueID));
         }
 
         if (queues?.length) {
