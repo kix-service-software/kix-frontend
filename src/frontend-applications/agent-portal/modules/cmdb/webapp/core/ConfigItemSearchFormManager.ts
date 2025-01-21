@@ -26,6 +26,7 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Organisation } from '../../../customer/model/Organisation';
 import { Contact } from '../../../customer/model/Contact';
+import { QueueService } from '../../../ticket/webapp/core/admin';
 import { ConfigItem } from '../../model/ConfigItem';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
@@ -154,6 +155,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
                 || type === 'CIClassReference'
                 || type === 'Organisation'
                 || type === 'Contact'
+                || type === 'TeamReference'
             ) {
                 operations = numberOperators;
             } else {
@@ -193,6 +195,8 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
                 inputType = InputFieldTypes.OBJECT_REFERENCE;
             } else if (type === 'Organisation' || type === 'Contact') {
                 inputType = InputFieldTypes.OBJECT_REFERENCE;
+            } else if (type === 'TeamReference') {
+                inputType = InputFieldTypes.DROPDOWN;
             } else {
 
                 // use type rather than property
@@ -258,6 +262,13 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
                             KIXObjectType.CONFIG_ITEM, objectIds
                         );
                         return await KIXObjectService.prepareTree(items);
+                    } else if (input.Type === 'TeamReference') {
+                        const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(
+                            false, null, ['READ'], objectIds ? objectIds.map((oid) => Number(oid)) : null
+                        );
+                        return await QueueService.getInstance().prepareObjectTree(
+                            queuesHierarchy, true, false
+                        );
                     } else {
 
                         // use type rather than property
