@@ -52,12 +52,12 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         const extensions = ObjectFormRegistry.getInstance().getObjectFormValueMapperExtensions();
 
         for (const mapperExtension of extensions) {
-            this.extensions.push(new mapperExtension(this));
+            this.extensions?.push(new mapperExtension(this));
         }
     }
 
     public destroy(): void {
-        for (const mapperExtension of this.extensions) {
+        for (const mapperExtension of this.extensions || []) {
             mapperExtension.destroy();
         }
 
@@ -83,7 +83,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
     public async mapFormValues(object: T): Promise<void> {
 
-        for (const mapperExtension of this.extensions) {
+        for (const mapperExtension of this.extensions || []) {
             const startInitMapper = Date.now();
             await mapperExtension.init();
             const endInitMapper = Date.now();
@@ -116,7 +116,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         const endInitFormValues = Date.now();
         console.debug(`Init Form Values: ${endInitFormValues - startInitFormValues}ms`);
 
-        for (const mapperExtension of this.extensions) {
+        for (const mapperExtension of this.extensions || []) {
             const startExtension = Date.now();
             await mapperExtension.postMapFormValues(object);
             const endExtension = Date.now();
@@ -145,7 +145,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         // create from values for existing dynamic field values
         await dfFormValue.createDFFormValues();
 
-        for (const mapperExtension of this.extensions) {
+        for (const mapperExtension of this.extensions || []) {
             await mapperExtension.mapObjectValues(object);
         }
     }
@@ -231,7 +231,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
 
         if (formValue) {
-            for (const mapperExtension of this.extensions) {
+            for (const mapperExtension of this.extensions || []) {
 
                 const startExtension = Date.now();
                 await mapperExtension.initFormValueByField(field, formValue);
@@ -257,7 +257,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             formValue = new DynamicFieldObjectFormValue(property, object, this, null);
         }
 
-        for (const mapperExtension of this.extensions) {
+        for (const mapperExtension of this.extensions || []) {
             formValue = await mapperExtension.createFormValue(property, object);
             if (formValue) {
                 break;
