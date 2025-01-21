@@ -29,6 +29,7 @@ import { ConfigItem } from '../../model/ConfigItem';
 import { Organisation } from '../../../customer/model/Organisation';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { Contact } from '../../../customer/model/Contact';
+import { Queue } from '../../../ticket/model/Queue';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { InputDefinition } from '../../model/InputDefinition';
 import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
@@ -271,6 +272,14 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
 
                 if (contacts && contacts.length) {
                     displayValue = await LabelService.getInstance().getObjectText(contacts[0]);
+                }
+            } else if (input.Type === 'TeamReference') {
+                const queues = await KIXObjectService.loadObjects<Queue>(
+                    KIXObjectType.QUEUE, [value], null, null, false
+                );
+
+                if (queues && queues.length) {
+                    displayValue = await LabelService.getInstance().getObjectText(queues[0]);
                 }
             } else if (input.Type === 'Date') {
                 displayValue = await DateTimeUtil.getLocalDateString(displayValue);
