@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -57,6 +57,7 @@ import { JobFormService } from '../../../job/webapp/core/JobFormService';
 import { MacroService } from '../../../macro/webapp/core/MacroService';
 import { FetchAssetAttributesOptionFieldHandler } from './form/extended-form-manager/FetchAssetAttributesOptionFieldHandler';
 import { TicketBulkPrintAction } from './actions/TicketBulkPrintAction';
+import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
 
 export class UIModule implements IUIModule {
 
@@ -137,7 +138,9 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('ticket-watch-action', TicketWatchAction);
         ActionFactory.getInstance().registerAction('ticket-lock-action', TicketLockAction);
         ActionFactory.getInstance().registerAction('ticket-print-action', TicketPrintAction);
-        ActionFactory.getInstance().registerAction('ticket-bulk-print-action', TicketBulkPrintAction);
+        ActionFactory.getInstance().registerAction(
+            'ticket-bulk-print-action', TicketBulkPrintAction, [ConfigurationType.TableWidget]
+        );
     }
 
     private async registerContexts(): Promise<void> {
