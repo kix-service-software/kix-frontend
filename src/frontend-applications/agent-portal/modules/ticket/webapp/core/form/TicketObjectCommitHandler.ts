@@ -83,39 +83,55 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     ): Promise<void> {
         if (ticket.Articles?.length) {
             ticket.Articles = ticket.Articles.filter((a) => a.ChannelID);
-            /**
-             * Here starts the error for the attachments
-             * not being in the commitment for the other browser
-             */
-            for (const article of ticket.Articles) {
-                this.deleteArticleProperties(article);
-                this.deleteCommonProperties(article, true);
 
-                this.prepareDynamicFields(article, forCommit);
+            const articleFormValue = this.objectValueMapper?.findFormValue(TicketProperty.ARTICLES);
+            const channelFormValues = articleFormValue?.formValues?.filter(
+                (fv) => fv.property === ArticleProperty.CHANNEL_ID && fv.enabled
+            );
 
-                if (forCommit) {
-                    if (article.Attachments?.length) {
-                        article.Attachments = await this.prepareAttachments(article.Attachments);
-                    }
-
-                    const ticketOrQueueId = ticket.QueueID ? ticket : orgTicketQueueID;
-                    article.Body = await this.addQueueSignature(ticketOrQueueId, article.Body, article.ChannelID);
-
-                    await this.prepareReferencedArticle(article, ticket);
-                } else {
-                    article.Attachments = null;
-                    if (!forStorage) {
-                        article.Body = article.Body?.replace(/<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g, '');
-                    }
+            if (channelFormValues?.length) {
+                /**
+                 * Here starts the error for the attachments
+                 * not being in the commitment for the other browser
+                 */
+                for (const article of ticket.Articles) {
+                    this.prepareArticle(ticket, article, forCommit, orgTicketQueueID, forStorage);
                 }
-
-                this.prepareRecipients(article);
+            } else {
+                delete ticket.Articles;
             }
         }
 
         if (!ticket.Articles?.length) {
             delete ticket.Articles;
         }
+    }
+
+    public async prepareArticle(
+        ticket: Ticket, article: Article, forCommit: boolean, orgTicketQueueID: number, forStorage?: boolean
+    ): Promise<void> {
+        this.deleteArticleProperties(article);
+        this.deleteCommonProperties(article, true);
+
+        this.prepareDynamicFields(article, forCommit);
+
+        if (forCommit) {
+            if (article.Attachments?.length) {
+                article.Attachments = await this.prepareAttachments(article.Attachments);
+            }
+
+            const ticketOrQueueId = ticket.QueueID ? ticket : orgTicketQueueID;
+            article.Body = await this.addQueueSignature(ticketOrQueueId, article.Body, article.ChannelID);
+
+            await this.prepareReferencedArticle(article, ticket);
+        } else {
+            article.Attachments = null;
+            if (!forStorage) {
+                article.Body = article.Body?.replace(/<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g, '');
+            }
+        }
+
+        this.prepareRecipients(article);
     }
 
     private deleteArticleProperties(article: Article): void {
