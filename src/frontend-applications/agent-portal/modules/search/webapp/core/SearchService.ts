@@ -158,15 +158,17 @@ export class SearchService {
     }
 
     public async searchObjects(
-        searchCache: SearchCache,
+        cache: SearchCache,
         context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>(),
         additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean],
         additionalFilter?: FilterCriteria[],
         setResult: boolean = true
     ): Promise<KIXObject[]> {
-        if (!searchCache) {
+        if (!cache) {
             throw new Error('No search available');
         }
+
+        const searchCache = JSON.parse(JSON.stringify(cache));
 
         const searchDefinition = this.getSearchDefinition(searchCache.objectType);
 
@@ -256,7 +258,7 @@ export class SearchService {
 
         if (setResult && context instanceof SearchContext) {
             setTimeout(() => {
-                context.setSearchCache(searchCache);
+                context.setSearchCache(cache);
                 context.setSearchResult(objects);
             }, 1000);
         }
