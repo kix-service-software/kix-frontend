@@ -474,7 +474,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
 
         const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.TICKET);
 
-        if (pattern && ticket) {
+        if (pattern && ticket && !id) {
             displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, ticket);
         } else {
             let ticketHook: string = '';
