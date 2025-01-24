@@ -17,6 +17,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private bindingIds: string[];
     private formValue: RichTextFormValue;
+    private changeTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -65,11 +66,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public valueChanged(value: string): void {
-        this.state.currentValue = value;
-        if (this.state.currentValue === '') {
-            this.state.currentValue = null;
+        if (this.changeTimeout) {
+            window.clearTimeout(this.changeTimeout);
         }
-        this.formValue?.setFormValue(this.state.currentValue);
+
+        this.changeTimeout = setTimeout(async () => {
+            this.formValue.setFormValue(value);
+        }, 500);
     }
 
 }

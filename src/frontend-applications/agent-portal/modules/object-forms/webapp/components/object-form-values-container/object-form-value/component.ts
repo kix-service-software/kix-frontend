@@ -65,14 +65,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.bindingIds.push(
             this.state.formValue?.addPropertyBinding(
-                FormValueProperty.VALUE, (formValue: ObjectFormValue) => {
-                    this.state.formValues = [...formValue.formValues];
-                }
-            )
-        );
-
-        this.bindingIds.push(
-            this.state.formValue?.addPropertyBinding(
                 FormValueProperty.VALID, (formValue: ObjectFormValue) => {
                     this.state.valid = formValue.valid;
                 }
