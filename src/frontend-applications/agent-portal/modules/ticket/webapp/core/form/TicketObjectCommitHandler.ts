@@ -95,7 +95,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                  * not being in the commitment for the other browser
                  */
                 for (const article of ticket.Articles) {
-                    this.prepareArticle(ticket, article, forCommit, orgTicketQueueID, forStorage);
+                    await this.prepareArticle(ticket, article, forCommit, orgTicketQueueID, forStorage);
                 }
             } else {
                 delete ticket.Articles;

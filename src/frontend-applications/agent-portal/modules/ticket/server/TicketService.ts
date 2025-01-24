@@ -648,6 +648,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             ckEditorCSS = ckEditorCSS.toString();
 
             let bootstrapCSS = fs.readFileSync(__dirname + '/../../../static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css');
+            bootstrapCSS = bootstrapCSS.toString();
+
             const html = '<div class="ck ck-content">' + article.Body + '</div>';
             article.Body = juice.inlineContent(html, ckEditorCSS + bootstrapCSS);
         } catch (e) {
