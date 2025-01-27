@@ -318,7 +318,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
                 // use default if given
                 if (!formValue.value && formValue.defaultValue) {
-                    formValue.value = formValue.defaultValue;
+                    await formValue.setFormValue(formValue.defaultValue);
                 }
             }
         }
