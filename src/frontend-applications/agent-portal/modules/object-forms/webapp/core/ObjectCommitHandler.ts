@@ -28,13 +28,13 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
             const extensions = ObjectFormRegistry.getInstance().getObjectCommitHandlerExtensions(kixObjectType);
 
             for (const mapperExtension of extensions) {
-                this.extensions.push(new mapperExtension(objectValueMapper));
+                this.extensions?.push(new mapperExtension(objectValueMapper));
             }
         }
     }
 
     public destroy(): void {
-        for (const handlerExtension of this.extensions) {
+        for (const handlerExtension of this.extensions || []) {
             handlerExtension.destroy();
         }
     }
@@ -42,7 +42,7 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
     public async commitObject(): Promise<number | string> {
         const newObject = await this.prepareObject(this.objectValueMapper.object as any, this.objectValueMapper);
         const id = await ObjectCommitSocketClient.getInstance().commitObject(newObject);
-        for (const extension of this.extensions) {
+        for (const extension of this.extensions || []) {
             await extension.postCommitHandling(id);
         }
         return id;
@@ -51,7 +51,7 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
     public registerObjectCommitHandlerExtension(
         extension: ObjectCommitHandlerExtension
     ): void {
-        this.extensions.push(extension);
+        this.extensions?.push(extension);
     }
 
     public async prepareObject(
@@ -65,8 +65,8 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
             this.removeDisabledProperties(newObject, objectValueMapper?.getFormValues());
         }
 
-        if (this.extensions.length) {
-            this.extensions.forEach((e) => {
+        if (this.extensions?.length) {
+            this.extensions?.forEach((e) => {
                 e.prepareObject(newObject);
             });
         }
@@ -75,8 +75,8 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
     }
 
     protected async prepareTitle(object: T): Promise<void> {
-        if (this.extensions.length) {
-            for (const extension of this.extensions) {
+        if (this.extensions?.length) {
+            for (const extension of this.extensions || []) {
                 await extension.prepareTitle(object);
             }
         }

@@ -22,9 +22,6 @@ import { ObjectIcon } from '../../../model/ObjectIcon';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
-    private subscriber: IEventSubscriber;
-
     private dragCounter: number;
     private mimeTypes: string[];
 
@@ -45,11 +42,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
-
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Select image file'
         ]);
+
+        const size = await AttachmentUtil.getMaxUploadSize(true);
+        this.state.maxUploadSizeInfo = await TranslationService.translate(
+            'Max. allowed icon size: {0}', [AttachmentUtil.getFileSize(size)]
+        );
 
         const uploadElement = (this as any).getEl();
         if (uploadElement) {
@@ -95,10 +95,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async checkAndSetIcon(files: File[]): Promise<void> {
-        const fileError = await AttachmentUtil.checkFile(files[0], this.mimeTypes);
+        const fileError = await AttachmentUtil.checkFile(files[0], this.mimeTypes, true);
 
         if (fileError) {
-            const errorMessages = await AttachmentUtil.buildErrorMessages([[files[0], fileError]]);
+            const errorMessages = await AttachmentUtil.buildErrorMessages([[files[0], fileError]], true);
             const title = await TranslationService.translate('Translatable#Error while adding the image:');
             const content = new ComponentContent('list-with-title', { title, list: errorMessages });
 
