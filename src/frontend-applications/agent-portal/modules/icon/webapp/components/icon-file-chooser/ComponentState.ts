@@ -13,6 +13,7 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public dragging: boolean = false,
+        public maxUploadSizeInfo: string = ''
     ) {
         super();
     }

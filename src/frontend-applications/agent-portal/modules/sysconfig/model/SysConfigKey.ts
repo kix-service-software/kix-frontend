@@ -29,6 +29,8 @@ export enum SysConfigKey {
 
     MAX_ALLOWED_SIZE = 'FileUpload::MaxAllowedSize',
 
+    MAX_ALLOWED_ICON_SIZE = 'ObjectIcon::MaxAllowedSize',
+
     IMPRINT_LINK = 'ImprintLink',
 
     CONFIG_LEVEL = 'ConfigLevel',
