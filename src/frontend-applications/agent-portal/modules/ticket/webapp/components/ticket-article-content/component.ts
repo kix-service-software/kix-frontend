@@ -29,7 +29,7 @@ class Component {
             this.article = input.article;
 
             const applicationUrl = ClientStorageService.getApplicationUrl();
-            this.state.url = `${applicationUrl}/views/tickets/${this.article?.TicketID}/articles/${this.article?.ArticleID}`;
+            this.state.url = `${applicationUrl}/views/tickets/${this.article?.TicketID}/articles/${this.article?.ArticleID}?prepareInline=true`;
         }
     }
 
