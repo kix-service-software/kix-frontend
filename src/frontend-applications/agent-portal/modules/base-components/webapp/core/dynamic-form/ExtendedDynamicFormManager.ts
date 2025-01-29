@@ -17,6 +17,7 @@ import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyVa
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 export abstract class ExtendedDynamicFormManager implements IDynamicFormManager {
 
@@ -174,6 +175,10 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
     }
 
     public isRelativDateTimeOperator(operator: string): boolean {
+        return;
+    }
+
+    public prepareValuesForParameter(values: ObjectPropertyValue[], selectedObjects: KIXObject[]): void {
         return;
     }
 }

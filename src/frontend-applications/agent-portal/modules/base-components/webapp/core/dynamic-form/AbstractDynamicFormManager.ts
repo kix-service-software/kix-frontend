@@ -293,6 +293,12 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public showValueInput(value: ObjectPropertyValue): boolean {
+        for (const extendedManager of this.extendedFormManager) {
+            const result = extendedManager.showValueInput(value);
+            if (typeof result === 'boolean') {
+                return result;
+            }
+        }
         return Boolean(value.property && value.operator);
     }
 
