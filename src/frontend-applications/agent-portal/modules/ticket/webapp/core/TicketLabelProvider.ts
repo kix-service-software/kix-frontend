@@ -118,26 +118,12 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.ORGANISATION_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    const organisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, [value]
-                    );
-                    if (organisations?.length) {
-                        displayValue = await LabelService.getInstance().getObjectText(organisations[0]);
-                    } else {
-                        displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.ORGANISATION, value);
-                    }
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.ORGANISATION, value);
                 }
                 break;
             case TicketProperty.CONTACT_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    const contacts = await KIXObjectService.loadObjects<Contact>(
-                        KIXObjectType.CONTACT, [value]
-                    );
-                    if (contacts?.length) {
-                        displayValue = await LabelService.getInstance().getObjectText(contacts[0]);
-                    } else {
-                        displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.CONTACT, value);
-                    }
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.CONTACT, value);
                 }
                 break;
             case TicketProperty.CREATED:
