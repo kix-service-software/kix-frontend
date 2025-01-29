@@ -319,15 +319,15 @@ class Component {
             let count = this.state.table?.getContentProvider()?.totalCount || 0;
 
             if (!count) {
-                count = this.state.table?.getRowCount(true);
+                count = this.state.table?.getRowCount();
             }
 
             let countString = `${count}`;
             // TODO: consider frontend filtering?
             // if current loaded (page) < total, show actually loaded (api-filter/permission) of total
             const currentLimit = this.state.table?.getContentProvider()?.currentLimit || count;
-            if (currentLimit < count) {
-                const visibleRows = this.state.table?.getRowCount();
+            const visibleRows = this.state.table?.getRowCount(true);
+            if (currentLimit < visibleRows) {
                 countString = `${visibleRows}/${count}`;
             }
 
@@ -412,6 +412,8 @@ class Component {
             if (this.state.widgetConfiguration?.contextDependent) {
                 this.setFilteredObjectListToContext();
             }
+
+            this.prepareTitle();
         }
     }
 
