@@ -293,29 +293,6 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                     formValue.required = true;
                 }
 
-                if (
-                    formValue.property === ArticleProperty.BODY && !formValue.defaultValue
-                    && this.article?.TicketID && this.article?.ArticleID
-                ) {
-
-                    const inlineAttachments = (this.article.Attachments || []).filter((a) => a.Disposition === 'inline');
-                    const attachments = await TicketService.getInstance().loadArticleAttachments(
-                        this.article.TicketID, this.article.ArticleID, inlineAttachments.map((a) => a.ID)
-                    );
-
-                    for (const attachment of attachments) {
-                        const index = this.article.Attachments.findIndex((a) => a.ID === attachment.ID);
-                        if (index !== -1) {
-                            this.article.Attachments[index] = attachment;
-                        }
-                    }
-                    const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(
-                        this.article
-                    );
-                    let contentString = BrowserUtil.replaceInlineContent(prepareContent[0], prepareContent[1]);
-                    formValue.value = contentString;
-                }
-
                 // use default if given
                 if (!formValue.value && formValue.defaultValue) {
                     await formValue.setFormValue(formValue.defaultValue);
