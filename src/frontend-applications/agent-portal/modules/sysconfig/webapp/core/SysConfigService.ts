@@ -11,7 +11,11 @@ import { AgentPortalConfiguration } from '../../../../model/configuration/AgentP
 import { DisplayValueConfiguration } from '../../../../model/configuration/DisplayValueConfiguration';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
+import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
 import { SysConfigKey } from '../../model/SysConfigKey';
 import { SysConfigOption } from '../../model/SysConfigOption';
 import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
@@ -116,6 +120,21 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         }
 
         return pattern;
+    }
+
+    public async updateObjectByForm(
+        objectType: KIXObjectType | string, formId: string, objectId: number | string,
+        cacheKeyPrefix: string = objectType
+    ): Promise<string | number> {
+
+        if (objectId.toString() === SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG) {
+            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(objectType, ServiceType.FORM);
+            const parameter = await service.getFormParameter(true);
+            const value = parameter.find((p) => p.includes('Value'));
+            ClientStorageService.setSocketTimeout(value[1]);
+        }
+
+        return super.updateObjectByForm(objectType, formId, objectId, cacheKeyPrefix);
     }
 
 }
