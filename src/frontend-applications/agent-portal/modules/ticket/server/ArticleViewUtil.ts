@@ -1,8 +1,13 @@
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Attachment } from '../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { InlineContent } from '../../base-components/webapp/core/InlineContent';
+import { SysConfigKey } from '../../sysconfig/model/SysConfigKey';
+import { SysConfigOption } from '../../sysconfig/model/SysConfigOption';
+import { SysConfigService } from '../../sysconfig/server/SysConfigService';
 import { Article } from '../model/Article';
 import { ArticleLoadingOptions } from '../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../model/ArticleProperty';
@@ -11,7 +16,8 @@ import { TicketAPIService } from './TicketService';
 export class ArticleViewUtil {
 
     public static async getArticleHTMLContent(
-        token: string, articleId: number, ticketId: number, resolveInlineCSS: boolean
+        token: string, articleId: number, ticketId: number, reduceContent: boolean, resolveInlineCSS: boolean,
+        linesCount?: number, prepareInline: boolean = true
     ): Promise<string> {
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.includes.push(ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN);
@@ -25,7 +31,9 @@ export class ArticleViewUtil {
             const article = new Article(articleResponse.objects[0]);
 
             if (article.bodyAttachment) {
-                content = await this.getHTMLContent(token, ticketId, article);
+                content = await this.getHTMLContent(
+                    token, ticketId, article, reduceContent, linesCount, prepareInline
+                );
 
                 if (resolveInlineCSS) {
                     const juice = require('juice');
@@ -45,10 +53,18 @@ export class ArticleViewUtil {
         return content;
     }
 
-    private static async getHTMLContent(token: string, ticketId: number, article: Article): Promise<string> {
-        const inlineAttachments = article.getInlineAttachments() || [];
+    private static async getHTMLContent(
+        token: string, ticketId: number, article: Article, reduceContent: boolean,
+        linesCount?: number, prepareInline: boolean = true
+    ): Promise<string> {
 
-        const attachmentIds = [article.bodyAttachment.ID, ...inlineAttachments.map((a) => a.ID)];
+        const attachmentIds = [article.bodyAttachment.ID];
+
+        if (prepareInline) {
+            const inlineAttachments = article.getInlineAttachments() || [];
+            attachmentIds.push(...inlineAttachments.map((a) => a.ID));
+        }
+
         const attachments = await TicketAPIService.getInstance().loadArticleAttachments(
             token, ticketId, article.ArticleID, attachmentIds
         );
@@ -56,11 +72,16 @@ export class ArticleViewUtil {
         const contentAttachment = attachments.find((a) => a.ID === article.bodyAttachment.ID);
         let content = this.getContent(contentAttachment);
 
-        let inlineContent = [];
-        const inline = attachments?.filter((a) => a.ID !== article.bodyAttachment.ID);
-        inlineContent = this.prepareInlineContent(inline);
+        if (reduceContent) {
+            content = await this.reduceContent(content, linesCount);
+        }
 
-        content = this.replaceInlineContent(content, inlineContent);
+        if (prepareInline) {
+            let inlineContent = [];
+            const inline = attachments?.filter((a) => a.ID !== article.bodyAttachment.ID);
+            inlineContent = this.prepareInlineContent(inline);
+            content = this.replaceInlineContent(content, inlineContent);
+        }
         return content;
     }
 
@@ -165,6 +186,67 @@ export class ArticleViewUtil {
                 }
             }
         }
+    }
+
+    public static async reduceContent(result: string, reduceContent?: number): Promise<string> {
+        let linesCount = reduceContent;
+        if (reduceContent > 0) {
+            linesCount = reduceContent;
+        } else {
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            const response = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                serverConfig.BACKEND_API_TOKEN, 'ArticleViewUtil', KIXObjectType.SYS_CONFIG_OPTION,
+                [`${SysConfigKey.TICKET_PLACEHOLDER_BODYRICHTEXT_LINECOUNT}`],
+                null, null
+            ).catch((): ObjectResponse<SysConfigOption> => new ObjectResponse());
+            linesCount = response?.objects?.length ? Number(response.objects[0].Value) : 0;
+        }
+
+        if (!isNaN(linesCount) && linesCount > 0) {
+            const lines = result.split(/\n/);
+
+            if (lines.length > linesCount) {
+                result = lines.slice(0, linesCount).join('\n');
+                result = this.closeTags(result);
+                result += '\n[...]';
+            }
+        }
+        return result;
+    }
+
+    public static closeTags(body: string): string {
+
+        // get all opening and closing tag names but not self closing ones
+        // e.g. <div>, <p class...> but not <br /> or <img src... />
+        const ingoreTags = [
+            'area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen',
+            'link', 'meta', 'param', 'source', 'track', 'wbr'
+        ];
+        const startTags = (body.match(/(?:<([^!\s\/]+?)>|<([^!\s\/]+)\s+.+?\s*[^\/]>)/g) || [])
+            .map((tag) => tag.slice(1, -1))// remove < and >
+            .map((tag: string) => tag.replace(/(\w+).*/s, '$1'))
+            .filter((tag) => !ingoreTags.some((itag) => itag === tag));
+        const endTags = (body.match(/<\/(.+?)>/g) || [])
+            .map((tag) => tag.slice(2, -1)) // remove </ and >
+            .filter((tag) => !ingoreTags.some((itag) => itag === tag));
+
+        // rember only opening tags with no closing counterpart
+        if (endTags.length) {
+
+            // remove now closed tags (start with last opened - in to out)
+            startTags.reverse();
+            endTags.forEach((tag) => {
+                const index = startTags.findIndex((startTag) => startTag === tag);
+                if (index !== -1) {
+                    startTags.splice(index, 1);
+                }
+            });
+        }
+
+        // add closing tags if needed (start with last, still reversed)
+        startTags.forEach((tag) => body += `\n<\/${tag}>`);
+
+        return body;
     }
 
 }
