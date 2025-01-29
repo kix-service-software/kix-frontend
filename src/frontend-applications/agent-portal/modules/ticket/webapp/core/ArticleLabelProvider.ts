@@ -121,19 +121,15 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
             case ArticleProperty.BODY_RICHTEXT:
                 if (article) {
                     const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(article);
-                    if (prepareContent) {
-                        displayValue = BrowserUtil.replaceInlineContent(prepareContent[0], prepareContent[1]);
-                    }
+                    displayValue = prepareContent;
                     translatable = false;
                 }
                 break;
             case ArticleProperty.BODY_RICHTEXT_NO_INLINE:
                 if (article) {
-                    const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(
-                        article, true
-                    );
+                    const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(article);
                     if (prepareContent) {
-                        displayValue = prepareContent[0];
+                        displayValue = prepareContent;
                     }
                     translatable = false;
                 }

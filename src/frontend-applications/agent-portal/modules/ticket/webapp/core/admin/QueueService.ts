@@ -267,6 +267,9 @@ export class QueueService extends KIXObjectService<Queue> {
                 parent.ValidID = 2;
                 parent.SubQueues = [queue];
 
+                // add queue to queuelist
+                queues.push(parent);
+
                 // check if parent queue is not on root level
                 if (names.length > 1) {
                     // prepare next level
@@ -286,9 +289,6 @@ export class QueueService extends KIXObjectService<Queue> {
 
             // set parent of queue
             queue.ParentID = parent.QueueID;
-
-            // add queue to queuelist
-            queues.push(parent);
         }
     }
 

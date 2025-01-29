@@ -86,13 +86,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     this.state.prepared = false;
                     this.handlerChangeInProgress = true;
                 } else if (
-                    this.formhandler.objectFormValueMapper.initialized &&
+                    this.formhandler?.objectFormValueMapper?.initialized &&
                     eventId === ObjectFormEvent.FORM_VALUE_ADDED &&
                     data?.instanceId === this.context.instanceId
                 ) {
                     updateNeeded = true;
                 } else if (
-                    this.formhandler.objectFormValueMapper.initialized &&
+                    this.formhandler?.objectFormValueMapper?.initialized &&
                     eventId === ObjectFormEvent.FIELD_ORDER_CHANGED
                 ) {
                     updateNeeded = true;
@@ -156,7 +156,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.prepared = true;
 
             setTimeout(() => {
-                const invalidFormValue = this.getFirstInvalidFormValue(this.formhandler.getFormValues());
+                const invalidFormValue = this.getFirstInvalidFormValue(this.formhandler?.getFormValues());
                 EventService.getInstance().publish(ObjectFormEvent.SCROLL_TO_FORM_VALUE, invalidFormValue?.instanceId);
             }, 25);
         }
@@ -171,7 +171,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.prepared = false;
 
                 try {
-                    const id = await this.formhandler.commit();
+                    const id = await this.formhandler?.commit();
                     if (id) {
 
                         await ContextService.getInstance().removeContext(
