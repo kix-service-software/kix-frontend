@@ -35,18 +35,27 @@ div#graphdiv {
             .widget-filter {
                 .action-list-wrapper {
                     .action-list {
-                        .action {
-                            a {
-                                color: @secondary-6;
+                        button {
+                            .action {
+                                &:not(.inactive) {
+                                    color: @secondary-6;
+                                }
+
+                                &.inactive {
+                                    color: @secondary-2;
+                                }
                             }
                         }
-                    }
 
-                    .action-list-expansion-container {
-                        background-color: @primary-2;
-
-                        .action-list-expansion {
+                        .is-expansion {
+                            background-color: @primary-2;
                             color: @secondary-6;
+
+                            .dropdown-menu .list-group-item {
+                                background-color: fade(@primary-2, 85%);
+                                color: @secondary-6;
+                                border-color: @primary-2;
+                            }
                         }
                     }
                 }
@@ -57,36 +66,27 @@ div#graphdiv {
 
             >.action-list-wrapper {
                 >.action-list {
-                    >li {
-                        color: @secondary-6;
-
-                        a {
-                            color: @secondary-6
-                        }
-
-                        &.inactive {
-                            color: @secondary-2;
-
-                            a {
-                                color: @secondary-2
+                    button {
+                        .action {
+                            &:not(.inactive) {
+                                color: @secondary-6;
                             }
-                        }
 
-                        &:hover:not(.list-button):not(.inactive) {
-                            color: @primary-5;
-
-                            a {
-                                color: @primary-5
+                            &.inactive {
+                                color: @secondary-2;
                             }
                         }
                     }
-                }
 
-                .action-list-expansion-container {
-                    background-color: @primary-2;
-
-                    .action-list-expansion {
+                    .is-expansion {
+                        background-color: @primary-2;
                         color: @secondary-6;
+
+                        .dropdown-menu .list-group-item {
+                            background-color: fade(@primary-2, 85%);
+                            color: @secondary-6;
+                            border-color: @primary-2;
+                        }
                     }
                 }
             }

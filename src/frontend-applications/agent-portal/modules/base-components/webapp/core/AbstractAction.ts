@@ -23,6 +23,10 @@ export abstract class AbstractAction<T = any> implements IAction<T> {
     public icon: string | ObjectIcon;
     public data: T;
     public hasLink: boolean = true;
+    public rank: number;
+    public groupText: string;
+    public groupIcon: string | ObjectIcon;
+    public groupRank: number;
 
     public permissions: UIComponentPermission[] = [];
 
