@@ -7,16 +7,14 @@
  * --
  */
 
-import { IAction } from '../../../../../modules/base-components/webapp/core/IAction';
+import { ActionGroup } from '../../../model/ActionGroup';
+import { IAction } from '../../core/IAction';
 
 export class ComponentState {
 
     public constructor(
-        public actionList: IAction[] = [],
-        public listDefault: IAction[] = [],
-        public listExpansion: IAction[] = [],
-        public showListExpansion: boolean = false,
-        public keepShow: boolean = false,
+        public listDefault: Array<ActionGroup | IAction> = [],
+        public listExpansion: Array<ActionGroup | IAction> = [],
         public displayText: boolean = true,
         public prepared: boolean = false
     ) { }

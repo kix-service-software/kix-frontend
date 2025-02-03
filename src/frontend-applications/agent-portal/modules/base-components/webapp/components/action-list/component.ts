@@ -8,76 +8,57 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { IActionListener } from '../../../../../modules/base-components/webapp/core/IActionListener';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { IAction } from '../../core/IAction';
+import { ActionFactory } from '../../core/ActionFactory';
+import { ActionGroup } from '../../../model/ActionGroup';
+import { BrowserUtil } from '../../core/BrowserUtil';
 
-export class Component implements IActionListener {
+export class Component {
 
     private state: ComponentState;
     private resizeTimeout: any = null;
+    private prepareTimeout: any;
+    private observer: ResizeObserver;
+    private actionList: IAction[];
+    private actionsToShow: Array<ActionGroup | IAction>;
 
     public listenerInstanceId: string;
-
-    private prepareTimeout;
-
-    private observer: ResizeObserver;
+    public fontSize: number;
+    public expansionWidth: number;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
+        this.fontSize = BrowserUtil.getBrowserFontsize();
+        this.expansionWidth = 3 * this.fontSize;
         this.listenerInstanceId = input.instanceId;
-        this.initActionList(input);
     }
 
     public onInput(input: any): void {
-        this.initActionList(input);
-    }
-
-    private async initActionList(input: any): Promise<void> {
         this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
-        this.state.prepared = false;
-
-        if (Array.isArray(input.list) && input.list.length) {
-            await this.setActionList(input.list);
-        }
-        this.state.prepared = true;
-
-        this.prepareActionLists();
+        this.actionList = input.list || [];
     }
 
-    private async setActionList(actionList: IAction[]): Promise<void> {
-        const actions = [];
-        if (Array.isArray(actionList)) {
-            const actionPromises = [];
-            actionList.forEach((a) => actionPromises.push(a.canShow()));
-            const actionsResults = await Promise.all(actionPromises);
-            actionsResults.forEach((r, i) => {
-                if (r) {
-                    actions.push(actionList[i]);
-                }
-            });
-        }
-
-        this.state.actionList = actions;
-    }
-
-    public onMount(): void {
-        document.addEventListener('click', (event) => {
-            if (this.state.keepShow) {
-                this.state.keepShow = false;
-            } else {
-                this.state.showListExpansion = false;
-            }
-        }, false);
+    public async onMount(): Promise<void> {
+        this.actionsToShow = await ActionFactory.getActionList(this.actionList);
 
         if (this.listenerInstanceId) {
-            WidgetService.getInstance().registerActionListener(this);
-            this.actionsChanged();
-        } else {
+            WidgetService.getInstance().registerActionListener({
+                listenerInstanceId: this.listenerInstanceId,
+                actionDataChanged: () => {
+                    (this as any).setStateDirty('listDefault');
+                    (this as any).setStateDirty('listExpansion');
+                },
+                actionsChanged: () => this.actionsChanged()
+            });
+            await this.actionsChanged();
+        } else if (this.actionsToShow.length) {
             this.prepareActionLists();
         }
 
-        this.prepareObserver();
+        this.state.prepared = true;
+
+        setTimeout(() => this.prepareObserver(), 150);
     }
 
     public onDestroy(): void {
@@ -86,22 +67,35 @@ export class Component implements IActionListener {
         }
     }
 
+    private actionPreparationRunning = false;
     private prepareObserver(): void {
         if (window.ResizeObserver) {
-            this.observer = new ResizeObserver((entries) => {
-                this.resizeThrottler();
-            });
-            const rootElement = (this as any).getEl();
-            this.observer.observe(rootElement);
-        }
-    }
+            const rootElement: HTMLElement = (this as any).getEl('action-list-wrapper');
+            const container = rootElement?.parentElement;
+            const actionListElement: HTMLElement = (this as any).getEl('action-list');
 
-    private resizeThrottler(): void {
-        if (!this.resizeTimeout) {
-            this.resizeTimeout = setTimeout(() => {
-                this.resizeTimeout = null;
-                this.prepareActionLists();
-            }, 100);
+            let containerWidth = container.offsetWidth;
+            this.observer = new ResizeObserver((entries) => {
+                if (
+                    container.offsetWidth !== containerWidth &&
+                    !this.actionPreparationRunning && this.actionsToShow.length
+                ) {
+                    // hide, so action do not visible overlap if container shrinks
+                    actionListElement.classList.add('opacity-0');
+
+                    if (this.resizeTimeout) {
+                        clearTimeout(this.resizeTimeout);
+                    }
+
+                    this.resizeTimeout = setTimeout(() => {
+                        containerWidth = container.offsetWidth;
+                        this.prepareActionLists();
+                        this.resizeTimeout = null;
+                    }, 150);
+                }
+            });
+
+            this.observer.observe(container);
         }
     }
 
@@ -109,48 +103,63 @@ export class Component implements IActionListener {
         if (this.prepareTimeout) {
             window.clearTimeout(this.prepareTimeout);
         }
+
+        const actionListElement: HTMLElement = (this as any).getEl('action-list');
+        const maxWidth = actionListElement?.parentElement?.offsetWidth || 0;
+
+        // hide action during preparation
+        actionListElement.classList.add('opacity-0');
+
+        this.actionPreparationRunning = true;
+        this.state.listDefault = [...this.actionsToShow];
+        this.state.listExpansion = [];
+        (this as any).setStateDirty();
+
         this.prepareTimeout = setTimeout(() => {
-            const actionListElement = (this as any).getEl('action-list');
-            const listWidth = actionListElement ? actionListElement.scrollWidth : 0;
-            if (this.state.actionList) {
-                const actionWidth = (this.state.displayText ? 9.5 : 1.75) * this.getBrowserFontsize();
-                const gapWith = 1.5 * this.getBrowserFontsize();
-                let maxActions = this.state.actionList.length;
-                while ((maxActions * actionWidth) + ((maxActions - 1) * gapWith) > listWidth && maxActions > 0) {
-                    maxActions--;
+            this.prepareTimeout = null;
+            const listDefault = [];
+            const listExpansion = [];
+            if (this.actionsToShow.length) {
+                let actionsWidth = 0;
+                for (const action of this.actionsToShow) {
+                    const element = (this as any).getEl(action['key']);
+                    const width = element?.offsetWidth || ((this.state.displayText ? 16 : 3) * this.fontSize);
+
+                    if (actionsWidth + width < maxWidth) {
+                        listDefault.push(action);
+                        actionsWidth += width;
+                    } else {
+                        listExpansion.push(action);
+                    }
                 }
-                this.state.listDefault = this.state.actionList.slice(0, maxActions);
-                this.state.listExpansion = this.state.actionList.slice(maxActions);
+
+                // if list is wider with expansion button shown, move last action
+                if (listDefault.length && listExpansion.length && (actionsWidth + this.expansionWidth) > maxWidth) {
+                    const removedElement = listDefault.pop();
+                    listExpansion.unshift(removedElement);
+                }
             }
-        }, 250);
-    }
-
-    private getBrowserFontsize(): number {
-        const browserFontSizeSetting = window
-            .getComputedStyle(document.getElementsByTagName('body')[0], null)
-            .getPropertyValue('font-size');
-        return Number(browserFontSizeSetting.replace('px', ''));
-    }
-
-    public toggleListExpansion(event: any): any {
-        event.stopPropagation();
-        this.state.showListExpansion = !this.state.showListExpansion;
-        this.state.keepShow = !this.state.keepShow;
+            this.state.listDefault = listDefault;
+            this.state.listExpansion = listExpansion;
+            (this as any).setStateDirty();
+            actionListElement.classList.remove('opacity-0');
+            this.actionPreparationRunning = false;
+        }, 200);
     }
 
     public async actionsChanged(): Promise<void> {
         const actions = WidgetService.getInstance().getRegisteredActions(this.listenerInstanceId);
         if (actions) {
-            await this.setActionList(actions[0]);
+            this.actionList = actions[0];
+            this.actionsToShow = await ActionFactory.getActionList(this.actionList);
             this.state.displayText = actions[1];
             this.prepareActionLists();
         }
     }
-
-    public actionDataChanged(): void {
-        (this as any).setStateDirty('listDefault');
-        (this as any).setStateDirty('listExpansion');
+    public actionListClicked(event: any): any {
+        (this as any).emit('actionListClicked');
     }
+
 }
 
 module.exports = Component;

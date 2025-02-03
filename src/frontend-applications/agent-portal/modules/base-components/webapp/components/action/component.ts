@@ -31,11 +31,13 @@ class ActionComponent {
     private async update(): Promise<void> {
         this.state.text = await TranslationService.translate(this.state.action.text);
         this.state.actionData = await this.state.action.getLinkData();
+        this.state.canRunAction = this.state.action.canRun();
     }
 
     public doAction(event: any): void {
         if (!this.state.canRunAction) return;
         this.state.canRunAction = false;
+        (this as any).emit('actionClicked');
         if (event) {
             event.stopPropagation();
             event.preventDefault();
