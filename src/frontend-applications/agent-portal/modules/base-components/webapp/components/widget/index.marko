@@ -64,6 +64,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 list=input.actions
                 instanceId=state.instanceId
                 displayText=component.getWidgetTypeActionDisplaySetting()
+                on-actionListClicked('doNotChangeMinimize')
             />
             <if(state.minimizable)>
                 <span class="minimize-icon-wrapper">

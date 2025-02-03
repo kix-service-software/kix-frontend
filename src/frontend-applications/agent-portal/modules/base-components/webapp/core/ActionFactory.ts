@@ -11,6 +11,11 @@ import { AbstractAction } from './AbstractAction';
 import { IAction } from './IAction';
 import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
+import { SortOrder } from '../../../../model/SortOrder';
+import { SortUtil } from '../../../../model/SortUtil';
+import { IdService } from '../../../../model/IdService';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ActionGroup } from '../../model/ActionGroup';
 
 
 export class ActionFactory<T extends AbstractAction> {
@@ -105,6 +110,66 @@ export class ActionFactory<T extends AbstractAction> {
         }
 
         return actions;
+    }
+
+    public static sortList<T extends ActionGroup | IAction>(list: T[]): T[] {
+        return list.sort((a, b) => {
+            // objects wihout rank belong to the end and are not sorted by text
+            // check b first to keep given order e.g. if a also has no rank
+            if (typeof b.rank === 'undefined' || b.rank === null) {
+                return 0;
+            }
+            if (typeof a.rank === 'undefined' || a.rank === null) {
+                return 1;
+            }
+
+            // sort by given rank or text if equal
+            if (a.rank !== b.rank) {
+                return SortUtil.compareNumber(
+                    a.rank, b.rank, SortOrder.UP, false
+                );
+            } else {
+                return SortUtil.compareString(a.text, b.text, SortOrder.UP);
+            }
+        });
+    }
+
+    public static async getActionList(actionList: IAction[]): Promise<Array<ActionGroup | IAction>> {
+        const list: Array<ActionGroup | IAction> = [];
+        const actionPromises = [];
+        actionList.forEach((a) => actionPromises.push(a.canShow()));
+        const canShowResults = await Promise.all(actionPromises);
+        for (const [index, canShow] of canShowResults.entries()) {
+            if (!canShow) {
+                continue;
+            }
+
+            const action = actionList[index];
+            action['key'] = IdService.generateDateBasedId();
+            if (action.groupText) {
+                const group = list.find((c) => c.text === action.groupText);
+                if (group instanceof ActionGroup) {
+                    group.actions.push(action);
+                    if (!group.icon) {
+                        group.icon = action.groupIcon;
+                    }
+                } else {
+                    list.push(new ActionGroup(
+                        [action], action.groupRank, action.groupText, action.groupIcon
+                    ));
+                }
+            } else {
+                list.push(action);
+            }
+        }
+
+        const actionsToShow = ActionFactory.sortList(list);
+        for (const c of actionsToShow.filter((a) => a instanceof ActionGroup)) {
+            c.text = await TranslationService.translate(c.text);
+            c.actions = ActionFactory.sortList(c.actions);
+        };
+
+        return actionsToShow;
     }
 
 }

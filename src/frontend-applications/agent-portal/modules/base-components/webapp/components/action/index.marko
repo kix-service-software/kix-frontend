@@ -7,25 +7,44 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.action on-click("doAction") title=state.text>
+<div
+    on-click("doAction")
+    title=state.text
+    class=[
+        "action",
+        "d-flex",
+        "align-items-center",
+        "overflow-hidden",
+        {
+            inactive: !state.canRunAction,
+        },
+    ]
+>
     <if(state.action.hasLink)>
         <a
             href=("?actionId=" + state.action.id + "&data=" + state.actionData)
-            on-click("linkClicked")>
-            <icon icon=state.action.icon/>
+            on-click("linkClicked")
+        >
+            <icon icon=(state.action.icon)/>
         </a>
     </if>
     <else>
-        <icon icon=state.action.icon/>
+        <icon icon=(state.action.icon)/>
     </else>
     <if(state.displayText && state.action.hasLink)>
         <a
+            class="ms-2 text-truncate"
             href=("?actionId=" + state.action.id + "&data=" + state.actionData)
-            on-click("linkClicked")>
-            <span.text>${state.text}</span>
+            on-click("linkClicked")
+        >
+            <span class="text text-nowrap">
+                ${state.text}
+            </span>
         </a>
     </if>
     <else-if(state.displayText)>
-        <span.text>${state.text}</span>
+        <span class="ms-2 text text-nowrap text-truncate">
+            ${state.text}
+        </span>
     </else-if>
 </div>
