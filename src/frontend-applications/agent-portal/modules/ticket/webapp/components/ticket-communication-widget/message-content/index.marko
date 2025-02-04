@@ -50,16 +50,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </div>
         <div
             style=`background-color: ${state.backgroundColor};`
-            on-click("toggleArticleCompactView", false)
             class="message"
         >
-            <div class=[
-                "header",
-                {
-                    "list-view":
-                        state.selectedCompactView && !state.compactViewExpanded,
-                },
-            ]>
+            <div
+                class=[
+                    "header",
+                    {
+                        "list-view":
+                            state.selectedCompactView &&
+                            !state.compactViewExpanded,
+                    },
+                ]
+                on-click("toggleArticleCompactView", false)
+            >
                 <message-header
                     article=state.article
                     articleCountNumber=input.articleCountNumber
@@ -97,9 +100,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             </div>
                         </if>
                     </div>
-                    <div
-                    key="message-body"
-                    class="message-body">
+                    <div key="message-body" class="message-body">
                         <div
                             on-click("toggleArticleListView")
                             class="show-message hide-top"
