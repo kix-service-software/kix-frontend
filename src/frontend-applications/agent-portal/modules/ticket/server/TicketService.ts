@@ -715,12 +715,14 @@ export class TicketAPIService extends KIXObjectAPIService {
             : response?.responseData?.Attachment;
 
 
-        if (asDownload && Array.isArray(attachments)) {
+        if (Array.isArray(attachments)) {
             const preparedAttachments = [];
             for (const a of attachments) {
                 const preparedAttachment = new Attachment(a);
                 preparedAttachments.push(preparedAttachment);
-                FileService.prepareFileForDownload(user?.UserID, preparedAttachment);
+                if (asDownload) {
+                    FileService.prepareFileForDownload(user?.UserID, preparedAttachment);
+                }
             }
             attachments = preparedAttachments;
         }

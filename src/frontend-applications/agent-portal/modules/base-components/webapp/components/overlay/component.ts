@@ -54,9 +54,7 @@ class OverlayComponent {
 
         EventService.getInstance().subscribe(ApplicationEvent.CLOSE_OVERLAY, {
             eventSubscriberId: 'overlay',
-            eventPublished: (): void => {
-                this.closeOverlay();
-            }
+            eventPublished: (): void => this.closeOverlay()
         });
     }
 
