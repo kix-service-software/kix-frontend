@@ -36,11 +36,23 @@ export class ArticleViewUtil {
                 );
 
                 if (resolveInlineCSS) {
-                    const juice = require('juice');
-                    content = juice(content);
+                    let error = '';
+                    try {
+                        const juice = require('juice');
+                        content = juice(content);
+                    } catch (e) {
+                        LoggingService.getInstance().error('Error resolving inline css.', e);
+                        LoggingService.getInstance().error(e);
+                        error = 'Possible invalid HTML/CSS in source mail.';
+                    }
+
                     const bodyMatch = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
                     if (bodyMatch && bodyMatch.length >= 3) {
                         content = bodyMatch[2];
+                    }
+
+                    if (error) {
+                        content = `<b style=\"color:red\">${error}</b>${content}`;
                     }
                 }
             } else {
