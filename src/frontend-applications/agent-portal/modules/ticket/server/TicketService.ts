@@ -664,13 +664,14 @@ export class TicketAPIService extends KIXObjectAPIService {
 
     private async prepareArticleAttachments(article: Article, token: string): Promise<void> {
         if (Array.isArray(article.Attachments)) {
+            const user = await UserService.getInstance().getUserByToken(token);
             for (const attachment of article.Attachments) {
                 if (!attachment.Content) {
                     let content;
                     // probably an attachment from a referenced article
                     if (attachment.Disposition === 'attachment') {
-                        content = FileService.getFileContent(attachment.Filename, true);
-                        FileService.removeFile(attachment.Filename, false);
+                        content = FileService.getFileContent(attachment.downloadId, true);
+                        FileService.removeDownload(attachment.downloadId, user?.UserID);
                     }
                     // a new attachment
                     else {
