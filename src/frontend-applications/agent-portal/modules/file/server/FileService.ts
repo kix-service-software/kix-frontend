@@ -33,8 +33,9 @@ export class FileService {
         const fileName = `${userId}_downloads.json`;
         try {
             if (!downloads.some((f) => f.Filename === file.Filename && f.FilesizeRaw === file.FilesizeRaw)) {
+                file.downloadId ||= uuidv4();
                 if (!file.path) {
-                    const filePath = this.getFilePath(file.Filename);
+                    const filePath = this.getFilePath(file.downloadId);
                     fs.writeFileSync(filePath, file.Content, { encoding: 'base64' });
                 }
                 this.addFileToDownloads(file, downloads, fileName);
@@ -56,7 +57,7 @@ export class FileService {
     private static addFileToDownloads(
         file: IDownloadableFile, downloads: IDownloadableFile[] = [], downloadFileName: string
     ): void {
-        file.downloadId = uuidv4();
+        file.downloadId ||= uuidv4();
         file.downloadSecret = uuidv4();
 
 
@@ -91,13 +92,17 @@ export class FileService {
 
         const file = FileService.getDownloadFile(downloadId, userId);
         if (file) {
-            res.download(FileService.getFilePath(file.Filename, file.path), (err) => {
-                if (err) {
-                    LoggingService.getInstance().error('Error while download file to client.', err);
-                } else {
-                    FileService.removeDownload(downloadId, userId);
+            res.download(
+                FileService.getFilePath(file.downloadId, file.path),
+                file.Filename,
+                (err) => {
+                    if (err) {
+                        LoggingService.getInstance().error('Error while download file to client.', err);
+                    } else {
+                        FileService.removeDownload(downloadId, userId);
+                    }
                 }
-            });
+            );
 
         } else {
             res.status(400);
@@ -124,14 +129,14 @@ export class FileService {
         return downloads;
     }
 
-    private static removeDownload(downloadId: string, userId: number): void {
+    public static removeDownload(downloadId: string, userId: number): void {
         const downloads = this.getDownloads(userId);
         const index = downloads.findIndex((d) => d.downloadId === downloadId);
         if (index !== -1) {
             const file = downloads[index];
 
             if (!file.path) {
-                this.removeFile(file.Filename);
+                this.removeFile(file.downloadId);
             }
 
             downloads.splice(index, 1);
