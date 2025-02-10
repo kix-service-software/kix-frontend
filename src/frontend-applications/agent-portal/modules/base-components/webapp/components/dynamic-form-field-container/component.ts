@@ -411,6 +411,11 @@ class Component {
         event.stopPropagation();
         event.preventDefault();
 
+        if (this.dragInterval) {
+            clearInterval(this.dragInterval);
+            this.dragInterval = null;
+        }
+
         await this.manager.changeValueOrder(this.state.dragStartIndex, index);
         this.sortLocalValues(this.state.dragStartIndex, index);
 
