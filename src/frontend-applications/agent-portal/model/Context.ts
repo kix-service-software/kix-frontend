@@ -654,6 +654,14 @@ export abstract class Context {
             }
         }
 
+        if (configuration?.conditions?.length) {
+            const object = await this.getObject();
+            const allowed = await FilterUtil.checkCriteriaByPropertyValue(configuration.conditions, object);
+            if (!allowed) {
+                return null;
+            }
+        }
+
         return configuration;
     }
 
