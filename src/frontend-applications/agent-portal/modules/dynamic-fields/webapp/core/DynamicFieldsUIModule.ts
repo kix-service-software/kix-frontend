@@ -491,11 +491,12 @@ export class UIModule implements IUIModule {
                                 title: 'Value',
                                 type: 'string'
                             }
-                        }
+                        },
+                        required: ['Key', 'Value']
                     }
                 }
             },
-            required: ['CountMin', 'CountMax', 'CountDefault']
+            required: ['PossibleValues', 'CountMin', 'CountMax', 'CountDefault']
         };
 
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.SELECTION, schema);
