@@ -101,6 +101,7 @@ class Component {
     public triggerFileUpload(): void {
         const uploadInput = (this as any).getEl('fileUploadInput');
         if (uploadInput) {
+            uploadInput.value = '';
             uploadInput.click();
         }
     }
