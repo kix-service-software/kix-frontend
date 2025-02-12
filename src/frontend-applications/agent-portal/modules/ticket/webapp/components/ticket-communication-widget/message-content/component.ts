@@ -170,7 +170,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 await this.prepareArticleData();
 
                 if (!this.state.selectedCompactView) {
-                    this.loadDetailedArticle();
+                    this.loadDetailedArticle(this.articleIndex === 0);
                 }
 
                 this.observer?.disconnect();
@@ -181,14 +181,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.resizeHandling();
     }
 
-    private loadDetailedArticle(): void {
+    private loadDetailedArticle(allowSetSeen: boolean = false): void {
         if (!this.detailedArticle) {
             this.context?.articleDetailsLoader?.queueArticle(this.articleId, (a: Article) => {
                 this.detailedArticle = a;
-                this.prepareArticleContent();
+                this.prepareArticleContent(allowSetSeen);
             });
         } else {
-            this.prepareArticleContent();
+            this.prepareArticleContent(allowSetSeen);
         }
     }
 
@@ -282,7 +282,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.state.expanded) {
             this.state.loadingContent = true;
 
-            this.loadDetailedArticle();
+            this.loadDetailedArticle(true);
 
             this.context.setAdditionalInformation('CURRENT_ARTICLE_FOCUS', this.articleId);
         }
@@ -290,7 +290,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.saveArticleToggleState();
     }
 
-    private async prepareArticleContent(): Promise<void> {
+    private async prepareArticleContent(allowSetSeen: boolean = false): Promise<void> {
         this.prepareAttachments();
 
         if (this.state.compactViewExpanded) {
@@ -307,9 +307,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.detailedArticle, ArticleProperty.BCC, undefined, false, false
         );
 
-        await this.setArticleSeen();
-
-        this.state.unseen = 0;
+        if (allowSetSeen) {
+            await this.setArticleSeen();
+            this.state.unseen = 0;
+        }
 
         this.state.loadingContent = false;
         this.state.showContent = true;
