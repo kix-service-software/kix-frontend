@@ -49,8 +49,9 @@ export class ArticleRouter extends KIXRouter {
         const articleId = Number(req.params.articleId);
 
         const content = await ArticleViewUtil.getArticleHTMLContent(
-            token, articleId, ticketId, Number(req.query.resolveInlineCSS) === 1
-
+            token, articleId, ticketId, req.query.reduceContent === 'true',
+            Number(req.query.resolveInlineCSS) === 1,
+            Number(req.query.lineCount), req.query.prepareInline === 'true'
         );
 
         (res as any).marko(template, { content: content });

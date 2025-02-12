@@ -483,10 +483,12 @@ export class TicketService extends KIXObjectService<Ticket> {
         return context.descriptor.urlPaths[0] + '/' + id;
     }
 
-    public async getPreparedArticleBodyContent(article: Article): Promise<string> {
+    public async getPreparedArticleBodyContent(
+        article: Article, reduceContent?: boolean, lineCount?: number, prepareInline: boolean = true
+    ): Promise<string> {
 
         const applicationUrl = ClientStorageService.getApplicationUrl();
-        const response = await fetch(`${applicationUrl}/views/tickets/${article.TicketID}/articles/${article.ArticleID}?resolveInlineCSS=1`)
+        const response = await fetch(`${applicationUrl}/views/tickets/${article.TicketID}/articles/${article.ArticleID}?resolveInlineCSS=1&reduceContent=${reduceContent}&lineCount=${lineCount}&prepareInline=${prepareInline}`)
             .catch((error): Response => {
                 console.error('Fetch error:', error);
                 return new Response();
