@@ -121,7 +121,11 @@ export class TextmodulePlugin {
                     const modelFragment = this.editor.data.toModel(viewFragment);
 
                     const insertionRange = model.insertContent(modelFragment, range);
-                    writer.setSelection(insertionRange);
+
+                    if (insertionRange) {
+                        const newPosition = insertionRange.end;
+                        writer.setSelection(newPosition);
+                    }
                 });
             }
 
