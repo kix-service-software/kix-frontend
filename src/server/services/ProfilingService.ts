@@ -124,6 +124,7 @@ class ProfileTask {
     ) {
         this.startTime = new Date().getTime();
         this.message = this.message.replace(new RegExp('"Content":".*=?(\\n)?"'), '"Content":"..."');
+        this.message = this.message.replace(new RegExp('"Body":".*=?(\\n)?"'), '"Body":"..."');
         this.clientRequestId = '<none>';
 
         if (inputData) {
