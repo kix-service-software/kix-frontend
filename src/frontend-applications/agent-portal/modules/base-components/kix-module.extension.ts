@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -59,6 +59,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('loading-spinner', '/kix-module-base-components$0/webapp/components/loading-spinner', []),
         new UIComponent('main-form', '/kix-module-base-components$0/webapp/components/main-form', []),
         new UIComponent('notes-widget', '/kix-module-base-components$0/webapp/components/notes-widget', []),
+        new UIComponent('out-of-office-widget', '/kix-module-base-components$0/webapp/components/out-of-office-widget', []),
         new UIComponent('number-input', '/kix-module-base-components$0/webapp/components/number-input', []),
         new UIComponent(
             'object-avatar-label', '/kix-module-base-components$0/webapp/components/object-avatar-label', []
