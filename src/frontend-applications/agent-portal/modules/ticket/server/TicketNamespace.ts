@@ -23,6 +23,9 @@ import { CacheService } from '../../../server/services/cache';
 import cookie from 'cookie';
 import { Socket } from 'socket.io';
 import { Attachment } from '../../../model/kix/Attachment';
+import { UserService } from '../../user/server/UserService';
+import { FileService } from '../../file/server/FileService';
+import { RemoveArticleAttachmentDownloadsRequest } from '../model/RemoveArticleAttachmentDownloadsRequest';
 
 export class TicketNamespace extends SocketNameSpace {
 
@@ -45,6 +48,9 @@ export class TicketNamespace extends SocketNameSpace {
 
     protected registerEvents(client: Socket): void {
         this.registerEventHandler(client, TicketEvent.LOAD_ARTICLE_ATTACHMENT, this.loadArticleAttachment.bind(this));
+        this.registerEventHandler(
+            client, TicketEvent.REMOVE_ARTICLE_ATTACHMENT_DOWNLOADS, this.removeArticleAttachmentDownloads.bind(this)
+        );
         this.registerEventHandler(
             client, TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT, this.loadArticleZipAttachment.bind(this)
         );
@@ -70,6 +76,27 @@ export class TicketNamespace extends SocketNameSpace {
         ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
         return response;
+    }
+
+    private async removeArticleAttachmentDownloads(
+        data: RemoveArticleAttachmentDownloadsRequest, client: Socket
+    ): Promise<SocketResponse> {
+        if (Array.isArray(data.downloadIds) && data.downloadIds.length) {
+            const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+            const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+            const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
+            const user = await UserService.getInstance().getUserByToken(token);
+            if (user?.UserID) {
+                data.downloadIds?.forEach((di) => {
+                    FileService.removeDownload(di, user?.UserID);
+                });
+            }
+        }
+
+        return new SocketResponse(
+            TicketEvent.ARTICLE_ATTACHMENT_DOWNLOADS_REMOVED,
+            new LoadArticleAttachmentResponse(data.requestId, null)
+        );
     }
 
     private async loadArticleZipAttachment(

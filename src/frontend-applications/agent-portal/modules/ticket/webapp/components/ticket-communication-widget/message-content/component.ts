@@ -169,8 +169,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.unseen = this.state.article?.Unseen;
                 await this.prepareArticleData();
 
-                if (!this.state.selectedCompactView) {
-                    this.loadDetailedArticle(this.articleIndex === 0);
+                if (this.state.expanded) {
+                    this.loadDetailedArticle();
                 }
 
                 this.observer?.disconnect();

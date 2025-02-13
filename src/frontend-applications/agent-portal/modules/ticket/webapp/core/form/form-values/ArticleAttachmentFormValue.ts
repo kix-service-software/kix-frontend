@@ -19,6 +19,7 @@ import { Article } from '../../../../model/Article';
 import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { TicketService } from '../../TicketService';
+import { TicketSocketClient } from '../../TicketSocketClient';
 
 export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
 
@@ -60,36 +61,23 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
 
         const newValue = [];
 
-        const context = ContextService.getInstance().getActiveContext();
-        const updateArticleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
-        if (updateArticleId) {
-            const refTicketId = context?.getObjectId();
-            const updateArticle = await this.getUpdateArticle();
-            const updateInlineAttachments = updateArticle.getInlineAttachments();
-            const attachments = await this.getRefAttachments(
-                updateInlineAttachments, updateArticleId, Number(refTicketId)
-            );
-
-            newValue.push(...attachments);
+        // use predefined value
+        if (Array.isArray(this.value) && this.value.length) {
+            newValue.push(...this.value);
         }
 
+        const context = ContextService.getInstance().getActiveContext();
+        const updateArticleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
         const useRefArticleAttachments = context?.getAdditionalInformation('USE_REFERENCED_ATTACHMENTS');
-        if (useRefArticleAttachments) {
-            // FIXME: referenced article is also relevante article in ArticleEdit (better use ARTICLE_UPDATE_ID)
-            // or use object value (see constructor)
-            const article = await this.getReferencedArticle();
+
+        // if no prefedined value is set on update or the referenced attachments should implicitly be used, add them
+        if ((!newValue.length && updateArticleId) || useRefArticleAttachments) {
+            const article = updateArticleId ? await this.getUpdateArticle() : await this.getReferencedArticle();
             if (article) {
                 const attachments = await this.getRefAttachments(
                     article.getAttachments(), article.ArticleID, article.TicketID
                 );
-
                 newValue.push(...attachments);
-                if (attachments?.length) {
-
-                    if (Array.isArray(this.value) && this.value.length) {
-                        newValue.push(...this.value);
-                    }
-                }
             }
         }
 
@@ -160,5 +148,15 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
         }
 
         await super.setFormValue(value, force);
+    }
+
+    public destroy(): void {
+        super.destroy();
+        if (Array.isArray(this.value) && this.value.length) {
+            const downloadIds = this.value.filter((a) => a.downloadId).map((a) => a.downloadId);
+            if (downloadIds.length) {
+                TicketSocketClient.getInstance().removeArticleAttachmentDownloads(downloadIds);
+            }
+        }
     }
 }

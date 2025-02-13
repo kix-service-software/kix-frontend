@@ -634,43 +634,19 @@ export class TicketAPIService extends KIXObjectAPIService {
         article.MimeType = 'text/html';
         article.Charset = 'utf-8';
 
-        this.prepareHTMLInlineCSSContent(article, ticket.TicketID);
-
         await this.prepareArticleAttachments(article, token);
-    }
-
-    private prepareHTMLInlineCSSContent(article: Article, ticketId: number): void {
-        try {
-            const juice = require('juice');
-            const fs = require('fs');
-
-            let ckEditorCSS = fs.readFileSync(__dirname + '/../../../static/thirdparty/ckeditor5/ckeditor5.css');
-            ckEditorCSS = ckEditorCSS.toString();
-
-            let bootstrapCSS = fs.readFileSync(__dirname + '/../../../static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css');
-            bootstrapCSS = bootstrapCSS.toString();
-
-            const html = '<div class="ck ck-content">' + article.Body + '</div>';
-            article.Body = juice.inlineContent(html, ckEditorCSS + bootstrapCSS);
-        } catch (e) {
-            LoggingService.getInstance().error(
-                `Error preparing article body with inline styles! (TicketId: ${ticketId}, ArticleId: ${article.ArticleID}`
-
-            );
-            LoggingService.getInstance().error(e);
-            console.error(e);
-        }
     }
 
     private async prepareArticleAttachments(article: Article, token: string): Promise<void> {
         if (Array.isArray(article.Attachments)) {
+            const user = await UserService.getInstance().getUserByToken(token);
             for (const attachment of article.Attachments) {
                 if (!attachment.Content) {
                     let content;
                     // probably an attachment from a referenced article
                     if (attachment.Disposition === 'attachment') {
-                        content = FileService.getFileContent(attachment.Filename, true);
-                        FileService.removeFile(attachment.Filename, false);
+                        content = FileService.getFileContent(attachment.downloadId, true);
+                        FileService.removeDownload(attachment.downloadId, user?.UserID);
                     }
                     // a new attachment
                     else {
