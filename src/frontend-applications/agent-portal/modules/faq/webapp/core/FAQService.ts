@@ -72,10 +72,12 @@ export class FAQService extends KIXObjectService {
         return 'FAQArticle';
     }
 
-    public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
+    public async prepareFullTextFilter(
+        searchValue: string, filterType: FilterType = FilterType.AND
+    ): Promise<FilterCriteria[]> {
         const filter: FilterCriteria[] = [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, `${searchValue}`
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, filterType, `${searchValue}`
             )
         ];
 
