@@ -61,6 +61,14 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(notesSidebar);
 
+        const outOfOffice = new WidgetConfiguration(
+            'home-dashboard-out-of-office-widget', 'Translatable#Out of office', ConfigurationType.Widget,
+            'out-of-office-widget', 'Translatable#Out of office', [], null, null,
+            false, false, 'fa-solid fa-user-clock', false
+        );
+
+        configurations.push(outOfOffice);
+
         const chartWidgets = await this.getChartWidgetConfigurations();
 
         configurations.push(
@@ -68,7 +76,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
                 this.getModuleId(),
                 [
-                    new ConfiguredWidget('home-dashboard-notes-widget', 'home-dashboard-notes-widget')
+                    new ConfiguredWidget('home-dashboard-notes-widget', 'home-dashboard-notes-widget'),
+                    new ConfiguredWidget('home-dashboard-out-of-office-widget', 'home-dashboard-out-of-office-widget')
                 ],
                 [], [],
                 [
