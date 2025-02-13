@@ -149,6 +149,19 @@ export class CKEditor5 {
             );
         }
 
+        const toolbar = editorConfig.image.toolbar;
+
+        editorConfig.image = {
+            toolbar: toolbar,
+            resizeUnit: 'px',
+            resizeOptions: [
+                { name: 'resizeImage:original', value: null, label: 'Original' },
+                { name: 'resizeImage:400', value: '400', label: '400px' },
+                { name: 'resizeImage:800', value: '800', label: '800px' },
+                { name: 'resizeImage:custom', value: 'custom', label: 'Custom' }
+            ]
+        } as CustomImageConfig;
+
         this.editor = await ClassicEditor.create(document.querySelector(`#${this.elementId}`), editorConfig);
 
         const success = await this.waitForEditor();
@@ -223,4 +236,10 @@ export class CKEditor5 {
         return ckEditorClass;
     }
 
+}
+
+interface CustomImageConfig {
+    toolbar: any;
+    resizeUnit?: 'px' | '%';
+    resizeOptions?: { name: string; value: string | null; label: string }[];
 }
