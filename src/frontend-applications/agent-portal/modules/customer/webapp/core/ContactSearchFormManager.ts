@@ -25,6 +25,7 @@ import { Organisation } from '../../model/Organisation';
 import { UserProperty } from '../../../user/model/UserProperty';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 import { Contact } from '../../model/Contact';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class ContactSearchFormManager extends SearchFormManager {
 
@@ -147,6 +148,7 @@ export class ContactSearchFormManager extends SearchFormManager {
     }
 
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
         let nodes = [];
         switch (property) {
             case ContactProperty.PRIMARY_ORGANISATION_ID:
@@ -154,13 +156,15 @@ export class ContactSearchFormManager extends SearchFormManager {
                     const organisations = await KIXObjectService.loadObjects<Organisation>(
                         KIXObjectType.ORGANISATION, objectIds
                     );
-                    nodes = await KIXObjectService.prepareTree(organisations);
+                    nodes = await KIXObjectService.prepareTree(organisations, showInvalid, showInvalid);
                 }
                 break;
             default:
                 nodes = await super.getTreeNodes(property);
                 if (!nodes || !nodes.length) {
-                    nodes = await ContactService.getInstance().getTreeNodes(property, true, true, objectIds);
+                    nodes = await ContactService.getInstance().getTreeNodes(
+                        property, showInvalid, showInvalid, objectIds
+                    );
                 }
         }
         return nodes;

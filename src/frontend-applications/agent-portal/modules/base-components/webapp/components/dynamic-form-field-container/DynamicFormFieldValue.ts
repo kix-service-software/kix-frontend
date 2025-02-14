@@ -23,6 +23,7 @@ import { ObjectReferenceOptions } from '../../core/ObjectReferenceOptions';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SearchDefinition } from '../../../../search/webapp/core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { ContextService } from '../../core/ContextService';
 
 export class DynamicFormFieldValue {
 
@@ -749,14 +750,14 @@ export class DynamicFormFieldValue {
 
         loadingOptions.limit = limit;
         loadingOptions.searchLimit = limit;
-
+        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
         loadingOptions = await this.manager.prepareLoadingOptions(this.value, loadingOptions);
 
         if (this.manager.useOwnSearch) {
             tree = await this.manager.searchObjectTree(this.value.property, searchValue, loadingOptions);
         } else {
             tree = await KIXObjectService.searchObjectTree(
-                this.manager.objectType, this.value.property, searchValue, loadingOptions
+                this.manager.objectType, this.value.property, searchValue, loadingOptions, undefined, showInvalid
             );
         }
 
