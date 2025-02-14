@@ -151,7 +151,8 @@ export class FAQService extends KIXObjectService {
         if (objects?.length) {
             if (objects[0].KIXObjectType === KIXObjectType.FAQ_CATEGORY) {
                 if (!showInvalid) {
-                    objects = objects.filter((c) => c.ValidID === 1);
+                    objects = objects.filter(
+                        (c: FAQCategory) => c.ValidID === 1 || this.hasValidDescendants(c.SubCategories));
                 } else if (!invalidClickable) {
                     objects = (objects as FAQCategory[]).filter(
                         (c) => c.ValidID === 1 || this.hasValidDescendants(c.SubCategories)

@@ -49,6 +49,7 @@ import { KIXObjectFormService } from './KIXObjectFormService';
 import { ObjectSearchLoadingOptions } from '../../../object-search/model/ObjectSearchLoadingOptions';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
+import { ValidIDProperty } from './ValidIDProperty';
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -703,21 +704,25 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static async searchObjectTree(
         objectType: KIXObjectType | string, property: string, searchValue: string,
-        loadingOptions?: KIXObjectLoadingOptions, additionalData?: any
+        loadingOptions?: KIXObjectLoadingOptions, additionalData?: any, showInvalid: boolean = true
     ): Promise<TreeNode[]> {
 
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         if (service) {
-            return service.searchObjectTree(property, searchValue, loadingOptions, additionalData);
+            return service.searchObjectTree(property, searchValue, loadingOptions, additionalData, showInvalid);
         }
     }
 
     public async searchObjectTree(
-        property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions, additionalData?: any
+        property: string,
+        searchValue: string,
+        loadingOptions?: KIXObjectLoadingOptions,
+        additionalData?: any,
+        showInvalid: boolean = true
     ): Promise<TreeNode[]> {
         const objectTypeForSearch = await this.getObjectTypeForProperty(property);
         const objects = await KIXObjectService.search(objectTypeForSearch, searchValue, loadingOptions);
-        return KIXObjectService.prepareTree(objects);
+        return KIXObjectService.prepareTree(objects, showInvalid, showInvalid);
     }
 
     public static async getObjectTypeForProperty(
@@ -780,11 +785,21 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return properties;
     }
 
-    public static async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
+    public static async getObjectDependencies(
+        objectType: KIXObjectType, showInvalid: boolean = true
+    ): Promise<KIXObject[]> {
         let dependencies: KIXObject[] = [];
+
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
         if (service) {
             dependencies = await service.getObjectDependencies(objectType);
+        }
+
+        if (!showInvalid) {
+            const filtered = dependencies.filter(
+                (dependency) => Number(dependency.ValidID) === ValidIDProperty.VALID
+            );
+            dependencies = filtered;
         }
 
         return dependencies;

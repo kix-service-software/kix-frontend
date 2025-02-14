@@ -32,6 +32,7 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class ConfigItemSearchFormManager extends SearchFormManager {
 
@@ -228,14 +229,15 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
     }
 
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
-                return await CMDBService.getInstance().getTreeNodes(property);
+                return await CMDBService.getInstance().getTreeNodes(property, showInvalid, showInvalid);
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CHANGE_BY:
             case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
-                return await CMDBService.getInstance().getTreeNodes(property, true, true);
+                return await CMDBService.getInstance().getTreeNodes(property, showInvalid, showInvalid);
             default:
                 const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);
                 const input = await ConfigItemClassAttributeUtil.getAttributeInput(
@@ -253,21 +255,21 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
                         const organisations = await KIXObjectService.loadObjects<Organisation>(
                             KIXObjectType.ORGANISATION, objectIds
                         );
-                        return await KIXObjectService.prepareTree(organisations);
+                        return await KIXObjectService.prepareTree(organisations, showInvalid, showInvalid);
                     } else if (input.Type === 'Contact' && objectIds) {
                         const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, objectIds);
-                        return await KIXObjectService.prepareTree(contacts);
+                        return await KIXObjectService.prepareTree(contacts, showInvalid, showInvalid);
                     } else if (input.Type === 'CIClassReference' && objectIds) {
                         const items = await KIXObjectService.loadObjects<ConfigItem>(
                             KIXObjectType.CONFIG_ITEM, objectIds
                         );
-                        return await KIXObjectService.prepareTree(items);
+                        return await KIXObjectService.prepareTree(items, showInvalid, showInvalid);
                     } else if (input.Type === 'TeamReference') {
                         const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(
                             false, null, ['READ'], objectIds ? objectIds.map((oid) => Number(oid)) : null
                         );
                         return await QueueService.getInstance().prepareObjectTree(
-                            queuesHierarchy, true, false
+                            queuesHierarchy, showInvalid, showInvalid
                         );
                     } else {
 

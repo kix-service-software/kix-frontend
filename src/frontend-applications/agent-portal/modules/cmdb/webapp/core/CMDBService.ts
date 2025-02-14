@@ -285,7 +285,8 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
     }
 
     public async searchObjectTree(
-        property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions, additionalData?: any
+        property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions,
+        additionalData?: any, showInvalid: boolean = true
     ): Promise<TreeNode[]> {
         const dep: string = typeof additionalData === 'object' && additionalData['dep'] ?
             additionalData['dep'] : undefined;
@@ -306,12 +307,12 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                     const organisations = await KIXObjectService.search(
                         KIXObjectType.ORGANISATION, searchValue, loadingOptions
                     );
-                    return await KIXObjectService.prepareTree(organisations);
+                    return await KIXObjectService.prepareTree(organisations, showInvalid, showInvalid);
                 } else if (input.Type === 'Contact') {
                     const contacts = await KIXObjectService.search(
                         KIXObjectType.CONTACT, searchValue, loadingOptions
                     );
-                    return await KIXObjectService.prepareTree(contacts);
+                    return await KIXObjectService.prepareTree(contacts, showInvalid, showInvalid);
                 }
             }
         }
