@@ -51,24 +51,25 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             null, tableWidget, false, false, 'kix-icon-faq', true
         );
 
-        configurations.push(
-            new ContextConfiguration(
-                this.getModuleId(), 'FAQ Search', ConfigurationType.Context, this.getModuleId(),
-                [], [], [],
-                [
-                    new ConfiguredWidget(
-                        'search-criteria-widget', null, new WidgetConfiguration(
-                            'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
-                            'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
-                        )
-                    ),
-                    new ConfiguredWidget('faq-search-article-widget', null, articleListWidget)
-                ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                [
-                    [KIXObjectType.FAQ_ARTICLE, 'faq-search-article-widget']
-                ]
-            )
+        const contextConfiguration = new ContextConfiguration(
+            this.getModuleId(), 'FAQ Search', ConfigurationType.Context, this.getModuleId(),
+            [], [], [],
+            [
+                new ConfiguredWidget(
+                    'search-criteria-widget', null, new WidgetConfiguration(
+                        'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
+                        'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
+                    )
+                ),
+                new ConfiguredWidget('faq-search-article-widget', null, articleListWidget)
+            ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+            [
+                [KIXObjectType.FAQ_ARTICLE, 'faq-search-article-widget']
+            ]
         );
+
+        contextConfiguration.provideInvalidValues = false;
+        configurations.push(contextConfiguration);
 
         return configurations;
     }

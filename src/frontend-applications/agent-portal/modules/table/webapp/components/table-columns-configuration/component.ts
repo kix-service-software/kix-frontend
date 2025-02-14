@@ -17,6 +17,7 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TreeHandler, TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { ComponentState } from './ComponentState';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -63,8 +64,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async updateColumnNames(): Promise<void> {
         this.state.loading = true;
-
-        const dependencies = await KIXObjectService.getObjectDependencies(this.objectType);
+        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
+        const dependencies = await KIXObjectService.getObjectDependencies(this.objectType, showInvalid);
         this.state.dependencyName = await KIXObjectService.getObjectDependencyName(this.objectType);
 
         for (const c of this.columns) {
@@ -131,8 +132,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async updateDependencyNodes(): Promise<void> {
         const nodes: TreeNode[] = [];
-
-        const dependencies = await KIXObjectService.getObjectDependencies(this.objectType);
+        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
+        const dependencies = await KIXObjectService.getObjectDependencies(this.objectType, showInvalid);
 
         for (const dependency of dependencies) {
             const text = await LabelService.getInstance().getObjectText(dependency);

@@ -48,24 +48,25 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             null, tableWidget, false, false, 'kix-icon-man-house', true
         );
 
-        configurations.push(
-            new ContextConfiguration(
-                this.getModuleId(), 'Organisation Search', ConfigurationType.Context, this.getModuleId(),
-                [], [], [],
-                [
-                    new ConfiguredWidget(
-                        'search-criteria-widget', null, new WidgetConfiguration(
-                            'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
-                            'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
-                        )
-                    ),
-                    new ConfiguredWidget('organisation-search-widget', null, listWidget)
-                ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                [
-                    [KIXObjectType.ORGANISATION, 'organisation-search-widget']
-                ]
-            )
+        const contextConfig = new ContextConfiguration(
+            this.getModuleId(), 'Organisation Search', ConfigurationType.Context, this.getModuleId(),
+            [], [], [],
+            [
+                new ConfiguredWidget(
+                    'search-criteria-widget', null, new WidgetConfiguration(
+                        'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
+                        'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
+                    )
+                ),
+                new ConfiguredWidget('organisation-search-widget', null, listWidget)
+            ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+            [
+                [KIXObjectType.ORGANISATION, 'organisation-search-widget']
+            ]
         );
+
+        contextConfig.provideInvalidValues = true;
+        configurations.push(contextConfig);
 
         return configurations;
     }
