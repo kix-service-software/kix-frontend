@@ -686,7 +686,8 @@ export class TicketService extends KIXObjectService<Ticket> {
             KIXObjectProperty.CHANGE_BY,
             TicketProperty.CREATED,
             KIXObjectProperty.CREATE_BY,
-            TicketProperty.WATCHER_ID
+            TicketProperty.WATCHER_ID,
+            TicketProperty.ATTACHMENT_COUNT
         ];
 
         return [...objectProperties, ...superProperties];

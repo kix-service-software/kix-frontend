@@ -186,6 +186,11 @@ describe('Placeholder replacement for ticket', () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${KIXObjectProperty.CHANGE_BY}>`, ticket);
             expect(text).equal(`${KIXObjectProperty.CHANGE_BY}_Name`);
         });
+
+        it('Should replace ticket attachment count placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.ATTACHMENT_COUNT}>`, ticket);
+            expect(text).equal('5');
+        });
     });
 
     describe('Replace complex ticket attribute placeholder (translatable)', async () => {
@@ -317,6 +322,7 @@ class someTestFunctions {
         ticket.ChangeBy = 2;
         ticket.ArchiveFlag = 'y';
         ticket.PendingTime = '2019-06-11 11:11:11';
+        ticket.AttachmentCount = 5;
 
         ticket.CreateTimeUnix = 1559198730;
 
