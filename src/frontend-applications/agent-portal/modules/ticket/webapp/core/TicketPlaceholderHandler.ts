@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -451,6 +451,9 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                     if (optionsString && Number.isInteger(Number(optionsString))) {
                         result = result.substring(0, Number(optionsString));
                     }
+                    break;
+                case TicketProperty.ATTACHMENT_COUNT:
+                    result = (ticket.AttachmentCount || 0).toString();
                     break;
                 case TicketProperty.ARTICLES:
                 case TicketProperty.ARTICLE_CREATE_TIME:

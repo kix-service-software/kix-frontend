@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,12 +29,7 @@ import { Article } from '../../model/Article';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
-import { OverlayIcon } from '../../../base-components/webapp/core/OverlayIcon';
-import { QueueService } from './admin';
-import { ObjectResponse } from '../../../../server/services/ObjectResponse';
 import { QueueLabelProvider } from './QueueLabelProvider';
-import { Organisation } from '../../../customer/model/Organisation';
-import { Contact } from '../../../customer/model/Contact';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -185,6 +180,10 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     queueWithFollowUp, QueueProperty.FOLLOW_UP_ID
                 );
                 break;
+            case TicketProperty.ATTACHMENT_COUNT:
+                displayValue ||= '0';
+                translatable = false;
+                break;
             default:
                 if (Article.isArticleProperty(property)) {
                     displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
@@ -327,6 +326,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.MY_QUEUES:
                 displayValue = 'Translatable#My Teams';
+                break;
+            case TicketProperty.ATTACHMENT_COUNT:
+                displayValue = 'Translatable#Number of Attachments';
                 break;
             default:
                 if (Article.isArticleProperty(property)) {
