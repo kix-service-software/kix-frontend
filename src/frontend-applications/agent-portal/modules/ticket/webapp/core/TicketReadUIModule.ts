@@ -42,6 +42,7 @@ import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { JobTypes } from '../../../job/model/JobTypes';
 import { TicketArticleCreateOptionFieldHandler } from './form/extended-form-manager/TicketArticleCreateOptionFieldHandler';
 import { TicketCreateDynamicFieldsOptionFieldHandler } from './form/extended-form-manager/TicketCreateDynamicFieldsOptionFieldHandler';
+import { AttachmentPatternRuleFieldsOptionFieldHandler } from './form/extended-form-manager/AttachmentPatternRuleFieldsOptionFieldHandler';
 import { TicketJobFormManager } from './TicketJobFormManager';
 import { TicketStateSetOptionFieldHandler } from './form/extended-form-manager/TicketStateSetOptionFieldHandler';
 import { TeamSetOptionFieldHandler } from './form/extended-form-manager/TeamSetOptionFieldHandler';
@@ -125,6 +126,7 @@ export class UIModule implements IUIModule {
     public async registerExtensions(): Promise<void> {
         MacroService.getInstance().registerOptionFieldHandler(new TicketArticleCreateOptionFieldHandler());
         MacroService.getInstance().registerOptionFieldHandler(new TicketCreateDynamicFieldsOptionFieldHandler());
+        MacroService.getInstance().registerOptionFieldHandler(new AttachmentPatternRuleFieldsOptionFieldHandler());
         MacroService.getInstance().registerOptionFieldHandler(new TicketStateSetOptionFieldHandler());
         MacroService.getInstance().registerOptionFieldHandler(new TeamSetOptionFieldHandler());
         MacroService.getInstance().registerOptionFieldHandler(new FetchAssetAttributesOptionFieldHandler());
