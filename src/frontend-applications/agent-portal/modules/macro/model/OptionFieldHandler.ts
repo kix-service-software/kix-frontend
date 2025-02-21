@@ -36,7 +36,7 @@ export abstract class OptionFieldHandler {
     ): FormFieldConfiguration {
         return new FormFieldConfiguration(
             `job-action-${actionType}-${option.Name}`, option.Label,
-            `${actionFieldInstanceId}###${option.Name}`,
+            `${actionFieldInstanceId}###${actionType}###${option.Name}`,
             fieldType, Boolean(option.Required), option.Description, options,
             typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined,
             null, null, null, countDefault, countMax, countMin,

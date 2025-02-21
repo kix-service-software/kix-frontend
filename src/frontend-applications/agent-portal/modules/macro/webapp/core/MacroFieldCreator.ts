@@ -238,7 +238,7 @@ export class MacroFieldCreator {
                             if (optionField.countMax > 1 && Array.isArray(optionField.defaultValue.value)) {
                                 for (const value of optionField.defaultValue.value) {
                                     const clonedOptionField = this.cloneOptionField(
-                                        optionField, value, actionFieldInstanceId, option.Name
+                                        optionField, value, actionFieldInstanceId, option.Name, actionType
                                     );
                                     fieldOrderMap.set(clonedOptionField.instanceId, option.Order);
                                     fields.push(clonedOptionField);
@@ -281,11 +281,11 @@ export class MacroFieldCreator {
                     const resultField = new FormFieldConfiguration(
                         `macro-action-${actionType.Name}-result-${result.Name}`,
                         result.Name,
-                        `${actionFieldInstanceId}###RESULT###${result.Name}`,
+                        `${actionFieldInstanceId}-${actionType.Name}###RESULT###${result.Name}`,
                         null
                     );
 
-                    resultField.instanceId = `${actionFieldInstanceId}###ResultGroup###${result.Name}`;
+                    resultField.instanceId = `${actionFieldInstanceId}-${actionType.Name}###ResultGroup###${result.Name}`;
                     resultField.required = false;
                     resultField.hint = result.Description;
                     resultField.translateLabel = false;
@@ -341,7 +341,7 @@ export class MacroFieldCreator {
                 );
 
                 if (result) {
-                    result.instanceId = `${actionFieldInstanceId}###${option.Name}`;
+                    result.instanceId = `${actionFieldInstanceId}###${actionType}###${option.Name}`;
                     if (Array.isArray(result.options)) {
                         result.options.push(nameOption);
                     } else {
@@ -358,10 +358,10 @@ export class MacroFieldCreator {
         }
 
         let optionField = new FormFieldConfiguration(
-            `macro-action-${actionType}-${option.Name}`, option.Label, `${actionFieldInstanceId}###${option.Name}`, null
+            `macro-action-${actionType}-${option.Name}`, option.Label, `${actionFieldInstanceId}###${actionType}###${option.Name}`, null
         );
 
-        optionField.instanceId = `${actionFieldInstanceId}###${option.Name}`;
+        optionField.instanceId = `${actionFieldInstanceId}###${actionType}###${option.Name}`;
         optionField.required = Boolean(option.Required);
         optionField.hint = option.Description;
         optionField.defaultValue = typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined;
@@ -395,13 +395,14 @@ export class MacroFieldCreator {
     }
 
     private static cloneOptionField(
-        optionField: FormFieldConfiguration, value: any, actionFieldInstanceId: string, optionName: string
+        optionField: FormFieldConfiguration, value: any,
+        actionFieldInstanceId: string, optionName: string, actionType: string
     ): FormFieldConfiguration {
         const field = FormFactory.cloneField(optionField);
         field.instanceId = IdService.generateDateBasedId(optionField.id);
         field.defaultValue = new FormFieldValue(value);
         // special instance id to distinguish between the actions
-        field.existingFieldId = IdService.generateDateBasedId(`${actionFieldInstanceId}###${optionName}`);
+        field.existingFieldId = IdService.generateDateBasedId(`${actionFieldInstanceId}###${actionType}###${optionName}`);
         return field;
     }
 
