@@ -29,6 +29,14 @@ import { FormInstance } from './FormInstance';
 import { KIXObjectService } from './KIXObjectService';
 import { FormFactory } from './FormFactory';
 import { FormService } from './FormService';
+import { ObjectTag } from '../../../object-tag/model/ObjectTag';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { ObjectTagLinkProperty } from '../../../object-tag/model/ObjectTagLinkProperty';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 
 export abstract class KIXObjectFormService {
 
@@ -120,18 +128,6 @@ export abstract class KIXObjectFormService {
 
             values.push([f.instanceId, value]);
 
-            // TODO: move handling to this.getValue - object FormServices have to use super
-            if (f.property === 'ICON') {
-                if (kixObject && formContext === FormContext.EDIT) {
-                    const icon = LabelService.getInstance().getObjectIcon(kixObject);
-                    if (icon instanceof ObjectIcon) {
-                        value = icon;
-                    }
-                } else if (!value) {
-                    value = f.defaultValue.value;
-                }
-            }
-
             const formFieldValue = kixObject && formContext === FormContext.EDIT
                 ? new FormFieldValue(value)
                 : new FormFieldValue(value, f.defaultValue ? f.defaultValue.valid : undefined);
@@ -165,9 +161,43 @@ export abstract class KIXObjectFormService {
                     }
                 }
                 break;
+            case KIXObjectProperty.OBJECT_TAGS:
+                if (object && formContext === FormContext.EDIT) {
+                    value = await this.prepareObjectTags(object.KIXObjectType, object.ObjectId);
+                }
             default:
         }
         return value;
+    }
+
+    private async prepareObjectTags(
+        objectType: KIXObjectType | string, objectId: number | string
+    ): Promise<string[]> {
+        const objectTypes = await KIXObjectService.prepareObjectTagTypes();
+
+        const type = objectTypes.has(objectType)
+            ? objectTypes.get(objectType)
+            : objectType;
+
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.filter = [
+            new FilterCriteria(
+                ObjectTagLinkProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, type
+            ),
+            new FilterCriteria(
+                ObjectTagLinkProperty.OBJECT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                FilterType.AND, objectId.toString()
+            )
+        ];
+
+        const tags = await KIXObjectService.loadObjects<ObjectTag>(
+            KIXObjectType.OBJECT_TAG, null, loadingOptions
+        );
+        if (tags && tags.length) {
+            return tags.map((t) => t.Name);
+        }
+        return [];
     }
 
     protected async handleCountValues(formFields: FormFieldConfiguration[], formInstance: FormInstance): Promise<void> {

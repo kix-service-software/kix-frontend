@@ -21,6 +21,8 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { Table } from '../../../model/Table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 
 export class TableFactoryService {
 
@@ -140,6 +142,15 @@ export class TableFactoryService {
                     defaultRouting, defaultToggle, short, objectType, objects
                 );
 
+                const objectTypes = await KIXObjectService.prepareObjectTagTypes();
+                if (
+                    objectTypes.has(objectType) && table.getTableConfiguration().showTags
+                    && !table.getColumn(KIXObjectProperty.OBJECT_TAGS)
+                ) {
+                    table.addAdditionalColumns(
+                        [factory.getDefaultColumnConfiguration(KIXObjectProperty.OBJECT_TAGS)]
+                    );
+                }
                 if (tableContextId) {
                     if (!this.contextTableInstances.has(tableContextId)) {
                         this.contextTableInstances.set(tableContextId, new Map());

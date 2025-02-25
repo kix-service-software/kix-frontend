@@ -20,6 +20,7 @@ import { FollowUpType } from '../../../model/FollowUpType';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { AgentSocketClient } from '../../../../user/webapp/core/AgentSocketClient';
 import { IdService } from '../../../../../model/IdService';
+import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 
 export class QueueService extends KIXObjectService<Queue> {
 
@@ -312,5 +313,15 @@ export class QueueService extends KIXObjectService<Queue> {
         }
 
         return values;
+    }
+
+    public async checkFilterValue(queue: Queue, criteria: UIFilterCriterion): Promise<boolean> {
+        let match = false;
+        if (criteria.property === QueueProperty.QUEUE_ID) {
+            match = (criteria.value as []).some((id: number) => id === queue.QueueID);
+        } else {
+            match = await super.checkFilterValue(queue, criteria);
+        }
+        return match;
     }
 }

@@ -50,10 +50,12 @@ import { ObjectSearchLoadingOptions } from '../../../object-search/model/ObjectS
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 import { ValidIDProperty } from './ValidIDProperty';
+import { ObjectTag } from '../../../object-tag/model/ObjectTag';
+import { ObjectTagLinkProperty } from '../../../object-tag/model/ObjectTagLinkProperty';
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
-    private extendedServices: ExtendedKIXObjectService[] = [];
+    protected extendedServices: ExtendedKIXObjectService[] = [];
 
     // tslint:disable-next-line: ban-types
     protected objectConstructors: Map<KIXObjectType | string, Array<new (object?: KIXObject) => KIXObject>> = new Map();
@@ -1185,5 +1187,55 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         }
     }
 
+    public static async loadObjectTags(
+        objectType: KIXObjectType | string, objectId: number | string
+    ): Promise<string[]> {
 
+        if (objectType && objectId) {
+
+            const types = await this.prepareObjectTagTypes();
+
+            const type = types.has(objectType)
+                ? types.get(objectType)
+                : objectType;
+
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.filter = [
+                new FilterCriteria(
+                    ObjectTagLinkProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
+                    FilterType.AND, type
+                ),
+                new FilterCriteria(
+                    ObjectTagLinkProperty.OBJECT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                    FilterType.AND, objectId
+                )
+            ];
+            const objectTags = await KIXObjectService.loadObjects<ObjectTag>(
+                KIXObjectType.OBJECT_TAG, null, loadingOptions
+            ).catch(() => [] as ObjectTag[]);
+
+            return objectTags.map((o) => o.Name);
+        }
+        return [];
+    }
+
+    public static async prepareObjectTagTypes(reverse: boolean = false): Promise<Map<string, string>> {
+        const sorted: Map<string, string> = new Map();
+
+        const config: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, ['ObjectTag::ObjectTypes']
+        ).catch((error): SysConfigOption[] => []);
+
+        if (config?.length) {
+            const types: Map<string, string> = new Map();
+            Object.keys(config[0].Value).forEach((entry: string) => {
+                const key = reverse ? config[0].Value[entry] : entry;
+                const value = reverse ? entry : config[0].Value[entry];
+                types.set(key, value);
+
+            });
+            return new Map([...types.entries()].sort());
+        }
+        return sorted;
+    }
 }
