@@ -99,17 +99,11 @@ export class ActionFactory<T extends AbstractAction> {
         this.actionInstances.set(actionId, action);
     }
 
-    public async getActionsForConfigurationType(type: ConfigurationType | string): Promise<AbstractAction[]> {
-        let actions: AbstractAction[] = [];
-
-        if (type === ConfigurationType.TableWidget) {
-            const actionIds = this.widgetActions.has(type)
-                ? this.widgetActions.get(type)
-                : [];
-            actions = await this.generateActions(actionIds);
-        }
-
-        return actions;
+    public async getActionsForType(type: ConfigurationType | string): Promise<AbstractAction[]> {
+        const actionIds = this.widgetActions.has(type)
+            ? this.widgetActions.get(type)
+            : [];
+        return this.generateActions(actionIds);
     }
 
     public static sortList<T extends ActionGroup | IAction>(list: T[]): T[] {

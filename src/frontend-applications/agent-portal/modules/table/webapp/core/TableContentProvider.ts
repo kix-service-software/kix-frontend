@@ -272,6 +272,14 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                                     dfv.DisplayValue.split(dynamicField.Config.ItemSeparator) :
                                     null;
                             }
+                        } else if (
+                            column.property === KIXObjectProperty.OBJECT_TAGS && o[KIXObjectProperty.OBJECT_TYPE]
+                            && o[KIXObjectProperty.OBJECT_ID]
+                        ) {
+                            const tags = await KIXObjectService.loadObjectTags(
+                                o[KIXObjectProperty.OBJECT_TYPE], o[KIXObjectProperty.OBJECT_ID]
+                            );
+                            tableValue = new TableValue(column.property, tags, tags.join(','), null, null, null, tags);
                         } else {
                             tableValue = new TableValue(column.property, o[column.property], null, null, null);
 
