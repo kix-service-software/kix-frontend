@@ -29,38 +29,49 @@ export class FileService {
     }
 
     public static prepareFileForDownload(userId: number, file: IDownloadableFile): void {
+        if (!file?.Filename) {
+            LoggingService.getInstance().error('Got no file for download preparation');
+            return;
+        }
+        if (!userId) {
+            LoggingService.getInstance().error(`Need userId for download preparation ${file.Filename}`);
+            return;
+        }
+
         const downloads = this.getDownloads(userId);
-        const fileName = `${userId}_downloads.json`;
         try {
-            if (!downloads.some((f) => f.Filename === file.Filename && f.FilesizeRaw === file.FilesizeRaw)) {
-                file.downloadId ||= uuidv4();
-                if (!file.path) {
+            const existingFile = downloads.find(
+                (f) => f.Filename === file.Filename && f.FilesizeRaw === file.FilesizeRaw
+            );
+            if (!existingFile) {
+                file.downloadId = uuidv4() + `-${file.Filename}`;
+                file.downloadSecret = uuidv4();
+                let saved: boolean = true;
+                try {
                     const filePath = this.getFilePath(file.downloadId);
                     fs.writeFileSync(filePath, file.Content, { encoding: 'base64' });
+                } catch (err) {
+                    LoggingService.getInstance().error(`Could not save file "${file.Filename}" for download (${err})`);
+                    saved = false;
                 }
-                this.addFileToDownloads(file, downloads, fileName);
+                if (saved) {
+                    const jsonFileName = `${userId}_downloads.json`;
+                    this.addFileToDownloads(file, downloads, jsonFileName);
+                }
             } else {
-                const existingFile = downloads.find(
-                    (f) => f.Filename === f.Filename && f.FilesizeRaw === f.FilesizeRaw
-                );
-
                 file.downloadId = existingFile.downloadId;
                 file.downloadSecret = existingFile.downloadSecret;
             }
 
             delete file.Content;
         } catch (err) {
-            console.error(err);
+            LoggingService.getInstance().error(err);
         }
     }
 
     private static addFileToDownloads(
         file: IDownloadableFile, downloads: IDownloadableFile[] = [], downloadFileName: string
     ): void {
-        file.downloadId ||= uuidv4();
-        file.downloadSecret = uuidv4();
-
-
         let hash: string;
         if (file?.Content) {
             hash = createHash('md5').update(file.Content).digest('hex').toString();
@@ -85,6 +96,7 @@ export class FileService {
         const userId = Number(req.query.userid);
 
         if (!downloadId || !userId) {
+            LoggingService.getInstance().error('Need downloadId and userId');
             res.status(400);
             res.render('Invalid request!');
             return;
@@ -97,14 +109,14 @@ export class FileService {
                 file.Filename,
                 (err) => {
                     if (err) {
-                        LoggingService.getInstance().error('Error while download file to client.', err);
-                    } else {
-                        FileService.removeDownload(downloadId, userId);
+                        LoggingService.getInstance().error('Error while download file to client (downloadId: ${downloadId}, userId: ${userId}).', err);
                     }
+                    // always remove/cleanup
+                    FileService.removeDownload(downloadId, userId);
                 }
             );
-
         } else {
+            LoggingService.getInstance().error(`Relevant file not found in ${userId}_downloads.json (downloadId: ${downloadId}).`);
             res.status(400);
             res.render('Invalid request!');
             return;
