@@ -229,6 +229,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                 }
             }
             CacheService.getInstance().deleteKeys(KIXObjectType.OBJECT_TAG);
+            CacheService.getInstance().deleteKeys(KIXObjectType.OBJECT_TAG_LINK);
         }
     }
 
