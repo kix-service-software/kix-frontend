@@ -50,8 +50,8 @@ import { ObjectSearchLoadingOptions } from '../../../object-search/model/ObjectS
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 import { ValidIDProperty } from './ValidIDProperty';
-import { ObjectTag } from '../../../object-tag/model/ObjectTag';
 import { ObjectTagLinkProperty } from '../../../object-tag/model/ObjectTagLinkProperty';
+import { ObjectTagLink } from '../../../object-tag/model/ObjectTagLink';
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -1204,17 +1204,13 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 new FilterCriteria(
                     ObjectTagLinkProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
                     FilterType.AND, type
-                ),
-                new FilterCriteria(
-                    ObjectTagLinkProperty.OBJECT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                    FilterType.AND, objectId
                 )
             ];
-            const objectTags = await KIXObjectService.loadObjects<ObjectTag>(
-                KIXObjectType.OBJECT_TAG, null, loadingOptions
-            ).catch(() => [] as ObjectTag[]);
+            const objectTags = await KIXObjectService.loadObjects<ObjectTagLink>(
+                KIXObjectType.OBJECT_TAG_LINK, null, loadingOptions
+            ).catch(() => [] as ObjectTagLink[]);
 
-            return objectTags.map((o) => o.Name);
+            return objectTags.filter((o) => o.ObjectID === objectId).map((o) => o.Name);
         }
         return [];
     }
