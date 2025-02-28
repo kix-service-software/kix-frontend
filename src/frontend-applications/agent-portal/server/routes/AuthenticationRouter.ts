@@ -139,7 +139,7 @@ export class AuthenticationRouter extends KIXRouter {
             });
 
             if (success) {
-                res.cookie('token', token);
+                res.cookie('token', token, { httpOnly: true });
                 res.clearCookie('authNegotiationDone');
                 res.status(200);
                 res.send(
@@ -164,7 +164,7 @@ export class AuthenticationRouter extends KIXRouter {
         res.cookie('authNoSSO', true, { httpOnly: true });
 
         if (req.headers['x-forwarded-for']) {
-            res.cookie('x-forwarded-for', req.headers['x-forwarded-for']);
+            res.cookie('x-forwarded-for', req.headers['x-forwarded-for'], { httpOnly: true });
         }
 
         const applications = await PluginService.getInstance().getExtensions<IMarkoApplication>(
