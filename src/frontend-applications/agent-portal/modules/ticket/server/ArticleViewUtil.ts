@@ -69,7 +69,7 @@ export class ArticleViewUtil {
             }
         }
 
-        content = this.removeScriptContent(content);
+        content = this.prepareContent(content);
 
         return content;
     }
@@ -156,7 +156,7 @@ export class ArticleViewUtil {
         return newString;
     }
 
-    public static removeScriptContent(content: string): string {
+    public static prepareContent(content: string): string {
         try {
             const jsdom = require('jsdom');
             const { JSDOM } = jsdom;
@@ -171,6 +171,18 @@ export class ArticleViewUtil {
             }
 
             this.removeListenersFromTags(dom);
+
+            const ckEditorLink = domDocument.createElement('link');
+            ckEditorLink.rel = 'stylesheet';
+            ckEditorLink.href = '/static/thirdparty/ckeditor5/ckeditor5.css';
+            domDocument.head.appendChild(ckEditorLink);
+
+            const bootstrapLink = domDocument.createElement('link');
+            bootstrapLink.rel = 'stylesheet';
+            bootstrapLink.href = '/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css';
+            domDocument.head.appendChild(bootstrapLink);
+
+            domDocument.body.innerHTML = '<div class="ck ck-content">' + domDocument.body.innerHTML + '</div>';
 
             return domDocument.documentElement.innerHTML;
         } catch (e) {
