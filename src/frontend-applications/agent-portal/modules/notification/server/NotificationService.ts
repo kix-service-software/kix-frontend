@@ -104,7 +104,8 @@ export class NotificationAPIService extends KIXObjectAPIService {
         parameter.forEach((p) => {
             if (p[0] === NotificationProperty.NAME ||
                 p[0] === KIXObjectProperty.VALID_ID ||
-                p[0] === KIXObjectProperty.COMMENT
+                p[0] === KIXObjectProperty.COMMENT ||
+                p[0] === KIXObjectProperty.OBJECT_TAGS
             ) {
                 newParameter.push(p);
             } else if (p[0].match(messageRegEx)) {
