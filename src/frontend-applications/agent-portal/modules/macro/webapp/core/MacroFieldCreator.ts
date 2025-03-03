@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -36,6 +36,8 @@ import { MacroService } from './MacroService';
 
 export class MacroFieldCreator {
 
+    public static readonly MACRO_PAGE_ID = 'macro-form-page-macro';
+
     public static async createMacroPage(formInstance: FormInstance, macro: Macro,
         property: string = MacroProperty.MACRO, type: string = macro?.Type || 'Common',
         title: string = 'Translatable#Macro'
@@ -45,7 +47,7 @@ export class MacroFieldCreator {
         macroField.property = property;
 
         const page = new FormPageConfiguration(
-            'macro-form-page-macro', title,
+            MacroFieldCreator.MACRO_PAGE_ID, title,
             [], true, false,
             [new FormGroupConfiguration('macro-form-group-macro', title, [], null, [macroField], true)]
         );
