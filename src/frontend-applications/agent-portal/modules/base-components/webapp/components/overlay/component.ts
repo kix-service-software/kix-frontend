@@ -59,7 +59,9 @@ class OverlayComponent {
     }
 
     public onUpdate(): void {
-        this.setOverlayPosition();
+        setTimeout(() => {
+            this.setOverlayPosition();
+        }, 50);
     }
 
     public overlayClicked(event: any): void {
