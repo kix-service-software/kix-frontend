@@ -54,7 +54,7 @@ export class TextModuleFormService extends KIXObjectFormService {
                 break;
             default:
         }
-        return value;
+        return super.getValue(property, value, textModule, formField, formContext);
     }
 
     public async prepareCreateValue(
