@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -110,14 +110,18 @@ export class BrowserUtil {
     }
 
     public static async startFileDownload(file: IDownloadableFile): Promise<void> {
-        const user = await AgentService.getInstance().getCurrentUser();
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = `/files/download/${file.downloadId}?userid=${user?.UserID}`;
-        a.download = file.Filename;
-        a.target = '_blank';
-        document.body.appendChild(a);
-        a.click();
+        const user = await AgentService.getInstance().getCurrentUser().catch(
+            () => console.error('Could not get current user to start download.')
+        );
+        if (user) {
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = `/files/download/${file.downloadId}?userid=${user?.UserID}`;
+            a.download = file.Filename;
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+        }
     }
 
     public static openPDF(content: string, name?: string): void {

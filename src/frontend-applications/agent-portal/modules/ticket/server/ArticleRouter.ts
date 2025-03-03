@@ -11,6 +11,7 @@ import { AuthenticationService } from '../../../../../server/services/Authentica
 import { KIXRouter } from '../../../server/routes/KIXRouter';
 import { Request, Response } from 'express';
 import { ArticleViewUtil } from './ArticleViewUtil';
+import { CheckUtil } from '../../../model/CheckUtil';
 import path from 'path';
 
 export class ArticleRouter extends KIXRouter {
@@ -47,11 +48,11 @@ export class ArticleRouter extends KIXRouter {
         const token: string = req.cookies.token;
         const ticketId = Number(req.params.ticketId);
         const articleId = Number(req.params.articleId);
+        const linesCount = CheckUtil.isNumeric(req.query.lineCount) ? Number(req.query.lineCount) : null;
 
         const content = await ArticleViewUtil.getArticleHTMLContent(
             token, articleId, ticketId, req.query.reduceContent === 'true',
-            Number(req.query.resolveInlineCSS) === 1,
-            Number(req.query.lineCount), req.query.prepareInline === 'true'
+            Number(req.query.resolveInlineCSS) === 1, linesCount, req.query.prepareInline === 'true'
         );
 
         (res as any).marko(template, { content: content });

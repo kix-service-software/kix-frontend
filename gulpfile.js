@@ -156,11 +156,11 @@ function buildAgentPortalApp(cb) {
     cb();
 }
 
-// gulp.task('license-headers', (done) => {
-//     let tasks = [licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber];
-//     gulp.series(tasks)();
-//     done();
-// });
+ gulp.task('license-headers', (done) => {
+     let tasks = [licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber];
+     gulp.series(tasks)();
+     done();
+ });
 
 let build = series(
     lint,

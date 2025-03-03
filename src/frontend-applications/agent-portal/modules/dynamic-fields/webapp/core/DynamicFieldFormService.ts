@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -87,6 +87,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                         }
                         value.PossibleValues = possibleValueArray;
                         value.TranslatableValues = Boolean(value.TranslatableValues === '1');
+                        value.AppendValues = Boolean(value.AppendValues === '1');
                     } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
                         const checklist = JSON.parse(value.DefaultValue);
                         DynamicFieldFormService.prepareChecklistConfig(checklist);
@@ -134,6 +135,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
             configParameter[1] = { ...configParameter[1] };
             if (fieldTypeParameter[1] === DynamicFieldTypes.SELECTION) {
                 configParameter[1].TranslatableValues = configParameter[1].TranslatableValues ? 1 : 0;
+                configParameter[1].AppendValues = configParameter[1].AppendValues ? 1 : 0;
                 const possibleValue = configParameter[1].PossibleValues ? configParameter[1].PossibleValues : [];
                 const possibleValueHash = {};
                 possibleValue.forEach((p) => possibleValueHash[p.Key] = p.Value);
