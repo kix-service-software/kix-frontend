@@ -3060,7 +3060,7 @@
 │  ├─ email: me@feedic.com
 │  ├─ path: node_modules/nth-check
 │  └─ licenseFile: node_modules/nth-check/LICENSE
-├─ nwsapi@2.2.16
+├─ nwsapi@2.2.18
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/dperini/nwsapi
 │  ├─ publisher: Diego Perini
