@@ -1188,12 +1188,17 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async loadObjectTags(
-        objectType: KIXObjectType | string, objectId: number | string
+        objectType: KIXObjectType | string, objectId: number | string, idFilter: boolean = false
     ): Promise<string[]> {
 
         if (objectType && objectId) {
 
             const types = await this.prepareObjectTagTypes();
+
+            const prepared = await this.prepareSysConfigForObjectTag(objectType, objectId);
+
+            objectType = prepared.has('ObjectType') ? prepared.get('ObjectType').toString() : objectType;
+            objectId = prepared.has('ObjectID') ? prepared.get('ObjectID') : objectId;
 
             const type = types.has(objectType)
                 ? types.get(objectType)
@@ -1206,11 +1211,21 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                     FilterType.AND, type
                 )
             ];
+
+            if (idFilter) {
+                loadingOptions.filter.push(
+                    new FilterCriteria(
+                        ObjectTagLinkProperty.OBJECT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                        FilterType.AND, objectId
+                    )
+                );
+            }
+
             const objectTags = await KIXObjectService.loadObjects<ObjectTagLink>(
                 KIXObjectType.OBJECT_TAG_LINK, null, loadingOptions
             ).catch(() => [] as ObjectTagLink[]);
 
-            return objectTags.filter((o) => o.ObjectID === objectId).map((o) => o.Name);
+            return objectTags.filter((o) => o.ObjectID === Number(objectId)).map((o) => o.Name);
         }
         return [];
     }
@@ -1233,5 +1248,30 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             return new Map([...types.entries()].sort());
         }
         return sorted;
+    }
+
+    private static async prepareSysConfigForObjectTag(
+        objectType: KIXObjectType | string, objectId: number | string
+    ): Promise<Map<string, string | number>> {
+        let result: Map<string, string | number> = new Map();
+
+        if (
+            objectType === KIXObjectType.SYS_CONFIG_OPTION
+            || objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION
+        ) {
+            if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
+                result.set('ObjectType', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
+            }
+
+            const configs: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION,
+            ).catch((error): SysConfigOption[] => []);
+
+            if (configs?.length) {
+                const id = configs.filter((c) => c.Name === objectId).map((c) => c.ID);
+                result.set('ObjectID', id[0]);
+            }
+        }
+        return result;
     }
 }

@@ -7,6 +7,7 @@
  * --
  */
 
+import { FORMERR } from 'dns';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
@@ -16,6 +17,12 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ExtendedKIXObjectFormService } from '../../../base-components/webapp/core/ExtendedKIXObjectFormService';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { ObjectTagProperty } from '../../model/ObjectTagProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
 
 export class ObjectTagFormService extends ExtendedKIXObjectFormService {
 
@@ -24,6 +31,12 @@ export class ObjectTagFormService extends ExtendedKIXObjectFormService {
     ): Promise<void> {
 
         const fieldId = `${form.id}-field-object-tags`;
+        const otFilter = [
+            new FilterCriteria(
+                ObjectTagProperty.NAME, SearchOperator.LIKE, FilterDataType.STRING,
+                FilterType.AND, '<SEARCH_VALUE>'
+            )
+        ];
         const objectTag = new FormFieldConfiguration(
             fieldId,
             'Translatable#Tags', KIXObjectProperty.OBJECT_TAGS, 'object-reference-input', false,
@@ -33,7 +46,8 @@ export class ObjectTagFormService extends ExtendedKIXObjectFormService {
                 new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                 new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
                 new FormFieldOption(ObjectReferenceOptions.FREETEXT, true),
-                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions(otFilter))
             ]
         );
 
@@ -47,6 +61,9 @@ export class ObjectTagFormService extends ExtendedKIXObjectFormService {
                         );
                         if (index !== -1) {
                             group.formFields?.splice(index, 0, objectTag);
+                        }
+                        else if (form.objectType === KIXObjectType.OBJECT_ICON) {
+                            group.formFields.push(objectTag);
                         }
                     }
                 }
