@@ -10,6 +10,7 @@
 import { AgentPortalConfiguration } from '../../../../model/configuration/AgentPortalConfiguration';
 import { DisplayValueConfiguration } from '../../../../model/configuration/DisplayValueConfiguration';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
@@ -19,6 +20,7 @@ import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
 import { SysConfigKey } from '../../model/SysConfigKey';
 import { SysConfigOption } from '../../model/SysConfigOption';
 import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
+import { SysConfigOptionProperty } from '../../model/SysConfigOptionProperty';
 
 export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
@@ -135,6 +137,16 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         }
 
         return super.updateObjectByForm(objectType, formId, objectId, cacheKeyPrefix);
+    }
+
+    public async checkFilterValue(option: SysConfigOption, criteria: UIFilterCriterion): Promise<boolean> {
+        let match = false;
+        if (criteria.property === SysConfigOptionProperty.ID) {
+            match = (criteria.value as []).some((id: number) => id === option.ID);
+        } else {
+            match = await super.checkFilterValue(option, criteria);
+        }
+        return match;
     }
 
 }

@@ -142,18 +142,20 @@ export class SysConfigFormService extends KIXObjectFormService {
     }
 
     protected async getValue(
-        property: string, value: any, sysConfig: SysConfigOptionDefinition, formField: FormFieldConfiguration
+        property: string, value: any, sysConfig: SysConfigOptionDefinition,
+        formField: FormFieldConfiguration, formContext?: FormContext
     ): Promise<any> {
         if (sysConfig) {
-            value = await this.handleSingleSysconfigKey(property, value, sysConfig, formField);
+            value = await this.handleSingleSysconfigKey(property, value, sysConfig, formField, formContext);
         } else {
-            value = await this.handleSysconfigListValue(property, value, formField);
+            value = await this.handleSysconfigListValue(property, value, formField, formContext);
         }
         return value;
     }
 
     private async handleSingleSysconfigKey(
-        property: string, value: any, sysConfig: SysConfigOptionDefinition, formField: FormFieldConfiguration
+        property: string, value: any, sysConfig: SysConfigOptionDefinition,
+        formField: FormFieldConfiguration, formContext?: FormContext
     ): Promise<any> {
         switch (property) {
             case SysConfigOptionDefinitionProperty.SETTING:
@@ -197,11 +199,11 @@ export class SysConfigFormService extends KIXObjectFormService {
             default:
         }
 
-        return value;
+        return super.getValue(property, value, sysConfig, formField, formContext);
     }
 
     private async handleSysconfigListValue(
-        property: string, value: any, formField: FormFieldConfiguration
+        property: string, value: any, formField: FormFieldConfiguration, formContext?: FormContext
     ): Promise<any> {
         const option = formField.options ? formField.options.find((o) => o.option === 'SYSCONFIG_NAME') : null;
 
@@ -214,7 +216,8 @@ export class SysConfigFormService extends KIXObjectFormService {
 
             const sysConfig = sysconfigKeys.find((sk: SysConfigOptionDefinition) => sk.Name === option.value);
             value = await this.handleSingleSysconfigKey(
-                property, sysConfig[property], sysConfig as SysConfigOptionDefinition, formField
+                property, sysConfig[property], sysConfig as SysConfigOptionDefinition,
+                formField, formContext
             );
         }
 
