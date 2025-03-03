@@ -103,10 +103,15 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
         const types = await this.prepareObjectTagTypes(token);
-        const index = parameter.findIndex((p) => p[0] === ObjectTagLinkProperty.OBJECT_TYPE);
-        parameter[index][1] = types.has(parameter[index][1])
-            ? types.get(parameter[index][1])
-            : parameter[index][1];
+
+        const objectID = parameter.find((p) => p[0] === ObjectTagLinkProperty.OBJECT_ID);
+        const type = parameter.find((p) => p[0] === ObjectTagLinkProperty.OBJECT_TYPE);
+
+        await this.prepareSysConfig(token, clientRequestId, type[1], objectID[1]);
+
+        type[1] = types.has(type[1])
+            ? types.get(type[1])
+            : type[1];
 
         const uri = this.buildUri(this.RESOURCE_URI);
         const id = super.executeUpdateOrCreateRequest(
@@ -119,10 +124,13 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
     }
 
     public async deleteObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: number,
+        token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: number | string,
         deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
     ): Promise<Error[]> {
         const types = await this.prepareObjectTagTypes(token);
+
+        await this.prepareSysConfig(token, clientRequestId, objectType, objectId);
+
         const type = types.has(objectType)
         ? types.get(objectType)
         : objectType;
@@ -175,5 +183,31 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
             return new Map([...types.entries()].sort());
         }
         return new Map();
+    }
+
+    private async prepareSysConfig(
+        token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: number | string
+    ): Promise<void> {
+        if (
+            objectType !== KIXObjectType.SYS_CONFIG_OPTION
+            && objectType !== KIXObjectType.SYS_CONFIG_OPTION_DEFINITION
+        ) {
+            return null;
+        }
+
+        if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
+            objectType = KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
+        }
+
+        const optionService = KIXObjectServiceRegistry.getServiceInstance(
+            KIXObjectType.SYS_CONFIG_OPTION
+        );
+        const object = await optionService.loadObjects(
+            token, clientRequestId, KIXObjectType.SYS_CONFIG_OPTION, [objectId],
+            null, null
+        );
+        if (object?.objects) {
+            objectId = object.objects[0].ID;
+        }
     }
 }
