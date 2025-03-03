@@ -12,6 +12,8 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TicketState } from '../../../model/TicketState';
 import { TicketStateProperty } from '../../../model/TicketStateProperty';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormContext } from '../../../../../model/configuration/FormContext';
 
 
 export class TicketStateFormService extends KIXObjectFormService {
@@ -34,18 +36,20 @@ export class TicketStateFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.TICKET_STATE;
     }
 
-    protected async getValue(property: string, value: any, ticketState: TicketState): Promise<any> {
-        if (value) {
-            switch (property) {
-                case TicketStateProperty.TYPE_ID:
-                    const stateTypes = await KIXObjectService.loadObjects(KIXObjectType.TICKET_STATE_TYPE, [value]);
-                    if (stateTypes && stateTypes.length) {
-                        value = stateTypes[0].ObjectId;
-                    }
-                    break;
-                default:
-            }
+    protected async getValue(
+        property: string, value: any, ticketState: TicketState,
+        formField: FormFieldConfiguration, formContext: FormContext
+    ): Promise<any> {
+        switch (property) {
+            case TicketStateProperty.TYPE_ID:
+                const stateTypes = await KIXObjectService.loadObjects(KIXObjectType.TICKET_STATE_TYPE, [value]);
+                if (stateTypes && stateTypes.length) {
+                    value = stateTypes[0].ObjectId;
+                }
+                break;
+            default:
         }
-        return value;
+
+        return super.getValue(property, value, ticketState, formField, formContext);
     }
 }
