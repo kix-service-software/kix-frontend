@@ -32,6 +32,7 @@ import { CreatePermissionDescription } from '../../user/server/CreatePermissionD
 import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { Permission } from '../../user/model/Permission';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 
 export class ReportingAPIService extends KIXObjectAPIService {
 
@@ -139,6 +140,11 @@ export class ReportingAPIService extends KIXObjectAPIService {
                     await this.updatePermissions(id, roleIds[1]);
                 }
 
+                const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
+                await this.commitObjectTag(
+                    token, clientRequestId, tags, objectType, id
+                );
+
                 return id;
             } else {
                 throw new Error('1', 'Missing required parameter ReportDefinition.');
@@ -183,6 +189,11 @@ export class ReportingAPIService extends KIXObjectAPIService {
             if (roleIds && Array.isArray(roleIds[1])) {
                 await this.updatePermissions(id, roleIds[1]);
             }
+
+            const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
+            await this.commitObjectTag(
+                token, clientRequestId, tags, objectType, id
+            );
 
             return id;
         }
