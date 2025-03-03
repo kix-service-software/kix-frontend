@@ -504,7 +504,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.13.5
+├─ @types/node@22.13.8
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1005,7 +1005,7 @@
 │  ├─ email: M8ch88l@gmail.com
 │  ├─ path: node_modules/big.js
 │  └─ licenseFile: node_modules/big.js/LICENCE
-├─ bl@6.0.19
+├─ bl@6.0.20
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/rvagg/bl
 │  ├─ path: node_modules/bl
@@ -1379,7 +1379,7 @@
 │  ├─ repository: https://github.com/zloirock/core-js
 │  ├─ path: node_modules/core-js
 │  └─ licenseFile: node_modules/babel-runtime/node_modules/core-js/LICENSE
-├─ core-js@3.40.0
+├─ core-js@3.41.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/zloirock/core-js
 │  ├─ publisher: Denis Pushkarev
@@ -2620,7 +2620,7 @@
 │  ├─ publisher: auth0
 │  ├─ path: node_modules/jsonwebtoken
 │  └─ licenseFile: node_modules/jsonwebtoken/LICENSE
-├─ juice@11.0.0
+├─ juice@11.0.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/Automattic/juice
 │  ├─ path: node_modules/juice
@@ -2862,7 +2862,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.18
+├─ marko@5.37.19
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -3886,13 +3886,13 @@
 │  ├─ url: dominictarr.com
 │  ├─ path: node_modules/through
 │  └─ licenseFile: node_modules/through/LICENSE.APACHE2
-├─ tldts-core@6.1.79
+├─ tldts-core@6.1.82
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/remusao/tldts
 │  ├─ publisher: Rémi Berson
 │  ├─ path: node_modules/tldts-core
 │  └─ licenseFile: node_modules/tldts-core/LICENSE
-├─ tldts@6.1.79
+├─ tldts@6.1.82
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/remusao/tldts
 │  ├─ publisher: Rémi Berson
@@ -3913,7 +3913,7 @@
 │  ├─ email: doug@somethingdoug.com
 │  ├─ path: node_modules/toidentifier
 │  └─ licenseFile: node_modules/toidentifier/LICENSE
-├─ tough-cookie@5.1.1
+├─ tough-cookie@5.1.2
 │  ├─ licenses: BSD-3-Clause
 │  ├─ repository: https://github.com/salesforce/tough-cookie
 │  ├─ publisher: Jeremy Stashewsky
