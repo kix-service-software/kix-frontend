@@ -19,6 +19,8 @@ export class SysConfigOptionDefinition extends KIXObject {
 
     public AccessLevel: string;
 
+    public ID: number;
+
     public Name: string;
 
     public Value: any;
@@ -48,6 +50,7 @@ export class SysConfigOptionDefinition extends KIXObject {
     public constructor(sysConfigOptionDefinition?: SysConfigOptionDefinition) {
         super(sysConfigOptionDefinition);
         if (sysConfigOptionDefinition) {
+            this.ID = sysConfigOptionDefinition.ID;
             this.AccessLevel = sysConfigOptionDefinition.AccessLevel;
             this.Name = sysConfigOptionDefinition.Name;
             this.ObjectId = this.Name;

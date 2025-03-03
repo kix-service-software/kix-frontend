@@ -23,6 +23,9 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
 import { TableValue } from '../../../../table/model/TableValue';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
+import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty';
 
 export class SysConfigTableContentProvider extends TableContentProvider<SysConfigOptionDefinition> {
 
@@ -78,7 +81,15 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
 
         const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
         for (const column of columns) {
-            const tableValue = new TableValue(column.property, definition[column.property]);
+            let tableValue: TableValue;
+            if (column.property === KIXObjectProperty.OBJECT_TAGS) {
+                const tags = await KIXObjectService.loadObjectTags(
+                    KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, definition.ObjectId
+                );
+                tableValue = new TableValue(column.property, tags, tags.join(','), null, null, null, tags);
+            } else {
+                tableValue = new TableValue(column.property, definition[column.property]);
+            }
             values.push(tableValue);
         }
 
