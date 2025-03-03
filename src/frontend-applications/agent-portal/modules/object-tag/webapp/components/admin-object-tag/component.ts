@@ -20,6 +20,9 @@ import { ObjectTagLinkProperty } from '../../../model/ObjectTagLinkProperty';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { Table } from '../../../../table/model/Table';
+import { SysConfigOptionProperty } from '../../../../sysconfig/model/SysConfigOptionProperty';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -52,13 +55,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         loadingOptions.searchLimit = 0;
         loadingOptions.filter = [
             new FilterCriteria(
-                ObjectTagProperty.NAME, SearchOperator.CONTAINS, FilterDataType.STRING,
-                FilterType.AND, searchValue
+                ObjectTagProperty.NAME, SearchOperator.LIKE, FilterDataType.STRING,
+                FilterType.AND, `*${searchValue}*`
             )
         ];
 
         tree = await KIXObjectService.searchObjectTree(
-            KIXObjectType.OBJECT_TAG, ObjectTagProperty.NAME, searchValue, loadingOptions
+            KIXObjectType.OBJECT_TAG, ObjectTagProperty.NAME, `*${searchValue}*`, loadingOptions
         );
 
         return tree;
@@ -133,20 +136,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         tables.forEach( (table,index) => {
             if ( typeof table !== 'undefined' ) {
                 table.getTableConfiguration().enableSelection = Boolean(this.state.actions);
-                table['title'] = `Translatable#${objects[index][0]}`;
+                table['title'] = LabelService.getInstance().getObjectName(objects[index][0], true, true);
                 table['instanceId'] = IdService.generateDateBasedId();
-                if ( table.getObjectType() === KIXObjectType.QUEUE ) {
-                    table.setFilter(
-                        null,
-                        [
-                            new UIFilterCriterion(
-                        QueueProperty.QUEUE_ID, SearchOperator.IN, objects[index][1],
-                        true
-                            )
-                        ]
-                    );
-                    table.filter();
-                }
+                this.setSpecialFilter(table, objects[index][1]);
                 this.state.tables.push(table);
             }
         });
@@ -162,6 +154,37 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
         return filteredActions;
+    }
+
+    private async setSpecialFilter(table: Table, value: any): Promise<void> {
+        const objectType = table.getObjectType();
+        switch (objectType) {
+            case KIXObjectType.QUEUE:
+                table.setFilter(
+                    null,
+                    [
+                        new UIFilterCriterion(
+                            QueueProperty.QUEUE_ID, SearchOperator.IN, value,
+                            true
+                        )
+                    ]
+                );
+                table.filter();
+                break;
+            case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
+                table.setFilter(
+                    null,
+                    [
+                        new UIFilterCriterion(
+                            SysConfigOptionProperty.ID, SearchOperator.IN, value,
+                            true
+                        )
+                    ]
+                );
+                table.filter();
+                break;
+            default:
+        }
     }
 
     public runAction(action:AbstractAction): void {
