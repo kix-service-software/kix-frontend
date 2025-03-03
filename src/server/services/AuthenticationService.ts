@@ -58,7 +58,7 @@ export class AuthenticationService {
         }
     }
 
-    private createToken(userLogin: string, backendToken: string): string {
+    public createToken(userLogin: string, backendToken: string): string {
         const token = jwt.sign({ userLogin, backendToken, created: Date.now() }, this.tokenSecret);
         return token;
     }
