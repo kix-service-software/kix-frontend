@@ -96,7 +96,7 @@ export class ApplicationRouter extends KIXRouter {
             this.setFrontendSocketUrl(res);
 
             if (req.headers['x-forwarded-for']) {
-                res.cookie('x-forwarded-for', req.headers['x-forwarded-for']);
+                res.cookie('x-forwarded-for', req.headers['x-forwarded-for'], { httpOnly: true });
             }
 
             const token: string = req.cookies.token;
