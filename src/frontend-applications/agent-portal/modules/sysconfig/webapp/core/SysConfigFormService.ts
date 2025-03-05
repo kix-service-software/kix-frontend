@@ -150,7 +150,7 @@ export class SysConfigFormService extends KIXObjectFormService {
         } else {
             value = await this.handleSysconfigListValue(property, value, formField, formContext);
         }
-        return value;
+        return super.getValue(property, value, sysConfig, formField, formContext);
     }
 
     private async handleSingleSysconfigKey(
@@ -199,7 +199,7 @@ export class SysConfigFormService extends KIXObjectFormService {
             default:
         }
 
-        return super.getValue(property, value, sysConfig, formField, formContext);
+        return value;
     }
 
     private async handleSysconfigListValue(

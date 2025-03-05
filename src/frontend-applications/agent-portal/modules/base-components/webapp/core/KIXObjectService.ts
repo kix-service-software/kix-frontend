@@ -1197,8 +1197,8 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
             const prepared = await this.prepareSysConfigForObjectTag(objectType, objectId);
 
-            objectType = prepared.has('ObjectType') ? prepared.get('ObjectType').toString() : objectType;
-            objectId = prepared.has('ObjectID') ? prepared.get('ObjectID') : objectId;
+            objectType = prepared?.has('ObjectType') ? prepared.get('ObjectType').toString() : objectType;
+            objectId = prepared?.has('ObjectID') ? prepared.get('ObjectID') : objectId;
 
             const type = types.has(objectType)
                 ? types.get(objectType)
