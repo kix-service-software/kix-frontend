@@ -130,7 +130,7 @@ export class CKEditor5 {
         const plugins = (window as any).KIX_CKEDITOR_PLUGINS;
 
         const editorConfig = await CKEditorService.getCKEditorConfiguration();
-        editorConfig.plugins = plugins;
+        editorConfig.plugins = [...plugins]; // don't overwrite initial list
 
         this.addPlugins(editorConfig);
 
@@ -204,6 +204,9 @@ export class CKEditor5 {
     }
 
     public destroy(): void {
+        if (this.changeTimeout) {
+            clearTimeout(this.changeTimeout);
+        }
         return;
     }
 
