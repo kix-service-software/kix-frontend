@@ -386,6 +386,9 @@ export class TextmodulePlugin {
             }
 
             private _showOrUpdateUI(markerMarker): void {
+                if (!this._textmoduleView) {
+                    return;
+                }
                 try {
                     if (this._isUIVisible()) {
                         this._balloon.updatePosition(
@@ -402,7 +405,7 @@ export class TextmodulePlugin {
                     this._textmoduleView.position = this._balloon.view.position;
                     this._textmoduleView.selectFirst();
                 } catch (e) {
-                    console.warn('Textmodule Plugin: Could update UI.');
+                    console.warn('Textmodule Plugin: Could not update UI.');
                     console.warn(e);
                 }
             }
@@ -703,7 +706,7 @@ export class TextmodulePlugin {
     private static getLastValidMarkerInText(text): any {
         let lastValidMarker;
 
-        const currentMarkerLastIndex = text.lastIndexOf('::');
+        const currentMarkerLastIndex = text.lastIndexOf(this.MARKER);
 
         if (!lastValidMarker || currentMarkerLastIndex >= lastValidMarker.position) {
             lastValidMarker = {
