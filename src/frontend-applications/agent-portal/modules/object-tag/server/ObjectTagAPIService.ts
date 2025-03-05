@@ -107,7 +107,10 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
         const objectID = parameter.find((p) => p[0] === ObjectTagLinkProperty.OBJECT_ID);
         const type = parameter.find((p) => p[0] === ObjectTagLinkProperty.OBJECT_TYPE);
 
-        await this.prepareSysConfig(token, clientRequestId, type[1], objectID[1]);
+        const prepared = await this.prepareSysConfig(token, clientRequestId, type[1], objectID[1]);
+
+        type[1] = prepared?.has('ObjectType') ? prepared.get('ObjectType').toString() : type[1];
+        objectID[1] = prepared?.has('ObjectID') ? prepared.get('ObjectID') : objectID[1];
 
         type[1] = types.has(type[1])
             ? types.get(type[1])
@@ -129,17 +132,20 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
     ): Promise<Error[]> {
         const types = await this.prepareObjectTagTypes(token);
 
-        await this.prepareSysConfig(token, clientRequestId, objectType, objectId);
+        const prepared = await this.prepareSysConfig(token, clientRequestId, objectType, objectId);
 
-        const type = types.has(objectType)
-        ? types.get(objectType)
-        : objectType;
+        objectType = prepared?.has('ObjectType') ? prepared.get('ObjectType').toString() : objectType;
+        objectId = prepared?.has('ObjectID') ? prepared.get('ObjectID') : objectId;
+
+        objectType = types.has(objectType)
+            ? types.get(objectType)
+            : objectType;
 
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.filter = [
             new FilterCriteria(
                 ObjectTagLinkProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.AND, type
+                FilterType.AND, objectType
             ),
             new FilterCriteria(
                 ObjectTagLinkProperty.OBJECT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
@@ -187,7 +193,8 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
 
     private async prepareSysConfig(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: number | string
-    ): Promise<void> {
+    ): Promise<Map<string, string | number>> {
+        let result: Map<string, string | number> = new Map();
         if (
             objectType !== KIXObjectType.SYS_CONFIG_OPTION
             && objectType !== KIXObjectType.SYS_CONFIG_OPTION_DEFINITION
@@ -196,18 +203,21 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
         }
 
         if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
-            objectType = KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
+            result.set('ObjectType', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
         }
 
         const optionService = KIXObjectServiceRegistry.getServiceInstance(
             KIXObjectType.SYS_CONFIG_OPTION
         );
-        const object = await optionService.loadObjects(
+        const configs = await optionService.loadObjects(
             token, clientRequestId, KIXObjectType.SYS_CONFIG_OPTION, [objectId],
             null, null
         );
-        if (object?.objects) {
-            objectId = object.objects[0].ID;
+        if (configs?.objects) {
+            const id = configs.objects.filter((c) => c.Name === objectId).map((c) => c.ID);
+            result.set('ObjectID', id[0]);
         }
+
+        return result;
     }
 }
