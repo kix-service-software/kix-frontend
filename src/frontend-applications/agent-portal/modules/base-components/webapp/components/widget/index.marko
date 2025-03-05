@@ -46,6 +46,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     title=state.title
                     on-click("minimizeWidget", true)
                     on-mousedown("headerMousedown", true)
+                    class="m-0"
                 >
                     <translation-string pattern=state.title/>
                 </h2>
@@ -64,7 +65,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 list=input.actions
                 instanceId=state.instanceId
                 displayText=component.getWidgetTypeActionDisplaySetting()
-                on-actionListClicked('doNotChangeMinimize')
+                on-actionListClicked("doNotChangeMinimize")
             />
             <if(state.minimizable)>
                 <span class="minimize-icon-wrapper">
