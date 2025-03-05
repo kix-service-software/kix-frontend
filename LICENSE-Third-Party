@@ -304,7 +304,7 @@
 │  ├─ url: https://luxass.dev
 │  ├─ path: node_modules/@luxass/strip-json-comments
 │  └─ licenseFile: node_modules/@luxass/strip-json-comments/LICENSE
-├─ @marko/compiler@5.39.12
+├─ @marko/compiler@5.39.13
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -504,7 +504,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.13.8
+├─ @types/node@22.13.9
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1121,14 +1121,14 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bind
 │  └─ licenseFile: node_modules/call-bind/LICENSE
-├─ call-bound@1.0.3
+├─ call-bound@1.0.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ljharb/call-bound
 │  ├─ publisher: Jordan Harband
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001701
+├─ caniuse-lite@1.0.30001702
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1864,7 +1864,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.109
+├─ electron-to-chromium@1.5.112
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -2862,7 +2862,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.19
+├─ marko@5.37.20
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
