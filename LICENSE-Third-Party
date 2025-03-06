@@ -3886,13 +3886,13 @@
 │  ├─ url: dominictarr.com
 │  ├─ path: node_modules/through
 │  └─ licenseFile: node_modules/through/LICENSE.APACHE2
-├─ tldts-core@6.1.82
+├─ tldts-core@6.1.83
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/remusao/tldts
 │  ├─ publisher: Rémi Berson
 │  ├─ path: node_modules/tldts-core
 │  └─ licenseFile: node_modules/tldts-core/LICENSE
-├─ tldts@6.1.82
+├─ tldts@6.1.83
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/remusao/tldts
 │  ├─ publisher: Rémi Berson
