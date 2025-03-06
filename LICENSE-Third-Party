@@ -536,7 +536,7 @@
 │  ├─ repository: https://github.com/acornjs/acorn
 │  ├─ path: node_modules/acorn
 │  └─ licenseFile: node_modules/acorn/LICENSE
-├─ acorn@8.14.0
+├─ acorn@8.14.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/acornjs/acorn
 │  ├─ path: node_modules/acorn
