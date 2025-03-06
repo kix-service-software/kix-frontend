@@ -539,7 +539,7 @@ export class SearchService {
                 new PortalNotification(
                     IdService.generateDateBasedId('search-error'), 'error',
                     PortalNotificationType.IMPORTANT,
-                    'Error Loading Search', new Date().toLocaleString(), true, false,
+                    'Error Loading Search', new Date().toString(), true, false,
                     `No search ${name} available`,
                     `Invalid search template ${name} - please update your dashboard configuration.`
                 )
