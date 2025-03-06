@@ -47,6 +47,11 @@ export class UIModule implements IUIModule {
                     BrowserCacheService.getInstance().addDependencies(
                         objectType[0], [KIXObjectType.OBJECT_TAG, KIXObjectType.OBJECT_TAG_LINK]
                     );
+                    if (objectType[0] === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
+                        BrowserCacheService.getInstance().addDependencies(
+                            KIXObjectType.SYS_CONFIG_OPTION, [KIXObjectType.OBJECT_TAG, KIXObjectType.OBJECT_TAG_LINK]
+                        );
+                    }
                 }
             }
         }
