@@ -117,6 +117,23 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 nodes = await this.handleUnique(nodes);
             }
 
+            const defaultValue = this.state.field.defaultValue?.value;
+            if (nodes?.length && defaultValue) {
+                if (Array.isArray(defaultValue) && defaultValue.length) {
+                    defaultValue.forEach((value) => {
+                        const defaultValueNode = nodes.find((node) => node.id === defaultValue);
+                        if (defaultValueNode) {
+                            defaultValueNode.selected = true;
+                        }
+                    });
+                } else {
+                    const defaultValueNode = nodes.find((node) => node.id === defaultValue);
+                    if (defaultValueNode) {
+                        defaultValueNode.selected = true;
+                    }
+                }
+            }
+
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
             if (treeHandler) {
                 treeHandler.setTree(nodes, null, true, filterSelection);
