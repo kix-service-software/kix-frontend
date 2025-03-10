@@ -270,7 +270,7 @@ export class ArticleViewUtil {
             'area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen',
             'link', 'meta', 'param', 'source', 'track', 'wbr'
         ];
-        const startTags = (body.match(/<[^!\/].+?>/g) || [])
+        const startTags = (body.match(/<[^!\/][^>]*?>/g) || [])
             .map((tag) => tag.slice(1, -1))// remove < and >
             .map((tag: string) => tag.replace(/([^\s]+).*/s, '$1'))
             .filter((tag) => !ingoreTags.some((itag) => itag === tag));
