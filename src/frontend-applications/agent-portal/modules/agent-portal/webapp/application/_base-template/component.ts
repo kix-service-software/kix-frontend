@@ -119,7 +119,7 @@ class Component {
 
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
 
-        RoutingService.getInstance().routeToInitialContext();
+        RoutingService.getInstance().routeToInitialContext(true);
 
         this.state.initialized = true;
         this.state.loading = false;

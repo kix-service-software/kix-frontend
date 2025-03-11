@@ -27,7 +27,7 @@ export class UIModule implements IUIModule {
 
     private registerContexts(): void {
         const kanbanContext = new ContextDescriptor(
-            KanbanContext.CONTEXT_ID, [KIXObjectType.ANY],
+            KanbanContext.CONTEXT_ID, [KIXObjectType.TICKET],
             ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'kanban-module', ['kanban'], KanbanContext
         );
