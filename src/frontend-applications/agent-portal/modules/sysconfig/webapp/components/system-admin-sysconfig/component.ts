@@ -202,6 +202,8 @@ class SysConfigContentProvider extends TableContentProvider {
                         definition.Type === SysConfigOptionType.HASH
                         || definition.Type === SysConfigOptionType.ARRAY
                         || definition.Type === SysConfigOptionType.OBJECT
+                        || definition.Type === SysConfigOptionType.TIME_VACATION_DAYS
+                        || definition.Type === SysConfigOptionType.TIME_VACATION_DAYS_ONE_TIME
                     )
                 ) {
                     value = JSON.stringify(value);
