@@ -5,7 +5,7 @@
 │  ├─ email: jridgewell@google.com
 │  ├─ path: node_modules/@ampproject/remapping
 │  └─ licenseFile: node_modules/@ampproject/remapping/LICENSE
-├─ @asamuzakjp/css-color@2.8.3
+├─ @asamuzakjp/css-color@3.1.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/asamuzaK/cssColor
 │  ├─ publisher: asamuzaK
@@ -504,7 +504,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.13.9
+├─ @types/node@22.13.10
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1128,7 +1128,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001702
+├─ caniuse-lite@1.0.30001703
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1442,7 +1442,7 @@
 │  ├─ url: https://github.com/afelix
 │  ├─ path: node_modules/csso
 │  └─ licenseFile: node_modules/csso/LICENSE
-├─ cssstyle@4.2.1
+├─ cssstyle@4.3.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jsdom/cssstyle
 │  ├─ path: node_modules/cssstyle
@@ -1864,7 +1864,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.112
+├─ electron-to-chromium@1.5.114
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -3886,13 +3886,13 @@
 │  ├─ url: dominictarr.com
 │  ├─ path: node_modules/through
 │  └─ licenseFile: node_modules/through/LICENSE.APACHE2
-├─ tldts-core@6.1.82
+├─ tldts-core@6.1.84
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/remusao/tldts
 │  ├─ publisher: Rémi Berson
 │  ├─ path: node_modules/tldts-core
 │  └─ licenseFile: node_modules/tldts-core/LICENSE
-├─ tldts@6.1.82
+├─ tldts@6.1.84
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/remusao/tldts
 │  ├─ publisher: Rémi Berson
@@ -4149,7 +4149,7 @@
 │  ├─ email: github@smayr.name
 │  ├─ path: node_modules/whatwg-url
 │  └─ licenseFile: node_modules/whatwg-url/LICENSE.txt
-├─ which-typed-array@1.1.18
+├─ which-typed-array@1.1.19
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/inspect-js/which-typed-array
 │  ├─ publisher: Jordan Harband
