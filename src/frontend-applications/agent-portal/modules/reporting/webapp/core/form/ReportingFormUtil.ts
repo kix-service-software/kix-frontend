@@ -61,6 +61,7 @@ export class ReportingFormUtil {
                     field.options.push(new FormFieldOption(FormFieldOptions.SHOW_INVALID, false));
                     const autocompleteConfig = new AutoCompleteConfiguration(0);
                     field.options.push(new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, autocompleteConfig));
+                    field.options.push(new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true));
 
                     if (filterPossibleValues) {
                         field.options.push(

@@ -20,6 +20,8 @@ import { IconFormValue } from '../../../../object-forms/model/FormValues/IconFor
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { PrimaryOrganisationFormValue } from './form-values/PrimaryOrganisationFormValue';
 import { ContactUserFormValue } from './form-values/ContactUserFormValue';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact> {
 
@@ -68,7 +70,27 @@ export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact>
         this.formValues.push(new ObjectFormValue(ContactProperty.TITLE, contact, this, null));
         this.formValues.push(new ObjectFormValue(ContactProperty.CITY, contact, this, null));
         this.formValues.push(new ObjectFormValue(ContactProperty.STREET, contact, this, null));
-        this.formValues.push(new ObjectFormValue(ContactProperty.COUNTRY, contact, this, null));
+
+        const field = this.objectFormHandler?.findFormField(ContactProperty.COUNTRY);
+        if (field?.inputComponent === 'default-select-input') {
+            const nodesOption = field?.options?.find((o) => o.option === 'NODES');
+            if (Array.isArray(nodesOption?.value)) {
+                const countryFormValue = new SelectObjectFormValue(ContactProperty.COUNTRY, contact, this, null);
+                (countryFormValue as any).prepareSelectableNodes = async (objects: KIXObject[]): Promise<void> => {
+                    const nodes = [];
+                    for (const node of nodesOption.value) {
+                        node.label = await TranslationService.translate(node.label);
+                        nodes.push(node);
+                    }
+                    countryFormValue.treeHandler?.setTree(nodes, undefined, true, true);
+                };
+                this.formValues.push(countryFormValue);
+            }
+        } else {
+            const countryFormValue = new ObjectFormValue(ContactProperty.COUNTRY, contact, this, null);
+            this.formValues.push(countryFormValue);
+        }
+
         this.formValues.push(new ObjectFormValue(ContactProperty.FAX, contact, this, null));
         this.formValues.push(new ObjectFormValue(ContactProperty.MOBILE, contact, this, null));
         this.formValues.push(new ObjectFormValue(ContactProperty.PHONE, contact, this, null));

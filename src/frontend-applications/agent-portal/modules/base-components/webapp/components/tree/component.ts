@@ -39,16 +39,17 @@ class TreeComponent {
         this.state.activeNode = input.activeNode;
         this.state.treeStyle = input.treeStyle;
 
-        this.prepareExpandCollapseAll(input.allowExpandCollapseAll);
+        this.state.allowExpandCollapseAll = typeof input.allowExpandCollapseAll !== 'undefined'
+            ? input.allowExpandCollapseAll
+            : true;
+    }
 
+    public async onMount(): Promise<void> {
+        this.prepareExpandCollapseAll();
         this.prepareUserPreference();
     }
 
     private async prepareExpandCollapseAll(allowExpandCollapseAll: boolean = true): Promise<void> {
-        this.state.allowExpandCollapseAll = typeof allowExpandCollapseAll !== 'undefined'
-            ? allowExpandCollapseAll
-            : true;
-
         if (this.state.allowExpandCollapseAll) {
             let expandCollapseAll = false;
             for (const node of this.state.tree) {
@@ -62,12 +63,14 @@ class TreeComponent {
     }
 
     private async prepareUserPreference(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const treeExpanded = await AgentService.getInstance().getUserPreference(`tree-expanded-${context.contextId}`);
-        const hasUserPreferenceSet = treeExpanded !== undefined;
+        if (this.state.allowExpandCollapseAll) {
+            const context = ContextService.getInstance().getActiveContext();
+            const treeExpanded = await AgentService.getInstance().getUserPreference(`tree-expanded-${context.contextId}-${this.state.treeId}`);
+            const hasUserPreferenceSet = treeExpanded !== undefined;
 
-        if (hasUserPreferenceSet) {
-            this.expandOrCollapseAll(BrowserUtil.isBooleanTrue(treeExpanded.Value));
+            if (hasUserPreferenceSet) {
+                this.expandOrCollapseAll(BrowserUtil.isBooleanTrue(treeExpanded.Value));
+            }
         }
     }
 
@@ -90,8 +93,11 @@ class TreeComponent {
     public expandOrCollapseAll(expand?: boolean): void {
         TreeUtil.expandOrCollapseAll(this.state.tree, expand);
 
+        const treeElement: HTMLElement = (this as any).getEl('state.treeId');
+
+
         const context = ContextService.getInstance().getActiveContext();
-        AgentService.getInstance().setPreferences([[`tree-expanded-${context.contextId}`, expand]]);
+        AgentService.getInstance().setPreferences([[`tree-expanded-${context.contextId}-${this.state.treeId}`, expand]]);
 
         (this as any).setStateDirty('tree');
     }
