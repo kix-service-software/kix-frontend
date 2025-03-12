@@ -28,7 +28,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
-import { SearchSocketClient } from '../../../../search/webapp/core';
+import { SearchSocketClient } from '../../../../search/webapp/core/SearchSocketClient';
 import { PersonalSetting } from '../../../model/PersonalSetting';
 import { AgentService } from '../../core/AgentService';
 import { ComponentState } from './ComponentState';

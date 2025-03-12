@@ -20,7 +20,6 @@ import {
 } from '.';
 import { TicketTableFactory } from './table/TicketTableFactory';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { SearchService } from '../../../search/webapp/core';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { ArticleTableFactory } from './table/ArticleTableFactory';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
@@ -59,6 +58,7 @@ import { MacroService } from '../../../macro/webapp/core/MacroService';
 import { FetchAssetAttributesOptionFieldHandler } from './form/extended-form-manager/FetchAssetAttributesOptionFieldHandler';
 import { TicketBulkPrintAction } from './actions/TicketBulkPrintAction';
 import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
+import { SearchService } from '../../../search/webapp/core/SearchService';
 
 export class UIModule implements IUIModule {
 

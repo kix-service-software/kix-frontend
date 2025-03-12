@@ -17,7 +17,6 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
-import { SearchService } from '../../../../search/webapp/core';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TreeService } from '../../../../base-components/webapp/core/tree';
@@ -25,6 +24,7 @@ import { IdService } from '../../../../../model/IdService';
 import { FilterType } from '../../../../../model/FilterType';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { JobFormService } from '../../core/JobFormService';
+import { SearchService } from '../../../../search/webapp/core/SearchService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 

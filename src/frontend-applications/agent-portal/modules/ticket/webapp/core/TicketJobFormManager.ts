@@ -16,7 +16,7 @@ import { JobProperty } from '../../../job/model/JobProperty';
 import { AbstractJobFormManager } from '../../../job/webapp/core/AbstractJobFormManager';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { SearchProperty } from '../../../search/model/SearchProperty';
-import { SearchService } from '../../../search/webapp/core';
+import { SearchService } from '../../../search/webapp/core/SearchService';
 import { TicketProperty } from '../../model/TicketProperty';
 import { QueueService } from './admin';
 import { TicketSearchFormManager } from './TicketSearchFormManager';

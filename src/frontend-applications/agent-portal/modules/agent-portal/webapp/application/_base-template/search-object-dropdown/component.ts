@@ -12,7 +12,7 @@ import { ContextEvents } from '../../../../../base-components/webapp/core/Contex
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
-import { SearchService } from '../../../../../search/webapp/core';
+import { SearchService } from '../../../../../search/webapp/core/SearchService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ComponentState } from './ComponentState';
 

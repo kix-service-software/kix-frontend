@@ -1,8 +1,9 @@
 {
     "dependencies": [
+        "require ./core/SearchUIModule",
         "require ./components/save-search-template-overlay",
         "require ./components/search-criteria-widget",
         "require ./components/search-module",
-        "require ./core"
+        "require ./components/search-list-widget"
     ]
 }

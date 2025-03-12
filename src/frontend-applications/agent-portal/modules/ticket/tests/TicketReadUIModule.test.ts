@@ -17,7 +17,6 @@ import { TicketTableFactory } from '../webapp/core/table/TicketTableFactory'
 import { TicketPlaceholderHandler } from '../webapp/core/TicketPlaceholderHandler';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 import { PlaceholderService } from '../../base-components/webapp/core/PlaceholderService';
-import { SearchService } from '../../search/webapp/core';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ArticleTableFactory } from '../webapp/core/table/ArticleTableFactory';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
@@ -27,6 +26,7 @@ import { ChannelService } from '../webapp/core/ChannelService';
 import { ServiceType } from '../../base-components/webapp/core/ServiceType';
 import { TableCSSHandlerRegistry } from '../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
 import { TableFactoryService } from '../../table/webapp/core/factory/TableFactoryService';
+import { SearchService } from '../../search/webapp/core/SearchService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

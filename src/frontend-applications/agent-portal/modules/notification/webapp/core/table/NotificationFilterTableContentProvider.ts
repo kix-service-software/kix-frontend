@@ -19,13 +19,14 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { Notification } from '../../../model/Notification';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { SearchDefinition, SearchOperatorUtil } from '../../../../search/webapp/core';
 import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
 import { TableValue } from '../../../../table/model/TableValue';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { SearchOperatorUtil } from '../../../../search/webapp/core/SearchOperatorUtil';
+import { SearchDefinition } from '../../../../search/webapp/core/SearchDefinition';
 
 export class NotificationFilterTableContentProvider extends TableContentProvider<any> {
 

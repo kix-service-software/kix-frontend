@@ -21,9 +21,9 @@ import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../core/ObjectReferenceOptions';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { SearchDefinition } from '../../../../search/webapp/core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ContextService } from '../../core/ContextService';
+import { SearchDefinition } from '../../../../search/webapp/core/SearchDefinition';
 
 export class DynamicFormFieldValue {
 

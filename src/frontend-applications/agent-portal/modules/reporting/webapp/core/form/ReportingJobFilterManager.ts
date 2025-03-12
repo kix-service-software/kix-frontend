@@ -13,7 +13,7 @@ import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFi
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
-import { SearchDefinition } from '../../../../search/webapp/core';
+import { SearchDefinition } from '../../../../search/webapp/core/SearchDefinition';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ReportDefinitionProperty } from '../../../model/ReportDefinitionProperty';
 

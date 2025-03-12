@@ -19,7 +19,6 @@ import { AuthenticationSocketClient } from '../../../../modules/base-components/
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { SearchOperator } from '../../../search/model/SearchOperator';
-import { SearchDefinition, SearchOperatorUtil } from '../../../search/webapp/core';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
@@ -33,6 +32,8 @@ import { SearchFormManager } from '../../../base-components/webapp/core/SearchFo
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { SearchOperatorUtil } from '../../../search/webapp/core/SearchOperatorUtil';
+import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
 
 export class ConfigItemSearchFormManager extends SearchFormManager {
 
