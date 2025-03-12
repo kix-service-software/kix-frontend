@@ -27,7 +27,7 @@ import { KIXObjectSocketClient } from '../../../base-components/webapp/core/KIXO
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { SearchOperator } from '../../../search/model/SearchOperator';
-import { SearchService } from '../../../search/webapp/core';
+import { SearchService } from '../../../search/webapp/core/SearchService';
 import { ITableContentProvider } from '../../model/ITableContentProvider';
 import { RowObject } from '../../model/RowObject';
 import { Table } from '../../model/Table';

@@ -40,7 +40,7 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { GraphService } from '../../../graph/webapp/core/GraphService';
-import { SearchService } from '../../../search/webapp/core';
+import { SearchService } from '../../../search/webapp/core/SearchService';
 import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { ConfigItemPrintAction } from './actions/ConfigItemPrintAction';

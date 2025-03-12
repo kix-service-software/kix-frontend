@@ -11,10 +11,12 @@ import { IUIModule } from '../../../../model/IUIModule';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
-import { SaveSearchAction, DeleteSearchAction, LoadSearchAction } from './actions';
 import { SearchService } from './SearchService';
 import { SaveUserDefaultSearchAction } from './actions/SaveUserDefaultSearchAction';
 import { SharedSearchEventHandler } from './SharedSearchEventHandler';
+import { DeleteSearchAction } from './actions/DeleteSearchAction';
+import { LoadSearchAction } from './actions/LoadSearchAction';
+import { SaveSearchAction } from './actions/SaveSearchAction';
 
 export class UIModule implements IUIModule {
 

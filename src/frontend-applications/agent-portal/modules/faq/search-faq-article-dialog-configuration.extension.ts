@@ -51,9 +51,17 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             null, tableWidget, false, false, 'kix-icon-faq', true
         );
 
+        const searchListWidget = new WidgetConfiguration(
+            'faq-search-widget', 'Searches', ConfigurationType.Widget, 'search-list-widget', 'Translatable#Searches', []
+        );
+
         const contextConfiguration = new ContextConfiguration(
             this.getModuleId(), 'FAQ Search', ConfigurationType.Context, this.getModuleId(),
-            [], [], [],
+            [],
+            [
+                new ConfiguredWidget('search-list-widget', null, searchListWidget)
+
+            ], [],
             [
                 new ConfiguredWidget(
                     'search-criteria-widget', null, new WidgetConfiguration(

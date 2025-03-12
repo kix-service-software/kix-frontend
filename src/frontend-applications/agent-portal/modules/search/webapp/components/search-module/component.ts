@@ -7,9 +7,6 @@
  * --
  */
 
-import { ConfigurationType } from '../../../../../model/configuration/ConfigurationType';
-import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
-import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { Context } from '../../../../../model/Context';
 import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -21,7 +18,7 @@ import { KIXObjectSocketClient } from '../../../../base-components/webapp/core/K
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { SearchEvent } from '../../../model/SearchEvent';
-import { SearchContext } from '../../core';
+import { SearchContext } from '../../core/SearchContext';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {

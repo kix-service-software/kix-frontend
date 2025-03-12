@@ -15,13 +15,13 @@ import { ContextService } from '../../core/ContextService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { TreeHandler, TreeNode, TreeService } from '../../core/tree';
 import { IdService } from '../../../../../model/IdService';
-import { SearchService } from '../../../../search/webapp/core';
 import { EventService } from '../../core/EventService';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { ContextEvents } from '../../core/ContextEvents';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { SearchService } from '../../../../search/webapp/core/SearchService';
 
 class Component {
 

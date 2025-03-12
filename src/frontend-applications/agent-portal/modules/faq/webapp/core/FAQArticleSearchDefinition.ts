@@ -8,7 +8,6 @@
  */
 
 import { FAQArticleSearchFormManager } from './FAQArticleSearchFormManager';
-import { SearchDefinition } from '../../../search/webapp/core';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
@@ -20,6 +19,7 @@ import { FilterType } from '../../../../model/FilterType';
 import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
 
 export class FAQArticleSearchDefinition extends SearchDefinition {
 

@@ -11,7 +11,7 @@ import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { FilterCriteria } from '../../../model/FilterCriteria';
 import { IdService } from '../../../model/IdService';
-import { SearchService } from '../webapp/core';
+import { SearchService } from '../webapp/core/SearchService';
 
 export class SearchCache<T extends KIXObject = KIXObject> {
 

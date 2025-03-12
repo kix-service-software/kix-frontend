@@ -17,11 +17,12 @@ import { AuthenticationSocketClient } from '../../../../modules/base-components/
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { SearchOperator } from '../../../search/model/SearchOperator';
-import { SearchDefinition, SearchOperatorUtil } from '../../../search/webapp/core';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
+import { SearchOperatorUtil } from '../../../search/webapp/core/SearchOperatorUtil';
 
 
 export class FAQArticleSearchFormManager extends SearchFormManager {

@@ -494,7 +494,7 @@ export class SearchService {
         return bookmarks;
     }
 
-    private getSearchIcon(objectType: KIXObjectType | string): string {
+    public getSearchIcon(objectType: KIXObjectType | string): string {
         switch (objectType) {
             case KIXObjectType.TICKET:
                 return 'kix-icon-searchtemplate-ticket';
