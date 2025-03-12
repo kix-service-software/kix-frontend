@@ -48,9 +48,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             null, tableWidget, false, false, 'kix-icon-man-house', true
         );
 
+        const searchListWidget = new WidgetConfiguration(
+            'organisation-search-widget', 'Searches', ConfigurationType.Widget, 'search-list-widget', 'Translatable#Searches', []
+        );
+
         const contextConfig = new ContextConfiguration(
             this.getModuleId(), 'Organisation Search', ConfigurationType.Context, this.getModuleId(),
-            [], [], [],
+            [],
+            [
+                new ConfiguredWidget('search-list-widget', null, searchListWidget)
+            ], [],
             [
                 new ConfiguredWidget(
                     'search-criteria-widget', null, new WidgetConfiguration(

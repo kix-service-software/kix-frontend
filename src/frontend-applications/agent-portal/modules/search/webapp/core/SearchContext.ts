@@ -15,13 +15,13 @@ import { SearchCache } from '../../model/SearchCache';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { IdService } from '../../../../model/IdService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
-import { SearchSocketClient } from '.';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { SearchEvent } from '../../model/SearchEvent';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SearchSocketClient } from './SearchSocketClient';
 
 export abstract class SearchContext extends Context {
 
@@ -97,6 +97,7 @@ export abstract class SearchContext extends Context {
 
     public setSearchCache(cache: SearchCache): void {
         this.searchCache = cache;
+        this.searchCache.criteria = JSON.parse(JSON.stringify(this.searchCache.criteria));
         EventService.getInstance().publish(SearchEvent.SEARCH_CACHE_CHANGED, this);
         ContextService.getInstance().setDocumentHistory(true, this, this, null);
     }

@@ -14,7 +14,6 @@ import { TicketProperty } from '../../model/TicketProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { SearchOperator } from '../../../search/model/SearchOperator';
-import { SearchDefinition, SearchOperatorUtil } from '../../../search/webapp/core';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
@@ -29,6 +28,8 @@ import { Ticket } from '../../model/Ticket';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
+import { SearchOperatorUtil } from '../../../search/webapp/core/SearchOperatorUtil';
 
 export class TicketSearchFormManager extends SearchFormManager {
 

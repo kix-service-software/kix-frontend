@@ -21,7 +21,6 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { SearchContext } from '../SearchContext';
 import { AgentSocketClient } from '../../../../user/webapp/core/AgentSocketClient';
 import { User } from '../../../../user/model/User';
-import { SearchCache } from '../../../model/SearchCache';
 
 export class DeleteSearchAction extends AbstractAction {
 

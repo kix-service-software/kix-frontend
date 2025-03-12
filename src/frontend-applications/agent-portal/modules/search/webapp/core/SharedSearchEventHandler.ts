@@ -8,14 +8,11 @@
  */
 
 import { BackendNotification } from '../../../../model/BackendNotification';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
-import { BookmarkService } from '../../../base-components/webapp/core/BookmarkService';
-import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
-import { SearchService } from '../../../search/webapp/core';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
+import { SearchService } from './SearchService';
 
 export class SharedSearchEventHandler {
 

@@ -17,9 +17,9 @@ import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../base-components/webapp/core/ServiceType';
-import { SearchService } from '../../search/webapp/core';
 import { TranslationService } from '../../translation/webapp/core/TranslationService';
 import { TableFactoryService } from '../../table/webapp/core/factory/TableFactoryService';
+import { SearchService } from '../../search/webapp/core/SearchService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

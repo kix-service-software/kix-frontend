@@ -14,7 +14,6 @@ import { TableFactoryService } from '../../../table/webapp/core/factory/TableFac
 import { OrganisationTableFactory } from './table/OrganisationTableFactory';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { SearchService } from '../../../search/webapp/core';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
@@ -31,6 +30,7 @@ import { OrganisationFormService } from './OrganisationFormService';
 import { OrganisationLabelProvider } from './OrganisationLabelProvider';
 import { OrganisationSearchDefinition } from './OrganisationSearchDefinition';
 import { OrganisationService } from './OrganisationService';
+import { SearchService } from '../../../search/webapp/core/SearchService';
 
 export class UIModule implements IUIModule {
 

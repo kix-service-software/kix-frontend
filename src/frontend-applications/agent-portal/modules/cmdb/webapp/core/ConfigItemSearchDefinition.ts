@@ -7,7 +7,6 @@
  * --
  */
 
-import { SearchDefinition } from '../../../search/webapp/core';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ConfigItemSearchFormManager } from './ConfigItemSearchFormManager';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
@@ -34,6 +33,7 @@ import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/Da
 import { InputDefinition } from '../../model/InputDefinition';
 import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
+import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
 
 export class ConfigItemSearchDefinition extends SearchDefinition {
 

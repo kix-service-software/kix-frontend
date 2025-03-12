@@ -17,7 +17,6 @@ import { AuthenticationSocketClient } from '../../../../modules/base-components/
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { SearchOperator } from '../../../search/model/SearchOperator';
-import { SearchOperatorUtil } from '../../../search/webapp/core';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
@@ -26,6 +25,7 @@ import { UserProperty } from '../../../user/model/UserProperty';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 import { Contact } from '../../model/Contact';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { SearchOperatorUtil } from '../../../search/webapp/core/SearchOperatorUtil';
 
 export class ContactSearchFormManager extends SearchFormManager {
 

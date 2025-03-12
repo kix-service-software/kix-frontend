@@ -25,6 +25,7 @@ import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetC
 import { TableHeaderHeight } from '../table/model/TableHeaderHeight';
 import { TableRowHeight } from '../table/model/TableRowHeight';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { ContextType } from '../../model/ContextType';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -56,9 +57,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             null, tableWidgetConfig, false, false, 'kix-icon-ticket', true
         );
 
+        const searchListWidget = new WidgetConfiguration(
+            'ticket-search-widget', 'Searches', ConfigurationType.Widget, 'search-list-widget', 'Translatable#Searches', []
+        );
+
         const contextConfiguration = new ContextConfiguration(
             this.getModuleId(), 'Ticket Search', ConfigurationType.Context, this.getModuleId(),
-            [], [], [],
+            [],
+            [
+                new ConfiguredWidget('search-list-widget', null, searchListWidget)
+            ], [],
             [
                 new ConfiguredWidget(
                     'search-criteria-widget', null, new WidgetConfiguration(
