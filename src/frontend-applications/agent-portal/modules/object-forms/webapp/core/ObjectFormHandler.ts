@@ -9,6 +9,7 @@
 
 import { Error } from '../../../../../../server/model/Error';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { Context } from '../../../../model/Context';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
@@ -65,6 +66,35 @@ export class ObjectFormHandler<T extends KIXObject = any> {
 
             this.objectFormValidator = new ObjectFormValidator(this.objectFormValueMapper);
         }
+    }
+
+    public findFormField(property: string): FormFieldConfiguration {
+        for (const p of this.form.pages) {
+            for (const g of p.groups) {
+                const fv = this.findFormFieldRecursiv(property, g.formFields || []);
+                if (fv) {
+                    return fv;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    protected findFormFieldRecursiv(property: string, fields: FormFieldConfiguration[]): FormFieldConfiguration {
+        for (const f of fields) {
+            if (f.property === property) {
+                return f;
+            }
+
+            if (f.children?.length) {
+                const subField = this.findFormFieldRecursiv(property, f.children);
+                if (subField) {
+                    return subField;
+                }
+            }
+        }
+        return undefined;
     }
 
     public getFormValues(): ObjectFormValue[] {
