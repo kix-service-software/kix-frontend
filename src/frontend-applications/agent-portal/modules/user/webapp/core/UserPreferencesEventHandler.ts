@@ -14,7 +14,7 @@ import { BookmarkService } from '../../../base-components/webapp/core/BookmarkSe
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
-import { SearchService } from '../../../search/webapp/core';
+import { SearchService } from '../../../search/webapp/core/SearchService';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 
 export class UserPreferencesEventHandler {

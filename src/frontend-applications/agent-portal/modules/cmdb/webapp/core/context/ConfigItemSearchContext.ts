@@ -9,7 +9,7 @@
 
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-import { SearchContext } from '../../../../search/webapp/core';
+import { SearchContext } from '../../../../search/webapp/core/SearchContext';
 import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 
 

@@ -49,10 +49,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             null, tableWidgetConfig, false, false, 'kix-icon-ci', true
         );
 
+        const searchListWidget = new WidgetConfiguration(
+            'cmdb-search-widget', 'Searches', ConfigurationType.Widget, 'search-list-widget', 'Translatable#Searches', []
+        );
 
         const contextConfiguration = new ContextConfiguration(
             this.getModuleId(), 'Config Item Search', ConfigurationType.Context, this.getModuleId(),
-            [], [], [],
+            [],
+            [
+                new ConfiguredWidget('search-list-widget', null, searchListWidget)
+            ], [],
             [
                 new ConfiguredWidget(
                     'search-criteria-widget', null, new WidgetConfiguration(

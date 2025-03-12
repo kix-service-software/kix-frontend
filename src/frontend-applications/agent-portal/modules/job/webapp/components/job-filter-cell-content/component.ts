@@ -12,8 +12,9 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { Cell } from '../../../../table/model/Cell';
 import { JobFilterTableProperty } from '../../../../job/webapp/core/table/JobFilterTableProperty';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
-import { SearchDefinition, SearchService } from '../../../../search/webapp/core';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { SearchService } from '../../../../search/webapp/core/SearchService';
+import { SearchDefinition } from '../../../../search/webapp/core/SearchDefinition';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

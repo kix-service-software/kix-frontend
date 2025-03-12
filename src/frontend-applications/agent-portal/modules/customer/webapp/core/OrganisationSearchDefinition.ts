@@ -8,13 +8,11 @@
  */
 
 import { OrganisationSearchFormManager } from './OrganisationSearchFormManager';
-import { SearchDefinition } from '../../../search/webapp/core';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { FilterCriteria } from '../../../../model/FilterCriteria';
-import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { OrganisationProperty } from '../../model/OrganisationProperty';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
+import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
 
 export class OrganisationSearchDefinition extends SearchDefinition {
 

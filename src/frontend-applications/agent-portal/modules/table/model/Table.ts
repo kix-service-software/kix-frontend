@@ -31,7 +31,6 @@ import { DynamicField } from '../../dynamic-fields/model/DynamicField';
 import { DynamicFieldProperty } from '../../dynamic-fields/model/DynamicFieldProperty';
 import { SearchOperator } from '../../search/model/SearchOperator';
 import { SearchProperty } from '../../search/model/SearchProperty';
-import { SearchContext, SearchService } from '../../search/webapp/core';
 import { TicketProperty } from '../../ticket/model/TicketProperty';
 import { AdditionalTableObjectsHandlerConfiguration } from '../webapp/core/AdditionalTableObjectsHandlerConfiguration';
 import { TableEvent } from './TableEvent';
@@ -46,6 +45,8 @@ import { SearchCache } from '../../search/model/SearchCache';
 import { DataType } from '../../../model/DataType';
 import { IdService } from '../../../model/IdService';
 import { DefaultDepColumnConfiguration } from './DefaultDepColumnConfiguration';
+import { SearchContext } from '../../search/webapp/core/SearchContext';
+import { SearchService } from '../../search/webapp/core/SearchService';
 
 export class Table implements Table {
 

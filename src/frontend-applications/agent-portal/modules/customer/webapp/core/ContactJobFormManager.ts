@@ -22,7 +22,7 @@ import { JobProperty } from '../../../job/model/JobProperty';
 import { AbstractJobFormManager } from '../../../job/webapp/core/AbstractJobFormManager';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { SearchProperty } from '../../../search/model/SearchProperty';
-import { SearchService } from '../../../search/webapp/core';
+import { SearchService } from '../../../search/webapp/core/SearchService';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { ContactSearchFormManager } from './ContactSearchFormManager';
