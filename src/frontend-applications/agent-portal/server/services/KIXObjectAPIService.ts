@@ -389,6 +389,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             LoggingService.getInstance().error(`${errors[0].Code}: ${errors[0].Message}`, errors[0]);
             throw new Error(errors[0].Code, errors[0].Message);
         }
+        else {
+            // triggers the deletion of associated tags for the deleted object
+            await this.commitObjectTag(token, clientRequestId, null, objectType, objectId);
+        }
 
         return [];
     }
