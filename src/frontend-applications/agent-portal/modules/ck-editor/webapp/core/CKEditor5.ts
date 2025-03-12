@@ -16,9 +16,10 @@ import { TextmodulePlugin } from './TextmodulePlugin';
 
 export class CKEditor5 {
 
+    public static editorTimeout = 2000;
+
     private editor: any;
 
-    private changeTimeout: any;
     private handleOnInputChange: boolean = false;
     private updateTimeout: any;
 
@@ -26,12 +27,12 @@ export class CKEditor5 {
 
     private readOnly: boolean = false;
 
-    private changeListener: Array<(value: string) => null> = [];
+    private changeListener: Array<() => null> = [];
     private focusListener: Array<(value: string) => null> = [];
 
     public constructor(public elementId: string) { }
 
-    public addChangeListener(listener: (value: string) => null): void {
+    public addChangeListener(listener: () => null): void {
         this.changeListener.push(listener);
     }
 
@@ -156,16 +157,7 @@ export class CKEditor5 {
         if (success) {
             const changeListener = (): void => {
                 if (!this.handleOnInputChange) {
-                    if (this.changeTimeout) {
-                        clearTimeout(this.changeTimeout);
-                        this.changeTimeout = null;
-                    }
-
-                    this.changeTimeout = setTimeout(() => {
-                        const value = this.editor.getData();
-                        this.changeListener.forEach((l) => l(value));
-                        this.changeTimeout = null;
-                    }, 2000);
+                    this.changeListener.forEach((l) => l());
                 }
             };
 
@@ -204,9 +196,6 @@ export class CKEditor5 {
     }
 
     public destroy(): void {
-        if (this.changeTimeout) {
-            clearTimeout(this.changeTimeout);
-        }
         return;
     }
 
