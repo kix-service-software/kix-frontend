@@ -21,7 +21,8 @@ export class ComponentState extends AbstractComponentState {
         public contextType: ContextType = null,
         public isContextCustomizable: boolean = false,
         public submitButtonText: string = null,
-        public canSubmit = true
+        public canSubmit: boolean = true,
+        public processing: boolean = false,
     ) {
         super();
     }
