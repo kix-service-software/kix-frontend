@@ -7,7 +7,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.admin-modules-explorer>
+<div class="admin-modules-explorer">
     <widget
         instanceId=state.instanceId
         title=(
@@ -25,6 +25,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             />
             <if(state.nodes && state.prepared)>
                 <tree
+                    treeId="admin-modules-tree"
                     tree=state.nodes
                     key="admin-modules-tree"
                     activeNode=state.activeNode
