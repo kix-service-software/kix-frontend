@@ -17,6 +17,8 @@ export class SysConfigOption extends KIXObject {
 
     public KIXObjectType: KIXObjectType | string = KIXObjectType.SYS_CONFIG_OPTION;
 
+    public ID: number;
+
     public Name: string;
 
     public Value: any;
@@ -30,6 +32,7 @@ export class SysConfigOption extends KIXObject {
     public constructor(sysConfigOption?: SysConfigOption) {
         super();
         if (sysConfigOption) {
+            this.ID = sysConfigOption.ID;
             this.Name = sysConfigOption.Name;
             this.ObjectId = this.Name;
             this.Value = sysConfigOption.Value;
