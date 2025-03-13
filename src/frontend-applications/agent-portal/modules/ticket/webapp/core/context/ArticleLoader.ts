@@ -76,7 +76,7 @@ export class ArticleLoader {
 
         loadingOptions.expands = [ArticleProperty.CREATED_BY, ArticleProperty.FROM];
 
-        const articleIds = [...articleIdMap.keys()];
+        const articleIds = [...articleIdMap.keys()].sort();
         const articles = await KIXObjectService.loadObjects<Article>(
             KIXObjectType.ARTICLE, articleIds, loadingOptions,
             new ArticleLoadingOptions(this.ticketId)
