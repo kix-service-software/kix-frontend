@@ -37,6 +37,7 @@ export class TableWidgetConfiguration implements IConfiguration {
         public resetFilterOnReload: boolean = true,
         public configuration: IConfiguration = tableConfiguration,
         public valid: boolean = true,
+        public showFilterInBody: boolean = false
     ) { }
 
 }
