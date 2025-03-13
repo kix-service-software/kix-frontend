@@ -48,6 +48,7 @@ export class TableConfiguration implements IConfiguration {
         public searchId: string = null,
         public specificLoadingOptions?: KIXObjectSpecificLoadingOptions,
         public valid: boolean = true,
+        public showTags: boolean = true
     ) {
 
         if (!headerHeight) {

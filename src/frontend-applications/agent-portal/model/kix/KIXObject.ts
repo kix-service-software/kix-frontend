@@ -14,7 +14,6 @@ import { SearchOperator } from '../../modules/search/model/SearchOperator';
 import { ObjectIcon } from '../../modules/icon/model/ObjectIcon';
 import { SortUtil } from '../SortUtil';
 import { BindableObject } from '../BindableObject';
-import { User } from '../../modules/user/model/User';
 
 export abstract class KIXObject extends BindableObject {
 
@@ -44,6 +43,8 @@ export abstract class KIXObject extends BindableObject {
     public DynamicFields: DynamicFieldValue[] = [];
 
     public LinkCount: number = 0;
+
+    public ObjectTags: string[] = [];
 
     public constructor(object?: KIXObject) {
         super();

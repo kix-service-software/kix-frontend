@@ -12,7 +12,6 @@ import { FormInstance } from './FormInstance';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { FormContext } from '../../../../model/configuration/FormContext';
-import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 
 export class ExtendedKIXObjectFormService {

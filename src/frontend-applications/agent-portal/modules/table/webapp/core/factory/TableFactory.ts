@@ -150,6 +150,12 @@ export abstract class TableFactory {
                     property, true, false, true, false, 120, true, true, true, DataType.STRING
                 );
                 break;
+            case KIXObjectProperty.OBJECT_TAGS:
+                config = new DefaultColumnConfiguration(
+                    undefined, undefined, undefined, property, true, false, true, false, 150, true, true,
+                    undefined, undefined, undefined, 'label-list-cell-content', undefined, false
+                );
+                break;
             default:
                 config = new DefaultColumnConfiguration(
                     undefined, undefined, undefined, property, true, false, true, false, 150, true, true,

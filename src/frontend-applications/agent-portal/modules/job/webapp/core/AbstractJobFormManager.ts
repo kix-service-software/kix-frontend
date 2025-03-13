@@ -31,6 +31,7 @@ import { MacroFieldCreator } from '../../../macro/webapp/core/MacroFieldCreator'
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 import { MacroProperty } from '../../../macro/model/MacroProperty';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 
 export class AbstractJobFormManager {
 
@@ -308,6 +309,13 @@ export class AbstractJobFormManager {
                 if (job && (formContext === FormContext.EDIT || duplicate)) {
                     // will be set in postPrepareForm
                     value = null;
+                }
+                break;
+            case KIXObjectProperty.OBJECT_TAGS:
+                if (job && formContext === FormContext.EDIT || duplicate) {
+                    value = await KIXObjectService.loadObjectTags(
+                        KIXObjectType.JOB, job.ObjectId, true
+                    );
                 }
                 break;
             default:

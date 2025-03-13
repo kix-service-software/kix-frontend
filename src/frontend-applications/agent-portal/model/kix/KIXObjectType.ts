@@ -133,6 +133,10 @@ export enum KIXObjectType {
 
     OAUTH2_PROFILE_AUTH_URL = 'OAUTH2_PROFILE_AUTH_URL',
 
+    OBJECT_TAG = 'ObjectTag',
+
+    OBJECT_TAG_LINK = 'ObjectTagLink',
+
     QUEUE = 'Queue',
 
     PLUGIN = 'Plugin',

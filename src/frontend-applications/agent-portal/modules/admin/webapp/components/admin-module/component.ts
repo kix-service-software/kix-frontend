@@ -58,8 +58,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async moduleChanged(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext() as AdminContext;
         const module = await AdministrationSocketClient.getInstance().getAdminModule(context.adminModuleId);
-        if (module) {
+        if (module && module.componentId) {
             this.state.template = KIXModulesService.getComponentTemplate(module.componentId);
+        }
+        else {
+            this.state.template = KIXModulesService.getComponentTemplate('admin-object-tag');
         }
     }
 }
