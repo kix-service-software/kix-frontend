@@ -303,7 +303,7 @@ export class Row extends BindableObject {
             else {
                 const newCell = newCells.find((nC) => nC.getProperty() === c.getColumnId());
                 if (newCell.getDisplayValue() !== cell.getDisplayValue()) {
-                    cell.setValue(new TableValue(c.getColumnId(), newCell.getDisplayValue()));
+                    cell.setValue(new TableValue(c.getColumnId(), newCell.getValue().objectValue));
                 }
             }
         });
