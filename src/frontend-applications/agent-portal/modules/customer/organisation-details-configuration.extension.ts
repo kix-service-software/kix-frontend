@@ -39,6 +39,7 @@ import { FilterDataType } from '../../model/FilterDataType';
 import { FilterType } from '../../model/FilterType';
 import { OrganisationDetailsContext } from './webapp/core/context/OrganisationDetailsContext';
 import { ConfigItemTableFactory } from '../cmdb/webapp/core';
+import { ConfigItemProperty } from '../cmdb/model/ConfigItemProperty';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -295,59 +296,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(newTicketsColumn);
 
-        const assignedContactsTableConfig = new TableConfiguration(
-            'organisation-details-assigned-contacts-table', 'Contacts Table', ConfigurationType.Table,
-            KIXObjectType.CONTACT,
-            new KIXObjectLoadingOptions(
-                null, null, null,
-                [ContactProperty.TICKET_STATS, ContactProperty.USER], null, null,
-                'CONTACT_TICKET_STATS'
-            ), null, null,
-            [
-                'organisation-details-assigned-contacts-firstname',
-                'organisation-details-assigned-contacts-lastname',
-                'organisation-details-assigned-contacts-email',
-                'organisation-details-assigned-contacts-login',
-                'organisation-details-assigned-contacts-new-tickets-count',
-                'organisation-details-assigned-contacts-open-tickets',
-                'organisation-details-assigned-contacts-reminder-tickets',
-                'organisation-details-assigned-contacts-new-tickets'
-            ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-        );
-        configurations.push(assignedContactsTableConfig);
-
-        const assignedContactsLane = new WidgetConfiguration(
-            'organisation-details-assigned-contacts-widget', 'Assigned Contacts', ConfigurationType.Widget,
-            'organisation-assigned-contacts-widget', 'Translatable#Assigned Contacts', [],
-            new ConfigurationDefinition('organisation-details-assigned-contacts-table', ConfigurationType.Table),
-            null, false, true, null, false
-        );
-        configurations.push(assignedContactsLane);
-
-
-        const assetTableConfiguration = new TableConfiguration(
-            null, null, ConfigurationType.Table,
-            KIXObjectType.CONFIG_ITEM, null, null, null, null, null, null, null, null,
-            TableHeaderHeight.SMALL, TableRowHeight.SMALL
-        );
-
-        assetTableConfiguration.tableColumns = [
-            ...ConfigItemTableFactory.getDefaultColumns(),
-            new DefaultColumnConfiguration(
-                'organisation-details-assigned-contacts-new-tickets', 'New Ticket', ConfigurationType.TableColumn,
-                ContactProperty.CREATE_NEW_TICKET, true, false, false, true, 150,
-                false, false, false, DataType.STRING, false, 'create-new-ticket-cell'
-            )
-        ];
-
-        const assignedConfigItemsLane = new WidgetConfiguration(
-            'organisation-details-assigned-config-items-widget', 'Assigned Assets', ConfigurationType.Widget,
-            'organisation-assigned-config-items-widget', 'Translatable#Assigned Assets',
-            [], null, assetTableConfiguration, false, true, null, false
-        );
-
-        configurations.push(assignedConfigItemsLane);
-
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), 'Organisation Details', ConfigurationType.Context,
@@ -355,14 +303,73 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new ConfiguredWidget('organisation-details-tab-widget', 'organisation-details-tab-widget'),
                     new ConfiguredWidget(
-                        'organisation-details-assigned-contacts-widget',
-                        'organisation-details-assigned-contacts-widget',
-                        null, [new UIComponentPermission('contacts', [CRUD.READ])]
+                        'organisation-details-assigned-contacts-widget', null,
+                        new WidgetConfiguration(
+                            'organisation-details-assigned-contacts-widget', 'Assigned Contacts', ConfigurationType.Widget,
+                            'table-widget', 'Translatable#Assigned Contacts', [], null,
+                            new TableWidgetConfiguration(
+                                'organisation-details-assigned-contacts-table-widget-config', 'Assigned Contacts Table Widget Config', ConfigurationType.TableWidget,
+                                KIXObjectType.CONTACT, null, null,
+                                new TableConfiguration(
+                                    'organisation-details-assigned-contacts-table-config', 'Contacts Table', ConfigurationType.Table,
+                                    KIXObjectType.CONTACT,
+                                    new KIXObjectLoadingOptions(
+                                        [
+                                            new FilterCriteria(
+                                                ContactProperty.ORGANISATION_IDS, SearchOperator.IN,
+                                                FilterDataType.NUMERIC, FilterType.AND,
+                                                ['<KIX_ORGANISATION_ID>']
+                                            )
+                                        ], null, 20,
+                                        [ContactProperty.TICKET_STATS]
+                                    ), 15, null,
+                                    [
+                                        'organisation-details-assigned-contacts-firstname',
+                                        'organisation-details-assigned-contacts-lastname',
+                                        'organisation-details-assigned-contacts-email',
+                                        'organisation-details-assigned-contacts-login',
+                                        'organisation-details-assigned-contacts-new-tickets-count',
+                                        'organisation-details-assigned-contacts-open-tickets',
+                                        'organisation-details-assigned-contacts-reminder-tickets',
+                                        'organisation-details-assigned-contacts-new-tickets'
+                                    ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                                ), null, true,
+                                undefined, undefined, undefined, undefined, undefined, undefined, true
+                            ), false, true, null, false
+                        ), [new UIComponentPermission('contacts', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
-                        'organisation-details-assigned-config-items-widget',
-                        'organisation-details-assigned-config-items-widget',
-                        null, [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
+                        'organisation-details-assigned-config-items-widget', null,
+                        new WidgetConfiguration(
+                            'organisation-details-assigned-config-items-widget', 'Assigned Assets', ConfigurationType.Widget,
+                            'table-widget', 'Translatable#Assigned Assets', [], null,
+                            new TableWidgetConfiguration(
+                                'organisation-details-assigned-config-items-table-widget-config', 'Assigned ConfigItems Table Widget Config', ConfigurationType.TableWidget,
+                                KIXObjectType.CONFIG_ITEM, null, null,
+                                new TableConfiguration(
+                                    'organisation-details-assigned-config-items-table-config', 'Asset Table', ConfigurationType.Table,
+                                    KIXObjectType.CONFIG_ITEM,
+                                    new KIXObjectLoadingOptions(
+                                        [
+                                            new FilterCriteria(
+                                                ConfigItemProperty.ASSIGNED_ORGANISATION, SearchOperator.IN,
+                                                FilterDataType.NUMERIC, FilterType.AND,
+                                                ['<KIX_ORGANISATION_ID>']
+                                            )
+                                        ], null, 20
+                                    ), 15,
+                                    [
+                                        ...ConfigItemTableFactory.getDefaultColumns(),
+                                        new DefaultColumnConfiguration(
+                                            'organisation-details-assigned-config-items-new-tickets', 'New Ticket', ConfigurationType.TableColumn,
+                                            ContactProperty.CREATE_NEW_TICKET, true, false, false, true, 150,
+                                            false, false, false, DataType.STRING, false, 'create-new-ticket-cell'
+                                        )
+                                    ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                                ), null, false,
+                                undefined, undefined, undefined, undefined, undefined, undefined
+                            ), false, true, null, false
+                        ), [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
                         'organisation-details-assigned-tickets-widget', null,

@@ -211,6 +211,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
             if (this.currentLoadLimit) {
                 this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(this.id);
+                this.currentLimit = this.currentLoadLimit;
             }
         }
 
