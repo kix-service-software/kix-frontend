@@ -1128,7 +1128,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001703
+├─ caniuse-lite@1.0.30001704
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1864,7 +1864,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.114
+├─ electron-to-chromium@1.5.116
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -4025,7 +4025,7 @@
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici-types
 │  └─ licenseFile: node_modules/undici-types/LICENSE
-├─ undici@6.21.1
+├─ undici@6.21.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici
