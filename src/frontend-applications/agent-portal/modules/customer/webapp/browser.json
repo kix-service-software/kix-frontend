@@ -5,8 +5,6 @@
         "require ./components/contact-list-widget",
         "require ./components/create-new-ticket-cell",
         "require ./components/customer-label",
-        "require ./components/organisation-assigned-contacts-widget",
-        "require ./components/organisation-assigned-config-items-widget",
         "require ./components/organisation-module",
         "require ./components/setup-my-organisation",
         "require ./core/ContactEditUIModule",
