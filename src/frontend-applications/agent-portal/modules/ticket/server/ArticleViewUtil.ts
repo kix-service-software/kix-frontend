@@ -142,6 +142,8 @@ export class ArticleViewUtil {
     public static replaceInlineContent(value: string, inlineContent: InlineContent[]): string {
         let newString = value;
         if (inlineContent) {
+            const missingQuotationRegexp = new RegExp('src=(?!["\'])(cid:[^\s\/\>\"\']+)', 'g');
+            newString = newString.replace(missingQuotationRegexp, 'src="$1"');
             for (const contentItem of inlineContent) {
                 if (contentItem.contentId && contentItem.contentType) {
                     const contentType = contentItem.contentType.replace(new RegExp('"', 'g'), '\'');
