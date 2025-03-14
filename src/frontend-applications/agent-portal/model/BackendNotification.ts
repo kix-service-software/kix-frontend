@@ -7,7 +7,7 @@
  * --
  */
 
-import { ObjectUpdatedEvent } from './ObjectUpdatedEvent';
+import { BackendNotificationEvent } from './BackendNotificationEvent';
 
 export class BackendNotification {
 
@@ -15,9 +15,10 @@ export class BackendNotification {
     public Namespace: string;
     public ObjectID: string;
     public Timestamp: string;
-    public Event: ObjectUpdatedEvent;
+    public Event: BackendNotificationEvent;
     public ObjectType: string;
     public UserID: number;
+    public Data: Object;
 
     public constructor(notification?: BackendNotification) {
         if (notification) {
@@ -28,6 +29,7 @@ export class BackendNotification {
             this.RequestID = notification.RequestID;
             this.ObjectType = notification.ObjectType;
             this.UserID = Number(notification.UserID);
+            this.Data = notification.Data;
         }
     }
 }
