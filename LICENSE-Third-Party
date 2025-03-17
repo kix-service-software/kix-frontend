@@ -304,6 +304,12 @@
 │  ├─ url: https://luxass.dev
 │  ├─ path: node_modules/@luxass/strip-json-comments
 │  └─ licenseFile: node_modules/@luxass/strip-json-comments/LICENSE
+├─ @marko/babel-utils@6.6.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/marko-js/marko/tree/main/packages/babel-utils
+│  ├─ publisher: Dylan Piercey
+│  ├─ email: dpiercey@ebay.com
+│  └─ path: node_modules/@marko/babel-utils
 ├─ @marko/compiler@5.39.13
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
@@ -1128,7 +1134,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001704
+├─ caniuse-lite@1.0.30001705
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1864,7 +1870,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.118
+├─ electron-to-chromium@1.5.119
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -3920,7 +3926,7 @@
 │  ├─ email: jstash@gmail.com
 │  ├─ path: node_modules/tough-cookie
 │  └─ licenseFile: node_modules/tough-cookie/LICENSE
-├─ tr46@5.0.0
+├─ tr46@5.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jsdom/tr46
 │  ├─ publisher: Sebastian Mayr
@@ -4142,7 +4148,7 @@
 │  ├─ url: https://domenic.me/
 │  ├─ path: node_modules/whatwg-mimetype
 │  └─ licenseFile: node_modules/whatwg-mimetype/LICENSE.txt
-├─ whatwg-url@14.1.1
+├─ whatwg-url@14.2.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jsdom/whatwg-url
 │  ├─ publisher: Sebastian Mayr
