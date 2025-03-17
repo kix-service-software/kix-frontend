@@ -7,7 +7,7 @@
  * --
  */
 
-export enum ObjectUpdatedEvent {
+export enum BackendNotificationEvent {
 
     UPDATE = 'UPDATE',
 
@@ -15,6 +15,8 @@ export enum ObjectUpdatedEvent {
 
     DELETE = 'DELETE',
 
-    CLEAR_CACHE = 'CLEAR_CACHE'
+    CLEAR_CACHE = 'CLEAR_CACHE',
+
+    EXECUTE_COMMAND = 'EXECUTE_COMMAND'
 
 }

@@ -13,7 +13,7 @@ import { BackendNotification } from '../../../../model/BackendNotification';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
-import { ObjectUpdatedEvent } from '../../../../model/ObjectUpdatedEvent';
+import { BackendNotificationEvent } from '../../../../model/BackendNotificationEvent';
 import { LabelService } from './LabelService';
 
 export class BrowserCacheService {
@@ -101,7 +101,7 @@ export class BrowserCacheService {
     }
 
     public async updateCaches(events: BackendNotification[]): Promise<void> {
-        if (events.some((e) => e.Event === ObjectUpdatedEvent.CLEAR_CACHE)) {
+        if (events.some((e) => e.Event === BackendNotificationEvent.CLEAR_CACHE)) {
             this.clear();
         } else {
             events = events

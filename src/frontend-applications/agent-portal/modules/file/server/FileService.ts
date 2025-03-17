@@ -15,6 +15,9 @@ import { ConfigurationService } from '../../../../../server/services/Configurati
 import { createHash } from 'node:crypto';
 import { Request, Response } from 'express';
 import { LoggingService } from '../../../../../server/services/LoggingService';
+import { ClientNotificationService } from '../../../server/services/ClientNotificationService';
+import { BackendNotification } from '../../../model/BackendNotification';
+import { BackendNotificationEvent } from '../../../model/BackendNotificationEvent';
 
 export class FileService {
 
@@ -25,6 +28,16 @@ export class FileService {
             if (!fs.existsSync(folderPath)) {
                 fs.mkdirSync(folderPath);
             }
+        }
+        ClientNotificationService.getInstance().registerNotificationListener(
+            FileService.handleBackendNotification.bind(this));
+    }
+
+    private static handleBackendNotification(events: BackendNotification[]): void {
+        const fileServiceEvents = events?.filter((e) => e.Namespace === 'FileService'
+            && e.Event === BackendNotificationEvent.EXECUTE_COMMAND);
+        if (fileServiceEvents?.some((fse) => fse.Data['Command'] === 'cleanup')) {
+            FileService.cleanup();
         }
     }
 
@@ -171,9 +184,27 @@ export class FileService {
         }
     }
 
-    private static getFilePath(filename: string, targetPath?: string, download: boolean = true): string {
+    public static cleanup(): void {
+        const directory = this.getFilePath();
+        try {
+            const files = fs.readdirSync(directory);
+
+            for (const file of files) {
+                const filePath = path.join(directory, file);
+                fs.unlinkSync(filePath);
+            }
+            LoggingService.getInstance().debug(`FileService: cleanup of ${directory} deleted ${files.length} files`);
+        } catch (e) {
+            LoggingService.getInstance().error(`Could not cleanup ${directory}`, e);
+        }
+    }
+
+    private static getFilePath(filename?: string, targetPath?: string, download: boolean = true): string {
         const folder = download ? 'downloads' : 'uploads';
-        let filePath = path.join(__dirname, '..', '..', '..', '..', '..', '..', 'data', folder, filename);
+        let filePath = path.join(__dirname, '..', '..', '..', '..', '..', '..', 'data', folder);
+        if (filename) {
+            filePath = path.join(filePath, filename);
+        }
         if (targetPath) {
             filePath = path.join(__dirname, '..', '..', '..', '..', '..', '..', targetPath, filename);
         }
