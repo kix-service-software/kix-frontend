@@ -50,10 +50,11 @@ export class HTTPRequestLogger {
             const end = Date.now();
             const time = end - entry.startTime;
 
-            const size = this.getSizeResponse((response as AxiosResponse)?.data)?.toFixed(3);
+            const stringLength = JSON.stringify((response as AxiosResponse)?.data)?.length * 2;
+            const size = (stringLength / 1024)?.toFixed(3);
             const status = (response as AxiosResponse)?.status || (response as AxiosError).response?.status;
 
-            this.logger.info(`${time}\t${entry.method}\t${status}\t${size}\t${entry.resource}\t${entry.parameter}`);
+            this.logger.info(`${entry.clientId}\t${time}\t${entry.method}\t${status}\t${size}\t${entry.resource}\t${entry.parameter}`);
 
             this.requests.delete(id);
         }
@@ -107,39 +108,6 @@ export class HTTPRequestLogger {
                 })
             ]
         });
-    }
-
-    private getSizeResponse(data: any): number {
-        let bytes = 0;
-
-        if (data !== null && data !== undefined) {
-            switch (typeof data) {
-                case 'number':
-                    bytes += 8;
-                    break;
-                case 'string':
-                    bytes += data.length * 2;
-                    break;
-                case 'boolean':
-                    bytes += 4;
-                    break;
-                case 'object':
-                    let objClass = Object.prototype.toString.call(data).slice(8, -1);
-                    if (objClass === 'Object' || objClass === 'Array') {
-                        for (let key in data) {
-                            if (!data.hasOwnProperty(key)) {
-                                continue;
-                            }
-                            bytes += this.getSizeResponse(data[key]);
-                        }
-                    } else {
-                        bytes += data.toString().length * 2;
-                    }
-                    break;
-                default:
-            }
-        }
-        return (bytes / 1024);
     }
 }
 

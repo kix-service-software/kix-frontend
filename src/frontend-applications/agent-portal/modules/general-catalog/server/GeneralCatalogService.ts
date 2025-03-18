@@ -18,6 +18,7 @@ import { Error } from '../../../../../server/model/Error';
 import { GeneralCatalogItem } from '../model/GeneralCatalogItem';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { FilterCriteria } from '../../../model/FilterCriteria';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 export class GeneralCatalogService extends KIXObjectAPIService {
 
@@ -44,6 +45,16 @@ export class GeneralCatalogService extends KIXObjectAPIService {
         return kixObjectType === this.objectType
             || kixObjectType === KIXObjectType.GENERAL_CATALOG_CLASS
             || kixObjectType === KIXObjectType.GENERAL_CATALOG;
+    }
+
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        let objectClass;
+
+        if (objectType === KIXObjectType.GENERAL_CATALOG_ITEM) {
+            return GeneralCatalogItem;
+        }
+
+        return objectClass;
     }
 
     public async loadObjects<T>(
