@@ -100,16 +100,7 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
                 displayValue = value ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             case DynamicFieldProperty.FIELD_TYPE:
-                displayValue = value;
-                const types = await KIXObjectService.loadObjects<DynamicFieldType>(
-                    KIXObjectType.DYNAMIC_FIELD_TYPE, null, null, null, true
-                ).catch(() => [] as DynamicFieldType[]);
-                if (types && types.length) {
-                    const type = types.find((t) => t.Name === value);
-                    if (type) {
-                        displayValue = type.DisplayName;
-                    }
-                }
+                displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.DYNAMIC_FIELD_TYPE, value);
                 break;
             case DynamicFieldProperty.OBJECT_TYPE:
                 displayValue = value;
