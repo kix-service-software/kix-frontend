@@ -46,6 +46,7 @@
     "dependencies": {
         "@json-editor/json-editor": "2.13.2",
         "@lasso/marko-taglib": "^2.0.3",
+        "@marko/babel-utils": "^6.6.3",
         "@marko/express": "^1.0.0",
         "@socket.io/cluster-adapter": "^0.2.0",
         "@socket.io/sticky": "^1.0.1",
@@ -64,6 +65,7 @@
         "file-saver": "^2.0.5",
         "https-proxy-agent": "^5.0.0",
         "js-plugins": "1.0.0",
+        "js-yaml": "^4.1.0",
         "jsdom": "^26.0.0",
         "jsonfile": "^6.1.0",
         "jsonwebtoken": "^9.0.2",

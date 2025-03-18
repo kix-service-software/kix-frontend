@@ -33,7 +33,9 @@ export class DynamicFieldTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
         const table = new Table(tableKey, tableConfiguration);
-        table.setContentProvider(new DynamicFieldTableContentProvider(table, objectIds, null, contextId));
+        table.setContentProvider(
+            new DynamicFieldTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
+        );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -62,11 +64,11 @@ export class DynamicFieldTableFactory extends TableFactory {
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!tableConfiguration.tableColumns?.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 
-        if (defaultRouting) {
+        if (defaultRouting && !tableConfiguration.routingConfiguration) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
                 EditDynamicFieldDialogContext.CONTEXT_ID, null, null, DynamicFieldProperty.ID
             );
