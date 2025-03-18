@@ -274,7 +274,7 @@ export class DateTimeUtil {
     }
 
     public static getDateFromLocalString(localDate: string): Date {
-        const parts = localDate.split('.');
+        const parts = localDate?.split('.');
         if (parts && parts.length === 3) {
             return new Date(parts[1] + '/' + parts[0] + '/' + parts[2]);
         }
