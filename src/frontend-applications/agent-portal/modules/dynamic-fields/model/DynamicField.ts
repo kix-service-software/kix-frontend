@@ -54,4 +54,8 @@ export class DynamicField extends KIXObject {
         }
     }
 
+    public toString(): string {
+        return this.Label;
+    }
+
 }

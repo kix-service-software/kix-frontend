@@ -49,28 +49,11 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
         let displayValue = '';
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
-                const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
-                    KIXObjectType.CONFIG_ITEM_CLASS, [value], null
-                );
-                if (ciClasses && !!ciClasses.length) {
-                    displayValue = ciClasses[0].Name;
-                }
+                displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.CONFIG_ITEM_CLASS, value);
                 break;
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
-                const deploymentItems = await KIXObjectService.loadObjects<GeneralCatalogItem>(
-                    KIXObjectType.GENERAL_CATALOG_ITEM, [value], null
-                );
-                if (deploymentItems && !!deploymentItems.length) {
-                    displayValue = deploymentItems[0].Name;
-                }
-                break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
-                const incidentItems = await KIXObjectService.loadObjects<GeneralCatalogItem>(
-                    KIXObjectType.GENERAL_CATALOG_ITEM, [value], null
-                );
-                if (incidentItems && !!incidentItems.length) {
-                    displayValue = incidentItems[0].Name;
-                }
+                displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.GENERAL_CATALOG_ITEM, value);
                 break;
             case ConfigItemProperty.VERSIONS:
                 if (value && Array.isArray(value)) {

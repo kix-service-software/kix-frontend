@@ -69,10 +69,8 @@ export class AuthenticationNamespace extends SocketNameSpace {
                 data.userName, data.password, data.userType, data.negotiateToken, data.mfaToken,
                 data.clientRequestId, client.handshake.headers
             ).then(async (token: string) => {
-                await TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null)
+                TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null)
                     .catch(() => null);
-                await ObjectIconService.getInstance().getObjectIcons(token).catch(() => null);
-                await TicketAPIService.getInstance().preloadObjects(token).catch(() => null);
                 return new SocketResponse(
                     AuthenticationEvent.AUTHORIZED,
                     new AuthenticationResult(token, data.requestId, data.redirectUrl)

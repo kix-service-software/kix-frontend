@@ -29,6 +29,7 @@ import { FilterType } from '../../../model/FilterType';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { UserService } from '../../user/server/UserService';
 
 export class OrganisationAPIService extends KIXObjectAPIService {
 
@@ -74,7 +75,11 @@ export class OrganisationAPIService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.ORGANISATION) {
 
-            const preload = await this.shouldPreload(token, KIXObjectType.CONTACT);
+            let preload = false;
+            const user = await UserService.getInstance().getUserByToken(token);
+            if (user.IsAgent) {
+                preload = await this.shouldPreload(token, KIXObjectType.CONTACT);
+            }
 
             if (loadingOptions || !preload) {
                 objectResponse = await super.load<Organisation>(
