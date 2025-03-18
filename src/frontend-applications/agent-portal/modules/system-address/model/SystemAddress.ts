@@ -45,4 +45,8 @@ export class SystemAddress extends KIXObject {
         return this.ID === systemAddress.ID;
     }
 
+    public toString(): string {
+        return `${this.Name} (${this.Realname})`;
+    }
+
 }

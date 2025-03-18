@@ -233,14 +233,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             case 'CreatedBy':
             case 'ChangedBy':
                 if (value) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value],
-                        new KIXObjectLoadingOptions(
-                            null, null, null, [UserProperty.CONTACT]
-                        ), null, true, true, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && users.length ?
-                        users[0].Contact ? users[0].Contact.Fullname : users[0].UserLogin : value;
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.USER, value);
                 }
                 break;
             case KIXObjectProperty.CREATE_TIME:
