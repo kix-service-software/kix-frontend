@@ -15,10 +15,10 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { ObjectReferenceLabelProvider } from '../../../base-components/webapp/core/ObjectReferenceLabelProvider';
 import { DynamicFieldType } from '../../../dynamic-fields/model/DynamicFieldType';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
-import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { ConfigItem } from '../../model/ConfigItem';
 import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { VersionProperty } from '../../model/VersionProperty';
 
 export class ConfigItemReferenceLabelProvider extends ObjectReferenceLabelProvider {
 
@@ -30,7 +30,7 @@ export class ConfigItemReferenceLabelProvider extends ObjectReferenceLabelProvid
         return KIXObjectService.loadObjects<ConfigItem>(
             KIXObjectType.CONFIG_ITEM, [value],
             new KIXObjectLoadingOptions(
-                null, null, null, [ConfigItemProperty.CURRENT_VERSION]
+                null, null, null, [ConfigItemProperty.CURRENT_VERSION, VersionProperty.PREPARED_DATA]
             ), null, true
         );
     }
