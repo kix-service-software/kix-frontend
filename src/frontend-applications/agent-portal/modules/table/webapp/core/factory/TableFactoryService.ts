@@ -142,15 +142,18 @@ export class TableFactoryService {
                     defaultRouting, defaultToggle, short, objectType, objects
                 );
 
-                const objectTypes = await KIXObjectService.prepareObjectTagTypes();
-                if (
-                    objectTypes.has(objectType) && table.getTableConfiguration().showTags
-                    && !table.getColumn(KIXObjectProperty.OBJECT_TAGS)
-                ) {
-                    table.addAdditionalColumns(
-                        [factory.getDefaultColumnConfiguration(KIXObjectProperty.OBJECT_TAGS)]
-                    );
+                if (context?.getConfiguration()?.application === 'agent-portal') {
+                    const objectTypes = await KIXObjectService.prepareObjectTagTypes();
+                    if (
+                        objectTypes.has(objectType) && table.getTableConfiguration().showTags
+                        && !table.getColumn(KIXObjectProperty.OBJECT_TAGS)
+                    ) {
+                        table.addAdditionalColumns(
+                            [factory.getDefaultColumnConfiguration(KIXObjectProperty.OBJECT_TAGS)]
+                        );
+                    }
                 }
+
                 if (tableContextId) {
                     if (!this.contextTableInstances.has(tableContextId)) {
                         this.contextTableInstances.set(tableContextId, new Map());
