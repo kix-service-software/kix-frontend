@@ -180,9 +180,11 @@ export class FileService {
         return filePath;
     }
 
-    public static getFileContent(filename: string, download: boolean = true): string {
+    public static getFileContent(
+        filename: string, download: boolean = true, encoding: BufferEncoding = 'base64'
+    ): string {
         const filePath = this.getFilePath(filename, null, download);
-        const content = fs.readFileSync(filePath, { encoding: 'base64' });
+        const content = fs.readFileSync(filePath, { encoding });
         return content;
     }
 

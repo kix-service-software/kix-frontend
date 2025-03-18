@@ -14,16 +14,23 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { Table } from '../../../table/model/Table';
 import { RowObject } from '../../../table/model/RowObject';
 import { ValueState } from '../../../table/model/ValueState';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class DynamicFieldTableContentProvider extends TableContentProvider<DynamicField> {
 
     public constructor(
-        table: Table,
-        objectIds: number[],
-        loadingOptions: KIXObjectLoadingOptions,
-        contextId?: string
+        protected table: Table,
+        protected objectIds: Array<number | string>,
+        protected loadingOptions: KIXObjectLoadingOptions,
+        protected contextId?: string,
+        protected objects?: KIXObject[],
+        protected specificLoadingOptions?: KIXObjectSpecificLoadingOptions
     ) {
-        super(KIXObjectType.DYNAMIC_FIELD, table, objectIds, loadingOptions, contextId);
+        super(
+            KIXObjectType.DYNAMIC_FIELD, table, objectIds,
+            loadingOptions, contextId, objects, specificLoadingOptions
+        );
     }
 
     public async getRowObjects(objects: DynamicField[]): Promise<RowObject<DynamicField>[]> {
