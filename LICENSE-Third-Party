@@ -619,6 +619,11 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/argly
 │  └─ licenseFile: node_modules/argly/README.md
+├─ argparse@2.0.1
+│  ├─ licenses: Python-2.0
+│  ├─ repository: https://github.com/nodeca/argparse
+│  ├─ path: node_modules/argparse
+│  └─ licenseFile: node_modules/argparse/LICENSE
 ├─ array-flatten@1.1.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/blakeembrey/array-flatten
@@ -2566,6 +2571,13 @@
 │  ├─ publisher: Simon Lydell
 │  ├─ path: node_modules/js-tokens
 │  └─ licenseFile: node_modules/js-tokens/LICENSE
+├─ js-yaml@4.1.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/nodeca/js-yaml
+│  ├─ publisher: Vladimir Zapparov
+│  ├─ email: dervus.grim@gmail.com
+│  ├─ path: node_modules/js-yaml
+│  └─ licenseFile: node_modules/js-yaml/LICENSE
 ├─ jsdom@26.0.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jsdom/jsdom
@@ -3066,7 +3078,7 @@
 │  ├─ email: me@feedic.com
 │  ├─ path: node_modules/nth-check
 │  └─ licenseFile: node_modules/nth-check/LICENSE
-├─ nwsapi@2.2.18
+├─ nwsapi@2.2.19
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/dperini/nwsapi
 │  ├─ publisher: Diego Perini
