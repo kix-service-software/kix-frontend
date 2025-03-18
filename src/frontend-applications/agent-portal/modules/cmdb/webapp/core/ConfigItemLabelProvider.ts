@@ -225,15 +225,13 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
         let displayValue = '';
         if (configItem) {
 
-            if (!id) {
-                let pattern = await SysConfigService.getInstance().getDisplayValuePattern(`${KIXObjectType.CONFIG_ITEM}::${configItem.Class}`);
-                if (!pattern) {
-                    pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.CONFIG_ITEM);
-                }
+            let pattern = await SysConfigService.getInstance().getDisplayValuePattern(`${KIXObjectType.CONFIG_ITEM}::${configItem.Class}`);
+            if (!pattern) {
+                pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.CONFIG_ITEM);
+            }
 
-                if (pattern) {
-                    displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, configItem);
-                }
+            if (pattern) {
+                displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, configItem);
             }
 
             if (!displayValue) {
