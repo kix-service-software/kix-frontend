@@ -191,6 +191,7 @@ export class QueueService extends KIXObjectService<Queue> {
             if (withData) {
                 loadingOptions.includes = ['TicketStats'];
                 loadingOptions.query.push(['TicketStats.StateType', 'Open']);
+                loadingOptions.query.push(['TicketStats.NoEscalatedCount', '1']);
             }
 
             if (permissions?.length) {
