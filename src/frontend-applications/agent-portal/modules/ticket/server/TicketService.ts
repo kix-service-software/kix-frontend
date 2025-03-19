@@ -634,6 +634,8 @@ export class TicketAPIService extends KIXObjectAPIService {
         article.MimeType = 'text/html';
         article.Charset = 'utf-8';
 
+        article.Body = Article.MAIL_STYLE + article.Body;
+
         await this.prepareArticleAttachments(article, token);
     }
 
