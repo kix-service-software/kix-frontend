@@ -2940,7 +2940,7 @@
 │  ├─ repository: https://github.com/jshttp/mime-db
 │  ├─ path: node_modules/mime-db
 │  └─ licenseFile: node_modules/mime-types/node_modules/mime-db/LICENSE
-├─ mime-db@1.53.0
+├─ mime-db@1.54.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jshttp/mime-db
 │  ├─ path: node_modules/mime-db
