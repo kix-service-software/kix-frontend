@@ -138,6 +138,7 @@ export class OrganisationContext extends Context {
             const filter = await OrganisationService.getInstance().prepareFullTextFilter(this.filterValue);
             let loadingOptions = new KIXObjectLoadingOptions(filter);
             loadingOptions.limit = limit;
+            loadingOptions.searchLimit = ( limit && limit > 100 ) ? limit : 100;
             loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
 
             loadingOptions = await this.prepareContextLoadingOptions(KIXObjectType.ORGANISATION, loadingOptions);
@@ -169,6 +170,7 @@ export class OrganisationContext extends Context {
         let loadingOptions = new KIXObjectLoadingOptions([]);
         loadingOptions.includes = [ContactProperty.USER, KIXObjectProperty.DYNAMIC_FIELDS];
         loadingOptions.limit = limit;
+        loadingOptions.searchLimit = ( limit && limit > 100 ) ? limit : 100;
 
         const collectionId = this.contextId + KIXObjectType.CONTACT;
 
