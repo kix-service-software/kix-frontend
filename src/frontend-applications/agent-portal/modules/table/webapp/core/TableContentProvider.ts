@@ -400,7 +400,6 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         }
 
         await TableFactoryService.getInstance().prepareTableLoadingOptions(loadingOptions, this.table);
-
         return loadingOptions;
     }
 
