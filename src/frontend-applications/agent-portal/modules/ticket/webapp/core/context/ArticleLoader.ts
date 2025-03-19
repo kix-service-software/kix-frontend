@@ -234,9 +234,9 @@ export class ArticleLoader {
                 )
             );
         }
-        loadingOptions.query.push(['fields', 'Article.ArticleID']);
+        loadingOptions.query.push(['fields', 'Article.ArticleID,Article.TicketID,Article.IncomingTime']);
 
-        let articles: Article[] = await KIXObjectService.loadObjects<Article>(
+        const articles: Article[] = await KIXObjectService.loadObjects<Article>(
             KIXObjectType.ARTICLE, null, loadingOptions, new ArticleLoadingOptions(ticketId)
         ).catch((): Article[] => []);
 
