@@ -374,7 +374,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property.startsWith('Data') ||
             c.property.startsWith('CurrentVersion') ||
             c.property === ConfigItemProperty.ASSIGNED_CONTACT ||
-            c.property === ConfigItemProperty.ASSIGNED_ORGANISATION ||
+            (c.property === ConfigItemProperty.ASSIGNED_ORGANISATION && c.filterType === FilterType.OR && c.value) ||
+            (c.property === ConfigItemProperty.ASSIGNED_ORGANISATION && c.filterType === FilterType.AND) ||
             c.property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH ||
             c.property === 'ID' ||
             c.property === KIXObjectProperty.CHANGE_BY ||
