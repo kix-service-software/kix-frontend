@@ -3042,7 +3042,7 @@
 │  ├─ repository: https://github.com/vercel/ms
 │  ├─ path: node_modules/ms
 │  └─ licenseFile: node_modules/ms/license.md
-├─ multer@1.4.5-lts.1
+├─ multer@1.4.5-lts.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/expressjs/multer
 │  ├─ path: node_modules/multer
