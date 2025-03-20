@@ -17,7 +17,6 @@ import { AuthenticationSocketClient } from '../../../../modules/base-components/
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { SearchOperator } from '../../../search/model/SearchOperator';
-import { SearchOperatorUtil } from '../../../search/webapp/core';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
@@ -25,6 +24,8 @@ import { Organisation } from '../../model/Organisation';
 import { UserProperty } from '../../../user/model/UserProperty';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 import { Contact } from '../../model/Contact';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { SearchOperatorUtil } from '../../../search/webapp/core/SearchOperatorUtil';
 
 export class ContactSearchFormManager extends SearchFormManager {
 
@@ -147,6 +148,7 @@ export class ContactSearchFormManager extends SearchFormManager {
     }
 
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
         let nodes = [];
         switch (property) {
             case ContactProperty.PRIMARY_ORGANISATION_ID:
@@ -154,13 +156,15 @@ export class ContactSearchFormManager extends SearchFormManager {
                     const organisations = await KIXObjectService.loadObjects<Organisation>(
                         KIXObjectType.ORGANISATION, objectIds
                     );
-                    nodes = await KIXObjectService.prepareTree(organisations);
+                    nodes = await KIXObjectService.prepareTree(organisations, showInvalid, showInvalid);
                 }
                 break;
             default:
                 nodes = await super.getTreeNodes(property);
                 if (!nodes || !nodes.length) {
-                    nodes = await ContactService.getInstance().getTreeNodes(property, true, true, objectIds);
+                    nodes = await ContactService.getInstance().getTreeNodes(
+                        property, showInvalid, showInvalid, objectIds
+                    );
                 }
         }
         return nodes;

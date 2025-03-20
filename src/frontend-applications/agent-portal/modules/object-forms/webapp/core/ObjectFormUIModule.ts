@@ -16,6 +16,12 @@ import { SelectionFormValueValidator } from './validation/validator/SelectionFor
 import { RegexFormValueValidator } from './validation/validator/RegexFormValueValidator';
 import { DynamicFieldTableValidator } from './validation/validator/dynamic-fields/DynamicFieldTableValidator';
 import { DynamicFieldChecklistValidator } from './validation/validator/dynamic-fields/DynamicFieldChecklistValidator';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ObjectFormConfigurationContext } from './ObjectFormConfigurationContext';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
 
 export class UIModule implements IUIModule {
 
@@ -31,6 +37,12 @@ export class UIModule implements IUIModule {
         ObjectFormRegistry.getInstance().registerObjectFormValueValidator(RegexFormValueValidator);
         ObjectFormRegistry.getInstance().registerObjectFormValueValidator(DynamicFieldTableValidator);
         ObjectFormRegistry.getInstance().registerObjectFormValueValidator(DynamicFieldChecklistValidator);
+
+        const descriptor = new ContextDescriptor(
+            ObjectFormConfigurationContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.DIALOG,
+            ContextMode.EDIT, true, null, [], ObjectFormConfigurationContext
+        );
+        ContextService.getInstance().registerContext(descriptor);
     }
 
     public async registerExtensions(): Promise<void> {

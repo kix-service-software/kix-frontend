@@ -158,15 +158,17 @@ export class SearchService {
     }
 
     public async searchObjects(
-        searchCache: SearchCache,
+        cache: SearchCache,
         context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>(),
         additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean],
         additionalFilter?: FilterCriteria[],
         setResult: boolean = true
     ): Promise<KIXObject[]> {
-        if (!searchCache) {
+        if (!cache) {
             throw new Error('No search available');
         }
+
+        const searchCache = JSON.parse(JSON.stringify(cache));
 
         const searchDefinition = this.getSearchDefinition(searchCache.objectType);
 
@@ -256,7 +258,7 @@ export class SearchService {
 
         if (setResult && context instanceof SearchContext) {
             setTimeout(() => {
-                context.setSearchCache(searchCache);
+                context.setSearchCache(cache);
                 context.setSearchResult(objects);
             }, 1000);
         }
@@ -343,7 +345,7 @@ export class SearchService {
         const searchCache = new SearchCache<T>(null, null, objectType, [], []);
         searchCache.criteria = [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, searchValue
             )
         ];
 
@@ -492,7 +494,7 @@ export class SearchService {
         return bookmarks;
     }
 
-    private getSearchIcon(objectType: KIXObjectType | string): string {
+    public getSearchIcon(objectType: KIXObjectType | string): string {
         switch (objectType) {
             case KIXObjectType.TICKET:
                 return 'kix-icon-searchtemplate-ticket';
@@ -537,7 +539,7 @@ export class SearchService {
                 new PortalNotification(
                     IdService.generateDateBasedId('search-error'), 'error',
                     PortalNotificationType.IMPORTANT,
-                    'Error Loading Search', new Date().toLocaleString(), true, false,
+                    'Error Loading Search', new Date().toString(), true, false,
                     `No search ${name} available`,
                     `Invalid search template ${name} - please update your dashboard configuration.`
                 )

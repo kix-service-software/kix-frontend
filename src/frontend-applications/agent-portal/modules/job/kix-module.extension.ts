@@ -35,6 +35,10 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'job-details-filter-widget',
             '/kix-module-job$0/webapp/components/job-details-filter-widget', []
         ),
+        new UIComponent(
+            'job-input-attachmentPatternRule',
+            '/kix-module-job$0/webapp/components/job-input-attachmentPatternRule', []
+        ),
         new UIComponent('job-input-events', '/kix-module-job$0/webapp/components/job-input-events', []),
         new UIComponent(
             'job-input-fetchAssetAttributesMapping',

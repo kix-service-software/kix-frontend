@@ -2629,6 +2629,9 @@ msgstr "Last day of absence."
 msgid "Helptext_PersonalSettings_OutOfOfficeStart_Hint"
 msgstr "First day of absence."
 
+msgid "Helptext_PersonalSettings_Dont_Ask_On_Exit"
+msgstr "Prevents confirm popup while logging out or closing KIX."
+
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr "Choose the language you want to use for this application."
 

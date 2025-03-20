@@ -17,11 +17,12 @@ import { AuthenticationSocketClient } from '../../../../modules/base-components/
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { SearchOperator } from '../../../search/model/SearchOperator';
-import { SearchOperatorUtil } from '../../../search/webapp/core';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 import { Organisation } from '../../model/Organisation';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { SearchOperatorUtil } from '../../../search/webapp/core/SearchOperatorUtil';
 
 export class OrganisationSearchFormManager extends SearchFormManager {
 
@@ -135,12 +136,15 @@ export class OrganisationSearchFormManager extends SearchFormManager {
     }
 
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
         let nodes = [];
         switch (property) {
             default:
                 nodes = await super.getTreeNodes(property);
                 if (!nodes || !nodes.length) {
-                    nodes = await OrganisationService.getInstance().getTreeNodes(property, true, true, objectIds);
+                    nodes = await OrganisationService.getInstance().getTreeNodes(
+                        property, showInvalid, showInvalid, objectIds
+                    );
                 }
         }
         return nodes;

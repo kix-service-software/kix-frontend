@@ -113,7 +113,7 @@ export class SysConfigService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
             const uri = this.buildUri(this.RESOURCE_URI, objectId);
             const id = await super.executeUpdateOrCreateRequest<string>(
-                token, clientRequestId, parameter, uri, this.objectType, 'Name'
+                token, clientRequestId, parameter, uri, KIXObjectType.SYS_CONFIG_OPTION, 'Option'
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
@@ -192,11 +192,11 @@ export class SysConfigService extends KIXObjectAPIService {
         return config;
     }
 
-    public async getSysConfigOptionValue(token: string, id: string): Promise<any> {
+    public async getSysConfigOptionValue(token: string, name: string): Promise<any> {
         let value;
 
         const response = await this.loadObjects<SysConfigOption>(
-            token, '', KIXObjectType.SYS_CONFIG_OPTION, [id], null, null
+            token, '', KIXObjectType.SYS_CONFIG_OPTION, [name], null, null
         ).catch((): ObjectResponse<SysConfigOption> => new ObjectResponse([]));
 
         if (response?.objects?.length) {

@@ -41,6 +41,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
             <if(state.nodes)>
                 <tree
+                    treeId="ticket-queues-tree"
                     tree=state.nodes
                     activeNode=state.activeNode
                     on-nodeClicked("activeNodeChanged")

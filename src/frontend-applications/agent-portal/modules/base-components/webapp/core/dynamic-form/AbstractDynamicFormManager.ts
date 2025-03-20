@@ -171,6 +171,25 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return properties.filter((p, index) => properties.indexOf(p) === index);
     }
 
+    public async getUniqueProperties(currentProperty: string): Promise<Array<[string, string]>> {
+        const uniqueProperties: Array<[string, string]> = [];
+        const properties = await this.getProperties() || [];
+        for (const p of properties) {
+            if (
+                (
+                    !this.hasValueForProperty(p[0])
+                    || (currentProperty && p[0] === currentProperty)
+                )
+                && !await this.isHiddenProperty(p[0])
+            ) {
+                // TODO: the manager should return TreeNode[], e.g. to handle specific labels and icons
+                uniqueProperties.push([p[0], p[1]]);
+            }
+        }
+
+        return uniqueProperties;
+    }
+
     protected extendedFormManager: ExtendedDynamicFormManager[] = [];
 
     public addExtendedFormManager(manager: ExtendedDynamicFormManager): void {
@@ -264,28 +283,30 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
     }
 
-    public async removeValue(importValue: ObjectPropertyValue): Promise<void> {
-        const index = this.values.findIndex((bv) => bv.id === importValue.id);
-        if (index !== -1) {
-            this.values.splice(index, 1);
+    public async removeValue(value: ObjectPropertyValue): Promise<void> {
+        if (value) {
+            const index = this.values.findIndex((bv) => bv.id === value?.id);
+            if (index !== -1) {
+                this.values.splice(index, 1);
+            }
+
+            await this.checkProperties(value?.property);
+
+            // reset context information
+            const context = ContextService.getInstance().getActiveContext();
+            if (context) {
+                context.setAdditionalInformation('DynamicFormValidationResults', null);
+            }
+
+            const results = await this.validate();
+
+            // set result in context to prevent submit
+            if (results?.length && context) {
+                context.setAdditionalInformation('DynamicFormValidationResults', results);
+            }
+
+            this.notifyListeners();
         }
-
-        await this.checkProperties(importValue.property);
-
-        // reset context information
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.setAdditionalInformation('DynamicFormValidationResults', null);
-        }
-
-        const results = await this.validate();
-
-        // set result in context to prevent submit
-        if (results?.length && context) {
-            context.setAdditionalInformation('DynamicFormValidationResults', results);
-        }
-
-        this.notifyListeners();
     }
 
     protected async checkProperties(property: string): Promise<void> {
@@ -293,6 +314,12 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public showValueInput(value: ObjectPropertyValue): boolean {
+        for (const extendedManager of this.extendedFormManager) {
+            const result = extendedManager.showValueInput(value);
+            if (typeof result === 'boolean') {
+                return result;
+            }
+        }
         return Boolean(value.property && value.operator);
     }
 

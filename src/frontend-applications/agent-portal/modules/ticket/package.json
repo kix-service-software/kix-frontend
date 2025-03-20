@@ -75,6 +75,11 @@
             "socket-namespace-registry-ticket-module": {
                 "module": "NamespaceRegistry.extension"
             }
+        },
+        "kix:router": {
+            "views-router": {
+                "module": "router.extension"
+            }
         }
     }
 }

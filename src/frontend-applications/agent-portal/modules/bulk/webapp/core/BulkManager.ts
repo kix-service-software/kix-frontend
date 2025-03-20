@@ -39,19 +39,19 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         return this.bulkRun;
     }
 
-    public async getOperations(property: string): Promise<PropertyOperator[]> {
+    public async getOperations(property: string): Promise<Array<PropertyOperator | string>> {
         return [
             PropertyOperator.CHANGE,
             PropertyOperator.CLEAR
         ];
     }
 
-    public getOperatorDisplayText(operator: PropertyOperator): Promise<string> {
-        return PropertyOperatorUtil.getText(operator);
+    public async getOperatorDisplayText(operator: PropertyOperator): Promise<string> {
+        return await PropertyOperatorUtil.getText(operator) || super.getOperatorDisplayText(operator);
     }
 
     public showValueInput(value: ObjectPropertyValue): boolean {
-        return Boolean(value.property && value.operator && value.operator !== PropertyOperator.CLEAR);
+        return Boolean(super.showValueInput(value) && value.operator !== PropertyOperator.CLEAR);
     }
 
     public async getEditableValues(): Promise<ObjectPropertyValue[]> {
@@ -90,6 +90,10 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
     }
 
     public async prepareParameter(): Promise<Array<[string, any]>> {
+        for (const extendedManager of this.extendedFormManager) {
+            await extendedManager.prepareValuesForParameter(this.values, this.selectedObjects);
+        }
+
         const edTableValues = await this.getEditableValues();
         if (edTableValues.some((v) => !v.valid && v.operator !== PropertyOperator.CLEAR)) {
             return;

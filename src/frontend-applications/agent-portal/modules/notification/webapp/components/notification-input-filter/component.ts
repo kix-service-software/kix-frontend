@@ -21,9 +21,9 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../../model/ContextType';
-import { SearchService } from '../../../../search/webapp/core';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { IdService } from '../../../../../model/IdService';
+import { SearchService } from '../../../../search/webapp/core/SearchService';
 
 class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
 

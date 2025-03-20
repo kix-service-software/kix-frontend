@@ -634,18 +634,21 @@ export class TicketAPIService extends KIXObjectAPIService {
         article.MimeType = 'text/html';
         article.Charset = 'utf-8';
 
+        article.Body = Article.MAIL_STYLE + article.Body;
+
         await this.prepareArticleAttachments(article, token);
     }
 
     private async prepareArticleAttachments(article: Article, token: string): Promise<void> {
         if (Array.isArray(article.Attachments)) {
+            const user = await UserService.getInstance().getUserByToken(token);
             for (const attachment of article.Attachments) {
                 if (!attachment.Content) {
                     let content;
                     // probably an attachment from a referenced article
                     if (attachment.Disposition === 'attachment') {
-                        content = FileService.getFileContent(attachment.Filename, true);
-                        FileService.removeFile(attachment.Filename, false);
+                        content = FileService.getFileContent(attachment.downloadId, true);
+                        FileService.removeDownload(attachment.downloadId, user?.UserID);
                     }
                     // a new attachment
                     else {
@@ -690,12 +693,14 @@ export class TicketAPIService extends KIXObjectAPIService {
             : response?.responseData?.Attachment;
 
 
-        if (asDownload && Array.isArray(attachments)) {
+        if (Array.isArray(attachments)) {
             const preparedAttachments = [];
             for (const a of attachments) {
                 const preparedAttachment = new Attachment(a);
                 preparedAttachments.push(preparedAttachment);
-                FileService.prepareFileForDownload(user?.UserID, preparedAttachment);
+                if (asDownload) {
+                    FileService.prepareFileForDownload(user?.UserID, preparedAttachment);
+                }
             }
             attachments = preparedAttachments;
         }

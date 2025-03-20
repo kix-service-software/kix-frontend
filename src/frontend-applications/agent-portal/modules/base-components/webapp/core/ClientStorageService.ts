@@ -35,17 +35,23 @@ export class ClientStorageService {
             socketUrl = ClientStorageService.getCookie('frontendSocketUrl');
 
             if (!socketUrl || socketUrl === '') {
-                // use current location as socket URL
-                socketUrl = window.location.protocol + '//' + window.location.hostname;
-
-                const port = window.location.port;
-                if (port) {
-                    socketUrl = socketUrl + ':' + port;
-                }
+                socketUrl = this.getApplicationUrl();
             }
         }
 
         return socketUrl;
+    }
+
+    public static getApplicationUrl(): string {
+        // use current location as socket URL
+        let applicationUrl = window.location.protocol + '//' + window.location.hostname;
+
+        const port = window.location.port;
+        if (port) {
+            applicationUrl = applicationUrl + ':' + port;
+        }
+
+        return applicationUrl;
     }
 
     public static getCookie(name: string): string {

@@ -172,7 +172,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
         if (faqArticle) {
             const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.FAQ_ARTICLE);
 
-            if (pattern) {
+            if (pattern && !id) {
                 displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, faqArticle);
             } else {
                 if (id) {

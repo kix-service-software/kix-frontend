@@ -33,8 +33,8 @@ import { TableEvent } from '../../../../table/model/TableEvent';
 import { TableEventData } from '../../../../table/model/TableEventData';
 import { ValueState } from '../../../../table/model/ValueState';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
-import { SearchService } from '../../../../search/webapp/core';
 import { IdService } from '../../../../../model/IdService';
+import { SearchService } from '../../../../search/webapp/core/SearchService';
 
 class LinkDialogComponent {
 

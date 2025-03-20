@@ -45,19 +45,22 @@ describe('ObjectCommitHandler', () => {
         before(async () => {
             ticket = new Ticket();
 
-            ticket.Articles = [];
-
-            for (let i = 0; i < 3; i++) {
-                const article = new Article(null, ticket);
-                article.ChannelID = 1;
-                ticket.Articles.push(article);
-            }
             ticket.addBinding(TicketProperty.CONTACT_ID, () => null);
             ticket.addBinding(TicketProperty.TYPE_ID, () => null);
             ticket.addBinding(TicketProperty.STATE_ID, () => null);
 
             const commitHandler = new TicketObjectCommitHandler(null);
             ticket = await commitHandler.prepareObject(ticket);
+
+            ticket.Articles = [];
+            for (let i = 0; i < 3; i++) {
+                const article = new Article(null, ticket);
+                article.ChannelID = 1;
+                ticket.Articles.push(article);
+            }
+            for (const article of ticket.Articles) {
+                await commitHandler.prepareArticle(ticket, article, false, null, null);
+            }
         });
 
         it('should remove property bindings', () => {
@@ -148,7 +151,9 @@ describe('ObjectCommitHandler', () => {
             ticket.Articles = [emailArticle, noteArticle];
 
             const commitHandler = new TicketObjectCommitHandler(null);
-            ticket = await commitHandler.prepareObject(ticket, null, true);
+            for (const article of ticket.Articles) {
+                await commitHandler.prepareArticle(ticket, article, true, null, null);
+            }
         });
 
         it('Ticket should have one article with a signature and one without', () => {
@@ -211,7 +216,9 @@ describe('ObjectCommitHandler', () => {
             ticket.Articles = [emailArticle, noteArticle];
 
             const commitHandler = new TicketObjectCommitHandler(null);
-            ticket = await commitHandler.prepareObject(ticket, null, true);
+            for (const article of ticket.Articles) {
+                await commitHandler.prepareArticle(ticket, article, true, null, null);
+            }
         });
 
         it('Ticket should have two articles without a signature', () => {

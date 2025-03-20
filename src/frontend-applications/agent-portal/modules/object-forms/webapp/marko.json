@@ -6,6 +6,7 @@
     ],
     "tags-dir": [
         "./components/",
+        "./components/object-form",
         "./components/object-form-values-container",
         "./components/inputs/",
         "./components/inputs/checklist-form-input"

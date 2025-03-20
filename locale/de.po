@@ -2785,6 +2785,9 @@ msgstr "Letzter Tag der Abwesenheit"
 msgid "Helptext_PersonalSettings_OutOfOfficeStart_Hint"
 msgstr "Erster Tag der Abwesenheit"
 
+msgid "Helptext_PersonalSettings_Dont_Ask_On_Exit"
+msgstr "Verhindert das Bestätings-Popup beim Abmelden bzw. Schließen von KIX."
+
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr ""
 "Ändern Sie hier die Sprache in der das Self-Service-Portal dargestellt wird."

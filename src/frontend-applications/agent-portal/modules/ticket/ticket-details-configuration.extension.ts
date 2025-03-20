@@ -1065,6 +1065,9 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         'ticket-details-affected-asset-tickets', 'ticket-details-affected-asset-tickets', null,
                         [
                             new UIComponentPermission('cmdb/configitems', [CRUD.READ])
+                        ], undefined, undefined,
+                        [
+                            new UIFilterCriterion('DynamicFields.AffectedAsset', SearchOperator.NOT_EQUALS, null)
                         ]
                     ),
                     new ConfiguredWidget('ticket-details-contact-tickets', 'ticket-details-contact-tickets'),

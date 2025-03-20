@@ -87,7 +87,12 @@ class WidgetComponent implements IEventSubscriber {
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TITLE, this);
     }
 
+    private canChangeMinimize = true;
     public async minimizeWidget(force: boolean = false, event: any): Promise<void> {
+        if (!this.canChangeMinimize) {
+            this.canChangeMinimize = true;
+            return;
+        }
         if (event) {
             event.stopPropagation();
             event.preventDefault();
@@ -129,6 +134,10 @@ class WidgetComponent implements IEventSubscriber {
                 ClientStorageService.deleteState(`${this.state.instanceId}-minimized`);
             }
         }
+    }
+
+    public doNotChangeMinimize(): void {
+        this.canChangeMinimize = false;
     }
 
     public setMinizedState(state: boolean = false): void {

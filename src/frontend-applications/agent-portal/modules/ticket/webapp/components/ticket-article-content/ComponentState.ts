@@ -12,10 +12,7 @@ import { InlineContent } from '../../../../../modules/base-components/webapp/cor
 export class ComponentState {
 
     public constructor(
-        public content: string = null,
-        public inlineContent: InlineContent[] = [],
-        public plainText: string = null,
-        public useReadonlyStyle: boolean = true,
-        public style: string = null
+        public url: string = null,
+        public frameId: string = null
     ) { }
 }

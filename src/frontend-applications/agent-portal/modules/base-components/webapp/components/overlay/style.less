@@ -40,6 +40,7 @@
             &.large {
                 width: @default-widget-width * 3;
                 height: @default-widget-height + 5.5rem;
+
                 &.size-auto {
                     height: auto;
                     min-height: @default-widget-height - 3rem;
@@ -64,17 +65,14 @@
 
                     >.header-right {
                         >.action-list-wrapper {
-                            >.action-list-expansion-container {
+                            .is-expansion {
                                 background-color: @tertiary-1;
                                 color: @secondary-6;
-                                top: @overlay-widget-header-height;
 
-                                >ul.action-list-expansion {
-                                    >li {
-                                        >div {
-                                            border-color: @secondary-6;
-                                        }
-                                    }
+                                .dropdown-menu .list-group-item {
+                                    background-color: fade(@tertiary-1, 85%);
+                                    color: @secondary-6;
+                                    border-color: @tertiary-1;
                                 }
                             }
                         }
@@ -141,6 +139,7 @@
                     >div.overlay-resize {
                         background-color: @primary-0;
                     }
+
                     .form-list {
                         >.value-list {
                             position: unset;
@@ -170,6 +169,7 @@
 
                     >div {
                         margin: 1rem;
+
                         >textarea {
                             resize: none;
                             width: 100%;

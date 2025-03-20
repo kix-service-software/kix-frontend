@@ -21,11 +21,9 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SystemAddress } from '../../../system-address/model/SystemAddress';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { TicketService } from './TicketService';
-import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
-import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
-import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
+import { CheckUtil } from '../../../../model/CheckUtil';
 
 export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -99,16 +97,14 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         }
                         break;
                     case ArticleProperty.BODY_RICHTEXT:
-                        const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(article);
-                        result = await this.reduceContent(prepareContent[0] || article.Body, optionsString);
-                        if (prepareContent && prepareContent[1]) {
-                            result = BrowserUtil.replaceInlineContent(result, prepareContent[1]);
-                        }
+                        result = await TicketService.getInstance().getPreparedArticleBodyContent(
+                            article, true, CheckUtil.isNumeric(optionsString) ? Number(optionsString) : null,
+                        );
                         break;
                     case ArticleProperty.BODY_RICHTEXT_NO_INLINE:
-                        const prepareContentNoInline =
-                            await TicketService.getInstance().getPreparedArticleBodyContent(article, true);
-                        result = await this.reduceContent(prepareContentNoInline[0] || article.Body, optionsString);
+                        result = await TicketService.getInstance().getPreparedArticleBodyContent(
+                            article, true, CheckUtil.isNumeric(optionsString) ? Number(optionsString) : null, false
+                        );
                         break;
                     case ArticleProperty.FROM_REALNAME:
                     case ArticleProperty.TO_REALNAME:
@@ -174,65 +170,6 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
             }
         }
         return result;
-    }
-
-    private async reduceContent(result: string, optionsString?: string): Promise<string> {
-        let linesCount = 0;
-        if (optionsString && !isNaN(Number(optionsString))) {
-            linesCount = Number(optionsString);
-        } else {
-            const defaultCount = await KIXObjectService.loadObjects<SysConfigOption>(
-                KIXObjectType.SYS_CONFIG_OPTION, [`${SysConfigKey.TICKET_PLACEHOLDER_BODYRICHTEXT_LINECOUNT}`],
-                null, null, true
-            ).catch(() => [] as SysConfigOption[]);
-            linesCount = defaultCount?.length ? Number(defaultCount[0].Value) : 0;
-        }
-
-        if (!isNaN(linesCount) && linesCount > 0) {
-            const lines = result.split(/\n/);
-
-            if (lines.length > linesCount) {
-                result = lines.slice(0, linesCount).join('\n');
-                result = this.closeTags(result);
-                result += '\n[...]';
-            }
-        }
-        return result;
-    }
-
-    private closeTags(body: string): string {
-
-        // get all opening and closing tag names but not self closing ones
-        // e.g. <div>, <p class...> but not <br /> or <img src... />
-        const ingoreTags = [
-            'area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen',
-            'link', 'meta', 'param', 'source', 'track', 'wbr'
-        ];
-        const startTags = (body.match(/(?:<([^!\s\/]+?)>|<([^!\s\/]+)\s+.+?\s*[^\/]>)/g) || [])
-            .map((tag) => tag.slice(1, -1))// remove < and >
-            .map((tag: string) => tag.replace(/(\w+).*/s, '$1'))
-            .filter((tag) => !ingoreTags.some((itag) => itag === tag));
-        const endTags = (body.match(/<\/(.+?)>/g) || [])
-            .map((tag) => tag.slice(2, -1)) // remove </ and >
-            .filter((tag) => !ingoreTags.some((itag) => itag === tag));
-
-        // rember only opening tags with no closing counterpart
-        if (endTags.length) {
-
-            // remove now closed tags (start with last opened - in to out)
-            startTags.reverse();
-            endTags.forEach((tag) => {
-                const index = startTags.findIndex((startTag) => startTag === tag);
-                if (index !== -1) {
-                    startTags.splice(index, 1);
-                }
-            });
-        }
-
-        // add closing tags if needed (start with last, still reversed)
-        startTags.forEach((tag) => body += `\n<\/${tag}>`);
-
-        return body;
     }
 
     private isKnownProperty(property: string): boolean {

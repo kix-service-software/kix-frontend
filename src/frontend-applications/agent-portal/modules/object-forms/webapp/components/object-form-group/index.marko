@@ -1,0 +1,75 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<if(state.prepared && input.group)>
+    <div
+        id=(input.group.id)
+        class=[
+            "accordion my-2 m-0 p-0",
+            component.getGroupClasses(input.group.id),
+        ]
+    >
+        <div class="accordion-item h-100">
+            <if(input.group.name)>
+                <button
+                    class="accordion-button fw-bold"
+                    type="button"
+                    data-bs-toggle=(input.contextInstanceId ? "" : "collapse")
+                    data-bs-target=("#content-" + input.group.id)
+                    aria-expanded="true"
+                    aria-controls=(input.group.id)
+                >
+                    <if(input.contextInstanceId)>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-light text-black me-3"
+                            aria-label="Edit Group"
+                            on-click("editGroup", input.group.id)
+                        >
+                            <i class="fa-regular fa-pen-to-square"/>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-light text-black me-3"
+                            aria-label="Add Field"
+                            on-click("addField", input.group.id)
+                        >
+                            <i class="fa-regular fa-square-plus"/>
+                        </button>
+                    </if>
+                    <translation-string pattern=(input.group.name)/>
+                </button>
+            </if>
+
+            <div
+                id=("content-" + input.group.id)
+                class="accordion-collapse collapse show"
+                data-bs-parent=("#" + input.group.id)
+            >
+                <div class="accordion-body">
+                    <if(input.group.description)>
+                        <div class="alert alert-light" role="alert">
+                            $!{input.group.description}
+                        </div>
+                    </if>
+                    <object-form-values-container
+                        fieldLayout=component.getFieldLayout(input.group.id)
+                        formValues=component.getFormValues(
+                            input.pageId,
+                            input.group.id,
+                        )
+                        formLayout=component.getFormLayout()
+                        contextInstanceId=input.contextInstanceId
+                        rows=state.rows
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</if>

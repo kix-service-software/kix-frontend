@@ -20,6 +20,7 @@ import { FollowUpType } from '../../../model/FollowUpType';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { AgentSocketClient } from '../../../../user/webapp/core/AgentSocketClient';
 import { IdService } from '../../../../../model/IdService';
+import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 
 export class QueueService extends KIXObjectService<Queue> {
 
@@ -181,7 +182,7 @@ export class QueueService extends KIXObjectService<Queue> {
     }
 
     public async getQueuesHierarchy(
-        withData: boolean = true, queues?: Queue[], permissions: string[] = []
+        withData: boolean = true, queues?: Queue[], permissions: string[] = [], filterIds?: Array<number>
     ): Promise<Queue[]> {
         let queueTree: Queue[] = [];
         if (!queues) {
@@ -190,6 +191,7 @@ export class QueueService extends KIXObjectService<Queue> {
             if (withData) {
                 loadingOptions.includes = ['TicketStats'];
                 loadingOptions.query.push(['TicketStats.StateType', 'Open']);
+                loadingOptions.query.push(['TicketStats.NoEscalatedCount', '1']);
             }
 
             if (permissions?.length) {
@@ -206,6 +208,10 @@ export class QueueService extends KIXObjectService<Queue> {
 
             queues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions)
                 .catch((): Queue[] => []);
+        }
+
+        if (filterIds && filterIds.length) {
+            queues = queues.filter((q) => !filterIds.some((fid) => fid === q.QueueID));
         }
 
         if (queues?.length) {
@@ -263,6 +269,9 @@ export class QueueService extends KIXObjectService<Queue> {
                 parent.ValidID = 2;
                 parent.SubQueues = [queue];
 
+                // add queue to queuelist
+                queues.push(parent);
+
                 // check if parent queue is not on root level
                 if (names.length > 1) {
                     // prepare next level
@@ -282,9 +291,6 @@ export class QueueService extends KIXObjectService<Queue> {
 
             // set parent of queue
             queue.ParentID = parent.QueueID;
-
-            // add queue to queuelist
-            queues.push(parent);
         }
     }
 
@@ -308,5 +314,15 @@ export class QueueService extends KIXObjectService<Queue> {
         }
 
         return values;
+    }
+
+    public async checkFilterValue(queue: Queue, criteria: UIFilterCriterion): Promise<boolean> {
+        let match = false;
+        if (criteria.property === QueueProperty.QUEUE_ID) {
+            match = (criteria.value as []).some((id: number) => id === queue.QueueID);
+        } else {
+            match = await super.checkFilterValue(queue, criteria);
+        }
+        return match;
     }
 }

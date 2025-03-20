@@ -10,7 +10,6 @@
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
 import { Contact } from '../../../../model/Contact';
-import { ContactProperty } from '../../../../model/ContactProperty';
 
 export class ContactEmailFormValue extends ObjectFormValue<string> {
 
@@ -21,10 +20,6 @@ export class ContactEmailFormValue extends ObjectFormValue<string> {
         public parent: ObjectFormValue,
     ) {
         super(property, contact, objectValueMapper, parent);
-
-        for (let i = 1; i < 6; i++) {
-            this.formValues.push(new ObjectFormValue(ContactProperty.EMAIL + i, contact, objectValueMapper, this));
-        }
     }
 
 }

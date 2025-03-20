@@ -39,6 +39,8 @@ export enum KIXObjectProperty {
 
     DYNAMIC_FIELDS = 'DynamicFields',
 
-    LINK_COUNT = 'LinkCount'
+    LINK_COUNT = 'LinkCount',
+
+    OBJECT_TAGS = 'ObjectTags'
 
 }
