@@ -53,7 +53,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.state.prepared = true;
+        return;
     }
 
     public onDestroy(): void {

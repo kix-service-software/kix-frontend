@@ -1,0 +1,41 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<if(state.prepared)>
+    <div class="row m-0 p-0">
+        <div id="other-information" class="accordion my-2 p-0 col-12">
+            <div class="accordion-item">
+                <button
+                    class="accordion-button fw-bold"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#content-other-information"
+                    aria-expanded="true"
+                    aria-controls="other-information"
+                >
+                    <translation-string pattern="Other Information"/>
+                </button>
+
+                <div
+                    id="content-other-information"
+                    class="accordion-collapse collapse show"
+                    data-bs-parent="#other-information"
+                >
+                    <div class="accordion-body">
+                        <object-form-values-container
+                            contextInstanceId=input.contextInstanceId
+                            formValues=state.formValues
+                            formLayout=state.formLayout
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</if>

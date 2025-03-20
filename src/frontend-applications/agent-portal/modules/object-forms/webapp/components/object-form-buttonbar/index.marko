@@ -1,0 +1,39 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<if(state.prepared)>
+    <div class="form-submission-buttons">
+        <dialog-notifiactions/>
+        <div class="bg-light me-2">
+            <button
+                type="button"
+                on-click("cancel")
+                class="btn btn-outline-danger py-0"
+            >
+                <span class="btn-label-danger">
+                    <i class="fa fa-times text-light"/>
+                </span>
+                <translation-string pattern="Translatable#Cancel"/>
+            </button>
+        </div>
+        <div class="bg-light">
+            <button
+                disabled=state.blocked || !state.canSubmit
+                type="button"
+                on-click("submit")
+                class="btn btn-outline-success py-0"
+            >
+                <span class="btn-label-success">
+                    <i class="fa fa-check text-light"/>
+                </span>
+                <translation-string pattern=state.submitPattern/>
+            </button>
+        </div>
+    </div>
+</if>
