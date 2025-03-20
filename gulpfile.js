@@ -28,35 +28,35 @@ function cleanUp(cb) {
 function licenseHeaderTS() {
     const year = new Date().getFullYear();
     return gulp.src('src/**/*.ts')
-        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), { year: year }))
+        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), { year: 2024 }))
         .pipe(gulp.dest('src/'));
 }
 
 function licenseHeaderMarko() {
     const year = new Date().getFullYear();
     return gulp.src('src/**/*.marko')
-        .pipe(license(fs.readFileSync('license-html-header.txt', 'utf8'), { year: year }))
+        .pipe(license(fs.readFileSync('license-html-header.txt', 'utf8'), { year: 2024 }))
         .pipe(gulp.dest('src/'));
 }
 
 function licenseHeaderLess() {
     const year = new Date().getFullYear();
     return gulp.src(['src/**/*.less', '!src/frontend-applications/agent-portal/static/less/default/kix_font.less'])
-        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), { year: year }))
+        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), { year: 2024 }))
         .pipe(gulp.dest('src/'));
 }
 
 function licenseHeaderTests() {
     const year = new Date().getFullYear();
     return gulp.src('tests/**/*.ts')
-        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), { year: year }))
+        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), { year: 2024 }))
         .pipe(gulp.dest('tests/'));
 }
 
 function licenseHeaderCucumber() {
     const year = new Date().getFullYear();
     return gulp.src('features/**/*.feature')
-        .pipe(license(fs.readFileSync('license-feature-header.txt', 'utf8'), { year: year }))
+        .pipe(license(fs.readFileSync('license-feature-header.txt', 'utf8'), { year: 2024 }))
         .pipe(gulp.dest('features/'));
 }
 

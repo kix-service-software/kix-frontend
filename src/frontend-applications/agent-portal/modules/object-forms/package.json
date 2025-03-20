@@ -10,6 +10,11 @@
             "object-forms-socket-namespace-registry": {
                 "module": "NamespaceRegistry.extension"
             }
+        },
+        "kix:configuration": {
+            "object-form-edit-dialog-configuration": {
+                "module": "object-form-edit-configuration.extension"
+            }
         }
     }
 }

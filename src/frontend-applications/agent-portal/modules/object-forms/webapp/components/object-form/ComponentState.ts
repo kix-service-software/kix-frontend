@@ -7,18 +7,19 @@
  * --
  */
 
+import { IdService } from '../../../../../model/IdService';
+import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
 import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
-import { ObjectFormValue } from '../../../model/FormValues/ObjectFormValue';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public formValues: ObjectFormValue[] = [],
         public prepared: boolean = false,
-        public submitPattern: string = 'Translatable#Save',
-        public blocked: boolean = false,
         public error: string = null,
-        public canSubmit: boolean = true
+        public pages: FormPageConfiguration[] = [],
+        public carouselId: string = 'Carousel-' + IdService.generateDateBasedId(),
+        public configurationMode: boolean = false,
+        public contextInstanceId: string = null
     ) {
         super();
     }

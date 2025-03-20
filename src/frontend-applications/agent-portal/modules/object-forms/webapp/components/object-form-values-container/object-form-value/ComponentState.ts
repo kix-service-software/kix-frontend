@@ -27,7 +27,10 @@ export class ComponentState extends AbstractComponentState {
         public enabled: boolean = false,
         public elementId: string = IdService.generateDateBasedId('object-form-value-'),
         public formValues: ObjectFormValue[] = [],
-        public isEmpty: boolean = false
+        public isEmpty: boolean = false,
+        public configReadOnly: boolean = false,
+        public displayNone: boolean = false,
+        public prepared: boolean = false
     ) {
         super();
     }

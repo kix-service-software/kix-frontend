@@ -251,7 +251,7 @@ export class ContextService {
     public checkDialogConfirmation(contextInstanceId: string, silent?: boolean): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             const context = this.contextInstances.find((ci) => ci.instanceId === contextInstanceId);
-            if (context?.descriptor?.contextType === ContextType.DIALOG) {
+            if (context?.descriptor?.contextType === ContextType.DIALOG && !silent) {
                 BrowserUtil.openConfirmOverlay(
                     'Translatable#Cancel',
                     'Translatable#Any data you have entered will be lost. Continue?',
