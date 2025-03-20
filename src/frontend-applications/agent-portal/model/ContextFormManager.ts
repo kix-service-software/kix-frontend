@@ -94,8 +94,6 @@ export class ContextFormManager {
 
     public async getObjectFormHandler(createNewInstance?: boolean): Promise<ObjectFormHandler> {
         if (this.formId && (createNewInstance || !this.handler)) {
-            EventService.getInstance().publish(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.context);
-
             this.handler?.destroy();
 
             if (!this.createObjectHandlerPromise) {
@@ -103,6 +101,9 @@ export class ContextFormManager {
             }
 
             await this.createObjectHandlerPromise;
+
+            EventService.getInstance().publish(ObjectFormEvent.OBJECT_FORM_HANDLER_CHANGED, this.context);
+
             this.createObjectHandlerPromise = null;
         }
 

@@ -8,6 +8,7 @@
  */
 
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { FormValueProperty } from '../../FormValueProperty';
@@ -17,7 +18,8 @@ import { ICountableFormValue } from './ICountableFormValue';
 
 export class DynamicFieldCountableFormValue extends ObjectFormValue implements ICountableFormValue {
 
-    public static readonly IS_COUNTABLE = true;
+    public readonly IS_COUNTABLE = true;
+    public readonly COUNT_CONTAINER = true;
 
     public dfValues: DynamicFieldValue[] = [];
     public isEmpty: boolean = false;
@@ -47,7 +49,6 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         super(property, object, objectValueMapper, parent);
         this.inputComponentId = 'count-handler-form-input';
         this.addBindings();
-        this.isSortable = parent?.isSortable;
     }
 
     public findFormValue(property: string): ObjectFormValue {
@@ -137,7 +138,9 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
         if (this.value?.length) {
             for (const v of this.value) {
-                await this.addFormValue(this.instanceId, v, true);
+                if (!this.formValues.some((fv) => fv.value === v)) {
+                    await this.addFormValue(this.instanceId, v, true);
+                }
             }
         }
 
@@ -205,17 +208,19 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
                 fv.setNewInitialState(FormValueProperty.VISIBLE, true);
             }
 
-            fv.isSortable = false;
-            fv.readonly = this.readonly;
+            fv.readonly = BrowserUtil.isBooleanTrue(this.readonly?.toString());
             fv.required = this.required;
             fv.label = this.label;
             fv.hint = this.hint;
 
+            fv.isControlledByParent = true;
             (fv as any).IS_COUNTABLE = true;
 
             await fv.initFormValue();
 
-            this.formValues = [...this.formValues, fv];
+            if (!this.formValues.some((f) => f.instanceId === fv.instanceId)) {
+                this.formValues = [...this.formValues, fv];
+            }
 
             fv.setInitialState();
             await fv.setFormValue(value || this.defaultValue, force);

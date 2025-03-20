@@ -7,23 +7,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.col-1.col-sm-1.p-0.ps-2>
-   <if(!state.readonly)>
-      <if(state.canAdd)>
-         <button.btn.btn-outline-secondary.me-1
-            type="button"
-            on-click("addValue")
-         >
-            <i.fas.fa-plus-circle/>
-         </button>
-      </if>
-      <if(state.canRemove)>
-         <button.btn.btn-outline-secondary
-            type="button"
-            on-click("removeValue")
-         >
-            <i.fas.fa-minus-circle/>
-         </button>
-      </if>
+<if(!state.readonly)>
+   <if(state.canAdd)>
+      <button
+         type="button"
+         on-click("addValue")
+         class=[
+            "btn btn-sm btn-outline-secondary",
+            {
+               "me-1": state.canRemove,
+               "me-2": !state.canRemove,
+            },
+         ]
+      >
+         <i class="fas fa-plus-circle"/>
+      </button>
    </if>
-</div>
+   <if(state.canRemove)>
+      <button
+         type="button"
+         on-click("removeValue")
+         class="btn btn-sm btn-outline-secondary me-2"
+      >
+         <i class="fas fa-minus-circle"/>
+      </button>
+   </if>
+</if>

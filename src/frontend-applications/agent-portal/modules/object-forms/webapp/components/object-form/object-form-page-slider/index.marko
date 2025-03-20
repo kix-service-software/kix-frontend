@@ -1,0 +1,56 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<if(state.prepared)>
+   <div class="row mb-3 py-0 bg-white">
+      <div class="col-4 d-flex align-items-center justify-content-end">
+         <div
+            class="kix-icon-nook-left fs-3"
+            title=(state.translations["Translatable#Previous"])
+            data-bs-target="#" + state.carouselId
+            data-bs-slide="prev"
+         />
+      </div>
+      <div class="col-4 text-center fw-bold">
+         <h2 class="fw-bold fs-3">
+            <if(state.activePageIndex >= 0 && state.pages.length)>
+               <translation-string pattern=(
+                  state.pages[state.activePageIndex].name
+               )/>
+            </if>
+         </h2>
+         <div class="d-flex justify-content-center mt-2">
+
+            <for|page, index| of=state.pages>
+               <div
+                  style="width:1rem;height:1rem"
+                  class=[
+                     "rounded-circle me-2",
+                     {
+                        "bg-secondary": index !== state.activePageIndex,
+                        "bg-primary": index === state.activePageIndex,
+                     },
+                  ]
+                  title=page.name
+                  data-bs-target="#" + state.carouselId
+                  data-bs-slide-to=index
+               />
+            </for>
+         </div>
+      </div>
+      <div class="col-4 d-flex align-items-center justify-content-start">
+         <div
+            class="kix-icon-nook-right fs-3"
+            title=(state.translations["Translatable#Next"])
+            data-bs-target="#" + state.carouselId
+            data-bs-slide="next"
+         />
+      </div>
+   </div>
+</if>

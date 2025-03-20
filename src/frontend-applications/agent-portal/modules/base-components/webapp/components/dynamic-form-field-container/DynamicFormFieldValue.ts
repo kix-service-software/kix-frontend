@@ -191,26 +191,20 @@ export class DynamicFormFieldValue {
     }
 
     public async setPropertyTree(): Promise<string> {
-        const properties = await this.manager.getProperties();
-        // TODO: Its not needed to check unique here, because getProperties() should return only available properties.
-        // The manager should make the decision
         const unique = this.manager.uniqueProperties;
-        const nodes: TreeNode[] = [];
-        if (properties) {
-            for (const p of properties) {
-                if (
-                    (
-                        !unique
-                        || !this.manager.hasValueForProperty(p[0])
-                        || (this.value.property && p[0] === this.value.property)
-                    )
-                    && !await this.manager.isHiddenProperty(p[0])
-                ) {
-                    // TODO: the manager should return TreeNode[], e.g. to handle specific labels and icons
-                    nodes.push(new TreeNode(p[0], p[1]));
-                }
-            }
+
+        let properties: Array<[string, string]> = [];
+        if (unique) {
+            properties = await this.manager.getUniqueProperties(this.value.property);
+        } else {
+            properties = await this.manager.getProperties();
         }
+
+        const nodes: TreeNode[] = [];
+        for (const p of properties) {
+            nodes.push(new TreeNode(p[0], p[1]));
+        }
+
         this.propertyTreeHandler.setTree(nodes);
         if (this.value.property) {
             const propNode = nodes.find((n) => n.id.toString() === this.value.property);

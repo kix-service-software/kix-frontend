@@ -16,6 +16,7 @@ import { AdditionalContextInformation } from '../../../../../base-components/web
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
+import { DynamicFormFieldOption } from '../../../../../dynamic-fields/webapp/core';
 import { DynamicFieldObjectFormValue } from '../../../../../object-forms/model/FormValues/DynamicFieldObjectFormValue';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
@@ -36,6 +37,8 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public noChannelSelectable: boolean = false;
 
+    private fieldOrder: any = {};
+
     public constructor(
         property: string,
         private article: Article,
@@ -47,6 +50,15 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         this.objectType = KIXObjectType.CHANNEL;
         this.structureOption = false;
         this.inputComponentId = 'channel-form-input';
+
+        this.fieldOrder[ArticleProperty.CUSTOMER_VISIBLE] = 0;
+        this.fieldOrder[ArticleProperty.TO] = 1;
+        this.fieldOrder[ArticleProperty.CC] = 2;
+        this.fieldOrder[ArticleProperty.BCC] = 3;
+        this.fieldOrder[ArticleProperty.SUBJECT] = 4;
+        this.fieldOrder[ArticleProperty.BODY] = 5;
+        this.fieldOrder[ArticleProperty.ATTACHMENTS] = 6;
+        this.fieldOrder[ArticleProperty.ENCRYPT_IF_POSSIBLE] = 7;
 
         this.createArticleFormValues(article);
     }
@@ -64,9 +76,13 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         } else {
             for (const fv of this.formValues) {
                 if (fv.property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                    fv.formValues?.forEach((dfv) => dfv.enabled = false);
+                    fv.formValues?.forEach((dfv) => {
+                        dfv.enabled = false;
+                        fv.isConfigurable = false;
+                    });
                 } else {
                     fv.enabled = false;
+                    fv.isConfigurable = false;
                 }
             }
         }
@@ -109,6 +125,27 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                     && !this.readonly;
             }
         }
+
+        this.sortArticleDFs(field);
+    }
+
+    protected sortArticleDFs(field: FormFieldConfiguration): void {
+        const channelGroup = this.objectValueMapper.objectFormHandler.getGroupForField(field?.id);
+        const dfValue = this.findFormValue(KIXObjectProperty.DYNAMIC_FIELDS);
+        if (channelGroup && channelGroup.formFields?.length && dfValue?.formValues?.length) {
+            // get all ArticleDFs from Group
+            let newFormValues = [];
+            const dfFields = channelGroup.formFields?.filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
+            for (const field of dfFields) {
+                const option = field.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+                const index = dfValue?.formValues.findIndex((fv) => fv['dfName'] === option?.value);
+                if (index !== -1) {
+                    newFormValues.push(...dfValue.formValues.splice(index, 1));
+                }
+            }
+
+            dfValue.formValues = [...newFormValues, ...dfValue.formValues];
+        }
     }
 
     protected createArticleFormValues(article: Article): void {
@@ -123,7 +160,6 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         const index = this.formValues.findIndex((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS);
         if (index !== -1) {
             const dfFormValue = this.formValues.splice(index, 1);
-            dfFormValue[0].isSortable = false;
             dfFormValue[0].disable();
             this.formValues.push(dfFormValue[0]);
         }
@@ -134,11 +170,23 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 ArticleProperty.ENCRYPT_IF_POSSIBLE, article, this.objectValueMapper, this
             );
             encyptFormValue.visible = true;
-            encyptFormValue.isSortable = false;
             // add it after recipents
             const bccIndex = this.formValues.findIndex((fv) => fv.property === ArticleProperty.BCC);
             this.formValues.splice(bccIndex + 1, 0, encyptFormValue);
         }
+
+        this.formValues.sort((a, b) => {
+            const aFieldOrder = this.fieldOrder[a.property];
+            const bFieldOrder = this.fieldOrder[b.property];
+
+            if (aFieldOrder !== undefined && bFieldOrder !== undefined) {
+                return aFieldOrder - bFieldOrder;
+            } else if (aFieldOrder !== undefined && bFieldOrder === undefined) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
     }
 
     protected createArticleFormValue(property: string, article: Article): void {
@@ -179,7 +227,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
         if (formValue) {
             formValue.visible = true;
-            formValue.isSortable = false;
+            formValue.isControlledByParent = true;
 
             // subject and body are always required (if enabled)
             if (formValue.property === ArticleProperty.SUBJECT || formValue.property === ArticleProperty.BODY) {
@@ -246,9 +294,13 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
             // handle enable only on channel switch
             if (dfFormValue?.formValues && !byInit) {
-                for (const fv of dfFormValue.formValues) {
+                for (const fv of dfFormValue.formValues.filter((fv) => fv.fieldId)) {
+                    if (fv['COUNT_CONTAINER']) {
+                        fv.isConfigurable = fv.formValues?.length > 0;
+                    } else {
+                        fv.isConfigurable = true;
+                    }
                     await fv.enable();
-                    fv.isSortable = false;
                 }
             }
         } else {
@@ -256,6 +308,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             if (dfFormValue?.formValues) {
                 for (const fv of dfFormValue.formValues) {
                     await fv.disable();
+                    fv.isConfigurable = false;
                 }
             }
         }
@@ -297,6 +350,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 if (!formValue.value && formValue.defaultValue) {
                     await formValue.setFormValue(formValue.defaultValue);
                 }
+
+                if (formValue.fieldId) {
+                    formValue.isConfigurable = true;
+                }
             }
         }
     }
@@ -307,6 +364,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
             if (formValue) {
                 await formValue.disable();
+                formValue.isConfigurable = false;
             }
         }
     }

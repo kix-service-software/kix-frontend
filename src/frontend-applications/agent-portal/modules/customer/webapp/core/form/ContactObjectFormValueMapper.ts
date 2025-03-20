@@ -71,7 +71,7 @@ export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact>
         this.formValues.push(new ObjectFormValue(ContactProperty.CITY, contact, this, null));
         this.formValues.push(new ObjectFormValue(ContactProperty.STREET, contact, this, null));
 
-        const field = this.objectFormHandler?.findFormField(ContactProperty.COUNTRY);
+        const field = this.objectFormHandler?.findFormFieldByProperty(ContactProperty.COUNTRY);
         if (field?.inputComponent === 'default-select-input') {
             const nodesOption = field?.options?.find((o) => o.option === 'NODES');
             if (Array.isArray(nodesOption?.value)) {

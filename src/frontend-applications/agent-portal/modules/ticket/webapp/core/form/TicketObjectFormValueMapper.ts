@@ -30,6 +30,7 @@ import { DynamicField } from '../../../../dynamic-fields/model/DynamicField';
 import { DynamicFieldObjectFormValue } from '../../../../object-forms/model/FormValues/DynamicFieldObjectFormValue';
 import { ArticleLoader } from '../context/ArticleLoader';
 import { Article } from '../../../model/Article';
+import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 
 export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
 
@@ -49,6 +50,9 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
         const channelFormValue = this.findFormValue(ArticleProperty.CHANNEL_ID);
         const dfValue = channelFormValue?.formValues.find((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS);
         await (dfValue as DynamicFieldObjectFormValue)?.createDFFormValues();
+        for (const formValue of dfValue?.formValues || []) {
+            formValue.isControlledByParent = true;
+        }
     }
 
     protected async mapTicketAttribute(property: string, ticket: Ticket): Promise<void> {
@@ -101,18 +105,25 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
         }
     }
 
-    protected async mapFormField(field: FormFieldConfiguration, ticket: Ticket): Promise<void> {
+    public async mapFormField(
+        field: FormFieldConfiguration, ticket: Ticket, parentFormValue?: ObjectFormValue
+    ): Promise<ObjectFormValue> {
+        let formValue: ObjectFormValue;
         if (field.property === 'USE_REFERENCED_ATTACHMENTS') {
             if (field.defaultValue?.value) {
                 const context = ContextService.getInstance().getActiveContext();
                 context?.setAdditionalInformation('USE_REFERENCED_ATTACHMENTS', true);
             }
         } else {
-            await super.mapFormField(field, ticket);
+            formValue = await super.mapFormField(field, ticket, parentFormValue);
         }
+        return formValue;
     }
 
-    protected async createFormValue(property: string, ticket: Ticket): Promise<ObjectFormValue> {
+    protected async createFormValue(
+        property: string, field: FormFieldConfiguration,
+        ticket: Ticket, parentFormValue?: ObjectFormValue
+    ): Promise<ObjectFormValue> {
         let formValue: ObjectFormValue;
         if (this.isArticleProperty(property)) {
             const articleFormValue = this.formValues.find((fv) => fv.property === TicketProperty.ARTICLES);
@@ -120,7 +131,7 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
         }
 
         if (!formValue) {
-            formValue = await super.createFormValue(property, ticket);
+            formValue = await super.createFormValue(property, field, ticket);
         }
 
         return formValue;

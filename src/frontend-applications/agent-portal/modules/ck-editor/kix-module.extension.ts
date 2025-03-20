@@ -28,7 +28,8 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     ];
 
     public uiComponents: UIComponent[] = [
-        new UIComponent('editor', '/kix-module-ck-editor$0/webapp/components/editor', [])
+        new UIComponent('editor', '/kix-module-ck-editor$0/webapp/components/editor', []),
+        new UIComponent('json-editor', '/kix-module-ck-editor$0/webapp/components/json-editor', [])
     ];
 
 }

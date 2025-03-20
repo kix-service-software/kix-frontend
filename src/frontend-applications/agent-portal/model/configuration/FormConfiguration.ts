@@ -13,6 +13,7 @@ import { FormPageConfiguration } from './FormPageConfiguration';
 import { ConfigurationType } from './ConfigurationType';
 import { AutoCompleteConfiguration } from './AutoCompleteConfiguration';
 import { FormContext } from './FormContext';
+import { FormLayout } from '../../modules/object-forms/model/layout/FormLayout';
 
 export class FormConfiguration implements IConfiguration {
 
@@ -31,6 +32,7 @@ export class FormConfiguration implements IConfiguration {
         public pages: FormPageConfiguration[] = [],
         public type: ConfigurationType = ConfigurationType.Form,
         public valid: boolean = true,
+        public formLayout: FormLayout = new FormLayout()
     ) { }
 
 }
