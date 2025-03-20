@@ -17,10 +17,10 @@ import { ServiceType } from '../../base-components/webapp/core/ServiceType';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 import { CMDBReadUIModule, CMDBService, ConfigItemFormService, ConfigItemVersionTableFactory, CompareConfigItemVersionTableFactory, ConfigItemHistoryTableFactory, ConfigItemLabelProvider, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider, ConfigItemHistoryLabelProvider, ConfigItemVersionLabelProvider, ConfigItemVersionCompareLabelProvider, ConfigItemSearchDefinition, CMDBContext, ConfigItemDetailsContext, ConfigItemSearchContext, CompareConfigItemVersionContext, ConfigItemTableFactory } from '../webapp/core';
-import { SearchService } from '../../search/webapp/core';
 import { PostproductivCSSHandler } from '../webapp/core/table/PostproductivCSSHandler';
 import { TableFactoryService } from '../../table/webapp/core/factory/TableFactoryService';
 import { TableCSSHandlerRegistry } from '../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
+import { SearchService } from '../../search/webapp/core/SearchService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

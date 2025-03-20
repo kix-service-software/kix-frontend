@@ -22,6 +22,12 @@ export interface IAction<T = any> {
 
     hasLink: boolean;
 
+    rank: number;
+
+    groupText: string;
+    groupIcon: string | ObjectIcon;
+    groupRank: number;
+
     initAction(): Promise<void>;
 
     setData(data: T): Promise<void>;

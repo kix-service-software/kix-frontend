@@ -144,27 +144,18 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                 'checkbox-input'
             ),
             new PersonalSetting(
+                'Translatable#Notifications',
+                PersonalSettingsProperty.DONT_ASK_ON_EXIT,
+                'Translatable#Exit KIX without asking',
+                'Translatable#Helptext_PersonalSettings_Dont_Ask_On_Exit',
+                'checkbox-input'
+            ),
+            new PersonalSetting(
                 'Translatable#User Token',
                 PersonalSettingsProperty.USER_TOKEN,
                 'Translatable#User Token',
                 'Translatable#Helptext_PersonalSettings_user_token_Hint',
                 'user-token-input'
-            ),
-            new PersonalSetting(
-                'Translatable#Article',
-                PersonalSettingsProperty.ARTICLE_SORT_ORDER,
-                'Translatable#Article sort order',
-                'Translatable#Helptext_PersonalSettings_article_sort_order_Hint',
-                'default-select-input',
-                false, new FormFieldValue('oldest'),
-                [
-                    new FormFieldOption(DefaultSelectInputFormOption.NODES,
-                        [
-                            new TreeNode('oldest', 'Translatable#Oldest first'),
-                            new TreeNode('newest', 'Translatable#Newest first')
-                        ]
-                    )
-                ]
             ),
             new PersonalSetting(
                 'Translatable#Article',

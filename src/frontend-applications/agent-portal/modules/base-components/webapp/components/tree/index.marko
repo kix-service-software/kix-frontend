@@ -7,7 +7,23 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<ul.tree-list key=state.treeId style=state.treeStyle>
+<ul key=state.treeId style=state.treeStyle class="tree-list">
+    <if(state.allowExpandCollapseAll)>
+        <div class="row m-0 my-3 expand-hover">
+            <div
+                class="col-6 m-0 p-0 pe-2 text-end"
+                on-click("expandOrCollapseAll", false)
+            >
+                <translation-string pattern="Translatable#Collapse All"/>
+            </div>
+            <div
+                class="col-6 m-0 p-0 ps-2 pe-auto border-start border-secondary"
+                on-click("expandOrCollapseAll", true)
+            >
+                <translation-string pattern="Translatable#Expand All"/>
+            </div>
+        </div>
+    </if>
     <for|node| of=state.tree>
         <if(node.visible)>
             <tree-node
@@ -17,7 +33,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 expandIfActiveChild=input.expandIfActiveChild
                 on-nodeToggled("nodeToggled")
                 on-nodeClicked("nodeClicked")
-                on-nodeHovered("nodeHovered")/>
+                on-nodeHovered("nodeHovered")
+            />
         </if>
     </for>
 </ul>

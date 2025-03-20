@@ -8,42 +8,39 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <div class=[
-    "container-fluid m-0 p-2 pe-1 bg-white",
+    "container-fluid bg-white",
     {
         "text-center": !state.prepared,
     },
 ]>
 
     <if(state.prepared)>
-        <object-form-values-container formValues=state.formValues/>
-        <div class="form-submission-buttons">
-            <dialog-notifiactions/>
-            <div class="bg-light me-2">
-                <button
-                    type="button"
-                    on-click("cancel")
-                    class="btn btn-outline-danger py-0"
-                >
-                    <span class="btn-label-danger">
-                        <i class="fa fa-times text-light"/>
-                    </span>
-                    <translation-string pattern="Translatable#Cancel"/>
-                </button>
-            </div>
-            <div class="bg-light">
-                <button
-                    disabled=state.blocked || !state.canSubmit
-                    type="button"
-                    on-click("submit")
-                    class="btn btn-outline-success py-0"
-                >
-                    <span class="btn-label-success">
-                        <i class="fa fa-check text-light"/>
-                    </span>
-                    <translation-string pattern=state.submitPattern/>
-                </button>
+        <div id=state.carouselId class="carousel slide carousel-fade">
+            <if(state.pages.length > 1 || input.contextInstanceId)>
+                <object-form-page-slider
+                    pages=state.pages
+                    carouselId=state.carouselId
+                    contextInstanceId=state.contextInstanceId
+                />
+            </if>
+            <div
+                class="carousel-inner mt-2"
+                style="max-height: 70vh; overflow-y: auto;"
+            >
+                <div class="row mt-2 " + component.getLayoutClasses()>
+                    <for|page, index| of=state.pages>
+                        <object-form-page
+                            page=page
+                            contextInstanceId=input.contextInstanceId
+                        />
+                    </for>
+                    <object-form-other-information contextInstanceId=input.contextInstanceId/>
+                </div>
             </div>
         </div>
+        <if(!input.contextInstanceId)>
+            <object-form-buttonbar contextInstanceId=input.contextInstanceId/>
+        </if>
     </if>
     <else-if(state.error)>
         <div class="alert alert-danger d-flex align-items-center" role="alert">

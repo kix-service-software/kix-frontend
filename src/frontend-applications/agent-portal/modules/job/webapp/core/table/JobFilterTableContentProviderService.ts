@@ -17,9 +17,9 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
 import { JobTypes } from '../../../model/JobTypes';
 import { ExtendedJobFilterContentProvider } from './ExtendedJobFilterContentProvider';
-import { SearchDefinition } from '../../../../search/webapp/core';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { SearchDefinition } from '../../../../search/webapp/core/SearchDefinition';
 
 export class JobFilterTableContentProviderService {
 

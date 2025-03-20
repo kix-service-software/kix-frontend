@@ -57,7 +57,10 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const formId = 'report-definition-edit-form';
 
         configurations.push(
-            new FormConfiguration(formId, 'Translatable#Edit Report Definition', [], KIXObjectType.REPORT_DEFINITION)
+            new FormConfiguration(
+                formId, 'Translatable#Edit Report Definition', [], KIXObjectType.REPORT_DEFINITION,
+                true, FormContext.EDIT
+            )
         );
         ModuleConfigurationService.getInstance().registerForm(
             [FormContext.EDIT], KIXObjectType.REPORT_DEFINITION, formId

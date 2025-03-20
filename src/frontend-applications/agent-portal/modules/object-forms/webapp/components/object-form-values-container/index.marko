@@ -8,15 +8,51 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.prepared)>
-   <div class="object-form-values-container">
-      <for|formValue| of=state.formValues>
-         <if(formValue && !component.isSorted(formValue))>
+   <div class=[
+      "row m-0 p-0",
+      {
+         "ps-5":
+            input.parent && !input.parent.IS_COUNTABLE && input.parent.visible,
+         "border-start":
+            input.parent && !input.parent.IS_COUNTABLE && input.parent.visible,
+      },
+   ]>
+      <if(Array.isArray(input.rows) && input.rows.length)>
+         <for|rowColumns| of=input.rows>
+            <if(Array.isArray(rowColumns) && rowColumns.length)>
+               <for|column| of=rowColumns>
+                  <div class=[
+                     "row my-2 m-0 p-0 pe-3 ",
+                     component.getColumnClasses(column),
+                  ]>
+                     <if(Array.isArray(column.fields) && column.fields.length)>
+                        <for|field| of=column.fields>
+                           <object-form-value
+                              contextInstanceId=state.contextInstanceId
+                              formValue=component.getFormValue(field)
+                              parent=input.parent
+                              key=component.getKey()
+                              formLayout=input.formLayout
+                              fieldLayout=input.fieldLayout
+                           />
+                        </for>
+                     </if>
+                  </div>
+               </for>
+            </if>
+         </for>
+      </if>
+      <else>
+         <for|formValue| of=state.formValues>
             <object-form-value
+               contextInstanceId=state.contextInstanceId
                formValue=formValue
                parent=input.parent
                key=component.getKey()
+               formLayout=input.formLayout
+               fieldLayout=input.fieldLayout
             />
-         </if>
-      </for>
+         </for>
+      </else>
    </div>
 </if>

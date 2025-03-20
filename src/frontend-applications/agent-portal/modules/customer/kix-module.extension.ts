@@ -64,14 +64,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'create-new-ticket-cell', '/kix-module-customer$0/webapp/components/create-new-ticket-cell', []
         ),
         new UIComponent('contact-list-widget', '/kix-module-customer$0/webapp/components/contact-list-widget', []),
-        new UIComponent(
-            'organisation-assigned-contacts-widget',
-            '/kix-module-customer$0/webapp/components/organisation-assigned-contacts-widget', []
-        ),
-        new UIComponent(
-            'organisation-assigned-config-items-widget',
-            '/kix-module-customer$0/webapp/components/organisation-assigned-config-items-widget', []
-        ),
         new UIComponent('setup-my-organisation', '/kix-module-customer$0/webapp/components/setup-my-organisation', [])
     ];
 

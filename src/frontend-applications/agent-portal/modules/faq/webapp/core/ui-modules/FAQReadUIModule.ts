@@ -17,7 +17,6 @@ import {
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { SearchService } from '../../../../search/webapp/core';
 import { ContextDescriptor } from '../../../../../model/ContextDescriptor';
 import { FAQContext } from '../context/FAQContext';
 import { ContextType } from '../../../../../model/ContextType';
@@ -30,6 +29,7 @@ import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { FAQArticleVoteFormService } from '../FAQArticleVoteFormService';
 import { PlaceholderService } from '../../../../../modules/base-components/webapp/core/PlaceholderService';
 import { FAQArticlePlaceholderHandler } from '../FAQArticlePlaceholderHandler';
+import { SearchService } from '../../../../search/webapp/core/SearchService';
 
 export class UIModule implements IUIModule {
 

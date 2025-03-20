@@ -17,9 +17,11 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 
 export class AttachmentUtil {
 
-    public static async checkFile(file: File, mimeTypes?: string[]): Promise<AttachmentError> {
+    public static async checkFile(
+        file: File, mimeTypes?: string[], isIcon?: boolean
+    ): Promise<AttachmentError> {
         let error;
-        const fileSizeOK = await AttachmentUtil.checkFileSize(file);
+        const fileSizeOK = await AttachmentUtil.checkFileSize(file, isIcon);
         if (!fileSizeOK) {
             error = AttachmentError.MAX_FILE_SIZE_EXCEEDED;
         } else if (mimeTypes && mimeTypes.length && !AttachmentUtil.checkMimeType(file, mimeTypes)) {
@@ -28,8 +30,8 @@ export class AttachmentUtil {
         return error;
     }
 
-    public static async checkFileSize(file: File): Promise<boolean> {
-        const maxSize = await AttachmentUtil.getMaxUploadFileSize();
+    public static async checkFileSize(file: File, isIcon?: boolean): Promise<boolean> {
+        const maxSize = await AttachmentUtil.getMaxUploadSize(isIcon);
         if (maxSize) {
             if (file.size <= maxSize) {
                 return true;
@@ -40,9 +42,12 @@ export class AttachmentUtil {
         return true;
     }
 
-    public static async getMaxUploadFileSize(): Promise<number> {
+    public static async getMaxUploadSize(isIcon?: boolean): Promise<number> {
+        const key = isIcon
+            ? SysConfigKey.MAX_ALLOWED_ICON_SIZE
+            : SysConfigKey.MAX_ALLOWED_SIZE;
         const maxUploadFileSize = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.MAX_ALLOWED_SIZE]
+            KIXObjectType.SYS_CONFIG_OPTION, [key]
         );
         return maxUploadFileSize && maxUploadFileSize.length ? maxUploadFileSize[0].Value : null;
     }
@@ -60,9 +65,12 @@ export class AttachmentUtil {
     }
 
     // tslint:disable:max-line-length
-    public static async buildErrorMessages(fileErrors: Array<[File, AttachmentError]>): Promise<string[]> {
+    public static async buildErrorMessages(
+        fileErrors: Array<[File, AttachmentError]>, isIcon?: boolean
+
+    ): Promise<string[]> {
         const errorMessages = [];
-        const maxFileSize = await AttachmentUtil.getMaxUploadFileSize();
+        const maxFileSize = await AttachmentUtil.getMaxUploadSize(isIcon);
         const maxFileSizeString = AttachmentUtil.getFileSize(maxFileSize, 0);
         for (const fe of fileErrors) {
             switch (fe[1]) {

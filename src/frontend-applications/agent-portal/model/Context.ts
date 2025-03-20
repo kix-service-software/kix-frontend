@@ -15,6 +15,7 @@ import { ClientStorageService } from '../modules/base-components/webapp/core/Cli
 import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
 import { ContextService } from '../modules/base-components/webapp/core/ContextService';
 import { EventService } from '../modules/base-components/webapp/core/EventService';
+import { FilterUtil } from '../modules/base-components/webapp/core/FilterUtil';
 import { IContextListener } from '../modules/base-components/webapp/core/IContextListener';
 import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
@@ -493,13 +494,27 @@ export abstract class Context {
                 );
             }
 
+            if (!allowedPermissions) {
+                continue;
+            }
+
             let allowedRoles = true;
             if (widget.roleIds?.length) {
                 const currentUser = await AgentService.getInstance().getCurrentUser();
                 allowedRoles = AgentService.userHasRole(widget.roleIds, currentUser);
             }
 
-            if (allowedPermissions && allowedRoles) {
+            if (!allowedRoles) {
+                continue;
+            }
+
+            let allowedConditions = true;
+            if (widget.conditions?.length) {
+                const object = await this.getObject();
+                allowedConditions = await FilterUtil.checkCriteriaByPropertyValue(widget.conditions, object);
+            }
+
+            if (allowedConditions) {
                 allowedWidgets.push(widget);
             }
         }
@@ -634,6 +649,14 @@ export abstract class Context {
         if (configuration?.roleIds?.length) {
             const currentUser = await AgentService.getInstance().getCurrentUser();
             const allowed = AgentService.userHasRole(configuration.roleIds, currentUser);
+            if (!allowed) {
+                return null;
+            }
+        }
+
+        if (configuration?.conditions?.length) {
+            const object = await this.getObject();
+            const allowed = await FilterUtil.checkCriteriaByPropertyValue(configuration.conditions, object);
             if (!allowed) {
                 return null;
             }

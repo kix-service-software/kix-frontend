@@ -28,6 +28,7 @@ export class ComponentState extends AbstractComponentState {
         public shortMessage: string = '',
         public articleTo: string = '',
         public articleCc: string = '',
+        public articleBcc: string = '',
         public articleAttachments: Attachment[] = [],
         public images: DisplayImageDescription[] = [],
         public show: boolean = false,

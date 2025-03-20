@@ -21,6 +21,7 @@ import { LoadArticleZipAttachmentRequest } from '../../model/LoadArticleZipAttac
 import { SetArticleSeenFlagRequest } from '../../model/SetArticleSeenFlagRequest';
 import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { RemoveArticleAttachmentDownloadsRequest } from '../../model/RemoveArticleAttachmentDownloadsRequest';
 
 export class TicketSocketClient extends SocketClient {
 
@@ -125,6 +126,36 @@ export class TicketSocketClient extends SocketClient {
         return requestPromise;
     }
 
+    public async removeArticleAttachmentDownloads(downloadIds: string[]): Promise<void> {
+        this.checkSocketConnection();
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+
+        return new Promise<void>((resolve, reject) => {
+            const requestId = IdService.generateDateBasedId();
+            const request = new RemoveArticleAttachmentDownloadsRequest(requestId, downloadIds);
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + TicketEvent.REMOVE_ARTICLE_ATTACHMENT_DOWNLOADS);
+            }, socketTimeout);
+
+            this.socket.on(TicketEvent.ARTICLE_ATTACHMENT_DOWNLOADS_REMOVED, (result: ISocketResponse) => {
+                if (requestId === result.requestId) {
+                    window.clearTimeout(timeout);
+                    resolve();
+                }
+            });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error);
+                }
+            });
+
+            this.socket.emit(TicketEvent.REMOVE_ARTICLE_ATTACHMENT_DOWNLOADS, request);
+        });
+    }
 
     public async setArticleSeenFlag(ticketId, articleId): Promise<void> {
         this.checkSocketConnection();

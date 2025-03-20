@@ -7,11 +7,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<editor
-    value=state.content
-    plainText=state.plainText
-    inlineContent=state.inlineContent
-    readOnly
-    useReadonlyStyle=state.useReadonlyStyle
-    style=state.style
+<iframe
+    src=state.url
+    class="w-100 bg-white article-view"
+    on-load("viewLoaded")
+    id=state.frameId
 />

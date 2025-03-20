@@ -65,14 +65,12 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             for (const k in TicketProperty) {
                 if (TicketProperty[k]) {
                     const property = TicketProperty[k];
-                    if (
-                        property === TicketProperty.TICKET_ID ||
-                        property === TicketProperty.PENDING_TIME
-                    ) {
+                    if (property === TicketProperty.TICKET_ID) {
                         continue;
                     }
-                    const hasValue = formValues.some((fv) => fv.property === property && fv.enabled);
-                    if (!hasValue) {
+
+                    const formValue = this.objectValueMapper?.findFormValue(property);
+                    if (!formValue?.enabled) {
                         delete newObject[property];
                     }
                 }
@@ -85,37 +83,55 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     ): Promise<void> {
         if (ticket.Articles?.length) {
             ticket.Articles = ticket.Articles.filter((a) => a.ChannelID);
-            /**
-             * Here starts the error for the attachments
-             * not being in the commitment for the other browser
-             */
-            for (const article of ticket.Articles) {
-                this.deleteArticleProperties(article);
-                this.deleteCommonProperties(article, true);
 
-                if (forCommit) {
-                    if (article.Attachments?.length) {
-                        article.Attachments = await this.prepareAttachments(article.Attachments);
-                    }
+            const articleFormValue = this.objectValueMapper?.findFormValue(TicketProperty.ARTICLES);
+            const channelFormValues = articleFormValue?.formValues?.filter(
+                (fv) => fv.property === ArticleProperty.CHANNEL_ID && fv.enabled
+            );
 
-                    const ticketOrQueueId = ticket.QueueID ? ticket : orgTicketQueueID;
-                    article.Body = await this.addQueueSignature(ticketOrQueueId, article.Body, article.ChannelID);
-
-                    await this.prepareReferencedArticle(article, ticket);
-                } else {
-                    article.Attachments = null;
-                    if (!forStorage) {
-                        article.Body = article.Body?.replace(/<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g, '');
-                    }
+            if (channelFormValues?.length) {
+                /**
+                 * Here starts the error for the attachments
+                 * not being in the commitment for the other browser
+                 */
+                for (const article of ticket.Articles) {
+                    await this.prepareArticle(ticket, article, forCommit, orgTicketQueueID, forStorage);
                 }
-
-                this.prepareRecipients(article);
+            } else {
+                delete ticket.Articles;
             }
         }
 
-        if (!ticket.Articles.length) {
+        if (!ticket.Articles?.length) {
             delete ticket.Articles;
         }
+    }
+
+    public async prepareArticle(
+        ticket: Ticket, article: Article, forCommit: boolean, orgTicketQueueID: number, forStorage?: boolean
+    ): Promise<void> {
+        this.deleteArticleProperties(article);
+        this.deleteCommonProperties(article, true);
+
+        this.prepareDynamicFields(article, forCommit);
+
+        if (forCommit) {
+            if (article.Attachments?.length) {
+                article.Attachments = await this.prepareAttachments(article.Attachments);
+            }
+
+            const ticketOrQueueId = ticket.QueueID ? ticket : orgTicketQueueID;
+            article.Body = await this.addQueueSignature(ticketOrQueueId, article.Body, article.ChannelID);
+
+            await this.prepareReferencedArticle(article, ticket);
+        } else {
+            article.Attachments = null;
+            if (!forStorage) {
+                article.Body = article.Body?.replace(/<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g, '');
+            }
+        }
+
+        this.prepareRecipients(article);
     }
 
     private deleteArticleProperties(article: Article): void {
@@ -176,24 +192,27 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
     public async addQueueSignature(ticketOrQueueId: number | Ticket, body: string, channelId: number): Promise<string> {
         const queueId = typeof ticketOrQueueId === 'number' ? ticketOrQueueId : ticketOrQueueId?.QueueID;
-        const config = await TicketService.getTicketModuleConfiguration();
 
-        if (channelId && queueId && config?.addQueueSignature) {
+        if (channelId && queueId) {
             const channels = await KIXObjectService.loadObjects<Channel>(
                 KIXObjectType.CHANNEL, [channelId], null, null, true
             ).catch(() => []);
             if (channels && channels[0] && channels[0].Name === 'email') {
-                const queues = await KIXObjectService.loadObjects<Queue>(
-                    KIXObjectType.QUEUE, [queueId], null, null, true
-                );
-                const queue = queues && !!queues.length ? queues[0] : null;
-                if (queue && queue.Signature) {
-                    const signature =
-                        await PlaceholderService.getInstance().replacePlaceholders(
-                            queue.Signature,
-                            (ticketOrQueueId instanceof Ticket ? ticketOrQueueId : undefined)
-                        );
-                    body += `\n\n${signature}`;
+                const config = await TicketService.getTicketModuleConfiguration().catch(() => null);
+
+                if (config?.addQueueSignature) {
+                    const queues = await KIXObjectService.loadObjects<Queue>(
+                        KIXObjectType.QUEUE, [queueId], null, null, true
+                    );
+                    const queue = queues && !!queues.length ? queues[0] : null;
+                    if (queue && queue.Signature) {
+                        const signature =
+                            await PlaceholderService.getInstance().replacePlaceholders(
+                                queue.Signature,
+                                (ticketOrQueueId instanceof Ticket ? ticketOrQueueId : undefined)
+                            );
+                        body += `\n\n${signature}`;
+                    }
                 }
             }
         }

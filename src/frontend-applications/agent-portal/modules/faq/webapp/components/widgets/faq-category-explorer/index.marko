@@ -7,27 +7,34 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.faq-category-explorer>
+<div class="faq-category-explorer">
     <widget
         instanceId=state.instanceId
         title=(
             state.widgetConfiguration
                 ? state.widgetConfiguration.title
                 : "Translatable#FAQ Categories"
-        )>
+        )
+    >
         <@content>
-            <div.show-all
-                class={
-                    active: !state.activeNode
-                }
-                on-click("showAll")>
+            <div
+                class=[
+                    "show-all",
+                    {
+                        active: !state.activeNode,
+                    },
+                ]
+                on-click("showAll")
+            >
                 <translation-string pattern="Translatable#Show all"/>
             </div>
             <if(state.nodes)>
                 <tree
+                    treeId="faq-category-tree"
                     tree=state.nodes
                     activeNode=state.activeNode
-                    on-nodeClicked("activeNodeChanged")/>
+                    on-nodeClicked("activeNodeChanged")
+                />
             </if>
         </@content>
     </widget>

@@ -29,12 +29,7 @@ import { Article } from '../../model/Article';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
-import { OverlayIcon } from '../../../base-components/webapp/core/OverlayIcon';
-import { QueueService } from './admin';
-import { ObjectResponse } from '../../../../server/services/ObjectResponse';
 import { QueueLabelProvider } from './QueueLabelProvider';
-import { Organisation } from '../../../customer/model/Organisation';
-import { Contact } from '../../../customer/model/Contact';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -118,26 +113,12 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.ORGANISATION_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    const organisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, [value]
-                    );
-                    if (organisations?.length) {
-                        displayValue = await LabelService.getInstance().getObjectText(organisations[0]);
-                    } else {
-                        displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.ORGANISATION, value);
-                    }
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.ORGANISATION, value);
                 }
                 break;
             case TicketProperty.CONTACT_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    const contacts = await KIXObjectService.loadObjects<Contact>(
-                        KIXObjectType.CONTACT, [value]
-                    );
-                    if (contacts?.length) {
-                        displayValue = await LabelService.getInstance().getObjectText(contacts[0]);
-                    } else {
-                        displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.CONTACT, value);
-                    }
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.CONTACT, value);
                 }
                 break;
             case TicketProperty.CREATED:
@@ -198,6 +179,10 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 displayValue = await LabelService.getInstance().getDisplayText(
                     queueWithFollowUp, QueueProperty.FOLLOW_UP_ID
                 );
+                break;
+            case TicketProperty.ATTACHMENT_COUNT:
+                displayValue ||= '0';
+                translatable = false;
                 break;
             default:
                 if (Article.isArticleProperty(property)) {
@@ -342,6 +327,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.MY_QUEUES:
                 displayValue = 'Translatable#My Teams';
                 break;
+            case TicketProperty.ATTACHMENT_COUNT:
+                displayValue = 'Translatable#Number of Attachments';
+                break;
             default:
                 if (Article.isArticleProperty(property)) {
                     displayValue = await LabelService.getInstance().getPropertyText(
@@ -474,7 +462,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
 
         const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.TICKET);
 
-        if (pattern && ticket) {
+        if (pattern && ticket && !id) {
             displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, ticket);
         } else {
             let ticketHook: string = '';

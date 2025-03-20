@@ -19,7 +19,7 @@ export class PropertyOperatorUtil {
             case PropertyOperator.CLEAR:
                 return await TranslationService.translate('Translatable#Clear');
             default:
-                return operator;
+                return;
         }
     }
 

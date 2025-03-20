@@ -50,9 +50,11 @@ export class HTTPRequestLogger {
             const end = Date.now();
             const time = end - entry.startTime;
 
+            const stringLength = JSON.stringify((response as AxiosResponse)?.data)?.length * 2;
+            const size = (stringLength / 1024)?.toFixed(3);
             const status = (response as AxiosResponse)?.status || (response as AxiosError).response?.status;
 
-            this.logger.info(`${time}\t${entry.method}\t${status}\t${entry.resource}\t${entry.parameter}`);
+            this.logger.info(`${entry.clientId}\t${time}\t${entry.method}\t${status}\t${size}\t${entry.resource}\t${entry.parameter}`);
 
             this.requests.delete(id);
         }

@@ -15,10 +15,10 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { ObjectReferenceLabelProvider } from '../../../base-components/webapp/core/ObjectReferenceLabelProvider';
 import { DynamicFieldType } from '../../../dynamic-fields/model/DynamicFieldType';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
-import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { ConfigItem } from '../../model/ConfigItem';
 import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { VersionProperty } from '../../model/VersionProperty';
 
 export class ConfigItemReferenceLabelProvider extends ObjectReferenceLabelProvider {
 
@@ -30,16 +30,24 @@ export class ConfigItemReferenceLabelProvider extends ObjectReferenceLabelProvid
         return KIXObjectService.loadObjects<ConfigItem>(
             KIXObjectType.CONFIG_ITEM, [value],
             new KIXObjectLoadingOptions(
-                null, null, null, [ConfigItemProperty.CURRENT_VERSION]
+                null, null, null, [ConfigItemProperty.CURRENT_VERSION, VersionProperty.PREPARED_DATA]
             ), null, true
         );
     }
 
     protected async getLabel(configItem: ConfigItem): Promise<Label> {
-        const title = await LabelService.getInstance().getObjectText(configItem, true);
-        return new Label(
-            configItem, configItem.ConfigItemID, 'kix-icon-ci', title, null, title, true
-        );
+        let label;
+        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CONFIG_ITEM);
+        if (labelProvider) {
+            label = await labelProvider.getLabelByObject(configItem);
+        }
+        if (!label) {
+            const title = await LabelService.getInstance().getObjectText(configItem, true) || configItem.Name;
+            label = new Label(
+                configItem, configItem.ConfigItemID, 'kix-icon-ci', title, null, title, true
+            );
+        }
+        return label;
     }
 
     public getObjectIcon(dynamicFieldType?: DynamicFieldType): string | ObjectIcon {
@@ -49,11 +57,5 @@ export class ConfigItemReferenceLabelProvider extends ObjectReferenceLabelProvid
             objectIcon = 'kix-icon-ci';
         }
         return objectIcon;
-    }
-
-    public createLabelsFromDFValue(dfValue: DynamicFieldValue): Promise<Label[]> {
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CONFIG_ITEM);
-        const labels = labelProvider?.createLabelsFromDFValue(dfValue);
-        return labels;
     }
 }

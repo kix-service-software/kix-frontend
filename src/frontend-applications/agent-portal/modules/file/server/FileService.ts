@@ -15,6 +15,9 @@ import { ConfigurationService } from '../../../../../server/services/Configurati
 import { createHash } from 'node:crypto';
 import { Request, Response } from 'express';
 import { LoggingService } from '../../../../../server/services/LoggingService';
+import { ClientNotificationService } from '../../../server/services/ClientNotificationService';
+import { BackendNotification } from '../../../model/BackendNotification';
+import { BackendNotificationEvent } from '../../../model/BackendNotificationEvent';
 
 export class FileService {
 
@@ -26,40 +29,62 @@ export class FileService {
                 fs.mkdirSync(folderPath);
             }
         }
+        ClientNotificationService.getInstance().registerNotificationListener(
+            FileService.handleBackendNotification.bind(this));
+    }
+
+    private static handleBackendNotification(events: BackendNotification[]): void {
+        const fileServiceEvents = events?.filter((e) => e.Namespace === 'FileService'
+            && e.Event === BackendNotificationEvent.EXECUTE_COMMAND);
+        if (fileServiceEvents?.some((fse) => fse.Data['Command'] === 'cleanup')) {
+            FileService.cleanup();
+        }
     }
 
     public static prepareFileForDownload(userId: number, file: IDownloadableFile): void {
-        const downloads = this.getDownloads(userId);
-        const fileName = `${userId}_downloads.json`;
-        try {
-            if (!downloads.some((f) => f.Filename === file.Filename && f.FilesizeRaw === file.FilesizeRaw)) {
-                if (!file.path) {
-                    const filePath = this.getFilePath(file.Filename);
-                    fs.writeFileSync(filePath, file.Content, { encoding: 'base64' });
-                }
-                this.addFileToDownloads(file, downloads, fileName);
-            } else {
-                const existingFile = downloads.find(
-                    (f) => f.Filename === f.Filename && f.FilesizeRaw === f.FilesizeRaw
-                );
+        if (!file?.Filename) {
+            LoggingService.getInstance().error('Got no file for download preparation');
+            return;
+        }
+        if (!userId) {
+            LoggingService.getInstance().error(`Need userId for download preparation ${file.Filename}`);
+            return;
+        }
 
+        const downloads = this.getDownloads(userId);
+        try {
+            const existingFile = downloads.find(
+                (f) => f.Filename === file.Filename && f.FilesizeRaw === file.FilesizeRaw
+            );
+            if (!existingFile) {
+                file.downloadId = uuidv4() + `-${file.Filename}`;
+                file.downloadSecret = uuidv4();
+                let saved: boolean = true;
+                try {
+                    const filePath = this.getFilePath(file.downloadId);
+                    fs.writeFileSync(filePath, file.Content, { encoding: 'base64' });
+                } catch (err) {
+                    LoggingService.getInstance().error(`Could not save file "${file.Filename}" for download (${err})`);
+                    saved = false;
+                }
+                if (saved) {
+                    const jsonFileName = `${userId}_downloads.json`;
+                    this.addFileToDownloads(file, downloads, jsonFileName);
+                }
+            } else {
                 file.downloadId = existingFile.downloadId;
                 file.downloadSecret = existingFile.downloadSecret;
             }
 
             delete file.Content;
         } catch (err) {
-            console.error(err);
+            LoggingService.getInstance().error(err);
         }
     }
 
     private static addFileToDownloads(
         file: IDownloadableFile, downloads: IDownloadableFile[] = [], downloadFileName: string
     ): void {
-        file.downloadId = uuidv4();
-        file.downloadSecret = uuidv4();
-
-
         let hash: string;
         if (file?.Content) {
             hash = createHash('md5').update(file.Content).digest('hex').toString();
@@ -84,6 +109,7 @@ export class FileService {
         const userId = Number(req.query.userid);
 
         if (!downloadId || !userId) {
+            LoggingService.getInstance().error('Need downloadId and userId');
             res.status(400);
             res.render('Invalid request!');
             return;
@@ -91,15 +117,19 @@ export class FileService {
 
         const file = FileService.getDownloadFile(downloadId, userId);
         if (file) {
-            res.download(FileService.getFilePath(file.Filename, file.path), (err) => {
-                if (err) {
-                    LoggingService.getInstance().error('Error while download file to client.', err);
-                } else {
+            res.download(
+                FileService.getFilePath(file.downloadId, file.path),
+                file.Filename,
+                (err) => {
+                    if (err) {
+                        LoggingService.getInstance().error('Error while download file to client (downloadId: ${downloadId}, userId: ${userId}).', err);
+                    }
+                    // always remove/cleanup
                     FileService.removeDownload(downloadId, userId);
                 }
-            });
-
+            );
         } else {
+            LoggingService.getInstance().error(`Relevant file not found in ${userId}_downloads.json (downloadId: ${downloadId}).`);
             res.status(400);
             res.render('Invalid request!');
             return;
@@ -124,14 +154,14 @@ export class FileService {
         return downloads;
     }
 
-    private static removeDownload(downloadId: string, userId: number): void {
+    public static removeDownload(downloadId: string, userId: number): void {
         const downloads = this.getDownloads(userId);
         const index = downloads.findIndex((d) => d.downloadId === downloadId);
         if (index !== -1) {
             const file = downloads[index];
 
             if (!file.path) {
-                this.removeFile(file.Filename);
+                this.removeFile(file.downloadId);
             }
 
             downloads.splice(index, 1);
@@ -154,18 +184,38 @@ export class FileService {
         }
     }
 
-    private static getFilePath(filename: string, targetPath?: string, download: boolean = true): string {
+    public static cleanup(): void {
+        const directory = this.getFilePath();
+        try {
+            const files = fs.readdirSync(directory);
+
+            for (const file of files) {
+                const filePath = path.join(directory, file);
+                fs.unlinkSync(filePath);
+            }
+            LoggingService.getInstance().debug(`FileService: cleanup of ${directory} deleted ${files.length} files`);
+        } catch (e) {
+            LoggingService.getInstance().error(`Could not cleanup ${directory}`, e);
+        }
+    }
+
+    private static getFilePath(filename?: string, targetPath?: string, download: boolean = true): string {
         const folder = download ? 'downloads' : 'uploads';
-        let filePath = path.join(__dirname, '..', '..', '..', '..', '..', '..', 'data', folder, filename);
+        let filePath = path.join(__dirname, '..', '..', '..', '..', '..', '..', 'data', folder);
+        if (filename) {
+            filePath = path.join(filePath, filename);
+        }
         if (targetPath) {
             filePath = path.join(__dirname, '..', '..', '..', '..', '..', '..', targetPath, filename);
         }
         return filePath;
     }
 
-    public static getFileContent(filename: string, download: boolean = true): string {
+    public static getFileContent(
+        filename: string, download: boolean = true, encoding: BufferEncoding = 'base64'
+    ): string {
         const filePath = this.getFilePath(filename, null, download);
-        const content = fs.readFileSync(filePath, { encoding: 'base64' });
+        const content = fs.readFileSync(filePath, { encoding });
         return content;
     }
 

@@ -94,6 +94,8 @@ export class Ticket extends KIXObject {
 
     public UntilTime: number;
 
+    public AttachmentCount: number;
+
     // refrenced objects
     public Contact: Contact;
     public TicketLock: TicketLock;
@@ -219,6 +221,7 @@ export class Ticket extends KIXObject {
             this.Responsible = null;
             this.State = null;
             this.Type = null;
+            this.AttachmentCount = null;
         }
 
     }

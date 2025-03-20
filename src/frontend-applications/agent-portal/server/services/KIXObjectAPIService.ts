@@ -145,7 +145,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
 
         const object = {};
-        object[objectType] = new RequestObject(parameter.filter((p) => p[0] !== 'ICON'));
+        object[objectType] = new RequestObject(
+            parameter.filter((p) => p[0] !== 'ICON' && p[0] !== KIXObjectProperty.OBJECT_TAGS)
+        );
 
         const response = await this.sendRequest(token, clientRequestId, uri, object, cacheKeyPrefix, create);
 
@@ -165,6 +167,12 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                     });
             }
         }
+
+        const tags = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
+        await this.commitObjectTag(token, clientRequestId, tags, objectType, response[responseProperty])
+            .catch(() => {
+                // be silent
+            });
 
         return responseProperty ? response[responseProperty] : response;
     }
@@ -187,6 +195,42 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         token: string, clientRequestId: string, object: KIXObject, relevantOrganisationId: number
     ): Promise<number | string> {
         throw new Error('', 'Method commitObject not implemented.');
+    }
+
+    protected async commitObjectTag(
+        token: string, clientRequestId: string, objectTags: string[],
+        objectType: KIXObjectType | string, objectId: string | number
+    ): Promise<void> {
+        if (
+            objectType !== KIXObjectType.OBJECT_TAG
+            && objectType !== KIXObjectType.OBJECT_TAG_LINK
+        ) {
+            const tagService = KIXObjectServiceRegistry.getServiceInstance(
+                KIXObjectType.OBJECT_TAG
+            );
+
+            await tagService.deleteObject(
+                token, clientRequestId, objectType, objectId,
+                null, KIXObjectType.OBJECT_TAG_LINK
+            ).catch((error: Error) => {
+                throw new Error(error.Code, error.Message);
+            });
+
+            if (objectTags && objectTags.length) {
+                for (const tag of objectTags) {
+                    await tagService.createObject(token, clientRequestId, KIXObjectType.OBJECT_TAG, [
+                        ['Name', tag],
+                        ['ObjectID', objectId.toString()],
+                        ['ObjectType', objectType]
+                    ], null, KIXObjectType.OBJECT_TAG
+                    ).catch((error: Error) => {
+                        throw new Error(error.Code, error.Message);
+                    });
+                }
+            }
+            CacheService.getInstance().deleteKeys(KIXObjectType.OBJECT_TAG);
+            CacheService.getInstance().deleteKeys(KIXObjectType.OBJECT_TAG_LINK);
+        }
     }
 
     protected async prepareQuery(
@@ -344,6 +388,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         if (errors && errors.length) {
             LoggingService.getInstance().error(`${errors[0].Code}: ${errors[0].Message}`, errors[0]);
             throw new Error(errors[0].Code, errors[0].Message);
+        }
+        else {
+            // triggers the deletion of associated tags for the deleted object
+            await this.commitObjectTag(token, clientRequestId, null, objectType, objectId);
         }
 
         return [];

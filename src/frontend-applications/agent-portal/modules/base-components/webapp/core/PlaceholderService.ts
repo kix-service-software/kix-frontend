@@ -11,8 +11,6 @@ import { IPlaceholderHandler } from './IPlaceholderHandler';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { SortUtil } from '../../../../model/SortUtil';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { TranslationService } from '../../../translation/webapp/core/TranslationService';
-
 export class PlaceholderService {
 
     private static INSTANCE: PlaceholderService;

@@ -20,18 +20,29 @@ const expect = chai.expect;
 describe('Browser / AttachmentUtil', () => {
 
     const MAX_UPLOAD_FILE_SIZE = 100;
+    const MAX_UPLOAD_FILE_ICON_SIZE = 30;
 
     before(() => {
-        AttachmentUtil.getMaxUploadFileSize = async (): Promise<number> => {
-            return MAX_UPLOAD_FILE_SIZE;
+        AttachmentUtil.getMaxUploadSize = async (isIcon?: boolean): Promise<number> => {
+            if (isIcon) {
+                return MAX_UPLOAD_FILE_ICON_SIZE;
+            }
+            else {
+                return MAX_UPLOAD_FILE_SIZE;
+            }
         }
     });
 
     describe('File check', () => {
         it('Should return the max upload file size.', async () => {
-            const maxUploadFileSize = await AttachmentUtil.getMaxUploadFileSize();
+            const maxUploadFileSize = await AttachmentUtil.getMaxUploadSize();
             expect(maxUploadFileSize).exist;
             expect(maxUploadFileSize).equals(MAX_UPLOAD_FILE_SIZE);
+        });
+        it('Should return the max upload file size.', async () => {
+            const maxUploadIconFileSize = await AttachmentUtil.getMaxUploadSize(true);
+            expect(maxUploadIconFileSize).exist;
+            expect(maxUploadIconFileSize).equals(MAX_UPLOAD_FILE_ICON_SIZE);
         });
 
         it('Should return MAX_FILE_SIZE_EXCEEDED error if file size is to large.', async () => {
@@ -42,12 +53,27 @@ describe('Browser / AttachmentUtil', () => {
             expect(error).exist;
             expect(error).equals(AttachmentError.MAX_FILE_SIZE_EXCEEDED);
         });
+        it('Should return MAX_FILE_SIZE_EXCEEDED error if icon file size is to large.', async () => {
+            const file = {
+                size: 50
+            }
+            const error = await AttachmentUtil.checkFile((file as File), [], true);
+            expect(error).exist;
+            expect(error).equals(AttachmentError.MAX_FILE_SIZE_EXCEEDED);
+        });
 
         it('Should not return error if file size is valid.', async () => {
             const file = {
                 size: 50
             }
             const error = await AttachmentUtil.checkFile((file as File));
+            expect(error).be.undefined;
+        });
+        it('Should not return error if icon file size is valid.', async () => {
+            const file = {
+                size: 20
+            }
+            const error = await AttachmentUtil.checkFile((file as File), [], true);
             expect(error).be.undefined;
         });
 

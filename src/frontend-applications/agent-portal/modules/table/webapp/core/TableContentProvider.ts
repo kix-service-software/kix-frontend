@@ -27,7 +27,7 @@ import { KIXObjectSocketClient } from '../../../base-components/webapp/core/KIXO
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { SearchOperator } from '../../../search/model/SearchOperator';
-import { SearchService } from '../../../search/webapp/core';
+import { SearchService } from '../../../search/webapp/core/SearchService';
 import { ITableContentProvider } from '../../model/ITableContentProvider';
 import { RowObject } from '../../model/RowObject';
 import { Table } from '../../model/Table';
@@ -211,6 +211,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
             if (this.currentLoadLimit) {
                 this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(this.id);
+                this.currentLimit = this.currentLoadLimit;
             }
         }
 
@@ -272,6 +273,14 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                                     dfv.DisplayValue.split(dynamicField.Config.ItemSeparator) :
                                     null;
                             }
+                        } else if (
+                            column.property === KIXObjectProperty.OBJECT_TAGS && o[KIXObjectProperty.OBJECT_TYPE]
+                            && o[KIXObjectProperty.OBJECT_ID]
+                        ) {
+                            const tags = await KIXObjectService.loadObjectTags(
+                                o[KIXObjectProperty.OBJECT_TYPE], o[KIXObjectProperty.OBJECT_ID]
+                            );
+                            tableValue = new TableValue(column.property, tags, tags.join(','), null, null, null, tags);
                         } else {
                             tableValue = new TableValue(column.property, o[column.property], null, null, null);
 
@@ -391,7 +400,6 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         }
 
         await TableFactoryService.getInstance().prepareTableLoadingOptions(loadingOptions, this.table);
-
         return loadingOptions;
     }
 

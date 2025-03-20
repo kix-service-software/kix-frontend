@@ -9,6 +9,7 @@
 
 import { ValidationResult } from '../../../../../base-components/webapp/core/ValidationResult';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
+import { SelectObjectFormValue } from '../../../../model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueValidator } from '../ObjectFormValueValidator';
 
 export class PossibleValuesValidator extends ObjectFormValueValidator {
@@ -22,7 +23,13 @@ export class PossibleValuesValidator extends ObjectFormValueValidator {
             const values = Array.isArray(formValue.value) ? formValue.value : [formValue.value];
 
             if (values.length) {
-                const valid = values.every((v) => formValue.isValidValue(v));
+
+                let freeText = false;
+                if (formValue instanceof SelectObjectFormValue) {
+                    freeText = formValue.freeText;
+                }
+
+                const valid = freeText || values.every((v) => formValue.isValidValue(v));
                 if (!valid) {
                     const error = await ObjectFormValueValidator.createValidationError(
                         `Invalid value ${formValue.value}`

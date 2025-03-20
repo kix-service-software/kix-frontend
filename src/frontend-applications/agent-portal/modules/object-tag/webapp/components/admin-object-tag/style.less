@@ -1,0 +1,61 @@
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.admin-object-tag-container {
+   .object-tag-search {
+        display: grid;
+        grid-template-columns: auto max-content max-content max-content;
+        grid-column-gap: @margin-small;
+        padding: 1rem;
+        border-radius: 3px;
+        border: 1px solid @secondary-2;
+        margin: 0 0 1rem 0;
+        background-color: @secondary-6;
+        box-sizing: border-box;
+        box-shadow: 2px 2px 2px 0 #c6c6c6;
+
+        .button-without-text {
+            background-color: @secondary-3;
+
+            >span {
+                background-color: unset;
+                border-color: unset;
+                color: @secondary-7;
+            }
+        }
+
+        .action-switch {
+            display: grid;
+            grid-auto-flow: column;
+            grid-column-gap: @margin-small;
+            grid-auto-columns: 2rem;
+            padding-left: @margin-small;
+            margin-left: @margin-small;
+            border-left: 1px solid @secondary-2;
+            font-size: 2rem;
+            color: @secondary-0;
+
+            >span {
+                &:hover {
+                    color: @secondary-6;
+                    background-color: @secondary-0;
+                    cursor: pointer;
+                }
+
+                &.active {
+                    color: @secondary-6;
+                    background-color: @secondary-0;
+                }
+            }
+        }
+    }
+    >.content-widget {
+        margin-top: 1rem;
+    }
+}

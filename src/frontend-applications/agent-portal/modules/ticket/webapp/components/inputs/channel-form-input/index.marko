@@ -8,29 +8,58 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(Array.isArray(state.nodes) && !state.loading)>
-    <div.channel-list.form-control.p-0.input-group class={readonly: state.readonly}>
-        <ul.nav.nav-tabs.border-0>
+    <div class=[
+        "channel-list form-control p-0 input-group",
+        {
+            readonly: state.readonly,
+        },
+    ]>
+        <ul class="nav nav-tabs border-0">
             <for|node| of=state.nodes>
-                <li.nav-item>
-                    <a.nav-link class={
-                        "active": state.selectedNode && state.selectedNode.id === node.id
-                    } aria-current="page" tabindex="0" on-click("selectChannel", node) on-keydown("keydown", node)>
-                        <span.channel-icon>
+                <li class="nav-item">
+                    <a
+                        class=[
+                            "nav-link",
+                            {
+                                active:
+                                    state.selectedNode &&
+                                    state.selectedNode.id === node.id,
+                            },
+                        ]
+                        aria-current="page"
+                        tabindex="0"
+                        on-click("selectChannel", node)
+                        on-keydown("keydown", node)
+                    >
+                        <span class="channel-icon">
                             <icon icon=node.icon/>
                         </span>
-                        <span.channel-text>${node.label}</span>
+                        <span class="channel-text">
+                            ${node.label}
+                        </span>
                     </a>
                 </li>
             </for>
             <if(state.noChannel)>
-                <li.nav-item>
-                    <a.nav-link class={
-                        "active": !state.selectedNode
-                    } aria-current="page" tabindex="0" on-click("clearValue") on-keydown("keydown", null)>
-                        <span.channel-icon>
+                <li class="nav-item">
+                    <a
+                        class=[
+                            "nav-link",
+                            {
+                                active: !state.selectedNode,
+                            },
+                        ]
+                        aria-current="page"
+                        tabindex="0"
+                        on-click("clearValue")
+                        on-keydown("keydown", null)
+                    >
+                        <span class="channel-icon">
                             <icon icon="kix-icon-unselect"/>
                         </span>
-                        <span.channel-text><translation-string pattern='Translatable#No Channel'/></span>
+                        <span class="channel-text">
+                            <translation-string pattern="Translatable#No Channel"/>
+                        </span>
                     </a>
                 </li>
             </if>

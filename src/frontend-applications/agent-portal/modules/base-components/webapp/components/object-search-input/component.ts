@@ -8,12 +8,12 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { SearchService } from '../../../../search/webapp/core';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { FormInputComponent } from '../../core/FormInputComponent';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { ContextService } from '../../core/ContextService';
+import { SearchService } from '../../../../search/webapp/core/SearchService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 

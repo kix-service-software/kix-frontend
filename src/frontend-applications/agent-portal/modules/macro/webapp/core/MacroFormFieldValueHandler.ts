@@ -43,6 +43,11 @@ export class MacroFormFieldValueHandler extends FormFieldValueHandler {
             );
 
             if (macroTypeValue) {
+
+                if (formInstance.hasPage(MacroFieldCreator.MACRO_PAGE_ID)) {
+                    await formInstance.removePages([MacroFieldCreator.MACRO_PAGE_ID]);
+                }
+
                 const macro = await ContextService.getInstance().getActiveContext().getObject();
                 await MacroFieldCreator.createMacroPage(
                     formInstance, macro as Macro, 'Macros', macroTypeValue[1].value

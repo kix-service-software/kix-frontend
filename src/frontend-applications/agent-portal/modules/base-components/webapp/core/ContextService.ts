@@ -251,7 +251,7 @@ export class ContextService {
     public checkDialogConfirmation(contextInstanceId: string, silent?: boolean): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             const context = this.contextInstances.find((ci) => ci.instanceId === contextInstanceId);
-            if (context?.descriptor?.contextType === ContextType.DIALOG) {
+            if (context?.descriptor?.contextType === ContextType.DIALOG && !silent) {
                 BrowserUtil.openConfirmOverlay(
                     'Translatable#Cancel',
                     'Translatable#Any data you have entered will be lost. Continue?',
@@ -276,7 +276,7 @@ export class ContextService {
         let canRemove = true;
         if (this.contextInstances.length === 1) {
             const context = this.getContext(instanceId);
-            canRemove = context.contextId !== this.DEFAULT_FALLBACK_CONTEXT;
+            canRemove = context?.contextId !== this.DEFAULT_FALLBACK_CONTEXT;
         }
         return canRemove;
     }
@@ -521,17 +521,20 @@ export class ContextService {
                             await context.getStorageManager()?.loadStoredValues(contextPreference);
                         }
 
+                        let error = false;
                         await context.initContext(urlParams).catch((e) => {
                             console.error(e);
                             this.removeContext(instanceId);
+                            error = true;
                         });
 
-
-                        const index = this.activeContextIndex >= 0
-                            ? this.activeContextIndex
-                            : this.contextInstances.length - 1;
-                        this.contextInstances.splice(index + 1, 0, context);
-                        EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, context);
+                        if (!error) {
+                            const index = this.activeContextIndex >= 0
+                                ? this.activeContextIndex
+                                : this.contextInstances.length - 1;
+                            this.contextInstances.splice(index + 1, 0, context);
+                            EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, context);
+                        }
                     }
                 }
             }

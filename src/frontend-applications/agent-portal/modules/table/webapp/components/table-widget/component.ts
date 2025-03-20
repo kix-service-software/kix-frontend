@@ -84,6 +84,7 @@ class Component {
             const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
 
             this.state.showFilter = typeof settings.showFilter !== 'undefined' ? settings.showFilter : true;
+            this.state.showFilterInBody = Boolean(settings.showFilterInBody);
             this.state.icon = this.state.widgetConfiguration.icon;
             this.state.predefinedTableFilter = settings.predefinedTableFilters ? settings.predefinedTableFilters : [];
             this.initEventSubscriber();
@@ -316,17 +317,19 @@ class Component {
         }
 
         this.prepareTitleTimeout = setTimeout(async () => {
-            let count = this.state.table?.getContentProvider()?.totalCount || 0;
 
-            if (!count) {
-                count = this.state.table?.getRowCount(true);
-            }
+            // get total, if not set, use all rows (but consider frontend filtering = "not all")
+            let count = this.state.table?.getContentProvider()?.totalCount ||
+                this.state.table?.getRowCount(this.state.table.isBackendFilterSupported()) || 0;
 
             let countString = `${count}`;
-            // TODO: consider frontend filtering?
-            // if current loaded (page) < total, show actually loaded (api-filter/permission) of total
+
+            // if current loaded (page) < total, show actually loaded of total
+            // use current count, if not set use "total"
             const currentLimit = this.state.table?.getContentProvider()?.currentLimit || count;
             if (currentLimit < count) {
+                // use actul row count, because currentCount could be lager (based on pagesize)
+                // e.g. current limit is 20 but only 18 objects (rows) exist
                 const visibleRows = this.state.table?.getRowCount();
                 countString = `${visibleRows}/${count}`;
             }
@@ -412,6 +415,8 @@ class Component {
             if (this.state.widgetConfiguration?.contextDependent) {
                 this.setFilteredObjectListToContext();
             }
+
+            this.prepareTitle();
         }
     }
 

@@ -25,6 +25,8 @@ export class ArticleFormValue extends ObjectFormValue<Article[]> {
     ) {
         super(property, null, objectValueMapper, parent);
 
+        this.showInUI = false;
+
         let article: Article;
 
         const context = ContextService.getInstance().getActiveContext();
@@ -46,6 +48,8 @@ export class ArticleFormValue extends ObjectFormValue<Article[]> {
             article.ArticleID = updateArticleId;
             ticket.Articles.push(article);
         }
+
+        delete article.From;
 
         this.object = article;
         this.createBindings(property, article);
