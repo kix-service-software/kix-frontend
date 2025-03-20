@@ -20,6 +20,7 @@ import { FormFieldOption } from '../../../../../model/configuration/FormFieldOpt
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 export abstract class ExtendedDynamicFormManager implements IDynamicFormManager {
+    resetValue?: boolean;
 
     public objectType: string;
     public uniqueProperties: boolean;
@@ -91,6 +92,10 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
     }
 
     public getProperties(): Promise<Array<[string, string]>> {
+        return null;
+    }
+
+    public getUniqueProperties(currentProperty: string): Promise<Array<[string, string]>> {
         return null;
     }
 

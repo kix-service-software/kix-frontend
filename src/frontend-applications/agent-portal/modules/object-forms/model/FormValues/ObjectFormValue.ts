@@ -13,6 +13,7 @@ import { IdService } from '../../../../model/IdService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
+import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
@@ -44,6 +45,7 @@ export class ObjectFormValue<T = any> {
     public readonly: boolean = false;
     public visible: boolean = false;
     public enabled: boolean = false;
+    public empty: boolean = false;
 
     public valid: boolean = true;
     public validationResults: ValidationResult[] = [];
@@ -58,13 +60,20 @@ export class ObjectFormValue<T = any> {
 
     public actions: FormValueAction[] = [];
 
-    public isSortable: boolean = true;
-
     public isSetInBackground: boolean = false;
 
     public isPassword: boolean = false;
 
     protected initialState: Map<string, any> = new Map();
+
+    public fieldId: string;
+    public formField: FormFieldConfiguration;
+    public description: string;
+    public showInUI: boolean = true;
+    public isControlledByParent: boolean = false;
+    public isConfigurable: boolean = true;
+
+    public applyPlaceholders: boolean = true;
 
     public constructor(
         public property: string,
@@ -179,7 +188,8 @@ export class ObjectFormValue<T = any> {
                 new FormValueBinding(this, FormValueProperty.COUNT_MAX, object, property),
                 new FormValueBinding(this, FormValueProperty.REG_EX_LIST, object, property),
                 new FormValueBinding(this, FormValueProperty.FORM_VALUES, object, property),
-                new FormValueBinding(this, FormValueProperty.LABEL, object, property)
+                new FormValueBinding(this, FormValueProperty.LABEL, object, property),
+                new FormValueBinding(this, FormValueProperty.IS_CONFIGURABLE, object, property)
             );
 
             this.addPropertyBinding(FormValueProperty.REG_EX_LIST, () => {
@@ -259,6 +269,7 @@ export class ObjectFormValue<T = any> {
 
             if (field.empty) {
                 this.setFormValue(null, true);
+                this.empty = true;
             } else if (hasDefaultValue) {
                 const value = await this.handlePlaceholders(field.defaultValue?.value);
                 this.defaultValue = value;
@@ -266,10 +277,11 @@ export class ObjectFormValue<T = any> {
             }
         }
 
-        this.enabled = true;
+        this.enabled = field.valid !== false;
+
         this.visible = field.visible;
         this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
-        this.readonly = field.readonly;
+        this.readonly = BrowserUtil.isBooleanTrue(field.readonly?.toString());
         this.setNewInitialState(FormValueProperty.READ_ONLY, this.readonly);
         this.required = field.required;
         this.setNewInitialState(FormValueProperty.REQUIRED, this.required);
@@ -314,7 +326,7 @@ export class ObjectFormValue<T = any> {
     }
 
     protected async handlePlaceholders(value: any, forRichtext?: boolean): Promise<any> {
-        if (value) {
+        if (value && this.applyPlaceholders) {
 
             const placeholderObject = this.objectValueMapper?.sourceObject || this.objectValueMapper?.object;
 

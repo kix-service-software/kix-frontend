@@ -27,7 +27,9 @@ export class TicketStateFormValue extends SelectObjectFormValue {
 
         this.objectType = KIXObjectType.TICKET_STATE;
 
-        this.formValues.push(new PendingTimeFormValue(TicketProperty.PENDING_TIME, ticket, objectValueMapper, this));
+        const pendingFormValue = new PendingTimeFormValue(TicketProperty.PENDING_TIME, ticket, objectValueMapper, this);
+        pendingFormValue.isControlledByParent = true;
+        this.formValues.push(pendingFormValue);
     }
 
     public async initFormValue(): Promise<void> {
