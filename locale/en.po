@@ -3484,9 +3484,6 @@ msgstr ""
 msgid "No encryption"
 msgstr ""
 
-msgid "No form available. Please contact your administrator."
-msgstr ""
-
 msgid "No object with ID {0} available."
 msgstr ""
 
