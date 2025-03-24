@@ -165,7 +165,6 @@ export class ObjectFormHandler<T extends KIXObject = any> {
         const index = this.form?.pages?.findIndex((p) => p.id === this.activePageId);
         if (index !== undefined && index !== -1) {
             this.form.pages.splice(index, 1);
-
             if (this.form.pages?.length) {
                 let newPageIndex = 0;
                 if (this.form.pages.length > 1) {
@@ -183,6 +182,8 @@ export class ObjectFormHandler<T extends KIXObject = any> {
         const group = new FormGroupConfiguration(IdService.generateDateBasedId(), 'New Group');
         const page = this.form?.pages?.find((p) => p.id === pageId);
         page?.groups?.push(group);
+        const configObject = new FormConfigurationObject();
+        configObject.groupId = group.id;
         EventService.getInstance().publish(ObjectFormEvent.GROUP_ADDED, group);
     }
 
@@ -202,6 +203,8 @@ export class ObjectFormHandler<T extends KIXObject = any> {
                 formGroup.formFields.splice(fieldIndex, 1);
                 const newGroup = this.getGroup(newGroupId);
                 newGroup.formFields.push(field);
+
+                this.removeFieldFromLayout(formGroup.id, field?.id);
             }
         }
     }
@@ -233,6 +236,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
             configObject.fieldId = fieldId;
             configObject.groupId = formGroup.id;
             EventService.getInstance().publish(ObjectFormEvent.FIELD_DELETED, configObject);
+            EventService.getInstance().publish(ObjectFormEvent.GROUP_UPDATED, configObject);
         }
     }
 
@@ -253,6 +257,10 @@ export class ObjectFormHandler<T extends KIXObject = any> {
                 }
             }
         }
+
+        const configObject = new FormConfigurationObject();
+        configObject.groupId = groupId;
+        EventService.getInstance().publish(ObjectFormEvent.GROUP_UPDATED, configObject);
     }
 
     public deleteGroup(groupId: string): void {
