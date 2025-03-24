@@ -966,6 +966,9 @@ msgstr ""
 msgid "Duplicate"
 msgstr ""
 
+msgid "Duplicate Contact"
+msgstr ""
+
 msgid "Dynamic Field"
 msgstr ""
 
