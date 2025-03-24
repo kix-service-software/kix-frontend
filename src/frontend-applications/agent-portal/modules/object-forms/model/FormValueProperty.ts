@@ -11,6 +11,8 @@ export enum FormValueProperty {
 
     VALUE = 'value',
 
+    DEFAULT_VALUE = 'defaultValue',
+
     POSSIBLE_VALUES = 'possibleValues',
 
     REQUIRED = 'required',
