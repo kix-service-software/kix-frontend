@@ -51,6 +51,7 @@ import { GeneralCatalogService } from '../../general-catalog/server/GeneralCatal
 import { FileService } from '../../file/server/FileService';
 import { Attachment } from '../../../model/kix/Attachment';
 import { UserService } from '../../user/server/UserService';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 
 export class CMDBAPIService extends KIXObjectAPIService {
@@ -412,5 +413,14 @@ export class CMDBAPIService extends KIXObjectAPIService {
             }
         }
         return newCriteria;
+    }
+
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        let objectClass;
+        if (objectType === KIXObjectType.CONFIG_ITEM) {
+            objectClass = ConfigItem;
+        }
+
+        return objectClass;
     }
 }
