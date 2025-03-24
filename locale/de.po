@@ -982,6 +982,9 @@ msgstr "Log Download"
 msgid "Duplicate"
 msgstr "Duplizieren"
 
+msgid "Duplicate Contact"
+msgstr ""
+
 msgid "Dynamic Field"
 msgstr "Dynamisches Feld"
 
