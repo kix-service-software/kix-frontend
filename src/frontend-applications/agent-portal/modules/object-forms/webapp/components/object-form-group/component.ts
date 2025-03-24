@@ -58,6 +58,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             eventSubscriberId: IdService.generateDateBasedId('object-form-group'),
             eventPublished: async (data: FormConfigurationObject, eventId: string): Promise<void> => {
                 if (data?.groupId === this.group.id) {
+                    this.formhandler = await this.context?.getFormManager().getObjectFormHandler();
                     this.state.prepared = false;
                     await this.prepareRowLayout();
                     setTimeout(() => this.state.prepared = true, 0);
@@ -88,6 +89,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.rows = [[new GroupRowLayout(this.group.formFields, 12, 12, 12)]];
         }
     }
+
     private mapRows(groupRowLayout: Array<RowColumnLayout[]>): Array<GroupRowLayout[]> {
         const rows: Array<GroupRowLayout[]> = [];
         const mappedFieldIds: string[] = [];
