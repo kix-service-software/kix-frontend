@@ -81,4 +81,8 @@ export class ConfigItemClass extends KIXObject {
         return this.ID === configItemClass.ID;
     }
 
+    public toString(): string {
+        return this.Name;
+    }
+
 }
