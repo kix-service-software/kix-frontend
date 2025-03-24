@@ -7,6 +7,9 @@
  * --
  */
 
+import { FormContext } from '../../../../../../model/configuration/FormContext';
+import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
 import { Contact } from '../../../../model/Contact';
