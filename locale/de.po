@@ -3672,9 +3672,6 @@ msgstr "Keine Angaben verfügbar."
 msgid "No encryption"
 msgstr "Keine Verschlüsselung"
 
-msgid "No form available. Please contact your administrator."
-msgstr "Kein formular verfügbar. Bitte kontaktieren Sie ihren Administrator."
-
 msgid "No object with ID {0} available."
 msgstr "Kein Objekt mit der ID {0} verfügbar."
 
@@ -5702,6 +5699,10 @@ msgstr "{0}: hat keinen Wert."
 
 msgid "{0}: just white spaces as value is not allowed."
 msgstr "{0}: nur Leerzeichen als Wert sind nicht zulässig."
+
+#~ msgid "No form available. Please contact your administrator."
+#~ msgstr ""
+#~ "Kein formular verfügbar. Bitte kontaktieren Sie ihren Administrator."
 
 #~ msgid "Apply Table"
 #~ msgstr "Tabelle hinzufügen"
