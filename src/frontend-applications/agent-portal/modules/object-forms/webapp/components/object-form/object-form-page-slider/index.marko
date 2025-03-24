@@ -8,13 +8,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.prepared)>
-   <div class="row mb-3 py-0 bg-white">
+   <div class="row mb-3 py-0 pb-2 bg-white sticky-top">
       <div class="col-4 d-flex align-items-center justify-content-end">
          <div
             class="kix-icon-nook-left fs-3"
             title=(state.translations["Translatable#Previous"])
-            data-bs-target="#" + state.carouselId
-            data-bs-slide="prev"
+            on-click("previousPage")
          />
       </div>
       <div class="col-4 text-center fw-bold">
@@ -38,8 +37,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                      },
                   ]
                   title=page.name
-                  data-bs-target="#" + state.carouselId
-                  data-bs-slide-to=index
+                  on-click("setPage", index)
                />
             </for>
          </div>
@@ -48,8 +46,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          <div
             class="kix-icon-nook-right fs-3"
             title=(state.translations["Translatable#Next"])
-            data-bs-target="#" + state.carouselId
-            data-bs-slide="next"
+            on-click("nextPage")
          />
       </div>
    </div>
