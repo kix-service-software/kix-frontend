@@ -24,8 +24,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private subscriber: IEventSubscriber;
     private formHandler: ObjectFormHandler;
 
-    private updateTimeout: any;
-
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -43,11 +41,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.formHandler = await this.context.getFormManager().getObjectFormHandler();
+        this.state.pages = this.formHandler?.form?.pages;
 
-        if (this.formHandler.form.pages?.length) {
+        if (this.state.pages?.length) {
             this.formHandler.setActivePageId(this.formHandler.form.pages[0].id);
         }
-        this.setFormValues();
         this.registerEventHandler();
     }
 
@@ -86,23 +84,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.pages = this.formHandler?.form.pages;
         (this as any).setStateDirty('pages');
         setTimeout(() => this.state.prepared = true, 50);
-    }
-
-    private setFormValues(resetCurrenPage: boolean = true): void {
-        if (this.updateTimeout) {
-            clearTimeout(this.updateTimeout);
-        }
-
-        this.updateTimeout = setTimeout(() => {
-            if (this.formHandler) {
-                this.state.pages = this.formHandler?.form.pages;
-            } else {
-                this.state.error = 'Translatable#No form available. Please contact your administrator.';
-                console.error('No form available. Please contact your administrator.');
-            }
-
-            this.state.prepared = true;
-        }, 50);
     }
 
     public getLayoutClasses(): string {

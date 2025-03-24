@@ -65,14 +65,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         EventService.getInstance().subscribe(ObjectFormEvent.PAGE_UPDATED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.PAGE_ADDED, this.subscriber);
-
-        setTimeout(() => {
-            const carousel = document.getElementById(this.state.carouselId);
-            carousel?.addEventListener('slide.bs.carousel', (event: any) => {
-                this.setPage(event.to);
-            });
-        }, 100);
-
     }
 
     public onDestroy(): void {
@@ -91,9 +83,30 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.activePageIndex = index;
         const page = this.state.pages[index];
         this.state.title = page?.name;
-        const context = ContextService.getInstance().getContext(this.contextInstanceId);
-        const formHandler = await context?.getFormManager()?.getObjectFormHandler();
+        const formHandler = await this.context?.getFormManager()?.getObjectFormHandler();
         formHandler?.setActivePageId(page?.id);
+    }
+
+    public previousPage(): void {
+        let index = 0;
+        if (this.state.activePageIndex === 0) {
+            index = this.state.pages.length - 1;
+        } else {
+            index === this.state.activePageIndex - 1;
+        }
+
+        this.setPage(index);
+    }
+
+    public nextPage(): void {
+        let index = 0;
+        if (this.state.activePageIndex === this.state.pages.length - 1) {
+            index = 0;
+        } else {
+            index = this.state.activePageIndex + 1;
+        }
+
+        this.setPage(index);
     }
 
 }
