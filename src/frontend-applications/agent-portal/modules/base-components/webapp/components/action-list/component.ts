@@ -37,6 +37,9 @@ export class Component {
     public onInput(input: any): void {
         this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
         this.actionList = input.list || [];
+        if (this.state.prepared && this.actionList.length) {
+            this.initializeActionLists();
+        }
     }
 
     public async onMount(): Promise<void> {
@@ -97,6 +100,11 @@ export class Component {
 
             this.observer.observe(container);
         }
+    }
+
+    private async initializeActionLists(): Promise<void> {
+        this.actionsToShow = await ActionFactory.getActionList(this.actionList);
+        this.prepareActionLists();
     }
 
     public prepareActionLists(): void {
