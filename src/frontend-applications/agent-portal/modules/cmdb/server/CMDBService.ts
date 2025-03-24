@@ -380,6 +380,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property === 'ID' ||
             c.property === KIXObjectProperty.CHANGE_BY ||
             c.property === KIXObjectProperty.CREATE_BY ||
+            c.property === KIXObjectProperty.CHANGE_TIME ||
+            c.property === KIXObjectProperty.CREATE_TIME ||
             c.property === SearchProperty.FULLTEXT
         );
 
