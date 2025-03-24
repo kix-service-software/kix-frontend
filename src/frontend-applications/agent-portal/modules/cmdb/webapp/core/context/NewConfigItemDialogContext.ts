@@ -22,6 +22,8 @@ import { FilterType } from '../../../../../model/FilterType';
 import { ConfigItemClass } from '../../../model/ConfigItemClass';
 import { ConfigItemFormFactory } from '../ConfigItemFormFactory';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
 
 export class NewConfigItemDialogContext extends Context {
 
@@ -44,6 +46,22 @@ export class NewConfigItemDialogContext extends Context {
             object = objects && objects.length ? objects[0] : null;
         }
         return object;
+    }
+
+    public async getDisplayText(short?: boolean): Promise<string> {
+        const assetTitle = await TranslationService.translate('Translatable#Asset');
+
+        let classTitle = '';
+        const classId = this.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
+        if (classId) {
+            const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
+                KIXObjectType.CONFIG_ITEM_CLASS, [classId]
+            ).catch((): ConfigItemClass[] => []);
+            if (ciClasses?.length) {
+                classTitle = await TranslationService.translate(ciClasses[0].Name);
+            }
+        }
+        return `${assetTitle} (${classTitle})`;
     }
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
@@ -83,7 +101,16 @@ export class NewConfigItemDialogContext extends Context {
         return ciClasses?.length ? ciClasses[0].ID : null;
     }
 
-    public setClassId(classId: number): void {
+    public async setClassId(classId: number): Promise<void> {
+        this.setAdditionalInformation(ConfigItemProperty.CLASS_ID, classId);
+
+        const contentWidgets = await this.getContent();
+        const widget = contentWidgets.find((cw) => cw.configuration?.widgetId === 'object-dialog-form-widget');
+        if (widget) {
+            const title = await this.getDisplayText();
+            WidgetService.getInstance().setWidgetTitle(widget.instanceId, title);
+        }
+
         ConfigItemFormFactory.getInstance().createAndProvideForm(classId, this);
     }
 
