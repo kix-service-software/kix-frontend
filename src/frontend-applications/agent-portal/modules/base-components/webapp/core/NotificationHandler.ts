@@ -69,7 +69,7 @@ export class NotificationHandler {
             .some((roleId) => user.RoleIDs.some((rid) => rid === roleId));
 
         if (userIsAffacted) {
-            BrowserUtil.openAppRefreshOverlay('Translatable#Your Permissions have been updated.', null, true);
+            BrowserUtil.openAppRefreshOverlay();
         }
     }
 
