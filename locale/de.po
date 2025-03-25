@@ -5279,6 +5279,9 @@ msgstr "KIX CSS verwenden"
 msgid "User"
 msgstr "Nutzer"
 
+msgid "User Access"
+msgstr ""
+
 msgid "User Details"
 msgstr "Nutzerdetails"
 
@@ -5299,6 +5302,9 @@ msgstr "Handbuch"
 
 msgid "User Name"
 msgstr "Nutzerkennung"
+
+msgid "User Preferences"
+msgstr ""
 
 msgid "User Secret"
 msgstr "Nutzer Secret"
