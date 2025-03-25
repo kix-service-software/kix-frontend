@@ -10,7 +10,7 @@
 export class ComponentState {
 
     public constructor(
-        public message: string = ''
+        public time: string = ''
     ) { }
 
 }

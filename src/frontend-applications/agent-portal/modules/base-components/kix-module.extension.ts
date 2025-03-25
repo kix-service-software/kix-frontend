@@ -101,9 +101,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'confirm-overlay', '/kix-module-base-components$0/webapp/components/overlay/confirm-overlay', []
         ),
         new UIComponent(
-            'refresh-app-toast', '/kix-module-base-components$0/webapp/components/overlay/refresh-app-toast', []
-        ),
-        new UIComponent(
             'table-column-filter-overlay',
             '/kix-module-base-components$0/webapp/components/overlay/table-column-filter-overlay', []
         ),

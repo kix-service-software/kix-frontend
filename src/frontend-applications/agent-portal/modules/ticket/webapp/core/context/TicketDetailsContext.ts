@@ -35,6 +35,7 @@ export class TicketDetailsContext extends Context {
     public static CONTEXT_ID = 'ticket-details';
     public articleLoader: ArticleLoader;
     public articleDetailsLoader: ArticleLoader;
+    private handleMissingObjectTimeout: any;
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
         this.articleLoader = new ArticleLoader(Number(this.objectId), this, false);
@@ -95,24 +96,30 @@ export class TicketDetailsContext extends Context {
     }
 
     private async handleMissingObject(): Promise<void> {
-        const moduleConfiguration = await TicketService.getTicketModuleConfiguration();
-        const routeConfiguration = moduleConfiguration?.ticketRouteConfiguration || new TicketRouteConfiguration();
+        if (this.handleMissingObjectTimeout) {
+            clearTimeout(this.handleMissingObjectTimeout);
+        }
 
-        const contextId = routeConfiguration?.targetContextId || TicketContext.CONTEXT_ID;
-        const severity = routeConfiguration?.severity || 'info';
+        this.handleMissingObjectTimeout = setTimeout(async () => {
+            const moduleConfiguration = await TicketService.getTicketModuleConfiguration();
+            const routeConfiguration = moduleConfiguration?.ticketRouteConfiguration || new TicketRouteConfiguration();
 
-        await ContextService.getInstance().toggleActiveContext(contextId);
+            const contextId = routeConfiguration?.targetContextId || TicketContext.CONTEXT_ID;
+            const severity = routeConfiguration?.severity || 'info';
 
-        setTimeout(async () => {
-            EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
+            await ContextService.getInstance().toggleActiveContext(contextId);
 
-            const message = await TranslationService.translate('Translatable#The requested ticket is not available due to restricted permissions.');
-            if (severity.toLocaleLowerCase() === 'error') {
-                BrowserUtil.openErrorOverlay(message);
-            } else {
-                BrowserUtil.openInfoOverlay(message);
-            }
-        }, 1500);
+            setTimeout(async () => {
+                EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
+
+                const message = await TranslationService.translate('Translatable#The requested ticket is not available due to restricted permissions.');
+                if (severity.toLocaleLowerCase() === 'error') {
+                    BrowserUtil.openErrorOverlay(message);
+                } else {
+                    BrowserUtil.openInfoOverlay(message);
+                }
+            }, 1500);
+        }, 200);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {

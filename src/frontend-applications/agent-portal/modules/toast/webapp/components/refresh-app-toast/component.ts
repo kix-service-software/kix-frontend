@@ -8,10 +8,9 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { RefreshToastSettings } from '../../../../../../modules/base-components/webapp/core/RefreshToastSettings';
-import { ApplicationEvent } from '../../../../../../modules/base-components/webapp/core/ApplicationEvent';
-import { EventService } from '../../../../../../modules/base-components/webapp/core/EventService';
-import { WindowListener } from '../../../core/WindowListener';
+import { RefreshToastSettings } from '../../../../base-components/webapp/core/RefreshToastSettings';
+import { WindowListener } from '../../../../base-components/webapp/core/WindowListener';
+import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
 
 class Component {
 
@@ -22,7 +21,11 @@ class Component {
     }
 
     public onInput(input: RefreshToastSettings): void {
-        this.state.message = input.message;
+        return;
+    }
+
+    public async onMount(): Promise<void> {
+        this.state.time = DateTimeUtil.getKIXTimeString(new Date());
     }
 
     public refreshClicked(event: any): void {
@@ -30,10 +33,6 @@ class Component {
         event.preventDefault();
         WindowListener.getInstance().removeBrowserListener();
         location.reload();
-    }
-
-    public close(): void {
-        EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
     }
 
 }
