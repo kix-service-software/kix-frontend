@@ -5065,6 +5065,9 @@ msgstr ""
 msgid "User"
 msgstr ""
 
+msgid "User Access"
+msgstr ""
+
 msgid "User Details"
 msgstr ""
 
@@ -5084,6 +5087,9 @@ msgid "User Manual"
 msgstr ""
 
 msgid "User Name"
+msgstr ""
+
+msgid "User Preferences"
 msgstr ""
 
 msgid "User Secret"
