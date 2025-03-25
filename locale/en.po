@@ -2989,6 +2989,9 @@ msgstr ""
 msgid "Incorrectly processed lines"
 msgstr ""
 
+msgid "Information"
+msgstr ""
+
 msgid "Information text"
 msgstr ""
 
@@ -4054,10 +4057,10 @@ msgstr ""
 msgid "References"
 msgstr ""
 
-msgid "Refresh Interval(sec)"
+msgid "Refresh Application"
 msgstr ""
 
-msgid "Refresh Page"
+msgid "Refresh Interval(sec)"
 msgstr ""
 
 msgid "RegEx"
@@ -4080,6 +4083,9 @@ msgstr ""
 
 msgid "Reload Agent Portal Configurations"
 msgstr "Reload Frontend Configurations"
+
+msgid "Reload Application"
+msgstr ""
 
 msgid "Reload Calendar Data ..."
 msgstr ""
