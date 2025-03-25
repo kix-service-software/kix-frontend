@@ -13,9 +13,7 @@ import { StringContent } from './StringContent';
 import { ComponentContent } from './ComponentContent';
 import { ToastContent } from './ToastContent';
 import { ConfirmOverlayContent } from './ConfirmOverlayContent';
-import { RefreshToastSettings } from './RefreshToastSettings';
 import { DateTimeUtil } from './DateTimeUtil';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ValidationResult } from './ValidationResult';
 import { ValidationSeverity } from './ValidationSeverity';
 import { EventService } from './EventService';
@@ -28,6 +26,7 @@ import { AgentService } from '../../../user/webapp/core/AgentService';
 import { IDownloadableFile } from '../../../../model/IDownloadableFile';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { WindowListener } from './WindowListener';
+import { ToastUtil } from '../../../toast/webapp/core/ToastUtil';
 
 export class BrowserUtil {
 
@@ -36,23 +35,15 @@ export class BrowserUtil {
     public static readonly URL_REGEX = /(https?|ftps?|sftp):\/\/[^\s]+/;
 
     public static openErrorOverlay(error: string): void {
-        OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', null, true
-        );
+        ToastUtil.showErrorToast(error);
     }
 
     public static async openSuccessOverlay(message: string): Promise<void> {
-        setTimeout(() => {
-            const content = new ComponentContent('toast', new ToastContent('kix-icon-check', message));
-            OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, 'Translatable#Success!');
-        }, 500);
+        ToastUtil.showSuccessToast(message);
     }
 
     public static async openInfoOverlay(message: string): Promise<void> {
-        setTimeout(() => {
-            const content = new ComponentContent('toast', new ToastContent('kix-icon-info', message));
-            OverlayService.getInstance().openOverlay(OverlayType.INFO_TOAST, null, content, 'Translatable#Hint');
-        }, 500);
+        ToastUtil.showInfoToast(message);
     }
 
     public static async openConfirmOverlay(
@@ -76,14 +67,8 @@ export class BrowserUtil {
         }
     }
 
-    public static openAppRefreshOverlay(
-        message: string, objectType: KIXObjectType | string, reloadApp?: boolean
-    ): void {
-        const settings = new RefreshToastSettings(message, reloadApp, objectType);
-        const componentContent = new ComponentContent('refresh-app-toast', settings);
-        OverlayService.getInstance().openOverlay(
-            OverlayType.HINT_TOAST, null, componentContent, '', null, false, null, null, null, null, null, true
-        );
+    public static openAppRefreshOverlay(): void {
+        ToastUtil.showRefreshToast();
     }
 
     public static async openAccessDeniedOverlay(): Promise<void> {
