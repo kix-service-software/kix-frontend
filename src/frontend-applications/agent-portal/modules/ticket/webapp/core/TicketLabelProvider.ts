@@ -30,6 +30,7 @@ import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { QueueLabelProvider } from './QueueLabelProvider';
+import { ObjectLoader } from '../../../base-components/webapp/core/ObjectLoader';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -69,6 +70,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         ];
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async getPropertyValueDisplayText(
         property: string, value: any, translatable: boolean = true
     ): Promise<string> {
@@ -81,11 +83,12 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.QUEUE_FULLNAME:
-                const queues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, [value])
-                    .catch((): Queue[] => []);
-                displayValue = queues?.length
-                    ? await QueueLabelProvider.getQueueFullname(queues[0])
-                    : value;
+                const queue = await ObjectLoader.getInstance().queue(
+                    KIXObjectType.QUEUE, value
+                ).catch(() => null);
+                if (queue) {
+                    displayValue = await QueueLabelProvider.getQueueFullname(queue);
+                }
                 break;
             case TicketProperty.CREATED_STATE_ID:
             case TicketProperty.STATE_ID:
@@ -113,12 +116,22 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.ORGANISATION_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.ORGANISATION, value);
+                    const organisation = await ObjectLoader.getInstance().queue(
+                        KIXObjectType.ORGANISATION, value
+                    ).catch(() => null);
+                    if (organisation) {
+                        displayValue = await LabelService.getInstance().getObjectText(organisation);
+                    }
                 }
                 break;
             case TicketProperty.CONTACT_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.CONTACT, value);
+                    const contact = await ObjectLoader.getInstance().queue(
+                        KIXObjectType.CONTACT, value
+                    ).catch(() => null);
+                    if (contact) {
+                        displayValue = await LabelService.getInstance().getObjectText(contact);
+                    }
                 }
                 break;
             case TicketProperty.CREATED:
