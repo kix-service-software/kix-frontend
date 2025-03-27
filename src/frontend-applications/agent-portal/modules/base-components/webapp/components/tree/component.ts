@@ -13,12 +13,14 @@ import { TreeUtil, TreeNode } from '../../core/tree';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { ContextService } from '../../core/ContextService';
 import { BrowserUtil } from '../../core/BrowserUtil';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class TreeComponent {
 
     private state: ComponentState;
 
     private setParentFlags: boolean = true;
+    private allowExpandCollapseAll: boolean;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -39,18 +41,23 @@ class TreeComponent {
         this.state.activeNode = input.activeNode;
         this.state.treeStyle = input.treeStyle;
 
-        this.state.allowExpandCollapseAll = typeof input.allowExpandCollapseAll !== 'undefined'
-            ? input.allowExpandCollapseAll
-            : true;
+        if (this.allowExpandCollapseAll === undefined) {
+            this.allowExpandCollapseAll = typeof input.allowExpandCollapseAll !== 'undefined'
+                ? input.allowExpandCollapseAll
+                : true;
+        }
     }
 
     public async onMount(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Expand All', 'Translatable#Collapse All'
+        ]);
         this.prepareExpandCollapseAll();
         this.prepareUserPreference();
     }
 
-    private async prepareExpandCollapseAll(allowExpandCollapseAll: boolean = true): Promise<void> {
-        if (this.state.allowExpandCollapseAll) {
+    private async prepareExpandCollapseAll(): Promise<void> {
+        if (this.allowExpandCollapseAll) {
             let expandCollapseAll = false;
             for (const node of this.state.tree) {
                 if (TreeUtil.hasChildrenToShow(node, this.state.filterValue)) {
@@ -63,7 +70,7 @@ class TreeComponent {
     }
 
     private async prepareUserPreference(): Promise<void> {
-        if (this.state.allowExpandCollapseAll) {
+        if (this.allowExpandCollapseAll) {
             const context = ContextService.getInstance().getActiveContext();
             const treeExpanded = await AgentService.getInstance().getUserPreference(`tree-expanded-${context.contextId}-${this.state.treeId}`);
             const hasUserPreferenceSet = treeExpanded !== undefined;

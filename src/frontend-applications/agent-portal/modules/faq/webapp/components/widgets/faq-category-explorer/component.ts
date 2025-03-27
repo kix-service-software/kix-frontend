@@ -68,6 +68,8 @@ export class Component {
 
         this.state.activeNode = this.getActiveNode(context.categoryId);
 
+        this.state.prepared = true;
+
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (data: any, eventId: string): void => {
