@@ -19,7 +19,8 @@ export class ComponentState {
         public contextType: ContextType = null,
         public contextId: string = null,
         public nodes: TreeNode[] = [],
-        public activeNode: TreeNode = null
+        public activeNode: TreeNode = null,
+        public prepared: boolean = false
     ) { }
 
 }
