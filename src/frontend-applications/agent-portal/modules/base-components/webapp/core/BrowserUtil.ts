@@ -101,11 +101,12 @@ export class BrowserUtil {
         if (user) {
             const a = document.createElement('a');
             a.style.display = 'none';
-            a.href = `/files/download/${file.downloadId}?userid=${user?.UserID}`;
+            a.href = `/files/download/${encodeURIComponent(file.downloadId)}`;
             a.download = file.Filename;
             a.target = '_blank';
             document.body.appendChild(a);
             a.click();
+            a.remove();
         }
     }
 
