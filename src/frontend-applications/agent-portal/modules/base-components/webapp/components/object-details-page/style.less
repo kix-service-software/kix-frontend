@@ -58,6 +58,14 @@
             >.widget-header {
                 background-color: @primary-0;
                 color: @secondary-6;
+
+                button {
+                    .action {
+                        &:not(.inactive) {
+                            color: @secondary-3 !important;
+                        }
+                    }
+                }
             }
         }
     }
