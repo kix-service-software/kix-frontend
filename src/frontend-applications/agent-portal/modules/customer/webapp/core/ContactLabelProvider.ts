@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /**
  * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
@@ -24,6 +25,7 @@ import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsPr
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { SysConfigService } from '../../../sysconfig/webapp/core';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { ObjectLoader } from '../../../base-components/webapp/core/ObjectLoader';
 
 export class ContactLabelProvider extends LabelProvider<Contact> {
 
@@ -45,12 +47,12 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 break;
             case ContactProperty.PRIMARY_ORGANISATION_NUMBER:
                 if (value) {
-                    const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, [value], null, null, true
-                    ).catch((error) => console.error(error));
-                    displayValue = primaryOrganisations && !!primaryOrganisations.length
-                        ? primaryOrganisations[0].Number
-                        : '';
+                    const organisation = await ObjectLoader.getInstance().queue(
+                        KIXObjectType.ORGANISATION, value
+                    ).catch(() => null);
+                    if (organisation) {
+                        displayValue = organisation.Number;
+                    }
                 }
                 break;
             case ContactProperty.ORGANISATION_IDS:
@@ -191,12 +193,10 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 if (object) {
                     const orgId = object[ContactProperty.PRIMARY_ORGANISATION_ID];
                     if (orgId) {
-                        const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
-                            KIXObjectType.ORGANISATION, [orgId], null, null, true
-                        ).catch((error) => console.error(error));
-                        newValue = primaryOrganisations && !!primaryOrganisations.length
-                            ? primaryOrganisations[0].Number
-                            : orgId;
+                        const organisation = await ObjectLoader.getInstance().queue(
+                            KIXObjectType.ORGANISATION, orgId
+                        ).catch(() => null);
+                        newValue = organisation ? organisation.Number : orgId;
                     }
                 }
                 break;
