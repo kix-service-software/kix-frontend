@@ -18,6 +18,7 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { ClientNotificationService } from '../../../server/services/ClientNotificationService';
 import { BackendNotification } from '../../../model/BackendNotification';
 import { BackendNotificationEvent } from '../../../model/BackendNotificationEvent';
+import { UserService } from '../../user/server/UserService';
 
 export class FileService {
 
@@ -104,18 +105,18 @@ export class FileService {
         ConfigurationService.getInstance().saveDataFileContent(downloadFileName, downloads);
     }
 
-    public static downloadFile(req: Request, res: Response, next: () => void): void {
+    public static async downloadFile(req: Request, res: Response, next: () => void): Promise<void> {
         const downloadId = req.params.downloadId;
-        const userId = Number(req.query.userid);
+        const user = await UserService.getInstance().getUserByToken(req.cookies.token);
 
-        if (!downloadId || !userId) {
+        if (!downloadId || !user?.UserID) {
             LoggingService.getInstance().error('Need downloadId and userId');
             res.status(400);
             res.render('Invalid request!');
             return;
         }
 
-        const file = FileService.getDownloadFile(downloadId, userId);
+        const file = FileService.getDownloadFile(downloadId, user?.UserID);
         if (file) {
             res.download(
                 FileService.getFilePath(file.downloadId, file.path),
@@ -125,11 +126,11 @@ export class FileService {
                         LoggingService.getInstance().error('Error while download file to client (downloadId: ${downloadId}, userId: ${userId}).', err);
                     }
                     // always remove/cleanup
-                    FileService.removeDownload(downloadId, userId);
+                    FileService.removeDownload(downloadId, user?.UserID);
                 }
             );
         } else {
-            LoggingService.getInstance().error(`Relevant file not found in ${userId}_downloads.json (downloadId: ${downloadId}).`);
+            LoggingService.getInstance().error(`Relevant file not found in ${user?.UserID}_downloads.json (downloadId: ${downloadId}).`);
             res.status(400);
             res.render('Invalid request!');
             return;
