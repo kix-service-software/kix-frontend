@@ -1,0 +1,15 @@
+{
+    "name": "html-to-pdf",
+    "extensions": {
+        "kix:services": {
+            "html-to-pdf-module-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "html-to-pdf-module": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}
