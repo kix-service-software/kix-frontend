@@ -40,13 +40,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.context = ContextService.getInstance().getActiveContext();
         }
 
+        this.registerEventHandler();
+
         this.formHandler = await this.context.getFormManager().getObjectFormHandler();
         this.state.pages = this.formHandler?.form?.pages;
 
         if (this.state.pages?.length) {
             this.formHandler.setActivePageId(this.formHandler.form.pages[0].id);
         }
-        this.registerEventHandler();
+
+        this.state.prepared = true;
     }
 
     private registerEventHandler(): void {
