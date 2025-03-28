@@ -98,7 +98,6 @@ export class TicketService extends KIXObjectService<Ticket> {
             || kixObjectType === KIXObjectType.TICKET_LOCK
             || kixObjectType === KIXObjectType.WATCHER
             || kixObjectType === KIXObjectType.TICKET_HISTORY
-            || kixObjectType === KIXObjectType.HTML_TO_PDF
             || kixObjectType === KIXObjectType.USER_TICKETS
             || kixObjectType === KIXObjectType.USER_COUNTER;
     }
@@ -115,8 +114,6 @@ export class TicketService extends KIXObjectService<Ticket> {
                 KIXObjectType.SENDER_TYPE, null, loadingOptions);
         } else if (objectType === KIXObjectType.TICKET_LOCK) {
             objects = await super.loadObjects<O>(KIXObjectType.TICKET_LOCK, null, loadingOptions);
-        } else if (objectType === KIXObjectType.HTML_TO_PDF) {
-            objects = await super.loadObjects<O>(objectType, null, loadingOptions, null, false);
         } else {
             superLoad = true;
 
