@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2025-03-24 14:55+0000\n"
-"Last-Translator: tto <Torsten.Thau@kixdesk.com>\n"
+"PO-Revision-Date: 2025-03-28 10:24+0000\n"
+"Last-Translator: jbrueckner <Joerg.Brueckner@kixdesk.com>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -306,13 +306,13 @@ msgid "Any data you have entered will be lost. Continue?"
 msgstr "Alle eingegebenen Daten werden verworfen. Fortfahren?"
 
 msgid "Append Values"
-msgstr ""
+msgstr "Werte einfügen"
 
 msgid "Append Values - Regex"
-msgstr ""
+msgstr "Werte einfügen -Regex"
 
 msgid "Append Values - Roles"
-msgstr ""
+msgstr "Werte einfügen - Rollen"
 
 msgid "Apply"
 msgstr "Anwenden"
@@ -592,7 +592,7 @@ msgid "Clear"
 msgstr "Leeren"
 
 msgid "Clear in mask"
-msgstr ""
+msgstr "im Formular setzen"
 
 msgid "Client ID"
 msgstr "Client ID"
@@ -622,7 +622,7 @@ msgid "Code"
 msgstr "Code"
 
 msgid "Collapse All"
-msgstr ""
+msgstr "Alle einklappen"
 
 msgid "Collapse all"
 msgstr "Alle einklappen"
@@ -946,7 +946,7 @@ msgid "Detailed search results"
 msgstr "Detaillierte Suchergebnisse"
 
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktiviert"
 
 msgid "Dispatching"
 msgstr "Verteilung"
@@ -983,7 +983,7 @@ msgid "Duplicate"
 msgstr "Duplizieren"
 
 msgid "Duplicate Contact"
-msgstr ""
+msgstr "Doppelter Kontakt"
 
 msgid "Dynamic Field"
 msgstr "Dynamisches Feld"
@@ -1289,10 +1289,10 @@ msgid "Existing Links ({0})"
 msgstr "Vorhandene Verknüpfungen ({0})"
 
 msgid "Exit KIX without asking"
-msgstr ""
+msgstr "KIX ohne Rückfrage verlassen"
 
 msgid "Expand All"
-msgstr ""
+msgstr "Alle ausklappen"
 
 msgid "Explorer"
 msgstr "Explorer"
@@ -1403,7 +1403,7 @@ msgid "File Upload"
 msgstr "Datei hochladen"
 
 msgid "Filename"
-msgstr ""
+msgstr "Dateiname"
 
 msgid "Filter"
 msgstr "Filter"
@@ -3178,7 +3178,7 @@ msgid "Incorrectly processed lines"
 msgstr "Fehlerhaft verarbeitete Zeilen"
 
 msgid "Information"
-msgstr ""
+msgstr "Information"
 
 msgid "Information text"
 msgstr "Hinweistext"
@@ -3466,7 +3466,7 @@ msgid "My Queues"
 msgstr "Meine Teams"
 
 msgid "My Searches"
-msgstr ""
+msgstr "meine Suchen"
 
 msgid "My Teams"
 msgstr "Meine Teams"
@@ -3763,7 +3763,7 @@ msgid "Number of Actions"
 msgstr "Anzahl Aktionen"
 
 msgid "Number of Attachments"
-msgstr ""
+msgstr "Anzahl Anhänge"
 
 msgid "Number of Config Items"
 msgstr "Anzahl Assets"
@@ -3775,7 +3775,7 @@ msgid "Number of open tickets by priority"
 msgstr "Anzahl offener Tickets nach Priorität"
 
 msgid "Number of open tickets by statetype"
-msgstr ""
+msgstr "Anzahl offener Tickets nach Statetype"
 
 msgid "Number of ratings"
 msgstr "Anzahl Bewertungen"
@@ -3892,10 +3892,10 @@ msgid "Out Of Office"
 msgstr "Abwesend"
 
 msgid "Out Of Office Agents"
-msgstr ""
+msgstr "Abwesende Agenten"
 
 msgid "Out of office"
-msgstr ""
+msgstr "Abwesend"
 
 msgid "Outbox"
 msgstr "Postausgang"
@@ -4250,7 +4250,7 @@ msgid "References"
 msgstr "Verweise"
 
 msgid "Refresh Application"
-msgstr ""
+msgstr "Anwendung aktualisieren"
 
 msgid "Refresh Interval(sec)"
 msgstr "Refresh-Intervall (sec)"
@@ -4277,7 +4277,7 @@ msgid "Reload Agent Portal Configurations"
 msgstr "Frontend-Konfigurationen neu laden"
 
 msgid "Reload Application"
-msgstr ""
+msgstr "Anwendung neu laden"
 
 msgid "Reload Calendar Data ..."
 msgstr "Kalenderdaten neu laden..."
@@ -4684,7 +4684,7 @@ msgid "Set Email Headers"
 msgstr "E-Mail-Header setzen"
 
 msgid "Set Hidden"
-msgstr ""
+msgstr "im Hintergrund setzen"
 
 msgid "Set Password for admin"
 msgstr "Passwort für admin setzen"
@@ -4708,7 +4708,7 @@ msgid "Shared Search"
 msgstr "Geteilte Suche"
 
 msgid "Shared Searches"
-msgstr ""
+msgstr "geteilte Suchen"
 
 msgid "Show Backlog"
 msgstr "Backlog anzeigen"
@@ -5012,7 +5012,7 @@ msgid "The entered date is out of boundaries."
 msgstr "Das eingegebene Datum ist außerhalb des zulässigen Wertebereichs."
 
 msgid "The entered date is out of boundaries.."
-msgstr ""
+msgstr "Das eingegebene Datum liegt außerhalb der Grenzen."
 
 msgid "The file size of {0} is too large ({1}). Max.: {2}"
 msgstr "Die Datei {0} ist zu groß ({1}). Max.: {2}"
@@ -5286,7 +5286,7 @@ msgid "User"
 msgstr "Nutzer"
 
 msgid "User Access"
-msgstr ""
+msgstr "Benutzer-Zugang"
 
 msgid "User Details"
 msgstr "Nutzerdetails"
@@ -5310,7 +5310,7 @@ msgid "User Name"
 msgstr "Nutzerkennung"
 
 msgid "User Preferences"
-msgstr ""
+msgstr "Benutzer-Einstellungen"
 
 msgid "User Secret"
 msgstr "Nutzer Secret"
