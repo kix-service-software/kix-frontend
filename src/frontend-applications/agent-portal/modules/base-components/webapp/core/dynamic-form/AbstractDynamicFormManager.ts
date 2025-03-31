@@ -59,6 +59,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     protected propertiesIgnoreList: string[] = [];
 
+    public fieldInstanceId: string;
+
+    public allowEmptyValues: boolean = true;
+
     public async getUseOwnSearch(property: string): Promise<boolean> {
         for (const extendedManager of this.extendedFormManager) {
             const extentedUseOwnSearch = await extendedManager.getUseOwnSearch(property);
@@ -265,18 +269,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
         await this.checkProperties(newValue.property);
 
-        // reset context information
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.setAdditionalInformation('DynamicFormValidationResults', null);
-        }
-
-        const results = await this.validate();
-
-        // set result in context to prevent submit
-        if (results?.length && context) {
-            context.setAdditionalInformation('DynamicFormValidationResults', results);
-        }
+        await this.validate();
 
         if (!silent) {
             this.notifyListeners();
@@ -291,19 +284,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             }
 
             await this.checkProperties(value?.property);
-
-            // reset context information
-            const context = ContextService.getInstance().getActiveContext();
-            if (context) {
-                context.setAdditionalInformation('DynamicFormValidationResults', null);
-            }
-
-            const results = await this.validate();
-
-            // set result in context to prevent submit
-            if (results?.length && context) {
-                context.setAdditionalInformation('DynamicFormValidationResults', results);
-            }
+            await this.validate();
 
             this.notifyListeners();
         }
@@ -470,29 +451,35 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return true;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async validate(): Promise<ValidationResult[]> {
 
         // reset valid of values
-        this.values.forEach((v) => {
-            v.valid = true;
-            v.validErrorMessages = [];
-        });
-        const fullResult = [];
+        this.values.forEach((v) => { v.valid = true; v.validErrorMessages = []; });
+        const fullResult: ValidationResult[] = [];
 
         for (const extendedManager of this.extendedFormManager) {
             const result = await extendedManager.validate();
-            if (result) {
+            if (Array.isArray(result)) {
                 fullResult.push(...result);
             }
         }
         for (const value of this.values) {
             if (value.property) {
+                fullResult.push(...this.checkEmptyValue(value));
                 fullResult.push(...await this.checkBetweenValue(value));
                 fullResult.push(...this.checkWithinValue(value));
                 fullResult.push(...this.checkRequiredValue(value));
                 value.valid = !value.validErrorMessages.length;
+                const errorMessages = fullResult
+                    .filter((r) => r.severity === ValidationSeverity.ERROR)
+                    .map((r) => r.message);
+                value.validErrorMessages.push(...errorMessages);
             }
         }
+
+        const context = ContextService.getInstance().getActiveContext();
+        context?.setAdditionalInformation('DynamicFormValidationResults-' + this.fieldInstanceId, fullResult);
         return fullResult;
     }
 
@@ -545,6 +532,16 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                 ));
                 value.validErrorMessages.push('Translatable#Second number value is not an integer.');
             }
+        }
+        return results;
+    }
+
+    private checkEmptyValue(value: ObjectPropertyValue): ValidationResult[] {
+        const results: ValidationResult[] = [];
+        if (!this.allowEmptyValues && !value.value) {
+            results.push(new ValidationResult(
+                ValidationSeverity.ERROR, `No value defined for ${value.property}!`)
+            );
         }
         return results;
     }
