@@ -632,14 +632,6 @@ export class FormInstance {
                 }
             }
 
-            const context = ContextService.getInstance().getActiveContext();
-            if (context) {
-                const dynamicFormResults = context.getAdditionalInformation('DynamicFormValidationResults');
-                if (dynamicFormResults?.length) {
-                    result.push(...dynamicFormResults);
-                }
-            }
-
             EventService.getInstance().publish(FormEvent.FORM_VALIDATED, { formInstance: this, result });
         }
         return result;
@@ -659,6 +651,7 @@ export class FormInstance {
         return result;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async validateField(field: FormFieldConfiguration): Promise<ValidationResult[]> {
         let result: ValidationResult[];
         const fieldResult = await FormValidationService.getInstance().validate(field, this.form.id, this);
@@ -673,6 +666,20 @@ export class FormInstance {
                 }
             });
             result = fieldResult;
+
+            const context = ContextService.getInstance().getActiveContext();
+            if (context) {
+                const key = 'DynamicFormValidationResults-' + field.instanceId;
+                const dynamicFormResults = context.getAdditionalInformation(key) || [];
+                dynamicFormResults.forEach((r) => {
+                    if (r.severity === ValidationSeverity.ERROR) {
+                        formFieldValue.valid = false;
+                        formFieldValue.errorMessages.push(r.message);
+                    }
+                });
+                result.push(...dynamicFormResults);
+            }
+
             if ((!field.empty || field.asStructure) && field.children && !!field.children.length) {
                 const childrenResult = await this.validateFields(field.children);
                 result = [...result, ...childrenResult];
