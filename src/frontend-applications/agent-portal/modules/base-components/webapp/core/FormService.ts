@@ -154,7 +154,7 @@ export class FormService {
                     IdService.generateDateBasedId(), null, null, true, null,
                     [
                         new FormGroupConfiguration(
-                            IdService.generateDateBasedId(), title, null, null, []
+                            IdService.generateDateBasedId(), title || 'Default', null, null, []
                         )
                     ]
                 )
