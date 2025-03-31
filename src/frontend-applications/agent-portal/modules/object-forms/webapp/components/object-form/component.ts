@@ -56,9 +56,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('object-form'),
             eventPublished: async (data: Context | any, eventId: string): Promise<void> => {
-                if (eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED) {
-                    this.state.prepared = true;
-                } else if (
+                if (eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED ||
                     eventId === ObjectFormEvent.OBJECT_FORM_HANDLER_CHANGED ||
                     eventId === ObjectFormEvent.PAGE_ADDED ||
                     eventId === ObjectFormEvent.PAGE_DELETED
