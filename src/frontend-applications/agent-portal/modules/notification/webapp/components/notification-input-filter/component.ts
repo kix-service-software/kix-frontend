@@ -81,6 +81,7 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
     }
 
     private async setManager(): Promise<void> {
+        this.state.manager.fieldInstanceId = this.state.field.instanceId;
         this.state.manager.init();
         this.state.manager.reset(false);
 
