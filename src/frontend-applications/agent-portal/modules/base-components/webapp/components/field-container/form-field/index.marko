@@ -8,50 +8,68 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.field)>
-    <div.form-field
-        class={
-            additionalFieldControlsNeeded: input.additionalFieldControlsNeeded,
-            "show-object": state.show
-        }
+    <div
+        class=[
+            "form-field",
+            {
+                additionalFieldControlsNeeded:
+                    input.additionalFieldControlsNeeded,
+                "show-object": state.show,
+            },
+        ]
         draggable=state.draggable
         on-dragstart("handleDragStart")
         on-dragend("handleDragEnd")
-        id=state.field.instanceId>
-        <div.field-label class={
-            "no-label": !state.label || !state.field.showLabel
-        }>
-            <span.label-text title=state.label>
+        id=(state.field.instanceId)
+    >
+        <div class=[
+            "field-label",
+            {
+                "no-label": !state.label || !state.field.showLabel,
+            },
+        ]>
+            <span title=state.label class="label-text">
                 <if(state.field.required && state.field.showLabel)>
-                    <span.required-field>*</span>
+                    <span class="required-field">
+                        *
+                    </span>
                 </if>
-                <if(state.field.showLabel)>${state.label}</if>
+                <if(state.field.showLabel)>
+                    ${state.label}
+                </if>
             </span>
         </div>
-        <div.field-icon>
+        <div class="field-icon">
             <if(state.hint)>
-                <overlay-icon isHint=true content=state.hint title=state.label/>
+                <overlay-icon isHint content=state.hint title=state.label/>
             </if>
         </div>
-        <div.field-input style={
-            "padding-right": component.getPaddingRight()
-        }>
+        <div
+            style={
+                "padding-right": component.getPaddingRight(),
+            }
+            class="field-input"
+        >
             <if(!state.field.empty && !state.field.asStructure)>
                 <${component.getInputComponent()} ...{
                     field: state.field,
                     fieldId: state.field.property,
-                    formId: state.formId
+                    formId: state.formId,
                 }/>
             </if>
             <else>
-                <div.form-separator-container>
-                    <div.form-separator/>
+                <div class="form-separator-container">
+                    <div class="form-separator"/>
                 </div>
             </else>
         </div>
         <if(state.errorMessages && state.errorMessages.length)>
-            <div.validation-errors>
+            <div class="validation-errors">
                 <for|error, index| of=state.errorMessages>
-                    <span>${error}${index < state.errorMessages.length - 1 ? " " : ""}</span>
+                    <span>
+                        <translation-string pattern=error/>
+                        ${index < state.errorMessages.length - 1 ? " " : ""}
+                    </span>
                 </for>
             </div>
         </if>
@@ -59,30 +77,32 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             component.hasChildren() &&
             (!state.field.empty || state.field.asStructure)
         )>
-            <span.minimize-icon-container>
+            <span class="minimize-icon-container">
                 <if(state.minimized)>
-                    <span.kix-icon-sort-down on-click("minimize")/>
+                    <span on-click("minimize") class="kix-icon-sort-down"/>
                 </if>
                 <else>
-                    <span.kix-icon-triangle-up on-click("minimize")>
-                        <span.path1/>
-                        <span.path2/>
+                    <span on-click("minimize") class="kix-icon-triangle-up">
+                        <span class="path1"/>
+                        <span class="path2"/>
                     </span>
                 </else>
             </span>
         </if>
         <if(input.additionalFieldControls || state.canDraggable)>
-            <div.additionalFieldControls>
+            <div class="additionalFieldControls">
                 <if(input.additionalFieldControls)>
                     <${input.additionalFieldControls}/>
                 </if>
                 <if(state.canDraggable)>
-                    <div.form-control-button.button-without-text.drag-button
-                        title=state.translations["Translatable#Sort"]
+                    <div
+                        title=(state.translations["Translatable#Sort"])
                         on-mouseenter("setDraggable", true)
-                        on-mouseleave("setDraggable", false)>
-                        <span.kix-icon-sort-up/>
-                        <span.kix-icon-sort-down/>
+                        on-mouseleave("setDraggable", false)
+                        class="form-control-button button-without-text drag-button"
+                    >
+                        <span class="kix-icon-sort-up"/>
+                        <span class="kix-icon-sort-down"/>
                     </div>
                 </if>
             </div>
@@ -93,13 +113,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         (!state.field.empty || state.field.asStructure) &&
         component.hasChildren()
     )>
-        <div.sub-field-container>
+        <div class="sub-field-container">
             <field-container
-                level=(state.level + 1)
-                fields=state.field.children
+                level=state.level + 1
+                fields=(state.field.children)
                 formId=state.formId
                 additionalFieldControlsNeeded=input.additionalFieldControlsNeeded
-                draggable=state.field.draggableFields/>
+                draggable=(state.field.draggableFields)
+            />
         </div>
     </if>
 </if>
