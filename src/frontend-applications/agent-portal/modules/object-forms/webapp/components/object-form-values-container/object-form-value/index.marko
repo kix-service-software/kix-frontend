@@ -91,6 +91,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          </div>
       </div>
       <if(
+         !state.displayNone &&
          !state.formValue.readonly &&
          Array.isArray(state.formValue.actions) &&
          state.formValue.actions.length > 0
