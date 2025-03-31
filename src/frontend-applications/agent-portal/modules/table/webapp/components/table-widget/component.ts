@@ -87,9 +87,9 @@ class Component {
             this.state.showFilterInBody = Boolean(settings.showFilterInBody);
             this.state.icon = this.state.widgetConfiguration.icon;
             this.state.predefinedTableFilter = settings.predefinedTableFilters ? settings.predefinedTableFilters : [];
-            this.initEventSubscriber();
-
             await this.prepare();
+            this.state.showFilterReset = this.state.table.isFiltered();
+            this.initEventSubscriber();
             this.state.filterValue = this.state.table ? this.state.table.getFilterValue() : null;
             await this.prepareContextDependency(settings);
             await this.prepareFormDependency();
