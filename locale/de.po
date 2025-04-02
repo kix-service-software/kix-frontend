@@ -5195,8 +5195,8 @@ msgstr "Zu übersetzende Spalten"
 msgid "Translatable Title"
 msgstr "Übersetzbarer Titel"
 
-msgid "Translatable Values"
-msgstr "Zu übersetzende Werte"
+msgid "Translate Values"
+msgstr "Werte übersetzen"
 
 msgid "Translation"
 msgstr "Übersetzung"

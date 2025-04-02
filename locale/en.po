@@ -4981,7 +4981,7 @@ msgstr ""
 msgid "Translatable Title"
 msgstr ""
 
-msgid "Translatable Values"
+msgid "Translate Values"
 msgstr ""
 
 msgid "Translation"
