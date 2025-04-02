@@ -8,19 +8,25 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.prepared && state.selectedValue)>
-    <div.new-object-dropdown-container>
-        <span.selected-value on-click("valueClicked", state.selectedValue)>
-            <i.fa.fa-ellipsis-v.dropdown-button/>
+    <div class="new-object-dropdown-container">
+        <span
+            on-click("valueClicked", state.selectedValue)
+            class="selected-value"
+        >
+            <if(state.values.length)>
+                <i class="fa fa-ellipsis-v dropdown-button"/>
+            </if>
             <span>${state.selectedValue[1]}</span>
-            <i.fa.fa-plus/>
+            <i class="fa fa-plus"/>
         </span>
         <ul>
             <for|value| of=state.values>
                 <li
                     class={
-                        active: value[0] === state.selectedValue[0]
+                        active: value[0] === state.selectedValue[0],
                     }
-                    on-click("valueClicked", value)>
+                    on-click("valueClicked", value)
+                >
                     ${value[1]}
                 </li>
             </for>

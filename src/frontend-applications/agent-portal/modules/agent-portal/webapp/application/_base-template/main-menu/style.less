@@ -29,6 +29,14 @@
                 border: 1px solid @secondary-6;
                 box-sizing: border-box;
 
+                &.active {
+                    background: darken(@primary-2, 20%);
+                }
+
+                &:not(.active):hover {
+                    background: darken(@primary-2, 10%);
+                }
+
                 >a {
                     color: @secondary-6;
 
@@ -70,7 +78,7 @@
     .main-menu-container {
         width: 100%;
         height: 100%;
-        background-color: #e2e2e2;
+        background-color: @secondary-3;
         padding: 0.5rem 0.25rem;
         box-sizing: border-box;
 
@@ -79,28 +87,35 @@
 
             li {
                 font-size: 1rem;
-                color: #b0b0b0;
                 height: 3rem;
                 box-sizing: border-box;
                 border-radius: 6px;
 
                 &.active {
                     background: @primary-1;
-                    color: #fff;
+
+                    a,
+                    a:hover {
+                        color: @secondary-6;
+                    }
                 }
 
-                &:hover {
-                    color: #0a7cb3;
+                &:not(.active):hover {
+                    background: darken(@secondary-3, 10%);
                 }
 
                 a {
+                    color: @secondary-1;
                     display: block;
-                    color: #b0b0b0;
                     height: 100%;
                     text-decoration: none;
                     text-align: center;
                     overflow: hidden;
                     position: relative;
+
+                    a:visited {
+                        color: @secondary-1;
+                    }
 
                     span.label-wrapper {
                         opacity: 1;

@@ -33,6 +33,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     key="table-widget-filter"
                 />
             </if>
+            <if(input.filterActions)>
+                <div class="filter-action-list">
+                    <action-list list=input.filterActions displayText=false/>
+                </div>
+            </if>
             <if(state.showFilterReset && !state.showFilterInBody)>
                 <span
                     class=["table-reset-filter", "icon", "fas fa-window-close"]
@@ -45,11 +50,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <span class="path4"/>
                     <span class="path5"/>
                 </span>
-            </if>
-            <if(input.filterActions)>
-                <div class="filter-action-list">
-                    <action-list list=input.filterActions displayText=false/>
-                </div>
             </if>
         </@headerfilter>
         <@content>
