@@ -4387,9 +4387,6 @@ msgstr ""
 msgid "Search Results: Tickets"
 msgstr ""
 
-msgid "Search Results: {0}"
-msgstr ""
-
 msgid "Search Templates"
 msgstr ""
 
