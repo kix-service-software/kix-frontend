@@ -4581,9 +4581,6 @@ msgstr "Suchergebnisse: Organisationen"
 msgid "Search Results: Tickets"
 msgstr "Suchergebnisse: Tickets"
 
-msgid "Search Results: {0}"
-msgstr "Suchergebnisse: {0}"
-
 msgid "Search Templates"
 msgstr "Suchvorlagen"
 
@@ -5714,6 +5711,9 @@ msgstr "{0}: hat keinen Wert."
 
 msgid "{0}: just white spaces as value is not allowed."
 msgstr "{0}: nur Leerzeichen als Wert sind nicht zulässig."
+
+#~ msgid "Search Results: {0}"
+#~ msgstr "Suchergebnisse: {0}"
 
 #~ msgid "Refresh Page"
 #~ msgstr "Seite neu laden"
