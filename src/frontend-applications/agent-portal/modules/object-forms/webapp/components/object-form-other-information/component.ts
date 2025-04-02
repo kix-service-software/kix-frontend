@@ -10,16 +10,19 @@
 import { Context } from 'vm';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { ObjectFormValue } from '../../../model/FormValues/ObjectFormValue';
-import { FormLayout } from '../../../model/layout/FormLayout';
 import { ObjectFormHandler } from '../../core/ObjectFormHandler';
 import { ComponentState } from './ComponentState';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private context: Context;
     private formhandler: ObjectFormHandler;
     private contextInstanceId: string;
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -31,6 +34,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('object-form-other-information'),
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
+                if (eventId === ObjectFormEvent.OTHER_INFORMATION_CHANGED) {
+                    this.state.prepared = false;
+                    this.update();
+                }
+            }
+        };
+
         if (this.contextInstanceId) {
             this.context = ContextService.getInstance().getContext(this.contextInstanceId);
         } else {
@@ -38,6 +51,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.formhandler = await this.context?.getFormManager().getObjectFormHandler();
             this.update();
         }
+        EventService.getInstance().subscribe(ObjectFormEvent.OTHER_INFORMATION_CHANGED, this.subscriber);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ObjectFormEvent.OTHER_INFORMATION_CHANGED, this.subscriber);
     }
 
     private update(): void {
