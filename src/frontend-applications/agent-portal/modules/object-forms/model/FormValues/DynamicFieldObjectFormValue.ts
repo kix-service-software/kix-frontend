@@ -30,6 +30,8 @@ import { ObjectFormValue } from './ObjectFormValue';
 
 export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldValue> {
 
+    public readonly COUNT_CONTAINER = true;
+
     public constructor(
         public property: string,
         object: KIXObject,

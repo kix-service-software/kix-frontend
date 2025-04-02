@@ -19,7 +19,7 @@ export class ComponentState extends AbstractComponentState {
         public pages: FormPageConfiguration[] = [],
         public carouselId: string = 'Carousel-' + IdService.generateDateBasedId(),
         public configurationMode: boolean = false,
-        public contextInstanceId: string = null
+        public contextInstanceId: string = null,
     ) {
         super();
     }
