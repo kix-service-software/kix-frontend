@@ -45,6 +45,8 @@ class TreeComponent {
             this.allowExpandCollapseAll = typeof input.allowExpandCollapseAll !== 'undefined'
                 ? input.allowExpandCollapseAll
                 : true;
+
+            this.state.allowExpandCollapseAll = this.allowExpandCollapseAll;
         }
     }
 
