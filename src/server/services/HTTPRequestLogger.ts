@@ -48,13 +48,14 @@ export class HTTPRequestLogger {
             const entry = this.requests.get(id);
 
             const end = Date.now();
-            const time = end - entry.startTime;
+            const duration = end - entry.startTime;
 
             const stringLength = JSON.stringify((response as AxiosResponse)?.data)?.length * 2;
             const size = (stringLength / 1024)?.toFixed(3);
             const status = (response as AxiosResponse)?.status || (response as AxiosError).response?.status;
 
-            this.logger.info(`${entry.clientId}\t${time}\t${entry.method}\t${status}\t${size}\t${entry.resource}\t${entry.parameter}`);
+            const pid = process.pid;
+            this.logger.info(`${pid}\t${entry.clientId}\t${duration}\t${entry.method}\t${status}\t${size}\t${entry.resource}\t${entry.parameter}`);
 
             this.requests.delete(id);
         }
