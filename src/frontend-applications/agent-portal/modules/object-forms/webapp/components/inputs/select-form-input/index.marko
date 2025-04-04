@@ -53,6 +53,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                      </if>
                      <if(!state.readonly)>
                         <i
+                           on-mouseenter("setIsMouseOnNodeRemove", true)
+                           on-mouseleave("setIsMouseOnNodeRemove", false)
                            on-click("removeValue", node)
                            class="ms-2 fas fa-times"
                         />
