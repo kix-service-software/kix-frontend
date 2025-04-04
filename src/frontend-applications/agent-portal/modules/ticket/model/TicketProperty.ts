@@ -114,5 +114,7 @@ export enum TicketProperty {
 
     CREATED_USER_ID = 'CreatedUserID', // TODO: depricated use CreateByID instead if necessary
 
-    UNTIL_TIME = 'UntilTime'
+    UNTIL_TIME = 'UntilTime',
+
+    ATTACHMENT_COUNT = 'AttachmentCount'
 }

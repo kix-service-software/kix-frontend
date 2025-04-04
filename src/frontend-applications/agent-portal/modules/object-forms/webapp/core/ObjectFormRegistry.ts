@@ -7,6 +7,7 @@
  * --
  */
 
+import { Context } from '../../../../model/Context';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
@@ -38,7 +39,7 @@ export class ObjectFormRegistry {
     private objectCommitHandler: Map<KIXObjectType | string, new (objectValueMapper: ObjectFormValueMapper) => ObjectCommitHandler> = new Map();
     private objectFormValidators: Array<new () => ObjectFormValueValidator> = [];
     // eslint-disable-next-line max-len
-    private objectFormValueMapperExtensions: Array<new (mapper: ObjectFormValueMapper) => ObjectFormValueMapperExtension> = [];
+    private objectFormValueMapperExtensions: Array<new (mapper: ObjectFormValueMapper, context: Context) => ObjectFormValueMapperExtension> = [];
     // eslint-disable-next-line max-len
     private objectCommitHandlerExtensions: Map<KIXObjectType | string, Array<new (objectValueMapper: ObjectFormValueMapper) => ObjectCommitHandlerExtension>> = new Map();
     // eslint-disable-next-line max-len
@@ -96,13 +97,13 @@ export class ObjectFormRegistry {
     }
 
     public registerObjectValueMapperExtension(
-        extension: new (mapper: ObjectFormValueMapper) => ObjectFormValueMapperExtension
+        extension: new (mapper: ObjectFormValueMapper, context: Context) => ObjectFormValueMapperExtension
     ): void {
         this.objectFormValueMapperExtensions.push(extension);
     }
 
     public getObjectFormValueMapperExtensions()
-        : Array<new (mapper: ObjectFormValueMapper) => ObjectFormValueMapperExtension> {
+        : Array<new (mapper: ObjectFormValueMapper, context: Context) => ObjectFormValueMapperExtension> {
         return this.objectFormValueMapperExtensions || [];
     }
 

@@ -25,6 +25,7 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { DefaultDepColumnConfiguration } from '../../../model/DefaultDepColumnConfiguration';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 
 export abstract class TableFactory {
 
@@ -53,7 +54,9 @@ export abstract class TableFactory {
         this.prepareDepColumns(tableColumns);
 
         const context = contextId ? ContextService.getInstance().getActiveContext() : null;
-        const ignoreDependencyCheck = context?.getAdditionalInformation('IGNORE_OBJECT_DEPENDENCY_CHECK');
+        const ignoreDependencyCheck = BrowserUtil.isBooleanTrue(
+            context?.getAdditionalInformation('IGNORE_OBJECT_DEPENDENCY_CHECK')
+        );
         const dependency = !ignoreDependencyCheck ? context?.getAdditionalInformation('OBJECT_DEPENDENCY') : null;
 
         const currentUser = await AgentService.getInstance().getCurrentUser();
@@ -69,10 +72,7 @@ export abstract class TableFactory {
                 return true;
             }
 
-            if (tc instanceof DefaultDepColumnConfiguration) {
-                if (!ignoreDependencyCheck) {
-                    return true;
-                }
+            if (tc instanceof DefaultDepColumnConfiguration && !ignoreDependencyCheck) {
                 return Array.isArray(dependency) ?
                     dependency.some((d) => d.toString() === tc.dep.toString()) :
                     dependency ?
@@ -148,6 +148,12 @@ export abstract class TableFactory {
                 config = new DefaultColumnConfiguration(
                     null, null, null,
                     property, true, false, true, false, 120, true, true, true, DataType.STRING
+                );
+                break;
+            case KIXObjectProperty.OBJECT_TAGS:
+                config = new DefaultColumnConfiguration(
+                    undefined, undefined, undefined, property, true, false, true, false, 150, true, true,
+                    undefined, undefined, undefined, 'label-list-cell-content', undefined, false
                 );
                 break;
             default:

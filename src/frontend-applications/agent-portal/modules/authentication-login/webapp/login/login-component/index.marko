@@ -90,7 +90,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <else-if(state.pwResetState === "error")>
                             <div class="message message-error">
                                 <span class="kix-icon-warnsign"/>
-                                ${component.getString("Password reset failed.")}
+                                ${component.getString(
+                                    "Invalid or expired token. Please send a new request.",
+                                )}
                             </div>
                         </else-if>
                     </div>

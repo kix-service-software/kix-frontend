@@ -8,11 +8,11 @@
  */
 
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
-import { SearchService } from '../../../../search/webapp/core';
 import { AbstractDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
 import { TicketSearchFormManager } from '../../../../ticket/webapp/core/TicketSearchFormManager';
+import { SearchService } from '../../../../search/webapp/core/SearchService';
 
 export class ComponentState extends FormInputComponentState {
 

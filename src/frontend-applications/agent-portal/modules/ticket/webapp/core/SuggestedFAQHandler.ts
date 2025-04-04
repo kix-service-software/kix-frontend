@@ -26,6 +26,7 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { ObjectFormHandler } from '../../../object-forms/webapp/core/ObjectFormHandler';
+import { FAQService } from '../../../faq/webapp/core';
 
 export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
 
@@ -97,9 +98,10 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
         filter: FilterCriteria[], value: string, service: IKIXObjectService, minLength: any, stopWords: string[]
     ): Promise<FilterCriteria[]> {
         const searchWords = value
-            .replace(/;/g, '')
+            .replace(/[.,!?"(){}\[\]:;<>@#$%^&*-+=_`~]/g, '')
             .replace(/\\/g, ' ')
-            .split(' ');
+            .split(' ')
+            .filter((word) => word.length > 0);
         filter = await this.buildFilterForSearchWords(searchWords, service, minLength, stopWords);
         return filter;
     }
@@ -110,7 +112,7 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
         let filter = [];
         for (const w of searchWords) {
             if (w.length >= minLength && !stopWords.some((sw) => sw === w)) {
-                const fullTextFilter = await service.prepareFullTextFilter(w);
+                const fullTextFilter = await (service as FAQService).prepareFullTextFilter(w, FilterType.OR);
                 filter = [
                     ...filter,
                     ...fullTextFilter

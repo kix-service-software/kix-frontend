@@ -14,11 +14,11 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Job } from '../../../model/Job';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-import { SearchOperatorUtil } from '../../../../search/webapp/core';
 import { JobFilterTableContentProviderService } from './JobFilterTableContentProviderService';
 import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
 import { TableValue } from '../../../../table/model/TableValue';
+import { SearchOperatorUtil } from '../../../../search/webapp/core/SearchOperatorUtil';
 
 export class JobFilterTableContentProvider extends TableContentProvider<any> {
 

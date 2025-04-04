@@ -88,7 +88,6 @@ export class TicketAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.TICKET_LOCK
             || kixObjectType === KIXObjectType.WATCHER
             || kixObjectType === KIXObjectType.TICKET_HISTORY
-            || kixObjectType === KIXObjectType.HTML_TO_PDF
             || kixObjectType === KIXObjectType.USER_TICKETS
             || kixObjectType === KIXObjectType.USER_COUNTER;
     }
@@ -336,13 +335,6 @@ export class TicketAPIService extends KIXObjectAPIService {
                     clientRequestId, TicketHistory
                 );
             }
-        }
-        else if (objectType === KIXObjectType.HTML_TO_PDF) {
-            const uri = this.buildUri('system', 'htmltopdf', 'convert');
-            objectResponse = await super.load(
-                token, KIXObjectType.HTML_TO_PDF, uri, loadingOptions, null, KIXObjectType.HTML_TO_PDF,
-                null, null, false
-            );
         }
 
         return objectResponse;
@@ -633,6 +625,8 @@ export class TicketAPIService extends KIXObjectAPIService {
         article.ContentType = 'text/html; charset=utf-8';
         article.MimeType = 'text/html';
         article.Charset = 'utf-8';
+
+        article.Body = Article.MAIL_STYLE + article.Body;
 
         await this.prepareArticleAttachments(article, token);
     }

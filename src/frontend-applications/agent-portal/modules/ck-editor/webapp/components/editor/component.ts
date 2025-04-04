@@ -6,7 +6,10 @@
  * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
  * --
  */
+
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { CKEditor5 } from '../../core/CKEditor5';
 import { ComponentState } from './ComponentState';
 
@@ -16,6 +19,7 @@ class EditorComponent {
     private editor: CKEditor5;
     private createTimeout: any;
     private input: any;
+    private changeTimeout: any;
 
 
     public onCreate(input: any): void {
@@ -35,7 +39,20 @@ class EditorComponent {
 
     public async onMount(): Promise<void> {
         this.editor = new CKEditor5(this.state.id);
-        this.editor.addChangeListener((value) => (this as any).emit('valueChanged', value));
+        this.editor.addChangeListener(() => {
+            if (this.changeTimeout) {
+                clearTimeout(this.changeTimeout);
+            } else {
+                EventService.getInstance().publish(FormEvent.BLOCK, true);
+            }
+            this.changeTimeout = setTimeout(() => {
+                const value = this.editor.getValue();
+                (this as any).emit('valueChanged', value);
+                EventService.getInstance().publish(FormEvent.BLOCK, false);
+                this.changeTimeout = null;
+            }, CKEditor5.editorTimeout);
+            return null;
+        });
         this.editor.addFocusListener((value) => (this as any).emit('focusLost', value));
         await this.editor.create();
         if (this.input) {

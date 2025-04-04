@@ -151,6 +151,13 @@ export class CKEditor5Configuration implements IConfiguration {
             '|',
             'resizeImage',
         ],
+        resizeUnit: 'px',
+        resizeOptions: [
+            { name: 'resizeImage:original', value: null, label: 'Original' },
+            { name: 'resizeImage:400', value: '400', label: '400px' },
+            { name: 'resizeImage:800', value: '800', label: '800px' },
+            { name: 'resizeImage:custom', value: 'custom', label: 'Custom' }
+        ]
     };
 
     public link = {

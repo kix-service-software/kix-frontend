@@ -9,6 +9,8 @@
 
 export enum SysConfigOptionProperty {
 
+    ID = 'ID',
+
     NAME = 'Name',
 
     VALUE = 'Value',

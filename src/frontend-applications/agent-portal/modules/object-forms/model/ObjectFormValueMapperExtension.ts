@@ -8,15 +8,19 @@
  */
 
 import { FormFieldConfiguration } from '../../../model/configuration/FormFieldConfiguration';
+import { Context } from '../../../model/Context';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { DynamicField } from '../../dynamic-fields/model/DynamicField';
 import { DynamicFieldValue } from '../../dynamic-fields/model/DynamicFieldValue';
 import { ObjectFormValue } from './FormValues/ObjectFormValue';
 import { ObjectFormValueMapper } from './ObjectFormValueMapper';
 
-export abstract class ObjectFormValueMapperExtension<T extends KIXObject = KIXObject>{
+export abstract class ObjectFormValueMapperExtension<T extends KIXObject = KIXObject> {
 
-    public constructor(protected objectValueMapper: ObjectFormValueMapper) { }
+    public constructor(
+        protected objectValueMapper: ObjectFormValueMapper,
+        protected context: Context
+    ) { }
 
     public async init(): Promise<void> {
         return;

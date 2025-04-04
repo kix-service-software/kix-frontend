@@ -11,6 +11,16 @@ import { TreeNode } from '.';
 
 export class TreeUtil {
 
+    public static expandOrCollapseAll(tree: TreeNode[], expand?: boolean): void {
+        for (const node of tree) {
+            node.expanded = expand;
+
+            if (node.children?.length) {
+                this.expandOrCollapseAll(node.children, expand);
+            }
+        }
+    }
+
     public static linkTreeNodes(
         tree: TreeNode[], filterValue: string, parent?: TreeNode,
         linkNodes: boolean = true, setParentFlags: boolean = true

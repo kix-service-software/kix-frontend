@@ -8,7 +8,7 @@
  */
 
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-import { SearchContext } from '../../../../search/webapp/core';
+import { SearchContext } from '../../../../search/webapp/core/SearchContext';
 
 export class OrganisationSearchContext extends SearchContext {
 

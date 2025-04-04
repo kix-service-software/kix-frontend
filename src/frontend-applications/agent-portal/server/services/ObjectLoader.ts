@@ -79,7 +79,7 @@ export class ObjectLoader {
                 this.loadingOptionsMap.get(objectType) : null;
 
             const objectResponse = await service.loadObjects<KIXObject>(
-                config?.BACKEND_API_TOKEN, 'KIXObjectAPIService', objectType, objectIds, loadingOptions, null
+                config?.BACKEND_API_TOKEN, 'ObjectLoader', objectType, objectIds, loadingOptions, null
             ).catch((): ObjectResponse<KIXObject> => new ObjectResponse());
 
             const objectClass = service.getObjectClass(objectType);

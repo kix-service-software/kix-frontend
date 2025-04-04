@@ -28,13 +28,8 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         const bulkDialogContext = new ContextDescriptor(
-            BulkDialogContext.CONTEXT_ID, [KIXObjectType.ANY],
-            ContextType.DIALOG, ContextMode.EDIT_BULK,
-            false, 'bulk-dialog', ['bulk'], BulkDialogContext,
-            [
-                new UIComponentPermission('tickets', [CRUD.CREATE])
-            ],
-            'Translatable#Bulk', 'kix-icon-gear',
+            BulkDialogContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.DIALOG, ContextMode.EDIT_BULK,
+            false, 'bulk-dialog', ['bulk'], BulkDialogContext, [], 'Translatable#Bulk', 'kix-icon-gear',
             undefined, undefined, false
         );
         ContextService.getInstance().registerContext(bulkDialogContext);

@@ -8,6 +8,7 @@
  */
 
 import { IConfiguration } from '../../../model/configuration/IConfiguration';
+import { TicketRouteConfiguration } from './TicketRouteConfiguration';
 
 export class TicketModuleConfiguration implements IConfiguration {
 
@@ -22,7 +23,8 @@ export class TicketModuleConfiguration implements IConfiguration {
         public valid: boolean = true,
         public roleIds: number[] = [],
         public addQueueSignature: boolean = true,
-        public ticketColors: TicketColorConfiguration = new TicketColorConfiguration()
+        public ticketColors = new TicketColorConfiguration(),
+        public ticketRouteConfiguration = new TicketRouteConfiguration()
     ) { }
 }
 

@@ -17,7 +17,6 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
-import { SearchService } from '../../../../search/webapp/core';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TreeService } from '../../../../base-components/webapp/core/tree';
@@ -25,6 +24,7 @@ import { IdService } from '../../../../../model/IdService';
 import { FilterType } from '../../../../../model/FilterType';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { JobFormService } from '../../core/JobFormService';
+import { SearchService } from '../../../../search/webapp/core/SearchService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -60,6 +60,7 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.state.prepared = true;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     private async setManager(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
@@ -70,6 +71,8 @@ class Component extends FormInputComponent<any, ComponentState> {
 
         this.state.manager = jobFormManager?.getFilterManager() || jobFormManager?.filterManager;
         if (this.state.manager) {
+            this.state.manager.allowEmptyValues = false;
+            this.state.manager.fieldInstanceId = this.state.field.instanceId;
             this.state.manager.init();
             this.state.manager.reset(false);
 
@@ -95,6 +98,8 @@ class Component extends FormInputComponent<any, ComponentState> {
                             );
                         }
                     }
+
+                    await this.state.manager.validate();
                     super.provideValue(filterValues, true);
                 }, 200);
             });

@@ -7,104 +7,123 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<if(state.enabled)>
-   <div class="mt-2 mb-2">
-      <if(state.visible)>
-
-         <div class="input-group">
-
-            <div class="col-11 col-sm-2 d-flex p-0">
-               <span
-                  class=[
-                     "object-forms-component flex-fill input-group-text min-w-0 p-0 ps-2 pe-2 rounded-0 rounded-start",
-                     {
-                        border: !state.valid,
-                        "bg-danger": !state.valid,
-                        "text-white": !state.valid,
-                        "border-danger": !state.valid,
-                        'rounded-left"': !state.valid,
-                        "border-end-0": state.hint,
-                        "border-end-1": !state.hint,
-                     },
-                  ]
-                  title=state.label
-               >
-                  <span class="text-truncate">
-                     ${state.label}
-                  </span>
-                  <if(state.required)>
-                     *
-                  </if>
-               </span>
-
-               <if(state.hint)>
-                  <span class="object-forms-component input-group-text hint-wrapper rounded-0 border-start-0">
-                     <overlay-icon isHint content=state.hint title=state.label/>
-                  </span>
-               </if>
-            </div>
-
-            <div class=[
-               "col-11 col-sm-9 p-0",
-               {
-                  border: !state.valid,
-                  "border-danger": !state.valid,
-                  "text-danger": !state.valid,
-                  rounded: !state.valid,
-               },
-            ]>
-               <if(state.inputTemplate)>
-                  <${state.inputTemplate} formValue=input.formValue/>
-               </if>
-               <else-if(!state.isEmpty)>
-                  <text-form-input formValue=input.formValue/>
-               </else-if>
-            </div>
+<if(state.prepared && state.formValue)>
+   <div class=[
+      "m-0 p-0",
+      component.getFieldClasses(),
+      {
+         "my-2 pe-2": !state.displayNone,
+      },
+   ]>
+      <div class=[
+         {
+            "d-none": state.displayNone,
+         },
+      ]>
+         <label class="form-label d-flex align-items-center m-0 mb-1 text-truncate">
             <add-remove-form-value-control
                formValue=input.formValue
                key=("control-" + input.formValue.instanceId)
             />
-         </div>
-         <if(
-            !state.formValue.readonly &&
-            Array.isArray(state.formValue.actions) &&
-            state.formValue.actions.length > 0
-         )>
-            <div class="input-group">
-               <div class="col-11 col-sm-2 d-flex p-0"/>
-               <div class="col-11 col-sm-9 p-0">
-                  <actions-container
-                     actions=(state.formValue.actions)
-                     isSelectInput=(
-                        state.formValue.inputComponentId === "select-form-input"
-                     )
-                  />
-               </div>
-            </div>
-         </if>
-
-         <if(state.validationErrors.length)>
-            <div class="col-sm-10 offset-sm-2">
-               <for|validationError| of=state.validationErrors>
-                  <span class="text-danger">
-                     ${validationError.message}
+            <if(input.contextInstanceId)>
+               <button
+                  type="button"
+                  class="btn btn-sm btn-light text-black me-3"
+                  aria-label="Edit Field"
+                  on-click("editField")
+               >
+                  <i class="fa-regular fa-pen-to-square"/>
+               </button>
+            </if>
+            ${state.label}
+            <if(state.required)>
+               *
+            </if>
+            <if(state.hint)>
+               <overlay-icon isHint content=state.hint title=state.label/>
+            </if>
+            <if(input.contextInstanceId)>
+               <if(!state.enabled)>
+                  <span class="badge text-bg-danger mx-2">
+                     <translation-string pattern="Translatable#Disabled"/>
                   </span>
-               </for>
+               </if>
+               <if(!state.visible)>
+                  <span class="badge text-bg-warning mx-2">
+                     <translation-string pattern="Translatable#Set Hidden"/>
+                  </span>
+               </if>
+               <if(state.isEmpty)>
+                  <span class="badge text-bg-secondary mx-2">
+                     <translation-string pattern="Translatable#Clear in mask"/>
+                  </span>
+               </if>
+               <if(state.configReadOnly)>
+                  <span class="badge text-bg-secondary mx-2">
+                     Readonly
+                  </span>
+               </if>
+            </if>
+         </label>
+
+         <if(state.formValue.description)>
+            <div class="alert alert-light" role="alert">
+               $!{state.formValue.description}
             </div>
          </if>
-      </if>
-      <if(Array.isArray(state.formValues) && state.formValues.length)>
-         <div class={
-            "ps-2": !state.formValue.IS_COUNTABLE && state.formValue.visible,
-            "ms-4": !state.formValue.IS_COUNTABLE && state.formValue.visible,
-            "border-start":
-               !state.formValue.IS_COUNTABLE && state.formValue.visible,
-         }>
-            <object-form-values-container
-               formValues=state.formValues
-               parent=input.formValue
-            />
+         <div class=[
+            "m-0 p-0",
+            {
+               border: !state.valid,
+               "border-danger": !state.valid,
+               "text-danger": !state.valid,
+               rounded: !state.valid,
+            },
+         ]>
+            <if(!state.formValue["COUNT_CONTAINER"])>
+               <if(state.inputTemplate)>
+                  <${state.inputTemplate} formValue=input.formValue/>
+               </if>
+               <else>
+                  <text-form-input formValue=input.formValue/>
+               </else>
+            </if>
          </div>
+      </div>
+      <if(
+         !state.displayNone &&
+         !state.formValue.readonly &&
+         Array.isArray(state.formValue.actions) &&
+         state.formValue.actions.length > 0
+      )>
+         <actions-container
+            actions=(state.formValue.actions)
+            isSelectInput=(
+               state.formValue.inputComponentId === "select-form-input"
+            )
+         />
+      </if>
+
+      <if(state.validationErrors.length)>
+         <div class="col-12">
+            <for|validationError| of=state.validationErrors>
+               <span class="text-danger">
+                  ${validationError.message}
+               </span>
+            </for>
+         </div>
+      </if>
+      <if(
+         Array.isArray(state.formValues) &&
+         state.formValues.length &&
+         component.hasEnabledFormValues()
+      )>
+         <object-form-values-container
+            formValues=state.formValues
+            parent=input.formValue
+            contextInstanceId=input.contextInstanceId
+            formLayout=input.formLayout
+         />
       </if>
    </div>
 </if>

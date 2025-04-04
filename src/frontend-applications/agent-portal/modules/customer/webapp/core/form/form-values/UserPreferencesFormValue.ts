@@ -8,6 +8,7 @@
  */
 
 import { FormContext } from '../../../../../../model/configuration/FormContext';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { FormValueProperty } from '../../../../../object-forms/model/FormValueProperty';
 import { DateTimeFormValue } from '../../../../../object-forms/model/FormValues/DateTimeFormValue';
@@ -23,6 +24,8 @@ import { NotificationFormValue } from './NotificationFormValue';
 
 export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> {
 
+    public readonly COUNT_CONTAINER = true;
+
     protected oooFormValue: ObjectFormValue;
     protected myQueuesFormValue: ObjectFormValue;
     protected notificationsFormValue: ObjectFormValue;
@@ -37,11 +40,11 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
 
         this.inputComponentId = null;
 
-        if (!Array.isArray(user.Preferences)) {
+        if (!Array.isArray(user?.Preferences)) {
             user.Preferences = [];
         }
 
-        const preferences = user.Preferences;
+        const preferences = user?.Preferences;
 
         this.addLanguageFormValue(preferences, objectValueMapper);
         this.oooFormValue = this.addOutOfOfficeFormValues(preferences, objectValueMapper);
@@ -52,11 +55,17 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
             this.addUserTokenFormValue(preferences, objectValueMapper);
         }
 
-        this.visible = true;
+        this.visible = false;
 
         this.formValues.forEach((fv) => {
             fv.visible = true;
+            fv.isControlledByParent = true;
         });
+    }
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        await super.initFormValueByField(field);
+        this.visible = false;
     }
 
     public async enable(): Promise<void> {
@@ -67,7 +76,7 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
         ];
 
         for (const fv of this.formValues) {
-            if (!this.user.IsAgent && agentPreferencesIds.some((id) => id === fv.instanceId)) {
+            if (!this.user?.IsAgent && agentPreferencesIds.some((id) => id === fv.instanceId)) {
                 continue;
             }
 
@@ -126,6 +135,7 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
         const startFormValue = new DateTimeFormValue('Value', startPreference, objectValueMapper, oofFormValue);
         startFormValue.label = 'Translatable#From';
         startFormValue.visible = true;
+        startFormValue.isControlledByParent = true;
         oofFormValue.formValues.push(startFormValue);
 
         let endPreference = preferences.find((p) => p.ID === PersonalSettingsProperty.OUT_OF_OFFICE_END);
@@ -138,6 +148,7 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
         const endFormValue = new DateTimeFormValue('Value', endPreference, objectValueMapper, oofFormValue);
         endFormValue.label = 'Translatable#Till';
         endFormValue.visible = true;
+        endFormValue.isControlledByParent = true;
         oofFormValue.formValues.push(endFormValue);
 
         return oofFormValue;

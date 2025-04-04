@@ -36,6 +36,7 @@ import { TableEvent } from '../../../../table/model/TableEvent';
 import { TableEventData } from '../../../../table/model/TableEventData';
 import { TableValue } from '../../../../table/model/TableValue';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -202,11 +203,18 @@ class SysConfigContentProvider extends TableContentProvider {
                         definition.Type === SysConfigOptionType.HASH
                         || definition.Type === SysConfigOptionType.ARRAY
                         || definition.Type === SysConfigOptionType.OBJECT
+                        || definition.Type === SysConfigOptionType.TIME_VACATION_DAYS
+                        || definition.Type === SysConfigOptionType.TIME_VACATION_DAYS_ONE_TIME
                     )
                 ) {
                     value = JSON.stringify(value);
                 }
                 tableValue = new TableValue(column.property, value, value);
+            } else if (column.property === KIXObjectProperty.OBJECT_TAGS) {
+                const tags = await KIXObjectService.loadObjectTags(
+                    KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, definition.ObjectId
+                );
+                tableValue = new TableValue(column.property, tags, tags.join(','), null, null, null, tags);
             } else {
                 tableValue = new TableValue(column.property, definition[column.property]);
             }

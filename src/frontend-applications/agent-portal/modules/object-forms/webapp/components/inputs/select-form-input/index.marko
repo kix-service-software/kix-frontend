@@ -17,9 +17,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       class="select-input-row"
    >
       <div class=[
-         "form-control select-input-container rounded-0",
+         "form-control border-secondary-subtle",
          {
             readonly: state.readonly,
+            rounded: state.readonly,
+            border: state.readonly,
+         },
+         {
+            "rounded-0": !state.readonly,
+            "rounded-start": !state.readonly,
+            "border-end-0": !state.readonly,
          },
       ]>
          <if(state.prepared)>
@@ -56,16 +63,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          </if>
       </div>
       <if(!state.readonly && state.prepared)>
+         <if(state.selectedNodes.length)>
+            <button
+               type="button"
+               on-click("clearValue")
+               class="btn btn-outline-light border-secondary-subtle rounded-0 border-start-0 border-end-0"
+            >
+               <i class="far fa-times-circle"/>
+            </button>
+         </if>
          <button
             type="button"
-            on-click("clearValue")
-            class="object-forms-component btn btn-outline-secondary rounded-0 border-start-0 border-end-0"
-         >
-            <i class="far fa-times-circle"/>
-         </button>
-         <button
-            type="button"
-            class="object-forms-component btn btn-outline-secondary dropdown-toggle rounded-0 border-start-0 border-start-0 rounded-end"
+            class="btn btn-outline-light dropdown-toggle border-secondary-subtle rounded-0 border-start-0 border-start-0 rounded-end"
          />
       </if>
    </div>

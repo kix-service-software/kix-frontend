@@ -24,6 +24,7 @@ import { FormPageConfiguration } from '../../../../model/configuration/FormPageC
 import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
 import { Error } from '../../../../../../server/model/Error';
 import { Context } from '../../../../model/Context';
+import { IdService } from '../../../../model/IdService';
 
 export class FormService {
 
@@ -133,9 +134,28 @@ export class FormService {
             true, formContext, null,
             [
                 new FormPageConfiguration(
-                    null, null, null, true, null,
+                    IdService.generateDateBasedId(), null, null, true, null,
                     [
-                        new FormGroupConfiguration(null, null, null, null, formFields)
+                        new FormGroupConfiguration(IdService.generateDateBasedId(), formName, null, null, formFields)
+                    ]
+                )
+            ]
+        );
+
+        return form;
+    }
+
+    public static createDefaultForm(title: string = 'Default'): FormConfiguration {
+        const form = new FormConfiguration(
+            `${IdService.generateDateBasedId()}`, '', [], KIXObjectType.TICKET,
+            true, FormContext.EDIT, null,
+            [
+                new FormPageConfiguration(
+                    IdService.generateDateBasedId(), null, null, true, null,
+                    [
+                        new FormGroupConfiguration(
+                            IdService.generateDateBasedId(), title || 'Default', null, null, []
+                        )
                     ]
                 )
             ]

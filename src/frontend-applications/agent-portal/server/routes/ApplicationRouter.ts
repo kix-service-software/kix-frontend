@@ -71,6 +71,21 @@ export class ApplicationRouter extends KIXRouter {
         );
 
         this.router.get(
+            '/healthcheck',
+            async (req: Request, res: Response) => {
+                const config = ConfigurationService.getInstance().getServerConfiguration();
+                const token = config.BACKEND_API_TOKEN;
+
+                const valid = await AuthenticationService.getInstance().validateToken(
+                    token, 'healthcheck'
+                ).catch((error) => false);
+
+                res.status(valid ? 200 : 503);
+                res.send();
+            }
+        );
+
+        this.router.get(
             '/:moduleId',
             AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getModule.bind(this)
@@ -96,7 +111,7 @@ export class ApplicationRouter extends KIXRouter {
             this.setFrontendSocketUrl(res);
 
             if (req.headers['x-forwarded-for']) {
-                res.cookie('x-forwarded-for', req.headers['x-forwarded-for']);
+                res.cookie('x-forwarded-for', req.headers['x-forwarded-for'], { httpOnly: true });
             }
 
             const token: string = req.cookies.token;
@@ -165,25 +180,24 @@ export class ApplicationRouter extends KIXRouter {
     }
 
     private async getSocketTimeout(): Promise<number> {
-        if (!this.socketTimeout) {
-            if (!this.socketTimeoutRequest) {
-                this.socketTimeoutRequest = new Promise<number>(async (resolve, reject) => {
-                    const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-                    const backendToken = serverConfig.BACKEND_API_TOKEN;
+        if (!this.socketTimeoutRequest) {
+            this.socketTimeoutRequest = new Promise<number>(async (resolve, reject) => {
+                const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+                const backendToken = serverConfig.BACKEND_API_TOKEN;
 
-                    const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-                        backendToken, 'ApplicationRouter', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG],
-                        null, null
-                    ).catch(() => new ObjectResponse<SysConfigOption>());
+                const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                    backendToken, 'ApplicationRouter', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG],
+                    null, null
+                ).catch(() => new ObjectResponse<SysConfigOption>());
 
-                    const options = objectResponse?.objects || [];
-                    resolve(options?.length ? Number(options[0].Value) : null);
-                });
-            }
-
-            const socketTimeout = await this.socketTimeoutRequest;
-            this.socketTimeout = socketTimeout || 30000;
+                const options = objectResponse?.objects || [];
+                resolve(options?.length ? Number(options[0].Value) : null);
+            });
         }
+
+        const socketTimeout = await this.socketTimeoutRequest;
+        this.socketTimeoutRequest = null;
+        this.socketTimeout = socketTimeout || 30000;
 
         return this.socketTimeout;
     }

@@ -20,7 +20,6 @@ import {
 } from '.';
 import { TicketTableFactory } from './table/TicketTableFactory';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { SearchService } from '../../../search/webapp/core';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { ArticleTableFactory } from './table/ArticleTableFactory';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
@@ -42,6 +41,7 @@ import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { JobTypes } from '../../../job/model/JobTypes';
 import { TicketArticleCreateOptionFieldHandler } from './form/extended-form-manager/TicketArticleCreateOptionFieldHandler';
 import { TicketCreateDynamicFieldsOptionFieldHandler } from './form/extended-form-manager/TicketCreateDynamicFieldsOptionFieldHandler';
+import { AttachmentPatternRuleFieldsOptionFieldHandler } from './form/extended-form-manager/AttachmentPatternRuleFieldsOptionFieldHandler';
 import { TicketJobFormManager } from './TicketJobFormManager';
 import { TicketStateSetOptionFieldHandler } from './form/extended-form-manager/TicketStateSetOptionFieldHandler';
 import { TeamSetOptionFieldHandler } from './form/extended-form-manager/TeamSetOptionFieldHandler';
@@ -57,6 +57,8 @@ import { JobFormService } from '../../../job/webapp/core/JobFormService';
 import { MacroService } from '../../../macro/webapp/core/MacroService';
 import { FetchAssetAttributesOptionFieldHandler } from './form/extended-form-manager/FetchAssetAttributesOptionFieldHandler';
 import { TicketBulkPrintAction } from './actions/TicketBulkPrintAction';
+import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
+import { SearchService } from '../../../search/webapp/core/SearchService';
 
 export class UIModule implements IUIModule {
 
@@ -124,6 +126,7 @@ export class UIModule implements IUIModule {
     public async registerExtensions(): Promise<void> {
         MacroService.getInstance().registerOptionFieldHandler(new TicketArticleCreateOptionFieldHandler());
         MacroService.getInstance().registerOptionFieldHandler(new TicketCreateDynamicFieldsOptionFieldHandler());
+        MacroService.getInstance().registerOptionFieldHandler(new AttachmentPatternRuleFieldsOptionFieldHandler());
         MacroService.getInstance().registerOptionFieldHandler(new TicketStateSetOptionFieldHandler());
         MacroService.getInstance().registerOptionFieldHandler(new TeamSetOptionFieldHandler());
         MacroService.getInstance().registerOptionFieldHandler(new FetchAssetAttributesOptionFieldHandler());
@@ -137,7 +140,9 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('ticket-watch-action', TicketWatchAction);
         ActionFactory.getInstance().registerAction('ticket-lock-action', TicketLockAction);
         ActionFactory.getInstance().registerAction('ticket-print-action', TicketPrintAction);
-        ActionFactory.getInstance().registerAction('ticket-bulk-print-action', TicketBulkPrintAction);
+        ActionFactory.getInstance().registerAction(
+            'ticket-bulk-print-action', TicketBulkPrintAction, [ConfigurationType.TableWidget]
+        );
     }
 
     private async registerContexts(): Promise<void> {
@@ -172,7 +177,7 @@ export class UIModule implements IUIModule {
         ContextService.getInstance().registerContext(searchContext);
 
         const ticketListContext = new ContextDescriptor(
-            TicketListContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.MAIN, ContextMode.DETAILS,
+            TicketListContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'ticket-list-module', ['ticket-list'], TicketListContext,
             [
                 new UIComponentPermission('tickets', [CRUD.READ])

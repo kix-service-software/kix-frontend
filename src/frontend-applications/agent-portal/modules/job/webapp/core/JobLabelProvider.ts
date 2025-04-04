@@ -226,4 +226,13 @@ export class JobLabelProvider extends LabelProvider {
         return icons;
     }
 
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(
+                plural ? 'Translatable#Jobs' : 'Translatable#Job'
+            );
+        }
+        return plural ? 'Jobs' : 'Job';
+    }
+
 }
