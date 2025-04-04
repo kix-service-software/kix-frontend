@@ -14,9 +14,9 @@ import { SearchService } from '../../core/SearchService';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { SearchContext } from '../../core';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { SearchContext } from '../../core/SearchContext';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

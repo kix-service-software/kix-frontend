@@ -21,11 +21,12 @@ export class FormPageConfiguration implements IConfiguration {
         public id: string,
         public name: string,
         public groupConfigurationIds: string[] = [],
-        public singleFormGroupOpen: boolean = false,
-        public showSingleGroup: boolean = false,
+        public singleFormGroupOpen: boolean = false, // deprecated
+        public showSingleGroup: boolean = false,// deprecated
         public groups: FormGroupConfiguration[] = [],
         public type: ConfigurationType = ConfigurationType.FormPage,
         public valid: boolean = true,
+        public description?: string
     ) { }
 
 }

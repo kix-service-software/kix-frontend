@@ -32,6 +32,8 @@ async function preBuildApplications(): Promise<void> {
     LoggingService.getInstance().info('Build Applications');
 
     await ServerUtil.buildApplications();
+
+    process.exit();
 }
 
 preBuildApplications();

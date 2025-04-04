@@ -221,7 +221,7 @@ export class KIXObjectSocketClient extends SocketClient {
                             new PortalNotification(
                                 IdService.generateDateBasedId('object-error'), 'error',
                                 PortalNotificationType.IMPORTANT,
-                                'Error Loading Objects', new Date().toLocaleString(), true, false,
+                                'Error Loading Objects', new Date().toString(), true, false,
                                 request.objectType + request.objectIds?.join(','), JSON.stringify(error)
                             )
                         ]);
@@ -340,7 +340,7 @@ export class KIXObjectSocketClient extends SocketClient {
                         new PortalNotification(
                             IdService.generateDateBasedId('timeout'), 'error',
                             PortalNotificationType.IMPORTANT,
-                            'Request Timeout', new Date().toLocaleString(), true, false,
+                            'Request Timeout', new Date().toString(), true, false,
                             '', JSON.stringify(error)
                         )
                     ]);
@@ -360,12 +360,12 @@ export class KIXObjectSocketClient extends SocketClient {
                 if (error.requestId === requestObject.requestId) {
                     window.clearTimeout(timeout);
                     const errorMessage = `Socket Error: Event - ${event}, Object - ${requestObject.objectType}`;
-                    if (silent) {
+                    if (!silent) {
                         PortalNotificationService.getInstance().publishNotifications([
                             new PortalNotification(
                                 IdService.generateDateBasedId('socket-error'), 'error',
                                 PortalNotificationType.IMPORTANT,
-                                'Socket Error', new Date().toLocaleString(), true, false,
+                                'Socket Error', new Date().toString(), true, false,
                                 errorMessage, JSON.stringify(error)
                             )
                         ]);

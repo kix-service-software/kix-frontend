@@ -82,6 +82,12 @@ export class ReportTableFactory extends TableFactory {
                 config.hasListFilter = true;
                 config.componentId = 'label-list-cell-content';
                 break;
+            case ReportProperty.CREATE_TIME:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 150, true, true,
+                    false, DataType.DATE_TIME
+                );
+                break;
             default:
                 config = new DefaultColumnConfiguration(
                     null, null, null, property, true, false, true, false, 150, true, true

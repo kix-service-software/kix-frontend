@@ -10,12 +10,17 @@
 import { ComponentState } from './ComponentState';
 import { IdService } from '../../../../../model/IdService';
 import { TreeUtil, TreeNode } from '../../core/tree';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { ContextService } from '../../core/ContextService';
+import { BrowserUtil } from '../../core/BrowserUtil';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class TreeComponent {
 
     private state: ComponentState;
 
     private setParentFlags: boolean = true;
+    private allowExpandCollapseAll: boolean;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -24,13 +29,58 @@ class TreeComponent {
     public onInput(input: any): void {
         this.state.tree = input.tree;
         this.state.treeId = input.treeId ? 'tree-' + input.treeId : 'tree-' + IdService.generateDateBasedId();
-        this.setParentFlags = typeof input.setParentFlags !== 'undefined' ? input.setParentFlags : true;
+        this.setParentFlags = typeof input.setParentFlags !== 'undefined'
+            ? input.setParentFlags
+            : true;
+
         if (this.state.filterValue !== input.filterValue) {
             this.state.filterValue = input.filterValue;
             TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue, null, false, this.setParentFlags);
         }
+
         this.state.activeNode = input.activeNode;
         this.state.treeStyle = input.treeStyle;
+
+        if (this.allowExpandCollapseAll === undefined) {
+            this.allowExpandCollapseAll = typeof input.allowExpandCollapseAll !== 'undefined'
+                ? input.allowExpandCollapseAll
+                : true;
+
+            this.state.allowExpandCollapseAll = this.allowExpandCollapseAll;
+        }
+    }
+
+    public async onMount(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Expand All', 'Translatable#Collapse All'
+        ]);
+        this.prepareExpandCollapseAll();
+        this.prepareUserPreference();
+    }
+
+    private async prepareExpandCollapseAll(): Promise<void> {
+        if (this.allowExpandCollapseAll) {
+            let expandCollapseAll = false;
+            for (const node of this.state.tree) {
+                if (TreeUtil.hasChildrenToShow(node, this.state.filterValue)) {
+                    expandCollapseAll = true;
+                    break;
+                }
+            }
+            this.state.allowExpandCollapseAll = expandCollapseAll;
+        }
+    }
+
+    private async prepareUserPreference(): Promise<void> {
+        if (this.allowExpandCollapseAll) {
+            const context = ContextService.getInstance().getActiveContext();
+            const treeExpanded = await AgentService.getInstance().getUserPreference(`tree-expanded-${context.contextId}-${this.state.treeId}`);
+            const hasUserPreferenceSet = treeExpanded !== undefined;
+
+            if (hasUserPreferenceSet) {
+                this.expandOrCollapseAll(BrowserUtil.isBooleanTrue(treeExpanded.Value));
+            }
+        }
     }
 
     public getNodes(): TreeNode[] {
@@ -47,6 +97,18 @@ class TreeComponent {
 
     public nodeHovered(node: TreeNode): void {
         (this as any).emit('nodeHovered', node);
+    }
+
+    public expandOrCollapseAll(expand?: boolean): void {
+        TreeUtil.expandOrCollapseAll(this.state.tree, expand);
+
+        const treeElement: HTMLElement = (this as any).getEl('state.treeId');
+
+
+        const context = ContextService.getInstance().getActiveContext();
+        AgentService.getInstance().setPreferences([[`tree-expanded-${context.contextId}-${this.state.treeId}`, expand]]);
+
+        (this as any).setStateDirty('tree');
     }
 }
 

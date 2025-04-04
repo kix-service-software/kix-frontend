@@ -16,6 +16,7 @@ import { Error } from '../../../../../server/model/Error';
 import { ReportDefinition } from '../model/ReportDefinition';
 import { FilterCriteria } from '../../../model/FilterCriteria';
 import { ReportDefinitionProperty } from '../model/ReportDefinitionProperty';
+import { ReportProperty } from '../model/ReportProperty';
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 import { Report } from '../model/Report';
 import { ReportResultLoadingOptions } from '../model/ReportResultLoadingOptions';
@@ -31,6 +32,7 @@ import { CreatePermissionDescription } from '../../user/server/CreatePermissionD
 import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { Permission } from '../../user/model/Permission';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 
 export class ReportingAPIService extends KIXObjectAPIService {
 
@@ -138,6 +140,11 @@ export class ReportingAPIService extends KIXObjectAPIService {
                     await this.updatePermissions(id, roleIds[1]);
                 }
 
+                const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
+                await this.commitObjectTag(
+                    token, clientRequestId, tags, objectType, id
+                );
+
                 return id;
             } else {
                 throw new Error('1', 'Missing required parameter ReportDefinition.');
@@ -183,6 +190,11 @@ export class ReportingAPIService extends KIXObjectAPIService {
                 await this.updatePermissions(id, roleIds[1]);
             }
 
+            const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
+            await this.commitObjectTag(
+                token, clientRequestId, tags, objectType, id
+            );
+
             return id;
         }
     }
@@ -202,10 +214,35 @@ export class ReportingAPIService extends KIXObjectAPIService {
         return super.deleteObject(token, clientRequestId, objectType, objectId, null, objectType, ressourceUri);
     }
 
-    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPIFilter(
+        criteria: FilterCriteria[], token: string, objectType?: string
+    ): Promise<FilterCriteria[]> {
         return criteria.filter(
-            (c) => c.property === ReportDefinitionProperty.NAME
-                || c.property === ReportDefinitionProperty.DATASOURCE
+            (c) => (
+                objectType !== KIXObjectType.REPORT
+                || c.property !== ReportProperty.DEFINITION_ID
+            )
+        );
+    }
+
+    public async prepareAPISearch(
+        criteria: FilterCriteria[], token: string, objectType?: string
+    ): Promise<FilterCriteria[]> {
+        return criteria.filter(
+            (c) => (
+                (
+                    objectType === KIXObjectType.REPORT_DEFINITION
+                    && (
+                        c.property === ReportDefinitionProperty.NAME
+                        || c.property === ReportDefinitionProperty.DATASOURCE
+
+                    )
+                )
+                || (
+                    objectType === KIXObjectType.REPORT
+                    && c.property === ReportProperty.DEFINITION_ID
+                )
+            )
         );
     }
 

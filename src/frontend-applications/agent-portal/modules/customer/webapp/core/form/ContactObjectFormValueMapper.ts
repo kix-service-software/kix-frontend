@@ -19,9 +19,83 @@ import { TextAreaFormValue } from '../../../../object-forms/model/FormValues/Tex
 import { IconFormValue } from '../../../../object-forms/model/FormValues/IconFormValue';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { PrimaryOrganisationFormValue } from './form-values/PrimaryOrganisationFormValue';
-import { ContactUserFormValue } from './form-values/ContactUserFormValue';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { UserProperty } from '../../../../user/model/UserProperty';
+import { UserAccessFormValue } from './form-values/UserAccessFormValue';
+import { User } from '../../../../user/model/User';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
+import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { FormLayout } from '../../../../object-forms/model/layout/FormLayout';
+import { RowLayout } from '../../../../object-forms/model/layout/RowLayout';
+import { RowColumnLayout } from '../../../../object-forms/model/layout/RowColumnLayout';
+import { GroupLayout } from '../../../../object-forms/model/layout/GroupLayout';
 
 export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact> {
+
+    public async mapFormValues(contact: Contact): Promise<void> {
+        if (!contact.User) {
+            contact.User = new User();
+        }
+
+        const hasUserCreatePermission = await AgentService.checkPermissions('system/users', [CRUD.CREATE]);
+        if (hasUserCreatePermission) {
+            this.createUserPage();
+        }
+
+        return super.mapFormValues(contact);
+    }
+
+    // eslint-disable-next-line max-lines-per-function
+    private createUserPage(): void {
+        const page = new FormPageConfiguration('user-form-page', 'Translatable#User Information');
+        const userGroup = new FormGroupConfiguration('user-form-group', 'Translatable#User Access');
+        page.groups.push(userGroup);
+
+        userGroup.formFields.push(
+            new FormFieldConfiguration(
+                'user-form-user-access', 'Translatable#Access', UserProperty.USER_ACCESS, null
+            ),
+            new FormFieldConfiguration(
+                'user-form-user-login', 'Translatable#Login Name', UserProperty.USER_LOGIN, null
+            ),
+            new FormFieldConfiguration(
+                'user-form-user-password', 'Translatable#Password', UserProperty.USER_PASSWORD, null
+            ),
+            new FormFieldConfiguration(
+                'user-form-user-roles', 'Translatable#Roles', UserProperty.ROLE_IDS, null
+            ),
+        );
+
+        const preferencesGroup = new FormGroupConfiguration(
+            'user-preferences-form-group', 'Translatable#User Preferences'
+        );
+        page.groups.push(preferencesGroup);
+        preferencesGroup.formFields.push(
+            new FormFieldConfiguration(
+                'user-form-user-preferences', 'Translatable#Preferences', UserProperty.PREFERENCES, null
+            )
+        );
+
+        if (!this.form.formLayout) {
+            this.form.formLayout = new FormLayout();
+        }
+        const groupLayout = new GroupLayout(userGroup.id);
+        groupLayout.rowLayout.push(
+            [
+                new RowColumnLayout(['user-form-user-access'], 12, 12, 4),
+                new RowColumnLayout(['user-form-user-login'], 12, 6, 4),
+                new RowColumnLayout(['user-form-user-password'], 12, 6, 4),
+                new RowColumnLayout(['user-form-user-roles'], 12, 6, 12)
+            ]
+        );
+        this.form.formLayout.groupLayout?.push(groupLayout);
+
+        this.form.pages.push(page);
+    }
 
     public async mapObjectValues(contact: Contact): Promise<void> {
         await this.mapContactAttributes(contact);
@@ -30,8 +104,10 @@ export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact>
         await iconFormValue.setFormValue(new ObjectIcon(null, KIXObjectType.CONTACT, contact?.ID));
         this.formValues.push(iconFormValue);
 
-        const userFormValue = new ContactUserFormValue(ContactProperty.USER, contact, this, null);
-        this.formValues.push(userFormValue);
+        const userAccessFormValue = new UserAccessFormValue(
+            UserProperty.USER_ACCESS, contact.User, this, null
+        );
+        this.formValues.push(userAccessFormValue);
 
         await super.mapObjectValues(contact);
     }
@@ -68,7 +144,27 @@ export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact>
         this.formValues.push(new ObjectFormValue(ContactProperty.TITLE, contact, this, null));
         this.formValues.push(new ObjectFormValue(ContactProperty.CITY, contact, this, null));
         this.formValues.push(new ObjectFormValue(ContactProperty.STREET, contact, this, null));
-        this.formValues.push(new ObjectFormValue(ContactProperty.COUNTRY, contact, this, null));
+
+        const field = this.objectFormHandler?.findFormFieldByProperty(ContactProperty.COUNTRY);
+        if (field?.inputComponent === 'default-select-input') {
+            const nodesOption = field?.options?.find((o) => o.option === 'NODES');
+            if (Array.isArray(nodesOption?.value)) {
+                const countryFormValue = new SelectObjectFormValue(ContactProperty.COUNTRY, contact, this, null);
+                (countryFormValue as any).prepareSelectableNodes = async (objects: KIXObject[]): Promise<void> => {
+                    const nodes = [];
+                    for (const node of nodesOption.value) {
+                        node.label = await TranslationService.translate(node.label);
+                        nodes.push(node);
+                    }
+                    countryFormValue.treeHandler?.setTree(nodes, undefined, true, true);
+                };
+                this.formValues.push(countryFormValue);
+            }
+        } else {
+            const countryFormValue = new ObjectFormValue(ContactProperty.COUNTRY, contact, this, null);
+            this.formValues.push(countryFormValue);
+        }
+
         this.formValues.push(new ObjectFormValue(ContactProperty.FAX, contact, this, null));
         this.formValues.push(new ObjectFormValue(ContactProperty.MOBILE, contact, this, null));
         this.formValues.push(new ObjectFormValue(ContactProperty.PHONE, contact, this, null));

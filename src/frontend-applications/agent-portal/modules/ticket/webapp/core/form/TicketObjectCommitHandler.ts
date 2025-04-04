@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -192,24 +192,27 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
     public async addQueueSignature(ticketOrQueueId: number | Ticket, body: string, channelId: number): Promise<string> {
         const queueId = typeof ticketOrQueueId === 'number' ? ticketOrQueueId : ticketOrQueueId?.QueueID;
-        const config = await TicketService.getTicketModuleConfiguration();
 
-        if (channelId && queueId && config?.addQueueSignature) {
+        if (channelId && queueId) {
             const channels = await KIXObjectService.loadObjects<Channel>(
                 KIXObjectType.CHANNEL, [channelId], null, null, true
             ).catch(() => []);
             if (channels && channels[0] && channels[0].Name === 'email') {
-                const queues = await KIXObjectService.loadObjects<Queue>(
-                    KIXObjectType.QUEUE, [queueId], null, null, true
-                );
-                const queue = queues && !!queues.length ? queues[0] : null;
-                if (queue && queue.Signature) {
-                    const signature =
-                        await PlaceholderService.getInstance().replacePlaceholders(
-                            queue.Signature,
-                            (ticketOrQueueId instanceof Ticket ? ticketOrQueueId : undefined)
-                        );
-                    body += `\n\n${signature}`;
+                const config = await TicketService.getTicketModuleConfiguration().catch(() => null);
+
+                if (config?.addQueueSignature) {
+                    const queues = await KIXObjectService.loadObjects<Queue>(
+                        KIXObjectType.QUEUE, [queueId], null, null, true
+                    );
+                    const queue = queues && !!queues.length ? queues[0] : null;
+                    if (queue && queue.Signature) {
+                        const signature =
+                            await PlaceholderService.getInstance().replacePlaceholders(
+                                queue.Signature,
+                                (ticketOrQueueId instanceof Ticket ? ticketOrQueueId : undefined)
+                            );
+                        body += `\n\n${signature}`;
+                    }
                 }
             }
         }

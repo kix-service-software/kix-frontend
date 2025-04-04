@@ -1,0 +1,65 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div.admin-object-tag-container>
+    <div class="object-tag-search">
+        <form-list
+            treeId="object-tag-value"
+            key="object-tag-value"
+            canRemoveNode
+            multiselect
+            freeText=false
+            loadNodes=state.loadNodes
+            autoCompleteConfiguration=state.autoCompleteConfiguration
+            searchCallback=state.searchCallback
+         />
+        <button
+            type="button"
+            title=(state.translations["Translatable#Help"])
+            class="kix-button button button-without-text"
+        >
+            <overlay-icon
+                isHint
+                content="Translatable#Helptext_Object_Tag_Search"
+                title=(state.translations["Translatable#Search"])
+            />
+        </button>
+        <button
+            type="button"
+            on-click("search")
+            class="kix-button submit-button"
+        >
+            <span class="kix-icon-search"/>
+            <translation-string pattern="Translatable#Search"/>
+        </button>
+        <for|action| of=state.actions>
+            <div class="action-switch">
+                <span
+                    title=(action.displayName)
+                    class=[action.icon]
+                    on-click("runAction", action)
+                />
+            </div>
+        </for>
+    </div>
+   <if(state.prepared)>
+      <for|table| of=state.tables>
+         <widget
+            class="object-tag-widget"
+            instanceId=table.instanceId
+            minimizable=false
+            title=table.title>
+            <@content>
+               <kix-table table=table/>
+            </@content>
+         </widget>
+      </for>
+   </if>
+   <loading-shield shieldId="TAG_EXPORT_SHIELD"/>
+</div>

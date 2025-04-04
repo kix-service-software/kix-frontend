@@ -24,6 +24,7 @@ import { FilterType } from '../../../model/FilterType';
 import { DynamicFieldType } from '../model/DynamicFieldType';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 export class DynamicFieldAPIService extends KIXObjectAPIService {
 
@@ -48,6 +49,18 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
     public isServiceFor(type: KIXObjectType | string): boolean {
         return type === KIXObjectType.DYNAMIC_FIELD
             || type === KIXObjectType.DYNAMIC_FIELD_TYPE;
+    }
+
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        let objectClass;
+
+        if (objectType === KIXObjectType.DYNAMIC_FIELD) {
+            return DynamicField;
+        } else if (objectType === KIXObjectType.DYNAMIC_FIELD_TYPE) {
+            return DynamicFieldType;
+        }
+
+        return objectClass;
     }
 
     public async preloadObjects(token: string): Promise<void> {

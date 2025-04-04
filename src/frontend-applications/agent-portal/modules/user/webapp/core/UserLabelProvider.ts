@@ -92,9 +92,11 @@ export class UserLabelProvider extends LabelProvider<User> {
                 displayValue = 'Translatable#Customer Login';
                 break;
             case OutOfOfficeProperty.START:
+            case PersonalSettingsProperty.OUT_OF_OFFICE_START:
                 displayValue = 'Translatable#From';
                 break;
             case OutOfOfficeProperty.END:
+            case PersonalSettingsProperty.OUT_OF_OFFICE_END:
                 displayValue = 'Translatable#Till';
                 break;
             default:
@@ -201,6 +203,15 @@ export class UserLabelProvider extends LabelProvider<User> {
             case OutOfOfficeProperty.START:
             case OutOfOfficeProperty.END:
                 displayValue = await DateTimeUtil.getLocalDateString(user[property]);
+                break;
+            case PersonalSettingsProperty.OUT_OF_OFFICE_START:
+            case PersonalSettingsProperty.OUT_OF_OFFICE_END:
+                if (user.Preferences) {
+                    const outOfOfficeDate = user.Preferences.find((p) => p.ID === property);
+                    if (outOfOfficeDate) {
+                        displayValue = await DateTimeUtil.getLocalDateString(outOfOfficeDate.Value);
+                    }
+                }
                 break;
             default:
                 if (this.isContactProperty(property) || property === 'ContactID') {

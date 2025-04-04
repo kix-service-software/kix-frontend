@@ -13,7 +13,6 @@ import { ServiceRegistry } from '../../../../modules/base-components/webapp/core
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { SearchService } from '../../../search/webapp/core';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
@@ -34,7 +33,7 @@ import { ContactFormFieldValueHandler } from './ContactFormFieldValueHandler';
 import { ContactJobFormManager } from './ContactJobFormManager';
 import { JobTypes } from '../../../job/model/JobTypes';
 import { JobFormService } from '../../../job/webapp/core/JobFormService';
-import { ContactFormService } from './form/ContactFormService';
+import { SearchService } from '../../../search/webapp/core/SearchService';
 
 export class UIModule implements IUIModule {
 
@@ -46,7 +45,6 @@ export class UIModule implements IUIModule {
         PlaceholderService.getInstance().registerPlaceholderHandler(new ContactPlaceholderHandler());
 
         ServiceRegistry.registerServiceInstance(ContactService.getInstance());
-        ServiceRegistry.registerServiceInstance(ContactFormService.getInstance());
 
         TableFactoryService.getInstance().registerFactory(new ContactTableFactory());
         LabelService.getInstance().registerLabelProvider(new ContactLabelProvider());

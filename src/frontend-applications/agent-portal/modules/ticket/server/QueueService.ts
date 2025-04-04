@@ -21,6 +21,7 @@ import { KIXObject } from '../../../model/kix/KIXObject';
 import { CacheService } from '../../../server/services/cache';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { QueueProperty } from '../model/QueueProperty';
+import { SystemAddress } from '../../system-address/model/SystemAddress';
 
 export class QueueAPIService extends KIXObjectAPIService {
 
@@ -53,7 +54,10 @@ export class QueueAPIService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.QUEUE) {
             objectClass = Queue;
+        } else if (objectType === KIXObjectType.FOLLOW_UP_TYPE) {
+            objectClass = FollowUpType;
         }
+
         return objectClass;
     }
 

@@ -42,4 +42,8 @@ export class GeneralCatalogItem extends KIXObject {
         return 'ItemID';
     }
 
+    public toString(): string {
+        return this.Name;
+    }
+
 }

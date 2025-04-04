@@ -24,7 +24,7 @@ export class ExtendedContactFormObjectValueMapper extends ObjectFormValueMapperE
                 UserProperty.PREFERENCES
             );
 
-            this.addMFAFields(preferencesFormValue);
+            await this.addMFAFields(preferencesFormValue);
         }
     }
 
@@ -36,8 +36,9 @@ export class ExtendedContactFormObjectValueMapper extends ObjectFormValueMapperE
             const mfaFormValue = new MFAPreferencesFormValue(
                 preferencesFormValue, this.objectValueMapper, mfaConfigs
             );
+            mfaFormValue.isControlledByParent = true;
+            mfaFormValue['COUNT_CONTAINER'] = true;
             preferencesFormValue.formValues.push(mfaFormValue);
         }
-
     }
 }

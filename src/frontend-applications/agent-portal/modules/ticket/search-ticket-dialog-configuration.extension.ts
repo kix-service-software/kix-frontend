@@ -25,6 +25,7 @@ import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetC
 import { TableHeaderHeight } from '../table/model/TableHeaderHeight';
 import { TableRowHeight } from '../table/model/TableRowHeight';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { ContextType } from '../../model/ContextType';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -56,24 +57,32 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             null, tableWidgetConfig, false, false, 'kix-icon-ticket', true
         );
 
-        configurations.push(
-            new ContextConfiguration(
-                this.getModuleId(), 'Ticket Search', ConfigurationType.Context, this.getModuleId(),
-                [], [], [],
-                [
-                    new ConfiguredWidget(
-                        'search-criteria-widget', null, new WidgetConfiguration(
-                            'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
-                            'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
-                        )
-                    ),
-                    new ConfiguredWidget('ticket-search-ticket-list-widget', null, ticketListConfig)
-                ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                [
-                    [KIXObjectType.TICKET, 'ticket-search-ticket-list-widget']
-                ]
-            )
+        const searchListWidget = new WidgetConfiguration(
+            'ticket-search-widget', 'Searches', ConfigurationType.Widget, 'search-list-widget', 'Translatable#Searches', []
         );
+
+        const contextConfiguration = new ContextConfiguration(
+            this.getModuleId(), 'Ticket Search', ConfigurationType.Context, this.getModuleId(),
+            [],
+            [
+                new ConfiguredWidget('search-list-widget', null, searchListWidget)
+            ], [],
+            [
+                new ConfiguredWidget(
+                    'search-criteria-widget', null, new WidgetConfiguration(
+                        'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
+                        'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
+                    )
+                ),
+                new ConfiguredWidget('ticket-search-ticket-list-widget', null, ticketListConfig)
+            ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+            [
+                [KIXObjectType.TICKET, 'ticket-search-ticket-list-widget']
+            ]
+        );
+
+        contextConfiguration.provideInvalidValues = false;
+        configurations.push(contextConfiguration);
 
         return configurations;
     }

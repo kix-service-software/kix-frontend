@@ -37,8 +37,6 @@ export class PendingTimeFormValue extends DateTimeFormValue {
             this.visible = true;
         }
 
-        this.isSortable = false;
-
         await super.initFormValue();
 
         this.object.addBinding(TicketProperty.STATE_ID, async (value: number) => {

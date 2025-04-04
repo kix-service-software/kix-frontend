@@ -9,6 +9,8 @@
 
 export enum SysConfigOptionDefinitionProperty {
 
+    ID = 'ID',
+
     ACCESS_LEVEL = 'AccessLevel',
 
     NAME = 'Name',

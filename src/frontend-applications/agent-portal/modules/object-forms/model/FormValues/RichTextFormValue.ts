@@ -31,6 +31,13 @@ export class RichTextFormValue extends ObjectFormValue<string> {
         this.autocompleteOption = new AutocompleteFormFieldOption(autoCompleteOptions);
     }
 
+    public async initFormValue(): Promise<void> {
+        await super.initFormValue();
+        if (this.defaultValue) {
+            this.value = this.defaultValue;
+        }
+    }
+
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
         const noImagesOption = field?.options.find((o) => o.option === 'NO_IMAGES');

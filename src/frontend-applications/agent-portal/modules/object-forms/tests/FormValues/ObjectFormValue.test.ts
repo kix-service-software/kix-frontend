@@ -13,6 +13,10 @@ import { FormFieldConfiguration } from '../../../../model/configuration/FormFiel
 import { TestObjectValueMapper, TestFormObject } from '../MockData';
 import { ObjectFormValue } from '../../model/FormValues/ObjectFormValue';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormContext } from '../../../../model/configuration/FormContext';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -32,6 +36,7 @@ describe('ObjectFormValue', () => {
             const field = new FormFieldConfiguration('', '', '', '');
 
             await formValue.initFormValueByField(field);
+            await formValue.initFormValue();
         });
 
         it('The value should not be set', () => {
@@ -48,12 +53,16 @@ describe('ObjectFormValue', () => {
             const objectFormValueMapper = new TestObjectValueMapper();
             object = new TestFormObject();
 
+            objectFormValueMapper.form = new FormConfiguration('test-form', 'test form', [], KIXObjectType.ANY);
+            objectFormValueMapper.form.formContext = FormContext.NEW;
+
             formValue = new ObjectFormValue('testProperty1', object, objectFormValueMapper, null);
 
             const field = new FormFieldConfiguration('', '', '', '');
             field.defaultValue = new FormFieldValue('testValue');
 
             await formValue.initFormValueByField(field);
+            await formValue.initFormValue();
         });
 
         it('The value should be set', () => {

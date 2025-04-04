@@ -14,7 +14,6 @@ import { TicketProperty } from '../../model/TicketProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { SearchOperator } from '../../../search/model/SearchOperator';
-import { SearchDefinition, SearchOperatorUtil } from '../../../search/webapp/core';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
@@ -29,6 +28,8 @@ import { Ticket } from '../../model/Ticket';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
+import { SearchOperatorUtil } from '../../../search/webapp/core/SearchOperatorUtil';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -162,12 +163,13 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
         let nodes = [];
         switch (property) {
             case TicketProperty.CONTACT_ID:
                 if (objectIds) {
                     const contacts = await KIXObjectService.loadObjects(KIXObjectType.CONTACT, objectIds);
-                    nodes = await KIXObjectService.prepareTree(contacts);
+                    nodes = await KIXObjectService.prepareTree(contacts, showInvalid, showInvalid);
                 }
                 break;
             case TicketProperty.ORGANISATION_ID:
@@ -175,7 +177,7 @@ export class TicketSearchFormManager extends SearchFormManager {
                     const organisations = await KIXObjectService.loadObjects(
                         KIXObjectType.ORGANISATION, objectIds
                     );
-                    nodes = await KIXObjectService.prepareTree(organisations);
+                    nodes = await KIXObjectService.prepareTree(organisations, showInvalid, showInvalid);
                 }
                 break;
             case TicketProperty.OWNER_OOO:
@@ -191,17 +193,19 @@ export class TicketSearchFormManager extends SearchFormManager {
                 break;
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['READ']);
-                nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, true, true);
+                nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, showInvalid, showInvalid);
                 break;
             default:
                 nodes = await super.getTreeNodes(property);
                 if (!nodes || !nodes.length) {
                     if (property === 'Queue.FollowUpID') {
                         nodes = await QueueService.getInstance().getTreeNodes(
-                            QueueProperty.FOLLOW_UP_ID, true, true, objectIds
+                            QueueProperty.FOLLOW_UP_ID, showInvalid, showInvalid, objectIds
                         );
                     } else {
-                        nodes = await TicketService.getInstance().getTreeNodes(property, true, true, objectIds);
+                        nodes = await TicketService.getInstance().getTreeNodes(
+                            property, showInvalid, showInvalid, objectIds
+                        );
                     }
                 }
         }

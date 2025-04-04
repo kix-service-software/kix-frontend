@@ -41,6 +41,7 @@ import { ConfigItemClassProperty } from '../../model/ConfigItemClassProperty';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 import { Contact } from '../../../customer/model/Contact';
+import { QueueService } from '../../../ticket/webapp/core/admin';
 import { Organisation } from '../../../customer/model/Organisation';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 
@@ -267,6 +268,13 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                                 KIXObjectType.CONFIG_ITEM, filterIds
                             );
                             return await KIXObjectService.prepareTree(items);
+                        } else if (input.Type === 'TeamReference') {
+                            const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(
+                                false, null, ['READ'], filterIds ? filterIds.map((fid) => Number(fid)) : null
+                            );
+                            return await QueueService.getInstance().prepareObjectTree(
+                                queuesHierarchy, showInvalid, invalidClickable
+                            );
                         }
                     }
                 }
@@ -277,7 +285,8 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
     }
 
     public async searchObjectTree(
-        property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions, additionalData?: any
+        property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions,
+        additionalData?: any, showInvalid: boolean = true
     ): Promise<TreeNode[]> {
         const dep: string = typeof additionalData === 'object' && additionalData['dep'] ?
             additionalData['dep'] : undefined;
@@ -298,12 +307,12 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                     const organisations = await KIXObjectService.search(
                         KIXObjectType.ORGANISATION, searchValue, loadingOptions
                     );
-                    return await KIXObjectService.prepareTree(organisations);
+                    return await KIXObjectService.prepareTree(organisations, showInvalid, showInvalid);
                 } else if (input.Type === 'Contact') {
                     const contacts = await KIXObjectService.search(
                         KIXObjectType.CONTACT, searchValue, loadingOptions
                     );
-                    return await KIXObjectService.prepareTree(contacts);
+                    return await KIXObjectService.prepareTree(contacts, showInvalid, showInvalid);
                 }
             }
         }
@@ -646,6 +655,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
             if (type) {
                 switch (type) {
                     case 'GeneralCatalog':
+                    case 'TeamReference':
                         return BackendSearchDataType.NUMERIC;
                     case 'Contact':
                     case 'Organisation':

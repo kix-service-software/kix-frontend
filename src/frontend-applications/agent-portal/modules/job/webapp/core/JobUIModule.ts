@@ -39,6 +39,8 @@ import { JobDetailsContext } from './context/JobDetailsContext';
 import { NewJobDialogContext } from './context/NewJobDialogContext';
 import { JobTableFactory } from './table/JobTableFactory';
 import { JobMacroActionTableFactory } from './table/JobMacroActionTableFactory';
+import { DebugOptionFieldHandler } from './DebugOptionFieldHandler';
+import { MacroService } from '../../../macro/webapp/core/MacroService';
 
 export class UIModule implements IUIModule {
 
@@ -107,6 +109,6 @@ export class UIModule implements IUIModule {
     }
 
     public async registerExtensions(): Promise<void> {
-        return;
+        MacroService.getInstance().registerOptionFieldHandler(new DebugOptionFieldHandler());
     }
 }

@@ -51,6 +51,7 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
                 value = await this.handleNotifications(value);
                 break;
             case PersonalSettingsProperty.DONT_ASK_DIALOG_ON_CLOSE:
+            case PersonalSettingsProperty.DONT_ASK_ON_EXIT:
                 value = Boolean(Number(value));
                 break;
             case PersonalSettingsProperty.OUT_OF_OFFICE_START:

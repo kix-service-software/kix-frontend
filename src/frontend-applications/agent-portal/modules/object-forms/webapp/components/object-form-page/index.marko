@@ -1,0 +1,54 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<if(state.prepared)>
+    <div class=[
+        "p-0 m-0",
+        {
+            "d-none": !state.active,
+        },
+    ]>
+        <if(input.page.description)>
+            <div class="alert alert-light" role="alert">
+                $!{input.page.description}
+            </div>
+        </if>
+
+        <if(Array.isArray(state.rows) && state.rows.length)>
+            <for|rowColumns| of=state.rows>
+                <div class="page-row row m-0 p-0">
+                    <if(Array.isArray(rowColumns) && rowColumns.length)>
+                        <for|column| of=rowColumns>
+                            <div class=[
+                                "page-column",
+                                "m-0 p-0",
+                                component.getColumnClasses(column),
+                            ]>
+                                <if(
+                                    Array.isArray(column.groups) &&
+                                    column.groups.length
+                                )>
+                                    <div class="column-row row m-0 p-0 h-100">
+                                        <for|group| of=column.groups>
+                                            <object-form-group
+                                                group=group
+                                                pageId=(input.page.id)
+                                                contextInstanceId=input.contextInstanceId
+                                            />
+                                        </for>
+                                    </div>
+                                </if>
+                            </div>
+                        </for>
+                    </if>
+                </div>
+            </for>
+        </if>
+    </div>
+</if>

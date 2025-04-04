@@ -59,64 +59,10 @@
                 background-color: @primary-0;
                 color: @secondary-6;
 
-                .action-list-wrapper {
-                    >.action-list {
-                        >li {
-                            a {
-                                color: @secondary-6
-                            }
-
-                            color: @secondary-6;
-
-                            &.inactive {
-                                color: @primary-2;
-
-                                a {
-                                    color: @primary-2
-                                }
-                            }
-
-                            &:hover:not(.list-button):not(.inactive) {
-                                color: @primary-5;
-
-                                a {
-                                    color: @primary-5
-                                }
-                            }
-                        }
-                    }
-
-                    >.action-list-expansion-container {
-                        background-color: @primary-0;
-
-                        .action-list-expansion {
-                            li {
-                                color: @secondary-6;
-
-                                >div {
-                                    border-color: @secondary-6;
-                                }
-
-                                a {
-                                    color: @secondary-6
-                                }
-
-                                &.inactive {
-                                    color: @primary-2;
-
-                                    a {
-                                        color: @primary-2
-                                    }
-                                }
-
-                                &:hover:not(.list-button):not(.inactive) {
-                                    color: @primary-5;
-
-                                    a {
-                                        color: @primary-5
-                                    }
-                                }
-                            }
+                button {
+                    .action {
+                        &:not(.inactive) {
+                            color: @secondary-3 !important;
                         }
                     }
                 }

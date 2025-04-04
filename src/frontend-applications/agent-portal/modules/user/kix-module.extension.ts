@@ -22,7 +22,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     public id = 'user-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('user-module-component', '/kix-module-user$0/webapp/core/UserUIModule', [])
+        new UIComponent('user-module-component', '/kix-module-user$0/webapp/core/UserUIModule', []),
     ];
 
     public external: boolean = false;
@@ -70,7 +70,8 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             '/kix-module-user$0/webapp/components/base-permission-input',
             []
         ),
-        new UIComponent('user-token-input', '/kix-module-user$0/webapp/components/user-token-input', [])
+        new UIComponent('user-token-input', '/kix-module-user$0/webapp/components/user-token-input', []),
+        new UIComponent('out-of-office-widget', '/kix-module-user$0/webapp/components/out-of-office-widget', [])
     ];
 
     public webDependencies: string[] = [

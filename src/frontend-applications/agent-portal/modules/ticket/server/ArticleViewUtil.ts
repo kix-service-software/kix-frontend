@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Attachment } from '../../../model/kix/Attachment';
@@ -60,7 +69,7 @@ export class ArticleViewUtil {
             }
         }
 
-        content = this.removeScriptContent(content);
+        content = this.prepareContent(content);
 
         return content;
     }
@@ -116,7 +125,7 @@ export class ArticleViewUtil {
             htmlContent = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
         }
 
-        return content;
+        return htmlContent;
     }
 
     private static prepareInlineContent(inlineAttachments: Attachment[]): InlineContent[] {
@@ -133,6 +142,8 @@ export class ArticleViewUtil {
     public static replaceInlineContent(value: string, inlineContent: InlineContent[]): string {
         let newString = value;
         if (inlineContent) {
+            const missingQuotationRegexp = new RegExp('src=(?!["\'])(cid:[^\s\/\>\"\']+)', 'g');
+            newString = newString.replace(missingQuotationRegexp, 'src="$1"');
             for (const contentItem of inlineContent) {
                 if (contentItem.contentId && contentItem.contentType) {
                     const contentType = contentItem.contentType.replace(new RegExp('"', 'g'), '\'');
@@ -147,7 +158,7 @@ export class ArticleViewUtil {
         return newString;
     }
 
-    public static removeScriptContent(content: string): string {
+    public static prepareContent(content: string): string {
         try {
             const jsdom = require('jsdom');
             const { JSDOM } = jsdom;
@@ -162,6 +173,18 @@ export class ArticleViewUtil {
             }
 
             this.removeListenersFromTags(dom);
+
+            const ckEditorLink = domDocument.createElement('link');
+            ckEditorLink.rel = 'stylesheet';
+            ckEditorLink.href = '/static/thirdparty/ckeditor5/ckeditor5.css';
+            domDocument.head.appendChild(ckEditorLink);
+
+            const bootstrapLink = domDocument.createElement('link');
+            bootstrapLink.rel = 'stylesheet';
+            bootstrapLink.href = '/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css';
+            domDocument.head.appendChild(bootstrapLink);
+
+            domDocument.body.innerHTML = '<div class="ck ck-content">' + domDocument.body.innerHTML + '</div>';
 
             return domDocument.documentElement.innerHTML;
         } catch (e) {
@@ -200,11 +223,8 @@ export class ArticleViewUtil {
         }
     }
 
-    public static async reduceContent(result: string, reduceContent?: number): Promise<string> {
-        let linesCount = reduceContent;
-        if (reduceContent > 0) {
-            linesCount = reduceContent;
-        } else {
+    public static async reduceContent(result: string, linesCount?: number): Promise<string> {
+        if (linesCount === null) {
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
             const response = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                 serverConfig.BACKEND_API_TOKEN, 'ArticleViewUtil', KIXObjectType.SYS_CONFIG_OPTION,
@@ -212,15 +232,33 @@ export class ArticleViewUtil {
                 null, null
             ).catch((): ObjectResponse<SysConfigOption> => new ObjectResponse());
             linesCount = response?.objects?.length ? Number(response.objects[0].Value) : 0;
+        } else {
+            // make sure it is a number
+            linesCount = Number(linesCount);
         }
 
         if (!isNaN(linesCount) && linesCount > 0) {
+            // cut pre body html (only reduce "visible" content)
+            let preBodyHTML = '';
+            const closingHeadIndex = result.indexOf('</head>');
+            if (closingHeadIndex !== -1) {
+                preBodyHTML = result.slice(0, closingHeadIndex + 7);
+                result = result.slice(closingHeadIndex + 7);
+            }
+
             const lines = result.split(/\n/);
 
             if (lines.length > linesCount) {
                 result = lines.slice(0, linesCount).join('\n');
                 result = this.closeTags(result);
                 result += '\n[...]';
+            }
+
+            if (preBodyHTML) {
+                result = preBodyHTML + result;
+                if (result.match(/<html.*?>/) && !result.match('</html>')) {
+                    result += '\n</html>';
+                }
             }
         }
         return result;
@@ -234,19 +272,19 @@ export class ArticleViewUtil {
             'area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen',
             'link', 'meta', 'param', 'source', 'track', 'wbr'
         ];
-        const startTags = (body.match(/(?:<([^!\s\/]+?)>|<([^!\s\/]+)\s+.+?\s*[^\/]>)/g) || [])
+        const startTags = (body.match(/<[^!\/][^>]*?>/g) || [])
             .map((tag) => tag.slice(1, -1))// remove < and >
-            .map((tag: string) => tag.replace(/(\w+).*/s, '$1'))
+            .map((tag: string) => tag.replace(/([^\s]+).*/s, '$1'))
             .filter((tag) => !ingoreTags.some((itag) => itag === tag));
-        const endTags = (body.match(/<\/(.+?)>/g) || [])
+        const endTags = (body.match(/<\/.+?>/g) || [])
             .map((tag) => tag.slice(2, -1)) // remove </ and >
             .filter((tag) => !ingoreTags.some((itag) => itag === tag));
 
+        // remove now closed tags (start with last opened - in to out)
         // rember only opening tags with no closing counterpart
+        startTags.reverse();
         if (endTags.length) {
 
-            // remove now closed tags (start with last opened - in to out)
-            startTags.reverse();
             endTags.forEach((tag) => {
                 const index = startTags.findIndex((startTag) => startTag === tag);
                 if (index !== -1) {

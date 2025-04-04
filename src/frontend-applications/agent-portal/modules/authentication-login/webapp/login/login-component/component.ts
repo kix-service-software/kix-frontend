@@ -116,7 +116,7 @@ class Component {
             ['Back', 'Zurück'],
             ['Password reset is requested.', 'Passwortrücksetzung ist angefordert.'],
             ['Requested password reset is confirmed.', 'Angeforderte Passwortrücksetzung ist bestätigt.'],
-            ['Password reset failed.', 'Passwortrücksetzung fehlgeschlagen.'],
+            ['Invalid or expired token. Please send a new request.', 'Ungültiger oder abgelaufener Token. Bitte senden Sie eine neue Anfrage.'],
             ['Username is required.', 'Nutzername muss angegeben werden.'],
         ];
     }

@@ -20,15 +20,23 @@ export class FormFactory {
             form.pages = form.pages.map((p) => {
                 let groups;
                 if (p.groups) {
-                    groups = p.groups.map(
-                        (g) => new FormGroupConfiguration(
-                            g.id, g.name, [], g.separatorString, this.initFormFields(g.formFields), g.draggableFields
-                        )
-                    );
+                    groups = p.groups.map((g) => {
+                        const group = new FormGroupConfiguration(g.id, g.name);
+                        group.fieldConfigurationIds = [];
+                        group.separatorString = g.separatorString;
+                        group.formFields = this.initFormFields(g.formFields), g.draggableFields;
+                        group.description = g.description;
+                        return group;
+                    });
                 }
-                return new FormPageConfiguration(
-                    p.id, p.name, [], p.singleFormGroupOpen, p.showSingleGroup, groups
-                );
+                const page = new FormPageConfiguration(p.id, p.name);
+                page.groupConfigurationIds = [];
+                page.singleFormGroupOpen = p.singleFormGroupOpen;
+                page.showSingleGroup = p.showSingleGroup;
+                page.groups = groups;
+                page.description = p.description;
+
+                return page;
             });
         }
     }
@@ -42,7 +50,7 @@ export class FormFactory {
 
     public static cloneField(field: FormFieldConfiguration, prefixForNewInstanceId?: string): FormFieldConfiguration {
         const clonedField = new FormFieldConfiguration(
-            field.id,
+            field.id || IdService.generateDateBasedId(),
             field.label,
             field.property,
             field.inputComponent,
@@ -72,7 +80,8 @@ export class FormFactory {
             field.visible,
             field.translateLabel,
             field.valid,
-            field.countSeparatorString
+            field.countSeparatorString,
+            field.description
         );
         clonedField.instanceId = field.instanceId || IdService.generateDateBasedId(prefixForNewInstanceId);
         clonedField.parent = field.parent;
