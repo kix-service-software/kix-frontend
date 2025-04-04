@@ -90,7 +90,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.required = this.state.formValue?.required;
         this.state.hint = this.state.formValue?.hint;
         this.state.formValues = this.state.formValue?.formValues?.filter(
-            (fv) => fv.isControlledByParent || fv.fieldId?.length > 0
+            (fv) => fv.isControlledByParent || !fv.fieldId
         );
         this.state.label = await TranslationService.translate(this.state.formValue?.label);
 
