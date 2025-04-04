@@ -38,6 +38,9 @@ import { HTTPResponse } from './HTTPResponse';
 import { ObjectResponse } from './ObjectResponse';
 import { FilterDataType } from '../../model/FilterDataType';
 import { ObjectLoader } from './ObjectLoader';
+import { PermissionService } from './PermissionService';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -201,9 +204,18 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         token: string, clientRequestId: string, objectTags: string[],
         objectType: KIXObjectType | string, objectId: string | number
     ): Promise<void> {
+        const allowed = await PermissionService.getInstance().checkPermissions(
+            token,
+            [
+                new UIComponentPermission('system/config', [CRUD.READ]),
+                new UIComponentPermission('objecttags', [CRUD.READ, CRUD.CREATE])
+            ], clientRequestId, null
+        ).catch(() => false);
+
         if (
             objectType !== KIXObjectType.OBJECT_TAG
             && objectType !== KIXObjectType.OBJECT_TAG_LINK
+            && allowed
         ) {
             const tagService = KIXObjectServiceRegistry.getServiceInstance(
                 KIXObjectType.OBJECT_TAG
@@ -391,7 +403,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
         else {
             // triggers the deletion of associated tags for the deleted object
-            await this.commitObjectTag(token, clientRequestId, null, objectType, objectId);
+            await this.commitObjectTag(token, clientRequestId, null, objectType, objectId)
+                .catch(() => {
+                    // be silent
+                });
         }
 
         return [];
