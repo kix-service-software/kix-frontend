@@ -113,11 +113,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </for>
          </div>
       </if>
-      <if(
-         Array.isArray(state.formValues) &&
-         state.formValues.length &&
-         component.hasEnabledFormValues()
-      )>
+      <if(Array.isArray(state.formValues) && state.formValues.length)>
          <object-form-values-container
             formValues=state.formValues
             parent=input.formValue

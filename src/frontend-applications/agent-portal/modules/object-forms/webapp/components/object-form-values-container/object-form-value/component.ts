@@ -264,10 +264,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public hasEnabledFormValues(): boolean {
-        return this.state.formValues?.some((fv) => fv.enabled);
-    }
-
     public getFieldClasses(): string {
         const classes = [];
 
