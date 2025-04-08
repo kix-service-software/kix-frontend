@@ -119,7 +119,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'faq-article-edit-form-field-tags',
-                'Translatable#Tags', FAQArticleProperty.KEYWORDS, null, false,
+                'Translatable#Keywords', FAQArticleProperty.KEYWORDS, null, false,
                 'Translatable#Helptext_FAQ_ArticleCreate_Tags'
             )
         );
