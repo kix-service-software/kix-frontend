@@ -43,11 +43,19 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
         return super.findFormValue(property);
     }
 
-    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+    protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
         const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
         const config = dynamicField?.Config;
-        field.defaultValue = new FormFieldValue(config?.DefaultValue);
-        return super.initFormValueByField(field);
+        this.defaultValue = config?.DefaultValue;
+    }
+
+    public async initFormValue(): Promise<void> {
+        if (!this.value && this.defaultValue) {
+            if (typeof this.defaultValue === 'string') {
+                this.value = DynamicFieldService.parseChecklist(this.defaultValue);
+            }
+        }
+        await this.prepareLabel();
     }
 
     public async setObjectValue(value: CheckListItem[]): Promise<void> {
