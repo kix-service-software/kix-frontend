@@ -94,7 +94,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = 'Translatable#Id';
                 break;
             case FAQArticleProperty.KEYWORDS:
-                displayValue = 'Translatable#Tags';
+                displayValue = 'Translatable#Keywords';
                 break;
             case FAQArticleProperty.LANGUAGE:
                 displayValue = 'Translatable#Language';
