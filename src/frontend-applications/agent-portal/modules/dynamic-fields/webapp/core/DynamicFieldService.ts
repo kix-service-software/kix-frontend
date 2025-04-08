@@ -27,6 +27,7 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
 
     private schema: Map<string, any> = new Map();
     private schemaHandler: Map<string, () => Promise<void>> = new Map();
+    public ignoreDFTypes: string[] = [];
 
     private static INSTANCE: DynamicFieldService = null;
 
@@ -51,6 +52,10 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
 
     public getLinkObjectName(): string {
         return 'DynamicField';
+    }
+
+    public addIgnoreDFType(dfType: string): void {
+        this.ignoreDFTypes.push(dfType);
     }
 
     public async loadObjects<O extends KIXObject>(
