@@ -46,7 +46,6 @@ export class UserCounterEventHandler {
     }
 
     public async updateCurrentUserCache(): Promise<void> {
-        BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.USER_TICKETS}`);
         BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.USER_COUNTER}`);
         EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
