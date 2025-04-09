@@ -807,6 +807,19 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return dependencies;
     }
 
+    public static async getObjectDependencieNodes(
+        objectType: KIXObjectType, showInvalid: boolean = true
+    ): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
+
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
+        if (service) {
+            nodes = await service.getObjectDependencyNodes(objectType, showInvalid);
+        }
+
+        return nodes;
+    }
+
     public async getObjectProperties(objectType: KIXObjectType, dependencyIds: string[] = []): Promise<string[]> {
         let properties: string[] = [];
         const dynamicFields: DynamicField[] = await KIXObjectService.loadDynamicFields(objectType);
@@ -841,6 +854,20 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             }
         }
         return dependencies;
+    }
+
+    public async getObjectDependencyNodes(
+        objectType: KIXObjectType, showInvalid: boolean = true
+    ): Promise<TreeNode[]> {
+        const dependencies: KIXObject[] = await KIXObjectService.getObjectDependencies(objectType, showInvalid);
+        const nodes: TreeNode[] = [];
+        for (const dependency of dependencies) {
+            const text = await LabelService.getInstance().getObjectText(dependency);
+            nodes.push(new TreeNode(dependency.ObjectId, text));
+        }
+        nodes.sort((a, b) => a.label.localeCompare(b.label));
+
+        return nodes;
     }
 
     public static async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
