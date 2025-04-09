@@ -30,6 +30,8 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     private bulkRun: boolean = false;
 
+    public validationIgnoreOperators: string[] = [PropertyOperator.CLEAR];
+
     public init(): void {
         super.init();
         this.bulkRun = false;
@@ -64,7 +66,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
     public async validate(): Promise<ValidationResult[]> {
         const validationResult: ValidationResult[] = await super.validate();
         let dfValues = this.values.filter((v) => KIXObjectService.getDynamicFieldName(v.property));
-        dfValues = dfValues.filter((v) => v.operator !== PropertyOperator.CLEAR);
+        dfValues = dfValues.filter((v) => !this.validationIgnoreOperators.some((o) => o === v.operator));
         for (const v of dfValues) {
             const results = await DynamicFieldFormUtil.getInstance().validateDFValue(
                 KIXObjectService.getDynamicFieldName(v.property), v.value
