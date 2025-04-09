@@ -22,11 +22,11 @@ export class TicketCreateDynamicFieldsOptionFieldHandler extends OptionFieldHand
         jobType: string
     ): Promise<FormFieldConfiguration> {
         const isDynamicFieldOption = option.Name === 'DynamicFieldList' || option.Name === 'ArticleDynamicFieldList';
-        const isCreateAction = actionType === 'TicketCreate' || actionType === 'ArticleCreate';
+        const isCreateAction = actionType === 'TicketCreate' || (jobType === JobTypes.TICKET && actionType === 'ArticleCreate');
 
-        if (jobType === JobTypes.TICKET && isCreateAction && isDynamicFieldOption) {
+        if (isCreateAction && isDynamicFieldOption) {
             let defaultValue;
-            if (action && action.Parameters) {
+            if (action?.Parameters) {
                 defaultValue = action.Parameters[option.Name];
             }
 
@@ -36,7 +36,6 @@ export class TicketCreateDynamicFieldsOptionFieldHandler extends OptionFieldHand
                 defaultValue, 1, 99, 1, [new FormFieldOption('ObjectType', objectType)]
             );
         }
-        return;
     }
 
     public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: any): any {
@@ -50,6 +49,5 @@ export class TicketCreateDynamicFieldsOptionFieldHandler extends OptionFieldHand
                 return parameter[optionName];
             }
         }
-        return;
     }
 }
