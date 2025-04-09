@@ -11,19 +11,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <div
         id=(input.group.id)
         class=[
-            "accordion my-2 m-0 p-0",
+            "accordion my-2 m-0 p-0 px-1",
             component.getGroupClasses(input.group.id),
         ]
     >
         <div class="accordion-item h-100">
             <if(input.group.name)>
                 <button
-                    class="accordion-button fw-bold"
+                    class="accordion-button fw-bold p-2 flex-wrap"
                     type="button"
                     data-bs-toggle=(input.contextInstanceId ? "" : "collapse")
                     data-bs-target=("#content-" + input.group.id)
                     aria-expanded="true"
                     aria-controls=(input.group.id)
+                    title=(input.group.name)
                 >
                     <if(input.contextInstanceId)>
                         <button

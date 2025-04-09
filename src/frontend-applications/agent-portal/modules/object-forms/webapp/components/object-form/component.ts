@@ -24,8 +24,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private subscriber: IEventSubscriber;
     private formHandler: ObjectFormHandler;
 
-    private updateTimeout: any;
-
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -42,22 +40,23 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.context = ContextService.getInstance().getActiveContext();
         }
 
-        this.formHandler = await this.context.getFormManager().getObjectFormHandler();
+        this.registerEventHandler();
 
-        if (this.formHandler.form.pages?.length) {
+        this.formHandler = await this.context.getFormManager().getObjectFormHandler();
+        this.state.pages = this.formHandler?.form?.pages;
+
+        if (this.state.pages?.length) {
             this.formHandler.setActivePageId(this.formHandler.form.pages[0].id);
         }
-        this.setFormValues();
-        this.registerEventHandler();
+
+        this.state.prepared = true;
     }
 
     private registerEventHandler(): void {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('object-form'),
             eventPublished: async (data: Context | any, eventId: string): Promise<void> => {
-                if (eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED) {
-                    this.state.prepared = true;
-                } else if (
+                if (eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED ||
                     eventId === ObjectFormEvent.OBJECT_FORM_HANDLER_CHANGED ||
                     eventId === ObjectFormEvent.PAGE_ADDED ||
                     eventId === ObjectFormEvent.PAGE_DELETED
@@ -86,23 +85,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.pages = this.formHandler?.form.pages;
         (this as any).setStateDirty('pages');
         setTimeout(() => this.state.prepared = true, 50);
-    }
-
-    private setFormValues(resetCurrenPage: boolean = true): void {
-        if (this.updateTimeout) {
-            clearTimeout(this.updateTimeout);
-        }
-
-        this.updateTimeout = setTimeout(() => {
-            if (this.formHandler) {
-                this.state.pages = this.formHandler?.form.pages;
-            } else {
-                this.state.error = 'Translatable#No form available. Please contact your administrator.';
-                console.error('No form available. Please contact your administrator.');
-            }
-
-            this.state.prepared = true;
-        }, 50);
     }
 
     public getLayoutClasses(): string {

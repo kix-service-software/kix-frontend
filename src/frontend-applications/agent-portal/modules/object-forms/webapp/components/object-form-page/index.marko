@@ -9,9 +9,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.prepared)>
     <div class=[
-        "p-0 m-0 carousel-item",
+        "p-0 m-0",
         {
-            active: state.active,
+            "d-none": !state.active,
         },
     ]>
         <if(input.page.description)>
@@ -27,7 +27,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <for|column| of=rowColumns>
                             <div class=[
                                 "page-column",
-                                "m-0 p-0 px-1 ",
+                                "m-0 p-0",
                                 component.getColumnClasses(column),
                             ]>
                                 <if(

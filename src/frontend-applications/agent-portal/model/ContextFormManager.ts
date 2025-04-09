@@ -117,7 +117,7 @@ export class ContextFormManager {
 
         this.handler = new ObjectFormHandler(this.context);
 
-        await this.handler.loadForm(true);
+        this.handler.loadForm(true);
 
         const end = Date.now();
         console.debug(`ObjectFormHandler created: ${(end - start)}ms`);

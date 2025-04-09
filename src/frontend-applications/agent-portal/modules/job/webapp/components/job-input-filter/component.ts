@@ -60,6 +60,7 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.state.prepared = true;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     private async setManager(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
@@ -70,6 +71,8 @@ class Component extends FormInputComponent<any, ComponentState> {
 
         this.state.manager = jobFormManager?.getFilterManager() || jobFormManager?.filterManager;
         if (this.state.manager) {
+            this.state.manager.allowEmptyValues = false;
+            this.state.manager.fieldInstanceId = this.state.field.instanceId;
             this.state.manager.init();
             this.state.manager.reset(false);
 
@@ -95,6 +98,8 @@ class Component extends FormInputComponent<any, ComponentState> {
                             );
                         }
                     }
+
+                    await this.state.manager.validate();
                     super.provideValue(filterValues, true);
                 }, 200);
             });

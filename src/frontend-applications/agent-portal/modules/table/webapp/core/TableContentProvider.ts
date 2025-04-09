@@ -25,7 +25,6 @@ import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSub
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectSocketClient } from '../../../base-components/webapp/core/KIXObjectSocketClient';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
-import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { SearchService } from '../../../search/webapp/core/SearchService';
 import { ITableContentProvider } from '../../model/ITableContentProvider';
@@ -256,24 +255,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     for (const column of columns) {
 
                         let tableValue: TableValue;
-                        const dfName = KIXObjectService.getDynamicFieldName(column.property);
-                        if (dfName) {
-                            const dfv: DynamicFieldValue = o[KIXObjectProperty.DYNAMIC_FIELDS].find(
-                                (dfv) => dfv.Name === dfName
-                            );
-                            tableValue = new TableValue(column.property, dfv?.Value, dfv?.DisplayValue?.toString());
-                            tableValue.displayValueList = dfv?.PreparedValue;
-
-                            // split display value on reference fields,
-                            // because they often use some short value (ValueLookup) as prepared value
-                            // TODO: use correct display string of referenced object type
-                            const dynamicField = await KIXObjectService.loadDynamicField(dfName);
-                            if (dfv?.DisplayValue && dynamicField && dynamicField.FieldType.match(/Reference$/)) {
-                                tableValue.displayValueList = dynamicField.Config?.ItemSeparator ?
-                                    dfv.DisplayValue.split(dynamicField.Config.ItemSeparator) :
-                                    null;
-                            }
-                        } else if (
+                        if (
                             column.property === KIXObjectProperty.OBJECT_TAGS && o[KIXObjectProperty.OBJECT_TYPE]
                             && o[KIXObjectProperty.OBJECT_ID]
                         ) {

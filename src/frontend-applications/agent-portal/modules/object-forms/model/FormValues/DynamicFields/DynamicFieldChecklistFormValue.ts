@@ -7,12 +7,14 @@
  * --
  */
 
-import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { CheckListItem } from '../../../../dynamic-fields/model/CheckListItem';
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { ObjectFormValue } from '../ObjectFormValue';
 import { DynamicFieldService } from '../../../../dynamic-fields/webapp/core/DynamicFieldService';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 
 export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListItem[]> {
 
@@ -26,6 +28,11 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
         super(property, object, objectValueMapper, parent);
 
         this.inputComponentId = 'checklist-form-input';
+
+        const checklist = Array.isArray(object[property]) && object[property].length
+            ? object[property][0]
+            : object[property];
+        this.value = DynamicFieldService.parseChecklist(checklist);
     }
 
     public findFormValue(property: string): ObjectFormValue {
@@ -36,22 +43,19 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
         return super.findFormValue(property);
     }
 
-    public async initFormValue(): Promise<void> {
+    protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
         const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
         const config = dynamicField?.Config;
+        this.defaultValue = config?.DefaultValue;
+    }
 
-        const value = this.object[this.property];
-        if (Array.isArray(value)) {
-            this.value = value.length ? value[0] : null;
-        } else {
-            this.value = value;
+    public async initFormValue(): Promise<void> {
+        if (!this.value && this.defaultValue) {
+            if (typeof this.defaultValue === 'string') {
+                this.value = DynamicFieldService.parseChecklist(this.defaultValue);
+            }
         }
-
-        if (!this.value && config?.DefaultValue) {
-            this.setFormValue(config?.DefaultValue, true);
-        } else if (typeof this.value === 'string') {
-            this.setFormValue(this.value, true);
-        }
+        await this.prepareLabel();
     }
 
     public async setObjectValue(value: CheckListItem[]): Promise<void> {

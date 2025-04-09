@@ -12,6 +12,8 @@ import { PODefinition } from '../server/model/PODefinition';
 
 export interface ILocaleExtension {
 
+    pluginId: string;
+
     getPODefinitions(): Promise<PODefinition[]>;
 
 }

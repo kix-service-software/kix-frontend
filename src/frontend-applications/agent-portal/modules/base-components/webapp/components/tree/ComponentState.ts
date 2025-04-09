@@ -9,8 +9,9 @@
 
 import { TreeNode } from '../../core/tree';
 import { IdService } from '../../../../../model/IdService';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public tree: TreeNode[] = [],
@@ -19,6 +20,8 @@ export class ComponentState {
         public activeNode: TreeNode = null,
         public treeStyle: string = null,
         public allowExpandCollapseAll: boolean = true
-    ) { }
+    ) {
+        super();
+    }
 
 }

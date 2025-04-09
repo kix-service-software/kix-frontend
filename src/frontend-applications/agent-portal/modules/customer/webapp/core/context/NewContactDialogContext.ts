@@ -50,6 +50,12 @@ export class NewContactDialogContext extends Context {
                 delete contact.ID;
                 delete contact.User?.UserID;
                 delete contact.AssignedUserID;
+                delete contact.Email;
+                delete contact.Email1;
+                delete contact.Email2;
+                delete contact.Email3;
+                delete contact.Email4;
+                delete contact.Email5;
             }
         } else {
             contact = new Contact();

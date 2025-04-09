@@ -23,6 +23,9 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 
 export class TableFactoryService {
 
@@ -143,10 +146,17 @@ export class TableFactoryService {
                 );
 
                 if (context?.getConfiguration()?.application === 'agent-portal') {
+                    const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(
+                        [
+                            new UIComponentPermission('system/config', [CRUD.READ]),
+                            new UIComponentPermission('objecttags', [CRUD.READ, CRUD.CREATE])
+                        ]
+                    );
                     const objectTypes = await KIXObjectService.prepareObjectTagTypes();
                     if (
                         objectTypes.has(objectType) && table.getTableConfiguration().showTags
                         && !table.getColumn(KIXObjectProperty.OBJECT_TAGS)
+                        && allowed
                     ) {
                         table.addAdditionalColumns(
                             [factory.getDefaultColumnConfiguration(KIXObjectProperty.OBJECT_TAGS)]

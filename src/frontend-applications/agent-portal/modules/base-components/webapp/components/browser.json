@@ -49,7 +49,6 @@
         "require ./object-search-input",
         "require ./overlay",
         "require ./overlay/confirm-overlay",
-        "require ./overlay/refresh-app-toast",
         "require ./overlay/table-column-filter-overlay",
         "require ./overlay/toast",
         "require ./overlay-icon",

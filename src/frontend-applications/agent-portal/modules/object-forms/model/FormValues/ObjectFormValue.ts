@@ -189,7 +189,8 @@ export class ObjectFormValue<T = any> {
                 new FormValueBinding(this, FormValueProperty.REG_EX_LIST, object, property),
                 new FormValueBinding(this, FormValueProperty.FORM_VALUES, object, property),
                 new FormValueBinding(this, FormValueProperty.LABEL, object, property),
-                new FormValueBinding(this, FormValueProperty.IS_CONFIGURABLE, object, property)
+                new FormValueBinding(this, FormValueProperty.IS_CONFIGURABLE, object, property),
+                new FormValueBinding(this, FormValueProperty.DEFAULT_VALUE, object, property)
             );
 
             this.addPropertyBinding(FormValueProperty.REG_EX_LIST, () => {
@@ -257,25 +258,7 @@ export class ObjectFormValue<T = any> {
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
-
-        const context = ContextService.getInstance().getActiveContext();
-        const isRestoredContext = context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
-        if (!isRestoredContext) {
-            const defaultValue = field.defaultValue?.value;
-            let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null && defaultValue !== '');
-            if (Array.isArray(defaultValue)) {
-                hasDefaultValue = defaultValue.length > 0;
-            }
-
-            if (field.empty) {
-                this.setFormValue(null, true);
-                this.empty = true;
-            } else if (hasDefaultValue) {
-                const value = await this.handlePlaceholders(field.defaultValue?.value);
-                this.defaultValue = value;
-                this.setFormValue(value, true);
-            }
-        }
+        await this.setDefaultValue(field);
 
         this.enabled = field.valid !== false;
 
@@ -305,16 +288,40 @@ export class ObjectFormValue<T = any> {
         }
     }
 
+    protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        const isRestoredContext = context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
+        if (!isRestoredContext) {
+            const defaultValue = field.defaultValue?.value;
+            let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null && defaultValue !== '');
+            if (Array.isArray(defaultValue)) {
+                hasDefaultValue = defaultValue.length > 0;
+            }
+
+            if (field.empty) {
+                this.defaultValue = null;
+                this.empty = true;
+            } else if (hasDefaultValue) {
+                const value = await this.handlePlaceholders(field.defaultValue?.value);
+                this.defaultValue = value;
+            }
+        }
+    }
+
     public async initFormValue(): Promise<void> {
         this.actions = await ObjectFormRegistry.getInstance().getActions(this, this.objectValueMapper);
-        if (this.object && !this.value && this.object[this.property]) {
-            this.setFormValue(this.object[this.property]);
+        if (this.defaultValue) {
+            this.value = this.defaultValue;
+        } else if (this.object && this.object[this.property]) {
+            this.value = this.object[this.property];
         }
         return this.prepareLabel();
     }
 
     public async postInitFormValue(): Promise<void> {
-        return;
+        if (!this.value) {
+            this.setFormValue(this.defaultValue, true);
+        }
     }
 
     public async prepareLabel(): Promise<void> {

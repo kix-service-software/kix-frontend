@@ -88,7 +88,6 @@ export class TicketAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.TICKET_LOCK
             || kixObjectType === KIXObjectType.WATCHER
             || kixObjectType === KIXObjectType.TICKET_HISTORY
-            || kixObjectType === KIXObjectType.HTML_TO_PDF
             || kixObjectType === KIXObjectType.USER_TICKETS
             || kixObjectType === KIXObjectType.USER_COUNTER;
     }
@@ -280,11 +279,10 @@ export class TicketAPIService extends KIXObjectAPIService {
             );
         } else if (objectType === KIXObjectType.USER_TICKETS) {
             const uri = this.buildUri('session', 'user', 'tickets');
-            const user = await UserService.getInstance().getUserByToken(token);
-            loadingOptions.cacheType = `${KIXObjectType.USER_TICKETS}_${user?.UserID}`;
+            loadingOptions.cacheType = KIXObjectType.TICKET;
             objectResponse = await super.load(
                 token, KIXObjectType.TICKET, uri, loadingOptions, null, KIXObjectType.TICKET,
-                clientRequestId, Ticket
+                clientRequestId, Ticket, true, true
             );
         } else if (objectType === KIXObjectType.USER_COUNTER) {
             const uri = this.buildUri('session', 'user', 'counters');
@@ -336,13 +334,6 @@ export class TicketAPIService extends KIXObjectAPIService {
                     clientRequestId, TicketHistory
                 );
             }
-        }
-        else if (objectType === KIXObjectType.HTML_TO_PDF) {
-            const uri = this.buildUri('system', 'htmltopdf', 'convert');
-            objectResponse = await super.load(
-                token, KIXObjectType.HTML_TO_PDF, uri, loadingOptions, null, KIXObjectType.HTML_TO_PDF,
-                null, null, false
-            );
         }
 
         return objectResponse;

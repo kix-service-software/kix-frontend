@@ -9,19 +9,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <ul key=state.treeId style=state.treeStyle class="tree-list">
     <if(state.allowExpandCollapseAll)>
-        <div class="row m-0 my-3 expand-hover">
-            <div
-                class="col-6 m-0 p-0 pe-2 text-end"
+        <div class="d-flex justify-content-end m-0 mb-3 expand-hover border-bottom border-secondary pb-2">
+            <i
+                class="fa-solid fa-angles-up mx-2"
                 on-click("expandOrCollapseAll", false)
-            >
-                <translation-string pattern="Translatable#Collapse All"/>
-            </div>
-            <div
-                class="col-6 m-0 p-0 ps-2 pe-auto border-start border-secondary"
+                title=(state.translations["Translatable#Collapse All"])
+            />
+            <i
+                class="fa-solid fa-angles-down"
                 on-click("expandOrCollapseAll", true)
-            >
-                <translation-string pattern="Translatable#Expand All"/>
-            </div>
+                title=(state.translations["Translatable#Expand All"])
+            />
         </div>
     </if>
     <for|node| of=state.tree>

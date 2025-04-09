@@ -49,6 +49,17 @@ class Component {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        if (context) {
+            const instanceId = context.getAdditionalInformation('SEARCH_WIDGET_INSTANCE_ID');
+            if (instanceId) {
+                this.state.instanceId = instanceId;
+            } else {
+                context.setAdditionalInformation(
+                    'SEARCH_WIDGET_INSTANCE_ID', IdService.generateDateBasedId(this.state.instanceId)
+                );
+            }
+        }
     }
 
     public async onMount(): Promise<void> {

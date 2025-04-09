@@ -1,0 +1,9 @@
+{
+    "dependencies": [
+        "require ./core/ToastUIModule",
+        "require ./components/refresh-app-toast",
+        "require ./components/success-toast",
+        "require ./components/info-toast",
+        "require ./components/error-toast"
+    ]
+}

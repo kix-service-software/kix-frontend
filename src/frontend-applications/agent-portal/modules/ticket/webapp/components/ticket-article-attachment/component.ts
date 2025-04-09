@@ -55,12 +55,13 @@ class ArticleAttachmentComponent {
                     loading: true, hint: 'Translatable#Prepare File Download'
                 });
                 const isPDF = this.state.attachment.ContentType === 'application/pdf';
+                const asDownload = (isPDF && force || !isPDF);
 
                 this.state.progress = true;
-                const attachment = await this.loadArticleAttachment(this.state.attachment.ID, !isPDF);
+                const attachment = await this.loadArticleAttachment(this.state.attachment.ID, asDownload);
                 this.state.progress = false;
 
-                if (isPDF) {
+                if (!asDownload) {
                     BrowserUtil.openPDF(attachment.Content, attachment.Filename);
                 } else {
                     BrowserUtil.startFileDownload(attachment);

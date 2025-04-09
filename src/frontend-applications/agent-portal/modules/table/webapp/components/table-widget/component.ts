@@ -87,9 +87,9 @@ class Component {
             this.state.showFilterInBody = Boolean(settings.showFilterInBody);
             this.state.icon = this.state.widgetConfiguration.icon;
             this.state.predefinedTableFilter = settings.predefinedTableFilters ? settings.predefinedTableFilters : [];
-            this.initEventSubscriber();
-
             await this.prepare();
+            this.state.showFilterReset = this.state.table.isFiltered();
+            this.initEventSubscriber();
             this.state.filterValue = this.state.table ? this.state.table.getFilterValue() : null;
             await this.prepareContextDependency(settings);
             await this.prepareFormDependency();
@@ -317,21 +317,26 @@ class Component {
         }
 
         this.prepareTitleTimeout = setTimeout(async () => {
+            let countString = '';
+            let count = 0;
 
-            // get total, if not set, use all rows (but consider frontend filtering = "not all")
-            let count = this.state.table?.getContentProvider()?.totalCount ||
-                this.state.table?.getRowCount(this.state.table.isBackendFilterSupported()) || 0;
+            // only show count, if rows are "present" / objects found
+            if (this.state.table?.getRowCount()) {
 
-            let countString = `${count}`;
+                // get total, if not set, use all rows (but consider frontend filtering = "not all")
+                count = this.state.table?.getContentProvider()?.totalCount ||
+                    this.state.table?.getRowCount(this.state.table.isBackendFilterSupported()) || 0;
+                countString = `${count}`;
 
-            // if current loaded (page) < total, show actually loaded of total
-            // use current count, if not set use "total"
-            const currentLimit = this.state.table?.getContentProvider()?.currentLimit || count;
-            if (currentLimit < count) {
-                // use actul row count, because currentCount could be lager (based on pagesize)
-                // e.g. current limit is 20 but only 18 objects (rows) exist
-                const visibleRows = this.state.table?.getRowCount();
-                countString = `${visibleRows}/${count}`;
+                // if current loaded (page) < total, show actually loaded of total
+                // use current count, if not set use "total"
+                const currentLimit = this.state.table?.getContentProvider()?.currentLimit || count;
+                if (currentLimit < count) {
+                    // use actul row count, because currentCount could be lager (based on pagesize)
+                    // e.g. current limit is 20 but only 18 objects (rows) exist
+                    const visibleRows = this.state.table?.getRowCount();
+                    countString = `${visibleRows}/${count}`;
+                }
             }
 
             if (!this.configuredTitle) {

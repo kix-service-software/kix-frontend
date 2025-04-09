@@ -154,10 +154,11 @@ class Component {
                 loading: true, hint: 'Translatable#Prepare File Download'
             });
             const isPDF = attachment.ContentType === 'application/pdf';
+            const asDownload = (isPDF && force || !isPDF);
 
-            const downloadableAttachment = await this.loadAttachment(attachment, undefined, !isPDF);
+            const downloadableAttachment = await this.loadAttachment(attachment, undefined, asDownload);
             if (downloadableAttachment) {
-                if (isPDF) {
+                if (!asDownload) {
                     BrowserUtil.openPDF(downloadableAttachment.Content, downloadableAttachment.Filename);
                 } else {
                     BrowserUtil.startFileDownload(downloadableAttachment);
