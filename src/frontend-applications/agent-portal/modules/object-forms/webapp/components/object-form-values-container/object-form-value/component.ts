@@ -270,15 +270,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const fieldLayout = this.fieldLayout?.find((fl) => fl.fieldId === this.field?.id);
 
         if (fieldLayout?.colSM > 0) {
-            classes.push('col-sm-' + fieldLayout.colSM);
+            classes.push('col-sm-' + (fieldLayout.colSM < 3 ? 3 : fieldLayout.colSM));
         }
 
         if (fieldLayout?.colMD > 0) {
-            classes.push('col-md-' + fieldLayout.colMD);
+            classes.push('col-md-' + (fieldLayout.colMD < 3 ? 3 : fieldLayout.colMD));
         }
 
         if (fieldLayout?.colLG > 0) {
-            classes.push('col-lg-' + fieldLayout.colLG);
+            classes.push('col-lg-' + (fieldLayout.colLG < 3 ? 3 : fieldLayout.colLG));
         }
 
         if (!classes.length) {
