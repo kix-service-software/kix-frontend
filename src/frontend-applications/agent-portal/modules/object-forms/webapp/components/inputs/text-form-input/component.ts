@@ -50,6 +50,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.value = this.formValue?.value;
         this.state.readonly = this.formValue?.readonly;
         this.state.inputType = this.formValue.isPassword ? 'password' : 'text';
+        this.state.autocompleteProperty = this.formValue.isPassword ? 'new-password' : 'off';
     }
 
     public async onMount(): Promise<void> {
