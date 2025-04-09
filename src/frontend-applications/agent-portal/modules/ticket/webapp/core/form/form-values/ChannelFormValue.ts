@@ -13,7 +13,6 @@ import { FormFieldConfiguration } from '../../../../../../model/configuration/Fo
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
-import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFormFieldOption } from '../../../../../dynamic-fields/webapp/core';
@@ -26,7 +25,6 @@ import { Article } from '../../../../model/Article';
 import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { Channel } from '../../../../model/Channel';
-import { TicketService } from '../../TicketService';
 import { ArticleAttachmentFormValue } from './ArticleAttachmentFormValue';
 import { CustomerVisibleFormValue } from './CustomerVisibleFormValue';
 import { EncryptIfPossibleFormValue } from './EncryptIfPossibleFormValue';
@@ -88,9 +86,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
 
         this.object?.addBinding(ArticleProperty.CHANNEL_ID, async (value: number) => {
-            if (this.visible) {
-                await this.setChannelFields(value);
-            }
+            await this.setChannelFields(value);
         });
     }
 
@@ -109,6 +105,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
+
+        if (!this.value && this.defaultValue) {
+            this.value = this.defaultValue;
+        }
 
         // do not show in article edit forms
         if ((this.object as Article).ArticleID) {

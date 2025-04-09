@@ -128,8 +128,16 @@ export class ContextService {
             if (this.isStorableDialogContext(context)) {
                 await this.updateStorage(context?.instanceId);
             }
-        } else if (urlParams) {
-            await context.update(urlParams);
+        } else {
+            if (urlParams) {
+                await context.update(urlParams);
+            }
+
+            if (additionalInformation && additionalInformation.length) {
+                additionalInformation.forEach(([key, value]) => {
+                    context.setAdditionalInformation(key, value);
+                });
+            }
         }
         return context;
     }
@@ -372,8 +380,13 @@ export class ContextService {
 
     public async setActiveContext(
         contextId: string, objectId?: string | number, urlParams?: URLSearchParams,
-        additionalInformation: Array<[string, any]> = [], history: boolean = true
+        additionalInformation: Array<[string, any]> = [], history: boolean = true, removeCurrent: boolean = false
     ): Promise<Context> {
+        if (removeCurrent) {
+            const currentContext = this.getActiveContext();
+            await this.removeContext(currentContext.instanceId);
+        }
+
         const context = await this.getContextInstance(
             contextId, objectId, additionalInformation, urlParams
         );
@@ -381,6 +394,7 @@ export class ContextService {
         if (context) {
             await this.setContextByInstanceId(context.instanceId, objectId, history);
         }
+
 
         return context;
     }

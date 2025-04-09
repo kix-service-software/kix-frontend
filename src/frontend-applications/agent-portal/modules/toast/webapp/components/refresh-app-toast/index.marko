@@ -1,0 +1,40 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<div
+    id="refresh-app-toast"
+    class="toast position-absolute top-0 end-0 p-1 bg-light fade show me-5 mt-5 border-1 border-danger"
+    role="alert"
+>
+    <div class="toast-header">
+        <i class="fa-solid fa-rotate me-2"/>
+        <strong class="me-auto">
+            <translation-string pattern="Translatable#Reload Application"/>
+        </strong>
+        <small>${state.time}</small>
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+        />
+    </div>
+    <div class="toast-body">
+        <h2>
+            <translation-string pattern="Translatable#Your Permissions have been updated."/>
+        </h2>
+        <button
+            type="button"
+            class="btn btn-sm btn-danger text-white"
+            on-click("refreshClicked")
+        >
+            <i class="fa-solid fa-rotate me-2"/>
+            <translation-string pattern="Translatable#Refresh Application"/>
+        </button>
+    </div>
+</div>

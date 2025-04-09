@@ -28,7 +28,7 @@ export class TicketDialogUtil {
     ): Promise<Context> {
         const context = ContextService.getInstance().getActiveContext();
 
-        if (context) {
+        if (context && !isNaN(Number(context.getObjectId()))) {
             const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET);
             if (!ticketId && ticket) {
                 ticketId = ticket.TicketID;

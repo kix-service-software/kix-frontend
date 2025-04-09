@@ -19,9 +19,7 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Error } from '../../../../../server/model/Error';
 import { TicketStateType } from '../model/TicketStateType';
 import { KIXObject } from '../../../model/kix/KIXObject';
-import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
-import { TicketStateProperty } from '../model/TicketStateProperty';
 
 export class TicketStateAPIService extends KIXObjectAPIService {
 

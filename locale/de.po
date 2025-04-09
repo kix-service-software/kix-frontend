@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2024-11-27 10:51+0000\n"
-"Last-Translator: jbrueckner <Joerg.Brueckner@kixdesk.com>\n"
+"PO-Revision-Date: 2025-04-09 11:57+0000\n"
+"Last-Translator: tto <Torsten.Thau@kixdesk.com>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -12,70 +12,82 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "', "
 msgstr "', "
 
-msgid "{0}/{1} {2} imported"
-msgstr "{0}/{1} {2} importiert"
+msgid "(Current definition)"
+msgstr "(aktuelle Definition)"
 
-msgid "{0}. Action"
-msgstr "{0}. Aktion"
+msgid "(Current version)"
+msgstr "(aktuelle Version)"
+
+msgid "(Last Change: {0})"
+msgstr "(Letzte Änderung: {0})"
+
+msgid ", (comma)"
+msgstr ", (Komma)"
+
+msgid "-> (tab)"
+msgstr "-> (Tabulator)"
+
+msgid ". (dot)"
+msgstr ". (Punkt)"
 
 msgid "0 data sets found."
 msgstr "Nichts gefunden."
 
-msgid "{0} File(s) added"
-msgstr "{0} Datei(en) hinzugefügt"
+msgid ": (colon)"
+msgstr ": (Doppelpunkt)"
 
-msgid "{0}: has no value."
-msgstr "{0}: hat keinen Wert."
+msgid "; (semicolon)"
+msgstr "; (Semikolon)"
 
-msgid "{0} imported"
-msgstr "{0} importiert"
+msgid "<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname> via Sender Address"
+msgstr "<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname> via Absendeadresse"
 
-msgid "{0} is required."
-msgstr "{0} ist ein Pflichtfeld."
+msgid "A maximum of 1 value can be selected. (SingleSelect)"
+msgstr "Es kann maximal ein Wert ausgewählt werden."
 
-msgid "{0}: just white spaces as value is not allowed."
-msgstr "{0}: nur Leerzeichen als Wert sind nicht zulässig."
+msgid "A maximum of {0} values can be selected."
+msgstr "Es können maximal {0} Werte ausgewählt werden."
 
-msgid "{0} Link created"
-msgstr "{0} Verknüpfung(en) angelegt"
+msgid "A product by KIX Service Software GmbH"
+msgstr "Ein Produkt der KIX Service Software GmbH"
 
-msgid "{0} link(s) assigned."
-msgstr "{0} Verknüpfung(en) erstellt."
+msgid "A year after 2200 is not possible."
+msgstr "Eine Jahreszahl nach 2200 ist nicht möglich."
 
 msgid "Aborted by user."
 msgstr "Durch Nutzer abgebrochen."
 
-msgid "Accepted domains"
-msgstr "Akzeptierte Domains"
-
 msgid "Accept KIX Header"
 msgstr "KIX Header zulassen"
+
+msgid "Accepted domains"
+msgstr "Akzeptierte Domains"
 
 msgid "Access"
 msgstr "Zugang"
 
-msgid "Access denied"
-msgstr "Zugriff verweigert"
-
 msgid "Access Level"
 msgstr "Zugriffsebene"
 
-msgid "Accounted Time"
-msgstr "Zeitbuchung"
-
-msgid "Accounted Time: {0}"
-msgstr "Zeitbuchung: {0}"
+msgid "Access denied"
+msgstr "Zugriff verweigert"
 
 msgid "Account Information"
 msgstr "Kontoinformationen"
 
 msgid "Account time has to be an integer."
 msgstr "Zu buchende Zeit muss eine ganze Zahl sein."
+
+msgid "Accounted Time"
+msgstr "Zeitbuchung"
+
+msgid "Accounted Time: {0}"
+msgstr "Zeitbuchung: {0}"
 
 msgid "Action"
 msgstr "Action"
@@ -95,38 +107,47 @@ msgstr "Asset-Klasse hinzufügen"
 msgid "Add Column(s)"
 msgstr "Spalte(n) hinzufügen"
 
+msgid "Add Table Widget"
+msgstr "Tabellenwidget hinzufügen"
+
+msgid "Add Widget"
+msgstr "Widget hinzufügen"
+
 msgid "Add email account for incoming mails"
 msgstr "E-Mail-Konto für eingehende E-Mails einrichten"
 
 msgid "Add initial table"
 msgstr "Tabelle hinzufügen"
 
-msgid "Additional recipients"
-msgstr "Zusätzliche Empfänger"
-
 msgid "Add new Links"
 msgstr "Neue Verknüpfung hinzufügen"
-
-msgid "add notes here"
-msgstr "Notizen hinzufügen"
-
-msgid "Address successfully removed."
-msgstr "E-Mail-Adresse(n) wurde(n) erfolgreich gelöscht."
-
-msgid "Add Table Widget"
-msgstr "Tabellenwidget hinzufügen"
 
 msgid "Add to Affected Assets"
 msgstr "zu betroffenen Assets hinzufügen"
 
-msgid "Add Widget"
-msgstr "Widget hinzufügen"
+msgid "Additional recipients"
+msgstr "Zusätzliche Empfänger"
+
+msgid "Address successfully removed."
+msgstr "E-Mail-Adresse(n) wurde(n) erfolgreich gelöscht."
 
 msgid "Admin"
 msgstr "Admin"
 
+msgid "Admin Manual"
+msgstr "Adminhandbuch"
+
+msgid "Admin Password"
+msgstr "Admin Passwort"
+
 msgid "Admin: {0}"
 msgstr "Admin: {0}"
+
+msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
+msgstr ""
+"Vorgabewert wird verwendet um das Feld bei erstmaliger Anzeige zu "
+"initialisieren; Angabe erfolgt als Offset zum Zeitpunkt der Feldanzeige "
+"(0=jetzt; 3600=jetzt+1h, leer=keine Initialisierung)."
 
 msgid "Admin_DynamicField_Config_CIRef_DeploymentStates"
 msgstr ""
@@ -178,12 +199,6 @@ msgstr ""
 "zum Zeitpunkt der Feldanzeige (0=jetzt; 3600=jetzt+1h, leer=keine "
 "Initialisierung); bei Asset-Referenzen die ID des Assets."
 
-msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
-msgstr ""
-"Vorgabewert wird verwendet um das Feld bei erstmaliger Anzeige zu "
-"initialisieren; Angabe erfolgt als Offset zum Zeitpunkt der Feldanzeige "
-"(0=jetzt; 3600=jetzt+1h, leer=keine Initialisierung)."
-
 msgid "Admin_DynamicField_Edit_Name_Hint"
 msgstr ""
 "Bei Änderung des Feldnamens werden abhängige Konfigurationen NICHT "
@@ -191,12 +206,6 @@ msgstr ""
 
 msgid "Administration"
 msgstr "Administration"
-
-msgid "Admin Manual"
-msgstr "Adminhandbuch"
-
-msgid "Admin Password"
-msgstr "Admin Passwort"
 
 msgid "Advanced"
 msgstr "Erweitert"
@@ -210,14 +219,8 @@ msgstr "Betroffene Assets"
 msgid "Affected Services"
 msgstr "Betroffene Services"
 
-msgid "after"
-msgstr "nach/größer als"
-
 msgid "Age"
 msgstr "Alter"
-
-msgid "agent"
-msgstr "Agent"
 
 msgid "Agent"
 msgstr "Agent"
@@ -240,6 +243,9 @@ msgstr "Agenten"
 msgid "All"
 msgstr "Alle"
 
+msgid "All Objects"
+msgstr "Alle Objekte"
+
 msgid "All agents subscribed to the tickets queue"
 msgstr "Alle Agenten, die das Team des Tickets abonniert haben"
 
@@ -260,32 +266,17 @@ msgstr ""
 msgid "All free tickets"
 msgstr "Alle freien Tickets"
 
-msgid "All Objects"
-msgstr "Alle Objekte"
-
 msgid "All open tabs will be closed. Continue?"
 msgstr "Alle geöffneten Tabs werden geschlossen. Fortfahren?"
-
-msgid "Allow access to admin module"
-msgstr "Zugang zum Admin-Modul erlauben"
 
 msgid "All tickets"
 msgstr "Alle Tickets"
 
+msgid "Allow access to admin module"
+msgstr "Zugang zum Admin-Modul erlauben"
+
 msgid "Always close dialog tab without asking"
 msgstr "Dialog immer ohne Rückfrage schließen"
-
-msgid "A maximum of {0} values can be selected."
-msgstr "Es können maximal {0} Werte ausgewählt werden."
-
-msgid "A maximum of 1 value can be selected. (SingleSelect)"
-msgstr "Es kann maximal ein Wert ausgewählt werden."
-
-msgid "and"
-msgstr "und"
-
-msgid "and further"
-msgstr "und weitere"
 
 msgid "An error occured during export execution. See system log for details."
 msgstr ""
@@ -314,17 +305,20 @@ msgstr "Es ist ein Fehler aufgetreten."
 msgid "Any data you have entered will be lost. Continue?"
 msgstr "Alle eingegebenen Daten werden verworfen. Fortfahren?"
 
+msgid "Append Values"
+msgstr "Werte einfügen"
+
+msgid "Append Values - Regex"
+msgstr "Werte einfügen -Regex"
+
+msgid "Append Values - Roles"
+msgstr "Werte einfügen - Rollen"
+
 msgid "Apply"
 msgstr "Anwenden"
 
-msgid "Apply Table"
-msgstr "Tabelle hinzufügen"
-
 msgid "Approved"
 msgstr "Genehmigt"
-
-msgid "A product by KIX Service Software GmbH"
-msgstr "Ein Produkt der KIX Service Software GmbH"
 
 msgid "Archived"
 msgstr "Archiviert"
@@ -338,20 +332,14 @@ msgstr "Erstellzeitpunkt des Artikels"
 msgid "Article Data"
 msgstr "Artikeldaten"
 
-msgid "Article has printed"
-msgstr "Artikel wurde gedruckt"
-
 msgid "Article Id"
 msgstr "Artikel ID"
-
-msgid "Article sort order"
-msgstr "Artikelsortierung"
 
 msgid "Article Text"
 msgstr "Artikeltext"
 
-msgid "ascending"
-msgstr "aufsteigend"
+msgid "Article has printed"
+msgstr "Artikel wurde gedruckt"
 
 msgid "Asset"
 msgstr "Asset"
@@ -377,8 +365,14 @@ msgstr "Assets: General Catalog"
 msgid "Assets: Import/Export"
 msgstr "Assets: Import/Export"
 
-msgid "Assigned agent"
-msgstr "Zugeordneter Agent"
+msgid "Assign Link"
+msgstr "Verknüpfung hinzufügen"
+
+msgid "Assign Links"
+msgstr "Verknüpfung zuordnen"
+
+msgid "Assign Team / Queue"
+msgstr "Team/Queue zuordnen"
 
 msgid "Assigned Agents"
 msgstr "Zugeordnete Agenten"
@@ -401,23 +395,17 @@ msgstr "Zugeordnete Rollen"
 msgid "Assigned Tickets"
 msgstr "Zugeordnete Tickets"
 
+msgid "Assigned agent"
+msgstr "Zugeordneter Agent"
+
 msgid "Assignees"
 msgstr "Verantwortlichkeiten"
 
-msgid "Assign Link"
-msgstr "Verknüpfung hinzufügen"
-
-msgid "Assign Links"
-msgstr "Verknüpfung zuordnen"
-
-msgid "Assign Team / Queue"
-msgstr "Team/Queue zuordnen"
+msgid "At least one link could not be saved."
+msgstr "Mindestens eine Verknüpfung konnte nicht gespeichert werden."
 
 msgid "At least {0} values must be selected"
 msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
-
-msgid "At least one link could not be saved."
-msgstr "Mindestens eine Verknüpfung konnte nicht gespeichert werden."
 
 msgid "Attachment Name"
 msgstr "Name des Anhangs"
@@ -455,9 +443,6 @@ msgstr "Verfügbare Ausgabeformate"
 msgid "Avatar"
 msgstr "Avatar"
 
-msgid "A year after 2200 is not possible."
-msgstr "Eine Jahreszahl nach 2200 ist nicht möglich."
-
 msgid "Backend"
 msgstr "Backend"
 
@@ -467,14 +452,8 @@ msgstr "Basiert auf Klassendefinition"
 msgid "Bcc"
 msgstr "Bcc"
 
-msgid "before"
-msgstr "vor/kleiner als"
-
 msgid "Begin of Business Day"
 msgstr "Beginn Servicezeit (\"Business Day\")"
-
-msgid "between"
-msgstr "zwischen"
 
 msgid "Body"
 msgstr "Artikeltext"
@@ -491,8 +470,38 @@ msgstr "Sammelaktion: {0}"
 msgid "Bulk Print"
 msgstr "Sammeldruck"
 
-msgid "Cancel"
-msgstr "Abbrechen"
+msgid "CI Class"
+msgstr "Asset-Klasse"
+
+msgid "CI Class Definition"
+msgstr "Asset-Klassendefinition"
+
+msgid "CI Class Definitions"
+msgstr "Asset-Klassendefinitionen"
+
+msgid "CI Class Information"
+msgstr "Asset-Klasseninformationen"
+
+msgid "CI Classes"
+msgstr "Asset-Klassen"
+
+msgid "CMDB"
+msgstr "Assets"
+
+msgid "CMDB Explorer"
+msgstr "Asset-Explorer"
+
+msgid "CMDB: CI Classes"
+msgstr "Assets: Asset-Klassen"
+
+msgid "CNO"
+msgstr "KNR"
+
+msgid "CSV-Export"
+msgstr "CSV-Export"
+
+msgid "CW"
+msgstr "KW"
 
 msgid "Can not create link ({0})"
 msgstr "Verknüpfung konnte nicht angelegt werden ({0})"
@@ -502,6 +511,9 @@ msgstr "Datei kann nicht verwendet werden (Datei ist leer)."
 
 msgid "Can not use file (missing required properties):"
 msgstr "Datei kann nicht verwendet werden (Fehlende Pflichtangaben):"
+
+msgid "Cancel"
+msgstr "Abbrechen"
 
 msgid "Category"
 msgstr "Kategorie"
@@ -515,6 +527,15 @@ msgstr "Cc"
 msgid "Change Admin Password"
 msgstr "Admin Passwort ändern"
 
+msgid "Change Password"
+msgstr "Passwort ändern"
+
+msgid "Change sort direction"
+msgstr "Sortierrichtung ändern"
+
+msgid "Change to"
+msgstr "Ändern in"
+
 msgid "Changed"
 msgstr "Geändert"
 
@@ -524,21 +545,12 @@ msgstr "Geändert am"
 msgid "Changed by"
 msgstr "Geändert von"
 
-msgid "Change Password"
-msgstr "Passwort ändern"
-
 msgid "Changes cannot be saved. How do you want to proceed?"
 msgstr ""
 "Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?"
 
-msgid "Change sort direction"
-msgstr "Sortierrichtung ändern"
-
 msgid "Changes saved."
 msgstr "Änderungen wurden gespeichert."
-
-msgid "Change to"
-msgstr "Ändern in"
 
 msgid "Channel"
 msgstr "Kanal"
@@ -552,32 +564,17 @@ msgstr "Zeichensatz"
 msgid "Checklist Item"
 msgstr "Checklisteneintrag"
 
-msgid "Checklists"
-msgstr "Checklisten"
-
 msgid "Checklist State"
 msgstr "Checklisten-Status"
+
+msgid "Checklists"
+msgstr "Checklisten"
 
 msgid "Child Tickets"
 msgstr "Kindtickets"
 
 msgid "Choose a command"
 msgstr "Wählen Sie ein Kommando"
-
-msgid "CI Class"
-msgstr "Asset-Klasse"
-
-msgid "CI Class Definition"
-msgstr "Asset-Klassendefinition"
-
-msgid "CI Class Definitions"
-msgstr "Asset-Klassendefinitionen"
-
-msgid "CI Classes"
-msgstr "Asset-Klassen"
-
-msgid "CI Class Information"
-msgstr "Asset-Klasseninformationen"
 
 msgid "City"
 msgstr "Stadt"
@@ -594,6 +591,9 @@ msgstr "Klassen"
 msgid "Clear"
 msgstr "Leeren"
 
+msgid "Clear in mask"
+msgstr "im Formular setzen"
+
 msgid "Client ID"
 msgstr "Client ID"
 
@@ -602,6 +602,12 @@ msgstr "Client Secret"
 
 msgid "Close"
 msgstr "Schließen"
+
+msgid "Close Overlay"
+msgstr "Schließen"
+
+msgid "Close Sidebars"
+msgstr "Sidebars schließen"
 
 msgid "Close all open tabs"
 msgstr "Alle offenen Tabs schließen"
@@ -612,50 +618,32 @@ msgstr "Geschlossen"
 msgid "Closed at"
 msgstr "Geschlossen am"
 
-msgid "Close Overlay"
-msgstr "Schließen"
-
-msgid "Close Sidebars"
-msgstr "Sidebars schließen"
-
-msgid "CMDB"
-msgstr "Assets"
-
-msgid "CMDB: CI Classes"
-msgstr "Assets: Asset-Klassen"
-
-msgid "CMDB Explorer"
-msgstr "Asset-Explorer"
-
-msgid "CNO"
-msgstr "KNR"
-
 msgid "Code"
 msgstr "Code"
+
+msgid "Collapse All"
+msgstr "Alle einklappen"
 
 msgid "Collapse all"
 msgstr "Alle einklappen"
 
-msgid ": (colon)"
-msgstr ": (Doppelpunkt)"
-
 msgid "Column Icon"
 msgstr "Spaltensymbol"
-
-msgid "Columns"
-msgstr "Spalten"
 
 msgid "Column Title"
 msgstr "Spaltentitel"
 
-msgid ", (comma)"
-msgstr ", (Komma)"
+msgid "Columns"
+msgstr "Spalten"
 
 msgid "Comment"
 msgstr "Kommentar"
 
 msgid "Communication"
 msgstr "Kommunikation"
+
+msgid "Communication History"
+msgstr "Kommunikationshistorie"
 
 msgid "Communication: Email: Email Addresses"
 msgstr "Kommunikation: E-Mail: E-Mail-Adressen"
@@ -672,9 +660,6 @@ msgstr "Kommunikation: E-Mail: OAuth2 Profile"
 msgid "Communication: Email: Outbox"
 msgstr "Kommunikation: E-Mail: Postausgang"
 
-msgid "Communication History"
-msgstr "Kommunikationshistorie"
-
 msgid "Communication: Webform"
 msgstr "Kommunikation: Webformular"
 
@@ -687,14 +672,14 @@ msgstr "Kompaktdarstellung"
 msgid "Compare"
 msgstr "Vergleichen"
 
-msgid "Compare: {0}"
-msgstr "Vergleichen: {0}"
-
 msgid "Compare Asset Versions"
 msgstr "Assetversionen Vergleichen"
 
 msgid "Compare Versions"
 msgstr "Versionen vergleichen"
+
+msgid "Compare: {0}"
+msgstr "Vergleichen: {0}"
 
 msgid "Component ID"
 msgstr "Komponenten-ID"
@@ -717,14 +702,14 @@ msgstr "Asset ID"
 msgid "Config Item Information"
 msgstr "Asset-Informationen"
 
+msgid "Config Item Version Compare"
+msgstr "Asset-Versionsvergleich"
+
 msgid "Config Items"
 msgstr "Assets"
 
 msgid "Config Items Count: {0}"
 msgstr "Anzahl Assets: {0}"
-
-msgid "Config Item Version Compare"
-msgstr "Asset-Versionsvergleich"
 
 msgid "Configuration"
 msgstr "Konfiguration"
@@ -750,14 +735,8 @@ msgstr "Kontaktinformationen"
 msgid "Contacts"
 msgstr "Kontakte"
 
-msgid "contained in"
-msgstr "enthalten in"
-
 msgid "Contained in Affected Assets"
 msgstr "enthalten in betroffenen Assets"
-
-msgid "contains"
-msgstr "enthält"
 
 msgid "ContentType"
 msgstr "Inhaltstyp"
@@ -765,11 +744,11 @@ msgstr "Inhaltstyp"
 msgid "Context"
 msgstr "Kontext"
 
-msgid "Copy of {0}"
-msgstr "Kopie von {0}"
-
 msgid "Copy URL To Clipboard And Close"
 msgstr "URL in Zwischenablage kopieren und schließen"
+
+msgid "Copy of {0}"
+msgstr "Kopie von {0}"
 
 msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
@@ -796,10 +775,31 @@ msgid "Create"
 msgstr "Erstellen"
 
 msgid "Create Article"
-msgstr "Artikel erstellen"
+msgstr "Artikel Erstellen"
 
-msgid "created"
-msgstr "erstellt"
+msgid "Create Email Account"
+msgstr "E-Mail-Konto erstellen"
+
+msgid "Create Links"
+msgstr "Verknüpfung wird angelegt"
+
+msgid "Create Priority"
+msgstr "Priorität wird angelegt"
+
+msgid "Create Report"
+msgstr "Bericht erstellen"
+
+msgid "Create State"
+msgstr "Status wird angelegt"
+
+msgid "Create Superuser Account"
+msgstr "Superuser anlegen"
+
+msgid "Create Type"
+msgstr "Typ wird angelegt"
+
+msgid "Create the report with output format {0} and defaults?"
+msgstr "Bericht mit Ausgabeformat {0} und Standardwerten erstellen?"
 
 msgid "Created at"
 msgstr "Erstellt am"
@@ -825,41 +825,11 @@ msgstr "Erstellt mit dem Typ"
 msgid "Created with User"
 msgstr "Erstellt mit dem Nutzer"
 
-msgid "Create Email Account"
-msgstr "E-Mail-Konto erstellen"
-
-msgid "Create Links"
-msgstr "Verknüpfung wird angelegt"
-
-msgid "Create Priority"
-msgstr "Priorität wird angelegt"
-
-msgid "Create Report"
-msgstr "Bericht erstellen"
-
-msgid "Create State"
-msgstr "Status wird angelegt"
-
-msgid "Create Superuser Account"
-msgstr "Superuser anlegen"
-
-msgid "Create the report with output format {0} and defaults?"
-msgstr "Bericht mit Ausgabeformat {0} und Standardwerten erstellen?"
-
-msgid "Create Type"
-msgstr "Typ wird angelegt"
-
-msgid "CSV-Export"
-msgstr "CSV-Export"
-
-msgid "current"
-msgstr "aktuell"
-
-msgid "(Current definition)"
-msgstr "(aktuelle Definition)"
-
 msgid "Current Definition"
 msgstr "Aktuelle Definition"
+
+msgid "Current Version"
+msgstr "Aktuelle Version"
 
 msgid "Current deployment state"
 msgstr "Aktueller Verwendungsstatus"
@@ -867,13 +837,7 @@ msgstr "Aktueller Verwendungsstatus"
 msgid "Current incident state"
 msgstr "Aktueller Vorfallsstatus"
 
-msgid "(Current version)"
-msgstr "(aktuelle Version)"
-
 msgid "Current version"
-msgstr "Aktuelle Version"
-
-msgid "Current Version"
 msgstr "Aktuelle Version"
 
 msgid "Customer"
@@ -888,11 +852,14 @@ msgstr "Self Service Portal"
 msgid "Customize Dashboard"
 msgstr "Dashboard anpassen"
 
-msgid "CW"
-msgstr "KW"
+msgid "DBMS"
+msgstr "DBMS"
 
-msgid "Datasource"
-msgstr "Datenquelle"
+msgid "DESC"
+msgstr "Absteigend"
+
+msgid "DOUBLE_QUOTES"
+msgstr "\" (Doppeltes Hochkomma)"
 
 msgid "Data Source"
 msgstr "Datenquelle"
@@ -900,14 +867,14 @@ msgstr "Datenquelle"
 msgid "Data Type"
 msgstr "Datentyp"
 
+msgid "Datasource"
+msgstr "Datenquelle"
+
 msgid "Date Restriction"
 msgstr "Datumsbeschränkung"
 
 msgid "Day(s)"
 msgstr "Tag(e)"
-
-msgid "DBMS"
-msgstr "DBMS"
 
 msgid "Default"
 msgstr "Standard"
@@ -927,18 +894,6 @@ msgstr "Benachrichtigungs-Layout definieren"
 msgid "Delete"
 msgstr "Löschen"
 
-msgid "Delete all selected report definitions?"
-msgstr "Ausgewählte Berichtsdefinitionen löschen?"
-
-msgid "Delete all selected reports?"
-msgstr "Ausgewählte Berichte löschen?"
-
-msgid "Delete all selected webforms?"
-msgstr "Alle ausgewählten Webformulare löschen?"
-
-msgid "Deleted"
-msgstr "Gelöscht"
-
 msgid "Delete Link"
 msgstr "Verknüpfung löschen"
 
@@ -954,14 +909,23 @@ msgstr "Suche löschen"
 msgid "Delete Webform"
 msgstr "Webformular löschen"
 
+msgid "Delete all selected report definitions?"
+msgstr "Ausgewählte Berichtsdefinitionen löschen?"
+
+msgid "Delete all selected reports?"
+msgstr "Ausgewählte Berichte löschen?"
+
+msgid "Delete all selected webforms?"
+msgstr "Alle ausgewählten Webformulare löschen?"
+
+msgid "Deleted"
+msgstr "Gelöscht"
+
 msgid "Dependencies"
 msgstr "Abhängigkeiten"
 
 msgid "Dependency"
 msgstr "Abhängigkeit"
-
-msgid "Deployment state"
-msgstr "Verwendungsstatus"
 
 msgid "Deployment State"
 msgstr "Verwendungsstatus"
@@ -969,11 +933,8 @@ msgstr "Verwendungsstatus"
 msgid "Deployment States"
 msgstr "Verwendungsstatus"
 
-msgid "DESC"
-msgstr "Absteigend"
-
-msgid "descending"
-msgstr "absteigend"
+msgid "Deployment state"
+msgstr "Verwendungsstatus"
 
 msgid "Descending:"
 msgstr "Absteigend:"
@@ -984,14 +945,17 @@ msgstr "Beschreibung"
 msgid "Detailed search results"
 msgstr "Detaillierte Suchergebnisse"
 
+msgid "Disabled"
+msgstr "Deaktiviert"
+
 msgid "Dispatching"
 msgstr "Verteilung"
 
 msgid "Display Name"
 msgstr "Anzeigename"
 
-msgid "Done"
-msgstr "Fertig"
+msgid "Disposition"
+msgstr ""
 
 msgid ""
 "Do not forget to replace the <YOUR_FRONTEND_HOST> placeholder (if it is not "
@@ -1000,14 +964,14 @@ msgstr ""
 "Denken Sie daran, den Platzhalter <YOUR_FRONTEND_HOST> zu ersetzen (wenn "
 "nicht bereits geschehen)."
 
-msgid ". (dot)"
-msgstr ". (Punkt)"
-
-msgid "DOUBLE_QUOTES"
-msgstr "\" (Doppeltes Hochkomma)"
+msgid "Done"
+msgstr "Fertig"
 
 msgid "Download"
 msgstr "Download"
+
+msgid "Download Result"
+msgstr "Ergebnis herunterladen"
 
 msgid "Download all attachments"
 msgstr "Alle Anhänge herunterladen"
@@ -1015,20 +979,20 @@ msgstr "Alle Anhänge herunterladen"
 msgid "Download log"
 msgstr "Log Download"
 
-msgid "Download Result"
-msgstr "Ergebnis herunterladen"
-
-msgid "draft successfully saved"
-msgstr "Entwurf gesichert"
-
 msgid "Duplicate"
 msgstr "Duplizieren"
+
+msgid "Duplicate Contact"
+msgstr "Doppelter Kontakt"
 
 msgid "Dynamic Field"
 msgstr "Dynamisches Feld"
 
-msgid "DynamicField"
-msgstr "Dynamisches Feld"
+msgid "Dynamic Field Type"
+msgstr "Dynamischer Feldtyp"
+
+msgid "Dynamic Field Types"
+msgstr "Dynamische Feldtypen"
 
 msgid "Dynamic Fields"
 msgstr "Dynamische Felder"
@@ -1036,11 +1000,8 @@ msgstr "Dynamische Felder"
 msgid "Dynamic Fields successfully removed."
 msgstr "Dynamische Felder erfolgreich entfernt."
 
-msgid "Dynamic Field Type"
-msgstr "Dynamischer Feldtyp"
-
-msgid "Dynamic Field Types"
-msgstr "Dynamische Feldtypen"
+msgid "DynamicField"
+msgstr "Dynamisches Feld"
 
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -1068,12 +1029,6 @@ msgstr "Kontakt bearbeiten"
 
 msgid "Edit Dynamic Field"
 msgstr "Dynamisches Feld bearbeiten"
-
-msgid "edited"
-msgstr "bearbeitet"
-
-msgid "edited at {0} by {1}"
-msgstr "bearbeitet am {0} durch {1}"
 
 msgid "Edit Email Address"
 msgstr "Emailadresse Bearbeiten"
@@ -1153,11 +1108,11 @@ msgstr "SysConfig Bearbeiten"
 msgid "Edit Team"
 msgstr "Team Bearbeiten"
 
-msgid "Edit Textmodule"
-msgstr "Textbaustein Bearbeiten"
-
 msgid "Edit Text Module"
 msgstr "Textbausteine bearbeiten"
+
+msgid "Edit Textmodule"
+msgstr "Textbaustein Bearbeiten"
 
 msgid "Edit Ticket"
 msgstr "Ticket bearbeiten"
@@ -1177,21 +1132,6 @@ msgstr "Webformular bearbeiten"
 msgid "Email"
 msgstr "Email"
 
-msgid "Email1"
-msgstr "E-Mail 1"
-
-msgid "Email2"
-msgstr "E-Mail 2"
-
-msgid "Email3"
-msgstr "E-Mail 3"
-
-msgid "Email4"
-msgstr "E-Mail 4"
-
-msgid "Email5"
-msgstr "E-Mail 5"
-
 msgid "Email Account"
 msgstr "E-Mail-Konto"
 
@@ -1209,9 +1149,6 @@ msgstr "E-Mail-Adressen-Domain"
 
 msgid "Email Addresses"
 msgstr "E-Mail-Adressen"
-
-msgid "Email could not be sent"
-msgstr "E-Mail konnte nicht gesendet werden"
 
 msgid "Email Error"
 msgstr "E-Mail-Fehler"
@@ -1234,6 +1171,24 @@ msgstr "E-Mail-Informationen"
 msgid "Email Security"
 msgstr "E-Mail-Sicherheit"
 
+msgid "Email could not be sent"
+msgstr "E-Mail konnte nicht gesendet werden"
+
+msgid "Email1"
+msgstr "E-Mail 1"
+
+msgid "Email2"
+msgstr "E-Mail 2"
+
+msgid "Email3"
+msgstr "E-Mail 3"
+
+msgid "Email4"
+msgstr "E-Mail 4"
+
+msgid "Email5"
+msgstr "E-Mail 5"
+
 msgid "Empty Result Hint"
 msgstr "Anzeigetext leeres Ergebnis"
 
@@ -1255,35 +1210,23 @@ msgstr "Enddatum/-zeit fehlt"
 msgid "End of Business Day"
 msgstr "Ende Servicezeit (\"Business Day\")"
 
-msgid "ends with"
-msgstr "endet mit"
-
 msgid "End time"
 msgstr "Endzeitpunkt"
 
 msgid "End value is not given"
 msgstr "Endwert fehlt"
 
-msgid "Entered date-time value is invalid."
-msgstr "Eingegebener Zeitpunkt ist ungültig."
-
-msgid "enter filter value"
-msgstr "Filterwert eingeben"
-
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
+
+msgid "Entered date-time value is invalid."
+msgstr "Eingegebener Zeitpunkt ist ungültig."
 
 msgid "Envelope From"
 msgstr "Envelope From"
 
-msgid "equals"
-msgstr "ist gleich"
-
 msgid "Error"
 msgstr "Fehler"
-
-msgid "Error!"
-msgstr "Fehler!"
 
 msgid "Error on create:"
 msgstr "Fehler bei Erstellen:"
@@ -1303,14 +1246,17 @@ msgstr "Fehler während dem Hinzufügen eines Anhangs:"
 msgid "Error while adding the image:"
 msgstr "Fehler beim Hinzufügen des Bildes:"
 
-msgid "Error while deleting Report."
-msgstr "Beim Löschen des Berichts ist ein Fehler aufgetreten."
-
 msgid "Error while deleting Report Definition."
 msgstr "Beim Löschen der Berichtsdefinition ist ein Fehler aufgetreten."
 
+msgid "Error while deleting Report."
+msgstr "Beim Löschen des Berichts ist ein Fehler aufgetreten."
+
 msgid "Error while deleting Webform."
 msgstr "Fehler beim Löschen der Webform."
+
+msgid "Error!"
+msgstr "Fehler!"
 
 msgid "Escalated Tickets"
 msgstr "Eskalierte Tickets"
@@ -1342,8 +1288,11 @@ msgstr "Ausführungsplan"
 msgid "Existing Links ({0})"
 msgstr "Vorhandene Verknüpfungen ({0})"
 
-msgid "expected time required:"
-msgstr "voraussichtlich benötigte Zeit:"
+msgid "Exit KIX without asking"
+msgstr "KIX ohne Rückfrage verlassen"
+
+msgid "Expand All"
+msgstr "Alle ausklappen"
 
 msgid "Explorer"
 msgstr "Explorer"
@@ -1354,14 +1303,8 @@ msgstr "Export"
 msgid "Export data"
 msgstr "Daten exportieren"
 
-msgid "external"
-msgstr "extern"
-
 msgid "FAQ"
 msgstr "FAQ"
-
-msgid "FAQ#"
-msgstr "FAQ#"
 
 msgid "FAQ Article"
 msgstr "FAQ Artikel"
@@ -1377,9 +1320,6 @@ msgstr "FAQ Attribute"
 
 msgid "FAQ Categories"
 msgstr "FAQ Kategorien"
-
-msgid "FAQ categories successfully removed."
-msgstr "FAQ Kategorien erfolgreich entfernt."
 
 msgid "FAQ Category"
 msgstr "FAQ Kategorie"
@@ -1399,8 +1339,17 @@ msgstr "FAQ Details"
 msgid "FAQ Information"
 msgstr "FAQ-Informationen"
 
+msgid "FAQ categories successfully removed."
+msgstr "FAQ Kategorien erfolgreich entfernt."
+
 msgid "FAQ rating"
 msgstr "FAQ Bewertung"
+
+msgid "FAQ#"
+msgstr "FAQ#"
+
+msgid "FQDN"
+msgstr "FQDN"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -1411,29 +1360,14 @@ msgstr "Fax"
 msgid "Feedback"
 msgstr "Feedback"
 
-msgid "Fetching Mail Account"
-msgstr "E-Mail-Konto abrufen"
-
 msgid "Fetch now"
 msgstr "Jetzt abrufen"
 
+msgid "Fetching Mail Account"
+msgstr "E-Mail-Konto abrufen"
+
 msgid "Field"
 msgstr "Feld"
-
-msgid "Field {0} has an empty row ({1})."
-msgstr "Feld {0} hat eine leere Zeile ({1})."
-
-msgid "Field {0} has an empty rows."
-msgstr "Feld {0} hat eine leere Zeile."
-
-msgid "Field {0} has an invalid value ({1})."
-msgstr "Feld {0} enthält einen ungültigen Wert ({1})."
-
-msgid "Field {0} has an invalid value (max date: {1})."
-msgstr "Feld {0} hat einen üngültigen Wert (max. Datum: {1})."
-
-msgid "Field {0} has an invalid value (min date: {2})."
-msgstr "Feld {0} hat einen üngültigen Wert (min. Datum: {2})."
 
 msgid "Field Agent App"
 msgstr "Field Agent App"
@@ -1450,20 +1384,32 @@ msgstr "Feld Informationen"
 msgid "Field Type"
 msgstr "Feldtyp"
 
+msgid "Field {0} has an empty row ({1})."
+msgstr "Feld {0} hat eine leere Zeile ({1})."
+
+msgid "Field {0} has an empty rows."
+msgstr "Feld {0} hat eine leere Zeile."
+
+msgid "Field {0} has an invalid value (max date: {1})."
+msgstr "Feld {0} hat einen üngültigen Wert (max. Datum: {1})."
+
+msgid "Field {0} has an invalid value (min date: {2})."
+msgstr "Feld {0} hat einen üngültigen Wert (min. Datum: {2})."
+
+msgid "Field {0} has an invalid value ({1})."
+msgstr "Feld {0} enthält einen ungültigen Wert ({1})."
+
 msgid "File Upload"
 msgstr "Datei hochladen"
+
+msgid "Filename"
+msgstr "Dateiname"
 
 msgid "Filter"
 msgstr "Filter"
 
-msgid "Filterable"
-msgstr "Filterbar"
-
 msgid "Filter Conditions"
 msgstr "Filterbedingungen"
-
-msgid "Filter in list"
-msgstr "Filtern in Liste"
 
 msgid "Filter List"
 msgstr "Filterliste"
@@ -1471,8 +1417,14 @@ msgstr "Filterliste"
 msgid "Filter Log Level"
 msgstr "Log Level einschränken"
 
+msgid "Filter in list"
+msgstr "Filtern in Liste"
+
 msgid "Filter successfully removed."
 msgstr "Filter wurde(n) erfolgreich gelöscht."
+
+msgid "Filterable"
+msgstr "Filterbar"
 
 msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
@@ -1480,9 +1432,6 @@ msgid ""
 msgstr ""
 "Gespeicherte Suche finden Sie im Kopfmenü der Anwendung über das Favoriten-"
 "Icon."
-
-msgid "finished"
-msgstr "abgeschlossen"
 
 msgid "First Name"
 msgstr "Vorname"
@@ -1496,11 +1445,14 @@ msgstr "Erster Wert ist keine Ganzzahl."
 msgid "Fixed First Column"
 msgstr "Erste Spalte fixieren"
 
+msgid "Follow Up Ticket Lock"
+msgstr "Tickets werden gesperrt"
+
 msgid "Follow Up on Tickets"
 msgstr "Nachfrage an Tickets"
 
-msgid "Follow Up Ticket Lock"
-msgstr "Tickets werden gesperrt"
+msgid "For Tickets"
+msgstr "Für Tickets"
 
 msgid ""
 "For a more intensive introduction to the use and administration of KIX, you "
@@ -1512,26 +1464,20 @@ msgstr ""
 msgid "Force"
 msgstr "Erzwingen"
 
-msgid "Format"
-msgstr "Format"
-
 msgid "Form contains invalid values"
 msgstr "Formular beinhaltet ungültige Werte"
 
 msgid "Form title"
 msgstr "Formulartitel"
 
-msgid "For Tickets"
-msgstr "Für Tickets"
+msgid "Format"
+msgstr "Format"
 
 msgid "Forum"
 msgstr "Forum"
 
 msgid "Forward"
 msgstr "Weiterleiten"
-
-msgid "FQDN"
-msgstr "FQDN"
 
 msgid "Friday"
 msgstr "Freitag"
@@ -1551,11 +1497,11 @@ msgstr "von intern"
 msgid "Frontend"
 msgstr "Frontend"
 
-msgid "Fullname"
-msgstr "Vollständiger Name"
-
 msgid "Full Text"
 msgstr "Volltext"
+
+msgid "Fullname"
+msgstr "Vollständiger Name"
 
 msgid "General Catalog"
 msgstr "General Catalog"
@@ -1587,11 +1533,14 @@ msgstr "nach oben"
 msgid "Graph"
 msgstr "Graph"
 
+msgid "Graph (simulation active)"
+msgstr "Graph (Simulation aktiv)"
+
 msgid "Graph Options"
 msgstr "Graph Optionen"
 
-msgid "Graph (simulation active)"
-msgstr "Graph (Simulation aktiv)"
+msgid "HTTP Type"
+msgstr "HTTP Type"
 
 msgid "Has access token"
 msgstr "Hat Zugriffstoken"
@@ -1605,10 +1554,16 @@ msgstr "Hilfe"
 msgid "Help, hints & tricks"
 msgstr "Hilfe, Tipps und Tricks"
 
-msgid "Helptext_Admin_CreateEdit_Actions"
+msgid "HelptImporConfigext_Import_File"
 msgstr ""
+"Die Spalten in der Datei müssen wie folgt benannt sein um eine autom. "
+"Wertzuordnung zu nutzen: \"ServiceID\",\"SLA\",\"Organisation (Number)\","
+"\"Type\",\"Priority\",\"Contact\", \"Validity\" for value mapping."
 
 msgid "Helptext_Admin_CreateEdit_ActionSkip"
+msgstr ""
+
+msgid "Helptext_Admin_CreateEdit_Actions"
 msgstr ""
 
 msgid "Helptext_Admin_DynamicFieldCreate_Config"
@@ -1698,6 +1653,8 @@ msgstr ""
 
 msgid "Helptext_Admin_JobCreateEdit_Asynchronous"
 msgstr ""
+"Wenn gesetzt, wird der Job asynchron. Dies ist relevant, wenn es sich um "
+"einen durch ein Ereignis ausgelösten Job handelt."
 
 msgid "Helptext_Admin_JobCreateEdit_Comment"
 msgstr ""
@@ -1727,6 +1684,9 @@ msgstr "Der Name des Jobs muss eindeutig sein."
 
 msgid "Helptext_Admin_JobCreateEdit_SortOrder"
 msgstr ""
+"Definiert in welcher Reihenfolge mehrere gefundene Businessobjekte (Tickets, "
+"Assets, Kontakte, etc.) von diesem Job behandelt werden. Die Einstellung ist "
+"relevant für periodisch auszuführende Jobs."
 
 msgid "Helptext_Admin_JobCreateEdit_Time"
 msgstr ""
@@ -2192,6 +2152,12 @@ msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr ""
 "Die E-Mail-Adresse kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
+msgid "Helptext_Admin_Tags."
+msgstr ""
+"Kennzeichnen Sie dieses Konfigurationselement als zugehörig zu einem "
+"Workflow, Prozess o.ä. damit es im zentralen Export aufgelistet und einfach "
+"transferiert werden kann."
+
 msgid "Helptext_Admin_TextModuleCreate_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
@@ -2334,6 +2300,11 @@ msgstr ""
 "Teil einer Bezeichnung gesucht, muss dieser in * gesetzt werden (Wildcard-"
 "Suche)."
 
+msgid "Helptext_Admin_UsersSearch"
+msgstr ""
+"Durchsuchbar sind die Eigenschaften in den Spalten \"Login\", \"Vorname\", "
+"\"Nachname\" und \"E-Mail\". Wildcard-Suche (Eingabe \"*\") ist möglich."
+
 msgid "Helptext_Admin_Users_RoleCreate_AllowAdminModule"
 msgstr ""
 
@@ -2356,11 +2327,6 @@ msgstr "Es werden nur gültige Agenten angezeigt."
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
 msgstr "Die Rolle kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-msgid "Helptext_Admin_UsersSearch"
-msgstr ""
-"Durchsuchbar sind die Eigenschaften in den Spalten \"Login\", \"Vorname\", "
-"\"Nachname\" und \"E-Mail\". Wildcard-Suche (Eingabe \"*\") ist möglich."
-
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
 "Die Verwendung von RegEx ist möglich. Für Aufzählungen nutzen Sie \"|"
@@ -2374,8 +2340,8 @@ msgstr ""
 msgid "Helptext_Admin_WebformCreateEdit_AssignedAgent"
 msgstr ""
 "Damit über das Webformular Tickets im KIX erstellt werden können, muss am "
-"Formular ein Agent zugeordnet sein, der mindestens die Rolle \"Ticket Creator"
-"\" hat."
+"Formular ein Agent zugeordnet sein, der mindestens die Rolle \"Ticket "
+"Creator\" hat."
 
 msgid "Helptext_Admin_WebformCreateEdit_AssignedAgentPassword"
 msgstr ""
@@ -2512,10 +2478,10 @@ msgid "Helptext_Customer_Dashboard_Search"
 msgstr ""
 "Wenn die Tabellen abhängig sind, wird nur nach Organisationen gesucht. Ist "
 "die Abhängigkeit aufgelöst, wird nach Organisationen und Kontakten gesucht. "
-"Durchsuchbar sind die Organisations-Eigenschaften \"KNR\", \"Name\", \"URL"
-"\", \"Straße\", \"PLZ\", \"Stadt\" und \"Land\" und die Kontakt-"
-"Eigenschaften \"Nutzername\", \"E-Mail\", \"Vorname\", \"Nachname\", \"Titel"
-"\", \"Telefon\", \"Fax\", \"Mobil\", \"Straße\", \"Stadt\", \"Land\". "
+"Durchsuchbar sind die Organisations-Eigenschaften \"KNR\", \"Name\", "
+"\"URL\", \"Straße\", \"PLZ\", \"Stadt\" und \"Land\" und die Kontakt-"
+"Eigenschaften \"Nutzername\", \"E-Mail\", \"Vorname\", \"Nachname\", "
+"\"Titel\", \"Telefon\", \"Fax\", \"Mobil\", \"Straße\", \"Stadt\", \"Land\". "
 "Verwendung von Wildcards (*) ist möglich. Die Nutzung weiterer Sonderzeichen "
 "ist im FAQ Artikel \"Wie suche ich in KIX 18\" zu finden."
 
@@ -2725,18 +2691,6 @@ msgstr "Suchen Sie nach FAQ-Artikeln mit diesem Titel oder Teilen des Titels."
 msgid "Helptext_FAQ_Link_Validity"
 msgstr "Suchen Sie nach FAQ-Artikeln mit der gewählten Gültigkeit."
 
-msgid "Helptext_i18n_TranslationPatternCreateEdit_Translation"
-msgstr ""
-"Wenn Sie diese Übersetzung für das Pattern angeben, wird diese in der "
-"Nutzeroberfläche angezeigt, wenn der Nutzer als Sprache die voranstehende "
-"Sprache gewählt hat."
-
-msgid "Helptext_i18n_TranslationPatternCreate_Pattern"
-msgstr ""
-"Das Pattern bezeichnet die Ausgangszeichenkette. Je nach dem, welche "
-"Sprachen in der SysConfig konfiguriert sind, können dafür Übersetzungen "
-"angelegt werden, welche dann in der Nutzeroberfläche angezeigt werden."
-
 msgid "Helptext_Import_CharacterSet."
 msgstr ""
 "Ermöglicht standardisierte Verwendung von Sonderzeichen u.ä. Standard für "
@@ -2752,6 +2706,12 @@ msgstr ""
 "Ermöglicht es, die einzelnen Attribute einer Zeile voneinander zu trennen. "
 "Falls unbekannt, öffnen Sie die .csv-Datei mit einem Texteditor."
 
+msgid "Helptext_Object_Tag_Search"
+msgstr ""
+"Geben Sie hier ein oder mehrere Tags an zu denen Konfigurationsobjekte "
+"gelistet und/oder exportiert werden sollen. Bitte mind. 3 Zeichen angeben um "
+"Vorschläge für vorhandene Tags zu erhalten."
+
 msgid "Helptext_Organisation_Address_Domain_Pattern"
 msgstr ""
 
@@ -2760,13 +2720,8 @@ msgstr ""
 "Bei Abbruch einer Bearbeitung (Schließen eines Dialogs) keine Bestätigung "
 "abfragen."
 
-msgid "Helptext_PersonalSettings_article_from_format"
-msgstr ""
-"Format des Namensteils der Absendeadresse im Kanal E-Mail. Die eigentliche, "
-"technische Email-Adresse wird immer die des jeweiligen Teams sein."
-
-msgid "Helptext_PersonalSettings_article_sort_order_Hint"
-msgstr "Definiert die Reihenfolge der Artikel in der Kommunikationshistorie."
+msgid "Helptext_PersonalSettings_Dont_Ask_On_Exit"
+msgstr "Verhindert das Bestätings-Popup beim Abmelden bzw. Schließen von KIX."
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2785,9 +2740,6 @@ msgstr "Letzter Tag der Abwesenheit"
 msgid "Helptext_PersonalSettings_OutOfOfficeStart_Hint"
 msgstr "Erster Tag der Abwesenheit"
 
-msgid "Helptext_PersonalSettings_Dont_Ask_On_Exit"
-msgstr "Verhindert das Bestätings-Popup beim Abmelden bzw. Schließen von KIX."
-
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr ""
 "Ändern Sie hier die Sprache in der das Self-Service-Portal dargestellt wird."
@@ -2798,6 +2750,11 @@ msgstr ""
 
 msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
 msgstr "Ihr neues Passwort für die Nutzung des Self-Service-Portals"
+
+msgid "Helptext_PersonalSettings_article_from_format"
+msgstr ""
+"Format des Namensteils der Absendeadresse im Kanal E-Mail. Die eigentliche, "
+"technische Email-Adresse wird immer die des jeweiligen Teams sein."
 
 msgid "Helptext_PersonalSettings_user_token_Hint"
 msgstr ""
@@ -2812,8 +2769,8 @@ msgstr ""
 
 msgid "Helptext_Reporting_ReportCreate_Datasource"
 msgstr ""
-"Angabe der Datenquelle der Berichtsdefinition. Aktuell ist nur \"GenericSQL"
-"\" möglich."
+"Angabe der Datenquelle der Berichtsdefinition. Aktuell ist nur "
+"\"GenericSQL\" möglich."
 
 msgid "Helptext_Reporting_ReportCreate_Datasource_DBMS"
 msgstr ""
@@ -3097,11 +3054,17 @@ msgstr ""
 msgid "Helptext_User_UserCreateEdit_Preferences_UserSecret"
 msgstr ""
 
-msgid "HelptImporConfigext_Import_File"
+msgid "Helptext_i18n_TranslationPatternCreateEdit_Translation"
 msgstr ""
-"Die Spalten in der Datei müssen wie folgt benannt sein um eine autom. "
-"Wertzuordnung zu nutzen: \"ServiceID\",\"SLA\",\"Organisation (Number)\","
-"\"Type\",\"Priority\",\"Contact\", \"Validity\" for value mapping."
+"Wenn Sie diese Übersetzung für das Pattern angeben, wird diese in der "
+"Nutzeroberfläche angezeigt, wenn der Nutzer als Sprache die voranstehende "
+"Sprache gewählt hat."
+
+msgid "Helptext_i18n_TranslationPatternCreate_Pattern"
+msgstr ""
+"Das Pattern bezeichnet die Ausgangszeichenkette. Je nach dem, welche "
+"Sprachen in der SysConfig konfiguriert sind, können dafür Übersetzungen "
+"angelegt werden, welche dann in der Nutzeroberfläche angezeigt werden."
 
 msgid "Hide"
 msgstr "Ausblenden"
@@ -3122,19 +3085,19 @@ msgid "Host"
 msgstr "Host"
 
 msgid "Hour(s)"
-msgstr "Stunden"
+msgstr "Stunde(n)"
 
-msgid "HTTP Type"
-msgstr "HTTP Type"
+msgid "ID"
+msgstr "ID"
+
+msgid "IMAP Folder"
+msgstr "IMAP-Ordner"
 
 msgid "Icon"
 msgstr "Icon"
 
 msgid "Id"
 msgstr "Id"
-
-msgid "ID"
-msgstr "ID"
 
 msgid "If checked, the last change date will be displayed for this item."
 msgstr ""
@@ -3147,20 +3110,26 @@ msgstr "Wenn gesetzt, wird der Wert den Checklisten-Zähler erhöhen."
 msgid "Ignore"
 msgstr "Ignorieren"
 
-msgid "IMAP Folder"
-msgstr "IMAP-Ordner"
-
 msgid "Import"
 msgstr "Import"
 
-msgid "Import {0} {1}. Execute?"
-msgstr "Sie importieren {0} {1}. Ausführen?"
+msgid "Import Contacts"
+msgstr "Kontakte importieren"
+
+msgid "Import Organisations"
+msgstr "Organisationen importieren"
 
 msgid "Import configurations"
 msgstr "Konfigurationen importieren"
 
-msgid "Import Contacts"
-msgstr "Kontakte importieren"
+msgid "Import successfully started."
+msgstr "Import wurde erfolgreich gestartet."
+
+msgid "Import will be started"
+msgstr "Der Import wird gestartet"
+
+msgid "Import {0} {1}. Execute?"
+msgstr "Sie importieren {0} {1}. Ausführen?"
 
 msgid "Import/Export"
 msgstr "Import/Export"
@@ -3177,17 +3146,8 @@ msgstr "Import/Export Vorlage wird ausgeführt"
 msgid "Import/Export Templates"
 msgstr "Import/Export Vorlagen"
 
-msgid "Import Organisations"
-msgstr "Organisationen importieren"
-
 msgid "Importstate"
 msgstr "Importstatus"
-
-msgid "Import successfully started."
-msgstr "Import wurde erfolgreich gestartet."
-
-msgid "Import will be started"
-msgstr "Der Import wird gestartet"
 
 msgid "Imprint"
 msgstr "Impressum"
@@ -3198,10 +3158,10 @@ msgstr "Posteingang"
 msgid "Incident"
 msgstr "Störung"
 
-msgid "Incident state"
+msgid "Incident State"
 msgstr "Vorfallsstatus"
 
-msgid "Incident State"
+msgid "Incident state"
 msgstr "Vorfallsstatus"
 
 msgid "Include Previous Version"
@@ -3223,29 +3183,23 @@ msgstr ""
 msgid "Incorrectly processed lines"
 msgstr "Fehlerhaft verarbeitete Zeilen"
 
+msgid "Information"
+msgstr "Information"
+
 msgid "Information text"
 msgstr "Hinweistext"
 
-msgid "in less than"
-msgstr "in weniger als"
-
-msgid "in more than"
-msgstr "in mehr als"
-
 msgid "Input"
 msgstr "Eingabe"
+
+msgid "Insert into article"
+msgstr "In Artikel einfügen"
 
 msgid "Inserted email address is invalid"
 msgstr "Die eingegebene E-Mail-Adresse ist ungültig"
 
 msgid "Inserted email address must not be a system address ({0})."
 msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein ({0})."
-
-msgid "insert filter value"
-msgstr "Filterwert eingeben"
-
-msgid "Insert into article"
-msgstr "In Artikel einfügen"
 
 msgid "Internal Field"
 msgstr "Intern"
@@ -3262,9 +3216,6 @@ msgstr "Ungültiges Datum bei 'Warten bis'"
 msgid "Is asynchronous"
 msgstr "Ist asynchron"
 
-msgid "is to large (max {0})."
-msgstr "ist zu lang (max {0})."
-
 msgid "Item Separator"
 msgstr "Einzeleintrag-Separator"
 
@@ -3277,26 +3228,23 @@ msgstr "Job Details"
 msgid "Job Information"
 msgstr "Job Informationen"
 
+msgid "Job successfully ran."
+msgstr "Job erfolgreich ausgeführt."
+
 msgid "Jobs"
 msgstr "Jobs"
 
 msgid "Jobs successfully removed."
 msgstr "Jobs wurden gelöscht."
 
-msgid "Job successfully ran."
-msgstr "Job erfolgreich ausgeführt."
-
-msgid "Keywords"
-msgstr "Schlagworte"
-
 msgid "KIX"
 msgstr "KIX"
 
-msgid "<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname> via Sender Address"
-msgstr "<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname> via Absendeadresse"
-
 msgid "KIX Forum"
 msgstr "KIX Forum"
+
+msgid "Keywords"
+msgstr "Schlagworte"
 
 msgid "Knowledge Database"
 msgstr "Wissensdatenbank"
@@ -3322,17 +3270,14 @@ msgstr "Sprachen"
 msgid "Large View"
 msgstr "Großansicht"
 
-msgid "(Last Change: {0})"
-msgstr "(Letzte Änderung: {0})"
-
-msgid "Last executed at"
-msgstr "Zuletzt ausgeführt am"
-
 msgid "Last Login"
 msgstr "Letzte Anmeldung"
 
 msgid "Last Name"
 msgstr "Nachname"
+
+msgid "Last executed at"
+msgstr "Zuletzt ausgeführt am"
 
 msgid "Latest releases"
 msgstr "Letzte Version"
@@ -3343,9 +3288,6 @@ msgstr "Layer"
 msgid "Legend"
 msgstr "Legende"
 
-msgid "less than ago"
-msgstr "vor weniger als"
-
 msgid "Let's go"
 msgstr "Los geht's"
 
@@ -3355,38 +3297,11 @@ msgstr "Los geht's"
 msgid "Library"
 msgstr "Bibliothek"
 
-msgid "link {0}"
-msgstr "{0} verknüpfen"
-
 msgid "Link Config Item with"
 msgstr "Asset verknüpfen mit"
 
-msgid "Linked as"
-msgstr "Verknüpft als"
-
-msgid "Linked Objects (<KIX_OBJECT_LinkCount>)"
-msgstr "Verknüpfte Objekte (<KIX_OBJECT_LinkCount>)"
-
 msgid "Link FAQ with"
 msgstr "FAQ verknüpfen mit"
-
-msgid "Links"
-msgstr "Verknüpfungen"
-
-msgid "Links for {0}"
-msgstr ""
-
-msgid "Links updated."
-msgstr "Verknüpfungen aktualisiert."
-
-msgid "Links will be removed."
-msgstr "Verknüpfungen werden entfernt."
-
-msgid "Link to"
-msgstr "Verknüpfen mit"
-
-msgid "Link to ticket"
-msgstr "Verknüpfen mit Ticket"
 
 msgid "Link Type"
 msgstr "Verknüpfungstyp"
@@ -3394,11 +3309,35 @@ msgstr "Verknüpfungstyp"
 msgid "Link Types"
 msgstr "Verknüpfungstypen"
 
-msgid "Loading ..."
-msgstr "Lade ..."
+msgid "Link to"
+msgstr "Verknüpfen mit"
+
+msgid "Link to ticket"
+msgstr "Verknüpfen mit Ticket"
+
+msgid "Linked Objects (<KIX_OBJECT_LinkCount>)"
+msgstr "Verknüpfte Objekte (<KIX_OBJECT_LinkCount>)"
+
+msgid "Linked as"
+msgstr "Verknüpft als"
+
+msgid "Links"
+msgstr "Verknüpfungen"
+
+msgid "Links for {0}"
+msgstr "Verknüpfung(en) für {0}"
+
+msgid "Links updated."
+msgstr "Verknüpfungen aktualisiert."
+
+msgid "Links will be removed."
+msgstr "Verknüpfungen werden entfernt."
 
 msgid "Load more"
 msgstr "weitere laden"
+
+msgid "Loading ..."
+msgstr "Lade ..."
 
 msgid "Localisation"
 msgstr "Lokalisierung"
@@ -3406,26 +3345,26 @@ msgstr "Lokalisierung"
 msgid "Lock"
 msgstr "Sperren"
 
-msgid "Locked"
-msgstr "Gesperrt"
-
-msgid "Locked Tickets"
-msgstr "Gesperrte Tickets"
-
 msgid "Lock State"
 msgstr "Sperrstatus"
 
 msgid "Lock Ticket"
 msgstr "Ticket sperren"
 
+msgid "Locked"
+msgstr "Gesperrt"
+
+msgid "Locked Tickets"
+msgstr "Gesperrte Tickets"
+
+msgid "Log Level"
+msgstr "Log Level"
+
 msgid "Logged in"
 msgstr "Angemeldet"
 
 msgid "Login Name"
 msgstr "Nutzername"
-
-msgid "Log Level"
-msgstr "Log Level"
 
 msgid "Logout"
 msgstr "Abmelden"
@@ -3442,11 +3381,11 @@ msgstr "Makro Informationen"
 msgid "Mail Account Details"
 msgstr "Mailkonto Details"
 
-msgid "Mail Accounts successfully removed."
-msgstr "E-Mail-Konten wurden erfolgreich gelöscht."
-
 msgid "Mail Account successfully fetched."
 msgstr "E-Mail-Konto wurde erfolgreich abgerufen."
+
+msgid "Mail Accounts successfully removed."
+msgstr "E-Mail-Konten wurden erfolgreich gelöscht."
 
 msgid "Mail Filter Details"
 msgstr "Mailfilter Details"
@@ -3505,9 +3444,6 @@ msgstr "Monat"
 msgid "Month(s)"
 msgstr "Monat(e)"
 
-msgid "more than ago"
-msgstr "vor mehr als"
-
 msgid "Multifactor Authentication"
 msgstr "Multifaktor-Authentifizierung"
 
@@ -3516,12 +3452,6 @@ msgstr "Mehrfach"
 
 msgid "My Articles"
 msgstr "Meine Artikel"
-
-msgid "My locked tickets"
-msgstr "Meine gesperrten Tickets"
-
-msgid "My locked tickets with new articles"
-msgstr "Meine gesperrten Tickets mit neuen Artikeln"
 
 msgid "My Open Tickets"
 msgstr "Meine offenen Tickets"
@@ -3541,11 +3471,20 @@ msgstr "Eigene Firma"
 msgid "My Queues"
 msgstr "Meine Teams"
 
+msgid "My Searches"
+msgstr "meine Suchen"
+
 msgid "My Teams"
 msgstr "Meine Teams"
 
 msgid "My Tickets"
 msgstr "Meine Tickets"
+
+msgid "My locked tickets"
+msgstr "Meine gesperrten Tickets"
+
+msgid "My locked tickets with new articles"
+msgstr "Meine gesperrten Tickets mit neuen Artikeln"
 
 msgid "My tickets with new articles"
 msgstr "Meine Tickets mit neuen Artikeln"
@@ -3603,9 +3542,6 @@ msgstr "Neue Emailadresse"
 
 msgid "New Email Filter"
 msgstr "Neuer E-Mail-Filter"
-
-msgid "Newest first"
-msgstr "neueste zuerst"
 
 msgid "New FAQ"
 msgstr "Neue FAQ"
@@ -3673,10 +3609,10 @@ msgstr "Neuer Status"
 msgid "New Team"
 msgstr "Neues Team"
 
-msgid "New Textmodule"
+msgid "New Text Module"
 msgstr "Neuer Textbaustein"
 
-msgid "New Text Module"
+msgid "New Textmodule"
 msgstr "Neuer Textbaustein"
 
 msgid "New Ticket"
@@ -3685,14 +3621,14 @@ msgstr "Neues Ticket"
 msgid "New Tickets"
 msgstr "Neue Tickets"
 
+msgid "New Tickets (recent 7 days)"
+msgstr "Neue Tickets der letzten 7 Tage"
+
 msgid "New Tickets Chart"
 msgstr "Neuer Ticketchart"
 
 msgid "New Tickets Chart Widget"
 msgstr "Neues Ticketchart-Widget"
-
-msgid "New Tickets (recent 7 days)"
-msgstr "Neue Tickets der letzten 7 Tage"
 
 msgid "New Tickets Table"
 msgstr "Neue Tickettabelle"
@@ -3721,26 +3657,14 @@ msgstr "Neuer Wert"
 msgid "New Webform"
 msgstr "Neues Formular"
 
-msgid "next"
-msgstr "weiter"
-
 msgid "Next"
 msgstr "Nächste"
 
 msgid "Next Image"
 msgstr "Nächstes Bild"
 
-msgid "no"
-msgstr "nein"
-
 msgid "No"
 msgstr "Nein"
-
-msgid "No."
-msgstr "Nr."
-
-msgid "No {0} found (add at least {1} characters)."
-msgstr "Keine {0} gefunden (mind. {1} Zeichen eingeben)."
 
 msgid "No Access"
 msgstr "Kein Zugriff"
@@ -3748,11 +3672,11 @@ msgstr "Kein Zugriff"
 msgid "No Article"
 msgstr "Kein Artikel"
 
-msgid "No article available."
-msgstr "Kein Artikel verfügbar."
-
 msgid "No Channel"
 msgstr "Kein Kanal"
+
+msgid "No article available."
+msgstr "Kein Artikel verfügbar."
 
 msgid "No data available."
 msgstr "Keine Angaben verfügbar."
@@ -3760,14 +3684,11 @@ msgstr "Keine Angaben verfügbar."
 msgid "No encryption"
 msgstr "Keine Verschlüsselung"
 
-msgid "No form available. Please contact your administrator."
-msgstr "Kein formular verfügbar. Bitte kontaktieren Sie ihren Administrator."
+msgid "No object with ID {0} available."
+msgstr "Kein Objekt mit der ID {0} verfügbar."
 
 msgid "No objects available."
 msgstr "Keine Objekte verfügbar."
-
-msgid "No object with ID {0} available."
-msgstr "Kein Objekt mit der ID {0} verfügbar."
 
 msgid "No permission for this object."
 msgstr "Keine Berechtigung für dieses Objekt."
@@ -3778,20 +3699,29 @@ msgstr "Keine Bewertung verfügbar."
 msgid "No report available"
 msgstr "Kein Bericht verfügbar"
 
+msgid "No version available"
+msgstr "Keine Version verfügbar"
+
+msgid "No {0} found (add at least {1} characters)."
+msgstr "Keine {0} gefunden (mind. {1} Zeichen eingeben)."
+
+msgid "No, thank you"
+msgstr "Nein, danke"
+
+msgid "No."
+msgstr "Nr."
+
 msgid "Not available (not any more or not yet)"
 msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
 
-msgid "not contained in"
-msgstr "nicht enthalten in"
+msgid "Not more than 5 files possible."
+msgstr "Nicht mehr als 5 Dateien möglich."
 
 msgid "Note"
 msgstr "Notiz"
 
 msgid "Notes"
 msgstr "Notizen"
-
-msgid "No, thank you"
-msgstr "Nein, danke"
 
 msgid "Notification"
 msgstr "Benachrichtigung"
@@ -3814,6 +3744,12 @@ msgstr "Benachrichtigungsmethoden"
 msgid "Notification Options"
 msgstr "Benachrichtigungsoptionen"
 
+msgid "Notification Template"
+msgstr "Benachrichtigungen Layout"
+
+msgid "Notification Text"
+msgstr "Benachrichtigungstext"
+
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
@@ -3822,21 +3758,6 @@ msgstr "Benachrichtigungen für Tickets"
 
 msgid "Notifications successfully removed."
 msgstr "Benachrichtigung(en) wurde(n) erfolgreich gelöscht."
-
-msgid "Notification Template"
-msgstr "Benachrichtigungen Layout"
-
-msgid "Notification Text"
-msgstr "Benachrichtigungstext"
-
-msgid "not modified"
-msgstr "********"
-
-msgid "Not more than 5 files possible."
-msgstr "Nicht mehr als 5 Dateien möglich."
-
-msgid "No version available"
-msgstr "Keine Version verfügbar"
 
 msgid "Nr."
 msgstr "Nr."
@@ -3847,6 +3768,9 @@ msgstr "Nummer"
 msgid "Number of Actions"
 msgstr "Anzahl Aktionen"
 
+msgid "Number of Attachments"
+msgstr "Anzahl Anhänge"
+
 msgid "Number of Config Items"
 msgstr "Anzahl Assets"
 
@@ -3856,8 +3780,8 @@ msgstr "Anzahl Assets mit kritischem Vorfallsstatus"
 msgid "Number of open tickets by priority"
 msgstr "Anzahl offener Tickets nach Priorität"
 
-msgid "Number of open tickets by state"
-msgstr "Anzahl offener Tickets nach Status"
+msgid "Number of open tickets by statetype"
+msgstr "Anzahl offener Tickets nach Statetype"
 
 msgid "Number of ratings"
 msgstr "Anzahl Bewertungen"
@@ -3883,29 +3807,32 @@ msgstr "OAuth2 Profil"
 msgid "OAuth2 Profiles"
 msgstr "OAuth2 Profile"
 
+msgid "OK"
+msgstr "OK"
+
 msgid "Object"
 msgstr "Objekt"
-
-msgid "Object Id"
-msgstr "Objekt ID"
 
 msgid "Object ID"
 msgstr "Objekt ID"
 
-msgid "Objects"
-msgstr "Objekte"
+msgid "Object Id"
+msgstr "Objekt ID"
+
+msgid "Object Tag"
+msgstr ""
+
+msgid "Object Tags"
+msgstr ""
 
 msgid "Object Type"
 msgstr "Objekttyp"
 
+msgid "Objects"
+msgstr "Objekte"
+
 msgid "Observer"
 msgstr "Beobachter"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Oldest first"
-msgstr "älteste zuerst"
 
 msgid "Once a day"
 msgstr "Einmal pro Tag"
@@ -3915,15 +3842,6 @@ msgstr "Einmal pro Tag"
 
 msgid "Open"
 msgstr "Offen"
-
-msgid "Open left sidebar"
-msgstr "Linke Sidebar Öffnen"
-
-msgid "Open main menu"
-msgstr "Hauptmenu Öffnen"
-
-msgid "Open right sidebar"
-msgstr "Rechte Sidebar Öffnen"
 
 msgid "Open Sidebars"
 msgstr "Geöffnete Sidebars"
@@ -3936,6 +3854,15 @@ msgstr "Offene Tickets des Kontaktes"
 
 msgid "Open Tickets of Organisation"
 msgstr "Offene Tickets der Organisation"
+
+msgid "Open left sidebar"
+msgstr "Linke Sidebar Öffnen"
+
+msgid "Open main menu"
+msgstr "Hauptmenu Öffnen"
+
+msgid "Open right sidebar"
+msgstr "Rechte Sidebar Öffnen"
 
 msgid "Open toolbar"
 msgstr "Toolbar Öffnen"
@@ -3967,11 +3894,17 @@ msgstr "Organisationen Dashboard"
 msgid "Other"
 msgstr "andere"
 
-msgid "Outbox"
-msgstr "Postausgang"
-
 msgid "Out Of Office"
 msgstr "Abwesend"
+
+msgid "Out Of Office Agents"
+msgstr "Abwesende Agenten"
+
+msgid "Out of office"
+msgstr "Abwesend"
+
+msgid "Outbox"
+msgstr "Postausgang"
 
 msgid "Output Format"
 msgstr "Ausgabeformat"
@@ -4000,9 +3933,6 @@ msgstr "Übersicht Kontakte"
 msgid "Overview FAQ"
 msgstr "Übersicht FAQ"
 
-msgid "Overview of {0} to import ({1})"
-msgstr "Übersicht zu importierende {0} ({1})"
-
 msgid "Overview Organisations"
 msgstr "Übersicht Organisationen"
 
@@ -4015,17 +3945,17 @@ msgstr "Übersicht Berichte"
 msgid "Overview Ticket Priorities"
 msgstr "Tickets nach Prioritäten"
 
-msgid "Overview Tickets"
-msgstr "Übersicht Tickets"
-
 msgid "Overview Ticket States"
 msgstr "Tickets nach Status"
+
+msgid "Overview Tickets"
+msgstr "Übersicht Tickets"
 
 msgid "Overview Versions"
 msgstr "Versionsübersicht"
 
-msgid "owned by me"
-msgstr "in Bearbeitung durch mich"
+msgid "Overview of {0} to import ({1})"
+msgstr "Übersicht zu importierende {0} ({1})"
 
 msgid "Owner"
 msgstr "Bearbeiter"
@@ -4063,12 +3993,6 @@ msgstr "Pattern"
 msgid "Pending"
 msgstr "Wartend"
 
-msgid "Pending date is not in the future."
-msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
-
-msgid "Pending time"
-msgstr "Wartezeit"
-
 msgid "Pending Time has invalid date!"
 msgstr "Wartezeit hat ungültigen Wert!"
 
@@ -4077,6 +4001,12 @@ msgstr "Der Wartezeitpunkt muss in der Zukunft liegen!"
 
 msgid "Pending Time is required!"
 msgstr "Es muss ein Wartezeitpunkt angegeben werden!"
+
+msgid "Pending date is not in the future."
+msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
+
+msgid "Pending time"
+msgstr "Wartezeit"
 
 msgid "Pending until"
 msgstr "Warten bis"
@@ -4121,20 +4051,20 @@ msgstr ""
 msgid "Plaintext"
 msgstr "Klartext"
 
-msgid "Plan: {0} - {1}"
-msgstr "Plan: {0} - {1}"
-
 msgid "Plan Begin"
 msgstr "Plan Beginn"
 
 msgid "Plan End"
 msgstr "Plan Ende"
 
-msgid "Please enter a search term."
-msgstr "Bitte geben Sie einen Suchbegriff ein."
+msgid "Plan: {0} - {1}"
+msgstr "Plan: {0} - {1}"
 
 msgid "Please enter a search term for a organisation."
 msgstr "Bitte geben Sie einen Suchbegriff für eine Organisation ein."
+
+msgid "Please enter a search term."
+msgstr "Bitte geben Sie einen Suchbegriff ein."
 
 msgid "Please logout and login again with the new user."
 msgstr "Bitte abmelden und mit dem neuen Nutzer wieder anmelden."
@@ -4186,9 +4116,6 @@ msgstr "Vorschau"
 
 msgid "Preview List"
 msgstr "Vorschauliste"
-
-msgid "previous"
-msgstr "zurück"
 
 msgid "Previous"
 msgstr "Vorherig"
@@ -4295,6 +4222,9 @@ msgstr ""
 "Übersichtliche Tabellen, die Sie ganz nach Ihren Bedürfnissen sortieren und "
 "filtern können, helfen Ihnen optimal bei Ihren täglichen Arbeitsprozessen."
 
+msgid "RTL"
+msgstr ""
+
 msgid "Rate"
 msgstr "Bewerten"
 
@@ -4304,20 +4234,17 @@ msgstr "Bewertung"
 msgid "Read"
 msgstr "Lesen"
 
+msgid "Read & Write"
+msgstr "Lesen & Schreiben"
+
 msgid "Read all"
 msgstr "alle gelesen"
 
 msgid "Readonly"
 msgstr "Nur Lesen"
 
-msgid "Read & Write"
-msgstr "Lesen & Schreiben"
-
 msgid "Recently Closed"
 msgstr "Kürzlich Geschlossen"
-
-msgid "recipient addresses (To, Cc, etc.)"
-msgstr "Empfängeradressen (Von, Cc, etc.)"
 
 msgid "Recipients"
 msgstr "Empfänger"
@@ -4328,20 +4255,20 @@ msgstr "Redirect URL"
 msgid "References"
 msgstr "Verweise"
 
+msgid "Refresh Application"
+msgstr "Anwendung aktualisieren"
+
 msgid "Refresh Interval(sec)"
 msgstr "Refresh-Intervall (sec)"
-
-msgid "Refresh Page"
-msgstr "Seite neu laden"
 
 msgid "RegEx"
 msgstr "RegEx"
 
-msgid "RegExErrorMessage"
-msgstr "RegEx Fehlernachricht"
-
 msgid "RegEx List"
 msgstr "RegEx Liste"
+
+msgid "RegExErrorMessage"
+msgstr "RegEx Fehlernachricht"
 
 msgid "Related Assets"
 msgstr "Relevante Assets"
@@ -4354,6 +4281,9 @@ msgstr "Relevanter Makrotyp"
 
 msgid "Reload Agent Portal Configurations"
 msgstr "Frontend-Konfigurationen neu laden"
+
+msgid "Reload Application"
+msgstr "Anwendung neu laden"
 
 msgid "Reload Calendar Data ..."
 msgstr "Kalenderdaten neu laden..."
@@ -4373,9 +4303,6 @@ msgstr "Entfernen"
 msgid "Remove Address"
 msgstr "Adresse(n) löschen"
 
-msgid "Remove dependency to organisation"
-msgstr "Abhängigkeit zur Organisation lösen"
-
 msgid "Remove Dynamic Fields"
 msgstr "Dynamische Felder entfernen"
 
@@ -4391,9 +4318,6 @@ msgstr "FAQ Kategorien entfernen"
 msgid "Remove Filter"
 msgstr "Filter löschen"
 
-msgid "Remove from Affected Assets"
-msgstr "Aus betroffenen Assets entfernen"
-
 msgid "Remove Jobs"
 msgstr "Jobs Entfernen"
 
@@ -4402,9 +4326,6 @@ msgstr "E-Mail-Konten löschen"
 
 msgid "Remove Notifications"
 msgstr "Benachrichtigungen löschen"
-
-msgid "Remove parameter"
-msgstr "Parameter löschen"
 
 msgid "Remove Priorities"
 msgstr "Prioritäten löschen"
@@ -4421,17 +4342,26 @@ msgstr "Rollen entfernen"
 msgid "Remove States"
 msgstr "Status löschen"
 
-msgid "Remove table"
-msgstr "Tabelle entfernen"
-
 msgid "Remove Text Modules"
 msgstr "Textbausteine Entfernen"
 
-msgid "Remove translations"
-msgstr "Übersetzungen löschen"
-
 msgid "Remove Types"
 msgstr "Typen löschen"
+
+msgid "Remove dependency to organisation"
+msgstr "Abhängigkeit zur Organisation lösen"
+
+msgid "Remove from Affected Assets"
+msgstr "Aus betroffenen Assets entfernen"
+
+msgid "Remove parameter"
+msgstr "Parameter löschen"
+
+msgid "Remove table"
+msgstr "Tabelle entfernen"
+
+msgid "Remove translations"
+msgstr "Übersetzungen löschen"
 
 msgid "Rename Your Organisation"
 msgstr "Eigene Firma eintragen"
@@ -4439,11 +4369,11 @@ msgstr "Eigene Firma eintragen"
 msgid "Renew Authorization"
 msgstr "Autorisierung erneuern"
 
-msgid "Replace empty value"
-msgstr "Leerwert ersetzen"
-
 msgid "Replace Values"
 msgstr "Wert ersetzen"
+
+msgid "Replace empty value"
+msgstr "Leerwert ersetzen"
 
 msgid "Reply"
 msgstr "Antworten"
@@ -4460,29 +4390,32 @@ msgstr "Berichtsgrafik"
 msgid "Report Definition"
 msgstr "Berichtsdefinition"
 
-msgid "Report Definitions"
-msgstr "Berichtsdefinitionen"
-
 msgid "Report Definition(s) deleted."
 msgstr "Berichtsdefinition(en) wurden gelöscht."
+
+msgid "Report Definitions"
+msgstr "Berichtsdefinitionen"
 
 msgid "Report Information"
 msgstr "Berichtsinformationen"
 
-msgid "Reporting"
-msgstr "Berichte"
-
 msgid "Report Parameter"
 msgstr "Berichtsparamenter"
-
-msgid "Reports"
-msgstr "Berichte"
 
 msgid "Report(s) deleted."
 msgstr "Bericht(e) wurden gelöscht."
 
+msgid "Reporting"
+msgstr "Berichte"
+
+msgid "Reports"
+msgstr "Berichte"
+
 msgid "Required"
 msgstr "Pflichtfeld"
+
+msgid "Required field has no value."
+msgstr "Erforderliches Feld hat keinen Wert."
 
 msgid "Required field {0} has no value."
 msgstr "Benötigtes Feld '{0}' hat keinen Wert."
@@ -4490,23 +4423,20 @@ msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 msgid "Required field {0} is no JSON."
 msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format."
 
-msgid "Required field has no value."
-msgstr "Erforderliches Feld hat keinen Wert."
-
 msgid "Reset"
 msgstr "Rücksetzen"
-
-msgid "Reset?"
-msgstr "Zurücksetzen?"
-
-msgid "Reset data"
-msgstr "Daten zurücksetzen"
 
 msgid "Reset Preference"
 msgstr "Einstellung zurücksetzen"
 
 msgid "Reset Search To Default"
 msgstr "Suche auf Default zurücksetzen"
+
+msgid "Reset User Widgets"
+msgstr "Nutzer-Widgets zurücksetzen"
+
+msgid "Reset data"
+msgstr "Daten zurücksetzen"
 
 msgid "Reset specific user settings"
 msgstr "Spezifische Nutzereinstellungen zurücksetzen"
@@ -4517,14 +4447,11 @@ msgstr "Tabellenfilter zurücksetzen"
 msgid "Reset to Default"
 msgstr "Auf Vorgabewert zurücksetzen"
 
-msgid "Reset User Widgets"
-msgstr "Nutzer-Widgets zurücksetzen"
+msgid "Reset?"
+msgstr "Zurücksetzen?"
 
 msgid "Resizable"
 msgstr "Größe änderbar"
-
-msgid "responsibility by me"
-msgstr "verantwortet durch mich"
 
 msgid "Responsible"
 msgstr "Verantwortlicher"
@@ -4553,28 +4480,25 @@ msgstr "Rollen-Informationen"
 msgid "Roles"
 msgstr "Rollen"
 
-msgid "Roles/Permissions"
-msgstr "Rollen/Berechtigungen"
-
 msgid "Roles successfully removed."
 msgstr "Rollen erfolgreich entfernt."
 
+msgid "Roles/Permissions"
+msgstr "Rollen/Berechtigungen"
+
 msgid "Row"
 msgstr "Zeile"
-
-msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
-msgstr ""
-"Zeile {0} der Datei {1} {2}: kann nicht importiert werden{3}. Wie möchten "
-"Sie fortfahren?"
 
 msgid "Row Number"
 msgstr "Zeilennummer"
 
 msgid "Row Selection"
-msgstr "Spaltenauswahl"
+msgstr "Zeilenauswahl"
 
-msgid "RTL"
+msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
 msgstr ""
+"Zeile {0} der Datei {1} {2}: kann nicht importiert werden{3}. Wie möchten "
+"Sie fortfahren?"
 
 msgid "Run"
 msgstr "Ausführen"
@@ -4582,8 +4506,17 @@ msgstr "Ausführen"
 msgid "Run asynchronously"
 msgstr "Asynchron ausführen"
 
-msgid "running"
-msgstr "laufend"
+msgid "SEARCH_OPERATOR_WITHIN_LAST"
+msgstr "der letzten"
+
+msgid "SEARCH_OPERATOR_WITHIN_NEXT"
+msgstr "der nächsten"
+
+msgid "SINGLE_QUOTES"
+msgstr "' (Einfaches Hochkomma)"
+
+msgid "SSP"
+msgstr "SSP"
 
 msgid "Saturday"
 msgstr "Samstag"
@@ -4600,12 +4533,6 @@ msgstr "Speichern & Abrufen"
 msgid "Save & Logout"
 msgstr "Speichern & Ausloggen"
 
-msgid "Save new search"
-msgstr "Neue Suche speichern"
-
-msgid "Save notification template"
-msgstr "Layout Benachrichtigungen speichern"
-
 msgid "Save Organisation"
 msgstr "Organisation Sichern"
 
@@ -4621,53 +4548,29 @@ msgstr "Einstellungen werden gespeichert."
 msgid "Save System Settings"
 msgstr "Systemeinstellungen speichern"
 
+msgid "Save new search"
+msgstr "Neue Suche speichern"
+
+msgid "Save notification template"
+msgstr "Layout Benachrichtigungen speichern"
+
 msgid "Scheduling"
 msgstr "Zeitplanung"
 
 msgid "Scope"
 msgstr "Scope"
 
-msgid "search ..."
-msgstr "suchen ..."
-
 msgid "Search"
-msgstr "Suchen"
-
-msgid "Search: {0}"
-msgstr "Suche: {0}"
-
-msgid "Search {0} will be deleted. Are you sure?"
-msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
-
-msgid "Search defaults for {0} reseted."
-msgstr "Standard-Sucheinstellungen für {0} zurückgesetzt."
-
-msgid "Search error!"
-msgstr "Fehler bei Suche!"
-
-msgid "Searches"
 msgstr "Suchen"
 
 msgid "Search Limit"
 msgstr "Suchlimit"
 
-msgid "Search menu"
-msgstr "Suchmenü"
-
 msgid "Search Object"
 msgstr "Suchobjekt"
 
-msgid "SEARCH_OPERATOR_WITHIN_LAST"
-msgstr "der letzten"
-
-msgid "SEARCH_OPERATOR_WITHIN_NEXT"
-msgstr "der nächsten"
-
 msgid "Search Results ({0})"
 msgstr "Suchergebnisse ({0})"
-
-msgid "Search Results: {0}"
-msgstr "Suchergebnisse: {0}"
 
 msgid "Search Results: Config Items"
 msgstr "Suchergebnisse: Assets"
@@ -4684,17 +4587,35 @@ msgstr "Suchergebnisse: Organisationen"
 msgid "Search Results: Tickets"
 msgstr "Suchergebnisse: Tickets"
 
-msgid "Search successfully saved."
-msgstr "Suche wurde gespeichert."
-
 msgid "Search Templates"
 msgstr "Suchvorlagen"
+
+msgid "Search Title"
+msgstr "Name der Suche"
+
+msgid "Search defaults for {0} reseted."
+msgstr "Standard-Sucheinstellungen für {0} zurückgesetzt."
+
+msgid "Search error!"
+msgstr "Fehler bei Suche!"
+
+msgid "Search menu"
+msgstr "Suchmenü"
+
+msgid "Search successfully saved."
+msgstr "Suche wurde gespeichert."
 
 msgid "Search template successfully removed."
 msgstr "Suchvorlage(n) wurde(n) erfolgreich gelöscht."
 
-msgid "Search Title"
-msgstr "Name der Suche"
+msgid "Search {0} will be deleted. Are you sure?"
+msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
+
+msgid "Search: {0}"
+msgstr "Suche: {0}"
+
+msgid "Searches"
+msgstr "Suchen"
 
 msgid "Second number value is missing."
 msgstr "Zweiter Wert fehlt."
@@ -4708,20 +4629,14 @@ msgstr "Sekunde(n)"
 msgid "Select"
 msgstr "Wählen"
 
-msgid "Select all"
-msgstr "Alle auswählen"
-
 msgid "Select All"
 msgstr "Alle auswählen"
 
-msgid "Selected {0} ({1})"
-msgstr "Ausgewählte {0} ({1})"
+msgid "Select None"
+msgstr "Keine Auswählen"
 
-msgid "Selected Search Criteria"
-msgstr "Gewählte Suchkriterien"
-
-msgid "Selected Versions"
-msgstr "Gewählte Versionen"
+msgid "Select all"
+msgstr "Alle auswählen"
 
 msgid "Select file"
 msgstr "Datei auswählen"
@@ -4729,20 +4644,32 @@ msgstr "Datei auswählen"
 msgid "Select image file"
 msgstr "Bilddatei wählen"
 
-msgid "Select None"
-msgstr "Keine Auswählen"
+msgid "Selected Search Criteria"
+msgstr "Gewählte Suchkriterien"
+
+msgid "Selected Versions"
+msgstr "Gewählte Versionen"
+
+msgid "Selected {0} ({1})"
+msgstr "Ausgewählte {0} ({1})"
 
 msgid "Self Service Manual"
 msgstr "Self Service Handbuch"
-
-msgid "; (semicolon)"
-msgstr "; (Semikolon)"
 
 msgid "Send"
 msgstr "Senden"
 
 msgid "Send despite out of office"
 msgstr "Trotz „nicht im Büro“"
+
+msgid "Send to"
+msgstr "Senden an"
+
+msgid "Send to all role members"
+msgstr "Senden an Agenten-Rollen"
+
+msgid "Send to these agents"
+msgstr "Senden an Agenten"
 
 msgid "Sender Address"
 msgstr "Absendeadresse"
@@ -4753,99 +4680,38 @@ msgstr "Absender E-Mail"
 msgid "Sender Type"
 msgstr "Sendertyp"
 
-msgid "Send to"
-msgstr "Senden an"
-
-msgid "Send to all role members"
-msgstr "Senden an Agenten-Rollen"
-
-msgid "send to background"
-msgstr "im Hintergrund ausführen"
-
-msgid "Send to these agents"
-msgstr "Senden an Agenten"
-
-msgid "Set as Default"
-msgstr "als Standard setzen"
-
 msgid "Set Email Header"
 msgstr "E-Mail-Header setzen"
 
 msgid "Set Email Headers"
 msgstr "E-Mail-Header setzen"
 
+msgid "Set Hidden"
+msgstr "im Hintergrund setzen"
+
 msgid "Set Password for admin"
 msgstr "Passwort für admin setzen"
-
-msgid "Setup Assistant"
-msgstr "Setup Assistent"
-
-msgid "setup_assistant_add_mail_account_text"
-msgstr ""
-"Richten Sie ein E-Mail-Konto ein, von dem Sie E-Mails abrufen möchten. "
-"Weitere Konten können im Admin-Bereich \"Kommunikation/E-Mail/E-Mail-Konten"
-"\" hinzugefügt werden. Bitte beachten Sie, dass E-Mails unabhängig vom "
-"gewählten Kontentyp aus dem Postfach abgeholt und gelöscht werden!"
-
-msgid "setup_assistant_change_admin_password_text"
-msgstr ""
-"Setzen Sie ein eigenes Passwort für den Systemnutzer \"admin\" um die "
-"Sicherheit Ihres Systems zu erhöhen."
-
-msgid "setup_assistant_create_superuser_text"
-msgstr ""
-"Der Nutzer \"admin\" ist ein Systemnutzer und nicht zur Arbeit im System "
-"gedacht. Legen Sie deshalb hier einen neuen Nutzer an. Dieser verfügt "
-"ebenfalls über komplette Berechtigungen. Bitte loggen Sie sich anschließend "
-"mit diesem Nutzer neu ein."
-
-msgid "setup_assistant_notification_template_text"
-msgstr ""
-"Passen Sie das Layout der E-Mail-Benachrichtigungen, die vom System "
-"verschickt werden, entsprechend Ihrer Wünsche an. Sie können sich eine "
-"Vorschau anzeigen lassen."
-
-msgid "setup_assistant_sending_email_text"
-msgstr ""
-"Richten Sie den E-Mail-Server ein, über den E-Mails versendet werden sollen."
-
-msgid "setup_assistant_system_settings_text"
-msgstr ""
-"Bitte fügen Sie Grundeinstellungen entsprechend Ihrer Installation hinzu. "
-"KIX.Cloud Nutzer: bitte prüfen Sie Ihre Benachrichtigungs-Mail. Für on-"
-"premise-Installationen: Frontend bezieht sich auf FQDN+Port, unter dem das "
-"Agentenportal erreichbar ist (z.B. \"your.docker.host:20001\"). Backend "
-"bezieht sich auf FQDN+Port, über den die KIX REST-API erreichbar ist (z.B. "
-"\"your.docker.host:20000\"). Das Customer Frontend sollte entsprechend "
-"eingestellt werden, wenn Sie das KIX Self Service Portal nutzen möchten (z."
-"B. \"your.docker.host:20002\")."
-
-msgid "setup_assistant_welcome_text"
-msgstr ""
-"Bitte führen Sie die folgenden Schritte aus, um die Grundeinstellungen für "
-"KIX zu setzen. Nähere Informationen dazu finden Sie auch im Admin-Handbuch "
-"im Abschnitt „Ersteinrichtung“."
-
-msgid "Setup email server"
-msgstr "E-Mail-Server einrichten"
-
-msgid "setupt_assistant_my-organisation_text"
-msgstr ""
-"Tragen Sie hier die Daten Ihrer Firma ein. Diese wird an verschiedenen "
-"Stellen in KIX als Referenz genutzt und z.B. automatisch in der Standard-"
-"Signatur ersetzt."
 
 msgid "Set Value"
 msgstr "Wert setzen"
 
-msgid "Shared Search"
-msgstr "Geteilte Suche"
+msgid "Set as Default"
+msgstr "als Standard setzen"
+
+msgid "Setup Assistant"
+msgstr "Setup Assistent"
+
+msgid "Setup email server"
+msgstr "E-Mail-Server einrichten"
 
 msgid "Share_Search_Template"
 msgstr "Suchvorlage teilen"
 
-msgid "Show all"
-msgstr "Alles anzeigen"
+msgid "Shared Search"
+msgstr "Geteilte Suche"
+
+msgid "Shared Searches"
+msgstr "geteilte Suchen"
 
 msgid "Show Backlog"
 msgstr "Backlog anzeigen"
@@ -4856,17 +4722,20 @@ msgstr "Filter zeigen"
 msgid "Show Graph"
 msgstr "Graph Anzeigen"
 
-msgid "Show in agent preferences"
-msgstr "Anzeige Agenteneinstellung"
-
-msgid "Show in Customer Portal"
-msgstr "Im Kundenportal verfügbar"
-
 msgid "Show Last Change Date"
 msgstr "Datum der letzten Änderung anzeigen"
 
 msgid "Show Links"
 msgstr "Zeige Links"
+
+msgid "Show all"
+msgstr "Alles anzeigen"
+
+msgid "Show in Customer Portal"
+msgstr "In Kundenportal Anzeigen"
+
+msgid "Show in agent preferences"
+msgstr "Anzeige Agenteneinstellung"
 
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
@@ -4876,12 +4745,6 @@ msgstr "Sidebars"
 
 msgid "Signature"
 msgstr "Signatur"
-
-msgid "since"
-msgstr "seit/gleich oder größer"
-
-msgid "SINGLE_QUOTES"
-msgstr "' (Einfaches Hochkomma)"
 
 msgid "Size"
 msgstr "Größe"
@@ -4913,9 +4776,6 @@ msgstr "Übersetzung"
 msgid "Sort"
 msgstr "Sortieren"
 
-msgid "Sortable"
-msgstr "Sortierbar"
-
 msgid "Sort attribute:"
 msgstr "Sortierattribut:"
 
@@ -4924,6 +4784,9 @@ msgstr "Sortierreihenfolge"
 
 msgid "Sort order:"
 msgstr "Sortierreihenfolge:"
+
+msgid "Sortable"
+msgstr "Sortierbar"
 
 msgid "Source"
 msgstr "Quelle"
@@ -4934,11 +4797,11 @@ msgstr "Quelltext"
 msgid "Split Option"
 msgstr "Trennoptionen"
 
-msgid "SSP"
-msgstr "SSP"
-
 msgid "Standard"
 msgstr "Standard"
+
+msgid "Start Import"
+msgstr "Import starten"
 
 msgid "Start by"
 msgstr "Gestartet von"
@@ -4946,17 +4809,11 @@ msgstr "Gestartet von"
 msgid "Start date/time is not given"
 msgstr "Startdatum/-zeit ist nicht angegeben"
 
-msgid "Start Import"
-msgstr "Import starten"
-
 msgid "Start modal dialog for form"
 msgstr "Modalen Dialog starten"
 
 msgid "Start search"
 msgstr "Suche starten"
-
-msgid "starts with"
-msgstr "beginnt mit"
 
 msgid "Start time"
 msgstr "Startzeitpunkt"
@@ -4976,23 +4833,23 @@ msgstr "Status"
 msgid "State Data"
 msgstr "Stammdaten"
 
-msgid "States"
-msgstr "Status"
-
-msgid "States Chart"
-msgstr "Status-Chart"
-
-msgid "States Chart Widget"
-msgstr "Status-Chart-Widget"
-
-msgid "States successfully removed."
-msgstr "Status wurde(n) erfolgreich gelöscht."
-
 msgid "State Type"
 msgstr "Statustyp"
 
 msgid "State Types"
 msgstr "Statustypen"
+
+msgid "State Types Chart"
+msgstr ""
+
+msgid "State Types Chart Widget"
+msgstr ""
+
+msgid "States"
+msgstr "Status"
+
+msgid "States successfully removed."
+msgstr "Status wurde(n) erfolgreich gelöscht."
 
 msgid "Stop after match"
 msgstr "Stoppen nach Treffer"
@@ -5042,9 +4899,6 @@ msgstr "Nutzer Superuser"
 msgid "Switch attachment list layout"
 msgstr "Layout der Anlagenliste ändern"
 
-msgid "switch_column_order_action"
-msgstr "Tauschen"
-
 msgid "Switch to customer portal."
 msgstr "Wechsel ins Self Service Portal."
 
@@ -5057,20 +4911,20 @@ msgstr "SysConfig"
 msgid "SysConfig Keys"
 msgstr "SysConfig Schlüssel"
 
-msgid "system"
-msgstr "System"
-
 msgid "System"
 msgstr "System"
-
-msgid "System address"
-msgstr "Systemadresse"
 
 msgid "System Address"
 msgstr "Systemadresse"
 
 msgid "System Addresses"
 msgstr "Systemadressen"
+
+msgid "System Settings"
+msgstr "Systemeinstellungen"
+
+msgid "System address"
+msgstr "Systemadresse"
 
 msgid "System: Console"
 msgstr "System: Konsole"
@@ -5084,14 +4938,8 @@ msgstr "System: Logs"
 msgid "System: Plugins"
 msgstr "System: Plugins"
 
-msgid "System Settings"
-msgstr "Systemeinstellungen"
-
 msgid "System: Sysconfig ({0})"
 msgstr "System: SysConfig ({0})"
-
-msgid "-> (tab)"
-msgstr "-> (Tabulator)"
 
 msgid "Table Columns"
 msgstr "Tabellenspalten"
@@ -5102,14 +4950,14 @@ msgstr "Tabellenkonfiguration"
 msgid "Table Height (Row Count)"
 msgstr "Tabellenhöhe (Zeilenanzahl)"
 
-msgid "Tables"
-msgstr "Tabellen"
-
 msgid "Table Widget"
 msgstr "Tabellen-Widget"
 
+msgid "Tables"
+msgstr "Tabellen"
+
 msgid "Tags"
-msgstr "Schlagworte"
+msgstr "Tags"
 
 msgid "Tail Lines"
 msgstr "End-Zeilen"
@@ -5160,14 +5008,20 @@ msgstr "Textbaustein(e) wurde(n) erfolgreich gelöscht."
 msgid "Text separator"
 msgstr "Texttrenner"
 
+msgid "The Job {0} will be ran now. Are you sure?"
+msgstr "Der Job {0} wird jetzt ausgeführt. Sind Sie sicher?"
+
 msgid "The entered date is out of boundaries."
 msgstr "Das eingegebene Datum ist außerhalb des zulässigen Wertebereichs."
 
-msgid "The file {0} has no valid MIME-TYPE."
-msgstr "Die Datei {0} hat keinen akzeptierten MIME-Type."
+msgid "The entered date is out of boundaries.."
+msgstr "Das eingegebene Datum liegt außerhalb der Grenzen."
 
 msgid "The file size of {0} is too large ({1}). Max.: {2}"
 msgstr "Die Datei {0} ist zu groß ({1}). Max.: {2}"
+
+msgid "The file {0} has no valid MIME-TYPE."
+msgstr "Die Datei {0} hat keinen akzeptierten MIME-Type."
 
 msgid ""
 "The following {0} entries and existing sub categories will be deleted. Are "
@@ -5179,18 +5033,8 @@ msgstr ""
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
 
-msgid "The Job {0} will be ran now. Are you sure?"
-msgstr "Der Job {0} wird jetzt ausgeführt. Sind Sie sicher?"
-
 msgid "The password is changed for Admin."
 msgstr "Das Passwort für Admin wurde geändert."
-
-msgid ""
-"The preference ContextWidgetLists will be reseted for the {0} selected user. "
-"Are you sure?"
-msgstr ""
-"Die Einstellung der angezeigten Widgets wird für die {0} gewählten Nutzer "
-"zurückgesetzt. Fortfahren?"
 
 msgid ""
 "The preference ContextWidgetLists will be reseted for the user. Are you sure?"
@@ -5199,10 +5043,11 @@ msgstr ""
 "Fortfahren?"
 
 msgid ""
-"There are open dialogs. Any data you may have entered will be lost. Continue?"
+"The preference ContextWidgetLists will be reseted for the {0} selected user. "
+"Are you sure?"
 msgstr ""
-"Es gibt offene Dialoge. Alle ggf. eingegebenen Daten gehen verloren. "
-"Fortfahren?"
+"Die Einstellung der angezeigten Widgets wird für die {0} gewählten Nutzer "
+"zurückgesetzt. Fortfahren?"
 
 msgid "The requested ticket is not available due to restricted permissions."
 msgstr ""
@@ -5221,6 +5066,12 @@ msgstr "Das eingegebene Jahr darf nur maximal {0} Jahre in der Zukunft liegen."
 msgid "The year can be a maximum of {0} years in the past"
 msgstr ""
 "Das eingegebene Jahr darf nur maximal {0} Jahre in der Vergangenheit liegen."
+
+msgid ""
+"There are open dialogs. Any data you may have entered will be lost. Continue?"
+msgstr ""
+"Es gibt offene Dialoge. Alle ggf. eingegebenen Daten gehen verloren. "
+"Fortfahren?"
 
 msgid ""
 "This is the administration panel. Please select a module from the explorer."
@@ -5243,14 +5094,20 @@ msgstr "Ticketdaten"
 msgid "Ticket Flags"
 msgstr "Ticket Flags"
 
-msgid "Ticket has printed"
-msgstr "Ticket wurde gedruckt"
-
 msgid "Ticket History"
 msgstr "Ticket Historie"
 
 msgid "Ticket Information"
 msgstr "Ticketinformation"
+
+msgid "Ticket Notifications"
+msgstr "Ticketbenachrichtigungen"
+
+msgid "Ticket Number"
+msgstr "Ticket Nummer"
+
+msgid "Ticket has printed"
+msgstr "Ticket wurde gedruckt"
 
 msgid "Ticket is being watched."
 msgstr "Ticket wird beobachtet."
@@ -5261,38 +5118,14 @@ msgstr "Ticket wird nicht mehr beobachtet."
 msgid "Ticket locked."
 msgstr "Ticket gesperrt."
 
-msgid "Ticket Notifications"
-msgstr "Ticketbenachrichtigungen"
-
-msgid "Ticket Number"
-msgstr "Ticket Nummer"
-
-msgid "TicketOwner"
-msgstr "Bearbeiter"
+msgid "Ticket unlocked."
+msgstr "Ticket entsperrt."
 
 msgid "Ticket: Priorities"
 msgstr "Ticket: Prioritäten"
 
 msgid "Ticket: Queues"
 msgstr "Ticket: Teams"
-
-msgid "TicketResponsible"
-msgstr "Verantwortlicher"
-
-msgid "Tickets"
-msgstr "Tickets"
-
-msgid "Tickets: {0}"
-msgstr "Tickets: {0}"
-
-msgid "Tickets for Assets"
-msgstr "Tickets zu Assets"
-
-msgid "Tickets for Contact"
-msgstr "Tickets zu Kontakt"
-
-msgid "Tickets has been printed and zipped"
-msgstr "Tickets wurden gedruckt und gepackt"
 
 msgid "Ticket: States"
 msgstr "Ticket: Status"
@@ -5303,8 +5136,26 @@ msgstr "Ticket: Textbausteine"
 msgid "Ticket: Types"
 msgstr "Ticket: Typen"
 
-msgid "Ticket unlocked."
-msgstr "Ticket entsperrt."
+msgid "TicketOwner"
+msgstr "Bearbeiter"
+
+msgid "TicketResponsible"
+msgstr "Verantwortlicher"
+
+msgid "Tickets"
+msgstr "Tickets"
+
+msgid "Tickets for Assets"
+msgstr "Tickets zu Assets"
+
+msgid "Tickets for Contact"
+msgstr "Tickets zu Kontakt"
+
+msgid "Tickets has been printed and zipped"
+msgstr "Tickets wurden gedruckt und gepackt"
+
+msgid "Tickets: {0}"
+msgstr "Tickets: {0}"
 
 msgid "Till"
 msgstr "Bis"
@@ -5329,26 +5180,14 @@ msgstr ""
 msgid "Title"
 msgstr "Titel"
 
-msgid "to"
-msgstr "bis"
-
 msgid "To"
 msgstr "To"
-
-msgid "to Article"
-msgstr "zum Artikel"
 
 msgid "Today"
 msgstr "Heute"
 
 msgid "Token URL"
 msgstr "Token URL"
-
-msgid "to version"
-msgstr "zur Version"
-
-msgid "to Version"
-msgstr "zur Version"
 
 msgid "Translatable"
 msgstr "Übersetzbar"
@@ -5359,8 +5198,8 @@ msgstr "Zu übersetzende Spalten"
 msgid "Translatable Title"
 msgstr "Übersetzbarer Titel"
 
-msgid "Translatable Values"
-msgstr "Zu übersetzende Werte"
+msgid "Translate Values"
+msgstr "Werte übersetzen"
 
 msgid "Translation"
 msgstr "Übersetzung"
@@ -5383,11 +5222,11 @@ msgstr "Typ"
 msgid "Type Data"
 msgstr "Typdaten"
 
-msgid "Type of first value is missing."
-msgstr "Typ des ersten Werts fehlt."
-
 msgid "Type of Job"
 msgstr "Job Typ"
+
+msgid "Type of first value is missing."
+msgstr "Typ des ersten Werts fehlt."
 
 msgid "Type of second value is missing."
 msgstr "Typ des zweiten Werts fehlt."
@@ -5398,8 +5237,8 @@ msgstr "Typen"
 msgid "Types successfully removed."
 msgstr "Typ(en) wurde(n) erfolgreich gelöscht."
 
-msgid "unequal"
-msgstr "ungleich"
+msgid "URL"
+msgstr "URL"
 
 msgid "Unit of first value is missing."
 msgstr "Einheit des ersten Werts fehlt."
@@ -5410,12 +5249,6 @@ msgstr "Einheit des zweiten Werts fehlt."
 msgid "Unlock"
 msgstr "Freigeben"
 
-msgid "Unlocked"
-msgstr "Frei"
-
-msgid "Unlocked Tickets"
-msgstr "Freie Tickets"
-
 msgid "Unlock Ticket"
 msgstr "Ticket entsperren"
 
@@ -5425,14 +5258,17 @@ msgstr "Entsperrzeit"
 msgid "Unlock Timeout (min)"
 msgstr "Entsperrzeit (min)"
 
+msgid "Unlocked"
+msgstr "Frei"
+
+msgid "Unlocked Tickets"
+msgstr "Freie Tickets"
+
 msgid "Unread"
 msgstr "Ungelesen"
 
 msgid "Unread Articles"
 msgstr "Ungelesene Artikel"
-
-msgid "until"
-msgstr "bis/gleich oder weniger"
 
 msgid "Unwatch"
 msgstr "Nicht beobachten"
@@ -5443,9 +5279,6 @@ msgstr "Ticket nicht mehr beobachten"
 msgid "Update Email Account"
 msgstr "Aktualisierung wird durchgeführt"
 
-msgid "URL"
-msgstr "URL"
-
 msgid "Usage Context"
 msgstr "Nutzungskontext"
 
@@ -5455,14 +5288,14 @@ msgstr "KIX CSS verwenden"
 msgid "User"
 msgstr "Nutzer"
 
+msgid "User Access"
+msgstr "Benutzer-Zugang"
+
 msgid "User Details"
 msgstr "Nutzerdetails"
 
 msgid "User Information"
 msgstr "Nutzer Informationen"
-
-msgid "User is already assigned"
-msgstr "Nutzer ist bereits zugewiesen"
 
 msgid "User Management"
 msgstr "Nutzerverwaltung"
@@ -5479,14 +5312,20 @@ msgstr "Handbuch"
 msgid "User Name"
 msgstr "Nutzerkennung"
 
-msgid "Users"
-msgstr "Nutzer"
+msgid "User Preferences"
+msgstr "Benutzer-Einstellungen"
 
 msgid "User Secret"
 msgstr "Nutzer Secret"
 
 msgid "User Token"
 msgstr "Benutzertoken"
+
+msgid "User is already assigned"
+msgstr "Nutzer ist bereits zugewiesen"
+
+msgid "Users"
+msgstr "Nutzer"
 
 msgid "Validation error"
 msgstr "Validierungsfehler"
@@ -5509,17 +5348,17 @@ msgstr "Versions-ID"
 msgid "View"
 msgstr "Ansicht"
 
-msgid "Viewable States"
-msgstr "Sichtbare Status"
-
 msgid "View Log File"
 msgstr "Log File Anzeigen"
 
-msgid "Visible in customer portal"
-msgstr "Sichtbar in Kundenportal"
+msgid "Viewable States"
+msgstr "Sichtbare Status"
 
 msgid "Visible in Self Service Portal"
 msgstr "Sichtbar im Kundenportal"
+
+msgid "Visible in customer portal"
+msgstr "Sichtbar in Kundenportal"
 
 msgid "Votes"
 msgstr "Bewertungen"
@@ -5533,17 +5372,17 @@ msgstr "Warnung"
 msgid "Watch"
 msgstr "Beobachten"
 
-msgid "Watched"
-msgstr "Beobachtet"
-
-msgid "Watched Tickets"
-msgstr "Beobachtete Tickets"
-
 msgid "Watch Ticket"
 msgstr "Ticket beobachten"
 
 msgid "Watch User"
 msgstr "Beobachtender Nutzer"
+
+msgid "Watched"
+msgstr "Beobachtet"
+
+msgid "Watched Tickets"
+msgstr "Beobachtete Tickets"
 
 msgid "We are working on this functionality."
 msgstr "Funktionalität ist in Arbeit."
@@ -5566,11 +5405,11 @@ msgstr "Mittwoch"
 msgid "Week"
 msgstr "Woche"
 
-msgid "Weekday(s)"
-msgstr "Wochentag(e)"
-
 msgid "Week(s)"
 msgstr "Woche(n)"
+
+msgid "Weekday(s)"
+msgstr "Wochentag(e)"
 
 msgid "Welcome"
 msgstr "Willkommen"
@@ -5586,15 +5425,6 @@ msgstr "Wildcard-Suche"
 
 msgid "With attachments"
 msgstr "mit Anhängen"
-
-msgid "within"
-msgstr "innerhalb"
-
-msgid "within the last"
-msgstr "innerhalb der letzten"
-
-msgid "within the next"
-msgstr "innerhalb der nächsten"
 
 msgid "Work in Progress"
 msgstr "In Bearbeitung (WIP)"
@@ -5614,9 +5444,6 @@ msgstr "Jahre in Zukunft"
 msgid "Years in Past"
 msgstr "Jahre in Vergangenheit"
 
-msgid "yes"
-msgstr "ja"
-
 msgid "Yes"
 msgstr "Ja"
 
@@ -5629,6 +5456,12 @@ msgstr "Geschafft!"
 msgid "You have to confirm your password."
 msgstr "Bitte bestätigen Sie das neue Passwort."
 
+msgid "You will edit {0} attributes for {1} {2}. Execute now?"
+msgstr "Sie ändern {0} Attribute an {1} {2}. Jetzt starten?"
+
+msgid "You will reset {0} Sysconfig Options. Execute now?"
+msgstr "Es werden {0} Sysconfig Optionen zurückgesetzt. Jetzt ausführen?"
+
 msgid "Your Permissions have been updated."
 msgstr "Ihre Berechtigungen wurden aktualisiert."
 
@@ -5638,17 +5471,287 @@ msgstr "Ihre Bewertung"
 msgid "Youtube"
 msgstr "Youtube"
 
-msgid "You will edit {0} attributes for {1} {2}. Execute now?"
-msgstr "Sie ändern {0} Attribute an {1} {2}. Jetzt starten?"
-
-msgid "You will reset {0} Sysconfig Options. Execute now?"
-msgstr "Es werden {0} Sysconfig Optionen zurückgesetzt. Jetzt ausführen?"
+msgid "ZIP"
+msgstr "PLZ"
 
 msgid "Zip"
 msgstr "PLZ"
 
-msgid "ZIP"
-msgstr "PLZ"
+msgid "add notes here"
+msgstr "Notizen hinzufügen"
+
+msgid "after"
+msgstr "nach/größer als"
+
+msgid "agent"
+msgstr "Agent"
+
+msgid "and"
+msgstr "und"
+
+msgid "and further"
+msgstr "und weitere"
+
+msgid "ascending"
+msgstr "aufsteigend"
+
+msgid "before"
+msgstr "vor/kleiner als"
+
+msgid "between"
+msgstr "zwischen"
+
+msgid "contained in"
+msgstr "enthalten in"
+
+msgid "contains"
+msgstr "enthält"
+
+msgid "created"
+msgstr "erstellt"
+
+msgid "current"
+msgstr "aktuell"
+
+msgid "descending"
+msgstr "absteigend"
+
+msgid "draft successfully saved"
+msgstr "Entwurf gesichert"
+
+msgid "edited"
+msgstr "bearbeitet"
+
+msgid "edited at {0} by {1}"
+msgstr "bearbeitet am {0} durch {1}"
+
+msgid "ends with"
+msgstr "endet mit"
+
+msgid "enter filter value"
+msgstr "Filterwert eingeben"
+
+msgid "equals"
+msgstr "ist gleich"
+
+msgid "expected time required:"
+msgstr "voraussichtlich benötigte Zeit:"
+
+msgid "external"
+msgstr "extern"
+
+msgid "finished"
+msgstr "abgeschlossen"
+
+msgid "in less than"
+msgstr "in weniger als"
+
+msgid "in more than"
+msgstr "in mehr als"
+
+msgid "insert filter value"
+msgstr "Filterwert eingeben"
+
+msgid "is to large (max {0})."
+msgstr "ist zu lang (max {0})."
+
+msgid "less than ago"
+msgstr "vor weniger als"
+
+msgid "link {0}"
+msgstr "{0} verknüpfen"
+
+msgid "more than ago"
+msgstr "vor mehr als"
+
+msgid "next"
+msgstr "weiter"
+
+msgid "no"
+msgstr "nein"
+
+msgid "not contained in"
+msgstr "nicht enthalten in"
+
+msgid "not modified"
+msgstr "********"
+
+msgid "owned by me"
+msgstr "in Bearbeitung durch mich"
+
+msgid "previous"
+msgstr "zurück"
+
+msgid "recipient addresses (To, Cc, etc.)"
+msgstr "Empfängeradressen (Von, Cc, etc.)"
+
+msgid "responsibility by me"
+msgstr "verantwortet durch mich"
+
+msgid "running"
+msgstr "laufend"
+
+msgid "search ..."
+msgstr "suchen ..."
+
+msgid "send to background"
+msgstr "im Hintergrund ausführen"
+
+msgid "setup_assistant_add_mail_account_text"
+msgstr ""
+"Richten Sie ein E-Mail-Konto ein, von dem Sie E-Mails abrufen möchten. "
+"Weitere Konten können im Admin-Bereich \"Kommunikation/E-Mail/E-Mail-"
+"Konten\" hinzugefügt werden. Bitte beachten Sie, dass E-Mails unabhängig vom "
+"gewählten Kontentyp aus dem Postfach abgeholt und gelöscht werden!"
+
+msgid "setup_assistant_change_admin_password_text"
+msgstr ""
+"Setzen Sie ein eigenes Passwort für den Systemnutzer \"admin\" um die "
+"Sicherheit Ihres Systems zu erhöhen."
+
+msgid "setup_assistant_create_superuser_text"
+msgstr ""
+"Der Nutzer \"admin\" ist ein Systemnutzer und nicht zur Arbeit im System "
+"gedacht. Legen Sie deshalb hier einen neuen Nutzer an. Dieser verfügt "
+"ebenfalls über komplette Berechtigungen. Bitte loggen Sie sich anschließend "
+"mit diesem Nutzer neu ein."
+
+msgid "setup_assistant_notification_template_text"
+msgstr ""
+"Passen Sie das Layout der E-Mail-Benachrichtigungen, die vom System "
+"verschickt werden, entsprechend Ihrer Wünsche an. Sie können sich eine "
+"Vorschau anzeigen lassen."
+
+msgid "setup_assistant_sending_email_text"
+msgstr ""
+"Richten Sie den E-Mail-Server ein, über den E-Mails versendet werden sollen."
+
+msgid "setup_assistant_system_settings_text"
+msgstr ""
+"Bitte fügen Sie Grundeinstellungen entsprechend Ihrer Installation hinzu. "
+"KIX.Cloud Nutzer: bitte prüfen Sie Ihre Benachrichtigungs-Mail. Für on-"
+"premise-Installationen: Frontend bezieht sich auf FQDN+Port, unter dem das "
+"Agentenportal erreichbar ist (z.B. \"your.docker.host:20001\"). Backend "
+"bezieht sich auf FQDN+Port, über den die KIX REST-API erreichbar ist (z.B. "
+"\"your.docker.host:20000\"). Das Customer Frontend sollte entsprechend "
+"eingestellt werden, wenn Sie das KIX Self Service Portal nutzen möchten (z."
+"B. \"your.docker.host:20002\")."
+
+msgid "setup_assistant_welcome_text"
+msgstr ""
+"Bitte führen Sie die folgenden Schritte aus, um die Grundeinstellungen für "
+"KIX zu setzen. Nähere Informationen dazu finden Sie auch im Admin-Handbuch "
+"im Abschnitt „Ersteinrichtung“."
+
+msgid "setupt_assistant_my-organisation_text"
+msgstr ""
+"Tragen Sie hier die Daten Ihrer Firma ein. Diese wird an verschiedenen "
+"Stellen in KIX als Referenz genutzt und z.B. automatisch in der Standard-"
+"Signatur ersetzt."
+
+msgid "since"
+msgstr "seit/gleich oder größer"
+
+msgid "starts with"
+msgstr "beginnt mit"
+
+msgid "switch_column_order_action"
+msgstr "Tauschen"
+
+msgid "system"
+msgstr "System"
+
+msgid "to"
+msgstr "bis"
+
+msgid "to Article"
+msgstr "zum Artikel"
+
+msgid "to Version"
+msgstr "zur Version"
+
+msgid "to version"
+msgstr "zur Version"
+
+msgid "unequal"
+msgstr "ungleich"
+
+msgid "until"
+msgstr "bis/gleich oder weniger"
+
+msgid "within"
+msgstr "innerhalb"
+
+msgid "within the last"
+msgstr "innerhalb der letzten"
+
+msgid "within the next"
+msgstr "innerhalb der nächsten"
+
+msgid "yes"
+msgstr "ja"
+
+msgid "{0} File(s) added"
+msgstr "{0} Datei(en) hinzugefügt"
+
+msgid "{0} Link created"
+msgstr "{0} Verknüpfung(en) angelegt"
+
+msgid "{0} imported"
+msgstr "{0} importiert"
+
+msgid "{0} is required."
+msgstr "{0} ist ein Pflichtfeld."
+
+msgid "{0} link(s) assigned."
+msgstr "{0} Verknüpfung(en) erstellt."
+
+msgid "{0}. Action"
+msgstr "{0}. Aktion"
+
+msgid "{0}/{1} {2} imported"
+msgstr "{0}/{1} {2} importiert"
+
+msgid "{0}: has no value."
+msgstr "{0}: hat keinen Wert."
+
+msgid "{0}: just white spaces as value is not allowed."
+msgstr "{0}: nur Leerzeichen als Wert sind nicht zulässig."
+
+#~ msgid "Search Results: {0}"
+#~ msgstr "Suchergebnisse: {0}"
+
+#~ msgid "Refresh Page"
+#~ msgstr "Seite neu laden"
+
+#~ msgid "No form available. Please contact your administrator."
+#~ msgstr ""
+#~ "Kein formular verfügbar. Bitte kontaktieren Sie ihren Administrator."
+
+#~ msgid "Apply Table"
+#~ msgstr "Tabelle hinzufügen"
+
+#~ msgid "Article sort order"
+#~ msgstr "Artikelsortierung"
+
+#~ msgid "Helptext_PersonalSettings_article_sort_order_Hint"
+#~ msgstr ""
+#~ "Definiert die Reihenfolge der Artikel in der Kommunikationshistorie."
+
+#~ msgid "Newest first"
+#~ msgstr "neueste zuerst"
+
+#~ msgid "Number of open tickets by state"
+#~ msgstr "Anzahl offener Tickets nach Status"
+
+#~ msgid "Oldest first"
+#~ msgstr "älteste zuerst"
+
+#~ msgid "States Chart"
+#~ msgstr "Status-Chart"
+
+#~ msgid "States Chart Widget"
+#~ msgstr "Status-Chart-Widget"
 
 #~ msgid "Current Password"
 #~ msgstr "Aktuelles Passwort"
@@ -7473,8 +7576,8 @@ msgstr "PLZ"
 
 #~ msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
 #~ msgstr ""
-#~ "Setzen Sie den Typ als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
-#~ "\"."
+#~ "Setzen Sie den Typ als \"gültig\", \"ungültig (temporär)\" oder "
+#~ "\"ungültig\"."
 
 #~ msgid "Set the user as „valid“, „invalid (temporarily)“, or „invalid“."
 #~ msgstr ""

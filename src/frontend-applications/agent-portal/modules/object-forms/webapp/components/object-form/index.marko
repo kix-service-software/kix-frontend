@@ -15,28 +15,21 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 ]>
 
     <if(state.prepared)>
-        <div id=state.carouselId class="carousel slide carousel-fade">
-            <if(state.pages.length > 1 || input.contextInstanceId)>
-                <object-form-page-slider
-                    pages=state.pages
-                    carouselId=state.carouselId
-                    contextInstanceId=state.contextInstanceId
+        <if(state.pages.length > 1 || input.contextInstanceId)>
+            <object-form-page-slider
+                pages=state.pages
+                carouselId=state.carouselId
+                contextInstanceId=state.contextInstanceId
+            />
+        </if>
+        <div class=component.getLayoutClasses()>
+            <for|page| of=state.pages>
+                <object-form-page
+                    page=page
+                    contextInstanceId=input.contextInstanceId
                 />
-            </if>
-            <div
-                class="carousel-inner mt-2"
-                style="max-height: 70vh; overflow-y: auto;"
-            >
-                <div class="row mt-2 " + component.getLayoutClasses()>
-                    <for|page, index| of=state.pages>
-                        <object-form-page
-                            page=page
-                            contextInstanceId=input.contextInstanceId
-                        />
-                    </for>
-                    <object-form-other-information contextInstanceId=input.contextInstanceId/>
-                </div>
-            </div>
+            </for>
+            <object-form-other-information contextInstanceId=input.contextInstanceId/>
         </div>
         <if(!input.contextInstanceId)>
             <object-form-buttonbar contextInstanceId=input.contextInstanceId/>

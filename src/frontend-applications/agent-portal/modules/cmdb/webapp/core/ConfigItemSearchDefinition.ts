@@ -134,7 +134,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     newCriteria.push(searchCriteria);
                     break;
                 default:
-                    if (classIds && forSearch && !searchCriteria.property.match(/^CurrentVersion.Data/)) {
+                    if (forSearch && !searchCriteria.property.match(/^CurrentVersion.Data/)) {
                         const path = await ConfigItemClassAttributeUtil.getAttributePath(
                             searchCriteria.property, classIds
                         );

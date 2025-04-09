@@ -33,8 +33,8 @@ import { ContactFormFieldValueHandler } from './ContactFormFieldValueHandler';
 import { ContactJobFormManager } from './ContactJobFormManager';
 import { JobTypes } from '../../../job/model/JobTypes';
 import { JobFormService } from '../../../job/webapp/core/JobFormService';
-import { ContactFormService } from './form/ContactFormService';
 import { SearchService } from '../../../search/webapp/core/SearchService';
+import { ContactFormService } from './form/ContactFormService';
 
 export class UIModule implements IUIModule {
 

@@ -37,11 +37,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private fieldLayout: FieldLayout[];
     private field: FormFieldConfiguration;
 
+    private parent: ObjectFormValue;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        this.parent = input.parent;
         this.contextInstanceId = input.contextInstanceId;
         this.fieldLayout = input.fieldLayout;
         if (this.state.formValue?.instanceId !== input.formValue?.instanceId || this.contextInstanceId) {
@@ -86,7 +89,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.readonly = this.state.formValue?.readonly;
         this.state.required = this.state.formValue?.required;
         this.state.hint = this.state.formValue?.hint;
-        this.state.formValues = this.state.formValue?.formValues;
+        this.state.formValues = this.state.formValue?.formValues?.filter(
+            (fv) => fv.isControlledByParent || !fv.fieldId
+        );
         this.state.label = await TranslationService.translate(this.state.formValue?.label);
 
         this.state.validationErrors = this.state.formValue?.validationResults.filter(
@@ -203,7 +208,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
                 canShow = canShow && formValue.isConfigurable;
             } else {
-                canShow = (formValue?.enabled && BrowserUtil.isBooleanTrue(formValue?.visible?.toString()));
+                const isVisible = BrowserUtil.isBooleanTrue(formValue?.visible?.toString());
+                canShow = formValue?.enabled && isVisible;
             }
 
             this.state.displayNone = !canShow;
@@ -258,25 +264,21 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public hasEnabledFormValues(): boolean {
-        return this.state.formValues?.some((fv) => fv.enabled);
-    }
-
     public getFieldClasses(): string {
         const classes = [];
 
         const fieldLayout = this.fieldLayout?.find((fl) => fl.fieldId === this.field?.id);
 
         if (fieldLayout?.colSM > 0) {
-            classes.push('col-sm-' + fieldLayout.colSM);
+            classes.push('col-sm-' + (fieldLayout.colSM < 3 ? 3 : fieldLayout.colSM));
         }
 
         if (fieldLayout?.colMD > 0) {
-            classes.push('col-md-' + fieldLayout.colMD);
+            classes.push('col-md-' + (fieldLayout.colMD < 3 ? 3 : fieldLayout.colMD));
         }
 
         if (fieldLayout?.colLG > 0) {
-            classes.push('col-lg-' + fieldLayout.colLG);
+            classes.push('col-lg-' + (fieldLayout.colLG < 3 ? 3 : fieldLayout.colLG));
         }
 
         if (!classes.length) {

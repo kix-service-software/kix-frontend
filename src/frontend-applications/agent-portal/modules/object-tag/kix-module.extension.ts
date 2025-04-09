@@ -10,6 +10,8 @@
 import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
 import { UIComponent } from '../../model/UIComponent';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
 class Extension extends KIXExtension implements IKIXModuleExtension {
 
@@ -22,7 +24,12 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     public external: boolean = false;
 
     public initComponents: UIComponent[] = [
-        new UIComponent('UIModule', '/kix-module-object-tag$0/webapp/core/ObjectTagUIModule', [])
+        new UIComponent('UIModule', '/kix-module-object-tag$0/webapp/core/ObjectTagUIModule',
+            [
+                new UIComponentPermission('system/config', [CRUD.READ]),
+                new UIComponentPermission('objecttags', [CRUD.CREATE, CRUD.READ])
+            ]
+        )
     ];
 
     public uiComponents: UIComponent[] = [

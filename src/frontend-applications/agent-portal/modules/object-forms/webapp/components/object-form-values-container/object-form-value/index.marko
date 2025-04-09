@@ -80,15 +80,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                rounded: !state.valid,
             },
          ]>
-            <if(state.inputTemplate)>
-               <${state.inputTemplate} formValue=input.formValue/>
+            <if(!state.formValue["COUNT_CONTAINER"])>
+               <if(state.inputTemplate)>
+                  <${state.inputTemplate} formValue=input.formValue/>
+               </if>
+               <else>
+                  <text-form-input formValue=input.formValue/>
+               </else>
             </if>
-            <else>
-               <text-form-input formValue=input.formValue/>
-            </else>
          </div>
       </div>
       <if(
+         !state.displayNone &&
          !state.formValue.readonly &&
          Array.isArray(state.formValue.actions) &&
          state.formValue.actions.length > 0
@@ -110,11 +113,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </for>
          </div>
       </if>
-      <if(
-         Array.isArray(state.formValues) &&
-         state.formValues.length &&
-         component.hasEnabledFormValues()
-      )>
+      <if(Array.isArray(state.formValues) && state.formValues.length)>
          <object-form-values-container
             formValues=state.formValues
             parent=input.formValue

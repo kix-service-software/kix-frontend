@@ -145,7 +145,7 @@ export class FormService {
         return form;
     }
 
-    public static createDefaultForm(): FormConfiguration {
+    public static createDefaultForm(title: string = 'Default'): FormConfiguration {
         const form = new FormConfiguration(
             `${IdService.generateDateBasedId()}`, '', [], KIXObjectType.TICKET,
             true, FormContext.EDIT, null,
@@ -154,7 +154,7 @@ export class FormService {
                     IdService.generateDateBasedId(), null, null, true, null,
                     [
                         new FormGroupConfiguration(
-                            IdService.generateDateBasedId(), 'Default Group', null, null, []
+                            IdService.generateDateBasedId(), title || 'Default', null, null, []
                         )
                     ]
                 )

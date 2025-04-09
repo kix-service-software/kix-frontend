@@ -353,7 +353,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     ): ObjectFormValue[] {
         const formValuesToShow: ObjectFormValue[] = [];
         for (const fv of formValues) {
-            let canShow = fv.showInUI;
+            let canShow = fv.showInUI && !fv['COUNT_CONTAINER'];
             canShow = canShow && !fieldIds.some((id) => id === fv.fieldId);
 
             if (canShow && !fv.isControlledByParent) {
@@ -388,6 +388,8 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
 
         await this.applyInteractions(result);
+
+        EventService.getInstance().publish(ObjectFormEvent.OTHER_INFORMATION_CHANGED);
     }
 
     private async applyPropertyInstructions(result: RuleResult): Promise<void> {

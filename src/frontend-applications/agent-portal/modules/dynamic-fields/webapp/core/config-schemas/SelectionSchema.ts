@@ -43,7 +43,7 @@ export class SelectionSchema {
         const defaultValueTitle = await TranslationService.translate('Translatable#Default Value');
         const defaultValueDescription = await TranslationService.translate('Translatable#Admin_DynamicField_Config_Value');
 
-        const translatableValues = await TranslationService.translate('Translatable#Translatable Values');
+        const translatableValues = await TranslationService.translate('Translatable#Translate Values');
         const possibleValues = await TranslationService.translate('Translatable#Possible Values');
 
         const appendValues = await TranslationService.translate('Translatable#Append Values');
