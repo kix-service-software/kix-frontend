@@ -221,7 +221,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         switch (property) {
             case TicketProperty.CREATED_QUEUE_ID:
             case TicketProperty.QUEUE_ID:
-                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false);
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, undefined, ['READ']);
                 nodes = await QueueService.getInstance().prepareObjectTree(
                     queuesHierarchy, showInvalid, invalidClickable,
                     filterIds ? filterIds.map((fid) => Number(fid)) : null
@@ -853,6 +853,10 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
         return KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE);
+    }
+
+    public async getObjectDependencyNodes(objectType: KIXObjectType, showInvalid?: boolean): Promise<TreeNode[]> {
+        return this.getTreeNodes(TicketProperty.QUEUE_ID, showInvalid, showInvalid);
     }
 
     public async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
