@@ -128,15 +128,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         let classes = [];
 
         if (column?.colSM > 0) {
-            classes.push('col-sm-' + column.colSM);
+            classes.push('col-sm-' + (column.colSM < 3 ? 3 : column.colSM));
         }
 
         if (column?.colMD > 0) {
-            classes.push('col-md-' + column.colMD);
+            classes.push('col-md-' + (column.colMD < 3 ? 3 : column.colMD));
         }
 
         if (column?.colLG > 0) {
-            classes.push('col-lg-' + column.colLG);
+            classes.push('col-lg-' + (column.colLG < 3 ? 3 : column.colLG));
         }
 
         if (!classes.length) {
