@@ -80,6 +80,8 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
 
     getObjectDependencies(objectType: KIXObjectType | string, showInvalid?: boolean): Promise<KIXObject[]>;
 
+    getObjectDependencyNodes(objectType: KIXObjectType | string, showInvalid?: boolean): Promise<TreeNode[]>;
+
     getObjectDependencyName(objectType: KIXObjectType | string): Promise<string>;
 
 }
