@@ -111,8 +111,10 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
             const contact = context.getAdditionalInformation(KIXObjectType.CONTACT);
             initialOrgId = contact?.PrimaryOrganisationID;
         }
-
-        if (init && initialOrgId) {
+        if (init && this.empty) {
+            organisationId = null;
+        }
+        else if (init && initialOrgId) {
             organisationId = initialOrgId;
         } else {
             if (!contactId) {

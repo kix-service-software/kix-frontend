@@ -310,7 +310,7 @@ export class ObjectFormValue<T = any> {
 
     public async initFormValue(): Promise<void> {
         this.actions = await ObjectFormRegistry.getInstance().getActions(this, this.objectValueMapper);
-        if (this.defaultValue) {
+        if (this.defaultValue || this.empty) {
             this.value = this.defaultValue;
         } else if (this.object && this.object[this.property]) {
             this.value = this.object[this.property];
