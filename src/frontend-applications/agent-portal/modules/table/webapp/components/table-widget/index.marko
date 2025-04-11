@@ -7,6 +7,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
+<macro name="widget-viewbar">
+    <if(state.hasViews)>
+        <div class="d-flex justify-content-start" role="group">
+            <for|view| of=state.views>
+                <button
+                    type="button"
+                    class=[
+                        "btn fs-4 px-2",
+                        {
+                            "border-0 bg-secondary text-white":
+                                state.activeViewId === view.id,
+                        },
+                    ]
+                    on-click("toggleView", view)
+                    title=view.name
+                >
+                    <icon icon=view.icon/>
+                </button>
+            </for>
+        </div>
+    </if>
+</macro>
+
 <if(!state.loading)>
     <widget
         instanceId=state.instanceId
@@ -15,11 +38,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         icon=state.icon
         contextType=component.contextType
     >
-        <@header-content>
+        <@headercontent>
             <for|componentId| of=state.headerTitleComponents>
                 <${component.getTemplate(componentId)}/>
             </for>
-        </@header-content>
+            <widget-viewbar/>
+        </@headercontent>
         <@headerfilter>
             <if(state.showFilter && !state.showFilterInBody)>
                 <filter
@@ -53,44 +77,61 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </if>
         </@headerfilter>
         <@content>
+            <if(
+                (state.showFilter || state.showFilterReset) &&
+                state.showFilterInBody
+            )>
+                <div class="mt-1 mb-3 d-flex">
+                    <if(state.showFilter && state.showFilterInBody)>
+                        <filter
+                            filterCount=state.filterCount
+                            predefinedFilter=state.predefinedTableFilter
+                            predefinedFilterName=state.predefinedFilterName
+                            predefinedFilterPlaceholder=state.filterPlaceholder
+                            disabled=state.isFiltering
+                            filterValue=state.filterValue
+                            on-filter("filter")
+                            key="table-widget-filter"
+                        />
+                    </if>
+                    <if(state.showFilterReset && state.showFilterInBody)>
+                        <span
+                            class=[
+                                "table-reset-filter",
+                                "icon",
+                                "fas fa-window-close",
+                            ]
+                            title=component.resetFilterTitle
+                            on-click("resetFilter")
+                        >
+                            <span class="path1"/>
+                            <span class="path2"/>
+                            <span class="path3"/>
+                            <span class="path4"/>
+                            <span class="path5"/>
+                        </span>
+                    </if>
+                </div>
+            </if>
+            <for|view| of=state.views>
+                <div class=[
+                    {
+                        "d-none": state.activeViewId !== view.id,
+                    },
+                ]>
+                    <${
+                        component.getTemplate(view.template)
+                    } tickets=state.objects/>
+                </div>
+            </for>
             <if(state.table)>
-                <if(
-                    (state.showFilter || state.showFilterReset) &&
-                    state.showFilterInBody
-                )>
-                    <div class="mt-1 mb-3 d-flex">
-                        <if(state.showFilter && state.showFilterInBody)>
-                            <filter
-                                filterCount=state.filterCount
-                                predefinedFilter=state.predefinedTableFilter
-                                predefinedFilterName=state.predefinedFilterName
-                                predefinedFilterPlaceholder=state.filterPlaceholder
-                                disabled=state.isFiltering
-                                filterValue=state.filterValue
-                                on-filter("filter")
-                                key="table-widget-filter"
-                            />
-                        </if>
-                        <if(state.showFilterReset && state.showFilterInBody)>
-                            <span
-                                class=[
-                                    "table-reset-filter",
-                                    "icon",
-                                    "fas fa-window-close",
-                                ]
-                                title=component.resetFilterTitle
-                                on-click("resetFilter")
-                            >
-                                <span class="path1"/>
-                                <span class="path2"/>
-                                <span class="path3"/>
-                                <span class="path4"/>
-                                <span class="path5"/>
-                            </span>
-                        </if>
-                    </div>
-                </if>
-                <kix-table table=state.table key=state.table.getTableId()/>
+                <div class=[
+                    {
+                        "d-none": state.activeViewId !== "table",
+                    },
+                ]>
+                    <kix-table table=state.table key=state.table.getTableId()/>
+                </div>
             </if>
         </@content>
     </widget>

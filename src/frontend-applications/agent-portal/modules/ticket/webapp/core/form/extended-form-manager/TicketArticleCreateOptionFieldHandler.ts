@@ -30,8 +30,8 @@ export class TicketArticleCreateOptionFieldHandler extends OptionFieldHandler {
         jobType: string
     ): Promise<FormFieldConfiguration> {
         if (
-            jobType === JobTypes.TICKET
-            && (actionType === 'ArticleCreate' || actionType === 'TicketCreate')
+            actionType === 'TicketCreate'
+            || (jobType === JobTypes.TICKET && actionType === 'ArticleCreate')
         ) {
             let defaultValue;
             if (action && action.Parameters) {
