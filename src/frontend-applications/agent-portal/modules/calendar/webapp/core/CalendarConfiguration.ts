@@ -8,13 +8,22 @@
  */
 
 import { AbstractConfiguration } from '../../../../model/configuration/AbstractConfiguration';
+import { TicketProperty } from '../../../ticket/model/TicketProperty';
 
 export class CalendarConfiguration extends AbstractConfiguration {
 
     public constructor(
-        public startDateProperty: string,
-        public endDateProperty: string,
-        public properties: string[] = [],
+        public startDateProperty: string = 'DynamicFields.PlanBegin',
+        public endDateProperty: string = 'DynamicFields.PlanEnd',
+        public properties: string[] = [
+            TicketProperty.CONTACT_ID,
+            TicketProperty.STATE_ID,
+            TicketProperty.QUEUE_ID,
+            TicketProperty.RESPONSIBLE_ID,
+            TicketProperty.CHANGED,
+            'DynamicFields.PlanBegin',
+            'DynamicFields.PlanEnd',
+        ],
         public defaultView: string = 'month'
     ) {
         super();
