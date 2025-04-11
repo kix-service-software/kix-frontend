@@ -9,27 +9,30 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <div>
     <form-page-menu
-        pages=(state.formInstance ? state.formInstance.form.pages : [])
+        pages=component.getValidPages()
         activePageIndex=state.activePageIndex
-        before=true
-        on-showPage("showPage")/>
-    <form.form autocomplete="off">
+        before
+        on-showPage("showPage")
+    />
+    <form autocomplete="off" class="form">
         <input
             id="username"
             style="display:none"
             type="text"
-            name="fakeusernameremembered"/>
+            name="fakeusernameremembered"
+        >
         <input
             id="password"
             style="display:none"
             type="password"
             name="fakepasswordremembered"
-            autocomplete="off"/>
+            autocomplete="off"
+        >
         <if(state.formInstance && state.formInstance.form && state.formId)>
-            <for|page, index| of=state.formInstance.form.pages>
+            <for|page, index| of=component.getValidPages()>
                 <div class={
                     active: index === state.activePageIndex,
-                    "form-page": true
+                    "form-page": true,
                 }>
                     <for|group| of=page.groups>
                         <if(page.groups.length > 1 || page.showSingleGroup)>
@@ -38,19 +41,23 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 title=group.name
                                 on-minimizedChanged(
                                     "handleFormGroupMinimizeState",
-                                    group.name
+                                    group.name,
                                 )
-                                key=group.name>
+                                key=group.name
+                            >
                                 <@content>
                                     <field-container
                                         fields=group.formFields
                                         formId=state.formId
                                         additionalFieldControlsNeeded=state.additionalFieldControlsNeeded
-                                        draggable=group.draggableFields/>
+                                        draggable=group.draggableFields
+                                    />
                                 </@content>
                             </widget>
                             <if(group.separatorString)>
-                                <div.separator>${group.separatorString}</div>
+                                <div class="separator">
+                                    ${group.separatorString}
+                                </div>
                             </if>
                         </if>
                         <else>
@@ -58,7 +65,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 fields=group.formFields
                                 formId=state.formId
                                 additionalFieldControlsNeeded=state.additionalFieldControlsNeeded
-                                draggable=group.draggableFields/>
+                                draggable=group.draggableFields
+                            />
                         </else>
                     </for>
                 </div>
@@ -66,7 +74,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </if>
     </form>
     <form-page-menu
-        pages=(state.formInstance ? state.formInstance.form.pages : [])
+        pages=component.getValidPages()
         activePageIndex=state.activePageIndex
-        on-showPage("showPage")/>
+        on-showPage("showPage")
+    />
 </div>
