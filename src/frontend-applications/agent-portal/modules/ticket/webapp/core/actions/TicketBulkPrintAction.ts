@@ -16,6 +16,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { HTMLToPDF } from '../../../../html-to-pdf/model/HTMLToPDF';
 
 export class TicketBulkPrintAction extends AbstractAction {
 
@@ -57,7 +58,7 @@ export class TicketBulkPrintAction extends AbstractAction {
             BrowserUtil.openInfoOverlay('Translatable#Prepare Tickets to print & zip');
 
             const currentUser = await AgentService.getInstance().getCurrentUser();
-            const file = await KIXObjectService.loadObjects(
+            const files = await KIXObjectService.loadObjects<HTMLToPDF>(
                 KIXObjectType.HTML_TO_PDF, null,
                 new KIXObjectLoadingOptions(
                     null, null, null, null, null,
@@ -70,12 +71,13 @@ export class TicketBulkPrintAction extends AbstractAction {
                         ['Compress', 1]
                     ]
                 ), null, null, false
-            );
+            ).catch((): HTMLToPDF[] => []);
 
-            if (file && file[0]) {
+            if (files?.length) {
+                const file = files[0];
                 BrowserUtil.openSuccessOverlay('Translatable#Tickets has been printed and zipped');
                 BrowserUtil.startBrowserDownload(
-                    file[0]['Filename'], file[0]['Content'], file[0]['ContentType'], true
+                    file.Filename, file.Content, file.ContentType, true
                 );
             }
         }

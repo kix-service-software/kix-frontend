@@ -7,66 +7,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div class="calendar-container">
+<div class="calendar-widget-container">
     <widget instanceId=input.instanceId title="Ticket Calendar">
         <@content>
-            <div class="calendar-header">
-                <div class="calendar-date">
-                    <div class="month">
-                        ${state.currentDate}
-                    </div>
-                </div>
-                <div class="calendar-controls">
-                    <span on-click("prev") class="kix-icon-circle-prior"/>
-                    <div on-click("today") class="calendar-button today">
-                        <translation-string pattern="Translatable#Today"/>
-                    </div>
-                    <span on-click("next") class="kix-icon-circle-next"/>
-                    <div on-click("changeView") class="calendar-button switch">
-                        <if(state.view === "month")>
-                            <span class="kix-icon-calendar-week"/>
-                        </if>
-                        <else>
-                            <span class="kix-icon-calendar-month"/>
-                        </else>
-                        <translation-string pattern=state.viewLabel/>
-                    </div>
-                </div>
-            </div>
-            <div no-update id="calendar"/>
-            <div class="calendar-legend">
-                <if(state.loading)>
-                    <span class="kix-icon-arrow-refresh"/>
-                    <translation-string pattern="Translatable#Reload Calendar Data ..."/>
-                </if>
-                <ul>
-                    <for|calendar| of=state.calendars>
-                        <li
-                            class={
-                                inactive: !calendar.visible,
-                            }
-                            style="border-color:" + calendar.bgColor
-                            on-click("toggleCalendar", calendar)
-                        >
-                            ${calendar.name}
-                            <if(calendar.overlay)>
-                                <overlay-icon
-                                    title=(calendar.overlay.Title)
-                                    icon=(calendar.overlay.Icon)
-                                    content=(calendar.overlay.Content)
-                                    isHint=(calendar.overlay.IsHint)
-                                    isCustom=(calendar.overlay.IsCustom)
-                                    data={
-                                        object: calendar.overlay.Data,
-                                        properties:
-                                            calendar.overlay.Data.Properties,
-                                    }
-                                />
-                            </if>
-                        </li>
-                    </for>
-                </ul>
-            </div>
+            <if(state.prepared)>
+                <calendar
+                    tickets=state.tickets
+                    calendarConfig=state.calendarConfig
+                />
+            </if>
         </@content>
     </widget>
 </div>
