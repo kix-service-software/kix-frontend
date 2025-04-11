@@ -26,6 +26,7 @@ import { FormEvent } from '../../core/FormEvent';
 import { ContextService } from '../../core/ContextService';
 import { ContextFormManagerEvents } from '../../core/ContextFormManagerEvents';
 import { BrowserUtil } from '../../core/BrowserUtil';
+import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
 
 
 class FormComponent {
@@ -72,6 +73,10 @@ class FormComponent {
                     setTimeout(() => this.prepareForm(), 20);
                 } if (eventId === FormEvent.GO_TO_INVALID_FIELD && data.formId === this.state.formId) {
                     this.goToInvalidField();
+                }
+                if (eventId === FormEvent.FORM_PAGE_VALIDITY_CHANGED) {
+                    const targetPage = this.state.formInstance.getForm().pages.find((page) => page.id === data.pageId);
+                    targetPage.valid = data.valid;
                 } else {
                     this.setNeeded();
                     (this as any).setStateDirty('formInstance');
@@ -87,6 +92,7 @@ class FormComponent {
         EventService.getInstance().subscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
         EventService.getInstance().subscribe(FormEvent.FORM_PAGES_REMOVED, this.formSubscriber);
         EventService.getInstance().subscribe(FormEvent.GO_TO_INVALID_FIELD, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FORM_PAGE_VALIDITY_CHANGED, this.formSubscriber);
 
         this.state.loading = false;
     }
@@ -104,6 +110,8 @@ class FormComponent {
         EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_PAGES_REMOVED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.GO_TO_INVALID_FIELD, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_VALIDITY_CHANGED, this.formSubscriber);
+
     }
 
     public keyDown(event: any): void {
@@ -280,6 +288,13 @@ class FormComponent {
                 }, 50);
             }
         }
+    }
+
+    public getValidPages(): FormPageConfiguration[] {
+        if (this.state.formInstance) {
+            return this.state.formInstance.getForm().pages.filter((page) => page.valid);
+        }
+        return [];
     }
 }
 
