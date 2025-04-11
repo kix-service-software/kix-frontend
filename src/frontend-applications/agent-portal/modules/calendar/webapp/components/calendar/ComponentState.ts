@@ -7,21 +7,19 @@
  * --
  */
 
+import { IdService } from '../../../../../model/IdService';
 import { WidgetComponentState } from '../../../../base-components/webapp/core/WidgetComponentState';
-import { Ticket } from '../../../../ticket/model/Ticket';
-import { CalendarConfiguration } from '../../core/CalendarConfiguration';
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public prepared: boolean = false,
-        public viewLabel: string = 'Translatable#Week',
+        public toggleLabel: string = 'Translatable#Week',
         public view: string = 'month',
         public currentDate: string = '',
         public calendars: any[] = [],
         public loading: boolean = false,
-        public tickets: Ticket[] = [],
-        public calendarConfig: CalendarConfiguration = null
+        public calendarId: string = IdService.generateDateBasedId('calendar-')
     ) {
         super();
     }
