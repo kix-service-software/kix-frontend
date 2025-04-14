@@ -317,7 +317,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.17
+├─ @marko/compiler@5.39.18
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -517,7 +517,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.14.0
+├─ @types/node@22.14.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -670,13 +670,6 @@
 │  ├─ publisher: Caolan McMahon
 │  ├─ path: node_modules/async
 │  └─ licenseFile: node_modules/winston/node_modules/async/LICENSE
-├─ asynckit@0.4.0
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/alexindigo/asynckit
-│  ├─ publisher: Alex Indigo
-│  ├─ email: iam@alexindigo.com
-│  ├─ path: node_modules/asynckit
-│  └─ licenseFile: node_modules/asynckit/LICENSE
 ├─ available-typed-arrays@1.0.7
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/inspect-js/available-typed-arrays
@@ -1242,14 +1235,6 @@
 │  ├─ publisher: Arnout Kazemier
 │  ├─ path: node_modules/colorspace
 │  └─ licenseFile: node_modules/colorspace/LICENSE.md
-├─ combined-stream@1.0.8
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/felixge/node-combined-stream
-│  ├─ publisher: Felix Geisendörfer
-│  ├─ email: felix@debuggable.com
-│  ├─ url: http://debuggable.com/
-│  ├─ path: node_modules/combined-stream
-│  └─ licenseFile: node_modules/combined-stream/License
 ├─ commander@12.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/tj/commander.js
@@ -1758,14 +1743,6 @@
 │  ├─ publisher: Vladimir Agafonkin
 │  ├─ path: node_modules/delaunator
 │  └─ licenseFile: node_modules/delaunator/LICENSE
-├─ delayed-stream@1.0.0
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/felixge/node-delayed-stream
-│  ├─ publisher: Felix Geisendörfer
-│  ├─ email: felix@debuggable.com
-│  ├─ url: http://debuggable.com/
-│  ├─ path: node_modules/delayed-stream
-│  └─ licenseFile: node_modules/delayed-stream/License
 ├─ denque@1.5.1
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/invertase/denque
@@ -1988,13 +1965,6 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/es-object-atoms
 │  └─ licenseFile: node_modules/es-object-atoms/LICENSE
-├─ es-set-tostringtag@2.1.0
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/es-shims/es-set-tostringtag
-│  ├─ publisher: Jordan Harband
-│  ├─ email: ljharb@gmail.com
-│  ├─ path: node_modules/es-set-tostringtag
-│  └─ licenseFile: node_modules/es-set-tostringtag/LICENSE
 ├─ escalade@3.2.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/lukeed/escalade
@@ -2136,14 +2106,6 @@
 │  ├─ email: raynos2@gmail.com
 │  ├─ path: node_modules/for-each
 │  └─ licenseFile: node_modules/for-each/LICENSE
-├─ form-data@4.0.2
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/form-data/form-data
-│  ├─ publisher: Felix Geisendörfer
-│  ├─ email: felix@debuggable.com
-│  ├─ url: http://debuggable.com/
-│  ├─ path: node_modules/form-data
-│  └─ licenseFile: node_modules/form-data/License
 ├─ forwarded@0.2.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jshttp/forwarded
@@ -2585,7 +2547,7 @@
 │  ├─ email: dervus.grim@gmail.com
 │  ├─ path: node_modules/js-yaml
 │  └─ licenseFile: node_modules/js-yaml/LICENSE
-├─ jsdom@26.0.0
+├─ jsdom@26.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jsdom/jsdom
 │  ├─ path: node_modules/jsdom
@@ -3911,13 +3873,13 @@
 │  ├─ url: dominictarr.com
 │  ├─ path: node_modules/through
 │  └─ licenseFile: node_modules/through/LICENSE.APACHE2
-├─ tldts-core@6.1.85
+├─ tldts-core@6.1.86
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/remusao/tldts
 │  ├─ publisher: Rémi Berson
 │  ├─ path: node_modules/tldts-core
 │  └─ licenseFile: node_modules/tldts-core/LICENSE
-├─ tldts@6.1.85
+├─ tldts@6.1.86
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/remusao/tldts
 │  ├─ publisher: Rémi Berson
