@@ -10,8 +10,8 @@
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
-import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { SearchContextConfiguration } from '../../model/configuration/SearchContextConfiguration';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
@@ -51,7 +51,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'contact-search-widget', 'Searches', ConfigurationType.Widget, 'search-list-widget', 'Translatable#Searches', []
         );
 
-        const contextConfig = new ContextConfiguration(
+        const contextConfig = new SearchContextConfiguration(
             this.getModuleId(), 'Contact Search', ConfigurationType.Context, this.getModuleId(),
             [],
             [

@@ -21,6 +21,7 @@ import { SearchEvent } from '../../../model/SearchEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
 import { SortUtil } from '../../../../../model/SortUtil';
+import { SearchContextConfiguration } from '../../../../../model/configuration/SearchContextConfiguration';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -106,6 +107,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.setActiveNode();
 
         EventService.getInstance().publish(SearchEvent.SHOW_CRITERIA);
+        if ((this.context.getConfiguration() as SearchContextConfiguration).enabeSidebarAutoSearch) {
+            EventService.getInstance().publish(SearchEvent.CALL_SEARCH);
+        }
     }
 
 }

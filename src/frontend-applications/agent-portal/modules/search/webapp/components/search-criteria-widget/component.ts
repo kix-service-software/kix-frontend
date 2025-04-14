@@ -75,7 +75,7 @@ class Component {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('search-criteria-widget'),
-            eventPublished: (data: SearchContext, eventId: string): void => {
+            eventPublished: async (data: SearchContext, eventId: string): Promise<void> => {
                 if (data.instanceId === this.contextInstanceId) {
                     if (eventId === SearchEvent.SEARCH_DELETED || eventId === SearchEvent.SEARCH_CACHE_CHANGED) {
                         this.initManager();
@@ -88,6 +88,9 @@ class Component {
                     if (groupComponent) {
                         groupComponent.setMinizedState(false);
                     }
+                }
+                if (eventId === SearchEvent.CALL_SEARCH) {
+                    await this.search();
                 }
             }
         };
@@ -127,6 +130,7 @@ class Component {
         EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
         EventService.getInstance().subscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(SearchEvent.SHOW_CRITERIA, this.subscriber);
+        EventService.getInstance().subscribe(SearchEvent.CALL_SEARCH, this.subscriber);
 
         const groupComponent = (this as any).getComponent(this.state.instanceId);
         if (groupComponent) {
@@ -154,6 +158,7 @@ class Component {
         EventService.getInstance().unsubscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
         EventService.getInstance().unsubscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(SearchEvent.SHOW_CRITERIA, this.subscriber);
+        EventService.getInstance().unsubscribe(SearchEvent.CALL_SEARCH, this.subscriber);
 
         this.state.manager?.unregisterListener(this.managerListenerId);
 
