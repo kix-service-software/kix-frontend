@@ -16,7 +16,6 @@ import { SearchProperty } from '../search/model/SearchProperty';
 import { TicketProperty } from './model/TicketProperty';
 import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
-import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
@@ -25,7 +24,7 @@ import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetC
 import { TableHeaderHeight } from '../table/model/TableHeaderHeight';
 import { TableRowHeight } from '../table/model/TableRowHeight';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
-import { ContextType } from '../../model/ContextType';
+import { SearchContextConfiguration } from '../../model/configuration/SearchContextConfiguration';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -61,7 +60,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'ticket-search-widget', 'Searches', ConfigurationType.Widget, 'search-list-widget', 'Translatable#Searches', []
         );
 
-        const contextConfiguration = new ContextConfiguration(
+        const contextConfiguration = new SearchContextConfiguration(
             this.getModuleId(), 'Ticket Search', ConfigurationType.Context, this.getModuleId(),
             [],
             [
