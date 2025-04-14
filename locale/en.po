@@ -1412,7 +1412,7 @@ msgstr ""
 
 msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
-"menu right besides the New-button"
+"menu right besides the New-button or in the left sidebar"
 msgstr ""
 
 msgid "First Name"

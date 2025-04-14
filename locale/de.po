@@ -1428,10 +1428,10 @@ msgstr "Filterbar"
 
 msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
-"menu right besides the New-button"
+"menu right besides the New-button or in the left sidebar"
 msgstr ""
 "Gespeicherte Suche finden Sie im Kopfmenü der Anwendung über das Favoriten-"
-"Icon."
+"Icon, oder in der linken Seitenleiste"
 
 msgid "First Name"
 msgstr "Vorname"
