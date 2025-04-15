@@ -37,6 +37,12 @@
     &#sidebar-left {
         border-top-right-radius: @border-radius;
         border-bottom-right-radius: @border-radius;
+
+        &::-webkit-scrollbar {
+            display: unset;
+        }
+
+        scrollbar-width: auto;
     }
 
     >.sidebar-widgets-container {
