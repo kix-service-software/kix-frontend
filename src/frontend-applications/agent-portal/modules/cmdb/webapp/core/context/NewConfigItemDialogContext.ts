@@ -24,6 +24,8 @@ import { ConfigItemFormFactory } from '../ConfigItemFormFactory';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ContextEvent } from '../../../../base-components/webapp/core/ContextEvent';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class NewConfigItemDialogContext extends Context {
@@ -64,7 +66,7 @@ export class NewConfigItemDialogContext extends Context {
             }
         }
 
-        let displayText = `${assetTitle} (${classTitle})`;
+        let displayText = `${assetTitle} ${classTitle ? '(' + classTitle + ')' : ''}`;
 
         if (this.getAdditionalInformation(AdditionalContextInformation.DUPLICATE) && !this.classChanged) {
             displayText = await TranslationService.translate('Translatable#New {0} as copy of', [displayText]);
@@ -120,7 +122,7 @@ export class NewConfigItemDialogContext extends Context {
             const title = await this.getDisplayText();
             WidgetService.getInstance().setWidgetTitle(widget.instanceId, title);
         }
-
+        EventService.getInstance().publish(ContextEvent.DISPLAY_VALUE_UPDATED, this);
         ConfigItemFormFactory.getInstance().createAndProvideForm(classId, this);
     }
 

@@ -26,6 +26,8 @@ import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
 import { NewConfigItemDialogContext } from '../../core';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ContextEvent } from '../../../../base-components/webapp/core/ContextEvent';
 
 export class Component {
 
@@ -66,6 +68,8 @@ export class Component {
             const classIdValue = await formInstance.getFormFieldValueByProperty(ConfigItemProperty.CLASS_ID);
             if (classIdValue?.value) {
                 this.state.activeNode = this.state.nodes.find((n) => n.id === classIdValue.value);
+                this.context.setAdditionalInformation(ConfigItemProperty.CLASS_ID, classIdValue.value);
+                EventService.getInstance().publish(ContextEvent.DISPLAY_VALUE_UPDATED, this);
             }
         }
     }
