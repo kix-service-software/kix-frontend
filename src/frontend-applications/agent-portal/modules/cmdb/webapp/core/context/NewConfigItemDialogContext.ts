@@ -24,10 +24,12 @@ import { ConfigItemFormFactory } from '../ConfigItemFormFactory';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class NewConfigItemDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-config-item-dialog-context';
+    private classChanged: boolean = false;
 
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM, reload: boolean = false, changedProperties?: string[]
@@ -61,7 +63,14 @@ export class NewConfigItemDialogContext extends Context {
                 classTitle = await TranslationService.translate(ciClasses[0].Name);
             }
         }
-        return `${assetTitle} (${classTitle})`;
+
+        let displayText = `${assetTitle} (${classTitle})`;
+
+        if (this.getAdditionalInformation(AdditionalContextInformation.DUPLICATE) && !this.classChanged) {
+            displayText = await TranslationService.translate('Translatable#New {0} as copy of', [displayText]);
+            this.classChanged = false;
+        }
+        return displayText;
     }
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
@@ -83,7 +92,7 @@ export class NewConfigItemDialogContext extends Context {
         if (!formId) {
             const classId = this.getAdditionalInformation(ConfigItemProperty.CLASS_ID) || await this.getFirstClass();
             if (classId) {
-                this.setClassId(classId);
+                this.setClassId(classId, true);
             }
         }
     }
@@ -101,12 +110,13 @@ export class NewConfigItemDialogContext extends Context {
         return ciClasses?.length ? ciClasses[0].ID : null;
     }
 
-    public async setClassId(classId: number): Promise<void> {
+    public async setClassId(classId: number, postInit: boolean = false): Promise<void> {
         this.setAdditionalInformation(ConfigItemProperty.CLASS_ID, classId);
 
         const contentWidgets = await this.getContent();
         const widget = contentWidgets.find((cw) => cw.configuration?.widgetId === 'object-dialog-form-widget');
         if (widget) {
+            this.classChanged = !postInit;
             const title = await this.getDisplayText();
             WidgetService.getInstance().setWidgetTitle(widget.instanceId, title);
         }
