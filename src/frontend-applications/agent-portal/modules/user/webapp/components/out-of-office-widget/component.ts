@@ -22,6 +22,9 @@ import { TableConfiguration } from '../../../../../model/configuration/TableConf
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { ContactDetailsContext } from '../../../../customer/webapp/core/context/ContactDetailsContext';
+import { ContextMode } from '../../../../../model/ContextMode';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -72,7 +75,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         );
         const table = await TableFactoryService.getInstance().createTable(
             'out-of-office-users', KIXObjectType.USER, tableConfiguration, outOfOfficeUsersIDs,
-            context.contextId, true, undefined, false, true, true
+            context.contextId, false, undefined, false, true, true
+        );
+        table.getTableConfiguration().routingConfiguration = new RoutingConfiguration(
+            ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
+            ContextMode.DETAILS, `${UserProperty.CONTACT}.ID`
         );
         this.state.table = table;
     }
