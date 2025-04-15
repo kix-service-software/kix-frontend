@@ -8,7 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ComponentInput } from './ComponentInput';
 import { KIXModulesSocketClient } from '../../../../../modules/base-components/webapp/core/KIXModulesSocketClient';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
@@ -17,22 +16,45 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
 
 class Component {
 
     public state: ComponentState;
+    private releaseInfo: ReleaseInfo;
+    private unauthorized: boolean;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
-    public onInput(input: ComponentInput): void {
-        this.state.releaseInfo = !this.state.releaseInfo ? input.releaseInfo : this.state.releaseInfo;
+    public onInput(input: any): void {
+        this.releaseInfo = !this.releaseInfo ? input.releaseInfo : this.releaseInfo;
         this.state.imprintLink = !this.state.imprintLink ? input.imprintLink : this.state.imprintLink;
-        this.state.unauthorized = typeof input.unauthorized !== 'undefined' ? input.unauthorized : false;
+        this.unauthorized = typeof input.unauthorized !== 'undefined' ? input.unauthorized : false;
     }
 
     public async onMount(): Promise<void> {
+        await this.prepareImprintLink();
+
+        if (!this.releaseInfo) {
+            this.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        }
+
+        if (!this.unauthorized) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            this.state.currentUserLogin = currentUser.UserLogin;
+        }
+
+        this.prepareKIXVersions();
+
+        const apConfig = await SysConfigService.getInstance().getPortalConfiguration<AgentPortalConfiguration>();
+        this.state.footerInformation = apConfig?.footerInformation || [];
+
+    }
+
+    private async prepareImprintLink(): Promise<void> {
         if (!this.state.imprintLink) {
             const imprintConfig = await KIXObjectService.loadObjects<SysConfigOption>(
                 KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.IMPRINT_LINK]
@@ -49,29 +71,12 @@ class Component {
                 }
             }
         }
-
-        if (!this.state.releaseInfo) {
-            this.state.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-        }
-
-        if (!this.state.unauthorized) {
-            const currentUser = await AgentService.getInstance().getCurrentUser();
-            this.state.currentUserLogin = currentUser.UserLogin;
-        }
-
-        if (this.state.releaseInfo) {
-            this.state.kixProduct = this.state.releaseInfo.product;
-            this.state.kixVersion = this.state.releaseInfo.version;
-            this.state.buildNumber = this.getBuildNumber(this.state.releaseInfo);
-        }
-
     }
 
-    private getBuildNumber(releaseInfo: ReleaseInfo): string {
-        const backendBuildNumber = releaseInfo.backendSystemInfo ? releaseInfo.backendSystemInfo.BuildNumber : '';
-        const backendPatchNumber = releaseInfo.backendSystemInfo ? releaseInfo.backendSystemInfo.PatchNumber : '';
-        return `(Build: ${releaseInfo.buildNumber.toString()}-${releaseInfo.patchNumber.toString()}.${backendBuildNumber}-${backendPatchNumber})`;
+    private prepareKIXVersions(): void {
+        this.state.kixVersion = `${this.releaseInfo?.product || 'KIX'} ${this.releaseInfo?.version || '18'}`;
     }
+
 }
 
 module.exports = Component;
