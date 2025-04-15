@@ -5,7 +5,7 @@
 │  ├─ email: jridgewell@google.com
 │  ├─ path: node_modules/@ampproject/remapping
 │  └─ licenseFile: node_modules/@ampproject/remapping/LICENSE
-├─ @asamuzakjp/css-color@3.1.1
+├─ @asamuzakjp/css-color@3.1.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/asamuzaK/cssColor
 │  ├─ publisher: asamuzaK
@@ -317,7 +317,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.18
+├─ @marko/compiler@5.39.19
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -1859,7 +1859,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.136
+├─ electron-to-chromium@1.5.137
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -2849,7 +2849,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.28
+├─ marko@5.37.29
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
