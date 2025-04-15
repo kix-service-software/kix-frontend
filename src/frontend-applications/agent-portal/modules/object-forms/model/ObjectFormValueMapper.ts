@@ -315,27 +315,35 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         return formValue as T;
     }
 
+
     public getFormValues(pageId?: string, groupId?: string): ObjectFormValue[] {
         const formValues = [];
-
-        if (!pageId || !groupId) {
-            formValues.push(...this.formValues);
+        let formFields = [];
+        if (!pageId && !groupId) {
+            return [...this.formValues];
+        } else if (pageId && !groupId) {
+            const page = this.form?.pages?.find((p) => p.id === pageId);
+            if (page.groups.length) {
+                page.groups.forEach((group) => {
+                    formFields.push(...group.formFields || []);
+                });
+            }
         } else {
             const page = this.form?.pages?.find((p) => p.id === pageId);
             const group = page?.groups?.find((g) => g.id === groupId);
-            const formFields = group?.formFields || [];
+            formFields = group?.formFields || [];
+        }
 
-            for (const field of formFields) {
-                let property: string = field.property;
-                if (property === KIXObjectProperty.DYNAMIC_FIELDS.toString()) {
-                    const option = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
-                    property += `.${option?.value}`;
-                }
+        for (const field of formFields) {
+            let property: string = field.property;
+            if (property === KIXObjectProperty.DYNAMIC_FIELDS.toString()) {
+                const option = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+                property += `.${option?.value}`;
+            }
 
-                const formValue = this.findFormValue(property);
-                if (formValue && !formValue.isControlledByParent) {
-                    formValues.push(formValue);
-                }
+            const formValue = this.findFormValue(property);
+            if (formValue && !formValue.isControlledByParent) {
+                formValues.push(formValue);
             }
         }
 
