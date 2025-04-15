@@ -80,7 +80,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                rounded: !state.valid,
             },
          ]>
-            <if(!state.formValue["COUNT_CONTAINER"])>
+            <if(input.contextInstanceId && state.isEmpty)/>
+            <else-if(!state.formValue["COUNT_CONTAINER"])>
                <if(state.inputTemplate)>
                   <${state.inputTemplate} formValue=input.formValue/>
                </if>
@@ -88,7 +89,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                <else>
                   <text-form-input formValue=input.formValue/>
                </else>
-            </if>
+            </else-if>
          </div>
       </div>
       <if(
