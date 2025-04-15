@@ -12,13 +12,10 @@ import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
 export class ComponentState {
 
     public constructor(
-        public kixVersion: string = null,
-        public kixProduct: string = null,
+        public kixVersion: string = 'KIX 18',
         public currentUserLogin: string = null,
-        public buildNumber: string = null,
-        public releaseInfo: ReleaseInfo = null,
         public imprintLink: string = null,
-        public unauthorized: boolean = false
+        public footerInformation: string[] = []
     ) { }
 
 }
