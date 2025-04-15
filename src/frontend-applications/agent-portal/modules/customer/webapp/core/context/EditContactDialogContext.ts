@@ -16,6 +16,8 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { UserProperty } from '../../../../user/model/UserProperty';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { FormContext } from '../../../../../model/configuration/FormContext';
+import { Contact } from '../../../model/Contact';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class EditContactDialogContext extends Context {
 
@@ -33,6 +35,19 @@ export class EditContactDialogContext extends Context {
         reload: boolean = false, changedProperties?: string[]
     ): Promise<O> {
         let object;
+
+        if (objectType === KIXObjectType.CONTACT) {
+            object = this.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
+            if (!object) {
+                object = await this.loadContact();
+            }
+        }
+
+        return object;
+    }
+
+    private async loadContact(): Promise<Contact> {
+        let contact: Contact;
         const objectId = this.getObjectId();
         if (objectId) {
             const loadingOptions = new KIXObjectLoadingOptions(
@@ -44,11 +59,14 @@ export class EditContactDialogContext extends Context {
                     UserProperty.PREFERENCES
                 ]
             );
-            const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions)
-                .catch(() => []);
-            object = objects?.length ? objects[0] : null;
+            let contacts = await KIXObjectService.loadObjects<Contact>(
+                KIXObjectType.CONTACT, [objectId], loadingOptions
+            ).catch((): Contact[] => []);
+            if (contacts?.length) {
+                contact = KIXObjectService.createObjectInstance(KIXObjectType.CONTACT, contacts[0]);
+            }
         }
-        return object;
+        return contact;
     }
 
 }
