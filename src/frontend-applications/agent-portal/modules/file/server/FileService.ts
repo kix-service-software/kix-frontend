@@ -54,27 +54,19 @@ export class FileService {
 
         const downloads = this.getDownloads(userId);
         try {
-            const existingFile = downloads.find(
-                (f) => f.Filename === file.Filename && f.FilesizeRaw === file.FilesizeRaw
-            );
-            if (!existingFile) {
-                file.downloadId = uuidv4() + `-${file.Filename}`;
-                file.downloadSecret = uuidv4();
-                let saved: boolean = true;
-                try {
-                    const filePath = this.getFilePath(file.downloadId);
-                    fs.writeFileSync(filePath, file.Content, { encoding: 'base64' });
-                } catch (err) {
-                    LoggingService.getInstance().error(`Could not save file "${file.Filename}" for download (${err})`);
-                    saved = false;
-                }
-                if (saved) {
-                    const jsonFileName = `${userId}_downloads.json`;
-                    this.addFileToDownloads(file, downloads, jsonFileName);
-                }
-            } else {
-                file.downloadId = existingFile.downloadId;
-                file.downloadSecret = existingFile.downloadSecret;
+            file.downloadId = uuidv4() + `-${file.Filename}`;
+            file.downloadSecret = uuidv4();
+            let saved: boolean = true;
+            try {
+                const filePath = this.getFilePath(file.downloadId);
+                fs.writeFileSync(filePath, file.Content, { encoding: 'base64' });
+            } catch (err) {
+                LoggingService.getInstance().error(`Could not save file "${file.Filename}" for download (${err})`);
+                saved = false;
+            }
+            if (saved) {
+                const jsonFileName = `${userId}_downloads.json`;
+                this.addFileToDownloads(file, downloads, jsonFileName);
             }
 
             delete file.Content;
@@ -86,19 +78,11 @@ export class FileService {
     private static addFileToDownloads(
         file: IDownloadableFile, downloads: IDownloadableFile[] = [], downloadFileName: string
     ): void {
-        let hash: string;
-        if (file?.Content) {
-            hash = createHash('md5').update(file.Content).digest('hex').toString();
-        }
-
         const downloadFile: any = {
-            Content: null,
             downloadId: file.downloadId,
             downloadSecret: file.downloadSecret,
             Filename: file.Filename,
-            FilesizeRaw: file.FilesizeRaw,
-            md5Sum: hash,
-            path: file.path
+            FilesizeRaw: file.FilesizeRaw
         };
         downloads.push(downloadFile);
 
@@ -123,7 +107,7 @@ export class FileService {
                 file.Filename,
                 (err) => {
                     if (err) {
-                        LoggingService.getInstance().error('Error while download file to client (downloadId: ${downloadId}, userId: ${userId}).', err);
+                        LoggingService.getInstance().error(`Error while download file to client (downloadId: ${downloadId}, userId: ${user.UserID}).`, err);
                     }
                     // always remove/cleanup
                     FileService.removeDownload(downloadId, user?.UserID);
