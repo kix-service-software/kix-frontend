@@ -13,6 +13,7 @@ import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ApplicationEvent } from '../../../../../base-components/webapp/core/ApplicationEvent';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
+import { ContextEvent } from '../../../../../base-components/webapp/core/ContextEvent';
 import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
@@ -67,7 +68,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 } else if (eventId === ContextEvents.CONTEXT_REORDERED) {
                     this.state.contextTabs = [];
                     this.addContextTabs();
+                } else if (eventId === ContextEvent.DISPLAY_VALUE_UPDATED) {
+                    const tab = this.state.contextTabs.find((t) => t.contextInstanceId === data.instanceId);
+                    const context = ContextService.getInstance().getContext(data.instanceId);
+                    tab.displayText = await context.getDisplayText();
+                    (this as any).setStateDirty('contextTabs');
                 }
+
             }
         };
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_CREATED, this.subscriber);
@@ -79,6 +86,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_REORDERED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
+        EventService.getInstance().subscribe(ContextEvent.DISPLAY_VALUE_UPDATED, this.subscriber);
+
     }
 
     public onDestroy(): void {
@@ -91,6 +100,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REORDERED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
+        EventService.getInstance().unsubscribe(ContextEvent.DISPLAY_VALUE_UPDATED, this.subscriber);
     }
 
     private toggleActiveEntry(): void {
