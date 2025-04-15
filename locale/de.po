@@ -3510,6 +3510,9 @@ msgstr "Negieren"
 msgid "New"
 msgstr "Neu"
 
+msgid "New {0} as copy of"
+msgstr "Neu {0} als Kopie von:"
+
 msgid "New Account"
 msgstr "Neues Konto"
 
