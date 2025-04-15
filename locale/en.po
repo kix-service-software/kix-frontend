@@ -3322,6 +3322,9 @@ msgstr ""
 msgid "New"
 msgstr ""
 
+msgid "New {0} as copy of"
+msgstr "New {0} as copy of:"
+
 msgid "New Account"
 msgstr ""
 
