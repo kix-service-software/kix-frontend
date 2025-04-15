@@ -258,6 +258,7 @@ export class ObjectFormValue<T = any> {
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        this.empty = false;
         await this.setDefaultValue(field);
 
         this.enabled = field.valid !== false;
