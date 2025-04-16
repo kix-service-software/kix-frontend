@@ -31,6 +31,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             type="button"
                             class="btn btn-sm btn-light text-black me-3"
                             aria-label="Edit Group"
+                            title=(
+                                state.translations["Translatable#Edit Group"]
+                            )
                             on-click("editGroup", input.group.id)
                         >
                             <i class="fa-regular fa-pen-to-square"/>
@@ -39,6 +42,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             type="button"
                             class="btn btn-sm btn-light text-black me-3"
                             aria-label="Add Field"
+                            title=(state.translations["Translatable#Add Field"])
                             on-click("addField", input.group.id)
                         >
                             <i class="fa-regular fa-square-plus"/>
