@@ -49,7 +49,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.bindingIds.push(
             this.formValue.addPropertyBinding(FormValueProperty.VALUE, (formValue: ObjectFormValue) => {
                 this.state.value = this.createNewTable(formValue.value);
-                if (!this.state.value) {
+                if (!this.state.value || Array.isArray(this.state.value) && !this.state.value.length) {
                     this.removeTable();
                 }
             })
@@ -141,12 +141,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public canRemove(index: number): boolean {
+        if (!this.state.value) return false;
         const rowMin = this.formValue.minRowCount;
         const rowCount = this.state.value?.length;
         return rowCount > rowMin;
     }
 
     public canAdd(index: number): boolean {
+        if (!this.state.value) return true;
         const rowMax = this.formValue.maxRowCount;
         const rowCount = this.state.value?.length;
         return rowCount < rowMax && index === rowCount - 1;

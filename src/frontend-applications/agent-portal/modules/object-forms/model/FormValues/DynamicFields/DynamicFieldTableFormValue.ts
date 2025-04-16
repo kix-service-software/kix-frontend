@@ -139,13 +139,15 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
         }
     }
 
-    // FIXME: field in frontend does not support more tables (no array value)
     protected async handlePlaceholders(value: any): Promise<any> {
-        value = await super.handlePlaceholders(value);
+        const newTableValues = [];
         if (Array.isArray(value)) {
-            value = value[0];
+            for (let rowValue of value) {
+                const handledRowValue = await super.handlePlaceholders(rowValue);
+                newTableValues.push(handledRowValue);
+            }
         }
-        return value;
+        return newTableValues;
     }
 
 }
