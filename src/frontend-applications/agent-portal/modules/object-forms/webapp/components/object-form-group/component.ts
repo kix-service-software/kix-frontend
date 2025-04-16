@@ -25,6 +25,7 @@ import { FormGroupConfiguration } from '../../../../../model/configuration/FormG
 import { GroupRowLayout } from './GroupRowLayout';
 import { RowColumnLayout } from '../../../model/layout/RowColumnLayout';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -44,6 +45,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Edit Group', 'Translatable#Add Field'
+        ]);
         if (this.contextInstanceId) {
             this.context = ContextService.getInstance().getContext(this.contextInstanceId);
         } else {
