@@ -27,6 +27,7 @@ import { IDownloadableFile } from '../../../../model/IDownloadableFile';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { WindowListener } from './WindowListener';
 import { ToastUtil } from '../../../toast/webapp/core/ToastUtil';
+import { RoutingService } from './RoutingService';
 
 export class BrowserUtil {
 
@@ -469,6 +470,22 @@ export class BrowserUtil {
             WindowListener.getInstance().removeBrowserListener();
         } else {
             WindowListener.getInstance().addBrowserListener();
+        }
+    }
+
+    public static handleLinkClicked(event): void {
+
+        // handle links but not if user requested a new browser tab (ctrl) or window (shift)
+        if (event?.target?.closest('a') && !event.ctrlKey && !event.shiftKey) {
+            event.preventDefault();
+            // "open" KIX internal links as KIX tabs
+            if (window.location.host === event.target.host) {
+                RoutingService.getInstance().routeToURL(true, event.target.href);
+            }
+            // else open new browser tab
+            else {
+                window.open(event.target.href, '_blank', 'noopener, noreferrer');
+            }
         }
     }
 
