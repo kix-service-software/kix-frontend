@@ -91,9 +91,9 @@ export class RoutingService {
         return routed;
     }
 
-    public async routeToURL(history: boolean = false): Promise<boolean> {
+    public async routeToURL(history: boolean = false, url?: string): Promise<boolean> {
         let routed: boolean = false;
-        const parsedUrl = new URL(window.location.href);
+        const parsedUrl = new URL(url || window.location.href);
         const urlParams = parsedUrl.searchParams;
 
         const prefixLength = KIXModulesService.urlPrefix.length;
