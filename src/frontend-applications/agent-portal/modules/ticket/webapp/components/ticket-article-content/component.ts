@@ -9,9 +9,9 @@
 
 import { ComponentState } from './ComponentState';
 import { Article } from '../../../model/Article';
-import { TicketService } from '../../core';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { IdService } from '../../../../../model/IdService';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 
 class Component {
 
@@ -39,6 +39,14 @@ class Component {
         const frame = document.getElementById(this.state.frameId);
         const frameHeight = frameDocument.documentElement.scrollHeight;
         frame.style.height = frameHeight + 10 + 'px'; // 10 is for the top and bottom padding of 5px each
+
+        const bodyElements = frameDocument.documentElement.getElementsByTagName('body');
+        if (bodyElements?.length) {
+            bodyElements[0].addEventListener('click', (event) => {
+                BrowserUtil.handleLinkClicked(event);
+            });
+        }
+
     }
 }
 
