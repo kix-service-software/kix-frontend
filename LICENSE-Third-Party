@@ -1139,7 +1139,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001713
+├─ caniuse-lite@1.0.30001714
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -3907,7 +3907,7 @@
 │  ├─ email: jstash@gmail.com
 │  ├─ path: node_modules/tough-cookie
 │  └─ licenseFile: node_modules/tough-cookie/LICENSE
-├─ tr46@5.1.0
+├─ tr46@5.1.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jsdom/tr46
 │  ├─ publisher: Sebastian Mayr
