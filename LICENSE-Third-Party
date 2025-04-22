@@ -5,7 +5,7 @@
 │  ├─ email: jridgewell@google.com
 │  ├─ path: node_modules/@ampproject/remapping
 │  └─ licenseFile: node_modules/@ampproject/remapping/LICENSE
-├─ @asamuzakjp/css-color@3.1.2
+├─ @asamuzakjp/css-color@3.1.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/asamuzaK/cssColor
 │  ├─ publisher: asamuzaK
@@ -217,12 +217,12 @@
 │  ├─ repository: https://github.com/csstools/postcss-plugins
 │  ├─ path: node_modules/@csstools/color-helpers
 │  └─ licenseFile: node_modules/@csstools/color-helpers/LICENSE.md
-├─ @csstools/css-calc@2.1.2
+├─ @csstools/css-calc@2.1.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/csstools/postcss-plugins
 │  ├─ path: node_modules/@csstools/css-calc
 │  └─ licenseFile: node_modules/@csstools/css-calc/LICENSE.md
-├─ @csstools/css-color-parser@3.0.8
+├─ @csstools/css-color-parser@3.0.9
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/csstools/postcss-plugins
 │  ├─ path: node_modules/@csstools/css-color-parser
@@ -1139,7 +1139,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001714
+├─ caniuse-lite@1.0.30001715
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1445,7 +1445,7 @@
 │  ├─ url: https://github.com/afelix
 │  ├─ path: node_modules/csso
 │  └─ licenseFile: node_modules/csso/LICENSE
-├─ cssstyle@4.3.0
+├─ cssstyle@4.3.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jsdom/cssstyle
 │  ├─ path: node_modules/cssstyle
@@ -1859,7 +1859,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.137
+├─ electron-to-chromium@1.5.140
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
