@@ -94,7 +94,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = 'Translatable#Id';
                 break;
             case FAQArticleProperty.KEYWORDS:
-                displayValue = 'Translatable#Tags';
+                displayValue = 'Translatable#Keywords';
                 break;
             case FAQArticleProperty.LANGUAGE:
                 displayValue = 'Translatable#Language';
@@ -172,7 +172,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
         if (faqArticle) {
             const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.FAQ_ARTICLE);
 
-            if (pattern) {
+            if (pattern && !id) {
                 displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, faqArticle);
             } else {
                 if (id) {

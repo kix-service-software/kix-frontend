@@ -120,18 +120,6 @@ export abstract class KIXObjectFormService {
 
             values.push([f.instanceId, value]);
 
-            // TODO: move handling to this.getValue - object FormServices have to use super
-            if (f.property === 'ICON') {
-                if (kixObject && formContext === FormContext.EDIT) {
-                    const icon = LabelService.getInstance().getObjectIcon(kixObject);
-                    if (icon instanceof ObjectIcon) {
-                        value = icon;
-                    }
-                } else if (!value) {
-                    value = f.defaultValue.value;
-                }
-            }
-
             const formFieldValue = kixObject && formContext === FormContext.EDIT
                 ? new FormFieldValue(value)
                 : new FormFieldValue(value, f.defaultValue ? f.defaultValue.valid : undefined);
@@ -165,6 +153,12 @@ export abstract class KIXObjectFormService {
                     }
                 }
                 break;
+            case KIXObjectProperty.OBJECT_TAGS:
+                if (object && formContext === FormContext.EDIT) {
+                    value = await KIXObjectService.loadObjectTags(
+                        object.KIXObjectType, object.ObjectId, true
+                    );
+                }
             default:
         }
         return value;

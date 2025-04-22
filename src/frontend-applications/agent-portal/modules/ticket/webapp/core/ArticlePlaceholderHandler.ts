@@ -23,6 +23,7 @@ import { KIXObjectService } from '../../../base-components/webapp/core/KIXObject
 import { TicketService } from './TicketService';
 import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
+import { CheckUtil } from '../../../../model/CheckUtil';
 
 export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -97,13 +98,12 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case ArticleProperty.BODY_RICHTEXT:
                         result = await TicketService.getInstance().getPreparedArticleBodyContent(
-                            article, (isNaN(Number(optionsString)) || Number(optionsString) > 0), Number(optionsString)
+                            article, true, CheckUtil.isNumeric(optionsString) ? Number(optionsString) : null,
                         );
                         break;
                     case ArticleProperty.BODY_RICHTEXT_NO_INLINE:
                         result = await TicketService.getInstance().getPreparedArticleBodyContent(
-                            article, (isNaN(Number(optionsString)) || Number(optionsString) > 0),
-                            Number(optionsString), false
+                            article, true, CheckUtil.isNumeric(optionsString) ? Number(optionsString) : null, false
                         );
                         break;
                     case ArticleProperty.FROM_REALNAME:

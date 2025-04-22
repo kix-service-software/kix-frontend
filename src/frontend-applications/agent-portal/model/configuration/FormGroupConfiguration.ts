@@ -26,6 +26,7 @@ export class FormGroupConfiguration implements IConfiguration {
         public draggableFields: boolean = false,
         public type: ConfigurationType = ConfigurationType.FormGroup,
         public valid: boolean = true,
+        public description?: string
     ) { }
 
 }

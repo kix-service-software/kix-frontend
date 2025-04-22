@@ -21,6 +21,8 @@ export enum PersonalSettingsProperty {
 
     DONT_ASK_DIALOG_ON_CLOSE = 'DONT_ASK_DIALOG_CLOSE',
 
+    DONT_ASK_ON_EXIT = 'DONT_ASK_ON_EXIT',
+
     CONTEXT_WIDGET_LISTS = 'ContextWidgetLists',
 
     USER_TOKEN = 'UserToken',

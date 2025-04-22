@@ -219,6 +219,7 @@ export class TranslationAPIService extends KIXObjectAPIService {
 
         for (const extension of localeExtensions) {
             const definitions = await extension.getPODefinitions();
+            definitions.forEach((d) => d.plugin = extension.pluginId);
             poDefinitions = [
                 ...poDefinitions,
                 ...definitions

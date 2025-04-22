@@ -12,6 +12,7 @@ import { TranslationService } from '../../../../../../modules/translation/webapp
 import { EventService } from '../../../core/EventService';
 import { IdService } from '../../../../../../model/IdService';
 import { IEventSubscriber } from '../../../core/IEventSubscriber';
+import { ContextService } from '../../../core/ContextService';
 
 class Component {
 
@@ -36,7 +37,11 @@ class Component {
         this.eventSubscriber = {
             eventSubscriberId: IdService.generateDateBasedId('page-subscriber-'),
             eventPublished: (): void => {
-                this.state.pageChanged = true;
+                const context = ContextService.getInstance().getActiveContext();
+                const index = context?.getFormManager()?.getActiveFormPageIndex();
+                if (Number.isInteger(index) && index !== this.state.activePageIndex) {
+                    this.state.pageChanged = true;
+                }
             }
         };
         EventService.getInstance().subscribe('PAGE_CHANGED', this.eventSubscriber);

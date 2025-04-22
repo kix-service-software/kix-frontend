@@ -21,6 +21,7 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { Contact } from '../../../customer/model/Contact';
 import { Organisation } from '../../../customer/model/Organisation';
+import { QueueService } from '../../../ticket/webapp/core/admin';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { VersionProperty } from '../../model/VersionProperty';
 
@@ -95,6 +96,8 @@ export class ConfigItemBulkManager extends BulkManager {
                     inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
                 } else if (type === 'Organisation' || type === 'Contact') {
                     inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
+                } else if (type === 'TeamReference') {
+                    inputFieldType = InputFieldTypes.DROPDOWN;
                 } else {
                     inputFieldType = await super.getInputType(type);
                 }
@@ -134,6 +137,13 @@ export class ConfigItemBulkManager extends BulkManager {
                             KIXObjectType.CONFIG_ITEM, objectIds
                         );
                         return await KIXObjectService.prepareTree(items);
+                    } else if (input.Type === 'TeamReference') {
+                        const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(
+                            false, null, ['READ'], objectIds ? objectIds.map((oid) => Number(oid)) : null
+                        );
+                        return await QueueService.getInstance().prepareObjectTree(
+                            queuesHierarchy, true, false
+                        );
                     } else {
                         // use type rather than property
                         return await super.getTreeNodes(input.Type);

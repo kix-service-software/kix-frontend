@@ -21,7 +21,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </for>
         </@header-content>
         <@headerfilter>
-            <if(state.showFilter)>
+            <if(state.showFilter && !state.showFilterInBody)>
                 <filter
                     filterCount=state.filterCount
                     predefinedFilter=state.predefinedTableFilter
@@ -33,7 +33,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     key="table-widget-filter"
                 />
             </if>
-            <if(state.showFilterReset)>
+            <if(input.filterActions)>
+                <div class="filter-action-list">
+                    <action-list list=input.filterActions displayText=false/>
+                </div>
+            </if>
+            <if(state.showFilterReset && !state.showFilterInBody)>
                 <span
                     class=["table-reset-filter", "icon", "fas fa-window-close"]
                     title=component.resetFilterTitle
@@ -46,14 +51,45 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <span class="path5"/>
                 </span>
             </if>
-            <if(input.filterActions)>
-                <div class="filter-action-list">
-                    <action-list list=input.filterActions displayText=false/>
-                </div>
-            </if>
         </@headerfilter>
         <@content>
             <if(state.table)>
+                <if(
+                    (state.showFilter || state.showFilterReset) &&
+                    state.showFilterInBody
+                )>
+                    <div class="mt-1 mb-3 d-flex">
+                        <if(state.showFilter && state.showFilterInBody)>
+                            <filter
+                                filterCount=state.filterCount
+                                predefinedFilter=state.predefinedTableFilter
+                                predefinedFilterName=state.predefinedFilterName
+                                predefinedFilterPlaceholder=state.filterPlaceholder
+                                disabled=state.isFiltering
+                                filterValue=state.filterValue
+                                on-filter("filter")
+                                key="table-widget-filter"
+                            />
+                        </if>
+                        <if(state.showFilterReset && state.showFilterInBody)>
+                            <span
+                                class=[
+                                    "table-reset-filter",
+                                    "icon",
+                                    "fas fa-window-close",
+                                ]
+                                title=component.resetFilterTitle
+                                on-click("resetFilter")
+                            >
+                                <span class="path1"/>
+                                <span class="path2"/>
+                                <span class="path3"/>
+                                <span class="path4"/>
+                                <span class="path5"/>
+                            </span>
+                        </if>
+                    </div>
+                </if>
                 <kix-table table=state.table key=state.table.getTableId()/>
             </if>
         </@content>

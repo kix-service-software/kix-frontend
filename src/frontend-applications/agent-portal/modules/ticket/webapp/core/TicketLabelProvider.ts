@@ -29,12 +29,8 @@ import { Article } from '../../model/Article';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
-import { OverlayIcon } from '../../../base-components/webapp/core/OverlayIcon';
-import { QueueService } from './admin';
-import { ObjectResponse } from '../../../../server/services/ObjectResponse';
 import { QueueLabelProvider } from './QueueLabelProvider';
-import { Organisation } from '../../../customer/model/Organisation';
-import { Contact } from '../../../customer/model/Contact';
+import { ObjectLoader } from '../../../base-components/webapp/core/ObjectLoader';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -74,6 +70,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         ];
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async getPropertyValueDisplayText(
         property: string, value: any, translatable: boolean = true
     ): Promise<string> {
@@ -86,11 +83,12 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.QUEUE_FULLNAME:
-                const queues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, [value])
-                    .catch((): Queue[] => []);
-                displayValue = queues?.length
-                    ? await QueueLabelProvider.getQueueFullname(queues[0])
-                    : value;
+                const queue = await ObjectLoader.getInstance().queue(
+                    KIXObjectType.QUEUE, value
+                ).catch(() => null);
+                if (queue) {
+                    displayValue = await QueueLabelProvider.getQueueFullname(queue);
+                }
                 break;
             case TicketProperty.CREATED_STATE_ID:
             case TicketProperty.STATE_ID:
@@ -118,12 +116,22 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.ORGANISATION_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.ORGANISATION, value);
+                    const organisation = await ObjectLoader.getInstance().queue(
+                        KIXObjectType.ORGANISATION, value
+                    ).catch(() => null);
+                    if (organisation) {
+                        displayValue = await LabelService.getInstance().getObjectText(organisation);
+                    }
                 }
                 break;
             case TicketProperty.CONTACT_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.CONTACT, value);
+                    const contact = await ObjectLoader.getInstance().queue(
+                        KIXObjectType.CONTACT, value
+                    ).catch(() => null);
+                    if (contact) {
+                        displayValue = await LabelService.getInstance().getObjectText(contact);
+                    }
                 }
                 break;
             case TicketProperty.CREATED:
@@ -184,6 +192,10 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 displayValue = await LabelService.getInstance().getDisplayText(
                     queueWithFollowUp, QueueProperty.FOLLOW_UP_ID
                 );
+                break;
+            case TicketProperty.ATTACHMENT_COUNT:
+                displayValue ||= '0';
+                translatable = false;
                 break;
             default:
                 if (Article.isArticleProperty(property)) {
@@ -328,6 +340,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.MY_QUEUES:
                 displayValue = 'Translatable#My Teams';
                 break;
+            case TicketProperty.ATTACHMENT_COUNT:
+                displayValue = 'Translatable#Number of Attachments';
+                break;
             default:
                 if (Article.isArticleProperty(property)) {
                     displayValue = await LabelService.getInstance().getPropertyText(
@@ -460,7 +475,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
 
         const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.TICKET);
 
-        if (pattern && ticket) {
+        if (pattern && ticket && !id) {
             displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, ticket);
         } else {
             let ticketHook: string = '';

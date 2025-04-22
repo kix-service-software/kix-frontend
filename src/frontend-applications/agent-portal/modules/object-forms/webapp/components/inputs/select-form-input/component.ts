@@ -25,6 +25,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private formValue: SelectObjectFormValue<Array<string | number> | string | number>;
     private searchTimeout: any;
     private isFocusFreeText: boolean;
+    private isMouseOnNodeRemove: boolean = false;
 
     private subscriber: IEventSubscriber;
 
@@ -46,7 +47,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
 
             const myDropdown = document.getElementById(`id_${this.state.searchValueKey}`);
-            myDropdown?.addEventListener('hidden.bs.dropdown', async () => {
+            myDropdown?.addEventListener('hidden.bs.dropdown', async (event) => {
+                if (this.isMouseOnNodeRemove && this.state.multiselect && this.state.selectedNodes.length > 1) {
+                    this.stopPropagation(event);
+                }
                 await this.formValue?.setSelectedNodes();
 
                 // reset filter result
@@ -58,7 +62,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             });
 
-            myDropdown?.addEventListener('show.bs.dropdown', () => {
+            myDropdown?.addEventListener('show.bs.dropdown', (event) => {
+                if (this.isMouseOnNodeRemove && this.state.multiselect && this.state.selectedNodes.length > 1) {
+                    this.stopPropagation(event);
+                }
                 this.state.selectAll = this.formValue?.treeHandler?.getSelectedNodes()?.length <= 0;
             });
 
@@ -236,6 +243,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         // wait, so event handling for hidden.bs.dropdown will not overwrite this "remove"
         // the "await this.formValue?.setSelectedNodes()" is done before/during this remove
         // but we cannot remove this selection handling either because some possible new selections could to be added
+        this.isMouseOnNodeRemove = false;
         setTimeout(() => {
             this.formValue.removeValue(node.id);
         }, 20);
@@ -243,6 +251,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public clearValue(event: any): void {
         this.stopPropagation(event);
+        this.isMouseOnNodeRemove = false;
         setTimeout(() => {
             this.formValue.removeValue(null);
         }, 20);
@@ -276,13 +285,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public async select(event: any, reopen?: boolean): Promise<void> {
         await this.formValue?.setSelectedNodes();
         this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
-
-        if (reopen) {
-            setTimeout(() => {
-                const element = document.getElementById(`id_${this.state.searchValueKey}`);
-                element?.click();
-            }, 50);
-        }
     }
 
     public async apply(event: any): Promise<void> {
@@ -312,6 +314,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (event.preventDefault) {
             event.preventDefault();
         }
+    }
+
+    public setIsMouseOnNodeRemove(isHovering: boolean): void {
+        this.isMouseOnNodeRemove = isHovering;
     }
 
 }

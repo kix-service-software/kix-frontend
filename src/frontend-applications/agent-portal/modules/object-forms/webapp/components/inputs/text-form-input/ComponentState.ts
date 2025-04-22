@@ -13,9 +13,9 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public value: any = null,
-        public prepared: boolean = false,
         public readonly: boolean = false,
-        public inputType: string = 'text'
+        public inputType: string = 'text',
+        public autocompleteProperty: string = 'off'
     ) {
         super();
     }

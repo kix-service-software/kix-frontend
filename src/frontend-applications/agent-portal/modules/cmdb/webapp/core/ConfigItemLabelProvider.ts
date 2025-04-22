@@ -49,28 +49,11 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
         let displayValue = '';
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
-                const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
-                    KIXObjectType.CONFIG_ITEM_CLASS, [value], null
-                );
-                if (ciClasses && !!ciClasses.length) {
-                    displayValue = ciClasses[0].Name;
-                }
+                displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.CONFIG_ITEM_CLASS, value);
                 break;
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
-                const deploymentItems = await KIXObjectService.loadObjects<GeneralCatalogItem>(
-                    KIXObjectType.GENERAL_CATALOG_ITEM, [value], null
-                );
-                if (deploymentItems && !!deploymentItems.length) {
-                    displayValue = deploymentItems[0].Name;
-                }
-                break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
-                const incidentItems = await KIXObjectService.loadObjects<GeneralCatalogItem>(
-                    KIXObjectType.GENERAL_CATALOG_ITEM, [value], null
-                );
-                if (incidentItems && !!incidentItems.length) {
-                    displayValue = incidentItems[0].Name;
-                }
+                displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.GENERAL_CATALOG_ITEM, value);
                 break;
             case ConfigItemProperty.VERSIONS:
                 if (value && Array.isArray(value)) {
@@ -324,24 +307,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
                 const labels = [];
                 for (const ci of configItems) {
-                    const ciIcon = new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
-                    const incidentIcons = await LabelService.getInstance().getIcons(
-                        ci, ConfigItemProperty.CUR_INCI_STATE_ID
-                    );
-                    const deploymentIcon = await LabelService.getInstance().getIcons(
-                        ci, ConfigItemProperty.CUR_DEPL_STATE_ID
-                    );
-                    const label = new Label(ci, ci.ConfigItemID, ciIcon, ci.Name, null, ci.Name, true, [
-                        ...incidentIcons, ...deploymentIcon
-                    ],
-                        {
-                            title: 'Translatable#Asset',
-                            content: 'config-item-info',
-                            instanceId: 'config-item-info',
-                            data: { configItem: ci },
-                            large: true
-                        }
-                    );
+                    const label = await this.getLabelByObject(ci);
                     labels.push(label);
                 }
 
@@ -349,6 +315,28 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             }
         }
         return null;
+    }
+
+    public async getLabelByObject(ci: ConfigItem): Promise<Label> {
+        const ciIcon = new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
+        const incidentIcons = await LabelService.getInstance().getIcons(
+            ci, ConfigItemProperty.CUR_INCI_STATE_ID
+        );
+        const deploymentIcon = await LabelService.getInstance().getIcons(
+            ci, ConfigItemProperty.CUR_DEPL_STATE_ID
+        );
+        const label = new Label(ci, ci.ConfigItemID, ciIcon, ci.Name, null, ci.Name, true, [
+            ...incidentIcons, ...deploymentIcon
+        ],
+            {
+                title: 'Translatable#Asset',
+                content: 'config-item-info',
+                instanceId: 'config-item-info',
+                data: { configItem: ci },
+                large: true
+            }
+        );
+        return label;
     }
 
     private async getAttributePropertyText(

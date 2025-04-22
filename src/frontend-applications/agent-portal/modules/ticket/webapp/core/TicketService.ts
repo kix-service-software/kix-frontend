@@ -34,7 +34,6 @@ import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
 import { StateType } from '../../model/StateType';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { Article } from '../../model/Article';
-import { InlineContent } from '../../../../modules/base-components/webapp/core/InlineContent';
 import { Channel } from '../../model/Channel';
 import { ChannelProperty } from '../../model/ChannelProperty';
 import { UserProperty } from '../../../user/model/UserProperty';
@@ -99,7 +98,6 @@ export class TicketService extends KIXObjectService<Ticket> {
             || kixObjectType === KIXObjectType.TICKET_LOCK
             || kixObjectType === KIXObjectType.WATCHER
             || kixObjectType === KIXObjectType.TICKET_HISTORY
-            || kixObjectType === KIXObjectType.HTML_TO_PDF
             || kixObjectType === KIXObjectType.USER_TICKETS
             || kixObjectType === KIXObjectType.USER_COUNTER;
     }
@@ -116,8 +114,6 @@ export class TicketService extends KIXObjectService<Ticket> {
                 KIXObjectType.SENDER_TYPE, null, loadingOptions);
         } else if (objectType === KIXObjectType.TICKET_LOCK) {
             objects = await super.loadObjects<O>(KIXObjectType.TICKET_LOCK, null, loadingOptions);
-        } else if (objectType === KIXObjectType.HTML_TO_PDF) {
-            objects = await super.loadObjects<O>(objectType, null, loadingOptions, null, false);
         } else {
             superLoad = true;
 
@@ -484,9 +480,8 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async getPreparedArticleBodyContent(
-        article: Article, reduceContent?: boolean, lineCount?: number, prepareInline: boolean = true
+        article: Article, reduceContent: boolean = false, lineCount?: number, prepareInline: boolean = true
     ): Promise<string> {
-
         const applicationUrl = ClientStorageService.getApplicationUrl();
         const response = await fetch(`${applicationUrl}/views/tickets/${article.TicketID}/articles/${article.ArticleID}?resolveInlineCSS=1&reduceContent=${reduceContent}&lineCount=${lineCount}&prepareInline=${prepareInline}`)
             .catch((error): Response => {
@@ -495,48 +490,6 @@ export class TicketService extends KIXObjectService<Ticket> {
             });
 
         return response.text();
-    }
-
-    private getContent(contentAttachment: Attachment): [string, string] {
-        let buffer = Buffer.from(contentAttachment.Content, 'base64');
-        const encoding = contentAttachment.charset ? contentAttachment.charset : 'utf8';
-        if (encoding !== 'utf8' && encoding !== 'utf-8') {
-            const iconv = require('iconv-lite');
-            try {
-                buffer = iconv.decode(buffer, encoding);
-            } catch (e) {
-                // do nothing
-            }
-        }
-
-        let content = buffer.toString('utf8');
-        let htmlContent: string = content;
-        let styleContent: string;
-
-        const bodyMatch = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
-        if (bodyMatch && bodyMatch.length >= 3) {
-            htmlContent = bodyMatch[2];
-        } else if (!contentAttachment.Filename.match(/^file-(1|2|1\.html)$/)) {
-            htmlContent = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
-        }
-
-        const styleMatch = content.match(/(<style[^>]*>)([\w|\W]*)(<\/style>)/);
-        if (styleMatch && styleMatch.length >= 3) {
-            styleContent = styleMatch[2];
-        }
-
-        return [htmlContent, styleContent];
-    }
-
-    private async prepareInlineContent(inlineAttachments: Attachment[]): Promise<InlineContent[]> {
-        const inlineContent: InlineContent[] = [];
-
-        for (const attachment of inlineAttachments) {
-            const content = new InlineContent(attachment.ContentID, attachment.Content, attachment.ContentType);
-            inlineContent.push(content);
-        }
-
-        return inlineContent;
     }
 
     protected getResource(objectType: KIXObjectType): string {
@@ -686,7 +639,8 @@ export class TicketService extends KIXObjectService<Ticket> {
             KIXObjectProperty.CHANGE_BY,
             TicketProperty.CREATED,
             KIXObjectProperty.CREATE_BY,
-            TicketProperty.WATCHER_ID
+            TicketProperty.WATCHER_ID,
+            TicketProperty.ATTACHMENT_COUNT
         ];
 
         return [...objectProperties, ...superProperties];

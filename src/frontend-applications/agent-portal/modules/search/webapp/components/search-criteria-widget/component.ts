@@ -18,7 +18,6 @@ import { SearchEvent } from '../../../model/SearchEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { SearchContext, SearchDefinition } from '../../core';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
@@ -27,6 +26,8 @@ import { SearchFormManager } from '../../../../base-components/webapp/core/Searc
 import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
 import { SysConfigService } from '../../../../sysconfig/webapp/core';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
+import { SearchContext } from '../../core/SearchContext';
+import { SearchDefinition } from '../../core/SearchDefinition';
 
 class Component {
 
@@ -48,6 +49,17 @@ class Component {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        if (context) {
+            const instanceId = context.getAdditionalInformation('SEARCH_WIDGET_INSTANCE_ID');
+            if (instanceId) {
+                this.state.instanceId = instanceId;
+            } else {
+                context.setAdditionalInformation(
+                    'SEARCH_WIDGET_INSTANCE_ID', IdService.generateDateBasedId(this.state.instanceId)
+                );
+            }
+        }
     }
 
     public async onMount(): Promise<void> {
@@ -70,6 +82,12 @@ class Component {
                         this.initSort();
                     }
                     this.setTitle();
+                }
+                if (eventId === SearchEvent.SHOW_CRITERIA) {
+                    const groupComponent = (this as any).getComponent(this.state.instanceId);
+                    if (groupComponent) {
+                        groupComponent.setMinizedState(false);
+                    }
                 }
             }
         };
@@ -108,6 +126,7 @@ class Component {
         EventService.getInstance().subscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
         EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
         EventService.getInstance().subscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
+        EventService.getInstance().subscribe(SearchEvent.SHOW_CRITERIA, this.subscriber);
 
         const groupComponent = (this as any).getComponent(this.state.instanceId);
         if (groupComponent) {
@@ -134,6 +153,7 @@ class Component {
         EventService.getInstance().unsubscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
         EventService.getInstance().unsubscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
         EventService.getInstance().unsubscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
+        EventService.getInstance().unsubscribe(SearchEvent.SHOW_CRITERIA, this.subscriber);
 
         this.state.manager?.unregisterListener(this.managerListenerId);
 

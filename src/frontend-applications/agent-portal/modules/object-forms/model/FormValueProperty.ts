@@ -11,6 +11,8 @@ export enum FormValueProperty {
 
     VALUE = 'value',
 
+    DEFAULT_VALUE = 'defaultValue',
+
     POSSIBLE_VALUES = 'possibleValues',
 
     REQUIRED = 'required',
@@ -33,6 +35,8 @@ export enum FormValueProperty {
 
     REG_EX_LIST = 'regExList',
 
-    LABEL = 'label'
+    LABEL = 'label',
+
+    IS_CONFIGURABLE = 'isConfigurable'
 
 }

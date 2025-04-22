@@ -7,7 +7,9 @@
  * --
  */
 
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { Table } from '../../../table/model/Table';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
@@ -21,9 +23,12 @@ import { KIXObjectService } from './KIXObjectService';
 import { OverlayService } from './OverlayService';
 import { OverlayType } from './OverlayType';
 
-export class ResetUserContextWidgetListAction extends AbstractAction<Table | User>{
+export class ResetUserContextWidgetListAction extends AbstractAction<Table | User> {
 
     public hasLink: boolean = false;
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('system/user', [CRUD.CREATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Reset User Widgets';

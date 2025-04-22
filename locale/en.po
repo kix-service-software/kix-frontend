@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2024-09-10 13:50+0000\n"
+"PO-Revision-Date: 2025-04-09 11:57+0000\n"
 "Last-Translator: tto <Torsten.Thau@kixdesk.com>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
@@ -12,70 +12,82 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14\n"
+"X-Generator: Weblate 5.6.2\n"
 
 msgid "', "
 msgstr ""
 
-msgid "{0}/{1} {2} imported"
-msgstr "{0}/{1} {2} imported"
+msgid "(Current definition)"
+msgstr ""
 
-msgid "{0}. Action"
-msgstr "{0}. Action"
+msgid "(Current version)"
+msgstr ""
+
+msgid "(Last Change: {0})"
+msgstr ""
+
+msgid ", (comma)"
+msgstr ""
+
+msgid "-> (tab)"
+msgstr ""
+
+msgid ". (dot)"
+msgstr ""
 
 msgid "0 data sets found."
 msgstr "Nothing found."
 
-msgid "{0} File(s) added"
-msgstr "{0} File(s) added"
-
-msgid "{0}: has no value."
+msgid ": (colon)"
 msgstr ""
 
-msgid "{0} imported"
-msgstr "{0} imported"
-
-msgid "{0} is required."
-msgstr "{0} is required."
-
-msgid "{0}: just white spaces as value is not allowed."
+msgid "; (semicolon)"
 msgstr ""
 
-msgid "{0} Link created"
-msgstr "{0} Link created"
+msgid "<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname> via Sender Address"
+msgstr ""
 
-msgid "{0} link(s) assigned."
-msgstr "{0} link(s) assigned."
+msgid "A maximum of 1 value can be selected. (SingleSelect)"
+msgstr ""
+
+msgid "A maximum of {0} values can be selected."
+msgstr ""
+
+msgid "A product by KIX Service Software GmbH"
+msgstr ""
+
+msgid "A year after 2200 is not possible."
+msgstr ""
 
 msgid "Aborted by user."
 msgstr ""
 
-msgid "Accepted domains"
-msgstr "Accepted domains"
-
 msgid "Accept KIX Header"
 msgstr "Accept KIX Header"
+
+msgid "Accepted domains"
+msgstr "Accepted domains"
 
 msgid "Access"
 msgstr "Access"
 
-msgid "Access denied"
-msgstr "Access denied"
-
 msgid "Access Level"
 msgstr "Access Level"
 
-msgid "Accounted Time"
-msgstr ""
-
-msgid "Accounted Time: {0}"
-msgstr "Accounted Time: {0}"
+msgid "Access denied"
+msgstr "Access denied"
 
 msgid "Account Information"
 msgstr "Account Information"
 
 msgid "Account time has to be an integer."
 msgstr "Accounted time has to be an integer."
+
+msgid "Accounted Time"
+msgstr ""
+
+msgid "Accounted Time: {0}"
+msgstr "Accounted Time: {0}"
 
 msgid "Action"
 msgstr "Action"
@@ -95,38 +107,47 @@ msgstr "Add Asset Class"
 msgid "Add Column(s)"
 msgstr ""
 
+msgid "Add Table Widget"
+msgstr ""
+
+msgid "Add Widget"
+msgstr ""
+
 msgid "Add email account for incoming mails"
 msgstr ""
 
 msgid "Add initial table"
 msgstr ""
 
-msgid "Additional recipients"
-msgstr ""
-
 msgid "Add new Links"
-msgstr ""
-
-msgid "add notes here"
-msgstr ""
-
-msgid "Address successfully removed."
-msgstr "Email Address(es) successfully removed."
-
-msgid "Add Table Widget"
 msgstr ""
 
 msgid "Add to Affected Assets"
 msgstr ""
 
-msgid "Add Widget"
+msgid "Additional recipients"
 msgstr ""
+
+msgid "Address successfully removed."
+msgstr "Email Address(es) successfully removed."
 
 msgid "Admin"
 msgstr ""
 
+msgid "Admin Manual"
+msgstr ""
+
+msgid "Admin Password"
+msgstr ""
+
 msgid "Admin: {0}"
 msgstr ""
+
+msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
+msgstr ""
+"Default value is used to initialize the field when first displayed; It is "
+"specified as an offset at the time the field is displayed (0=now; "
+"3600=now+1h, blank=no initialization)."
 
 msgid "Admin_DynamicField_Config_CIRef_DeploymentStates"
 msgstr ""
@@ -175,24 +196,12 @@ msgstr ""
 "(0=now; 3600=now+1h, blank=no initialization); for asset references, the ID "
 "of the asset."
 
-msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
-msgstr ""
-"Default value is used to initialize the field when first displayed; It is "
-"specified as an offset at the time the field is displayed (0=now; 3600=now"
-"+1h, blank=no initialization)."
-
 msgid "Admin_DynamicField_Edit_Name_Hint"
 msgstr ""
 "If the field name is changed, dependent configurations are NOT automatically "
 "updated!"
 
 msgid "Administration"
-msgstr ""
-
-msgid "Admin Manual"
-msgstr ""
-
-msgid "Admin Password"
 msgstr ""
 
 msgid "Advanced"
@@ -207,13 +216,7 @@ msgstr ""
 msgid "Affected Services"
 msgstr ""
 
-msgid "after"
-msgstr "after/greater than"
-
 msgid "Age"
-msgstr ""
-
-msgid "agent"
 msgstr ""
 
 msgid "Agent"
@@ -237,6 +240,9 @@ msgstr ""
 msgid "All"
 msgstr ""
 
+msgid "All Objects"
+msgstr ""
+
 msgid "All agents subscribed to the tickets queue"
 msgstr "All agents subscribed to the tickets team"
 
@@ -255,31 +261,16 @@ msgstr ""
 msgid "All free tickets"
 msgstr "All unlocked tickets"
 
-msgid "All Objects"
-msgstr ""
-
 msgid "All open tabs will be closed. Continue?"
-msgstr ""
-
-msgid "Allow access to admin module"
 msgstr ""
 
 msgid "All tickets"
 msgstr ""
 
+msgid "Allow access to admin module"
+msgstr ""
+
 msgid "Always close dialog tab without asking"
-msgstr ""
-
-msgid "A maximum of {0} values can be selected."
-msgstr ""
-
-msgid "A maximum of 1 value can be selected. (SingleSelect)"
-msgstr ""
-
-msgid "and"
-msgstr ""
-
-msgid "and further"
 msgstr ""
 
 msgid "An error occured during export execution. See system log for details."
@@ -301,16 +292,19 @@ msgstr ""
 msgid "Any data you have entered will be lost. Continue?"
 msgstr ""
 
+msgid "Append Values"
+msgstr ""
+
+msgid "Append Values - Regex"
+msgstr ""
+
+msgid "Append Values - Roles"
+msgstr ""
+
 msgid "Apply"
 msgstr ""
 
-msgid "Apply Table"
-msgstr ""
-
 msgid "Approved"
-msgstr ""
-
-msgid "A product by KIX Service Software GmbH"
 msgstr ""
 
 msgid "Archived"
@@ -325,20 +319,14 @@ msgstr ""
 msgid "Article Data"
 msgstr ""
 
-msgid "Article has printed"
-msgstr "Article has been printed"
-
 msgid "Article Id"
-msgstr ""
-
-msgid "Article sort order"
 msgstr ""
 
 msgid "Article Text"
 msgstr ""
 
-msgid "ascending"
-msgstr ""
+msgid "Article has printed"
+msgstr "Article has been printed"
 
 msgid "Asset"
 msgstr ""
@@ -364,8 +352,14 @@ msgstr ""
 msgid "Assets: Import/Export"
 msgstr ""
 
-msgid "Assigned agent"
+msgid "Assign Link"
 msgstr ""
+
+msgid "Assign Links"
+msgstr ""
+
+msgid "Assign Team / Queue"
+msgstr "Assign Team / Queue"
 
 msgid "Assigned Agents"
 msgstr ""
@@ -388,22 +382,16 @@ msgstr ""
 msgid "Assigned Tickets"
 msgstr ""
 
+msgid "Assigned agent"
+msgstr ""
+
 msgid "Assignees"
 msgstr ""
 
-msgid "Assign Link"
+msgid "At least one link could not be saved."
 msgstr ""
-
-msgid "Assign Links"
-msgstr ""
-
-msgid "Assign Team / Queue"
-msgstr "Assign Team / Queue"
 
 msgid "At least {0} values must be selected"
-msgstr ""
-
-msgid "At least one link could not be saved."
 msgstr ""
 
 msgid "Attachment Name"
@@ -442,9 +430,6 @@ msgstr ""
 msgid "Avatar"
 msgstr ""
 
-msgid "A year after 2200 is not possible."
-msgstr ""
-
 msgid "Backend"
 msgstr ""
 
@@ -454,13 +439,7 @@ msgstr ""
 msgid "Bcc"
 msgstr ""
 
-msgid "before"
-msgstr "before/less than"
-
 msgid "Begin of Business Day"
-msgstr ""
-
-msgid "between"
 msgstr ""
 
 msgid "Body"
@@ -478,8 +457,38 @@ msgstr ""
 msgid "Bulk Print"
 msgstr ""
 
-msgid "Cancel"
-msgstr "Cancel"
+msgid "CI Class"
+msgstr "Asset Class"
+
+msgid "CI Class Definition"
+msgstr "Asset Class Definition"
+
+msgid "CI Class Definitions"
+msgstr "Asset Class Definitions"
+
+msgid "CI Class Information"
+msgstr "Asset Class Information"
+
+msgid "CI Classes"
+msgstr "Asset Classes"
+
+msgid "CMDB"
+msgstr "Assets"
+
+msgid "CMDB Explorer"
+msgstr "Asset Explorer"
+
+msgid "CMDB: CI Classes"
+msgstr "Assets: Asset Classes"
+
+msgid "CNO"
+msgstr ""
+
+msgid "CSV-Export"
+msgstr ""
+
+msgid "CW"
+msgstr ""
 
 msgid "Can not create link ({0})"
 msgstr ""
@@ -489,6 +498,9 @@ msgstr ""
 
 msgid "Can not use file (missing required properties):"
 msgstr ""
+
+msgid "Cancel"
+msgstr "Cancel"
 
 msgid "Category"
 msgstr ""
@@ -502,6 +514,15 @@ msgstr ""
 msgid "Change Admin Password"
 msgstr ""
 
+msgid "Change Password"
+msgstr "Change Password"
+
+msgid "Change sort direction"
+msgstr ""
+
+msgid "Change to"
+msgstr ""
+
 msgid "Changed"
 msgstr ""
 
@@ -511,19 +532,10 @@ msgstr ""
 msgid "Changed by"
 msgstr ""
 
-msgid "Change Password"
-msgstr "Change Password"
-
 msgid "Changes cannot be saved. How do you want to proceed?"
 msgstr ""
 
-msgid "Change sort direction"
-msgstr ""
-
 msgid "Changes saved."
-msgstr ""
-
-msgid "Change to"
 msgstr ""
 
 msgid "Channel"
@@ -538,10 +550,10 @@ msgstr ""
 msgid "Checklist Item"
 msgstr ""
 
-msgid "Checklists"
+msgid "Checklist State"
 msgstr ""
 
-msgid "Checklist State"
+msgid "Checklists"
 msgstr ""
 
 msgid "Child Tickets"
@@ -549,21 +561,6 @@ msgstr ""
 
 msgid "Choose a command"
 msgstr ""
-
-msgid "CI Class"
-msgstr "Asset Class"
-
-msgid "CI Class Definition"
-msgstr "Asset Class Definition"
-
-msgid "CI Class Definitions"
-msgstr "Asset Class Definitions"
-
-msgid "CI Classes"
-msgstr "Asset Classes"
-
-msgid "CI Class Information"
-msgstr "Asset Class Information"
 
 msgid "City"
 msgstr ""
@@ -580,6 +577,9 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
+msgid "Clear in mask"
+msgstr ""
+
 msgid "Client ID"
 msgstr ""
 
@@ -587,6 +587,12 @@ msgid "Client Secret"
 msgstr ""
 
 msgid "Close"
+msgstr ""
+
+msgid "Close Overlay"
+msgstr "Close"
+
+msgid "Close Sidebars"
 msgstr ""
 
 msgid "Close all open tabs"
@@ -598,49 +604,31 @@ msgstr ""
 msgid "Closed at"
 msgstr ""
 
-msgid "Close Overlay"
-msgstr "Close"
-
-msgid "Close Sidebars"
-msgstr ""
-
-msgid "CMDB"
-msgstr "Assets"
-
-msgid "CMDB: CI Classes"
-msgstr "Assets: Asset Classes"
-
-msgid "CMDB Explorer"
-msgstr "Asset Explorer"
-
-msgid "CNO"
-msgstr ""
-
 msgid "Code"
+msgstr ""
+
+msgid "Collapse All"
 msgstr ""
 
 msgid "Collapse all"
 msgstr ""
 
-msgid ": (colon)"
-msgstr ""
-
 msgid "Column Icon"
-msgstr ""
-
-msgid "Columns"
 msgstr ""
 
 msgid "Column Title"
 msgstr ""
 
-msgid ", (comma)"
+msgid "Columns"
 msgstr ""
 
 msgid "Comment"
 msgstr "Comment"
 
 msgid "Communication"
+msgstr ""
+
+msgid "Communication History"
 msgstr ""
 
 msgid "Communication: Email: Email Addresses"
@@ -658,9 +646,6 @@ msgstr ""
 msgid "Communication: Email: Outbox"
 msgstr ""
 
-msgid "Communication History"
-msgstr ""
-
 msgid "Communication: Webform"
 msgstr ""
 
@@ -673,13 +658,13 @@ msgstr ""
 msgid "Compare"
 msgstr ""
 
-msgid "Compare: {0}"
-msgstr ""
-
 msgid "Compare Asset Versions"
 msgstr ""
 
 msgid "Compare Versions"
+msgstr ""
+
+msgid "Compare: {0}"
 msgstr ""
 
 msgid "Component ID"
@@ -703,14 +688,14 @@ msgstr ""
 msgid "Config Item Information"
 msgstr "Asset Information"
 
+msgid "Config Item Version Compare"
+msgstr "Asset Version Compare"
+
 msgid "Config Items"
 msgstr "Assets"
 
 msgid "Config Items Count: {0}"
 msgstr "Assets Count: {0}"
-
-msgid "Config Item Version Compare"
-msgstr "Asset Version Compare"
 
 msgid "Configuration"
 msgstr ""
@@ -736,13 +721,7 @@ msgstr ""
 msgid "Contacts"
 msgstr ""
 
-msgid "contained in"
-msgstr ""
-
 msgid "Contained in Affected Assets"
-msgstr ""
-
-msgid "contains"
 msgstr ""
 
 msgid "ContentType"
@@ -751,10 +730,10 @@ msgstr ""
 msgid "Context"
 msgstr "Context"
 
-msgid "Copy of {0}"
+msgid "Copy URL To Clipboard And Close"
 msgstr ""
 
-msgid "Copy URL To Clipboard And Close"
+msgid "Copy of {0}"
 msgstr ""
 
 msgid "Could not handle request."
@@ -784,7 +763,28 @@ msgstr ""
 msgid "Create Article"
 msgstr ""
 
-msgid "created"
+msgid "Create Email Account"
+msgstr ""
+
+msgid "Create Links"
+msgstr ""
+
+msgid "Create Priority"
+msgstr ""
+
+msgid "Create Report"
+msgstr ""
+
+msgid "Create State"
+msgstr ""
+
+msgid "Create Superuser Account"
+msgstr ""
+
+msgid "Create Type"
+msgstr ""
+
+msgid "Create the report with output format {0} and defaults?"
 msgstr ""
 
 msgid "Created at"
@@ -811,40 +811,10 @@ msgstr ""
 msgid "Created with User"
 msgstr ""
 
-msgid "Create Email Account"
-msgstr ""
-
-msgid "Create Links"
-msgstr ""
-
-msgid "Create Priority"
-msgstr ""
-
-msgid "Create Report"
-msgstr ""
-
-msgid "Create State"
-msgstr ""
-
-msgid "Create Superuser Account"
-msgstr ""
-
-msgid "Create the report with output format {0} and defaults?"
-msgstr ""
-
-msgid "Create Type"
-msgstr ""
-
-msgid "CSV-Export"
-msgstr ""
-
-msgid "current"
-msgstr ""
-
-msgid "(Current definition)"
-msgstr ""
-
 msgid "Current Definition"
+msgstr ""
+
+msgid "Current Version"
 msgstr ""
 
 msgid "Current deployment state"
@@ -853,13 +823,7 @@ msgstr ""
 msgid "Current incident state"
 msgstr ""
 
-msgid "(Current version)"
-msgstr ""
-
 msgid "Current version"
-msgstr ""
-
-msgid "Current Version"
 msgstr ""
 
 msgid "Customer"
@@ -874,11 +838,14 @@ msgstr "Self Service Portal"
 msgid "Customize Dashboard"
 msgstr ""
 
-msgid "CW"
+msgid "DBMS"
 msgstr ""
 
-msgid "Datasource"
+msgid "DESC"
 msgstr ""
+
+msgid "DOUBLE_QUOTES"
+msgstr "\" (Double Quotes)"
 
 msgid "Data Source"
 msgstr ""
@@ -886,13 +853,13 @@ msgstr ""
 msgid "Data Type"
 msgstr ""
 
+msgid "Datasource"
+msgstr ""
+
 msgid "Date Restriction"
 msgstr ""
 
 msgid "Day(s)"
-msgstr ""
-
-msgid "DBMS"
 msgstr ""
 
 msgid "Default"
@@ -913,18 +880,6 @@ msgstr ""
 msgid "Delete"
 msgstr "Delete"
 
-msgid "Delete all selected report definitions?"
-msgstr ""
-
-msgid "Delete all selected reports?"
-msgstr ""
-
-msgid "Delete all selected webforms?"
-msgstr ""
-
-msgid "Deleted"
-msgstr ""
-
 msgid "Delete Link"
 msgstr ""
 
@@ -940,13 +895,22 @@ msgstr ""
 msgid "Delete Webform"
 msgstr ""
 
+msgid "Delete all selected report definitions?"
+msgstr ""
+
+msgid "Delete all selected reports?"
+msgstr ""
+
+msgid "Delete all selected webforms?"
+msgstr ""
+
+msgid "Deleted"
+msgstr ""
+
 msgid "Dependencies"
 msgstr ""
 
 msgid "Dependency"
-msgstr ""
-
-msgid "Deployment state"
 msgstr ""
 
 msgid "Deployment State"
@@ -955,10 +919,7 @@ msgstr ""
 msgid "Deployment States"
 msgstr ""
 
-msgid "DESC"
-msgstr ""
-
-msgid "descending"
+msgid "Deployment state"
 msgstr ""
 
 msgid "Descending:"
@@ -970,13 +931,16 @@ msgstr ""
 msgid "Detailed search results"
 msgstr ""
 
+msgid "Disabled"
+msgstr ""
+
 msgid "Dispatching"
 msgstr ""
 
 msgid "Display Name"
 msgstr ""
 
-msgid "Done"
+msgid "Disposition"
 msgstr ""
 
 msgid ""
@@ -984,13 +948,13 @@ msgid ""
 "already)."
 msgstr ""
 
-msgid ". (dot)"
+msgid "Done"
 msgstr ""
 
-msgid "DOUBLE_QUOTES"
-msgstr "\" (Double Quotes)"
-
 msgid "Download"
+msgstr ""
+
+msgid "Download Result"
 msgstr ""
 
 msgid "Download all attachments"
@@ -999,19 +963,19 @@ msgstr ""
 msgid "Download log"
 msgstr ""
 
-msgid "Download Result"
-msgstr ""
-
-msgid "draft successfully saved"
-msgstr ""
-
 msgid "Duplicate"
+msgstr ""
+
+msgid "Duplicate Contact"
 msgstr ""
 
 msgid "Dynamic Field"
 msgstr ""
 
-msgid "DynamicField"
+msgid "Dynamic Field Type"
+msgstr ""
+
+msgid "Dynamic Field Types"
 msgstr ""
 
 msgid "Dynamic Fields"
@@ -1020,10 +984,7 @@ msgstr ""
 msgid "Dynamic Fields successfully removed."
 msgstr ""
 
-msgid "Dynamic Field Type"
-msgstr ""
-
-msgid "Dynamic Field Types"
+msgid "DynamicField"
 msgstr ""
 
 msgid "Edit"
@@ -1051,12 +1012,6 @@ msgid "Edit Contact"
 msgstr ""
 
 msgid "Edit Dynamic Field"
-msgstr ""
-
-msgid "edited"
-msgstr ""
-
-msgid "edited at {0} by {1}"
 msgstr ""
 
 msgid "Edit Email Address"
@@ -1137,10 +1092,10 @@ msgstr ""
 msgid "Edit Team"
 msgstr ""
 
-msgid "Edit Textmodule"
+msgid "Edit Text Module"
 msgstr ""
 
-msgid "Edit Text Module"
+msgid "Edit Textmodule"
 msgstr ""
 
 msgid "Edit Ticket"
@@ -1161,21 +1116,6 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-msgid "Email1"
-msgstr ""
-
-msgid "Email2"
-msgstr ""
-
-msgid "Email3"
-msgstr ""
-
-msgid "Email4"
-msgstr ""
-
-msgid "Email5"
-msgstr ""
-
 msgid "Email Account"
 msgstr ""
 
@@ -1192,9 +1132,6 @@ msgid "Email Address Domain"
 msgstr ""
 
 msgid "Email Addresses"
-msgstr ""
-
-msgid "Email could not be sent"
 msgstr ""
 
 msgid "Email Error"
@@ -1218,6 +1155,24 @@ msgstr ""
 msgid "Email Security"
 msgstr ""
 
+msgid "Email could not be sent"
+msgstr ""
+
+msgid "Email1"
+msgstr ""
+
+msgid "Email2"
+msgstr ""
+
+msgid "Email3"
+msgstr ""
+
+msgid "Email4"
+msgstr ""
+
+msgid "Email5"
+msgstr ""
+
 msgid "Empty Result Hint"
 msgstr ""
 
@@ -1239,34 +1194,22 @@ msgstr ""
 msgid "End of Business Day"
 msgstr ""
 
-msgid "ends with"
-msgstr ""
-
 msgid "End time"
 msgstr "End Time"
 
 msgid "End value is not given"
 msgstr ""
 
-msgid "Entered date-time value is invalid."
-msgstr ""
-
-msgid "enter filter value"
-msgstr ""
-
 msgid "Enter search value"
+msgstr ""
+
+msgid "Entered date-time value is invalid."
 msgstr ""
 
 msgid "Envelope From"
 msgstr ""
 
-msgid "equals"
-msgstr ""
-
 msgid "Error"
-msgstr ""
-
-msgid "Error!"
 msgstr ""
 
 msgid "Error on create:"
@@ -1287,13 +1230,16 @@ msgstr ""
 msgid "Error while adding the image:"
 msgstr ""
 
-msgid "Error while deleting Report."
-msgstr ""
-
 msgid "Error while deleting Report Definition."
 msgstr ""
 
+msgid "Error while deleting Report."
+msgstr ""
+
 msgid "Error while deleting Webform."
+msgstr ""
+
+msgid "Error!"
 msgstr ""
 
 msgid "Escalated Tickets"
@@ -1326,7 +1272,10 @@ msgstr ""
 msgid "Existing Links ({0})"
 msgstr ""
 
-msgid "expected time required:"
+msgid "Exit KIX without asking"
+msgstr ""
+
+msgid "Expand All"
 msgstr ""
 
 msgid "Explorer"
@@ -1338,13 +1287,7 @@ msgstr ""
 msgid "Export data"
 msgstr ""
 
-msgid "external"
-msgstr ""
-
 msgid "FAQ"
-msgstr ""
-
-msgid "FAQ#"
 msgstr ""
 
 msgid "FAQ Article"
@@ -1360,9 +1303,6 @@ msgid "FAQ Attributes"
 msgstr ""
 
 msgid "FAQ Categories"
-msgstr ""
-
-msgid "FAQ categories successfully removed."
 msgstr ""
 
 msgid "FAQ Category"
@@ -1383,7 +1323,16 @@ msgstr ""
 msgid "FAQ Information"
 msgstr ""
 
+msgid "FAQ categories successfully removed."
+msgstr ""
+
 msgid "FAQ rating"
+msgstr ""
+
+msgid "FAQ#"
+msgstr ""
+
+msgid "FQDN"
 msgstr ""
 
 msgid "Favorites"
@@ -1395,28 +1344,13 @@ msgstr ""
 msgid "Feedback"
 msgstr ""
 
-msgid "Fetching Mail Account"
-msgstr ""
-
 msgid "Fetch now"
 msgstr ""
 
+msgid "Fetching Mail Account"
+msgstr ""
+
 msgid "Field"
-msgstr ""
-
-msgid "Field {0} has an empty row ({1})."
-msgstr ""
-
-msgid "Field {0} has an empty rows."
-msgstr ""
-
-msgid "Field {0} has an invalid value ({1})."
-msgstr ""
-
-msgid "Field {0} has an invalid value (max date: {1})."
-msgstr ""
-
-msgid "Field {0} has an invalid value (min date: {2})."
 msgstr ""
 
 msgid "Field Agent App"
@@ -1434,19 +1368,31 @@ msgstr ""
 msgid "Field Type"
 msgstr ""
 
+msgid "Field {0} has an empty row ({1})."
+msgstr ""
+
+msgid "Field {0} has an empty rows."
+msgstr ""
+
+msgid "Field {0} has an invalid value (max date: {1})."
+msgstr ""
+
+msgid "Field {0} has an invalid value (min date: {2})."
+msgstr ""
+
+msgid "Field {0} has an invalid value ({1})."
+msgstr ""
+
 msgid "File Upload"
+msgstr ""
+
+msgid "Filename"
 msgstr ""
 
 msgid "Filter"
 msgstr ""
 
-msgid "Filterable"
-msgstr ""
-
 msgid "Filter Conditions"
-msgstr ""
-
-msgid "Filter in list"
 msgstr ""
 
 msgid "Filter List"
@@ -1455,15 +1401,18 @@ msgstr ""
 msgid "Filter Log Level"
 msgstr ""
 
+msgid "Filter in list"
+msgstr ""
+
 msgid "Filter successfully removed."
 msgstr "Filter(s) successfully removed."
 
-msgid ""
-"Find this saved search within the Dropdown Bookmarks, located in the header "
-"menu right besides the New-button"
+msgid "Filterable"
 msgstr ""
 
-msgid "finished"
+msgid ""
+"Find this saved search within the Dropdown Bookmarks, located in the header "
+"menu right besides the New-button or in the left sidebar"
 msgstr ""
 
 msgid "First Name"
@@ -1478,11 +1427,14 @@ msgstr ""
 msgid "Fixed First Column"
 msgstr ""
 
+msgid "Follow Up Ticket Lock"
+msgstr "Follow Up Ticket Lock"
+
 msgid "Follow Up on Tickets"
 msgstr ""
 
-msgid "Follow Up Ticket Lock"
-msgstr "Follow Up Ticket Lock"
+msgid "For Tickets"
+msgstr ""
 
 msgid ""
 "For a more intensive introduction to the use and administration of KIX, you "
@@ -1492,25 +1444,19 @@ msgstr ""
 msgid "Force"
 msgstr ""
 
-msgid "Format"
-msgstr ""
-
 msgid "Form contains invalid values"
 msgstr ""
 
 msgid "Form title"
 msgstr ""
 
-msgid "For Tickets"
+msgid "Format"
 msgstr ""
 
 msgid "Forum"
 msgstr ""
 
 msgid "Forward"
-msgstr ""
-
-msgid "FQDN"
 msgstr ""
 
 msgid "Friday"
@@ -1531,10 +1477,10 @@ msgstr ""
 msgid "Frontend"
 msgstr ""
 
-msgid "Fullname"
+msgid "Full Text"
 msgstr ""
 
-msgid "Full Text"
+msgid "Fullname"
 msgstr ""
 
 msgid "General Catalog"
@@ -1567,10 +1513,13 @@ msgstr ""
 msgid "Graph"
 msgstr ""
 
+msgid "Graph (simulation active)"
+msgstr ""
+
 msgid "Graph Options"
 msgstr ""
 
-msgid "Graph (simulation active)"
+msgid "HTTP Type"
 msgstr ""
 
 msgid "Has access token"
@@ -1585,10 +1534,16 @@ msgstr ""
 msgid "Help, hints & tricks"
 msgstr ""
 
-msgid "Helptext_Admin_CreateEdit_Actions"
+msgid "HelptImporConfigext_Import_File"
 msgstr ""
+"The file must contain columns labeled with \"ServiceID\",\"SLA\","
+"\"Organisation (Number)\",\"Type\",\"Priority\",\"Contact\", \"Validity\" "
+"for value mapping."
 
 msgid "Helptext_Admin_CreateEdit_ActionSkip"
+msgstr ""
+
+msgid "Helptext_Admin_CreateEdit_Actions"
 msgstr ""
 
 msgid "Helptext_Admin_DynamicFieldCreate_Config"
@@ -2074,10 +2029,11 @@ msgstr ""
 
 msgid "Helptext_Admin_SysConfigSearch"
 msgstr ""
-"Searchable are properties of the colums \"Name\", \"Context\" and \"Metadata"
-"\". If only a part of a name is inserted it must be put in * (Wildcard-"
-"Search). Additionally it is possible to insert \"modified\" to find all "
-"modified values as well as \"!modified\" to find all unmodified values."
+"Searchable are properties of the colums \"Name\", \"Context\" and "
+"\"Metadata\". If only a part of a name is inserted it must be put in * "
+"(Wildcard-Search). Additionally it is possible to insert \"modified\" to "
+"find all modified values as well as \"!modified\" to find all unmodified "
+"values."
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
 msgstr ""
@@ -2100,6 +2056,12 @@ msgstr ""
 
 msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr "The email address can only be used within the system if set “valid”."
+
+msgid "Helptext_Admin_Tags."
+msgstr ""
+"Tag this configuration element as belonging to a workflow, process, or "
+"similar so that it can be listed in the central export and easily "
+"transferred."
 
 msgid "Helptext_Admin_TextModuleCreate_Comment"
 msgstr ""
@@ -2227,6 +2189,11 @@ msgstr ""
 "Searchable are properties of the colum \"Pattern\". If only a part of a name "
 "is inserted it must be put in * (Wildcard-Search)."
 
+msgid "Helptext_Admin_UsersSearch"
+msgstr ""
+"Searchable are properties of the colums \"Login\", \"Firstname\", "
+"\"Lastname\" and \"Email\". Wildcard-Search (using \"*\") is possible."
+
 msgid "Helptext_Admin_Users_RoleCreate_AllowAdminModule"
 msgstr ""
 
@@ -2247,11 +2214,6 @@ msgstr "Only valid agents are available."
 
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
 msgstr "The role can only be used within the system if set “valid”."
-
-msgid "Helptext_Admin_UsersSearch"
-msgstr ""
-"Searchable are properties of the colums \"Login\", \"Firstname\", \"Lastname"
-"\" and \"Email\". Wildcard-Search (using \"*\") is possible."
 
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
@@ -2383,12 +2345,13 @@ msgid "Helptext_Customer_Dashboard_Search"
 msgstr ""
 "If the tables are dependend, only Organisations are searchable. If the "
 "dependency is removed, Organisations and Contacts are searchable. The "
-"following Organisation attributes are considered: \"CNO\", \"Name\", \"URL"
-"\", \"Street\", \"ZIP\", \"City\" and \"Country\". The following Contact "
-"attributes are considered: \"Login Name\", \"Email\", \"First Name\", \"Last "
-"Name\", \"Title\", \"Phone\", \"Fax\", \"Mobile\", \"Street\", \"City\", "
-"\"County\". It is possible to use Wildcards (*). See FAQ article \"How to "
-"search in KIX 18\" for further use of special characters."
+"following Organisation attributes are considered: \"CNO\", \"Name\", "
+"\"URL\", \"Street\", \"ZIP\", \"City\" and \"Country\". The following "
+"Contact attributes are considered: \"Login Name\", \"Email\", \"First "
+"Name\", \"Last Name\", \"Title\", \"Phone\", \"Fax\", \"Mobile\", "
+"\"Street\", \"City\", \"County\". It is possible to use Wildcards (*). See "
+"FAQ article \"How to search in KIX 18\" for further use of special "
+"characters."
 
 msgid "Helptext_Customers_ContactCreate_Avatar."
 msgstr ""
@@ -2575,15 +2538,6 @@ msgstr "Search for FAQ articles with this title or a part of the title."
 msgid "Helptext_FAQ_Link_Validity"
 msgstr "Search for FAQ articles with the chosen validity."
 
-msgid "Helptext_i18n_TranslationPatternCreateEdit_Translation"
-msgstr ""
-
-msgid "Helptext_i18n_TranslationPatternCreate_Pattern"
-msgstr ""
-"The pattern refers to the base string. Depending on which languages are "
-"configured in the SysConfig, translations can be created to show in the user "
-"interface."
-
 msgid "Helptext_Import_CharacterSet."
 msgstr ""
 "Enables standardised usage of special characters, etc. UTF-8 is the European "
@@ -2599,19 +2553,20 @@ msgstr ""
 "Separates between the attributes of a row. If unknown, open your .csv-file "
 "with a text editor."
 
+msgid "Helptext_Object_Tag_Search"
+msgstr ""
+"Enter one or more tags for which configuration objects should be listed and/"
+"or exported. Please enter at least 3 characters to receive suggestions for "
+"existing tags."
+
 msgid "Helptext_Organisation_Address_Domain_Pattern"
 msgstr ""
 
 msgid "Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint"
 msgstr ""
 
-msgid "Helptext_PersonalSettings_article_from_format"
-msgstr ""
-"Format of the real name part of a communication sent in channel e-mail. The "
-"actual, technical From-address will always be the teams mail address."
-
-msgid "Helptext_PersonalSettings_article_sort_order_Hint"
-msgstr ""
+msgid "Helptext_PersonalSettings_Dont_Ask_On_Exit"
+msgstr "Prevents confirm popup while logging out or closing KIX."
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2637,6 +2592,11 @@ msgstr "Confirm your new password."
 
 msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
 msgstr "Set a new password for your user account."
+
+msgid "Helptext_PersonalSettings_article_from_format"
+msgstr ""
+"Format of the real name part of a communication sent in channel e-mail. The "
+"actual, technical From-address will always be the teams mail address."
 
 msgid "Helptext_PersonalSettings_user_token_Hint"
 msgstr ""
@@ -2913,11 +2873,14 @@ msgstr ""
 msgid "Helptext_User_UserCreateEdit_Preferences_UserSecret"
 msgstr ""
 
-msgid "HelptImporConfigext_Import_File"
+msgid "Helptext_i18n_TranslationPatternCreateEdit_Translation"
 msgstr ""
-"The file must contain columns labeled with \"ServiceID\",\"SLA\","
-"\"Organisation (Number)\",\"Type\",\"Priority\",\"Contact\", \"Validity\" "
-"for value mapping."
+
+msgid "Helptext_i18n_TranslationPatternCreate_Pattern"
+msgstr ""
+"The pattern refers to the base string. Depending on which languages are "
+"configured in the SysConfig, translations can be created to show in the user "
+"interface."
 
 msgid "Hide"
 msgstr ""
@@ -2940,16 +2903,16 @@ msgstr ""
 msgid "Hour(s)"
 msgstr "Stunde(n)"
 
-msgid "HTTP Type"
+msgid "ID"
+msgstr ""
+
+msgid "IMAP Folder"
 msgstr ""
 
 msgid "Icon"
 msgstr ""
 
 msgid "Id"
-msgstr ""
-
-msgid "ID"
 msgstr ""
 
 msgid "If checked, the last change date will be displayed for this item."
@@ -2961,19 +2924,25 @@ msgstr ""
 msgid "Ignore"
 msgstr ""
 
-msgid "IMAP Folder"
-msgstr ""
-
 msgid "Import"
 msgstr ""
 
-msgid "Import {0} {1}. Execute?"
+msgid "Import Contacts"
+msgstr ""
+
+msgid "Import Organisations"
 msgstr ""
 
 msgid "Import configurations"
 msgstr ""
 
-msgid "Import Contacts"
+msgid "Import successfully started."
+msgstr ""
+
+msgid "Import will be started"
+msgstr ""
+
+msgid "Import {0} {1}. Execute?"
 msgstr ""
 
 msgid "Import/Export"
@@ -2991,16 +2960,7 @@ msgstr ""
 msgid "Import/Export Templates"
 msgstr ""
 
-msgid "Import Organisations"
-msgstr ""
-
 msgid "Importstate"
-msgstr ""
-
-msgid "Import successfully started."
-msgstr ""
-
-msgid "Import will be started"
 msgstr ""
 
 msgid "Imprint"
@@ -3012,10 +2972,10 @@ msgstr ""
 msgid "Incident"
 msgstr ""
 
-msgid "Incident state"
+msgid "Incident State"
 msgstr ""
 
-msgid "Incident State"
+msgid "Incident state"
 msgstr ""
 
 msgid "Include Previous Version"
@@ -3035,28 +2995,22 @@ msgstr ""
 msgid "Incorrectly processed lines"
 msgstr ""
 
+msgid "Information"
+msgstr ""
+
 msgid "Information text"
 msgstr ""
 
-msgid "in less than"
-msgstr ""
-
-msgid "in more than"
-msgstr ""
-
 msgid "Input"
+msgstr ""
+
+msgid "Insert into article"
 msgstr ""
 
 msgid "Inserted email address is invalid"
 msgstr ""
 
 msgid "Inserted email address must not be a system address ({0})."
-msgstr ""
-
-msgid "insert filter value"
-msgstr ""
-
-msgid "Insert into article"
 msgstr ""
 
 msgid "Internal Field"
@@ -3074,9 +3028,6 @@ msgstr ""
 msgid "Is asynchronous"
 msgstr ""
 
-msgid "is to large (max {0})."
-msgstr ""
-
 msgid "Item Separator"
 msgstr ""
 
@@ -3089,25 +3040,22 @@ msgstr ""
 msgid "Job Information"
 msgstr ""
 
+msgid "Job successfully ran."
+msgstr ""
+
 msgid "Jobs"
 msgstr ""
 
 msgid "Jobs successfully removed."
 msgstr ""
 
-msgid "Job successfully ran."
-msgstr ""
-
-msgid "Keywords"
-msgstr ""
-
 msgid "KIX"
 msgstr ""
 
-msgid "<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname> via Sender Address"
+msgid "KIX Forum"
 msgstr ""
 
-msgid "KIX Forum"
+msgid "Keywords"
 msgstr ""
 
 msgid "Knowledge Database"
@@ -3134,16 +3082,13 @@ msgstr ""
 msgid "Large View"
 msgstr ""
 
-msgid "(Last Change: {0})"
-msgstr ""
-
-msgid "Last executed at"
-msgstr ""
-
 msgid "Last Login"
 msgstr ""
 
 msgid "Last Name"
+msgstr ""
+
+msgid "Last executed at"
 msgstr ""
 
 msgid "Latest releases"
@@ -3155,9 +3100,6 @@ msgstr ""
 msgid "Legend"
 msgstr ""
 
-msgid "less than ago"
-msgstr ""
-
 msgid "Let's go"
 msgstr ""
 
@@ -3167,19 +3109,28 @@ msgstr ""
 msgid "Library"
 msgstr ""
 
-msgid "link {0}"
-msgstr "Link {0}"
-
 msgid "Link Config Item with"
 msgstr "Link Asset with"
 
-msgid "Linked as"
+msgid "Link FAQ with"
+msgstr ""
+
+msgid "Link Type"
+msgstr "Link Type"
+
+msgid "Link Types"
+msgstr ""
+
+msgid "Link to"
+msgstr ""
+
+msgid "Link to ticket"
 msgstr ""
 
 msgid "Linked Objects (<KIX_OBJECT_LinkCount>)"
 msgstr ""
 
-msgid "Link FAQ with"
+msgid "Linked as"
 msgstr ""
 
 msgid "Links"
@@ -3194,22 +3145,10 @@ msgstr ""
 msgid "Links will be removed."
 msgstr ""
 
-msgid "Link to"
-msgstr ""
-
-msgid "Link to ticket"
-msgstr ""
-
-msgid "Link Type"
-msgstr "Link Type"
-
-msgid "Link Types"
+msgid "Load more"
 msgstr ""
 
 msgid "Loading ..."
-msgstr ""
-
-msgid "Load more"
 msgstr ""
 
 msgid "Localisation"
@@ -3218,25 +3157,25 @@ msgstr ""
 msgid "Lock"
 msgstr ""
 
-msgid "Locked"
-msgstr ""
-
-msgid "Locked Tickets"
-msgstr ""
-
 msgid "Lock State"
 msgstr ""
 
 msgid "Lock Ticket"
 msgstr ""
 
+msgid "Locked"
+msgstr ""
+
+msgid "Locked Tickets"
+msgstr ""
+
+msgid "Log Level"
+msgstr ""
+
 msgid "Logged in"
 msgstr ""
 
 msgid "Login Name"
-msgstr ""
-
-msgid "Log Level"
 msgstr ""
 
 msgid "Logout"
@@ -3254,11 +3193,11 @@ msgstr ""
 msgid "Mail Account Details"
 msgstr ""
 
-msgid "Mail Accounts successfully removed."
-msgstr "Email Account(s) successfully removed."
-
 msgid "Mail Account successfully fetched."
 msgstr ""
+
+msgid "Mail Accounts successfully removed."
+msgstr "Email Account(s) successfully removed."
 
 msgid "Mail Filter Details"
 msgstr ""
@@ -3317,9 +3256,6 @@ msgstr ""
 msgid "Month(s)"
 msgstr ""
 
-msgid "more than ago"
-msgstr ""
-
 msgid "Multifactor Authentication"
 msgstr ""
 
@@ -3327,12 +3263,6 @@ msgid "Multiple"
 msgstr ""
 
 msgid "My Articles"
-msgstr ""
-
-msgid "My locked tickets"
-msgstr ""
-
-msgid "My locked tickets with new articles"
 msgstr ""
 
 msgid "My Open Tickets"
@@ -3353,10 +3283,19 @@ msgstr ""
 msgid "My Queues"
 msgstr "My Teams"
 
+msgid "My Searches"
+msgstr ""
+
 msgid "My Teams"
 msgstr ""
 
 msgid "My Tickets"
+msgstr ""
+
+msgid "My locked tickets"
+msgstr ""
+
+msgid "My locked tickets with new articles"
 msgstr ""
 
 msgid "My tickets with new articles"
@@ -3382,6 +3321,9 @@ msgstr ""
 
 msgid "New"
 msgstr ""
+
+msgid "New {0} as copy of"
+msgstr "New {0} as copy of:"
 
 msgid "New Account"
 msgstr ""
@@ -3414,9 +3356,6 @@ msgid "New Email Address"
 msgstr ""
 
 msgid "New Email Filter"
-msgstr ""
-
-msgid "Newest first"
 msgstr ""
 
 msgid "New FAQ"
@@ -3485,10 +3424,10 @@ msgstr ""
 msgid "New Team"
 msgstr ""
 
-msgid "New Textmodule"
+msgid "New Text Module"
 msgstr ""
 
-msgid "New Text Module"
+msgid "New Textmodule"
 msgstr ""
 
 msgid "New Ticket"
@@ -3497,13 +3436,13 @@ msgstr ""
 msgid "New Tickets"
 msgstr ""
 
+msgid "New Tickets (recent 7 days)"
+msgstr ""
+
 msgid "New Tickets Chart"
 msgstr ""
 
 msgid "New Tickets Chart Widget"
-msgstr ""
-
-msgid "New Tickets (recent 7 days)"
 msgstr ""
 
 msgid "New Tickets Table"
@@ -3533,26 +3472,14 @@ msgstr ""
 msgid "New Webform"
 msgstr ""
 
-msgid "next"
-msgstr ""
-
 msgid "Next"
 msgstr ""
 
 msgid "Next Image"
 msgstr ""
 
-msgid "no"
-msgstr ""
-
 msgid "No"
 msgstr "No"
-
-msgid "No."
-msgstr ""
-
-msgid "No {0} found (add at least {1} characters)."
-msgstr ""
 
 msgid "No Access"
 msgstr ""
@@ -3560,10 +3487,10 @@ msgstr ""
 msgid "No Article"
 msgstr ""
 
-msgid "No article available."
+msgid "No Channel"
 msgstr ""
 
-msgid "No Channel"
+msgid "No article available."
 msgstr ""
 
 msgid "No data available."
@@ -3572,13 +3499,10 @@ msgstr ""
 msgid "No encryption"
 msgstr ""
 
-msgid "No form available. Please contact your administrator."
+msgid "No object with ID {0} available."
 msgstr ""
 
 msgid "No objects available."
-msgstr ""
-
-msgid "No object with ID {0} available."
 msgstr ""
 
 msgid "No permission for this object."
@@ -3590,19 +3514,28 @@ msgstr ""
 msgid "No report available"
 msgstr ""
 
+msgid "No version available"
+msgstr ""
+
+msgid "No {0} found (add at least {1} characters)."
+msgstr ""
+
+msgid "No, thank you"
+msgstr ""
+
+msgid "No."
+msgstr ""
+
 msgid "Not available (not any more or not yet)"
 msgstr ""
 
-msgid "not contained in"
+msgid "Not more than 5 files possible."
 msgstr ""
 
 msgid "Note"
 msgstr ""
 
 msgid "Notes"
-msgstr ""
-
-msgid "No, thank you"
 msgstr ""
 
 msgid "Notification"
@@ -3626,6 +3559,12 @@ msgstr "Notification Methods"
 msgid "Notification Options"
 msgstr "Notification Methods"
 
+msgid "Notification Template"
+msgstr "Notifications Template"
+
+msgid "Notification Text"
+msgstr ""
+
 msgid "Notifications"
 msgstr "Notifications"
 
@@ -3635,21 +3574,6 @@ msgstr ""
 msgid "Notifications successfully removed."
 msgstr "Notification(s) successfully removed."
 
-msgid "Notification Template"
-msgstr "Notifications Template"
-
-msgid "Notification Text"
-msgstr ""
-
-msgid "not modified"
-msgstr "********"
-
-msgid "Not more than 5 files possible."
-msgstr ""
-
-msgid "No version available"
-msgstr ""
-
 msgid "Nr."
 msgstr ""
 
@@ -3657,6 +3581,9 @@ msgid "Number"
 msgstr ""
 
 msgid "Number of Actions"
+msgstr ""
+
+msgid "Number of Attachments"
 msgstr ""
 
 msgid "Number of Config Items"
@@ -3668,7 +3595,7 @@ msgstr "Number of Assets in critical incident state"
 msgid "Number of open tickets by priority"
 msgstr ""
 
-msgid "Number of open tickets by state"
+msgid "Number of open tickets by statetype"
 msgstr ""
 
 msgid "Number of ratings"
@@ -3695,28 +3622,31 @@ msgstr ""
 msgid "OAuth2 Profiles"
 msgstr ""
 
+msgid "OK"
+msgstr ""
+
 msgid "Object"
 msgstr "Object"
-
-msgid "Object Id"
-msgstr ""
 
 msgid "Object ID"
 msgstr "Object ID"
 
-msgid "Objects"
+msgid "Object Id"
+msgstr ""
+
+msgid "Object Tag"
+msgstr ""
+
+msgid "Object Tags"
 msgstr ""
 
 msgid "Object Type"
 msgstr ""
 
+msgid "Objects"
+msgstr ""
+
 msgid "Observer"
-msgstr ""
-
-msgid "OK"
-msgstr ""
-
-msgid "Oldest first"
 msgstr ""
 
 msgid "Once a day"
@@ -3726,15 +3656,6 @@ msgid "Once per day"
 msgstr ""
 
 msgid "Open"
-msgstr ""
-
-msgid "Open left sidebar"
-msgstr ""
-
-msgid "Open main menu"
-msgstr ""
-
-msgid "Open right sidebar"
 msgstr ""
 
 msgid "Open Sidebars"
@@ -3747,6 +3668,15 @@ msgid "Open Tickets of Contact"
 msgstr ""
 
 msgid "Open Tickets of Organisation"
+msgstr ""
+
+msgid "Open left sidebar"
+msgstr ""
+
+msgid "Open main menu"
+msgstr ""
+
+msgid "Open right sidebar"
 msgstr ""
 
 msgid "Open toolbar"
@@ -3779,10 +3709,16 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-msgid "Outbox"
+msgid "Out Of Office"
 msgstr ""
 
-msgid "Out Of Office"
+msgid "Out Of Office Agents"
+msgstr ""
+
+msgid "Out of office"
+msgstr ""
+
+msgid "Outbox"
 msgstr ""
 
 msgid "Output Format"
@@ -3812,9 +3748,6 @@ msgstr ""
 msgid "Overview FAQ"
 msgstr ""
 
-msgid "Overview of {0} to import ({1})"
-msgstr ""
-
 msgid "Overview Organisations"
 msgstr ""
 
@@ -3827,16 +3760,16 @@ msgstr ""
 msgid "Overview Ticket Priorities"
 msgstr "Tickets by Priorities"
 
-msgid "Overview Tickets"
-msgstr ""
-
 msgid "Overview Ticket States"
 msgstr "Tickets by States"
+
+msgid "Overview Tickets"
+msgstr ""
 
 msgid "Overview Versions"
 msgstr ""
 
-msgid "owned by me"
+msgid "Overview of {0} to import ({1})"
 msgstr ""
 
 msgid "Owner"
@@ -3875,12 +3808,6 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
-msgid "Pending date is not in the future."
-msgstr ""
-
-msgid "Pending time"
-msgstr ""
-
 msgid "Pending Time has invalid date!"
 msgstr ""
 
@@ -3888,6 +3815,12 @@ msgid "Pending Time has to be in future!"
 msgstr ""
 
 msgid "Pending Time is required!"
+msgstr ""
+
+msgid "Pending date is not in the future."
+msgstr ""
+
+msgid "Pending time"
 msgstr ""
 
 msgid "Pending until"
@@ -3932,19 +3865,19 @@ msgstr ""
 msgid "Plaintext"
 msgstr ""
 
-msgid "Plan: {0} - {1}"
-msgstr ""
-
 msgid "Plan Begin"
 msgstr ""
 
 msgid "Plan End"
 msgstr ""
 
-msgid "Please enter a search term."
+msgid "Plan: {0} - {1}"
 msgstr ""
 
 msgid "Please enter a search term for a organisation."
+msgstr ""
+
+msgid "Please enter a search term."
 msgstr ""
 
 msgid "Please logout and login again with the new user."
@@ -3996,9 +3929,6 @@ msgid "Preview"
 msgstr ""
 
 msgid "Preview List"
-msgstr ""
-
-msgid "previous"
 msgstr ""
 
 msgid "Previous"
@@ -4103,6 +4033,9 @@ msgstr ""
 "Clearly arranged tables, which you can sort and filter according to your "
 "needs, help you optimally in your daily work processes."
 
+msgid "RTL"
+msgstr ""
+
 msgid "Rate"
 msgstr ""
 
@@ -4112,19 +4045,16 @@ msgstr ""
 msgid "Read"
 msgstr ""
 
+msgid "Read & Write"
+msgstr ""
+
 msgid "Read all"
 msgstr ""
 
 msgid "Readonly"
 msgstr ""
 
-msgid "Read & Write"
-msgstr ""
-
 msgid "Recently Closed"
-msgstr ""
-
-msgid "recipient addresses (To, Cc, etc.)"
 msgstr ""
 
 msgid "Recipients"
@@ -4136,19 +4066,19 @@ msgstr ""
 msgid "References"
 msgstr ""
 
-msgid "Refresh Interval(sec)"
+msgid "Refresh Application"
 msgstr ""
 
-msgid "Refresh Page"
+msgid "Refresh Interval(sec)"
 msgstr ""
 
 msgid "RegEx"
 msgstr ""
 
-msgid "RegExErrorMessage"
+msgid "RegEx List"
 msgstr ""
 
-msgid "RegEx List"
+msgid "RegExErrorMessage"
 msgstr ""
 
 msgid "Related Assets"
@@ -4162,6 +4092,9 @@ msgstr ""
 
 msgid "Reload Agent Portal Configurations"
 msgstr "Reload Frontend Configurations"
+
+msgid "Reload Application"
+msgstr ""
 
 msgid "Reload Calendar Data ..."
 msgstr ""
@@ -4181,9 +4114,6 @@ msgstr ""
 msgid "Remove Address"
 msgstr "Remove Adress(es)"
 
-msgid "Remove dependency to organisation"
-msgstr ""
-
 msgid "Remove Dynamic Fields"
 msgstr ""
 
@@ -4199,9 +4129,6 @@ msgstr ""
 msgid "Remove Filter"
 msgstr ""
 
-msgid "Remove from Affected Assets"
-msgstr ""
-
 msgid "Remove Jobs"
 msgstr ""
 
@@ -4209,9 +4136,6 @@ msgid "Remove Mail Accounts"
 msgstr "Remove Email Account(s)"
 
 msgid "Remove Notifications"
-msgstr ""
-
-msgid "Remove parameter"
 msgstr ""
 
 msgid "Remove Priorities"
@@ -4229,16 +4153,25 @@ msgstr ""
 msgid "Remove States"
 msgstr ""
 
-msgid "Remove table"
-msgstr ""
-
 msgid "Remove Text Modules"
 msgstr ""
 
-msgid "Remove translations"
+msgid "Remove Types"
 msgstr ""
 
-msgid "Remove Types"
+msgid "Remove dependency to organisation"
+msgstr ""
+
+msgid "Remove from Affected Assets"
+msgstr ""
+
+msgid "Remove parameter"
+msgstr ""
+
+msgid "Remove table"
+msgstr ""
+
+msgid "Remove translations"
 msgstr ""
 
 msgid "Rename Your Organisation"
@@ -4247,10 +4180,10 @@ msgstr ""
 msgid "Renew Authorization"
 msgstr ""
 
-msgid "Replace empty value"
+msgid "Replace Values"
 msgstr ""
 
-msgid "Replace Values"
+msgid "Replace empty value"
 msgstr ""
 
 msgid "Reply"
@@ -4268,28 +4201,31 @@ msgstr ""
 msgid "Report Definition"
 msgstr ""
 
-msgid "Report Definitions"
+msgid "Report Definition(s) deleted."
 msgstr ""
 
-msgid "Report Definition(s) deleted."
+msgid "Report Definitions"
 msgstr ""
 
 msgid "Report Information"
 msgstr ""
 
-msgid "Reporting"
-msgstr ""
-
 msgid "Report Parameter"
-msgstr ""
-
-msgid "Reports"
 msgstr ""
 
 msgid "Report(s) deleted."
 msgstr ""
 
+msgid "Reporting"
+msgstr ""
+
+msgid "Reports"
+msgstr ""
+
 msgid "Required"
+msgstr ""
+
+msgid "Required field has no value."
 msgstr ""
 
 msgid "Required field {0} has no value."
@@ -4298,22 +4234,19 @@ msgstr ""
 msgid "Required field {0} is no JSON."
 msgstr ""
 
-msgid "Required field has no value."
-msgstr ""
-
 msgid "Reset"
-msgstr ""
-
-msgid "Reset?"
-msgstr ""
-
-msgid "Reset data"
 msgstr ""
 
 msgid "Reset Preference"
 msgstr ""
 
 msgid "Reset Search To Default"
+msgstr ""
+
+msgid "Reset User Widgets"
+msgstr ""
+
+msgid "Reset data"
 msgstr ""
 
 msgid "Reset specific user settings"
@@ -4325,13 +4258,10 @@ msgstr ""
 msgid "Reset to Default"
 msgstr ""
 
-msgid "Reset User Widgets"
+msgid "Reset?"
 msgstr ""
 
 msgid "Resizable"
-msgstr ""
-
-msgid "responsibility by me"
 msgstr ""
 
 msgid "Responsible"
@@ -4361,16 +4291,13 @@ msgstr ""
 msgid "Roles"
 msgstr ""
 
-msgid "Roles/Permissions"
-msgstr ""
-
 msgid "Roles successfully removed."
 msgstr ""
 
-msgid "Row"
+msgid "Roles/Permissions"
 msgstr ""
 
-msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
+msgid "Row"
 msgstr ""
 
 msgid "Row Number"
@@ -4379,7 +4306,7 @@ msgstr ""
 msgid "Row Selection"
 msgstr ""
 
-msgid "RTL"
+msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
 msgstr ""
 
 msgid "Run"
@@ -4388,8 +4315,17 @@ msgstr ""
 msgid "Run asynchronously"
 msgstr ""
 
-msgid "running"
-msgstr "running"
+msgid "SEARCH_OPERATOR_WITHIN_LAST"
+msgstr "the last"
+
+msgid "SEARCH_OPERATOR_WITHIN_NEXT"
+msgstr "the next"
+
+msgid "SINGLE_QUOTES"
+msgstr "' (Single Quotes)"
+
+msgid "SSP"
+msgstr ""
 
 msgid "Saturday"
 msgstr ""
@@ -4406,12 +4342,6 @@ msgstr ""
 msgid "Save & Logout"
 msgstr ""
 
-msgid "Save new search"
-msgstr ""
-
-msgid "Save notification template"
-msgstr "Save notifications template"
-
 msgid "Save Organisation"
 msgstr ""
 
@@ -4427,52 +4357,28 @@ msgstr ""
 msgid "Save System Settings"
 msgstr ""
 
+msgid "Save new search"
+msgstr ""
+
+msgid "Save notification template"
+msgstr "Save notifications template"
+
 msgid "Scheduling"
 msgstr ""
 
 msgid "Scope"
 msgstr ""
 
-msgid "search ..."
-msgstr ""
-
 msgid "Search"
-msgstr ""
-
-msgid "Search: {0}"
-msgstr ""
-
-msgid "Search {0} will be deleted. Are you sure?"
-msgstr ""
-
-msgid "Search defaults for {0} reseted."
-msgstr ""
-
-msgid "Search error!"
-msgstr ""
-
-msgid "Searches"
 msgstr ""
 
 msgid "Search Limit"
 msgstr ""
 
-msgid "Search menu"
-msgstr ""
-
 msgid "Search Object"
 msgstr ""
 
-msgid "SEARCH_OPERATOR_WITHIN_LAST"
-msgstr "the last"
-
-msgid "SEARCH_OPERATOR_WITHIN_NEXT"
-msgstr "the next"
-
 msgid "Search Results ({0})"
-msgstr ""
-
-msgid "Search Results: {0}"
 msgstr ""
 
 msgid "Search Results: Config Items"
@@ -4490,16 +4396,34 @@ msgstr ""
 msgid "Search Results: Tickets"
 msgstr ""
 
-msgid "Search successfully saved."
-msgstr "Search successfully saved."
-
 msgid "Search Templates"
 msgstr ""
+
+msgid "Search Title"
+msgstr ""
+
+msgid "Search defaults for {0} reseted."
+msgstr ""
+
+msgid "Search error!"
+msgstr ""
+
+msgid "Search menu"
+msgstr ""
+
+msgid "Search successfully saved."
+msgstr "Search successfully saved."
 
 msgid "Search template successfully removed."
 msgstr "Search template(s) successfully removed."
 
-msgid "Search Title"
+msgid "Search {0} will be deleted. Are you sure?"
+msgstr ""
+
+msgid "Search: {0}"
+msgstr ""
+
+msgid "Searches"
 msgstr ""
 
 msgid "Second number value is missing."
@@ -4514,19 +4438,13 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-msgid "Select all"
-msgstr ""
-
 msgid "Select All"
 msgstr ""
 
-msgid "Selected {0} ({1})"
+msgid "Select None"
 msgstr ""
 
-msgid "Selected Search Criteria"
-msgstr ""
-
-msgid "Selected Versions"
+msgid "Select all"
 msgstr ""
 
 msgid "Select file"
@@ -4535,19 +4453,31 @@ msgstr ""
 msgid "Select image file"
 msgstr ""
 
-msgid "Select None"
+msgid "Selected Search Criteria"
+msgstr ""
+
+msgid "Selected Versions"
+msgstr ""
+
+msgid "Selected {0} ({1})"
 msgstr ""
 
 msgid "Self Service Manual"
-msgstr ""
-
-msgid "; (semicolon)"
 msgstr ""
 
 msgid "Send"
 msgstr ""
 
 msgid "Send despite out of office"
+msgstr ""
+
+msgid "Send to"
+msgstr ""
+
+msgid "Send to all role members"
+msgstr ""
+
+msgid "Send to these agents"
 msgstr ""
 
 msgid "Sender Address"
@@ -4559,96 +4489,37 @@ msgstr ""
 msgid "Sender Type"
 msgstr ""
 
-msgid "Send to"
-msgstr ""
-
-msgid "Send to all role members"
-msgstr ""
-
-msgid "send to background"
-msgstr ""
-
-msgid "Send to these agents"
-msgstr ""
-
-msgid "Set as Default"
-msgstr ""
-
 msgid "Set Email Header"
 msgstr ""
 
 msgid "Set Email Headers"
 msgstr ""
 
+msgid "Set Hidden"
+msgstr ""
+
 msgid "Set Password for admin"
+msgstr ""
+
+msgid "Set Value"
+msgstr ""
+
+msgid "Set as Default"
 msgstr ""
 
 msgid "Setup Assistant"
 msgstr ""
 
-msgid "setup_assistant_add_mail_account_text"
-msgstr ""
-"Add an email account for fetching incoming emails. Additional accounts can "
-"be added in admin module \"Communication/Email/Email Account\". Please note "
-"that regardless of the selected account type, emails are fetched from the "
-"mailbox and deleted!"
-
-msgid "setup_assistant_change_admin_password_text"
-msgstr ""
-"Set a different password for system user \"admin\" in order to prevent "
-"continued use of the initial password."
-
-msgid "setup_assistant_create_superuser_text"
-msgstr ""
-"The user admin is a system user and not recommended for active use. Please "
-"create a new user here. This one will also have complete permissions. After "
-"successfully creating that account, please login again with the new user."
-
-msgid "setup_assistant_notification_template_text"
-msgstr ""
-"In case you prefer a different styling for notifications sent out of your "
-"KIX, you may define it here. Do NOT remove placeholders with \"THIS IS WHERE "
-"THE NOTIFICATION...\". Use \"Preview\" in order to check your template."
-
-msgid "setup_assistant_sending_email_text"
-msgstr ""
-"Please enter connection information for your outgoing email server. If you "
-"want to use team mail addresses as sender only, leave envelope inputs empty."
-
-msgid "setup_assistant_system_settings_text"
-msgstr ""
-"Please add basic system settings according to your system setup. For kix."
-"cloud users please check your notification email. For on-premise-"
-"installations: frontend refers to FQDN+port where the agent portal may be "
-"reached (e.g. \"your.docker.host:20001\"). Backend refers to FQDN+port where "
-"the KIX REST-API can be reached (e.g. \"your.docker.host:20000\"). Customer "
-"Frontend should be set accordingly, if you intend to use the KIX Self "
-"Service Portal (e.g. \"your.docker.host:20002\")."
-
-msgid "setup_assistant_welcome_text"
-msgstr ""
-"Please compete the following steps to set the basic configurations for KIX. "
-"The admin manual, section \"Initial Setup\" also provides more information."
-
 msgid "Setup email server"
-msgstr ""
-
-msgid "setupt_assistant_my-organisation_text"
-msgstr ""
-"Fill the form with your organisations data. This data is used in KIX as a "
-"reference at several occations, e.g. the standard signature contains this "
-"information."
-
-msgid "Set Value"
-msgstr ""
-
-msgid "Shared Search"
 msgstr ""
 
 msgid "Share_Search_Template"
 msgstr ""
 
-msgid "Show all"
+msgid "Shared Search"
+msgstr ""
+
+msgid "Shared Searches"
 msgstr ""
 
 msgid "Show Backlog"
@@ -4660,16 +4531,19 @@ msgstr ""
 msgid "Show Graph"
 msgstr ""
 
-msgid "Show in agent preferences"
+msgid "Show Last Change Date"
+msgstr ""
+
+msgid "Show Links"
+msgstr ""
+
+msgid "Show all"
 msgstr ""
 
 msgid "Show in Customer Portal"
 msgstr "Available in Customer Portal"
 
-msgid "Show Last Change Date"
-msgstr ""
-
-msgid "Show Links"
+msgid "Show in agent preferences"
 msgstr ""
 
 msgid "Show title in form"
@@ -4680,12 +4554,6 @@ msgstr ""
 
 msgid "Signature"
 msgstr ""
-
-msgid "since"
-msgstr "since/equal or greater"
-
-msgid "SINGLE_QUOTES"
-msgstr "' (Single Quotes)"
 
 msgid "Size"
 msgstr ""
@@ -4717,9 +4585,6 @@ msgstr ""
 msgid "Sort"
 msgstr ""
 
-msgid "Sortable"
-msgstr ""
-
 msgid "Sort attribute:"
 msgstr ""
 
@@ -4727,6 +4592,9 @@ msgid "Sort order"
 msgstr ""
 
 msgid "Sort order:"
+msgstr ""
+
+msgid "Sortable"
 msgstr ""
 
 msgid "Source"
@@ -4738,10 +4606,10 @@ msgstr ""
 msgid "Split Option"
 msgstr ""
 
-msgid "SSP"
+msgid "Standard"
 msgstr ""
 
-msgid "Standard"
+msgid "Start Import"
 msgstr ""
 
 msgid "Start by"
@@ -4750,16 +4618,10 @@ msgstr ""
 msgid "Start date/time is not given"
 msgstr ""
 
-msgid "Start Import"
-msgstr ""
-
 msgid "Start modal dialog for form"
 msgstr "Start Modal Dialog"
 
 msgid "Start search"
-msgstr ""
-
-msgid "starts with"
 msgstr ""
 
 msgid "Start time"
@@ -4780,23 +4642,23 @@ msgstr ""
 msgid "State Data"
 msgstr ""
 
-msgid "States"
-msgstr ""
-
-msgid "States Chart"
-msgstr ""
-
-msgid "States Chart Widget"
-msgstr ""
-
-msgid "States successfully removed."
-msgstr "State(s) successfully removed."
-
 msgid "State Type"
 msgstr ""
 
 msgid "State Types"
 msgstr ""
+
+msgid "State Types Chart"
+msgstr ""
+
+msgid "State Types Chart Widget"
+msgstr ""
+
+msgid "States"
+msgstr ""
+
+msgid "States successfully removed."
+msgstr "State(s) successfully removed."
 
 msgid "Stop after match"
 msgstr ""
@@ -4846,9 +4708,6 @@ msgstr ""
 msgid "Switch attachment list layout"
 msgstr ""
 
-msgid "switch_column_order_action"
-msgstr "Switch"
-
 msgid "Switch to customer portal."
 msgstr "Switch to Self Service Portal."
 
@@ -4861,20 +4720,20 @@ msgstr ""
 msgid "SysConfig Keys"
 msgstr ""
 
-msgid "system"
-msgstr ""
-
 msgid "System"
 msgstr ""
-
-msgid "System address"
-msgstr "System Address"
 
 msgid "System Address"
 msgstr ""
 
 msgid "System Addresses"
 msgstr ""
+
+msgid "System Settings"
+msgstr ""
+
+msgid "System address"
+msgstr "System Address"
 
 msgid "System: Console"
 msgstr ""
@@ -4888,13 +4747,7 @@ msgstr ""
 msgid "System: Plugins"
 msgstr ""
 
-msgid "System Settings"
-msgstr ""
-
 msgid "System: Sysconfig ({0})"
-msgstr ""
-
-msgid "-> (tab)"
 msgstr ""
 
 msgid "Table Columns"
@@ -4906,10 +4759,10 @@ msgstr ""
 msgid "Table Height (Row Count)"
 msgstr ""
 
-msgid "Tables"
+msgid "Table Widget"
 msgstr ""
 
-msgid "Table Widget"
+msgid "Tables"
 msgstr ""
 
 msgid "Tags"
@@ -4962,13 +4815,19 @@ msgstr "Text Module(s) successfully removed."
 msgid "Text separator"
 msgstr ""
 
+msgid "The Job {0} will be ran now. Are you sure?"
+msgstr ""
+
 msgid "The entered date is out of boundaries."
 msgstr ""
 
-msgid "The file {0} has no valid MIME-TYPE."
+msgid "The entered date is out of boundaries.."
 msgstr ""
 
 msgid "The file size of {0} is too large ({1}). Max.: {2}"
+msgstr ""
+
+msgid "The file {0} has no valid MIME-TYPE."
 msgstr ""
 
 msgid ""
@@ -4979,15 +4838,7 @@ msgstr ""
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr ""
 
-msgid "The Job {0} will be ran now. Are you sure?"
-msgstr ""
-
 msgid "The password is changed for Admin."
-msgstr ""
-
-msgid ""
-"The preference ContextWidgetLists will be reseted for the {0} selected user. "
-"Are you sure?"
 msgstr ""
 
 msgid ""
@@ -4995,7 +4846,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"There are open dialogs. Any data you may have entered will be lost. Continue?"
+"The preference ContextWidgetLists will be reseted for the {0} selected user. "
+"Are you sure?"
 msgstr ""
 
 msgid "The requested ticket is not available due to restricted permissions."
@@ -5009,6 +4861,10 @@ msgid "The year can be a maximum of {0} years in the future"
 msgstr ""
 
 msgid "The year can be a maximum of {0} years in the past"
+msgstr ""
+
+msgid ""
+"There are open dialogs. Any data you may have entered will be lost. Continue?"
 msgstr ""
 
 msgid ""
@@ -5030,14 +4886,20 @@ msgstr ""
 msgid "Ticket Flags"
 msgstr ""
 
-msgid "Ticket has printed"
-msgstr "Ticket has been printed"
-
 msgid "Ticket History"
 msgstr ""
 
 msgid "Ticket Information"
 msgstr ""
+
+msgid "Ticket Notifications"
+msgstr ""
+
+msgid "Ticket Number"
+msgstr ""
+
+msgid "Ticket has printed"
+msgstr "Ticket has been printed"
 
 msgid "Ticket is being watched."
 msgstr ""
@@ -5048,13 +4910,7 @@ msgstr ""
 msgid "Ticket locked."
 msgstr ""
 
-msgid "Ticket Notifications"
-msgstr ""
-
-msgid "Ticket Number"
-msgstr ""
-
-msgid "TicketOwner"
+msgid "Ticket unlocked."
 msgstr ""
 
 msgid "Ticket: Priorities"
@@ -5063,13 +4919,22 @@ msgstr ""
 msgid "Ticket: Queues"
 msgstr "Ticket: Teams"
 
+msgid "Ticket: States"
+msgstr ""
+
+msgid "Ticket: Text Modules"
+msgstr ""
+
+msgid "Ticket: Types"
+msgstr ""
+
+msgid "TicketOwner"
+msgstr ""
+
 msgid "TicketResponsible"
 msgstr ""
 
 msgid "Tickets"
-msgstr ""
-
-msgid "Tickets: {0}"
 msgstr ""
 
 msgid "Tickets for Assets"
@@ -5081,16 +4946,7 @@ msgstr ""
 msgid "Tickets has been printed and zipped"
 msgstr ""
 
-msgid "Ticket: States"
-msgstr ""
-
-msgid "Ticket: Text Modules"
-msgstr ""
-
-msgid "Ticket: Types"
-msgstr ""
-
-msgid "Ticket unlocked."
+msgid "Tickets: {0}"
 msgstr ""
 
 msgid "Till"
@@ -5113,25 +4969,13 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-msgid "to"
-msgstr ""
-
 msgid "To"
-msgstr ""
-
-msgid "to Article"
 msgstr ""
 
 msgid "Today"
 msgstr ""
 
 msgid "Token URL"
-msgstr ""
-
-msgid "to version"
-msgstr ""
-
-msgid "to Version"
 msgstr ""
 
 msgid "Translatable"
@@ -5143,7 +4987,7 @@ msgstr ""
 msgid "Translatable Title"
 msgstr ""
 
-msgid "Translatable Values"
+msgid "Translate Values"
 msgstr ""
 
 msgid "Translation"
@@ -5167,10 +5011,10 @@ msgstr ""
 msgid "Type Data"
 msgstr ""
 
-msgid "Type of first value is missing."
+msgid "Type of Job"
 msgstr ""
 
-msgid "Type of Job"
+msgid "Type of first value is missing."
 msgstr ""
 
 msgid "Type of second value is missing."
@@ -5182,7 +5026,7 @@ msgstr ""
 msgid "Types successfully removed."
 msgstr "Type(s) successfully removed."
 
-msgid "unequal"
+msgid "URL"
 msgstr ""
 
 msgid "Unit of first value is missing."
@@ -5194,12 +5038,6 @@ msgstr ""
 msgid "Unlock"
 msgstr ""
 
-msgid "Unlocked"
-msgstr ""
-
-msgid "Unlocked Tickets"
-msgstr ""
-
 msgid "Unlock Ticket"
 msgstr ""
 
@@ -5209,14 +5047,17 @@ msgstr ""
 msgid "Unlock Timeout (min)"
 msgstr ""
 
+msgid "Unlocked"
+msgstr ""
+
+msgid "Unlocked Tickets"
+msgstr ""
+
 msgid "Unread"
 msgstr ""
 
 msgid "Unread Articles"
 msgstr ""
-
-msgid "until"
-msgstr "until/equal or less"
 
 msgid "Unwatch"
 msgstr ""
@@ -5225,9 +5066,6 @@ msgid "Unwatch Ticket"
 msgstr ""
 
 msgid "Update Email Account"
-msgstr ""
-
-msgid "URL"
 msgstr ""
 
 msgid "Usage Context"
@@ -5239,13 +5077,13 @@ msgstr ""
 msgid "User"
 msgstr ""
 
+msgid "User Access"
+msgstr ""
+
 msgid "User Details"
 msgstr ""
 
 msgid "User Information"
-msgstr ""
-
-msgid "User is already assigned"
 msgstr ""
 
 msgid "User Management"
@@ -5263,13 +5101,19 @@ msgstr ""
 msgid "User Name"
 msgstr ""
 
-msgid "Users"
+msgid "User Preferences"
 msgstr ""
 
 msgid "User Secret"
 msgstr ""
 
 msgid "User Token"
+msgstr ""
+
+msgid "User is already assigned"
+msgstr ""
+
+msgid "Users"
 msgstr ""
 
 msgid "Validation error"
@@ -5293,16 +5137,16 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-msgid "Viewable States"
-msgstr ""
-
 msgid "View Log File"
 msgstr ""
 
-msgid "Visible in customer portal"
+msgid "Viewable States"
 msgstr ""
 
 msgid "Visible in Self Service Portal"
+msgstr ""
+
+msgid "Visible in customer portal"
 msgstr ""
 
 msgid "Votes"
@@ -5317,16 +5161,16 @@ msgstr ""
 msgid "Watch"
 msgstr ""
 
-msgid "Watched"
-msgstr ""
-
-msgid "Watched Tickets"
-msgstr ""
-
 msgid "Watch Ticket"
 msgstr ""
 
 msgid "Watch User"
+msgstr ""
+
+msgid "Watched"
+msgstr ""
+
+msgid "Watched Tickets"
 msgstr ""
 
 msgid "We are working on this functionality."
@@ -5350,10 +5194,10 @@ msgstr ""
 msgid "Week"
 msgstr ""
 
-msgid "Weekday(s)"
+msgid "Week(s)"
 msgstr ""
 
-msgid "Week(s)"
+msgid "Weekday(s)"
 msgstr ""
 
 msgid "Welcome"
@@ -5369,15 +5213,6 @@ msgid "Wildcard Search"
 msgstr ""
 
 msgid "With attachments"
-msgstr ""
-
-msgid "within"
-msgstr ""
-
-msgid "within the last"
-msgstr ""
-
-msgid "within the next"
 msgstr ""
 
 msgid "Work in Progress"
@@ -5398,9 +5233,6 @@ msgstr ""
 msgid "Years in Past"
 msgstr ""
 
-msgid "yes"
-msgstr ""
-
 msgid "Yes"
 msgstr ""
 
@@ -5413,6 +5245,12 @@ msgstr ""
 msgid "You have to confirm your password."
 msgstr ""
 
+msgid "You will edit {0} attributes for {1} {2}. Execute now?"
+msgstr ""
+
+msgid "You will reset {0} Sysconfig Options. Execute now?"
+msgstr ""
+
 msgid "Your Permissions have been updated."
 msgstr ""
 
@@ -5422,16 +5260,249 @@ msgstr ""
 msgid "Youtube"
 msgstr ""
 
-msgid "You will edit {0} attributes for {1} {2}. Execute now?"
-msgstr ""
-
-msgid "You will reset {0} Sysconfig Options. Execute now?"
+msgid "ZIP"
 msgstr ""
 
 msgid "Zip"
 msgstr ""
 
-msgid "ZIP"
+msgid "add notes here"
+msgstr ""
+
+msgid "after"
+msgstr "after/greater than"
+
+msgid "agent"
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+msgid "and further"
+msgstr ""
+
+msgid "ascending"
+msgstr ""
+
+msgid "before"
+msgstr "before/less than"
+
+msgid "between"
+msgstr ""
+
+msgid "contained in"
+msgstr ""
+
+msgid "contains"
+msgstr ""
+
+msgid "created"
+msgstr ""
+
+msgid "current"
+msgstr ""
+
+msgid "descending"
+msgstr ""
+
+msgid "draft successfully saved"
+msgstr ""
+
+msgid "edited"
+msgstr ""
+
+msgid "edited at {0} by {1}"
+msgstr ""
+
+msgid "ends with"
+msgstr ""
+
+msgid "enter filter value"
+msgstr ""
+
+msgid "equals"
+msgstr ""
+
+msgid "expected time required:"
+msgstr ""
+
+msgid "external"
+msgstr ""
+
+msgid "finished"
+msgstr ""
+
+msgid "in less than"
+msgstr ""
+
+msgid "in more than"
+msgstr ""
+
+msgid "insert filter value"
+msgstr ""
+
+msgid "is to large (max {0})."
+msgstr ""
+
+msgid "less than ago"
+msgstr ""
+
+msgid "link {0}"
+msgstr "Link {0}"
+
+msgid "more than ago"
+msgstr ""
+
+msgid "next"
+msgstr ""
+
+msgid "no"
+msgstr ""
+
+msgid "not contained in"
+msgstr ""
+
+msgid "not modified"
+msgstr "********"
+
+msgid "owned by me"
+msgstr ""
+
+msgid "previous"
+msgstr ""
+
+msgid "recipient addresses (To, Cc, etc.)"
+msgstr ""
+
+msgid "responsibility by me"
+msgstr ""
+
+msgid "running"
+msgstr "running"
+
+msgid "search ..."
+msgstr ""
+
+msgid "send to background"
+msgstr ""
+
+msgid "setup_assistant_add_mail_account_text"
+msgstr ""
+"Add an email account for fetching incoming emails. Additional accounts can "
+"be added in admin module \"Communication/Email/Email Account\". Please note "
+"that regardless of the selected account type, emails are fetched from the "
+"mailbox and deleted!"
+
+msgid "setup_assistant_change_admin_password_text"
+msgstr ""
+"Set a different password for system user \"admin\" in order to prevent "
+"continued use of the initial password."
+
+msgid "setup_assistant_create_superuser_text"
+msgstr ""
+"The user admin is a system user and not recommended for active use. Please "
+"create a new user here. This one will also have complete permissions. After "
+"successfully creating that account, please login again with the new user."
+
+msgid "setup_assistant_notification_template_text"
+msgstr ""
+"In case you prefer a different styling for notifications sent out of your "
+"KIX, you may define it here. Do NOT remove placeholders with \"THIS IS WHERE "
+"THE NOTIFICATION...\". Use \"Preview\" in order to check your template."
+
+msgid "setup_assistant_sending_email_text"
+msgstr ""
+"Please enter connection information for your outgoing email server. If you "
+"want to use team mail addresses as sender only, leave envelope inputs empty."
+
+msgid "setup_assistant_system_settings_text"
+msgstr ""
+"Please add basic system settings according to your system setup. For kix."
+"cloud users please check your notification email. For on-premise-"
+"installations: frontend refers to FQDN+port where the agent portal may be "
+"reached (e.g. \"your.docker.host:20001\"). Backend refers to FQDN+port where "
+"the KIX REST-API can be reached (e.g. \"your.docker.host:20000\"). Customer "
+"Frontend should be set accordingly, if you intend to use the KIX Self "
+"Service Portal (e.g. \"your.docker.host:20002\")."
+
+msgid "setup_assistant_welcome_text"
+msgstr ""
+"Please compete the following steps to set the basic configurations for KIX. "
+"The admin manual, section \"Initial Setup\" also provides more information."
+
+msgid "setupt_assistant_my-organisation_text"
+msgstr ""
+"Fill the form with your organisations data. This data is used in KIX as a "
+"reference at several occations, e.g. the standard signature contains this "
+"information."
+
+msgid "since"
+msgstr "since/equal or greater"
+
+msgid "starts with"
+msgstr ""
+
+msgid "switch_column_order_action"
+msgstr "Switch"
+
+msgid "system"
+msgstr ""
+
+msgid "to"
+msgstr ""
+
+msgid "to Article"
+msgstr ""
+
+msgid "to Version"
+msgstr ""
+
+msgid "to version"
+msgstr ""
+
+msgid "unequal"
+msgstr ""
+
+msgid "until"
+msgstr "until/equal or less"
+
+msgid "within"
+msgstr ""
+
+msgid "within the last"
+msgstr ""
+
+msgid "within the next"
+msgstr ""
+
+msgid "yes"
+msgstr ""
+
+msgid "{0} File(s) added"
+msgstr "{0} File(s) added"
+
+msgid "{0} Link created"
+msgstr "{0} Link created"
+
+msgid "{0} imported"
+msgstr "{0} imported"
+
+msgid "{0} is required."
+msgstr "{0} is required."
+
+msgid "{0} link(s) assigned."
+msgstr "{0} link(s) assigned."
+
+msgid "{0}. Action"
+msgstr "{0}. Action"
+
+msgid "{0}/{1} {2} imported"
+msgstr "{0}/{1} {2} imported"
+
+msgid "{0}: has no value."
+msgstr ""
+
+msgid "{0}: just white spaces as value is not allowed."
 msgstr ""
 
 #~ msgid "Helptext_Admin_JobCreateEdit_Actions"

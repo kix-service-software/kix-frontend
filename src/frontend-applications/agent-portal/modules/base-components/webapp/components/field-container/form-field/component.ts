@@ -66,11 +66,7 @@ class Component {
         const formInstance = await context?.getFormManager()?.getFormInstance();
 
         const value = formInstance?.getFormFieldValue(this.state.field?.instanceId);
-        if (value && Array.isArray(value.errorMessages) && value.errorMessages.length) {
-            this.state.errorMessages = value.errorMessages;
-        } else {
-            this.state.errorMessages = [];
-        }
+        this.state.errorMessages = value?.errorMessages || [];
 
         this.state.show = true;
 

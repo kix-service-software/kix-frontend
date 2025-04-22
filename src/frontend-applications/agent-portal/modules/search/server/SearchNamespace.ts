@@ -29,7 +29,7 @@ import { LoadSearchDefaultRequest } from '../model/LoadSearchDefaultRequest';
 import { LoadSearchDefaultResponse } from '../model/LoadSearchDefaultResponse';
 import { ClientNotificationService } from '../../../server/services/ClientNotificationService';
 import { BackendNotification } from '../../../model/BackendNotification';
-import { ObjectUpdatedEvent } from '../../../model/ObjectUpdatedEvent';
+import { BackendNotificationEvent } from '../../../model/BackendNotificationEvent';
 
 export class SearchNamespace extends SocketNameSpace {
 
@@ -198,7 +198,7 @@ export class SearchNamespace extends SocketNameSpace {
         const event = new BackendNotification();
         event.ObjectID = 'SharedSearch';
         event.Namespace = 'Search.Shared';
-        event.Event = ObjectUpdatedEvent.UPDATE;
+        event.Event = BackendNotificationEvent.UPDATE;
         ClientNotificationService.getInstance().queueNotifications([event]);
     }
 

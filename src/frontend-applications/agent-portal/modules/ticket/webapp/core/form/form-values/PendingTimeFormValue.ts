@@ -37,8 +37,6 @@ export class PendingTimeFormValue extends DateTimeFormValue {
             this.visible = true;
         }
 
-        this.isSortable = false;
-
         await super.initFormValue();
 
         this.object.addBinding(TicketProperty.STATE_ID, async (value: number) => {
@@ -74,7 +72,7 @@ export class PendingTimeFormValue extends DateTimeFormValue {
         // this.defaultValue contains the origin value of the FormFieldConfiguration
         // it's needed to calculate the right pending time
         const pendingDate = await TicketService.getPendingDateDiff(this.defaultValue || this.value);
-        await this.setFormValue(DateTimeUtil.getKIXDateTimeString(pendingDate));
+        this.value = DateTimeUtil.getKIXDateTimeString(pendingDate);
         this.minDate = DateTimeUtil.getKIXDateTimeString(new Date());
     }
 

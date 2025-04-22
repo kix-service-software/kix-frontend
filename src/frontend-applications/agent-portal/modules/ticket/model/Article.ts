@@ -302,4 +302,36 @@ export class Article extends KIXObject {
         const articleProperty = Object.keys(ArticleProperty).map((p) => ArticleProperty[p]);
         return articleProperty.some((p) => p === property);
     }
+
+    public static readonly MAIL_STYLE = `
+    <style>
+      table {
+        display: table;
+        margin: .9em auto;
+        border: 1px double #b3b3b3;
+        border-collapse: collapse;
+        border-spacing: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      thead,tbody {
+        display: table-row-group;
+        vertical-align: middle;
+        unicode-bidi: isolate;
+      }
+      
+      tr {
+        display: table-row;
+        vertical-align: inherit;
+        unicode-bidi: isolate;
+        border: 0;
+      }
+
+      th,td {
+        border: 1px solid #bfbfbf;
+        min-width: 2em;
+        padding: 0.4em;
+      }
+    </style>`;
 }

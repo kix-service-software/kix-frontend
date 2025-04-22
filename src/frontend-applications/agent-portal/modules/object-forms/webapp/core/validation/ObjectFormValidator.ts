@@ -75,7 +75,7 @@ export class ObjectFormValidator {
         return valid;
     }
 
-    private async validateFormValues(formValues: ObjectFormValue[] = []): Promise<void> {
+    public async validateFormValues(formValues: ObjectFormValue[] = []): Promise<void> {
         const validationPromises: Array<Promise<void>> = [];
         for (const fv of formValues) {
             validationPromises.push(this.validate(fv));

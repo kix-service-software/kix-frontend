@@ -36,7 +36,8 @@ export class ContextConfiguration implements IConfiguration {
                 public valid: boolean = true,
                 public loadingOptions: Array<[KIXObjectType | string, KIXObjectLoadingOptions]> = null,
                 public tableWidgetInstanceIds: Array<[string, string]> = [],
-                public roleIds: number[] = []
+                public roleIds: number[] = [],
+                public provideInvalidValues: boolean = true
         ) { }
 
 }

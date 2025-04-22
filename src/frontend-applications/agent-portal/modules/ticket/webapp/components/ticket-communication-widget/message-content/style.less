@@ -36,11 +36,6 @@
       grid-column: 2;
    }
 
-   &:last-of-type .message .message-footer .actions-list .action-list-expansion-container {
-      top: unset;
-      bottom: 2.25rem;
-   }
-
    &:not(:last-of-type) {
       margin-bottom: 1rem;
    }
@@ -50,10 +45,6 @@
          &.message {
             .unread-shadow();
             color: #000;
-
-            .message-footer .actions-list .action-list-wrapper .action-list-expansion-container {
-               .unread-shadow();
-            }
          }
 
          .speech-bubble,
@@ -268,21 +259,10 @@
             justify-self: end;
             position: relative;
 
-            .action-list-wrapper {
+            background-color: inherit;
+
+            .is-expansion {
                background-color: inherit;
-
-               .action-list-expansion-container {
-                  background-color: inherit;
-                  border-radius: @message-border-radius;
-                  right: -@message-padding;
-                  border: 1px solid @secondary-0;
-
-                  .shadow-1();
-
-                  li {
-                     border-top: 1px solid fade(#777, 20%);
-                  }
-               }
             }
 
             img {

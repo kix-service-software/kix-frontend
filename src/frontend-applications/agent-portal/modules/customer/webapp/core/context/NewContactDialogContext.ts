@@ -15,6 +15,8 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { Organisation } from '../../../model/Organisation';
 import { Contact } from '../../../model/Contact';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class NewContactDialogContext extends Context {
 
@@ -50,11 +52,26 @@ export class NewContactDialogContext extends Context {
                 delete contact.ID;
                 delete contact.User?.UserID;
                 delete contact.AssignedUserID;
+                delete contact.Email;
+                delete contact.Email1;
+                delete contact.Email2;
+                delete contact.Email3;
+                delete contact.Email4;
+                delete contact.Email5;
             }
         } else {
             contact = new Contact();
         }
         return contact as any;
+    }
+
+    public async getDisplayText(short?: boolean): Promise<string> {
+        let displayText = await super.getDisplayText(short);
+        if (this.getAdditionalInformation(AdditionalContextInformation.DUPLICATE)) {
+            const translatedNew = await TranslationService.translate('Translatable#New');
+            displayText = `${translatedNew} ${displayText}`;
+        }
+        return displayText;
     }
 
 }

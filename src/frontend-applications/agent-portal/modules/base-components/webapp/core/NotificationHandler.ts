@@ -14,6 +14,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { BrowserUtil } from './BrowserUtil';
 import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
+import { BrowserCacheService } from './CacheService';
 
 export class NotificationHandler {
 
@@ -40,6 +41,18 @@ export class NotificationHandler {
     private async checkForPermissionUpdate(events: BackendNotification[]): Promise<void> {
         const user = await AgentSocketClient.getInstance().getCurrentUser();
 
+        const hasCurrenUserEvent = events.some(
+            (e) => e.Namespace === KIXObjectType.USER && e.ObjectID.toString() === user.UserID.toString()
+        );
+
+        const hasCurrentContactEvent = events.some(
+            (e) => e.Namespace === KIXObjectType.CONTACT && e.ObjectID.toString() === user.Contact?.ID.toString()
+        );
+
+        if (hasCurrenUserEvent || hasCurrentContactEvent) {
+            BrowserCacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+        }
+
         let userIsAffacted = events
             .filter((e) => e.ObjectID && e.Namespace === `${KIXObjectType.ROLE}.${KIXObjectType.USER}`)
             .map((e) => Number(e.ObjectID?.split('::')[1]))
@@ -56,7 +69,7 @@ export class NotificationHandler {
             .some((roleId) => user.RoleIDs.some((rid) => rid === roleId));
 
         if (userIsAffacted) {
-            BrowserUtil.openAppRefreshOverlay('Translatable#Your Permissions have been updated.', null, true);
+            BrowserUtil.openAppRefreshOverlay();
         }
     }
 

@@ -11,6 +11,7 @@ import { FilterCriteria } from '../../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { TreeNode } from '../../../../../base-components/webapp/core/tree';
@@ -111,20 +112,29 @@ export class UserAccessFormValue extends SelectObjectFormValue<string[]> {
         if (!Array.isArray(roleValue)) {
             roleValue = [];
         }
+        const rolesToRemove = [];
 
         const roleNames = [];
         if (this.user.IsAgent) {
             roleNames.push('Agent User');
+        } else {
+            rolesToRemove.push('Agent User');
         }
 
         if (this.user.IsCustomer) {
             roleNames.push('Customer');
+        } else {
+            rolesToRemove.push('Customer');
         }
 
         if (roleNames.length) {
-            const roles = await this.loadRoles(roleNames);
+            const roles = await this.loadRoles([...roleNames, ...rolesToRemove]);
             for (const role of roles) {
-                if (!roleValue.some((rid) => rid === role.ID)) {
+                const shouldRemove = rolesToRemove.some((r) => r === role.Name);
+                const roleIndex = roleValue.findIndex((rid) => rid === role.ID);
+                if (shouldRemove && roleIndex !== -1) {
+                    roleValue.splice(roleIndex, 1);
+                } else if (!shouldRemove && roleIndex === -1) {
                     roleValue.push(role.ID);
                 }
             }
@@ -178,6 +188,7 @@ export class UserAccessFormValue extends SelectObjectFormValue<string[]> {
                 selectedNodes.push(node);
             }
             this.selectedNodes = selectedNodes.sort((a, b) => a.Name - b.Name);
+            this.treeHandler?.setSelection(selectedNodes, true, true, undefined, true);
         } else {
             this.treeHandler.selectNone();
             this.selectedNodes = [];

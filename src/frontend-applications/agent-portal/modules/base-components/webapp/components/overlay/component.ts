@@ -54,14 +54,14 @@ class OverlayComponent {
 
         EventService.getInstance().subscribe(ApplicationEvent.CLOSE_OVERLAY, {
             eventSubscriberId: 'overlay',
-            eventPublished: (): void => {
-                this.closeOverlay();
-            }
+            eventPublished: (): void => this.closeOverlay()
         });
     }
 
     public onUpdate(): void {
-        this.setOverlayPosition();
+        setTimeout(() => {
+            this.setOverlayPosition();
+        }, 50);
     }
 
     public overlayClicked(event: any): void {

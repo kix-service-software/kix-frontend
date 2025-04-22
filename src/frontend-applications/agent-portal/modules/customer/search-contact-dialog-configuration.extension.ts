@@ -47,24 +47,32 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             null, tableWidget, false, false, 'kix-icon-man-bubble', true
         );
 
-        configurations.push(
-            new ContextConfiguration(
-                this.getModuleId(), 'Contact Search', ConfigurationType.Context, this.getModuleId(),
-                [], [], [],
-                [
-                    new ConfiguredWidget(
-                        'search-criteria-widget', null, new WidgetConfiguration(
-                            'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
-                            'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
-                        )
-                    ),
-                    new ConfiguredWidget('contact-search-widget', null, contactListWidget)
-                ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                [
-                    [KIXObjectType.CONTACT, 'contact-search-widget']
-                ]
-            )
+        const searchListWidget = new WidgetConfiguration(
+            'contact-search-widget', 'Searches', ConfigurationType.Widget, 'search-list-widget', 'Translatable#Searches', []
         );
+
+        const contextConfig = new ContextConfiguration(
+            this.getModuleId(), 'Contact Search', ConfigurationType.Context, this.getModuleId(),
+            [],
+            [
+                new ConfiguredWidget('search-list-widget', null, searchListWidget)
+            ], [],
+            [
+                new ConfiguredWidget(
+                    'search-criteria-widget', null, new WidgetConfiguration(
+                        'search-criteria-widget', 'Search Criteria Widget', ConfigurationType.Widget,
+                        'search-criteria-widget', 'Translatable#Selected Search Criteria', [], null, null, false
+                    )
+                ),
+                new ConfiguredWidget('contact-search-widget', null, contactListWidget)
+            ], undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+            [
+                [KIXObjectType.CONTACT, 'contact-search-widget']
+            ]
+        );
+
+        contextConfig.provideInvalidValues = true;
+        configurations.push(contextConfig);
 
         return configurations;
     }

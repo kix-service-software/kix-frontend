@@ -22,10 +22,16 @@ import { FilterType } from '../../../../../model/FilterType';
 import { ConfigItemClass } from '../../../model/ConfigItemClass';
 import { ConfigItemFormFactory } from '../ConfigItemFormFactory';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ContextEvent } from '../../../../base-components/webapp/core/ContextEvent';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class NewConfigItemDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-config-item-dialog-context';
+    private classChanged: boolean = false;
 
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM, reload: boolean = false, changedProperties?: string[]
@@ -44,6 +50,29 @@ export class NewConfigItemDialogContext extends Context {
             object = objects && objects.length ? objects[0] : null;
         }
         return object;
+    }
+
+    public async getDisplayText(short?: boolean): Promise<string> {
+        const assetTitle = await TranslationService.translate('Translatable#Asset');
+
+        let classTitle = '';
+        const classId = this.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
+        if (classId) {
+            const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
+                KIXObjectType.CONFIG_ITEM_CLASS, [classId]
+            ).catch((): ConfigItemClass[] => []);
+            if (ciClasses?.length) {
+                classTitle = await TranslationService.translate(ciClasses[0].Name);
+            }
+        }
+
+        let displayText = `${assetTitle} ${classTitle ? '(' + classTitle + ')' : ''}`;
+
+        if (this.getAdditionalInformation(AdditionalContextInformation.DUPLICATE) && !this.classChanged) {
+            displayText = await TranslationService.translate('Translatable#New {0} as copy of', [displayText]);
+            this.classChanged = false;
+        }
+        return displayText;
     }
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
@@ -65,7 +94,7 @@ export class NewConfigItemDialogContext extends Context {
         if (!formId) {
             const classId = this.getAdditionalInformation(ConfigItemProperty.CLASS_ID) || await this.getFirstClass();
             if (classId) {
-                this.setClassId(classId);
+                this.setClassId(classId, true);
             }
         }
     }
@@ -83,7 +112,17 @@ export class NewConfigItemDialogContext extends Context {
         return ciClasses?.length ? ciClasses[0].ID : null;
     }
 
-    public setClassId(classId: number): void {
+    public async setClassId(classId: number, postInit: boolean = false): Promise<void> {
+        this.setAdditionalInformation(ConfigItemProperty.CLASS_ID, classId);
+
+        const contentWidgets = await this.getContent();
+        const widget = contentWidgets.find((cw) => cw.configuration?.widgetId === 'object-dialog-form-widget');
+        if (widget) {
+            this.classChanged = !postInit;
+            const title = await this.getDisplayText();
+            WidgetService.getInstance().setWidgetTitle(widget.instanceId, title);
+        }
+        EventService.getInstance().publish(ContextEvent.DISPLAY_VALUE_UPDATED, this);
         ConfigItemFormFactory.getInstance().createAndProvideForm(classId, this);
     }
 

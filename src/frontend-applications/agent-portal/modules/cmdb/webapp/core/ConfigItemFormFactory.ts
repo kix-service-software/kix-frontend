@@ -211,6 +211,8 @@ export class ConfigItemFormFactory {
                 formField = this.getObjectReferenceField(ad, parentInstanceId, KIXObjectType.ORGANISATION);
             } else if (ad.Input.Type === 'CIClassReference') {
                 formField = this.getCIClassReferenceField(ad, parentInstanceId);
+            } else if (ad.Input.Type === 'TeamReference') {
+                formField = this.getQueueFormField(ad, parentInstanceId);
             } else if (ad.Input.Type === 'Date') {
                 formField = this.getDateField(ad, parentInstanceId);
             } else if (ad.Input.Type === 'DateTime') {
@@ -405,6 +407,30 @@ export class ConfigItemFormFactory {
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.ATTACHMENT)
             ], null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
+        );
+    }
+
+    private getQueueFormField(ad: AttributeDefinition, parentInstanceId: string): FormFieldConfiguration {
+        return new FormFieldConfiguration(
+            ad.Key, ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, null,
+            [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+                new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
+                new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, false),
+                new FormFieldOption(FormFieldOptions.SHOW_INVALID, true),
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                    new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                            FilterType.AND, 1
+                        )
+                    ])
+                ),
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                new FormFieldOption(ObjectReferenceOptions.KEEP_SELECTION, true),
+                new FormFieldOption(ObjectReferenceOptions.UNIQUE, false)
+            ], null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
+            ad.Input.MaxLength, null, null
         );
     }
 }

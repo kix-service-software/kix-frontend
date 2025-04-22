@@ -38,7 +38,7 @@ class Component {
 
         const frame = document.getElementById(this.state.frameId);
         const frameHeight = frameDocument.documentElement.scrollHeight;
-        frame.style.height = frameHeight + 'px';
+        frame.style.height = frameHeight + 10 + 'px'; // 10 is for the top and bottom padding of 5px each
     }
 }
 

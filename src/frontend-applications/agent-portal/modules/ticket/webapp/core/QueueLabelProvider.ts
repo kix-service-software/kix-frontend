@@ -130,19 +130,12 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
                 break;
             case QueueProperty.SYSTEM_ADDRESS_ID:
                 if (value) {
-                    const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
-                        KIXObjectType.SYSTEM_ADDRESS, [value], null, null, true
-                    ).catch((error) => [] as SystemAddress[]);
-                    displayValue = systemAddresses && !!systemAddresses.length ?
-                        await LabelService.getInstance().getObjectText(systemAddresses[0]) : value;
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.SYSTEM_ADDRESS, value);
                 }
                 break;
             case QueueProperty.FOLLOW_UP_ID:
                 if (value) {
-                    const follwoUptypes = await KIXObjectService.loadObjects<FollowUpType>(
-                        KIXObjectType.FOLLOW_UP_TYPE, [value], null, null, true
-                    ).catch((error) => [] as FollowUpType[]);
-                    displayValue = follwoUptypes && !!follwoUptypes.length ? follwoUptypes[0].Name : value;
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.FOLLOW_UP_TYPE, value);
                 }
                 break;
             case QueueProperty.FOLLOW_UP_LOCK:
@@ -157,11 +150,7 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
                 break;
             case QueueProperty.PARENT_ID:
                 if (value) {
-                    const parentQueue = await KIXObjectService.loadObjects<Queue>(
-                        KIXObjectType.QUEUE, [value], null, null, true
-                    ).catch((error) => [] as Queue[]);
-                    displayValue = parentQueue && !!parentQueue.length ?
-                        await LabelService.getInstance().getObjectText(parentQueue[0], true, false) : value;
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.QUEUE, value);
                 }
                 break;
             default:

@@ -14,6 +14,7 @@ import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { IdService } from '../../../../../model/IdService';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificCreateOptions } from '../../../../../model/KIXObjectSpecificCreateOptions';
@@ -91,8 +92,9 @@ export class ReportDefinitionFormService extends KIXObjectFormService {
         parameter = await super.postPrepareValues(parameter, createOptions, formContext, formInstance);
 
         const roleIds = parameter.find((p) => p[0] === ReportDefinitionProperty.ROLE_IDS);
+        const tagParameter = parameter.find((p) => p[0] === KIXObjectProperty.OBJECT_TAGS);
         const reportDefinition = await ReportDefintionObjectCreator.createReportDefinitionObject(formInstance);
-        parameter = [[KIXObjectType.REPORT_DEFINITION, reportDefinition]];
+        parameter = [[KIXObjectType.REPORT_DEFINITION, reportDefinition], tagParameter];
         if (roleIds) {
             parameter.push(roleIds);
         }
@@ -134,8 +136,8 @@ export class ReportDefinitionFormService extends KIXObjectFormService {
             return 0;
         }
 
-        if (formContext === FormContext.EDIT && reportDefinition) {
-            return formField.defaultValue ? formField.defaultValue.value : null;
+        if (formContext === FormContext.EDIT && !reportDefinition[property]) {
+            value = formField.defaultValue ? formField.defaultValue.value : null;
         }
 
         return super.getValue(property, value, reportDefinition, formField, formContext);

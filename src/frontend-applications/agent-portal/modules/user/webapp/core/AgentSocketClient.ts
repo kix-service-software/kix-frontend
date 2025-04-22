@@ -26,6 +26,7 @@ import { BrowserCacheService } from '../../../../modules/base-components/webapp/
 import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
 import { MarkObjectAsSeenRequest } from '../../../base-components/webapp/core/MarkObjectAsSeenRequest';
 import { MarkObjectAsSeenResponse } from '../../../base-components/webapp/core/MarkObjectAsSeenResponse';
+import { AuthenticationSocketClient } from '../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class AgentSocketClient extends SocketClient {
 
@@ -46,6 +47,11 @@ export class AgentSocketClient extends SocketClient {
     }
 
     public async getCurrentUser(): Promise<User> {
+        const hasValidToken = await AuthenticationSocketClient.getInstance().validateToken();
+        if (!hasValidToken) {
+            return null;
+        }
+
         let currentUserRequestPromise;
 
         const cacheType = KIXObjectType.CURRENT_USER;
