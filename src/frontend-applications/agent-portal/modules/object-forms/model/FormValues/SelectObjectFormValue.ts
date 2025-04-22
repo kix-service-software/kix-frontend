@@ -576,7 +576,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             }
 
             selectedNodes = selectedNodes.filter(
-                (node, index) => selectedNodes.findIndex((n) => n.id === node.id) === index
+                (node, index) => selectedNodes.findIndex((n) => n.id?.toString() === node.id?.toString()) === index
             );
             this.treeHandler?.setSelection(selectedNodes, true, true, undefined, true);
         } else {

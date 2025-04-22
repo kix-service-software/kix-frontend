@@ -72,10 +72,12 @@ export class FAQService extends KIXObjectService {
         return 'FAQArticle';
     }
 
-    public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
+    public async prepareFullTextFilter(
+        searchValue: string, filterType: FilterType = FilterType.AND
+    ): Promise<FilterCriteria[]> {
         const filter: FilterCriteria[] = [
             new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, `${searchValue}`
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, filterType, `${searchValue}`
             )
         ];
 
@@ -149,7 +151,8 @@ export class FAQService extends KIXObjectService {
         if (objects?.length) {
             if (objects[0].KIXObjectType === KIXObjectType.FAQ_CATEGORY) {
                 if (!showInvalid) {
-                    objects = objects.filter((c) => c.ValidID === 1);
+                    objects = objects.filter(
+                        (c: FAQCategory) => c.ValidID === 1 || this.hasValidDescendants(c.SubCategories));
                 } else if (!invalidClickable) {
                     objects = (objects as FAQCategory[]).filter(
                         (c) => c.ValidID === 1 || this.hasValidDescendants(c.SubCategories)

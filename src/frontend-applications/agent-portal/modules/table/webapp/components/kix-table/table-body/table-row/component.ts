@@ -88,7 +88,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 if (this.observer) {
                     this.observer.disconnect();
                 }
-                this.observer = new IntersectionObserver(this.intersectionCallback.bind(this));
+                this.observer = new IntersectionObserver(
+                    this.intersectionCallback.bind(this), { threshold: 0.5 }
+                );
                 this.observer.observe(row);
             }
         } else {
@@ -212,10 +214,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         if (config.routingConfiguration) {
             const object = this.state.row?.getRowObject()?.getObject();
-            let objectId;
-            if (object) {
-                objectId = object[config?.routingConfiguration?.objectIdProperty];
-            }
+
+            const objectId = RoutingService.getObjectId(object, config.routingConfiguration);
             RoutingService.getInstance().routeTo(config?.routingConfiguration, objectId);
         }
 

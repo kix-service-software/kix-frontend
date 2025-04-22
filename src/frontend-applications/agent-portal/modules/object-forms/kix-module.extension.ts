@@ -30,6 +30,18 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     public uiComponents: UIComponent[] = [
         new UIComponent('object-form', '/kix-module-object-forms$0/webapp/components/object-form', []),
         new UIComponent(
+            'object-form-buttonbar',
+            '/kix-module-object-forms$0/webapp/components/object-form-buttonbar',
+            []
+        ),
+        new UIComponent('object-form-group', '/kix-module-object-forms$0/webapp/components/object-form-group', []),
+        new UIComponent('object-form-page', '/kix-module-object-forms$0/webapp/components/object-form-page', []),
+        new UIComponent(
+            'object-form-other-information',
+            '/kix-module-object-forms$0/webapp/components/object-form-other-information',
+            []
+        ),
+        new UIComponent(
             'object-form-values-container',
             '/kix-module-object-forms$0/webapp/components/object-form-values-container',
             []

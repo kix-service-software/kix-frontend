@@ -29,4 +29,8 @@ export class DynamicFieldType extends KIXObject {
         }
     }
 
+    public toString(): string {
+        return this.DisplayName;
+    }
+
 }

@@ -13,6 +13,7 @@
         "require ./components/setup-superuser",
         "require ./components/setup-admin-password",
         "require ./components/user-token-input",
+        "require ./components/out-of-office-widget",
         "require ./core/UserUIModule"
     ]
 }

@@ -9,15 +9,19 @@
 
 import { TreeNode } from '../../core/tree';
 import { IdService } from '../../../../../model/IdService';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public tree: TreeNode[] = [],
         public filterValue: string = null,
         public treeId: string = 'tree-' + IdService.generateDateBasedId(),
         public activeNode: TreeNode = null,
-        public treeStyle: string = null
-    ) { }
+        public treeStyle: string = null,
+        public allowExpandCollapseAll: boolean = true
+    ) {
+        super();
+    }
 
 }

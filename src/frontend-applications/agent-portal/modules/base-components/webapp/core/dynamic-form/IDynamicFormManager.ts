@@ -66,6 +66,8 @@ export interface IDynamicFormManager {
 
     getProperties(): Promise<Array<[string, string]>>;
 
+    getUniqueProperties(currentProperty: string): Promise<Array<[string, string]>>;
+
     getPropertiesPlaceholder(): Promise<string>;
 
     isHiddenProperty(property: string): Promise<boolean>;

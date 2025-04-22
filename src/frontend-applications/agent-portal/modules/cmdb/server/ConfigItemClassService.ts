@@ -26,6 +26,7 @@ import { Error } from '../../../../../server/model/Error';
 import { ConfigItemClass } from '../model/ConfigItemClass';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 
 export class ConfigItemAPIClassService extends KIXObjectAPIService {
@@ -140,6 +141,11 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
                 await this.createIcon(token, clientRequestId, icon);
             }
 
+            const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
+            await this.commitObjectTag(
+                token, clientRequestId, tags, objectType, response.ConfigItemClassID
+            );
+
             return response.ConfigItemClassID;
         }
     }
@@ -188,8 +194,22 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
                 });
             }
 
+            const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
+            await this.commitObjectTag(
+                token, clientRequestId, tags, objectType, response.ConfigItemClassID
+            );
+
             return response.ConfigItemClassID;
         }
+    }
+
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        let objectClass;
+        if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
+            objectClass = ConfigItemClass;
+        }
+
+        return objectClass;
     }
 
 }

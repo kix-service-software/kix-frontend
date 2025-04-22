@@ -17,6 +17,7 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { Error } from '../../../../../server/model/Error';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 export class SystemAddressService extends KIXObjectAPIService {
 
@@ -40,6 +41,16 @@ export class SystemAddressService extends KIXObjectAPIService {
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.SYSTEM_ADDRESS;
+    }
+
+    public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        let objectClass;
+
+        if (objectType === KIXObjectType.SYSTEM_ADDRESS) {
+            objectClass = SystemAddress;
+        }
+
+        return objectClass;
     }
 
     public async loadObjects<T>(

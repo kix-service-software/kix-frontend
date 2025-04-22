@@ -23,6 +23,7 @@ import { UpdateObjectIconRequest } from './UpdateObjectIconRequest';
 import { Error } from '../../../../../server/model/Error';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 
 export class ObjectIconService extends KIXObjectAPIService {
 
@@ -58,7 +59,9 @@ export class ObjectIconService extends KIXObjectAPIService {
             const objectIcons = await this.getObjectIcons(token);
 
             if (objectIds && objectIds.length) {
-                const filteredIcons = objectIcons?.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                const filteredIcons = objectIcons?.filter(
+                    (t) => objectIds.some((oid) => oid.toString() === t.ID.toString())
+                );
                 objectResponse = new ObjectResponse(filteredIcons, filteredIcons.length);
             } else if (iconLoadingOptions) {
                 if (iconLoadingOptions.object && iconLoadingOptions.objectId) {
@@ -103,6 +106,11 @@ export class ObjectIconService extends KIXObjectAPIService {
             throw new Error(error.Code, error.Message);
         });
 
+        const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
+        await this.commitObjectTag(
+            token, clientRequestId, tags, objectType, response.ObjectIconID
+        );
+
         return response.ObjectIconID;
     }
 
@@ -119,6 +127,11 @@ export class ObjectIconService extends KIXObjectAPIService {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
+
+        const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
+        await this.commitObjectTag(
+            token, clientRequestId, tags, objectType, response.ObjectIconID
+        );
 
         return response.ObjectIconID;
     }

@@ -1,6 +1,7 @@
 {
     "dependencies": [
         "require ./core/CKEditorUIModule",
-        "require ./components/editor"
+        "require ./components/editor",
+        "require ./components/json-editor"
     ]
 }

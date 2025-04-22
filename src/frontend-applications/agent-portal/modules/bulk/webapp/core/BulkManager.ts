@@ -30,6 +30,8 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     private bulkRun: boolean = false;
 
+    public validationIgnoreOperators: string[] = [PropertyOperator.CLEAR];
+
     public init(): void {
         super.init();
         this.bulkRun = false;
@@ -39,19 +41,19 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         return this.bulkRun;
     }
 
-    public async getOperations(property: string): Promise<PropertyOperator[]> {
+    public async getOperations(property: string): Promise<Array<PropertyOperator | string>> {
         return [
             PropertyOperator.CHANGE,
             PropertyOperator.CLEAR
         ];
     }
 
-    public getOperatorDisplayText(operator: PropertyOperator): Promise<string> {
-        return PropertyOperatorUtil.getText(operator);
+    public async getOperatorDisplayText(operator: PropertyOperator): Promise<string> {
+        return await PropertyOperatorUtil.getText(operator) || super.getOperatorDisplayText(operator);
     }
 
     public showValueInput(value: ObjectPropertyValue): boolean {
-        return Boolean(value.property && value.operator && value.operator !== PropertyOperator.CLEAR);
+        return Boolean(super.showValueInput(value) && value.operator !== PropertyOperator.CLEAR);
     }
 
     public async getEditableValues(): Promise<ObjectPropertyValue[]> {
@@ -64,7 +66,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
     public async validate(): Promise<ValidationResult[]> {
         const validationResult: ValidationResult[] = await super.validate();
         let dfValues = this.values.filter((v) => KIXObjectService.getDynamicFieldName(v.property));
-        dfValues = dfValues.filter((v) => v.operator !== PropertyOperator.CLEAR);
+        dfValues = dfValues.filter((v) => !this.validationIgnoreOperators.some((o) => o === v.operator));
         for (const v of dfValues) {
             const results = await DynamicFieldFormUtil.getInstance().validateDFValue(
                 KIXObjectService.getDynamicFieldName(v.property), v.value
@@ -90,6 +92,10 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
     }
 
     public async prepareParameter(): Promise<Array<[string, any]>> {
+        for (const extendedManager of this.extendedFormManager) {
+            await extendedManager.prepareValuesForParameter(this.values, this.selectedObjects);
+        }
+
         const edTableValues = await this.getEditableValues();
         if (edTableValues.some((v) => !v.valid && v.operator !== PropertyOperator.CLEAR)) {
             return;

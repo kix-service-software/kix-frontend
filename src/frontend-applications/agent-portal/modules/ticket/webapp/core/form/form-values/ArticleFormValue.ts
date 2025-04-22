@@ -25,6 +25,8 @@ export class ArticleFormValue extends ObjectFormValue<Article[]> {
     ) {
         super(property, null, objectValueMapper, parent);
 
+        this.showInUI = false;
+
         let article: Article;
 
         const context = ContextService.getInstance().getActiveContext();

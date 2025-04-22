@@ -79,12 +79,15 @@ export class NotificationFormValue extends SelectObjectFormValue<string[]> {
             ).catch((): Notification[] => []);
 
             const selectedNodes = [];
+            const transport = 'Email';
             for (const n of notifications) {
                 const label = await TranslationService.translate(n.Name);
-                const node = new TreeNode(n.ID, label);
+                const node = new TreeNode(`Notification-${n.ID}-${transport}`, label);
                 selectedNodes.push(node);
             }
             this.selectedNodes = selectedNodes.sort((a, b) => a.Name - b.Name);
+        } else {
+            this.selectedNodes = [];
         }
 
     }

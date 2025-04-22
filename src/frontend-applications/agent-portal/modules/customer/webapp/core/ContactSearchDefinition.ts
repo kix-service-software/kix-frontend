@@ -8,7 +8,6 @@
  */
 
 import { ContactSearchFormManager } from './ContactSearchFormManager';
-import { SearchDefinition } from '../../../search/webapp/core';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
@@ -16,6 +15,7 @@ import { UserProperty } from '../../../user/model/UserProperty';
 import { ContactProperty } from '../../model/ContactProperty';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
+import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
 
 export class ContactSearchDefinition extends SearchDefinition {
 

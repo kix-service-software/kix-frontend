@@ -214,7 +214,8 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         let result = '';
         if (ticket.ResponsibleID && !isNaN(Number(ticket.ResponsibleID))) {
             const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, null, ['Preferences']
+                null, null, null,
+                ['Preferences', UserProperty.CONTACT]
             );
             const users = await KIXObjectService.loadObjects<User>(
                 KIXObjectType.USER, [ticket.ResponsibleID], loadingOptions, null, true, true, true
@@ -236,7 +237,6 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         if (ticket.OwnerID && !isNaN(Number(ticket.OwnerID))) {
             const loadingOptions = new KIXObjectLoadingOptions(
                 null, null, null,
-                ['Preferences', UserProperty.CONTACT],
                 ['Preferences', UserProperty.CONTACT]
             );
             const users = await KIXObjectService.loadObjects<User>(
@@ -452,6 +452,9 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                         result = result.substring(0, Number(optionsString));
                     }
                     break;
+                case TicketProperty.ATTACHMENT_COUNT:
+                    result = (ticket.AttachmentCount || 0).toString();
+                    break;
                 case TicketProperty.ARTICLES:
                 case TicketProperty.ARTICLE_CREATE_TIME:
                 case TicketProperty.ARTICLE_FLAG:
@@ -510,9 +513,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             case TicketProperty.UNSEEN:
             case KIXObjectProperty.OBJECT_ID:
             case KIXObjectProperty.OBJECT_TYPE:
-            case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CREATE_TIME:
-            case KIXObjectProperty.CHANGE_BY:
             case KIXObjectProperty.CHANGE_TIME:
                 return true;
             default:

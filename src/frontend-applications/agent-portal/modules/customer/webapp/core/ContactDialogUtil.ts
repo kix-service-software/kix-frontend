@@ -9,6 +9,7 @@
 
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 import { Contact } from '../../model/Contact';
 import { Organisation } from '../../model/Organisation';
 import { EditContactDialogContext } from './context/EditContactDialogContext';
@@ -45,7 +46,13 @@ export class ContactDialogUtil {
     }
 
     public static async duplicate(contact: Contact): Promise<void> {
-        ContextService.getInstance().setActiveContext(NewContactDialogContext.CONTEXT_ID, contact?.ID);
+        ContextService.getInstance().setActiveContext(
+            NewContactDialogContext.CONTEXT_ID, contact?.ID, null,
+            [
+                [AdditionalContextInformation.DISPLAY_TEXT, 'Translatable#Duplicate Contact'],
+                [AdditionalContextInformation.DUPLICATE, true]
+            ]
+        );
     }
 
 }

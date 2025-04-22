@@ -85,8 +85,9 @@ export class CacheService {
             } else if (!event.Namespace) {
                 LoggingService.getInstance().warning('Ignore Backend Notification (missing Namespace in event)', event);
             } else if (event.Namespace === 'User.Counters') {
-                await this.deleteKeys(`${KIXObjectType.USER_TICKETS}_${event.UserID}`);
                 await this.deleteKeys(`${KIXObjectType.USER_COUNTER}_${event.UserID}`);
+            } else if (event.Namespace === 'User') {
+                await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_${event.ObjectID}`);
             } else if (event.Namespace.startsWith('User.UserPreference')) {
                 promises.push(this.handleUserPreferencesCache(event));
             } else if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {

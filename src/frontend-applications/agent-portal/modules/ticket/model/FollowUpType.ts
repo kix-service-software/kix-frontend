@@ -35,4 +35,7 @@ export class FollowUpType extends KIXObject {
         return this.ID === followUpType.ID;
     }
 
+    public toString(): string {
+        return this.Name;
+    }
 }

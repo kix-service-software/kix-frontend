@@ -8,10 +8,13 @@
  */
 
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { AgentSocketClient } from '../../../../user/webapp/core/AgentSocketClient';
 import { FormValueProperty } from '../../FormValueProperty';
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { ObjectFormValue } from '../ObjectFormValue';
@@ -54,6 +57,10 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
         this.multiselect = this.maxSelectCount < 0 || this.maxSelectCount > 1;
         this.setNewInitialState('maxSelectCount', this.maxSelectCount);
 
+        this.regExList = dynamicField?.Config?.AppendValuesRegexList?.map(
+            (ri) => { return { regEx: ri.Value, errorMessage: ri.ErrorMessage }; }
+        ) || [];
+
         this.treeHandler?.setMultiSelect(this.multiselect);
 
         this.translatable = Boolean(Number(dynamicField?.Config?.TranslatableValues)) || false;
@@ -66,6 +73,25 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
         await super.initFormValue();
 
         this.value = this.object[this.property];
+    }
+
+    private async setFreeText(dfConfig: any): Promise<void> {
+        const allowAppendValues = BrowserUtil.isBooleanTrue(dfConfig?.AppendValues);
+        if (allowAppendValues) {
+            const hasAppendValuesRoles = dfConfig?.AppendValuesRoleIDs?.length > 0;
+            if (hasAppendValuesRoles) {
+                const roleIds: number[] = dfConfig?.AppendValuesRoleIDs.map((rid) => Number(rid));
+                const currentUser = await AgentSocketClient.getInstance().getCurrentUser();
+                const userHasRole = currentUser.RoleIDs.some((rid) => roleIds.some((dfRid) => dfRid === rid));
+                if (userHasRole) {
+                    this.freeText = true;
+                    this.setNewInitialState('freeText', this.freeText);
+                }
+            } else {
+                this.freeText = true;
+                this.setNewInitialState('freeText', this.freeText);
+            }
+        }
     }
 
     private setValueByDefault(config: any): void {
@@ -112,6 +138,8 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
         this.minSelectCount = Number(dynamicField?.Config?.CountMin) || 0;
         this.maxSelectCount = Number(dynamicField?.Config?.CountMax) || 1;
         await super.initFormValueByField(field);
+
+        this.setFreeText(dynamicField?.Config);
     }
 
     public async loadSelectableValues(): Promise<void> {
@@ -148,8 +176,8 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
             const possibleValues = dynamicField?.Config?.PossibleValues;
             if (possibleValues) {
                 for (const key of this.value) {
-                    const value = possibleValues[key];
-                    if (this.isValidValue(key)) {
+                    if (this.isValidValue(key) || this.freeText) {
+                        const value = possibleValues[key] || key;
                         const node = await this.createNode(key, value);
                         selectedNodes.push(node);
                     }

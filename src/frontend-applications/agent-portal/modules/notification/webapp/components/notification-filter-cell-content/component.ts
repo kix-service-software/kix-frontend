@@ -12,8 +12,9 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { Cell } from '../../../../table/model/Cell';
 import { NotificationFilterTableProperty } from '../../core';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
-import { SearchDefinition, SearchService } from '../../../../search/webapp/core';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { SearchDefinition } from '../../../../search/webapp/core/SearchDefinition';
+import { SearchService } from '../../../../search/webapp/core/SearchService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

@@ -4,6 +4,7 @@
         "require ./components/job-details-exec-plans-widget",
         "require ./components/job-details-filter-widget",
         "require ./components/job-filter-cell-content",
+        "require ./components/job-input-attachmentPatternRule",
         "require ./components/job-input-events",
         "require ./components/job-input-fetchAssetAttributesMapping",
         "require ./components/job-input-filter",

@@ -61,6 +61,14 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(notesSidebar);
 
+        const outOfOffice = new WidgetConfiguration(
+            'home-dashboard-out-of-office-widget', 'Translatable#Out of office', ConfigurationType.Widget,
+            'out-of-office-widget', 'Translatable#Out of office', [], null, null,
+            false, false, 'fa-solid fa-user-clock', false
+        );
+
+        configurations.push(outOfOffice);
+
         const chartWidgets = await this.getChartWidgetConfigurations();
 
         configurations.push(
@@ -68,7 +76,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
                 this.getModuleId(),
                 [
-                    new ConfiguredWidget('home-dashboard-notes-widget', 'home-dashboard-notes-widget')
+                    new ConfiguredWidget('home-dashboard-notes-widget', 'home-dashboard-notes-widget'),
+                    new ConfiguredWidget('home-dashboard-out-of-office-widget', 'home-dashboard-out-of-office-widget')
                 ],
                 [], [],
                 [
@@ -132,16 +141,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             [new UIComponentPermission('reporting/reports', [CRUD.READ])], WidgetSize.SMALL
         ));
 
-        const stateReportId = await this.getReportId('Number of open tickets by state');
+        const stateTypeReportId = await this.getReportId('Number of open tickets by statetype');
         chartWidgets.push(new ConfiguredWidget(
-            'home-dashboard-ticket-chart-widget-states', null,
+            'home-dashboard-ticket-chart-widget-statetypes', null,
             new WidgetConfiguration(
-                'home-dashboard-ticket-chart-widget-states', 'Translatable#States Chart Widget', ConfigurationType.Widget,
-                'report-chart-widget', 'Translatable#Number of open tickets by state', [], null,
+                'home-dashboard-ticket-chart-widget-statetypes', 'Translatable#State Types Chart Widget', ConfigurationType.Widget,
+                'report-chart-widget', 'Translatable#Number of open tickets by statetype', [], null,
                 new ReportChartWidgetConfiguration(
-                    'home-dashboard-ticket-chart-widget-states-chart', 'Translatable#States Chart',
+                    'home-dashboard-ticket-chart-widget-statetypes-chart', 'Translatable#State Types Chart',
                     new ChartComponentConfiguration(
-                        'home-dashboard-ticket-chart-widget-states-config', 'Translatable#States Chart', ConfigurationType.Chart,
+                        'home-dashboard-ticket-chart-widget-statetypes-config', 'Translatable#State Types Chart', ConfigurationType.Chart,
                         {
                             type: 'pie',
                             options: {
@@ -151,7 +160,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 }
                             }
                         }
-                    ), stateReportId, 'CSV', new CSVFormatConfiguration(['name'], 'name', ['count'], '"', ',')
+                    ), stateTypeReportId, 'CSV', new CSVFormatConfiguration(['name'], 'name', ['count'], '"', ',')
                 ), false, true, null, false
             ),
             [new UIComponentPermission('reporting/reports', [CRUD.READ])], WidgetSize.SMALL

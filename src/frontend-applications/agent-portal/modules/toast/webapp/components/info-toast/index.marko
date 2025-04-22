@@ -1,0 +1,30 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<div
+    id="info-toast"
+    class="toast position-absolute top-0 start-50 p-1 bg-light fade show me-5 mt-5 border-1 border-primary"
+    role="alert"
+>
+    <div class="toast-header bg-primary text-white">
+        <i class="fa-solid fa-info me-2"/>
+        <strong class="me-auto">
+            <translation-string pattern="Translatable#Information"/>
+        </strong>
+        <small>${state.time}</small>
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+        />
+    </div>
+    <div class="toast-body">
+        <translation-string pattern=state.message/>
+    </div>
+</div>

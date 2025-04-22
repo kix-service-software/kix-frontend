@@ -14,6 +14,7 @@ import { KIXModulesService } from './KIXModulesService';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { BrowserUtil } from './BrowserUtil';
 import { AdditionalRoutingHandler } from './AdditionalRoutingHandler';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class RoutingService {
 
@@ -166,5 +167,17 @@ export class RoutingService {
             }
         });
         return result;
+    }
+
+    public static getObjectId(object: KIXObject, routingConfiguration: RoutingConfiguration): string {
+        let objectId;
+        if (object) {
+            const objPath = routingConfiguration?.objectIdProperty?.split('.') || [];
+            objectId = object;
+            for (const key of objPath) {
+                objectId = objectId[key];
+            }
+        }
+        return objectId;
     }
 }

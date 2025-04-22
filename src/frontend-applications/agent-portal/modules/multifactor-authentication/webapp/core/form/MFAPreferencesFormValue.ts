@@ -47,6 +47,7 @@ export class MFAPreferencesFormValue extends ObjectFormValue {
             const mfaConfigFormValue = new ObjectFormValue(null, null, objectValueMapper, this);
             mfaConfigFormValue.inputComponentId = null;
             mfaConfigFormValue.label = mfaConfig.name;
+            mfaConfigFormValue['COUNT_CONTAINER'] = true;
             this.formValues.push(mfaConfigFormValue);
 
             const enableFormValue = new BooleanFormValue(
@@ -73,12 +74,16 @@ export class MFAPreferencesFormValue extends ObjectFormValue {
                 mfaConfigFormValue.formValues.push(userSecretFormValue);
             }
 
-            mfaConfigFormValue.formValues.forEach((fv) => fv.visible = true);
+            mfaConfigFormValue.formValues.forEach((fv) => {
+                fv.visible = true;
+                fv.isControlledByParent = true;
+            });
         }
 
         this.formValues.forEach((fv) => {
             fv.visible = true;
             fv.setNewInitialState(FormValueProperty.VISIBLE, true);
+            fv.isControlledByParent = true;
         });
     }
 

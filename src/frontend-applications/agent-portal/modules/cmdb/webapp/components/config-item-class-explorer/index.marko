@@ -27,7 +27,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </if>
             <div
                 class=[
-                    "show-all",
+                    "show-all m-1",
                     {
                         active: !state.activeNode,
                     },
@@ -38,6 +38,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
             <if(state.nodes)>
                 <tree
+                    treeId="cmdb-item-class-tree"
                     tree=state.nodes
                     activeNode=state.activeNode
                     filterValue=state.filterValue

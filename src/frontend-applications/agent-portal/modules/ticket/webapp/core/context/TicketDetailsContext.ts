@@ -26,12 +26,16 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 import { ArticleLoader } from './ArticleLoader';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { TicketService } from '../TicketService';
+import { TicketRouteConfiguration } from '../../../model/TicketRouteConfiguration';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 
 export class TicketDetailsContext extends Context {
 
     public static CONTEXT_ID = 'ticket-details';
     public articleLoader: ArticleLoader;
     public articleDetailsLoader: ArticleLoader;
+    private handleMissingObjectTimeout: any;
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
         this.articleLoader = new ArticleLoader(Number(this.objectId), this, false);
@@ -58,11 +62,7 @@ export class TicketDetailsContext extends Context {
         const ticket = await this.loadTicket(changedProperties);
 
         if (!ticket) {
-            await ContextService.getInstance().toggleActiveContext(TicketContext.CONTEXT_ID);
-            setTimeout(async () => {
-                const error = await TranslationService.translate('Translatable#The requested ticket is not available due to restricted permissions.');
-                BrowserUtil.openErrorOverlay(error);
-            }, 500);
+            this.handleMissingObject();
             return object;
         }
 
@@ -93,6 +93,33 @@ export class TicketDetailsContext extends Context {
         }
 
         return object;
+    }
+
+    private async handleMissingObject(): Promise<void> {
+        if (this.handleMissingObjectTimeout) {
+            clearTimeout(this.handleMissingObjectTimeout);
+        }
+
+        this.handleMissingObjectTimeout = setTimeout(async () => {
+            const moduleConfiguration = await TicketService.getTicketModuleConfiguration();
+            const routeConfiguration = moduleConfiguration?.ticketRouteConfiguration || new TicketRouteConfiguration();
+
+            const contextId = routeConfiguration?.targetContextId || TicketContext.CONTEXT_ID;
+            const severity = routeConfiguration?.severity || 'info';
+
+            await ContextService.getInstance().toggleActiveContext(contextId);
+
+            setTimeout(async () => {
+                EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
+
+                const message = await TranslationService.translate('Translatable#The requested ticket is not available due to restricted permissions.');
+                if (severity.toLocaleLowerCase() === 'error') {
+                    BrowserUtil.openErrorOverlay(message);
+                } else {
+                    BrowserUtil.openInfoOverlay(message);
+                }
+            }, 1500);
+        }, 200);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
@@ -136,7 +163,9 @@ export class TicketDetailsContext extends Context {
         return objects;
     }
 
-    public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
+    public async reloadObjectList(
+        objectType: KIXObjectType | string, silent: boolean = false, limit?: number
+    ): Promise<void> {
         if (objectType === KIXObjectType.ARTICLE) {
 
             // just trigger objectListChanged event
@@ -144,7 +173,7 @@ export class TicketDetailsContext extends Context {
                 this.setObjectList(KIXObjectType.ARTICLE, null);
             }
         } else {
-            return super.reloadObjectList(objectType, silent);
+            return super.reloadObjectList(objectType, silent, limit);
         }
     }
 

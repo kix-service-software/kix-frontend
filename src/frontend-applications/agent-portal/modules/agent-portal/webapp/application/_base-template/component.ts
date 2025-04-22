@@ -24,6 +24,7 @@ import { ContextHistory } from '../../../../base-components/webapp/core/ContextH
 import { IKIXModuleExtension } from '../../../../../model/IKIXModuleExtension';
 import { KIXStyle } from '../../../../base-components/model/KIXStyle';
 import { PortalNotificationService } from '../../../../portal-notification/webapp/core/PortalNotificationService';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 
 class Component {
 
@@ -57,6 +58,7 @@ class Component {
         ClientNotificationSocketClient.getInstance();
         PortalNotificationService.getInstance();
         ContextHistory.getInstance();
+        BrowserUtil.handleBeforeUnload();
 
         const startInitModules = Date.now();
         await KIXModulesService.getInstance().init(this.modules);
@@ -117,7 +119,7 @@ class Component {
 
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
 
-        RoutingService.getInstance().routeToInitialContext();
+        RoutingService.getInstance().routeToInitialContext(true);
 
         this.state.initialized = true;
         this.state.loading = false;

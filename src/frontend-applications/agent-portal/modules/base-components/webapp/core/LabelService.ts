@@ -358,9 +358,11 @@ export class LabelService {
 
         if (labelProvider) {
             for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
-                const result = await extendedLabelProvider.getObjectText(object, id, title, translatable);
-                if (result) {
-                    return result;
+                if (extendedLabelProvider.isLabelProviderForType(object.KIXObjectType)) {
+                    const result = await extendedLabelProvider.getObjectText(object, id, title, translatable);
+                    if (result) {
+                        return result;
+                    }
                 }
             }
 

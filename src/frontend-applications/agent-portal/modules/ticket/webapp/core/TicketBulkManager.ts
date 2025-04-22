@@ -47,8 +47,15 @@ export class TicketBulkManager extends BulkManager {
         }
     }
 
-    public async getOperations(property: string): Promise<PropertyOperator[]> {
-        const operations = [PropertyOperator.CHANGE];
+    public async getOperations(property: string): Promise<Array<PropertyOperator | string>> {
+        for (const extendedManager of this.extendedFormManager) {
+            const result = await extendedManager.getOperations(property);
+            if (result) {
+                return result;
+            }
+        }
+
+        const operations: Array<PropertyOperator | string> = [PropertyOperator.CHANGE];
 
         if (property) {
             switch (property) {

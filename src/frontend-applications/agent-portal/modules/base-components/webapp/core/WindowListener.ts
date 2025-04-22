@@ -10,6 +10,7 @@
 export class WindowListener {
 
     private static INSTANCE: WindowListener;
+    private listenerAdded: boolean = false;
 
     public static getInstance(): WindowListener {
         if (!WindowListener.INSTANCE) {
@@ -18,12 +19,18 @@ export class WindowListener {
         return WindowListener.INSTANCE;
     }
 
-    private constructor() {
-        window.addEventListener('beforeunload', this.beforeunload.bind(this), { capture: true });
+    public addBrowserListener(): void {
+        if (!this.listenerAdded) {
+            // WARNING: don't bind "this" on listener function because then it will not be same for remove
+            // even if this bind is used for remove, too
+            window.addEventListener('beforeunload', this.beforeunload, true);
+            this.listenerAdded = true;
+        }
     }
 
     public removeBrowserListener(): void {
-        window.removeEventListener('beforeunload', this.beforeunload.bind(this), { capture: true });
+        window.removeEventListener('beforeunload', this.beforeunload, true);
+        this.listenerAdded = false;
     }
 
     private beforeunload(event: any): any {
@@ -32,8 +39,6 @@ export class WindowListener {
     }
 
     public logout(): void {
-        this.removeBrowserListener();
-        window.onbeforeunload = (): void => null;
         window.location.replace('/auth/logout');
     }
 

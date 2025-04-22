@@ -54,7 +54,8 @@ export class FormFieldConfiguration implements IConfiguration {
         public visible: boolean = true,
         public translateLabel: boolean = true,
         public valid: boolean = true,
-        public countSeparatorString: string = null
+        public countSeparatorString: string = null,
+        public description?: string
     ) {
         this.instanceId = existingFieldId ? existingFieldId : null;
 
@@ -62,5 +63,64 @@ export class FormFieldConfiguration implements IConfiguration {
         if (requiredDefined && typeof required === 'string') {
             this.required = BrowserUtil.isBooleanTrue(required);
         }
+    }
+
+    public static getPropertyName(property: string): string {
+        let displayValue: string = property;
+
+        switch (property) {
+            case 'id':
+                displayValue = 'Id';
+                break;
+            case 'label':
+                displayValue = 'Label';
+                break;
+            case 'property':
+                displayValue = 'Property';
+                break;
+            case 'inputComponent':
+                displayValue = 'Input Component';
+                break;
+            case 'required':
+                displayValue = 'Required';
+                break;
+            case 'hint':
+                displayValue = 'Hint';
+                break;
+            case 'options':
+                displayValue = 'Options';
+                break;
+            case 'defaultValue':
+                displayValue = 'Default Value';
+                break;
+            case 'maxLength':
+                displayValue = 'Max Length';
+                break;
+            case 'regEx':
+                displayValue = 'Validation - Regex';
+                break;
+            case 'regExErrorMessage':
+                displayValue = 'Validation - Regex Error Message';
+                break;
+            case 'empty':
+                displayValue = 'Empty Field (Dummy/Container)';
+                break;
+            case 'readonly':
+                displayValue = 'Readonly';
+                break;
+            case 'visible':
+                displayValue = 'Visible';
+                break;
+            case 'valid':
+                displayValue = 'Valid';
+                break;
+            case 'description':
+                displayValue = 'Field Description';
+                break;
+            default:
+                displayValue = property;
+        }
+
+        return displayValue;
     }
 }
