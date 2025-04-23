@@ -1934,6 +1934,13 @@
 │  ├─ email: me@feedic.com
 │  ├─ path: node_modules/entities
 │  └─ licenseFile: node_modules/entities/LICENSE
+├─ entities@6.0.0
+│  ├─ licenses: BSD-2-Clause
+│  ├─ repository: https://github.com/fb55/entities
+│  ├─ publisher: Felix Boehm
+│  ├─ email: me@feedic.com
+│  ├─ path: node_modules/entities
+│  └─ licenseFile: node_modules/parse5/node_modules/entities/LICENSE
 ├─ errno@0.1.8
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/rvagg/node-errno
@@ -3164,7 +3171,7 @@
 │  ├─ url: https://github.com/inikulin
 │  ├─ path: node_modules/parse5-parser-stream
 │  └─ licenseFile: node_modules/parse5-parser-stream/LICENSE
-├─ parse5@7.2.1
+├─ parse5@7.3.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/inikulin/parse5
 │  ├─ publisher: Ivan Nikulin
