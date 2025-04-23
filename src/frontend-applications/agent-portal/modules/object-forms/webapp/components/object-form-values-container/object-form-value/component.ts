@@ -217,6 +217,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Edit Field'
+        ]);
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(this.state.formValue?.instanceId),
             eventPublished: (instanceId: string): void => {

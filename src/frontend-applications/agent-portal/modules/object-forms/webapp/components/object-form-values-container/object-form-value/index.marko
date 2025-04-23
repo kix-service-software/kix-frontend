@@ -30,6 +30,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                   type="button"
                   class="btn btn-sm btn-light text-black me-3"
                   aria-label="Edit Field"
+                  title=(state.translations["Translatable#Edit Field"])
                   on-click("editField")
                >
                   <i class="fa-regular fa-pen-to-square"/>
@@ -80,14 +81,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                rounded: !state.valid,
             },
          ]>
-            <if(!state.formValue["COUNT_CONTAINER"])>
+            <if(input.contextInstanceId && state.isEmpty)/>
+            <else-if(!state.formValue["COUNT_CONTAINER"])>
                <if(state.inputTemplate)>
                   <${state.inputTemplate} formValue=input.formValue/>
                </if>
+               <else-if(input.formValue.inputComponentId === "no-input")/>
                <else>
                   <text-form-input formValue=input.formValue/>
                </else>
-            </if>
+            </else-if>
          </div>
       </div>
       <if(

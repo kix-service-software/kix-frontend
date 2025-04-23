@@ -79,11 +79,18 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         ]);
     }
 
+
     private async setPage(index: number): Promise<void> {
+        const formHandler = await this.context?.getFormManager()?.getObjectFormHandler();
+        try {
+            await formHandler.validateObjectFormPage(this.state.pages[this.state.activePageIndex].id);
+        } catch (e) {
+            console.warn(e);
+            return;
+        }
         this.state.activePageIndex = index;
         const page = this.state.pages[index];
         this.state.title = page?.name;
-        const formHandler = await this.context?.getFormManager()?.getObjectFormHandler();
         formHandler?.setActivePageId(page?.id);
     }
 
