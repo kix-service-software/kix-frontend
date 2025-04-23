@@ -17,13 +17,18 @@ import { KIXObjectService } from '../../../../modules/base-components/webapp/cor
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { SortUtil } from '../../../../model/SortUtil';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class ConfigItemClassAttributeUtil {
 
     public static async getMergedClassAttributeIds(
-        classIds?: number | number[], searchableOnly: boolean = true
+        classIds?: number | number[], searchableOnly: boolean = true, filterValidClasses?: boolean
     ): Promise<Array<[string, string, string]>> {
-        let attributes = await this.getAttributeDefinitions(classIds);
+        let attributes = await this.getAttributeDefinitions(classIds, filterValidClasses);
 
         attributes = attributes.filter((a) => a.Input.Type !== 'Attachment');
         if (searchableOnly) {
@@ -68,18 +73,21 @@ export class ConfigItemClassAttributeUtil {
         return null;
     }
 
-    public static async getAttributeDefinitions(classIds?: number | number[]): Promise<AttributeDefinition[]> {
+    public static async getAttributeDefinitions(
+        classIds?: number | number[], filterValidClasses?: boolean
+    ): Promise<AttributeDefinition[]> {
         let attributes;
-        const ciClasses = await this.loadCIClasses(classIds);
-        if (ciClasses && ciClasses.length) {
-            if (ciClasses[0]?.CurrentDefinition) {
-                attributes = ciClasses[0]?.CurrentDefinition?.Definition.map((d) => new AttributeDefinition(d));
-                if (ciClasses.length > 1) {
-                    for (let i = 1; i < ciClasses.length; i++) {
-                        const definition = ciClasses[i]?.CurrentDefinition;
-                        if (definition && definition?.Definition) {
-                            this.compareTrees(attributes, definition?.Definition);
-                        }
+        const ciClasses = await this.loadCIClasses(classIds, filterValidClasses);
+        if (ciClasses?.length) {
+            attributes = ciClasses[0]?.CurrentDefinition?.Definition?.map(
+                (d) => new AttributeDefinition(d)
+            );
+
+            if (ciClasses.length > 1) {
+                for (let i = 1; i < ciClasses.length; i++) {
+                    const definition = ciClasses[i]?.CurrentDefinition;
+                    if (definition && definition?.Definition) {
+                        this.compareTrees(attributes, definition?.Definition);
                     }
                 }
             }
@@ -120,7 +128,10 @@ export class ConfigItemClassAttributeUtil {
         return undefined;
     }
 
-    private static async loadCIClasses(classIds?: number | number[]): Promise<ConfigItemClass[]> {
+    private static async loadCIClasses(
+        classIds?: number | number[], filterValidClasses?: boolean
+
+    ): Promise<ConfigItemClass[]> {
         let objectIds: number[];
         if (classIds) {
             if (Array.isArray(classIds)) {
@@ -131,12 +142,19 @@ export class ConfigItemClassAttributeUtil {
         }
 
         const loadingOptions = new KIXObjectLoadingOptions();
+        if (filterValidClasses) {
+            loadingOptions.filter = [
+                new FilterCriteria(
+                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+                )
+            ];
+        }
         loadingOptions.includes = [ConfigItemClassProperty.CURRENT_DEFINITION];
         loadingOptions.cacheType = `${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`;
 
         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
             KIXObjectType.CONFIG_ITEM_CLASS, objectIds, loadingOptions
-        );
+        ).catch((): ConfigItemClass[] => []);
         return ciClasses;
     }
 
