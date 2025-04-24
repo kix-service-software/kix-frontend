@@ -110,13 +110,6 @@ export class NotificationFormService extends KIXObjectFormService {
     private getLanguageField(
         form: FormConfiguration, language: [string, string], notification: Notification
     ): FormFieldConfiguration {
-        let contentType = 'text/html';
-        if (
-            form.formContext === FormContext.EDIT &&
-            notification && notification.Message && notification.Message[language[0]]
-        ) {
-            contentType = notification.Message[language[0]].ContentType;
-        }
         const subjectField = new FormFieldConfiguration(
             'subject-field',
             'Translatable#Subject', `${NotificationProperty.MESSAGE_SUBJECT}###${language[0]}`, null, true,
@@ -131,13 +124,12 @@ export class NotificationFormService extends KIXObjectFormService {
             form && form.formContext === FormContext.EDIT ?
                 'Translatable#Helptext_Admin_NotificationEdit_MessageContentType' :
                 'Translatable#Helptext_Admin_NotificationCreate_MessageContentType',
-                [
-                    new FormFieldOption(
-                        DefaultSelectInputFormOption.NODES,
-                        NotificationConfig.getContentType().map((v) => new TreeNode(v.key, v.label))
-                    )
-                ],
-                new FormFieldValue('text/html')
+            [
+                new FormFieldOption(
+                    DefaultSelectInputFormOption.NODES,
+                    NotificationConfig.getContentType().map((v) => new TreeNode(v.key, v.label))
+                )
+            ]
         );
         contentTypeField.instanceId = IdService.generateDateBasedId(`notification-${language[0]}`);
 
