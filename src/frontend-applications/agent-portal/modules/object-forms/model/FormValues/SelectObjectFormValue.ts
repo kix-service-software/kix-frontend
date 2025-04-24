@@ -498,7 +498,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     protected async searchObjects(): Promise<T[]> {
         let objects = [];
-        if (this.searchValue?.length >= this.autoCompleteConfiguration.charCount) {
+        if (this.searchValue?.length >= this.autoCompleteConfiguration?.charCount) {
             const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(this.objectType);
             let loadingOptions = new KIXObjectLoadingOptions();
 
