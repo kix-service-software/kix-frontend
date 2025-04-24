@@ -20,12 +20,15 @@ import { Context } from '../../../../../model/Context';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { LogTier } from '../../../model/LogTier';
 
+declare let CodeMirror: any;
+
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private context: Context;
     private logFile: LogFile;
     private logLevel: string[];
     private intervalId: number;
+    private codeMirror: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -48,12 +51,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Filter Log Level'
         ]);
 
-        await this.loadLogFile();
-
-        this.state.title = this.state.translations['Translatable#View Log File']
-            + ': ' + this.logFile.DisplayName;
-
-        this.setRefreshInterval();
+        await this.initCodeEditor();
+        this.state.title = `${this.state.translations['Translatable#View Log File']}: ${this.logFile?.DisplayName || ''}`;
 
         this.state.prepared = true;
     }
@@ -61,6 +60,28 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onDestroy(): void {
         if (this.intervalId) {
             window.clearInterval(this.intervalId);
+        }
+    }
+
+    private async initCodeEditor(): Promise<void> {
+        const textareaElement = (this as any).getEl(this.state.editorId);
+        if (textareaElement) {
+            this.codeMirror = CodeMirror.fromTextArea(
+                textareaElement,
+                {
+                    value: '',
+                    lineNumbers: true,
+                    readOnly: true,
+                    lineWrapping: true,
+                    foldGutter: true,
+                    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+                }
+            );
+
+            this.codeMirror.setSize('100%', '100%');
+
+            await this.loadLogFile();
+            this.setRefreshInterval();
         }
     }
 
@@ -145,7 +166,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             content = matchingLines.join('\n');
         }
 
-        this.state.content = content;
+        if (this.codeMirror) {
+            this.codeMirror.setValue(content);
+            this.codeMirror.refresh();
+        }
     }
 
     private getContent(): string {
