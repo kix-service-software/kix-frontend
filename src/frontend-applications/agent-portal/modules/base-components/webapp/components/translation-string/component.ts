@@ -9,8 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -49,12 +47,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await this.setText();
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH, {
-            eventSubscriberId: '',
-            eventPublished: (): void => {
-                this.setText();
-            }
-        });
     }
 
     private async setText(): Promise<void> {
