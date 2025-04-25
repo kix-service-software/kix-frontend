@@ -353,7 +353,7 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
                     + '<thead><tr>'
                     + '<th style="padding:10px 15px;">Action</th>'
                     + '<th style="padding:10px 15px;">State</th>'
-                    + '<tr></thead>'
+                    + '</tr></thead>'
                     + '<tbody>';
 
                 checkListItems.forEach((cl) => {
