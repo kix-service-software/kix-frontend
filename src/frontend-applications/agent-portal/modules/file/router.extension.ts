@@ -12,11 +12,11 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { IServerRouterExtension } from '../../server/extensions/IServerRouterExtension';
 import { FileRouter } from './server/FileRouter';
 
-
 class Extension extends KIXExtension implements IServerRouterExtension {
 
-    public async registerRouter(expressRouter: Router): Promise<void> {
-        expressRouter.use(
+    public async registerRouter(): Promise<Router> {
+        const router = Router();
+        return router.use(
             FileRouter.getInstance().getBaseRoute(),
             FileRouter.getInstance().getRouter()
         );

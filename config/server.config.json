@@ -21,5 +21,7 @@
     "CLUSTER_WORKER_COUNT": 2,
     "CLUSTER_ENABLED": false,
     "BUILD_MARKO_APPLICATIONS": "",
-    "SSO_ENABLED": false
+    "SSO_ENABLED": false,
+    "BASE_ROUTE": "",
+    "BASE_ROUTE_SSP": ""
 }
