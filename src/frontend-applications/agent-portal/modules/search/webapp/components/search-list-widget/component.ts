@@ -107,7 +107,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.setActiveNode();
 
         EventService.getInstance().publish(SearchEvent.SHOW_CRITERIA);
-        if ((this.context.getConfiguration() as SearchContextConfiguration).enabeSidebarAutoSearch) {
+        if ((this.context.getConfiguration() as SearchContextConfiguration).enableSidebarAutoSearch) {
             EventService.getInstance().publish(SearchEvent.CALL_SEARCH);
         }
     }
