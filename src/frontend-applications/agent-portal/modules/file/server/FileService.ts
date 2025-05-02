@@ -204,4 +204,36 @@ export class FileService {
         return content;
     }
 
+    public static async tailFile(filePath: string, tailCount: number): Promise<string[]> {
+        const fs = require('fs/promises');
+        const fd = await fs.open(filePath, 'r');
+        const stat = await fd.stat();
+
+        const chunkSize = 1024;
+        let position = stat.size;
+        let buffer = '';
+        let lines = [];
+
+        while (position > 0 && lines.length < tailCount) {
+            const readSize = Math.min(chunkSize, position);
+            position -= readSize;
+
+            const { buffer: chunk } = await fd.read({
+                buffer: Buffer.alloc(readSize),
+                position,
+                length: readSize
+            });
+
+            buffer = chunk.toString('utf8') + buffer;
+            const parts = buffer.split('\n');
+            if (position > 0) {
+                buffer = parts.shift();
+            }
+            lines = [...parts, ...lines];
+        }
+
+        await fd.close();
+        return lines.slice(-tailCount);
+    }
+
 }
