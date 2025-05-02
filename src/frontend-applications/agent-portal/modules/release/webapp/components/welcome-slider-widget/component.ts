@@ -14,6 +14,7 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { SliderContent } from '../../../model/SliderContent';
 import { SliderWidgetConfiguration } from '../../../model/SliderWidgetConfiguration';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -30,6 +31,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        this.state.baseRoute = ClientStorageService.getBaseRoute();
         const currentUser = await AgentService.getInstance().getCurrentUser();
         if (currentUser && currentUser.UserID !== 1) {
             this.state.userString = currentUser.Contact ? currentUser.Contact.Fullname : currentUser.UserLogin;

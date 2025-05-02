@@ -46,7 +46,7 @@ export abstract class KIXRouter implements IRouter {
     }
 
     protected setFrontendSocketUrl(res: Response): void {
-        res.cookie('frontendSocketUrl', this.getServerUrl(), { httpOnly: true });
+        res.cookie('frontendSocketUrl', this.getServerUrl(), { httpOnly: true, path: '/' });
     }
 
     protected async getIcon(name: string): Promise<ObjectIcon> {

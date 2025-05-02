@@ -26,7 +26,6 @@ import { SearchProperty } from '../modules/search/model/SearchProperty';
 import { TableFactoryService } from '../modules/table/webapp/core/factory/TableFactoryService';
 import { TranslationService } from '../modules/translation/webapp/core/TranslationService';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
-import { AgentSocketClient } from '../modules/user/webapp/core/AgentSocketClient';
 import { ConfiguredWidget } from './configuration/ConfiguredWidget';
 import { ContextConfiguration } from './configuration/ContextConfiguration';
 import { TableConfiguration } from './configuration/TableConfiguration';

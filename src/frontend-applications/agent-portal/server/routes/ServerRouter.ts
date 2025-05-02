@@ -21,31 +21,36 @@ export class ServerRouter {
 
     public constructor(application: Application) {
         this.expressRouter = Router();
-
         application.use(this.expressRouter);
     }
 
     public async initializeRoutes(): Promise<void> {
-        await this.initExtensions();
+        const baseRoute = '/';
 
-        this.expressRouter.use(
-            AuthenticationRouter.getInstance().getBaseRoute(), AuthenticationRouter.getInstance().getRouter()
-        );
+        const extentionRouter = await this.initExtensions();
 
-        this.expressRouter.use(
-            ApplicationRouter.getInstance().getBaseRoute(), ApplicationRouter.getInstance().getRouter()
-        );
-
+        this.expressRouter.use(baseRoute, [
+            Router().use(
+                AuthenticationRouter.getInstance().getBaseRoute(),
+                AuthenticationRouter.getInstance().getRouter()
+            ),
+            ...extentionRouter,
+            ApplicationRouter.getInstance().getRouter()
+        ]);
     }
 
-    private async initExtensions(): Promise<void> {
+    private async initExtensions(): Promise<Router[]> {
         const routerExtensions = await PluginService.getInstance().getExtensions<IServerRouterExtension>(
             AgentPortalExtensions.ROUTER
         );
 
+        const router = [];
         LoggingService.getInstance().info(`Init ${routerExtensions.length} router extensions`);
         for (const extension of routerExtensions) {
-            await extension.registerRouter(this.expressRouter);
+            const r = await extension.registerRouter();
+            router.push(r);
         }
+
+        return router;
     }
 }

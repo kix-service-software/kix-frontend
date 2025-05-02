@@ -20,7 +20,8 @@ export class ComponentState extends WidgetComponentState {
         public selfServiceManualLink: string = null,
         public userManualLink: string = null,
         public adminManualLink: string = null,
-        public faqIds: number[] = []
+        public faqIds: number[] = [],
+        public baseRoute: string = ''
 
     ) {
         super();
