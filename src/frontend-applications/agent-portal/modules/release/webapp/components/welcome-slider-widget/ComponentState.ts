@@ -22,7 +22,8 @@ export class ComponentState extends WidgetComponentState {
             new KIXReleaseVersion('v35 - Feature-Liste KIX18 v35 ', 'https://forum.kixdesk.com/index.php?topic=12783.0'),
             new KIXReleaseVersion('v34 - Feature-Liste KIX18 v34 ', 'https://forum.kixdesk.com/index.php?topic=12539'),
             new KIXReleaseVersion('v33 - Feature-Liste KIX18 v33 ', 'https://forum.kixdesk.com/index.php?topic=12273')
-        ]
+        ],
+        public baseRoute: string = ''
     ) {
         super();
     }

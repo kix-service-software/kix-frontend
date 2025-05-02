@@ -14,6 +14,7 @@ import { KIXModulesService } from './KIXModulesService';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { BrowserUtil } from './BrowserUtil';
 import { AdditionalRoutingHandler } from './AdditionalRoutingHandler';
+import { ClientStorageService } from './ClientStorageService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class RoutingService {
@@ -99,10 +100,13 @@ export class RoutingService {
 
         const prefixLength = KIXModulesService.urlPrefix.length;
         const pathName = parsedUrl.pathname.substring(prefixLength + 1, parsedUrl.pathname.length);
-        const path = parsedUrl.pathname === '/' ? [] : this.removeEmptyPaths(pathName.split('/'));
+        let path = parsedUrl.pathname === '/' ? [] : this.removeEmptyPaths(pathName.split('/'));
 
         let contextUrl: string;
         let objectId: string;
+
+        const baseRoute = this.removeEmptyPaths(ClientStorageService.getBaseRoute().split('/'));
+        path.splice(0, baseRoute?.length);
 
         if (path.length) {
             contextUrl = path[0];

@@ -13,6 +13,14 @@ export class ClientStorageService {
 
     public static tokenPrefix = '';
 
+    public static setBaseRoute(baseRoute: string): void {
+        this.setOption(this.tokenPrefix + 'BASE_ROUTE', baseRoute || '');
+    }
+
+    public static getBaseRoute(): string {
+        return this.getOption(this.tokenPrefix + 'BASE_ROUTE') || '';
+    }
+
     public static setSocketTimeout(timeout: number): void {
         if (!isNaN(timeout)) {
             this.setOption('SocketTimeout', timeout.toString());
@@ -35,14 +43,14 @@ export class ClientStorageService {
             socketUrl = ClientStorageService.getCookie('frontendSocketUrl');
 
             if (!socketUrl || socketUrl === '') {
-                socketUrl = this.getApplicationUrl();
+                socketUrl = this.getApplicationUrl(true);
             }
         }
 
         return socketUrl;
     }
 
-    public static getApplicationUrl(): string {
+    public static getApplicationUrl(hostOnly?: boolean): string {
         // use current location as socket URL
         let applicationUrl = window.location.protocol + '//' + window.location.hostname;
 
@@ -51,7 +59,8 @@ export class ClientStorageService {
             applicationUrl = applicationUrl + ':' + port;
         }
 
-        return applicationUrl;
+        const baseRoute = hostOnly ? '' : ClientStorageService.getBaseRoute();
+        return `${applicationUrl}${baseRoute}`;
     }
 
     public static getCookie(name: string): string {

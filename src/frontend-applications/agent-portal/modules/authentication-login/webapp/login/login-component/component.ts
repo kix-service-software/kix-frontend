@@ -25,6 +25,7 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 
 declare const window: Window;
 
@@ -51,6 +52,7 @@ class Component {
         this.mfaConfig = input.mfaConfig;
         this.state.pwResetEnabled = input.pwResetEnabled;
         this.state.pwResetState = input.pwResetState;
+        ClientStorageService.setBaseRoute(input.baseRoute);
     }
 
     public async onMount(): Promise<void> {
@@ -58,7 +60,6 @@ class Component {
         this.checkBrowser();
 
         this.state.loading = false;
-        this.state.notifications = await PortalNotificationService.getInstance().getPreLoginNotifications();
 
         this.subscriber = {
             eventSubscriberId: 'login-component',
@@ -73,6 +74,17 @@ class Component {
             this.state.authMethods = this.authMethods.filter((am) => am.type !== 'LOGIN' && am.preAuth);
         }
 
+        this.state.prepared = true;
+
+        setTimeout(() => {
+            const userElement = (this as any).getEl('login-user-name');
+            if (userElement) {
+                userElement.focus();
+            }
+        }, 200);
+
+        this.state.notifications = await PortalNotificationService.getInstance().getPreLoginNotifications();
+
         if (!this.state.pwResetEnabled) {
             const passwordResetEnabled = await KIXObjectService.loadObjects<SysConfigOption>(
                 KIXObjectType.SYS_CONFIG_OPTION, ['User::Password::Reset::Enabled']
@@ -82,15 +94,6 @@ class Component {
                 this.state.pwResetEnabled = passwordResetEnabled[UserType.AGENT].Value.toString() === '1';
             }
         }
-
-        setTimeout(() => {
-            const userElement = (this as any).getEl('login-user-name');
-            if (userElement) {
-                userElement.focus();
-            }
-        }, 200);
-
-        this.state.prepared = true;
     }
 
     public onDestroy(): void {

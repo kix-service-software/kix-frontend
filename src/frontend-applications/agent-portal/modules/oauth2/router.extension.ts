@@ -14,9 +14,11 @@ import { Router } from 'express';
 
 class Extension extends KIXExtension implements IServerRouterExtension {
 
-    public async registerRouter(expressRouter: Router): Promise<void> {
-        expressRouter.use(
-            ProfileRedirectRouter.getInstance().getBaseRoute(), ProfileRedirectRouter.getInstance().getRouter()
+    public async registerRouter(): Promise<Router> {
+        const router = Router();
+        return router.use(
+            ProfileRedirectRouter.getInstance().getBaseRoute(),
+            ProfileRedirectRouter.getInstance().getRouter()
         );
     }
 
