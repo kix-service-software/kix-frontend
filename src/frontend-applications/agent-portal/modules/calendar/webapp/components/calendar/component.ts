@@ -137,9 +137,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.updateCalendarSchedules(tickets);
         this.setCurrentDate();
 
-        this.calendar.on('beforeUpdateSchedule', this.scheduleChanged.bind(this));
-        this.calendar.on('clickSchedule', this.scheduleClicked.bind(this));
-        this.calendar.on('beforeCreateSchedule', (event) => {
+        this.calendar?.on('beforeUpdateSchedule', this.scheduleChanged.bind(this));
+        this.calendar?.on('clickSchedule', this.scheduleClicked.bind(this));
+        this.calendar?.on('beforeCreateSchedule', (event) => {
             const guide = event.guide;
             guide.clearGuideElement();
         });
@@ -246,7 +246,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async updateCalendarSchedules(tickets: Ticket[]): Promise<void> {
         this.schedules = await this.createSchedules(tickets);
-        this.calendar.createSchedules(this.schedules.filter((s) => s));
+        this.calendar?.createSchedules(this.schedules.filter((s) => s));
         this.state.loading = false;
     }
 
@@ -389,7 +389,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const id = isNaN(Number(schedule.id)) ? schedule.id.replace(/^pending-/, '') : schedule.id;
                 KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, id)
                     .then(() => {
-                        this.calendar.updateSchedule(schedule.id, schedule.calendarId, changes);
+                        this.calendar?.updateSchedule(schedule.id, schedule.calendarId, changes);
                         const context = ContextService.getInstance().getActiveContext();
                         if (context) {
                             context.reloadObjectList(KIXObjectType.TICKET, true);
@@ -404,27 +404,27 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.view = this.state.view === 'month' ? 'week' : 'month';
         this.state.toggleLabel = this.state.view === 'month' ? 'Translatable#Week' : 'Translatable#Month';
         this.setCurrentDate();
-        this.calendar.changeView(this.state.view, true);
+        this.calendar?.changeView(this.state.view, true);
     }
 
     public today(): void {
         if (this.calendar) {
-            this.calendar.setDate(new Date());
-            this.calendar.changeView(this.state.view, true);
+            this.calendar?.setDate(new Date());
+            this.calendar?.changeView(this.state.view, true);
             this.setCurrentDate();
         }
     }
 
     public next(): void {
         if (this.calendar) {
-            this.calendar.next();
+            this.calendar?.next();
             this.setCurrentDate();
         }
     }
 
     public prev(): void {
         if (this.calendar) {
-            this.calendar.prev();
+            this.calendar?.prev();
             this.setCurrentDate();
         }
     }
@@ -465,7 +465,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async setCurrentDate(): Promise<void> {
-        const currentDate = this.calendar.getDate().toDate();
+        const currentDate = this.calendar?.getDate().toDate();
         const month = currentDate.getMonth();
 
         const monthLabel = await DateTimeUtil.getMonthName(currentDate);
@@ -492,7 +492,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const cal = this.state.calendars.find((c) => c.id === calendar.id);
         cal.visible = !cal.visible;
         (this as any).setStateDirty('calendars');
-        this.calendar.toggleSchedules(cal.id, !cal.visible);
+        this.calendar?.toggleSchedules(cal.id, !cal.visible);
     }
 
 }
