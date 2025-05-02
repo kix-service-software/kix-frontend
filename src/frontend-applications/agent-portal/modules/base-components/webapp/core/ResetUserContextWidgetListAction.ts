@@ -27,7 +27,7 @@ export class ResetUserContextWidgetListAction extends AbstractAction<Table | Use
 
     public hasLink: boolean = false;
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('system/user', [CRUD.CREATE])
+        new UIComponentPermission('system/users', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {
