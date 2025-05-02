@@ -60,7 +60,7 @@ export class AuthenticationSocketClient extends SocketClient {
                     if (!fakeLogin) {
                         document.cookie = ClientStorageService.tokenPrefix + 'token=' + result.token;
                         const baseRoute = ClientStorageService.getBaseRoute();
-                        window.location.replace(`${baseRoute}/${result.redirectUrl}`);
+                        window.location.replace(`${baseRoute}${result.redirectUrl}`);
                     }
                     resolve(new LoginResult(true));
                 }
