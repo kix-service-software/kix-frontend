@@ -38,7 +38,7 @@ export class SearchContextConfiguration extends ContextConfiguration {
         public tableWidgetInstanceIds: Array<[string, string]> = [],
         public roleIds: number[] = [],
         public provideInvalidValues: boolean = true,
-        public enabeSidebarAutoSearch: boolean = false,
+        public enableSidebarAutoSearch: boolean = false,
     ) {
         super(
             id, name, type, contextId, sidebars, explorer, lanes, content, generalActions, actions,
