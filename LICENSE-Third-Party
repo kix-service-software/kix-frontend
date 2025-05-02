@@ -3844,13 +3844,6 @@
 │  ├─ email: joris@jorisvanderwel.com
 │  ├─ path: node_modules/symbol-tree
 │  └─ licenseFile: node_modules/symbol-tree/LICENSE
-├─ tail@2.2.6
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/lucagrulla/node-tail
-│  ├─ publisher: Luca Grulla
-│  ├─ url: https://www.lucagrulla.com
-│  ├─ path: node_modules/tail
-│  └─ licenseFile: node_modules/tail/LICENSE
 ├─ terser@5.39.0
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/terser/terser
