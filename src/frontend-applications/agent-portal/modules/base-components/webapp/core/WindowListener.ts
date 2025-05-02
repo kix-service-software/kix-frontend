@@ -7,6 +7,8 @@
  * --
  */
 
+import { ClientStorageService } from './ClientStorageService';
+
 export class WindowListener {
 
     private static INSTANCE: WindowListener;
@@ -39,7 +41,8 @@ export class WindowListener {
     }
 
     public logout(): void {
-        window.location.replace('/auth/logout');
+        const baseRoute = ClientStorageService.getBaseRoute();
+        window.location.replace(`${baseRoute}/auth/logout`);
     }
 
 }

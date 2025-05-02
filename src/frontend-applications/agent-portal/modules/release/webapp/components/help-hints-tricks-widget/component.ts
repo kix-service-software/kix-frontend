@@ -19,6 +19,7 @@ import { AuthenticationSocketClient } from '../../../../../modules/base-componen
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -34,6 +35,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        this.state.baseRoute = ClientStorageService.getBaseRoute();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Help, hints & tricks',
             'Translatable#Field Agent App',

@@ -281,6 +281,9 @@ export class HttpService {
             options.method, resource, parameter, clientRequestId
         );
 
+        const http = require('http');
+        options.httpAgent = new http.Agent({ keepAlive: true });
+
         let response: AxiosResponse | HTTPResponse = await this.axios(options).catch((error: AxiosError) => {
             if (logError) {
                 LoggingService.getInstance().error(

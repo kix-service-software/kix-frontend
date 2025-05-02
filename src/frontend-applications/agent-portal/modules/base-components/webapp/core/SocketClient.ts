@@ -29,7 +29,10 @@ export abstract class SocketClient {
     protected createSocket(): void {
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
 
+        const baseRoute = ClientStorageService.getBaseRoute();
+
         const options = {
+            path: `${baseRoute}/socket.io`,
             withCredentials: true,
             closeOnBeforeunload: false,
             extraHeaders: {
