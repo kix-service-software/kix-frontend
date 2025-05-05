@@ -116,14 +116,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public tableValueChanged(rowIndex: number, colIndex: number, event: any): void {
         this.state.value[rowIndex][colIndex] = event.target.value;
-        (this as any).setStateDirty('tableValues');
         this.formValue.setTableValue(this.state.value);
     }
 
     public tableRowRemoved(index: number, event: any): void {
+        this.state.prepared = false;
         this.state.value.splice(index, 1);
         (this as any).setStateDirty('tableValues');
         this.formValue.setTableValue(this.state.value);
+        setTimeout(() => this.state.prepared = true, 10);
     }
 
     public tableRowAdded(event: any): void {
@@ -152,10 +153,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const rowMax = this.formValue.maxRowCount;
         const rowCount = this.state.value?.length;
         return rowCount < rowMax && index === rowCount - 1;
-    }
-
-    public addInitialTable(): void {
-        this.formValue.addInitialTable();
     }
 
 }
