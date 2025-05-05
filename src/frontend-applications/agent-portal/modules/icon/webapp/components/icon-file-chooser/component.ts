@@ -48,7 +48,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         const size = await AttachmentUtil.getMaxUploadSize(true);
         this.state.maxUploadSizeInfo = await TranslationService.translate(
-            'Max. allowed icon size: {0}', [AttachmentUtil.getFileSize(size)]
+            'Translatable#Max. allowed icon size: {0}', [AttachmentUtil.getFileSize(size)]
         );
 
         const uploadElement = (this as any).getEl();

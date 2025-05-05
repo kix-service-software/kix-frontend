@@ -3399,6 +3399,9 @@ msgstr "Alle Artikel als gelesen markieren."
 msgid "Max Depth"
 msgstr "Max. Tiefe"
 
+msgid "Max. allowed icon size: {0}"
+msgstr "Max. zulässige Bildgröße: {0}"
+
 msgid "Max. Reports"
 msgstr "Max. Berichte"
 
@@ -4595,6 +4598,9 @@ msgstr "Suchvorlagen"
 
 msgid "Search Title"
 msgstr "Name der Suche"
+
+msgid "Search by tag"
+msgstr "Suche anhand Tags"
 
 msgid "Search defaults for {0} reseted."
 msgstr "Standard-Sucheinstellungen für {0} zurückgesetzt."
