@@ -198,7 +198,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 if (formValue['IS_COUNTABLE'] === true && !formValue['COUNT_CONTAINER']) {
                     hasField = formValue?.parent?.fieldId !== undefined;
                 } else {
-                    hasField = formValue.fieldId !== undefined;
+                    hasField = !!formValue.fieldId;
                 }
                 canShow = this.contextInstanceId !== undefined && hasField;
 
