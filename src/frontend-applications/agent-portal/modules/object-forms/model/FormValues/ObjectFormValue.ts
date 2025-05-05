@@ -84,8 +84,9 @@ export class ObjectFormValue<T = any> {
         this.instanceId = IdService.generateDateBasedId();
         if (object) {
             this.value = object[property];
-            this.createBindings(property, object);
         }
+
+        this.createBindings();
     }
 
     public getInitialState(property: string): any {
@@ -174,35 +175,33 @@ export class ObjectFormValue<T = any> {
         }
     }
 
-    protected createBindings(property: string, object: any): void {
-        if (property && object) {
-            this.bindings.push(
-                new FormValueBinding(this, FormValueProperty.VALUE, object, property),
-                new FormValueBinding(this, FormValueProperty.POSSIBLE_VALUES, object, property),
-                new FormValueBinding(this, FormValueProperty.READ_ONLY, object, property),
-                new FormValueBinding(this, FormValueProperty.REQUIRED, object, property),
-                new FormValueBinding(this, FormValueProperty.VALID, object, property),
-                new FormValueBinding(this, FormValueProperty.VALIDATION_RESULTS, object, property),
-                new FormValueBinding(this, FormValueProperty.VISIBLE, object, property),
-                new FormValueBinding(this, FormValueProperty.ENABLED, object, property),
-                new FormValueBinding(this, FormValueProperty.COUNT_MAX, object, property),
-                new FormValueBinding(this, FormValueProperty.REG_EX_LIST, object, property),
-                new FormValueBinding(this, FormValueProperty.FORM_VALUES, object, property),
-                new FormValueBinding(this, FormValueProperty.LABEL, object, property),
-                new FormValueBinding(this, FormValueProperty.IS_CONFIGURABLE, object, property),
-                new FormValueBinding(this, FormValueProperty.DEFAULT_VALUE, object, property)
-            );
+    protected createBindings(property?: string, object?: any): void {
+        this.bindings.push(
+            new FormValueBinding(this, FormValueProperty.VALUE),
+            new FormValueBinding(this, FormValueProperty.POSSIBLE_VALUES),
+            new FormValueBinding(this, FormValueProperty.READ_ONLY),
+            new FormValueBinding(this, FormValueProperty.REQUIRED),
+            new FormValueBinding(this, FormValueProperty.VALID),
+            new FormValueBinding(this, FormValueProperty.VALIDATION_RESULTS),
+            new FormValueBinding(this, FormValueProperty.VISIBLE),
+            new FormValueBinding(this, FormValueProperty.ENABLED),
+            new FormValueBinding(this, FormValueProperty.COUNT_MAX),
+            new FormValueBinding(this, FormValueProperty.REG_EX_LIST),
+            new FormValueBinding(this, FormValueProperty.FORM_VALUES),
+            new FormValueBinding(this, FormValueProperty.LABEL),
+            new FormValueBinding(this, FormValueProperty.IS_CONFIGURABLE),
+            new FormValueBinding(this, FormValueProperty.DEFAULT_VALUE)
+        );
 
-            this.addPropertyBinding(FormValueProperty.REG_EX_LIST, () => {
-                if (Array.isArray(this.formValues)) {
-                    for (const formValue of this.formValues) {
-                        formValue.regExList = this.regExList;
-                    }
-                } else if (this.regExList?.length) {
-                    this.objectValueMapper?.validateFormValue(this, true);
+        this.addPropertyBinding(FormValueProperty.REG_EX_LIST, () => {
+            if (Array.isArray(this.formValues)) {
+                for (const formValue of this.formValues) {
+                    formValue.regExList = this.regExList;
                 }
-            });
-        }
+            } else if (this.regExList?.length) {
+                this.objectValueMapper?.validateFormValue(this, true);
+            }
+        });
     }
 
     public addPropertyBinding(property: string, cb: (value: ObjectFormValue) => void): string {
