@@ -14,6 +14,7 @@ import { TableRemoveFormValueAction } from '../actions/TableRemoveFormValueActio
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { FormValueAction } from '../FormValueAction';
 import { ObjectFormValue } from '../ObjectFormValue';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 
 export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>> {
 
@@ -27,6 +28,7 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
     public tableValue: Array<string[]>;
 
     private setValueTimeout: any;
+    private initialized: boolean = false;
 
     public constructor(
         public property: string,
@@ -54,36 +56,54 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
         return super.findFormValue(property);
     }
 
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        await this.setDefaultTableSettings();
+        await super.initFormValueByField(field);
+    }
+
+    protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
+        this.defaultValue = this.addInitialTable();
+    }
+
     public async initFormValue(): Promise<void> {
-        await super.initFormValue();
+        this.setDefaultTableSettings();
 
-        const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
-        const config = dynamicField?.Config;
-
-        this.translatableColumn = typeof config?.TranslatableColumn !== 'undefined'
-            ? config.TranslatableColumn
-            : true;
-
-        this.columns = config?.Columns || [];
-        this.minRowCount = Number(config?.RowsMin) || 1;
-        this.maxRowCount = Number(config?.RowsMax) || 1;
-        this.initialRowCount = Number(config?.RowsInit) || 1;
-
-        const value = this.object[this.property];
+        let value = this.object[this.property];
         if (Array.isArray(value) && value.length) {
-            this.value = value[0];
-        } else {
-            this.value = value;
+            value = value[0];
         }
 
-        if (!this.value) {
-            this.addInitialTable();
-        } else if (typeof this.value === 'string') {
-            this.setFormValue(this.value, true);
+        if (typeof value === 'string') {
+            value = JSON.parse(value);
+        }
+
+        if (!value) {
+            value = this.defaultValue;
+        }
+
+        this.value = value;
+
+        await this.prepareLabel();
+    }
+
+    private async setDefaultTableSettings(): Promise<void> {
+        if (!this.initialized) {
+            const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
+            const config = dynamicField?.Config;
+
+            this.translatableColumn = typeof config?.TranslatableColumn !== 'undefined'
+                ? config.TranslatableColumn
+                : true;
+
+            this.columns = config?.Columns || [];
+            this.minRowCount = Number(config?.RowsMin) || 1;
+            this.maxRowCount = Number(config?.RowsMax) || 1;
+            this.initialRowCount = Number(config?.RowsInit) || 1;
+            this.initialized = true;
         }
     }
 
-    public async addInitialTable(): Promise<void> {
+    public addInitialTable(setAsValue?: boolean): Array<string[]> {
         const tableValues: Array<string[]> = [];
 
         let rowCount = this.initialRowCount > this.minRowCount && this.initialRowCount < this.maxRowCount
@@ -102,7 +122,11 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
             tableValues.push(row);
         }
 
-        this.value = tableValues;
+        if (setAsValue) {
+            this.value = tableValues;
+        }
+
+        return tableValues;
     }
 
     public async setObjectValue(value: Array<string[]>): Promise<void> {

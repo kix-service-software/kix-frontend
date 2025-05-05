@@ -12,12 +12,11 @@ import { ValidationResult } from '../../../../../../base-components/webapp/core/
 import { ValidationSeverity } from '../../../../../../base-components/webapp/core/ValidationSeverity';
 import { TranslationService } from '../../../../../../translation/webapp/core/TranslationService';
 import { DynamicFieldChecklistFormValue } from '../../../../../model/FormValues/DynamicFields/DynamicFieldChecklistFormValue';
-import { DynamicFieldTableFormValue } from '../../../../../model/FormValues/DynamicFields/DynamicFieldTableFormValue';
 import { ObjectFormValueValidator } from '../../ObjectFormValueValidator';
 
 export class DynamicFieldChecklistValidator extends ObjectFormValueValidator {
 
-    public async validate(formValue: DynamicFieldTableFormValue): Promise<ValidationResult[]> {
+    public async validate(formValue: DynamicFieldChecklistFormValue): Promise<ValidationResult[]> {
         const result: ValidationResult[] = [];
 
         if (formValue.required && formValue instanceof DynamicFieldChecklistFormValue) {
