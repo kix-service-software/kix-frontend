@@ -5,7 +5,7 @@
 │  ├─ email: jridgewell@google.com
 │  ├─ path: node_modules/@ampproject/remapping
 │  └─ licenseFile: node_modules/@ampproject/remapping/LICENSE
-├─ @asamuzakjp/css-color@3.1.5
+├─ @asamuzakjp/css-color@3.1.7
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/asamuzaK/cssColor
 │  ├─ publisher: asamuzaK
@@ -1033,7 +1033,7 @@
 │  ├─ email: me@feedic.com
 │  ├─ path: node_modules/boolbase
 │  └─ licenseFile: node_modules/boolbase/README.md
-├─ bootstrap-icons@1.11.3
+├─ bootstrap-icons@1.12.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/twbs/icons
 │  ├─ publisher: mdo
@@ -1077,7 +1077,7 @@
 │  ├─ email: andrey@sitnik.ru
 │  ├─ path: node_modules/browserslist
 │  └─ licenseFile: node_modules/babel-preset-env/node_modules/browserslist/LICENSE
-├─ browserslist@4.24.4
+├─ browserslist@4.24.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/browserslist/browserslist
 │  ├─ publisher: Andrey Sitnik
@@ -1139,7 +1139,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001716
+├─ caniuse-lite@1.0.30001717
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -4182,7 +4182,7 @@
 │  ├─ url: http://2x.io
 │  ├─ path: node_modules/ws
 │  └─ licenseFile: node_modules/socket.io-adapter/node_modules/ws/LICENSE
-├─ ws@8.18.1
+├─ ws@8.18.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/websockets/ws
 │  ├─ publisher: Einar Otto Stangvik
