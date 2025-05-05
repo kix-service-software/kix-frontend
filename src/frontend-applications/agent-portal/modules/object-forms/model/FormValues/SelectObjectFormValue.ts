@@ -75,10 +75,10 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.inputComponentId = 'select-form-input';
 
         this.bindings.push(
-            new FormValueBinding(this, 'minSelectCount', object, property),
-            new FormValueBinding(this, 'maxSelectCount', object, property),
-            new FormValueBinding(this, 'selectedNodes', object, property),
-            new FormValueBinding(this, 'multiselect', object, property),
+            new FormValueBinding(this, 'minSelectCount'),
+            new FormValueBinding(this, 'maxSelectCount'),
+            new FormValueBinding(this, 'selectedNodes'),
+            new FormValueBinding(this, 'multiselect'),
         );
     }
 

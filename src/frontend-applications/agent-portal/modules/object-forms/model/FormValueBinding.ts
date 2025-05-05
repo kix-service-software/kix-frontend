@@ -22,8 +22,7 @@ export class FormValueBinding {
     private value: any;
 
     public constructor(
-        private formValue: ObjectFormValue, public property: string,
-        object: BindableObject, objectProperty: string
+        private formValue: ObjectFormValue, public property: string
     ) {
         this.id = IdService.generateDateBasedId('FormValueBinding');
         this.value = formValue[property];
