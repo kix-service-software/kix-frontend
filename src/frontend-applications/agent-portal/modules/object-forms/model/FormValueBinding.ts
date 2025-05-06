@@ -27,10 +27,14 @@ export class FormValueBinding {
         this.id = IdService.generateDateBasedId('FormValueBinding');
         this.value = formValue[property];
 
-        Object.defineProperty(this.formValue, this.property, {
-            get: this.valueGetter.bind(this),
-            set: this.valueSetter.bind(this)
-        });
+        try {
+            Object.defineProperty(this.formValue, this.property, {
+                get: this.valueGetter.bind(this),
+                set: this.valueSetter.bind(this)
+            });
+        } catch (e) {
+            console.warn(`Could not create property binding for property: ${property}`);
+        }
 
         if (property === FormValueProperty.VALUE) {
             // FIXME: currently not active because of circle (form => object => form => object ...)
