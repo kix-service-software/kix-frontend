@@ -26,8 +26,8 @@ export class ContactDetailsContext extends Context {
         return 'kix-icon-man-bubble';
     }
 
-    public async getDisplayText(short?: boolean): Promise<string> {
-        return LabelService.getInstance().getObjectText(await this.getObject<Contact>(), short, short);
+    public async getDisplayText(): Promise<string> {
+        return LabelService.getInstance().getObjectText(await this.getObject<Contact>());
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {

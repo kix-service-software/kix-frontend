@@ -288,7 +288,7 @@ export abstract class Context {
         EventService.getInstance().publish(ContextEvents.CONTEXT_ICON_CHANGED, this);
     }
 
-    public async getDisplayText(short: boolean = false): Promise<string> {
+    public async getDisplayText(): Promise<string> {
         let displayText = this.displayText;
         if (!displayText) {
             displayText = this.getAdditionalInformation(AdditionalContextInformation.DISPLAY_TEXT);
