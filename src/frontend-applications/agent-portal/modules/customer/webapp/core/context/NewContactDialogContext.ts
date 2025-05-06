@@ -65,8 +65,8 @@ export class NewContactDialogContext extends Context {
         return contact as any;
     }
 
-    public async getDisplayText(short?: boolean): Promise<string> {
-        let displayText = await super.getDisplayText(short);
+    public async getDisplayText(): Promise<string> {
+        let displayText = await super.getDisplayText();
         if (this.getAdditionalInformation(AdditionalContextInformation.DUPLICATE)) {
             const translatedNew = await TranslationService.translate('Translatable#New');
             displayText = `${translatedNew} ${displayText}`;

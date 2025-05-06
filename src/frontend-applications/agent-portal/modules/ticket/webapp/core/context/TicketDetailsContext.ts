@@ -46,8 +46,8 @@ export class TicketDetailsContext extends Context {
         return 'kix-icon-ticket';
     }
 
-    public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getObjectText(await this.getObject<Ticket>(), true, !short);
+    public async getDisplayText(): Promise<string> {
+        return await LabelService.getInstance().getObjectText(await this.getObject<Ticket>());
     }
 
     public async getObject<O extends KIXObject>(
