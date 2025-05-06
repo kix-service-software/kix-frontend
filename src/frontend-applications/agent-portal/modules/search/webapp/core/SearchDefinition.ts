@@ -243,8 +243,4 @@ export abstract class SearchDefinition {
         return [];
     }
 
-    public appendFullTextCriteria(criteria: FilterCriteria[]): void {
-        return;
-    }
-
 }

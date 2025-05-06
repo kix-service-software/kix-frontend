@@ -60,9 +60,10 @@ export class SearchCache<T extends KIXObject = KIXObject> {
 
     public static create(searchCache: SearchCache, createNew?: boolean): SearchCache {
         const id = createNew ? IdService.generateDateBasedId('SearchCache') : searchCache?.id;
+        const criteria = searchCache?.criteria ? JSON.parse(JSON.stringify(searchCache.criteria)) : [];
         return new SearchCache(
             id, searchCache.contextId,
-            searchCache.objectType, searchCache.criteria || [], [],
+            searchCache.objectType, criteria, [],
             searchCache.fulltextValue, searchCache.primaryValue, searchCache.name,
             searchCache.limit, searchCache.sortAttribute, searchCache.sortDescending,
             searchCache.userId, searchCache.userDisplayText
