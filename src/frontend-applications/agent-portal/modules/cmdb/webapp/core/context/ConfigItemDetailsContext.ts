@@ -26,8 +26,8 @@ export class ConfigItemDetailsContext extends Context {
         return 'kix-icon-ci';
     }
 
-    public async getDisplayText(short?: boolean): Promise<string> {
-        return await LabelService.getInstance().getObjectText(await this.getObject<ConfigItem>(), true, !short);
+    public async getDisplayText(): Promise<string> {
+        return await LabelService.getInstance().getObjectText(await this.getObject<ConfigItem>());
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
