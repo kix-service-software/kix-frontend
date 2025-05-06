@@ -68,7 +68,7 @@ export class CompareConfigItemVersionContext extends Context {
         return 'kix-icon-ci';
     }
 
-    public async getDisplayText(short: boolean = false): Promise<string> {
+    public async getDisplayText(): Promise<string> {
         const configItem = await this.getObject<ConfigItem>();
         const configItemName = await LabelService.getInstance().getObjectText(configItem);
 

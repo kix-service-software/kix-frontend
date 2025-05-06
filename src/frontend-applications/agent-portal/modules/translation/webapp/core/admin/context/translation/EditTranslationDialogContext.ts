@@ -38,7 +38,7 @@ export class EditTranslationDialogContext extends Context {
         return object;
     }
 
-    public async getDisplayText(short: boolean = false): Promise<string> {
+    public async getDisplayText(): Promise<string> {
         const object = await this.getObject<TranslationPattern>();
         return object?.Value;
     }

@@ -30,8 +30,8 @@ export class NewOrganisationDialogContext extends Context {
         return object;
     }
 
-    public async getDisplayText(short?: boolean): Promise<string> {
-        let displayText = await super.getDisplayText(short);
+    public async getDisplayText(): Promise<string> {
+        let displayText = await super.getDisplayText();
         if (this.getAdditionalInformation(AdditionalContextInformation.DUPLICATE)) {
             displayText = await TranslationService.translate('Translatable#New {0} as copy of', [displayText]);
         }

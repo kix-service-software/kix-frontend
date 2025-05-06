@@ -106,7 +106,7 @@ export abstract class SearchContext extends Context {
         return 'kix-icon-search';
     }
 
-    public async getDisplayText(short: boolean = false): Promise<string> {
+    public async getDisplayText(): Promise<string> {
         let text = await TranslationService.translate('Translatable#Search');
         if (this.searchCache) {
             let searchName = this.searchCache.name;
