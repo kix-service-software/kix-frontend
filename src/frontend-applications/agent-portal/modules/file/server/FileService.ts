@@ -12,13 +12,12 @@ import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import path from 'path';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
-import { createHash } from 'node:crypto';
 import { Request, Response } from 'express';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { ClientNotificationService } from '../../../server/services/ClientNotificationService';
 import { BackendNotification } from '../../../model/BackendNotification';
 import { BackendNotificationEvent } from '../../../model/BackendNotificationEvent';
-import { UserService } from '../../user/server/UserService';
+import { User } from '../../user/model/User';
 
 export class FileService {
 
@@ -89,19 +88,11 @@ export class FileService {
         ConfigurationService.getInstance().saveDataFileContent(downloadFileName, downloads);
     }
 
-    public static async downloadFile(req: Request, res: Response, next: () => void): Promise<void> {
-        const downloadId = req.params.downloadId;
-        const user = await UserService.getInstance().getUserByToken(req.cookies.token);
-
-        if (!downloadId || !user?.UserID) {
-            LoggingService.getInstance().error('Need downloadId and userId');
-            res.status(400);
-            res.render('Invalid request!');
-            return;
-        }
-
+    public static async downloadFile(downloadId: string, user: User, res: Response): Promise<void> {
         const file = FileService.getDownloadFile(downloadId, user?.UserID);
         if (file) {
+            // avoid MIME type sniffing
+            res.setHeader('X-Content-Type-Options', 'nosniff');
             res.download(
                 FileService.getFilePath(file.downloadId, file.path),
                 file.Filename,
@@ -117,9 +108,7 @@ export class FileService {
             LoggingService.getInstance().error(`Relevant file not found in ${user?.UserID}_downloads.json (downloadId: ${downloadId}).`);
             res.status(400);
             res.render('Invalid request!');
-            return;
         }
-
     }
 
     private static getDownloadFile(downloadId: string, userId: number): IDownloadableFile {
