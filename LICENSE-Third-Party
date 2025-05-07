@@ -517,7 +517,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.15.12
+├─ @types/node@22.15.14
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -2619,7 +2619,7 @@
 │  ├─ repository: https://github.com/Automattic/juice
 │  ├─ path: node_modules/juice
 │  └─ licenseFile: node_modules/juice/LICENSE.md
-├─ jwa@1.4.1
+├─ jwa@1.4.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/brianloveswords/node-jwa
 │  ├─ publisher: Brian J. Brennan
