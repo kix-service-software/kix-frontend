@@ -43,6 +43,11 @@ class TreeComponent {
         this.state.treeStyle = input.treeStyle;
     }
 
+    public handleClick(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
 }
 
 module.exports = TreeComponent;
