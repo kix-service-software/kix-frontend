@@ -417,7 +417,7 @@ export class BrowserUtil {
             }
             this.clickTimeout = setTimeout(async () => {
                 this.clickTimeout = undefined;
-                // ingore click if text is selected
+                // ingore cTESTlick if text is selected
                 if (window.getSelection()?.type === 'Range') {
                     resolve(true);
                 }
@@ -488,5 +488,55 @@ export class BrowserUtil {
             }
         }
     }
+
+    public static wrapLinksAndEmailsAndAppendToElement(
+        id: string, text: string
+    ): void {
+        const parent = document.getElementById(id);
+        if (!parent) {
+            console.error('No parent element');
+            return;
+        }
+        parent.innerHTML = '';
+        const regex = /((https?:\/\/[^\s]+)|(mailto:[^\s]+)|([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}))/g;
+
+        let lastIndex = 0;
+        let match;
+
+        while ((match = regex.exec(text)) !== null) {
+            const matchText = match[0];
+            const matchIndex = match.index;
+
+            if (lastIndex < matchIndex) {
+                const plainText = text.slice(lastIndex, matchIndex);
+                parent.appendChild(document.createTextNode(plainText));
+            }
+
+            let linkEl: HTMLAnchorElement;
+
+            if (matchText.startsWith('http')) {
+                linkEl = document.createElement('a');
+                linkEl.href = matchText;
+                linkEl.target = '_blank';
+                linkEl.rel = 'noopener noreferrer';
+                linkEl.textContent = matchText;
+                linkEl.className = 'link-opacity-50-hover';
+            } else if (matchText.includes('@')) {
+                linkEl = document.createElement('a');
+                linkEl.href = matchText.startsWith('mailto:') ? matchText : `mailto:${matchText}`;
+                linkEl.textContent = matchText.replace(/^mailto:/, '');
+                linkEl.className = 'link-opacity-50-hover';
+            }
+
+            parent.appendChild(linkEl);
+            lastIndex = regex.lastIndex;
+        }
+
+        if (lastIndex < text.length) {
+            parent.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+    }
+
+
 
 }
