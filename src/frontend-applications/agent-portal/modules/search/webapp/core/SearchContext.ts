@@ -22,6 +22,7 @@ import { KIXObject } from '../../../../model/kix/KIXObject';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SearchSocketClient } from './SearchSocketClient';
+import { AgentService } from '../../../user/webapp/core/AgentService';
 
 export abstract class SearchContext extends Context {
 
@@ -122,19 +123,27 @@ export abstract class SearchContext extends Context {
 
     public async saveCache(id: string, name: string, share?: boolean): Promise<void> {
         if (this.searchCache) {
-            const createNew = !id && this.searchCache.name !== name;
-            const search = SearchCache.create(this.searchCache, createNew);
+            const search = SearchCache.create(this.searchCache, !id);
             search.name = name;
 
             if (id) {
                 search.id = id;
             }
 
+            if (!share) {
+                delete search.userId;
+                delete search.userDisplayText;
+            } else {
+                const user = await AgentService.getInstance().getCurrentUser();
+                search.userId = user?.UserID;
+                search.userDisplayText = user?.UserLogin;
+            }
+
             await SearchSocketClient.getInstance().saveSearch(search, share)
                 .catch((error: Error) => BrowserUtil.openErrorOverlay(error.message));
 
-            this.searchCache.name = name;
-            EventService.getInstance().publish(SearchEvent.SAVE_SEARCH_FINISHED);
+            this.searchCache = search;
+            EventService.getInstance().publish(SearchEvent.SAVE_SEARCH_FINISHED, this);
         }
     }
 
@@ -142,6 +151,13 @@ export abstract class SearchContext extends Context {
         if (this.searchCache && this.searchCache.name !== null) {
             await SearchSocketClient.getInstance().deleteSearch(this.searchCache.id);
             await SearchService.getInstance().getSearchBookmarks(true);
+            const defaultSearch = await SearchSocketClient.getInstance().loadDefaultUserSearch(
+                this.searchCache.objectType
+            );
+            this.searchCache = defaultSearch || new SearchCache(
+                IdService.generateDateBasedId(), this.descriptor.contextId, this.descriptor.kixObjectTypes[0],
+                [], [], null
+            );
             this.resetSearch();
         }
     }

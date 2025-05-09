@@ -8,16 +8,11 @@
  */
 
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
-import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public loadNodes: () => Promise<TreeNode[]> = null,
-        public name: string = '',
-        public error: string = null,
-        public share: boolean = false,
-        public newSearch: boolean = true
+        public searchName: string = ''
     ) {
         super();
     }

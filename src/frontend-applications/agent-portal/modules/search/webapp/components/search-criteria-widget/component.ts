@@ -277,7 +277,8 @@ class Component {
         const titleLabel = await TranslationService.translate('Translatable#Selected Search Criteria');
         const searchLabel = await TranslationService.translate('Translatable#Search');
         if (cache.name) {
-            this.state.title = `${titleLabel}: (${searchLabel}: ${cache.name})`;
+            const name = cache.userDisplayText ? `(${cache.userDisplayText}) - ${cache.name}` : cache.name;
+            this.state.title = `${titleLabel}: (${searchLabel}: ${name})`;
         } else {
             const objectName = await LabelService.getInstance().getObjectName(cache.objectType, true);
             this.state.title = `${titleLabel}: ${objectName}`;
