@@ -536,6 +536,12 @@ msgstr "Sortierrichtung ändern"
 msgid "Change to"
 msgstr "Ändern in"
 
+msgid "Change to date picker"
+msgstr "Zur Datumsauswahl wechseln"
+
+msgid "Change to placeholder"
+msgstr "Zum Platzhalter wechseln"
+
 msgid "Changed"
 msgstr "Geändert"
 

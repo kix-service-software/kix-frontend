@@ -523,6 +523,12 @@ msgstr ""
 msgid "Change to"
 msgstr ""
 
+msgid "Change to date picker"
+msgstr ""
+
+msgid "Change to placeholder"
+msgstr ""
+
 msgid "Changed"
 msgstr ""
 
