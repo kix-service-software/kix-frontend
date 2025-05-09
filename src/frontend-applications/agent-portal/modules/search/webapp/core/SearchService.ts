@@ -472,6 +472,17 @@ export class SearchService {
         }
     }
 
+    public async getSearchesOfUser(): Promise<SearchCache[]> {
+        let searches = await SearchSocketClient.getInstance().loadAllSearches() || [];
+
+        searches.sort((s1, s2) => SortUtil.compareString(s1.name, s2.name));
+
+        const user = await AgentSocketClient.getInstance().getCurrentUser();
+        searches = searches.filter((s) => !s.userId || s.userId === user.UserID);
+
+        return searches;
+    }
+
     public async getSearchBookmarks(publish?: boolean, userOnly?: boolean): Promise<Bookmark[]> {
         let searches = await SearchSocketClient.getInstance().loadAllSearches() || [];
 

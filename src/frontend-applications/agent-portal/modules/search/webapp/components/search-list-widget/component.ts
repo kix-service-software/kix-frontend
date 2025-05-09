@@ -49,15 +49,23 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (data: any, eventId: string): void => {
-                setTimeout(() => this.loadSearches(), 500);
+                if (eventId === SearchEvent.SEARCH_CACHE_CHANGED) {
+                    this.setActiveNode();
+                } else {
+                    setTimeout(() => this.loadSearches(), 500);
+                }
             }
         };
 
+        EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
+        EventService.getInstance().subscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
     }
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
+        EventService.getInstance().unsubscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
+        EventService.getInstance().unsubscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
     }
 
     private async loadSearches(): Promise<void> {
@@ -104,7 +112,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         node.id?.reset();
         this.context.setSearchCache(node.id);
         this.context.setSearchResult([]);
-        this.setActiveNode();
 
         EventService.getInstance().publish(SearchEvent.SHOW_CRITERIA);
         if ((this.context.getConfiguration() as SearchContextConfiguration).enableSidebarAutoSearch) {
