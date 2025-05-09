@@ -14,7 +14,6 @@ import { ObjectFormValue } from '../ObjectFormValue';
 import { DynamicFieldService } from '../../../../dynamic-fields/webapp/core/DynamicFieldService';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 
 export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListItem[]> {
 
@@ -44,9 +43,13 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
     }
 
     protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
-        const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
-        const config = dynamicField?.Config;
-        this.defaultValue = config?.DefaultValue;
+        if (!field?.defaultValue.value) {
+            const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
+            const config = dynamicField?.Config;
+            this.defaultValue = config?.DefaultValue;
+        } else {
+            this.defaultValue = field.defaultValue.value;
+        }
     }
 
     public async initFormValue(): Promise<void> {
