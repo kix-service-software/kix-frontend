@@ -798,6 +798,9 @@ msgstr "Superuser anlegen"
 msgid "Create Type"
 msgstr "Typ wird angelegt"
 
+msgid "Create new search template"
+msgstr "Neue Suchvorlage erstellen"
+
 msgid "Create the report with output format {0} and defaults?"
 msgstr "Bericht mit Ausgabeformat {0} und Standardwerten erstellen?"
 
@@ -4381,6 +4384,9 @@ msgstr "Wert ersetzen"
 msgid "Replace empty value"
 msgstr "Leerwert ersetzen"
 
+msgid "Replace existing search template \"{0}\"?"
+msgstr "Vorhandene Suchvorlage \"{0}\" ersetzen?"
+
 msgid "Reply"
 msgstr "Antworten"
 
@@ -4595,6 +4601,9 @@ msgstr "Suchergebnisse: Tickets"
 
 msgid "Search Templates"
 msgstr "Suchvorlagen"
+
+msgid "Search template with same title already exists."
+msgstr "Eine Suchvorlage mit diesem Titel existiert bereits."
 
 msgid "Search Title"
 msgstr "Name der Suche"
