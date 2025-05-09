@@ -9,7 +9,10 @@
 
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { InputFieldTypes } from '../../../base-components/webapp/core/InputFieldTypes';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { ObjectFormRegistry } from '../../webapp/core/ObjectFormRegistry';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
 import { ObjectFormValue } from './ObjectFormValue';
 
@@ -45,6 +48,35 @@ export class DateTimeFormValue extends ObjectFormValue<string> {
         this.maxDate = maxDateOption ? maxDateOption.value : null;
 
         this.isEmpty = field?.empty || false;
+    }
+
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        if (typeof value === 'string') {
+            const dateValue = await PlaceholderService.getInstance().replacePlaceholders(value.trim(), this.object);
+            if (dateValue?.length > 0) {
+                value = DateTimeUtil.getKIXDateTimeString(dateValue);
+            }
+        }
+
+        await super.setFormValue(value);
+    }
+
+    public async initFormValue(): Promise<void> {
+        this.actions = await ObjectFormRegistry.getInstance().getActions(this, this.objectValueMapper);
+        if (this.defaultValue || this.empty) {
+            if (this.defaultValue.startsWith('<') && this.defaultValue.endsWith('>')) {
+                this.value = this.defaultValue;
+            } else {
+                this.value = DateTimeUtil.getKIXDateTimeString(this.defaultValue);
+            }
+        } else if (this.object && this.object[this.property]) {
+            if (this.object[this.property].startsWith('<') && this.object[this.property].endsWith('>')) {
+                this.value = this.defaultValue;
+            } else {
+                this.value = DateTimeUtil.getKIXDateTimeString(this.object[this.property]);
+            }
+        }
+        return this.prepareLabel();
     }
 
 }
