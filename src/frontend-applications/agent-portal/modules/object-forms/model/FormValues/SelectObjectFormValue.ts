@@ -18,6 +18,7 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { SortUtil } from '../../../../model/SortUtil';
 import { ObjectReferenceUtil } from '../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { IKIXObjectService } from '../../../base-components/webapp/core/IKIXObjectService';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
@@ -765,4 +766,17 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             }
         }
     }
+
+    protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context.descriptor.contextMode.toLowerCase().includes('admin')) {
+            const isRestoredContext = context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
+            if (!isRestoredContext) {
+                this.defaultValue = field?.defaultValue.value || [];
+            }
+        } else {
+            await super.setDefaultValue(field);
+        }
+    }
+
 }
