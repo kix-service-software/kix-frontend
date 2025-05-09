@@ -1290,8 +1290,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 result.set('ObjectType', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
             }
 
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.limit = 0;
+            loadingOptions.searchLimit = 0;
+
             const configs: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
-                KIXObjectType.SYS_CONFIG_OPTION,
+                KIXObjectType.SYS_CONFIG_OPTION, null, loadingOptions
             ).catch((error): SysConfigOption[] => []);
 
             if (configs?.length) {
