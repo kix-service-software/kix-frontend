@@ -62,11 +62,11 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
     }
 
     protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
-        this.defaultValue = this.addInitialTable();
+        this.defaultValue = this.addInitialTable(false, field);
     }
 
     public async initFormValue(): Promise<void> {
-        this.setDefaultTableSettings();
+        await this.setDefaultTableSettings();
 
         let value = this.object[this.property];
         if (Array.isArray(value) && value.length) {
@@ -84,6 +84,7 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
         this.value = value;
 
         await this.prepareLabel();
+        this.initialized = true;
     }
 
     private async setDefaultTableSettings(): Promise<void> {
@@ -99,26 +100,36 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
             this.minRowCount = Number(config?.RowsMin) || 1;
             this.maxRowCount = Number(config?.RowsMax) || 1;
             this.initialRowCount = Number(config?.RowsInit) || 1;
-            this.initialized = true;
         }
     }
 
-    public addInitialTable(setAsValue?: boolean): Array<string[]> {
+    public addInitialTable(setAsValue?: boolean, field?: FormFieldConfiguration): Array<string[]> {
         const tableValues: Array<string[]> = [];
 
-        let rowCount = this.initialRowCount > this.minRowCount && this.initialRowCount < this.maxRowCount
-            ? this.initialRowCount
-            : this.minRowCount;
+        let rowCount: number;
+        if (field?.defaultValue.value?.length > 0) {
+            rowCount = field.defaultValue.value.length;
+        } else {
+            rowCount = this.initialRowCount;
+        }
 
         if (rowCount <= 0) {
             rowCount = 1;
         } else if (rowCount > this.maxRowCount) {
             rowCount = this.maxRowCount;
+        } else if (rowCount < this.minRowCount) {
+            rowCount = this.minRowCount;
         }
 
         for (let i = 0; i < rowCount; i++) {
             const row = [];
-            this.columns?.forEach((c) => row.push(''));
+            this.columns?.forEach((column, columnIndex) => {
+                let rowValue = '';
+                if (field?.defaultValue.value?.length > 0) {
+                    rowValue = field.defaultValue.value[i][columnIndex] ?? '';
+                }
+                row.push(rowValue);
+            });
             tableValues.push(row);
         }
 
