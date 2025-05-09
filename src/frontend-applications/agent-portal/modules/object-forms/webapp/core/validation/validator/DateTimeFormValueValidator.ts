@@ -23,6 +23,8 @@ export class DateTimeFormValueValidator extends ObjectFormValueValidator {
 
             if (hasValue) {
 
+                const isPlaceholder = typeof value === 'string' && value.startsWith('<') && value.endsWith('>');
+                if (isPlaceholder) return [];
                 if (typeof value === 'string' && parseInt(value.split('-')[0]) < 1000) {
                     const validationError = await ObjectFormValueValidator.createValidationError(
                         'Translatable#The entered date is out of boundaries..', formValue.label
