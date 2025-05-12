@@ -111,8 +111,8 @@ class Component {
         ];
 
         const widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
-        const isSidebar = widgetType === WidgetType.SIDEBAR;
-        if (!isSidebar && configuredWidget?.size === WidgetSize.LARGE && objectType === KIXObjectType.TICKET) {
+        const isAllowed = widgetType === WidgetType.SIDEBAR || widgetType === WidgetType.LANE;
+        if (!isAllowed && configuredWidget?.size === WidgetSize.LARGE && objectType === KIXObjectType.TICKET) {
             const calendarView = new ObjectView('calendar', 'Calendar', 'kix-icon-calendar', 'calendar');
             views.push(calendarView);
         }
