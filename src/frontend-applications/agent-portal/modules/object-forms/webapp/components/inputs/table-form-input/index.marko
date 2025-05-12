@@ -37,60 +37,62 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </tr>
                 </thead>
                 <tbody>
-                    <for|row, rowIndex| of=state.value>
-                        <tr>
-                            <for|value, colIndex| of=row>
-                                <td>
-                                    <input
-                                        type="text"
-                                        value=value
-                                        disabled=state.readonly
-                                        on-change(
-                                            "tableValueChanged",
-                                            rowIndex,
-                                            colIndex,
-                                        )
-                                        class="form-control"
-                                    >
-                                </td>
-                            </for>
-                            <if(state.hasAction && !state.readonly)>
-                                <td class="df-table-buttons">
-                                    <if(component.canAdd(rowIndex))>
-                                        <button
-                                            type="button"
-                                            title=(
-                                                state.translations[
-                                                    "Translatable#Add"
-                                                ]
-                                            )
-                                            on-click("tableRowAdded")
-                                            class="button btn btn-sm btn-outline-secondary me-1"
-                                        >
-                                            <i class="fas fa-plus-circle"/>
-                                        </button>
-                                    </if>
-                                    <if(component.canRemove(rowIndex))>
-                                        <button
-                                            type="button"
-                                            title=(
-                                                state.translations[
-                                                    "Translatable#Remove"
-                                                ]
-                                            )
-                                            on-click(
-                                                "tableRowRemoved",
+                    <if(state.prepared)>
+                        <for|row, rowIndex| of=state.value>
+                            <tr>
+                                <for|value, colIndex| of=row>
+                                    <td no-update>
+                                        <input
+                                            type="text"
+                                            value=value
+                                            disabled=state.readonly
+                                            on-change(
+                                                "tableValueChanged",
                                                 rowIndex,
+                                                colIndex,
                                             )
-                                            class="button btn btn-sm btn-outline-secondary"
+                                            class="form-control"
                                         >
-                                            <i class="fas fa-minus-circle"/>
-                                        </button>
-                                    </if>
-                                </td>
-                            </if>
-                        </tr>
-                    </for>
+                                    </td>
+                                </for>
+                                <if(state.hasAction && !state.readonly)>
+                                    <td class="df-table-buttons">
+                                        <if(component.canAdd(rowIndex))>
+                                            <button
+                                                type="button"
+                                                title=(
+                                                    state.translations[
+                                                        "Translatable#Add"
+                                                    ]
+                                                )
+                                                on-click("tableRowAdded")
+                                                class="button btn btn-sm btn-outline-secondary me-1"
+                                            >
+                                                <i class="fas fa-plus-circle"/>
+                                            </button>
+                                        </if>
+                                        <if(component.canRemove(rowIndex))>
+                                            <button
+                                                type="button"
+                                                title=(
+                                                    state.translations[
+                                                        "Translatable#Remove"
+                                                    ]
+                                                )
+                                                on-click(
+                                                    "tableRowRemoved",
+                                                    rowIndex,
+                                                )
+                                                class="button btn btn-sm btn-outline-secondary"
+                                            >
+                                                <i class="fas fa-minus-circle"/>
+                                            </button>
+                                        </if>
+                                    </td>
+                                </if>
+                            </tr>
+                        </for>
+                    </if>
                 </tbody>
             </table>
         </div>

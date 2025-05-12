@@ -20,6 +20,7 @@ import { TableEvent } from '../../../../../../model/TableEvent';
 import { ValueState } from '../../../../../../model/ValueState';
 import { TableCSSHandlerRegistry } from '../../../../../core/css-handler/TableCSSHandlerRegistry';
 import { IKIXObjectService } from '../../../../../../../base-components/webapp/core/IKIXObjectService';
+import { RoutingService } from '../../../../../../../base-components/webapp/core/RoutingService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -92,7 +93,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 && this.state.routingConfiguration.objectIdProperty
                 && object
             ) {
-                this.state.objectId = object[this.state.routingConfiguration.objectIdProperty];
+
+                this.state.objectId = RoutingService.getObjectId(object, this.state.routingConfiguration);
             }
 
             this.setValueStateClass();

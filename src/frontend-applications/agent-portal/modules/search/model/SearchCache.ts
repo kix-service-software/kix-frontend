@@ -19,6 +19,8 @@ export class SearchCache<T extends KIXObject = KIXObject> {
     private originalFulltextValue: string;
     private originalPrimaryValue: string;
     private originalLimit: number;
+    private originalSortAttribute: string;
+    private originalSortDescending: boolean;
 
     public constructor(
         public id: string,
@@ -45,6 +47,8 @@ export class SearchCache<T extends KIXObject = KIXObject> {
         this.originalFulltextValue = this.fulltextValue;
         this.originalPrimaryValue = this.primaryValue;
         this.originalLimit = this.limit;
+        this.originalSortAttribute = this.sortAttribute;
+        this.originalSortDescending = this.sortDescending;
     }
 
     public reset(): void {
@@ -53,16 +57,16 @@ export class SearchCache<T extends KIXObject = KIXObject> {
         this.fulltextValue = this.originalFulltextValue;
         this.primaryValue = this.originalPrimaryValue;
         this.limit = this.originalLimit;
-        this.name = '';
-        this.sortAttribute = null;
-        this.sortDescending = false;
+        this.sortAttribute = this.originalSortAttribute;
+        this.sortDescending = this.originalSortDescending;
     }
 
     public static create(searchCache: SearchCache, createNew?: boolean): SearchCache {
         const id = createNew ? IdService.generateDateBasedId('SearchCache') : searchCache?.id;
+        const criteria = searchCache?.criteria ? JSON.parse(JSON.stringify(searchCache.criteria)) : [];
         return new SearchCache(
             id, searchCache.contextId,
-            searchCache.objectType, searchCache.criteria || [], [],
+            searchCache.objectType, criteria, [],
             searchCache.fulltextValue, searchCache.primaryValue, searchCache.name,
             searchCache.limit, searchCache.sortAttribute, searchCache.sortDescending,
             searchCache.userId, searchCache.userDisplayText

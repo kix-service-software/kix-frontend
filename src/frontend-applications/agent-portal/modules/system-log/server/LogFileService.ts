@@ -109,7 +109,7 @@ export class LogFileService extends KIXObjectAPIService {
             const logLevelParameter = loadingOptions?.query?.find((q) => q[0] === 'Categories');
             const logFile = await LoggingService.getInstance().getLogFile(
                 objectIds[0].toString(),
-                tailParameter ? Number(tailParameter[1]) : null,
+                tailParameter ? Number(tailParameter[1]) : -1,
                 logLevelParameter ? logLevelParameter[1].split(',') : []
             );
             logFile.path = 'logs';

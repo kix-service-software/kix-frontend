@@ -121,7 +121,7 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
         const oofFormValue = new ObjectFormValue(null, null, objectValueMapper, null);
         oofFormValue.label = 'Translatable#Out Of Office';
         oofFormValue.visible = true;
-        oofFormValue.inputComponentId = null;
+        oofFormValue.inputComponentId = 'no-input';
 
         this.formValues.push(oofFormValue);
 

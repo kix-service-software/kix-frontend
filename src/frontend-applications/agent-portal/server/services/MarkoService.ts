@@ -44,6 +44,12 @@ export class MarkoService {
         }
         this.clearRequireCache(configName);
         const lassoConfig = require(path.join(__dirname, '..', configName));
+
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        const baseRoute = config.BASE_ROUTE || '';
+
+        lassoConfig.urlPrefix = `${baseRoute}/static/applications`;
+
         lasso.configure(lassoConfig);
     }
 

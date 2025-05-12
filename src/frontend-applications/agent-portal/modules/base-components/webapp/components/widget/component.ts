@@ -96,7 +96,9 @@ class WidgetComponent implements IEventSubscriber {
     public async minimizeWidget(force: boolean = false, event: any): Promise<void> {
         if (!this.canChangeMinimize) {
             this.canChangeMinimize = true;
-            return;
+            if (!force) {
+                return;
+            }
         }
         if (event) {
             event.stopPropagation();

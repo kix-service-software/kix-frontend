@@ -20,6 +20,7 @@ import { IServerConfiguration } from '../model/IServerConfiguration';
 import { LogLevel } from '../model/LogLevel';
 import { ServerUtil } from '../ServerUtil';
 import { ConfigurationService } from './ConfigurationService';
+import { FileService } from '../../frontend-applications/agent-portal/modules/file/server/FileService';
 
 
 export class LoggingService {
@@ -148,7 +149,7 @@ export class LoggingService {
                 const contentString = fs.readFileSync(logFilePath, 'utf8');
                 content = contentString.split(/\n/);
             } else {
-                content = await this.tailLogFile(logFilePath, tailCount);
+                content = await FileService.tailFile(logFilePath, tailCount);
             }
 
             if (logLevel?.length) {
@@ -159,31 +160,6 @@ export class LoggingService {
         }
 
         return logFile;
-    }
-
-    private async tailLogFile(logFilePath: string, tailCount: number): Promise<string[]> {
-        const tailedContent = await new Promise<string[]>((resolve, reject) => {
-            const content: string[] = [];
-            const Tail = require('tail').Tail;
-            const tailedFile = new Tail(logFilePath, { nLines: tailCount });
-            tailedFile.on('line', (data: string) => {
-                content.push(data);
-
-                if (content.length === tailCount) {
-                    tailedFile.unwatch();
-                    resolve(content);
-                }
-            });
-
-            tailedFile.on('error', function (error) {
-                rejects(error);
-            });
-        }).catch((error): string[] => {
-            LoggingService.getInstance().error(error);
-            return [];
-        });
-
-        return tailedContent;
     }
 
     public static createLogDirectory(): string {

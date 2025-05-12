@@ -136,9 +136,6 @@ export class AgentNamespace extends SocketNameSpace {
             ).then(() => {
                 CacheService.getInstance().deleteKeys(`${KIXObjectType.USER_COUNTER}_${user.UserID}`);
                 CacheService.getInstance().deleteKeys(data.objectType);
-                if (data.objectType === KIXObjectType.TICKET) {
-                    CacheService.getInstance().deleteKeys(`${KIXObjectType.USER_TICKETS}_${user.UserID}`);
-                }
                 return new SocketResponse(
                     AgentEvent.MARK_OBJECT_AS_SEEN_FINISHED, new MarkObjectAsSeenResponse(data.requestId)
                 );

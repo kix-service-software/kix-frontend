@@ -20,7 +20,7 @@ export class BulkDialogContext extends Context {
         return;
     }
 
-    public async getDisplayText(short: boolean = false): Promise<string> {
+    public async getDisplayText(): Promise<string> {
         return await TranslationService.translate('Translatable#Bulk Action');
     }
 

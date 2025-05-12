@@ -7,14 +7,15 @@
  * --
  */
 
-import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
+.calendar-container {
 
-export class ComponentInput {
+    .tui-full-calendar-dayname-name,
+    .tui-full-calendar-month-dayname-item {
+        font-size: 1.25rem !important;
+    }
 
-    public imprintLink: string;
-
-    public releaseInfo: ReleaseInfo;
-
-    public unauthorized: boolean;
+    .tui-full-calendar-popup-container {
+        padding: @margin-small;
+    }
 
 }

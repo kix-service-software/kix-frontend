@@ -214,10 +214,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         if (config.routingConfiguration) {
             const object = this.state.row?.getRowObject()?.getObject();
-            let objectId;
-            if (object) {
-                objectId = object[config?.routingConfiguration?.objectIdProperty];
-            }
+
+            const objectId = RoutingService.getObjectId(object, config.routingConfiguration);
             RoutingService.getInstance().routeTo(config?.routingConfiguration, objectId);
         }
 

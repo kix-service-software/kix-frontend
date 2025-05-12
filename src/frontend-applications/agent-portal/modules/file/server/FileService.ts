@@ -12,13 +12,12 @@ import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import path from 'path';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
-import { createHash } from 'node:crypto';
 import { Request, Response } from 'express';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { ClientNotificationService } from '../../../server/services/ClientNotificationService';
 import { BackendNotification } from '../../../model/BackendNotification';
 import { BackendNotificationEvent } from '../../../model/BackendNotificationEvent';
-import { UserService } from '../../user/server/UserService';
+import { User } from '../../user/model/User';
 
 export class FileService {
 
@@ -54,27 +53,19 @@ export class FileService {
 
         const downloads = this.getDownloads(userId);
         try {
-            const existingFile = downloads.find(
-                (f) => f.Filename === file.Filename && f.FilesizeRaw === file.FilesizeRaw
-            );
-            if (!existingFile) {
-                file.downloadId = uuidv4() + `-${file.Filename}`;
-                file.downloadSecret = uuidv4();
-                let saved: boolean = true;
-                try {
-                    const filePath = this.getFilePath(file.downloadId);
-                    fs.writeFileSync(filePath, file.Content, { encoding: 'base64' });
-                } catch (err) {
-                    LoggingService.getInstance().error(`Could not save file "${file.Filename}" for download (${err})`);
-                    saved = false;
-                }
-                if (saved) {
-                    const jsonFileName = `${userId}_downloads.json`;
-                    this.addFileToDownloads(file, downloads, jsonFileName);
-                }
-            } else {
-                file.downloadId = existingFile.downloadId;
-                file.downloadSecret = existingFile.downloadSecret;
+            file.downloadId = uuidv4() + `-${file.Filename}`;
+            file.downloadSecret = uuidv4();
+            let saved: boolean = true;
+            try {
+                const filePath = this.getFilePath(file.downloadId);
+                fs.writeFileSync(filePath, file.Content, { encoding: 'base64' });
+            } catch (err) {
+                LoggingService.getInstance().error(`Could not save file "${file.Filename}" for download (${err})`);
+                saved = false;
+            }
+            if (saved) {
+                const jsonFileName = `${userId}_downloads.json`;
+                this.addFileToDownloads(file, downloads, jsonFileName);
             }
 
             delete file.Content;
@@ -86,44 +77,28 @@ export class FileService {
     private static addFileToDownloads(
         file: IDownloadableFile, downloads: IDownloadableFile[] = [], downloadFileName: string
     ): void {
-        let hash: string;
-        if (file?.Content) {
-            hash = createHash('md5').update(file.Content).digest('hex').toString();
-        }
-
         const downloadFile: any = {
-            Content: null,
             downloadId: file.downloadId,
             downloadSecret: file.downloadSecret,
             Filename: file.Filename,
-            FilesizeRaw: file.FilesizeRaw,
-            md5Sum: hash,
-            path: file.path
+            FilesizeRaw: file.FilesizeRaw
         };
         downloads.push(downloadFile);
 
         ConfigurationService.getInstance().saveDataFileContent(downloadFileName, downloads);
     }
 
-    public static async downloadFile(req: Request, res: Response, next: () => void): Promise<void> {
-        const downloadId = req.params.downloadId;
-        const user = await UserService.getInstance().getUserByToken(req.cookies.token);
-
-        if (!downloadId || !user?.UserID) {
-            LoggingService.getInstance().error('Need downloadId and userId');
-            res.status(400);
-            res.render('Invalid request!');
-            return;
-        }
-
+    public static async downloadFile(downloadId: string, user: User, res: Response): Promise<void> {
         const file = FileService.getDownloadFile(downloadId, user?.UserID);
         if (file) {
+            // avoid MIME type sniffing
+            res.setHeader('X-Content-Type-Options', 'nosniff');
             res.download(
                 FileService.getFilePath(file.downloadId, file.path),
                 file.Filename,
                 (err) => {
                     if (err) {
-                        LoggingService.getInstance().error('Error while download file to client (downloadId: ${downloadId}, userId: ${userId}).', err);
+                        LoggingService.getInstance().error(`Error while download file to client (downloadId: ${downloadId}, userId: ${user.UserID}).`, err);
                     }
                     // always remove/cleanup
                     FileService.removeDownload(downloadId, user?.UserID);
@@ -133,9 +108,7 @@ export class FileService {
             LoggingService.getInstance().error(`Relevant file not found in ${user?.UserID}_downloads.json (downloadId: ${downloadId}).`);
             res.status(400);
             res.render('Invalid request!');
-            return;
         }
-
     }
 
     private static getDownloadFile(downloadId: string, userId: number): IDownloadableFile {
@@ -218,6 +191,38 @@ export class FileService {
         const filePath = this.getFilePath(filename, null, download);
         const content = fs.readFileSync(filePath, { encoding });
         return content;
+    }
+
+    public static async tailFile(filePath: string, tailCount: number): Promise<string[]> {
+        const fs = require('fs/promises');
+        const fd = await fs.open(filePath, 'r');
+        const stat = await fd.stat();
+
+        const chunkSize = 1024;
+        let position = stat.size;
+        let buffer = '';
+        let lines = [];
+
+        while (position > 0 && lines.length < tailCount) {
+            const readSize = Math.min(chunkSize, position);
+            position -= readSize;
+
+            const { buffer: chunk } = await fd.read({
+                buffer: Buffer.alloc(readSize),
+                position,
+                length: readSize
+            });
+
+            buffer = chunk.toString('utf8') + buffer;
+            const parts = buffer.split('\n');
+            if (position > 0) {
+                buffer = parts.shift();
+            }
+            lines = [...parts, ...lines];
+        }
+
+        await fd.close();
+        return lines.slice(-tailCount);
     }
 
 }

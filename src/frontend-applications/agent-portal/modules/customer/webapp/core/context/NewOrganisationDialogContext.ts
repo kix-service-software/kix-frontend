@@ -10,7 +10,9 @@
 import { Context } from '../../../../../model/Context';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class NewOrganisationDialogContext extends Context {
 
@@ -26,6 +28,14 @@ export class NewOrganisationDialogContext extends Context {
             object = objects && objects.length ? objects[0] : null;
         }
         return object;
+    }
+
+    public async getDisplayText(): Promise<string> {
+        let displayText = await super.getDisplayText();
+        if (this.getAdditionalInformation(AdditionalContextInformation.DUPLICATE)) {
+            displayText = await TranslationService.translate('Translatable#New {0} as copy of', [displayText]);
+        }
+        return displayText;
     }
 
 }

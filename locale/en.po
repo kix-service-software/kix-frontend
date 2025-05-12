@@ -523,6 +523,12 @@ msgstr ""
 msgid "Change to"
 msgstr ""
 
+msgid "Change to date picker"
+msgstr ""
+
+msgid "Change to placeholder"
+msgstr ""
+
 msgid "Changed"
 msgstr ""
 
@@ -1412,7 +1418,7 @@ msgstr ""
 
 msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
-"menu right besides the New-button"
+"menu right besides the New-button or in the left sidebar"
 msgstr ""
 
 msgid "First Name"
@@ -3321,6 +3327,9 @@ msgstr ""
 
 msgid "New"
 msgstr ""
+
+msgid "New {0} as copy of"
+msgstr "New {0} as copy of:"
 
 msgid "New Account"
 msgstr ""

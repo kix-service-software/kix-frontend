@@ -75,10 +75,10 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.inputComponentId = 'select-form-input';
 
         this.bindings.push(
-            new FormValueBinding(this, 'minSelectCount', object, property),
-            new FormValueBinding(this, 'maxSelectCount', object, property),
-            new FormValueBinding(this, 'selectedNodes', object, property),
-            new FormValueBinding(this, 'multiselect', object, property),
+            new FormValueBinding(this, 'minSelectCount'),
+            new FormValueBinding(this, 'maxSelectCount'),
+            new FormValueBinding(this, 'selectedNodes'),
+            new FormValueBinding(this, 'multiselect'),
         );
     }
 
@@ -498,7 +498,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     protected async searchObjects(): Promise<T[]> {
         let objects = [];
-        if (this.searchValue?.length >= this.autoCompleteConfiguration.charCount) {
+        if (this.searchValue?.length >= this.autoCompleteConfiguration?.charCount) {
             const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(this.objectType);
             let loadingOptions = new KIXObjectLoadingOptions();
 
@@ -576,7 +576,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             }
 
             selectedNodes = selectedNodes.filter(
-                (node, index) => selectedNodes.findIndex((n) => n.id === node.id) === index
+                (node, index) => selectedNodes.findIndex((n) => n.id?.toString() === node.id?.toString()) === index
             );
             this.treeHandler?.setSelection(selectedNodes, true, true, undefined, true);
         } else {

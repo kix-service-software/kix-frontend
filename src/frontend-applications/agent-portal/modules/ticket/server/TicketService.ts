@@ -279,11 +279,10 @@ export class TicketAPIService extends KIXObjectAPIService {
             );
         } else if (objectType === KIXObjectType.USER_TICKETS) {
             const uri = this.buildUri('session', 'user', 'tickets');
-            const user = await UserService.getInstance().getUserByToken(token);
-            loadingOptions.cacheType = `${KIXObjectType.USER_TICKETS}_${user?.UserID}`;
+            loadingOptions.cacheType = KIXObjectType.TICKET;
             objectResponse = await super.load(
                 token, KIXObjectType.TICKET, uri, loadingOptions, null, KIXObjectType.TICKET,
-                clientRequestId, Ticket
+                clientRequestId, Ticket, true, true
             );
         } else if (objectType === KIXObjectType.USER_COUNTER) {
             const uri = this.buildUri('session', 'user', 'counters');

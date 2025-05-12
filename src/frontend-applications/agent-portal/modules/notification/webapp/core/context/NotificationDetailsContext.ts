@@ -24,8 +24,8 @@ export class NotificationDetailsContext extends Context {
         return 'kix-icon-admin';
     }
 
-    public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getObjectText(await this.getObject<Notification>(), true, !short);
+    public async getDisplayText(): Promise<string> {
+        return await LabelService.getInstance().getObjectText(await this.getObject<Notification>());
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {

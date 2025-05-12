@@ -2,7 +2,8 @@
     "dependencies": [
         "require ./components/calendar-module",
         "require ./components/calendar-widget",
-        "require ./components/calendar-widget/calendar-schedule-details",
+        "require ./components/calendar",
+        "require ./components/calendar/calendar-schedule-details",
         "require ./core",
         "./static/tui-calendar.min.css"
     ]

@@ -173,9 +173,10 @@ export class SearchNamespace extends SocketNameSpace {
         delete search['originalCriteria'];
 
         if (share) {
-            this.shareSearchCache(search, user);
+            await this.deleteUserSearch(search.id, token);
+            await this.shareSearchCache(search, user);
         } else {
-            this.deleteSharedSearch(search.id);
+            await this.deleteSharedSearch(search.id);
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
             const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + 'searchprofiles';
 

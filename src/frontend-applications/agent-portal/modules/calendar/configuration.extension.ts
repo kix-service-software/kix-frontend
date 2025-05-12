@@ -31,7 +31,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             new WidgetConfiguration(
                 'calendar-main-widget', 'calendar Widget', ConfigurationType.Widget,
                 'calendar-widget', 'My calendar Widget', [], null,
-                new CalendarConfiguration('PlanBegin', 'PlanEnd', [
+                new CalendarConfiguration('DynamicFields.PlanBegin', 'DynamicFields.PlanEnd', [
                     TicketProperty.CONTACT_ID,
                     TicketProperty.STATE_ID,
                     TicketProperty.QUEUE_ID,

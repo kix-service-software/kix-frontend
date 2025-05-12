@@ -10,14 +10,15 @@
 import { IServerRouterExtension } from '../../server/extensions/IServerRouterExtension';
 import { KIXIntegrationRouter } from './server/KIXIntegrationRouter';
 import { Router } from 'express';
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IServerRouterExtension {
 
-    public async registerRouter(expressRouter: Router): Promise<void> {
-        expressRouter.use(
-            KIXIntegrationRouter.getInstance().getBaseRoute(), KIXIntegrationRouter.getInstance().getRouter()
+    public async registerRouter(): Promise<Router> {
+        const router = Router();
+        return router.use(
+            KIXIntegrationRouter.getInstance().getBaseRoute(),
+            KIXIntegrationRouter.getInstance().getRouter()
         );
     }
 

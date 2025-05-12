@@ -102,7 +102,7 @@ export class AuthenticationService {
 
             if (valid) {
                 redirect = false;
-                res.cookie('token', token, { httpOnly: true });
+                res.cookie('token', token, { httpOnly: true, path: '/' });
                 next();
             }
         }
@@ -116,7 +116,9 @@ export class AuthenticationService {
                 query = `?redirectUrl=${url}`;
             }
 
-            res.redirect(`/auth${query}`);
+            const config = ConfigurationService.getInstance().getServerConfiguration();
+            const baseRoute = config?.BASE_ROUTE || '';
+            res.redirect(`${baseRoute}/auth${query}`);
         }
     }
 
