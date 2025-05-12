@@ -29,6 +29,9 @@ import { MacroProperty } from '../model/MacroProperty';
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
+const loopMacroLabel = 'Macro';
+const loopMacroID = 2;
+
 describe('MacroFieldCreator', () => {
 
     describe('Create initial empty macro field', () => {
@@ -164,7 +167,7 @@ describe('MacroFieldCreator', () => {
 
             // Submacro for Loop action
             loopMacro = new Macro();
-            loopMacro.ID = 2;
+            loopMacro.ID = loopMacroID;
             loopMacro.Name = 'Loop Macro';
             macro.Type = KIXObjectType.TICKET;
 
@@ -199,7 +202,7 @@ describe('MacroFieldCreator', () => {
             // Loop parameter
             loopMacroIDParamterOption = new MacroActionTypeOption();
             loopMacroIDParamterOption.Description = 'The ID of the macro to execute for each value.';
-            loopMacroIDParamterOption.Label = 'MacroID';
+            loopMacroIDParamterOption.Label = loopMacroLabel;
             loopMacroIDParamterOption.Name = 'MacroID';
             loopMacroIDParamterOption.Order = 2;
             loopMacroIDParamterOption.Required = 1;
@@ -381,7 +384,9 @@ function checkMacroField(macroField: FormFieldConfiguration, macro: Macro, child
 
     expect(macroField.required, 'Macro Field should be required.').true;
     expect(macroField.empty, 'Macro Field should not be empty.').false;
-    expect(macroField.label, 'Macro Field should have label "Translatable#Macro".').equals('Translatable#Macro');
+    expect(macroField.label, 'Macro Field should have label "Translatable#Macro".').equals(
+        (macro && macro.ID === loopMacroID) ? loopMacroLabel : 'Translatable#Macro'
+    );
     expect(macroField.asStructure).false;
     expect(macroField.showLabel).true;
     expect(macroField.instanceId).exist;

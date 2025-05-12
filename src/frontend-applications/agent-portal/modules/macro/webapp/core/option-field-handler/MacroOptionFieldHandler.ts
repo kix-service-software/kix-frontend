@@ -89,8 +89,14 @@ export class MacroOptionFieldHandler extends OptionFieldHandler {
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
         type: string, formInstance: FormInstance
     ): Promise<FormFieldConfiguration> {
-        if (option.Name === 'MacroID') {
-            const field = MacroFieldCreator.createMacroField(null, formInstance, actionFieldInstanceId);
+        if (
+            option.Name === 'MacroID'
+            || option.Name === 'ElseMacroID'
+        ) {
+            const field = MacroFieldCreator.createMacroField(
+                null, formInstance, actionFieldInstanceId, null, null,
+                option.Label, option.Description, Boolean(option.Required)
+            );
             return field;
         }
         return;
