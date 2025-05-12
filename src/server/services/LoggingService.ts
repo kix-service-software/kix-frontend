@@ -155,7 +155,7 @@ export class LoggingService {
             if (logLevel?.length) {
                 content = content.filter((c) => logLevel.some((ll) => c.indexOf(ll) !== -1));
             }
-            const stringContent = content.join('\n');
+            const stringContent = content.filter((l) => l !== '').join('\n');
             logFile.Content = Buffer.from(stringContent).toString('base64');
         }
 

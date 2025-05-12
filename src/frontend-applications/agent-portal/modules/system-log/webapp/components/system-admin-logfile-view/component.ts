@@ -78,7 +78,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             );
 
-            this.codeMirror.setSize('100%', '100%');
+            this.codeMirror.setSize('100%', '65vh');
 
             await this.loadLogFile();
             this.setRefreshInterval();
@@ -90,10 +90,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const tier = this.context?.getAdditionalInformation('TIER');
         if (tier === LogTier.FRONTEND) {
             nodes = [
-                new TreeNode(' - info: ', 'Info'),
-                new TreeNode(' - warning: ', 'Warning'),
-                new TreeNode(' - error: ', 'Error'),
-                new TreeNode(' - debug: ', 'Debug')
+                new TreeNode('info', 'Info'),
+                new TreeNode('warning', 'Warning'),
+                new TreeNode('error', 'Error'),
+                new TreeNode('debug', 'Debug')
             ];
         } else {
             nodes = [
@@ -140,7 +140,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public wrapLinesChanged(nodes: TreeNode[]): void {
         if (nodes.length) {
-            this.state.wrapLines = nodes[0].id;
+            this.codeMirror?.setOption('lineWrapping', nodes[0].id);
         }
     }
 
@@ -156,19 +156,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public filterContent(): void {
-        let content = this.getContent();
-        if (content && this.state.filter) {
-            const lines = content.split('\n');
-            const matchingLines = lines.filter((l) => {
+        let lines = this.getContent()?.split('\n') || [];
+        if (this.state.filter) {
+            lines = lines.filter((l) => {
                 const matches = l.toLowerCase().match(new RegExp(this.state.filter.toLowerCase()));
                 return matches && matches.length > 0;
             });
-            content = matchingLines.join('\n');
         }
 
         if (this.codeMirror) {
-            this.codeMirror.setValue(content);
+            this.codeMirror.setValue(lines.join('\n'));
             this.codeMirror.refresh();
+            const lastLine = lines?.length > 0 ? lines.length - 1 : 0;
+            this.codeMirror.scrollIntoView({ line: lastLine, char: 0 }, 10);
         }
     }
 
