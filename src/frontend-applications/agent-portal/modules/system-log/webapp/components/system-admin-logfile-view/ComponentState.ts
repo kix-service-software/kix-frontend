@@ -20,7 +20,6 @@ export class ComponentState extends AbstractComponentState {
         public filter: string = '',
         public tailCount: number = 100,
         public refreshInterval: number = 10,
-        public wrapLines: boolean = true,
         public run: boolean = false,
         public prepared: boolean = false,
         public editorId: string = IdService.generateDateBasedId('logview-')
