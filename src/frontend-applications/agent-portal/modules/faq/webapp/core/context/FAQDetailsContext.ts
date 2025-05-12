@@ -24,8 +24,8 @@ export class FAQDetailsContext extends Context {
         return 'kix-icon-faq';
     }
 
-    public async getDisplayText(short?: boolean): Promise<string> {
-        return await LabelService.getInstance().getObjectText(await this.getObject<FAQArticle>(), true, !short);
+    public async getDisplayText(): Promise<string> {
+        return await LabelService.getInstance().getObjectText(await this.getObject<FAQArticle>());
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {

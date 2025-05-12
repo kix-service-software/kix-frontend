@@ -29,8 +29,8 @@ export class RoleDetailsContext extends Context {
         return 'kix-icon-admin';
     }
 
-    public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getObjectText(await this.getObject<Role>(), true, !short);
+    public async getDisplayText(): Promise<string> {
+        return await LabelService.getInstance().getObjectText(await this.getObject<Role>(), true);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {

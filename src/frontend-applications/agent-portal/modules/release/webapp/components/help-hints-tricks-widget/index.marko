@@ -9,12 +9,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <widget title=(state.translations["Translatable#Help, hints & tricks"])>
     <@content>
-        <div.help-and-info-widget>
+        <div class="help-and-info-widget">
             <div>
-                <div.header>
-                    <img.app-logo
+                <div class="header">
+                    <img
                         alt=(state.translations["Translatable#Field Agent App"])
-                        src="/static/img/release/kix_field_agent_app.png"
+                        src=state.baseRoute +
+                        "/static/img/release/kix_field_agent_app.png"
+                        class="app-logo"
                     >
                     <h2>
                         <translation-string pattern="Translatable#Field Agent App"/>
@@ -23,7 +25,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <p>
                     <translation-string pattern="Translatable#Technical Customer Service mit KIX - work order documentation, checklists, scheduling, offline information for maintenance and repairs."/>
                 </p>
-                <div.app-links>
+                <div class="app-links">
                     <a
                         href="https://apps.apple.com/de/app/kix-field-agent/id1489588005"
                         target="_blank"
@@ -34,7 +36,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     "Translatable#Field Agent App (iOS)"
                                 ]
                             )
-                            src=("/static/img/release/" + state.appleImg)
+                            src=state.baseRoute +
+                            "/static/img/release/" +
+                            state.appleImg
                         >
                     </a>
                     <a
@@ -47,16 +51,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     "Translatable#Field Agent App (Android)"
                                 ]
                             )
-                            src=("/static/img/release/" + state.googleImg)
+                            src=state.baseRoute +
+                            "/static/img/release/" +
+                            state.googleImg
                         >
                     </a>
                 </div>
             </div>
             <div>
-                <div.header>
-                    <img.app-logo
+                <div class="header">
+                    <img
                         alt=(state.translations["Translatable#Field Agent App"])
-                        src="/static/img/release/community.svg"
+                        src=state.baseRoute +
+                        "/static/img/release/community.svg"
+                        class="app-logo"
                     >
                     <h2>
                         <translation-string pattern="Translatable#Community"/>
@@ -65,14 +73,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <p>
                     <translation-string pattern="Translatable#Tips for getting started quickly with KIX can be found on the KIX YouTube channel. In the forum you can also exchange ideas with other KIX users."/>
                 </p>
-                <div.link-list>
-                    <a.link-entry
+                <div class="link-list">
+                    <a
                         href="https://www.youtube.com/watch?v=CqCNIvdhayo&list=PLyKz2PdXNlw3b13FZEPP9CcFMTFRvFQh-"
                         target="_blank"
+                        class="link-entry"
                     >
                         <img
                             alt=(state.translations["Translatable#Youtube"])
-                            src="/static/img/release/youtube.svg"
+                            src=state.baseRoute +
+                            "/static/img/release/youtube.svg"
                         >
                         <span>
                             ${state.translations[
@@ -80,13 +90,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             ]}
                         </span>
                     </a>
-                    <a.link-entry
+                    <a
                         href="https://forum.kixdesk.com/"
                         target="_blank"
+                        class="link-entry"
                     >
                         <img
                             alt=(state.translations["Translatable#Forum"])
-                            src="/static/img/release/forum.svg"
+                            src=state.baseRoute +
+                            "/static/img/release/forum.svg"
                         >
                         <span>
                             ${state.translations["Translatable#KIX Forum"]}
@@ -97,10 +109,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
             <if(state.hasConfigAccess)>
                 <div>
-                    <div.header>
-                        <img.app-logo
+                    <div class="header">
+                        <img
                             alt=(state.translations["Translatable#Manuals"])
-                            src="/static/img/release/manual.svg"
+                            src=state.baseRoute +
+                            "/static/img/release/manual.svg"
+                            class="app-logo"
                         >
                         <h2>
                             <translation-string pattern="Translatable#Manuals"/>
@@ -109,11 +123,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <p>
                         <translation-string pattern="Translatable#For a more intensive introduction to the use and administration of KIX, you will find the latest manuals in the online documentation."/>
                     </p>
-                    <div.link-list>
+                    <div class="link-list">
                         <if(state.userManualLink)>
-                            <a.link-entry
+                            <a
                                 href=state.userManualLink
                                 target="_blank"
+                                class="link-entry"
                             >
                                 <img
                                     alt=(
@@ -121,7 +136,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                             "Translatable#User Manual"
                                         ]
                                     )
-                                    src="/static/img/release/manual-user.svg"
+                                    src=state.baseRoute +
+                                    "/static/img/release/manual-user.svg"
                                 >
                                 <span>
                                     ${state.translations[
@@ -131,9 +147,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             </a>
                         </if>
                         <if(state.adminManualLink)>
-                            <a.link-entry
+                            <a
                                 href=state.adminManualLink
                                 target="_blank"
+                                class="link-entry"
                             >
                                 <img
                                     alt=(
@@ -141,7 +158,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                             "Translatable#Admin Manual"
                                         ]
                                     )
-                                    src="/static/img/release/manual-admin.svg"
+                                    src=state.baseRoute +
+                                    "/static/img/release/manual-admin.svg"
                                 >
                                 <span>
                                     ${state.translations[
@@ -152,9 +170,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         </if>
 
                         <if(state.selfServiceManualLink)>
-                            <a.link-entry
+                            <a
                                 href=state.selfServiceManualLink
                                 target="_blank"
+                                class="link-entry"
                             >
                                 <img
                                     alt=(
@@ -162,7 +181,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                             "Translatable#Self Service Manual"
                                         ]
                                     )
-                                    src="/static/img/release/selfserviceportal.svg"
+                                    src=state.baseRoute +
+                                    "/static/img/release/selfserviceportal.svg"
                                 >
                                 <span>
                                     ${state.translations[

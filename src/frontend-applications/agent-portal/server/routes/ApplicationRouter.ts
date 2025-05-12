@@ -111,7 +111,7 @@ export class ApplicationRouter extends KIXRouter {
             this.setFrontendSocketUrl(res);
 
             if (req.headers['x-forwarded-for']) {
-                res.cookie('x-forwarded-for', req.headers['x-forwarded-for'], { httpOnly: true });
+                res.cookie('x-forwarded-for', req.headers['x-forwarded-for'], { httpOnly: true, path: '/' });
             }
 
             const token: string = req.cookies.token;
@@ -137,10 +137,14 @@ export class ApplicationRouter extends KIXRouter {
 
             const uiModules = await Promise.all(createPromises);
 
+            const config = ConfigurationService.getInstance().getServerConfiguration();
+            const baseRoute = config?.BASE_ROUTE || '';
+
             (res as any).marko(template, {
                 socketTimeout,
                 favIcon,
-                modules: uiModules
+                modules: uiModules,
+                baseRoute
             });
         }
     }

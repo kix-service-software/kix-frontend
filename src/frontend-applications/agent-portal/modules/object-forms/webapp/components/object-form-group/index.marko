@@ -18,18 +18,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div class="accordion-item h-100">
             <if(input.group.name)>
                 <button
-                    class="accordion-button fw-bold p-2"
+                    class="accordion-button fw-bold p-2 flex-wrap"
                     type="button"
                     data-bs-toggle=(input.contextInstanceId ? "" : "collapse")
                     data-bs-target=("#content-" + input.group.id)
                     aria-expanded="true"
                     aria-controls=(input.group.id)
+                    title=(input.group.name)
                 >
                     <if(input.contextInstanceId)>
                         <button
                             type="button"
                             class="btn btn-sm btn-light text-black me-3"
                             aria-label="Edit Group"
+                            title=(
+                                state.translations["Translatable#Edit Group"]
+                            )
                             on-click("editGroup", input.group.id)
                         >
                             <i class="fa-regular fa-pen-to-square"/>
@@ -38,6 +42,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             type="button"
                             class="btn btn-sm btn-light text-black me-3"
                             aria-label="Add Field"
+                            title=(state.translations["Translatable#Add Field"])
                             on-click("addField", input.group.id)
                         >
                             <i class="fa-regular fa-square-plus"/>

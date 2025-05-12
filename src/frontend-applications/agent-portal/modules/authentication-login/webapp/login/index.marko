@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <!doctype html>
 <html lang="de">
     <head>
@@ -32,23 +31,32 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 rel="shortcut icon"
                 type="image/png"
                 sizes="32x32"
-                href="/static/img/kix_default.png"
+                href=input.baseRoute + "/static/img/kix_default.png"
             >
         </else>
         <link
             rel="stylesheet"
-            href="/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css"
+            href=input.baseRoute +
+            "/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css"
         >
-        <link rel="stylesheet" href="/static/font-awesome/css/all.min.css">
         <link
             rel="stylesheet"
-            href="/static/thirdparty/ckeditor5/ckeditor5.css"
+            href=input.baseRoute + "/static/font-awesome/css/all.min.css"
+        >
+        <link
+            rel="stylesheet"
+            href=input.baseRoute + "/static/font-awesome/css/all.min.css"
+        >
+        <link
+            rel="stylesheet"
+            href=input.baseRoute + "/static/thirdparty/ckeditor5/ckeditor5.css"
         >
         <!-- Muss aus der kix-font.less entfernt und hier eingefügt werden. -->
         <style>
             @font-face {
                 font-family: "kix_font";
-                src: url("/static/font/kix_font.woff?i8olzm") format("woff");
+                src: url("${input.baseRoute}/static/font/kix_font.woff?i8olzm")
+                    format("woff");
                 font-weight: normal;
                 font-style: normal;
             }
@@ -56,31 +64,38 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             @font-face {
                 font-family: Carlito;
                 src:
-                    url("/static/font/carlito-regular.woff") format("woff"),
-                    url("/static/font/carlito-regular.ttf") format("truetype");
+                    url("${input.baseRoute}/static/font/carlito-regular.woff")
+                        format("woff"),
+                    url("${input.baseRoute}/static/font/carlito-regular.ttf")
+                        format("truetype");
             }
 
             @font-face {
                 font-family: Carlito;
                 src:
-                    url("/static/font/carlito-bold.woff") format("woff"),
-                    url("/static/font/carlito-bold.ttf") format("truetype");
+                    url("${input.baseRoute}/static/font/carlito-bold.woff")
+                        format("woff"),
+                    url("${input.baseRoute}/static/font/carlito-bold.ttf")
+                        format("truetype");
                 font-weight: bold;
             }
 
             @font-face {
                 font-family: Carlito;
                 src:
-                    url("/static/font/carlito-italic.woff") format("woff"),
-                    url(/static/font/carlito-italic.ttf) format("truetype");
+                    url("${input.baseRoute}/static/font/carlito-italic.woff")
+                        format("woff"),
+                    url("${input.baseRoute}/static/font/carlito-italic.ttf")
+                        format("truetype");
                 font-style: italic;
             }
 
             @font-face {
                 font-family: Carlito;
                 src:
-                    url("/static/font/carlito-bold-italic.woff") format("woff"),
-                    url("/static/font/carlito-bold-italic.ttf")
+                    url("${input.baseRoute}/static/font/carlito-bold-italic.woff")
+                        format("woff"),
+                    url("${input.baseRoute}/static/font/carlito-bold-italic.ttf")
                         format("truetype");
                 font-weight: bold;
                 font-style: italic;
@@ -91,24 +106,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <body>
         <login-component ...input/>
         <script type="importmap">
-            
-            
-            
-            
-            
             {
                 "imports": {
-                    "ckeditor5": "/static/thirdparty/ckeditor5/ckeditor5.js",
-                    "ckeditor5/": "/static/thirdparty/ckeditor5/"
+                    "ckeditor5": "${input.baseRoute}/static/thirdparty/ckeditor5/ckeditor5.js",
+                    "ckeditor5/": "${input.baseRoute}/static/thirdparty/ckeditor5/"
                 }
             }
-
-
-
-
-
         </script>
-
         <lasso-body/>
 
         <script type="module">

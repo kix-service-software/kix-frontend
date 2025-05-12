@@ -17,14 +17,12 @@ import { KIXObject } from '../../../../model/kix/KIXObject';
 import { EventService } from './EventService';
 import { FormEvent } from './FormEvent';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
-import { ServiceRegistry } from './ServiceRegistry';
-import { KIXObjectFormService } from './KIXObjectFormService';
-import { ServiceType } from './ServiceType';
 import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
 import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
 import { Error } from '../../../../../../server/model/Error';
 import { Context } from '../../../../model/Context';
 import { IdService } from '../../../../model/IdService';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class FormService {
 
@@ -145,7 +143,10 @@ export class FormService {
         return form;
     }
 
-    public static createDefaultForm(title: string = 'Default'): FormConfiguration {
+    public static async createDefaultForm(title?: string): Promise<FormConfiguration> {
+        if (!title) {
+            title = await TranslationService.translate('Translatable#Default');
+        }
         const form = new FormConfiguration(
             `${IdService.generateDateBasedId()}`, '', [], KIXObjectType.TICKET,
             true, FormContext.EDIT, null,
@@ -154,7 +155,7 @@ export class FormService {
                     IdService.generateDateBasedId(), null, null, true, null,
                     [
                         new FormGroupConfiguration(
-                            IdService.generateDateBasedId(), title || 'Default', null, null, []
+                            IdService.generateDateBasedId(), title, null, null, []
                         )
                     ]
                 )

@@ -70,7 +70,7 @@ export class GraphContext extends Context {
         EventService.getInstance().unsubscribe(ApplicationEvent.CACHE_KEYS_DELETED, this.subscriber);
     }
 
-    public async getDisplayText(short: boolean = false): Promise<string> {
+    public async getDisplayText(): Promise<string> {
         let displayText = this.displayText;
         const cis = await KIXObjectService.loadObjects<ConfigItem>(KIXObjectType.CONFIG_ITEM, [this.getObjectId()])
             .catch((): ConfigItem[] => []);

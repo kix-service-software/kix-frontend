@@ -16,7 +16,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <if(state.initialized)>
         <if(!state.reload)>
             <div class="header-wrapper">
-                <kix-header/>
+                <kix-header baseRoute=input.baseRoute/>
                 <if(!state.isMobile)>
                     <tabbar/>
                 </if>
@@ -41,7 +41,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <sidebar/>
                 </div>
             </if>
-            <div class="footer-wrapper">
+            <div class="footer-wrapper row">
                 <kix-footer/>
             </div>
             <image-viewer/>

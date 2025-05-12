@@ -7,22 +7,13 @@
  * --
  */
 
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
-import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 
 export class ComponentState {
 
     public constructor(
         public instanceId: string = 'admin-dynamic-fields',
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
-            'table-widget', 'Translatable#System: Dynamic Fields',
-            [
-                'dynamic-field-create-action', 'dynamic-field-duplicate-action',
-                'dynamic-field-delete-action', 'csv-export-action'
-            ], null, new TableWidgetConfiguration(null, null, null, KIXObjectType.DYNAMIC_FIELD),
-            false, false, 'kix-icon-gears'
-        )
+        public widgetConfiguration: WidgetConfiguration = null
     ) { }
 
 }

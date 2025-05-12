@@ -7,8 +7,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<ul.form-list-tree tabindex=state.tabIndex key=state.treeId style=state.treeStyle>
+<ul
+    tabindex=state.tabIndex
+    key=state.treeId
+    style=state.treeStyle
+    on-click("handleClick")
+    class="form-list-tree"
+>
     <for|node| of=state.nodes>
-        <form-list-tree-node treeId=state.treeId node=node treeHandler=input.treeHandler/>
+        <form-list-tree-node
+            treeId=state.treeId
+            node=node
+            treeHandler=input.treeHandler
+        />
     </for>
 </ul>

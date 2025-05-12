@@ -19,6 +19,7 @@ import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserU
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { FormValidationService } from '../../../../../base-components/webapp/core/FormValidationService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
+import { PlaceholderService } from '../../../../../base-components/webapp/core/PlaceholderService';
 import { TreeNode, TreeUtil } from '../../../../../base-components/webapp/core/tree';
 import { Contact } from '../../../../../customer/model/Contact';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
@@ -114,6 +115,11 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
     }
 
     private async getPossibleContactId(contactId: number | string): Promise<string | number> {
+        const placeholders = PlaceholderService.getInstance().extractPlaceholders(contactId?.toString());
+        if (placeholders.length) {
+            return contactId;
+        }
+
         if (FormValidationService.getInstance().isValidEmail(contactId.toString())) {
             const loadingOptions = new KIXObjectLoadingOptions([
                 new FilterCriteria(

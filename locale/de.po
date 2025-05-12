@@ -536,6 +536,12 @@ msgstr "Sortierrichtung ändern"
 msgid "Change to"
 msgstr "Ändern in"
 
+msgid "Change to date picker"
+msgstr "Zur Datumsauswahl wechseln"
+
+msgid "Change to placeholder"
+msgstr "Zum Platzhalter wechseln"
+
 msgid "Changed"
 msgstr "Geändert"
 
@@ -797,6 +803,9 @@ msgstr "Superuser anlegen"
 
 msgid "Create Type"
 msgstr "Typ wird angelegt"
+
+msgid "Create new search template"
+msgstr "Neue Suchvorlage erstellen"
 
 msgid "Create the report with output format {0} and defaults?"
 msgstr "Bericht mit Ausgabeformat {0} und Standardwerten erstellen?"
@@ -1428,10 +1437,10 @@ msgstr "Filterbar"
 
 msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
-"menu right besides the New-button"
+"menu right besides the New-button or in the left sidebar"
 msgstr ""
 "Gespeicherte Suche finden Sie im Kopfmenü der Anwendung über das Favoriten-"
-"Icon."
+"Icon, oder in der linken Seitenleiste"
 
 msgid "First Name"
 msgstr "Vorname"
@@ -3400,6 +3409,9 @@ msgstr "Alle Artikel als gelesen markieren."
 msgid "Max Depth"
 msgstr "Max. Tiefe"
 
+msgid "Max. allowed icon size: {0}"
+msgstr "Max. zulässige Bildgröße: {0}"
+
 msgid "Max. Reports"
 msgstr "Max. Berichte"
 
@@ -3510,6 +3522,9 @@ msgstr "Negieren"
 
 msgid "New"
 msgstr "Neu"
+
+msgid "New {0} as copy of"
+msgstr "Neu {0} als Kopie von:"
 
 msgid "New Account"
 msgstr "Neues Konto"
@@ -4376,6 +4391,9 @@ msgstr "Wert ersetzen"
 msgid "Replace empty value"
 msgstr "Leerwert ersetzen"
 
+msgid "Replace existing search template \"{0}\"?"
+msgstr "Vorhandene Suchvorlage \"{0}\" ersetzen?"
+
 msgid "Reply"
 msgstr "Antworten"
 
@@ -4591,8 +4609,14 @@ msgstr "Suchergebnisse: Tickets"
 msgid "Search Templates"
 msgstr "Suchvorlagen"
 
+msgid "Search template with same title already exists."
+msgstr "Eine Suchvorlage mit diesem Titel existiert bereits."
+
 msgid "Search Title"
 msgstr "Name der Suche"
+
+msgid "Search by tag"
+msgstr "Suche anhand Tags"
 
 msgid "Search defaults for {0} reseted."
 msgstr "Standard-Sucheinstellungen für {0} zurückgesetzt."

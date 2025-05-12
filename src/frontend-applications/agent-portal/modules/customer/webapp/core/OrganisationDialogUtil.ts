@@ -8,6 +8,7 @@
  */
 
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 import { Organisation } from '../../model/Organisation';
 import { EditOrganisationDialogContext } from './context/EditOrganisationDialogContext';
 import { NewOrganisationDialogContext } from './context/NewOrganisationDialogContext';
@@ -33,7 +34,10 @@ export class OrganisationDialogUtil {
     }
 
     public static async duplicate(organisation: Organisation): Promise<void> {
-        ContextService.getInstance().setActiveContext(NewOrganisationDialogContext.CONTEXT_ID, organisation?.ID);
+        ContextService.getInstance().setActiveContext(NewOrganisationDialogContext.CONTEXT_ID, organisation?.ID,
+            undefined, [
+            [AdditionalContextInformation.DUPLICATE, true]
+        ]);
     }
 
 }

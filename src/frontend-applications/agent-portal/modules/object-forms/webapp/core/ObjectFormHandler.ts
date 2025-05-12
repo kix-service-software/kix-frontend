@@ -99,6 +99,24 @@ export class ObjectFormHandler<T extends KIXObject = any> {
         this.objectFormValueMapper?.applyWorkflowResult(ruleResult);
     }
 
+    public async validateObjectFormPage(pageId: string): Promise<void> {
+        if (this.context.contextId === 'ObjectFormConfigurationContext') return;
+        await this.objectFormValidator?.enable();
+        const formValues = this.objectFormValueMapper.getFormValues(pageId);
+        await this.objectFormValidator?.validateFormValues(formValues);
+        const valid = this.objectFormValidator.isFormValid(formValues);
+        if (!valid) {
+            const validationResults = this.objectFormValueMapper.getValidationResults();
+            console.debug('ValidationResults:');
+            for (const vr of validationResults) {
+                console.debug(vr.message);
+            }
+
+            const errorMessage = await TranslationService.translate('Translatable#Page contains invalid values');
+            throw new Error('0', errorMessage);
+        }
+    }
+
     public async commit(): Promise<string | number> {
 
         await this.objectFormValidator?.enable();
@@ -153,8 +171,9 @@ export class ObjectFormHandler<T extends KIXObject = any> {
         EventService.getInstance().publish(ObjectFormEvent.PAGE_CHANGED, pageId);
     }
 
-    public addPage(): void {
-        const page = new FormPageConfiguration(IdService.generateDateBasedId(), 'New Page');
+    public async addPage(): Promise<void> {
+        const newPage = await TranslationService.translate('Translatable#New Page');
+        const page = new FormPageConfiguration(IdService.generateDateBasedId(), newPage);
         this.form.pages.push(page);
         EventService.getInstance().publish(ObjectFormEvent.PAGE_ADDED, page);
 
@@ -178,8 +197,9 @@ export class ObjectFormHandler<T extends KIXObject = any> {
         }
     }
 
-    public addGroup(pageId: string = this.activePageId): void {
-        const group = new FormGroupConfiguration(IdService.generateDateBasedId(), 'New Group');
+    public async addGroup(pageId: string = this.activePageId): Promise<void> {
+        const newGroup = await TranslationService.translate('Translatable#New Group');
+        const group = new FormGroupConfiguration(IdService.generateDateBasedId(), newGroup);
         const page = this.form?.pages?.find((p) => p.id === pageId);
         page?.groups?.push(group);
         const configObject = new FormConfigurationObject();

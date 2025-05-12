@@ -39,6 +39,7 @@ class Component {
     public onInput(input: any): void {
         if (input && input.socketTimeout) {
             ClientStorageService.setSocketTimeout(input.socketTimeout);
+            ClientStorageService.setBaseRoute(input.baseRoute || '');
         }
 
         this.modules = input.modules;

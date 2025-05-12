@@ -9,39 +9,67 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.prepared && state.pages && state.pages.length > 1)>
     <if(input.before)>
-        <div.page-title-before class={
-            "title-change": state.pageChanged
-        }>${state.activePageTitle}</div>
+        <div class=[
+            "page-title-before",
+            {
+                "title-change": state.pageChanged,
+            },
+        ]>
+            ${state.activePageTitle}
+        </div>
     </if>
-    <div class=(input.before ? "form-page-menu-before" : "form-page-menu-after")>
-        <div.kix-icon-nook-left
-            class={
-                        "dead-end": !state.activePageIndex
-                    }
-            title=(state.activePageIndex ? state.translations["Translatable#Previous"] : "")
-            on-click("showPage", state.activePageIndex - 1)/>
+    <div class=(
+        input.before ? "form-page-menu-before" : "form-page-menu-after"
+    )>
+        <div
+            class=[
+                "kix-icon-nook-left",
+                {
+                    "dead-end": !state.activePageIndex,
+                },
+            ]
+            title=(
+                state.activePageIndex
+                    ? state.translations["Translatable#Previous"]
+                    : ""
+            )
+            on-click("showPage", state.activePageIndex - 1)
+        />
         <for|page, index| of=state.pages>
             <span
                 class={
-                                active: index === state.activePageIndex
-                            }
-                title=state.translations[page.name]
-                on-click("showPage", index)/>
+                    active: index === state.activePageIndex,
+                }
+                title=(state.translations[page.name])
+                on-click("showPage", index)
+            />
         </for>
-        <div.kix-icon-nook-right
-            class={
-                        "dead-end": state.activePageIndex && state.pages.length - 1 === state.activePageIndex
-                    }
+        <div
+            class=[
+                "kix-icon-nook-right",
+                {
+                    "dead-end":
+                        state.activePageIndex &&
+                        state.pages.length - 1 === state.activePageIndex,
+                },
+            ]
             title=(
-                        !isNaN(state.activePageIndex) && state.pages.length - 1 !== state.activePageIndex
-                                    ? state.translations["Translatable#Next"]
-                                    : ""
-                    )
-            on-click("showPage", state.activePageIndex + 1)/>
+                !isNaN(state.activePageIndex) &&
+                state.pages.length - 1 !== state.activePageIndex
+                    ? state.translations["Translatable#Next"]
+                    : ""
+            )
+            on-click("showPage", state.activePageIndex + 1)
+        />
     </div>
     <if(!input.before)>
-        <div.page-title-after class={
-            "title-change": state.pageChanged
-        }>${state.activePageTitle}</div>
+        <div class=[
+            "page-title-after",
+            {
+                "title-change": state.pageChanged,
+            },
+        ]>
+            ${state.activePageTitle}
+        </div>
     </if>
 </if>
