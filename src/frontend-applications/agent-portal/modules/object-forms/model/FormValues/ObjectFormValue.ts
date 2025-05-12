@@ -270,13 +270,14 @@ export class ObjectFormValue<T = any> {
         this.setNewInitialState(FormValueProperty.REQUIRED, this.required);
         this.isSetInBackground = field.options.some((o) => o.option === 'set hidden') || this.parent?.isSetInBackground;
 
-        if (field?.property !== KIXObjectProperty.DYNAMIC_FIELDS) {
+        if (field.label) {
             this.label = field.label;
-            if (!this.label) {
-                this.label = await LabelService.getInstance().getPropertyText(
-                    field.property, this.object?.KIXObjectType
-                );
-            }
+        }
+
+        if (!this.label && field?.property !== KIXObjectProperty.DYNAMIC_FIELDS) {
+            this.label = await LabelService.getInstance().getPropertyText(
+                field.property, this.object?.KIXObjectType
+            );
         }
 
         if (field?.regEx) {
