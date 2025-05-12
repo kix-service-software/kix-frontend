@@ -772,7 +772,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         if (context.descriptor.contextMode.toLowerCase().includes('admin')) {
             const isRestoredContext = context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
             if (!isRestoredContext) {
-                this.defaultValue = field?.defaultValue.value || [];
+                this.defaultValue = field?.defaultValue?.value || [];
             }
         } else {
             await super.setDefaultValue(field);
