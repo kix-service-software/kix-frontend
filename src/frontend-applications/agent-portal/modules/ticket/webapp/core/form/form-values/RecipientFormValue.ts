@@ -29,7 +29,6 @@ import { FormFieldConfiguration } from '../../../../../../model/configuration/Fo
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
-import { ContactProperty } from '../../../../../customer/model/ContactProperty';
 
 export class RecipientFormValue extends SelectObjectFormValue<any> {
 
@@ -273,15 +272,7 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
 
         let contacts: Contact[] = [];
         if (contactIds?.length) {
-            // This is the fix for the wrong contacts.
-            // They should be searched by their ASSIGNED_USER_ID instead of objectId
-            const loadingOptions = new KIXObjectLoadingOptions([
-                new FilterCriteria(
-                    ContactProperty.ASSIGNED_USER_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND,
-                    contactIds
-                )
-            ]);
-            contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null, loadingOptions);
+            contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, contactIds);
         }
 
         return [contacts, emailAddresses, placeholders];
