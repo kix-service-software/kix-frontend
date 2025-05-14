@@ -21,7 +21,7 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
 
     public constructor(
         public property: string,
-        protected object: DynamicFieldValue,
+        public object: DynamicFieldValue,
         public objectValueMapper: ObjectFormValueMapper,
         public parent: ObjectFormValue,
         public dfName: string
