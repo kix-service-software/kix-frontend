@@ -14,12 +14,12 @@ import { FormGroupConfiguration } from '../../../../model/configuration/FormGrou
 import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
 import { Context } from '../../../../model/Context';
 import { IdService } from '../../../../model/IdService';
-import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 import { ComponentContent } from '../../../base-components/webapp/core/ComponentContent';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { FormFactory } from '../../../base-components/webapp/core/FormFactory';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { OverlayService } from '../../../base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../base-components/webapp/core/OverlayType';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
@@ -32,22 +32,29 @@ import { RuleResult } from '../../model/RuleResult';
 import { ObjectFormRegistry } from './ObjectFormRegistry';
 import { ObjectFormValidator } from './validation/ObjectFormValidator';
 
-export class ObjectFormHandler<T extends KIXObject = any> {
-
-    public constructor(public context: Context) { }
+export class ObjectFormHandler {
 
     public form: FormConfiguration;
 
     public objectFormValueMapper: ObjectFormValueMapper;
     public objectFormValidator: ObjectFormValidator;
 
+    public configurationMode: boolean;
     public configurationObject: FormConfigurationObject;
 
     public activePageId: string;
 
+    public constructor(public context: Context) {
+        this.configurationMode = this.context?.contextId === 'ObjectFormConfigurationContext';
+    }
+
     public destroy(): void {
         this.objectFormValueMapper?.destroy();
         this.objectFormValidator?.destroy();
+    }
+
+    public setConfigurationMode(enabled: boolean): void {
+        this.configurationMode = enabled;
     }
 
     public async loadForm(createNewInstance?: boolean): Promise<void> {
@@ -312,7 +319,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
         const formGroup = this.getGroupForField(fieldId);
         configObject.groupId = formGroup.id;
 
-        if (formValue.isControlledByParent) {
+        if (formValue.isControlledByParent && KIXObjectService.isDynamicFieldProperty(formValue.property)) {
             formValue.parent?.initFormValue();
         }
 

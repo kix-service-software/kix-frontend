@@ -12,7 +12,7 @@ import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptio
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { InputFieldTypes } from '../../../base-components/webapp/core/InputFieldTypes';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
-import { ObjectFormRegistry } from '../../webapp/core/ObjectFormRegistry';
+import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
 import { ObjectFormValue } from './ObjectFormValue';
 
@@ -22,6 +22,7 @@ export class DateTimeFormValue extends ObjectFormValue<string> {
     public minDate: string;
     public maxDate: string;
     public isEmpty: boolean;
+    public isRelativeTimeValue: boolean;
 
     public constructor(
         public property: string,
@@ -38,6 +39,8 @@ export class DateTimeFormValue extends ObjectFormValue<string> {
         const typeOption = field?.options.find(
             (o) => o.option === FormFieldOptions.INPUT_FIELD_TYPE
         );
+
+        this.isRelativeTimeValue = field.options?.some((o) => o.option === DynamicFormFieldOption.RELATIVE_TIME);
 
         this.inputType = typeOption?.value?.toString() || InputFieldTypes.DATE_TIME;
 
@@ -60,23 +63,4 @@ export class DateTimeFormValue extends ObjectFormValue<string> {
 
         await super.setFormValue(value);
     }
-
-    public async initFormValue(): Promise<void> {
-        this.actions = await ObjectFormRegistry.getInstance().getActions(this, this.objectValueMapper);
-        if (this.defaultValue || this.empty) {
-            if (this.defaultValue.startsWith('<') && this.defaultValue.endsWith('>')) {
-                this.value = this.defaultValue;
-            } else {
-                this.value = DateTimeUtil.getKIXDateTimeString(this.defaultValue);
-            }
-        } else if (this.object && this.object[this.property]) {
-            if (this.object[this.property].startsWith('<') && this.object[this.property].endsWith('>')) {
-                this.value = this.defaultValue;
-            } else {
-                this.value = DateTimeUtil.getKIXDateTimeString(this.object[this.property]);
-            }
-        }
-        return this.prepareLabel();
-    }
-
 }
