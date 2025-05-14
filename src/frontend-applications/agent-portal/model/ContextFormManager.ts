@@ -116,7 +116,6 @@ export class ContextFormManager {
         const start = Date.now();
 
         this.handler = new ObjectFormHandler(this.context);
-
         this.handler.loadForm(true);
 
         const end = Date.now();
