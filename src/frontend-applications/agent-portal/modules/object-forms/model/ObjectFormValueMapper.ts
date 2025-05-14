@@ -16,17 +16,16 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ClientStorageService } from '../../base-components/webapp/core/ClientStorageService';
 import { EventService } from '../../base-components/webapp/core/EventService';
-import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
 import { ValidationResult } from '../../base-components/webapp/core/ValidationResult';
 import { DynamicFormFieldOption } from '../../dynamic-fields/webapp/core';
 import { FormConfigurationUtil } from '../webapp/core/FormConfigurationUtil';
 import { InteractionHandler } from '../webapp/core/InteractionHandler';
 import { ObjectFormHandler } from '../webapp/core/ObjectFormHandler';
 import { ObjectFormRegistry } from '../webapp/core/ObjectFormRegistry';
+import { PropertyInstructionMapper } from '../webapp/core/PropertyInstructionMapper';
 import { FormValueProperty } from './FormValueProperty';
 import { DynamicFieldObjectFormValue } from './FormValues/DynamicFieldObjectFormValue';
 import { ObjectFormValue } from './FormValues/ObjectFormValue';
-import { SelectObjectFormValue } from './FormValues/SelectObjectFormValue';
 import { InstructionProperty } from './InstructionProperty';
 import { ObjectFormEvent } from './ObjectFormEvent';
 import { ObjectFormValueMapperExtension } from './ObjectFormValueMapperExtension';
@@ -95,17 +94,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         const endMapObjectValues = Date.now();
         console.debug(`Map Object Values: ${(endMapObjectValues - startMapObjectValues)}ms`);
 
-        if (Array.isArray(this.form?.pages)) {
-            for (const p of this.form?.pages) {
-                if (Array.isArray(p.groups)) {
-                    for (const g of p.groups) {
-                        if (Array.isArray(g.formFields)) {
-                            await this.mapFormConfigurations(object, g.formFields);
-                        }
-                    }
-                }
-            }
-        }
+        await this.mapFormConfiguration();
 
         const startInitFormValues = Date.now();
         await this.initFormValues();
@@ -173,11 +162,22 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             if (fv.formValues?.length) {
                 this.setInitialFormValueState(fv.formValues);
             }
-
         }
     }
 
-    public async mapFormConfigurations(
+    protected async mapFormConfiguration(): Promise<void> {
+        if (Array.isArray(this.form?.pages)) {
+            const pages = this.form?.pages?.filter((p) => Array.isArray(p.groups)) || [];
+            for (const p of pages) {
+                const groups = p.groups?.filter((g) => Array.isArray(g.formFields)) || [];
+                for (const g of groups) {
+                    await this.mapFormFieldsToValues(this.object, g.formFields);
+                }
+            }
+        }
+    }
+
+    public async mapFormFieldsToValues(
         object: T, fields: FormFieldConfiguration[],
         parentField?: FormFieldConfiguration, parentFormValue?: ObjectFormValue
     ): Promise<void> {
@@ -193,7 +193,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             }
 
             if (field.children?.length) {
-                await this.mapFormConfigurations(object, field.children, field, formValue);
+                await this.mapFormFieldsToValues(object, field.children, field, formValue);
             }
         }
     }
@@ -322,10 +322,35 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
     public getFormValues(pageId?: string, groupId?: string): ObjectFormValue[] {
         const formValues = [];
-        let formFields = [];
         if (!pageId && !groupId) {
             return [...this.formValues];
-        } else if (pageId && !groupId) {
+        }
+
+        const formFields = this.getFormFields(pageId, groupId) || [];
+        for (const field of formFields) {
+            let property: string = field.property;
+            if (property === KIXObjectProperty.DYNAMIC_FIELDS.toString()) {
+                const option = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+                property += `.${option?.value}`;
+            }
+
+            const formValue = this.findFormValue(property);
+            let configurationFormValue: ObjectFormValue;
+            if (formValue && !formValue.isControlledByParent) {
+                if (this.objectFormHandler?.configurationMode) {
+                    configurationFormValue = this.getConfigurationFormValue(formValue);
+                }
+
+                formValues.push(configurationFormValue || formValue);
+            }
+        }
+
+        return formValues;
+    }
+
+    protected getFormFields(pageId: string, groupId: string): FormFieldConfiguration[] {
+        let formFields: FormFieldConfiguration[] = [];
+        if (pageId && !groupId) {
             const page = this.form?.pages?.find((p) => p.id === pageId);
             if (page.groups.length) {
                 page.groups.forEach((group) => {
@@ -338,20 +363,18 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             formFields = group?.formFields || [];
         }
 
-        for (const field of formFields) {
-            let property: string = field.property;
-            if (property === KIXObjectProperty.DYNAMIC_FIELDS.toString()) {
-                const option = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
-                property += `.${option?.value}`;
-            }
+        return formFields;
+    }
 
-            const formValue = this.findFormValue(property);
-            if (formValue && !formValue.isControlledByParent) {
-                formValues.push(formValue);
+    public getConfigurationFormValue(formValue: ObjectFormValue): ObjectFormValue {
+        let configurationFormValue: ObjectFormValue;
+        for (const extension of this.extensions || []) {
+            configurationFormValue = extension.getConfigurationFormValue(formValue);
+            if (configurationFormValue) {
+                break;
             }
         }
-
-        return formValues;
+        return configurationFormValue;
     }
 
     public getNotConfiguredFormValues(): ObjectFormValue[] {
@@ -384,6 +407,10 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     public async applyWorkflowResult(result: RuleResult): Promise<void> {
+        if (this.objectFormHandler?.configurationMode) {
+            return;
+        }
+
         const debugRules = Boolean(ClientStorageService.getOption('workflow-debug'));
         if (debugRules) {
             console.debug('FormValues before applyPropertyInstructions:');
@@ -408,7 +435,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         await this.resetFormValues(this.formValues, result.propertyInstructions);
 
         for (const instruction of result.propertyInstructions) {
-            await this.applyPropertyInstruction(instruction)
+            await PropertyInstructionMapper.applyPropertyInstruction(instruction, this)
                 .catch((e) => {
                     console.error('Error appling instruction:');
                     console.error(instruction);
@@ -467,162 +494,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         return ignoreFormValueProperties;
     }
 
-    private async applyPropertyInstruction(instruction: PropertyInstruction): Promise<void> {
-
-        if (instruction.property === 'Submit') {
-            const canSubmit = instruction.Enable === true;
-            EventService.getInstance().publish(ObjectFormEvent.FORM_SUBMIT_ENABLED, canSubmit);
-            return;
-        }
-
-        let formValue = this.findFormValue(instruction.property);
-
-        if (!formValue) {
-            const dfName = KIXObjectService.getDynamicFieldName(instruction.property);
-            if (dfName) {
-                const dfFormValue = await this.getDynamicFieldFormValue(dfName);
-                if (dfFormValue) {
-                    formValue = await (dfFormValue as DynamicFieldObjectFormValue)?.createFormValue(dfName);
-                }
-            }
-        }
-
-        if (formValue) {
-
-            const instructions = instruction.instructionOrder.sort((a, b) => {
-                if (a === InstructionProperty.ENABLE) {
-                    return -1;
-                } else if (b === InstructionProperty.ENABLE) {
-                    return 1;
-                }
-
-                return 0;
-            });
-
-            for (const instructionProperty of instructions) {
-                if (instructionProperty === InstructionProperty.POSSIBLE_VALUES) {
-                    formValue.resetProperty(instructionProperty);
-                    await formValue.setPossibleValues(instruction.PossibleValues);
-                }
-
-                if (instructionProperty === InstructionProperty.POSSIBLE_VALUES_ADD) {
-                    formValue.resetProperty(instructionProperty);
-                    await formValue.addPossibleValues(instruction.PossibleValuesAdd);
-                }
-
-                if (instructionProperty === InstructionProperty.POSSIBLE_VALUES_REMOVE) {
-                    formValue.resetProperty(instructionProperty);
-                    await formValue.removePossibleValues(instruction.PossibleValuesRemove);
-                }
-
-                if (instructionProperty === InstructionProperty.CLEAR) {
-                    await formValue.setFormValue(null, true);
-                }
-
-                if (instructionProperty === InstructionProperty.SET) {
-                    await formValue.setFormValue(instruction.Set, true);
-                }
-
-                if (instructionProperty === InstructionProperty.READ_ONLY) {
-                    if (formValue.readonly !== instruction.ReadOnly) {
-                        formValue.readonly = instruction.ReadOnly;
-                        if (formValue.formValues && formValue.formValues.length > 0) {
-                            formValue.formValues.forEach((fv) => {
-                                fv.readonly = instruction.ReadOnly;
-                            });
-                        }
-                    }
-                }
-
-                if (instructionProperty === InstructionProperty.WRITEABLE) {
-                    if (formValue.readonly === instruction.Writeable) {
-                        formValue.readonly = !instruction.Writeable;
-                        if (formValue.formValues && formValue.formValues.length > 0) {
-                            formValue.formValues.forEach((fv) => {
-                                fv.readonly = !instruction.Writeable;
-                            });
-                        }
-                    }
-                }
-
-                if (instructionProperty === InstructionProperty.SHOW) {
-                    await formValue.show();
-                }
-
-                if (instructionProperty === InstructionProperty.HIDE) {
-                    await formValue.hide();
-                }
-
-                if (instructionProperty === InstructionProperty.REQUIRED) {
-                    if (formValue.required !== instruction.Required) {
-                        formValue.required = instruction.Required;
-                        if (formValue.formValues && formValue.formValues.length > 0) {
-                            formValue.formValues.forEach((fv) => {
-                                fv.required = instruction.Required;
-                            });
-                        }
-                    }
-                }
-
-                if (instructionProperty === InstructionProperty.OPTIONAL) {
-                    if (formValue.required === instruction.Optional) {
-                        formValue.required = !instruction.Optional;
-                        if (formValue.formValues && formValue.formValues.length > 0) {
-                            formValue.formValues.forEach((fv) => {
-                                fv.required = !instruction.Optional;
-                            });
-                        }
-                    }
-                }
-
-                if (instructionProperty === InstructionProperty.ENABLE) {
-                    if (formValue.enabled !== instruction.Enable) {
-                        await formValue.enable();
-                    }
-                }
-
-                if (instructionProperty === InstructionProperty.DISABLE) {
-                    if (formValue.enabled === instruction.Disable) {
-                        await formValue.disable();
-                    }
-                }
-
-                if (instructionProperty === InstructionProperty.MIN_SELECTABLE) {
-                    if (formValue instanceof SelectObjectFormValue) {
-                        formValue.minSelectCount = instruction.MinSelectable;
-                    }
-                }
-
-                if (instructionProperty === InstructionProperty.MAX_SELECTABLE) {
-                    if (formValue instanceof SelectObjectFormValue) {
-                        formValue.maxSelectCount = instruction.MaxSelectable;
-                    }
-                }
-
-                if (instructionProperty === InstructionProperty.COUNT_MAX) {
-                    if (formValue.countMax !== instruction.CountMax) {
-                        formValue.countMax = Number(instruction.CountMax) > 0
-                            ? Number(instruction.CountMax)
-                            : 1;
-                    }
-                }
-
-                if (instructionProperty === InstructionProperty.VALIDATION) {
-                    formValue.regExList = [
-                        {
-                            errorMessage: instruction.Validation.RegExErrorMessage,
-                            regEx: instruction.Validation.RegEx
-                        }
-                    ];
-                }
-
-            }
-
-            await formValue.update();
-        }
-    }
-
-    protected async getDynamicFieldFormValue(dfName: string): Promise<DynamicFieldObjectFormValue> {
+    public async getDynamicFieldFormValue(dfName: string): Promise<DynamicFieldObjectFormValue> {
         const dfFormValue = this.findFormValue(KIXObjectProperty.DYNAMIC_FIELDS);
         return dfFormValue as DynamicFieldObjectFormValue;
     }
