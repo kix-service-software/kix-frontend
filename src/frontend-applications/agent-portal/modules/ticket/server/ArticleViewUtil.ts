@@ -65,7 +65,7 @@ export class ArticleViewUtil {
                     }
                 }
             } else {
-                content = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br>\n');
+                content = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br />\n');
             }
         }
 

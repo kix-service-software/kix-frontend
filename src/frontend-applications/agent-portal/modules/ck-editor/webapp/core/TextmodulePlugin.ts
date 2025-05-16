@@ -52,7 +52,7 @@ export class TextmodulePlugin {
         let text = textmoduleId?.toString();
         if (textmodules?.length) {
             text = await PlaceholderService.getInstance().replacePlaceholders(
-                textmodules[0].Text, null, textmodules[0].Language
+                textmodules[0].Text, null, textmodules[0].Language, true
             );
         }
         return text;
