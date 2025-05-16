@@ -5743,6 +5743,9 @@ msgstr "{0}: hat keinen Wert."
 msgid "{0}: just white spaces as value is not allowed."
 msgstr "{0}: nur Leerzeichen als Wert sind nicht zulässig."
 
+msgid "{0} rows"
+msgstr "{0} Zeilen"
+
 #~ msgid "Search Results: {0}"
 #~ msgstr "Suchergebnisse: {0}"
 
