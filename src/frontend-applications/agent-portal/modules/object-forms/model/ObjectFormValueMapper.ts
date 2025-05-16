@@ -16,6 +16,7 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ClientStorageService } from '../../base-components/webapp/core/ClientStorageService';
 import { EventService } from '../../base-components/webapp/core/EventService';
+import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
 import { ValidationResult } from '../../base-components/webapp/core/ValidationResult';
 import { DynamicFormFieldOption } from '../../dynamic-fields/webapp/core';
 import { FormConfigurationUtil } from '../webapp/core/FormConfigurationUtil';

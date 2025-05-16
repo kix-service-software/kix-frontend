@@ -252,10 +252,10 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         return translationObject;
     }
 
-    public static async createTranslationArray(patterns: string[]): Promise<any> {
+    public static async createTranslationArray(patterns: string[], language?: string): Promise<any> {
         const translatePromises = [];
         patterns.forEach(
-            (p) => translatePromises.push(TranslationService.translate(p))
+            (p) => translatePromises.push(TranslationService.translate(p, undefined, language))
         );
         const translationList = await Promise.all<boolean>(translatePromises);
 
