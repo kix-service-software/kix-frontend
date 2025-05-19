@@ -244,7 +244,11 @@ export class ContextNamespace extends SocketNameSpace {
         const user = await UserService.getInstance().getUserByToken(token).catch((): User => null);
         if (user) {
             const fileName = this.getContextListFileName(user);
-            contextList = ConfigurationService.getInstance().getDataFileContent(fileName, []);
+            contextList = await CacheService.getInstance().get(fileName);
+            if (!contextList) {
+                contextList = ConfigurationService.getInstance().getDataFileContent(fileName, []);
+                await CacheService.getInstance().set(fileName, contextList);
+            }
         }
 
         const response = {
@@ -261,9 +265,11 @@ export class ContextNamespace extends SocketNameSpace {
         const user = await UserService.getInstance().getUserByToken(token).catch((): User => null);
         if (user) {
             const fileName = this.getContextListFileName(user);
-            const contextList: ContextPreference[] = ConfigurationService.getInstance().getDataFileContent(
-                fileName, []
-            );
+            let contextList = await CacheService.getInstance().get(fileName);
+            if (!contextList) {
+                contextList = ConfigurationService.getInstance().getDataFileContent(fileName, []);
+                await CacheService.getInstance().set(fileName, contextList);
+            }
 
             const index = contextList
                 .filter((c) => c !== null && typeof c !== 'undefined')
@@ -275,6 +281,8 @@ export class ContextNamespace extends SocketNameSpace {
             if (data.contextPreference) {
                 contextList.push(data.contextPreference);
             }
+
+            await CacheService.getInstance().set(fileName, contextList);
             ConfigurationService.getInstance().saveDataFileContent(fileName, contextList);
         }
 
