@@ -8,7 +8,6 @@
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
                 "LASSO_TIMEOUT": "360000",
                 "SHOW_MODULE_COMPLAINS": "1",
-                "NODE_OPTIONS": "--inspect",
                 "ENABLE_PROFILING": "true"
             },
             "name": "KIX - Start Server",
@@ -19,7 +18,8 @@
                 ".ts",
                 "--presets",
                 "@babel/preset-env,@babel/preset-typescript",
-                "--preserve-symlinks"
+                "--preserve-symlinks",
+                "--inspect"
             ],
             "request": "launch",
             "sourceMaps": true,
