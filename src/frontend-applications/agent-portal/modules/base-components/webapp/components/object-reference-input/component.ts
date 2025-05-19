@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -269,9 +269,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             const keepSelectionOption = this.state.field?.options?.find(
                 (o) => o.option === ObjectReferenceOptions.KEEP_SELECTION
             );
+            const filterSelectionOption = this.state.field?.options?.find(
+                (o) => o.option === ObjectReferenceOptions.FILTER_SELECTION
+            );
 
             const keepSelection = keepSelectionOption ? keepSelectionOption.value : false;
-            const filterSelection = !keepSelection && !this.state.freeText;
+            const filterSelection = filterSelectionOption ? filterSelectionOption.value :
+                !keepSelection && !this.state.freeText;
             treeHandler.setTree(nodes, null, keepSelection, filterSelection);
         }
     }
@@ -449,7 +453,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
         const dfName = this.state.field?.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME)?.value;
         const property = this.state.field?.property === KIXObjectProperty.DYNAMIC_FIELDS
-            ? `${ KIXObjectProperty.DYNAMIC_FIELDS }.${ dfName }`
+            ? `${KIXObjectProperty.DYNAMIC_FIELDS}.${dfName}`
             : this.state.field?.property;
 
         const possibleValue = formInstance.getPossibleValue(property);
