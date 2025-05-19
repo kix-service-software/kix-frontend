@@ -140,9 +140,8 @@ export class ReportingAPIService extends KIXObjectAPIService {
                     await this.updatePermissions(id, roleIds[1]);
                 }
 
-                const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
                 await this.commitObjectTag(
-                    token, clientRequestId, tags, objectType, id
+                    token, clientRequestId, parameter, objectType, id
                 );
 
                 return id;
@@ -190,9 +189,8 @@ export class ReportingAPIService extends KIXObjectAPIService {
                 await this.updatePermissions(id, roleIds[1]);
             }
 
-            const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
             await this.commitObjectTag(
-                token, clientRequestId, tags, objectType, id
+                token, clientRequestId, parameter, objectType, id
             );
 
             return id;
