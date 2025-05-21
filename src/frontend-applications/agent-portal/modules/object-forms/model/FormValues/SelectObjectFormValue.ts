@@ -779,4 +779,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         }
     }
 
+    public isInitialized(): boolean {
+        return this.initialized;
+    }
+
 }
