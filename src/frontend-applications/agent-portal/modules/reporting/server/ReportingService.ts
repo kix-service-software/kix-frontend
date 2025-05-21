@@ -117,7 +117,7 @@ export class ReportingAPIService extends KIXObjectAPIService {
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
         if (objectType === KIXObjectType.REPORT_DEFINITION) {
-            const reportDefinition = parameter.find((p) => p[0] === KIXObjectType.REPORT_DEFINITION);
+            const reportDefinition = parameter.filter((p) => p).find((p) => p[0] === KIXObjectType.REPORT_DEFINITION);
             if (reportDefinition && reportDefinition[1]) {
                 const response = await this.sendCreateRequest(
                     token, clientRequestId,
@@ -133,7 +133,7 @@ export class ReportingAPIService extends KIXObjectAPIService {
 
                 const id = response['ReportDefinitionID'];
 
-                const roleIds = parameter.find((p) => p[0] === ReportDefinitionProperty.ROLE_IDS)
+                const roleIds = parameter.filter((p) => p).find((p) => p[0] === ReportDefinitionProperty.ROLE_IDS)
                     || [ReportDefinitionProperty.ROLE_IDS, []];
 
                 if (roleIds && Array.isArray(roleIds[1])) {
@@ -150,7 +150,7 @@ export class ReportingAPIService extends KIXObjectAPIService {
             }
         } else if (objectType === KIXObjectType.REPORT) {
             const uri = this.buildUri(this.RESOURCE_URI, 'reports');
-            const reportParameter = parameter.find((p) => p[0] === KIXObjectType.REPORT);
+            const reportParameter = parameter.filter((p) => p).find((p) => p[0] === KIXObjectType.REPORT);
 
             const response = await this.sendCreateRequest(
                 token, clientRequestId, uri, { Report: reportParameter[1] }, this.objectType
@@ -169,7 +169,7 @@ export class ReportingAPIService extends KIXObjectAPIService {
     ): Promise<string | number> {
         if (objectType === KIXObjectType.REPORT_DEFINITION) {
 
-            const reportDefinition = parameter.find((p) => p[0] === KIXObjectType.REPORT_DEFINITION);
+            const reportDefinition = parameter.filter((p) => p).find((p) => p[0] === KIXObjectType.REPORT_DEFINITION);
 
             const response = await this.sendUpdateRequest(
                 token, clientRequestId,
@@ -184,7 +184,7 @@ export class ReportingAPIService extends KIXObjectAPIService {
             });
 
             const id = response['ReportDefinitionID'];
-            const roleIds = parameter.find((p) => p[0] === ReportDefinitionProperty.ROLE_IDS);
+            const roleIds = parameter.filter((p) => p).find((p) => p[0] === ReportDefinitionProperty.ROLE_IDS);
             if (roleIds && Array.isArray(roleIds[1])) {
                 await this.updatePermissions(id, roleIds[1]);
             }
