@@ -243,15 +243,19 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 formValue = dfValue?.findFormValue(dfName);
                 if (!formValue) {
                     formValue = await dfValue?.createFormValue(dfName);
+                    if (!formValue) {
+                        console.debug(`No FormValue for ${field.property}: ${dfName}`);
+                    }
                 }
             }
         } else {
             formValue = this.findFormValue(field.property);
+            if (!formValue) {
+                formValue = await this.createFormValue(field.property, field, object, parentFormValue);
+            }
         }
 
-        if (!formValue) {
-            formValue = await this.createFormValue(field.property, field, object, parentFormValue);
-        } else if (parentFormValue) {
+        if (formValue && parentFormValue) {
             formValue.parent = parentFormValue;
             parentFormValue.formValues.push(formValue);
         }
