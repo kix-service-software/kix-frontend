@@ -5,7 +5,7 @@
 │  ├─ email: jridgewell@google.com
 │  ├─ path: node_modules/@ampproject/remapping
 │  └─ licenseFile: node_modules/@ampproject/remapping/LICENSE
-├─ @asamuzakjp/css-color@3.1.7
+├─ @asamuzakjp/css-color@3.2.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/asamuzaK/cssColor
 │  ├─ publisher: asamuzaK
@@ -517,12 +517,12 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.15.19
+├─ @types/node@22.15.21
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
 │  └─ licenseFile: node_modules/@types/node/LICENSE
-├─ @types/readable-stream@4.0.18
+├─ @types/readable-stream@4.0.19
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/readable-stream
@@ -3552,7 +3552,7 @@
 │  ├─ email: feross@feross.org
 │  ├─ url: http://feross.org
 │  ├─ path: node_modules/safe-buffer
-│  └─ licenseFile: node_modules/@types/readable-stream/node_modules/safe-buffer/LICENSE
+│  └─ licenseFile: node_modules/readable-stream/node_modules/safe-buffer/LICENSE
 ├─ safe-buffer@5.2.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/feross/safe-buffer
