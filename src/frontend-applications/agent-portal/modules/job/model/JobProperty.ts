@@ -34,7 +34,6 @@ export enum JobProperty {
     IS_ASYNCHRONOUS = 'IsAsynchronous',
 
     // ui properties
-    ACTION_COUNT = 'ACTION_COUNT',
     MACRO_ACTIONS = 'MACRO_ACTIONS',
     HAS_TRIGGER_EVENTS = 'HAS_TRIGGER_EVENTS',
     HAS_TRIGGER_TIMES = 'HAS_TRIGGER_TIMES',

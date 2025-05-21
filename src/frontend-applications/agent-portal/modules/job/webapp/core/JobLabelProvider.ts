@@ -51,9 +51,6 @@ export class JobLabelProvider extends LabelProvider {
             case JobProperty.HAS_TRIGGER_TIMES:
                 displayValue = 'Translatable#Time Based';
                 break;
-            case JobProperty.ACTION_COUNT:
-                displayValue = 'Translatable#Number of Actions';
-                break;
             case JobProperty.LAST_EXEC_TIME:
                 displayValue = 'Translatable#Last executed at';
                 break;
@@ -125,29 +122,6 @@ export class JobLabelProvider extends LabelProvider {
             displayValue = existingValue[1];
         } else {
             switch (property) {
-                case JobProperty.ACTION_COUNT:
-                    translatable = false;
-                    displayValue = 0;
-                    let macros: Macro[] = [];
-                    if (Array.isArray(job.Macros) && !!job.Macros.length) {
-                        macros = job.Macros;
-                    } else if (Array.isArray(job.MacroIDs) && !!job.MacroIDs.length) {
-                        macros = await KIXObjectService.loadObjects<Macro>(
-                            KIXObjectType.MACRO, job.MacroIDs,
-                            new KIXObjectLoadingOptions(undefined, undefined, undefined, ['Actions']),
-                            undefined, true
-                        ).catch(() => [] as Macro[]);
-                    }
-                    if (macros) {
-                        macros.forEach((m) => {
-                            if (Array.isArray(m.Actions)) {
-                                displayValue += m.Actions.length;
-                            } else {
-                                displayValue += m.ExecOrder ? m.ExecOrder.length : 0;
-                            }
-                        });
-                    }
-                    break;
                 case JobProperty.HAS_TRIGGER_EVENTS:
                     if (job[JobProperty.HAS_TRIGGER_EVENTS]) {
                         displayValue = job[JobProperty.HAS_TRIGGER_EVENTS];
