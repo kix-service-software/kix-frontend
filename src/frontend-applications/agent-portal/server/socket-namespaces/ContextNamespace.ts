@@ -40,6 +40,7 @@ import { PluginService } from '../../../../server/services/PluginService';
 import { IMarkoApplication } from '../extensions/IMarkoApplication';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { ObjectResponse } from '../services/ObjectResponse';
+import { PromiseQueue } from './PromiseQueue';
 
 export class ContextNamespace extends SocketNameSpace {
 
@@ -264,30 +265,34 @@ export class ContextNamespace extends SocketNameSpace {
 
         const user = await UserService.getInstance().getUserByToken(token).catch((): User => null);
         if (user) {
-            const fileName = this.getContextListFileName(user);
-            let contextList = await CacheService.getInstance().get(fileName);
-            if (!contextList) {
-                contextList = ConfigurationService.getInstance().getDataFileContent(fileName, []);
-                await CacheService.getInstance().set(fileName, contextList);
-            }
-
-            const index = contextList
-                .filter((c) => c !== null && typeof c !== 'undefined')
-                .findIndex((cp) => cp?.instanceId === data?.contextPreference?.instanceId);
-            if (index !== -1) {
-                contextList.splice(index, 1);
-            }
-
-            if (data.contextPreference) {
-                contextList.push(data.contextPreference);
-            }
-
-            await CacheService.getInstance().set(fileName, contextList);
-            ConfigurationService.getInstance().saveDataFileContent(fileName, contextList);
+            await PromiseQueue.getInstance().enqueue(this.createStoreContextPromise.bind(this), [user, data]);
         }
 
         const response = { requestId: data.requestId };
         return new SocketResponse(ContextEvent.STORE_CONTEXT_FINISCHED, response);
+    }
+
+    private async createStoreContextPromise(user: User, data: any): Promise<void> {
+        const fileName = this.getContextListFileName(user);
+        let contextList = await CacheService.getInstance().get(fileName);
+        if (!contextList) {
+            contextList = ConfigurationService.getInstance().getDataFileContent(fileName, []);
+            await CacheService.getInstance().set(fileName, contextList);
+        }
+
+        const index = contextList
+            .filter((c) => c !== null && typeof c !== 'undefined')
+            .findIndex((cp) => cp?.instanceId === data?.contextPreference?.instanceId);
+        if (index !== -1) {
+            contextList.splice(index, 1);
+        }
+
+        if (data.contextPreference) {
+            contextList.push(data.contextPreference);
+        }
+
+        await CacheService.getInstance().set(fileName, contextList);
+        ConfigurationService.getInstance().saveDataFileContent(fileName, contextList);
     }
 
     protected async removeStoredContext(data: any, client: Socket): Promise<SocketResponse<any | SocketErrorResponse>> {
@@ -296,22 +301,29 @@ export class ContextNamespace extends SocketNameSpace {
 
         const user = await UserService.getInstance().getUserByToken(token).catch((): User => null);
         if (user) {
-            const fileName = this.getContextListFileName(user);
-            const contextList: ContextPreference[] = ConfigurationService.getInstance().getDataFileContent(
-                fileName, []
-            );
-
-            const index = contextList
-                .filter((c) => c !== null && typeof c !== 'undefined')
-                .findIndex((cp) => cp?.instanceId === data?.instanceId);
-            if (index !== -1) {
-                contextList.splice(index, 1);
-            }
-            ConfigurationService.getInstance().saveDataFileContent(fileName, contextList);
+            await PromiseQueue.getInstance().enqueue(this.createRemoveStoredContextPromise.bind(this), [user, data]);
         }
 
         const response = { requestId: data.requestId };
         return new SocketResponse(ContextEvent.REMOVE_STORED_CONTEXT_FINISHED, response);
+    }
+
+    private async createRemoveStoredContextPromise(user: User, data: any): Promise<void> {
+        const fileName = this.getContextListFileName(user);
+        let contextList = await CacheService.getInstance().get(fileName);
+        if (!contextList) {
+            contextList = ConfigurationService.getInstance().getDataFileContent(fileName, []);
+        }
+
+        const index = contextList
+            .filter((c) => c !== null && typeof c !== 'undefined')
+            .findIndex((cp) => cp?.instanceId === data?.instanceId);
+        if (index !== -1) {
+            contextList.splice(index, 1);
+        }
+
+        await CacheService.getInstance().set(fileName, contextList);
+        ConfigurationService.getInstance().saveDataFileContent(fileName, contextList);
     }
 
     private getContextListFileName(user: User): string {
