@@ -33,6 +33,9 @@ import { SearchProperty } from '../../search/model/SearchProperty';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
+import { PermissionService } from '../../../server/services/PermissionService';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../server/model/rest/CRUD';
 
 export class ContactAPIService extends KIXObjectAPIService {
 
@@ -336,18 +339,30 @@ export class ContactAPIService extends KIXObjectAPIService {
             delete contact.DynamicFields;
         }
 
-        let userId = contact.AssignedUserID;
         if (contact.User) {
-            contact.User.ValidID = contact.ValidID;
+            const userId = contact.AssignedUserID;
+            let allowed;
+            if (userId){
+                allowed = await PermissionService.getInstance().checkPermissions(
+                    token, [new UIComponentPermission(`system/users/${userId}`, [CRUD.UPDATE])], clientRequestId
+                );
+            }
+            else {
+                allowed = await PermissionService.getInstance().checkPermissions(
+                    token, [new UIComponentPermission('system/users', [CRUD.CREATE])], clientRequestId
+                );
+            }
+            if (allowed) {
+                contact.User.ValidID = contact.ValidID;
 
-            const result = await UserService.getInstance().commitObject(
-                token, clientRequestId, contact.User, relevantOrganisationId
-            );
+                const result = await UserService.getInstance().commitObject(
+                    token, clientRequestId, contact.User, relevantOrganisationId
+                );
 
-            userId = Number(result);
-            contact.AssignedUserID = userId;
+                contact.AssignedUserID = Number(result);
 
-            delete contact.User;
+                delete contact.User;
+            }
         }
 
         const response = await this.sendRequest(
