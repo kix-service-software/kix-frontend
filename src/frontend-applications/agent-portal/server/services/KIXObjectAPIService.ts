@@ -105,7 +105,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             const success = await this.buildFilter(loadingOptions.filter, responseProperty, query, token, objectType);
 
             if (!success) {
-                LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter).replace(/\n/g, ''));
+                LoggingService.getInstance().warning('Invalid api filter.', { filter: loadingOptions.filter });
                 return new ObjectResponse([], 0);
             }
 
