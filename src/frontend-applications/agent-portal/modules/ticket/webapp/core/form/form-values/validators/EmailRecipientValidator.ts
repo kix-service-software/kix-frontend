@@ -23,7 +23,10 @@ export class EmailRecipientValidator implements ObjectFormValueValidator {
 
     public async validate(formValue: ObjectFormValue<any>): Promise<ValidationResult[]> {
         const result: ValidationResult[] = [];
-        if (formValue instanceof RecipientFormValue) {
+        if (
+            formValue instanceof RecipientFormValue &&
+            !formValue.objectValueMapper?.objectFormHandler?.configurationMode
+        ) {
             const value = formValue.value;
             const hasValue = typeof value !== 'undefined' && value !== null && value.length;
             if (hasValue) {

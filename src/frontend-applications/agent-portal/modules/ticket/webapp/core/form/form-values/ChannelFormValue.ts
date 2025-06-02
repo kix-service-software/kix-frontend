@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -235,7 +235,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             }
 
             // initial not visible (formActions should show them)
-            if (formValue.property === ArticleProperty.CC || formValue.property === ArticleProperty.BCC) {
+            if (
+                !this.objectValueMapper?.objectFormHandler?.configurationMode &&
+                (formValue.property === ArticleProperty.CC || formValue.property === ArticleProperty.BCC)
+            ) {
                 formValue.visible = false;
             }
             this.formValues.push(formValue);
@@ -286,7 +289,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 await this.enableChannelFormValues(channel.Name, noteFields);
             } else if (channel?.Name === 'email') {
                 await this.disableChannelFormValues(allFields.filter((p) => !mailFields.includes(p)));
-                await this.enableChannelFormValues(channel.Name, mailFields);
+                await this.enableChannelFormValues(channel.Name, mailFields, byInit);
                 submitPattern = 'Translatable#Send';
             }
 
@@ -314,36 +317,42 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
     }
 
-    protected async enableChannelFormValues(channelName: string, properties: ArticleProperty[]): Promise<void> {
+    protected async enableChannelFormValues(
+        channelName: string, properties: ArticleProperty[], byInit?: boolean
+    ): Promise<void> {
         for (const property of properties) {
             const formValue = this.formValues.find((fv) => fv.property === property);
 
             const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
 
             if (formValue) {
-                if (property === ArticleProperty.CC) {
+                // on init, let field decide (en/disabled in configuration)
+                if (property === ArticleProperty.CC && !byInit) {
                     const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                    const canShow = (!toValue?.enabled && !isEdit) || (toValue?.enabled && formValue?.value && isEdit);
+                    const canShow = (!toValue?.enabled && !isEdit) ||
+                        (toValue?.enabled && formValue?.value && isEdit) ||
+                        this.objectValueMapper?.objectFormHandler?.configurationMode;
                     formValue.visible = canShow;
                 }
-                if (property === ArticleProperty.BCC) {
+                // on init, let field decide (en/disabled in configuration)
+                if (property === ArticleProperty.BCC && !byInit) {
                     const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                    const canShow = toValue?.enabled && formValue?.value && isEdit;
+                    const canShow = toValue?.enabled && formValue?.value && isEdit ||
+                        this.objectValueMapper?.objectFormHandler?.configurationMode;
                     formValue.visible = canShow;
                 }
 
-                // TO is enabled for edit or if set by template (initFormValueByField in RecipientFormValue)
-                if (formValue.property !== ArticleProperty.TO || isEdit) {
-                    await formValue.enable();
-                }
+                await formValue.enable();
 
                 // make sure relevant properties are always required
-                if (formValue.property === ArticleProperty.TO) {
-                    formValue.required = channelName === 'email' && this.visible;
-                }
+                if (!this.objectValueMapper?.objectFormHandler?.configurationMode) {
+                    if (formValue.property === ArticleProperty.TO) {
+                        formValue.required = channelName === 'email' && this.visible;
+                    }
 
-                if (formValue.property === ArticleProperty.SUBJECT || formValue.property === ArticleProperty.BODY) {
-                    formValue.required = true;
+                    if (formValue.property === ArticleProperty.SUBJECT || formValue.property === ArticleProperty.BODY) {
+                        formValue.required = true;
+                    }
                 }
 
                 // use default if given
