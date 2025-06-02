@@ -115,18 +115,18 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
 
         if (
             !this.value
-            && defaultValue !== null
+            && typeof defaultValue === 'string'
             && !this.isEmpty
         ) {
+            this.value = [];
             if (separator) {
-                this.value = [];
                 for (const item of defaultValue.split(separator)) {
                     this.value.push(item);
                 }
+            } else {
+                this.value.push(defaultValue);
             }
-            else {
-                this.value = defaultValue;
-            }
+
         }
     }
 
