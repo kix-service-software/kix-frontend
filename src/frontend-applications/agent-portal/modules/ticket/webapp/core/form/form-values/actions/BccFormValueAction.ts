@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,17 +19,20 @@ export class BccFormValueAction extends FormValueAction {
     }
 
     public async canShow(): Promise<boolean> {
-        const toValue = this.objectValueMapper?.findFormValue(ArticleProperty.TO);
-        const bccValue = this.objectValueMapper?.findFormValue(ArticleProperty.BCC);
+        if (!this.objectValueMapper?.objectFormHandler?.configurationMode) {
+            const toValue = this.objectValueMapper?.findFormValue(ArticleProperty.TO);
+            const bccValue = this.objectValueMapper?.findFormValue(ArticleProperty.BCC);
 
-        let canShow = false;
-        if (this.formValue.property === ArticleProperty.TO) {
-            canShow = toValue?.enabled;
-        } else if (this.formValue.property === ArticleProperty.CC) {
-            canShow = !toValue.enabled;
+            let canShow = false;
+            if (this.formValue.property === ArticleProperty.TO) {
+                canShow = toValue?.enabled;
+            } else if (this.formValue.property === ArticleProperty.CC) {
+                canShow = !toValue.enabled;
+            }
+
+            return bccValue?.enabled && canShow;
         }
-
-        return bccValue?.enabled && canShow;
+        return false;
     }
 
     public canRun(): boolean {
