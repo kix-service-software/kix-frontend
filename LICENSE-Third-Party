@@ -18,7 +18,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/code-frame
 │  └─ licenseFile: node_modules/@babel/code-frame/LICENSE
-├─ @babel/compat-data@7.27.3
+├─ @babel/compat-data@7.27.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -32,14 +32,14 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/core
 │  └─ licenseFile: node_modules/@babel/core/LICENSE
-├─ @babel/core@7.27.3
+├─ @babel/core@7.27.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/core
 │  └─ licenseFile: node_modules/@marko/compiler/node_modules/@babel/core/LICENSE
-├─ @babel/generator@7.27.3
+├─ @babel/generator@7.27.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -137,14 +137,14 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helper-validator-option
 │  └─ licenseFile: node_modules/@babel/helper-validator-option/LICENSE
-├─ @babel/helpers@7.27.3
+├─ @babel/helpers@7.27.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helpers
 │  └─ licenseFile: node_modules/@babel/helpers/LICENSE
-├─ @babel/parser@7.27.3
+├─ @babel/parser@7.27.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -172,7 +172,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/plugin-transform-typescript
 │  └─ licenseFile: node_modules/@babel/plugin-transform-typescript/LICENSE
-├─ @babel/runtime@7.27.3
+├─ @babel/runtime@7.27.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -186,7 +186,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/template
 │  └─ licenseFile: node_modules/@babel/template/LICENSE
-├─ @babel/traverse@7.27.3
+├─ @babel/traverse@7.27.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -517,12 +517,12 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.15.27
+├─ @types/node@22.15.29
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
 │  └─ licenseFile: node_modules/@types/node/LICENSE
-├─ @types/readable-stream@4.0.20
+├─ @types/readable-stream@4.0.21
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/readable-stream
@@ -1139,7 +1139,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001720
+├─ caniuse-lite@1.0.30001721
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1859,7 +1859,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.161
+├─ electron-to-chromium@1.5.163
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
