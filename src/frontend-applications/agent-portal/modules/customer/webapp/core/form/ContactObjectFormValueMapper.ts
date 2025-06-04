@@ -60,7 +60,7 @@ export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact>
                 'user-form-user-access', 'Translatable#Access', UserProperty.USER_ACCESS, null
             ),
             new FormFieldConfiguration(
-                'user-form-user-login', 'Translatable#Login Name', UserProperty.USER_LOGIN, null
+                'user-form-user-login', 'Translatable#Login Name', UserProperty.USER_LOGIN, null, true
             ),
             new FormFieldConfiguration(
                 'user-form-user-password', 'Translatable#Password', UserProperty.USER_PASSWORD, null
