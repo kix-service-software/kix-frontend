@@ -31,7 +31,9 @@ export class EmailRecipientValidator implements ObjectFormValueValidator {
             const hasValue = typeof value !== 'undefined' && value !== null && value.length;
             if (hasValue) {
 
-                const recipientValues: any[] = value.filter((v) => v !== null && typeof v !== 'undefined');
+                const recipientValues: any[] = Array.isArray(value) ?
+                    value.filter((v) => v !== null && typeof v !== 'undefined') :
+                    [value];
 
                 // no check for contact ids necessary, they should already be replaced with their email address
                 const emailAddresses: string[] = [];
