@@ -53,10 +53,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         this.fieldOrder[ArticleProperty.TO] = 1;
         this.fieldOrder[ArticleProperty.CC] = 2;
         this.fieldOrder[ArticleProperty.BCC] = 3;
-        this.fieldOrder[ArticleProperty.SUBJECT] = 4;
-        this.fieldOrder[ArticleProperty.BODY] = 5;
-        this.fieldOrder[ArticleProperty.ATTACHMENTS] = 6;
-        this.fieldOrder[ArticleProperty.ENCRYPT_IF_POSSIBLE] = 7;
+        this.fieldOrder[ArticleProperty.ENCRYPT_IF_POSSIBLE] = 4;
+        this.fieldOrder[ArticleProperty.SUBJECT] = 5;
+        this.fieldOrder[ArticleProperty.BODY] = 6;
+        this.fieldOrder[ArticleProperty.ATTACHMENTS] = 7;
 
         this.createArticleFormValues(article);
     }
@@ -165,14 +165,17 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
 
         // property only needed for article create
-        if (!ContextService.getInstance().getActiveContext()?.getAdditionalInformation('ARTICLE_UPDATE_ID')) {
+        if (
+            !ContextService.getInstance().getActiveContext()?.getAdditionalInformation('ARTICLE_UPDATE_ID') &&
+            // FIXME: hide it in form designer for now (implement it as "real" property which can be configured)
+            !this.objectValueMapper?.objectFormHandler?.configurationMode
+        ) {
             const encyptFormValue = new EncryptIfPossibleFormValue(
                 ArticleProperty.ENCRYPT_IF_POSSIBLE, article, this.objectValueMapper, this
             );
             encyptFormValue.visible = true;
-            // add it after recipents
-            const bccIndex = this.formValues.findIndex((fv) => fv.property === ArticleProperty.BCC);
-            this.formValues.splice(bccIndex + 1, 0, encyptFormValue);
+            encyptFormValue.isControlledByParent = true;
+            this.formValues.push(encyptFormValue);
         }
 
         this.formValues.sort((a, b) => {
@@ -237,7 +240,11 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             // initial not visible (formActions should show them)
             if (
                 !this.objectValueMapper?.objectFormHandler?.configurationMode &&
-                (formValue.property === ArticleProperty.CC || formValue.property === ArticleProperty.BCC)
+                (
+                    formValue.property === ArticleProperty.CC ||
+                    formValue.property === ArticleProperty.BCC ||
+                    formValue.property === ArticleProperty.TO
+                )
             ) {
                 formValue.visible = false;
             }
@@ -317,6 +324,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
     }
 
+    // TODO: new ChannelFormValue for configuration => competitive requirements for dialog use and designer
     protected async enableChannelFormValues(
         channelName: string, properties: ArticleProperty[], byInit?: boolean
     ): Promise<void> {
@@ -326,19 +334,30 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
 
             if (formValue) {
-                // on init, let field decide (en/disabled in configuration)
-                if (property === ArticleProperty.CC && !byInit) {
+
+                // use default if given
+                if (!formValue.value && formValue.defaultValue) {
+                    await formValue.setFormValue(formValue.defaultValue);
+                }
+
+                if (property === ArticleProperty.TO && isEdit) {
+                    formValue.visible = true;
+                }
+
+                if (property === ArticleProperty.CC) {
                     const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                    const canShow = (!toValue?.enabled && !isEdit) ||
-                        (toValue?.enabled && formValue?.value && isEdit) ||
-                        this.objectValueMapper?.objectFormHandler?.configurationMode;
+                    const canShow = ((!toValue?.enabled || !toValue.visible) && !isEdit) ||
+                        formValue?.value ||
+                        this.objectValueMapper?.objectFormHandler?.configurationMode ||
+                        (byInit && formValue.visible);
                     formValue.visible = canShow;
                 }
-                // on init, let field decide (en/disabled in configuration)
-                if (property === ArticleProperty.BCC && !byInit) {
+
+                if (property === ArticleProperty.BCC) {
                     const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                    const canShow = toValue?.enabled && formValue?.value && isEdit ||
-                        this.objectValueMapper?.objectFormHandler?.configurationMode;
+                    const canShow = formValue?.value ||
+                        this.objectValueMapper?.objectFormHandler?.configurationMode ||
+                        (byInit && formValue.visible);
                     formValue.visible = canShow;
                 }
 
@@ -346,18 +365,13 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
                 // make sure relevant properties are always required
                 if (!this.objectValueMapper?.objectFormHandler?.configurationMode) {
-                    if (formValue.property === ArticleProperty.TO) {
+                    if (formValue.property === ArticleProperty.TO && isEdit && !formValue.required) {
                         formValue.required = channelName === 'email' && this.visible;
                     }
 
                     if (formValue.property === ArticleProperty.SUBJECT || formValue.property === ArticleProperty.BODY) {
                         formValue.required = true;
                     }
-                }
-
-                // use default if given
-                if (!formValue.value && formValue.defaultValue) {
-                    await formValue.setFormValue(formValue.defaultValue);
                 }
 
                 if (formValue.fieldId) {

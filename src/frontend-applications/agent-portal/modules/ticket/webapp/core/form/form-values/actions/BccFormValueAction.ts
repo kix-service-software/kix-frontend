@@ -27,7 +27,7 @@ export class BccFormValueAction extends FormValueAction {
             if (this.formValue.property === ArticleProperty.TO) {
                 canShow = toValue?.enabled;
             } else if (this.formValue.property === ArticleProperty.CC) {
-                canShow = !toValue.enabled;
+                canShow = !toValue.enabled || !toValue.visible;
             }
 
             return bccValue?.enabled && canShow;
