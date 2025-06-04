@@ -397,6 +397,12 @@ export class ObjectFormValue<T = any> {
         }
     }
 
+    public getObjectProperty(property: string): any {
+        if (this.object) {
+            return this.object[property];
+        }
+    }
+
     public async setFormValue(value: any, force?: boolean): Promise<void> {
         if ((force || !this.readonly) && !this.isSameValue(value)) {
             this.value = value;

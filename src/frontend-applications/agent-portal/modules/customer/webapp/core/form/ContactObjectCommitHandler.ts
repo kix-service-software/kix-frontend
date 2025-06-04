@@ -11,6 +11,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
+import { UserProperty } from '../../../../user/model/UserProperty';
 import { Contact } from '../../../model/Contact';
 import { NewContactDialogContext } from '../context/NewContactDialogContext';
 
@@ -36,6 +37,16 @@ export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {
 
         if (!newContact.User?.UserID && !newContact.User?.IsAgent && !newContact.User?.IsCustomer) {
             delete newContact.User;
+        }
+
+        if (Array.isArray(newContact.User?.Preferences)) {
+            const userAccessFormValue = objectValueMapper.findFormValue(UserProperty.USER_ACCESS);
+            const preferencesFormValue = userAccessFormValue?.findFormValue(UserProperty.PREFERENCES);
+            newContact.User.Preferences = newContact.User.Preferences.filter(
+                (pref) => preferencesFormValue.formValues.some(
+                    (formValue) => formValue.getObjectProperty('ID') === pref.ID
+                )
+            );
         }
 
         return newContact;
