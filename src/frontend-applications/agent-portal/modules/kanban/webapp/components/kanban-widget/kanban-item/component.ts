@@ -125,7 +125,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             this.state.contactTooltip = contact.Fullname;
 
-            this.state.userColor = BrowserUtil.getUserColor(this.state.ticket.OwnerID);
+            this.state.userColor = await BrowserUtil.getUserColor(this.state.ticket.OwnerID);
         }
     }
 
