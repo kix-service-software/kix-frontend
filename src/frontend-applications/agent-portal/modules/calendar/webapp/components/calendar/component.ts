@@ -30,6 +30,7 @@ import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { Context } from '../../../../../model/Context';
 import Calendar from 'tui-calendar';
 import { User } from '../../../../user/model/User';
+import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 
 declare const tui: any;
 
@@ -44,6 +45,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private popupTimeout: any;
     private tickets: Ticket[] = [];
     private updateTimeout: any;
+    private changeTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -52,12 +54,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any): void {
         this.tickets = input.tickets || [];
         this.calendarConfig = input.calendarConfig;
-
-        if (this.updateTimeout) {
-            clearTimeout(this.updateTimeout);
-        }
-
-        this.updateTimeout = setTimeout(() => this.updateCalendar(), 250);
+        this.updateCalendar();
     }
 
     public async onMount(): Promise<void> {
@@ -71,10 +68,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async updateCalendar(): Promise<void> {
-        const tickets = await this.loadTickets();
-        setTimeout(async () => {
+        if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout);
+        }
+        this.updateTimeout = setTimeout(async () => {
+            const tickets = await this.loadTickets();
             await this.createCalendar(tickets);
-        }, 100);
+        }, 1000); // use fairly long timeout to prevent empty calendar
     }
 
     private async initWidget(): Promise<void> {
@@ -135,7 +135,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         await this.updateCalendarSchedules(tickets);
-        this.setCurrentDate();
+        await this.setCurrentDate();
 
         this.calendar?.on('beforeUpdateSchedule', this.scheduleChanged.bind(this));
         this.calendar?.on('clickSchedule', this.scheduleClicked.bind(this));
@@ -150,7 +150,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const calendars = [];
         for (const u of userIdMap) {
-            const bgColor = BrowserUtil.getUserColor(u[0]);
+            const bgColor = await BrowserUtil.getUserColor(u[0]);
             const overlay = await LabelService.getInstance().getOverlayIcon(
                 KIXObjectType.USER, u[0]
             );
@@ -192,8 +192,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async createCalendarElement(): Promise<void> {
         const dayNames = await this.getDayNames();
         const calendar = document.getElementById(this.state.calendarId);
+        const pendingTranslation = await TranslationService.translate('Translatable#Pending');
         if (calendar) {
             this.calendar = new Calendar(`#${this.state.calendarId}`, {
+                usageStatistics: false,
                 defaultView: 'month',
                 useDetailPopup: true,
                 taskView: [],
@@ -211,7 +213,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     narrowWeekend: true,
                     startDayOfWeek: 1, // monday
                     daynames: dayNames,
-                }
+                },
+                template: {
+                    time(schedule): string {
+                        return `${schedule.raw?.StateType === 'pending reminder' ?
+                            `<i class="fas fa-hourglass-half me-1" title="${pendingTranslation}"></i>` :
+                            ''}${schedule.title}`;
+                    },
+                },
             });
         }
     }
@@ -245,8 +254,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async updateCalendarSchedules(tickets: Ticket[]): Promise<void> {
-        this.schedules = await this.createSchedules(tickets);
-        this.calendar?.createSchedules(this.schedules.filter((s) => s));
+        this.schedules = (await this.createSchedules(tickets)).filter((s) => s);
+        this.calendar?.createSchedules(this.schedules);
         this.state.loading = false;
     }
 
@@ -271,7 +280,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
                 const title = await LabelService.getInstance().getObjectText(ticket, true);
                 const isPending = ticket.StateType === 'pending reminder';
-                const bgColor = BrowserUtil.getUserColor(ticket.OwnerID);
+                const bgColor = await BrowserUtil.getUserColor(ticket.OwnerID);
                 const schedule: any = {
                     id: ticket.TicketID,
                     calendarId: ticket.OwnerID,
@@ -345,87 +354,99 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const schedule = event.schedule;
         const changes = event.changes;
 
-        if (changes) {
-            const parameter = [];
+        if (this.changeTimeout) {
+            clearTimeout(this.changeTimeout);
+        }
+        this.changeTimeout = setTimeout(async () => {
+            if (changes) {
+                const parameter = [];
 
-            const today = new Date();
+                const today = new Date();
 
-            if (schedule.raw.StateType === 'pending reminder' && isNaN(Number(schedule.id))) {
-                if (changes.start) {
-                    if (today > changes.start.toDate()) {
-                        BrowserUtil.openErrorOverlay('Translatable#Pending date is not in the future.');
-                    } else {
-                        const pendingDate = DateTimeUtil.getKIXDateTimeString(changes.start.toDate());
+                if (schedule.raw.StateType === 'pending reminder' && isNaN(Number(schedule.id))) {
+                    if (changes.start) {
+                        if (today > changes.start.toDate()) {
+                            BrowserUtil.openErrorOverlay('Translatable#Pending date is not in the future.');
+                        } else {
+                            const pendingDate = DateTimeUtil.getKIXDateTimeString(changes.start.toDate());
+                            parameter.push([TicketProperty.STATE_ID, schedule.raw.StateID]);
+                            parameter.push([TicketProperty.PENDING_TIME, pendingDate]);
+                        }
+                    } else if (changes.end) {
+                        const newStart = schedule.end.toDate();
+                        newStart.setHours(changes.end.toDate().getHours() - 1);
+                        const pendingDate = DateTimeUtil.getKIXDateTimeString(newStart);
                         parameter.push([TicketProperty.STATE_ID, schedule.raw.StateID]);
                         parameter.push([TicketProperty.PENDING_TIME, pendingDate]);
+
+                        changes.start = newStart;
                     }
-                } else if (changes.end) {
-                    const newStart = schedule.end.toDate();
-                    newStart.setHours(changes.end.toDate().getHours() - 1);
-                    const pendingDate = DateTimeUtil.getKIXDateTimeString(newStart);
-                    parameter.push([TicketProperty.STATE_ID, schedule.raw.StateID]);
-                    parameter.push([TicketProperty.PENDING_TIME, pendingDate]);
+                } else {
+                    const dfValue = [];
+                    if (changes.start) {
+                        const startDate = DateTimeUtil.getKIXDateTimeString(changes.start.toDate());
+                        dfValue.push({ Name: this.calendarConfig.startDateProperty, Value: [startDate] });
+                    }
 
-                    changes.start = newStart;
-                }
-            } else {
-                const dfValue = [];
-                if (changes.start) {
-                    const startDate = DateTimeUtil.getKIXDateTimeString(changes.start.toDate());
-                    dfValue.push({ Name: this.calendarConfig.startDateProperty, Value: startDate });
-                }
-
-                if (changes.end) {
-                    const endDate = DateTimeUtil.getKIXDateTimeString(changes.end.toDate());
-                    dfValue.push({ Name: this.calendarConfig.endDateProperty, Value: endDate });
-                }
-
-                if (dfValue.length) {
-                    parameter.push([KIXObjectProperty.DYNAMIC_FIELDS, dfValue]);
-                }
-            }
-
-            if (parameter.length) {
-                const id = isNaN(Number(schedule.id)) ? schedule.id.replace(/^pending-/, '') : schedule.id;
-                KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, id)
-                    .then(() => {
-                        this.calendar?.updateSchedule(schedule.id, schedule.calendarId, changes);
-                        const context = ContextService.getInstance().getActiveContext();
-                        if (context) {
-                            context.reloadObjectList(KIXObjectType.TICKET, true);
+                    if (changes.end) {
+                        let end = changes.end.toDate();
+                        if (changes.start?.toDate()?.getTime() === end.getTime()) {
+                            end = changes.end.addMinutes(30).toDate();
                         }
-                    })
-                    .catch(() => null);
+                        const endDate = DateTimeUtil.getKIXDateTimeString(end);
+                        dfValue.push({ Name: this.calendarConfig.endDateProperty, Value: [endDate] });
+                    }
+
+                    if (dfValue.length) {
+                        dfValue.forEach((df: DynamicFieldValue) => df.Name = df.Name.replace(
+                            /^DynamicFields\.(.+)$/, '$1'
+                        ));
+                        parameter.push([KIXObjectProperty.DYNAMIC_FIELDS, dfValue]);
+                    }
+                }
+
+                if (parameter.length) {
+                    const id = isNaN(Number(schedule.id)) ? schedule.id.replace(/^pending-/, '') : schedule.id;
+                    KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, id)
+                        .then(() => {
+                            this.calendar?.updateSchedule(schedule.id, schedule.calendarId, changes);
+                            const context = ContextService.getInstance().getActiveContext();
+                            if (context) {
+                                context.reloadObjectList(KIXObjectType.TICKET, true);
+                            }
+                        })
+                        .catch(() => null);
+                }
             }
-        }
+        }, 100);
     }
 
-    public changeView(): void {
+    public async changeView(): Promise<void> {
         this.state.view = this.state.view === 'month' ? 'week' : 'month';
         this.state.toggleLabel = this.state.view === 'month' ? 'Translatable#Week' : 'Translatable#Month';
-        this.setCurrentDate();
+        await this.setCurrentDate();
         this.calendar?.changeView(this.state.view, true);
     }
 
-    public today(): void {
+    public async today(): Promise<void> {
         if (this.calendar) {
             this.calendar?.setDate(new Date());
             this.calendar?.changeView(this.state.view, true);
-            this.setCurrentDate();
+            await this.setCurrentDate();
         }
     }
 
-    public next(): void {
+    public async next(): Promise<void> {
         if (this.calendar) {
             this.calendar?.next();
-            this.setCurrentDate();
+            await this.setCurrentDate();
         }
     }
 
-    public prev(): void {
+    public async prev(): Promise<void> {
         if (this.calendar) {
             this.calendar?.prev();
-            this.setCurrentDate();
+            await this.setCurrentDate();
         }
     }
 
