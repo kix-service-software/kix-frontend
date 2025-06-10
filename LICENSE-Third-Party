@@ -137,7 +137,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helper-validator-option
 │  └─ licenseFile: node_modules/@babel/helper-validator-option/LICENSE
-├─ @babel/helpers@7.27.4
+├─ @babel/helpers@7.27.6
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -172,7 +172,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/plugin-transform-typescript
 │  └─ licenseFile: node_modules/@babel/plugin-transform-typescript/LICENSE
-├─ @babel/runtime@7.27.4
+├─ @babel/runtime@7.27.6
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -193,7 +193,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/traverse
 │  └─ licenseFile: node_modules/@babel/traverse/LICENSE
-├─ @babel/types@7.27.3
+├─ @babel/types@7.27.6
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -317,7 +317,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.20
+├─ @marko/compiler@5.39.21
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -352,7 +352,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/cookie
 │  └─ licenseFile: node_modules/@types/cookie/LICENSE
-├─ @types/cors@2.8.18
+├─ @types/cors@2.8.19
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/cors
@@ -517,7 +517,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.15.29
+├─ @types/node@22.15.31
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -549,7 +549,7 @@
 │  ├─ repository: https://github.com/acornjs/acorn
 │  ├─ path: node_modules/acorn
 │  └─ licenseFile: node_modules/acorn/LICENSE
-├─ acorn@8.14.1
+├─ acorn@8.15.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/acornjs/acorn
 │  ├─ path: node_modules/acorn
@@ -1174,7 +1174,7 @@
 │  ├─ email: me@feedic.com
 │  ├─ path: node_modules/cheerio-select
 │  └─ licenseFile: node_modules/cheerio-select/LICENSE
-├─ cheerio@1.0.0
+├─ cheerio@1.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/cheeriojs/cheerio
 │  ├─ publisher: Matt Mueller
@@ -1382,7 +1382,7 @@
 │  ├─ repository: https://github.com/zloirock/core-js
 │  ├─ path: node_modules/core-js
 │  └─ licenseFile: node_modules/babel-runtime/node_modules/core-js/LICENSE
-├─ core-js@3.42.0
+├─ core-js@3.43.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/zloirock/core-js
 │  ├─ publisher: Denis Pushkarev
@@ -1445,7 +1445,7 @@
 │  ├─ url: https://github.com/afelix
 │  ├─ path: node_modules/csso
 │  └─ licenseFile: node_modules/csso/LICENSE
-├─ cssstyle@4.3.1
+├─ cssstyle@4.4.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jsdom/cssstyle
 │  ├─ path: node_modules/cssstyle
@@ -1859,7 +1859,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.165
+├─ electron-to-chromium@1.5.166
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -1896,7 +1896,7 @@
 │  ├─ repository: https://github.com/pillarjs/encodeurl
 │  ├─ path: node_modules/encodeurl
 │  └─ licenseFile: node_modules/encodeurl/LICENSE
-├─ encoding-sniffer@0.2.0
+├─ encoding-sniffer@0.2.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/fb55/encoding-sniffer
 │  ├─ publisher: Felix Boehm
@@ -1934,7 +1934,7 @@
 │  ├─ email: me@feedic.com
 │  ├─ path: node_modules/entities
 │  └─ licenseFile: node_modules/entities/LICENSE
-├─ entities@6.0.0
+├─ entities@6.0.1
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/fb55/entities
 │  ├─ publisher: Felix Boehm
@@ -2272,6 +2272,13 @@
 │  ├─ repository: https://github.com/marko-js/htmljs-parser
 │  ├─ path: node_modules/htmljs-parser
 │  └─ licenseFile: node_modules/htmljs-parser/LICENSE
+├─ htmlparser2@10.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/fb55/htmlparser2
+│  ├─ publisher: Felix Boehm
+│  ├─ email: me@feedic.com
+│  ├─ path: node_modules/htmlparser2
+│  └─ licenseFile: node_modules/htmlparser2/LICENSE
 ├─ htmlparser2@5.0.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/fb55/htmlparser2
@@ -2279,13 +2286,6 @@
 │  ├─ email: me@feedic.com
 │  ├─ path: node_modules/htmlparser2
 │  └─ licenseFile: node_modules/web-resource-inliner/node_modules/htmlparser2/LICENSE
-├─ htmlparser2@9.1.0
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/fb55/htmlparser2
-│  ├─ publisher: Felix Boehm
-│  ├─ email: me@feedic.com
-│  ├─ path: node_modules/htmlparser2
-│  └─ licenseFile: node_modules/htmlparser2/LICENSE
 ├─ http-errors@2.0.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jshttp/http-errors
@@ -2856,7 +2856,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.31
+├─ marko@5.37.32
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -3844,7 +3844,7 @@
 │  ├─ email: joris@jorisvanderwel.com
 │  ├─ path: node_modules/symbol-tree
 │  └─ licenseFile: node_modules/symbol-tree/LICENSE
-├─ terser@5.40.0
+├─ terser@5.42.0
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/terser/terser
 │  ├─ publisher: Mihai Bazon
@@ -4005,7 +4005,7 @@
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici-types
 │  └─ licenseFile: node_modules/undici-types/LICENSE
-├─ undici@6.21.3
+├─ undici@7.10.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici
