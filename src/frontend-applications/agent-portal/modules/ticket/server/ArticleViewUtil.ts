@@ -26,10 +26,11 @@ export class ArticleViewUtil {
 
     public static async getArticleHTMLContent(
         token: string, articleId: number, ticketId: number, reduceContent: boolean, resolveInlineCSS: boolean,
-        linesCount?: number, prepareInline: boolean = true
+        linesCount?: number, prepareInline: boolean = true, relevantOrganisationID?: number
     ): Promise<string> {
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.includes.push(ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN);
+        loadingOptions.query.push(['RelevantOrganisationID', relevantOrganisationID?.toString()]);
 
         const articleResponse = await TicketAPIService.getInstance().loadObjects<Article>(
             token, 'ArticleRouter', KIXObjectType.ARTICLE, [articleId], loadingOptions, new ArticleLoadingOptions(ticketId)
@@ -41,7 +42,7 @@ export class ArticleViewUtil {
 
             if (article.bodyAttachment) {
                 content = await this.getHTMLContent(
-                    token, ticketId, article, reduceContent, linesCount, prepareInline
+                    token, ticketId, article, reduceContent, linesCount, prepareInline, relevantOrganisationID
                 );
 
                 if (resolveInlineCSS) {
@@ -76,7 +77,7 @@ export class ArticleViewUtil {
 
     private static async getHTMLContent(
         token: string, ticketId: number, article: Article, reduceContent: boolean,
-        linesCount?: number, prepareInline: boolean = true
+        linesCount?: number, prepareInline: boolean = true, relevantOrganisationID?: number
     ): Promise<string> {
 
         const attachmentIds = [article.bodyAttachment.ID];
@@ -87,7 +88,7 @@ export class ArticleViewUtil {
         }
 
         const attachments = await TicketAPIService.getInstance().loadArticleAttachments(
-            token, ticketId, article.ArticleID, attachmentIds
+            token, ticketId, article.ArticleID, attachmentIds, relevantOrganisationID
         );
 
         const contentAttachment = attachments.find((a) => a.ID === article.bodyAttachment.ID);
