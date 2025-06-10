@@ -108,22 +108,25 @@ export class ActionFactory<T extends AbstractAction> {
 
     public static sortList<T extends ActionGroup | IAction>(list: T[]): T[] {
         return list.sort((a, b) => {
-            // objects wihout rank belong to the end and are not sorted by text
-            // check b first to keep given order e.g. if a also has no rank
-            if (typeof b.rank === 'undefined' || b.rank === null) {
-                return 0;
+            const aHasRank = !isNaN(Number(a.rank));
+            const bHasRank = !isNaN(Number(a.rank));
+
+            if (!aHasRank && !bHasRank) {
+                return SortUtil.compareString(a.text, b.text, SortOrder.UP);
             }
-            if (typeof a.rank === 'undefined' || a.rank === null) {
+
+            if (!aHasRank && bHasRank) {
+                return -1;
+            }
+
+            if (aHasRank && !bHasRank) {
                 return 1;
             }
 
-            // sort by given rank or text if equal
-            if (a.rank !== b.rank) {
-                return SortUtil.compareNumber(
-                    a.rank, b.rank, SortOrder.UP, false
-                );
-            } else {
+            if (a.rank === b.rank) {
                 return SortUtil.compareString(a.text, b.text, SortOrder.UP);
+            } else {
+                return SortUtil.compareNumber(a.rank, b.rank, SortOrder.UP, false);
             }
         });
     }
