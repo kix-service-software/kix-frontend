@@ -23,7 +23,8 @@ export class ObjectLoader {
 
     private constructor() { }
 
-    private objectIdMap: Map<string, Map<string, [(object: any) => void, (error: any) => void]>> = new Map();
+    private objectIdMap: Map<string, Map<string, Array<[(object: any) => void, (error: any) => void]>>> = new Map();
+
 
     private loadingOptionsMap: Map<string, KIXObjectLoadingOptions> = new Map();
 
@@ -44,7 +45,15 @@ export class ObjectLoader {
                 this.objectIdMap.set(objectType, new Map());
             }
 
-            this.objectIdMap.get(objectType).set(objectId.toString(), [resolve, reject]);
+            const objectMap = this.objectIdMap.get(objectType);
+            const key = objectId.toString();
+
+            if (!objectMap.has(key)) {
+                objectMap.set(key, []);
+            }
+
+            objectMap.get(key).push([resolve, reject]);
+
             this.load();
         });
     }
@@ -64,7 +73,7 @@ export class ObjectLoader {
     }
 
     private async loadObjects(
-        objectType: string, objectMap: Map<number | string, [(object: any) => void, (error) => void]>
+        objectType: string, objectMap: Map<string, Array<[(object: any) => void, (error: any) => void]>>
     ): Promise<void> {
         try {
             const objectIds = [...objectMap.keys()];
@@ -74,19 +83,23 @@ export class ObjectLoader {
             const objects = await KIXObjectService.loadObjects(objectType, objectIds, loadingOptions);
 
             for (const obj of objects) {
-                const cb = objectMap.get(obj.ObjectId?.toString());
-                if (cb?.length) {
-                    cb[0](obj);
+                const cbArray = objectMap.get(obj.ObjectId?.toString());
+                if (cbArray?.length) {
+                    cbArray.forEach((cb) => cb[0](obj));
                     objectMap.delete(obj.ObjectId?.toString());
                 }
             }
 
             if (objectMap.size > 0) {
-                objectMap.forEach((cb, key) => cb[0](null));
+                objectMap.forEach((cbArray, key) => {
+                    cbArray.forEach((cb) => cb[0](null));
+                });
             }
         } catch (e) {
             if (objectMap.size > 0) {
-                objectMap.forEach((cb, key) => cb[1](null));
+                objectMap.forEach((cbArray, key) => {
+                    cbArray.forEach((cb) => cb[1](null));
+                });
             }
         }
     }
