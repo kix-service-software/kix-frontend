@@ -249,9 +249,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'contact-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
-                'object-reference-input', true, 'Translatable#Helptext_Customers_ContactCreate_Validity', [
-                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-            ], new FormFieldValue(1)
+                'object-reference-input', true, 'Translatable#Helptext_Customers_ContactCreate_Validity',
+                [new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)]
             )
         );
 
