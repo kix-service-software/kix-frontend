@@ -436,4 +436,8 @@ export abstract class KIXObjectFormService {
         }
         return foundField;
     }
+
+    public getObjectTagPositionProperty(): Map<string, any> {
+        return null;
+    }
 }
