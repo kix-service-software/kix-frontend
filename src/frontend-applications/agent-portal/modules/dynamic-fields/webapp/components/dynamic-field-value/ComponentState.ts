@@ -19,7 +19,8 @@ export class ComponentState {
         public table: Array<string[]> = [],
         public prepared: boolean = false,
         public field: DynamicField = null,
-        public dfValue: DynamicFieldValue = null
+        public dfValue: DynamicFieldValue = null,
+        public textareaIds: string[] = []
     ) { }
 
 }

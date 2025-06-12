@@ -70,6 +70,17 @@ export class CKEditor5 {
                         }
                     }
 
+                    if (input.readOnly) {
+                        contentString = contentString.replace(
+                            /(https?:\/\/[^\s]+)/g,
+                            '<a href="$1" target="_blank">$1</a>'
+                        );
+                        contentString = contentString.replace(
+                            /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
+                            '<a href="mailto:$1">$1</a>'
+                        );
+                    }
+
                     if (this.editor.getData() !== contentString) {
                         this.handleOnInputChange = true;
                         const viewFragment = this.editor.data.processor.toView(contentString);

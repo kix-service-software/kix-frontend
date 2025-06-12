@@ -9,6 +9,8 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
+import { BrowserUtil } from '../../../core/BrowserUtil';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -46,6 +48,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         event.stopPropagation();
         event.preventDefault();
         (this as any).emit('removeLabel', this.state.label, event);
+    }
+
+    public async getLabelValue(): Promise<void> {
+        const translatedText = await TranslationService.translate(this.state.label.text);
+        BrowserUtil.wrapLinksAndEmailsAndAppendToElement(this.state.label.id.toString(), translatedText);
     }
 }
 

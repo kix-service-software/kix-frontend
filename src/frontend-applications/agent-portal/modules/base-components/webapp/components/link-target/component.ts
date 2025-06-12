@@ -76,6 +76,10 @@ class Component {
 
     public async linkClicked(event: any): Promise<void> {
         if (event.preventDefault) {
+            const target = event.target as HTMLAnchorElement;
+            if (target.target === '_blank') {
+                return;
+            }
             event.preventDefault();
         }
 
