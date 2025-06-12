@@ -29,6 +29,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private subscriber: IEventSubscriber;
 
+    private valueUpdateTimeout: any;
+    private selectedNodesUpdateTimeout: any;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -118,12 +121,27 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.setReadonly(Boolean(formValue.readonly));
             }),
             this.formValue.addPropertyBinding(FormValueProperty.VALUE, async () => {
-                this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
+                if (this.valueUpdateTimeout) {
+                    clearTimeout(this.valueUpdateTimeout);
+                }
+
+                this.valueUpdateTimeout = setTimeout(async () => {
+                    this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
+                    if (!this.formValue.multiselect) {
+                        this.apply();
+                    }
+                }, 150);
             }),
             this.formValue.addPropertyBinding('selectedNodes', async () => {
-                this.state.prepared = false;
-                this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
-                setTimeout(() => this.state.prepared = true, 20);
+                if (this.selectedNodesUpdateTimeout) {
+                    clearTimeout(this.selectedNodesUpdateTimeout);
+                }
+
+                this.selectedNodesUpdateTimeout = setTimeout(async () => {
+                    this.state.prepared = false;
+                    this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
+                    setTimeout(() => this.state.prepared = true, 20);
+                }, 150);
             })
         );
 
@@ -287,7 +305,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
     }
 
-    public async apply(event: any): Promise<void> {
+    public async apply(event?: any): Promise<void> {
         const element = document.getElementById(`id_${this.state.searchValueKey}`);
         element?.click();
     }
