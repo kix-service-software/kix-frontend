@@ -28,7 +28,7 @@ import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsPr
 import { WindowListener } from './WindowListener';
 import { ToastUtil } from '../../../toast/webapp/core/ToastUtil';
 import { RoutingService } from './RoutingService';
-import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { DefaultColorConfiguration } from '../../../../model/configuration/DefaultColorConfiguration';
 
 export class BrowserUtil {
