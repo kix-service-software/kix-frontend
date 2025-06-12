@@ -1047,7 +1047,7 @@
 │  ├─ url: http://dustindiaz.com
 │  ├─ path: node_modules/bowser
 │  └─ licenseFile: node_modules/bowser/LICENSE
-├─ brace-expansion@1.1.11
+├─ brace-expansion@1.1.12
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/juliangruber/brace-expansion
 │  ├─ publisher: Julian Gruber
@@ -1055,7 +1055,7 @@
 │  ├─ url: http://juliangruber.com
 │  ├─ path: node_modules/brace-expansion
 │  └─ licenseFile: node_modules/brace-expansion/LICENSE
-├─ brace-expansion@2.0.1
+├─ brace-expansion@2.0.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/juliangruber/brace-expansion
 │  ├─ publisher: Julian Gruber
@@ -1139,7 +1139,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001721
+├─ caniuse-lite@1.0.30001722
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
