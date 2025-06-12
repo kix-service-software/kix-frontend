@@ -9,7 +9,7 @@
 
 import { Ticket } from '../../../model/Ticket';
 import { TicketProperty } from '../../../model/TicketProperty';
-import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 import { TableValue } from '../../../../table/model/TableValue';
 import { ITableCSSHandler } from '../../../../table/webapp/core/css-handler/ITableCSSHandler';
 import { TicketService } from '../TicketService';
