@@ -63,7 +63,7 @@ import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 import { TicketModuleConfiguration } from '../../model/TicketModuleConfiguration';
-import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 

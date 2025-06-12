@@ -32,7 +32,7 @@ import { User } from '../../../user/model/User';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { ObjectLoader } from '../../../base-components/webapp/core/ObjectLoader';
 
