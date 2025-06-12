@@ -166,10 +166,10 @@ export class QueueService extends KIXObjectService<Queue> {
     private async getTicketStats(queue: Queue): Promise<TreeNodeProperty[]> {
         const properties: TreeNodeProperty[] = [];
         if (queue.TicketStats) {
-            const totalCount = queue.TicketStats.TotalCount;
+            const totalCount = queue.TicketStats.TotalCount || 0;
             const totalTooltip = await TranslationService.translate('Translatable#All tickets', [totalCount]);
 
-            const freeCount = totalCount - queue.TicketStats.LockCount;
+            const freeCount = totalCount - (queue.TicketStats.LockCount || 0);
             const freeTooltip = await TranslationService.translate(
                 'Translatable#All free tickets', [totalCount - freeCount]
             );
