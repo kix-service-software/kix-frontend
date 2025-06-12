@@ -23,6 +23,9 @@ import { ObjectTagProperty } from '../../model/ObjectTagProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
 
 export class ObjectTagFormService extends ExtendedKIXObjectFormService {
 
@@ -55,7 +58,7 @@ export class ObjectTagFormService extends ExtendedKIXObjectFormService {
             if ( page.groups ) {
                 for ( const group of page.groups ) {
                     if ( group.formFields ) {
-                        const index = group.formFields.findIndex( (f) =>
+                        let index = group.formFields.findIndex((f) =>
                             f.property === KIXObjectProperty.COMMENT
                             || f.property === KIXObjectProperty.VALID_ID
                         );
@@ -64,6 +67,25 @@ export class ObjectTagFormService extends ExtendedKIXObjectFormService {
                         }
                         else if (form.objectType === KIXObjectType.OBJECT_ICON) {
                             group.formFields.push(objectTag);
+                        }
+                        else {
+                            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+                                form.objectType, ServiceType.FORM
+                            );
+
+                            if (service) {
+                                const config = service.getObjectTagPositionProperty();
+                                if (config) {
+                                    const property = config.get('property');
+                                    const offset = config.get('indexOffset') || 0;
+                                    index = group.formFields.findIndex((f) =>
+                                        f.property === property
+                                    );
+                                    if (index !== -1) {
+                                        group.formFields?.splice(index + offset, 0, objectTag);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
