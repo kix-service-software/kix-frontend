@@ -11,7 +11,7 @@ import { Context } from '../../../../../model/Context';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { ConfigItem } from '../../../model/ConfigItem';
 import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformation';
-import { CMDBContext } from '.';
+import { CMDBContext } from './CMDBContext';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';

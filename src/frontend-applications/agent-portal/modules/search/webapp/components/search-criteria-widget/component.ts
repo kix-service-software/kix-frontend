@@ -24,7 +24,7 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { TreeHandler, TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { SearchFormManager } from '../../../../base-components/webapp/core/SearchFormManager';
 import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
-import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { SearchContext } from '../../core/SearchContext';
 import { SearchDefinition } from '../../core/SearchDefinition';
