@@ -39,7 +39,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private calendar: any;
     private calendarConfig: CalendarConfiguration;
     private contextListenerId: string;
-    private creatingCalendar: boolean;
     private schedules: any[];
     private context: Context;
     private popupTimeout: any;
@@ -78,19 +77,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initWidget(): Promise<void> {
-        if (this.creatingCalendar) {
-            return;
-        }
-
-        this.creatingCalendar = true;
-
-        const tickets = await this.loadTickets();
         this.state.prepared = true;
-
-        setTimeout(async () => {
-            await this.createCalendar(tickets);
-            this.creatingCalendar = false;
-        }, 100);
+        this.updateCalendar();
     }
 
     private async loadTickets(): Promise<Ticket[]> {
