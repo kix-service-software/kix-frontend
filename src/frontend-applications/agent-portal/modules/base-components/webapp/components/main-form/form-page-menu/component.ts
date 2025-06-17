@@ -36,11 +36,13 @@ class Component {
         this.prepareTranslations();
         this.eventSubscriber = {
             eventSubscriberId: IdService.generateDateBasedId('page-subscriber-'),
-            eventPublished: (): void => {
-                const context = ContextService.getInstance().getActiveContext();
-                const index = context?.getFormManager()?.getActiveFormPageIndex();
-                if (Number.isInteger(index) && index !== this.state.activePageIndex) {
-                    this.state.pageChanged = true;
+            eventPublished: (data: any, eventId: string): void => {
+                if (eventId === 'PAGE_CHANGED') {
+                    const context = ContextService.getInstance().getActiveContext();
+                    const index = context?.getFormManager()?.getActiveFormPageIndex();
+                    if (Number.isInteger(index) && index !== this.state.activePageIndex) {
+                        this.state.pageChanged = true;
+                    }
                 }
             }
         };
@@ -85,7 +87,9 @@ class Component {
         }
     }
 
+
     public showPage(index: number): void {
+        if (index >= this.state.pages.length || index < 0) return;
         EventService.getInstance().publish('PAGE_CHANGED');
         (this as any).emit('showPage', index);
     }

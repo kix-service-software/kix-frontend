@@ -59,4 +59,8 @@ export interface IServerConfiguration {
 
     SSO_ENABLED: boolean;
 
+    BASE_ROUTE: string;
+
+    BASE_ROUTE_SSP: string;
+
 }

@@ -27,7 +27,7 @@ export class TableAddFormValueAction extends FormValueAction {
     }
 
     public async run(event: any): Promise<void> {
-        (this.formValue as DynamicFieldTableFormValue)?.addInitialTable();
+        (this.formValue as DynamicFieldTableFormValue)?.addInitialTable(true);
     }
 
 }

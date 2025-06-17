@@ -85,7 +85,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
 
         const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);
         const classAttributes = await ConfigItemClassAttributeUtil.getMergedClassAttributeIds(
-            classParameter ? classParameter.value : null
+            classParameter ? classParameter.value : null, undefined, classParameter?.value ? false : true
         );
 
         classAttributes.filter((ca) => {

@@ -39,6 +39,10 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
         return [];
     }
 
+    public async getObjectDependencyNodes(objectType: KIXObjectType): Promise<TreeNode[]> {
+        return [];
+    }
+
     public async getObjectDependencyName(objectType: KIXObjectType | string): Promise<string> {
         return;
     }

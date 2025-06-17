@@ -8,7 +8,6 @@
  */
 
 import { Context } from '../../../../model/Context';
-import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { Ticket } from '../../../ticket/model/Ticket';
 

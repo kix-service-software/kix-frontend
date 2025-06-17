@@ -26,7 +26,8 @@ export class AgentPortalConfiguration implements IConfiguration {
                 public name: string = 'Agent Portal Configuration',
                 public type: string = 'Agent Portal',
                 public valid: boolean = true,
-                public minimizeSearchCriteriaWidget: boolean = true
+                public minimizeSearchCriteriaWidget: boolean = true,
+                public footerInformation: string[] = []
         ) { }
 
 }

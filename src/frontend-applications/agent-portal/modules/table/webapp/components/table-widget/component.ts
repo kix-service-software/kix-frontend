@@ -36,6 +36,10 @@ import { ObjectFormValue } from '../../../../object-forms/model/FormValues/Objec
 import { ObjectFormEvent } from '../../../../object-forms/model/ObjectFormEvent';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { WidgetSize } from '../../../../../model/configuration/WidgetSize';
+import { ObjectView } from '../../../../../model/ObjectView';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { WidgetType } from '../../../../../model/configuration/WidgetType';
 
 class Component {
 
@@ -83,6 +87,8 @@ class Component {
         if (this.state.widgetConfiguration) {
             const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
 
+            await this.initViews(settings?.objectType);
+
             this.state.showFilter = typeof settings.showFilter !== 'undefined' ? settings.showFilter : true;
             this.state.showFilterInBody = Boolean(settings.showFilterInBody);
             this.state.icon = this.state.widgetConfiguration.icon;
@@ -91,10 +97,40 @@ class Component {
             this.state.showFilterReset = this.state.table.isFiltered();
             this.initEventSubscriber();
             this.state.filterValue = this.state.table ? this.state.table.getFilterValue() : null;
-            await this.prepareContextDependency(settings);
+            this.prepareContextDependency(settings);
             await this.prepareFormDependency();
             this.state.loading = false;
         }
+    }
+
+    private async initViews(objectType: KIXObjectType | string): Promise<void> {
+        const configuredWidget = await this.context?.getConfiguredWidget(this.state.instanceId);
+
+        const views = [
+            new ObjectView('table', 'Table', 'kix-icon-legend', null)
+        ];
+
+        const widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
+        const isAllowed = widgetType === WidgetType.SIDEBAR || widgetType === WidgetType.LANE;
+        if (!isAllowed && configuredWidget?.size === WidgetSize.LARGE && objectType === KIXObjectType.TICKET) {
+            const calendarView = new ObjectView('calendar', 'Calendar', 'kix-icon-calendar', 'calendar');
+            views.push(calendarView);
+        }
+
+        this.state.views = views;
+        this.state.hasViews = views.length > 1;
+
+        const prefId = `table-widget-view-${this.state.instanceId}`;
+        const viewPref = await AgentService.getInstance().getUserPreference(prefId);
+        if (this.state.views.some((v) => v.id === viewPref?.Value)) {
+            this.state.activeViewId = viewPref.Value;
+        }
+    }
+
+    public toggleView(view: ObjectView): void {
+        this.state.activeViewId = view?.id;
+        const prefId = `table-widget-view-${this.state.instanceId}`;
+        AgentService.getInstance().setPreferences([[prefId, view?.id]]);
     }
 
     private initEventSubscriber(): void {
@@ -120,6 +156,7 @@ class Component {
                             }
                         }
 
+                        this.setObjectList();
                         this.prepareTitle();
                     } else {
                         if (eventId === TableEvent.TABLE_READY) {
@@ -131,6 +168,8 @@ class Component {
                                 this.state.filterCount = null;
                                 this.state.filterValue = null;
                             }
+
+                            this.setObjectList();
                             this.prepareTitle();
                         }
                         WidgetService.getInstance().updateActions(this.state.instanceId);
@@ -155,6 +194,7 @@ class Component {
         this.prepareHeader();
         await this.prepareTable();
         this.prepareActions();
+        this.setObjectList();
         this.prepareTitle();
     }
 
@@ -166,6 +206,7 @@ class Component {
         }
         this.state.filterCount = null;
         this.state.filterValue = null;
+        this.setObjectList();
         this.prepareTitle();
     }
 
@@ -310,6 +351,10 @@ class Component {
         }
     }
 
+    private setObjectList(): void {
+        this.state.objects = this.state.table?.getRows().map((r) => r.getRowObject().getObject()) || [];
+    }
+
     private prepareTitle(): void {
 
         if (this.prepareTitleTimeout) {
@@ -421,6 +466,7 @@ class Component {
                 this.setFilteredObjectListToContext();
             }
 
+            this.setObjectList();
             this.prepareTitle();
         }
     }

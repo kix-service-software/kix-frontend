@@ -29,9 +29,10 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     public uiComponents: UIComponent[] = [
         new UIComponent('calendar-module', '/kix-calendar$0/webapp/components/calendar-module', []),
         new UIComponent('calendar-widget', '/kix-calendar$0/webapp/components/calendar-widget', []),
+        new UIComponent('calendar', '/kix-calendar$0/webapp/components/calendar', []),
         new UIComponent(
             'calendar-schedule-details',
-            '/kix-calendar$0/webapp/components/calendar-widget/calendar-schedule-details',
+            '/kix-calendar$0/webapp/components/calendar/calendar-schedule-details',
             []
         )
     ];

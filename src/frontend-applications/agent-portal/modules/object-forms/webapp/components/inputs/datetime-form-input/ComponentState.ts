@@ -20,7 +20,9 @@ export class ComponentState extends AbstractComponentState {
         public maxDate: string = null,
         public inputType = null,
         public readonly: boolean = false,
-        public inputId: string = IdService.generateDateBasedId()
+        public inputId: string = IdService.generateDateBasedId(),
+        public usePlaceholderDateValue: boolean = false,
+        public displayInputChangeButton: boolean = false,
     ) {
         super();
     }

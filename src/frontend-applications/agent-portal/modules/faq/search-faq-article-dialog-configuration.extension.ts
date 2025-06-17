@@ -18,13 +18,13 @@ import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { FAQArticleProperty } from './model/FAQArticleProperty';
 import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
-import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { SearchContextConfiguration } from '../../model/configuration/SearchContextConfiguration';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -55,7 +55,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'faq-search-widget', 'Searches', ConfigurationType.Widget, 'search-list-widget', 'Translatable#Searches', []
         );
 
-        const contextConfiguration = new ContextConfiguration(
+        const contextConfiguration = new SearchContextConfiguration(
             this.getModuleId(), 'FAQ Search', ConfigurationType.Context, this.getModuleId(),
             [],
             [

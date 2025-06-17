@@ -1,0 +1,60 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div
+    id="search-overwrite-modal"
+    class="modal"
+    data-bs-backdrop="static"
+    tabindex="-1"
+    style="z-index: 1150;"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <translation-string
+                        pattern="Translatable#Search template with same title already exists."
+                        placeholders=[]
+                    />
+                </h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Cancel"
+                    on-click("cancel")
+                />
+            </div>
+            <div class="modal-body">
+                <translation-string
+                    pattern='Translatable#Replace existing search template "{0}"?'
+                    placeholders=[state.searchName]
+                />
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-danger text-white"
+                    data-bs-dismiss="modal"
+                    on-click("cancel")
+                >
+                    <translation-string pattern="Translatable#Cancel"/>
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-success text-white"
+                    data-bs-dismiss="modal"
+                    on-click("submit")
+                >
+                    <translation-string pattern="Translatable#OK"/>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

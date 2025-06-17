@@ -38,6 +38,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             tableConfig.headerHeight = TableHeaderHeight.LARGE;
             tableConfig.rowHeight = TableRowHeight.LARGE;
             tableConfig.loadingOptions = new KIXObjectLoadingOptions([]);
+            tableConfig.enableSelection = true;
             for (const ignoreType of ignoreTypes) {
                 tableConfig.loadingOptions.filter.push(
                     new FilterCriteria(

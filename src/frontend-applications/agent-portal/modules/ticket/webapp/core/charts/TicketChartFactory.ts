@@ -19,7 +19,7 @@ import { FilterType } from '../../../../../model/FilterType';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 
 
 export class TicketChartFactory {
