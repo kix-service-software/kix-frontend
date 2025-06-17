@@ -21,7 +21,7 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
 
     public constructor(
         public property: string,
-        protected object: DynamicFieldValue,
+        public object: DynamicFieldValue,
         public objectValueMapper: ObjectFormValueMapper,
         public parent: ObjectFormValue,
         public dfName: string
@@ -87,9 +87,11 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
     private setDatesLimit(config: any, disablePast = false, disableFuture = false): void {
         if (disablePast) {
             const date = new Date();
-            date.setHours(0);
-            date.setMinutes(0);
-            date.setSeconds(0);
+            if (this.inputType === InputFieldTypes.DATE) {
+                date.setHours(0);
+                date.setMinutes(0);
+                date.setSeconds(0);
+            }
             this.minDate = DateTimeUtil.getKIXDateTimeString(date);
         } else if (this.parseYearsToInt(config?.YearsInPast)) {
             this.minDate = this.calculateDate(config?.YearsInPast);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -53,10 +53,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         this.fieldOrder[ArticleProperty.TO] = 1;
         this.fieldOrder[ArticleProperty.CC] = 2;
         this.fieldOrder[ArticleProperty.BCC] = 3;
-        this.fieldOrder[ArticleProperty.SUBJECT] = 4;
-        this.fieldOrder[ArticleProperty.BODY] = 5;
-        this.fieldOrder[ArticleProperty.ATTACHMENTS] = 6;
-        this.fieldOrder[ArticleProperty.ENCRYPT_IF_POSSIBLE] = 7;
+        this.fieldOrder[ArticleProperty.ENCRYPT_IF_POSSIBLE] = 4;
+        this.fieldOrder[ArticleProperty.SUBJECT] = 5;
+        this.fieldOrder[ArticleProperty.BODY] = 6;
+        this.fieldOrder[ArticleProperty.ATTACHMENTS] = 7;
 
         this.createArticleFormValues(article);
     }
@@ -165,14 +165,17 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
 
         // property only needed for article create
-        if (!ContextService.getInstance().getActiveContext()?.getAdditionalInformation('ARTICLE_UPDATE_ID')) {
+        if (
+            !ContextService.getInstance().getActiveContext()?.getAdditionalInformation('ARTICLE_UPDATE_ID') &&
+            // FIXME: hide it in form designer for now (implement it as "real" property which can be configured)
+            !this.objectValueMapper?.objectFormHandler?.configurationMode
+        ) {
             const encyptFormValue = new EncryptIfPossibleFormValue(
                 ArticleProperty.ENCRYPT_IF_POSSIBLE, article, this.objectValueMapper, this
             );
             encyptFormValue.visible = true;
-            // add it after recipents
-            const bccIndex = this.formValues.findIndex((fv) => fv.property === ArticleProperty.BCC);
-            this.formValues.splice(bccIndex + 1, 0, encyptFormValue);
+            encyptFormValue.isControlledByParent = true;
+            this.formValues.push(encyptFormValue);
         }
 
         this.formValues.sort((a, b) => {
@@ -235,7 +238,14 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             }
 
             // initial not visible (formActions should show them)
-            if (formValue.property === ArticleProperty.CC || formValue.property === ArticleProperty.BCC) {
+            if (
+                !this.objectValueMapper?.objectFormHandler?.configurationMode &&
+                (
+                    formValue.property === ArticleProperty.CC ||
+                    formValue.property === ArticleProperty.BCC ||
+                    formValue.property === ArticleProperty.TO
+                )
+            ) {
                 formValue.visible = false;
             }
             this.formValues.push(formValue);
@@ -286,7 +296,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 await this.enableChannelFormValues(channel.Name, noteFields);
             } else if (channel?.Name === 'email') {
                 await this.disableChannelFormValues(allFields.filter((p) => !mailFields.includes(p)));
-                await this.enableChannelFormValues(channel.Name, mailFields);
+                await this.enableChannelFormValues(channel.Name, mailFields, byInit);
                 submitPattern = 'Translatable#Send';
             }
 
@@ -314,41 +324,54 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
     }
 
-    protected async enableChannelFormValues(channelName: string, properties: ArticleProperty[]): Promise<void> {
+    // TODO: new ChannelFormValue for configuration => competitive requirements for dialog use and designer
+    protected async enableChannelFormValues(
+        channelName: string, properties: ArticleProperty[], byInit?: boolean
+    ): Promise<void> {
         for (const property of properties) {
             const formValue = this.formValues.find((fv) => fv.property === property);
 
             const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
 
             if (formValue) {
-                if (property === ArticleProperty.CC) {
-                    const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                    const canShow = (!toValue?.enabled && !isEdit) || (toValue?.enabled && formValue?.value && isEdit);
-                    formValue.visible = canShow;
-                }
-                if (property === ArticleProperty.BCC) {
-                    const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                    const canShow = toValue?.enabled && formValue?.value && isEdit;
-                    formValue.visible = canShow;
-                }
-
-                // TO is enabled for edit or if set by template (initFormValueByField in RecipientFormValue)
-                if (formValue.property !== ArticleProperty.TO || isEdit) {
-                    await formValue.enable();
-                }
-
-                // make sure relevant properties are always required
-                if (formValue.property === ArticleProperty.TO) {
-                    formValue.required = channelName === 'email' && this.visible;
-                }
-
-                if (formValue.property === ArticleProperty.SUBJECT || formValue.property === ArticleProperty.BODY) {
-                    formValue.required = true;
-                }
 
                 // use default if given
                 if (!formValue.value && formValue.defaultValue) {
                     await formValue.setFormValue(formValue.defaultValue);
+                }
+
+                if (property === ArticleProperty.TO && isEdit) {
+                    formValue.visible = true;
+                }
+
+                if (property === ArticleProperty.CC) {
+                    const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
+                    const canShow = ((!toValue?.enabled || !toValue.visible) && !isEdit) ||
+                        formValue?.value ||
+                        this.objectValueMapper?.objectFormHandler?.configurationMode ||
+                        (byInit && formValue.visible);
+                    formValue.visible = canShow;
+                }
+
+                if (property === ArticleProperty.BCC) {
+                    const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
+                    const canShow = formValue?.value ||
+                        this.objectValueMapper?.objectFormHandler?.configurationMode ||
+                        (byInit && formValue.visible);
+                    formValue.visible = canShow;
+                }
+
+                await formValue.enable();
+
+                // make sure relevant properties are always required
+                if (!this.objectValueMapper?.objectFormHandler?.configurationMode) {
+                    if (formValue.property === ArticleProperty.TO && isEdit && !formValue.required) {
+                        formValue.required = channelName === 'email' && this.visible;
+                    }
+
+                    if (formValue.property === ArticleProperty.SUBJECT || formValue.property === ArticleProperty.BODY) {
+                        formValue.required = true;
+                    }
                 }
 
                 if (formValue.fieldId) {

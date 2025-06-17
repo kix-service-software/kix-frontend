@@ -183,7 +183,15 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             dfValue.Name = this.dfName;
             this.dfValues.push(dfValue);
 
-            const fv = new this.formValueConstructor('Value', dfValue, this.objectValueMapper, this, this.dfName);
+            let fv = new this.formValueConstructor('Value', dfValue, this.objectValueMapper, this, this.dfName);
+            if (this.objectValueMapper?.objectFormHandler?.configurationMode) {
+                for (const extension of this.objectValueMapper.extensions || []) {
+                    const configFV = extension.getConfigurationFormValue(fv);
+                    if (configFV) {
+                        fv = configFV;
+                    }
+                }
+            }
             fv.parent = this;
 
             if (this.field) {
@@ -203,6 +211,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             fv.required = this.required;
             fv.label = this.label;
             fv.hint = this.hint;
+            fv.description = this.description;
 
             fv.isControlledByParent = true;
             (fv as any).IS_COUNTABLE = true;

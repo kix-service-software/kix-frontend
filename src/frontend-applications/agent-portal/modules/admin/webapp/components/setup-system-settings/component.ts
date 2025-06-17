@@ -36,7 +36,6 @@ import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private configKeys: string[] = [];
     private step: SetupStep;
 
     public onCreate(input: any): void {
@@ -49,11 +48,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.configKeys = [
-            'FQDN',
-            'HttpType'
-        ];
-
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Save & Continue', 'Translatable#Skip & Continue', 'Translatable#Save'
         ]);
@@ -64,11 +58,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareForm(): Promise<void> {
         const sysConfigDefinitions = await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
-            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, this.configKeys
+            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, ['FQDN', 'HttpType']
         );
 
         const sysConfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, this.configKeys
+            KIXObjectType.SYS_CONFIG_OPTION, ['FQDN', 'HttpType']
         );
 
         const fqdnHint = sysConfigDefinitions.find((o) => o.Name === 'FQDN').Description || '';
@@ -87,9 +81,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
         fqdnSSPField.readonly = fqdnReadonly;
 
-        // show SSP option only if KIXPro plugin is available
+        // show SSP option only if SSP plugin is available
         const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-        fqdnSSPField.visible = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
+        fqdnSSPField.visible = releaseInfo?.plugins?.some((p) => p.product === 'SSP');
 
         const fqdnValue = sysConfigOptions.find((o) => o.Name === 'FQDN').Value ||
             sysConfigDefinitions.find((o) => o.Name === 'FQDN').Default;
@@ -161,38 +155,33 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async saveHttpTypeValue(formInstance: FormInstance): Promise<string | number> {
-        const ffValue = await formInstance.getFormFieldValueByProperty('HttpType');
-        if (ffValue?.value) {
-            return KIXObjectService.updateObject(
-                KIXObjectType.SYS_CONFIG_OPTION,
-                [
-                    [SysConfigOptionProperty.VALUE, ffValue.value],
-                    [KIXObjectProperty.VALID_ID, 1]
-                ],
-                'HttpType'
-            );
-        }
+        const ffValue = await formInstance.getFormFieldValueByProperty<string>('HttpType');
+        return KIXObjectService.updateObject(
+            KIXObjectType.SYS_CONFIG_OPTION,
+            [
+                [SysConfigOptionProperty.VALUE, ffValue?.value || 'http'],
+                [KIXObjectProperty.VALID_ID, 1]
+            ],
+            'HttpType'
+        );
     }
 
     private async saveFQDNValue(formInstance: FormInstance): Promise<string | number> {
-        const fqdnValue: any = {};
+        const fqdnValue = {};
 
         for (const property of ['Frontend', 'Backend', 'SSP']) {
-            const ffValue = await formInstance.getFormFieldValueByProperty(property);
-            if (ffValue?.value) {
-                fqdnValue[property] = ffValue.value;
-            }
+            const ffValue = await formInstance.getFormFieldValueByProperty<string>(property);
+            fqdnValue[property] = ffValue?.value;
+
         }
-        if (fqdnValue.length) {
-            return KIXObjectService.updateObject(
-                KIXObjectType.SYS_CONFIG_OPTION,
-                [
-                    [SysConfigOptionProperty.VALUE, JSON.stringify(fqdnValue)],
-                    [KIXObjectProperty.VALID_ID, 1]
-                ],
-                'FQDN'
-            );
-        }
+        return KIXObjectService.updateObject(
+            KIXObjectType.SYS_CONFIG_OPTION,
+            [
+                [SysConfigOptionProperty.VALUE, JSON.stringify(fqdnValue)],
+                [KIXObjectProperty.VALID_ID, 1]
+            ],
+            'FQDN'
+        );
     }
 
     public skip(): void {

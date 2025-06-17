@@ -8,6 +8,8 @@
  */
 
 import { WidgetComponentState } from '../../../../base-components/webapp/core/WidgetComponentState';
+import { Ticket } from '../../../../ticket/model/Ticket';
+import { CalendarConfiguration } from '../../core/CalendarConfiguration';
 
 export class ComponentState extends WidgetComponentState {
 
@@ -17,7 +19,9 @@ export class ComponentState extends WidgetComponentState {
         public view: string = 'month',
         public currentDate: string = '',
         public calendars: any[] = [],
-        public loading: boolean = false
+        public loading: boolean = false,
+        public tickets: Ticket[] = [],
+        public calendarConfig: CalendarConfiguration = null
     ) {
         super();
     }

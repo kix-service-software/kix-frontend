@@ -18,6 +18,7 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { SortUtil } from '../../../../model/SortUtil';
 import { ObjectReferenceUtil } from '../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { IKIXObjectService } from '../../../base-components/webapp/core/IKIXObjectService';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
@@ -75,10 +76,10 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.inputComponentId = 'select-form-input';
 
         this.bindings.push(
-            new FormValueBinding(this, 'minSelectCount', object, property),
-            new FormValueBinding(this, 'maxSelectCount', object, property),
-            new FormValueBinding(this, 'selectedNodes', object, property),
-            new FormValueBinding(this, 'multiselect', object, property),
+            new FormValueBinding(this, 'minSelectCount'),
+            new FormValueBinding(this, 'maxSelectCount'),
+            new FormValueBinding(this, 'selectedNodes'),
+            new FormValueBinding(this, 'multiselect'),
         );
     }
 
@@ -498,7 +499,11 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     protected async searchObjects(): Promise<T[]> {
         let objects = [];
-        if (this.searchValue?.length >= this.autoCompleteConfiguration.charCount) {
+        if (
+            this.searchValue?.length >= this.autoCompleteConfiguration?.charCount &&
+            // do not search with placeholder
+            !this.searchValue.match(/<KIX/)
+        ) {
             const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(this.objectType);
             let loadingOptions = new KIXObjectLoadingOptions();
 
@@ -765,4 +770,21 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             }
         }
     }
+
+    protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context.descriptor.contextMode.toLowerCase().includes('admin')) {
+            const isRestoredContext = context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
+            if (!isRestoredContext) {
+                this.defaultValue = field?.defaultValue?.value || [];
+            }
+        } else {
+            await super.setDefaultValue(field);
+        }
+    }
+
+    public isInitialized(): boolean {
+        return this.initialized;
+    }
+
 }

@@ -53,7 +53,6 @@ export class JobTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(JobProperty.HAS_TRIGGER_EVENTS),
             this.getDefaultColumnConfiguration(JobProperty.HAS_TRIGGER_TIMES),
             this.getDefaultColumnConfiguration(JobProperty.IS_ASYNCHRONOUS),
-            this.getDefaultColumnConfiguration(JobProperty.ACTION_COUNT),
             this.getDefaultColumnConfiguration(JobProperty.LAST_EXEC_TIME),
             this.getDefaultColumnConfiguration(KIXObjectProperty.COMMENT),
             this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
@@ -68,7 +67,7 @@ export class JobTableFactory extends TableFactory {
                 null, null, null,
                 KIXObjectType.JOB,
                 new KIXObjectLoadingOptions(
-                    undefined, undefined, undefined, [JobProperty.MACROS, JobProperty.EXEC_PLANS]
+                    undefined, undefined, undefined, [JobProperty.EXEC_PLANS]
                 ),
                 20, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
@@ -80,7 +79,7 @@ export class JobTableFactory extends TableFactory {
             }
             if (!tableConfiguration.loadingOptions) {
                 tableConfiguration.loadingOptions = new KIXObjectLoadingOptions(
-                    undefined, undefined, undefined, [JobProperty.MACROS, JobProperty.EXEC_PLANS]
+                    undefined, undefined, undefined, [JobProperty.EXEC_PLANS]
                 );
             }
         }
@@ -106,7 +105,6 @@ export class JobTableFactory extends TableFactory {
                     DataType.STRING, true, null, null, false
                 );
                 break;
-            case JobProperty.ACTION_COUNT:
             case JobProperty.LAST_EXEC_TIME:
                 config = new DefaultColumnConfiguration(
                     null, null, null,

@@ -4,6 +4,7 @@
         "require ./components/save-search-template-overlay",
         "require ./components/search-criteria-widget",
         "require ./components/search-module",
-        "require ./components/search-list-widget"
+        "require ./components/search-list-widget",
+        "require ./components/search-overwrite-modal"
     ]
 }

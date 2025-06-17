@@ -67,18 +67,6 @@ export class TicketSearchDefinition extends SearchDefinition {
         return criteria;
     }
 
-    public appendFullTextCriteria(criteria: FilterCriteria[]): void {
-        const hasStateType = criteria.some((c) => c.property === TicketProperty.STATE_TYPE);
-        if (!hasStateType) {
-            criteria.push(
-                new FilterCriteria(
-                    TicketProperty.STATE_TYPE, SearchOperator.IN,
-                    FilterDataType.STRING, FilterType.AND, ['Open']
-                )
-            );
-        }
-    }
-
     public async prepareSearchFormValue(property: string, value: any): Promise<FilterCriteria[]> {
         let criteria = [];
         switch (property) {

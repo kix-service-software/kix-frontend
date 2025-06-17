@@ -20,7 +20,7 @@ import { ApplicationEvent } from '../../core/ApplicationEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { ContextEvents } from '../../core/ContextEvents';
 import { BrowserUtil } from '../../core/BrowserUtil';
-import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 import { SearchService } from '../../../../search/webapp/core/SearchService';
 
 class Component {

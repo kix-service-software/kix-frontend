@@ -7,36 +7,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div class="kix-footer">
-    <if(input.leftText || input.rightText)>
-        <div class="left-text">
-            <translation-string pattern=input.leftText/>
-        </div>
-    </if>
-    <div>
-        <if(state.releaseInfo)>
-            ${state.kixProduct +
-            " " +
-            state.kixVersion +
-            " " +
-            state.buildNumber +
-            " | "}
-        </if>
-        <if(state.currentUserLogin)>
+<for|info| of=state.footerInformation>
+    <div class="d-flex justify-content-center fs-6 text-secondary">
+        <span>${info}</span>
+    </div>
+</for>
+<div class="d-flex justify-content-center fs-6 text-secondary">
+    <span class="pe-2 me-2 border-2 border-end">
+        ${state.kixVersion}
+    </span>
+    <if(state.currentUserLogin)>
+        <span class="pe-2 me-2 border-2 border-end">
             <translation-string pattern="Translatable#Logged in"/>
-            ${": " + state.currentUserLogin + " | "}
-        </if>
+            ${": " + state.currentUserLogin}
+        </span>
+    </if>
+    <span class="pe-2 me-2 border-2 border-end">
         <translation-string pattern="Translatable#A product by KIX Service Software GmbH"/>
-        <if(state.imprintLink)>
-            ${" |" + " "}
+    </span>
+    <if(state.imprintLink)>
+        <span>
             <a href=state.imprintLink target="_blank">
                 <translation-string pattern="Translatable#Imprint"/>
             </a>
-        </if>
-    </div>
-    <if(input.leftText || input.rightText)>
-        <div class="right-text">
-            <translation-string pattern=input.rightText/>
-        </div>
+        </span>
     </if>
 </div>

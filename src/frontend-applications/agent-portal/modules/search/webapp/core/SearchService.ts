@@ -162,7 +162,7 @@ export class SearchService {
         context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>(),
         additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean],
         additionalFilter?: FilterCriteria[],
-        setResult: boolean = true
+        setResult: boolean = true, setResultTimeout: number = 1000
     ): Promise<KIXObject[]> {
         if (!cache) {
             throw new Error('No search available');
@@ -260,7 +260,7 @@ export class SearchService {
             setTimeout(() => {
                 context.setSearchCache(cache);
                 context.setSearchResult(objects);
-            }, 1000);
+            }, setResultTimeout);
         }
 
         return objects;
@@ -342,17 +342,22 @@ export class SearchService {
     public async executeFullTextSearch<T extends KIXObject>(
         objectType: KIXObjectType | string, searchValue: string, setContext?: boolean
     ): Promise<T[]> {
-        const searchCache = new SearchCache<T>(null, null, objectType, [], []);
-        searchCache.criteria = [
+        const defaultSearch = await SearchSocketClient.getInstance().loadDefaultUserSearch(
+            objectType
+        );
+        if (defaultSearch?.criteria?.length) {
+            defaultSearch.criteria = defaultSearch.criteria.filter((c) => c.property !== SearchProperty.FULLTEXT);
+        }
+
+        const searchCache = defaultSearch ? SearchCache.create(defaultSearch, true)
+            : new SearchCache<T>(null, null, objectType, [], []);
+        searchCache.criteria.unshift(
             new FilterCriteria(
                 SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, searchValue
             )
-        ];
+        );
 
         searchCache.fulltextValue = searchValue;
-
-        const searchDefinition = this.getSearchDefinition(objectType);
-        searchDefinition?.appendFullTextCriteria(searchCache.criteria);
 
         let context;
         if (setContext) {
@@ -360,7 +365,7 @@ export class SearchService {
         }
 
         const objects = await this.searchObjects(
-            searchCache, context, undefined, undefined, undefined, undefined, undefined, setContext
+            searchCache, context, undefined, undefined, undefined, undefined, undefined, setContext, 10
         );
         return (objects as any);
     }
@@ -465,6 +470,17 @@ export class SearchService {
             default:
                 return value;
         }
+    }
+
+    public async getSearchesOfUser(): Promise<SearchCache[]> {
+        let searches = await SearchSocketClient.getInstance().loadAllSearches() || [];
+
+        searches.sort((s1, s2) => SortUtil.compareString(s1.name, s2.name));
+
+        const user = await AgentSocketClient.getInstance().getCurrentUser();
+        searches = searches.filter((s) => !s.userId || s.userId === user.UserID);
+
+        return searches;
     }
 
     public async getSearchBookmarks(publish?: boolean, userOnly?: boolean): Promise<Bookmark[]> {

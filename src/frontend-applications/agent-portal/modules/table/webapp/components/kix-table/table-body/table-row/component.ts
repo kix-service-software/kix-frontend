@@ -89,7 +89,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                     this.observer.disconnect();
                 }
                 this.observer = new IntersectionObserver(
-                    this.intersectionCallback.bind(this), { threshold: 0.5 }
+                    this.intersectionCallback.bind(this), { threshold: 0.1 }
                 );
                 this.observer.observe(row);
             }

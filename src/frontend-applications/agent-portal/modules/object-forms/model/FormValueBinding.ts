@@ -22,16 +22,19 @@ export class FormValueBinding {
     private value: any;
 
     public constructor(
-        private formValue: ObjectFormValue, public property: string,
-        object: BindableObject, objectProperty: string
+        private formValue: ObjectFormValue, public property: string
     ) {
         this.id = IdService.generateDateBasedId('FormValueBinding');
         this.value = formValue[property];
 
-        Object.defineProperty(this.formValue, this.property, {
-            get: this.valueGetter.bind(this),
-            set: this.valueSetter.bind(this)
-        });
+        try {
+            Object.defineProperty(this.formValue, this.property, {
+                get: this.valueGetter.bind(this),
+                set: this.valueSetter.bind(this)
+            });
+        } catch (e) {
+            console.warn(`Could not create property binding for property: ${property}`);
+        }
 
         if (property === FormValueProperty.VALUE) {
             // FIXME: currently not active because of circle (form => object => form => object ...)

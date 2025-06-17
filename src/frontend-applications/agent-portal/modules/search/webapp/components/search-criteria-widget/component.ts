@@ -24,7 +24,7 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { TreeHandler, TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { SearchFormManager } from '../../../../base-components/webapp/core/SearchFormManager';
 import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
-import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { SearchContext } from '../../core/SearchContext';
 import { SearchDefinition } from '../../core/SearchDefinition';
@@ -75,7 +75,7 @@ class Component {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('search-criteria-widget'),
-            eventPublished: (data: SearchContext, eventId: string): void => {
+            eventPublished: async (data: SearchContext, eventId: string): Promise<void> => {
                 if (data.instanceId === this.contextInstanceId) {
                     if (eventId === SearchEvent.SEARCH_DELETED || eventId === SearchEvent.SEARCH_CACHE_CHANGED) {
                         this.initManager();
@@ -88,6 +88,9 @@ class Component {
                     if (groupComponent) {
                         groupComponent.setMinizedState(false);
                     }
+                }
+                if (eventId === SearchEvent.CALL_SEARCH) {
+                    await this.search();
                 }
             }
         };
@@ -127,6 +130,7 @@ class Component {
         EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
         EventService.getInstance().subscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(SearchEvent.SHOW_CRITERIA, this.subscriber);
+        EventService.getInstance().subscribe(SearchEvent.CALL_SEARCH, this.subscriber);
 
         const groupComponent = (this as any).getComponent(this.state.instanceId);
         if (groupComponent) {
@@ -154,6 +158,7 @@ class Component {
         EventService.getInstance().unsubscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
         EventService.getInstance().unsubscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(SearchEvent.SHOW_CRITERIA, this.subscriber);
+        EventService.getInstance().unsubscribe(SearchEvent.CALL_SEARCH, this.subscriber);
 
         this.state.manager?.unregisterListener(this.managerListenerId);
 
@@ -272,7 +277,8 @@ class Component {
         const titleLabel = await TranslationService.translate('Translatable#Selected Search Criteria');
         const searchLabel = await TranslationService.translate('Translatable#Search');
         if (cache.name) {
-            this.state.title = `${titleLabel}: (${searchLabel}: ${cache.name})`;
+            const name = cache.userDisplayText ? `(${cache.userDisplayText}) - ${cache.name}` : cache.name;
+            this.state.title = `${titleLabel}: (${searchLabel}: ${name})`;
         } else {
             const objectName = await LabelService.getInstance().getObjectName(cache.objectType, true);
             this.state.title = `${titleLabel}: ${objectName}`;

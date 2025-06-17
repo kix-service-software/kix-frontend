@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,8 +19,11 @@ export class CcFormValueAction extends FormValueAction {
     }
 
     public async canShow(): Promise<boolean> {
-        const ccValue = this.objectValueMapper?.findFormValue(ArticleProperty.CC);
-        return ccValue?.enabled;
+        if (!this.objectValueMapper?.objectFormHandler?.configurationMode) {
+            const ccValue = this.objectValueMapper?.findFormValue(ArticleProperty.CC);
+            return ccValue?.enabled;
+        }
+        return false;
     }
 
     public canRun(): boolean {

@@ -16,7 +16,7 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
-import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 
 export class OrganisationLabelProvider extends LabelProvider<Organisation> {
 

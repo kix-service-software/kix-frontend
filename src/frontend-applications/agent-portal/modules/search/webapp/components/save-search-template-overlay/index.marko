@@ -11,24 +11,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <div class="row">
         <div class="mb-3">
             <label for="search-select" class="form-label">
-                <translation-string pattern="Translatable#Search"/>
-            </label>
-            <form-list
-                placeholder="Translatable#Save new search"
-                loadNodes=state.loadNodes
-                on-nodesChanged("nodesChanged")
-            />
-        </div>
-        <div class="mb-3">
-            <label for="search-select" class="form-label">
                 <translation-string pattern="Translatable#Title"/>
             </label>
             <input
                 class=[
                     {
-                        "is-invalid": state.nameInvalid,
+                        "is-invalid": state.error,
                     },
-                    "form-control",
+                    "form-control mb-2",
                 ]
                 type="text"
                 value=state.name
@@ -37,7 +27,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 on-keydown("keyPressed")
                 on-click("inputClicked")
             >
+            <if(state.error)>
+                <span class="text-danger">
+                    ${state.error}
+                </span>
+            </if>
         </div>
+    </div>
+    <div class="form-check form-switch">
+        <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            value=""
+            id="share-search"
+            checked=state.newSearch
+            readonly=!component.loadedSearchId
+            disabled=!component.loadedSearchId
+            on-change("newChanged")
+        >
+        <label class="form-check-label" for="share-search">
+            <translation-string pattern="Translatable#Create new search template"/>
+        </label>
+        <p/>
     </div>
     <div class="form-check form-switch">
         <input
@@ -73,6 +85,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 on-click("closeOverlay", true)
                 title=(state.translations["Translatable#Save"])
                 class="kix-button submit-button"
+                disabled=state.error
             >
                 <span class="kix-icon-check"/>
                 <translation-string pattern="Translatable#Save"/>

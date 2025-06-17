@@ -7,7 +7,13 @@
  * --
  */
 
-.datetime-input-container {
-   display: grid;
-   grid-auto-flow: column;
+export class ObjectView {
+
+    public constructor(
+        public id: string,
+        public name: string,
+        public icon: string,
+        public template: string
+    ) { }
+
 }
