@@ -3844,7 +3844,7 @@
 │  ├─ email: joris@jorisvanderwel.com
 │  ├─ path: node_modules/symbol-tree
 │  └─ licenseFile: node_modules/symbol-tree/LICENSE
-├─ terser@5.42.0
+├─ terser@5.43.0
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/terser/terser
 │  ├─ publisher: Mihai Bazon
