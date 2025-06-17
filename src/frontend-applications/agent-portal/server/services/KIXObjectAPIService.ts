@@ -41,6 +41,7 @@ import { ObjectLoader } from './ObjectLoader';
 import { PermissionService } from './PermissionService';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
+import { JobProperty } from '../../modules/job/model/JobProperty';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -171,8 +172,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             }
         }
 
-        const tags = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
-        await this.commitObjectTag(token, clientRequestId, tags, objectType, response[responseProperty])
+        await this.commitObjectTag(token, clientRequestId, parameter, objectType, response[responseProperty])
             .catch(() => {
                 // be silent
             });
@@ -201,22 +201,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     }
 
     protected async commitObjectTag(
-        token: string, clientRequestId: string, objectTags: string[],
+        token: string, clientRequestId: string, parameter: Array<[string, any]>,
         objectType: KIXObjectType | string, objectId: string | number
     ): Promise<void> {
-        const allowed = await PermissionService.getInstance().checkPermissions(
-            token,
-            [
-                new UIComponentPermission('system/config', [CRUD.READ]),
-                new UIComponentPermission('objecttags', [CRUD.READ, CRUD.CREATE])
-            ], clientRequestId, null
-        ).catch(() => false);
 
-        if (
-            objectType !== KIXObjectType.OBJECT_TAG
-            && objectType !== KIXObjectType.OBJECT_TAG_LINK
-            && allowed
-        ) {
+        const canCommit = await this.canCommit(token, clientRequestId, parameter, objectType);
+
+        if (canCommit) {
+            const tags = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
             const tagService = KIXObjectServiceRegistry.getServiceInstance(
                 KIXObjectType.OBJECT_TAG
             );
@@ -228,8 +220,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                 throw new Error(error.Code, error.Message);
             });
 
-            if (objectTags && objectTags.length) {
-                for (const tag of objectTags) {
+            if (tags && tags.length) {
+                for (const tag of tags) {
                     await tagService.createObject(token, clientRequestId, KIXObjectType.OBJECT_TAG, [
                         ['Name', tag],
                         ['ObjectID', objectId.toString()],
@@ -860,5 +852,38 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             preload = agentPortalConfig?.preloadObjects?.some((o) => o === objectType);
         }
         return preload;
+    }
+
+    private async canCommit(
+        token: string, clientRequestId: string, parameter: Array<[string, any]>,
+        objectType: KIXObjectType | string
+    ): Promise<boolean> {
+        if (
+            objectType === KIXObjectType.OBJECT_TAG
+            || objectType === KIXObjectType.OBJECT_TAG_LINK
+        ) {
+            return false;
+        }
+
+        if (
+            objectType === KIXObjectType.JOB
+            && Boolean(this.getParameterValue(parameter, JobProperty.EXEC))
+        ) {
+            return false;
+        }
+
+        const allowed = await PermissionService.getInstance().checkPermissions(
+            token,
+            [
+                new UIComponentPermission('system/config', [CRUD.READ]),
+                new UIComponentPermission('objecttags', [CRUD.READ, CRUD.CREATE])
+            ], clientRequestId, null
+        ).catch(() => false);
+
+        if (!allowed) {
+            return false;
+        }
+
+        return true;
     }
 }

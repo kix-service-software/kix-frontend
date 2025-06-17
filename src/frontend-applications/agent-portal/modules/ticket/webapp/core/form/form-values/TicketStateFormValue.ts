@@ -13,6 +13,7 @@ import { SelectObjectFormValue } from '../../../../../object-forms/model/FormVal
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
 import { Ticket } from '../../../../model/Ticket';
 import { TicketProperty } from '../../../../model/TicketProperty';
+import { ConfigurationPendingTimeFormValue } from './ConfigurationPendingTimeFormValue';
 import { PendingTimeFormValue } from './PendingTimeFormValue';
 
 export class TicketStateFormValue extends SelectObjectFormValue {
@@ -27,7 +28,14 @@ export class TicketStateFormValue extends SelectObjectFormValue {
 
         this.objectType = KIXObjectType.TICKET_STATE;
 
-        const pendingFormValue = new PendingTimeFormValue(TicketProperty.PENDING_TIME, ticket, objectValueMapper, this);
+        let pendingFormValue;
+        if (this.objectValueMapper?.objectFormHandler?.configurationMode) {
+            pendingFormValue = new ConfigurationPendingTimeFormValue(
+                TicketProperty.PENDING_TIME, ticket, objectValueMapper, this
+            );
+        } else {
+            pendingFormValue = new PendingTimeFormValue(TicketProperty.PENDING_TIME, ticket, objectValueMapper, this);
+        }
         pendingFormValue.isControlledByParent = true;
         this.formValues.push(pendingFormValue);
     }

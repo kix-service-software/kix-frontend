@@ -16,7 +16,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
-import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
 
 class Component {

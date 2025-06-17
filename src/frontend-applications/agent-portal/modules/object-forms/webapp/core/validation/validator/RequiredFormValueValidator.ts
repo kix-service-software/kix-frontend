@@ -16,7 +16,7 @@ export class RequiredFormValueValidator extends ObjectFormValueValidator {
     public async validate(formValue: ObjectFormValue<any>): Promise<ValidationResult[]> {
         const result = [];
 
-        if (formValue.required) {
+        if (formValue.required && !formValue.objectValueMapper?.objectFormHandler?.configurationMode) {
             const hasValue = typeof formValue.value !== 'undefined' && formValue.value !== null && formValue.value !==
                 '';
             const isArrayValueWithoutContent = (Array.isArray(formValue.value) && !formValue.value.length);

@@ -93,8 +93,14 @@ export class ReportDefinitionFormService extends KIXObjectFormService {
 
         const roleIds = parameter.find((p) => p[0] === ReportDefinitionProperty.ROLE_IDS);
         const tagParameter = parameter.find((p) => p[0] === KIXObjectProperty.OBJECT_TAGS);
+
         const reportDefinition = await ReportDefintionObjectCreator.createReportDefinitionObject(formInstance);
-        parameter = [[KIXObjectType.REPORT_DEFINITION, reportDefinition], tagParameter];
+        parameter = [[KIXObjectType.REPORT_DEFINITION, reportDefinition]];
+
+        if (tagParameter) {
+            parameter.push(tagParameter);
+        }
+
         if (roleIds) {
             parameter.push(roleIds);
         }

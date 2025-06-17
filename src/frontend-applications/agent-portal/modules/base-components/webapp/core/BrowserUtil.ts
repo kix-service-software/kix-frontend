@@ -28,6 +28,8 @@ import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsPr
 import { WindowListener } from './WindowListener';
 import { ToastUtil } from '../../../toast/webapp/core/ToastUtil';
 import { RoutingService } from './RoutingService';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
+import { DefaultColorConfiguration } from '../../../../model/configuration/DefaultColorConfiguration';
 
 export class BrowserUtil {
 
@@ -287,12 +289,24 @@ export class BrowserUtil {
         return color;
     }
 
-    public static getUserColor(userId: number): string {
+    public static async getUserColor(userId: number): Promise<string> {
         if (!this.userColors.has(userId)) {
             let color = this.getRandomColor();
+
             if (userId === 1) {
-                color = '#e31e24';
+                color = '#99a';
+            } else {
+                const colorConfig = await SysConfigService.getInstance().getUIConfiguration<DefaultColorConfiguration>(
+                    DefaultColorConfiguration.CONFIGURATION_ID
+                );
+                if (Array.isArray(colorConfig?.defaultColors) && colorConfig.defaultColors.length) {
+                    const configuredColor = colorConfig.defaultColors[userId % colorConfig.defaultColors.length];
+                    if (configuredColor) {
+                        color = configuredColor;
+                    }
+                }
             }
+
             this.userColors.set(userId, color);
         }
 
