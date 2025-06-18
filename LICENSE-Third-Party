@@ -317,7 +317,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.21
+├─ @marko/compiler@5.39.25
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -1859,7 +1859,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.169
+├─ electron-to-chromium@1.5.170
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -2856,7 +2856,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.32
+├─ marko@5.37.36
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
