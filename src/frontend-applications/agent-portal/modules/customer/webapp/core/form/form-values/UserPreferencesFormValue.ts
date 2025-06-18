@@ -79,14 +79,31 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
             if (!this.user?.IsAgent && agentPreferencesIds.some((id) => id === fv.instanceId)) {
                 continue;
             }
+            if (this.user && !Array.isArray(this.user.Preferences)) {
+                this.user.Preferences = [];
+            }
 
             if (fv.formValues?.length) {
                 for (const sfv of fv.formValues) {
                     await sfv.enable();
+
+                    if (
+                        sfv['object']
+                        && !this.user.Preferences.some((p) => p.ID === sfv['object'].ID)
+                    ) {
+                        this.user.Preferences.push(sfv['object']);
+                    }
                 }
             }
 
             await fv.enable();
+
+            if (
+                fv['object']
+                && !this.user.Preferences.some((p) => p.ID === fv['object'].ID)
+            ) {
+                this.user.Preferences.push(fv['object']);
+            }
         }
 
         await super.enable();
