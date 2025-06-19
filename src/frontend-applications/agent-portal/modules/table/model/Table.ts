@@ -969,6 +969,7 @@ export class Table implements Table {
 
             this.toggleFirstRow();
             await this.initDisplayRows();
+
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(TableEvent.RELOADED, new TableEventData(this.getTableId()));
 

@@ -93,7 +93,7 @@ export abstract class SearchDefinition {
                 if (Array.isArray(c.value)) {
                     return c.value.length > 0;
                 } else {
-                    return c.value !== null && c.value !== undefined && c.value !== '';
+                    return c.value !== null && typeof c.value !== undefined && c.value !== '';
                 }
             });
         }
