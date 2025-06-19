@@ -317,7 +317,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.25
+├─ @marko/compiler@5.39.26
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -2856,7 +2856,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.36
+├─ marko@5.37.38
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -3844,7 +3844,7 @@
 │  ├─ email: joris@jorisvanderwel.com
 │  ├─ path: node_modules/symbol-tree
 │  └─ licenseFile: node_modules/symbol-tree/LICENSE
-├─ terser@5.43.0
+├─ terser@5.43.1
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/terser/terser
 │  ├─ publisher: Mihai Bazon
