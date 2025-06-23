@@ -51,9 +51,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.tickets = input.tickets || [];
-        this.calendarConfig = input.calendarConfig;
-        this.updateCalendar();
+        if (input.active) {
+            this.tickets = input.tickets || [];
+            this.calendarConfig = input.calendarConfig;
+            this.updateCalendar();
+        }
     }
 
     public async onMount(): Promise<void> {
@@ -69,11 +71,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async updateCalendar(): Promise<void> {
         if (this.updateTimeout) {
             clearTimeout(this.updateTimeout);
+            this.updateTimeout = null;
         }
         this.updateTimeout = setTimeout(async () => {
             const tickets = await this.loadTickets();
             await this.createCalendar(tickets);
-        }, 1000); // use fairly long timeout to prevent empty calendar
+            this.updateTimeout = null;
+        }, 500);
     }
 
     private async initWidget(): Promise<void> {
@@ -118,19 +122,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.clearSchedules();
 
+        let created: boolean = false;
         if (!this.calendar) {
+            created = true;
             await this.createCalendarElement();
         }
 
         await this.updateCalendarSchedules(tickets);
-        await this.setCurrentDate();
 
-        this.calendar?.on('beforeUpdateSchedule', this.scheduleChanged.bind(this));
-        this.calendar?.on('clickSchedule', this.scheduleClicked.bind(this));
-        this.calendar?.on('beforeCreateSchedule', (event) => {
-            const guide = event.guide;
-            guide.clearGuideElement();
-        });
+        if (created) {
+            await this.setCurrentDate(); this.calendar?.on('beforeUpdateSchedule', this.scheduleChanged.bind(this));
+            this.calendar?.on('clickSchedule', this.scheduleClicked.bind(this));
+            this.calendar?.on('beforeCreateSchedule', (event) => {
+                const guide = event.guide;
+                guide.clearGuideElement();
+            });
+        }
     }
 
     private async createCalendarForUser(tickets: Ticket[]): Promise<any[]> {
@@ -232,11 +239,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (!Array.isArray(this.schedules)) {
             this.schedules = [];
         }
-        if (this.schedules.length > 0) {
-            this.schedules.forEach((s) => this.calendar?.deleteSchedule(s.id, s.calendarId));
-        }
+        if (this.calendar) {
+            if (this.schedules.length > 0) {
+                this.schedules.forEach((s) => this.calendar.deleteSchedule(s.id, s.calendarId));
+            }
 
-        this.calendar?.clear(true);
+            this.calendar?.clear(true);
+        }
 
         this.schedules = [];
     }
