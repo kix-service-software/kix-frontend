@@ -49,8 +49,18 @@ class Component {
 
         this.prepareKIXVersions();
 
-        const apConfig = await SysConfigService.getInstance().getPortalConfiguration<AgentPortalConfiguration>();
-        this.state.footerInformation = apConfig?.footerInformation || [];
+        const appConfig = await SysConfigService.getInstance().getPortalConfiguration<AgentPortalConfiguration>();
+        if (appConfig?.footerInformation) {
+            if (typeof appConfig?.footerInformation === 'string') {
+                this.state.footerInformation.push(appConfig?.footerInformation);
+            } else if (Array.isArray(appConfig?.footerInformation)) {
+                this.state.footerInformation = appConfig?.footerInformation.slice(0, 2);
+            }
+            // FIXME: This should be removed once the revised layout structure (KIX2018-14141) is implemented,
+            // provided it has been taken into account.
+            let component = document.querySelector('.content-wrapper');
+            component['style'].marginBottom = 2 + (1.1 * this.state.footerInformation.length) + 'rem';
+        }
 
     }
 
