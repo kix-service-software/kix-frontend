@@ -43,12 +43,16 @@ export class HTTPRequestLogger {
         return entry.id;
     }
 
-    public stop(id: string, response?: AxiosResponse | AxiosError): void {
+    public stop(id: string, response?: any): void {
         if (id && this.requests?.has(id)) {
             const entry = this.requests.get(id);
 
             const end = Date.now();
             const duration = end - entry.startTime;
+
+            if (response.isAxiosError) {
+                response = response.response;
+            }
 
             const stringLength = JSON.stringify((response as AxiosResponse)?.data)?.length * 2;
             const size = (stringLength / 1024)?.toFixed(3);
