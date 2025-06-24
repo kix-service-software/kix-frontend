@@ -119,9 +119,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         "d-none": state.activeViewId !== view.id,
                     },
                 ]>
-                    <${
-                        component.getTemplate(view.template)
-                    } tickets=state.objects/>
+                    <${component.getTemplate(view.template)}
+                        tickets=state.objects
+                        active=state.activeViewId === view.id
+                    />
                 </div>
             </for>
             <if(state.table)>
