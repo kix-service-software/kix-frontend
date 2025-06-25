@@ -33,6 +33,7 @@ import { ApplicationEvent } from './ApplicationEvent';
 import { KIXModulesService } from './KIXModulesService';
 import { ToolbarAction } from '../../../agent-portal/webapp/application/_base-template/personal-toolbar/ToolbarAction';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
+import { ClientStorageService } from './ClientStorageService';
 
 export class ContextService {
 
@@ -417,6 +418,9 @@ export class ContextService {
             } else {
                 url = `/${url}`;
             }
+
+            const baseRoute = ClientStorageService.getBaseRoute();
+            url = `${baseRoute}${url}`;
 
             const state = new BrowserHistoryState(context.contextId, objectId);
             if (oldContext) {

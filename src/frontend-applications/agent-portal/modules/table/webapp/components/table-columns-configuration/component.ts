@@ -131,16 +131,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async updateDependencyNodes(): Promise<void> {
-        const nodes: TreeNode[] = [];
         const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
-        const dependencies = await KIXObjectService.getObjectDependencies(this.objectType, showInvalid);
-
-        for (const dependency of dependencies) {
-            const text = await LabelService.getInstance().getObjectText(dependency);
-            nodes.push(new TreeNode(dependency.ObjectId, text));
-            this.state.columnDependencyNames[dependency.ObjectId] = text;
-        }
-        nodes.sort((a, b) => a.label.localeCompare(b.label));
+        const nodes = await KIXObjectService.getObjectDependencieNodes(this.objectType, showInvalid);
 
         this.dependencyTreeHandler = TreeService.getInstance().getTreeHandler(this.state.dependencyTreeId);
         if (this.dependencyTreeHandler) {

@@ -25,8 +25,8 @@ export class OrganisationDetailsContext extends Context {
         return 'kix-icon-man-house';
     }
 
-    public async getDisplayText(short: boolean = false): Promise<string> {
-        return LabelService.getInstance().getObjectText(await this.getObject<Organisation>(), short, short);
+    public async getDisplayText(): Promise<string> {
+        return LabelService.getInstance().getObjectText(await this.getObject<Organisation>());
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {

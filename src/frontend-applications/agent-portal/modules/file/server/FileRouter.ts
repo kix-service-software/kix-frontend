@@ -10,6 +10,9 @@
 import { KIXRouter } from '../../../server/routes/KIXRouter';
 import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
 import { FileService } from './FileService';
+import { Request, Response } from 'express';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { UserService } from '../../user/server/UserService';
 
 
 export class FileRouter extends KIXRouter {
@@ -35,7 +38,7 @@ export class FileRouter extends KIXRouter {
         this.router.get(
             '/download/:downloadId',
             AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
-            FileService.downloadFile
+            this.downloadFile.bind(this)
         );
 
         const multer = require('multer');
@@ -60,6 +63,20 @@ export class FileRouter extends KIXRouter {
             upload.single('file'),
             FileService.uploadFile
         );
+    }
+
+    private async downloadFile(req: Request, res: Response): Promise<void> {
+        const downloadId = req.params.downloadId;
+        const user = await UserService.getInstance().getUserByToken(req.cookies.token);
+
+        if (!downloadId || !user?.UserID) {
+            LoggingService.getInstance().error('Need downloadId and userId');
+            res.status(400);
+            res.render('Invalid request!');
+            return;
+        }
+
+        FileService.downloadFile(downloadId, user, res);
     }
 
 }

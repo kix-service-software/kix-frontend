@@ -52,4 +52,8 @@ export abstract class ObjectFormValueMapperExtension<T extends KIXObject = KIXOb
         return null;
     }
 
+    public getConfigurationFormValue(formValue: ObjectFormValue): ObjectFormValue {
+        return;
+    }
+
 }

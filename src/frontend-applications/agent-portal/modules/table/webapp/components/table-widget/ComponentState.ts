@@ -12,6 +12,8 @@ import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyF
 import { IAction } from '../../../../../modules/base-components/webapp/core/IAction';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { Table } from '../../../model/Table';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { ObjectView } from '../../../../../model/ObjectView';
 
 export class ComponentState extends WidgetComponentState {
 
@@ -31,6 +33,10 @@ export class ComponentState extends WidgetComponentState {
         public filterValue: string = null,
         public showFilterReset: boolean = false,
         public showFilterInBody: boolean = false,
+        public hasViews: boolean = false,
+        public views: ObjectView[] = [],
+        public activeViewId: string = 'table',
+        public objects: KIXObject[] = []
     ) {
         super();
     }

@@ -95,9 +95,6 @@ export class ReportDefinitionLabelProvider extends LabelProvider<ReportDefinitio
                     ? Object.keys(reportDefinition.Config['OutputFormats']).join(',')
                     : defaultValue;
                 break;
-            case ReportDefinitionProperty.NAME:
-                translatable = false;
-                break;
             case ReportDefinitionProperty.REPORT_COUNT:
                 const count = reportDefinition.Reports?.length || 0;
                 const max = reportDefinition.MaxReports || '-';

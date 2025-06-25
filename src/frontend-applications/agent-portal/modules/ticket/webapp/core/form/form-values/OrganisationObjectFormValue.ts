@@ -69,9 +69,11 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     }
 
     public async loadSelectableValues(): Promise<void> {
-        const contactValue = this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID);
-        if (contactValue?.value) {
-            const contactId = Array.isArray(contactValue?.value) ? contactValue?.value[0] : contactValue?.value;
+        const contactValue = (this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID)) as SelectObjectFormValue;
+        const selectedContactValue = this.initialized && contactValue?.isInitialized() ?
+            contactValue?.value : contactValue?.value || contactValue?.defaultValue;
+        if (selectedContactValue) {
+            const contactId = Array.isArray(selectedContactValue) ? selectedContactValue[0] : selectedContactValue;
             if (!isNaN(Number(contactId))) {
                 const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, [contactId])
                     .catch((): Contact[] => []);
@@ -111,13 +113,20 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
             const contact = context.getAdditionalInformation(KIXObjectType.CONTACT);
             initialOrgId = contact?.PrimaryOrganisationID;
         }
-
-        if (init && initialOrgId) {
+        if (init && this.empty) {
+            organisationId = null;
+        }
+        else if (init && initialOrgId) {
             organisationId = initialOrgId;
+        } else if (init && this.defaultValue) {
+            organisationId = this.defaultValue;
+            if (Array.isArray(this.defaultValue)) {
+                organisationId = this.defaultValue[0];
+            }
         } else {
             if (!contactId) {
                 const contactFormValue = this.objectValueMapper?.findFormValue(TicketProperty.CONTACT_ID);
-                contactId = contactFormValue?.value;
+                contactId = contactFormValue?.value || contactFormValue?.defaultValue;
             }
             if (Array.isArray(contactId)) {
                 contactId = contactId[0];

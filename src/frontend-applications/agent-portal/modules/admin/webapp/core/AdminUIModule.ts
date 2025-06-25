@@ -20,7 +20,7 @@ import { SetupService } from '../../../setup-assistant/webapp/core/SetupService'
 import { SetupStep } from '../../../setup-assistant/webapp/core/SetupStep';
 import { AdministrationSocketClient } from './AdministrationSocketClient';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
-import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 
 export class UIModule implements IUIModule {
 

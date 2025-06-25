@@ -52,7 +52,7 @@ export class NewConfigItemDialogContext extends Context {
         return object;
     }
 
-    public async getDisplayText(short?: boolean): Promise<string> {
+    public async getDisplayText(): Promise<string> {
         const assetTitle = await TranslationService.translate('Translatable#Asset');
 
         let classTitle = '';

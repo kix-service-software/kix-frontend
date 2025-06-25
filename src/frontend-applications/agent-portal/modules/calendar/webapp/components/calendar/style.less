@@ -1,0 +1,29 @@
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.calendar-container {
+
+    >div:first-of-type {
+        background: @primary-2;
+    }
+
+    .tui-full-calendar-dayname-name,
+    .tui-full-calendar-month-dayname-item {
+        font-size: 1.25rem !important;
+    }
+
+    .tui-full-calendar-popup-container {
+        padding: @margin-small;
+    }
+
+    .tui-full-calendar-month-week-item .tui-full-calendar-today .tui-full-calendar-weekday-grid-date-decorator {
+        background-color: @primary-2;
+    }
+
+}

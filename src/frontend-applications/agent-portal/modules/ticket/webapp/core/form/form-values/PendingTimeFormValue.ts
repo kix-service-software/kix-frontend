@@ -76,4 +76,10 @@ export class PendingTimeFormValue extends DateTimeFormValue {
         this.minDate = DateTimeUtil.getKIXDateTimeString(new Date());
     }
 
+    public async postInitFormValue(): Promise<void> {
+        if (!this.value || this.isRelativeTimeValue) {
+            this.setFormValue(this.defaultValue, true);
+        }
+    }
+
 }
