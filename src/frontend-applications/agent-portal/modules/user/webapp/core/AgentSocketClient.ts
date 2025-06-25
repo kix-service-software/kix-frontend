@@ -46,21 +46,21 @@ export class AgentSocketClient extends SocketClient {
         super('agent');
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async getCurrentUser(): Promise<User> {
-        const hasValidToken = await AuthenticationSocketClient.getInstance().validateToken();
-        if (!hasValidToken) {
-            return null;
-        }
-
-        let currentUserRequestPromise;
-
         const cacheType = KIXObjectType.CURRENT_USER;
 
+        let currentUserRequestPromise;
         if (BrowserCacheService.getInstance().has(cacheType, cacheType)) {
             currentUserRequestPromise = BrowserCacheService.getInstance().get(cacheType, cacheType);
         }
 
         if (!currentUserRequestPromise) {
+            const hasValidToken = await AuthenticationSocketClient.getInstance().validateToken();
+            if (!hasValidToken) {
+                return null;
+            }
+
             const requestId = IdService.generateDateBasedId();
             const currentUserRequest = new GetCurrentUserRequest(
                 requestId,
