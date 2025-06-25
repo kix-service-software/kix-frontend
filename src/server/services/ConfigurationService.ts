@@ -103,6 +103,7 @@ export class ConfigurationService {
             } catch (error) {
                 // do nothing
             }
+            this.clearRequireCache(filePath);
         }
 
         return configurationFile;

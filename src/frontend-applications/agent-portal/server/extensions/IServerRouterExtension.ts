@@ -11,6 +11,6 @@ import { Router } from 'express';
 
 export interface IServerRouterExtension {
 
-    registerRouter(expressRouter: Router): Promise<void>;
+    registerRouter(): Promise<Router>;
 
 }

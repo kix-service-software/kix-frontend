@@ -67,6 +67,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext();
+        this.state.displayInputChangeButton = this.context.descriptor.contextMode.toLowerCase().includes('admin');
         this.formHandler = await this.context.getFormManager().getObjectFormHandler();
         this.state.inputType = this.formValue?.inputType || InputFieldTypes.DATE;
 
@@ -102,10 +103,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private updateValue(): void {
         if (this.value) {
-            this.state.dateValue = DateTimeUtil.getKIXDateString(new Date(this.value?.toString()));
+            if (this.value.startsWith('<') && this.value.endsWith('>')) {
+                this.state.usePlaceholderDateValue = true;
+            } else {
+                this.state.usePlaceholderDateValue = false;
+                this.state.dateValue = DateTimeUtil.getKIXDateString(new Date(this.value?.toString()));
 
-            if (this.state.inputType === InputFieldTypes.DATE_TIME) {
-                this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date(this.value?.toString()));
+                if (this.state.inputType === InputFieldTypes.DATE_TIME) {
+                    this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date(this.value?.toString()));
+                }
             }
         }
     }
@@ -159,6 +165,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.formHandler.objectFormValidator?.validate(this.formValue, true);
             }
         }, 250);
+    }
+
+    public inputTypeChanged(): void {
+        this.state.usePlaceholderDateValue = !this.state.usePlaceholderDateValue;
     }
 
 }

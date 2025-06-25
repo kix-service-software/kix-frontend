@@ -106,9 +106,8 @@ export class ObjectIconService extends KIXObjectAPIService {
             throw new Error(error.Code, error.Message);
         });
 
-        const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
         await this.commitObjectTag(
-            token, clientRequestId, tags, objectType, response.ObjectIconID
+            token, clientRequestId, parameter, objectType, response.ObjectIconID
         );
 
         return response.ObjectIconID;
@@ -128,9 +127,8 @@ export class ObjectIconService extends KIXObjectAPIService {
             throw new Error(error.Code, error.Message);
         });
 
-        const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
         await this.commitObjectTag(
-            token, clientRequestId, tags, objectType, response.ObjectIconID
+            token, clientRequestId, parameter, objectType, response.ObjectIconID
         );
 
         return response.ObjectIconID;

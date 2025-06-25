@@ -10,7 +10,6 @@
 const http = require('http');
 import express from 'express';
 import markoExpress from '@marko/express';
-import { serveStatic } from 'lasso/middleware';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import { IServerConfiguration } from '../../../server/model/IServerConfiguration';
@@ -43,7 +42,10 @@ export class Server implements IServer {
         await this.initializeApplication();
 
         this.createHTTPServer();
+
+
         this.socketIO = require('socket.io')(this.httpServer, {
+            path: '/socket.io/',
             maxHttpBufferSize
         });
     }

@@ -13,14 +13,11 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { KIXObjectService } from './KIXObjectService';
 import { ValidObject } from '../../../valid/model/ValidObject';
-import { User } from '../../../user/model/User';
 import { DateTimeUtil } from './DateTimeUtil';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
-import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
-import { UserProperty } from '../../../user/model/UserProperty';
 import { DynamicFieldFormUtil } from './DynamicFieldFormUtil';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { ExtendedLabelProvider } from './ExtendedLabelProvider';
@@ -336,6 +333,11 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                     case DynamicFieldTypes.CHECK_LIST:
                         values = LabelProvider.getDFChecklistFieldShortValues(dynamicField, fieldValue);
                         break;
+                    case DynamicFieldTypes.TABLE:
+                        values = short ?
+                            await LabelProvider.getDFTableFieldShortValues(dynamicField, fieldValue, language) :
+                            await LabelProvider.getDFTableFieldValues(dynamicField, fieldValue, language);
+                        break;
                     default:
                         values = Array.isArray(fieldValue.PreparedValue)
                             ? fieldValue.PreparedValue
@@ -346,6 +348,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
 
         return [values, values.join(separator), fieldValue.Value];
     }
+
     public static async getDFDateDateTimeFieldValues(
         field: DynamicField, fieldValue: DynamicFieldValue, language?: string
     ): Promise<string[]> {
@@ -418,6 +421,69 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                     console.error(error);
                 }
             }
+        }
+        return values;
+    }
+
+    public static async getDFTableFieldValues(
+        field: DynamicField, fieldValue: DynamicFieldValue, language?: string
+    ): Promise<string[]> {
+        let values = [];
+        if (Array.isArray(fieldValue.Value)) {
+            let columns = field.Config.Columns;
+            if (Array.isArray(fieldValue?.Value) && Array.isArray(columns) && columns.length) {
+                columns = await TranslationService.createTranslationArray(columns, language);
+            }
+            fieldValue.Value.forEach((table, index) => {
+                let rowList: string[][];
+                try {
+                    rowList = JSON.parse(table);
+                } catch (error) {
+                    console.error(`Could not parse ${index + 1}. table of dynamic field "${field.Name}"`);
+                    console.error(error);
+                }
+                if (Array.isArray(rowList) && rowList.length) {
+                    let tableString = columns.join(' | ') + '\n';
+
+                    const rows = [];
+                    rowList.forEach((r) => {
+                        const rowColumns = [];
+                        const values = Array.isArray(r) && r.length ? r : [];
+                        columns.forEach((c, index) => {
+                            rowColumns.push(typeof values[index] !== 'undefined' ? values[index] : '');
+
+                        });
+                        rows.push(rowColumns.join(' | '));
+                    });
+
+                    tableString += rows.join('\n');
+
+                    values.push(tableString);
+                }
+            });
+        }
+        return values;
+    }
+
+    public static async getDFTableFieldShortValues(
+        field: DynamicField, fieldValue: DynamicFieldValue, language?: string
+    ): Promise<string[]> {
+        let values = [];
+        if (Array.isArray(fieldValue.Value)) {
+            const rowPromises = [];
+            fieldValue.Value.forEach((table, index) => {
+                let rowList: string[][];
+                try {
+                    rowList = JSON.parse(table);
+                } catch (error) {
+                    console.error(`Could not parse ${index + 1}. table of dynamic field "${field.Name}"`);
+                    console.error(error);
+                }
+                if (Array.isArray(rowList) && rowList.length) {
+                    rowPromises.push(TranslationService.translate('{0} rows', [rowList.length]));
+                }
+            });
+            values = await Promise.all(rowPromises);
         }
         return values;
     }

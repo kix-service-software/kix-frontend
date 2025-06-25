@@ -14,6 +14,7 @@ import { IdService } from '../../../../../model/IdService';
 class TreeComponent {
 
     private state: ComponentState;
+    private updateTimeout: any;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -40,7 +41,22 @@ class TreeComponent {
     }
 
     private async update(input: any): Promise<void> {
-        this.state.treeStyle = input.treeStyle;
+        if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout);
+        }
+
+        this.updateTimeout = setTimeout(() => {
+            this.state.treeStyle = input.treeStyle;
+            const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+            if (treeHandler) {
+                this.state.nodes = treeHandler.getTree();
+            }
+        }, 50);
+    }
+
+    public handleClick(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
     }
 
 }

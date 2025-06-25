@@ -13,7 +13,7 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 import { CSVFormatConfiguration } from '../../model/CSVFormatConfiguration';
 import { FormatConfiguration } from '../../model/FormatConfiguration';
 import { IReportChartDataMapper } from '../../model/IReportChartDataMapper';
-import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { DefaultColorConfiguration } from '../../../../model/configuration/DefaultColorConfiguration';
 import { config } from 'node:process';
 

@@ -15,7 +15,7 @@ import { RoleUsageContextTypes } from '../../../model/RoleUsageContextTypes';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 import { Role } from '../../../model/Role';
 
 

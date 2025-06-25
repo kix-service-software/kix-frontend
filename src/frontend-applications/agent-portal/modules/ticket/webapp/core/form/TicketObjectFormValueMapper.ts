@@ -158,7 +158,7 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
         }
     }
 
-    protected async getDynamicFieldFormValue(dfName: string): Promise<DynamicFieldObjectFormValue> {
+    public async getDynamicFieldFormValue(dfName: string): Promise<DynamicFieldObjectFormValue> {
         let formValue: ObjectFormValue;
         const dynamicField = await KIXObjectService.loadDynamicField(dfName).catch((): DynamicField => null);
 

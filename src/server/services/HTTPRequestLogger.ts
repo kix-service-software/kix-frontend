@@ -43,19 +43,43 @@ export class HTTPRequestLogger {
         return entry.id;
     }
 
-    public stop(id: string, response?: AxiosResponse | AxiosError): void {
+    public stop(id: string, response?: any): void {
         if (id && this.requests?.has(id)) {
             const entry = this.requests.get(id);
 
             const end = Date.now();
             const duration = end - entry.startTime;
 
+            if (response.isAxiosError) {
+                response = response.response;
+            }
+
             const stringLength = JSON.stringify((response as AxiosResponse)?.data)?.length * 2;
             const size = (stringLength / 1024)?.toFixed(3);
             const status = (response as AxiosResponse)?.status || (response as AxiosError).response?.status;
+            const backendDurationTotal = Math.ceil((response as AxiosResponse)?.headers['x-runtime'] * 1000);
+            const backendDurationApp = Math.ceil((response as AxiosResponse)?.headers['kix-request-duration'] * 1000);
+            const backendPID = (response as AxiosResponse)?.headers['kix-worker-pid'];
 
             const pid = process.pid;
-            this.logger.info(`${pid}\t${entry.clientId}\t${duration}\t${entry.method}\t${status}\t${size}\t${entry.resource}\t${entry.parameter}`);
+            this.logger.info(`${pid}\t${backendPID}\t${entry.clientId}\t${duration}\t${backendDurationTotal}\t${backendDurationApp}\t${entry.method}\t${status}\t${size}\t${entry.resource}\t${entry.parameter}`);
+
+            const durationFactor: number = process.env['REQUEST_DURATION_WARNING_FACTOR'] ? Number(process.env['REQUEST_DURATION_WARNING_FACTOR']) : 4;
+            if (duration >= backendDurationTotal * durationFactor) {
+                LoggingService.getInstance().warning(`PERFORMANCE: possible performance bottleneck!
+                    ClientID: ${entry.clientId}
+                    PID: ${pid}
+                    BE Worker PID: ${backendPID}
+                    Duration: ${duration} ms
+                    BE Duration Total: ${backendDurationTotal} ms
+                    BE Duration App: ${backendDurationApp} ms
+                    Method: ${entry.method}
+                    Status: ${status}
+                    Size: ${size}
+                    Resource: ${entry.resource}
+                    Parameters: ${entry.parameter}`
+                );
+            }
 
             this.requests.delete(id);
         }
@@ -83,7 +107,7 @@ export class HTTPRequestLogger {
                         const minutes = date.getMinutes().toString().padStart(2, '0');
                         const seconds = date.getSeconds().toString().padStart(2, '0');
 
-                        return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+                        return `${day} - ${month} - ${year} ${hours}: ${minutes}: ${seconds}`;
                     }
                 }),
                 winston.format.printf((info) => {
@@ -123,7 +147,7 @@ class RequestEntry {
         public parameter: string,
         public clientId: string
     ) {
-        this.id = `${Date.now()}-${method}-${resource}`;
+        this.id = `${Date.now()} - ${method} - ${resource}`;
         this.parameter = this.parameter.replace(new RegExp('"Content":".*=?(\\n)?"'), '"Content":"..."');
         this.parameter = this.parameter.replace(new RegExp('"Body":".*=?(\\n)?"'), '"Body":"..."');
 

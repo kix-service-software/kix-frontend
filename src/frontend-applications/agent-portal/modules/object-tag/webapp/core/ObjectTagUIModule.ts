@@ -15,7 +15,7 @@ import { ObjectTagLabelProvider } from './ObjectTagLabelProvider';
 import { ObjectTagService } from './ObjectTagService';
 import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
 import { ObjectTagFormService } from './ObjectTagFormService';
-import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 
@@ -37,7 +37,7 @@ export class UIModule implements IUIModule {
         );
         if (config) {
             const objectTypes = await this.prepareTypes(config);
-            for ( const objectType of objectTypes ) {
+            for (const objectType of objectTypes) {
 
                 const formService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
                     objectType[0], ServiceType.FORM
@@ -57,12 +57,12 @@ export class UIModule implements IUIModule {
         }
     }
 
-    private async prepareTypes(config:any): Promise<Map<string,string>> {
-        const types:Map<string,string> = new Map();
+    private async prepareTypes(config: any): Promise<Map<string, string>> {
+        const types: Map<string, string> = new Map();
         Object.keys(config).forEach((entry: string) => {
             types.set(entry, config[entry]);
         });
-        const sorted:Map<string,string> = new Map([...types.entries()].sort());
+        const sorted: Map<string, string> = new Map([...types.entries()].sort());
         return sorted;
     }
 }

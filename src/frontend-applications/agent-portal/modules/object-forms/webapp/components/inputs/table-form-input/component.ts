@@ -49,7 +49,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.bindingIds.push(
             this.formValue.addPropertyBinding(FormValueProperty.VALUE, (formValue: ObjectFormValue) => {
                 this.state.value = this.createNewTable(formValue.value);
-                if (!this.state.value) {
+                if (!this.state.value || Array.isArray(this.state.value) && !this.state.value.length) {
                     this.removeTable();
                 }
             })
@@ -116,14 +116,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public tableValueChanged(rowIndex: number, colIndex: number, event: any): void {
         this.state.value[rowIndex][colIndex] = event.target.value;
-        (this as any).setStateDirty('tableValues');
         this.formValue.setTableValue(this.state.value);
     }
 
     public tableRowRemoved(index: number, event: any): void {
+        this.state.prepared = false;
         this.state.value.splice(index, 1);
         (this as any).setStateDirty('tableValues');
         this.formValue.setTableValue(this.state.value);
+        setTimeout(() => this.state.prepared = true, 10);
     }
 
     public tableRowAdded(event: any): void {
@@ -141,19 +142,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public canRemove(index: number): boolean {
+        if (!this.state.value) return false;
         const rowMin = this.formValue.minRowCount;
         const rowCount = this.state.value?.length;
         return rowCount > rowMin;
     }
 
     public canAdd(index: number): boolean {
+        if (!this.state.value) return true;
         const rowMax = this.formValue.maxRowCount;
         const rowCount = this.state.value?.length;
         return rowCount < rowMax && index === rowCount - 1;
-    }
-
-    public addInitialTable(): void {
-        this.formValue.addInitialTable();
     }
 
 }

@@ -11,7 +11,7 @@ import { Context } from '../../../../../model/Context';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { ConfigItem } from '../../../model/ConfigItem';
 import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformation';
-import { CMDBContext } from '.';
+import { CMDBContext } from './CMDBContext';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
@@ -26,8 +26,8 @@ export class ConfigItemDetailsContext extends Context {
         return 'kix-icon-ci';
     }
 
-    public async getDisplayText(short?: boolean): Promise<string> {
-        return await LabelService.getInstance().getObjectText(await this.getObject<ConfigItem>(), true, !short);
+    public async getDisplayText(): Promise<string> {
+        return await LabelService.getInstance().getObjectText(await this.getObject<ConfigItem>());
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {

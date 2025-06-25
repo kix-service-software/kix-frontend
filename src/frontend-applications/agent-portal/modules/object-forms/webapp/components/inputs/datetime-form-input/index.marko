@@ -8,9 +8,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.prepared)>
-   <div class="datetime-input-container">
-
-      <if(state.inputType === "DATE" || state.inputType === "DATE_TIME")>
+   <span class="d-flex flex-row align-items-center">
+      <if(
+         (state.inputType === "DATE" || state.inputType === "DATE_TIME") &&
+         !state.usePlaceholderDateValue
+      )>
          <input
             key="date-" + state.inputId
             value=state.dateValue
@@ -22,7 +24,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             disabled=state.readonly
          >
       </if>
-      <if(state.inputType === "DATE_TIME" || state.inputType === "TIME")>
+      <if(
+         (state.inputType === "DATE_TIME" || state.inputType === "TIME") &&
+         !state.usePlaceholderDateValue
+      )>
          <input
             key="time-" + state.inputId
             value=state.timeValue
@@ -32,5 +37,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             disabled=state.readonly
          >
       </if>
-   </div>
+      <if(state.usePlaceholderDateValue)>
+         <text-form-input formValue=input.formValue/>
+      </if>
+   </span>
+   <if(state.displayInputChangeButton)>
+      <button
+         class="btn btn-outline-secondary mt-1"
+         on-click("inputTypeChanged")
+      >
+         <translation-string pattern=(
+            state.usePlaceholderDateValue
+               ? "Translatable#Change to date picker"
+               : "Translatable#Change to placeholder"
+         )/>
+      </button>
+   </if>
 </if>

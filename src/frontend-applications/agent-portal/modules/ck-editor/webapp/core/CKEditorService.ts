@@ -7,7 +7,7 @@
  * --
  */
 
-import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { CKEditor5Configuration } from '../../model/CKEditor5Configuration';
 
 export class CKEditorService {

@@ -7,6 +7,8 @@
  * --
  */
 
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
+
 export class FileService {
 
     public static async uploadFile(file: File): Promise<void> {
@@ -18,7 +20,9 @@ export class FileService {
             body: formData,
         };
 
-        const url = location.protocol + '//' + location.host;
+        const baseRoute = ClientStorageService.getBaseRoute() || '';
+
+        const url = location.protocol + '//' + location.host + baseRoute;
         await fetch(`${url}/files/upload`, request).catch((err) => {
             console.error(err);
             throw err;

@@ -9,7 +9,10 @@
 
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { InputFieldTypes } from '../../../base-components/webapp/core/InputFieldTypes';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
 import { ObjectFormValue } from './ObjectFormValue';
 
@@ -19,6 +22,7 @@ export class DateTimeFormValue extends ObjectFormValue<string> {
     public minDate: string;
     public maxDate: string;
     public isEmpty: boolean;
+    public isRelativeTimeValue: boolean;
 
     public constructor(
         public property: string,
@@ -36,6 +40,8 @@ export class DateTimeFormValue extends ObjectFormValue<string> {
             (o) => o.option === FormFieldOptions.INPUT_FIELD_TYPE
         );
 
+        this.isRelativeTimeValue = field.options?.some((o) => o.option === DynamicFormFieldOption.RELATIVE_TIME);
+
         this.inputType = typeOption?.value?.toString() || InputFieldTypes.DATE_TIME;
 
         const minDateOption = field?.options.find((o) => o.option === FormFieldOptions.MIN_DATE);
@@ -47,4 +53,14 @@ export class DateTimeFormValue extends ObjectFormValue<string> {
         this.isEmpty = field?.empty || false;
     }
 
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        if (typeof value === 'string') {
+            const dateValue = await PlaceholderService.getInstance().replacePlaceholders(value.trim(), this.object);
+            if (dateValue?.length > 0) {
+                value = DateTimeUtil.getKIXDateTimeString(dateValue);
+            }
+        }
+
+        await super.setFormValue(value);
+    }
 }

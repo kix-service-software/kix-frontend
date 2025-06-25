@@ -1,0 +1,79 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div class="calendar-container row m-0 p-0">
+    <div class="col-12 p-3 text-white d-flex justify-content-between">
+        <div class="fs-2 align-content-center">
+            ${state.currentDate}
+        </div>
+        <div class="fs-2 align-items-center d-flex">
+            <span on-click("prev") class="kix-icon-circle-prior"/>
+            <span on-click("today")>
+                <translation-string pattern="Translatable#Today"/>
+            </span>
+            <span on-click("next") class="kix-icon-circle-next"/>
+            <span
+                on-click("changeView")
+                class=[
+                    "ms-3",
+                    {
+                        "kix-icon-calendar-week": state.view === "month",
+                        "kix-icon-calendar-month": state.view !== "month",
+                    },
+                ]
+            />
+            <span on-click("changeView")>
+                <translation-string pattern=state.toggleLabel/>
+            </span>
+        </div>
+    </div>
+    <div class="col-10" no-update id=state.calendarId/>
+    <div class="col-2 ">
+        <if(state.loading)>
+            <span class="kix-icon-arrow-refresh"/>
+            <translation-string pattern="Translatable#Reload Calendar Data ..."/>
+        </if>
+        <ul class="list-group mt-2">
+            <for|calendar| of=state.calendars>
+                <li
+                    class=[
+                        "list-group-item border-start-3 mt-2 border rounded",
+                        {
+                            "text-white": calendar.visible,
+                        },
+                    ]
+                    style=[
+                        "border-color:" + calendar.bgColor + " !important",
+                        {
+                            "background-color": calendar.visible
+                                ? calendar.bgColor + " !important"
+                                : "unset",
+                        },
+                    ]
+                    on-click("toggleCalendar", calendar)
+                >
+                    ${calendar.name}
+                    <if(calendar.overlay)>
+                        <overlay-icon
+                            title=(calendar.overlay.Title)
+                            icon=(calendar.overlay.Icon)
+                            content=(calendar.overlay.Content)
+                            isHint=(calendar.overlay.IsHint)
+                            isCustom=(calendar.overlay.IsCustom)
+                            data={
+                                object: calendar.overlay.Data,
+                                properties: calendar.overlay.Data.Properties,
+                            }
+                        />
+                    </if>
+                </li>
+            </for>
+        </ul>
+    </div>
+</div>

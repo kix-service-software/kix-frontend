@@ -71,13 +71,17 @@ export class AuthenticationRouter extends KIXRouter {
         await AuthenticationService.getInstance().logout(token).catch(() => null);
 
         res.clearCookie('token');
-        res.redirect('/login?logout=true');
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        const baseRoute = config?.BASE_ROUTE || '';
+        res.redirect(`${baseRoute}/login?logout=true`);
     }
 
     public async login(req: Request, res: Response): Promise<void> {
 
         if (this.isUnsupportedBrowser(req)) {
-            res.redirect('/static/html/unsupported-browser/index.html');
+            const config = ConfigurationService.getInstance().getServerConfiguration();
+            const baseRoute = config?.BASE_ROUTE || '';
+            res.redirect(`${baseRoute}/static/html/unsupported-browser/index.html`);
         }
 
         const ssoSuccess = await this.doSSOLogin(req, res);
@@ -106,7 +110,7 @@ export class AuthenticationRouter extends KIXRouter {
             }
             else if (!req.cookies.authNegotiationDone && !req.cookies.authNoSSO) {
                 // no token - start the negotiation process
-                res.cookie('authNegotiationDone', true, { httpOnly: true });
+                res.cookie('authNegotiationDone', true, { httpOnly: true, path: '/' });
                 res.setHeader('WWW-Authenticate', 'Negotiate');
                 res.status(401);
                 res.send(
@@ -139,7 +143,7 @@ export class AuthenticationRouter extends KIXRouter {
             });
 
             if (success) {
-                res.cookie('token', token, { httpOnly: true });
+                res.cookie('token', token, { httpOnly: true, path: '/' });
                 res.clearCookie('authNegotiationDone');
                 res.status(200);
                 res.send(
@@ -161,10 +165,10 @@ export class AuthenticationRouter extends KIXRouter {
     private async routeToLoginPage(req: Request, res: Response): Promise<void> {
         res.clearCookie('token');
         res.clearCookie('authNegotiationDone');
-        res.cookie('authNoSSO', true, { httpOnly: true });
+        res.cookie('authNoSSO', true, { httpOnly: true, path: '/' });
 
         if (req.headers['x-forwarded-for']) {
-            res.cookie('x-forwarded-for', req.headers['x-forwarded-for'], { httpOnly: true });
+            res.cookie('x-forwarded-for', req.headers['x-forwarded-for'], { httpOnly: true, path: '/' });
         }
 
         const applications = await PluginService.getInstance().getExtensions<IMarkoApplication>(
@@ -205,9 +209,12 @@ export class AuthenticationRouter extends KIXRouter {
                 const mfaConfigs = await MFAService.getInstance().loadMFAConfigs();
                 const mfaConfig = mfaEnabled ? mfaConfigs?.find((mfac) => mfac.enabled) : null;
 
+                const config = ConfigurationService.getInstance().getServerConfiguration();
+                const baseRoute = config?.BASE_ROUTE || '';
+
                 (res as any).marko(template, {
                     login: true, logout, releaseInfo, imprintLink, redirectUrl,
-                    favIcon, logo, authMethods, mfaConfig, pwResetEnabled, pwResetState, error
+                    favIcon, logo, authMethods, mfaConfig, pwResetEnabled, pwResetState, error, baseRoute
                 });
             } catch (error) {
                 console.error(error);
@@ -272,7 +279,9 @@ export class AuthenticationRouter extends KIXRouter {
             );
         }
 
-        res.redirect('/auth?pwResetState=' + pwResetState);
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        const baseRoute = config?.BASE_ROUTE || '';
+        res.redirect(`${baseRoute}/auth?pwResetState=${pwResetState}`);
     }
 
 }

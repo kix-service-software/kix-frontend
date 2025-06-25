@@ -7,14 +7,14 @@
  * --
  */
 
-import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
+import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
 
-export class ComponentInput {
+export class ComponentState extends AbstractComponentState {
 
-    public imprintLink: string;
-
-    public releaseInfo: ReleaseInfo;
-
-    public unauthorized: boolean;
+    public constructor(
+        public searchName: string = ''
+    ) {
+        super();
+    }
 
 }

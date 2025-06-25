@@ -7,6 +7,7 @@
  * --
  */
 
+import { IdService } from '../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
@@ -15,14 +16,13 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public loadLogLevelNodes: () => Promise<TreeNode[]> = null,
         public loadWrapLinesNodes: () => Promise<TreeNode[]> = null,
-        public content: string = '',
         public title: string = 'Translatable#View Log File',
         public filter: string = '',
         public tailCount: number = 100,
         public refreshInterval: number = 10,
-        public wrapLines: boolean = true,
         public run: boolean = false,
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public editorId: string = IdService.generateDateBasedId('logview-')
     ) {
         super();
     }

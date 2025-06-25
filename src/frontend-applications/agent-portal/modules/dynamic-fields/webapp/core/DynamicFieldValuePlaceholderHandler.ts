@@ -22,6 +22,7 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { DynamicFieldService } from './DynamicFieldService';
+import { DynamicField } from '../../model/DynamicField';
 
 export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -129,7 +130,7 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
             dfValue.Value = [dfValue.Value];
         }
         if (dfValue && dfOptions && dfOptions.match(/^Key$/i)) {
-            result = await this.handleKey(object, dfValue);
+            result = await this.handleKey(object, dfValue, language, forRichtext);
         } else if (dfValue && dfOptions && dfOptions.match(/^HTML$/i)) {
             result = await this.handleHTMLValue(object, dfValue, language);
         } else if (dfValue && dfOptions && dfOptions.match(/^Short$/i)) {
@@ -139,12 +140,15 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
         } else if (dfOptions && dfOptions.match(/^Object_\d+_.+$/i) && dfValue?.Value?.length) {
             result = await this.handleObject(object, dfOptions, dfValue, language, forRichtext, translate);
         } else if (dfValue && (dfOptions === '' || dfOptions.match(/^Value$/i))) {
-            result = await this.handleValue(object, dfValue, language);
+            result = await this.handleValue(object, dfValue, language, forRichtext);
         }
         return result;
     }
 
-    private async handleKey(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
+    private async handleKey(
+        object: KIXObject, dfValue: DynamicFieldValue,
+        language?: string, forRichtext?: boolean
+    ): Promise<string> {
         for (const extendedHandler of this.extendedPlaceholderHandler) {
             const value = await extendedHandler.handleKey(object, dfValue);
             if (value) {
@@ -165,12 +169,14 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
                 dynamicField.Config.ItemSeparator : ', ';
             result = Array.isArray(dfValue.Value) ? dfValue.Value.join(separator) : [dfValue.Value].join(separator);
         } else {
-            result = await this.handleValue(object, dfValue);
+            result = await this.handleValue(object, dfValue, language, forRichtext);
         }
         return result;
     }
 
-    private async handleValue(object: KIXObject, dfValue: DynamicFieldValue, language?: string): Promise<string> {
+    private async handleValue(
+        object: KIXObject, dfValue: DynamicFieldValue, language?: string, forRichtext?: boolean
+    ): Promise<string> {
         for (const extendedHandler of this.extendedPlaceholderHandler) {
             const value = await extendedHandler.handleValue(object, dfValue, language);
             if (value) {
@@ -190,6 +196,9 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
             if (dynamicField) {
                 if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
                     result = this.getChecklistStringValue(dfValue);
+                }
+                else if (dynamicField.FieldType === DynamicFieldTypes.TABLE) {
+                    result = await this.getTableStringValue(dfValue, dynamicField, language);
                 } else {
                     const values = await LabelService.getInstance().getDFDisplayValues(
                         object.KIXObjectType, dfValue, false, language
@@ -207,6 +216,16 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
                 }
             }
         }
+
+        if (forRichtext) {
+            result = result.replace(/&/g, '&amp;');
+            result = result.replace(/</g, '&lt;');;
+            result = result.replace(/>/g, '&gt;');
+            result = result.replace(/"/g, '&quot;');
+            result = result.replace(/  /g, '&nbsp;&nbsp;');
+            result = result.replace(/(\r\n|\n\r|\n|\r)/g, '<br />');
+        }
+
         return result;
     }
 
@@ -258,8 +277,14 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
         let result: string = useDisplayValue && dfValue.DisplayValueHTML ? dfValue.DisplayValueHTML : '';
         if (!result) {
             const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
-            if (dynamicField && dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
+            if (dynamicField?.FieldType === DynamicFieldTypes.CHECK_LIST) {
                 result = this.getChecklistHTMLValue(dfValue);
+            } else if (dynamicField?.FieldType === DynamicFieldTypes.TABLE) {
+                result = !dynamicField.Config.TranslatableColumn && dfValue.DisplayValueHTML ?
+                    dfValue.DisplayValueHTML : '';
+                if (!result) {
+                    result = await this.getTableHTMLValue(dfValue, dynamicField, language);
+                }
             } else {
                 result = await this.handleValue(object, dfValue, language);
             }
@@ -353,7 +378,7 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
                     + '<thead><tr>'
                     + '<th style="padding:10px 15px;">Action</th>'
                     + '<th style="padding:10px 15px;">State</th>'
-                    + '<tr></thead>'
+                    + '</tr></thead>'
                     + '<tbody>';
 
                 checkListItems.forEach((cl) => {
@@ -382,6 +407,89 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
             }
         });
         return list;
+    }
+
+    private async getTableStringValue(
+        dfValue: DynamicFieldValue, dynamicField: DynamicField, language: string
+    ): Promise<string> {
+        let result = '';
+        const columns = dynamicField.Config.Columns;
+        if (Array.isArray(dfValue?.Value) && Array.isArray(columns) && columns.length) {
+            const translatedColumns = await TranslationService.createTranslationArray(columns, language);
+            dfValue.Value.forEach((table, index) => {
+                let rowList: string[][];
+                try {
+                    rowList = JSON.parse(table);
+                } catch (error) {
+                    console.error(`Could not parse ${index + 1}. table of dynamic field "${dynamicField.Name}"`);
+                    console.error(error);
+                }
+                if (Array.isArray(rowList) && rowList.length) {
+
+                    result = translatedColumns.join(' | ') + '\n';
+
+                    const rows = [];
+                    rowList.forEach((r) => {
+                        const rowColumns = [];
+                        const values = Array.isArray(r) && r.length ? r : [];
+                        translatedColumns.forEach((c, index) => {
+                            rowColumns.push(typeof values[index] !== 'undefined' ? values[index] : '');
+
+                        });
+                        rows.push(rowColumns.join(' | '));
+                    });
+
+                    result += rows.join('\n');
+                }
+            });
+        }
+        return result;
+    }
+
+    private async getTableHTMLValue(
+        dfValue: DynamicFieldValue, dynamicField: DynamicField, language: string
+    ): Promise<string> {
+        let result = '';
+        const columns = dynamicField.Config.Columns;
+        if (Array.isArray(dfValue?.Value) && Array.isArray(columns) && columns.length) {
+            const translatedColumns = await TranslationService.createTranslationArray(columns, language);
+            // use prepared value (keep html as string, to not use it as html)
+            dfValue.PreparedValue.forEach((table, index) => {
+                let rowList: string[][];
+                try {
+                    rowList = JSON.parse(table);
+                } catch (error) {
+                    console.error(`Could not parse ${index + 1}. table of dynamic field "${dynamicField.Name}"`);
+                    console.error(error);
+                }
+                if (Array.isArray(rowList) && rowList.length) {
+                    result += '<table cellspacing="0" cellpadding="2" '
+                        + 'style="border:1px solid black; width: 100%"><thead><tr>';
+
+                    translatedColumns.forEach((c) => {
+                        result += '<th style="border:1px solid black; padding: 5px; text-align: left; '
+                            + `background: rgba(0,0,0,.05)">${c}</th>`;
+                    });
+
+                    result += '</tr></thead><tbody>';
+
+                    rowList.forEach((r) => {
+                        result += '<tr>';
+                        const values = Array.isArray(r) && r.length ? r : [];
+                        translatedColumns.forEach((c, index) => {
+                            result += '<td style="border:1px solid black; padding: 5px; text-align: left">'
+                                + `${typeof values[index] !== 'undefined' ? values[index] : ''}</td>`;
+                        });
+                        result += '</tr>';
+                    });
+
+                    result += '</tbody></table>';
+                }
+            });
+        }
+
+        return result;
+
     }
 
 }

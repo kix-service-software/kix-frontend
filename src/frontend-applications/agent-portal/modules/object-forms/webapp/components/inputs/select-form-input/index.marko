@@ -33,11 +33,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <ul class="list-group list-group-horizontal flex-wrap">
                <for|node| of=state.selectedNodes>
 
-                  <li class="list-group-item ps-2 pe-2 pt-0 pb-0 mb-1 me-1 border">
+                  <li
+                     class="list-group-item ps-2 pe-2 pt-0 pb-0 mb-1 me-1 border"
+                     style="max-width: 100%;"
+                     title=node.label
+                  >
                      <if(node.icon !== null)>
                         <icon icon=node.icon withoutStyle class="me-2"/>
                      </if>
-                     ${node.label}
+                     <span class="text-truncate">
+                        ${node.label}
+                     </span>
                      <if(node.overlay)>
                         <overlay-icon
                            title=(node.overlay.Title)

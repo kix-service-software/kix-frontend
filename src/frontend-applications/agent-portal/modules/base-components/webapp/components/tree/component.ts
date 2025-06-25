@@ -78,7 +78,7 @@ class TreeComponent {
             const hasUserPreferenceSet = treeExpanded !== undefined;
 
             if (hasUserPreferenceSet) {
-                this.expandOrCollapseAll(BrowserUtil.isBooleanTrue(treeExpanded.Value));
+                this.expandOrCollapseAll(BrowserUtil.isBooleanTrue(treeExpanded.Value), false);
             }
         }
     }
@@ -99,14 +99,13 @@ class TreeComponent {
         (this as any).emit('nodeHovered', node);
     }
 
-    public expandOrCollapseAll(expand?: boolean): void {
+    public expandOrCollapseAll(expand: boolean, save: boolean): void {
         TreeUtil.expandOrCollapseAll(this.state.tree, expand);
 
-        const treeElement: HTMLElement = (this as any).getEl('state.treeId');
-
-
-        const context = ContextService.getInstance().getActiveContext();
-        AgentService.getInstance().setPreferences([[`tree-expanded-${context.contextId}-${this.state.treeId}`, expand]]);
+        if (save) {
+            const context = ContextService.getInstance().getActiveContext();
+            AgentService.getInstance().setPreferences([[`tree-expanded-${context.contextId}-${this.state.treeId}`, expand]]);
+        }
 
         (this as any).setStateDirty('tree');
     }

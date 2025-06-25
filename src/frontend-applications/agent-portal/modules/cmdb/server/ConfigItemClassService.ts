@@ -141,9 +141,8 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
                 await this.createIcon(token, clientRequestId, icon);
             }
 
-            const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
             await this.commitObjectTag(
-                token, clientRequestId, tags, objectType, response.ConfigItemClassID
+                token, clientRequestId, parameter, objectType, response.ConfigItemClassID
             );
 
             return response.ConfigItemClassID;
@@ -194,9 +193,8 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
                 });
             }
 
-            const tags: string[] = this.getParameterValue(parameter, KIXObjectProperty.OBJECT_TAGS);
             await this.commitObjectTag(
-                token, clientRequestId, tags, objectType, response.ConfigItemClassID
+                token, clientRequestId, parameter, objectType, response.ConfigItemClassID
             );
 
             return response.ConfigItemClassID;
