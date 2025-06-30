@@ -30,10 +30,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if((state.value || state.editorActive) && state.editorReady)>
                 <editor
                     value=state.value
-                    on-valueChanged("valueChanged")
                     simple
                     readOnly=!state.editorActive
-                    keyValue="notes-sidebar"
+                    key="notes-editor"
                 />
             </if>
             <else>
