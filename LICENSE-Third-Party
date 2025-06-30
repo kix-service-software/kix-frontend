@@ -18,7 +18,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/code-frame
 │  └─ licenseFile: node_modules/@babel/code-frame/LICENSE
-├─ @babel/compat-data@7.27.5
+├─ @babel/compat-data@7.27.7
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -32,7 +32,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/core
 │  └─ licenseFile: node_modules/@babel/core/LICENSE
-├─ @babel/core@7.27.4
+├─ @babel/core@7.27.7
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -144,7 +144,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helpers
 │  └─ licenseFile: node_modules/@babel/helpers/LICENSE
-├─ @babel/parser@7.27.5
+├─ @babel/parser@7.27.7
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -186,14 +186,14 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/template
 │  └─ licenseFile: node_modules/@babel/template/LICENSE
-├─ @babel/traverse@7.27.4
+├─ @babel/traverse@7.27.7
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/traverse
 │  └─ licenseFile: node_modules/@babel/traverse/LICENSE
-├─ @babel/types@7.27.6
+├─ @babel/types@7.27.7
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -243,9 +243,9 @@
 │  ├─ publisher: Arnout Kazemier
 │  ├─ path: node_modules/@dabh/diagnostics
 │  └─ licenseFile: node_modules/@dabh/diagnostics/LICENSE
-├─ @jridgewell/gen-mapping@0.3.8
+├─ @jridgewell/gen-mapping@0.3.10
 │  ├─ licenses: MIT
-│  ├─ repository: https://github.com/jridgewell/gen-mapping
+│  ├─ repository: https://github.com/jridgewell/sourcemaps
 │  ├─ publisher: Justin Ridgewell
 │  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/gen-mapping
@@ -257,29 +257,23 @@
 │  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/resolve-uri
 │  └─ licenseFile: node_modules/@jridgewell/resolve-uri/LICENSE
-├─ @jridgewell/set-array@1.2.1
+├─ @jridgewell/source-map@0.3.8
 │  ├─ licenses: MIT
-│  ├─ repository: https://github.com/jridgewell/set-array
-│  ├─ publisher: Justin Ridgewell
-│  ├─ email: justin@ridgewell.name
-│  ├─ path: node_modules/@jridgewell/set-array
-│  └─ licenseFile: node_modules/@jridgewell/set-array/LICENSE
-├─ @jridgewell/source-map@0.3.6
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/jridgewell/source-map
+│  ├─ repository: https://github.com/jridgewell/sourcemaps
 │  ├─ publisher: Justin Ridgewell
 │  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/source-map
 │  └─ licenseFile: node_modules/@jridgewell/source-map/LICENSE
-├─ @jridgewell/sourcemap-codec@1.5.0
+├─ @jridgewell/sourcemap-codec@1.5.2
 │  ├─ licenses: MIT
-│  ├─ repository: https://github.com/jridgewell/sourcemap-codec
-│  ├─ publisher: Rich Harris
+│  ├─ repository: https://github.com/jridgewell/sourcemaps
+│  ├─ publisher: Justin Ridgewell
+│  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/sourcemap-codec
 │  └─ licenseFile: node_modules/@jridgewell/sourcemap-codec/LICENSE
-├─ @jridgewell/trace-mapping@0.3.25
+├─ @jridgewell/trace-mapping@0.3.27
 │  ├─ licenses: MIT
-│  ├─ repository: https://github.com/jridgewell/trace-mapping
+│  ├─ repository: https://github.com/jridgewell/sourcemaps
 │  ├─ publisher: Justin Ridgewell
 │  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/trace-mapping
@@ -517,7 +511,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.15.33
+├─ @types/node@22.15.34
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1414,7 +1408,7 @@
 │  ├─ url: http://vorb.de
 │  ├─ path: node_modules/crypt
 │  └─ licenseFile: node_modules/crypt/LICENSE.mkd
-├─ css-select@5.1.0
+├─ css-select@5.2.2
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/fb55/css-select
 │  ├─ publisher: Felix Boehm
@@ -1429,7 +1423,7 @@
 │  ├─ url: https://github.com/lahmatiy
 │  ├─ path: node_modules/css-tree
 │  └─ licenseFile: node_modules/css-tree/LICENSE
-├─ css-what@6.1.0
+├─ css-what@6.2.2
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/fb55/css-what
 │  ├─ publisher: Felix Böhm
@@ -1859,7 +1853,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.173
+├─ electron-to-chromium@1.5.177
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -4005,7 +3999,7 @@
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici-types
 │  └─ licenseFile: node_modules/undici-types/LICENSE
-├─ undici@7.10.0
+├─ undici@7.11.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici
@@ -4182,7 +4176,7 @@
 │  ├─ url: http://2x.io
 │  ├─ path: node_modules/ws
 │  └─ licenseFile: node_modules/socket.io-adapter/node_modules/ws/LICENSE
-├─ ws@8.18.2
+├─ ws@8.18.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/websockets/ws
 │  ├─ publisher: Einar Otto Stangvik
