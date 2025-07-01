@@ -21,8 +21,11 @@ export class SaveUserDefaultSearchAction extends AbstractAction {
 
     public canRun(): boolean {
         const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        const cache = context?.getSearchCache();
-        return typeof cache !== 'undefined' && cache !== null;
+        if (context && context instanceof SearchContext) {
+            const cache = context.getSearchCache();
+            return typeof cache !== 'undefined' && cache !== null;
+        }
+        return false;
     }
 
     public async run(event: any): Promise<void> {
