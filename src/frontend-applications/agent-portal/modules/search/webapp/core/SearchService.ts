@@ -530,7 +530,7 @@ export class SearchService {
     public async executeSearchCache(
         id?: string, name?: string, cache?: SearchCache, context?: SearchContext, setSearchContext?: boolean,
         additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean],
-        additionalFilter?: FilterCriteria[]
+        additionalFilter?: FilterCriteria[], setResult?: boolean, setResultTimeout?: number
     ): Promise<KIXObject[]> {
         const search = await SearchSocketClient.getInstance().loadAllSearches();
         let searchCache = cache || search.find((s) => s.id === id);
@@ -563,7 +563,8 @@ export class SearchService {
         }
 
         return await this.searchObjects(
-            searchCache, context, additionalIncludes, limit, searchLimit, sort, additionalFilter
+            searchCache, context, additionalIncludes, limit, searchLimit, sort, additionalFilter,
+            setResult, setResultTimeout
         );
     }
 

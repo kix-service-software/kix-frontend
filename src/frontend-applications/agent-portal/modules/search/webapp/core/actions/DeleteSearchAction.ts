@@ -44,7 +44,7 @@ export class DeleteSearchAction extends AbstractAction {
         const context = ContextService.getInstance().getActiveContext<SearchContext>();
         const search = context?.getSearchCache();
 
-        const isUserSearch = !search.userId || search.userId === this.user.UserID;
+        const isUserSearch = search && (!search.userId || search.userId === this.user.UserID);
 
         return search?.name && isUserSearch;
     }
