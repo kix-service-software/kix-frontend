@@ -101,6 +101,7 @@ export class TicketTableCSSHandler implements ITableCSSHandler<Ticket> {
             element.innerHTML += `.${className} { ${cacheKey} }`;
 
             this.cssClassCache.set(cacheKey, className);
+            return className;
         }
     }
 
