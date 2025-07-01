@@ -49,10 +49,6 @@ export class Component {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
     }
 
-    public valueChanged(value): void {
-        this.editorValue = value;
-    }
-
     public setEditorActive(): void {
         this.state.editorReady = false;
         this.state.editorActive = true;
@@ -65,12 +61,11 @@ export class Component {
         this.state.editorActive = false;
     }
 
-    public submitEditor(): void {
-        setTimeout(() => {
-            this.state.value = this.editorValue;
-            this.state.editorActive = false;
-            NotesService.getInstance().saveNotes(this.state.contextId, this.state.value);
-        }, 200);
+    public async submitEditor(): Promise<void> {
+        const component = (this as any).getComponent('notes-editor');
+        this.state.value = component?.getValue();
+        await NotesService.getInstance().saveNotes(this.state.contextId, this.state.value);
+        this.state.editorActive = false;
     }
 
 }
