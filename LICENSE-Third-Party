@@ -18,7 +18,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/code-frame
 │  └─ licenseFile: node_modules/@babel/code-frame/LICENSE
-├─ @babel/compat-data@7.27.7
+├─ @babel/compat-data@7.28.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -32,14 +32,14 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/core
 │  └─ licenseFile: node_modules/@babel/core/LICENSE
-├─ @babel/core@7.27.7
+├─ @babel/core@7.28.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/core
 │  └─ licenseFile: node_modules/@marko/compiler/node_modules/@babel/core/LICENSE
-├─ @babel/generator@7.27.5
+├─ @babel/generator@7.28.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -67,6 +67,13 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helper-create-class-features-plugin
 │  └─ licenseFile: node_modules/@babel/helper-create-class-features-plugin/LICENSE
+├─ @babel/helper-globals@7.28.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/helper-globals
+│  └─ licenseFile: node_modules/@babel/helper-globals/LICENSE
 ├─ @babel/helper-member-expression-to-functions@7.27.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
@@ -144,7 +151,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helpers
 │  └─ licenseFile: node_modules/@babel/helpers/LICENSE
-├─ @babel/parser@7.27.7
+├─ @babel/parser@7.28.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -165,7 +172,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/plugin-transform-modules-commonjs
 │  └─ licenseFile: node_modules/@babel/plugin-transform-modules-commonjs/LICENSE
-├─ @babel/plugin-transform-typescript@7.27.1
+├─ @babel/plugin-transform-typescript@7.28.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -186,14 +193,14 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/template
 │  └─ licenseFile: node_modules/@babel/template/LICENSE
-├─ @babel/traverse@7.27.7
+├─ @babel/traverse@7.28.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/traverse
 │  └─ licenseFile: node_modules/@babel/traverse/LICENSE
-├─ @babel/types@7.27.7
+├─ @babel/types@7.28.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -243,7 +250,7 @@
 │  ├─ publisher: Arnout Kazemier
 │  ├─ path: node_modules/@dabh/diagnostics
 │  └─ licenseFile: node_modules/@dabh/diagnostics/LICENSE
-├─ @jridgewell/gen-mapping@0.3.11
+├─ @jridgewell/gen-mapping@0.3.12
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jridgewell/sourcemaps
 │  ├─ publisher: Justin Ridgewell
@@ -257,21 +264,21 @@
 │  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/resolve-uri
 │  └─ licenseFile: node_modules/@jridgewell/resolve-uri/LICENSE
-├─ @jridgewell/source-map@0.3.9
+├─ @jridgewell/source-map@0.3.10
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jridgewell/sourcemaps
 │  ├─ publisher: Justin Ridgewell
 │  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/source-map
 │  └─ licenseFile: node_modules/@jridgewell/source-map/LICENSE
-├─ @jridgewell/sourcemap-codec@1.5.3
+├─ @jridgewell/sourcemap-codec@1.5.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jridgewell/sourcemaps
 │  ├─ publisher: Justin Ridgewell
 │  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/sourcemap-codec
 │  └─ licenseFile: node_modules/@jridgewell/sourcemap-codec/LICENSE
-├─ @jridgewell/trace-mapping@0.3.28
+├─ @jridgewell/trace-mapping@0.3.29
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jridgewell/sourcemaps
 │  ├─ publisher: Justin Ridgewell
@@ -511,7 +518,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.15.34
+├─ @types/node@22.16.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -2164,14 +2171,6 @@
 │  ├─ url: http://blog.izs.me/
 │  ├─ path: node_modules/glob
 │  └─ licenseFile: node_modules/lasso/node_modules/glob/LICENSE
-├─ globals@11.12.0
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/sindresorhus/globals
-│  ├─ publisher: Sindre Sorhus
-│  ├─ email: sindresorhus@gmail.com
-│  ├─ url: sindresorhus.com
-│  ├─ path: node_modules/globals
-│  └─ licenseFile: node_modules/globals/license
 ├─ globals@9.18.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/sindresorhus/globals
