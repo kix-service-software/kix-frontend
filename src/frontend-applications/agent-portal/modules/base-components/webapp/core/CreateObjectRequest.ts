@@ -19,6 +19,8 @@ export class CreateObjectRequest implements ISocketRequest {
         public objectType: KIXObjectType | string,
         public parameter: Array<[string, any]>,
         public createOptions?: KIXObjectSpecificCreateOptions
-    ) { }
+    ) {
+        this.parameter = this.parameter?.filter((p) => p?.length === 2 && p[0]) || [];
+    }
 
 }
