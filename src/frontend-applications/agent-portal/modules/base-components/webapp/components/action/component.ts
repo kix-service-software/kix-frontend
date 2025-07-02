@@ -34,7 +34,7 @@ class ActionComponent {
         this.state.canRunAction = this.state.action.canRun();
     }
 
-    public doAction(event: any): void {
+    public async doAction(event: any): Promise<void> {
         if (!this.state.canRunAction) return;
         this.state.canRunAction = false;
         (this as any).emit('actionClicked');
@@ -42,10 +42,18 @@ class ActionComponent {
             event.stopPropagation();
             event.preventDefault();
         }
-        this.state.action.run(event);
-        setTimeout(() => {
+
+        // enable by timeout if action needs too "long" or results in error
+        let runTimeout = setTimeout(() => {
             this.state.canRunAction = true;
-        }, 500);
+            runTimeout = null;
+        }, 2000);
+
+        await this.state.action.run(event);
+        if (runTimeout) {
+            this.state.canRunAction = true;
+            clearTimeout(runTimeout);
+        }
     }
 
     public linkClicked(event: any): void {
