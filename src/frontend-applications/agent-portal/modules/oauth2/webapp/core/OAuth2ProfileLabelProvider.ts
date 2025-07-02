@@ -51,6 +51,9 @@ export class OAuth2ProfileLabelProvider extends LabelProvider<OAuth2Profile> {
             case OAuth2ProfileProperty.SCOPE:
                 displayValue = 'Translatable#Scope';
                 break;
+            case OAuth2ProfileProperty.PKCE:
+                displayValue = 'Translatable#PKCE';
+                break;
             case OAuth2ProfileProperty.RENEW_AUTH:
                 displayValue = 'Translatable#Renew Authorization';
                 break;

@@ -120,6 +120,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Admin_OAuth2ProfileCreate_Scope'
             )
         );
+        configurations.push(
+            new FormFieldConfiguration(
+                'oauth2-profile-edit-form-field-pkce',
+                'Translatable#PKCE', OAuth2ProfileProperty.PKCE, 'checkbox-input', true,
+                'Translatable#Helptext_Admin_OAuth2ProfileCreate_PKCE'
+            )
+        );
 
         configurations.push(
             new FormFieldConfiguration(
@@ -144,6 +151,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'oauth2-profile-edit-form-field-client-id',
                     'oauth2-profile-edit-form-field-client-secret',
                     'oauth2-profile-edit-form-field-url-scope',
+                    'oauth2-profile-edit-form-field-pkce',
                     'oauth2-profile-edit-form-field-valid'
                 ]
             )
