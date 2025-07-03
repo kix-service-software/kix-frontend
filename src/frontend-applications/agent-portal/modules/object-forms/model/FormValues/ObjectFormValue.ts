@@ -46,6 +46,7 @@ export class ObjectFormValue<T = any> {
     public visible: boolean = false;
     public enabled: boolean = false;
     public empty: boolean = false;
+    public dirty: boolean = false;
 
     public valid: boolean = true;
     public validationResults: ValidationResult[] = [];
