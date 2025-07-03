@@ -150,7 +150,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         const object = {};
         object[objectType] = new RequestObject(
-            parameter.filter((p) => p[0] !== 'ICON' && p[0] !== KIXObjectProperty.OBJECT_TAGS)
+            parameter.filter((p) => p?.length === 2 && p[0] !== 'ICON' && p[0] !== KIXObjectProperty.OBJECT_TAGS)
         );
 
         const response = await this.sendRequest(token, clientRequestId, uri, object, cacheKeyPrefix, create);
