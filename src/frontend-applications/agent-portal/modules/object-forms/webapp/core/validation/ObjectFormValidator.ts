@@ -7,6 +7,7 @@
  * --
  */
 
+import { rejects } from 'node:assert';
 import { IdService } from '../../../../../model/IdService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
@@ -79,13 +80,12 @@ export class ObjectFormValidator {
         const validationPromises: Array<Promise<void>> = [];
         for (const fv of formValues) {
             validationPromises.push(this.validate(fv));
-
             if (Array.isArray(fv.formValues) && fv.formValues.length) {
                 validationPromises.push(this.validateFormValues(fv.formValues));
             }
         }
 
-        await Promise.all(validationPromises);
+        await Promise.allSettled(validationPromises);
     }
 
     public async validate(formValue: ObjectFormValue, force?: boolean): Promise<void> {

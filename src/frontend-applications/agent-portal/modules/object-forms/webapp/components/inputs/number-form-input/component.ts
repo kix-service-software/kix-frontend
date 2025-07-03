@@ -72,13 +72,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public valueChanged(event: any): void {
+        this.formValue.dirty = true;
         if (this.changeTimeout) {
-            window.clearTimeout(this.changeTimeout);
+            clearTimeout(this.changeTimeout);
         }
 
         this.changeTimeout = setTimeout(async () => {
             this.state.value = event.target.value;
-            this.formValue.setFormValue(this.state.value);
+            await this.formValue.setFormValue(this.state.value);
+            this.formValue.dirty = false;
         }, 500);
     }
 }

@@ -110,8 +110,21 @@ export class ObjectFormHandler {
         if (this.context.contextId === 'ObjectFormConfigurationContext') return;
         await this.objectFormValidator?.enable();
         const formValues = this.objectFormValueMapper.getFormValues(pageId);
+        let valid = false;
+        if (formValues.some((fv) => fv.dirty)) {
+            valid = await new Promise((resolve, reject) => {
+                setTimeout(async () => {
+                    await this.objectFormValidator?.validateFormValues(formValues);
+                    const validation = this.objectFormValidator.isFormValid(formValues);
+                    resolve(validation);
+                }, 500);
+            });
+        } else {
+            await this.objectFormValidator?.validateFormValues(formValues);
+            valid = this.objectFormValidator.isFormValid(formValues);
+        }
         await this.objectFormValidator?.validateFormValues(formValues);
-        const valid = this.objectFormValidator.isFormValid(formValues);
+        valid = this.objectFormValidator.isFormValid(formValues);
         if (!valid) {
             const validationResults = this.objectFormValueMapper.getValidationResults();
             console.debug('ValidationResults:');
@@ -127,7 +140,19 @@ export class ObjectFormHandler {
     public async commit(): Promise<string | number> {
 
         await this.objectFormValidator?.enable();
-        const valid = await this.objectFormValidator?.validateForm();
+        let valid = false;
+        const formValues = this.objectFormValueMapper.getFormValues();
+        if (formValues.some((fv) => fv.dirty)) {
+            valid = await new Promise((resolve, reject) => {
+                setTimeout(async () => {
+                    const validation = await this.objectFormValidator?.validateForm();
+                    resolve(validation);
+                }, 500);
+            });
+        } else {
+            valid = await this.objectFormValidator?.validateForm();
+        }
+
         if (!valid) {
             const validationResults = this.objectFormValueMapper.getValidationResults();
             console.debug('ValidationResults:');
