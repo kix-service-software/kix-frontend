@@ -285,20 +285,25 @@ export class HttpService {
         options.httpAgent = new http.Agent({ keepAlive: true });
 
         let response: AxiosResponse | HTTPResponse = await this.axios(options).catch((error: AxiosError) => {
-            if (logError) {
-                LoggingService.getInstance().error(
-                    `Error during HTTP (${resource}) ${options.method} request.`, error
-                );
 
-                LoggingService.getInstance().error(JSON.stringify(error));
+            // do not log everything, only if really needed (debug)
+            if (logError && LoggingService.getInstance().isDebug()) {
+                try {
+                    LoggingService.getInstance().debug(
+                        `Error during HTTP (${resource}) ${options.method} request.`,
+                        error.toJSON ? error.toJSON() : error
+                    );
+                } catch (logginError) {
+                    console.error(error);
+                }
             }
             HTTPRequestLogger.getInstance().stop(profileTaskId, error);
             if (error?.response?.status === 403) {
-                throw new PermissionError(this.createError(error), resource, options.method);
+                throw new PermissionError(this.createError(error, logError), resource, options.method);
             } else if (error?.response?.status === 401) {
                 throw new SocketAuthenticationError('Invalid Token!');
             } else {
-                throw this.createError(error);
+                throw this.createError(error, logError);
             }
         });
 
@@ -341,16 +346,20 @@ export class HttpService {
         return `${this.apiURL}/${encodedResource}`;
     }
 
-    private createError(error: AxiosError): Error {
+    private createError(error: AxiosError, logError: boolean = true): Error {
         const status = error.response?.status;
         if (status === 500) {
-            LoggingService.getInstance().error(`(${status}) ${error.response?.statusText}`);
+            if (logError) {
+                LoggingService.getInstance().error(`(${status}) ${error.response?.statusText}`);
+            }
             return new Error(error.response.status?.toString(), error.response?.statusText, status);
         } else {
             const backendError = new BackendHTTPError(error);
-            LoggingService.getInstance().error(
-                `(${status}) ${backendError.error.Code} ${backendError.error.Message}`
-            );
+            if (logError) {
+                LoggingService.getInstance().error(
+                    `(${status}) ${backendError.error.Code} ${backendError.error.Message}`
+                );
+            }
             return new Error(backendError.error.Code?.toString(), backendError.error.Message, status);
         }
     }
