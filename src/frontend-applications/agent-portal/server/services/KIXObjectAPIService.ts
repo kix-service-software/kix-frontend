@@ -379,7 +379,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: string | number,
-        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
+        deleteOptions?: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string = objectType,
+        ressourceUri: string = this.RESOURCE_URI
     ): Promise<Error[]> {
         const uri = [this.buildUri(ressourceUri, objectId)];
 

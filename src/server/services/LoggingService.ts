@@ -250,4 +250,8 @@ export class LoggingService {
         return (level <= this.defaultLevelNumber);
     }
 
+    public isDebug(): boolean {
+        return this.checkLogLevel(LogLevel.DEBUG);
+    }
+
 }
