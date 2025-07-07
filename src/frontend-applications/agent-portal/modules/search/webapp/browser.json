@@ -5,6 +5,7 @@
         "require ./components/search-criteria-widget",
         "require ./components/search-module",
         "require ./components/search-list-widget",
-        "require ./components/search-overwrite-modal"
+        "require ./components/search-overwrite-modal",
+        "require ./components/elasticsearch-dashboard"
     ]
 }

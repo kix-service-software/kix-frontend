@@ -17,6 +17,12 @@ import { SharedSearchEventHandler } from './SharedSearchEventHandler';
 import { DeleteSearchAction } from './actions/DeleteSearchAction';
 import { LoadSearchAction } from './actions/LoadSearchAction';
 import { SaveSearchAction } from './actions/SaveSearchAction';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { ElasticSearchService } from './ElasticSearchService';
+import { ElasticSearchContext } from './ElasticSearchContext';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../model/ContextType';
 
 export class UIModule implements IUIModule {
 
@@ -26,6 +32,11 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         SharedSearchEventHandler.getInstance();
+        const contextDescriptor = new ContextDescriptor(
+            ElasticSearchContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN,
+            ContextMode.DASHBOARD, false, 'elasticsearch-dashboard', ['elasticsearch'], ElasticSearchContext
+        );
+        ContextService.getInstance().registerContext(contextDescriptor);
     }
 
     public async registerExtensions(): Promise<void> {
@@ -38,6 +49,7 @@ export class UIModule implements IUIModule {
                 'save-user-default-search-action', SaveUserDefaultSearchAction
             );
         }
+        ServiceRegistry.registerServiceInstance(ElasticSearchService.getInstance());
 
         await SearchService.getInstance().getSearchBookmarks(true);
     }

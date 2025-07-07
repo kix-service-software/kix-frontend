@@ -10,6 +10,16 @@
             "search-module": {
                 "module": "kix-module.extension"
             }
+        },
+        "kix:services": {
+            "search-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:configuration": {
+            "elasticsearch-configuration": {
+                "module": "configuration.extension"
+            }
         }
     }
 }
