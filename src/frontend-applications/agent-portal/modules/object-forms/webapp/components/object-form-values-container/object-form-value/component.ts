@@ -53,7 +53,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.formValue = input.formValue;
 
             if (input.contextInstanceId && this.state.formValue) {
-                this.state.configReadOnly = this.state.formValue?.formField?.readonly;
                 this.state.formValue.readonly = false;
             }
 
@@ -100,6 +99,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         const formHandler = await this.context.getFormManager()?.getObjectFormHandler();
         this.field = formHandler.getFormField(this.state.formValue?.fieldId);
+        this.state.showVisibilityBadge = this.field ? this.field.options?.find(
+            (option) => option.option === 'set hidden')?.value : !this.state.visible;
+        this.state.configReadOnly = this.field ?
+            this.field.readonly :
+            this.state.formValue?.isControlledByParent ?
+                this.state.formValue?.parent?.formField.readonly :
+                this.state.formValue?.formField.readonly;
 
         this.setDisplayNone();
 

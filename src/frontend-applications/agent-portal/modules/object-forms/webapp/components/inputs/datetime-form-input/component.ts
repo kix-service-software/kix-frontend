@@ -129,7 +129,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.setValueTimeout = setTimeout(() => {
             const dateElement = (this as any).getEl(`date-${this.state.inputId}`);
             const dateValue = dateElement?.value;
-            if (dateValue) {
+            if (dateValue !== null && typeof dateValue !== 'undefined') {
                 this.state.dateValue = dateValue;
             }
 
@@ -157,7 +157,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             this.value = date ? DateTimeUtil.getKIXDateTimeString(date) : null;
 
-            const hasValue = this.value !== null && this.value !== undefined;
+            const hasValue = this.value !== '' && typeof this.value !== 'undefined';
             if (hasValue) {
                 this.formValue.setFormValue(this.value);
             }

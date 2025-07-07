@@ -25,6 +25,7 @@ import { OverlayType } from '../../../base-components/webapp/core/OverlayType';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { FormConfigurationObject } from '../../model/FormConfigurationObject';
+import { DynamicFieldCountableFormValue } from '../../model/FormValues/DynamicFields/DynamicFieldCountableFormValue';
 import { ObjectFormValue } from '../../model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../model/ObjectFormEvent';
 import { ObjectFormValueMapper } from '../../model/ObjectFormValueMapper';
@@ -336,7 +337,11 @@ export class ObjectFormHandler {
     public async reInitField(fieldId: string): Promise<void> {
         const field = this.getFormField(fieldId);
         const formValue = await this.objectFormValueMapper.mapFormField(field, this.objectFormValueMapper.object);
-        await formValue.initFormValue();
+        if (formValue.hasOwnProperty('IS_COUNTABLE') && formValue['IS_COUNTABLE'] === true) {
+            await (formValue as DynamicFieldCountableFormValue).reInitFormValue();
+        } else {
+            await formValue.initFormValue();
+        }
 
         const configObject = new FormConfigurationObject();
         configObject.fieldId = fieldId;
