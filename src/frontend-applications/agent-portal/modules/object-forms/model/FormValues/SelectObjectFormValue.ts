@@ -348,9 +348,9 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.treeHandler = new TreeHandler([], null, null, this.multiselect);
         TreeService.getInstance().registerTreeHandler(this.instanceId, this.treeHandler);
 
-        this.treeHandler?.registerSelectionListener(this.instanceId + '-selection', (nodes: TreeNode[]) => {
+        this.treeHandler?.registerSelectionListener(this.instanceId + '-selection', async (nodes: TreeNode[]) => {
             if (this.initialized && !this.multiselect) {
-                this.setSelectedNodes();
+                await this.setSelectedNodes();
             }
         });
 
@@ -396,7 +396,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             }
         }
 
-        return this.setFormValue(newValue.length ? newValue as any : null);
+        return await this.setFormValue(newValue.length ? newValue as any : null);
     }
 
     public async loadSelectableValues(): Promise<void> {
@@ -688,7 +688,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 await this.setFormValue(newValue, true);
             }
         } else {
-            this.treeHandler?.selectNone();
+            this.treeHandler?.selectNone(true);
             await this.setFormValue(null, true);
         }
     }
