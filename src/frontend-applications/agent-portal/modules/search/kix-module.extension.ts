@@ -37,8 +37,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         ),
         new UIComponent('search-criteria-widget', '/kix-module-search$0/webapp/components/search-criteria-widget', []),
         new UIComponent('search-list-widget', '/kix-module-search$0/webapp/components/search-list-widget', []),
-        new UIComponent('search-overwrite-modal', '/kix-module-search$0/webapp/components/search-overwrite-modal', []),
-        new UIComponent('elasticsearch-dashboard', '/kix-module-search$0/webapp/components/elasticsearch-dashboard', [])
+        new UIComponent('search-overwrite-modal', '/kix-module-search$0/webapp/components/search-overwrite-modal', [])
     ];
 
 }
