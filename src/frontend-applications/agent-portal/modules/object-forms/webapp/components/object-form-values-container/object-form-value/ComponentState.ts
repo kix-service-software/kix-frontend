@@ -24,6 +24,7 @@ export class ComponentState extends AbstractComponentState {
         public label: string = '',
         public hint: string = null,
         public visible: boolean = false,
+        public showVisibilityBadge: boolean = false,
         public enabled: boolean = false,
         public elementId: string = IdService.generateDateBasedId('object-form-value-'),
         public formValues: ObjectFormValue[] = [],
