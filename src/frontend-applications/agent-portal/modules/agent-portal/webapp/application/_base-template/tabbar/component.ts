@@ -151,11 +151,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public canClose(): boolean {
         const instances = ContextService.getInstance().getContextInstances();
-        let isHomeContext: boolean = false;
+        let isDefaultContext: boolean = false;
         if (instances.length === 1) {
-            isHomeContext = instances[0].contextId === HomeContext.CONTEXT_ID;
+            isDefaultContext = instances[0].contextId === ContextService.getInstance().DEFAULT_FALLBACK_CONTEXT;
         }
-        return instances.length > 1 || !isHomeContext;
+        return instances.length > 1 || !isDefaultContext;
     }
 
     public async closeTabWithMMB(tab: ContextTab, event: any): Promise<void> {

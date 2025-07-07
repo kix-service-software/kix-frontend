@@ -80,6 +80,12 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
             ),
             new PersonalSetting(
                 'Translatable#Favorites',
+                PersonalSettingsProperty.INITIAL_SITE_URL,
+                'Translatable#Initial Site URL',
+                'Translatable#Helptext_PersonalSettings_InitialSiteURL_Hint'
+            ),
+            new PersonalSetting(
+                'Translatable#Favorites',
                 PersonalSettingsProperty.MY_QUEUES,
                 'Translatable#My Queues',
                 'Translatable#Helptext_PersonalSettings_MyQueues_Hint',
