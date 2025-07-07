@@ -1140,7 +1140,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001726
+├─ caniuse-lite@1.0.30001727
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1710,7 +1710,7 @@
 │  ├─ url: https://github.com/qix-
 │  ├─ path: node_modules/debug
 │  └─ licenseFile: node_modules/debug/LICENSE
-├─ decimal.js@10.5.0
+├─ decimal.js@10.6.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/MikeMcl/decimal.js
 │  ├─ publisher: Michael Mclaughlin
