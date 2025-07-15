@@ -38,6 +38,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.formValue?.addPropertyBinding(
                 FormValueProperty.VALUE, async (formValue: RichTextFormValue) => {
                     this.state.currentValue = formValue.value;
+                    this.state.externallyUpdated = formValue.isExternallyUpdated();
+                    formValue.setExternallyUpdatedFalse();
                 }
             )
         );

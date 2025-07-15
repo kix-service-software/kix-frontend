@@ -8,6 +8,7 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { CKEditorService } from '../../../../ck-editor/webapp/core/CKEditorService';
 import { Cell } from '../../../../table/model/Cell';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { FAQArticle } from '../../../model/FAQArticle';
@@ -36,8 +37,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async importClicked(event: any): Promise<void> {
         event.stopPropagation();
         event.preventDefault();
-
-        FAQArticleHandler.publishFAQArticleAsHTMLWithAttachments(this.faqArticle.ID);
+        CKEditorService.getInstance().getActiveEditor()?.disableFocusListener();
+        setTimeout(async () => {
+            await FAQArticleHandler.publishFAQArticleAsHTMLWithAttachments(this.faqArticle.ID);
+        }, 500);
     }
 
 }
