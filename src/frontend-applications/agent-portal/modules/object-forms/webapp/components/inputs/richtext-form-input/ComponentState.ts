@@ -16,7 +16,8 @@ export class ComponentState {
         public noImages: boolean = false,
         public editorId: string = IdService.generateDateBasedId('editor'),
         public prepared: boolean = false,
-        public readonly: boolean = false
+        public readonly: boolean = false,
+        public externallyUpdated: boolean = false,
     ) { }
 
 }

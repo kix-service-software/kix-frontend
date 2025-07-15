@@ -104,8 +104,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.configReadOnly = this.field ?
             this.field.readonly :
             this.state.formValue?.isControlledByParent ?
-                this.state.formValue?.parent?.formField.readonly :
-                this.state.formValue?.formField.readonly;
+                this.state.formValue?.parent?.formField?.readonly :
+                this.state.formValue?.formField?.readonly;
 
         this.setDisplayNone();
 

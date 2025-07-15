@@ -7,7 +7,10 @@
  * --
  */
 
+import { rejects } from 'node:assert';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
 import { CKEditor5Configuration } from '../../model/CKEditor5Configuration';
 import { CKEditor5Classes } from './CKEditor5Classes';
 import { CKEditorService } from './CKEditorService';
@@ -30,6 +33,8 @@ export class CKEditor5 {
     private changeListener: Array<() => null> = [];
     private focusListener: Array<(value: string) => null> = [];
 
+    private focusListenerEnabled = true;
+
     public constructor(public elementId: string) { }
 
     public addChangeListener(listener: () => null): void {
@@ -41,63 +46,70 @@ export class CKEditor5 {
     }
 
     public async update(input: any): Promise<void> {
-        if (this.updateTimeout) {
-            clearTimeout(this.updateTimeout);
-        }
+        await new Promise<void>(async (resolve, reject) => {
 
-        this.updateTimeout = setTimeout(async () => {
-            if (await this.waitForEditor()) {
-                if (input.addValue) {
-                    const viewFragment = this.editor.data.processor.toView(input.addValue);
-                    const modelFragment = this.editor.data.toModel(viewFragment);
-                    this.editor.model.insertContent(modelFragment);
-                }
+            if (this.updateTimeout) {
+                clearTimeout(this.updateTimeout);
+            }
 
-                const isFocused = (this.editor.focusManager && !this.editor.focusManager.hasFocus);
-                // if editor has no value or is not focused, set 'new' value
-                if (input.value !== null && (isFocused || !this.editor.getData())) {
-                    let contentString = BrowserUtil.replaceInlineContent(
-                        input.value ? input.value : '', input.inlineContent
-                    );
-
-                    const plainText: string = input.plainText;
-                    const matches = plainText?.match(/(<.*?>)/g);
-                    if (matches) {
-                        for (const m of matches) {
-                            let replacedString = m.replace(/>/g, '&gt;');
-                            replacedString = replacedString.replace(/</g, '&lt;');
-                            contentString = contentString.replace(m, replacedString);
-                        }
-                    }
-
-                    if (input.readOnly) {
-                        contentString = contentString.replace(
-                            /(https?:\/\/[^\s]+)/g,
-                            '<a href="$1" target="_blank">$1</a>'
-                        );
-                        contentString = contentString.replace(
-                            /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
-                            '<a href="mailto:$1">$1</a>'
-                        );
-                    }
-
-                    if (this.editor.getData() !== contentString) {
-                        this.handleOnInputChange = true;
-                        const viewFragment = this.editor.data.processor.toView(contentString);
+            this.updateTimeout = setTimeout(async () => {
+                if (await this.waitForEditor()) {
+                    if (input.addValue) {
+                        const viewFragment = this.editor.data.processor.toView(input.addValue);
                         const modelFragment = this.editor.data.toModel(viewFragment);
                         this.editor.model.insertContent(modelFragment);
-                        // this.editor.setData(contentString);
-                        this.handleOnInputChange = false;
                     }
-                    this.adjustEditorHeight();
-                }
 
-                if (typeof input.readOnly !== 'undefined' && input.readOnly !== null) {
-                    this.readOnly = input.readOnly;
-                    this.setReadOnlyMode();
+                    const isFocused = (this.editor.focusManager && !this.editor.focusManager.hasFocus);
+                    // if editor has no value or is not focused, set 'new' value
+                    if (input.value !== null || (isFocused || !this.editor.getData())) {
+                        let contentString = BrowserUtil.replaceInlineContent(
+                            input.value ? input.value : '', input.inlineContent
+                        );
+
+                        const plainText: string = input.plainText;
+                        const matches = plainText?.match(/(<.*?>)/g);
+                        if (matches) {
+                            for (const m of matches) {
+                                let replacedString = m.replace(/>/g, '&gt;');
+                                replacedString = replacedString.replace(/</g, '&lt;');
+                                contentString = contentString.replace(m, replacedString);
+                            }
+                        }
+
+                        if (input.readOnly) {
+                            contentString = contentString.replace(
+                                /(https?:\/\/[^\s]+)/g,
+                                '<a href="$1" target="_blank">$1</a>'
+                            );
+                            contentString = contentString.replace(
+                                /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
+                                '<a href="mailto:$1">$1</a>'
+                            );
+                        }
+
+                        if (this.editor.getData() !== contentString) {
+                            this.handleOnInputChange = true;
+                            if (input.externallyUpdated) {
+                                this.editor.setData(contentString);
+                            } else {
+                                const viewFragment = this.editor.data.processor.toView(contentString);
+                                const modelFragment = this.editor.data.toModel(viewFragment);
+                                this.editor.model.insertContent(modelFragment);
+                            }
+                            this.handleOnInputChange = false;
+                        }
+                        this.adjustEditorHeight();
+                    }
+
+                    if (typeof input.readOnly !== 'undefined' && input.readOnly !== null) {
+                        this.readOnly = input.readOnly;
+                        this.setReadOnlyMode();
+                    }
                 }
-            }
-        }, 50);
+                resolve();
+            }, 50);
+        });
     }
 
     private setReadOnlyMode(): void {
@@ -160,8 +172,10 @@ export class CKEditor5 {
                 }
             );
         }
-
-        this.editor = await ClassicEditor.create(document.querySelector(`#${this.elementId}`), editorConfig);
+        const editorElement = document.querySelector(`#${this.elementId}`);
+        if (editorElement) {
+            this.editor = await ClassicEditor.create(editorElement, editorConfig);
+        }
 
         const success = await this.waitForEditor();
 
@@ -176,8 +190,12 @@ export class CKEditor5 {
                 this.editor.model.document.on('change:data', changeListener);
                 this.editor.ui.focusTracker.on('change:isFocused', (evt, name, isFocused) => {
                     if (!isFocused) {
-                        const value = this.editor.getData();
-                        this.focusListener.forEach((fl) => fl(value));
+                        setTimeout(() => {
+                            const value = this.editor.getData();
+                            this.focusListener.forEach((fl) => fl(value));
+                        }, 500);
+                    } else {
+                        CKEditorService.getInstance().setActiveEditor(this);
                     }
                 });
             }
@@ -207,7 +225,8 @@ export class CKEditor5 {
     }
 
     public destroy(): void {
-        return;
+        this.changeListener = [];
+        this.focusListener = [];
     }
 
     private async addPlugins(editorConfig: CKEditor5Configuration): Promise<void> {
@@ -224,6 +243,17 @@ export class CKEditor5 {
             ckEditorClass = (window as any)?.KIX_CKEDITOR_CLASSES[className];
         }
         return ckEditorClass;
+    }
+
+    public disableFocusListener(disableTimeout: number = 1000): void {
+        this.focusListenerEnabled = false;
+        setTimeout(() => {
+            this.focusListenerEnabled = true;
+        }, disableTimeout);
+    }
+
+    public isFocusListenerEnabled(): boolean {
+        return this.focusListenerEnabled;
     }
 
 }

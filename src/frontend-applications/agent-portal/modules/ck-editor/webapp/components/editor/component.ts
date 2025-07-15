@@ -11,6 +11,7 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { CKEditor5 } from '../../core/CKEditor5';
+import { CKEditorService } from '../../core/CKEditorService';
 import { ComponentState } from './ComponentState';
 
 class EditorComponent {
@@ -29,11 +30,11 @@ class EditorComponent {
     public onInput(input: any): void {
         this.input = input;
         if (this.editor) {
-            this.editor.update(input);
-
-            if (this.input.style) {
-                BrowserUtil.applyStyle(this.state.id, this.input.style);
-            }
+            this.editor.update(input).then(() => {
+                if (this.input.style) {
+                    BrowserUtil.applyStyle(this.state.id, this.input.style);
+                }
+            });
         }
     }
 
@@ -46,21 +47,30 @@ class EditorComponent {
                 EventService.getInstance().publish(FormEvent.BLOCK, true);
             }
             this.changeTimeout = setTimeout(() => {
-                const value = this.editor.getValue();
-                (this as any).emit('valueChanged', value);
-                EventService.getInstance().publish(FormEvent.BLOCK, false);
+                if (!(this as any).isDestroyed()) {
+                    const value = this.editor.getValue();
+                    (this as any).emit('valueChanged', value);
+                    EventService.getInstance().publish(FormEvent.BLOCK, false);
+                }
                 this.changeTimeout = null;
             }, CKEditor5.editorTimeout);
             return null;
         });
-        this.editor.addFocusListener((value) => (this as any).emit('focusLost', value));
+        this.editor.addFocusListener(this.focusLostFallback.bind(this));
         await this.editor.create();
         if (this.input) {
-            this.editor.update(this.input);
+            await this.editor.update(this.input);
         }
 
         if (this.input.style) {
             BrowserUtil.applyStyle(this.state.id, this.input.style);
+        }
+    }
+
+    private focusLostFallback(): any {
+        if (!(this as any).isDestroyed() && this.editor?.isFocusListenerEnabled()) {
+            const editorValue = this.editor.getValue();
+            (this as any).emit('focusLost', editorValue);
         }
     }
 
