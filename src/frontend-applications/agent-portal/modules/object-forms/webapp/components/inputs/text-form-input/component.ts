@@ -7,7 +7,9 @@
  * --
  */
 
+import { FormFieldOptions } from '../../../../../../model/configuration/FormFieldOptions';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { InputFieldTypes } from '../../../../../base-components/webapp/core/InputFieldTypes';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 import { ComponentState } from './ComponentState';
@@ -26,6 +28,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;
+            this.state.isPassword = this.formValue.formField?.options.some(
+                (option) => option.option === FormFieldOptions.INPUT_FIELD_TYPE &&
+                    option.value === InputFieldTypes.PASSWORD
+            );
             this.update();
         }
     }
@@ -73,12 +79,22 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.changeTimeout) {
             window.clearTimeout(this.changeTimeout);
         }
-
+        this.state.value = event.target.value;
         this.changeTimeout = setTimeout(async () => {
-            this.state.value = event.target.value;
             await this.formValue.setFormValue(this.state.value);
             this.formValue.dirty = false;
         }, 500);
+    }
+
+    public togglePasswordVisible(): void {
+        if (this.state.isPassword) {
+            this.state.isPasswordVisible = !this.state.isPasswordVisible;
+        }
+    }
+
+    public getInputType(isPasswordVisible: boolean): string {
+        if (isPasswordVisible) return InputFieldTypes.TEXT;
+        return this.state.inputType;
     }
 
 }
