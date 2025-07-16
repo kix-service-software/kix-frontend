@@ -103,7 +103,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private updateValue(): void {
         if (this.value) {
-            if (this.value.startsWith('<') && this.value.endsWith('>')) {
+            if (typeof this.value === 'string' && this.value.startsWith('<') && this.value.endsWith('>')) {
                 this.state.usePlaceholderDateValue = true;
             } else {
                 this.state.usePlaceholderDateValue = false;
