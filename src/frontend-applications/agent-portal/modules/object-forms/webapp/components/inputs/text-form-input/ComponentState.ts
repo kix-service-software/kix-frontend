@@ -15,7 +15,9 @@ export class ComponentState extends AbstractComponentState {
         public value: any = null,
         public readonly: boolean = false,
         public inputType: string = 'text',
-        public autocompleteProperty: string = 'off'
+        public autocompleteProperty: string = 'off',
+        public isPassword: boolean = false,
+        public isPasswordVisible: boolean = false
     ) {
         super();
     }

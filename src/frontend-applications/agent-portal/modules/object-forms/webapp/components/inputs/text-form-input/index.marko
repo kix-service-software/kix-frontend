@@ -6,13 +6,25 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<input
-   type=state.inputType
-   value=state.value
-   disabled=state.readonly
-   on-keydown("keyDown")
-   on-change("valueChanged")
-   class="form-control"
-   autocomplete=state.autocompleteProperty
->
+<div class="d-flex align-items-center">
+   <input
+      type=component.getInputType(state.isPasswordVisible)
+      value=state.value
+      disabled=state.readonly
+      on-keydown("keyDown")
+      on-change("valueChanged")
+      class="form-control"
+      autocomplete=state.autocompleteProperty
+   >
+   <if(state.isPassword)>
+      <div role="button" on-click("togglePasswordVisible") class="p-2">
+         <i class=[
+            "far",
+            {
+               "fa-eye": state.isPasswordVisible,
+               "fa-eye-slash": !state.isPasswordVisible,
+            },
+         ]/>
+      </div>
+   </if>
+</div>
