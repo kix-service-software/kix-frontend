@@ -1860,7 +1860,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.185
+├─ electron-to-chromium@1.5.186
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -2711,7 +2711,7 @@
 │  ├─ repository: https://github.com/Leaflet/Leaflet
 │  ├─ path: node_modules/leaflet
 │  └─ licenseFile: node_modules/leaflet/LICENSE
-├─ less@4.3.0
+├─ less@4.4.0
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/less/less.js
 │  ├─ publisher: Alexis Sellier
