@@ -26,6 +26,7 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { DefaultSelectInputFormOption } from '../../model/configuration/DefaultSelectInputFormOption';
 import { TreeNode } from '../base-components/webapp/core/tree';
+import { NumberInputOptions } from '../base-components/webapp/core/NumberInputOptions';
 
 class Extension extends KIXExtension implements IPersonalSettingsExtension {
 
@@ -77,6 +78,19 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                 'Translatable#Language',
                 'Translatable#Helptext_PersonalSettings_UserLanguage_Hint',
                 'language-input', true
+            ),
+            new PersonalSetting(
+                'Translatable#Favorites',
+                PersonalSettingsProperty.AGENT_PORTAL_DASHBOARD_REFRESH_INTERVAL,
+                'Translatable#Dashboard Refresh Interval (Minutes)',
+                'Translatable#Helptext_PersonalSettings_DashboardRefreshInterval_Hint',
+                'number-input', null, null,
+                [
+                    new FormFieldOption(NumberInputOptions.MIN, 0),
+                    new FormFieldOption(NumberInputOptions.UNIT_STRING, 'Translatable#Minutes'),
+                    new FormFieldOption(NumberInputOptions.STEP, 1),
+                    new FormFieldOption(NumberInputOptions.EXCEPTS_EMPTY, true)
+                ]
             ),
             new PersonalSetting(
                 'Translatable#Favorites',

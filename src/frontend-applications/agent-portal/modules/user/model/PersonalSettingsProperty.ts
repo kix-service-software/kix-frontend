@@ -37,6 +37,8 @@ export enum PersonalSettingsProperty {
 
     ARTICLE_FROM_FORMAT = 'ArticleFromFormat',
 
-    INITIAL_SITE_URL = 'AgentPortalInitialContextURL'
+    INITIAL_SITE_URL = 'AgentPortalInitialContextURL',
+
+    AGENT_PORTAL_DASHBOARD_REFRESH_INTERVAL = 'AgentPortalDashboardRefreshInterval'
 
 }

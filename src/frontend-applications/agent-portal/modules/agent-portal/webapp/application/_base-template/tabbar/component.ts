@@ -73,6 +73,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     const context = ContextService.getInstance().getContext(data.instanceId);
                     tab.displayText = await context.getDisplayText();
                     (this as any).setStateDirty('contextTabs');
+                } else if (eventId === ApplicationEvent.REFRESH_CONTENT) {
+                    const tab = this.state.contextTabs?.find((t) => t.contextInstanceId === data?.instanceId);
+                    if (tab) {
+                        tab.refresh = false;
+                        (this as any).setStateDirty('contextTabs');
+                    }
                 }
 
             }
@@ -81,12 +87,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_ICON_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_REORDERED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvent.DISPLAY_VALUE_UPDATED, this.subscriber);
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, this.subscriber);
 
     }
 
@@ -95,12 +101,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_ICON_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REORDERED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvent.DISPLAY_VALUE_UPDATED, this.subscriber);
+        EventService.getInstance().unsubscribe(ApplicationEvent.REFRESH_CONTENT, this.subscriber);
     }
 
     private toggleActiveEntry(): void {
@@ -232,9 +238,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public refreshTab(tab: ContextTab): void {
-        tab.refresh = false;
-        EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT);
-        (this as any).setStateDirty('contextTabs');
+        EventService.getInstance().publish(
+            ApplicationEvent.REFRESH_CONTENT, ContextService.getInstance().getContext(tab.contextInstanceId)
+        );
     }
 
     public async tabDblClicked(tab: ContextTab): Promise<void> {

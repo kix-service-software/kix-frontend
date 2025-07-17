@@ -56,6 +56,7 @@ class Component {
 
         await this.checkAuthentication();
 
+        await ContextService.getInstance().initialize();
         ClientNotificationSocketClient.getInstance();
         PortalNotificationService.getInstance();
         ContextHistory.getInstance();
