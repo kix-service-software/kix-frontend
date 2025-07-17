@@ -34,6 +34,7 @@ import { KIXModulesService } from './KIXModulesService';
 import { ToolbarAction } from '../../../agent-portal/webapp/application/_base-template/personal-toolbar/ToolbarAction';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { ClientStorageService } from './ClientStorageService';
+import { ContextRefreshInterval } from './ContextRefreshInterval';
 
 export class ContextService {
 
@@ -66,6 +67,13 @@ export class ContextService {
     private toolbarActions: Map<string, ToolbarAction> = new Map();
 
     public supportContextStorage: boolean = true;
+
+    public contextRefreshInterval: ContextRefreshInterval;
+
+    public async initialize(): Promise<void> {
+        this.contextRefreshInterval = new ContextRefreshInterval();
+        await this.contextRefreshInterval.initialize();
+    }
 
     public registerContext(contextDescriptor: ContextDescriptor): void {
         if (!this.contextDescriptorList.some((d) => d.contextId === contextDescriptor.contextId)) {
@@ -396,7 +404,6 @@ export class ContextService {
             await this.setContextByInstanceId(context.instanceId, objectId, history);
         }
 
-
         return context;
     }
 
@@ -580,10 +587,7 @@ export class ContextService {
             }
 
             if (publishEvent) {
-                EventService.getInstance().publish(
-                    ContextEvents.CONTEXT_UPDATE_REQUIRED,
-                    context
-                );
+                EventService.getInstance().publish(ContextEvents.CONTEXT_UPDATE_REQUIRED, context);
             }
         }
     }
