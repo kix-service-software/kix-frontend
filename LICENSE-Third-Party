@@ -1280,7 +1280,7 @@
 │  ├─ repository: https://github.com/jshttp/compressible
 │  ├─ path: node_modules/compressible
 │  └─ licenseFile: node_modules/compressible/LICENSE
-├─ compression@1.8.0
+├─ compression@1.8.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/expressjs/compression
 │  ├─ path: node_modules/compression
@@ -1860,7 +1860,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.186
+├─ electron-to-chromium@1.5.187
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -3103,7 +3103,7 @@
 │  ├─ repository: https://github.com/jshttp/on-finished
 │  ├─ path: node_modules/on-finished
 │  └─ licenseFile: node_modules/on-finished/LICENSE
-├─ on-headers@1.0.2
+├─ on-headers@1.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jshttp/on-headers
 │  ├─ publisher: Douglas Christopher Wilson
