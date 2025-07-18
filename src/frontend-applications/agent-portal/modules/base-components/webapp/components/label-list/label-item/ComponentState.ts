@@ -15,7 +15,8 @@ export class ComponentState {
         public toggled: boolean = false,
         public showToggle: boolean = true,
         public label: Label = null,
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public labelId: string = ''
     ) { }
 
 }
