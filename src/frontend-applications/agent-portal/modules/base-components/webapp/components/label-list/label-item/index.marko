@@ -39,9 +39,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </if>
                 </if>
                 <else>
-                    <span id=(state.label.id) class="label-text">
-                        ${component.getLabelValue()}
-                    </span>
+                    <span id=state.labelId class="label-text"/>
                     <if(state.label.additionalText)>
                         <span>${state.label.additionalText}</span>
                     </if>

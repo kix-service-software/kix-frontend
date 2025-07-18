@@ -11,6 +11,7 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { BrowserUtil } from '../../../core/BrowserUtil';
+import { IdService } from '../../../../../../model/IdService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -26,11 +27,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.toggled = false;
         }
         this.state.label = input.label;
+        this.state.labelId = IdService.generateDateBasedId(this.state.label.id.toString());
     }
 
     public async onMount(): Promise<void> {
         await this.state.label.init();
         this.state.prepared = true;
+        setTimeout(() => {
+            this.getLabelValue();
+        }, 50);
     }
 
     public labelClicked(event: any): void {
@@ -50,9 +55,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         (this as any).emit('removeLabel', this.state.label, event);
     }
 
-    public async getLabelValue(): Promise<void> {
-        const translatedText = await TranslationService.translate(this.state.label.text);
-        BrowserUtil.wrapLinksAndEmailsAndAppendToElement(this.state.label.id.toString(), translatedText);
+    public getLabelValue(): void {
+        BrowserUtil.wrapLinksAndEmailsAndAppendToElement(this.state.labelId, this.state.label.text);
     }
 }
 
