@@ -123,7 +123,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'oauth2-profile-edit-form-field-pkce',
-                'Translatable#PKCE', OAuth2ProfileProperty.PKCE, 'checkbox-input', true,
+                'Translatable#PKCE', OAuth2ProfileProperty.PKCE, 'checkbox-input', false,
                 'Translatable#Helptext_Admin_OAuth2ProfileCreate_PKCE'
             )
         );
