@@ -318,7 +318,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.29
+├─ @marko/compiler@5.39.30
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -518,7 +518,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.16.4
+├─ @types/node@22.16.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1175,7 +1175,7 @@
 │  ├─ email: me@feedic.com
 │  ├─ path: node_modules/cheerio-select
 │  └─ licenseFile: node_modules/cheerio-select/LICENSE
-├─ cheerio@1.1.0
+├─ cheerio@1.1.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/cheeriojs/cheerio
 │  ├─ publisher: Matt Mueller
@@ -3998,7 +3998,7 @@
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici-types
 │  └─ licenseFile: node_modules/undici-types/LICENSE
-├─ undici@7.11.0
+├─ undici@7.12.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici
