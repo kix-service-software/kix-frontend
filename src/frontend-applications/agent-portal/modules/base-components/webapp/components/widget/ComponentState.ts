@@ -9,12 +9,14 @@
 
 import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
+import { IAction } from '../../core/IAction';
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public widgetType: WidgetType = null,
-        public title: string = null
+        public title: string = null,
+        public actions: IAction[] = []
     ) {
         super();
     }

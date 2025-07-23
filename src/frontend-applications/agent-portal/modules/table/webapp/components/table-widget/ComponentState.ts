@@ -13,7 +13,7 @@ import { IAction } from '../../../../../modules/base-components/webapp/core/IAct
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { Table } from '../../../model/Table';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { ObjectView } from '../../../../../model/ObjectView';
+import { DataView } from '../../../model/DataView';
 
 export class ComponentState extends WidgetComponentState {
 
@@ -34,7 +34,7 @@ export class ComponentState extends WidgetComponentState {
         public showFilterReset: boolean = false,
         public showFilterInBody: boolean = false,
         public hasViews: boolean = false,
-        public views: ObjectView[] = [],
+        public dataViews: DataView[] = [],
         public activeViewId: string = 'table',
         public objects: KIXObject[] = []
     ) {

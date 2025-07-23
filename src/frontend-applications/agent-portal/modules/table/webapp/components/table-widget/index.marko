@@ -9,18 +9,32 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <macro name="widget-viewbar">
     <if(state.hasViews)>
-        <div class="d-flex justify-content-start" role="group">
-            <for|view| of=state.views>
+        <div class="d-flex justify-content-start gap-1" role="group">
+            <button
+                type="button"
+                class=[
+                    "btn btn-sm fs-4 p-0 px-1",
+                    {
+                        "border-0 bg-light text-secondary":
+                            state.activeViewId === "table",
+                    },
+                ]
+                on-click("toggleView", "table")
+                title="Table"
+            >
+                <icon icon="kix-icon-legend"/>
+            </button>
+            <for|view| of=state.dataViews>
                 <button
                     type="button"
                     class=[
-                        "btn fs-4 px-2",
+                        "btn btn-sm fs-4 p-0 px-1",
                         {
-                            "border-0 bg-secondary text-white":
+                            "border-0 bg-light text-secondary":
                                 state.activeViewId === view.id,
                         },
                     ]
-                    on-click("toggleView", view)
+                    on-click("toggleView", view.id)
                     title=view.name
                 >
                     <icon icon=view.icon/>
@@ -113,15 +127,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </if>
                 </div>
             </if>
-            <for|view| of=state.views>
+            <for|view| of=state.dataViews>
                 <div class=[
                     {
                         "d-none": state.activeViewId !== view.id,
                     },
                 ]>
-                    <${component.getTemplate(view.template)}
-                        tickets=state.objects
+                    <${component.getTemplate(view.componentId)}
+                        objects=state.objects
                         active=state.activeViewId === view.id
+                        widgetConfiguration=state.widgetConfiguration
                     />
                 </div>
             </for>

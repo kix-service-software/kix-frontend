@@ -23,7 +23,8 @@ export class ActionFactory<T extends AbstractAction> {
     private actions: Map<string, new () => T> = new Map();
     private actionInstances: Map<string, T> = new Map();
     private blacklist: string[] = [];
-    private widgetActions: Map<ConfigurationType | string, string[]> = new Map();
+    private widgetConfigurationActions: Map<ConfigurationType | string, string[]> = new Map();
+    private widgetActions: Map<string, Array<new () => T>> = new Map();
 
     private static INSTANCE: ActionFactory<AbstractAction> = null;
 
@@ -45,13 +46,35 @@ export class ActionFactory<T extends AbstractAction> {
 
         if (Array.isArray(configurationTypes) && configurationTypes.length) {
             configurationTypes.forEach((t) => {
-                if (!this.widgetActions.has(t)) {
-                    this.widgetActions.set(t, []);
+                if (!this.widgetConfigurationActions.has(t)) {
+                    this.widgetConfigurationActions.set(t, []);
                 }
 
-                this.widgetActions.get(t).push(actionId);
+                this.widgetConfigurationActions.get(t).push(actionId);
             });
         }
+    }
+
+    public registerActionForWidget(widgetId: string, action: new () => T): void {
+        if (!this.widgetActions.has(widgetId)) {
+            this.widgetActions.set(widgetId, []);
+        }
+
+        this.widgetActions.get(widgetId).push(action);
+    }
+
+    public async getActionsForWidget(widgetId: string): Promise<IAction[]> {
+        const actions: IAction[] = [];
+        const actionConstructors = this.widgetActions.get(widgetId);
+        if (actionConstructors?.length) {
+            for (const ac of actionConstructors) {
+                const action = await this.createActionInstance(ac);
+                if (action) {
+                    actions.push(action);
+                }
+            }
+        }
+        return actions;
     }
 
     public blacklistActions(actionsIds: string[]): void {
@@ -73,26 +96,34 @@ export class ActionFactory<T extends AbstractAction> {
                 actions.push(this.actionInstances.get(actionId));
             } else if (this.actions.has(actionId) && !this.blacklist.some((a) => a === actionId)) {
                 const actionPrototype = this.actions.get(actionId);
-                let action: IAction = new actionPrototype();
-                action.id = actionId;
+                const action = await this.createActionInstance(actionPrototype, actionId, data);
 
-                let allowed = true;
-                if (action.permissions && action.permissions.length) {
-                    allowed = await AuthenticationSocketClient.getInstance().checkPermissions(action.permissions);
-                }
-
-                if (allowed) {
-                    await action.initAction();
-                    await action.setData(data);
+                if (action) {
                     actions.push(action);
-                } else {
-                    action = undefined;
                 }
-
             }
         }
 
         return actions;
+    }
+
+    public async createActionInstance(actionPrototype: new () => T, actionId?: string, data?: any): Promise<IAction> {
+        let action: IAction = new actionPrototype();
+        action.id = actionId || IdService.generateDateBasedId();
+
+        let allowed = true;
+        if (action.permissions && action.permissions.length) {
+            allowed = await AuthenticationSocketClient.getInstance().checkPermissions(action.permissions);
+        }
+
+        if (allowed) {
+            await action.initAction();
+            await action.setData(data);
+        } else {
+            action = undefined;
+        }
+
+        return action;
     }
 
     public registerActionInstance(actionId: string, action: T): void {
@@ -100,8 +131,8 @@ export class ActionFactory<T extends AbstractAction> {
     }
 
     public async getActionsForType(type: ConfigurationType | string): Promise<AbstractAction[]> {
-        const actionIds = this.widgetActions.has(type)
-            ? this.widgetActions.get(type)
+        const actionIds = this.widgetConfigurationActions.has(type)
+            ? this.widgetConfigurationActions.get(type)
             : [];
         return this.generateActions(actionIds);
     }

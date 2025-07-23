@@ -1,3 +1,4 @@
+
 /**
  * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
