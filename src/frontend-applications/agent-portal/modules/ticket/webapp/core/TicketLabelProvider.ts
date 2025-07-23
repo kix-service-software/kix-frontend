@@ -587,7 +587,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     ).catch((error) => [] as User[]);
                     if (Array.isArray(users) && users.length) {
                         icons.push(new ObjectIcon(
-                            null, KIXObjectType.CONTACT, users[0].Contact.ID, null, null,
+                            null, KIXObjectType.CONTACT, users[0]?.Contact?.ID, null, null,
                             LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER))
                         );
                     }
@@ -603,7 +603,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     ).catch((error) => [] as User[]);
                     if (Array.isArray(users) && users.length) {
                         icons.push(new ObjectIcon(
-                            null, KIXObjectType.CONTACT, users[0].Contact.ID, null, null,
+                            null, KIXObjectType.CONTACT, users[0]?.Contact?.ID, null, null,
                             LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER))
                         );
                     }
@@ -619,7 +619,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     ).catch((error) => [] as User[]);
                     if (Array.isArray(users) && users.length) {
                         icons.push(new ObjectIcon(
-                            null, KIXObjectType.CONTACT, users[0].Contact.ID, null, null,
+                            null, KIXObjectType.CONTACT, users[0]?.Contact?.ID, null, null,
                             LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER))
                         );
                     }

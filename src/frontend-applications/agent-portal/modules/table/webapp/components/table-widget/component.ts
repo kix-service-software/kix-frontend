@@ -36,10 +36,10 @@ import { ObjectFormValue } from '../../../../object-forms/model/FormValues/Objec
 import { ObjectFormEvent } from '../../../../object-forms/model/ObjectFormEvent';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
-import { WidgetSize } from '../../../../../model/configuration/WidgetSize';
-import { ObjectView } from '../../../../../model/ObjectView';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
-import { WidgetType } from '../../../../../model/configuration/WidgetType';
+import { DataViewService } from '../../core/DataViewService';
+import { DataView } from '../../../model/DataView';
+import { WidgetSize } from '../../../../../model/configuration/WidgetSize';
 
 class Component {
 
@@ -105,32 +105,27 @@ class Component {
 
     private async initViews(objectType: KIXObjectType | string): Promise<void> {
         const configuredWidget = await this.context?.getConfiguredWidget(this.state.instanceId);
-
-        const views = [
-            new ObjectView('table', 'Table', 'kix-icon-legend', null)
-        ];
-
-        const widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
-        const isAllowed = widgetType === WidgetType.SIDEBAR || widgetType === WidgetType.LANE;
-        if (!isAllowed && configuredWidget?.size === WidgetSize.LARGE && objectType === KIXObjectType.TICKET) {
-            const calendarView = new ObjectView('calendar', 'Calendar', 'kix-icon-calendar', 'calendar');
-            views.push(calendarView);
+        if (configuredWidget?.size === WidgetSize.SMALL) {
+            return;
         }
 
-        this.state.views = views;
-        this.state.hasViews = views.length > 1;
+        const widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
+        const views = DataViewService.getInstance().getDataViews(objectType, widgetType);
+
+        this.state.dataViews = views;
+        this.state.hasViews = views.length > 0;
 
         const prefId = `table-widget-view-${this.state.instanceId}`;
         const viewPref = await AgentService.getInstance().getUserPreference(prefId);
-        if (this.state.views.some((v) => v.id === viewPref?.Value)) {
+        if (this.state.dataViews.some((v) => v.id === viewPref?.Value)) {
             this.state.activeViewId = viewPref.Value;
         }
     }
 
-    public toggleView(view: ObjectView): void {
-        this.state.activeViewId = view?.id;
+    public toggleView(viewId: string): void {
+        this.state.activeViewId = viewId;
         const prefId = `table-widget-view-${this.state.instanceId}`;
-        AgentService.getInstance().setPreferences([[prefId, view?.id]]);
+        AgentService.getInstance().setPreferences([[prefId, viewId]]);
     }
 
     private initEventSubscriber(): void {

@@ -9,7 +9,6 @@
 
 import { OverlayService } from './OverlayService';
 import { OverlayType } from './OverlayType';
-import { StringContent } from './StringContent';
 import { ComponentContent } from './ComponentContent';
 import { ToastContent } from './ToastContent';
 import { ConfirmOverlayContent } from './ConfirmOverlayContent';
