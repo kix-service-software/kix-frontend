@@ -21,22 +21,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             },
         ]
         role="group"
-        style=style
-    >
+        style=style>
         <button
             type="button"
             class="btn d-flex align-items-center dropdown-toggle"
             data-bs-toggle="dropdown"
             data-bs-auto-close="outside"
             aria-expanded="false"
-        >
+            on-click("preventDefault")>
             <div class="action d-flex overflow-hidden">
                 <icon
                     icon=icon
                     class={
                         "me-2": !isExpansion,
-                    }
-                />
+                    }/>
                 <if(text)>
                     <span class="text me-2 text-nowrap text-truncate">
                         ${text}
@@ -57,8 +55,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     style=(
                         !action.actions && !action.canRun() ? "cursor:auto" : ""
                     )
-                    key=action.key + "-list-element"
-                >
+                    key=action.key + "-list-element">
                     <if(action.actions)>
                         <action-list-dropdown
                             actions=action.actions
@@ -66,8 +63,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             text=action.text
                             groupKey=action.key
                             dropstart
-                            key=action.key + "-macro"
-                        />
+                            key=action.key + "-macro"/>
                     </if>
                     <else>
                         <action action=action displayText/>
@@ -87,8 +83,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 icon=element.icon
                 text=(state.displayText ? element.text : undefined)
                 groupKey=element.key
-                key=element.key + "-macro"
-            />
+                key=element.key + "-macro"/>
         </if>
         <!-- create a single action -->
         <else>
@@ -97,7 +92,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 type="button"
                 class="btn"
                 style=(!element.canRun() ? "cursor:auto" : "")
-            >
+                on-click("preventDefault")>
                 <action action=element displayText=state.displayText/>
             </button>
         </else>
@@ -108,8 +103,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <div
         key="action-list"
         class="d-flex justify-content-end action-list opacity-0"
-        on-click("actionListClicked")
-    >
+        on-click("actionListClicked")>
         <div class="btn-group" role="group">
             <action-list actionList=state.listDefault/>
             <if(state.listExpansion && state.listExpansion.length > 0)>
@@ -118,8 +112,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     icon="kix-icon-dots"
                     isExpansion
                     groupKey="action-list-expansion"
-                    key="action-list-expansion-macro"
-                />
+                    key="action-list-expansion-macro"/>
             </if>
         </div>
     </div>
