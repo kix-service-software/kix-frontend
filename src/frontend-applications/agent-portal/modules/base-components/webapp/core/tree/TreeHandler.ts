@@ -220,7 +220,7 @@ export class TreeHandler {
                 }
 
                 if (selectionChanged) {
-                    this.tidyUpSelectedNodes(this.selectedNodes, selected);
+                    this.tidyUpSelectedNodes(nodes, selected);
                 }
             } else if (selected && filterSelection) {
                 this.selectedNodes = [];
