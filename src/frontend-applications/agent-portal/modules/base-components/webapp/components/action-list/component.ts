@@ -178,6 +178,13 @@ export class Component {
         (this as any).emit('actionListClicked');
     }
 
+    public preventDefault(event: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    }
+
 }
 
 module.exports = Component;
