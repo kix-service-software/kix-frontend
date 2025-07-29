@@ -339,60 +339,12 @@ export class ContactAPIService extends KIXObjectAPIService {
             delete contact.DynamicFields;
         }
 
-        const user = contact.User;
-        delete contact.User;
-
         const response = await this.sendRequest(
             token, clientRequestId, uri, content, KIXObjectType.CONTACT, create, relevantOrganisationId
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
-
-        if (user) {
-            const assignedUserId = contact.AssignedUserID;
-            let allowed;
-            if (assignedUserId) {
-                allowed = await PermissionService.getInstance().checkPermissions(
-                    token, [new UIComponentPermission(`system/users/${assignedUserId}`, [CRUD.UPDATE])], clientRequestId
-                );
-            } else {
-                allowed = await PermissionService.getInstance().checkPermissions(
-                    token, [new UIComponentPermission('system/users', [CRUD.CREATE])], clientRequestId
-                );
-                // remove token preference on add (it is set in UserCreate in BE)
-                const tokenIndex = user.Preferences?.length ?
-                    user.Preferences.findIndex((p) => p.ID === PersonalSettingsProperty.USER_TOKEN) : -1;
-                if (tokenIndex !== -1) {
-                    user.Preferences.splice(tokenIndex, 1);
-                }
-            }
-
-            if (allowed) {
-                user.ValidID = contact.ValidID;
-
-                const result = await UserService.getInstance().commitObject(
-                    token, clientRequestId, user, relevantOrganisationId
-                ).catch((error: Error) => {
-                    LoggingService.getInstance().error(
-                        `${error.Code}: Could not create or update user for contact ${error.Message}`, error
-                    );
-                    // delete new contact if user could not be created, too
-                    if (create) {
-                        this.deleteObject(token, clientRequestId, this.objectType, response.ContactID);
-                    }
-                    throw new Error(error.Code, error.Message);
-                });
-
-                // update contact => assign user
-                if (!assignedUserId && result) {
-                    await this.updateObject(
-                        token, clientRequestId, KIXObjectType.CONTACT,
-                        [[ContactProperty.ASSIGNED_USER_ID, Number(result)]], response.ContactID
-                    );
-                }
-            }
-        }
 
         if (icon?.Content) {
             icon.Object = KIXObjectType.CONTACT;
