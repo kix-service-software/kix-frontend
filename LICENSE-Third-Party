@@ -518,7 +518,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.16.5
+├─ @types/node@22.17.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1140,7 +1140,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001727
+├─ caniuse-lite@1.0.30001731
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1860,7 +1860,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.190
+├─ electron-to-chromium@1.5.192
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -3047,7 +3047,7 @@
 │  ├─ email: me@feedic.com
 │  ├─ path: node_modules/nth-check
 │  └─ licenseFile: node_modules/nth-check/LICENSE
-├─ nwsapi@2.2.20
+├─ nwsapi@2.2.21
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/dperini/nwsapi
 │  ├─ publisher: Diego Perini
