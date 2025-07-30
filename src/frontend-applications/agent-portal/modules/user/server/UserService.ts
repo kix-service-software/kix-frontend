@@ -195,6 +195,41 @@ export class UserService extends KIXObjectAPIService {
 
             const userId = Number(objectId);
 
+            const preferences = this.getParameterValue(parameter, UserProperty.PREFERENCES) || [];
+
+            const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
+            if (userLanguage) {
+                preferences.push({ ID: PersonalSettingsProperty.USER_LANGUAGE, Value: userLanguage[1] });
+            }
+
+            const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
+            if (myQueues) {
+                myQueues[1] = myQueues[1] === null ? '' : myQueues[1];
+                preferences.push({ ID: PersonalSettingsProperty.MY_QUEUES, Value: myQueues[1] });
+            }
+
+            const notifications = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
+            if (notifications) {
+                preferences.push({ ID: PersonalSettingsProperty.NOTIFICATIONS, Value: notifications[1] });
+            }
+
+            const outOfOfficeStart = parameter.find((p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_START);
+            if (outOfOfficeStart) {
+                preferences.push({ ID: PersonalSettingsProperty.OUT_OF_OFFICE_START, Value: outOfOfficeStart[1] });
+            }
+
+            const outOfOfficeEnd = parameter.find((p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_END);
+            if (outOfOfficeEnd) {
+                preferences.push({ ID: PersonalSettingsProperty.OUT_OF_OFFICE_END, Value: outOfOfficeEnd[1] });
+            }
+
+            updateParameter.push([UserProperty.PREFERENCES, preferences]);
+
+            const roleIds = this.getParameterValue(parameter, UserProperty.ROLE_IDS);
+            if (roleIds) {
+                updateParameter.push([UserProperty.ROLE_IDS, Array.isArray(roleIds) ? roleIds : [roleIds]]);
+            }
+
             const uri = this.buildUri(this.RESOURCE_URI, userId);
             const id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, updateParameter, uri, this.objectType, 'UserID'
@@ -202,49 +237,6 @@ export class UserService extends KIXObjectAPIService {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
             });
-
-            const roleIds = this.getParameterValue(parameter, UserProperty.ROLE_IDS);
-            if (roleIds) {
-                await this.updateUserRoles(
-                    token, clientRequestId, Array.isArray(roleIds) ? roleIds : [roleIds], userId
-                );
-            }
-
-            const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
-            if (userLanguage) {
-                await this.setPreferences(token, clientRequestId, [userLanguage], userId);
-            }
-
-            const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
-            if (myQueues) {
-                await this.setPreferences(token, clientRequestId, [myQueues], userId);
-            }
-
-            const notifications = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
-            if (notifications) {
-                await this.setPreferences(token, clientRequestId, [notifications], userId);
-            }
-
-            const outOfOfficeStart = parameter.find((p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_START);
-            if (outOfOfficeStart) {
-                await this.setPreferences(token, clientRequestId, [outOfOfficeStart], userId);
-            }
-
-            const outOfOfficeEnd = parameter.find((p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_END);
-            if (outOfOfficeEnd) {
-                await this.setPreferences(token, clientRequestId, [outOfOfficeEnd], userId);
-            }
-
-            const contextWIdgetLists = parameter.find((p) => p[0] === PersonalSettingsProperty.CONTEXT_WIDGET_LISTS);
-            if (contextWIdgetLists) {
-                await this.setPreferences(token, clientRequestId, [contextWIdgetLists], userId);
-            }
-
-            const preferences = this.getParameterValue(parameter, UserProperty.PREFERENCES);
-            if (preferences?.length) {
-                const preferenceValue = preferences.map((p): [string, any] => [p.ID, p.Value]);
-                await this.setPreferences(token, clientRequestId, preferenceValue, userId);
-            }
 
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
@@ -447,20 +439,7 @@ export class UserService extends KIXObjectAPIService {
             throw new Error(error.Code, error.Message);
         });
 
-        const userId = response.UserID;
-
-        if (Array.isArray(user?.RoleIDs)) {
-            await this.updateUserRoles(token, clientRequestId, user.RoleIDs, userId);
-        }
-
-        if (!create && user?.Preferences?.length) {
-            const preferences: Array<[string, any]> = user.Preferences.map((p) => {
-                return [p.ID, p.Value];
-            });
-            await this.setPreferences(token, clientRequestId, preferences, userId);
-        }
-
-        return userId;
+        return response.UserID;
     }
 
 }
