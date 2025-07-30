@@ -129,6 +129,22 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         this.sortArticleDFs(field);
     }
 
+    protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
+        const defaultValue = field.defaultValue?.value;
+        let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null && defaultValue !== '');
+        if (Array.isArray(defaultValue)) {
+            hasDefaultValue = defaultValue.length > 0;
+        }
+
+        if (field.empty) {
+            this.defaultValue = null;
+            this.empty = true;
+        } else if (hasDefaultValue) {
+            const value = await this.handlePlaceholders(field.defaultValue?.value);
+            this.defaultValue = value;
+        }
+    }
+
     protected sortArticleDFs(field: FormFieldConfiguration): void {
         const channelGroup = this.objectValueMapper.objectFormHandler.getGroupForField(field?.id);
         const dfValue = this.findFormValue(KIXObjectProperty.DYNAMIC_FIELDS);
