@@ -16,6 +16,7 @@ import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEv
 import { IdService } from '../../../../../../model/IdService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
+import { WindowListener } from '../../../../../base-components/webapp/core/WindowListener';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -76,6 +77,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         };
         EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+        WindowListener.getInstance().addUnloadTask(
+            `${this.formValue.instanceId}`, this.formValue.destroy.bind(this.formValue)
+        );
     }
 
     public async onDestroy(): Promise<void> {
@@ -84,6 +88,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+        WindowListener.getInstance().removeUnloadTask(`${this.formValue.instanceId}`);
     }
 
     public valueChanged(value: Array<Attachment | File>): void {

@@ -14,6 +14,8 @@ export class WindowListener {
     private static INSTANCE: WindowListener;
     private listenerAdded: boolean = false;
 
+    private unloadTasks: Map<string, () => any> = new Map();
+
     public static getInstance(): WindowListener {
         if (!WindowListener.INSTANCE) {
             WindowListener.INSTANCE = new WindowListener();
@@ -26,12 +28,14 @@ export class WindowListener {
             // WARNING: don't bind "this" on listener function because then it will not be same for remove
             // even if this bind is used for remove, too
             window.addEventListener('beforeunload', this.beforeunload, true);
+            window.addEventListener('unload', this.unload, true);
             this.listenerAdded = true;
         }
     }
 
     public removeBrowserListener(): void {
         window.removeEventListener('beforeunload', this.beforeunload, true);
+        window.removeEventListener('unload', this.unload, true);
         this.listenerAdded = false;
     }
 
@@ -40,9 +44,32 @@ export class WindowListener {
         event.returnValue = '';
     }
 
+    private unload(event: any): any {
+        const tasks = WindowListener.getInstance().getUnloadTasks();
+        if (tasks.size) {
+            tasks.forEach((task) => {
+                task();
+            });
+        }
+    }
+
     public logout(): void {
         const baseRoute = ClientStorageService.getBaseRoute();
         window.location.replace(`${baseRoute}/auth/logout`);
+    }
+
+    public addUnloadTask(taskName: string, task: () => any): void {
+        this.unloadTasks.set(taskName, task);
+    }
+
+    public removeUnloadTask(taskName: string): void {
+        if (this.unloadTasks.has(taskName)) {
+            this.unloadTasks.delete(taskName);
+        }
+    }
+
+    public getUnloadTasks(): Map<string, () => any> {
+        return this.unloadTasks;
     }
 
 }

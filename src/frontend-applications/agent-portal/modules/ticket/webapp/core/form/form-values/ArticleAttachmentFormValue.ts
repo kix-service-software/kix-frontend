@@ -77,7 +77,7 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
             }
         }
 
-        this.setFormValue(newValue, true);
+        await this.setFormValue(newValue, true);
     }
 
     private async getUpdateArticle(): Promise<Article> {
