@@ -317,6 +317,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                             );
                         }
                     }
+                    translatable = false;
                 } else {
                     displayValue = await super.getDisplayText(contact, property, defaultValue, translatable);
                 }
