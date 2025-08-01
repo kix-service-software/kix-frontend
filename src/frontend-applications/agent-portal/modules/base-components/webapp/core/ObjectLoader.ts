@@ -12,17 +12,6 @@ import { KIXObjectService } from './KIXObjectService';
 
 export class ObjectLoader {
 
-    private static INSTANCE: ObjectLoader;
-
-    public static getInstance(): ObjectLoader {
-        if (!ObjectLoader.INSTANCE) {
-            ObjectLoader.INSTANCE = new ObjectLoader();
-        }
-        return ObjectLoader.INSTANCE;
-    }
-
-    private constructor() { }
-
     private objectIdMap: Map<string, Map<string, Array<[(object: any) => void, (error: any) => void]>>> = new Map();
 
 

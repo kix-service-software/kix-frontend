@@ -208,7 +208,7 @@ export class SearchService {
                 loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
             }
         }
-        const includes = context.getAdditionalInformation('INCLUDES');
+        const includes = context?.getAdditionalInformation('INCLUDES');
         if (includes && includes.length > 0) {
             additionalIncludes.push(...includes);
         }
@@ -584,7 +584,7 @@ export class SearchService {
     }
 
     public async loadSearchCache(id: string): Promise<SearchCache> {
-        const search = await SearchSocketClient.getInstance().loadSearches();
+        const search = await SearchSocketClient.getInstance().loadAllSearches();
         let searchCache = search.find((s) => s.id === id);
         if (searchCache) {
             searchCache = SearchCache.create(searchCache);
