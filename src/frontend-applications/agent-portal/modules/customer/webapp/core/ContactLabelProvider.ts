@@ -40,6 +40,14 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONTACT;
 
+    public constructor() {
+        super();
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, [UserProperty.CONTACT, UserProperty.PREFERENCES]
+        );
+        ObjectLoader.getInstance().setLoadingoptions(KIXObjectType.USER, loadingOptions);
+    }
+
     public isLabelProviderFor(object: Contact | KIXObject): boolean {
         return object instanceof Contact || object?.KIXObjectType === this.kixObjectType;
     }
@@ -66,12 +74,14 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 break;
             case ContactProperty.ORGANISATION_IDS:
                 if (value && Array.isArray(value) && value.length) {
-                    const organisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, value, null, null, true, true, false
-                    ).catch((error) => console.error(error));
-                    const organisationNames = organisations && organisations.length
-                        ? organisations.map((c) => c.Name)
-                        : [];
+                    const promises = value.map(
+                        (v) => ObjectLoader.getInstance().queue<Organisation>(KIXObjectType.ORGANISATION, v)
+                    );
+
+                    const orgResult = await Promise.allSettled(promises);
+                    const organisationNames = orgResult
+                        .map((or) => or.status === 'fulfilled' ? or.value.Name : '')
+                        .filter((n) => n);
                     displayValue = organisationNames.join(', ');
                 }
                 break;
@@ -410,13 +420,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             if (useInclude && contact.User) {
                 user = contact.User;
             } else if (contact.AssignedUserID) {
-                const loadingOptions = includePreferences ?
-                    new KIXObjectLoadingOptions(null, null, null, [UserProperty.PREFERENCES]) :
-                    null;
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [contact.AssignedUserID], loadingOptions, null, true, true, true
-                ).catch(() => [] as User[]);
-                user = users && users.length ? users[0] : null;
+                user = await ObjectLoader.getInstance().queue<User>(KIXObjectType.USER, contact.AssignedUserID);
             }
         }
         return user;
