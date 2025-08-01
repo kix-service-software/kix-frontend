@@ -40,12 +40,14 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONTACT;
 
+    private objectLoader: ObjectLoader = new ObjectLoader();
+
     public constructor() {
         super();
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, [UserProperty.CONTACT, UserProperty.PREFERENCES]
         );
-        ObjectLoader.getInstance().setLoadingoptions(KIXObjectType.USER, loadingOptions);
+        this.objectLoader.setLoadingoptions(KIXObjectType.USER, loadingOptions);
     }
 
     public isLabelProviderFor(object: Contact | KIXObject): boolean {
@@ -64,7 +66,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 break;
             case ContactProperty.PRIMARY_ORGANISATION_NUMBER:
                 if (value) {
-                    const organisation = await ObjectLoader.getInstance().queue(
+                    const organisation = await this.objectLoader.queue(
                         KIXObjectType.ORGANISATION, value
                     ).catch(() => null);
                     if (organisation) {
@@ -75,7 +77,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case ContactProperty.ORGANISATION_IDS:
                 if (value && Array.isArray(value) && value.length) {
                     const promises = value.map(
-                        (v) => ObjectLoader.getInstance().queue<Organisation>(KIXObjectType.ORGANISATION, v)
+                        (v) => this.objectLoader.queue<Organisation>(KIXObjectType.ORGANISATION, v)
                     );
 
                     const orgResult = await Promise.allSettled(promises);
@@ -221,7 +223,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 if (object) {
                     const orgId = object[ContactProperty.PRIMARY_ORGANISATION_ID];
                     if (orgId) {
-                        const organisation = await ObjectLoader.getInstance().queue(
+                        const organisation = await this.objectLoader.queue(
                             KIXObjectType.ORGANISATION, orgId
                         ).catch(() => null);
                         newValue = organisation ? organisation.Number : orgId;
@@ -420,7 +422,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             if (useInclude && contact.User) {
                 user = contact.User;
             } else if (contact.AssignedUserID) {
-                user = await ObjectLoader.getInstance().queue<User>(KIXObjectType.USER, contact.AssignedUserID);
+                user = await this.objectLoader.queue<User>(KIXObjectType.USER, contact.AssignedUserID);
             }
         }
         return user;

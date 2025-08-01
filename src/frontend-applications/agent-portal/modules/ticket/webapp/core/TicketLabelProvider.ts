@@ -36,9 +36,10 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET;
 
+    private objectLoader: ObjectLoader = new ObjectLoader();
     public constructor() {
         super();
-        ObjectLoader.getInstance().setLoadingoptions(KIXObjectType.USER,
+        this.objectLoader.setLoadingoptions(KIXObjectType.USER,
             new KIXObjectLoadingOptions(
                 null, null, 1, [UserProperty.CONTACT, UserProperty.PREFERENCES]
             )
@@ -92,7 +93,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.QUEUE_FULLNAME:
-                const queue = await ObjectLoader.getInstance().queue(
+                const queue = await this.objectLoader.queue(
                     KIXObjectType.QUEUE, value
                 ).catch(() => null);
                 if (queue) {
@@ -125,7 +126,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.ORGANISATION_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    const organisation = await ObjectLoader.getInstance().queue(
+                    const organisation = await this.objectLoader.queue(
                         KIXObjectType.ORGANISATION, value
                     ).catch(() => null);
                     if (organisation) {
@@ -135,7 +136,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.CONTACT_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    const contact = await ObjectLoader.getInstance().queue(
+                    const contact = await this.objectLoader.queue(
                         KIXObjectType.CONTACT, value
                     ).catch(() => null);
                     if (contact) {
@@ -401,7 +402,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     break;
                 case TicketProperty.STATE_TYPE:
                     if (ticket.StateID) {
-                        const state = await ObjectLoader.getInstance().queue<TicketState>(
+                        const state = await this.objectLoader.queue<TicketState>(
                             KIXObjectType.TICKET_STATE, ticket.StateID
                         );
                         displayValue = state?.TypeName;
@@ -590,7 +591,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
                 if (value) {
-                    const user = await ObjectLoader.getInstance().queue<User>(
+                    const user = await this.objectLoader.queue<User>(
                         KIXObjectType.USER, value
                     );
 
