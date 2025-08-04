@@ -393,7 +393,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/d3-delaunay
 │  └─ licenseFile: node_modules/@types/d3-delaunay/LICENSE
-├─ @types/d3-dispatch@3.0.6
+├─ @types/d3-dispatch@3.0.7
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/d3-dispatch
@@ -1017,7 +1017,7 @@
 │  ├─ email: M8ch88l@gmail.com
 │  ├─ path: node_modules/big.js
 │  └─ licenseFile: node_modules/big.js/LICENCE
-├─ bl@6.1.0
+├─ bl@6.1.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/rvagg/bl
 │  ├─ path: node_modules/bl
@@ -1860,7 +1860,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.192
+├─ electron-to-chromium@1.5.194
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -2099,7 +2099,7 @@
 │  ├─ publisher: Arnout Kazemier
 │  ├─ path: node_modules/fn.name
 │  └─ licenseFile: node_modules/fn.name/LICENSE
-├─ follow-redirects@1.15.9
+├─ follow-redirects@1.15.11
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/follow-redirects/follow-redirects
 │  ├─ publisher: Ruben Verborgh
@@ -3998,7 +3998,7 @@
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici-types
 │  └─ licenseFile: node_modules/undici-types/LICENSE
-├─ undici@7.12.0
+├─ undici@7.13.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici
