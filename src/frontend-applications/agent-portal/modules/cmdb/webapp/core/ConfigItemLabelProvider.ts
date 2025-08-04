@@ -29,6 +29,7 @@ import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigServic
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { ContactProperty } from '../../../customer/model/ContactProperty';
 import { ConfigItemClassAttributeUtil } from './ConfigItemClassAttributeUtil';
+import { ObjectLoader } from '../../../base-components/webapp/core/ObjectLoader';
 
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
@@ -301,16 +302,17 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 const loadingOptions = new KIXObjectLoadingOptions(
                     null, null, null, [ConfigItemProperty.CURRENT_VERSION, VersionProperty.PREPARED_DATA]
                 );
-                const configItems = await KIXObjectService.loadObjects<ConfigItem>(
-                    KIXObjectType.CONFIG_ITEM, dfValue.Value, loadingOptions
-                ).catch((): ConfigItem[] => []);
 
-                const labels = [];
-                for (const ci of configItems) {
-                    const label = await this.getLabelByObject(ci);
-                    labels.push(label);
-                }
+                ObjectLoader.getInstance().setLoadingoptions(KIXObjectType.CONFIG_ITEM, loadingOptions);
+                const promises = dfValue.Value.map(
+                    (v) => ObjectLoader.getInstance().queue<ConfigItem>(KIXObjectType.CONFIG_ITEM, v)
+                );
+                const result = await Promise.allSettled(promises);
+                const configItems = result.filter((r) => r.status === 'fulfilled').map((r) => r.value);
 
+                const labelPromises = configItems.map((ci) => this.getLabelByObject(ci));
+                const labelResult = await Promise.allSettled(labelPromises);
+                const labels = labelResult.filter((r) => r.status === 'fulfilled').map((r) => r.value);
                 return labels;
             }
         }
