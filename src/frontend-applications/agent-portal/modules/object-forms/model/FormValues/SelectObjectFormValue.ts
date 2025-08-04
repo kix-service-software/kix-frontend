@@ -641,31 +641,17 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     private async getObjectsSeparately(ids: any[]): Promise<KIXObject[]> {
-        const objectPromises = [];
-        if (ids) {
-            if (!Array.isArray(ids)) {
-                ids = [ids];
-            }
-
-            // load objects separately, to prevent empty value if "no permission" error occurs
-            ids.forEach(async (id) =>
-                objectPromises.push(
-                    KIXObjectService.loadObjects(
-                        this.objectType, [id], this.loadingOptions,
-                        this.specificLoadingOptions, true, null, true
-                    ).catch(() => [])
-                )
-            );
+        if (ids && !Array.isArray(ids)) {
+            ids = [ids];
         }
 
-        const objects = [];
-        await Promise.allSettled<Array<KIXObject[]>>(objectPromises).then((results) =>
-            results.forEach((r) => {
-                if (r.status === 'fulfilled' && r.value?.length) {
-                    objects.push(...r.value);
-                }
-            })
-        );
+        const objectPromises = (ids || []).map(((id) => KIXObjectService.loadObjects(
+            this.objectType, [id], this.loadingOptions,
+            this.specificLoadingOptions, true, null, true
+        )));
+
+        const result = await Promise.allSettled(objectPromises);
+        const objects = result.filter((r) => r.status === 'fulfilled').map((r) => r.value).flat();
         return objects;
     }
 
