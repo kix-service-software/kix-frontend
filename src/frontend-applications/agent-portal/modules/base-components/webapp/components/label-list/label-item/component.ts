@@ -27,7 +27,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.toggled = false;
         }
         this.state.label = input.label;
-        this.state.labelId = IdService.generateDateBasedId(this.state.label.id.toString());
+        this.state.labelId = IdService.generateDateBasedId(this.state.label?.id ? this.state.label.id.toString() : '');
     }
 
     public async onMount(): Promise<void> {
