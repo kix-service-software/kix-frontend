@@ -14,10 +14,13 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { Label } from './Label';
 import { OverlayIcon } from './OverlayIcon';
+import { ObjectLoader } from './ObjectLoader';
 
 export abstract class ExtendedLabelProvider<T extends KIXObject = KIXObject> implements ILabelProvider<T> {
 
     public kixObjectType: string = KIXObjectType.TICKET;
+
+    protected objectLoader: ObjectLoader = new ObjectLoader();
 
     public getSupportedProperties(): string[] {
         return [];

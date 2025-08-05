@@ -24,11 +24,13 @@ import { ExtendedLabelProvider } from './ExtendedLabelProvider';
 import { Label } from './Label';
 import { OverlayIcon } from './OverlayIcon';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ObjectLoader } from './ObjectLoader';
 
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 
     public kixObjectType: KIXObjectType | string;
     protected dFRegEx = new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`);
+    protected objectLoader: ObjectLoader = new ObjectLoader();
 
     private extendedLabelProvider: ExtendedLabelProvider[] = [];
 

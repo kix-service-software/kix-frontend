@@ -36,7 +36,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET;
 
-    private objectLoader: ObjectLoader = new ObjectLoader();
     public constructor() {
         super();
         this.objectLoader.setLoadingoptions(KIXObjectType.USER,

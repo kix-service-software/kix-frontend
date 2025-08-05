@@ -34,13 +34,10 @@ import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsPr
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
-import { ObjectLoader } from '../../../base-components/webapp/core/ObjectLoader';
 
 export class ContactLabelProvider extends LabelProvider<Contact> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONTACT;
-
-    private objectLoader: ObjectLoader = new ObjectLoader();
 
     public constructor() {
         super();

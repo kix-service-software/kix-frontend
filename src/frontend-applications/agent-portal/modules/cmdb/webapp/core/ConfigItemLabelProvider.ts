@@ -13,7 +13,6 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ConfigItemProperty } from '../../model/ConfigItemProperty';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ConfigItemClass } from '../../model/ConfigItemClass';
-import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
@@ -29,12 +28,19 @@ import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigServic
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { ContactProperty } from '../../../customer/model/ContactProperty';
 import { ConfigItemClassAttributeUtil } from './ConfigItemClassAttributeUtil';
-import { ObjectLoader } from '../../../base-components/webapp/core/ObjectLoader';
 
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
     private classObjectType: RegExp = new RegExp(`${KIXObjectType.CONFIG_ITEM}\\..+`);
+
+    public constructor() {
+        super();
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, [ConfigItemProperty.CURRENT_VERSION, VersionProperty.PREPARED_DATA]
+        );
+        this.objectLoader.setLoadingoptions(KIXObjectType.CONFIG_ITEM, loadingOptions);
+    }
 
     public isLabelProviderForDFType(dfFieldType: string): boolean {
         return dfFieldType === DynamicFieldTypes.CI_REFERENCE || super.isLabelProviderForDFType(dfFieldType);
@@ -299,13 +305,8 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
         if (dynamicField && dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
             if (Array.isArray(dfValue.Value)) {
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    null, null, null, [ConfigItemProperty.CURRENT_VERSION, VersionProperty.PREPARED_DATA]
-                );
-
-                ObjectLoader.getInstance().setLoadingoptions(KIXObjectType.CONFIG_ITEM, loadingOptions);
                 const promises = dfValue.Value.map(
-                    (v) => ObjectLoader.getInstance().queue<ConfigItem>(KIXObjectType.CONFIG_ITEM, v)
+                    (v) => this.objectLoader.queue<ConfigItem>(KIXObjectType.CONFIG_ITEM, v)
                 );
                 const result = await Promise.allSettled(promises);
                 const configItems = result.filter((r) => r.status === 'fulfilled').map((r) => r.value);

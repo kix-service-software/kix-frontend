@@ -11,7 +11,6 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { Label } from '../../../base-components/webapp/core/Label';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
-import { ObjectLoader } from '../../../base-components/webapp/core/ObjectLoader';
 import { ObjectReferenceLabelProvider } from '../../../base-components/webapp/core/ObjectReferenceLabelProvider';
 import { DynamicFieldType } from '../../../dynamic-fields/model/DynamicFieldType';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
@@ -22,16 +21,20 @@ import { VersionProperty } from '../../model/VersionProperty';
 
 export class ConfigItemReferenceLabelProvider extends ObjectReferenceLabelProvider {
 
+    public constructor() {
+        super();
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, [ConfigItemProperty.CURRENT_VERSION, VersionProperty.PREPARED_DATA]
+        );
+        this.objectLoader.setLoadingoptions(KIXObjectType.CONFIG_ITEM, loadingOptions);
+    }
+
     public isLabelProviderForDFType(dfFieldType: string): boolean {
         return dfFieldType === DynamicFieldTypes.CI_REFERENCE;
     }
 
     protected async getObject(value: any): Promise<ConfigItem> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, [ConfigItemProperty.CURRENT_VERSION, VersionProperty.PREPARED_DATA]
-        );
-        ObjectLoader.getInstance().setLoadingoptions(KIXObjectType.CONFIG_ITEM, loadingOptions);
-        return ObjectLoader.getInstance().queue<ConfigItem>(KIXObjectType.CONFIG_ITEM, value);
+        return this.objectLoader.queue<ConfigItem>(KIXObjectType.CONFIG_ITEM, value);
     }
 
     protected async getLabel(configItem: ConfigItem): Promise<Label> {
