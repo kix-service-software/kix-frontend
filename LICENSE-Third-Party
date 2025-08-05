@@ -1383,7 +1383,7 @@
 │  ├─ repository: https://github.com/zloirock/core-js
 │  ├─ path: node_modules/core-js
 │  └─ licenseFile: node_modules/babel-runtime/node_modules/core-js/LICENSE
-├─ core-js@3.44.0
+├─ core-js@3.45.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/zloirock/core-js
 │  ├─ publisher: Denis Pushkarev
@@ -1860,7 +1860,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.194
+├─ electron-to-chromium@1.5.195
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
