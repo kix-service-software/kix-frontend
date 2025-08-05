@@ -11,8 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
    type="text"
    rows=state.rowCount
    value=state.value
-   on-change("valueChanged")
+   on-input("valueChanged")
    disabled=state.readonly
    readonly=state.readonly
-   class="form-control"
->${state.value}</textarea>
+   class="form-control">${state.value}</textarea>

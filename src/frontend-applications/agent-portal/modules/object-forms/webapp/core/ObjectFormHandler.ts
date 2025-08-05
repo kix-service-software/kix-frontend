@@ -35,6 +35,8 @@ import { ObjectFormValidator } from './validation/ObjectFormValidator';
 
 export class ObjectFormHandler {
 
+    public static TEXTFIELD_SUBMISSION_TIMEOUT = 500;
+
     public form: FormConfiguration;
 
     public objectFormValueMapper: ObjectFormValueMapper;

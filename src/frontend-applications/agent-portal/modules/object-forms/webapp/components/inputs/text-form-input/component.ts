@@ -12,6 +12,7 @@ import { AbstractMarkoComponent } from '../../../../../base-components/webapp/co
 import { InputFieldTypes } from '../../../../../base-components/webapp/core/InputFieldTypes';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
+import { ObjectFormHandler } from '../../../core/ObjectFormHandler';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
@@ -83,7 +84,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.changeTimeout = setTimeout(async () => {
             await this.formValue.setFormValue(this.state.value);
             this.formValue.dirty = false;
-        }, 500);
+        }, ObjectFormHandler.TEXTFIELD_SUBMISSION_TIMEOUT);
     }
 
     public togglePasswordVisible(): void {
