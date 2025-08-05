@@ -12,10 +12,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       value=state.value
       disabled=state.readonly
       on-keydown("keyDown")
-      on-change("valueChanged")
+      on-input("valueChanged")
       class="form-control"
-      autocomplete=state.autocompleteProperty
-   >
+      autocomplete=state.autocompleteProperty>
    <if(state.isPassword)>
       <div role="button" on-click("togglePasswordVisible") class="p-2">
          <i class=[
