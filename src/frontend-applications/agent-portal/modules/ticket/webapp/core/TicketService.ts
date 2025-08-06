@@ -221,6 +221,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         switch (property) {
             case TicketProperty.CREATED_QUEUE_ID:
             case TicketProperty.QUEUE_ID:
+            case TicketProperty.HISTORIC_QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, undefined, ['READ']);
                 nodes = await QueueService.getInstance().prepareObjectTree(
                     queuesHierarchy, showInvalid, invalidClickable,
@@ -229,6 +230,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.CREATED_TYPE_ID:
             case TicketProperty.TYPE_ID:
+            case TicketProperty.HISTORIC_TYPE_ID:
                 let types = await KIXObjectService.loadObjects<TicketType>(KIXObjectType.TICKET_TYPE);
                 if (!showInvalid) {
                     types = types.filter((t) => t.ValidID === 1);
@@ -249,6 +251,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.CREATED_PRIORITY_ID:
             case TicketProperty.PRIORITY_ID:
+            case TicketProperty.HISTORIC_PRIORITY_ID:
                 let priorities = await KIXObjectService.loadObjects<TicketPriority>(KIXObjectType.TICKET_PRIORITY);
                 if (!showInvalid) {
                     priorities = priorities.filter((p) => p.ValidID === 1);
@@ -269,6 +272,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.CREATED_STATE_ID:
             case TicketProperty.STATE_ID:
+            case TicketProperty.HISTORIC_STATE_ID:
                 let states = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE);
                 if (!showInvalid) {
                     states = states.filter((s) => s.ValidID === 1);
@@ -324,6 +328,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.CREATED_USER_ID:
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
+            case TicketProperty.HISTORIC_OWNER_ID:
                 if (loadingOptions) {
                     if (Array.isArray(loadingOptions.includes)) {
                         loadingOptions.includes.push(UserProperty.CONTACT);

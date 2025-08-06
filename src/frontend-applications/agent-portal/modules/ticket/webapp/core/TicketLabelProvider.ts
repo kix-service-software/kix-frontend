@@ -352,6 +352,24 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.ATTACHMENT_COUNT:
                 displayValue = 'Translatable#Number of Attachments';
                 break;
+            case TicketProperty.HISTORIC_MY_QUEUES:
+                displayValue = 'Translatable#My Teams (past)';
+                break;
+            case TicketProperty.HISTORIC_OWNER_ID:
+                displayValue = 'Translatable#Owner (past)';
+                break;
+            case TicketProperty.HISTORIC_PRIORITY_ID:
+                displayValue = 'Translatable#Priority (past)';
+                break;
+            case TicketProperty.HISTORIC_QUEUE_ID:
+                displayValue = 'Translatable#Queue (past)';
+                break;
+            case TicketProperty.HISTORIC_STATE_ID:
+                displayValue = 'Translatable#State (past)';
+                break;
+            case TicketProperty.HISTORIC_TYPE_ID:
+                displayValue = 'Translatable#Type (past)';
+                break;
             default:
                 if (Article.isArticleProperty(property)) {
                     displayValue = await LabelService.getInstance().getPropertyText(
