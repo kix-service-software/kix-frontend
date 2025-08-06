@@ -16,6 +16,7 @@ import { AdditionalContextInformation } from '../../../../../base-components/web
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFormFieldOption } from '../../../../../dynamic-fields/webapp/core';
+import { FormValueProperty } from '../../../../../object-forms/model/FormValueProperty';
 import { DynamicFieldObjectFormValue } from '../../../../../object-forms/model/FormValues/DynamicFieldObjectFormValue';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
@@ -358,6 +359,8 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
                 if (property === ArticleProperty.TO && isEdit) {
                     formValue.visible = true;
+                    formValue.setNewInitialState(FormValueProperty.VISIBLE, true);
+                    formValue.setNewInitialState(FormValueProperty.ENABLED, true);
                 }
 
                 if (property === ArticleProperty.CC) {
@@ -403,6 +406,8 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
             if (formValue) {
                 await formValue.disable();
+                formValue.setNewInitialState(FormValueProperty.VISIBLE, false);
+                formValue.setNewInitialState(FormValueProperty.ENABLED, false);
                 formValue.isConfigurable = false;
             }
         }
