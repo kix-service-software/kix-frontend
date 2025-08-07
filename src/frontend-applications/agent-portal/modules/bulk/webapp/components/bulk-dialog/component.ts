@@ -49,6 +49,8 @@ class Component {
         this.context.unregisterListener(this.listenerId);
 
         if (this.state.bulkManager) {
+            // resets the defaultValues before the manager is reset
+            this.state.bulkManager.setDefaultValues();
             this.state.bulkManager.reset();
         }
     }
