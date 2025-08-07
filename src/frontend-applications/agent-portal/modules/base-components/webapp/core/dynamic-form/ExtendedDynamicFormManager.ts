@@ -186,4 +186,9 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
     public prepareValuesForParameter(values: ObjectPropertyValue[], selectedObjects: KIXObject[]): void {
         return;
     }
+
+    public setDefaultValues(values?: ObjectPropertyValue[]): void {
+        return;
+    };
+
 }

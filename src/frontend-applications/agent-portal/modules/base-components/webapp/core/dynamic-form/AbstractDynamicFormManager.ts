@@ -44,6 +44,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public additionalObjectTypes: Array<KIXObjectType | string> = [];
 
     protected values: ObjectPropertyValue[] = [];
+    private defaultValues: ObjectPropertyValue[] = [];
 
     protected listeners: Map<string, () => void> = new Map();
 
@@ -225,7 +226,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public reset(notify: boolean = true, force: boolean = false): void {
-        this.values = [];
+        // This is necessary to prevent this.defaultValues from being overwritten by this.values
+        const defaultValues = this.defaultValues.map((dv) => Object.assign({}, dv));
+        this.values = defaultValues;
         if (notify) {
             this.notifyListeners();
         }
@@ -774,6 +777,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public isRelativDateTimeOperator(operator: string): boolean {
         return;
+    }
+
+    public setDefaultValues(values: ObjectPropertyValue[] = []): void {
+        this.defaultValues = values;
     }
 
 }
