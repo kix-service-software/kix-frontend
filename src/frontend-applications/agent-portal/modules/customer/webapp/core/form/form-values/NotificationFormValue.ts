@@ -52,7 +52,7 @@ export class NotificationFormValue extends SelectObjectFormValue<string[]> {
                     value.push(key);
                 }
             }
-            this.value = value;
+            this.defaultValue = value;
         }
 
         this.setNewInitialState(FormValueProperty.VISIBLE, true);
@@ -85,7 +85,8 @@ export class NotificationFormValue extends SelectObjectFormValue<string[]> {
                 const node = new TreeNode(`Notification-${n.ID}-${transport}`, label);
                 selectedNodes.push(node);
             }
-            this.selectedNodes = selectedNodes.sort((a, b) => a.Name - b.Name);
+            this.treeHandler.setSelection(selectedNodes.sort((a, b) => a.Name - b.Name));
+            this.selectedNodes = this.treeHandler.getSelectedNodes();
         } else {
             this.selectedNodes = [];
         }
