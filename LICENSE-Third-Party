@@ -32,14 +32,14 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/core
 │  └─ licenseFile: node_modules/@babel/core/LICENSE
-├─ @babel/core@7.28.0
+├─ @babel/core@7.28.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/core
 │  └─ licenseFile: node_modules/@marko/compiler/node_modules/@babel/core/LICENSE
-├─ @babel/generator@7.28.0
+├─ @babel/generator@7.28.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -60,7 +60,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helper-compilation-targets
 │  └─ licenseFile: node_modules/@babel/helper-compilation-targets/LICENSE
-├─ @babel/helper-create-class-features-plugin@7.27.1
+├─ @babel/helper-create-class-features-plugin@7.28.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -88,7 +88,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helper-module-imports
 │  └─ licenseFile: node_modules/@babel/helper-module-imports/LICENSE
-├─ @babel/helper-module-transforms@7.27.3
+├─ @babel/helper-module-transforms@7.28.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -144,14 +144,14 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helper-validator-option
 │  └─ licenseFile: node_modules/@babel/helper-validator-option/LICENSE
-├─ @babel/helpers@7.28.2
+├─ @babel/helpers@7.28.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helpers
 │  └─ licenseFile: node_modules/@babel/helpers/LICENSE
-├─ @babel/parser@7.28.0
+├─ @babel/parser@7.28.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -179,7 +179,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/plugin-transform-typescript
 │  └─ licenseFile: node_modules/@babel/plugin-transform-typescript/LICENSE
-├─ @babel/runtime@7.28.2
+├─ @babel/runtime@7.28.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -193,7 +193,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/template
 │  └─ licenseFile: node_modules/@babel/template/LICENSE
-├─ @babel/traverse@7.28.0
+├─ @babel/traverse@7.28.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -250,7 +250,7 @@
 │  ├─ publisher: Arnout Kazemier
 │  ├─ path: node_modules/@dabh/diagnostics
 │  └─ licenseFile: node_modules/@dabh/diagnostics/LICENSE
-├─ @jridgewell/gen-mapping@0.3.12
+├─ @jridgewell/gen-mapping@0.3.13
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jridgewell/sourcemaps
 │  ├─ publisher: Justin Ridgewell
@@ -264,21 +264,21 @@
 │  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/resolve-uri
 │  └─ licenseFile: node_modules/@jridgewell/resolve-uri/LICENSE
-├─ @jridgewell/source-map@0.3.10
+├─ @jridgewell/source-map@0.3.11
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jridgewell/sourcemaps
 │  ├─ publisher: Justin Ridgewell
 │  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/source-map
 │  └─ licenseFile: node_modules/@jridgewell/source-map/LICENSE
-├─ @jridgewell/sourcemap-codec@1.5.4
+├─ @jridgewell/sourcemap-codec@1.5.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jridgewell/sourcemaps
 │  ├─ publisher: Justin Ridgewell
 │  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/sourcemap-codec
 │  └─ licenseFile: node_modules/@jridgewell/sourcemap-codec/LICENSE
-├─ @jridgewell/trace-mapping@0.3.29
+├─ @jridgewell/trace-mapping@0.3.30
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jridgewell/sourcemaps
 │  ├─ publisher: Justin Ridgewell
@@ -318,7 +318,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.30
+├─ @marko/compiler@5.39.33
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -518,7 +518,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.17.0
+├─ @types/node@22.17.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1017,7 +1017,7 @@
 │  ├─ email: M8ch88l@gmail.com
 │  ├─ path: node_modules/big.js
 │  └─ licenseFile: node_modules/big.js/LICENCE
-├─ bl@6.1.1
+├─ bl@6.1.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/rvagg/bl
 │  ├─ path: node_modules/bl
@@ -1040,7 +1040,7 @@
 │  ├─ publisher: mdo
 │  ├─ path: node_modules/bootstrap-icons
 │  └─ licenseFile: node_modules/bootstrap-icons/LICENSE
-├─ bowser@2.11.0
+├─ bowser@2.12.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/lancedikson/bowser
 │  ├─ publisher: Dustin Diaz
@@ -1078,7 +1078,7 @@
 │  ├─ email: andrey@sitnik.ru
 │  ├─ path: node_modules/browserslist
 │  └─ licenseFile: node_modules/babel-preset-env/node_modules/browserslist/LICENSE
-├─ browserslist@4.25.1
+├─ browserslist@4.25.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/browserslist/browserslist
 │  ├─ publisher: Andrey Sitnik
@@ -1140,7 +1140,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001733
+├─ caniuse-lite@1.0.30001735
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1860,7 +1860,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.199
+├─ electron-to-chromium@1.5.203
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -2260,7 +2260,7 @@
 │  ├─ url: https://domenic.me/
 │  ├─ path: node_modules/html-encoding-sniffer
 │  └─ licenseFile: node_modules/html-encoding-sniffer/LICENSE.txt
-├─ htmljs-parser@5.6.2
+├─ htmljs-parser@5.7.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/htmljs-parser
 │  ├─ path: node_modules/htmljs-parser
@@ -2594,7 +2594,7 @@
 │  ├─ email: aseem.kishore@gmail.com
 │  ├─ path: node_modules/json5
 │  └─ licenseFile: node_modules/json5/LICENSE.md
-├─ jsonfile@6.1.0
+├─ jsonfile@6.2.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jprichardson/node-jsonfile
 │  ├─ publisher: JP Richardson
@@ -2849,7 +2849,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.42
+├─ marko@5.37.45
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -3998,7 +3998,7 @@
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici-types
 │  └─ licenseFile: node_modules/undici-types/LICENSE
-├─ undici@7.13.0
+├─ undici@7.14.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici
