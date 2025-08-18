@@ -89,7 +89,8 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                     new FormFieldOption(NumberInputOptions.MIN, 0),
                     new FormFieldOption(NumberInputOptions.UNIT_STRING, 'Translatable#Minutes'),
                     new FormFieldOption(NumberInputOptions.STEP, 1),
-                    new FormFieldOption(NumberInputOptions.EXCEPTS_EMPTY, true)
+                    new FormFieldOption(NumberInputOptions.EXCEPTS_EMPTY, true),
+                    new FormFieldOption(NumberInputOptions.POSITIVE_INTEGER, true)
                 ]
             ),
             new PersonalSetting(
