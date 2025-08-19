@@ -14,6 +14,7 @@ import { IdService } from '../../../model/IdService';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { BrowserCacheService } from '../../base-components/webapp/core/CacheService';
 import { ClientStorageService } from '../../base-components/webapp/core/ClientStorageService';
 import { EventService } from '../../base-components/webapp/core/EventService';
 import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
@@ -71,6 +72,12 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     protected destroyFormValues(formValues: ObjectFormValue[] = this.formValues): void {
+        const formValueObjectTypes = formValues.filter(
+            (fv) => fv.hasOwnProperty('objectType') && (fv as any).objectType?.length > 0
+        ).map(((fv) => (fv as any).objectType));
+        formValueObjectTypes.forEach((ot) => {
+            BrowserCacheService.getInstance().deleteKeys(ot);
+        });
         for (const value of formValues) {
             if (value.formValues?.length) {
                 this.destroyFormValues(value.formValues);
