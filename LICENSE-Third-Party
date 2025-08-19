@@ -1078,7 +1078,7 @@
 │  ├─ email: andrey@sitnik.ru
 │  ├─ path: node_modules/browserslist
 │  └─ licenseFile: node_modules/babel-preset-env/node_modules/browserslist/LICENSE
-├─ browserslist@4.25.2
+├─ browserslist@4.25.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/browserslist/browserslist
 │  ├─ publisher: Andrey Sitnik
@@ -1860,7 +1860,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.203
+├─ electron-to-chromium@1.5.206
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -2711,13 +2711,13 @@
 │  ├─ repository: https://github.com/Leaflet/Leaflet
 │  ├─ path: node_modules/leaflet
 │  └─ licenseFile: node_modules/leaflet/LICENSE
-├─ less@4.4.0
+├─ less@4.4.1
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/less/less.js
 │  ├─ publisher: Alexis Sellier
 │  ├─ email: self@cloudhead.net
 │  ├─ path: node_modules/less
-│  └─ licenseFile: node_modules/less/LICENSE
+│  └─ licenseFile: node_modules/less/README.md
 ├─ listener-tracker@2.0.0
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/patrick-steele-idem/listener-tracker
