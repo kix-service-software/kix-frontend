@@ -29,6 +29,7 @@ import { ToastUtil } from '../../../toast/webapp/core/ToastUtil';
 import { RoutingService } from './RoutingService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { DefaultColorConfiguration } from '../../../../model/configuration/DefaultColorConfiguration';
+import { ModalSettings } from '../../../toast/model/ModalSettings';
 
 export class BrowserUtil {
 
@@ -55,17 +56,15 @@ export class BrowserUtil {
         focusConfirm?: boolean, silent?: boolean
     ): Promise<void> {
         const preference = decision ? await AgentService.getInstance().getUserPreference(decision[0]) : null;
-        if ((preference && Boolean(Number(preference.Value))) || silent) {
+        if ((BrowserUtil.isBooleanTrue(preference?.Value)) || silent) {
             confirmCallback();
         } else {
-            const content = new ComponentContent(
-                'confirm-overlay',
-                new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels, decision, focusConfirm)
-            );
-            OverlayService.getInstance().openOverlay(
-                OverlayType.CONFIRM, null, content, title, null, closeButton,
-                undefined, undefined, undefined, undefined, undefined, undefined
-            );
+            const modalSettings = new ModalSettings(confirmCallback, cancelCallback, title, confirmText);
+            modalSettings.okLabel = labels?.length === 2 ? labels[0] : undefined;
+            modalSettings.cancelLabel = labels?.length === 2 ? labels[1] : undefined;
+            modalSettings.decisionPreference = decision?.length === 2 ? decision[0] : undefined;
+            modalSettings.decisionTitle = decision?.length === 2 ? decision[1] : undefined;
+            ToastUtil.showConfirmModal(modalSettings);
         }
     }
 

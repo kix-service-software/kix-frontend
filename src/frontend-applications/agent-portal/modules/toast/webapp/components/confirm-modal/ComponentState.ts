@@ -7,14 +7,15 @@
  * --
  */
 
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-
-export class RefreshToastSettings {
+export class ComponentState {
 
     public constructor(
-        public message: string,
-        public reloadApp: boolean,
-        public objectType: KIXObjectType | string
+        public okLabel: string = 'Translatable#OK',
+        public cancelLabel: string = 'Translatable#Cancel',
+        public title: string = 'Sure?',
+        public confirmText: string = '',
+        public decisionLabel: string = null,
+        public decisionChecked: boolean = false
     ) { }
 
 }
