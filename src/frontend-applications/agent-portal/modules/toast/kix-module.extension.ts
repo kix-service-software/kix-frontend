@@ -31,7 +31,8 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('refresh-app-toast', '/kix-module-toast$0/webapp/components/refresh-app-toast', []),
         new UIComponent('success-toast', '/kix-module-toast$0/webapp/components/success-toast', []),
         new UIComponent('info-toast', '/kix-module-toast$0/webapp/components/info-toast', []),
-        new UIComponent('error-toast', '/kix-module-toast$0/webapp/components/error-toast', [])
+        new UIComponent('error-toast', '/kix-module-toast$0/webapp/components/error-toast', []),
+        new UIComponent('confirm-modal', '/kix-module-toast$0/webapp/components/confirm-modal', [])
     ];
 
 }

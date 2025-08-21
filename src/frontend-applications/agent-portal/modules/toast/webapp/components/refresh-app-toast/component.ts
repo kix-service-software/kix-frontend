@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { RefreshToastSettings } from '../../../../base-components/webapp/core/RefreshToastSettings';
+import { RefreshToastSettings } from '../../../model/RefreshToastSettings';
 import { WindowListener } from '../../../../base-components/webapp/core/WindowListener';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
 

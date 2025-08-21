@@ -4,6 +4,7 @@
         "require ./components/refresh-app-toast",
         "require ./components/success-toast",
         "require ./components/info-toast",
-        "require ./components/error-toast"
+        "require ./components/error-toast",
+        "require ./components/confirm-modal"
     ]
 }
