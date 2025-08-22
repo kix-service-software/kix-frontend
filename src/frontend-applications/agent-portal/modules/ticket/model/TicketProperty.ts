@@ -116,5 +116,12 @@ export enum TicketProperty {
 
     UNTIL_TIME = 'UntilTime',
 
-    ATTACHMENT_COUNT = 'AttachmentCount'
+    ATTACHMENT_COUNT = 'AttachmentCount',
+
+    HISTORIC_MY_QUEUES = 'HistoricMyQueues',
+    HISTORIC_OWNER_ID = 'HistoricOwnerID',
+    HISTORIC_PRIORITY_ID = 'HistoricPriorityID',
+    HISTORIC_QUEUE_ID = 'HistoricQueueID',
+    HISTORIC_STATE_ID = 'HistoricStateID',
+    HISTORIC_TYPE_ID = 'HistoricTypeID'
 }

@@ -156,6 +156,7 @@ export class TicketSearchFormManager extends SearchFormManager {
             || property === TicketProperty.OWNER_OOO
             || property === TicketProperty.RESPONSIBLE_OOO
             || property === TicketProperty.MY_QUEUES
+            || property === TicketProperty.HISTORIC_MY_QUEUES
         ) {
             return false;
         }
@@ -182,6 +183,7 @@ export class TicketSearchFormManager extends SearchFormManager {
                 break;
             case TicketProperty.OWNER_OOO:
             case TicketProperty.MY_QUEUES:
+            case TicketProperty.HISTORIC_MY_QUEUES:
             case TicketProperty.RESPONSIBLE_OOO:
             case ArticleProperty.CUSTOMER_VISIBLE:
                 const no = await TranslationService.translate('No');
@@ -192,6 +194,7 @@ export class TicketSearchFormManager extends SearchFormManager {
                 ];
                 break;
             case TicketProperty.QUEUE_ID:
+            case TicketProperty.HISTORIC_QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['READ']);
                 nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, showInvalid, showInvalid);
                 break;
@@ -216,6 +219,7 @@ export class TicketSearchFormManager extends SearchFormManager {
         const options = await super.getInputTypeOptions(property, operator);
         const freeTextProperties = [
             TicketProperty.OWNER_ID,
+            TicketProperty.HISTORIC_OWNER_ID,
             TicketProperty.RESPONSIBLE_ID,
             TicketProperty.CONTACT_ID,
             TicketProperty.ORGANISATION_ID,
