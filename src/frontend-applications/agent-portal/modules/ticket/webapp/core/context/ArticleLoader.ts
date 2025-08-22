@@ -66,11 +66,11 @@ export class ArticleLoader {
         this.articleIds = new Map();
 
         const loadingOptions = new KIXObjectLoadingOptions();
-        loadingOptions.includes = [KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON];
+        loadingOptions.includes = [KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON, 'ObjectActions'];
 
         if (this.loadArticleDetails) {
             loadingOptions.includes.push(
-                ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN, 'ObjectActions', KIXObjectProperty.DYNAMIC_FIELDS
+                ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN, KIXObjectProperty.DYNAMIC_FIELDS
             );
         }
 
