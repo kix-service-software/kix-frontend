@@ -1140,7 +1140,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001736
+├─ caniuse-lite@1.0.30001737
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1860,7 +1860,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.207
+├─ electron-to-chromium@1.5.208
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -2822,7 +2822,7 @@
 │  ├─ email: i@izs.me
 │  ├─ path: node_modules/lru-cache
 │  └─ licenseFile: node_modules/lru-cache/LICENSE
-├─ magic-string@0.30.17
+├─ magic-string@0.30.18
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/rich-harris/magic-string
 │  ├─ publisher: Rich Harris
