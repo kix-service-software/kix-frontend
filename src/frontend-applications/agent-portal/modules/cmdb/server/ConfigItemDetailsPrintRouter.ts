@@ -35,7 +35,6 @@ export class ConfigItemDetailsPrintRouter extends KIXRouter {
     protected initialize(): void {
         this.router.get(
             '/:objectId/print',
-            AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getPrintComponent.bind(this)
         );
     }
