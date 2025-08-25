@@ -60,9 +60,10 @@ export class HTTPRequestLogger {
             const backendDurationTotal = Math.ceil((response as AxiosResponse)?.headers['x-runtime'] * 1000);
             const backendDurationApp = Math.ceil((response as AxiosResponse)?.headers['kix-request-duration'] * 1000);
             const backendPID = (response as AxiosResponse)?.headers['kix-worker-pid'];
+            const backendTimeTillExecution = Math.ceil((response as AxiosResponse)?.headers['kix-request-tte'] * 1000);
 
             const pid = process.pid;
-            this.logger.info(`${pid}\t${backendPID}\t${entry.clientId}\t${duration}\t${backendDurationTotal}\t${backendDurationApp}\t${entry.method}\t${status}\t${size}\t${entry.resource}\t${entry.parameter}`);
+            this.logger.info(`${pid}\t${backendPID}\t${entry.clientId}\t${duration}\t${backendTimeTillExecution}\t${backendDurationTotal}\t${backendDurationApp}\t${entry.method}\t${status}\t${size}\t${entry.resource}\t${entry.parameter}`);
 
             const durationFactor: number = process.env['REQUEST_DURATION_WARNING_FACTOR'] ? Number(process.env['REQUEST_DURATION_WARNING_FACTOR']) : 4;
             if (duration >= backendDurationTotal * durationFactor) {
@@ -71,6 +72,7 @@ export class HTTPRequestLogger {
                     PID: ${pid}
                     BE Worker PID: ${backendPID}
                     Duration: ${duration} ms
+                    BE TTE: ${backendTimeTillExecution} ms
                     BE Duration Total: ${backendDurationTotal} ms
                     BE Duration App: ${backendDurationApp} ms
                     Method: ${entry.method}
