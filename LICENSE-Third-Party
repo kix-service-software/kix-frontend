@@ -219,7 +219,7 @@
 │  ├─ publisher: DABH
 │  ├─ path: node_modules/@colors/colors
 │  └─ licenseFile: node_modules/winston/node_modules/@colors/colors/LICENSE
-├─ @csstools/color-helpers@5.0.2
+├─ @csstools/color-helpers@5.1.0
 │  ├─ licenses: MIT-0
 │  ├─ repository: https://github.com/csstools/postcss-plugins
 │  ├─ path: node_modules/@csstools/color-helpers
@@ -229,7 +229,7 @@
 │  ├─ repository: https://github.com/csstools/postcss-plugins
 │  ├─ path: node_modules/@csstools/css-calc
 │  └─ licenseFile: node_modules/@csstools/css-calc/LICENSE.md
-├─ @csstools/css-color-parser@3.0.10
+├─ @csstools/css-color-parser@3.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/csstools/postcss-plugins
 │  ├─ path: node_modules/@csstools/css-color-parser
@@ -518,7 +518,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.17.2
+├─ @types/node@22.18.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1040,7 +1040,7 @@
 │  ├─ publisher: mdo
 │  ├─ path: node_modules/bootstrap-icons
 │  └─ licenseFile: node_modules/bootstrap-icons/LICENSE
-├─ bowser@2.12.0
+├─ bowser@2.12.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/lancedikson/bowser
 │  ├─ publisher: Dustin Diaz
@@ -1860,7 +1860,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.208
+├─ electron-to-chromium@1.5.209
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -3998,7 +3998,7 @@
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici-types
 │  └─ licenseFile: node_modules/undici-types/LICENSE
-├─ undici@7.14.0
+├─ undici@7.15.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici
