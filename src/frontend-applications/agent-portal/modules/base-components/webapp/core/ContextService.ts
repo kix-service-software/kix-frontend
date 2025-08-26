@@ -298,6 +298,13 @@ export class ContextService {
         return canRemove;
     }
 
+    public async setDefaultFallbackContext(): Promise<void> {
+        const url = await AgentService.getInstance().getUserPreference(PersonalSettingsProperty.INITIAL_SITE_URL);
+        if (url) {
+            this.DEFAULT_FALLBACK_CONTEXT = url?.Value;
+        }
+    }
+
     private async switchToTargetContext(
         sourceContext: any, targetContextId?: string, targetObjectId?: string | number, useSourceContext?: boolean
     ): Promise<void> {

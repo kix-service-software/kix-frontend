@@ -111,6 +111,7 @@ class Component {
                     BrowserUtil.handleBeforeUnload();
                     setTimeout(async () => {
                         BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
+                        await ContextService.getInstance().setDefaultFallbackContext();
                         await ContextService.getInstance().toggleActiveContext(null, null, true);
                         EventService.getInstance().publish(ApplicationEvent.REFRESH);
                         const toast = await TranslationService.translate('Translatable#Changes saved.');

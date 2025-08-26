@@ -481,6 +481,9 @@ msgstr "Asset Explorer"
 msgid "CMDB: CI Classes"
 msgstr "Assets: Asset Classes"
 
+msgid "CMDB View"
+msgstr "Assets View"
+
 msgid "CNO"
 msgstr ""
 
@@ -3712,6 +3715,9 @@ msgstr ""
 msgid "Organisations Dashboard"
 msgstr ""
 
+msgid "Organizations and Contacts View"
+msgstr ""
+
 msgid "Other"
 msgstr ""
 
@@ -4796,6 +4802,9 @@ msgid "Team"
 msgstr ""
 
 msgid "Team Backlog"
+msgstr ""
+
+msgid "Team View"
 msgstr ""
 
 msgid ""

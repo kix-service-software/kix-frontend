@@ -43,8 +43,10 @@ import { GraphService } from '../../../graph/webapp/core/GraphService';
 import { SearchService } from '../../../search/webapp/core/SearchService';
 import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
+import { PersonalSettingsService } from '../../../user/model/PersonalSettingsService';
 import { ConfigItemPrintAction } from './actions/ConfigItemPrintAction';
 import { CMDBGraphInstance } from './CMDBGraphInstance';
+import { CMDBInitialSiteURLNodesService } from './CMDBInitialSiteURLNodesService';
 import { ConfigItemPlaceholderHandler } from './ConfigItemPlaceholderHandler';
 import { PostproductivCSSHandler } from './table/PostproductivCSSHandler';
 
@@ -77,6 +79,10 @@ export class UIModule implements IUIModule {
         );
 
         PlaceholderService.getInstance().registerPlaceholderHandler(ConfigItemPlaceholderHandler.getInstance());
+
+        PersonalSettingsService.getInstance().registerInitialURLSiteExtendedService(
+            new CMDBInitialSiteURLNodesService()
+        );
 
         await this.registerContexts();
         this.registerActions();

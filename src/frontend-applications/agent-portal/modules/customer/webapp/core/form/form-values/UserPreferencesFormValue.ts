@@ -19,6 +19,7 @@ import { PersonalSettingsProperty } from '../../../../../user/model/PersonalSett
 import { User } from '../../../../../user/model/User';
 import { UserPreference } from '../../../../../user/model/UserPreference';
 import { UserProperty } from '../../../../../user/model/UserProperty';
+import { InitialSiteURLFormValue } from './InitialSiteURLFormValue';
 import { LanguageFormValue } from './LanguageFormValue';
 import { NotificationFormValue } from './NotificationFormValue';
 
@@ -48,6 +49,7 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
 
         this.addLanguageFormValue(preferences, objectValueMapper);
         this.oooFormValue = this.addOutOfOfficeFormValues(preferences, objectValueMapper);
+        this.addInitialSiteURLFormValue(preferences, objectValueMapper);
         this.myQueuesFormValue = this.addMyQueuesFormValue(preferences, objectValueMapper);
         this.notificationsFormValue = this.addNotificationFormValue(preferences, objectValueMapper);
 
@@ -169,6 +171,17 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
         oofFormValue.formValues.push(endFormValue);
 
         return oofFormValue;
+    }
+
+    private addInitialSiteURLFormValue(preferences: UserPreference[], objectValueMapper: ObjectFormValueMapper): void {
+        let preference = preferences.find((p) => p.ID === PersonalSettingsProperty.INITIAL_SITE_URL);
+        if (!preference) {
+            preference = new UserPreference();
+            preference.ID = PersonalSettingsProperty.INITIAL_SITE_URL;
+            preferences.push(preference);
+        }
+        const formValue = new InitialSiteURLFormValue('Value', preference, objectValueMapper, this);
+        this.formValues.push(formValue);
     }
 
     private addMyQueuesFormValue(

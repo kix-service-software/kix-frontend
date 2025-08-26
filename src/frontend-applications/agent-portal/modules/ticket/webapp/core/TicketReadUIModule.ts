@@ -59,6 +59,8 @@ import { FetchAssetAttributesOptionFieldHandler } from './form/extended-form-man
 import { TicketBulkPrintAction } from './actions/TicketBulkPrintAction';
 import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
 import { SearchService } from '../../../search/webapp/core/SearchService';
+import { PersonalSettingsService } from '../../../user/model/PersonalSettingsService';
+import { TicketInitialSiteURLNodesService } from './TicketInitialSiteURLNodesService';
 
 export class UIModule implements IUIModule {
 
@@ -121,6 +123,10 @@ export class UIModule implements IUIModule {
         if (this.doRegisterContexts) {
             await this.registerContexts();
         }
+
+        PersonalSettingsService.getInstance().registerInitialURLSiteExtendedService(
+            new TicketInitialSiteURLNodesService()
+        );
     }
 
     public async registerExtensions(): Promise<void> {

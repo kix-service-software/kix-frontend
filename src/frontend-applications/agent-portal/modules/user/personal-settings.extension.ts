@@ -97,7 +97,9 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                 'Translatable#Favorites',
                 PersonalSettingsProperty.INITIAL_SITE_URL,
                 'Translatable#Initial Site URL',
-                'Translatable#Helptext_PersonalSettings_InitialSiteURL_Hint'
+                'Translatable#Helptext_PersonalSettings_InitialSiteURL_Hint',
+                'initial-site-url-select-input',
+                false, new FormFieldValue('Home-Dashboard'),
             ),
             new PersonalSetting(
                 'Translatable#Favorites',
