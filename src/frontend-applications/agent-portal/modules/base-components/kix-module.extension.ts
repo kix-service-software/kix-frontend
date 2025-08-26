@@ -116,7 +116,10 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('translation-string', '/kix-module-base-components$0/webapp/components/translation-string', []),
         new UIComponent('tree', '/kix-module-base-components$0/webapp/components/tree', []),
         new UIComponent('widget', '/kix-module-base-components$0/webapp/components/widget', []),
-        new UIComponent('widget-container', '/kix-module-base-components$0/webapp/components/widget-container', [])
+        new UIComponent('widget-container', '/kix-module-base-components$0/webapp/components/widget-container', []),
+        new UIComponent(
+            'initial-site-url-select-input', '/kix-module-base-components$0/webapp/components/initial-site-url-select-input', []
+        ),
     ];
 
     public webDependencies: string[] = [
