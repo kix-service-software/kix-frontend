@@ -171,11 +171,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
                 if (this.state.expanded) {
                     this.loadDetailedArticle();
+                } else {
+                    await this.prepareActions();
                 }
 
                 this.observer?.disconnect();
                 this.state.show = true;
             });
+        } else if (this.state.article) {
+            await this.prepareActions();
         }
 
         this.resizeHandling();
@@ -190,6 +194,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         } else {
             this.prepareArticleContent(allowSetSeen);
         }
+
     }
 
     public scrollToArticle(): void {
@@ -315,7 +320,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.loadingContent = false;
         this.state.showContent = true;
 
-        this.state.actions = await this.context?.articleLoader?.prepareArticleActions(this.detailedArticle);
+        await this.prepareActions(this.detailedArticle);
+    }
+
+    private async prepareActions(article: Article = this.state.article): Promise<void> {
+        this.state.actions = await this.context?.articleLoader?.prepareArticleActions(article);
     }
 
     private saveArticleToggleState(): void {
