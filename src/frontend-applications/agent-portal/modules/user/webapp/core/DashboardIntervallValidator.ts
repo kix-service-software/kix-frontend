@@ -22,9 +22,9 @@ export class DashboardIntervallValidator implements IFormFieldValidator {
     public validatorId: string = 'DashboardIntervallValidator';
 
     public isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean {
-        const option = formField.options.find((o) => o.option === NumberInputOptions.POSITIVE_INTEGER);
+        const option = formField?.options?.find((o) => o.option === NumberInputOptions.POSITIVE_INTEGER);
         const hasIntergerOption = BrowserUtil.isBooleanTrue(option?.value);
-        return formField.inputComponent === 'number-input' && hasIntergerOption;
+        return formField?.inputComponent === 'number-input' && hasIntergerOption;
     }
 
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
