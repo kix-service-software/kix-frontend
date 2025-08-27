@@ -555,6 +555,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         if (!create && articles?.length && ticket.TicketID) {
             for (const article of articles) {
                 let uri, articleCreate;
+
                 if (!article.ArticleID) {
                     articleCreate = true;
                     uri = this.buildUri(this.RESOURCE_URI, ticket.TicketID, 'articles');

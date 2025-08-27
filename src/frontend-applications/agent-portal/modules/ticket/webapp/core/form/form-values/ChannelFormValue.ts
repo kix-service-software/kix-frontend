@@ -112,7 +112,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
 
         // do not show in article edit forms
-        if ((this.object as Article).ArticleID) {
+        if (this.shouldSetInvisible()) {
             this.visible = false;
             this.readonly = true;
         } else {
@@ -128,6 +128,11 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
 
         this.sortArticleDFs(field);
+    }
+
+    private shouldSetInvisible(): boolean {
+        const context = ContextService.getInstance().getActiveContext();
+        return (this.object as Article).ArticleID && context.getAdditionalInformation('ARTICLE_FORWARD');
     }
 
     protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
