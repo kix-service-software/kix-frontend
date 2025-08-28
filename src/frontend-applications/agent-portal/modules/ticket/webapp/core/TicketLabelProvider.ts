@@ -30,7 +30,6 @@ import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { QueueLabelProvider } from './QueueLabelProvider';
-import { ObjectLoader } from '../../../base-components/webapp/core/ObjectLoader';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 

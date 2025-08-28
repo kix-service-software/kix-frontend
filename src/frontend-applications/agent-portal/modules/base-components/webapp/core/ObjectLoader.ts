@@ -14,7 +14,6 @@ export class ObjectLoader {
 
     private objectIdMap: Map<string, Map<string, Array<[(object: any) => void, (error: any) => void]>>> = new Map();
 
-
     private loadingOptionsMap: Map<string, KIXObjectLoadingOptions> = new Map();
 
     private timeout: any;
@@ -56,7 +55,6 @@ export class ObjectLoader {
             this.objectIdMap.forEach((value, key) => {
                 this.loadObjects(key, value);
                 this.objectIdMap.delete(key);
-                this.loadingOptionsMap.delete(key);
             });
         }, 150);
     }
