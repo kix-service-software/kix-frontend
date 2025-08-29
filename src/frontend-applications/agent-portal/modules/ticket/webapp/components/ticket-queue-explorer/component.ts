@@ -18,13 +18,11 @@ import { ContextEvents } from '../../../../base-components/webapp/core/ContextEv
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-export class Component {
-
-    private state: ComponentState;
+export class Component extends AbstractMarkoComponent<ComponentState, TicketContext> {
     private subscriber: IEventSubscriber;
     private contextListenerId: string;
-    private context: TicketContext;
 
     public listenerId: string;
 
@@ -38,7 +36,7 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext<TicketContext>();
+        await super.onMount();
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         await this.loadQueues(this.context);
 
@@ -61,7 +59,7 @@ export class Component {
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
 
         this.contextListenerId = IdService.generateDateBasedId('ticket-queue-explorer');
-        this.context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             filteredObjectListChanged: async () => null,
             additionalInformationChanged: (key: string, value: any) => {
                 if (key === AdditionalContextInformation.LOADING) {

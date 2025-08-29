@@ -12,10 +12,9 @@ import { Article } from '../../../model/Article';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { IdService } from '../../../../../model/IdService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private article: Article = null;
 

@@ -26,14 +26,14 @@ export class FAQArticleVoteAction extends AbstractAction {
     public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Rate';
         this.icon = 'kix-icon-star-fully';
     }
 
     public async canShow(): Promise<boolean> {
         let show = false;
-        const context = ContextService.getInstance().getActiveContext();
-        const objectId = context.getObjectId();
+        const objectId = this.context?.getObjectId();
 
         const permissions = [
             new UIComponentPermission(`faq/articles/${objectId}/votes`, [CRUD.CREATE])

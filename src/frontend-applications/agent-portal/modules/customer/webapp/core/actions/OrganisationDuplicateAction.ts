@@ -12,7 +12,6 @@ import { UIComponentPermission } from '../../../../../model/UIComponentPermissio
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { OrganisationDialogUtil } from '../OrganisationDialogUtil';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { Organisation } from '../../../model/Organisation';
 
 export class OrganisationDuplicateAction extends AbstractAction {
@@ -22,13 +21,13 @@ export class OrganisationDuplicateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Duplicate';
         this.icon = 'kix-icon-copy';
     }
 
     public async run(event: any): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const contact = await context.getObject<Organisation>(KIXObjectType.ORGANISATION);
+        const contact = await this.context?.getObject<Organisation>(KIXObjectType.ORGANISATION);
         if (contact) {
             OrganisationDialogUtil.duplicate(contact);
         }

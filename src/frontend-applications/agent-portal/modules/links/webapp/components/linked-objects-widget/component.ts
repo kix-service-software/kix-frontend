@@ -29,14 +29,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        context.registerListener('kix-object-linked-objects-widget', {
+        this.context?.registerListener('kix-object-linked-objects-widget', {
             objectChanged: (id: string | number, object: KIXObject, type: KIXObjectType) => {
-                this.prepareTable(context);
+                this.prepareTable(this.context);
             },
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
@@ -46,7 +44,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             additionalInformationChanged: (): void => { return; }
         });
 
-        this.prepareTable(context);
+        this.prepareTable(this.context);
     }
 
     private async prepareTable(context: Context): Promise<void> {

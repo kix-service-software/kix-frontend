@@ -7,14 +7,13 @@
  * --
  */
 
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ComponentState } from './ComponentState';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();

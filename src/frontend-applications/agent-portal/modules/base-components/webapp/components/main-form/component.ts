@@ -23,15 +23,14 @@ import { EventService } from '../../core/EventService';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { FormEvent } from '../../core/FormEvent';
-import { ContextService } from '../../core/ContextService';
 import { ContextFormManagerEvents } from '../../core/ContextFormManagerEvents';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
 
-class FormComponent {
+class FormComponent extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
     private changePageTimeout: any;
     private keyListenerElement: any;
     private keyListener: any;
@@ -42,10 +41,9 @@ class FormComponent {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.prepareForm();
-
-        const context = ContextService.getInstance().getActiveContext();
-        const pageIndex = context?.getFormManager()?.getActiveFormPageIndex();
+        const pageIndex = this.context?.getFormManager()?.getActiveFormPageIndex();
         if (pageIndex) {
             this.state.activePageIndex = pageIndex;
         }
@@ -125,8 +123,7 @@ class FormComponent {
     }
 
     private async prepareForm(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.formInstance = await context?.getFormManager()?.getFormInstance();
+        this.state.formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (this.state.formInstance) {
             this.state.formId = this.state.formInstance.getForm()?.id;
             this.setNeeded();
@@ -233,8 +230,7 @@ class FormComponent {
             const validateOk = await this.validateActivePage();
             if (validateOk) {
                 this.state.activePageIndex = index;
-                const context = ContextService.getInstance().getActiveContext();
-                context?.getFormManager()?.setActiveFormPageIndex(index);
+                this.context?.getFormManager()?.setActiveFormPageIndex(index);
             }
         }, 150);
     }

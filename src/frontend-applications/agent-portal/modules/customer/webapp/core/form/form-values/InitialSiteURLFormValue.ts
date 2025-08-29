@@ -24,7 +24,7 @@ export class InitialSiteURLFormValue extends SelectObjectFormValue {
     ) {
         super(property, preference, objectValueMapper, parent);
         this.maxSelectCount = 1;
-        this.label = 'Translatable#Initial Site URL';
+        this.label = 'Translatable#Initial Content';
         this.setNewInitialState(FormValueProperty.VISIBLE, true);
     }
 

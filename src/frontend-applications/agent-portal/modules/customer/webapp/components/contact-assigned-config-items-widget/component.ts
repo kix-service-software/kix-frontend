@@ -18,10 +18,9 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { ContactProperty } from '../../../model/ContactProperty';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -32,12 +31,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        context.registerListener('contact-assigned-config-items-component', {
+        this.context?.registerListener('contact-assigned-config-items-component', {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
@@ -51,7 +48,7 @@ class Component {
             additionalInformationChanged: (): void => { return; }
         });
 
-        this.initWidget(await context.getObject<Contact>(KIXObjectType.CONTACT));
+        this.initWidget(await this.context?.getObject<Contact>(KIXObjectType.CONTACT));
     }
 
     private async initWidget(contact: Contact): Promise<void> {

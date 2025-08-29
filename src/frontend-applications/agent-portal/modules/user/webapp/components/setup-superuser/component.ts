@@ -41,6 +41,7 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { WindowListener } from '../../../../base-components/webapp/core/WindowListener';
+import { Context } from '../../../../../model/Context';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -127,8 +128,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
 
-        const context = ContextService.getInstance().getActiveContext();
-        context?.getFormManager()?.setFormId(this.state.formId);
+        this.context?.getFormManager()?.setFormId(this.state.formId);
 
         if (this.update) {
             setTimeout(() => this.initFormValues(form.id), 500);
@@ -142,8 +142,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         ).catch((): Contact[] => []);
 
         if (contacts && contacts.length) {
-            const context = ContextService.getInstance().getActiveContext();
-            const formInstance = await context?.getFormManager()?.getFormInstance();
+            const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
             formInstance.provideFormFieldValuesForProperties([
                 [ContactProperty.LASTNAME, contacts[0].Lastname],
@@ -156,8 +155,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(logout: boolean): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const roles = await KIXObjectService.loadObjects<Role>(
             KIXObjectType.ROLE, null,

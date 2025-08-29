@@ -23,6 +23,7 @@ export class TicketBulkPrintAction extends AbstractAction {
     public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Bulk Print';
         this.icon = 'kix-icon-print';
     }

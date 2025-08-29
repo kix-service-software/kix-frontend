@@ -18,8 +18,9 @@ import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
     private releaseInfo: ReleaseInfo;

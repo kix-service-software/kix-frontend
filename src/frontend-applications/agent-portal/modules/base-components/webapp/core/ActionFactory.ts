@@ -16,12 +16,12 @@ import { SortUtil } from '../../../../model/SortUtil';
 import { IdService } from '../../../../model/IdService';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ActionGroup } from '../../model/ActionGroup';
-
+import { ContextService } from './ContextService';
 
 export class ActionFactory<T extends AbstractAction> {
 
     private actions: Map<string, new () => T> = new Map();
-    private actionInstances: Map<string, T> = new Map();
+    private actionInstances: Map<string, Map<string, T>> = new Map();
     private blacklist: string[] = [];
     private widgetConfigurationActions: Map<ConfigurationType | string, string[]> = new Map();
     private widgetActions: Map<string, Array<new () => T>> = new Map();
@@ -90,10 +90,16 @@ export class ActionFactory<T extends AbstractAction> {
             actionIds = [];
         }
 
+        const contextInstanceId = ContextService.getInstance().getActiveContext()?.instanceId;
+        if (!this.actionInstances.has(contextInstanceId)) {
+            this.actionInstances.set(contextInstanceId, new Map());
+        }
+
+        const actionMap: Map<string, IAction> = this.actionInstances.get(contextInstanceId);
         const actions = [];
         for (const actionId of actionIds) {
-            if (this.actionInstances.has(actionId)) {
-                actions.push(this.actionInstances.get(actionId));
+            if (actionMap.has(actionId)) {
+                actions.push(actionMap.get(actionId));
             } else if (this.actions.has(actionId) && !this.blacklist.some((a) => a === actionId)) {
                 const actionPrototype = this.actions.get(actionId);
                 const action = await this.createActionInstance(actionPrototype, actionId, data);
@@ -126,8 +132,11 @@ export class ActionFactory<T extends AbstractAction> {
         return action;
     }
 
-    public registerActionInstance(actionId: string, action: T): void {
-        this.actionInstances.set(actionId, action);
+    public registerActionInstance(actionId: string, action: T, contextInstanceId: string): void {
+        if (!this.actionInstances.has(contextInstanceId)) {
+            this.actionInstances.set(contextInstanceId, new Map());
+        }
+        this.actionInstances.get(contextInstanceId).set(actionId, action);
     }
 
     public async getActionsForType(type: ConfigurationType | string): Promise<AbstractAction[]> {
@@ -164,8 +173,7 @@ export class ActionFactory<T extends AbstractAction> {
 
     public static async getActionList(actionList: IAction[]): Promise<Array<ActionGroup | IAction>> {
         const list: Array<ActionGroup | IAction> = [];
-        const actionPromises = [];
-        actionList.forEach((a) => actionPromises.push(a.canShow()));
+        const actionPromises = actionList.map((a) => a.canShow());
         const canShowResults = await Promise.all(actionPromises);
         for (const [index, canShow] of canShowResults.entries()) {
             if (!canShow) {

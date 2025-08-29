@@ -7,11 +7,10 @@
  * --
  */
 
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
 
-export class Component {
-
-    private state: ComponentState;
+export class Component extends AbstractMarkoComponent<ComponentState> {
     private minimizedGroups: number[] = [];
 
     public onCreate(input: any): void {
@@ -25,7 +24,7 @@ export class Component {
         this.state.toggleButtonVisible = input.toggleButtonVisible !== false;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         if (this.state.level > 8) {
             this.state.level = 8;
         }

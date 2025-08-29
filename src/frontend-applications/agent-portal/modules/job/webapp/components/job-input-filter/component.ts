@@ -31,6 +31,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     private listenerId: string;
     private formTimeout: any;
     private formSubscriber: IEventSubscriber;
+    private initialized: boolean;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -41,9 +42,11 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.listenerId = IdService.generateDateBasedId('job-input-filter-manager-listener');
         await this.setManager();
-        await super.onMount();
+        this.initialized = true;
+        await this.setCurrentValue();
 
         this.formSubscriber = {
             eventSubscriberId: 'JobInputFilter',
@@ -62,8 +65,7 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     // eslint-disable-next-line max-lines-per-function
     private async setManager(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
         const type = typeValue && typeValue.value ? typeValue.value : null;
 
@@ -118,8 +120,10 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        if (!this.initialized) {
+            return;
+        }
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<any>(this.state.field?.instanceId);
         if (value && value.value) {
 
@@ -143,7 +147,7 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     private async setCriteria(criteria: any, fromBackend?: boolean): Promise<void> {
         let objectType: KIXObjectType | string;
-        const inputType = await this.state.manager.getInputType(fromBackend ? criteria.Field : criteria.property);
+        const inputType = await this.state.manager?.getInputType(fromBackend ? criteria.Field : criteria.property);
         if (inputType) {
             if (inputType === InputFieldTypes.OBJECT_REFERENCE) {
                 objectType = await this.state.manager.getObjectReferenceObjectType(
@@ -185,7 +189,7 @@ class Component extends FormInputComponent<any, ComponentState> {
             fromBackend ? criteria.Value : criteria.value,
             [], false, true, objectType
         );
-        this.state.manager.setValue(filterValue);
+        this.state.manager?.setValue(filterValue);
     }
 }
 

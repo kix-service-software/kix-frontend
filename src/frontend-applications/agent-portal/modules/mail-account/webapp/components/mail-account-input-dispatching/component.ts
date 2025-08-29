@@ -65,8 +65,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const formValue = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         const treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
         if (formValue && treeHandler) {
@@ -89,8 +88,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private async handleSelectionField(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         let field = this.state.field?.children.find((f) => f.property === MailAccountProperty.QUEUE_ID);
         const showField = this.isQueueType();
         if (field && !showField) {

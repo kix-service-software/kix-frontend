@@ -13,6 +13,7 @@ import { Table } from '../../../model/Table';
 export class SwitchColumnOrderAction extends AbstractAction<Table> {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#switch_column_order_action';
         this.icon = 'kix-icon-exchange';
     }

@@ -7,7 +7,6 @@
  * --
  */
 
-import { Context } from '../../../../../model/Context';
 import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
@@ -17,12 +16,12 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { ObjectFormValue } from '../../../model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
+import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
 import { ObjectFormHandler } from '../../core/ObjectFormHandler';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
     private subscriber: IEventSubscriber;
     private contextListenerId: string;
     private contextInstanceId: string;
@@ -38,11 +37,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        if (this.contextInstanceId) {
-            this.context = ContextService.getInstance().getContext(this.contextInstanceId);
-        } else {
-            this.context = ContextService.getInstance().getActiveContext();
-        }
+        await super.onMount(this.contextInstanceId);
 
         this.formhandler = await this.context.getFormManager().getObjectFormHandler();
 
@@ -61,17 +56,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private registerListener(): void {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('object-form-buttonbar'),
-            eventPublished: async (data: Context | any, eventId: string): Promise<void> => {
-                if (eventId === ObjectFormEvent.FORM_SUBMIT_ENABLED) {
-                    this.state.canSubmit = data;
-                } else if (eventId === ObjectFormEvent.BLOCK_FORM) {
-                    this.state.blocked = data.blocked;
+            eventPublished: async (data: ObjectFormEventData, eventId: string): Promise<void> => {
+                if (this.context?.instanceId === data.contextInstanceId) {
+                    if (eventId === ObjectFormEvent.FORM_SUBMIT_ENABLED) {
+                        this.state.canSubmit = data.canSubmit;
+                    } else if (eventId === ObjectFormEvent.BLOCK_FORM) {
+                        this.state.blocked = data.blocked;
+                    }
                 }
             }
         };
 
         this.contextListenerId = IdService.generateDateBasedId('object-forms-buttonbar');
-        this.context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             additionalInformationChanged: (key: string, value: any) => {
                 if (key === AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT) {
                     this.state.submitPattern = value;
@@ -108,7 +105,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             setTimeout(() => {
                 const invalidFormValue = this.getFirstInvalidFormValue(this.formhandler?.getFormValues());
-                EventService.getInstance().publish(ObjectFormEvent.SCROLL_TO_FORM_VALUE, invalidFormValue?.instanceId);
+                EventService.getInstance().publish(
+                    ObjectFormEvent.SCROLL_TO_FORM_VALUE,
+                    new ObjectFormEventData(null, null, invalidFormValue?.instanceId)
+                );
             }, 25);
         }
     }

@@ -34,9 +34,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
-        context.registerListener('user-assigned-roles-widget', {
+        this.context?.registerListener('user-assigned-roles-widget', {
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
@@ -49,11 +49,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             additionalInformationChanged: (): void => { return; }
         });
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        await this.initWidget(await context.getObject<User>());
+        await this.initWidget(await this.context?.getObject<User>());
     }
 
     private async initWidget(user: User): Promise<void> {

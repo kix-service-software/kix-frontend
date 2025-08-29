@@ -8,8 +8,9 @@
  */
 
 import { IdService } from '../../../../../../model/IdService';
+import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public currentValue: string = null,
@@ -18,6 +19,8 @@ export class ComponentState {
         public prepared: boolean = false,
         public readonly: boolean = false,
         public externallyUpdated: boolean = false,
-    ) { }
+    ) {
+        super();
+    }
 
 }

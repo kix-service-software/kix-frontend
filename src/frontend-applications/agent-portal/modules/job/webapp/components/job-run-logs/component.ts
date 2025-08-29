@@ -16,10 +16,9 @@ import { JobRunLogProperty } from '../../../model/JobRunLogProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { JobRunLog } from '../../../model/JobRunLog';
 import { RunLogLoadingOptions } from '../../../model/RunLogLoadingOptions';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private jobRun: JobRun;
 
     public onCreate(input: any): void {

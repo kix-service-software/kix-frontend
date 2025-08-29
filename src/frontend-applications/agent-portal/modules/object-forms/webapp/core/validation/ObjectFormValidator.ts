@@ -17,6 +17,7 @@ import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 import { ObjectFormValueMapper } from '../../../model/ObjectFormValueMapper';
 import { ObjectFormRegistry } from '../ObjectFormRegistry';
 import { ObjectFormValueValidator } from './ObjectFormValueValidator';
+import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
 
 export class ObjectFormValidator {
 
@@ -40,8 +41,10 @@ export class ObjectFormValidator {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('ObjectFormValidator'),
-            eventPublished: (data, eventId, subscriberId?): void => {
-                this.validate(data);
+            eventPublished: (data: ObjectFormEventData, eventId, subscriberId?): void => {
+                if (data.contextInstanceId === this.objectFormValueMapper?.instanceId) {
+                    this.validate(data.formValue);
+                }
             }
         };
         EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_CHANGED, this.subscriber);

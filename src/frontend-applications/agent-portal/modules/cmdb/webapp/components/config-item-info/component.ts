@@ -12,10 +12,9 @@ import { ComponentState } from './ComponentState';
 import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ConfigItemDetailsContext } from '../../core';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();

@@ -12,8 +12,9 @@ import { EventService } from '../../../../../../base-components/webapp/core/Even
 import { MobileShowEvent } from '../../../../../model/MobileShowEvent';
 import { TranslationService } from '../../../../../../translation/webapp/core/TranslationService';
 import { MobileShowEventData } from '../../../../../model/MobileShowEventData';
+import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 

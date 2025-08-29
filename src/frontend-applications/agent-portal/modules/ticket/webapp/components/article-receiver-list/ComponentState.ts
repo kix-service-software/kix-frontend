@@ -7,12 +7,15 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { ArticleReceiver } from '../../../model/ArticleReceiver';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public receiverList: ArticleReceiver[] = []
-    ) { }
+    ) {
+        super();
+    }
 
 }

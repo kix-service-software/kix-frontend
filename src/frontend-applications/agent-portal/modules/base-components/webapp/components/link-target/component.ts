@@ -13,10 +13,9 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { RoutingService } from '../../core/RoutingService';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private routingConfiguration: RoutingConfiguration;
     private objectId: number;
     private object: KIXObject;

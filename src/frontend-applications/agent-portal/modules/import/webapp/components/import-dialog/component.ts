@@ -22,7 +22,6 @@ import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/
 import { Error } from '../../../../../../../server/model/Error';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
-import { Context } from '../../../../../model/Context';
 import { TableEvent } from '../../../../table/model/TableEvent';
 import { TableEventData } from '../../../../table/model/TableEventData';
 import { ValueState } from '../../../../table/model/ValueState';
@@ -33,11 +32,10 @@ import { ImportProperty } from '../../../model/ImportProperty';
 import { ComponentContent } from '../../../../base-components/webapp/core/ComponentContent';
 import { OverlayService } from '../../../../base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../base-components/webapp/core/OverlayType';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
-    private context: Context;
     private objectType: KIXObjectType | string;
     private tableSubscriber: IEventSubscriber;
 
@@ -56,11 +54,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Replace Values', 'Translatable#Start Import'
         ]);
-
-        this.context = ContextService.getInstance().getActiveContext();
 
         this.state.title = await this.context?.getDisplayText();
         this.objectType = this.context?.descriptor?.kixObjectTypes?.length

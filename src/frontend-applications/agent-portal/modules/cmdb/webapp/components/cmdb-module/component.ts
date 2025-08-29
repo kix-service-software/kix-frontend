@@ -8,17 +8,16 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { CMDBContext } from '../../core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { IdService } from '../../../../../model/IdService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState, CMDBContext> {
 
-    private state: ComponentState;
     private subscriber: IEventSubscriber;
 
     public onCreate(): void {
@@ -26,14 +25,14 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext() as CMDBContext;
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Search',
             'Translatable#Help'
         ]);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
-        this.state.filterValue = context.filterValue;
+        this.state.filterValue = this.context?.filterValue;
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
@@ -47,10 +46,9 @@ class Component {
     }
 
     private async prepareWidgets(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
         this.state.prepared = false;
         setTimeout(async () => {
-            this.state.contentWidgets = await context.getContent();
+            this.state.contentWidgets = await this.context?.getContent();
             this.state.prepared = true;
         }, 100);
     }
@@ -63,10 +61,7 @@ class Component {
     }
 
     public async search(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof CMDBContext) {
-            context.setFilterValue(this.state.filterValue);
-        }
+        this.context?.setFilterValue(this.state.filterValue);
     }
 
 }

@@ -690,8 +690,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     private async prepareOverlayIcon(nodes: TreeNode[]): Promise<TreeNode[]> {
         if (nodes && nodes.length) {
-            const context = ContextService.getInstance().getActiveContext();
-            const form = context?.getFormManager()?.getForm();
+            const form = this.context?.getFormManager()?.getForm();
             if (form?.objectType === KIXObjectType.TICKET) {
                 for (const node of nodes) {
                     const overlay = await LabelService.getInstance().getOverlayIconByProperty(
@@ -758,9 +757,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context.descriptor.contextMode.toLowerCase().includes('admin')) {
-            const isRestoredContext = context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
+        if (this.context.descriptor.contextMode.toLowerCase().includes('admin')) {
+            const isRestoredContext = this.context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
             if (!isRestoredContext) {
                 this.defaultValue = field?.defaultValue?.value || [];
             }

@@ -33,7 +33,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.labelProvider = new UserLabelProvider();
         const context = ContextService.getInstance().getActiveContext();
 
-        context.registerListener('user-personal-settings-widget', {
+        this.context?.registerListener('user-personal-settings-widget', {
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
@@ -46,11 +46,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             additionalInformationChanged: (): void => { return; }
         });
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        await this.initWidget(await context.getObject<User>());
+        await this.initWidget(await this.context?.getObject<User>());
     }
 
     private async initWidget(user: User): Promise<void> {

@@ -16,29 +16,23 @@ export class ContactTableDependingAction extends AbstractAction {
     private isActive = true;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Activate dependency to organisation';
         this.icon = 'kix-icon-dependence';
-        const context = ContextService.getInstance().getActiveContext();
 
-        if (context) {
-            const isDepending = context.getAdditionalInformation(
-                OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
-            );
-            this.isActive = isDepending;
-        }
+        const isDepending = this.context?.getAdditionalInformation(
+            OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
+        );
+        this.isActive = isDepending;
     }
 
     public async setData(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-
-        if (context) {
-            if (this.isActive) {
-                this.text = 'Translatable#Remove dependency to organisation';
-                this.icon = 'kix-icon-dependence-remove';
-            } else {
-                this.text = 'Translatable#Activate dependency to organisation';
-                this.icon = 'kix-icon-dependence';
-            }
+        if (this.isActive) {
+            this.text = 'Translatable#Remove dependency to organisation';
+            this.icon = 'kix-icon-dependence-remove';
+        } else {
+            this.text = 'Translatable#Activate dependency to organisation';
+            this.icon = 'kix-icon-dependence';
         }
     }
 
@@ -46,11 +40,11 @@ export class ContactTableDependingAction extends AbstractAction {
         const context = ContextService.getInstance().getActiveContext() as OrganisationContext;
         if (context) {
             this.isActive = !this.isActive;
-            context.setAdditionalInformation(
+            this.context?.setAdditionalInformation(
                 OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, this.isActive
             );
 
-            context.loadContacts();
+            (this.context as OrganisationContext)?.loadContacts();
         }
     }
 

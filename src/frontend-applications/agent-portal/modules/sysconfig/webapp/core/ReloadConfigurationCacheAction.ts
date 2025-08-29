@@ -20,6 +20,7 @@ import { ContextService } from '../../../base-components/webapp/core/ContextServ
 export class ReloadConfigurationCacheAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Reload Frontend Configurations';
         this.icon = 'kix-icon-check';
     }

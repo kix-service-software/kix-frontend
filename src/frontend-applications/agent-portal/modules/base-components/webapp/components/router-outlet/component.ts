@@ -8,12 +8,14 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { EventService } from '../../core/EventService';
-import { RoutingEvent } from '../../core/RoutingEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
 import { ContextService } from '../../core/ContextService';
+import { ContextEvents } from '../../core/ContextEvents';
+import { KIXModulesService } from '../../core/KIXModulesService';
+import { ApplicationEvent } from '../../core/ApplicationEvent';
+import { Context } from '../../../../../model/Context';
 
 export class RouterOutletComponent {
 
@@ -28,40 +30,62 @@ export class RouterOutletComponent {
         this.state.routerId = input.id;
     }
 
-    public onMount(): void {
-
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            this.state.componentId = context.descriptor?.componentId;
-            this.state.data = { objectId: context.getObjectId() };
-            this.state.template = KIXModulesService.getComponentTemplate(this.state.componentId);
-        }
+    public async onMount(): Promise<void> {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('RouterOutlet'),
-            eventPublished: this.routedTo.bind(this)
+            eventPublished: this.updateContextList.bind(this)
         };
-        EventService.getInstance().subscribe(RoutingEvent.ROUTE_TO, this.subscriber);
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
 
-        this.state.prepared = true;
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, {
+            eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
+            eventPublished: (reloadContextInstanceId: string, eventId: string): void => {
+                this.state.reloadContextInstanceId = reloadContextInstanceId;
+
+                setTimeout(() => {
+                    this.state.reloadContextInstanceId = null;
+                }, 500);
+            }
+        });
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(RoutingEvent.ROUTE_TO, this.subscriber);
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
     }
 
-    public routedTo(data: any): void {
-        if (data.componentId) {
-            this.state.prepared = false;
+    public updateContextList(data: Context, eventId: string): void {
+        if (eventId === ContextEvents.CONTEXT_REMOVED) {
+            const index = this.state.contextList.findIndex((c) => c.instanceId === data?.instanceId);
+            if (index !== -1) {
+                this.state.contextList.splice(index, 1);
+            }
+        } else {
+            this.setContextList(data);
+        }
 
-            this.state.componentId = data.componentId;
-            this.state.data = data.data;
+        (this as any).setStateDirty('contextList');
+    }
 
-            this.state.template = KIXModulesService.getComponentTemplate(this.state.componentId);
-            setTimeout(() => this.state.prepared = true, 50);
+    private setContextList(context: Context): void {
+        if (!this.state.contextList.some((c) => c.instanceId === context.instanceId)) {
+            const template = KIXModulesService.getComponentTemplate(context.descriptor.componentId);
+            if (template) {
+                this.state.contextList.push({
+                    template,
+                    instanceId: context.instanceId,
+                    data: { objectId: context.getObjectId() }
+                });
+            }
         }
     }
 
+    public isActiveContext(instanceId: string): boolean {
+        const activeContext = ContextService.getInstance().getActiveContext();
+        return activeContext?.instanceId === instanceId;
+    }
 
 }
 

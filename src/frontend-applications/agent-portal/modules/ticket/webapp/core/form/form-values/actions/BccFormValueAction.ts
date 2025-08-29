@@ -14,6 +14,7 @@ import { ArticleProperty } from '../../../../../model/ArticleProperty';
 export class BccFormValueAction extends FormValueAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Bcc';
         this.icon = 'kix-icon-man-mail-bcc';
     }

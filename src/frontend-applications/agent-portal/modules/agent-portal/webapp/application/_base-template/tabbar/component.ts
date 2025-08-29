@@ -18,7 +18,6 @@ import { ContextEvents } from '../../../../../base-components/webapp/core/Contex
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
-import { HomeContext } from '../../../../../home/webapp/core';
 import { MobileShowEvent } from '../../../../model/MobileShowEvent';
 import { ComponentState } from './ComponentState';
 import { ContextTab } from './ContextTab';
@@ -46,8 +45,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private initContextEventListener(): void {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('tabbar-menu-context-event'),
-            eventPublished: async (data: Context, eventId: string): Promise<void> => {
-                if (eventId === ContextEvents.CONTEXT_CHANGED) {
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
+                if (eventId === ContextEvents.CONTEXT_CHANGED || eventId === ContextEvents.CONTEXT_CREATED) {
                     await this.addEntry(data, true);
                 } else if (eventId === ContextEvents.CONTEXT_REMOVED) {
                     this.removeEntry(data.instanceId);
@@ -74,7 +73,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     tab.displayText = await context.getDisplayText();
                     (this as any).setStateDirty('contextTabs');
                 } else if (eventId === ApplicationEvent.REFRESH_CONTENT) {
-                    const tab = this.state.contextTabs?.find((t) => t.contextInstanceId === data?.instanceId);
+                    const tab = this.state.contextTabs?.find((t) => t.contextInstanceId === data);
                     if (tab) {
                         tab.refresh = false;
                         (this as any).setStateDirty('contextTabs');
@@ -148,20 +147,27 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public tabClicked(tab: ContextTab, event: any): void {
+    public async tabClicked(tab: ContextTab, event: any): Promise<void> {
         if (!tab.active && !this.state.blocked) {
-            tab.refresh = false;
-            ContextService.getInstance().setContextByInstanceId(tab.contextInstanceId);
+            await ContextService.getInstance().setContextByInstanceId(tab.contextInstanceId);
         }
+    }
+
+    public async refreshTab(tab: ContextTab, event: any): Promise<void> {
+        await this.tabClicked(tab, event);
+        tab.refresh = false;
+        setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT, tab.contextInstanceId);
+        }, 500);
     }
 
     public canClose(): boolean {
         const instances = ContextService.getInstance().getContextInstances();
-        let isDefaultContext: boolean = false;
+        let canRemove: boolean = false;
         if (instances.length === 1) {
-            isDefaultContext = instances[0].contextId === ContextService.getInstance().DEFAULT_FALLBACK_CONTEXT;
+            canRemove = ContextService.getInstance().canRemove(instances[0].instanceId);
         }
-        return instances.length > 1 || !isDefaultContext;
+        return instances.length > 1 || canRemove;
     }
 
     public async closeTabWithMMB(tab: ContextTab, event: any): Promise<void> {
@@ -235,12 +241,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         });
         (this as any).setStateDirty('contextTabs');
-    }
-
-    public refreshTab(tab: ContextTab): void {
-        EventService.getInstance().publish(
-            ApplicationEvent.REFRESH_CONTENT, ContextService.getInstance().getContext(tab.contextInstanceId)
-        );
     }
 
     public async tabDblClicked(tab: ContextTab): Promise<void> {

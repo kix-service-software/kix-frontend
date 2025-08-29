@@ -13,10 +13,9 @@ import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEv
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../../base-components/webapp/core/FormValuesChangedEventData';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {

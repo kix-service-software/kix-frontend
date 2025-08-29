@@ -35,10 +35,10 @@ import { ValueState } from '../../../../table/model/ValueState';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { IdService } from '../../../../../model/IdService';
 import { SearchService } from '../../../../search/webapp/core/SearchService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class LinkDialogComponent {
+class LinkDialogComponent extends AbstractMarkoComponent<ComponentState, EditLinkedObjectsDialogContext> {
 
-    private state: ComponentState;
     private linkTypeDescriptions: LinkTypeDescription[] = [];
     private newLinks: CreateLinkDescription[] = [];
     private linkPartners: Array<[string, KIXObjectType]> = [];
@@ -66,6 +66,7 @@ class LinkDialogComponent {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.selectedObjects = [];
 
         this.state.translations = await TranslationService.createTranslationObject(
@@ -107,8 +108,7 @@ class LinkDialogComponent {
     }
 
     public async keyPressed(event: any): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (event.key === 'Enter' && formInstance.hasValues()) {
             this.executeSearch();
         }
@@ -120,16 +120,14 @@ class LinkDialogComponent {
         this.selectedObjects = [];
         this.state.resultCount = 0;
 
-        const context = ContextService.getInstance().getActiveContext();
-
         if (nodes && nodes.length) {
             const formId = nodes[0].id.toString();
-            await context?.getFormManager()?.setFormId(formId);
+            await this.context?.getFormManager()?.setFormId(formId);
 
             this.linkLabel = nodes[0].label;
-            const formInstance = await context?.getFormManager()?.getFormInstance();
+            const formInstance = await this.context?.getFormManager()?.getFormInstance();
             if (formInstance) {
-                context.setObjectList(formInstance.getObjectType(), []);
+                this.context?.setObjectList(formInstance.getObjectType(), []);
             }
         } else {
             this.state.table = null;
@@ -144,8 +142,7 @@ class LinkDialogComponent {
 
     private async executeSearch(): Promise<void> {
         BrowserUtil.toggleLoadingShield('APP_SHIELD', true);
-        const context = ContextService.getInstance().getActiveContext<EditLinkedObjectsDialogContext>();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (context && formInstance.hasValues()) {
             const excludeObjects = this.rootObject && formInstance.getObjectType() === this.rootObject.KIXObjectType
                 ? [this.rootObject]
@@ -155,8 +152,8 @@ class LinkDialogComponent {
                 formInstance, excludeObjects, null, true
             );
 
-            context.setAdditionalInformation('LinkObjectSearchLoadingOptions', loadingOptions);
-            await context.searchObjects(formInstance.getObjectType(), loadingOptions);
+            this.context.setAdditionalInformation('LinkObjectSearchLoadingOptions', loadingOptions);
+            await this.context?.searchObjects(formInstance.getObjectType(), loadingOptions);
 
             await this.prepareResultTable();
             this.setSubmitState();
@@ -168,8 +165,7 @@ class LinkDialogComponent {
     private async prepareResultTable(): Promise<void> {
         this.state.table = null;
 
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const objectType = formInstance.getObjectType();
 

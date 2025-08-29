@@ -64,7 +64,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async updateColumnNames(): Promise<void> {
         this.state.loading = true;
-        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
+        const showInvalid = this.context?.getConfiguration()?.provideInvalidValues;
         const dependencies = await KIXObjectService.getObjectDependencies(this.objectType, showInvalid);
         this.state.dependencyName = await KIXObjectService.getObjectDependencyName(this.objectType);
 
@@ -131,7 +131,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async updateDependencyNodes(): Promise<void> {
-        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
+        const showInvalid = this.context?.getConfiguration()?.provideInvalidValues;
         const nodes = await KIXObjectService.getObjectDependencieNodes(this.objectType, showInvalid);
 
         this.dependencyTreeHandler = TreeService.getInstance().getTreeHandler(this.state.dependencyTreeId);

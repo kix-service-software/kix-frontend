@@ -28,6 +28,7 @@ import { FormConfigurationObject } from '../../model/FormConfigurationObject';
 import { DynamicFieldCountableFormValue } from '../../model/FormValues/DynamicFields/DynamicFieldCountableFormValue';
 import { ObjectFormValue } from '../../model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../model/ObjectFormEvent';
+import { ObjectFormEventData } from '../../model/ObjectFormEventData';
 import { ObjectFormValueMapper } from '../../model/ObjectFormValueMapper';
 import { RuleResult } from '../../model/RuleResult';
 import { ObjectFormRegistry } from './ObjectFormRegistry';
@@ -203,14 +204,20 @@ export class ObjectFormHandler {
 
     public setActivePageId(pageId: string): void {
         this.activePageId = pageId;
-        EventService.getInstance().publish(ObjectFormEvent.PAGE_CHANGED, pageId);
+        EventService.getInstance().publish(
+            ObjectFormEvent.PAGE_CHANGED,
+            new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, null, null, null, pageId)
+        );
     }
 
     public async addPage(): Promise<void> {
         const newPage = await TranslationService.translate('Translatable#New Page');
         const page = new FormPageConfiguration(IdService.generateDateBasedId(), newPage);
         this.form.pages.push(page);
-        EventService.getInstance().publish(ObjectFormEvent.PAGE_ADDED, page);
+        EventService.getInstance().publish(
+            ObjectFormEvent.PAGE_ADDED,
+            new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, null, page)
+        );
 
         setTimeout(() => this.setActivePageId(page.id), 150);
     }
@@ -228,7 +235,10 @@ export class ObjectFormHandler {
                 this.setActivePageId(this.form.pages[newPageIndex]?.id);
             }
 
-            EventService.getInstance().publish(ObjectFormEvent.PAGE_DELETED);
+            EventService.getInstance().publish(
+                ObjectFormEvent.PAGE_DELETED,
+                new ObjectFormEventData(this.context?.instanceId)
+            );
         }
     }
 
@@ -239,7 +249,10 @@ export class ObjectFormHandler {
         page?.groups?.push(group);
         const configObject = new FormConfigurationObject();
         configObject.groupId = group.id;
-        EventService.getInstance().publish(ObjectFormEvent.GROUP_ADDED, group);
+        EventService.getInstance().publish(
+            ObjectFormEvent.GROUP_ADDED,
+            new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, null, null, group)
+        );
     }
 
     public addNewField(field: FormFieldConfiguration, groupId: string): void {
@@ -290,8 +303,14 @@ export class ObjectFormHandler {
             const configObject = new FormConfigurationObject();
             configObject.fieldId = fieldId;
             configObject.groupId = formGroup.id;
-            EventService.getInstance().publish(ObjectFormEvent.FIELD_DELETED, configObject);
-            EventService.getInstance().publish(ObjectFormEvent.GROUP_UPDATED, configObject);
+            EventService.getInstance().publish(
+                ObjectFormEvent.FIELD_DELETED,
+                new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, configObject)
+            );
+            EventService.getInstance().publish(
+                ObjectFormEvent.GROUP_UPDATED,
+                new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, configObject)
+            );
         }
     }
 
@@ -315,7 +334,10 @@ export class ObjectFormHandler {
 
         const configObject = new FormConfigurationObject();
         configObject.groupId = groupId;
-        EventService.getInstance().publish(ObjectFormEvent.GROUP_UPDATED, configObject);
+        EventService.getInstance().publish(
+            ObjectFormEvent.GROUP_UPDATED,
+            new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, configObject)
+        );
     }
 
     public deleteGroup(groupId: string): void {
@@ -332,7 +354,10 @@ export class ObjectFormHandler {
             const configObject = new FormConfigurationObject();
             configObject.groupId = groupId;
             configObject.pageId = page.id;
-            EventService.getInstance().publish(ObjectFormEvent.GROUP_DELETED, configObject);
+            EventService.getInstance().publish(
+                ObjectFormEvent.GROUP_DELETED,
+                new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, configObject)
+            );
         }
     }
 
@@ -355,7 +380,10 @@ export class ObjectFormHandler {
             formValue.parent?.initFormValue();
         }
 
-        EventService.getInstance().publish(ObjectFormEvent.FIELD_REINITIALIZED, configObject);
+        EventService.getInstance().publish(
+            ObjectFormEvent.FIELD_REINITIALIZED,
+            new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, configObject)
+        );
     }
 
     public setConfigurationObject(configurationObject: any): void {

@@ -7,13 +7,16 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { Cell } from '../../../../table/model/Cell';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public cell: Cell = null,
         public isActive: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

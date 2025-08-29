@@ -20,11 +20,9 @@ import { ToastContent } from '../../../../../modules/base-components/webapp/core
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { StringContent } from '../../../../../modules/base-components/webapp/core/StringContent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-export class Component {
-
-    private state: ComponentState;
+export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private faqArticle: FAQArticle;
     public rating: number = 0;
@@ -42,6 +40,10 @@ export class Component {
         if (this.faqArticle?.VoteCount) {
             this.voteCount = this.faqArticle.VoteCount;
         }
+    }
+
+    public async onMount(contextInstanceId?: string): Promise<void> {
+        await super.onMount(contextInstanceId);
     }
 
     public setCurrentRating(rating: number): void {
@@ -78,8 +80,7 @@ export class Component {
                     );
                 });
 
-            const context = ContextService.getInstance().getActiveContext();
-            await context.getObject(KIXObjectType.FAQ_ARTICLE, true);
+            await this.context.getObject(KIXObjectType.FAQ_ARTICLE, true);
         }
     }
 

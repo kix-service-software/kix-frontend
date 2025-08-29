@@ -26,6 +26,7 @@ export class FAQArticleDeleteAction extends AbstractAction<Table> {
     public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Delete';
         this.icon = 'kix-icon-trash';
     }
@@ -71,8 +72,7 @@ export class FAQArticleDeleteAction extends AbstractAction<Table> {
                 KIXObjectType.FAQ_ARTICLE, selectedRows.map((sR) => sR.getRowObject().getObject().ObjectId)
             );
 
-            const context = ContextService.getInstance().getActiveContext();
-            await context?.reloadObjectList(KIXObjectType.FAQ_ARTICLE);
+            await this.context?.reloadObjectList(KIXObjectType.FAQ_ARTICLE);
 
             if (!failIds || failIds.length === 0) {
                 const content = new ComponentContent(

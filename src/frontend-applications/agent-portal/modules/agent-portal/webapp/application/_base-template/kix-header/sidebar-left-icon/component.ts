@@ -14,8 +14,9 @@ import { ContextService } from '../../../../../../base-components/webapp/core/Co
 import { Context } from '../../../../../../../model/Context';
 import { TranslationService } from '../../../../../../translation/webapp/core/TranslationService';
 import { MobileShowEventData } from '../../../../../model/MobileShowEventData';
+import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 

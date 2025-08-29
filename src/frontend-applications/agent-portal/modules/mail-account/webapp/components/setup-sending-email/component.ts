@@ -70,6 +70,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.configKeys = [
             'SendmailModule',
             'SendmailEnvelopeFrom', 'SendmailNotificationEnvelopeFrom', 'SendmailNotificationEnvelopeFrom::FallbackToEmailFrom'
@@ -217,8 +218,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
                 const changedValue = data.changedValues.find((cv) => cv[0]?.property === 'SendmailModule');
                 if (changedValue) {
-                    const context = ContextService.getInstance().getActiveContext();
-                    const formInstance = await context?.getFormManager()?.getFormInstance();
+                    const formInstance = await this.context?.getFormManager()?.getFormInstance();
                     if (changedValue[1].value) {
                         let value = changedValue[1].value;
                         if (Array.isArray(changedValue[1].value) && changedValue[1].value.length) {
@@ -235,13 +235,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
 
-        const activeContext = ContextService.getInstance().getActiveContext();
-        const contextFormId = await activeContext?.getFormManager()?.getFormId();
+        const contextFormId = await this.context?.getFormManager()?.getFormId();
         if (contextFormId === this.state.formId) {
-            const object = await activeContext.getObject();
-            (await activeContext?.getFormManager()?.getFormInstance()).initFormInstance(form.id, object);
+            const object = await this.context.getObject();
+            (await this.context?.getFormManager()?.getFormInstance()).initFormInstance(form.id, object);
         } else {
-            await activeContext?.getFormManager()?.setFormId(this.state.formId);
+            await this.context?.getFormManager()?.setFormId(this.state.formId);
         }
 
         setTimeout(() => this.initFormValues(
@@ -436,8 +435,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initFormValues(formId: string, configKeys: string[] = this.configKeys): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, configKeys
@@ -458,8 +456,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);

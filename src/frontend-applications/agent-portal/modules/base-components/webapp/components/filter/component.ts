@@ -12,10 +12,9 @@ import { ComponentInput } from './ComponentInput';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
 import { TreeHandler, TreeService, TreeNode } from '../../core/tree';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private predefinedFilter: KIXObjectPropertyFilter[];
 

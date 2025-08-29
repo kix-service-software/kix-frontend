@@ -7,9 +7,7 @@
  * --
  */
 
-import { Context } from 'vm';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ObjectFormHandler } from '../../core/ObjectFormHandler';
 import { ComponentState } from './ComponentState';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
@@ -19,7 +17,6 @@ import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
     private formhandler: ObjectFormHandler;
     private contextInstanceId: string;
     private subscriber: IEventSubscriber;
@@ -34,6 +31,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount(this.contextInstanceId);
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('object-form-other-information'),
             eventPublished: async (data: any, eventId: string): Promise<void> => {
@@ -44,10 +42,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         };
 
-        if (this.contextInstanceId) {
-            this.context = ContextService.getInstance().getContext(this.contextInstanceId);
-        } else {
-            this.context = ContextService.getInstance().getActiveContext();
+        if (!this.contextInstanceId) {
             this.formhandler = await this.context?.getFormManager().getObjectFormHandler();
             this.update();
         }

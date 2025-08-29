@@ -15,12 +15,11 @@ import { EventService } from '../../../core/EventService';
 import { FormEvent } from '../../../core/FormEvent';
 import { IEventSubscriber } from '../../../core/IEventSubscriber';
 import { LabelService } from '../../../core/LabelService';
-import { ContextService } from '../../../core/ContextService';
 import { KIXModulesService } from '../../../core/KIXModulesService';
+import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
     private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
@@ -62,8 +61,7 @@ class Component {
             ? (hint.startsWith('Helptext_') ? null : hint)
             : null;
 
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const value = formInstance?.getFormFieldValue(this.state.field?.instanceId);
         this.state.errorMessages = value?.errorMessages || [];
@@ -73,6 +71,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.formSubscriber = {
             eventSubscriberId: this.state.field?.instanceId,
             eventPublished: async (data: any, eventId: string): Promise<void> => {
@@ -108,8 +107,7 @@ class Component {
     }
 
     private async hasInvalidChildren(field: FormFieldConfiguration = this.state.field): Promise<boolean> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance(false);
+        const formInstance = await this.context?.getFormManager()?.getFormInstance(false);
         let hasInvalidChildren = false;
         if (formInstance && Array.isArray(field.children)) {
             for (const child of field.children) {

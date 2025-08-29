@@ -8,21 +8,18 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { OrganisationContext } from '../../core/context/OrganisationContext';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    public state: ComponentState;
-    private context: OrganisationContext;
+class Component extends AbstractMarkoComponent<ComponentState, OrganisationContext> {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext() as OrganisationContext;
+        super.onMount();
         this.state.contentWidgets = await this.context.getContent();
 
         this.state.translations = await TranslationService.createTranslationObject([

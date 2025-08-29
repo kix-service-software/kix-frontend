@@ -7,11 +7,9 @@
  * --
  */
 
-import { Context } from '../../../../../../model/Context';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ClientStorageService } from '../../../../../base-components/webapp/core/ClientStorageService';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { TimeoutTimer } from '../../../../../base-components/webapp/core/TimeoutTimer';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { Article } from '../../../../model/Article';
@@ -21,7 +19,6 @@ import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
     private filterTimeout: any;
     private timoutTimer: TimeoutTimer;
     public isFiltered: boolean;
@@ -32,9 +29,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
-        this.context.registerListener('communication-widget-filter', {
+        this.context?.registerListener('communication-widget-filter', {
             filteredObjectListChanged: () => null,
             objectListChanged: (objectType: KIXObjectType) => {
                 if (objectType === KIXObjectType.ARTICLE) {

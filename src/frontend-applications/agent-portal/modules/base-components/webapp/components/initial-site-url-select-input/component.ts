@@ -27,17 +27,17 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async onMount(): Promise<void> {
-        this.state.prepared = false;
-        const currentUser = await AgentService.getInstance().getCurrentUser();
-        const initSiteURLSetting = currentUser.Preferences.find(
-            (setting) => setting.ObjectId === PersonalSettingsProperty.INITIAL_SITE_URL
-        );
+        await super.onMount(false);
 
         const nodes = await PersonalSettingsService.getInitialURLSiteNodes();
 
         const treeHandler = new TreeHandler(nodes, null, null, false);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
 
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+        const initSiteURLSetting = currentUser.Preferences.find(
+            (setting) => setting.ObjectId === PersonalSettingsProperty.INITIAL_SITE_URL
+        );
         const initialSelectedNode: TreeNode = nodes.find((node) => node.id === initSiteURLSetting?.Value);
         if (initialSelectedNode) {
             treeHandler.setSelection([initialSelectedNode], true);
@@ -47,8 +47,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string | number | string[] | number[]>(
             this.state.field?.instanceId
         );

@@ -9,7 +9,6 @@
 
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Webform } from '../../../model/Webform';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
@@ -24,9 +23,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-
-        context.registerListener('webform-code-widget', {
+        this.context?.registerListener('webform-code-widget', {
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
@@ -39,11 +36,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             additionalInformationChanged: (): void => { return; }
         });
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        await this.initWidget(await context.getObject<Webform>());
+        await this.initWidget(await this.context.getObject<Webform>());
     }
 
     private async initWidget(webform: Webform): Promise<void> {
@@ -52,8 +47,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onDestroy(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        context.unregisterListener('webform-code-widget');
+        this.context?.unregisterListener('webform-code-widget');
     }
 
 }

@@ -17,8 +17,9 @@ import { ConfigItem } from '../../../model/ConfigItem';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
     private cmdbChartConfiguration: ConfigItemChartWidgetConfiguration;
@@ -48,7 +49,7 @@ class Component {
             this.cmdbChartConfiguration.configuration.chartConfiguration.data.labels = [];
             this.cmdbChartConfiguration.configuration.chartConfiguration.data.datasets[0].data = [];
 
-            currentContext.registerListener('CMDBChartComponent' + IdService.generateDateBasedId(), {
+            this.context?.registerListener('CMDBChartComponent' + IdService.generateDateBasedId(), {
                 sidebarLeftToggled: (): void => { return; },
                 sidebarRightToggled: (): void => { return; },
                 objectChanged: (): void => { return; },

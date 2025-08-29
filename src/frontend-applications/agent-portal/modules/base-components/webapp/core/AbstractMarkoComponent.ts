@@ -7,23 +7,31 @@
  * --
  */
 
-import { IMarkoComponent } from './IMarkoComponent';
 import { AbstractComponentState } from './AbstractComponentState';
+import { Context } from '../../../../model/Context';
+import { ContextService } from './ContextService';
+import { IdService } from '../../../../model/IdService';
 
-export abstract class AbstractMarkoComponent<CS = AbstractComponentState, I = any> implements IMarkoComponent<CS, I> {
+// eslint-disable-next-line max-len
+export abstract class AbstractMarkoComponent<CS extends AbstractComponentState = AbstractComponentState, C extends Context = Context> {
 
     public state: CS;
+    protected context: C;
 
-    public onCreate(input: I): void {
+    public onCreate(input: any): void {
         return;
     }
 
-    public onInput(input: I): void {
+    public onInput(input: any): void {
         return;
     }
 
-    public async onMount(): Promise<void> {
-        return;
+    public async onMount(contextInstanceId?: string): Promise<void> {
+        if (contextInstanceId) {
+            this.context = ContextService.getInstance().getContext(contextInstanceId) as C;
+        } else {
+            this.context = ContextService.getInstance().getActiveContext<C>();
+        }
     }
 
     public onUpdate(): void {

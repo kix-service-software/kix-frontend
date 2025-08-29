@@ -42,37 +42,6 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         return;
     }
 
-    public async openDialog(): Promise<void> {
-        // const context = ContextService.getInstance().getActiveContext();
-        // const formInstance = await context?.getFormManager()?.getFormInstance();
-        // const objectType = formInstance.getObjectType();
-
-        // const objectName = await LabelService.getInstance().getObjectName(objectType);
-        // const dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
-
-        // const resultListenerId = 'result-listener-link-' + objectType + IdService.generateDateBasedId();
-        // TODO: Overlay
-        // DialogService.getInstance().openOverlayDialog(
-        //     'link-object-dialog',
-        //     {
-        //         linkDescriptions: this.state.linkDescriptions,
-        //         objectType,
-        //         resultListenerId
-        //     },
-        //     dialogTitle,
-        //     'kix-icon-link'
-        // );
-        // DialogService.getInstance()
-        //     .registerDialogResultListener<CreateLinkDescription[][]>(
-        //         resultListenerId, 'object-link', this.linksChanged.bind(this)
-        //     );
-    }
-
-    private linksChanged(result: CreateLinkDescription[][]): void {
-        this.state.linkDescriptions = [...result[0]];
-        this.updateField();
-    }
-
     public minimize(): void {
         this.state.minimized = !this.state.minimized;
     }

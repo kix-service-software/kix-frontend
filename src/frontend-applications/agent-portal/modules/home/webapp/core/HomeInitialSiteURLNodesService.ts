@@ -18,7 +18,7 @@ export class HomeInitialSiteURLNodesService extends ExtendedInitialSiteURLNodesS
     }
 
     public async getInitialSiteURLNodes(): Promise<TreeNode[]> {
-        const label = await TranslationService.translate('Translatable#Home');
+        const label = await TranslationService.translate('Translatable#Home Dashboard');
         return [new TreeNode('home', label, 'kix-icon-home')];
     }
 

@@ -20,8 +20,9 @@ import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
 import { TableHeaderHeight } from '../../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../../model/configuration/TableRowHeight';
+import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = 'admin-faq-admin-categories',
@@ -49,6 +50,8 @@ export class ComponentState {
             ),
             false, false, 'kix-icon-gears'
         )
-    ) { }
+    ) {
+        super();
+    }
 
 }

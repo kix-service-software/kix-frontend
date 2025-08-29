@@ -24,11 +24,12 @@ import { Report } from '../../../model/Report';
 import { StringContent } from '../../../../base-components/webapp/core/StringContent';
 import { ToastContent } from '../../../../base-components/webapp/core/ToastContent';
 
-export class ReportDeleteAction extends AbstractAction {
+export class ReportDeleteAction extends AbstractAction<any, ReportingContext> {
 
     public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Delete';
         this.icon = 'kix-icon-trash';
     }
@@ -63,36 +64,33 @@ export class ReportDeleteAction extends AbstractAction {
     }
 
     private async deleteReport(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext<ReportingContext>();
-        if (context) {
-            EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Deleting Reports' }
-            );
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Deleting Reports' }
+        );
 
-            const selectedRows: Row[] = this.data.getSelectedRows();
-            for (const r of selectedRows) {
-                const report = (r.getRowObject().getObject() as Report);
-                await KIXObjectService.deleteObject(KIXObjectType.REPORT, [report.ID])
-                    .catch((error: Error) => {
-                        console.error(error);
-                        const content = new StringContent('Translatable#Error while deleting Report.');
+        const selectedRows: Row[] = this.data.getSelectedRows();
+        for (const r of selectedRows) {
+            const report = (r.getRowObject().getObject() as Report);
+            await KIXObjectService.deleteObject(KIXObjectType.REPORT, [report.ID])
+                .catch((error: Error) => {
+                    console.error(error);
+                    const content = new StringContent('Translatable#Error while deleting Report.');
 
-                        OverlayService.getInstance().openOverlay(
-                            OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
-                        );
-                    });
-            }
-
-            setTimeout(() => {
-                context.loadReportDefinitions();
-                const content = new ComponentContent(
-                    'toast',
-                    new ToastContent('kix-icon-check', 'Translatable#Report(s) deleted.')
-                );
-                OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
-            }, 1000);
-
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
+                    OverlayService.getInstance().openOverlay(
+                        OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
+                    );
+                });
         }
+
+        setTimeout(() => {
+            this.context?.loadReportDefinitions();
+            const content = new ComponentContent(
+                'toast',
+                new ToastContent('kix-icon-check', 'Translatable#Report(s) deleted.')
+            );
+            OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
+        }, 1000);
+
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
     }
 }

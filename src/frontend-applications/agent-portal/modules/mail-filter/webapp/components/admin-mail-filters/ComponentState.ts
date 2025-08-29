@@ -12,8 +12,9 @@ import { TableWidgetConfiguration } from '../../../../../model/configuration/Tab
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { MailFilterProperty } from '../../../model/MailFilterProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
     public constructor(
         public instanceId: string = 'admin-communication-mail-filter-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
@@ -21,6 +22,8 @@ export class ComponentState {
             ['mail-filter-create', 'mail-filter-table-duplicate', 'mail-filter-table-delete', 'csv-export-action'],
             null, new TableWidgetConfiguration(null, null, null, KIXObjectType.MAIL_FILTER,
                 [MailFilterProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
-    ) { }
+    ) {
+        super();
+    }
 
 }

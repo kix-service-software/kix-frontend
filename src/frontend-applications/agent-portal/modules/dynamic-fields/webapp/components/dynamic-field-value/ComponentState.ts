@@ -7,11 +7,12 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { Label } from '../../../../base-components/webapp/core/Label';
 import { DynamicField } from '../../../model/DynamicField';
 import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public labels: Label[] = [],
@@ -21,6 +22,8 @@ export class ComponentState {
         public field: DynamicField = null,
         public dfValue: DynamicFieldValue = null,
         public textareaIds: string[] = []
-    ) { }
+    ) {
+        super();
+    }
 
 }

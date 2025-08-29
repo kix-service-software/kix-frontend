@@ -23,23 +23,22 @@ export class ConfigItemCreateGraphAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Show Graph';
         this.icon = 'fas fa-project-diagram';
     }
 
     public async canShow(): Promise<boolean> {
-        const context = ContextService.getInstance().getActiveContext();
-        return context?.contextId === ConfigItemDetailsContext.CONTEXT_ID;
+        return this.context?.contextId === ConfigItemDetailsContext.CONTEXT_ID;
     }
 
     public async run(event: any): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
         const additionalInformation: Array<[string, any]> = [
-            [GraphContextOptions.GRAPH_REQUEST_URI, `cmdb/configitems/${context.getObjectId()}/graph`]
+            [GraphContextOptions.GRAPH_REQUEST_URI, `cmdb/configitems/${this.context?.getObjectId()}/graph`]
         ];
 
         ContextService.getInstance().setActiveContext(
-            GraphContext.CONTEXT_ID, context.getObjectId(), null, additionalInformation
+            GraphContext.CONTEXT_ID, this.context?.getObjectId(), null, additionalInformation
         );
     }
 

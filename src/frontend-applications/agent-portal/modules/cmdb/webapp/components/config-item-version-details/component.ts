@@ -32,10 +32,9 @@ import { ContactDetailsContext } from '../../../../customer/webapp/core/context/
 import { ConfigItemDetailsContext } from '../../core';
 import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private imagesByGroup: Array<number[]> = [];
 
     public onCreate(): void {

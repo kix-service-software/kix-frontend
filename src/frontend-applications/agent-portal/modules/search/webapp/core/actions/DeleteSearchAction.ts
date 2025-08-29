@@ -22,11 +22,12 @@ import { SearchContext } from '../SearchContext';
 import { AgentSocketClient } from '../../../../user/webapp/core/AgentSocketClient';
 import { User } from '../../../../user/model/User';
 
-export class DeleteSearchAction extends AbstractAction {
+export class DeleteSearchAction extends AbstractAction<any, SearchContext> {
 
     private user: User;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Delete Search';
         this.icon = 'kix-icon-trash';
         this.user = await AgentSocketClient.getInstance().getCurrentUser();
@@ -41,8 +42,7 @@ export class DeleteSearchAction extends AbstractAction {
     }
 
     private isDeletable(): boolean {
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        const search = context?.getSearchCache();
+        const search = this.context?.getSearchCache();
 
         const isUserSearch = search && (!search.userId || search.userId === this.user.UserID);
 
@@ -51,8 +51,7 @@ export class DeleteSearchAction extends AbstractAction {
 
     public async run(): Promise<void> {
         if (this.canRun()) {
-            const context = ContextService.getInstance().getActiveContext<SearchContext>();
-            const cache = context?.getSearchCache();
+            const cache = this.context?.getSearchCache();
             const question = await TranslationService.translate(
                 'Translatable#Search {0} will be deleted. Are you sure?', [cache.name]
             );
@@ -71,8 +70,7 @@ export class DeleteSearchAction extends AbstractAction {
             loading: true, hint: 'Translatable#Delete Search'
         });
 
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        await context?.deleteSearch()
+        await this.context?.deleteSearch()
             .catch((error: Error) => BrowserUtil.openErrorOverlay(error.Message));
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });

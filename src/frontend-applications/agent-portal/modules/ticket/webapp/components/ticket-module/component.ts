@@ -15,10 +15,10 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { IdService } from '../../../../../model/IdService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState, TicketContext> {
 
-    public state: ComponentState;
     private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
@@ -26,14 +26,14 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext() as TicketContext;
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Search',
             'Translatable#Help'
         ]);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
-        this.state.filterValue = context?.filterValue;
+        this.state.filterValue = this.context?.filterValue;
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),

@@ -12,9 +12,10 @@ import { TableWidgetConfiguration } from '../../../../../model/configuration/Tab
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { WebformProperty } from '../../../model/WebformProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
     public constructor(
         public instanceId: string = 'admin-communication-webforms-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
@@ -24,6 +25,8 @@ export class ComponentState {
                 [WebformProperty.TITLE, SortOrder.UP]
             ), false, false, 'kix-icon-gears'
         )
-    ) { }
+    ) {
+        super();
+    }
 
 }

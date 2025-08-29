@@ -14,10 +14,9 @@ import { TableFactoryService } from '../../../../table/webapp/core/factory/Table
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
 import { Job } from '../../../model/Job';
 import { JobDetailsContext } from '../../core/context/JobDetailsContext';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -28,12 +27,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        context.registerListener('job-run-history-widget', {
+        this.context?.registerListener('job-run-history-widget', {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
@@ -47,7 +44,7 @@ class Component {
             additionalInformationChanged: (): void => { return; }
         });
 
-        await this.initWidget(await context.getObject<Job>());
+        await this.initWidget(await this.context?.getObject<Job>());
     }
 
     private async initWidget(job: Job): Promise<void> {

@@ -22,10 +22,9 @@ import { Context } from '../../../../../model/Context';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ImageViewerEvent } from '../../../../agent-portal/model/ImageViewerEvent';
 import { ImageViewerEventData } from '../../../../agent-portal/model/ImageViewerEventData';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private contextListenerId: string;
     private images: DisplayImageDescription[];
 
@@ -45,11 +44,9 @@ class Component {
         ]);
 
         const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             objectChanged: (id: string | number, object: ConfigItem, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONFIG_ITEM) {
                     this.initWidget(context, object);

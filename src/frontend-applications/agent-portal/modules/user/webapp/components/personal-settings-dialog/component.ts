@@ -25,6 +25,7 @@ import { OverlayType } from '../../../../../modules/base-components/webapp/core/
 import { ValidationResult } from '../../../../../modules/base-components/webapp/core/ValidationResult';
 import { ValidationSeverity } from '../../../../../modules/base-components/webapp/core/ValidationSeverity';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
@@ -34,9 +35,7 @@ import { AgentService } from '../../core/AgentService';
 import { ComponentState } from './ComponentState';
 
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private searchObject: KIXObjectType | string;
 
     public async onCreate(input: any): Promise<void> {

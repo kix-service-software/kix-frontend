@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -33,8 +32,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = context?.getFormManager()?.getFormInstance();
+        const formInstance = this.context?.getFormManager()?.getFormInstance();
         const value = (await formInstance).getFormFieldValue<string>(this.state.field?.instanceId);
         if (value) {
             this.state.currentValue = value.value;

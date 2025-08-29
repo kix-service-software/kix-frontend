@@ -19,7 +19,6 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../../model/ContextType';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { IdService } from '../../../../../model/IdService';
@@ -59,9 +58,8 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
     }
 
     private async handleArticleProperties(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context && context.descriptor.contextType === ContextType.DIALOG) {
-            const selectedEvents = context.getAdditionalInformation(NotificationProperty.DATA_EVENTS);
+        if (this.context.descriptor.contextType === ContextType.DIALOG) {
+            const selectedEvents = this.context.getAdditionalInformation(NotificationProperty.DATA_EVENTS);
             const hasArticleEvent = selectedEvents
                 ? await NotificationService.getInstance().hasArticleEvent(selectedEvents)
                 : false;
@@ -159,8 +157,7 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<any>(this.state.field?.instanceId);
         if (value && value.value) {
 

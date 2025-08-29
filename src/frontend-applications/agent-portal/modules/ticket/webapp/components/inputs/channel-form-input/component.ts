@@ -17,6 +17,7 @@ import { IdService } from '../../../../../../model/IdService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { ObjectFormEvent } from '../../../../../object-forms/model/ObjectFormEvent';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
+import { ObjectFormEventData } from '../../../../../object-forms/model/ObjectFormEventData';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -87,11 +88,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
-                if (data.blocked) {
-                    this.state.readonly = true;
-                } else {
-                    this.state.readonly = this.formValue.readonly;
+            eventPublished: (data: ObjectFormEventData, eventId: string): void => {
+                if (data.contextInstanceId === this.context?.instanceId) {
+                    if (data.blocked) {
+                        this.state.readonly = true;
+                    } else {
+                        this.state.readonly = this.formValue.readonly;
+                    }
                 }
             }
         };

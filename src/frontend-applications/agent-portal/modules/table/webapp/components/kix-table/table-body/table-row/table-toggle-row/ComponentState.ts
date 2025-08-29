@@ -7,16 +7,19 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../../../../base-components/webapp/core/AbstractComponentState';
 import { IAction } from '../../../../../../../base-components/webapp/core/IAction';
 import { Row } from '../../../../../../model/Row';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public row: Row = null,
         public width: string = '100%',
         public actions: IAction[] = null,
         public loading = true
-    ) { }
+    ) {
+        super();
+    }
 
 }

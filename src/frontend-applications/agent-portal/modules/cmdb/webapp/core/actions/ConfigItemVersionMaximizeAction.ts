@@ -12,6 +12,7 @@ import { AbstractAction } from '../../../../../modules/base-components/webapp/co
 export class ConfigItemVersionMaximizeAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Large View';
         this.icon = 'kix-icon-arrow-split2';
     }

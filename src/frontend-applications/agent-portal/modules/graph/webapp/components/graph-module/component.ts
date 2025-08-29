@@ -9,8 +9,9 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
@@ -19,12 +20,12 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.prepareWidgets();
     }
 
     private async prepareWidgets(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.contentWidgets = await context.getContent();
+        this.state.contentWidgets = await this.context.getContent();
     }
 }
 

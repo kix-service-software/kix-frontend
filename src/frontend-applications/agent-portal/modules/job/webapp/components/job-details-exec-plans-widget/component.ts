@@ -22,7 +22,7 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 import { JobDetailsContext } from '../../core/context/JobDetailsContext';
 import { JobFormService } from '../../core/JobFormService';
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractMarkoComponent<ComponentState, JobDetailsContext> {
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -33,28 +33,26 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         WidgetService.getInstance().setWidgetType('job-exec-plan-group', WidgetType.GROUP);
 
-        const context = ContextService.getInstance().getActiveContext() as JobDetailsContext;
-        if (context) {
-            this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
-            this.initWidget(context);
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
+        this.initWidget(this.context);
 
-            context.registerListener('jop-exec-plan-widget', {
-                sidebarLeftToggled: (): void => { return; },
-                filteredObjectListChanged: (): void => { return; },
-                objectListChanged: () => { return; },
-                sidebarRightToggled: (): void => { return; },
-                scrollInformationChanged: () => { return; },
-                objectChanged: (id: string | number, job: Job, type: KIXObjectType) => {
-                    if (type === KIXObjectType.JOB) {
-                        this.initWidget(context);
-                    }
-                },
-                additionalInformationChanged: (): void => { return; }
-            });
+        this.context?.registerListener('jop-exec-plan-widget', {
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
+            objectListChanged: () => { return; },
+            sidebarRightToggled: (): void => { return; },
+            scrollInformationChanged: () => { return; },
+            objectChanged: (id: string | number, job: Job, type: KIXObjectType) => {
+                if (type === KIXObjectType.JOB) {
+                    this.initWidget(this.context);
+                }
+            },
+            additionalInformationChanged: (): void => { return; }
+        });
 
-        }
 
         this.state.prepared = true;
     }

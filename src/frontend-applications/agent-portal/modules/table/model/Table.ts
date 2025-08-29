@@ -47,6 +47,7 @@ import { IdService } from '../../../model/IdService';
 import { DefaultDepColumnConfiguration } from './DefaultDepColumnConfiguration';
 import { SearchContext } from '../../search/webapp/core/SearchContext';
 import { SearchService } from '../../search/webapp/core/SearchService';
+import { Context } from '../../../model/Context';
 
 export class Table implements Table {
 
@@ -71,12 +72,15 @@ export class Table implements Table {
     private tableState: TableState;
 
     private subscriber: IEventSubscriber;
+    private context: Context;
 
     public constructor(
         private tableKey: string,
         private tableConfiguration?: TableConfiguration,
         private contextId?: string
-    ) { }
+    ) {
+        this.context = ContextService.getInstance().getActiveContext();
+    }
 
     public destroy(): void {
         this.contentProvider.destroy();
@@ -255,21 +259,18 @@ export class Table implements Table {
     }
 
     private async setSortByContext(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context.contextId === this.contextId) {
-            const sort = await context.getSortOrder(this.getObjectType());
-            if (sort) {
-                let property = sort.split('.')[1];
-                if (property) {
-                    property = property.split(':')[0];
-                    this.sortOrder = SortOrder.UP;
-                    if (property.match(/^-.+/)) {
-                        this.sortOrder = SortOrder.DOWN;
-                        property = property.replace(/-(.+)/, '$1');
-                    }
-                    if (this.columns.some((c) => c.getColumnId() === property)) {
-                        this.sortColumnId = property;
-                    }
+        const sort = await this.context.getSortOrder(this.getObjectType());
+        if (sort) {
+            let property = sort.split('.')[1];
+            if (property) {
+                property = property.split(':')[0];
+                this.sortOrder = SortOrder.UP;
+                if (property.match(/^-.+/)) {
+                    this.sortOrder = SortOrder.DOWN;
+                    property = property.replace(/-(.+)/, '$1');
+                }
+                if (this.columns.some((c) => c.getColumnId() === property)) {
+                    this.sortColumnId = property;
                 }
             }
         }
@@ -277,9 +278,12 @@ export class Table implements Table {
 
     private async prepareAdditionalSearchColumns(): Promise<void> {
         let searchCache: SearchCache;
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        if (context?.descriptor.contextMode === ContextMode.SEARCH && context?.getSearchCache()) {
-            searchCache = context.getSearchCache();
+        if (
+            this.context instanceof SearchContext
+            && this.context?.descriptor.contextMode === ContextMode.SEARCH
+            && this.context?.getSearchCache()
+        ) {
+            searchCache = this.context.getSearchCache();
         }
 
         if (searchCache) {

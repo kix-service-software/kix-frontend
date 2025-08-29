@@ -8,5 +8,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.show)>
-    <tab-container id=state.instanceId tabWidgets=state.widgets hideSidebar/>
+    <tab-container
+        key=state.componentId
+        id=state.componentId
+        tabWidgets=state.widgets
+        hideSidebar
+    />
 </if>

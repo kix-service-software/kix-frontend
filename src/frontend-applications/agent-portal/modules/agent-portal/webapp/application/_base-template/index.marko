@@ -24,23 +24,23 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <div active=state.activeMobile === 1 class="main-menu-wrapper">
                 <main-menu/>
             </div>
-            <if(!state.reloadContent)>
-                <div
-                    active=state.activeMobile === 2
-                    class="sidebar-left-wrapper"
-                >
-                    <sidebar isLeft/>
-                </div>
-                <div class="content-wrapper mt-3">
-                    <router-outlet id="base-router"/>
-                </div>
-                <div
-                    active=state.activeMobile === 3
-                    class="sidebar-right-wrapper"
-                >
-                    <sidebar/>
-                </div>
-            </if>
+        </if>
+        <div
+            active=state.activeMobile === 2
+            class="sidebar-left-wrapper"
+            style="max-width: 29.5rem">
+            <sidebar isLeft/>
+        </div>
+        <div class="content-wrapper mt-3">
+            <router-outlet id="base-router"/>
+        </div>
+        <div
+            active=state.activeMobile === 3
+            class="sidebar-right-wrapper"
+            style="max-width: 29.5rem">
+            <sidebar/>
+        </div>
+        <if(!state.reload)>
             <div class="footer-wrapper row">
                 <kix-footer/>
             </div>
@@ -75,7 +75,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
         </div>
     </if>
-
     <div id="kix-modal-area"/>
     <div id="kix-toast-area" style="z-index: 2020;"/>
 </div>

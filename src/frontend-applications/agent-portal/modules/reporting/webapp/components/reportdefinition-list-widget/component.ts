@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
@@ -32,9 +31,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
-        if (context) {
+        if (this.context) {
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.instanceId),
                 eventPublished: (data: any, eventId: string): void => {
@@ -49,7 +48,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                             const tableWidgetComponent = (this as any).getComponent('report-definition-table-widget');
                             if (tableWidgetComponent) {
                                 const table = tableWidgetComponent.getTable();
-                                context.setFilteredObjectList(
+                                this.context?.setFilteredObjectList(
                                     KIXObjectType.REPORT_DEFINITION,
                                     table?.getSelectedRows().map((r) => r.getRowObject().getObject())
                                 );
@@ -61,7 +60,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         !this.selectionTimeout // wait for possible further selection changes (select ALL)
                     ) {
                         this.selectionTimeout = setTimeout(() => {
-                            context.setFilteredObjectList(
+                            this.context?.setFilteredObjectList(
                                 KIXObjectType.REPORT_DEFINITION,
                                 data.table.getSelectedRows().map((r) => r.getRowObject().getObject())
                             );

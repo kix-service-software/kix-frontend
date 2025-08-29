@@ -24,10 +24,10 @@ export class ReplyAllFormValueAction extends FormValueAction {
     private referencedArticleId: number;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Reply All';
         this.icon = 'kix-icon-mail-answerall-outline';
-        const context = ContextService.getInstance().getActiveContext();
-        this.referencedArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+        this.referencedArticleId = this.context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
     }
 
     public async canShow(): Promise<boolean> {
@@ -39,9 +39,8 @@ export class ReplyAllFormValueAction extends FormValueAction {
     }
 
     public async run(event: any): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const refTicketId = await context?.getObjectId();
-        const formTicket: Ticket = await context?.getObject(KIXObjectType.TICKET);
+        const refTicketId = await this.context?.getObjectId();
+        const formTicket: Ticket = await this.context?.getObject(KIXObjectType.TICKET);
 
         const replyArticle = refTicketId ? await this.getReplyArticle(Number(refTicketId)) : null;
         if (replyArticle) {

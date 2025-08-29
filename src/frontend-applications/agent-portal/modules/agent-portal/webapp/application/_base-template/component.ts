@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /**
  * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
@@ -25,8 +26,9 @@ import { IKIXModuleExtension } from '../../../../../model/IKIXModuleExtension';
 import { KIXStyle } from '../../../../base-components/model/KIXStyle';
 import { PortalNotificationService } from '../../../../portal-notification/webapp/core/PortalNotificationService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
@@ -94,17 +96,6 @@ class Component {
                 setTimeout(() => {
                     this.state.reload = false;
                     RoutingService.getInstance().routeToInitialContext(false);
-                }, 500);
-            }
-        });
-
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, {
-            eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
-            eventPublished: (data: any, eventId: string): void => {
-                this.state.reloadContent = true;
-
-                setTimeout(() => {
-                    this.state.reloadContent = false;
                 }, 500);
             }
         });

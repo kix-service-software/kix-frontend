@@ -8,13 +8,11 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { HelpWidgetConfiguration } from '../../../../../model/configuration/HelpWidgetConfiguration';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-export class Component {
-
-    private state: ComponentState;
+export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
@@ -26,10 +24,7 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         const configuration = this.state.widgetConfiguration.configuration as HelpWidgetConfiguration;
         this.state.helpText = await TranslationService.translate(configuration.helpText);

@@ -8,12 +8,15 @@
  */
 
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public labels: Label[] = [],
         public removeLabels: boolean = true
-    ) { }
+    ) {
+        super();
+    }
 
 }
