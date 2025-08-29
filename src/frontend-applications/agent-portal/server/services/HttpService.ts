@@ -259,6 +259,7 @@ export class HttpService {
         options.headers = headers || {};
         options.headers['Authorization'] = 'Token ' + backendToken;
         options.headers['KIX-Request-ID'] = clientRequestId ? clientRequestId : '';
+        options.headers['KIX-Request-Timestamp'] = Date.now() / 1000;
 
         options.maxBodyLength = Infinity;
         options.maxContentLength = Infinity;
