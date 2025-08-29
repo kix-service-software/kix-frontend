@@ -7,13 +7,12 @@
  * --
  */
 
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
 
 const marked = require('marked');
 
-export class Component {
-
-    private state: ComponentState;
+export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();

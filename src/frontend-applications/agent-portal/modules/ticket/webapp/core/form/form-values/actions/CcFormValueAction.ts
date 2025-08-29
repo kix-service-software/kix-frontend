@@ -14,6 +14,7 @@ import { ArticleProperty } from '../../../../../model/ArticleProperty';
 export class CcFormValueAction extends FormValueAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Cc';
         this.icon = 'kix-icon-man-mail-cc';
     }

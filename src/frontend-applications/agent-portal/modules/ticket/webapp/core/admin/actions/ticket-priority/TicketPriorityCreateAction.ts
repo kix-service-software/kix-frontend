@@ -20,6 +20,7 @@ export class TicketPriorityCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Priority';
         this.icon = 'kix-icon-new-gear';
     }

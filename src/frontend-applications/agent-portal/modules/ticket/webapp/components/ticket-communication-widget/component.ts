@@ -9,7 +9,6 @@
 
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Article } from '../../../model/Article';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
@@ -25,13 +24,10 @@ import { BackendNotification } from '../../../../../model/BackendNotification';
 import { TicketUIEvent } from '../../../model/TicketUIEvent';
 import { TicketCommunicationConfiguration } from '../../../model/TicketCommunicationConfiguration';
 import { Ticket } from '../../../model/Ticket';
-import { SortUtil } from '../../../../../model/SortUtil';
-import { SortOrder } from '../../../../../model/SortOrder';
 
-export class Component extends AbstractMarkoComponent<ComponentState> {
+export class Component extends AbstractMarkoComponent<ComponentState, TicketDetailsContext> {
 
     private readonly displayView = 'selectedListView';
-    private context: TicketDetailsContext;
     private sortOrder: string;
     private subscriber: IEventSubscriber;
     private communicationConfig: TicketCommunicationConfiguration;
@@ -46,7 +42,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         this.communicationConfig = this.state.widgetConfiguration?.configuration as TicketCommunicationConfiguration;
 
@@ -89,7 +85,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         EventService.getInstance().subscribe(TicketUIEvent.SCROLL_TO_ARTICLE, this.subscriber);
 
-        this.context.registerListener('communication-widget', {
+        this.context?.registerListener('communication-widget', {
             filteredObjectListChanged: (objectType: KIXObjectType) => {
                 if (objectType === KIXObjectType.ARTICLE) {
                     this.setArticleIDs();

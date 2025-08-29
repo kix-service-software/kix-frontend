@@ -18,7 +18,7 @@ export class TicketInitialSiteURLNodesService extends ExtendedInitialSiteURLNode
     }
 
     public async getInitialSiteURLNodes(): Promise<TreeNode[]> {
-        const label = await TranslationService.translate('Translatable#Team View');
+        const label = await TranslationService.translate('Translatable#Team Dashboard');
         return [new TreeNode('tickets', label, 'kix-icon-ticket')];
     }
 

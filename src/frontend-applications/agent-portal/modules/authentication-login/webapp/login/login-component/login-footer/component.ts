@@ -15,8 +15,9 @@ import { SysConfigKey } from '../../../../../sysconfig/model/SysConfigKey';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXModulesSocketClient } from '../../../../../base-components/webapp/core/KIXModulesSocketClient';
 import { ReleaseInfo } from '../../../../../../model/ReleaseInfo';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 

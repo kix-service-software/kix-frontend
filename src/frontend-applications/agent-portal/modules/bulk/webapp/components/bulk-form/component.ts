@@ -33,10 +33,9 @@ import { TableFactoryService } from '../../../../table/webapp/core/factory/Table
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { Table } from '../../../../table/model/Table';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private tableSubscriber: IEventSubscriber;
 
@@ -244,14 +243,13 @@ class Component {
     private async updateTable(table: Table, successObjects: KIXObject[], errorObjects: KIXObject[]): Promise<void> {
         this.state.table = null;
 
-        const context = ContextService.getInstance().getActiveContext();
-        const oldObjects = await context.getObjectList(this.state.bulkManager?.objectType);
+        const oldObjects = await this.context?.getObjectList(this.state.bulkManager?.objectType);
         const idsToLoad = oldObjects ? oldObjects.map((o) => o.ObjectId) : null;
 
         const newObjects = await KIXObjectService.loadObjects(
             this.state.bulkManager?.objectType, idsToLoad, null, null, false
         ).catch(() => []);
-        context.setObjectList(this.state.bulkManager?.objectType, newObjects);
+        this.context?.setObjectList(this.state.bulkManager?.objectType, newObjects);
         this.prepareTitle();
 
         this.state.table = table;

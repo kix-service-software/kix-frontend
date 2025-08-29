@@ -40,13 +40,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.update();
     }
 
     private async update(): Promise<void> {
         if (!this.object) {
-            const context = ContextService.getInstance().getActiveContext();
-            const contextObject = await context.getObject();
+            const contextObject = await this.context.getObject();
             if (contextObject) {
                 const loadedObjects = await KIXObjectService.loadObjects(
                     contextObject.KIXObjectType, [contextObject.ObjectId],

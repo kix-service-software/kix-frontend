@@ -48,10 +48,10 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.setWidth();
-        const context = ContextService.getInstance().getActiveContext();
         const listenerId = this.state.row ? this.state.row.getRowId() : IdService.generateDateBasedId();
-        context.registerListener((listenerId + '-toggle'), {
+        this.context?.registerListener((listenerId + '-toggle'), {
             sidebarRightToggled: () => { this.setWidth(); },
             sidebarLeftToggled: () => { this.setWidth(); },
             objectChanged: (): void => { return; },
@@ -108,9 +108,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             : [];
 
         if (this.state.row) {
-            const context = ContextService.getInstance().getActiveContext();
             const object = this.state.row.getRowObject().getObject();
-            const objectActions = await context.getAdditionalActions(object);
+            const objectActions = await this.context.getAdditionalActions(object);
 
             actions = [...objectActions, ...actions];
         }

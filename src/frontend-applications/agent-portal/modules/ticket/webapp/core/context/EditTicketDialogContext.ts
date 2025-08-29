@@ -33,6 +33,12 @@ export class EditTicketDialogContext extends Context {
         await super.initContext();
     }
 
+    public async getUrl(): Promise<string> {
+        let url = this.descriptor.urlPaths[0];
+        url += `/${this.getObjectId()}`;
+        return url;
+    }
+
     public async postInit(): Promise<void> {
         const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
         const kixPro = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');

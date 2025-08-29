@@ -12,8 +12,9 @@ import { TableWidgetConfiguration } from '../../../../../model/configuration/Tab
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { LogFileProperty } from '../../../model/LogFileProperty';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
     public constructor(
         public instanceId: string = 'system-admin-logs-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
@@ -24,6 +25,8 @@ export class ComponentState {
                 [LogFileProperty.MODIFIY_TIME, SortOrder.DOWN]
             ), false, false, 'kix-icon-gears'
         )
-    ) { }
+    ) {
+        super();
+    }
 
 }

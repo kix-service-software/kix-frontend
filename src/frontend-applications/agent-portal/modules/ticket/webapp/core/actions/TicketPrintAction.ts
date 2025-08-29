@@ -23,6 +23,7 @@ export class TicketPrintAction extends AbstractAction {
     public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Print';
         this.icon = 'kix-icon-print';
     }
@@ -30,8 +31,7 @@ export class TicketPrintAction extends AbstractAction {
 
     public async canShow(): Promise<boolean> {
         let show = false;
-        const context = ContextService.getInstance().getActiveContext();
-        const objectId = context.getObjectId();
+        const objectId = this.context?.getObjectId();
 
         const permissions = [
             new UIComponentPermission(`tickets/${objectId}`, [CRUD.READ])
@@ -42,34 +42,29 @@ export class TicketPrintAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
+        BrowserUtil.openInfoOverlay('Translatable#Prepare Ticket for print');
 
-        const context = ContextService.getInstance().getActiveContext();
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+        const ticketId = this.context?.getObjectId();
+        const file = await KIXObjectService.loadObjects(
+            KIXObjectType.HTML_TO_PDF, null,
+            new KIXObjectLoadingOptions(
+                null, null, null, null, null,
+                [
+                    ['TemplateName', 'Ticket'],
+                    ['IdentifierType', 'IDKey'],
+                    ['IdentifierIDorNumber', ticketId.toString()],
+                    ['UserID', currentUser.UserID.toString()],
+                    ['Filename', 'Ticket_<KIX_TICKET_TicketNumber>_<TIME_YYMMDD_hhmm>']
+                ]
+            ), null, null, false
+        );
 
-        if (context) {
-            BrowserUtil.openInfoOverlay('Translatable#Prepare Ticket for print');
-
-            const currentUser = await AgentService.getInstance().getCurrentUser();
-            const ticketId = context.getObjectId();
-            const file = await KIXObjectService.loadObjects(
-                KIXObjectType.HTML_TO_PDF, null,
-                new KIXObjectLoadingOptions(
-                    null, null, null, null, null,
-                    [
-                        ['TemplateName', 'Ticket'],
-                        ['IdentifierType', 'IDKey'],
-                        ['IdentifierIDorNumber', ticketId.toString()],
-                        ['UserID', currentUser.UserID.toString()],
-                        ['Filename', 'Ticket_<KIX_TICKET_TicketNumber>_<TIME_YYMMDD_hhmm>']
-                    ]
-                ), null, null, false
+        if (file && file[0]) {
+            BrowserUtil.openSuccessOverlay('Translatable#Ticket has printed');
+            BrowserUtil.startBrowserDownload(
+                file[0]['Filename'], file[0]['Content'], file[0]['ContentType'], true
             );
-
-            if (file && file[0]) {
-                BrowserUtil.openSuccessOverlay('Translatable#Ticket has printed');
-                BrowserUtil.startBrowserDownload(
-                    file[0]['Filename'], file[0]['Content'], file[0]['ContentType'], true
-                );
-            }
         }
     }
 }

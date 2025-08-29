@@ -9,13 +9,16 @@
 
 import { CheckListItem } from '../../../../model/CheckListItem';
 import { IdService } from '../../../../../../model/IdService';
+import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public item: CheckListItem = null,
         public treeId: string = IdService.generateDateBasedId('checklist-item-'),
         public prepared: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

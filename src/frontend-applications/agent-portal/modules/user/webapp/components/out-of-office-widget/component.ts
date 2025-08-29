@@ -10,7 +10,6 @@
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
 import { Context } from '../../../../../model/Context';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { UserProperty } from '../../../model/UserProperty';
 import { AgentService } from '../../core/AgentService';
@@ -28,8 +27,6 @@ import { ContextMode } from '../../../../../model/ContextMode';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
-
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -39,13 +36,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
-
-        await this.initWidget(context);
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
+        await this.initWidget(this.context);
     }
 
     private async initWidget(context: Context): Promise<void> {

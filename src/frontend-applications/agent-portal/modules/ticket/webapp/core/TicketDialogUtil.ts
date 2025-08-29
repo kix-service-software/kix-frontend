@@ -18,6 +18,7 @@ import { Context } from '../../../../model/Context';
 import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 import { ConfigItem } from '../../../cmdb/model/ConfigItem';
 import { ArticleProperty } from '../../model/ArticleProperty';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
 
 
 export class TicketDialogUtil {

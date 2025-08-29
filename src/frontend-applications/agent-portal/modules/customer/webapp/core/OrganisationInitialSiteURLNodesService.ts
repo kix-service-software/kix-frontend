@@ -18,7 +18,7 @@ export class OrganisationInitialSiteURLNodesService extends ExtendedInitialSiteU
     }
 
     public async getInitialSiteURLNodes(): Promise<TreeNode[]> {
-        const label = await TranslationService.translate('Translatable#Organizations and Contacts View');
+        const label = await TranslationService.translate('Translatable#Organizations and Contacts Dashboard');
         return [new TreeNode('organisations', label, 'kix-icon-organisation')];
     }
 

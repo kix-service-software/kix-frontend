@@ -15,15 +15,14 @@ import { ServiceType } from '../../../../../modules/base-components/webapp/core/
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
-import { ContextService } from '../../core/ContextService';
 import { EventService } from '../../core/EventService';
 import { FormEvent } from '../../core/FormEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
     private formId: string;
     private fields: FormFieldConfiguration[];
     private updateTimeout: any;
@@ -41,6 +40,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Add', 'Translatable#Delete'
         ]);
@@ -81,8 +81,7 @@ class Component {
 
         this.updateTimeout = setTimeout(async () => {
             if (this.formId) {
-                const context = ContextService.getInstance().getActiveContext();
-                const formInstance = await context?.getFormManager()?.getFormInstance();
+                const formInstance = await this.context?.getFormManager()?.getFormInstance();
                 let availableFields: FormFieldConfiguration[] = fields;
 
                 const formService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
@@ -122,8 +121,7 @@ class Component {
             propertyFields = this.filterDynamicFields(field, propertyFields);
         }
 
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (propertyFields.length === 1) {
             formInstance.setFieldEmptyState(field, true);
         } else {
@@ -169,8 +167,7 @@ class Component {
     }
 
     public async addField(field: FormFieldConfiguration): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (field.empty) {
             formInstance.setFieldEmptyState(field, false);
         } else {
@@ -214,8 +211,7 @@ class Component {
         event.stopPropagation();
         event.preventDefault();
 
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (formInstance && this.state.dragStartInstanceId) {
             const fieldComponent = (this as any).getComponent(this.state.dragStartInstanceId);
             let wasMinimized = false;

@@ -15,12 +15,11 @@ import { TreeNode } from '../../core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { TimeoutTimer } from '../../core/TimeoutTimer';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
 declare const JSONEditor: any;
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private manager: IDynamicFormManager;
     private provideTimeout: any;
 

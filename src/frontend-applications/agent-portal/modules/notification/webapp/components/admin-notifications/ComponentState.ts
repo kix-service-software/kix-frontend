@@ -15,9 +15,10 @@ import { SortOrder } from '../../../../../model/SortOrder';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = 'admin-notifications-list',
@@ -35,6 +36,8 @@ export class ComponentState {
             ),
             false, false, 'kix-icon-gears'
         )
-    ) { }
+    ) {
+        super();
+    }
 
 }

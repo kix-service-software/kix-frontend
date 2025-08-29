@@ -12,8 +12,9 @@ import { Table } from '../../../../table/model/Table';
 import { LinkTypeDescription } from '../../../model/LinkTypeDescription';
 import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
 import { IdService } from '../../../../../model/IdService';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public loadNodes: () => Promise<TreeNode[]> = null,
@@ -26,5 +27,7 @@ export class ComponentState {
         public filterCount: number = null,
         public translations: any = {},
         public linkTypeTreeId: string = IdService.generateDateBasedId('linkTypeTreeId')
-    ) { }
+    ) {
+        super();
+    }
 }

@@ -8,21 +8,20 @@
  */
 
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { SearchContext } from '../SearchContext';
 import { SearchService } from '../SearchService';
 
-export class SaveUserDefaultSearchAction extends AbstractAction {
+export class SaveUserDefaultSearchAction extends AbstractAction<any, SearchContext> {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Set as Default';
         this.icon = 'kix-icon-star-fully';
     }
 
     public canRun(): boolean {
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        if (context && context instanceof SearchContext) {
-            const cache = context.getSearchCache();
+        if (this.context instanceof SearchContext) {
+            const cache = this.context.getSearchCache();
             return typeof cache !== 'undefined' && cache !== null;
         }
         return false;
@@ -30,8 +29,7 @@ export class SaveUserDefaultSearchAction extends AbstractAction {
 
     public async run(event: any): Promise<void> {
         if (this.canRun()) {
-            const context = ContextService.getInstance().getActiveContext<SearchContext>();
-            const cache = context?.getSearchCache();
+            const cache = this.context?.getSearchCache();
             await SearchService.getInstance().setSearchCacheAsDefault(cache);
         }
     }

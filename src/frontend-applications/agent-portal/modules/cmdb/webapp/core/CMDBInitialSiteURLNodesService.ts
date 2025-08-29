@@ -18,7 +18,7 @@ export class CMDBInitialSiteURLNodesService extends ExtendedInitialSiteURLNodesS
     }
 
     public async getInitialSiteURLNodes(): Promise<TreeNode[]> {
-        const label = await TranslationService.translate('Translatable#CMDB View');
+        const label = await TranslationService.translate('Translatable#Asset Dashboard');
         return [new TreeNode('configitems', label, 'kix-icon-cmdb')];
     }
 

@@ -12,7 +12,6 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableEvent } from '../../../../table/model/TableEvent';

@@ -21,9 +21,9 @@ import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEv
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { AgentService } from '../../../../../user/webapp/core/AgentService';
 import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
-import { BackendNotification } from '../../../../../../model/BackendNotification';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 

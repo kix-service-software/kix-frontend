@@ -11,7 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     { actions, icon, text, groupKey, dropstart, style, isExpansion },
 | name="action-list-dropdown">
     <div
-        key=groupKey
+        key=state.key + groupKey
         class=[
             "btn-group",
             {
@@ -42,7 +42,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </if>
             </div>
         </button>
-        <ul class="dropdown-menu p-0" key=groupKey + "-list">
+        <ul class="dropdown-menu p-0" key=state.key + groupKey + "-list">
             <for|action| of=actions>
                 <li
                     class=[
@@ -55,7 +55,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     style=(
                         !action.actions && !action.canRun() ? "cursor:auto" : ""
                     )
-                    key=action.key + "-list-element">
+                    key=state.key + action.key + "-list-element">
                     <if(action.actions)>
                         <action-list-dropdown
                             actions=action.actions
@@ -63,7 +63,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             text=action.text
                             groupKey=action.key
                             dropstart
-                            key=action.key + "-macro"/>
+                            key=state.key + action.key + "-macro"/>
                     </if>
                     <else>
                         <action action=action displayText/>
@@ -83,12 +83,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 icon=element.icon
                 text=(state.displayText ? element.text : undefined)
                 groupKey=element.key
-                key=element.key + "-macro"/>
+                key=state.key + element.key + "-macro"/>
         </if>
         <!-- create a single action -->
         <else>
             <button
-                key=element.key
+                key=state.key + element.key
                 type="button"
                 class="btn"
                 style=(!element.canRun() ? "cursor:auto" : "")
@@ -99,9 +99,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </for>
 </macro>
 
-<div key="action-list-wrapper" class="action-list-wrapper w-100">
+<div key=state.key + "-action-list-wrapper" class="action-list-wrapper w-100">
     <div
-        key="action-list"
+        key=state.key + "-action-list"
         class="d-flex justify-content-end action-list opacity-0"
         on-click("actionListClicked")>
         <div class="btn-group" role="group">
@@ -112,7 +112,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     icon="kix-icon-dots"
                     isExpansion
                     groupKey="action-list-expansion"
-                    key="action-list-expansion-macro"/>
+                    key=state.key + "action-list-expansion-macro"/>
             </if>
         </div>
     </div>

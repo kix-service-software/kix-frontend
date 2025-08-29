@@ -7,12 +7,15 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { CheckListItem } from '../../../model/CheckListItem';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public checklistItem: CheckListItem = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

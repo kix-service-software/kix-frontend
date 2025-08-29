@@ -63,8 +63,7 @@ export class JobFormService extends KIXObjectFormService {
                                     manager.reset();
                                 }
 
-                                const context = ContextService.getInstance().getActiveContext();
-                                const job = await context.getObject<Job>();
+                                const job = await data?.formInstance?.context.getObject<Job>();
                                 const pages = await manager.getPages(job, data.formInstance);
                                 pages.forEach((p) => data.formInstance.addPage(p));
                             }
@@ -99,7 +98,7 @@ export class JobFormService extends KIXObjectFormService {
         form.pages = [];
         form.pages.push(AbstractJobFormManager.getJobPage(formInstance));
 
-        const context = ContextService.getInstance().getActiveContext();
+        const context = formInstance.context;
         const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
         if (form.pages.length && job && (form.formContext === FormContext.EDIT || duplicate)) {
             const manager = this.getJobFormManager(job.Type);
@@ -109,7 +108,6 @@ export class JobFormService extends KIXObjectFormService {
             if (execPlans && !!execPlans.length) {
                 const eventExecPlans = execPlans.filter((ep) => ep.Type === ExecPlanTypes.EVENT_BASED);
                 if (eventExecPlans && !!eventExecPlans.length) {
-                    const context = ContextService.getInstance().getActiveContext();
                     if (context) {
                         context.setAdditionalInformation(
                             JobProperty.EXEC_PLAN_EVENTS, eventExecPlans[0].Parameters.Event
@@ -146,8 +144,7 @@ export class JobFormService extends KIXObjectFormService {
         form: FormConfiguration, formInstance: FormInstance, formFieldValues, job: Job
     ): Promise<void> {
 
-        const context = ContextService.getInstance().getActiveContext();
-        const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
+        const duplicate = formInstance?.context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
         if (form.formContext === FormContext.EDIT || duplicate) {
             // add additional filter fields and set filter values
             if (Array.isArray(job.Filter) && job.Filter.length) {

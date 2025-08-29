@@ -8,17 +8,15 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ConfigItemDetailsContext } from '../../core';
 import { ConfigItem } from '../../../model/ConfigItem';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -29,12 +27,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        context.registerListener('config-item-history-widget', {
+        this.context?.registerListener('config-item-history-widget', {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
@@ -48,7 +44,7 @@ class Component {
             additionalInformationChanged: (): void => { return; }
         });
 
-        await this.initWidget(await context.getObject<ConfigItem>());
+        await this.initWidget(await this.context?.getObject<ConfigItem>());
     }
 
     private async initWidget(configItem: ConfigItem): Promise<void> {

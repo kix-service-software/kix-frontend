@@ -19,7 +19,6 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { LinkUtil } from '../LinkUtil';
 import { RowObject } from '../../../../table/model/RowObject';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectSocketClient } from '../../../../base-components/webapp/core/KIXObjectSocketClient';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
@@ -46,13 +45,12 @@ export class LinkObjectTableContentProvider extends TableContentProvider<LinkObj
     }
 
     public async loadData(): Promise<RowObject<LinkObject>[]> {
-        const context = ContextService.getInstance().getActiveContext();
 
         let contextObject: KIXObject;
         if (context instanceof EditLinkedObjectsDialogContext) {
             contextObject = await context.getObject('LinkObject');
         } else {
-            contextObject = await context.getObject();
+            contextObject = await this.context.getObject();
         }
 
         const pageSize = await this.getPageSize();
@@ -92,7 +90,7 @@ export class LinkObjectTableContentProvider extends TableContentProvider<LinkObj
             rowObjects = await this.getRowObjects(linkedObjects);
         }
 
-        const newLinkObjects = await context.getObjectList<LinkObject>('newLinkObjects');
+        const newLinkObjects = await this.context?.getObjectList<LinkObject>('newLinkObjects');
         if (newLinkObjects) {
             const newLinkRowObjects = await this.getRowObjects(newLinkObjects);
             rowObjects.push(...newLinkRowObjects);

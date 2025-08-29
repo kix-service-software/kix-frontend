@@ -26,11 +26,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.labelProvider = new RoleLabelProvider();
 
         const context = ContextService.getInstance().getActiveContext();
 
-        context.registerListener('user-role-info-widget', {
+        this.context?.registerListener('user-role-info-widget', {
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
@@ -43,11 +44,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             additionalInformationChanged: (): void => { return; }
         });
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        await this.initWidget(await context.getObject<Role>());
+        await this.initWidget(await this.context?.getObject<Role>());
     }
 
     private async initWidget(role: Role): Promise<void> {

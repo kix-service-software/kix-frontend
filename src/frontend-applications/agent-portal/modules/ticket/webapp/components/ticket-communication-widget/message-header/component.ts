@@ -7,12 +7,10 @@
  * --
  */
 
-import { Context } from '../../../../../../model/Context';
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
@@ -22,8 +20,6 @@ import { TicketService } from '../../../core';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
-
-    private context: Context;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -38,7 +34,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
         if (this.state.article) {
             this.updateArticleData();

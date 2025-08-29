@@ -7,10 +7,14 @@
  * --
  */
 
-export class ComponentState {
+import { AbstractComponentState } from '../../core/AbstractComponentState';
+
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public text: string = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

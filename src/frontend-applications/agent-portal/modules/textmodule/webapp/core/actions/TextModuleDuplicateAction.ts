@@ -20,6 +20,7 @@ export class TextModuleDuplicateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Duplicate';
         this.icon = 'kix-icon-copy';
     }

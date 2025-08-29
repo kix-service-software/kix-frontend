@@ -20,6 +20,7 @@ export class OAuth2ProfileCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Profile';
         this.icon = 'kix-icon-new-gear';
     }

@@ -36,6 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Save & Fetch', 'Translatable#Skip & Continue'
         ]);
@@ -74,14 +75,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
         if (formId) {
             this.state.formId = formId;
-            const context = ContextService.getInstance().getActiveContext();
-            context?.getFormManager()?.setFormId(formId, account);
+            this.context?.getFormManager()?.setFormId(formId, account);
         }
     }
 
     public async submit(logout: boolean): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);

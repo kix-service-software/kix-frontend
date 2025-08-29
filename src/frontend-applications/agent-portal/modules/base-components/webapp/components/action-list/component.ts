@@ -23,10 +23,9 @@ import { IAction } from '../../core/IAction';
 import { ActionFactory } from '../../core/ActionFactory';
 import { ActionGroup } from '../../../model/ActionGroup';
 import { BrowserUtil } from '../../core/BrowserUtil';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-export class Component {
-
-    private state: ComponentState;
+export class Component extends AbstractMarkoComponent<ComponentState> {
     private resizeTimeout: any = null;
     private prepareTimeout: any;
     private observer: ResizeObserver;
@@ -83,9 +82,9 @@ export class Component {
     private actionPreparationRunning = false;
     private prepareObserver(): void {
         if (window.ResizeObserver) {
-            const rootElement: HTMLElement = (this as any).getEl('action-list-wrapper');
+            const rootElement: HTMLElement = (this as any).getEl(this.state.key + '-action-list-wrapper');
             const container = rootElement?.parentElement;
-            const actionListElement: HTMLElement = (this as any).getEl('action-list');
+            const actionListElement: HTMLElement = (this as any).getEl(this.state.key + '-action-list');
 
             let containerWidth = container.offsetWidth;
             this.observer = new ResizeObserver((entries) => {
@@ -122,7 +121,7 @@ export class Component {
             window.clearTimeout(this.prepareTimeout);
         }
 
-        const actionListElement: HTMLElement = (this as any).getEl('action-list');
+        const actionListElement: HTMLElement = (this as any).getEl(this.state.key + '-action-list');
         const maxWidth = actionListElement?.parentElement?.offsetWidth || 0;
 
         // hide action during preparation

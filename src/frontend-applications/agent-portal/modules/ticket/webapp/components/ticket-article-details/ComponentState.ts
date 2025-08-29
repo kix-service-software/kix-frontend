@@ -9,13 +9,16 @@
 
 import { Ticket } from '../../../model/Ticket';
 import { Article } from '../../../model/Article';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public inputObject: Ticket | Article = null,
         public article: Article = null,
         public loading: boolean = true
-    ) { }
+    ) {
+        super();
+    }
 
 }

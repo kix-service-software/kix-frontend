@@ -148,19 +148,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(TableEvent.TABLE_WAITING_END, this.subscriber);
     }
 
-    private async provideContextContent(): Promise<void> {
-        if (this.state.table.getContextId()) {
-            const context = ContextService.getInstance().getActiveContext();
-            if (context) {
-                const objects = this.state.table.getRows()
-                    .filter((r) => r.getRowObject() !== null && typeof r.getRowObject() !== 'undefined')
-                    .map((r) => r.getRowObject().getObject());
-
-                context.setFilteredObjectList(this.state.table.getObjectType(), objects);
-            }
-        }
-    }
-
     public setTableHeight(): void {
         this.state.tableHeight = '100%';
         const tableConfiguration = this.state.table?.getTableConfiguration();

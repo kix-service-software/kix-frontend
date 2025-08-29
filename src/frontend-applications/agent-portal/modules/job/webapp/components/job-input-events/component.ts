@@ -12,7 +12,6 @@ import { FormInputComponent } from '../../../../../modules/base-components/webap
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { TreeNode, TreeService, TreeHandler } from '../../../../base-components/webapp/core/tree';
 import { JobProperty } from '../../../model/JobProperty';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { AbstractJobFormManager } from '../../core/AbstractJobFormManager';
 import { JobFormService } from '../../core/JobFormService';
 
@@ -36,10 +35,10 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const treeHandler = new TreeHandler([], null, null, true);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
         await this.load();
-        await super.onMount();
 
         this.state.prepared = true;
     }
@@ -59,8 +58,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private async getJobFormManager(): Promise<AbstractJobFormManager> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (formInstance) {
             const value = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
             if (value && value.value) {
@@ -71,8 +69,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string[] | string>(this.state.field?.instanceId);
         if (value) {
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
@@ -104,12 +101,9 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private provideToContext(nodes: TreeNode[]): void {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.setAdditionalInformation(
-                JobProperty.EXEC_PLAN_EVENTS, nodes.map((n) => n.id)
-            );
-        }
+        this.context?.setAdditionalInformation(
+            JobProperty.EXEC_PLAN_EVENTS, nodes.map((n) => n.id)
+        );
     }
 
     public async focusLost(event: any): Promise<void> {

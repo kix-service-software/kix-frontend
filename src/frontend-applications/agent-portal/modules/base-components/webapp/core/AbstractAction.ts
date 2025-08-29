@@ -15,8 +15,10 @@ import { OverlayType } from './OverlayType';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { ContextService } from './ContextService';
+import { Context } from '../../../../model/Context';
 
-export abstract class AbstractAction<T = any> implements IAction<T> {
+export abstract class AbstractAction<T = any, C extends Context = Context> implements IAction<T> {
 
     public id: string;
     public text: string;
@@ -29,8 +31,11 @@ export abstract class AbstractAction<T = any> implements IAction<T> {
     public groupRank: number;
 
     public permissions: UIComponentPermission[] = [];
+    protected context: C;
 
-    public abstract initAction(): Promise<void>;
+    public async initAction(): Promise<void> {
+        this.context = ContextService.getInstance().getActiveContext();
+    }
 
     public async setData(data: T): Promise<void> {
         this.data = data;

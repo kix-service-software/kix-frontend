@@ -21,6 +21,7 @@ export class ArticleGetPlainAction extends AbstractAction<Article> {
     public hasLink: boolean = true;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Source Message';
         this.icon = 'kix-icon-listview';
     }
@@ -32,8 +33,7 @@ export class ArticleGetPlainAction extends AbstractAction<Article> {
 
     public async canShow(): Promise<boolean> {
         let show = false;
-        const context = ContextService.getInstance().getActiveContext();
-        const objectId = context ? context.getObjectId() : null;
+        const objectId = this.context?.getObjectId();
 
         if (objectId && this.articleId) {
             show = this.data.ChannelID === 2 && this.data.Plain && this.data.Plain !== '';
@@ -44,12 +44,11 @@ export class ArticleGetPlainAction extends AbstractAction<Article> {
 
     public async run(event: any): Promise<void> {
         if (this.canRun()) {
-            const context = ContextService.getInstance().getActiveContext();
-            const objectId = context ? context.getObjectId() : null;
+            const objectId = this.context?.getObjectId();
 
             if (objectId && this.articleId) {
                 if (this.data?.Plain) {
-                    const ticket = await context.getObject<Ticket>();
+                    const ticket = await this.context?.getObject<Ticket>();
                     if (ticket) {
                         const ticketText = await LabelService.getInstance().getObjectText(ticket, true, false);
                         const fileName = ticketText + '_' + this.articleId + '.eml';

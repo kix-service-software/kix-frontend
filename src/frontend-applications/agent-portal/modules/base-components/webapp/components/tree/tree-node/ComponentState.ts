@@ -7,9 +7,10 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../core/AbstractComponentState';
 import { TreeNode } from '../../../core/tree';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public node: TreeNode,
@@ -17,6 +18,8 @@ export class ComponentState {
         public treeParent: any = null,
         public treeId: string = null,
         public nodeId: string = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

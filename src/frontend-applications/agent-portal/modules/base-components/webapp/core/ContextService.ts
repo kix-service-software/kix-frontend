@@ -35,6 +35,7 @@ import { ToolbarAction } from '../../../agent-portal/webapp/application/_base-te
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { ClientStorageService } from './ClientStorageService';
 import { ContextRefreshInterval } from './ContextRefreshInterval';
+import { RoutingService } from './RoutingService';
 
 export class ContextService {
 
@@ -62,7 +63,7 @@ export class ContextService {
     private storedContexts: ContextPreference[];
     private storageProcessQueue: Array<Promise<boolean>> = [];
 
-    public DEFAULT_FALLBACK_CONTEXT: string = 'home';
+    public DEFAULT_FALLBACK_CONTEXT_URL: string = 'home';
 
     private toolbarActions: Map<string, ToolbarAction> = new Map();
 
@@ -97,7 +98,7 @@ export class ContextService {
                 contextPreference.contextId, contextPreference.objectId, contextPreference.instanceId,
                 contextPreference
             );
-            EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
+            EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, context);
         }
     }
 
@@ -171,7 +172,7 @@ export class ContextService {
         return instances;
     }
 
-    public getActiveContext<T extends Context = Context>(): T {
+    public getActiveContext<T = Context>(): T {
         return this.activeContext as T;
     }
 
@@ -190,7 +191,8 @@ export class ContextService {
         );
         if (!context) {
             context = await this.createContextInstance(
-                contextId, objectId, instanceId, null, null, contextPreference).catch((): Context => null);
+                contextId, objectId, instanceId, null, null, contextPreference).catch((): Context => null
+                );
         }
 
         return context;
@@ -262,7 +264,8 @@ export class ContextService {
         for (const c of [...this.contextInstances]) {
             await this.removeContext(c.instanceId, null, null, false, silent);
         }
-        await this.switchToTargetContext(null, this.DEFAULT_FALLBACK_CONTEXT);
+        const url = `${window.location.protocol}//${window.location.host}/${this.DEFAULT_FALLBACK_CONTEXT_URL}`;
+        await RoutingService.getInstance().routeToURL(true, url);
     }
 
     public checkDialogConfirmation(contextInstanceId: string, silent?: boolean): Promise<boolean> {
@@ -289,11 +292,14 @@ export class ContextService {
         });
     }
 
-    private canRemove(instanceId: string): boolean {
+    public canRemove(instanceId: string): boolean {
         let canRemove = true;
         if (this.contextInstances.length === 1) {
             const context = this.getContext(instanceId);
-            canRemove = context?.contextId !== this.DEFAULT_FALLBACK_CONTEXT;
+            const urlPaths = context?.descriptor.urlPaths;
+            if (urlPaths?.length) {
+                canRemove = !this.DEFAULT_FALLBACK_CONTEXT_URL.startsWith(urlPaths[0]);
+            }
         }
         return canRemove;
     }
@@ -301,7 +307,7 @@ export class ContextService {
     public async setDefaultFallbackContext(): Promise<void> {
         const url = await AgentService.getInstance().getUserPreference(PersonalSettingsProperty.INITIAL_SITE_URL);
         if (url) {
-            this.DEFAULT_FALLBACK_CONTEXT = url?.Value;
+            this.DEFAULT_FALLBACK_CONTEXT_URL = url?.Value;
         }
     }
 
@@ -318,7 +324,8 @@ export class ContextService {
                 this.contextInstances[this.contextInstances.length - 1].instanceId
             );
         } else {
-            await this.setActiveContext(this.DEFAULT_FALLBACK_CONTEXT);
+            const url = `${window.location.protocol}//${window.location.host}/${this.DEFAULT_FALLBACK_CONTEXT_URL}`;
+            await RoutingService.getInstance().routeToURL(true, url);
         }
     }
 
@@ -377,13 +384,6 @@ export class ContextService {
             }
 
             await context.update(null);
-
-            EventService.getInstance().publish(RoutingEvent.ROUTE_TO,
-                {
-                    componentId: context.descriptor.componentId,
-                    data: { objectId: context.getObjectId() }
-                }
-            );
 
             // TODO: Use Event
             this.serviceListener.forEach(
@@ -593,7 +593,7 @@ export class ContextService {
                 publishEvent = updates.some((u) => u[0] === objectType);
             }
 
-            if (publishEvent) {
+            if (publishEvent && context.descriptor.contextType !== ContextType.DIALOG) {
                 EventService.getInstance().publish(ContextEvents.CONTEXT_UPDATE_REQUIRED, context);
             }
         }
@@ -716,47 +716,44 @@ export class ContextService {
     }
 
     public async saveUserWidgetList(
-        instanceIds: string[], modifiedWidgets: ConfiguredWidget[], contextWidgetList: string
+        context: Context, instanceIds: string[], modifiedWidgets: ConfiguredWidget[], contextWidgetList: string
     ): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            const contextId = context.descriptor.contextId;
+        const contextId = context?.descriptor.contextId;
 
-            TableFactoryService.getInstance().deleteContextTables(context?.contextId);
+        TableFactoryService.getInstance().deleteContextTables(context?.contextId);
 
-            const currentUser = await AgentService.getInstance().getCurrentUser();
-            const preference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
-            const preferenceValue = preference && preference.Value ? JSON.parse(preference.Value) : {};
-            const userWidgetList: Array<string | ConfiguredWidget> = preferenceValue[contextId]
-                ? preferenceValue[contextId][contextWidgetList] || []
-                : [];
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+        const preference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
+        const preferenceValue = preference && preference.Value ? JSON.parse(preference.Value) : {};
+        const userWidgetList: Array<string | ConfiguredWidget> = preferenceValue[contextId]
+            ? preferenceValue[contextId][contextWidgetList] || []
+            : [];
 
-            const newWidgetList = [];
-            for (const instanceId of instanceIds) {
-                const modifiedWidget = modifiedWidgets.find((w) => w.instanceId === instanceId);
-                if (modifiedWidget) {
-                    newWidgetList.push(modifiedWidget);
+        const newWidgetList = [];
+        for (const instanceId of instanceIds) {
+            const modifiedWidget = modifiedWidgets.find((w) => w.instanceId === instanceId);
+            if (modifiedWidget) {
+                newWidgetList.push(modifiedWidget);
+            } else {
+                const widget = userWidgetList.find((w) => typeof w !== 'string' && w.instanceId === instanceId);
+                if (widget) {
+                    newWidgetList.push(widget);
                 } else {
-                    const widget = userWidgetList.find((w) => typeof w !== 'string' && w.instanceId === instanceId);
-                    if (widget) {
-                        newWidgetList.push(widget);
-                    } else {
-                        newWidgetList.push(instanceId);
-                    }
+                    newWidgetList.push(instanceId);
                 }
             }
-
-            if (!preferenceValue[contextId]) {
-                preferenceValue[contextId] = {};
-            }
-
-            preferenceValue[contextId][contextWidgetList] = newWidgetList;
-
-            const preferences: Array<[string, string]> = [
-                ['ContextWidgetLists', JSON.stringify(preferenceValue)]
-            ];
-            await AgentService.getInstance().setPreferences(preferences);
         }
+
+        if (!preferenceValue[contextId]) {
+            preferenceValue[contextId] = {};
+        }
+
+        preferenceValue[contextId][contextWidgetList] = newWidgetList;
+
+        const preferences: Array<[string, string]> = [
+            ['ContextWidgetLists', JSON.stringify(preferenceValue)]
+        ];
+        await AgentService.getInstance().setPreferences(preferences);
     }
 
     public async reloadContextConfigurations(): Promise<void> {

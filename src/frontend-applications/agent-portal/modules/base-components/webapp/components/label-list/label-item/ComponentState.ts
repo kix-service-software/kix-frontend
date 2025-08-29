@@ -8,15 +8,17 @@
  */
 
 import { Label } from '../../../../../../modules/base-components/webapp/core/Label';
+import { AbstractComponentState } from '../../../core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public toggled: boolean = false,
         public showToggle: boolean = true,
         public label: Label = null,
-        public prepared: boolean = false,
         public labelId: string = ''
-    ) { }
+    ) {
+        super();
+    }
 
 }

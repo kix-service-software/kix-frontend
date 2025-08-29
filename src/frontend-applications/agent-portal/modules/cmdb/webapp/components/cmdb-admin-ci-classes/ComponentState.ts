@@ -12,8 +12,9 @@ import { TableWidgetConfiguration } from '../../../../../model/configuration/Tab
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ConfigItemClassProperty } from '../../../model/ConfigItemClassProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = 'admin-cmdb-ci-classes-list',
@@ -27,6 +28,8 @@ export class ComponentState {
                 KIXObjectType.CONFIG_ITEM_CLASS,
                 [ConfigItemClassProperty.NAME, SortOrder.UP]
             ), false, false, 'kix-icon-gears')
-    ) { }
+    ) {
+        super();
+    }
 
 }

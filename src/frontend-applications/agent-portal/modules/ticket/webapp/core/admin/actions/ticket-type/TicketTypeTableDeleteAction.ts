@@ -25,6 +25,7 @@ export class TicketTypeTableDeleteAction extends AbstractAction<Table> {
     public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Delete';
         this.icon = 'kix-icon-trash';
     }

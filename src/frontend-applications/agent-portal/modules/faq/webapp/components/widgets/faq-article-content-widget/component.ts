@@ -31,12 +31,12 @@ import { EventService } from '../../../../../base-components/webapp/core/EventSe
 import { ImageViewerEvent } from '../../../../../agent-portal/model/ImageViewerEvent';
 import { ImageViewerEventData } from '../../../../../agent-portal/model/ImageViewerEventData';
 import { ApplicationEvent } from '../../../../../base-components/webapp/core/ApplicationEvent';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public eventSubscriberId: string = 'FAQContentComponent';
 
-    private state: ComponentState;
     private contextListenerId: string = null;
 
     public stars: Array<string | ObjectIcon> = [];
@@ -53,7 +53,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Symptom', 'Translatable#Cause', 'Translatable#Solution', 'Translatable#Comment',
             'Translatable#Number of ratings'
@@ -61,15 +61,12 @@ class Component {
 
         WidgetService.getInstance().setWidgetType('faq-article-group', WidgetType.GROUP);
 
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             objectChanged: (id: string | number, faqArticle: FAQArticle, type: KIXObjectType | string) => {
                 if (type === KIXObjectType.FAQ_ARTICLE) {
-                    this.initWidget(context, faqArticle);
+                    this.initWidget(this.context, faqArticle);
                 }
             },
             sidebarRightToggled: (): void => { return; },
@@ -80,7 +77,7 @@ class Component {
             additionalInformationChanged: (): void => { return; }
         });
 
-        await this.initWidget(context, await context.getObject<FAQArticle>());
+        await this.initWidget(this.context, await this.context.getObject<FAQArticle>());
         this.state.loading = false;
     }
 

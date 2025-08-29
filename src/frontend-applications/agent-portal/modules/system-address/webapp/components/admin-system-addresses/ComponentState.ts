@@ -12,8 +12,9 @@ import { TableWidgetConfiguration } from '../../../../../model/configuration/Tab
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SystemAddressProperty } from '../../../model/SystemAddressProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
     public constructor(
         public instanceId: string = 'communication-system-addresses-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
@@ -23,6 +24,8 @@ export class ComponentState {
             ], null,
             new TableWidgetConfiguration(null, null, null, KIXObjectType.SYSTEM_ADDRESS,
                 [SystemAddressProperty.REALNAME, SortOrder.UP]), false, false, 'kix-icon-gears')
-    ) { }
+    ) {
+        super();
+    }
 
 }

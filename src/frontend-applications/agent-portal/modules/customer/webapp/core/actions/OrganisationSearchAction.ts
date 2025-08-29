@@ -20,6 +20,7 @@ export class OrganisationSearchAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Search';
         this.icon = 'kix-icon-search';
     }

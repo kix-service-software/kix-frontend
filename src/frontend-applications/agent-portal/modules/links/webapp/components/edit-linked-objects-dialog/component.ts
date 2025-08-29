@@ -40,10 +40,10 @@ import { TableEventData } from '../../../../table/model/TableEventData';
 import { ValueState } from '../../../../table/model/ValueState';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { IdService } from '../../../../../model/IdService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
     private availableLinkObjects: LinkObject[] = [];
     private newLinkObjects: LinkObject[] = [];
     private deleteLinkObjects: LinkObject[] = [];
@@ -64,6 +64,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.filterPlaceholder = await TranslationService.translate('Translatable#enter filter value');
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Assign Link', 'Translatable#Delete Link', 'Translatable#Submit'
@@ -75,10 +76,11 @@ class Component {
 
         this.state.allowDelete = this.state.allowCreate;
 
-        const context = ContextService.getInstance().getActiveContext();
         let sourceContext: Context;
 
-        const sourceContextInformation = context?.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
+        const sourceContextInformation = this.context?.getAdditionalInformation(
+            AdditionalContextInformation.SOURCE_CONTEXT
+        );
         if (sourceContextInformation) {
             sourceContext = ContextService.getInstance().getContext(sourceContextInformation?.instanceId);
         }
@@ -105,12 +107,11 @@ class Component {
                 await this.reviseLinkObjects();
                 await this.setInitialLinkDescriptions();
 
-                const editLinksContext = ContextService.getInstance().getActiveContext();
-                editLinksContext.setObjectList(KIXObjectType.LINK_OBJECT, this.availableLinkObjects);
+                this.context?.setObjectList(KIXObjectType.LINK_OBJECT, this.availableLinkObjects);
 
                 await this.prepareTable();
 
-                const previousAddedLinks = context.getAdditionalInformation('CreateLinkDescription') ?? [];
+                const previousAddedLinks = this.context?.getAdditionalInformation('CreateLinkDescription') ?? [];
                 if (previousAddedLinks?.length) {
                     await this.linksAdded(previousAddedLinks);
                 }
@@ -138,12 +139,11 @@ class Component {
     }
 
     public async linksAdded(result: CreateLinkDescription[][]): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const previousAddedLinks = context.getAdditionalInformation('CreateLinkDescription') ?? [];
+        const previousAddedLinks = this.context?.getAdditionalInformation('CreateLinkDescription') ?? [];
         if (previousAddedLinks?.length && this.compareLinksArrays(previousAddedLinks[1], result[1])) {
             result = [result[0], [...previousAddedLinks[1], ...result[1]]];
         }
-        context.setAdditionalInformation('CreateLinkDescription', result);
+        this.context?.setAdditionalInformation('CreateLinkDescription', result);
         this.linkDescriptions = result[0];
         await this.addNewLinks(result[1]);
 
@@ -291,9 +291,8 @@ class Component {
             this.availableLinkObjects = this.filterUniqueLinks([...this.availableLinkObjects, ...newLinkObjects]);
             this.newLinkObjects = this.filterUniqueLinks([...this.newLinkObjects, ...newLinkObjects]);
 
-            const context = ContextService.getInstance().getActiveContext();
-            context.setObjectList(KIXObjectType.LINK_OBJECT, [...this.availableLinkObjects]);
-            context.setObjectList('newLinkObjects', this.newLinkObjects);
+            this.context?.setObjectList(KIXObjectType.LINK_OBJECT, [...this.availableLinkObjects]);
+            this.context?.setObjectList('newLinkObjects', this.newLinkObjects);
 
             this.state.linkObjectCount = this.availableLinkObjects.length;
 

@@ -14,6 +14,7 @@ import { ContactSearchContext } from '../context/ContactSearchContext';
 export class ContactSearchAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Search';
         this.icon = 'kix-icon-search';
     }

@@ -9,23 +9,21 @@
 
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { SearchSocketClient } from '../../core/SearchSocketClient';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SearchCache } from '../../../model/SearchCache';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { SearchService } from '../../core/SearchService';
-import { SearchContext } from '../../core/SearchContext';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { SearchEvent } from '../../../model/SearchEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { SearchContextConfiguration } from '../../../../../model/configuration/SearchContextConfiguration';
+import { SearchContext } from '../../core/SearchContext';
 
-export class Component extends AbstractMarkoComponent<ComponentState> {
+export class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
-    private context: SearchContext;
     private objectType: KIXObjectType | string;
     private subscriber: IEventSubscriber;
 
@@ -38,7 +36,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
         this.objectType = this.context?.descriptor?.kixObjectTypes?.length > 0
             ? this.context?.descriptor?.kixObjectTypes[0]

@@ -26,10 +26,10 @@ import { GroupRowLayout } from './GroupRowLayout';
 import { RowColumnLayout } from '../../../model/layout/RowColumnLayout';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
     private formhandler: ObjectFormHandler;
     private contextInstanceId: string;
     private subscriber: IEventSubscriber;
@@ -45,14 +45,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount(this.contextInstanceId);
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Edit Group', 'Translatable#Add Field'
         ]);
-        if (this.contextInstanceId) {
-            this.context = ContextService.getInstance().getContext(this.contextInstanceId);
-        } else {
-            this.context = ContextService.getInstance().getActiveContext();
-        }
 
         this.formhandler = await this.context?.getFormManager().getObjectFormHandler();
 
@@ -60,12 +56,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('object-form-group'),
-            eventPublished: async (data: FormConfigurationObject, eventId: string): Promise<void> => {
-                if (data?.groupId === this.group.id) {
-                    this.formhandler = await this.context?.getFormManager().getObjectFormHandler();
-                    this.state.prepared = false;
-                    await this.prepareRowLayout();
-                    setTimeout(() => this.state.prepared = true, 0);
+            eventPublished: async (data: ObjectFormEventData, eventId: string): Promise<void> => {
+                if (this.context?.instanceId === data.contextInstanceId) {
+                    if (data?.formConfigurationObject?.groupId === this.group.id) {
+                        this.formhandler = await this.context?.getFormManager().getObjectFormHandler();
+                        this.state.prepared = false;
+                        await this.prepareRowLayout();
+                        setTimeout(() => this.state.prepared = true, 0);
+                    }
                 }
             }
         };

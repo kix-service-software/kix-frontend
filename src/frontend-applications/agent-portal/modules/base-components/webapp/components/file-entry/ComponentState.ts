@@ -8,14 +8,17 @@
  */
 
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public fileName: string = null,
         public fileSize: string = null,
         public icon: string | ObjectIcon = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

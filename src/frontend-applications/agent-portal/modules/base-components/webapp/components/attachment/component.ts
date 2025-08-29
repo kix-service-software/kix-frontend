@@ -16,9 +16,9 @@ import { ComponentContent } from '../../../../../modules/base-components/webapp/
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
-import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 

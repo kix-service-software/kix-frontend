@@ -98,7 +98,7 @@ export class RoutingService {
                         path[0], path[1], urlParams, false
                     );
                     if (context) {
-                        ContextService.getInstance().DEFAULT_FALLBACK_CONTEXT = context.contextId;
+                        ContextService.getInstance().DEFAULT_FALLBACK_CONTEXT_URL = url?.Value;
                         routed = true;
                     }
                 }

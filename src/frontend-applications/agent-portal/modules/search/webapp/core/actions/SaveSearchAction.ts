@@ -11,20 +11,19 @@ import { AbstractAction } from '../../../../../modules/base-components/webapp/co
 import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { SearchContext } from '../SearchContext';
 
-export class SaveSearchAction extends AbstractAction {
+export class SaveSearchAction extends AbstractAction<any, SearchContext> {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Save Search';
         this.icon = 'kix-icon-save';
     }
 
     public canRun(): boolean {
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        if (context && context instanceof SearchContext) {
-            const cache = context.getSearchCache();
+        if (this.context instanceof SearchContext) {
+            const cache = this.context.getSearchCache();
             return typeof cache !== 'undefined' && cache !== null;
         }
         return false;

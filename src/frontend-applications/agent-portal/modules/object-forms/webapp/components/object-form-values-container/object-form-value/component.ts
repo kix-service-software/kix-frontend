@@ -7,7 +7,6 @@
  * --
  */
 
-import { Context } from '../../../../../../model/Context';
 import { IdService } from '../../../../../../model/IdService';
 import { ConfigurationType } from '../../../../../../model/configuration/ConfigurationType';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
@@ -25,6 +24,7 @@ import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { DynamicFieldCountableFormValue } from '../../../../model/FormValues/DynamicFields/DynamicFieldCountableFormValue';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
+import { ObjectFormEventData } from '../../../../model/ObjectFormEventData';
 import { FieldLayout } from '../../../../model/layout/FieldLayout';
 import { ComponentState } from './ComponentState';
 
@@ -33,7 +33,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private bindingIds: string[];
     private subscriber: IEventSubscriber;
     private contextInstanceId: string;
-    private context: Context;
     private fieldLayout: FieldLayout[];
     private field: FormFieldConfiguration;
 
@@ -72,14 +71,31 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+    public async onMount(): Promise<void> {
+        await super.onMount(this.contextInstanceId);
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Edit Field'
+        ]);
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(this.state.formValue?.instanceId),
+            eventPublished: (data: ObjectFormEventData): void => {
+                if (this.state.formValue?.instanceId === data?.formValueInstanceId) {
+                    const element = (this as any).getEl();
+                    if (element) {
+                        BrowserUtil.scrollIntoViewIfNeeded(element);
+                    }
+                }
+            }
+        };
+        EventService.getInstance().subscribe(ObjectFormEvent.SCROLL_TO_FORM_VALUE, this.subscriber);
+    }
+
+    public onDestroy(): void {
+        this.state.formValue?.removePropertyBinding(this.bindingIds);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.SCROLL_TO_FORM_VALUE, this.subscriber);
+    }
+
     private async update(): Promise<void> {
-
-        if (this.contextInstanceId) {
-            this.context = ContextService.getInstance().getContext(this.contextInstanceId);
-        } else {
-            this.context = ContextService.getInstance().getActiveContext();
-        }
-
         this.addBindings();
 
         this.state.enabled = this.state.formValue?.enabled;
@@ -220,29 +236,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             this.state.displayNone = !canShow;
         }
-    }
-
-    public async onMount(): Promise<void> {
-        this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Edit Field'
-        ]);
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(this.state.formValue?.instanceId),
-            eventPublished: (instanceId: string): void => {
-                if (this.state.formValue?.instanceId === instanceId) {
-                    const element = (this as any).getEl();
-                    if (element) {
-                        BrowserUtil.scrollIntoViewIfNeeded(element);
-                    }
-                }
-            }
-        };
-        EventService.getInstance().subscribe(ObjectFormEvent.SCROLL_TO_FORM_VALUE, this.subscriber);
-    }
-
-    public onDestroy(): void {
-        this.state.formValue?.removePropertyBinding(this.bindingIds);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.SCROLL_TO_FORM_VALUE, this.subscriber);
     }
 
     public async editField(): Promise<void> {

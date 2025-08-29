@@ -109,6 +109,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('rich-text-input', '/kix-module-base-components$0/webapp/components/rich-text-input', []),
         new UIComponent('router-outlet', '/kix-module-base-components$0/webapp/components/router-outlet', []),
         new UIComponent('sidebar', '/kix-module-base-components$0/webapp/components/sidebar', []),
+        new UIComponent(
+            'context-sidebar',
+            '/kix-module-base-components$0/webapp/components/sidebar/context-sidebar',
+            []
+        ),
         new UIComponent('tab-container', '/kix-module-base-components$0/webapp/components/tab-container', []),
         new UIComponent('tab-widget', '/kix-module-base-components$0/webapp/components/tab-widget', []),
         new UIComponent('text-area-input', '/kix-module-base-components$0/webapp/components/text-area-input', []),

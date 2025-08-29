@@ -58,6 +58,7 @@
         "require ./rich-text-input",
         "require ./router-outlet",
         "require ./sidebar",
+        "require ./sidebar/context-sidebar",
         "require ./tab-container",
         "require ./tab-widget",
         "require ./text-area-input",

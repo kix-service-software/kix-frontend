@@ -30,6 +30,7 @@ import { DynamicFieldObjectFormValue } from './FormValues/DynamicFieldObjectForm
 import { ObjectFormValue } from './FormValues/ObjectFormValue';
 import { InstructionProperty } from './InstructionProperty';
 import { ObjectFormEvent } from './ObjectFormEvent';
+import { ObjectFormEventData } from './ObjectFormEventData';
 import { ObjectFormValueMapperExtension } from './ObjectFormValueMapperExtension';
 import { PropertyInstruction } from './PropertyInstruction';
 import { RuleResult } from './RuleResult';
@@ -130,7 +131,10 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
 
         this.initialized = true;
-        EventService.getInstance().publish(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.instanceId);
+        EventService.getInstance().publish(
+            ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED,
+            new ObjectFormEventData(this.objectFormHandler?.context?.instanceId, this.instanceId)
+        );
     }
 
     protected async mapObjectValues(object: T): Promise<void> {
@@ -439,7 +443,9 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
         await this.applyInteractions(result);
 
-        EventService.getInstance().publish(ObjectFormEvent.OTHER_INFORMATION_CHANGED);
+        EventService.getInstance().publish(
+            ObjectFormEvent.OTHER_INFORMATION_CHANGED, new ObjectFormEventData(null, this.instanceId)
+        );
     }
 
     private async applyPropertyInstructions(result: RuleResult): Promise<void> {

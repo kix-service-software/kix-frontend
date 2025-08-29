@@ -115,7 +115,7 @@ export class TableFactoryService {
         const context = ContextService.getInstance().getActiveContext();
         let tableContextId: string;
         if (context) {
-            tableContextId = context.contextId;
+            tableContextId = context.instanceId;
 
             let dependency = context.getAdditionalInformation(AdditionalContextInformation.OBJECT_DEPENDENCY);
             if (Array.isArray(dependency)) {

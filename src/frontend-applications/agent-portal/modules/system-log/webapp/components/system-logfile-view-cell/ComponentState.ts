@@ -7,10 +7,14 @@
  * --
  */
 
-export class ComponentState {
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
+
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public title = '',
         public canShow: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 }

@@ -22,20 +22,15 @@ import { ContextEvents } from '../../core/ContextEvents';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 import { SearchService } from '../../../../search/webapp/core/SearchService';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private contextWidgetList: string = null;
-
     private originalWidgets: ConfiguredWidget[];
-
     private modifiedWidgets: ConfiguredWidget[] = [];
-
     private searchBookmarksTreeHandler: TreeHandler;
     private contextTreeHandler: TreeHandler;
-
     private subscriber: IEventSubscriber;
 
     public onCreate(): void {
@@ -53,14 +48,15 @@ class Component {
             ? input.configurationMode
             : false;
         this.contextWidgetList = input.contextWidgetList;
-
-        if (this.contextWidgetList) {
-            const activeContext = ContextService.getInstance().getActiveContext();
-            this.state.customizable = activeContext.getConfiguration().customizable;
-        }
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
+        if (this.contextWidgetList) {
+            this.state.customizable = this.context?.getConfiguration().customizable;
+        }
+
         this.state.translations = await TranslationService.createTranslationObject(
             [
                 'Translatable#Submit', 'Translatable#Save', 'Translatable#Cancel', 'Translatable#Add Table Widget'
@@ -142,8 +138,7 @@ class Component {
     }
 
     private async loadContextWidgets(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        let contextWidgets: ConfiguredWidget[] = context.getConfiguration()[this.contextWidgetList];
+        let contextWidgets: ConfiguredWidget[] = this.context?.getConfiguration()[this.contextWidgetList];
 
         const nodes: TreeNode[] = [];
         if (Array.isArray(contextWidgets)) {
@@ -176,7 +171,7 @@ class Component {
 
     public async saveWidgets(): Promise<void> {
         await ContextService.getInstance().saveUserWidgetList(
-            this.state.widgets.map((w) => w.instanceId), this.modifiedWidgets, this.contextWidgetList
+            this.context, this.state.widgets.map((w) => w.instanceId), this.modifiedWidgets, this.contextWidgetList
         );
 
         EventService.getInstance().publish(
@@ -225,8 +220,7 @@ class Component {
         if (this.contextTreeHandler) {
             const nodes = this.contextTreeHandler.getSelectedNodes();
             if (nodes.length) {
-                const context = ContextService.getInstance().getActiveContext();
-                const widget = await context.getConfiguredWidget(nodes[0].id);
+                const widget = await this.context?.getConfiguredWidget(nodes[0].id);
                 if (widget) {
                     // Update state widgets
                     const stateWidgetIndex = this.state.widgets.findIndex((sw) => {

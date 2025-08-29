@@ -20,18 +20,15 @@ export class ConfigItemClassEditAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
     }
 
     public async run(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-
-        if (context) {
-            const classId = context.getObjectId();
-            if (classId) {
-                ContextService.getInstance().setActiveContext(EditConfigItemClassDialogContext.CONTEXT_ID, classId);
-            }
+        const classId = this.context?.getObjectId();
+        if (classId) {
+            ContextService.getInstance().setActiveContext(EditConfigItemClassDialogContext.CONTEXT_ID, classId);
         }
     }
 

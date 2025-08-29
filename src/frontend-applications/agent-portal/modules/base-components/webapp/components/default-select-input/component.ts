@@ -12,7 +12,6 @@ import { FormInputComponent } from '../../../../../modules/base-components/webap
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { DefaultSelectInputFormOption } from '../../../../../model/configuration/DefaultSelectInputFormOption';
 import { TreeNode, TreeService, TreeHandler } from '../../core/tree';
-import { ContextService } from '../../core/ContextService';
 import { EventService } from '../../core/EventService';
 import { FormEvent } from '../../core/FormEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
@@ -45,6 +44,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         if (this.state.field && this.state.field?.options && !!this.state.field?.options) {
             const asMultiselectOption = this.state.field?.options.find(
                 (o) => o.option === DefaultSelectInputFormOption.MULTI
@@ -148,8 +148,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string | number | string[] | number[]>(
             this.state.field?.instanceId
         );
@@ -191,10 +190,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     // TODO: move to FormInstance/ValueHandler as universal solution for unique handling (possible values)
     private async handleUnique(nodes: TreeNode[]): Promise<TreeNode[]> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (formInstance) {
-            const fieldList = await formInstance.getFields(this.state.field);
+            const fieldList = formInstance.getFields(this.state.field);
             let usedValues = [];
             fieldList.forEach((f) => {
                 if (f.property === this.state.field?.property && f.instanceId !== this.state.field?.instanceId) {

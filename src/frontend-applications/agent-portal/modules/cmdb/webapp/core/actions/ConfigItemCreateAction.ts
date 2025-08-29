@@ -20,6 +20,7 @@ export class ConfigItemCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Config Item';
         this.icon = 'kix-icon-new-ci';
     }

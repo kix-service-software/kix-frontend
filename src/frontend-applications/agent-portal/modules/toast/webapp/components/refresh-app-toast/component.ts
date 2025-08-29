@@ -11,10 +11,9 @@ import { ComponentState } from './ComponentState';
 import { RefreshToastSettings } from '../../../model/RefreshToastSettings';
 import { WindowListener } from '../../../../base-components/webapp/core/WindowListener';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();

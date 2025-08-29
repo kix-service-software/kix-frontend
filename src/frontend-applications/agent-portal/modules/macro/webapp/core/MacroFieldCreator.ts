@@ -97,7 +97,7 @@ export class MacroFieldCreator {
 
         if (macro) {
 
-            const context = ContextService.getInstance().getActiveContext();
+            const context = formInstance.context;
             const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
             if (duplicate) {
                 macro.ID = null;
@@ -178,7 +178,7 @@ export class MacroFieldCreator {
             true, 'Translatable#Helptext_Admin_CreateEdit_Actions'
         );
 
-        const context = ContextService.getInstance().getActiveContext();
+        const context = formInstance.context;
         const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
         if (duplicate && action) {
             action.ID = null;

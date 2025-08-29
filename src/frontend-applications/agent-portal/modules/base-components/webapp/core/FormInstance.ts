@@ -30,7 +30,6 @@ import { FormFactory } from './FormFactory';
 import { KIXObjectFormService } from './KIXObjectFormService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
-import { ContextService } from './ContextService';
 import { Context } from '../../../../model/Context';
 
 export class FormInstance {
@@ -446,10 +445,8 @@ export class FormInstance {
         }
 
         if (!silent) {
-            const dialogContext = ContextService.getInstance().getActiveContext();
-
-            if (dialogContext) {
-                await dialogContext.setFormObject();
+            if (this.context) {
+                await this.context.setFormObject();
             }
 
             EventService.getInstance().publish(
@@ -667,10 +664,9 @@ export class FormInstance {
             });
             result = fieldResult;
 
-            const context = ContextService.getInstance().getActiveContext();
-            if (context) {
+            if (this.context) {
                 const key = 'DynamicFormValidationResults-' + field.instanceId;
-                const dynamicFormResults = context.getAdditionalInformation(key) || [];
+                const dynamicFormResults = this.context.getAdditionalInformation(key) || [];
                 dynamicFormResults.forEach((r) => {
                     if (r.severity === ValidationSeverity.ERROR) {
                         formFieldValue.valid = false;

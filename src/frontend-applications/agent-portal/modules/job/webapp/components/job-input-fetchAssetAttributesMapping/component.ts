@@ -33,8 +33,7 @@ class Component extends FormInputComponent<[string, string], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             this.state.currentAssetValue = value.value[0];

@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { IdService } from '../../../../../model/IdService';
 import { MailAccount } from '../../../model/MailAccount';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -33,13 +32,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
+            ? await this.context?.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
         this.contextListenerId = IdService.generateDateBasedId('mail-account-info-widget-');
-        context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
@@ -51,12 +50,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             additionalInformationChanged: (): void => { return; }
         });
 
-        this.initWidget(await context.getObject<MailAccount>(KIXObjectType.MAIL_ACCOUNT));
+        this.initWidget(await this.context?.getObject<MailAccount>(KIXObjectType.MAIL_ACCOUNT));
     }
 
     public onDestroy(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        context.unregisterListener(this.contextListenerId);
+        this.context?.unregisterListener(this.contextListenerId);
     }
 
     private initWidget(mailAccount: MailAccount): void {

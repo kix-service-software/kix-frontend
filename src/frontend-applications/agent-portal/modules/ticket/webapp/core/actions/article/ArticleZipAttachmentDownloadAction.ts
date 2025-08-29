@@ -18,6 +18,7 @@ import { StringContent } from '../../../../../../modules/base-components/webapp/
 export class ArticleZipAttachmentDownloadAction extends AbstractAction<Article> {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Download';
         this.icon = 'kix-icon-download';
     }

@@ -9,9 +9,10 @@
 
 import { IdService } from '../../../../../../model/IdService';
 import { AutoCompleteConfiguration } from '../../../../../../model/configuration/AutoCompleteConfiguration';
+import { AbstractComponentState } from '../../../core/AbstractComponentState';
 import { TreeNode } from '../../../core/tree';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public hasListFilter: boolean = true,
@@ -22,6 +23,8 @@ export class ComponentState {
         public isAutocompleteFilter: boolean = false,
         public autoCompleteConfiguration = new AutoCompleteConfiguration(),
         public autoCompleteCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

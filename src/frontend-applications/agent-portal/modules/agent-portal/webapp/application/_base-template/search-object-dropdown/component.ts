@@ -8,6 +8,7 @@
  */
 
 import { ContextMode } from '../../../../../../model/ContextMode';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
@@ -16,9 +17,7 @@ import { SearchService } from '../../../../../search/webapp/core/SearchService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ComponentState } from './ComponentState';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private subscriber: IEventSubscriber;
 
     public onCreate(): void {

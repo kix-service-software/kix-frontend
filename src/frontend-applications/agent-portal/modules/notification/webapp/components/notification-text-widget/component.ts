@@ -32,15 +32,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         WidgetService.getInstance().setWidgetType('notification-message-group', WidgetType.GROUP);
         this.state.labelProvider = new NotificationLabelProvider();
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         this.contextListenerId = IdService.generateDateBasedId('notification-text-widget');
 
-        context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
@@ -53,16 +51,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             additionalInformationChanged: (): void => { return; }
         });
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        await this.initWidget(await context.getObject<Notification>());
+        await this.initWidget(await this.context?.getObject<Notification>());
     }
 
     public onDestroy(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        context.unregisterListener(this.contextListenerId);
+        this.context?.unregisterListener(this.contextListenerId);
     }
 
     private async initWidget(notification: Notification): Promise<void> {

@@ -30,20 +30,17 @@ import { Table } from '../../../model/Table';
 import { TableEvent } from '../../../model/TableEvent';
 import { TableEventData } from '../../../model/TableEventData';
 import { TableFactoryService } from '../../core/factory/TableFactoryService';
-import { Context } from '../../../../../model/Context';
 import { FormValueProperty } from '../../../../object-forms/model/FormValueProperty';
 import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../../../object-forms/model/ObjectFormEvent';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { DataViewService } from '../../core/DataViewService';
-import { DataView } from '../../../model/DataView';
 import { WidgetSize } from '../../../../../model/configuration/WidgetSize';
 
-class Component {
-
-    public state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private additionalFilterCriteria: UIFilterCriterion[] = [];
     private objectType: KIXObjectType | string;
@@ -52,7 +49,6 @@ class Component {
     private useContext: boolean = true;
     private contextListener: IContextListener;
     private prepareTitleTimeout: any;
-    private context: Context;
     private formBindingIds: Map<string, string>;
 
     public resetFilterTitle: string;
@@ -75,10 +71,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.filterPlaceholder = await TranslationService.translate(this.state.filterPlaceholder);
         this.resetFilterTitle = await TranslationService.translate('Translatable#Reset table filters');
         this.additionalFilterCriteria = [];
-        this.context = ContextService.getInstance().getActiveContext();
 
         if (this.useContext) {
             this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
@@ -173,7 +169,9 @@ class Component {
                     eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED
                     && this.formBindingIds.size
                 ) {
-                    this.addFormBindings();
+                    if (data.contextInstanceId === this.context?.instanceId) {
+                        this.addFormBindings();
+                    }
                 }
 
             }
@@ -239,25 +237,21 @@ class Component {
 
         EventService.getInstance().subscribe(TableEvent.COLUMN_FILTERED, this.subscriber);
 
-        const context = ContextService.getInstance().getActiveContext();
-        context.registerListener('table-widget-' + this.state.instanceId, this.contextListener);
+        this.context?.registerListener('table-widget-' + this.state.instanceId, this.contextListener);
     }
 
     private async reloadTable(settings: TableWidgetConfiguration): Promise<void> {
-        const activeContext = ContextService.getInstance().getActiveContext();
-        if (this.context.instanceId === activeContext.instanceId) {
-            if (this.state.table?.isFiltered()) {
-                if (settings?.resetFilterOnReload && !this.state.table.isBackendFilterSupported()) {
-                    this.state.table.resetFilter();
-                    const filterComponent = (this as any).getComponent('table-widget-filter');
-                    filterComponent?.reset();
-                } else {
-                    this.state.filterValue = this.state.table.getFilterValue();
-                }
+        if (this.state.table?.isFiltered()) {
+            if (settings?.resetFilterOnReload && !this.state.table.isBackendFilterSupported()) {
+                this.state.table.resetFilter();
+                const filterComponent = (this as any).getComponent('table-widget-filter');
+                filterComponent?.reset();
+            } else {
+                this.state.filterValue = this.state.table.getFilterValue();
             }
-
-            await this.prepare();
         }
+
+        await this.prepare();
     }
 
     private async prepareFormDependency(): Promise<void> {
@@ -333,10 +327,7 @@ class Component {
         EventService.getInstance().unsubscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this.subscriber);
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.unregisterListener('table-widget-' + this.state.instanceId);
-        }
+        this.context?.unregisterListener('table-widget-' + this.state.instanceId);
     }
 
     private async prepareHeader(): Promise<void> {
@@ -396,9 +387,8 @@ class Component {
         const tableConfiguration = settings?.configuration as TableConfiguration;
         if (settings?.objectType || tableConfiguration?.objectType) {
             this.objectType = tableConfiguration?.objectType || settings.objectType;
-            const context = ContextService.getInstance().getActiveContext();
             const contextId = this.state.widgetConfiguration.contextDependent
-                ? context.contextId
+                ? this.context?.contextId
                 : null;
 
             const table = await TableFactoryService.getInstance().createTable(
@@ -479,7 +469,7 @@ class Component {
     }
 
     public getTemplate(componentId: string): any {
-        return KIXModulesService.getComponentTemplate(componentId);
+        return componentId ? KIXModulesService.getComponentTemplate(componentId) : null;
     }
 
     public getTable(): Table {

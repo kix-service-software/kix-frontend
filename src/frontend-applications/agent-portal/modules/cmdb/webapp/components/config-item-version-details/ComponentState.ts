@@ -10,14 +10,17 @@
 import { LabelValueGroup } from '../../../../../model/LabelValueGroup';
 import { Version } from '../../../model/Version';
 import { PreparedData } from '../../../model/PreparedData';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public groups: LabelValueGroup[] = [],
         public version: Version = null,
         public preparedData: PreparedData[] = []
-    ) { }
+    ) {
+        super();
+    }
 
 }

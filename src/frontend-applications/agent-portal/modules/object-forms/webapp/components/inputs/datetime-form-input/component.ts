@@ -7,10 +7,8 @@
  * --
  */
 
-import { Context } from '../../../../../../model/Context';
 import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { DateTimeUtil } from '../../../../../base-components/webapp/core/DateTimeUtil';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
@@ -26,7 +24,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private bindingIds: string[];
     private formValue: DateTimeFormValue;
-    private context: Context;
     private formHandler: ObjectFormHandler;
 
     private subscriber: IEventSubscriber;
@@ -66,7 +63,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         this.state.displayInputChangeButton = this.context.descriptor.contextMode.toLowerCase().includes('admin');
         this.formHandler = await this.context.getFormManager().getObjectFormHandler();
         this.state.inputType = this.formValue?.inputType || InputFieldTypes.DATE;
@@ -89,10 +86,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (data: any, eventId: string): void => {
-                if (data.blocked) {
-                    this.state.readonly = true;
-                } else {
-                    this.state.readonly = this.formValue.readonly;
+                if (this.context?.instanceId === data.contextInstanceId) {
+                    if (data.blocked) {
+                        this.state.readonly = true;
+                    } else {
+                        this.state.readonly = this.formValue.readonly;
+                    }
                 }
             }
         };

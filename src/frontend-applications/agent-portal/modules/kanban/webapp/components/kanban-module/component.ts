@@ -18,9 +18,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         if (context) {
-            this.state.widgets = await context.getContent();
+            this.state.widgets = await this.context?.getContent();
         }
     }
 

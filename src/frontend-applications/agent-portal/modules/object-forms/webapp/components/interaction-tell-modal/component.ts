@@ -29,8 +29,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const object = await context.getObject();
+        await super.onMount();
+        const object = await this.context?.getObject();
         this.state.message = await PlaceholderService.getInstance().replacePlaceholders(this.message, object);
         this.state.title = await PlaceholderService.getInstance().replacePlaceholders(this.title, object);
     }

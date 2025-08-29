@@ -77,10 +77,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (data: any, eventId: string): void => {
-                if (data.blocked) {
-                    this.state.readonly = true;
-                } else {
-                    this.state.readonly = this.formValue.readonly;
+                if (this.context?.instanceId === data.contextInstanceId) {
+                    if (data.blocked) {
+                        this.state.readonly = true;
+                    } else {
+                        this.state.readonly = this.formValue.readonly;
+                    }
                 }
             }
         };

@@ -7,13 +7,16 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 import { Column } from '../../../../model/Column';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public columns: Column[] = [],
         public toggleAll: boolean = false,
         public closeAll: boolean = true
-    ) { }
+    ) {
+        super();
+    }
 }

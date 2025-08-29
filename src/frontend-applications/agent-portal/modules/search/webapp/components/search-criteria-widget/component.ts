@@ -17,7 +17,6 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { SearchEvent } from '../../../model/SearchEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
@@ -28,12 +27,12 @@ import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigSer
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { SearchContext } from '../../core/SearchContext';
 import { SearchDefinition } from '../../core/SearchDefinition';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
     public listenerId: string = 'search-criteria-widget';
 
-    private state: ComponentState;
     private subscriber: IEventSubscriber;
     private managerListenerId: string;
     private contextInstanceId: string;
@@ -44,25 +43,22 @@ class Component {
     private valueChangedTimeout: any;
 
     private sortAttributeTreeHandler: TreeHandler;
-    private context: SearchContext;
     private searchDefinition: SearchDefinition;
 
     public onCreate(): void {
         this.state = new ComponentState();
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        if (context) {
-            const instanceId = context.getAdditionalInformation('SEARCH_WIDGET_INSTANCE_ID');
-            if (instanceId) {
-                this.state.instanceId = instanceId;
-            } else {
-                context.setAdditionalInformation(
-                    'SEARCH_WIDGET_INSTANCE_ID', IdService.generateDateBasedId(this.state.instanceId)
-                );
-            }
+        const instanceId = this.context?.getAdditionalInformation('SEARCH_WIDGET_INSTANCE_ID');
+        if (instanceId) {
+            this.state.instanceId = instanceId;
+        } else {
+            this.context?.setAdditionalInformation(
+                'SEARCH_WIDGET_INSTANCE_ID', IdService.generateDateBasedId(this.state.instanceId)
+            );
         }
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Attributes', 'Translatable#Reset data', 'Translatable#Cancel',
             'Translatable#Detailed search results', 'Translatable#Start search',
@@ -101,7 +97,6 @@ class Component {
             this.keyListenerElement.addEventListener('keydown', this.keyListener);
         }
 
-        this.context = ContextService.getInstance().getActiveContext<SearchContext>();
         this.contextInstanceId = this.context?.instanceId;
         this.searchDefinition = SearchService.getInstance().getSearchDefinition(
             this.context.descriptor.kixObjectTypes[0]
@@ -174,8 +169,7 @@ class Component {
     private async initManager(): Promise<void> {
         this.state.manager?.reset();
 
-        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
-        const cache = context?.getSearchCache();
+        const cache = this.context?.getSearchCache();
 
         if (this.state.manager && Array.isArray(cache?.criteria) && cache?.criteria.length) {
             for (const criteria of cache.criteria) {
@@ -194,8 +188,7 @@ class Component {
     }
 
     private async initSort(): Promise<void> {
-        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
-        const cache = context?.getSearchCache();
+        const cache = this.context?.getSearchCache();
 
         this.state.sortAttribute = cache?.sortAttribute;
         this.state.sortDescending = cache?.sortDescending;
@@ -230,13 +223,12 @@ class Component {
     public async search(): Promise<void> {
         const hint = await TranslationService.translate('Translatable#Search');
         BrowserUtil.toggleLoadingShield('SEARCH_CRITERIA_SHIELD', true, hint);
-        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
-        const cache = context?.getSearchCache();
+        const cache = this.context?.getSearchCache();
         if (cache) {
-            context.setSortOrder(cache.objectType, cache.sortAttribute, cache.sortDescending, false);
-            TableFactoryService.getInstance().resetFilterOfContextTables(context.contextId, cache.objectType);
+            this.context?.setSortOrder(cache.objectType, cache.sortAttribute, cache.sortDescending, false);
+            TableFactoryService.getInstance().resetFilterOfContextTables(this.context?.contextId, cache.objectType);
         }
-        await SearchService.getInstance().searchObjects(context?.getSearchCache());
+        await SearchService.getInstance().searchObjects(this.context?.getSearchCache());
         BrowserUtil.toggleLoadingShield('SEARCH_CRITERIA_SHIELD', false);
 
         const agentPortalConfig = await SysConfigService.getInstance()
@@ -249,8 +241,7 @@ class Component {
 
     public sortAttributeChanged(nodes: TreeNode[]): void {
         this.state.sortAttribute = nodes.length ? nodes[0].id : null;
-        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
-        const searchCache = context?.getSearchCache();
+        const searchCache = this.context?.getSearchCache();
         if (searchCache) {
             searchCache.sortAttribute = this.state.sortAttribute;
         }
@@ -258,21 +249,18 @@ class Component {
 
     public sortDescendingChanged(event: any): void {
         this.state.sortDescending = event.target.checked;
-        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
-        const searchCache = context?.getSearchCache();
+        const searchCache = this.context?.getSearchCache();
         if (searchCache) {
             searchCache.sortDescending = this.state.sortDescending;
         }
     }
 
     public resetSearch(): void {
-        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
-        context.resetSearch();
+        this.context?.resetSearch();
     }
 
     private async setTitle(): Promise<void> {
-        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
-        const cache = context?.getSearchCache();
+        const cache = this.context?.getSearchCache();
 
         const titleLabel = await TranslationService.translate('Translatable#Selected Search Criteria');
         const searchLabel = await TranslationService.translate('Translatable#Search');
@@ -286,8 +274,7 @@ class Component {
     }
 
     private async setDefaults(): Promise<void> {
-        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
-        const cache = context?.getSearchCache();
+        const cache = this.context?.getSearchCache();
         const searchDefinition = SearchService.getInstance().getSearchDefinition(cache?.objectType);
         const criteria = searchDefinition.getDefaultSearchCriteria();
         if (Array.isArray(criteria)) {

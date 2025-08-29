@@ -16,6 +16,7 @@ import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { DynamicFieldChecklistFormValue } from '../../../../model/FormValues/DynamicFields/DynamicFieldChecklistFormValue';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
+import { ObjectFormEventData } from '../../../../model/ObjectFormEventData';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
@@ -44,11 +45,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
-                if (data.blocked) {
-                    this.state.readonly = true;
-                } else {
-                    this.state.readonly = this.formValue.readonly;
+            eventPublished: (data: ObjectFormEventData, eventId: string): void => {
+                if (this.context?.instanceId === data.contextInstanceId) {
+                    if (data.blocked) {
+                        this.state.readonly = true;
+                    } else {
+                        this.state.readonly = this.formValue.readonly;
+                    }
                 }
             }
         };

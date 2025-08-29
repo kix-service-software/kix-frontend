@@ -13,19 +13,18 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 import { ComponentState } from './ComponentState';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { Context } from '../../../../../model/Context';
 import { RowLayout } from '../../../model/layout/RowLayout';
 import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
 import { PageRowLayout } from './PageRowLayout';
 import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
 import { ObjectFormHandler } from '../../core/ObjectFormHandler';
+import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private subscriber: IEventSubscriber;
     private contextInstanceId: string;
-    private context: Context;
     private page: FormPageConfiguration;
     private formHandler: ObjectFormHandler;
 
@@ -39,11 +38,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        if (this.contextInstanceId) {
-            this.context = ContextService.getInstance().getContext(this.contextInstanceId);
-        } else {
-            this.context = ContextService.getInstance().getActiveContext();
-        }
+        await super.onMount(this.contextInstanceId);
 
         this.formHandler = await this.context?.getFormManager()?.getObjectFormHandler();
 
@@ -51,18 +46,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('object-form-group'),
-            eventPublished: async (data: Context | any, eventId: string): Promise<void> => {
-                this.state.prepared = false;
+            eventPublished: async (data: ObjectFormEventData, eventId: string): Promise<void> => {
+                if (this.context?.instanceId === data.contextInstanceId) {
+                    this.state.prepared = false;
 
-                this.page = this.formHandler.form.pages.find((p) => p.id === this.page?.id);
+                    this.page = this.formHandler.form.pages.find((p) => p.id === this.page?.id);
 
-                this.state.active = this.formHandler?.activePageId === this.page?.id;
+                    this.state.active = this.formHandler?.activePageId === this.page?.id;
 
-                if (this.state.active) {
-                    await this.prepareRowLayout();
+                    if (this.state.active) {
+                        await this.prepareRowLayout();
+                    }
+
+                    setTimeout(() => this.state.prepared = true, 10);
                 }
-
-                setTimeout(() => this.state.prepared = true, 10);
             }
         };
 

@@ -8,12 +8,15 @@
  */
 
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = 'admin-dynamic-fields',
         public widgetConfiguration: WidgetConfiguration = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

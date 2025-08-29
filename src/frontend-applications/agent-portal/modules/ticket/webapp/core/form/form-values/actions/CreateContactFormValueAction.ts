@@ -26,6 +26,7 @@ export class CreateContactFormValueAction extends FormValueAction {
     private contextListenerId: string = IdService.generateDateBasedId('CreateContactFormValueAction');
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New';
         this.icon = 'kix-icon-man-bubble-new';
     }

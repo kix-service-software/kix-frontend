@@ -21,15 +21,13 @@ export class UserCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New User';
         this.icon = 'kix-icon-new-gear';
     }
 
     public async run(event: any): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.setAdditionalInformation('IS_AGENT_DIALOG', true);
-        }
+        this.context?.setAdditionalInformation('IS_AGENT_DIALOG', true);
         ContextService.getInstance().setActiveContext(NewContactDialogContext.CONTEXT_ID);
     }
 

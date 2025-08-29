@@ -8,25 +8,15 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { InformationRowConfiguration, InformationConfiguration } from './ObjectInformationCardConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IdService } from '../../../../../model/IdService';
 import { ObjectInformationCardConfiguration } from './ObjectInformationCardConfiguration';
-import { Context } from '../../../../../model/Context';
-import { ObjectInformationCardService } from '../../core/ObjectInformationCardService';
-import { KIXModulesService } from '../../core/KIXModulesService';
-import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private contextListenerId: string;
-
-    private context: Context;
-
     private updateTimeout: any;
 
     public onCreate(): void {
@@ -46,9 +36,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         this.contextListenerId = IdService.generateDateBasedId('object-information-widget-');
-        this.context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             sidebarLeftToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },

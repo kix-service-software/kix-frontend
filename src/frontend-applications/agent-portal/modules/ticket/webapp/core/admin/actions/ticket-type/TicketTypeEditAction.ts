@@ -17,14 +17,14 @@ import { AuthenticationSocketClient } from '../../../../../../base-components/we
 export class TicketTypeEditAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
     }
 
     public async canShow(): Promise<boolean> {
         let show = false;
-        const context = ContextService.getInstance().getActiveContext();
-        const objectId = context.getObjectId();
+        const objectId = this.context?.getObjectId();
 
         const permissions = [
             new UIComponentPermission(`system/ticket/types/${objectId}`, [CRUD.UPDATE], false, 'Object', false)
@@ -35,13 +35,9 @@ export class TicketTypeEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-
-        if (context) {
-            const id = context.getObjectId();
-            if (id) {
-                ContextService.getInstance().setActiveContext(EditTicketTypeDialogContext.CONTEXT_ID, id);
-            }
+        const id = this.context?.getObjectId();
+        if (id) {
+            ContextService.getInstance().setActiveContext(EditTicketTypeDialogContext.CONTEXT_ID, id);
         }
     }
 

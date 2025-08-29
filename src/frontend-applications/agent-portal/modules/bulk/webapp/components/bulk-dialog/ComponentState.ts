@@ -7,16 +7,19 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { BulkManager } from '../../core/BulkManager';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = null,
         public bulkManager: BulkManager = null,
         public title: string = 'Translatable#Bulk Action',
         public icon: ObjectIcon | string = 'kix-icon-gear'
-    ) { }
+    ) {
+        super();
+    }
 
 }

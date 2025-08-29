@@ -9,13 +9,11 @@
 
 import { ComponentState } from './ComponentState';
 import { ChartConfiguration } from 'chart.js';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
 declare let Chart: any;
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public config: ChartConfiguration = null;
     private chart: Chart;
@@ -71,9 +69,8 @@ class Component {
         }
     }
 
-    public onMount(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        context.registerListener(this.state.chartId, {
+    public async onMount(): Promise<void> {
+        this.context?.registerListener(this.state.chartId, {
             sidebarRightToggled: () => {
                 setTimeout(() => {
                     if (window.innerWidth > 1600) {

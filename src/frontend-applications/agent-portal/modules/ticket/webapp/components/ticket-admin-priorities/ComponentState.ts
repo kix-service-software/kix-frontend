@@ -12,9 +12,10 @@ import { TableWidgetConfiguration } from '../../../../../model/configuration/Tab
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TicketPriorityProperty } from '../../../model/TicketPriorityProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = 'admin-ticket-priorities-list',
@@ -28,6 +29,8 @@ export class ComponentState {
                 KIXObjectType.TICKET_PRIORITY,
                 [TicketPriorityProperty.NAME, SortOrder.UP]
             ), false, false, 'kix-icon-gears')
-    ) { }
+    ) {
+        super();
+    }
 
 }

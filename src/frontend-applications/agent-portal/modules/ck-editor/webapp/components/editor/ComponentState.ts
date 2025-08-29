@@ -8,12 +8,15 @@
  */
 
 import { IdService } from '../../../../../model/IdService';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public readOnly: boolean = false,
         public id: string = IdService.generateDateBasedId('editor-')
-    ) { }
+    ) {
+        super();
+    }
 
 }

@@ -9,9 +9,10 @@
 
 import { IdService } from '../../../../../model/IdService';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public textFilterValue: string = '',
@@ -23,6 +24,8 @@ export class ComponentState {
         public showFilterCount: boolean = true,
         public disabled: boolean = false,
         public treeId: string = IdService.generateDateBasedId('predefined-filter-list-')
-    ) { }
+    ) {
+        super();
+    }
 
 }

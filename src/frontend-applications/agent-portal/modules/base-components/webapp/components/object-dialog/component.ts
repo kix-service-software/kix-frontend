@@ -27,26 +27,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Save'
         ]);
 
         this.state.submitButtonText = this.state.translations['Translatable#Save'];
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            const submitButtonText = context.getAdditionalInformation(
-                AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT
-            );
-            if (submitButtonText) {
-                this.state.submitButtonText = await TranslationService.translate(submitButtonText);
-            }
-            this.state.widgets = await context.getContent();
+        const submitButtonText = this.context?.getAdditionalInformation(
+            AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT
+        );
+        if (submitButtonText) {
+            this.state.submitButtonText = await TranslationService.translate(submitButtonText);
+        }
+        this.state.widgets = await this.context?.getContent();
 
-            const canSubmit = context.getAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_ENABLED);
-            if (typeof canSubmit === 'boolean') {
-                this.state.canSubmit = canSubmit;
-            }
+        const canSubmit = this.context?.getAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_ENABLED);
+        if (typeof canSubmit === 'boolean') {
+            this.state.canSubmit = canSubmit;
         }
 
         this.subscriber = {
