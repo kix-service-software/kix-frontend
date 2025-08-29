@@ -86,6 +86,13 @@ export class ApplicationRouter extends KIXRouter {
         );
 
         this.router.get(
+            '/benchmark',
+            async (req: Request, res: Response) => {
+                res.sendFile(path.join(__dirname, '../../static/benchmark/benchmark.html'));
+            }
+        );
+
+        this.router.get(
             '/:moduleId',
             AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getModule.bind(this)

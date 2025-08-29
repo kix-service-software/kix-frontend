@@ -43,6 +43,7 @@ export class HttpService {
     private isClusterEnabled: boolean = false;
     private backendCertificate: any;
     private requestPromises: Map<string, Promise<any>> = new Map();
+    private userRoleIds: Map<number, number[]> = new Map();
 
     private constructor() {
         const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
@@ -65,6 +66,12 @@ export class HttpService {
         }
     }
 
+    public setUserRoleIds(user: User): void {
+        if (user) {
+            this.userRoleIds.set(user.UserID, user.RoleIDs);
+        }
+    }
+
     public async get<T>(
         resource: string, queryParameters: any, token: string, clientRequestId: string,
         cacheKeyPrefix: string = '', useCache: boolean = true, useToken?: boolean
@@ -76,69 +83,33 @@ export class HttpService {
 
         let cacheKey: string;
         if (useCache) {
-            cacheKey = await this.buildCacheKey(resource, queryParameters, token, useToken);
+            cacheKey = this.buildCacheKey(resource, queryParameters, token, useToken);
             const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
             if (cachedObject) {
                 return cachedObject;
             }
         }
 
-        const requestKey = await this.buildCacheKey(resource, queryParameters, token, true);
-
-        if (this.requestPromises.has(requestKey)) {
-            return this.requestPromises.get(requestKey);
-        }
-
-
-        let semaphor;
-        const semaphorKey = cacheKey ? `SEMAPHOR-${cacheKey}` : requestKey;
-        if (this.isClusterEnabled && useCache) {
-            semaphor = await CacheService.getInstance().get(semaphorKey, semaphorKey);
-
-            if (semaphor) {
-                LoggingService.getInstance().debug('\tSEMAPHOR\tStart\t' + semaphorKey + '\tWAITFOR');
-                const cachedObject = await CacheService.getInstance().waitFor(cacheKey, cacheKeyPrefix);
-                LoggingService.getInstance().debug('\tSEMAPHOR\tStop\t' + semaphorKey + '\tWAITFOR');
-                if (cachedObject) {
-                    return cachedObject;
-                }
-
-                semaphor = null;
-            }
+        if (this.requestPromises.has(cacheKey)) {
+            return this.requestPromises.get(cacheKey);
         }
 
         const requestPromise = this.executeRequest<HTTPResponse>(resource, token, clientRequestId, options);
-        this.requestPromises.set(requestKey, requestPromise);
-
-        if (this.isClusterEnabled && useCache) {
-            LoggingService.getInstance().debug('\tSEMAPHOR\t' + semaphorKey + '\tSET');
-            await CacheService.getInstance().set(semaphorKey, 1, semaphorKey);
-        }
+        this.requestPromises.set(cacheKey, requestPromise);
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size, true);
 
         const response = await requestPromise.catch((error) => {
-            this.requestPromises.delete(requestKey);
+            this.requestPromises.delete(cacheKey);
             RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
-
-            if (this.isClusterEnabled && useCache) {
-                LoggingService.getInstance().debug('\tSEMAPHOR\t' + semaphorKey + '\tDELETE');
-                CacheService.getInstance().deleteKeys(semaphorKey);
-            }
-
             throw error;
         });
 
-        this.requestPromises.delete(requestKey);
+        this.requestPromises.delete(cacheKey);
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
 
         if (useCache) {
-            if (this.isClusterEnabled) {
-                LoggingService.getInstance().debug('\tSEMAPHOR\t' + semaphorKey + '\tDELETE');
-                await CacheService.getInstance().deleteKeys(semaphorKey);
-            }
-
             CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
         }
 
@@ -236,7 +207,7 @@ export class HttpService {
         });
 
         const optionsResponse = new OptionsResponse(response.headers, response.data);
-        await CacheService.getInstance().set(cacheKey, optionsResponse, cacheType);
+        CacheService.getInstance().set(cacheKey, optionsResponse, cacheType);
         this.requestPromises.delete(cacheKey);
 
         return optionsResponse;
@@ -365,11 +336,12 @@ export class HttpService {
         }
     }
 
-    private async buildCacheKey(resource: string, query: any, token: string, useToken?: boolean): Promise<string> {
+    private buildCacheKey(resource: string, query: any, token: string, useToken?: boolean): string {
         let cacheId = token;
         if (!useToken) {
-            const user = await this.getUserByToken(token);
-            cacheId = user.RoleIDs?.sort().join(';');
+            const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+            const userId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
+            cacheId = this.userRoleIds.get(userId)?.sort().join(';');
         }
         const ordered = {};
 
@@ -435,7 +407,7 @@ export class HttpService {
                     }
                 });
 
-            await CacheService.getInstance().set(backendToken, response.data['User'], cacheType);
+            CacheService.getInstance().set(backendToken, response.data['User'], cacheType);
             HTTPRequestLogger.getInstance().stop(profileTaskId, response);
             this.requestPromises.delete(requestKey);
             resolve(response.data['User']);

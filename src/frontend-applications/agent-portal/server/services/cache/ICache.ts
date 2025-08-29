@@ -15,11 +15,11 @@ export interface ICache {
 
     getAll(type: string): Promise<any[]>;
 
-    set(type: string, key: string, value: any): Promise<void>;
+    set(type: string, key: string, value: any): void;
 
-    delete(type: string, key: string): Promise<void>;
+    delete(type: string, key: string): void;
 
-    deleteAll(type: string): Promise<void>;
+    deleteAll(type: string): void;
 
     waitFor(key: string, cacheType: string): Promise<any>;
 

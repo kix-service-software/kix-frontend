@@ -111,7 +111,7 @@ export class RedisCache implements ICache {
         return values;
     }
 
-    public async set(type: string, key: string, value: any): Promise<void> {
+    public set(type: string, key: string, value: any): void {
         if (typeof value === 'object') {
             try {
                 value = JSON.stringify(value);
@@ -121,19 +121,19 @@ export class RedisCache implements ICache {
             }
         }
 
-        await this.hsetAsync(`${this.KIX_CACHE_PREFIX}::${type}`, key, value)
+        this.hsetAsync(`${this.KIX_CACHE_PREFIX}::${type}`, key, value)
             .catch(() => this.checkConnection());
     }
 
-    public async delete(type: string, key: string): Promise<void> {
-        await this.hdelAsync(`${this.KIX_CACHE_PREFIX}::${type}`, key).catch(() => this.checkConnection());
+    public delete(type: string, key: string): void {
+        this.hdelAsync(`${this.KIX_CACHE_PREFIX}::${type}`, key).catch(() => this.checkConnection());
     }
 
-    public async deleteAll(type: string): Promise<void> {
+    public deleteAll(type: string): void {
         LoggingService.getInstance().debug(
             `Redis Cache: delete cacheKeyPrefix ${type}`
         );
-        await this.delAsync(`${this.KIX_CACHE_PREFIX}::${type}`).catch(() => this.checkConnection());
+        this.delAsync(`${this.KIX_CACHE_PREFIX}::${type}`).catch(() => this.checkConnection());
     }
 
     public async waitFor(key: string, cacheType: string): Promise<any> {

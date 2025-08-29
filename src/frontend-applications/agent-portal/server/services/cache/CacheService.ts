@@ -71,9 +71,9 @@ export class CacheService {
         return await this.getCacheBackendInstance()?.get(type, key);
     }
 
-    public async set(key: string, value: any, type: string = ''): Promise<void> {
+    public set(key: string, value: any, type: string = ''): void {
         key = md5(key);
-        await this.getCacheBackendInstance()?.set(type, key, value);
+        this.getCacheBackendInstance()?.set(type, key, value);
     }
 
     public async updateCaches(events: BackendNotification[]): Promise<void> {
@@ -122,7 +122,7 @@ export class CacheService {
             'CacheService', 'deleteKeys\t' + type, { data: prefixes }
         );
         for (const prefix of prefixes) {
-            await this.getCacheBackendInstance()?.deleteAll(prefix);
+            this.getCacheBackendInstance()?.deleteAll(prefix);
         }
         ProfilingService.getInstance().stop(profileTaskId);
     }

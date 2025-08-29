@@ -146,7 +146,7 @@ export class KIXModuleNamespace extends SocketNameSpace {
                         });
 
                         if (CacheService.getInstance().hasCacheBackend()) {
-                            await CacheService.getInstance().set(formOption.Name, newConfig, 'FormConfiguration');
+                            CacheService.getInstance().set(formOption.Name, newConfig, 'FormConfiguration');
                         } else {
                             this.configCache.set(formOption.Name, newConfig);
                         }
