@@ -229,7 +229,9 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             || property === KIXObjectProperty.CHANGE_TIME;
     }
 
-    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, objectIds?: Array<string | number>, operator?: string
+    ): Promise<TreeNode[]> {
         const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
@@ -273,9 +275,8 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
                             queuesHierarchy, showInvalid, showInvalid
                         );
                     } else {
-
                         // use type rather than property
-                        return await super.getTreeNodes(input.Type);
+                        return await super.getTreeNodes(input.Type, objectIds, operator);
                     }
                 }
         }

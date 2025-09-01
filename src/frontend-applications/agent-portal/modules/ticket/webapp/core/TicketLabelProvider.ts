@@ -342,8 +342,17 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.OWNER_OOO:
                 displayValue = 'Translatable#Owner Out Of Office';
                 break;
+            case TicketProperty.OWNER_OOO_SUBSTITUTE:
+                displayValue = 'Translatable#Owner Out Of Office Substitute';
+                break;
             case TicketProperty.RESPONSIBLE_OOO:
                 displayValue = 'Translatable#Responsible Out Of Office';
+                break;
+            case TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE:
+                displayValue = 'Translatable#Responsible Out Of Office Substitute';
+                break;
+            case TicketProperty.TICKET_OOO_SUBSTITUTE:
+                displayValue = 'Translatable#Ticket Out Of Office Substitute';
                 break;
             case TicketProperty.MY_QUEUES:
                 displayValue = 'Translatable#My Teams';

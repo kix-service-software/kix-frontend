@@ -875,21 +875,34 @@ export class TicketAPIService extends KIXObjectAPIService {
 
     private async setUserID(criteria: FilterCriteria[], token: string): Promise<void> {
         const user = await UserService.getInstance().getUserByToken(token);
-        const ownerCriteria = criteria.find(
-            (c) => c.property === TicketProperty.OWNER_ID && c.value === KIXObjectType.CURRENT_USER
+
+        const userIdProperties = [
+            TicketProperty.OWNER_ID,
+            TicketProperty.RESPONSIBLE_ID,
+            TicketProperty.OWNER_OOO_SUBSTITUTE,
+            TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE,
+            TicketProperty.TICKET_OOO_SUBSTITUTE,
+            TicketProperty.HISTORIC_OWNER_ID
+        ];
+
+        criteria.forEach(
+            (c, cIndex) => {
+                if (userIdProperties.some((p) => c.property === p)) {
+                    if (Array.isArray(c?.value)) {
+                        c.value.forEach(
+                            (cv, cvIndex) => {
+                                if (cv === KIXObjectType.CURRENT_USER) {
+                                    criteria[cIndex].value[cvIndex] = user.UserID;
+                                }
+                            }
+                        );
+                    }
+                    else if (c?.value === KIXObjectType.CURRENT_USER) {
+                        criteria[cIndex].value = user.UserID;
+                    }
+                }
+            }
         );
-
-        if (ownerCriteria) {
-            ownerCriteria.value = user.UserID;
-        }
-
-        const responsibleCriteria = criteria.find(
-            (c) => c.property === TicketProperty.RESPONSIBLE_ID && c.value === KIXObjectType.CURRENT_USER
-        );
-
-        if (responsibleCriteria) {
-            responsibleCriteria.value = user.UserID;
-        }
     }
 
     public getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {

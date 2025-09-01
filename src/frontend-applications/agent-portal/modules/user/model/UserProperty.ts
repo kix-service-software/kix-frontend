@@ -50,6 +50,8 @@ export enum UserProperty {
 
     OUT_OF_OFFICE_START = 'OutOfOfficeStart',
 
-    OUT_OF_OFFICE_END = 'OutOfOfficeEnd'
+    OUT_OF_OFFICE_END = 'OutOfOfficeEnd',
+
+    OUT_OF_OFFICE_SUBSTITUTE = 'OutOfOfficeSubstitute'
 
 }

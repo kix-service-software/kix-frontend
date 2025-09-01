@@ -27,6 +27,7 @@ import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { DefaultSelectInputFormOption } from '../../model/configuration/DefaultSelectInputFormOption';
 import { TreeNode } from '../base-components/webapp/core/tree';
 import { NumberInputOptions } from '../base-components/webapp/core/NumberInputOptions';
+import { UserProperty } from './model/UserProperty';
 
 class Extension extends KIXExtension implements IPersonalSettingsExtension {
 
@@ -50,6 +51,47 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                 'date-time-input', null, null,
                 [
                     new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE)
+                ]
+            ),
+            new PersonalSetting(
+                'Translatable#Out Of Office',
+                PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE,
+                'Translatable#Substitute',
+                'Translatable#Helptext_PersonalSettings_OutOfOfficeSubstitute_Hint',
+                'object-reference-input',
+                null, null,
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
+
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
+                    new FormFieldOption(
+                        ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    UserProperty.PREFERENCES + '.' + PersonalSettingsProperty.MY_QUEUES,
+                                    SearchOperator.IN, FilterDataType.NUMERIC,
+                                    FilterType.AND, KIXObjectType.CURRENT_USER
+                                ),
+                                new FilterCriteria(
+                                    UserProperty.IS_AGENT,
+                                    SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    'UserIDs',
+                                    SearchOperator.NOT_IN, FilterDataType.NUMERIC,
+                                    FilterType.AND, ['1', KIXObjectType.CURRENT_USER]
+                                ),
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID,
+                                    SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
                 ]
             ),
             new PersonalSetting(

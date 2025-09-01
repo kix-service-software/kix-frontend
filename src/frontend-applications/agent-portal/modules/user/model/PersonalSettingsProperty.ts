@@ -35,6 +35,8 @@ export enum PersonalSettingsProperty {
 
     OUT_OF_OFFICE_END = 'OutOfOfficeEnd',
 
+    OUT_OF_OFFICE_SUBSTITUTE = 'OutOfOfficeSubstitute',
+
     ARTICLE_FROM_FORMAT = 'ArticleFromFormat',
 
     INITIAL_SITE_URL = 'AgentPortalInitialContextURL',

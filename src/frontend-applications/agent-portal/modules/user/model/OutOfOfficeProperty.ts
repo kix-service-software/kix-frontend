@@ -13,4 +13,6 @@ export enum OutOfOfficeProperty {
 
     START = 'Start',
 
+    SUBSTITUTE = 'Substitute'
+
 }

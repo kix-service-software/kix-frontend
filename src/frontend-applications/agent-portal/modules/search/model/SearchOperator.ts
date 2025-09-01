@@ -9,6 +9,8 @@
 
 export enum SearchOperator {
 
+    EMPTY = 'EMPTY',
+
     EQUALS = 'EQ',
 
     NOT_EQUALS = 'NE',

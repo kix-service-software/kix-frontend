@@ -67,7 +67,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             new DefaultColumnConfiguration(null, null, null,
                 PersonalSettingsProperty.OUT_OF_OFFICE_END, true, false, true, false, 80, true, false, true,
                 DataType.DATE, true, null, null, false
-            ),
+            )
         ];
         const tableConfiguration = new TableConfiguration(null, null, null,
             KIXObjectType.USER, null, 32, columns, [], false, false, null, null,

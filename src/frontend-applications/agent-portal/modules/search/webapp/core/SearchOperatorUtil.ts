@@ -19,6 +19,8 @@ export class SearchOperatorUtil {
                 return await TranslationService.translate('Translatable#between');
             case SearchOperator.CONTAINS:
                 return await TranslationService.translate('Translatable#contains');
+            case SearchOperator.EMPTY:
+                return await TranslationService.translate('Translatable#is empty');
             case SearchOperator.ENDS_WITH:
                 return await TranslationService.translate('Translatable#ends with');
             case SearchOperator.EQUALS:

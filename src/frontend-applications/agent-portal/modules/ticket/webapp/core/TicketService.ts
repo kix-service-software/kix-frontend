@@ -328,6 +328,9 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.CREATED_USER_ID:
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
+            case TicketProperty.OWNER_OOO_SUBSTITUTE:
+            case TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE:
+            case TicketProperty.TICKET_OOO_SUBSTITUTE:
             case TicketProperty.HISTORIC_OWNER_ID:
                 if (loadingOptions) {
                     if (Array.isArray(loadingOptions.includes)) {
@@ -698,6 +701,10 @@ export class TicketService extends KIXObjectService<Ticket> {
                 case TicketProperty.RESPONSIBLE_ID:
                 case TicketProperty.CREATED_USER_ID:
                 case TicketProperty.WATCHER_USER_ID:
+                case TicketProperty.OWNER_OOO_SUBSTITUTE:
+                case TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE:
+                case TicketProperty.TICKET_OOO_SUBSTITUTE:
+                case TicketProperty.HISTORIC_OWNER_ID:
                     objectType = KIXObjectType.USER;
                     break;
                 case TicketProperty.CONTACT_ID:
@@ -847,6 +854,10 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.ORGANISATION_ID:
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
+            case TicketProperty.OWNER_OOO_SUBSTITUTE:
+            case TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE:
+            case TicketProperty.TICKET_OOO_SUBSTITUTE:
+            case TicketProperty.HISTORIC_OWNER_ID:
                 return 'Autocomplete';
             // use dropdown (Open, Closed)
             case TicketProperty.STATE_TYPE:
