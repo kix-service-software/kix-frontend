@@ -57,6 +57,7 @@ export class SearchFormManager extends AbstractDynamicFormManager {
                         break;
                     default:
                 }
+                operations.push(SearchOperator.EMPTY);
             }
         }
 

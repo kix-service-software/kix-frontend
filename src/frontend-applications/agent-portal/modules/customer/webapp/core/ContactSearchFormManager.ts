@@ -147,7 +147,9 @@ export class ContactSearchFormManager extends SearchFormManager {
         return true;
     }
 
-    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, objectIds?: Array<string | number>, operator?: string
+    ): Promise<TreeNode[]> {
         const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
         let nodes = [];
         switch (property) {
@@ -160,7 +162,7 @@ export class ContactSearchFormManager extends SearchFormManager {
                 }
                 break;
             default:
-                nodes = await super.getTreeNodes(property);
+                nodes = await super.getTreeNodes(property, objectIds, operator);
                 if (!nodes || !nodes.length) {
                     nodes = await ContactService.getInstance().getTreeNodes(
                         property, showInvalid, showInvalid, objectIds

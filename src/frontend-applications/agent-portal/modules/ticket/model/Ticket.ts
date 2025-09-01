@@ -412,8 +412,8 @@ export class Ticket extends KIXObject {
         },
         {
             Property: TicketProperty.ORGANISATION_ID,
-            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
-            APIOperations: Ticket.STRING_OPERATORS_EXTENDED,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN, SearchOperator.EMPTY],
+            APIOperations: [...Ticket.STRING_OPERATORS_EXTENDED, SearchOperator.EMPTY],
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.OBJECT_REFERENCE
         },
@@ -546,11 +546,32 @@ export class Ticket extends KIXObject {
             InputType: InputFieldTypes.DROPDOWN
         },
         {
+            Property: TicketProperty.OWNER_OOO_SUBSTITUTE,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN, SearchOperator.EMPTY],
+            APIOperations: [...Ticket.NUMBER_OPERATORS_EXTENDED, SearchOperator.EMPTY],
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.OBJECT_REFERENCE
+        },
+        {
             Property: TicketProperty.RESPONSIBLE_OOO,
             Operations: [SearchOperator.EQUALS],
             APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.DROPDOWN
+        },
+        {
+            Property: TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN, SearchOperator.EMPTY],
+            APIOperations: [...Ticket.NUMBER_OPERATORS_EXTENDED, SearchOperator.EMPTY],
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.OBJECT_REFERENCE
+        },
+        {
+            Property: TicketProperty.TICKET_OOO_SUBSTITUTE,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN, SearchOperator.EMPTY],
+            APIOperations: [...Ticket.NUMBER_OPERATORS_EXTENDED, SearchOperator.EMPTY],
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.OBJECT_REFERENCE
         },
         {
             Property: TicketProperty.HISTORIC_MY_QUEUES,

@@ -87,7 +87,7 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
         return null;
     }
 
-    public getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public getTreeNodes(property: string, objectIds?: Array<string | number>, operator?: string): Promise<TreeNode[]> {
         return null;
     }
 

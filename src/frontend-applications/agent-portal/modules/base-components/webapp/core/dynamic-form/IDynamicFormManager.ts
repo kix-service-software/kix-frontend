@@ -62,7 +62,7 @@ export interface IDynamicFormManager {
 
     getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>>;
 
-    getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]>;
+    getTreeNodes(property: string, objectIds?: Array<string | number>, operator?: string): Promise<TreeNode[]>;
 
     getProperties(): Promise<Array<[string, string]>>;
 

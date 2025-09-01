@@ -366,13 +366,25 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return '';
     }
 
-    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, objectIds?: Array<string | number>, operator?: string
+    ): Promise<TreeNode[]> {
         for (const extendedManager of this.extendedFormManager) {
-            const result = await extendedManager.getTreeNodes(property, objectIds);
+            const result = await extendedManager.getTreeNodes(property, objectIds, operator);
             if (result) {
                 return result;
             }
         }
+
+        if (operator === SearchOperator.EMPTY) {
+            const no = await TranslationService.translate('No');
+            const yes = await TranslationService.translate('Yes');
+            return [
+                new TreeNode(0, no),
+                new TreeNode(1, yes)
+            ];
+        }
+
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             return await this.getNodesForDF(dfName);
@@ -629,6 +641,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             if (extendedOperations) {
                 return extendedOperations;
             }
+        }
+
+        if (operator === SearchOperator.EMPTY) {
+            return InputFieldTypes.DROPDOWN;
         }
 
         const dfName = KIXObjectService.getDynamicFieldName(property);
