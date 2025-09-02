@@ -56,7 +56,7 @@ export class HTTPRequestLogger {
 
             const stringLength = JSON.stringify((response as AxiosResponse)?.data)?.length * 2;
             const size = (stringLength / 1024)?.toFixed(3);
-            const status = (response as AxiosResponse)?.status || (response as AxiosError).response?.status;
+            const status = (response as AxiosResponse)?.status || (response as AxiosError)?.response?.status;
             const backendDurationTotal = Math.ceil((response as AxiosResponse)?.headers['x-runtime'] * 1000);
             const backendDurationApp = Math.ceil((response as AxiosResponse)?.headers['kix-request-duration'] * 1000);
             const backendPID = (response as AxiosResponse)?.headers['kix-worker-pid'];
