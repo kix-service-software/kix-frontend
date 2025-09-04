@@ -322,7 +322,7 @@ export class ContextNamespace extends SocketNameSpace {
             contextList.splice(index, 1);
         }
 
-         CacheService.getInstance().set(fileName, contextList);
+        CacheService.getInstance().set(fileName, contextList);
         ConfigurationService.getInstance().saveDataFileContent(fileName, contextList);
     }
 
