@@ -79,7 +79,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         });
 
         this.state.faqArticle = await this.context.getObject<FAQArticle>();
-        await this.initWidget();
+        setTimeout(() => this.initWidget(), 200);
     }
 
     private async initWidget(): Promise<void> {
