@@ -1,10 +1,3 @@
-├─ @ampproject/remapping@2.3.0
-│  ├─ licenses: Apache-2.0
-│  ├─ repository: https://github.com/ampproject/remapping
-│  ├─ publisher: Justin Ridgewell
-│  ├─ email: jridgewell@google.com
-│  ├─ path: node_modules/@ampproject/remapping
-│  └─ licenseFile: node_modules/@ampproject/remapping/LICENSE
 ├─ @asamuzakjp/css-color@3.2.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/asamuzaK/cssColor
@@ -18,7 +11,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/code-frame
 │  └─ licenseFile: node_modules/@babel/code-frame/LICENSE
-├─ @babel/compat-data@7.28.0
+├─ @babel/compat-data@7.28.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -32,7 +25,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/core
 │  └─ licenseFile: node_modules/@babel/core/LICENSE
-├─ @babel/core@7.28.3
+├─ @babel/core@7.28.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -144,14 +137,14 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helper-validator-option
 │  └─ licenseFile: node_modules/@babel/helper-validator-option/LICENSE
-├─ @babel/helpers@7.28.3
+├─ @babel/helpers@7.28.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helpers
 │  └─ licenseFile: node_modules/@babel/helpers/LICENSE
-├─ @babel/parser@7.28.3
+├─ @babel/parser@7.28.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -179,7 +172,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/plugin-transform-typescript
 │  └─ licenseFile: node_modules/@babel/plugin-transform-typescript/LICENSE
-├─ @babel/runtime@7.28.3
+├─ @babel/runtime@7.28.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -193,14 +186,14 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/template
 │  └─ licenseFile: node_modules/@babel/template/LICENSE
-├─ @babel/traverse@7.28.3
+├─ @babel/traverse@7.28.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/traverse
 │  └─ licenseFile: node_modules/@babel/traverse/LICENSE
-├─ @babel/types@7.28.2
+├─ @babel/types@7.28.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -257,6 +250,13 @@
 │  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/gen-mapping
 │  └─ licenseFile: node_modules/@jridgewell/gen-mapping/LICENSE
+├─ @jridgewell/remapping@2.3.5
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jridgewell/sourcemaps
+│  ├─ publisher: Justin Ridgewell
+│  ├─ email: justin@ridgewell.name
+│  ├─ path: node_modules/@jridgewell/remapping
+│  └─ licenseFile: node_modules/@jridgewell/remapping/LICENSE
 ├─ @jridgewell/resolve-uri@3.1.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jridgewell/resolve-uri
@@ -1017,7 +1017,7 @@
 │  ├─ email: M8ch88l@gmail.com
 │  ├─ path: node_modules/big.js
 │  └─ licenseFile: node_modules/big.js/LICENCE
-├─ bl@6.1.2
+├─ bl@6.1.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/rvagg/bl
 │  ├─ path: node_modules/bl
@@ -1140,7 +1140,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001739
+├─ caniuse-lite@1.0.30001741
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -3033,7 +3033,7 @@
 │  ├─ repository: https://github.com/jshttp/negotiator
 │  ├─ path: node_modules/negotiator
 │  └─ licenseFile: node_modules/negotiator/LICENSE
-├─ node-releases@2.0.19
+├─ node-releases@2.0.20
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/chicoxyzzy/node-releases
 │  ├─ publisher: Sergey Rubanov
@@ -3047,7 +3047,7 @@
 │  ├─ email: me@feedic.com
 │  ├─ path: node_modules/nth-check
 │  └─ licenseFile: node_modules/nth-check/LICENSE
-├─ nwsapi@2.2.21
+├─ nwsapi@2.2.22
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/dperini/nwsapi
 │  ├─ publisher: Diego Perini
