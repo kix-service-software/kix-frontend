@@ -51,7 +51,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         }
 
-        if (this.formHandler.objectFormValueMapper.initialized) {
+        if (this.formHandler?.objectFormValueMapper?.initialized) {
             this.state.prepared = true;
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         }
