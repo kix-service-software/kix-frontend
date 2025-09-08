@@ -371,8 +371,6 @@ export class ContextService {
             this.activeContext = context;
             this.activeContextIndex = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
 
-            EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
-
             if (!this.activeContext.initialized) {
                 await this.activeContext.postInit();
 
@@ -384,6 +382,8 @@ export class ContextService {
             }
 
             await context.update(null);
+
+            EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
 
             // TODO: Use Event
             this.serviceListener.forEach(
