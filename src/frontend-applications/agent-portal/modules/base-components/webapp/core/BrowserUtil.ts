@@ -549,6 +549,51 @@ export class BrowserUtil {
         }
     }
 
+    public static cleanupHTML(htmlDocument: Document): void {
+        const scriptElements = htmlDocument.getElementsByTagName('script');
+        for (let i = 0; i < scriptElements.length; i++) {
+            scriptElements.item(i).remove();
+        }
 
+        this.removeListenersFromTags(htmlDocument);
+    }
+
+    private static removeListenersFromTags(htmlDocument: Document): void {
+        // try to remove listener and functions
+        const allElements = Array.prototype.slice.call(htmlDocument.querySelectorAll('*'));
+        allElements.push(htmlDocument);
+        const types = [];
+
+        for (let ev in htmlDocument) {
+            if (/^on/.test(ev)) {
+                types.push(ev);
+            }
+        }
+
+        for (const currentElement of allElements) {
+            for (const type of types) {
+                try {
+                    const attribute = currentElement.getAttribute(type);
+                    if (attribute) {
+                        currentElement.removeAttribute(type);
+                    }
+                } catch (e) {
+                    // do nothing
+                }
+            }
+        }
+    }
+
+    public static appendKIXStyling(htmlDocument: Document): void {
+        const kixLink = htmlDocument.createElement('link');
+        kixLink.rel = 'stylesheet';
+        kixLink.href = '/static/applications/application/lasso-less.css';
+        htmlDocument.head.appendChild(kixLink);
+
+        const bootstrapLink = htmlDocument.createElement('link');
+        bootstrapLink.rel = 'stylesheet';
+        bootstrapLink.href = '/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css';
+        htmlDocument.head.appendChild(bootstrapLink);
+    }
 
 }
