@@ -77,6 +77,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.observer) {
             this.observer.disconnect();
         }
+
+        WidgetService.getInstance().unregisterActionListener(this.listenerInstanceId);
     }
 
     private actionPreparationRunning = false;
