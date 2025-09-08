@@ -12,7 +12,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         ${state.error}
     </span>
 </if>
-<else>
+<else-if(state.prepared)>
     <div key=state.instanceId class="details-container">
         <widget
             instanceId=state.instanceId
@@ -44,4 +44,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </for>
         </div>
     </div>
+</else-if>
+<else>
+    <loading-spinner/>
 </else>

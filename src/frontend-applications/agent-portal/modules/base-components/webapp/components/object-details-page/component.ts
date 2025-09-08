@@ -32,22 +32,25 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await super.onMount();
         this.subscriber = {
             eventSubscriberId: 'object-details',
-            eventPublished: (data: any, eventId: string): void => {
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
                 if (eventId === ApplicationEvent.OBJECT_UPDATED) {
+                    this.state.prepared = false;
                     const activeContext = ContextService.getInstance().getActiveContext();
                     const isContext = activeContext?.instanceId === this.context?.instanceId;
                     const isObjectType = data.objectType === this.context?.descriptor?.kixObjectTypes[0];
                     if (isContext && isObjectType) {
-                        this.prepareWidget();
-                        this.prepareActions();
+                        await this.prepareWidget();
+                        await this.prepareActions();
                     }
+                    this.state.prepared = true;
                 }
             }
         };
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
         EventService.getInstance().subscribe(ApplicationEvent.CONFIGURATIONS_RELOADED, this.subscriber);
 
-        this.update();
+        await this.update();
+        this.state.prepared = true;
     }
 
     private async update(): Promise<void> {
