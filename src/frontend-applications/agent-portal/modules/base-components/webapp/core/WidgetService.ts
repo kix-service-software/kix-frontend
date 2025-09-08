@@ -93,13 +93,20 @@ export class WidgetService {
     }
 
     public registerActionListener(listener: IActionListener): void {
-        const existingListenerIndex = this.actionListenerListeners.findIndex(
+        const exists = this.actionListenerListeners.some(
             (l) => l.listenerInstanceId === listener.listenerInstanceId
         );
-        if (existingListenerIndex !== -1) {
-            this.actionListenerListeners.splice(existingListenerIndex, 1, listener);
-        } else {
+        if (!exists) {
             this.actionListenerListeners.push(listener);
+        }
+    }
+
+    public unregisterActionListener(listenerId: string): void {
+        const existingListenerIndex = this.actionListenerListeners.findIndex(
+            (l) => l.listenerInstanceId === listenerId
+        );
+        if (existingListenerIndex !== -1) {
+            this.actionListenerListeners.splice(existingListenerIndex, 1);
         }
     }
 
