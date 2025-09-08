@@ -2822,7 +2822,7 @@
 │  ├─ email: i@izs.me
 │  ├─ path: node_modules/lru-cache
 │  └─ licenseFile: node_modules/lru-cache/LICENSE
-├─ magic-string@0.30.18
+├─ magic-string@0.30.19
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/rich-harris/magic-string
 │  ├─ publisher: Rich Harris
@@ -3683,7 +3683,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/side-channel
 │  └─ licenseFile: node_modules/side-channel/LICENSE
-├─ simple-swizzle@0.2.2
+├─ simple-swizzle@0.2.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/qix-/node-simple-swizzle
 │  ├─ publisher: Qix
