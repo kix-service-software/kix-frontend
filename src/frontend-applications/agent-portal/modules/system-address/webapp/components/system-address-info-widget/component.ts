@@ -26,8 +26,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.labelProvider = new SystemAddressLabelProvider();
-        const context = ContextService.getInstance().getActiveContext();
         this.context?.registerListener('system-address-info-widget', {
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
