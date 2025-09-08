@@ -12,7 +12,6 @@ import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { ComponentInput } from './ComponentInput';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { IdService } from '../../../../../model/IdService';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';

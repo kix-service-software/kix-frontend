@@ -314,18 +314,22 @@ export class ContextService {
     private async switchToTargetContext(
         sourceContext: any, targetContextId?: string, targetObjectId?: string | number, useSourceContext?: boolean
     ): Promise<void> {
-        const context = this.contextInstances.find((c) => c.instanceId === sourceContext?.instanceId);
+        let context = this.contextInstances.find((c) => c.instanceId === sourceContext?.instanceId);
         if (!useSourceContext && targetContextId) {
-            await this.setActiveContext(targetContextId, targetObjectId);
+            context = await this.setActiveContext(targetContextId, targetObjectId);
         } else if (context) {
             await this.setContextByInstanceId(sourceContext.instanceId);
         } else if (this.contextInstances.length > 0) {
-            await this.setContextByInstanceId(
+            context = await this.setContextByInstanceId(
                 this.contextInstances[this.contextInstances.length - 1].instanceId
             );
         } else {
             const url = `${window.location.protocol}//${window.location.host}/${this.DEFAULT_FALLBACK_CONTEXT_URL}`;
             await RoutingService.getInstance().routeToURL(true, url);
+        }
+
+        if (context) {
+            EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT, context.instanceId);
         }
     }
 
@@ -357,7 +361,7 @@ export class ContextService {
 
     public async setContextByInstanceId(
         instanceId: string, objectId?: string | number, history: boolean = true
-    ): Promise<void> {
+    ): Promise<Context> {
         const context = this.contextInstances.find((i) => i.instanceId === instanceId);
         if (context && context.instanceId !== this.activeContext?.instanceId) {
 
@@ -392,6 +396,8 @@ export class ContextService {
                 )
             );
         }
+
+        return context;
     }
 
     public async setActiveContext(

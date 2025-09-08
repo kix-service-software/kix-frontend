@@ -7,9 +7,12 @@
  * --
  */
 
+import { FormContext } from '../../../../../model/configuration/FormContext';
+import { ContextMode } from '../../../../../model/ContextMode';
 import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
@@ -124,9 +127,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 try {
                     const id = await this.formhandler?.commit();
                     if (id) {
-
+                        const targetContextId = this.context?.descriptor?.targetContextId;
                         await ContextService.getInstance().removeContext(
-                            this.context?.instanceId, this.context?.descriptor?.targetContextId, id, true, true, true
+                            this.context?.instanceId, targetContextId, id, true, true, true
                         );
 
                         await BrowserUtil.openSuccessOverlay('Translatable#Success');
