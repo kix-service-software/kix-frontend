@@ -10,6 +10,7 @@
 import { Context } from '../../../../../model/Context';
 import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
+import { ApplicationEvent } from '../../core/ApplicationEvent';
 import { ContextEvents } from '../../core/ContextEvents';
 import { ContextService } from '../../core/ContextService';
 import { EventService } from '../../core/EventService';
@@ -36,16 +37,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('Sidebar'),
-            eventPublished: async (context: Context, eventId: string): Promise<void> => {
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
                 if (eventId === ContextEvents.CONTEXT_REMOVED) {
-                    const index = this.state.contextList.findIndex((c) => c.instanceId === context?.instanceId);
+                    const index = this.state.contextList.findIndex((c) => c.instanceId === data?.instanceId);
                     if (index !== -1) {
                         this.state.contextList.splice(index, 1);
                     }
                 } else if (eventId === ContextEvents.CONTEXT_CHANGED) {
-                    if (!this.state.contextList.some((c) => c.instanceId === context.instanceId)) {
-                        this.state.contextList.push(context);
+                    if (!this.state.contextList.some((c) => c.instanceId === data.instanceId)) {
+                        this.state.contextList.push(data);
                     }
+                } else if (eventId === ApplicationEvent.REFRESH_CONTENT) {
+                    this.state.reloadSidebarId = data;
+
+                    setTimeout(() => {
+                        this.state.reloadSidebarId = null;
+                    }, 25);
                 }
 
                 const activeContext = ContextService.getInstance().getActiveContext();
@@ -59,11 +66,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 (this as any).setStateDirty('contextList');
             }
         };
+
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
     }
 
     public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ApplicationEvent.REFRESH_CONTENT, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
     }

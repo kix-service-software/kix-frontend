@@ -17,8 +17,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 "d-none": !component.isActiveContext(context.instanceId),
                 "sidebars-shown": state.showSidebarArea || state.isMobile,
             },
-        ]
-    >
-        <${component.getSidebarTemplate()} isLeft=input.isLeft/>
+        ]>
+        <if(state.reloadSidebarId !== context.instanceId)>
+            <${component.getSidebarTemplate()} isLeft=input.isLeft/>
+        </if>
     </div>
 </for>

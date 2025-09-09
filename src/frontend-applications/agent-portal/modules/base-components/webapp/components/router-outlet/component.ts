@@ -49,6 +49,7 @@ export class RouterOutletComponent {
                 }, 500);
             }
         });
+
     }
 
     public onDestroy(): void {

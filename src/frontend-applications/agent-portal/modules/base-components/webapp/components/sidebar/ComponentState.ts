@@ -13,7 +13,8 @@ import { AbstractComponentState } from '../../core/AbstractComponentState';
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public contextList: Context[] = []
+        public contextList: Context[] = [],
+        public reloadSidebarId: string = null
     ) {
         super();
     }
