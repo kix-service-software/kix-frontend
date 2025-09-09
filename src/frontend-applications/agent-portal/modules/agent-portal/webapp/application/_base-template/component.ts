@@ -104,8 +104,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
                 setTimeout(() => {
                     this.state.reload = false;
-                    RoutingService.getInstance().routeToInitialContext(false);
-                }, 500);
+                }, 25);
             }
         });
 
