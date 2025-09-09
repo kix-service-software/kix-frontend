@@ -42,6 +42,11 @@ export class AdministrationSocketClient extends SocketClient {
         return module;
     }
 
+    public clearAdminModuleCache(): void {
+        this.adminModules = null;
+        ClientStorageService.deleteState('admin-modules');
+    }
+
     private findModule(id: string, modules: Array<AdminModule>): AdminModule {
         for (const m of modules) {
             if (m.id === id) {
@@ -58,6 +63,11 @@ export class AdministrationSocketClient extends SocketClient {
     }
 
     public async loadAdminCategories(): Promise<Array<AdminModule>> {
+        if (!this.adminModules) {
+            const cachedValue = ClientStorageService.getOption('admin-modules');
+            this.adminModules = cachedValue ? JSON.parse(cachedValue) : null;
+        }
+
         if (this.adminModules) {
             return this.adminModules;
         }
@@ -73,6 +83,7 @@ export class AdministrationSocketClient extends SocketClient {
                     if (result.requestId === requestId) {
                         const categories = result.modules.map((m) => new AdminModule(m));
                         this.adminModules = categories;
+                        ClientStorageService.setOption('admin-modules', JSON.stringify(this.adminModules));
                         resolve(categories);
                     }
                 }

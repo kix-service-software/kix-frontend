@@ -7,7 +7,14 @@
  * --
  */
 
+import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { ObjectSearch } from '../../model/ObjectSearch';
 
@@ -22,9 +29,24 @@ export class ObjectSearchService extends KIXObjectService {
         return ObjectSearchService.INSTANCE;
     }
 
+    private subscriber: IEventSubscriber;
+
     private constructor() {
         super(KIXObjectType.OBJECT_SEARCH);
         this.objectConstructors.set(KIXObjectType.OBJECT_SEARCH, [ObjectSearch]);
+
+        this.subscriber = {
+            eventSubscriberId: 'ObjectSearchService',
+            eventPublished: (data: string, eventId: string): void => {
+                if (data === KIXObjectType.OBJECT_SEARCH) {
+                    const keys = ClientStorageService.getAllKeys(KIXObjectType.OBJECT_SEARCH);
+                    keys.forEach((k) => ClientStorageService.deleteState(k));
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(ApplicationEvent.CACHE_KEY_DELETED, this.subscriber);
+        EventService.getInstance().subscribe(ApplicationEvent.CACHE_KEY_PREFIX_DELETED, this.subscriber);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType | string): boolean {
@@ -35,5 +57,27 @@ export class ObjectSearchService extends KIXObjectService {
         return '';
     }
 
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType | string, objectIds: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions,
+        objectLoadingOptions?: KIXObjectSpecificLoadingOptions, cache?: boolean, forceIds?: boolean,
+        silent?: boolean, collectionId?: string
+    ): Promise<O[]> {
+
+        const key = objectType + '-' + JSON.stringify(objectLoadingOptions);
+
+        let result;
+        const cachedValue = ClientStorageService.getOption(key);
+        if (cachedValue) {
+            result = cachedValue ? JSON.parse(cachedValue) : null;
+        } else {
+            result = await super.loadObjects<O>(
+                objectType, objectIds, loadingOptions, objectLoadingOptions, cache, forceIds, silent, collectionId
+            );
+            ClientStorageService.setOption(key, JSON.stringify(result));
+        }
+
+        return result;
+
+    }
 
 }

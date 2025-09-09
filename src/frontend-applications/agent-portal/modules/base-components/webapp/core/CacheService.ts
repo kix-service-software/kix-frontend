@@ -70,7 +70,9 @@ export class BrowserCacheService {
         }
 
         this.cache.delete(key);
+        EventService.getInstance().publish(ApplicationEvent.CACHE_KEY_DELETED, key);
         if (cacheKeyPrefix) {
+            EventService.getInstance().publish(ApplicationEvent.CACHE_KEY_PREFIX_DELETED, cacheKeyPrefix);
             if (this.keyIndex.has(cacheKeyPrefix)) {
                 const keys = this.keyIndex.get(cacheKeyPrefix);
                 const index = keys.findIndex((k) => k === key);
