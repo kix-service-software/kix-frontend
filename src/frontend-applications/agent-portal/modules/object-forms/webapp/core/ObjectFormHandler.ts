@@ -114,21 +114,12 @@ export class ObjectFormHandler {
         if (this.context.contextId === 'ObjectFormConfigurationContext') return;
         await this.objectFormValidator?.enable();
         const formValues = this.objectFormValueMapper.getFormValues(pageId);
-        let valid = false;
-        if (formValues.some((fv) => fv.dirty)) {
-            valid = await new Promise((resolve, reject) => {
-                setTimeout(async () => {
-                    await this.objectFormValidator?.validateFormValues(formValues);
-                    const validation = this.objectFormValidator.isFormValid(formValues);
-                    resolve(validation);
-                }, 500);
-            });
-        } else {
-            await this.objectFormValidator?.validateFormValues(formValues);
-            valid = this.objectFormValidator.isFormValid(formValues);
-        }
+
+        await this.waitForDirtyFields(pageId);
+
         await this.objectFormValidator?.validateFormValues(formValues);
-        valid = this.objectFormValidator.isFormValid(formValues);
+        const valid = this.objectFormValidator.isFormValid(formValues);
+
         if (!valid) {
             const validationResults = this.objectFormValueMapper.getValidationResults();
             console.debug('ValidationResults:');
@@ -138,6 +129,24 @@ export class ObjectFormHandler {
 
             const errorMessage = await TranslationService.translate('Translatable#Page contains invalid values');
             throw new Error('0', errorMessage);
+        }
+    }
+
+    private async waitForDirtyFields(pageId: string): Promise<void> {
+        let formValues = this.objectFormValueMapper.getFormValues(pageId);
+        let dirty = formValues.some((fv) => fv.dirty);
+
+        let retryCount = 0;
+
+        while (dirty || retryCount < 10) {
+            const waitPromise = new Promise<void>((resolve, reject) => {
+                setTimeout(() => resolve(), 50);
+            });
+
+            formValues = this.objectFormValueMapper.getFormValues(pageId);
+            dirty = formValues.some((fv) => fv.dirty);
+            retryCount++;
+            await waitPromise;
         }
     }
 
