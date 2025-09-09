@@ -1860,7 +1860,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.214
+├─ electron-to-chromium@1.5.215
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -2849,7 +2849,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.51
+├─ marko@5.37.52
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -3683,7 +3683,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/side-channel
 │  └─ licenseFile: node_modules/side-channel/LICENSE
-├─ simple-swizzle@0.2.3
+├─ simple-swizzle@0.2.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/qix-/node-simple-swizzle
 │  ├─ publisher: Qix
