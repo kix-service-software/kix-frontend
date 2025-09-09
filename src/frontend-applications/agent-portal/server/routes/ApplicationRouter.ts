@@ -176,14 +176,17 @@ export class ApplicationRouter extends KIXRouter {
     }
 
     public async filterUIComponents(token: string, uiComponents: UIComponent[]): Promise<UIComponent[]> {
-        const components: UIComponent[] = [];
+        const promises: Array<Promise<UIComponent>> = [];
         for (const component of uiComponents) {
-            if (await PermissionService.getInstance().checkPermissions(token, component.permissions, 'ApplicationRouter')) {
-                components.push(component);
-            }
+            promises.push(new Promise<UIComponent>((resolve, reject) => {
+                PermissionService.getInstance().checkPermissions(token, component.permissions, 'ApplicationRouter')
+                    .then((allowed: boolean) => allowed ? resolve(component) : reject())
+                    .catch((e) => reject());
+            }));
         }
 
-        return components;
+        const result = await Promise.allSettled(promises);
+        return result.filter((c) => c.status === 'fulfilled').map((c) => c.value);
     }
 
     public setUpdate(update: boolean): void {

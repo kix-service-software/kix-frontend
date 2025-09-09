@@ -177,9 +177,10 @@ export class HttpService {
 
         let cacheId = '';
         if (token) {
-            const user = await this.getUserByToken(token);
-            const usageContext = AuthenticationService.getInstance().getUsageContext(token);
-            cacheId = user.RoleIDs?.sort().join(';') + usageContext;
+            const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+            const decodedToken = AuthenticationService.getInstance().decodeToken(backendToken);
+            const userId = decodedToken?.UserID;
+            cacheId = this.userRoleIds.get(userId)?.sort().join(';') + decodedToken?.UserType;
         }
 
         const cacheKey = cacheId + resource;

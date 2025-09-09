@@ -7,6 +7,7 @@
  * --
  */
 
+import { LoggingService } from '../../../../server/services/LoggingService';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { HttpService } from './HttpService';
 
@@ -41,11 +42,11 @@ export class PermissionService {
                 andPermissionChecks.push(this.methodAllowed(token, p, object, clientRequestId));
             });
 
-            const andChecks = await Promise.all(andPermissionChecks);
-            const andCheck = andChecks.every((c) => c);
+            const andChecks = await Promise.allSettled(andPermissionChecks);
+            const andCheck = andChecks.every((c) => c.status === 'fulfilled' && c.value);
 
-            const orChecks = await Promise.all(orPermissionChecks);
-            const orCheck = orChecks.some((c) => c);
+            const orChecks = await Promise.allSettled(orPermissionChecks);
+            const orCheck = orChecks.some((c) => c.status === 'fulfilled' && c.value);
 
             return andChecks.length === 0 && orChecks.length > 0
                 ? orCheck
@@ -65,7 +66,7 @@ export class PermissionService {
             const response = await HttpService.getInstance().options(
                 token, permission.target, object, clientRequestId, permission.collection
             ).catch((error) => {
-                console.error(error);
+                LoggingService.getInstance().error(error);
                 return null;
             });
 
