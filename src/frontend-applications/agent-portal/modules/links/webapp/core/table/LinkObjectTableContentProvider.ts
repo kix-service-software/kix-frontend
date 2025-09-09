@@ -47,8 +47,8 @@ export class LinkObjectTableContentProvider extends TableContentProvider<LinkObj
     public async loadData(): Promise<RowObject<LinkObject>[]> {
 
         let contextObject: KIXObject;
-        if (context instanceof EditLinkedObjectsDialogContext) {
-            contextObject = await context.getObject('LinkObject');
+        if (this.context instanceof EditLinkedObjectsDialogContext) {
+            contextObject = await this.context.getObject('LinkObject');
         } else {
             contextObject = await this.context.getObject();
         }

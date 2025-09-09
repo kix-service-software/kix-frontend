@@ -22,7 +22,6 @@ import { TreeNode, TreeService } from '../../../../base-components/webapp/core/t
 import { EditLinkedObjectsDialogContext, LinkService } from '../../core';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
@@ -143,7 +142,7 @@ class LinkDialogComponent extends AbstractMarkoComponent<ComponentState, EditLin
     private async executeSearch(): Promise<void> {
         BrowserUtil.toggleLoadingShield('APP_SHIELD', true);
         const formInstance = await this.context?.getFormManager()?.getFormInstance();
-        if (context && formInstance.hasValues()) {
+        if (this.context && formInstance.hasValues()) {
             const excludeObjects = this.rootObject && formInstance.getObjectType() === this.rootObject.KIXObjectType
                 ? [this.rootObject]
                 : null;
