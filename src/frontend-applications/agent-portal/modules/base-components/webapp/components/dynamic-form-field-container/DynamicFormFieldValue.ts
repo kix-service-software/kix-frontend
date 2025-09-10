@@ -110,9 +110,6 @@ export class DynamicFormFieldValue {
         this.operationTreeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler('operation-' + this.id, this.operationTreeHandler);
 
-        this.valueTreeHandler = new TreeHandler();
-        TreeService.getInstance().registerTreeHandler('value-' + this.id, this.valueTreeHandler, true);
-
         this.relativeTimeUnitTreeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler('relativeTimeUnit-' + this.id, this.relativeTimeUnitTreeHandler);
 
@@ -339,6 +336,11 @@ export class DynamicFormFieldValue {
 
     private async createValueInput(): Promise<void> {
         if (this.manager.showValueInput(this.value)) {
+
+            TreeService.getInstance().removeTreeHandler('value-' + this.id);
+            this.valueTreeHandler = new TreeHandler();
+            TreeService.getInstance().registerTreeHandler('value-' + this.id, this.valueTreeHandler, true);
+
             const property = this.value.property ? this.value.property : null;
             const operator = this.value.operator ? this.value.operator : null;
             const inputType = await this.manager.getInputType(property, operator as SearchOperator);
