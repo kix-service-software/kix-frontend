@@ -145,8 +145,8 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
         if (isArticleDelete) {
             const objectIds = data?.ObjectID?.split('::');
             if (objectIds?.length === 2) {
-                const allArticleIndex = this.articleIds.findIndex((a) => a.toString() === objectIds[1].toString());
-                if (allArticleIndex !== -1) {
+                const allArticleIndex = this.articleIds?.findIndex((a) => a.toString() === objectIds[1].toString());
+                if (typeof allArticleIndex !== 'undefined' && allArticleIndex !== -1) {
                     this.articleIds.splice(allArticleIndex, 1);
                     this.setArticleIDs();
                 }
@@ -222,7 +222,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     }
 
     public getArticleCountNumber(articleId: number): number {
-        return this.articleIds.findIndex((aid) => aid === articleId) + 1;
+        return this.articleIds?.findIndex((aid) => aid === articleId) + 1 || 1;
     }
 }
 
