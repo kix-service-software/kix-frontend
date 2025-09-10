@@ -141,7 +141,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             if (this.actionsToShow.length) {
                 let actionsWidth = 0;
                 for (const action of this.actionsToShow) {
-                    const element = (this as any).getEl(action['key']);
+                    const element = (this as any).getEl(this.state.key + action['key']);
                     const width = element?.offsetWidth || ((this.state.displayText ? 16 : 3) * this.fontSize);
 
                     if (actionsWidth + width < maxWidth) {
