@@ -104,25 +104,16 @@ export class ContactAPIService extends KIXObjectAPIService {
         return objectResponse as any;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>
     ): Promise<string> {
 
+        const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
         const userParameter = this.getUserParameters(parameter);
-        this.prepareOrganisationIdsParameter(parameter);
-
-        const createContact = new CreateContact(parameter);
-        const response = await this.sendCreateRequest<CreateContactResponse, CreateContactRequest>(
-            token, clientRequestId, this.RESOURCE_URI, new CreateContactRequest(createContact),
-            this.objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
 
         let userId;
         if (userParameter.length && userParameter.some((up) => up[0] === UserProperty.USER_LOGIN)) {
-            const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
             userId = await this.createOrUpdateUser(token, clientRequestId, userParameter, assignedUserId).catch(
                 (error: Error) => {
                     LoggingService.getInstance().error(
@@ -131,13 +122,23 @@ export class ContactAPIService extends KIXObjectAPIService {
                     throw new Error(error.Code, error.Message);
                 }
             );
+
             if (!assignedUserId && userId) {
-                await this.updateObject(
-                    token, clientRequestId, KIXObjectType.CONTACT,
-                    [[ContactProperty.ASSIGNED_USER_ID, userId]], response.ContactID
-                );
+                parameter.push([ContactProperty.ASSIGNED_USER_ID, userId]);
             }
         }
+
+        this.prepareOrganisationIdsParameter(parameter);
+
+        const createContact = new CreateContact(parameter);
+        const response = await this.sendCreateRequest<CreateContactResponse, CreateContactRequest>(
+            token, clientRequestId, this.RESOURCE_URI, new CreateContactRequest(createContact),
+            this.objectType
+        ).catch((error: Error) => {
+            // for cleanup delete created user object
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
         if (icon && icon.Content) {
