@@ -254,7 +254,9 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             const configLoadingOptions = field?.options?.find(
                 (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
             );
-            this.loadingOptions = configLoadingOptions?.value || this.loadingOptions;
+            if (configLoadingOptions?.value) {
+                this.loadingOptions = JSON.parse(JSON.stringify(configLoadingOptions.value));
+            }
 
             const specificLoadingOptions = field?.options?.find(
                 (o) => o.option === ObjectReferenceOptions.OBJECT_SPECIFIC_LOADINGOPTIONS
