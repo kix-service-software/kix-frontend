@@ -127,7 +127,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const end = Date.now();
 
-        console.debug(`mount base template: ${(end - start) / 1000} sec.`);
+        console.debug(`mount base template: ${end - start} ms.`);
     }
 
     private setBaseLink(): void {
