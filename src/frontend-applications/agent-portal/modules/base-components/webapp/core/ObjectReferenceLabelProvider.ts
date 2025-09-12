@@ -57,7 +57,7 @@ export class ObjectReferenceLabelProvider extends ExtendedLabelProvider {
 
         const result = await Promise.allSettled(objectPromises);
         const objects = result.filter((r) => r.status === 'fulfilled').map((r) => r.value);
-        return objects;
+        return objects.filter((o) => o);
     }
 
     protected async getObject(value: any): Promise<KIXObject> {
