@@ -69,14 +69,7 @@ export class ApplicationRouter extends KIXRouter {
         this.router.get(
             '/healthcheck',
             async (req: Request, res: Response) => {
-                const config = ConfigurationService.getInstance().getServerConfiguration();
-                const token = config.BACKEND_API_TOKEN;
-
-                const valid = await AuthenticationService.getInstance().validateToken(
-                    token, 'healthcheck'
-                ).catch((error) => false);
-
-                res.status(valid ? 200 : 503);
+                res.status(200);
                 res.send();
             }
         );
