@@ -331,6 +331,18 @@
 │  ├─ email: dpiercey@ebay.com
 │  ├─ path: node_modules/@marko/express
 │  └─ licenseFile: node_modules/@marko/express/LICENSE
+├─ @popperjs/core@2.11.8
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/popperjs/popper-core
+│  ├─ publisher: Federico Zivolo
+│  ├─ email: federico.zivolo@gmail.com
+│  ├─ path: node_modules/@popperjs/core
+│  └─ licenseFile: node_modules/@popperjs/core/LICENSE.md
+├─ @remirror/core-constants@3.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/remirror/remirror
+│  ├─ path: node_modules/@remirror/core-constants
+│  └─ licenseFile: node_modules/@remirror/core-constants/LICENSE
 ├─ @socket.io/cluster-adapter@0.2.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/socketio/socket.io-cluster-adapter
@@ -343,6 +355,201 @@
 │  ├─ email: damien.arrachequesne@gmail.com
 │  ├─ path: node_modules/@socket.io/sticky
 │  └─ licenseFile: node_modules/@socket.io/sticky/LICENSE
+├─ @tiptap/core@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/core
+│  └─ licenseFile: node_modules/@tiptap/core/README.md
+├─ @tiptap/extension-blockquote@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-blockquote
+│  └─ licenseFile: node_modules/@tiptap/extension-blockquote/README.md
+├─ @tiptap/extension-bold@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-bold
+│  └─ licenseFile: node_modules/@tiptap/extension-bold/README.md
+├─ @tiptap/extension-bubble-menu@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-bubble-menu
+│  └─ licenseFile: node_modules/@tiptap/extension-bubble-menu/README.md
+├─ @tiptap/extension-bullet-list@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-bullet-list
+│  └─ licenseFile: node_modules/@tiptap/extension-bullet-list/README.md
+├─ @tiptap/extension-code-block@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-code-block
+│  └─ licenseFile: node_modules/@tiptap/extension-code-block/README.md
+├─ @tiptap/extension-code@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-code
+│  └─ licenseFile: node_modules/@tiptap/extension-code/README.md
+├─ @tiptap/extension-color@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-color
+│  └─ licenseFile: node_modules/@tiptap/extension-color/README.md
+├─ @tiptap/extension-document@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-document
+│  └─ licenseFile: node_modules/@tiptap/extension-document/README.md
+├─ @tiptap/extension-dropcursor@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-dropcursor
+│  └─ licenseFile: node_modules/@tiptap/extension-dropcursor/README.md
+├─ @tiptap/extension-floating-menu@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-floating-menu
+│  └─ licenseFile: node_modules/@tiptap/extension-floating-menu/README.md
+├─ @tiptap/extension-gapcursor@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-gapcursor
+│  └─ licenseFile: node_modules/@tiptap/extension-gapcursor/README.md
+├─ @tiptap/extension-hard-break@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-hard-break
+│  └─ licenseFile: node_modules/@tiptap/extension-hard-break/README.md
+├─ @tiptap/extension-heading@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-heading
+│  └─ licenseFile: node_modules/@tiptap/extension-heading/README.md
+├─ @tiptap/extension-highlight@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-highlight
+│  └─ licenseFile: node_modules/@tiptap/extension-highlight/README.md
+├─ @tiptap/extension-history@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-history
+│  └─ licenseFile: node_modules/@tiptap/extension-history/README.md
+├─ @tiptap/extension-horizontal-rule@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-horizontal-rule
+│  └─ licenseFile: node_modules/@tiptap/extension-horizontal-rule/README.md
+├─ @tiptap/extension-italic@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-italic
+│  └─ licenseFile: node_modules/@tiptap/extension-italic/README.md
+├─ @tiptap/extension-link@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-link
+│  └─ licenseFile: node_modules/@tiptap/extension-link/README.md
+├─ @tiptap/extension-list-item@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-list-item
+│  └─ licenseFile: node_modules/@tiptap/extension-list-item/README.md
+├─ @tiptap/extension-mention@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-mention
+│  └─ licenseFile: node_modules/@tiptap/extension-mention/README.md
+├─ @tiptap/extension-ordered-list@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-ordered-list
+│  └─ licenseFile: node_modules/@tiptap/extension-ordered-list/README.md
+├─ @tiptap/extension-paragraph@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-paragraph
+│  └─ licenseFile: node_modules/@tiptap/extension-paragraph/README.md
+├─ @tiptap/extension-placeholder@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-placeholder
+│  └─ licenseFile: node_modules/@tiptap/extension-placeholder/README.md
+├─ @tiptap/extension-strike@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-strike
+│  └─ licenseFile: node_modules/@tiptap/extension-strike/README.md
+├─ @tiptap/extension-table-cell@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-table-cell
+│  └─ licenseFile: node_modules/@tiptap/extension-table-cell/README.md
+├─ @tiptap/extension-table-header@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-table-header
+│  └─ licenseFile: node_modules/@tiptap/extension-table-header/README.md
+├─ @tiptap/extension-table-row@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-table-row
+│  └─ licenseFile: node_modules/@tiptap/extension-table-row/README.md
+├─ @tiptap/extension-table@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-table
+│  └─ licenseFile: node_modules/@tiptap/extension-table/README.md
+├─ @tiptap/extension-task-item@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-task-item
+│  └─ licenseFile: node_modules/@tiptap/extension-task-item/README.md
+├─ @tiptap/extension-task-list@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-task-list
+│  └─ licenseFile: node_modules/@tiptap/extension-task-list/README.md
+├─ @tiptap/extension-text-align@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-text-align
+│  └─ licenseFile: node_modules/@tiptap/extension-text-align/README.md
+├─ @tiptap/extension-text-style@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-text-style
+│  └─ licenseFile: node_modules/@tiptap/extension-text-style/README.md
+├─ @tiptap/extension-text@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-text
+│  └─ licenseFile: node_modules/@tiptap/extension-text/README.md
+├─ @tiptap/extension-underline@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-underline
+│  └─ licenseFile: node_modules/@tiptap/extension-underline/README.md
+├─ @tiptap/extension-youtube@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/extension-youtube
+│  └─ licenseFile: node_modules/@tiptap/extension-youtube/README.md
+├─ @tiptap/pm@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/pm
+│  └─ licenseFile: node_modules/@tiptap/pm/README.md
+├─ @tiptap/starter-kit@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/starter-kit
+│  └─ licenseFile: node_modules/@tiptap/starter-kit/README.md
+├─ @tiptap/suggestion@2.26.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ueberdosis/tiptap
+│  ├─ path: node_modules/@tiptap/suggestion
+│  └─ licenseFile: node_modules/@tiptap/suggestion/README.md
 ├─ @types/component-emitter@1.2.14
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -518,6 +725,21 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
+├─ @types/linkify-it@5.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+│  ├─ path: node_modules/@types/linkify-it
+│  └─ licenseFile: node_modules/@types/linkify-it/LICENSE
+├─ @types/markdown-it@14.1.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+│  ├─ path: node_modules/@types/markdown-it
+│  └─ licenseFile: node_modules/@types/markdown-it/LICENSE
+├─ @types/mdurl@2.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+│  ├─ path: node_modules/@types/mdurl
+│  └─ licenseFile: node_modules/@types/mdurl/LICENSE
 ├─ @types/node@22.18.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -644,7 +866,7 @@
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/browserify/commonjs-assert
 │  ├─ path: node_modules/assert
-│  └─ licenseFile: node_modules/assert/LICENSE
+│  └─ licenseFile: node_modules/lasso/node_modules/assert/LICENSE
 ├─ assertion-error@1.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/chaijs/assertion-error
@@ -1108,7 +1330,7 @@
 │  ├─ email: feross@feross.org
 │  ├─ url: https://feross.org
 │  ├─ path: node_modules/buffer
-│  └─ licenseFile: node_modules/buffer/LICENSE
+│  └─ licenseFile: node_modules/lasso/node_modules/buffer/LICENSE
 ├─ busboy@1.6.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/mscdex/busboy
@@ -1412,6 +1634,13 @@
 │  ├─ url: https://github.com/troygoode/
 │  ├─ path: node_modules/cors
 │  └─ licenseFile: node_modules/cors/LICENSE
+├─ crelt@1.0.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/marijnh/crelt
+│  ├─ publisher: Marijn Haverbeke
+│  ├─ email: marijn@haverbeke.berlin
+│  ├─ path: node_modules/crelt
+│  └─ licenseFile: node_modules/crelt/LICENSE
 ├─ crypt@0.0.2
 │  ├─ licenses: BSD-3-Clause
 │  ├─ repository: https://github.com/pvorb/node-crypt
@@ -2007,6 +2236,14 @@
 │  ├─ url: sindresorhus.com
 │  ├─ path: node_modules/escape-string-regexp
 │  └─ licenseFile: node_modules/escape-string-regexp/license
+├─ escape-string-regexp@4.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/sindresorhus/escape-string-regexp
+│  ├─ publisher: Sindre Sorhus
+│  ├─ email: sindresorhus@gmail.com
+│  ├─ url: https://sindresorhus.com
+│  ├─ path: node_modules/escape-string-regexp
+│  └─ licenseFile: node_modules/prosemirror-trailing-node/node_modules/escape-string-regexp/license
 ├─ eslint-visitor-keys@3.4.3
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/eslint/eslint-visitor-keys
@@ -2042,6 +2279,12 @@
 │  ├─ publisher: Toru Nagashima
 │  ├─ path: node_modules/event-target-shim
 │  └─ licenseFile: node_modules/event-target-shim/LICENSE
+├─ eventemitter3@5.0.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/primus/eventemitter3
+│  ├─ publisher: Arnout Kazemier
+│  ├─ path: node_modules/eventemitter3
+│  └─ licenseFile: node_modules/eventemitter3/LICENSE
 ├─ events-light@1.0.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/patrick-steele-idem/events-light
@@ -2072,6 +2315,13 @@
 │  ├─ email: tj@vision-media.ca
 │  ├─ path: node_modules/express
 │  └─ licenseFile: node_modules/express/LICENSE
+├─ fast-diff@1.3.0
+│  ├─ licenses: Apache-2.0
+│  ├─ repository: https://github.com/jhchen/fast-diff
+│  ├─ publisher: Jason Chen
+│  ├─ email: jhchen7@gmail.com
+│  ├─ path: node_modules/fast-diff
+│  └─ licenseFile: node_modules/fast-diff/LICENSE
 ├─ fecha@4.2.3
 │  ├─ licenses: MIT
 │  ├─ repository: git+https://taylorhakes@github.com/taylorhakes/fecha
@@ -2249,6 +2499,13 @@
 │  ├─ url: https://mathiasbynens.be/
 │  ├─ path: node_modules/he
 │  └─ licenseFile: node_modules/he/LICENSE-MIT.txt
+├─ highlight.js@11.11.1
+│  ├─ licenses: BSD-3-Clause
+│  ├─ repository: https://github.com/highlightjs/highlight.js
+│  ├─ publisher: Josh Goebel
+│  ├─ email: hello@joshgoebel.com
+│  ├─ path: node_modules/highlight.js
+│  └─ licenseFile: node_modules/highlight.js/LICENSE
 ├─ home-or-tmp@2.0.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/sindresorhus/home-or-tmp
@@ -2723,6 +2980,18 @@
 │  ├─ email: self@cloudhead.net
 │  ├─ path: node_modules/less
 │  └─ licenseFile: node_modules/less/README.md
+├─ linkify-it@5.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/markdown-it/linkify-it
+│  ├─ path: node_modules/linkify-it
+│  └─ licenseFile: node_modules/linkify-it/LICENSE
+├─ linkifyjs@4.3.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/nfrasser/linkifyjs
+│  ├─ publisher: Nick Frasser
+│  ├─ url: https://nfrasser.com
+│  ├─ path: node_modules/linkifyjs
+│  └─ licenseFile: node_modules/linkifyjs/LICENSE
 ├─ listener-tracker@2.0.0
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/patrick-steele-idem/listener-tracker
@@ -2736,6 +3005,21 @@
 │  ├─ publisher: Tobias Koppers @sokra
 │  ├─ path: node_modules/loader-utils
 │  └─ licenseFile: node_modules/loader-utils/LICENSE
+├─ lodash-es@4.17.21
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/lodash/lodash
+│  ├─ publisher: John-David Dalton
+│  ├─ email: john.david.dalton@gmail.com
+│  ├─ path: node_modules/lodash-es
+│  └─ licenseFile: node_modules/lodash-es/LICENSE
+├─ lodash.clonedeep@4.5.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/lodash/lodash
+│  ├─ publisher: John-David Dalton
+│  ├─ email: john.david.dalton@gmail.com
+│  ├─ url: http://allyoucanleet.com/
+│  ├─ path: node_modules/lodash.clonedeep
+│  └─ licenseFile: node_modules/lodash.clonedeep/LICENSE
 ├─ lodash.includes@4.3.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/lodash/lodash
@@ -2752,6 +3036,14 @@
 │  ├─ url: http://allyoucanleet.com/
 │  ├─ path: node_modules/lodash.isboolean
 │  └─ licenseFile: node_modules/lodash.isboolean/LICENSE
+├─ lodash.isequal@4.5.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/lodash/lodash
+│  ├─ publisher: John-David Dalton
+│  ├─ email: john.david.dalton@gmail.com
+│  ├─ url: http://allyoucanleet.com/
+│  ├─ path: node_modules/lodash.isequal
+│  └─ licenseFile: node_modules/lodash.isequal/LICENSE
 ├─ lodash.isinteger@4.0.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/lodash/lodash
@@ -2841,6 +3133,11 @@
 │  ├─ url: sindresorhus.com
 │  ├─ path: node_modules/make-dir
 │  └─ licenseFile: node_modules/make-dir/license
+├─ markdown-it@14.1.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/markdown-it/markdown-it
+│  ├─ path: node_modules/markdown-it
+│  └─ licenseFile: node_modules/markdown-it/LICENSE
 ├─ marked@4.3.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/markedjs/marked
@@ -2882,6 +3179,11 @@
 │  ├─ publisher: Mozilla Developer Network
 │  ├─ path: node_modules/mdn-data
 │  └─ licenseFile: node_modules/mdn-data/LICENSE
+├─ mdurl@2.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/markdown-it/mdurl
+│  ├─ path: node_modules/mdurl
+│  └─ licenseFile: node_modules/mdurl/LICENSE
 ├─ media-typer@0.3.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jshttp/media-typer
@@ -3129,6 +3431,13 @@
 │  ├─ publisher: Arnout Kazemier
 │  ├─ path: node_modules/one-time
 │  └─ licenseFile: node_modules/one-time/LICENSE
+├─ orderedmap@2.1.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/marijnh/orderedmap
+│  ├─ publisher: Marijn Haverbeke
+│  ├─ email: marijn@haverbeke.berlin
+│  ├─ path: node_modules/orderedmap
+│  └─ licenseFile: node_modules/orderedmap/LICENSE
 ├─ os-homedir@1.0.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/sindresorhus/os-homedir
@@ -3145,6 +3454,13 @@
 │  ├─ url: sindresorhus.com
 │  ├─ path: node_modules/os-tmpdir
 │  └─ licenseFile: node_modules/os-tmpdir/license
+├─ parchment@3.0.0
+│  ├─ licenses: BSD-3-Clause
+│  ├─ repository: https://github.com/quilljs/parchment
+│  ├─ publisher: Jason Chen
+│  ├─ email: jhchen7@gmail.com
+│  ├─ path: node_modules/parchment
+│  └─ licenseFile: node_modules/parchment/LICENSE
 ├─ parse-node-version@1.0.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/gulpjs/parse-node-version
@@ -3262,6 +3578,101 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/property-handlers
 │  └─ licenseFile: node_modules/property-handlers/LICENSE
+├─ prosemirror-changeset@2.3.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-changeset
+│  ├─ path: node_modules/prosemirror-changeset
+│  └─ licenseFile: node_modules/prosemirror-changeset/LICENSE
+├─ prosemirror-collab@1.3.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-collab
+│  ├─ path: node_modules/prosemirror-collab
+│  └─ licenseFile: node_modules/prosemirror-collab/LICENSE
+├─ prosemirror-commands@1.7.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-commands
+│  ├─ path: node_modules/prosemirror-commands
+│  └─ licenseFile: node_modules/prosemirror-commands/LICENSE
+├─ prosemirror-dropcursor@1.8.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-dropcursor
+│  ├─ path: node_modules/prosemirror-dropcursor
+│  └─ licenseFile: node_modules/prosemirror-dropcursor/LICENSE
+├─ prosemirror-example-setup@1.2.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-example-setup
+│  ├─ path: node_modules/prosemirror-example-setup
+│  └─ licenseFile: node_modules/prosemirror-example-setup/LICENSE
+├─ prosemirror-gapcursor@1.3.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-gapcursor
+│  ├─ path: node_modules/prosemirror-gapcursor
+│  └─ licenseFile: node_modules/prosemirror-gapcursor/LICENSE
+├─ prosemirror-history@1.4.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-history
+│  ├─ path: node_modules/prosemirror-history
+│  └─ licenseFile: node_modules/prosemirror-history/LICENSE
+├─ prosemirror-inputrules@1.5.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-inputrules
+│  ├─ path: node_modules/prosemirror-inputrules
+│  └─ licenseFile: node_modules/prosemirror-inputrules/LICENSE
+├─ prosemirror-keymap@1.2.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-keymap
+│  ├─ path: node_modules/prosemirror-keymap
+│  └─ licenseFile: node_modules/prosemirror-keymap/LICENSE
+├─ prosemirror-markdown@1.13.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-markdown
+│  ├─ path: node_modules/prosemirror-markdown
+│  └─ licenseFile: node_modules/prosemirror-markdown/LICENSE
+├─ prosemirror-menu@1.2.5
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-menu
+│  ├─ path: node_modules/prosemirror-menu
+│  └─ licenseFile: node_modules/prosemirror-menu/LICENSE
+├─ prosemirror-model@1.25.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-model
+│  ├─ path: node_modules/prosemirror-model
+│  └─ licenseFile: node_modules/prosemirror-model/LICENSE
+├─ prosemirror-schema-basic@1.2.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-schema-basic
+│  ├─ path: node_modules/prosemirror-schema-basic
+│  └─ licenseFile: node_modules/prosemirror-schema-basic/LICENSE
+├─ prosemirror-schema-list@1.5.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-schema-list
+│  ├─ path: node_modules/prosemirror-schema-list
+│  └─ licenseFile: node_modules/prosemirror-schema-list/LICENSE
+├─ prosemirror-state@1.4.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-state
+│  ├─ path: node_modules/prosemirror-state
+│  └─ licenseFile: node_modules/prosemirror-state/LICENSE
+├─ prosemirror-tables@1.8.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-tables
+│  ├─ path: node_modules/prosemirror-tables
+│  └─ licenseFile: node_modules/prosemirror-tables/LICENSE
+├─ prosemirror-trailing-node@3.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/remirror/remirror
+│  ├─ path: node_modules/prosemirror-trailing-node
+│  └─ licenseFile: node_modules/prosemirror-trailing-node/LICENSE
+├─ prosemirror-transform@1.10.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-transform
+│  ├─ path: node_modules/prosemirror-transform
+│  └─ licenseFile: node_modules/prosemirror-transform/LICENSE
+├─ prosemirror-view@1.41.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/prosemirror/prosemirror-view
+│  ├─ path: node_modules/prosemirror-view
+│  └─ licenseFile: node_modules/prosemirror-view/LICENSE
 ├─ proxy-addr@2.0.7
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jshttp/proxy-addr
@@ -3277,20 +3688,27 @@
 │  ├─ url: https://github.com/rvagg
 │  ├─ path: node_modules/prr
 │  └─ licenseFile: node_modules/prr/LICENSE.md
+├─ punycode.js@2.3.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/mathiasbynens/punycode.js
+│  ├─ publisher: Mathias Bynens
+│  ├─ url: https://mathiasbynens.be/
+│  ├─ path: node_modules/punycode.js
+│  └─ licenseFile: node_modules/punycode.js/LICENSE-MIT.txt
 ├─ punycode@1.4.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/bestiejs/punycode.js
 │  ├─ publisher: Mathias Bynens
 │  ├─ url: https://mathiasbynens.be/
 │  ├─ path: node_modules/punycode
-│  └─ licenseFile: node_modules/url/node_modules/punycode/LICENSE-MIT.txt
+│  └─ licenseFile: node_modules/punycode/LICENSE-MIT.txt
 ├─ punycode@2.3.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/mathiasbynens/punycode.js
 │  ├─ publisher: Mathias Bynens
 │  ├─ url: https://mathiasbynens.be/
 │  ├─ path: node_modules/punycode
-│  └─ licenseFile: node_modules/punycode/LICENSE-MIT.txt
+│  └─ licenseFile: node_modules/tr46/node_modules/punycode/LICENSE-MIT.txt
 ├─ q@1.5.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/kriskowal/q
@@ -3311,6 +3729,33 @@
 │  ├─ email: jesse.tane@gmail.com
 │  ├─ path: node_modules/queue
 │  └─ licenseFile: node_modules/queue/LICENSE
+├─ quill-better-table@1.2.10
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/soccerloway/quill-better-table
+│  ├─ publisher: soccerloway
+│  ├─ path: node_modules/quill-better-table
+│  └─ licenseFile: node_modules/quill-better-table/LICENSE
+├─ quill-delta@5.1.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/quilljs/delta
+│  ├─ publisher: Jason Chen
+│  ├─ email: jhchen7@gmail.com
+│  ├─ path: node_modules/quill-delta
+│  └─ licenseFile: node_modules/quill-delta/LICENSE
+├─ quill-mention@6.1.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/quill-mention/quill-mention
+│  ├─ publisher: Fredrik Sundqvist
+│  ├─ email: fsundqvist@gmail.com
+│  ├─ path: node_modules/quill-mention
+│  └─ licenseFile: node_modules/quill-mention/LICENSE
+├─ quill@2.0.3
+│  ├─ licenses: BSD-3-Clause
+│  ├─ repository: https://github.com/slab/quill
+│  ├─ publisher: Jason Chen
+│  ├─ email: jhchen7@gmail.com
+│  ├─ path: node_modules/quill
+│  └─ licenseFile: node_modules/quill/LICENSE
 ├─ range-parser@1.2.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jshttp/range-parser
@@ -3529,6 +3974,13 @@
 │  ├─ publisher: Vladimir Agafonkin
 │  ├─ path: node_modules/robust-predicates
 │  └─ licenseFile: node_modules/robust-predicates/LICENSE
+├─ rope-sequence@1.3.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/marijnh/rope-sequence
+│  ├─ publisher: Marijn Haverbeke
+│  ├─ email: marijn@haverbeke.berlin
+│  ├─ path: node_modules/rope-sequence
+│  └─ licenseFile: node_modules/rope-sequence/LICENSE
 ├─ rrweb-cssom@0.8.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/rrweb-io/CSSOM
@@ -3864,6 +4316,12 @@
 │  ├─ url: dominictarr.com
 │  ├─ path: node_modules/through
 │  └─ licenseFile: node_modules/through/LICENSE.APACHE2
+├─ tippy.js@6.3.7
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/atomiks/tippyjs
+│  ├─ publisher: atomiks
+│  ├─ path: node_modules/tippy.js
+│  └─ licenseFile: node_modules/tippy.js/LICENSE
 ├─ tldts-core@6.1.86
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/remusao/tldts
@@ -3983,6 +4441,11 @@
 │  ├─ url: http://substack.net
 │  ├─ path: node_modules/typedarray
 │  └─ licenseFile: node_modules/typedarray/LICENSE
+├─ uc.micro@2.1.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/markdown-it/uc.micro
+│  ├─ path: node_modules/uc.micro
+│  └─ licenseFile: node_modules/uc.micro/LICENSE.txt
 ├─ uglify-es@3.3.9
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/mishoo/UglifyJS2.git#harmony
@@ -4077,6 +4540,13 @@
 │  ├─ email: doug@somethingdoug.com
 │  ├─ path: node_modules/vary
 │  └─ licenseFile: node_modules/vary/LICENSE
+├─ w3c-keyname@2.2.8
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/marijnh/w3c-keyname
+│  ├─ publisher: Marijn Haverbeke
+│  ├─ email: marijn@haverbeke.berlin
+│  ├─ path: node_modules/w3c-keyname
+│  └─ licenseFile: node_modules/w3c-keyname/LICENSE
 ├─ w3c-xmlserializer@5.0.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jsdom/w3c-xmlserializer

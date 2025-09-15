@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { TextModuleService } from '../../../textmodule/webapp/core';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
