@@ -1,0 +1,8 @@
+{
+    "dependencies": [
+        "./static/tiptap.min.js",
+        "./static/editor.css",
+        "require: ./core/TiptapEditorUIModule",
+        "require: ./components/tiptap-editor"
+    ]
+}

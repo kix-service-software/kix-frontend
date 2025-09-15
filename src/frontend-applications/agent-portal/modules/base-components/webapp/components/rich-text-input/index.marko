@@ -7,19 +7,24 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.article-body.input-style class={
-    invalid: state.invalid
-}>
+<div class=[
+    "article-body input-style",
+    {
+        invalid: state.invalid,
+    },
+]>
     <if(state.field)>
-        <editor
-            resize=true
-            value=state.currentValue
-            on-valueChanged("valueChanged")
-            required=state.field.required
-            invalid=state.invalid
-            noImages=state.noImages
-            readOnly=state.field.readonly
-            useReadonlyStyle=state.field.readonly
-            key=(state.field.instanceId + "-editor")/>
+        <if(state.prepared)>
+            <${state.editorTemplate}
+                key=state.editorId
+                value=state.currentValue
+                on-valueChanged("valueChanged")
+                required=(state.field.required)
+                invalid=state.invalid
+                noImages=state.noImages
+                readOnly=(state.field.readonly)
+                useReadonlyStyle=(state.field.readonly)
+                externallyUpdated=state.externallyUpdated/>
+        </if>
     </if>
 </div>

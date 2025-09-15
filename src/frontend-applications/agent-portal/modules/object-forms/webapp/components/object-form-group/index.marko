@@ -13,8 +13,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         class=[
             "accordion my-2 m-0 p-0 px-1",
             component.getGroupClasses(input.group.id),
-        ]
-    >
+        ]>
         <div class="accordion-item h-100">
             <if(
                 input.group.name !== null ||
@@ -23,12 +22,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <button
                     class="accordion-button fw-bold p-2 flex-wrap"
                     type="button"
-                    data-bs-toggle=(input.contextInstanceId ? "" : "collapse")
-                    data-bs-target=("#content-" + input.group.id)
-                    aria-expanded="true"
-                    aria-controls=(input.group.id)
-                    title=(input.group.name)
-                >
+                    aria-expanded="true">
                     <if(input.contextInstanceId)>
                         <button
                             type="button"
@@ -37,8 +31,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             title=(
                                 state.translations["Translatable#Edit Group"]
                             )
-                            on-click("editGroup", input.group.id)
-                        >
+                            on-click("editGroup", input.group.id)>
                             <i class="fa-regular fa-pen-to-square"/>
                         </button>
                         <button
@@ -46,8 +39,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             class="btn btn-sm btn-light text-black me-3"
                             aria-label="Add Field"
                             title=(state.translations["Translatable#Add Field"])
-                            on-click("addField", input.group.id)
-                        >
+                            on-click("addField", input.group.id)>
                             <i class="fa-regular fa-square-plus"/>
                         </button>
                     </if>
@@ -58,14 +50,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <div
                 id=("content-" + input.group.id)
                 class="accordion-collapse collapse show"
-                data-bs-parent=("#" + input.group.id)
-            >
+                data-bs-parent=("#" + input.group.id)>
                 <div class="accordion-body">
                     <if(input.group.description)>
                         <div class="alert alert-light" role="alert">
                             $!{input.group.description}
                         </div>
                     </if>
+
                     <object-form-values-container
                         fieldLayout=component.getFieldLayout(input.group.id)
                         formValues=component.getFormValues(
@@ -74,8 +66,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         )
                         formLayout=component.getFormLayout()
                         contextInstanceId=input.contextInstanceId
-                        rows=state.rows
-                    />
+                        rows=state.rows/>
                 </div>
             </div>
         </div>

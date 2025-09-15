@@ -33,19 +33,41 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public viewLoaded(event: any): void {
-        const frameDocument = event.target.contentWindow.document;
+        const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
 
-        const frame = document.getElementById(this.state.frameId);
-        const frameHeight = frameDocument.documentElement.scrollHeight;
-        frame.style.height = frameHeight + 10 + 'px'; // 10 is for the top and bottom padding of 5px each
+        frame.addEventListener('load', () => {
+            let frameDocument: Document;
 
-        const bodyElements = frameDocument.documentElement.getElementsByTagName('body');
-        if (bodyElements?.length) {
-            bodyElements[0].addEventListener('click', (event) => {
-                BrowserUtil.handleLinkClicked(event);
+            try {
+                frameDocument = frame.contentWindow.document;
+            } catch (e) {
+                console.warn('iframe content not accessible due to cross-origin policy:', e);
+                return;
+            }
+
+            const frameHeight = frameDocument?.documentElement?.scrollHeight || 0;
+            frame.style.height = frameHeight + 10 + 'px';
+
+            const links = frameDocument.querySelectorAll('a[href]');
+            links.forEach((link: HTMLAnchorElement) => {
+                const href = link.href;
+                const isInternal = href?.startsWith(window.location.origin);
+
+                if (isInternal) {
+                    link.addEventListener('click', (event): void => {
+                        event.preventDefault();
+                        BrowserUtil.handleLinkClicked(event);
+                    });
+                } else {
+                    link.setAttribute('target', '_blank');
+                    link.setAttribute('rel', 'noopener noreferrer');
+                    link.addEventListener('click', (event): void => {
+                        event.preventDefault();
+                        window.open(href, '_blank', 'noopener,noreferrer');
+                    });
+                }
             });
-        }
-
+        });
     }
 }
 
