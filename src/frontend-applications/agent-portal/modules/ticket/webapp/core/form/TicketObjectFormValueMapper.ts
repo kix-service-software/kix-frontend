@@ -30,7 +30,6 @@ import { DynamicField } from '../../../../dynamic-fields/model/DynamicField';
 import { DynamicFieldObjectFormValue } from '../../../../object-forms/model/FormValues/DynamicFieldObjectFormValue';
 import { ArticleLoader } from '../context/ArticleLoader';
 import { Article } from '../../../model/Article';
-import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 
 export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
 
