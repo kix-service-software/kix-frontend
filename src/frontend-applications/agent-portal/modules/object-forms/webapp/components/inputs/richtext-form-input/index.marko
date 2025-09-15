@@ -7,18 +7,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div class="article-body input-style">
-    <if(state.prepared)>
-        <editor
-            resize
-            value=state.currentValue
+<if(state.prepared)>
+    <div class="article-body form-control p-0">
+        <${state.editorTemplate}
+            key=state.editorId
             on-focusLost("valueChanged")
             on-valueChanged("valueChanged")
-            noImages=state.noImages
-            key=state.editorId
             readOnly=state.readonly
+            value=state.currentValue
             useReadonlyStyle=state.readonly
-            externallyUpdated=state.externallyUpdated
-        />
-    </if>
-</div>
+            externallyUpdated=state.externallyUpdated/>
+    </div>
+</if>

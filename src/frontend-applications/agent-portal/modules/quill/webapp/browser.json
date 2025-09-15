@@ -1,0 +1,12 @@
+{
+    "dependencies": [
+        "./static/quill.js",
+        "./static/quill.better-table.min.js",
+        "./static/quill.better-table.css",
+        "./static/quill.css",
+        "./static/quill.mention.css",
+        "./static/quill.image-bubble-menu.css",
+        "require ./core/QuillUIModule",
+        "require ./components/quill-editor"
+    ]
+}

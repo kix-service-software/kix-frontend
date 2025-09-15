@@ -1,0 +1,15 @@
+{
+    "name": "kix-module-tiptap",
+    "extensions": {
+        "kix:modules": {
+            "kix-module-tiptap-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:configuration": {
+            "tiptap-editor-configuration": {
+                "module": "configuration.extension"
+            }
+        }
+    }
+}

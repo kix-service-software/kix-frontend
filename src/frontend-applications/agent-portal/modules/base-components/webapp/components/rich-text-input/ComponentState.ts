@@ -7,15 +7,18 @@
  * --
  */
 
+import { IdService } from '../../../../../model/IdService';
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
 
 export class ComponentState extends FormInputComponentState {
-
     public constructor(
         public currentValue: string = null,
-        public noImages: boolean = false
+        public noImages: boolean = false,
+        public prepared: boolean = false,
+        public editorId: string = IdService.generateDateBasedId('editor'),
+        public editorTemplate: any = null,
+        public externallyUpdated: boolean = false
     ) {
         super();
     }
-
 }

@@ -18,6 +18,7 @@ export class ComponentState extends AbstractComponentState {
         public editorId: string = IdService.generateDateBasedId('editor'),
         public prepared: boolean = false,
         public readonly: boolean = false,
+        public editorTemplate: any = null,
         public externallyUpdated: boolean = false,
     ) {
         super();
