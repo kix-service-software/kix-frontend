@@ -318,7 +318,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.34
+├─ @marko/compiler@5.39.36
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -358,7 +358,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/cors
 │  └─ licenseFile: node_modules/@types/cors/LICENSE
-├─ @types/d3-array@3.2.1
+├─ @types/d3-array@3.2.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/d3-array
@@ -518,7 +518,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/geojson
 │  └─ licenseFile: node_modules/@types/geojson/LICENSE
-├─ @types/node@22.18.1
+├─ @types/node@22.18.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1010,6 +1010,11 @@
 │  ├─ email: faeldt_kristian@cyberagent.co.jp
 │  ├─ path: node_modules/base64id
 │  └─ licenseFile: node_modules/base64id/LICENSE
+├─ baseline-browser-mapping@2.8.3
+│  ├─ licenses: Apache-2.0
+│  ├─ repository: https://github.com/web-platform-dx/baseline-browser-mapping
+│  ├─ path: node_modules/baseline-browser-mapping
+│  └─ licenseFile: node_modules/baseline-browser-mapping/LICENSE.txt
 ├─ big.js@5.2.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/MikeMcl/big.js
@@ -1078,7 +1083,7 @@
 │  ├─ email: andrey@sitnik.ru
 │  ├─ path: node_modules/browserslist
 │  └─ licenseFile: node_modules/babel-preset-env/node_modules/browserslist/LICENSE
-├─ browserslist@4.25.4
+├─ browserslist@4.26.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/browserslist/browserslist
 │  ├─ publisher: Andrey Sitnik
@@ -1703,7 +1708,7 @@
 │  ├─ url: https://github.com/qix-
 │  ├─ path: node_modules/debug
 │  └─ licenseFile: node_modules/@socket.io/cluster-adapter/node_modules/debug/LICENSE
-├─ debug@4.4.1
+├─ debug@4.4.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/debug-js/debug
 │  ├─ publisher: Josh Junon
@@ -2398,7 +2403,7 @@
 │  ├─ url: http://ljharb.codes
 │  ├─ path: node_modules/is-arguments
 │  └─ licenseFile: node_modules/is-arguments/LICENSE
-├─ is-arrayish@0.3.2
+├─ is-arrayish@0.3.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/qix-/node-is-arrayish
 │  ├─ publisher: Qix
@@ -2849,7 +2854,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.54
+├─ marko@5.37.56
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -3033,7 +3038,7 @@
 │  ├─ repository: https://github.com/jshttp/negotiator
 │  ├─ path: node_modules/negotiator
 │  └─ licenseFile: node_modules/negotiator/LICENSE
-├─ node-releases@2.0.20
+├─ node-releases@2.0.21
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/chicoxyzzy/node-releases
 │  ├─ publisher: Sergey Rubanov
@@ -3683,7 +3688,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/side-channel
 │  └─ licenseFile: node_modules/side-channel/LICENSE
-├─ simple-swizzle@0.2.2
+├─ simple-swizzle@0.2.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/qix-/node-simple-swizzle
 │  ├─ publisher: Qix
