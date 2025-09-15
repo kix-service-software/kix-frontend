@@ -7,15 +7,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.notification-info-container>
+<div class="notification-info-container">
    <if(state.notification)>
-      <div.notification-info-teaser>
+      <div class="notification-info-teaser">
          ${state.createTime} - ${state.notification.teaserText}
       </div>
-      <editor
-         value=(state.notification.fullText)
-         readOnly
-         useReadonlyStyle=false
-      />
+      <iframe
+         class="w-100 h-100 bg-white"
+         on-load("viewLoaded")
+         id=state.frameId>
+         <body/>
+      </iframe>
    </if>
 </div>

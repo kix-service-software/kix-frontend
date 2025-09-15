@@ -7,13 +7,15 @@
  * --
  */
 
+import { IdService } from '../../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 import { PortalNotification } from '../../../../../portal-notification/model/PortalNotification';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public notifications: Array<[string, PortalNotification[]]> = []
+        public notifications: Array<[string, PortalNotification[]]> = [],
+        public frameId: string = IdService.generateDateBasedId('notification-info')
     ) {
         super();
     }

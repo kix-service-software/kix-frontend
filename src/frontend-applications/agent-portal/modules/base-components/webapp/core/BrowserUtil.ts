@@ -486,17 +486,17 @@ export class BrowserUtil {
     }
 
     public static handleLinkClicked(event): void {
-
+        const linkElement = event?.target?.closest('a');
         // handle links but not if user requested a new browser tab (ctrl) or window (shift)
-        if (event?.target?.closest('a') && !event.ctrlKey && !event.shiftKey) {
+        if (linkElement && !event.ctrlKey && !event.shiftKey) {
             event.preventDefault();
             // "open" KIX internal links as KIX tabs
-            if (window.location.host === event.target.host) {
-                RoutingService.getInstance().routeToURL(true, event.target.href);
+            if (window.location.host === linkElement.host) {
+                RoutingService.getInstance().routeToURL(true, linkElement.href);
             }
             // else open new browser tab
             else {
-                window.open(event.target.href, '_blank', 'noopener, noreferrer');
+                window.open(linkElement.href, '_blank', 'noopener, noreferrer');
             }
         }
     }
