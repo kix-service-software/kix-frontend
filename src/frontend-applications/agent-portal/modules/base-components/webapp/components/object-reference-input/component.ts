@@ -9,7 +9,6 @@
 
 import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
-import { Context } from '../../../../../model/Context';
 import { DataType } from '../../../../../model/DataType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
@@ -22,7 +21,6 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { ObjectReferenceOptions } from '../../../../../modules/base-components/webapp/core/ObjectReferenceOptions';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
-import { ContextService } from '../../core/ContextService';
 import { EventService } from '../../core/EventService';
 import { FormEvent } from '../../core/FormEvent';
 import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
@@ -51,8 +49,6 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     // TODO: move to FormInstance/ValueHandler as universal solution for unique handling (possible values)
     private uniqueNodes: boolean;
 
-    private context: Context;
-
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -73,7 +69,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         this.setOptions();
         const treeHandler = new TreeHandler([], null, null, this.state.multiselect);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
@@ -269,9 +265,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             const keepSelectionOption = this.state.field?.options?.find(
                 (o) => o.option === ObjectReferenceOptions.KEEP_SELECTION
             );
+            const filterSelectionOption = this.state.field?.options?.find(
+                (o) => o.option === ObjectReferenceOptions.FILTER_SELECTION
+            );
 
             const keepSelection = keepSelectionOption ? keepSelectionOption.value : false;
-            const filterSelection = !keepSelection && !this.state.freeText;
+            const filterSelection = filterSelectionOption ? filterSelectionOption.value :
+                !keepSelection && !this.state.freeText;
             treeHandler.setTree(nodes, null, keepSelection, filterSelection);
         }
     }
@@ -449,7 +449,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
         const dfName = this.state.field?.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME)?.value;
         const property = this.state.field?.property === KIXObjectProperty.DYNAMIC_FIELDS
-            ? `${ KIXObjectProperty.DYNAMIC_FIELDS }.${ dfName }`
+            ? `${KIXObjectProperty.DYNAMIC_FIELDS}.${dfName}`
             : this.state.field?.property;
 
         const possibleValue = formInstance.getPossibleValue(property);

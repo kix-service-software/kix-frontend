@@ -13,6 +13,7 @@ import { ComponentInput } from './ComponentInput';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { LabelService } from '../../core/LabelService';
 import { ContextService } from '../../core/ContextService';
+import { Context } from '../../../../../model/Context';
 
 export class ObjectPropertyLabelComponent {
 
@@ -24,6 +25,7 @@ export class ObjectPropertyLabelComponent {
     private displayIcon: ObjectIcon | string;
     private propertyText: string;
     private displayText: string;
+    private context: Context;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -43,7 +45,7 @@ export class ObjectPropertyLabelComponent {
         }
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         this.prepareDisplayText();
         this.preparePropertyName();
     }
@@ -58,8 +60,7 @@ export class ObjectPropertyLabelComponent {
             this.state.propertyName = this.propertyText;
         } else if (this.property) {
             if (!this.object) {
-                const context = ContextService.getInstance().getActiveContext();
-                this.object = await context.getObject();
+                this.object = await this.context?.getObject();
             }
 
             let name = await LabelService.getInstance().getPropertyText(this.property, this.object.KIXObjectType);
@@ -76,8 +77,7 @@ export class ObjectPropertyLabelComponent {
             icon = this.displayIcon;
         } else if (this.property) {
             if (!this.object) {
-                const context = ContextService.getInstance().getActiveContext();
-                this.object = await context.getObject();
+                this.object = await this.context?.getObject();
             }
 
             const icons = await LabelService.getInstance().getIcons(this.object, this.property);
@@ -94,8 +94,7 @@ export class ObjectPropertyLabelComponent {
         }
 
         if (!this.object) {
-            const context = ContextService.getInstance().getActiveContext();
-            this.object = await context.getObject();
+            this.object = await this.context?.getObject();
         }
 
         if (this.object && this.property) {

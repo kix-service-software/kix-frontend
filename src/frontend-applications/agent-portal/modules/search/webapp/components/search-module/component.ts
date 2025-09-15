@@ -8,26 +8,18 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { SearchContext } from '../../core/SearchContext';
 import { ComponentState } from './ComponentState';
 
-class Component extends AbstractMarkoComponent<ComponentState> {
-
-    private context: SearchContext;
-    private subscriber: IEventSubscriber;
+class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext<SearchContext>();
-        const searchCache = this.context?.getSearchCache();
-
+        await super.onMount();
         await this.initContentWidgets();
-
         this.state.prepared = true;
     }
 

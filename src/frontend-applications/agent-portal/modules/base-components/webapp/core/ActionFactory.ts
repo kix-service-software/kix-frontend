@@ -16,14 +16,15 @@ import { SortUtil } from '../../../../model/SortUtil';
 import { IdService } from '../../../../model/IdService';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ActionGroup } from '../../model/ActionGroup';
-
+import { ContextService } from './ContextService';
 
 export class ActionFactory<T extends AbstractAction> {
 
     private actions: Map<string, new () => T> = new Map();
-    private actionInstances: Map<string, T> = new Map();
+    private actionInstances: Map<string, Map<string, T>> = new Map();
     private blacklist: string[] = [];
-    private widgetActions: Map<ConfigurationType | string, string[]> = new Map();
+    private widgetConfigurationActions: Map<ConfigurationType | string, string[]> = new Map();
+    private widgetActions: Map<string, Array<new () => T>> = new Map();
 
     private static INSTANCE: ActionFactory<AbstractAction> = null;
 
@@ -45,13 +46,35 @@ export class ActionFactory<T extends AbstractAction> {
 
         if (Array.isArray(configurationTypes) && configurationTypes.length) {
             configurationTypes.forEach((t) => {
-                if (!this.widgetActions.has(t)) {
-                    this.widgetActions.set(t, []);
+                if (!this.widgetConfigurationActions.has(t)) {
+                    this.widgetConfigurationActions.set(t, []);
                 }
 
-                this.widgetActions.get(t).push(actionId);
+                this.widgetConfigurationActions.get(t).push(actionId);
             });
         }
+    }
+
+    public registerActionForWidget(widgetId: string, action: new () => T): void {
+        if (!this.widgetActions.has(widgetId)) {
+            this.widgetActions.set(widgetId, []);
+        }
+
+        this.widgetActions.get(widgetId).push(action);
+    }
+
+    public async getActionsForWidget(widgetId: string): Promise<IAction[]> {
+        const actions: IAction[] = [];
+        const actionConstructors = this.widgetActions.get(widgetId);
+        if (actionConstructors?.length) {
+            for (const ac of actionConstructors) {
+                const action = await this.createActionInstance(ac);
+                if (action) {
+                    actions.push(action);
+                }
+            }
+        }
+        return actions;
     }
 
     public blacklistActions(actionsIds: string[]): void {
@@ -67,71 +90,90 @@ export class ActionFactory<T extends AbstractAction> {
             actionIds = [];
         }
 
+        const contextInstanceId = ContextService.getInstance().getActiveContext()?.instanceId;
+        if (!this.actionInstances.has(contextInstanceId)) {
+            this.actionInstances.set(contextInstanceId, new Map());
+        }
+
+        const actionMap: Map<string, IAction> = this.actionInstances.get(contextInstanceId);
         const actions = [];
         for (const actionId of actionIds) {
-            if (this.actionInstances.has(actionId)) {
-                actions.push(this.actionInstances.get(actionId));
+            if (actionMap.has(actionId)) {
+                actions.push(actionMap.get(actionId));
             } else if (this.actions.has(actionId) && !this.blacklist.some((a) => a === actionId)) {
                 const actionPrototype = this.actions.get(actionId);
-                let action: IAction = new actionPrototype();
-                action.id = actionId;
+                const action = await this.createActionInstance(actionPrototype, actionId, data);
 
-                let allowed = true;
-                if (action.permissions && action.permissions.length) {
-                    allowed = await AuthenticationSocketClient.getInstance().checkPermissions(action.permissions);
-                }
-
-                if (allowed) {
-                    await action.initAction();
-                    await action.setData(data);
+                if (action) {
                     actions.push(action);
-                } else {
-                    action = undefined;
                 }
-
             }
         }
 
         return actions;
     }
 
-    public registerActionInstance(actionId: string, action: T): void {
-        this.actionInstances.set(actionId, action);
+    public async createActionInstance(actionPrototype: new () => T, actionId?: string, data?: any): Promise<IAction> {
+        let action: IAction = new actionPrototype();
+        action.id = actionId || IdService.generateDateBasedId();
+
+        let allowed = true;
+        if (action.permissions && action.permissions.length) {
+            allowed = await AuthenticationSocketClient.getInstance().checkPermissions(action.permissions);
+        }
+
+        if (allowed) {
+            await action.initAction();
+            await action.setData(data);
+        } else {
+            action = undefined;
+        }
+
+        return action;
+    }
+
+    public registerActionInstance(actionId: string, action: T, contextInstanceId: string): void {
+        if (!this.actionInstances.has(contextInstanceId)) {
+            this.actionInstances.set(contextInstanceId, new Map());
+        }
+        this.actionInstances.get(contextInstanceId).set(actionId, action);
     }
 
     public async getActionsForType(type: ConfigurationType | string): Promise<AbstractAction[]> {
-        const actionIds = this.widgetActions.has(type)
-            ? this.widgetActions.get(type)
+        const actionIds = this.widgetConfigurationActions.has(type)
+            ? this.widgetConfigurationActions.get(type)
             : [];
         return this.generateActions(actionIds);
     }
 
     public static sortList<T extends ActionGroup | IAction>(list: T[]): T[] {
         return list.sort((a, b) => {
-            // objects wihout rank belong to the end and are not sorted by text
-            // check b first to keep given order e.g. if a also has no rank
-            if (typeof b.rank === 'undefined' || b.rank === null) {
-                return 0;
+            const aHasRank = !isNaN(Number(a.rank));
+            const bHasRank = !isNaN(Number(a.rank));
+
+            if (!aHasRank && !bHasRank) {
+                return SortUtil.compareString(a.text, b.text, SortOrder.UP);
             }
-            if (typeof a.rank === 'undefined' || a.rank === null) {
+
+            if (!aHasRank && bHasRank) {
+                return -1;
+            }
+
+            if (aHasRank && !bHasRank) {
                 return 1;
             }
 
-            // sort by given rank or text if equal
-            if (a.rank !== b.rank) {
-                return SortUtil.compareNumber(
-                    a.rank, b.rank, SortOrder.UP, false
-                );
-            } else {
+            if (a.rank === b.rank) {
                 return SortUtil.compareString(a.text, b.text, SortOrder.UP);
+            } else {
+                return SortUtil.compareNumber(a.rank, b.rank, SortOrder.UP, false);
             }
         });
     }
 
     public static async getActionList(actionList: IAction[]): Promise<Array<ActionGroup | IAction>> {
         const list: Array<ActionGroup | IAction> = [];
-        const actionPromises = [];
-        actionList.forEach((a) => actionPromises.push(a.canShow()));
+        const actionPromises = actionList.map((a) => a.canShow());
         const canShowResults = await Promise.all(actionPromises);
         for (const [index, canShow] of canShowResults.entries()) {
             if (!canShow) {

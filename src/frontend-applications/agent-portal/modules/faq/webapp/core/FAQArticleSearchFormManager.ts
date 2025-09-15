@@ -172,9 +172,11 @@ export class FAQArticleSearchFormManager extends SearchFormManager {
         return components;
     }
 
-    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, objectIds?: Array<string | number>, operator?: string
+    ): Promise<TreeNode[]> {
         const showInvalid = ContextService.getInstance().getActiveContext().getConfiguration()?.provideInvalidValues;
-        let nodes = await super.getTreeNodes(property);
+        let nodes = await super.getTreeNodes(property, objectIds, operator);
         if (!nodes || !nodes.length) {
             nodes = await FAQService.getInstance().getTreeNodes(property, showInvalid, showInvalid, objectIds);
         }

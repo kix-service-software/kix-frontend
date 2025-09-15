@@ -18,7 +18,6 @@ import { ContextEvents } from '../../../../../base-components/webapp/core/Contex
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
-import { HomeContext } from '../../../../../home/webapp/core';
 import { MobileShowEvent } from '../../../../model/MobileShowEvent';
 import { ComponentState } from './ComponentState';
 import { ContextTab } from './ContextTab';
@@ -46,8 +45,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private initContextEventListener(): void {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('tabbar-menu-context-event'),
-            eventPublished: async (data: Context, eventId: string): Promise<void> => {
-                if (eventId === ContextEvents.CONTEXT_CHANGED) {
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
+                if (eventId === ContextEvents.CONTEXT_CHANGED || eventId === ContextEvents.CONTEXT_CREATED) {
                     await this.addEntry(data, true);
                 } else if (eventId === ContextEvents.CONTEXT_REMOVED) {
                     this.removeEntry(data.instanceId);
@@ -73,6 +72,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     const context = ContextService.getInstance().getContext(data.instanceId);
                     tab.displayText = await context.getDisplayText();
                     (this as any).setStateDirty('contextTabs');
+                } else if (eventId === ApplicationEvent.REFRESH_CONTENT) {
+                    const tab = this.state.contextTabs?.find((t) => t.contextInstanceId === data);
+                    if (tab) {
+                        tab.refresh = false;
+                        (this as any).setStateDirty('contextTabs');
+                    }
                 }
 
             }
@@ -81,12 +86,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_ICON_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_REORDERED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvent.DISPLAY_VALUE_UPDATED, this.subscriber);
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, this.subscriber);
 
     }
 
@@ -95,12 +100,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_ICON_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REORDERED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvent.DISPLAY_VALUE_UPDATED, this.subscriber);
+        EventService.getInstance().unsubscribe(ApplicationEvent.REFRESH_CONTENT, this.subscriber);
     }
 
     private toggleActiveEntry(): void {
@@ -142,20 +147,27 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public tabClicked(tab: ContextTab, event: any): void {
+    public async tabClicked(tab: ContextTab, event: any): Promise<void> {
         if (!tab.active && !this.state.blocked) {
-            tab.refresh = false;
-            ContextService.getInstance().setContextByInstanceId(tab.contextInstanceId);
+            await ContextService.getInstance().setContextByInstanceId(tab.contextInstanceId);
         }
+    }
+
+    public async refreshTab(tab: ContextTab, event: any): Promise<void> {
+        await this.tabClicked(tab, event);
+        tab.refresh = false;
+        setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT, tab.contextInstanceId);
+        }, 500);
     }
 
     public canClose(): boolean {
         const instances = ContextService.getInstance().getContextInstances();
-        let isHomeContext: boolean = false;
+        let canRemove: boolean = false;
         if (instances.length === 1) {
-            isHomeContext = instances[0].contextId === HomeContext.CONTEXT_ID;
+            canRemove = ContextService.getInstance().canRemove(instances[0].instanceId);
         }
-        return instances.length > 1 || !isHomeContext;
+        return instances.length > 1 || canRemove;
     }
 
     public async closeTabWithMMB(tab: ContextTab, event: any): Promise<void> {
@@ -228,12 +240,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 e.refresh = true;
             }
         });
-        (this as any).setStateDirty('contextTabs');
-    }
-
-    public refreshTab(tab: ContextTab): void {
-        tab.refresh = false;
-        EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT);
         (this as any).setStateDirty('contextTabs');
     }
 

@@ -26,6 +26,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const option = this.state.field?.options.find((o) => o.option === FormFieldOptions.OBJECT_TYPE);
         if (option && option.value) {
             const searchDefinition = SearchService.getInstance().getSearchDefinition(option.value);
@@ -62,8 +63,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<FilterCriteria[]>(this.state.field?.instanceId);
         if (this.state.manager && value && Array.isArray(value.value)) {
             for (const criteria of value.value) {

@@ -26,7 +26,7 @@ class TreeComponent {
         this.update(input);
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
         if (treeHandler) {
             treeHandler.registerListener(

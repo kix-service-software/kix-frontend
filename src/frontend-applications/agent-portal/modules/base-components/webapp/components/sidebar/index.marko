@@ -7,59 +7,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<if(
-    Array.isArray(state.sidebars) &&
-    state.sidebars.length &&
-    (!state.isMobile || state.showMobile)
-)>
-    <div.sidebar
-        id=(state.isLeft ? "sidebar-left" : "sidebar-right")
-        class={
-            "sidebars-shown": state.showSidebarArea || state.isMobile
-        }>
-        <if(!state.isMobile)>
-            <div.sidebar-toggle
-                on-click("toggleSidebarArea")
-                title=(
-                    state.showSidebarArea
-                        ? state.translations["Translatable#Close Sidebars"]
-                        : state.translations["Translatable#Open Sidebars"]
-                )>
-                <if(state.isLeft)>
-                    <if(state.showSidebarArea)>
-                        <translation-string pattern="Translatable#Hide"/>
-                    </if>
-                    <i class=(
-                        state.showSidebarArea
-                            ? "fas fa-angle-double-left"
-                            : "fas fa-angle-double-right"
-                    )/>
-                </if>
-                <else>
-                    <i class=(
-                        state.showSidebarArea
-                            ? "fas fa-angle-double-right"
-                            : "fas fa-angle-double-left"
-                    )/>
-                    <if(state.showSidebarArea)>
-                        <translation-string pattern="Translatable#Hide"/>
-                    </if>
-                </else>
-            </div>
+<for|context| of=state.contextList>
+    <div
+        key="sidebar-" + context.instanceId + (input.isLeft ? "-left" : "")
+        id="sidebar-" + context.instanceId + (input.isLeft ? "-right" : "")
+        class=[
+            "sidebar",
+            {
+                "d-none": !component.isActiveContext(context.instanceId),
+                "sidebars-shown": state.showSidebarArea || state.isMobile,
+            },
+        ]>
+        <if(state.reloadSidebarId !== context.instanceId)>
+            <${component.getSidebarTemplate()} isLeft=input.isLeft/>
         </if>
-        <div.sidebar-widgets-container>
-            <if(state.showSidebarArea || state.isMobile)>
-                <for|sidebar| of=state.sidebars>
-                    <div.sidebar-widget-container key=("sidebar-" + sidebar[2])>
-                        <${sidebar[1]} ...{
-                            instanceId: sidebar[0]
-                        }/>
-                    </div>
-                </for>
-            </if>
-        </div>
     </div>
-    <if(state.isSmall && !state.isMobile)>
-        <div.sidebar-blocker/>
-    </if>
-</if>
+</for>

@@ -18,6 +18,7 @@ export class ConfigItemVersionCompareAction extends AbstractAction<Table> {
     public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Compare';
         this.icon = 'kix-icon-comparison-version';
     }
@@ -41,14 +42,12 @@ export class ConfigItemVersionCompareAction extends AbstractAction<Table> {
     }
 
     private async openDialog(versions: Version[]): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-
         const additionalInformation: Array<[string, any]> = [
             ['VERSION_IDS', versions.map((v) => v.VersionID)]
         ];
 
         await ContextService.getInstance().setActiveContext(
-            CompareConfigItemVersionContext.CONTEXT_ID, context?.getObjectId(), null, additionalInformation
+            CompareConfigItemVersionContext.CONTEXT_ID, this.context?.getObjectId(), null, additionalInformation
         );
     }
 }

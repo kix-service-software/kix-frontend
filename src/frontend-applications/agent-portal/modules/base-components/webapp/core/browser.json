@@ -108,7 +108,6 @@
         "require ./PreviousTabData",
         "require ./PropertyOperator",
         "require ./PropertyOperatorUtil",
-        "require ./RefreshToastSettings",
         "require ./RegExFormFieldValidator",
         "require ./RequiredFormFieldValidator",
         "require ./RoutingService",

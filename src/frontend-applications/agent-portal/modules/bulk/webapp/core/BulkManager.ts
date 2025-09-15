@@ -34,6 +34,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     public init(): void {
         super.init();
+        this.reset(false, true);
         this.bulkRun = false;
     }
 
@@ -147,11 +148,15 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     public reset(notify?: boolean, force: boolean = false): void | boolean {
         if (force) {
-            super.reset();
+            super.reset(notify);
             return;
         }
-        if (ContextService.getInstance().hasContextInstance(BulkDialogContext.CONTEXT_ID)
-            && this.values.length > 1) return true;
+        if (
+            ContextService.getInstance().hasContextInstance(BulkDialogContext.CONTEXT_ID)
+            && this.values.length > 1
+        ) {
+            return true;
+        }
         super.reset(notify);
     }
 

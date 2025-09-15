@@ -13,13 +13,10 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ObjectInformationCardService } from '../../core/ObjectInformationCardService';
 import { InformationConfiguration, InformationRowConfiguration, ObjectInformationCardConfiguration } from '../object-information-card-widget/ObjectInformationCardConfiguration';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-import { ContextService } from '../../core/ContextService';
-import { Context } from '../../../../../model/Context';
 import { KIXModulesService } from '../../core/KIXModulesService';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
     private config: ObjectInformationCardConfiguration;
     private widgetInstanceId: string;
 
@@ -36,7 +33,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         this.initWidget();
     }
 

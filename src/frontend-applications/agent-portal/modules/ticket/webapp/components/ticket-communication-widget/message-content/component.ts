@@ -12,7 +12,6 @@ import { Attachment } from '../../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IContextListener } from '../../../../../base-components/webapp/core/IContextListener';
@@ -24,9 +23,8 @@ import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { TicketDetailsContext, TicketService } from '../../../core';
 import { ComponentState } from './ComponentState';
 
-export class Component extends AbstractMarkoComponent<ComponentState> {
+export class Component extends AbstractMarkoComponent<ComponentState, TicketDetailsContext> {
 
-    private context: TicketDetailsContext;
     private eventSubscriber: IEventSubscriber;
     private contextListener: IContextListener;
     private contextListenerId: string;
@@ -55,7 +53,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext<TicketDetailsContext>();
+        await super.onMount();
 
         this.state.expanded = this.getArticleToggleState();
         this.state.show = this.state.expanded;
@@ -91,7 +89,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             },
             additionalInformationChanged: (): void => { return; }
         };
-        this.context.registerListener(this.contextListenerId, this.contextListener);
+        this.context?.registerListener(this.contextListenerId, this.contextListener);
     }
 
     public onDestroy(): void {
@@ -171,11 +169,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
                 if (this.state.expanded) {
                     this.loadDetailedArticle();
+                } else {
+                    await this.prepareActions();
                 }
 
                 this.observer?.disconnect();
                 this.state.show = true;
             });
+        } else if (this.state.article) {
+            await this.prepareActions();
         }
 
         this.resizeHandling();
@@ -190,6 +192,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         } else {
             this.prepareArticleContent(allowSetSeen);
         }
+
     }
 
     public scrollToArticle(): void {
@@ -315,7 +318,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.loadingContent = false;
         this.state.showContent = true;
 
-        this.state.actions = await this.context?.articleLoader?.prepareArticleActions(this.detailedArticle);
+        await this.prepareActions(this.detailedArticle);
+    }
+
+    private async prepareActions(article: Article = this.state.article): Promise<void> {
+        this.state.actions = await this.context?.articleLoader?.prepareArticleActions(article);
     }
 
     private saveArticleToggleState(): void {

@@ -17,6 +17,7 @@ import { FormService } from '../modules/base-components/webapp/core/FormService'
 import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectFormEvent } from '../modules/object-forms/model/ObjectFormEvent';
+import { ObjectFormEventData } from '../modules/object-forms/model/ObjectFormEventData';
 import { ObjectFormHandler } from '../modules/object-forms/webapp/core/ObjectFormHandler';
 import { ObjectFormRegistry } from '../modules/object-forms/webapp/core/ObjectFormRegistry';
 import { FormConfiguration } from './configuration/FormConfiguration';
@@ -47,10 +48,10 @@ export class ContextFormManager {
     public constructor(protected context?: Context) {
         this.formSubscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
+            eventPublished: (data: ObjectFormEventData | any, eventId: string): void => {
                 if (eventId === FormEvent.VALUES_CHANGED) {
                     this.handleValueChanged(data.formInstance);
-                } else {
+                } else if ((data as ObjectFormEventData).contextInstanceId === this.context?.instanceId) {
                     this.handleValueChanged();
                 }
             }
@@ -102,7 +103,9 @@ export class ContextFormManager {
 
             await this.createObjectHandlerPromise;
 
-            EventService.getInstance().publish(ObjectFormEvent.OBJECT_FORM_HANDLER_CHANGED, this.context);
+            EventService.getInstance().publish(
+                ObjectFormEvent.OBJECT_FORM_HANDLER_CHANGED, new ObjectFormEventData(this.context.instanceId)
+            );
 
             this.createObjectHandlerPromise = null;
         }
@@ -116,7 +119,7 @@ export class ContextFormManager {
         const start = Date.now();
 
         this.handler = new ObjectFormHandler(this.context);
-        this.handler.loadForm(true);
+        await this.handler.loadForm(true);
 
         const end = Date.now();
         console.debug(`ObjectFormHandler created: ${(end - start)}ms`);

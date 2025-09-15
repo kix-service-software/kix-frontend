@@ -8,8 +8,9 @@
  */
 
 import { FormPageConfiguration } from '../../../../../../model/configuration/FormPageConfiguration';
+import { AbstractComponentState } from '../../../core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public activePageIndex: number = 0,
@@ -18,6 +19,8 @@ export class ComponentState {
         public prepared: boolean = false,
         public activePageTitle: string = '',
         public pageChanged: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

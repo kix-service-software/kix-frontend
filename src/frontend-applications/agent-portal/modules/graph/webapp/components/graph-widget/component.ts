@@ -8,7 +8,6 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { GraphContext } from '../../core/GraphContext';
 import { ComponentState } from './ComponentState';
 import { GraphInstance } from '../../core/GraphInstance';
@@ -24,9 +23,8 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 
 declare let d3;
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractMarkoComponent<ComponentState, GraphContext> {
 
-    private context: GraphContext;
     private d3Graph: GraphInstance;
     private subscriber: IEventSubscriber;
 
@@ -39,11 +37,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
         await this.loadGraph();
 
-        this.context.registerListener('graph-widget', {
+        this.context?.registerListener('graph-widget', {
             additionalInformationChanged: () => null,
             filteredObjectListChanged: () => null,
             objectChanged: (id: string, graphInstance: GraphInstance) => {

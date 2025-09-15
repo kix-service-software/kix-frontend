@@ -39,9 +39,11 @@ export class TicketBulkManager extends BulkManager {
 
     public reset(notify?: boolean, force: boolean = false): void {
         const skipAddingEmptyValues = super.reset(notify, force);
-        if (skipAddingEmptyValues) return;
-        this.values.push(new ObjectPropertyValue(TicketProperty.QUEUE_ID, PropertyOperator.CHANGE, null));
-        this.values.push(new ObjectPropertyValue(TicketProperty.TYPE_ID, PropertyOperator.CHANGE, null));
+
+        if (skipAddingEmptyValues) {
+            return;
+        }
+
         if (notify || typeof notify === 'undefined') {
             this.notifyListeners();
         }
@@ -167,7 +169,7 @@ export class TicketBulkManager extends BulkManager {
         return property === TicketProperty.PENDING_TIME;
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
+    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
         switch (property) {
             case TicketProperty.ORGANISATION_ID:
@@ -208,7 +210,7 @@ export class TicketBulkManager extends BulkManager {
                 nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy);
                 break;
             default:
-                nodes = await TicketService.getInstance().getTreeNodes(property);
+                nodes = await TicketService.getInstance().getTreeNodes(property, null, null, objectIds);
                 for (const node of nodes) {
                     node.label = await TranslationService.translate(node.label);
                 }
@@ -474,5 +476,14 @@ export class TicketBulkManager extends BulkManager {
         loadingOptions.query = query;
 
         return loadingOptions;
+    }
+    public setDefaultValues(values?: ObjectPropertyValue[]): void {
+        if (!values?.length) {
+            values = [
+                new ObjectPropertyValue(TicketProperty.QUEUE_ID, PropertyOperator.CHANGE, null),
+                new ObjectPropertyValue(TicketProperty.TYPE_ID, PropertyOperator.CHANGE, null)
+            ];
+        }
+        super.setDefaultValues(values);
     }
 }

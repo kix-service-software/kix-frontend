@@ -10,7 +10,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
@@ -19,34 +18,39 @@ import { KIXModulesService } from '../../../../../modules/base-components/webapp
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
-import { Context } from '../../../../../model/Context';
+import { ContextService } from '../../core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private subscriber: IEventSubscriber;
-    private context: Context;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         this.subscriber = {
             eventSubscriberId: 'object-details',
-            eventPublished: (data: any, eventId: string): void => {
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
                 if (eventId === ApplicationEvent.OBJECT_UPDATED) {
-                    if (data.objectType === this.context.descriptor.kixObjectTypes[0]) {
-                        this.prepareWidget();
-                        this.prepareActions();
+                    this.state.prepared = false;
+                    const activeContext = ContextService.getInstance().getActiveContext();
+                    const isContext = activeContext?.instanceId === this.context?.instanceId;
+                    const isObjectType = data.objectType === this.context?.descriptor?.kixObjectTypes[0];
+                    if (isContext && isObjectType) {
+                        await this.prepareWidget();
+                        await this.prepareActions();
                     }
+                    this.state.prepared = true;
                 }
             }
         };
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
         EventService.getInstance().subscribe(ApplicationEvent.CONFIGURATIONS_RELOADED, this.subscriber);
 
-        this.update();
+        await this.update();
+        this.state.prepared = true;
     }
 
     private async update(): Promise<void> {

@@ -7,9 +7,10 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { Label } from '../../../../base-components/webapp/core/Label';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public cellLabels: Label[] = [];
 }

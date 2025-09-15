@@ -19,6 +19,7 @@ export class FAQArticleCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New FAQ';
         this.icon = 'kix-icon-new-faq';
     }

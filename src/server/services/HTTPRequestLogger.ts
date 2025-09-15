@@ -43,22 +43,27 @@ export class HTTPRequestLogger {
         return entry.id;
     }
 
-    public stop(id: string, response?: AxiosResponse | AxiosError): void {
+    public stop(id: string, response?: any): void {
         if (id && this.requests?.has(id)) {
             const entry = this.requests.get(id);
 
             const end = Date.now();
             const duration = end - entry.startTime;
 
+            if (response.isAxiosError) {
+                response = response.response;
+            }
+
             const stringLength = JSON.stringify((response as AxiosResponse)?.data)?.length * 2;
             const size = (stringLength / 1024)?.toFixed(3);
-            const status = (response as AxiosResponse)?.status || (response as AxiosError).response?.status;
+            const status = (response as AxiosResponse)?.status || (response as AxiosError)?.response?.status;
             const backendDurationTotal = Math.ceil((response as AxiosResponse)?.headers['x-runtime'] * 1000);
             const backendDurationApp = Math.ceil((response as AxiosResponse)?.headers['kix-request-duration'] * 1000);
             const backendPID = (response as AxiosResponse)?.headers['kix-worker-pid'];
+            const backendTimeTillExecution = Math.ceil((response as AxiosResponse)?.headers['kix-request-tte'] * 1000);
 
             const pid = process.pid;
-            this.logger.info(`${pid}\t${backendPID}\t${entry.clientId}\t${duration}\t${backendDurationTotal}\t${backendDurationApp}\t${entry.method}\t${status}\t${size}\t${entry.resource}\t${entry.parameter}`);
+            this.logger.info(`${pid}\t${backendPID}\t${entry.clientId}\t${entry.startTime}\t${duration}\t${backendTimeTillExecution}\t${backendDurationTotal}\t${backendDurationApp}\t${entry.method}\t${status}\t${size}\t${entry.resource}\t${entry.parameter}`);
 
             const durationFactor: number = process.env['REQUEST_DURATION_WARNING_FACTOR'] ? Number(process.env['REQUEST_DURATION_WARNING_FACTOR']) : 4;
             if (duration >= backendDurationTotal * durationFactor) {
@@ -67,6 +72,7 @@ export class HTTPRequestLogger {
                     PID: ${pid}
                     BE Worker PID: ${backendPID}
                     Duration: ${duration} ms
+                    BE TTE: ${backendTimeTillExecution} ms
                     BE Duration Total: ${backendDurationTotal} ms
                     BE Duration App: ${backendDurationApp} ms
                     Method: ${entry.method}
@@ -103,7 +109,7 @@ export class HTTPRequestLogger {
                         const minutes = date.getMinutes().toString().padStart(2, '0');
                         const seconds = date.getSeconds().toString().padStart(2, '0');
 
-                        return `${day} - ${month} - ${year} ${hours}: ${minutes}: ${seconds}`;
+                        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
                     }
                 }),
                 winston.format.printf((info) => {

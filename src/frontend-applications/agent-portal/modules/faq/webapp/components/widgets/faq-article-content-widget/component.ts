@@ -31,12 +31,12 @@ import { EventService } from '../../../../../base-components/webapp/core/EventSe
 import { ImageViewerEvent } from '../../../../../agent-portal/model/ImageViewerEvent';
 import { ImageViewerEventData } from '../../../../../agent-portal/model/ImageViewerEventData';
 import { ApplicationEvent } from '../../../../../base-components/webapp/core/ApplicationEvent';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public eventSubscriberId: string = 'FAQContentComponent';
 
-    private state: ComponentState;
     private contextListenerId: string = null;
 
     public stars: Array<string | ObjectIcon> = [];
@@ -53,7 +53,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Symptom', 'Translatable#Cause', 'Translatable#Solution', 'Translatable#Comment',
             'Translatable#Number of ratings'
@@ -61,15 +61,13 @@ class Component {
 
         WidgetService.getInstance().setWidgetType('faq-article-group', WidgetType.GROUP);
 
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             objectChanged: (id: string | number, faqArticle: FAQArticle, type: KIXObjectType | string) => {
                 if (type === KIXObjectType.FAQ_ARTICLE) {
-                    this.initWidget(context, faqArticle);
+                    this.state.faqArticle = faqArticle;
+                    this.initWidget();
                 }
             },
             sidebarRightToggled: (): void => { return; },
@@ -80,22 +78,57 @@ class Component {
             additionalInformationChanged: (): void => { return; }
         });
 
-        await this.initWidget(context, await context.getObject<FAQArticle>());
-        this.state.loading = false;
+        this.state.faqArticle = await this.context.getObject<FAQArticle>();
+        setTimeout(() => this.initWidget(), 200);
     }
 
-    private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
-        this.state.faqArticle = faqArticle;
+    private async initWidget(): Promise<void> {
+        if (this.state.faqArticle?.Attachments) {
+            this.state.attachments = this.state.faqArticle?.Attachments.filter((a) => a.Disposition !== 'inline');
+            const inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(this.state.faqArticle);
 
-        if (faqArticle?.Attachments) {
-            this.state.attachments = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
-            this.state.inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(faqArticle);
+            const field1Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field1, inlineContent);
+            this.prepareFrame('field1-frame', field1Value);
+
+            const field2Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field2, inlineContent);
+            this.prepareFrame('field2-frame', field2Value);
+
+            const field3Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field3, inlineContent);
+            this.prepareFrame('field3-frame', field3Value);
+
+            const field6Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field6, inlineContent);
+            this.prepareFrame('field6-frame', field6Value);
+
             this.prepareImages();
 
-            this.stars = await LabelService.getInstance().getIcons(faqArticle, FAQArticleProperty.RATING);
-            this.rating = BrowserUtil.round(faqArticle.Rating);
+            this.stars = await LabelService.getInstance().getIcons(this.state.faqArticle, FAQArticleProperty.RATING);
+            this.rating = BrowserUtil.round(this.state.faqArticle?.Rating);
             this.prepareActions();
         }
+    }
+
+    private prepareFrame(frameId: string, value: string): void {
+        const iframe: any = document.getElementById(frameId);
+        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+        iframeDocument.body.innerHTML = value;
+        BrowserUtil.cleanupHTML(iframeDocument);
+        BrowserUtil.appendKIXStyling(iframeDocument);
+    }
+
+    public viewLoaded(frameId: string, event: any): void {
+        const frameDocument = event.target.contentWindow.document;
+
+        const frame = document.getElementById(frameId);
+        const frameHeight = frameDocument.documentElement.scrollHeight;
+        frame.style.height = frameHeight + 10 + 'px'; // 10 is for the top and bottom padding of 5px each
+
+        const bodyElements = frameDocument.documentElement.getElementsByTagName('body');
+        if (bodyElements?.length) {
+            bodyElements[0].addEventListener('click', (event) => {
+                BrowserUtil.handleLinkClicked(event);
+            });
+        }
+
     }
 
     private async prepareImages(): Promise<void> {

@@ -20,6 +20,7 @@ export class NotificationCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Notification';
         this.icon = 'kix-icon-new-gear';
     }

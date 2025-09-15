@@ -12,7 +12,6 @@ import { FormInputComponent } from '../../../../../modules/base-components/webap
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { DefaultSelectInputFormOption } from '../../../../../model/configuration/DefaultSelectInputFormOption';
 import { TreeNode, TreeService, TreeHandler } from '../../core/tree';
-import { ContextService } from '../../core/ContextService';
 import { EventService } from '../../core/EventService';
 import { FormEvent } from '../../core/FormEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
@@ -45,6 +44,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         if (this.state.field && this.state.field?.options && !!this.state.field?.options) {
             const asMultiselectOption = this.state.field?.options.find(
                 (o) => o.option === DefaultSelectInputFormOption.MULTI
@@ -102,48 +102,53 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async load(filterSelection?: boolean): Promise<void> {
-        let nodes = [];
+        let nodes: TreeNode[] = [];
         if (this.state.field && this.state.field?.options && !!this.state.field?.options) {
-            const translatableOption = this.state.field?.options.find(
-                (o) => o.option === DefaultSelectInputFormOption.TRANSLATABLE
-            );
-            const translatable = !translatableOption || Boolean(translatableOption.value);
-            const nodesOption = this.state.field?.options.find(
-                (o) => o.option === DefaultSelectInputFormOption.NODES
-            );
-            nodes = await this.getNodes(nodesOption ? nodesOption.value : [], translatable);
-
-            if (this.uniqueNodes) {
-                nodes = await this.handleUnique(nodes);
-            }
-
-            const defaultValue = this.state.field.defaultValue?.value;
-            if (nodes?.length && defaultValue) {
-                if (Array.isArray(defaultValue) && defaultValue.length) {
-                    defaultValue.forEach((value) => {
-                        const defaultValueNode = nodes.find((node) => node.id === defaultValue);
-                        if (defaultValueNode) {
-                            defaultValueNode.selected = true;
-                        }
-                    });
-                } else {
-                    const defaultValueNode = nodes.find((node) => node.id === defaultValue);
-                    if (defaultValueNode) {
-                        defaultValueNode.selected = true;
-                    }
-                }
-            }
 
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
             if (treeHandler) {
+
+                const translatableOption = this.state.field?.options.find(
+                    (o) => o.option === DefaultSelectInputFormOption.TRANSLATABLE
+                );
+                const translatable = !translatableOption || Boolean(translatableOption.value);
+                const nodesOption = this.state.field?.options.find(
+                    (o) => o.option === DefaultSelectInputFormOption.NODES
+                );
+                nodes = await this.getNodes(nodesOption ? nodesOption.value : [], translatable);
+
+                if (this.uniqueNodes) {
+                    nodes = await this.handleUnique(nodes);
+                }
+
+                const currentNodes = treeHandler.getSelectedNodes();
+                // use current if still allowed else use default
+                if (!currentNodes?.some((cn) => nodes.some((n) => n.id === cn.id))) {
+                    const defaultValue = this.state.field.defaultValue?.value;
+                    if (nodes?.length && defaultValue) {
+                        if (Array.isArray(defaultValue) && defaultValue.length) {
+                            defaultValue.forEach((value) => {
+                                const defaultValueNode = nodes.find((node) => node.id === defaultValue);
+                                if (defaultValueNode) {
+                                    defaultValueNode.selected = true;
+                                }
+                            });
+                        } else {
+                            const defaultValueNode = nodes.find((node) => node.id === defaultValue);
+                            if (defaultValueNode) {
+                                defaultValueNode.selected = true;
+                            }
+                        }
+                    }
+                }
+
                 treeHandler.setTree(nodes, null, true, filterSelection);
             }
         }
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string | number | string[] | number[]>(
             this.state.field?.instanceId
         );
@@ -185,10 +190,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     // TODO: move to FormInstance/ValueHandler as universal solution for unique handling (possible values)
     private async handleUnique(nodes: TreeNode[]): Promise<TreeNode[]> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (formInstance) {
-            const fieldList = await formInstance.getFields(this.state.field);
+            const fieldList = formInstance.getFields(this.state.field);
             let usedValues = [];
             fieldList.forEach((f) => {
                 if (f.property === this.state.field?.property && f.instanceId !== this.state.field?.instanceId) {

@@ -16,6 +16,8 @@ import { BrowserUtil } from './BrowserUtil';
 import { AdditionalRoutingHandler } from './AdditionalRoutingHandler';
 import { ClientStorageService } from './ClientStorageService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { AgentService } from '../../../user/webapp/core/AgentService';
+import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 
 export class RoutingService {
 
@@ -57,7 +59,7 @@ export class RoutingService {
             if (contextList.length) {
                 await ContextService.getInstance().setContextByInstanceId(contextList[0].instanceId);
             } else {
-                this.setHomeContextIfNeeded(defaultContextId);
+                await this.setHomeContextIfNeeded(defaultContextId);
             }
         }
     }
@@ -82,12 +84,30 @@ export class RoutingService {
         }
     }
 
-    private setHomeContextIfNeeded(defaultContextId: string = 'home'): boolean {
+    private async setHomeContextIfNeeded(defaultContextId: string = 'home'): Promise<boolean> {
         let routed: boolean = false;
         const contextList = ContextService.getInstance().getContextInstances();
         if (Array.isArray(contextList) && !contextList.length) {
-            ContextService.getInstance().setActiveContext(defaultContextId);
-            routed = true;
+            const url = await AgentService.getInstance().getUserPreference(PersonalSettingsProperty.INITIAL_SITE_URL);
+            if (url?.Value) {
+                const urlParts = url.Value?.split('?');
+                if (urlParts.length) {
+                    const path = urlParts[0].split('/');
+                    const urlParams = new URLSearchParams(urlParts.length > 1 ? urlParts[1] : '');
+                    const context = await ContextService.getInstance().setContextByUrl(
+                        path[0], path[1], urlParams, false
+                    );
+                    if (context) {
+                        ContextService.getInstance().DEFAULT_FALLBACK_CONTEXT_URL = url?.Value;
+                        routed = true;
+                    }
+                }
+            }
+
+            if (!routed) {
+                ContextService.getInstance().setActiveContext(defaultContextId);
+                routed = true;
+            }
         }
 
         return routed;
@@ -141,35 +161,34 @@ export class RoutingService {
     private async handleURLParams(
         params: URLSearchParams, contextId?: string, history: boolean = true
     ): Promise<boolean> {
-        const result = await new Promise<boolean>(async (resolve, reject) => {
-            if (params.has('new')) {
+        let result = false;
 
-                const contextDescriptors = ContextService.getInstance().getContextDescriptors(
-                    ContextMode.CREATE
-                );
+        if (params.has('new')) {
 
-                const contextDescriptor = contextDescriptors.find(
-                    (c) => c.urlPaths.some((url) => url === contextId)
-                );
+            const contextDescriptors = ContextService.getInstance().getContextDescriptors(
+                ContextMode.CREATE
+            );
 
-                await ContextService.getInstance().setActiveContext(
-                    contextDescriptor?.contextId, null, params, [], history
-                );
+            const contextDescriptor = contextDescriptors.find(
+                (c) => c.urlPaths.some((url) => url === contextId)
+            );
 
-                resolve(true);
-            } else if (params.has('actionId')) {
-                await ContextService.getInstance().setActiveContext(contextId);
-                const actionId = params.get('actionId');
-                const data = params.get('data');
-                const actions = await ActionFactory.getInstance().generateActions([actionId], data);
-                if (actions && actions.length) {
-                    actions[0].run(null);
-                }
-                resolve(true);
-            } else {
-                resolve(false);
+            await ContextService.getInstance().setActiveContext(
+                contextDescriptor?.contextId, null, params, [], history
+            );
+
+            result = true;
+        } else if (params.has('actionId')) {
+            await ContextService.getInstance().setActiveContext(contextId);
+            const actionId = params.get('actionId');
+            const data = params.get('data');
+            const actions = await ActionFactory.getInstance().generateActions([actionId], data);
+            if (actions && actions.length) {
+                actions[0].run(null);
             }
-        });
+            result = true;
+        }
+
         return result;
     }
 

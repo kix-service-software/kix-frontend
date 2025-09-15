@@ -9,10 +9,9 @@
 
 import { ComponentState } from './ComponentState';
 import { ArticleReceiver } from '../../../model/ArticleReceiver';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();

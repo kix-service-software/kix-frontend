@@ -56,8 +56,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     private async prepareSort(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
         const type = typeValue && typeValue.value ? typeValue.value : null;
         const jobFormManager: AbstractJobFormManager = JobFormService.getInstance().getJobFormManager(type);
@@ -88,8 +87,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const value = formInstance.getFormFieldValue<any>(this.state.field?.instanceId);
         if (value && value.value) {

@@ -8,16 +8,14 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { FAQDetailsContext } from '../../../core/context/FAQDetailsContext';
 import { FAQArticle } from '../../../../model/FAQArticle';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../../modules/base-components/webapp/core/ActionFactory';
 import { TableFactoryService } from '../../../../../table/webapp/core/factory/TableFactoryService';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -28,12 +26,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        context.registerListener('faq-history-widget', {
+        this.context?.registerListener('faq-history-widget', {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
@@ -47,7 +43,7 @@ class Component {
             additionalInformationChanged: (): void => { return; }
         });
 
-        await this.initWidget(await context.getObject<FAQArticle>());
+        await this.initWidget(await this.context?.getObject<FAQArticle>());
 
     }
 

@@ -10,13 +10,12 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../core/ContextService';
 import { LabelService } from '../../core/LabelService';
 import { EventService } from '../../core/EventService';
 import { ContextEvents } from '../../core/ContextEvents';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
-import { Context } from 'mocha';
+import { Context } from '../../../../../model/Context';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -31,6 +30,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.setTitle();
         this.setIcon();
 
@@ -55,19 +55,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async setTitle(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
         let objectText = '';
-        const object = await context.getObject();
+        const object = await this.context.getObject();
         if (object) {
             objectText = await LabelService.getInstance().getObjectText(object);
         }
-        const displayText = await context.getDisplayText();
+        const displayText = await this.context?.getDisplayText();
         this.state.title = objectText ? `${displayText} (${objectText})` : displayText;
     }
 
     private setIcon(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.icon = context.getIcon();
+        this.state.icon = this.context.getIcon();
     }
 
 }

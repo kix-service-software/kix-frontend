@@ -9,18 +9,17 @@
 
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { Context } from '../../../../../model/Context';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
 import { ObjectFormHandler } from '../../core/ObjectFormHandler';
 import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 import { FormLayoutFontSize } from '../../../model/layout/FormLayoutFontSize';
+import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
     private subscriber: IEventSubscriber;
     private formHandler: ObjectFormHandler;
 
@@ -33,35 +32,49 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        if (this.state.contextInstanceId) {
-            this.context = ContextService.getInstance().getContext(this.state.contextInstanceId);
-            this.state.configurationMode = true;
-        } else {
-            this.context = ContextService.getInstance().getActiveContext();
-        }
+        await super.onMount(this.state.contextInstanceId);
+
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+            loading: true, hint: 'Translatable#Load Form'
+        });
 
         this.registerEventHandler();
 
         this.formHandler = await this.context.getFormManager().getObjectFormHandler();
-        this.state.pages = this.formHandler?.form?.pages;
+        if (this.formHandler) {
+            this.state.pages = this.formHandler?.form?.pages;
 
-        if (this.state.pages?.length) {
-            this.formHandler.setActivePageId(this.formHandler.form.pages[0].id);
+            if (this.state.pages?.length) {
+                this.formHandler.setActivePageId(this.formHandler.form.pages[0].id);
+            }
+        } else {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         }
 
-        this.state.prepared = true;
+        if (this.formHandler?.objectFormValueMapper?.initialized) {
+            this.state.prepared = true;
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
+        }
+
     }
 
     private registerEventHandler(): void {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('object-form'),
-            eventPublished: async (data: Context | any, eventId: string): Promise<void> => {
-                if (eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED ||
-                    eventId === ObjectFormEvent.OBJECT_FORM_HANDLER_CHANGED ||
-                    eventId === ObjectFormEvent.PAGE_ADDED ||
-                    eventId === ObjectFormEvent.PAGE_DELETED
-                ) {
-                    this.updateForm();
+            eventPublished: async (data: ObjectFormEventData, eventId: string): Promise<void> => {
+                if (data.contextInstanceId === this.context?.instanceId) {
+                    if (
+                        this.state.prepared &&
+                        (
+                            eventId === ObjectFormEvent.OBJECT_FORM_HANDLER_CHANGED ||
+                            eventId === ObjectFormEvent.PAGE_ADDED ||
+                            eventId === ObjectFormEvent.PAGE_DELETED
+                        )
+                    ) {
+                        this.updateForm();
+                    } else if (eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED) {
+                        this.state.prepared = true;
+                    }
                 }
             }
         };
@@ -80,11 +93,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async updateForm(): Promise<void> {
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+            loading: true, hint: 'Translatable#Load Form'
+        });
         this.state.prepared = false;
         this.formHandler = await this.context?.getFormManager()?.getObjectFormHandler();
         this.state.pages = this.formHandler?.form.pages;
         (this as any).setStateDirty('pages');
         setTimeout(() => this.state.prepared = true, 50);
+
+        setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: false
+            });
+        }, 500);
     }
 
     public getLayoutClasses(): string {

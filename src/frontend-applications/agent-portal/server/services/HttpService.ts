@@ -43,6 +43,7 @@ export class HttpService {
     private isClusterEnabled: boolean = false;
     private backendCertificate: any;
     private requestPromises: Map<string, Promise<any>> = new Map();
+    private userRoleIds: Map<number, number[]> = new Map();
 
     private constructor() {
         const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
@@ -65,6 +66,12 @@ export class HttpService {
         }
     }
 
+    public setUserRoleIds(user: User): void {
+        if (user) {
+            this.userRoleIds.set(user.UserID, user.RoleIDs);
+        }
+    }
+
     public async get<T>(
         resource: string, queryParameters: any, token: string, clientRequestId: string,
         cacheKeyPrefix: string = '', useCache: boolean = true, useToken?: boolean
@@ -76,69 +83,33 @@ export class HttpService {
 
         let cacheKey: string;
         if (useCache) {
-            cacheKey = await this.buildCacheKey(resource, queryParameters, token, useToken);
+            cacheKey = this.buildCacheKey(resource, queryParameters, token, useToken);
             const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
             if (cachedObject) {
                 return cachedObject;
             }
         }
 
-        const requestKey = await this.buildCacheKey(resource, queryParameters, token, true);
-
-        if (this.requestPromises.has(requestKey)) {
-            return this.requestPromises.get(requestKey);
-        }
-
-
-        let semaphor;
-        const semaphorKey = cacheKey ? `SEMAPHOR-${cacheKey}` : requestKey;
-        if (this.isClusterEnabled && useCache) {
-            semaphor = await CacheService.getInstance().get(semaphorKey, semaphorKey);
-
-            if (semaphor) {
-                LoggingService.getInstance().debug('\tSEMAPHOR\tStart\t' + semaphorKey + '\tWAITFOR');
-                const cachedObject = await CacheService.getInstance().waitFor(cacheKey, cacheKeyPrefix);
-                LoggingService.getInstance().debug('\tSEMAPHOR\tStop\t' + semaphorKey + '\tWAITFOR');
-                if (cachedObject) {
-                    return cachedObject;
-                }
-
-                semaphor = null;
-            }
+        if (this.requestPromises.has(cacheKey)) {
+            return this.requestPromises.get(cacheKey);
         }
 
         const requestPromise = this.executeRequest<HTTPResponse>(resource, token, clientRequestId, options);
-        this.requestPromises.set(requestKey, requestPromise);
-
-        if (this.isClusterEnabled && useCache) {
-            LoggingService.getInstance().debug('\tSEMAPHOR\t' + semaphorKey + '\tSET');
-            await CacheService.getInstance().set(semaphorKey, 1, semaphorKey);
-        }
+        this.requestPromises.set(cacheKey, requestPromise);
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size, true);
 
         const response = await requestPromise.catch((error) => {
-            this.requestPromises.delete(requestKey);
+            this.requestPromises.delete(cacheKey);
             RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
-
-            if (this.isClusterEnabled && useCache) {
-                LoggingService.getInstance().debug('\tSEMAPHOR\t' + semaphorKey + '\tDELETE');
-                CacheService.getInstance().deleteKeys(semaphorKey);
-            }
-
             throw error;
         });
 
-        this.requestPromises.delete(requestKey);
+        this.requestPromises.delete(cacheKey);
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
 
         if (useCache) {
-            if (this.isClusterEnabled) {
-                LoggingService.getInstance().debug('\tSEMAPHOR\t' + semaphorKey + '\tDELETE');
-                await CacheService.getInstance().deleteKeys(semaphorKey);
-            }
-
             CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
         }
 
@@ -206,9 +177,10 @@ export class HttpService {
 
         let cacheId = '';
         if (token) {
-            const user = await this.getUserByToken(token);
-            const usageContext = AuthenticationService.getInstance().getUsageContext(token);
-            cacheId = user.RoleIDs?.sort().join(';') + usageContext;
+            const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+            const decodedToken = AuthenticationService.getInstance().decodeToken(backendToken);
+            const userId = decodedToken?.UserID;
+            cacheId = this.userRoleIds.get(userId)?.sort().join(';') + decodedToken?.UserType;
         }
 
         const cacheKey = cacheId + resource;
@@ -236,7 +208,7 @@ export class HttpService {
         });
 
         const optionsResponse = new OptionsResponse(response.headers, response.data);
-        await CacheService.getInstance().set(cacheKey, optionsResponse, cacheType);
+        CacheService.getInstance().set(cacheKey, optionsResponse, cacheType);
         this.requestPromises.delete(cacheKey);
 
         return optionsResponse;
@@ -259,6 +231,7 @@ export class HttpService {
         options.headers = headers || {};
         options.headers['Authorization'] = 'Token ' + backendToken;
         options.headers['KIX-Request-ID'] = clientRequestId ? clientRequestId : '';
+        options.headers['KIX-Request-Timestamp'] = Date.now() / 1000;
 
         options.maxBodyLength = Infinity;
         options.maxContentLength = Infinity;
@@ -285,20 +258,25 @@ export class HttpService {
         options.httpAgent = new http.Agent({ keepAlive: true });
 
         let response: AxiosResponse | HTTPResponse = await this.axios(options).catch((error: AxiosError) => {
-            if (logError) {
-                LoggingService.getInstance().error(
-                    `Error during HTTP (${resource}) ${options.method} request.`, error
-                );
 
-                LoggingService.getInstance().error(JSON.stringify(error));
+            // do not log everything, only if really needed (debug)
+            if (logError && LoggingService.getInstance().isDebug()) {
+                try {
+                    LoggingService.getInstance().debug(
+                        `Error during HTTP (${resource}) ${options.method} request.`,
+                        error.toJSON ? error.toJSON() : error
+                    );
+                } catch (logginError) {
+                    console.error(error);
+                }
             }
             HTTPRequestLogger.getInstance().stop(profileTaskId, error);
             if (error?.response?.status === 403) {
-                throw new PermissionError(this.createError(error), resource, options.method);
+                throw new PermissionError(this.createError(error, logError), resource, options.method);
             } else if (error?.response?.status === 401) {
                 throw new SocketAuthenticationError('Invalid Token!');
             } else {
-                throw this.createError(error);
+                throw this.createError(error, logError);
             }
         });
 
@@ -341,25 +319,30 @@ export class HttpService {
         return `${this.apiURL}/${encodedResource}`;
     }
 
-    private createError(error: AxiosError): Error {
+    private createError(error: AxiosError, logError: boolean = true): Error {
         const status = error.response?.status;
         if (status === 500) {
-            LoggingService.getInstance().error(`(${status}) ${error.response?.statusText}`);
+            if (logError) {
+                LoggingService.getInstance().error(`(${status}) ${error.response?.statusText}`);
+            }
             return new Error(error.response.status?.toString(), error.response?.statusText, status);
         } else {
             const backendError = new BackendHTTPError(error);
-            LoggingService.getInstance().error(
-                `(${status}) ${backendError.error.Code} ${backendError.error.Message}`
-            );
+            if (logError) {
+                LoggingService.getInstance().error(
+                    `(${status}) ${backendError.error.Code} ${backendError.error.Message}`
+                );
+            }
             return new Error(backendError.error.Code?.toString(), backendError.error.Message, status);
         }
     }
 
-    private async buildCacheKey(resource: string, query: any, token: string, useToken?: boolean): Promise<string> {
+    private buildCacheKey(resource: string, query: any, token: string, useToken?: boolean): string {
         let cacheId = token;
         if (!useToken) {
-            const user = await this.getUserByToken(token);
-            cacheId = user.RoleIDs?.sort().join(';');
+            const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+            const userId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
+            cacheId = this.userRoleIds.get(userId)?.sort().join(';');
         }
         const ordered = {};
 
@@ -425,7 +408,7 @@ export class HttpService {
                     }
                 });
 
-            await CacheService.getInstance().set(backendToken, response.data['User'], cacheType);
+            CacheService.getInstance().set(backendToken, response.data['User'], cacheType);
             HTTPRequestLogger.getInstance().stop(profileTaskId, response);
             this.requestPromises.delete(requestKey);
             resolve(response.data['User']);

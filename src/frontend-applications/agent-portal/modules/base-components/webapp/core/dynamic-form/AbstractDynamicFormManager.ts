@@ -44,6 +44,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public additionalObjectTypes: Array<KIXObjectType | string> = [];
 
     protected values: ObjectPropertyValue[] = [];
+    private defaultValues: ObjectPropertyValue[] = [];
 
     protected listeners: Map<string, () => void> = new Map();
 
@@ -225,7 +226,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public reset(notify: boolean = true, force: boolean = false): void {
-        this.values = [];
+        // This is necessary to prevent this.defaultValues from being overwritten by this.values
+        const defaultValues = this.defaultValues.map((dv) => Object.assign({}, dv));
+        this.values = defaultValues;
         if (notify) {
             this.notifyListeners();
         }
@@ -363,13 +366,25 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return '';
     }
 
-    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, objectIds?: Array<string | number>, operator?: string
+    ): Promise<TreeNode[]> {
         for (const extendedManager of this.extendedFormManager) {
-            const result = await extendedManager.getTreeNodes(property, objectIds);
+            const result = await extendedManager.getTreeNodes(property, objectIds, operator);
             if (result) {
                 return result;
             }
         }
+
+        if (operator === SearchOperator.EMPTY) {
+            const no = await TranslationService.translate('No');
+            const yes = await TranslationService.translate('Yes');
+            return [
+                new TreeNode(0, no),
+                new TreeNode(1, yes)
+            ];
+        }
+
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             return await this.getNodesForDF(dfName);
@@ -628,6 +643,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             }
         }
 
+        if (operator === SearchOperator.EMPTY) {
+            return InputFieldTypes.DROPDOWN;
+        }
+
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             return await this.getInputTypeForDF(property);
@@ -774,6 +793,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public isRelativDateTimeOperator(operator: string): boolean {
         return;
+    }
+
+    public setDefaultValues(values: ObjectPropertyValue[] = []): void {
+        this.defaultValues = values;
     }
 
 }

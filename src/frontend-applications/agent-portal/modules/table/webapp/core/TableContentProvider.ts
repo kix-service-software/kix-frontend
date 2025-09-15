@@ -68,14 +68,14 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         protected contextId?: string,
         protected objects?: KIXObject[],
         protected specificLoadingOptions?: KIXObjectSpecificLoadingOptions
-    ) { }
+    ) {
+        this.context = ContextService.getInstance().getActiveContext();
+    }
 
     public async initialize(): Promise<void> {
         if (!this.initialized) {
 
             if (this.contextId) {
-
-                this.context = ContextService.getInstance().getActiveContext();
 
                 this.context?.registerListener(this.table.getTableId() + '-content-provider', {
                     sidebarLeftToggled: (): void => { return; },
@@ -90,9 +90,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 this.subscriber = {
                     eventSubscriberId: IdService.generateDateBasedId(),
                     eventPublished: (context: Context): void => {
-                        if (this.context.instanceId === context.instanceId) {
-                            this.currentPageIndex = 1;
-                        }
+                        this.currentPageIndex = 1;
                     }
                 };
 
@@ -104,10 +102,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     public async destroy(): Promise<void> {
         if (this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            if (context) {
-                context.unregisterListener(this.table.getTableId() + '-content-provider');
-            }
+            this.context.unregisterListener(this.table.getTableId() + '-content-provider');
 
             if (this.subscriber) {
                 EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
@@ -122,16 +117,13 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     }
 
-    private objectListChanged(objectType: KIXObjectType | string, filteredObjectList: KIXObject[]): void {
+    private objectListChanged(objectType: KIXObjectType | string): void {
         if (objectType === this.getContextObjectType()) {
             // set sort in table if needed
             if (this.isBackendSortSupported()) {
-                const context = ContextService.getInstance().getActiveContext();
-                if (context && context.contextId === this.contextId) {
-                    const sort = context.getSort(this.objectType);
-                    if (sort?.length) {
-                        this.table.setSort(sort[0], sort[1] ? SortOrder.DOWN : SortOrder.UP);
-                    }
+                const sort = this.context.getSort(this.objectType);
+                if (sort?.length) {
+                    this.table.setSort(sort[0], sort[1] ? SortOrder.DOWN : SortOrder.UP);
                 }
             }
             this.table.reload(true);
@@ -152,8 +144,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             const pageSize = await this.context?.getPageSize(this.objectType) || this.loadingOptions?.limit || 20;
             const currentLimit = this.currentPageIndex * pageSize;
 
-            const context = ContextService.getInstance().getActiveContext();
-            await context.reloadObjectList(this.objectType, undefined, currentLimit);
+            await this.context.reloadObjectList(this.objectType, undefined, currentLimit);
         }
         await this.table.reload();
     }
@@ -183,17 +174,14 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 this.table.getTableConfiguration().searchId
             );
         } else if (this.contextId && !this.objectIds) {
-            const context = ContextService.getInstance().getActiveContext();
-            if (context && context.contextId === this.contextId) {
-                objects = await context.getObjectList(this.objectType, this.currentLoadLimit);
-                const collectionId = context.getCollectionId() || context.contextId + this.objectType;
-                this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
-                    collectionId
-                );
-                this.currentLimit = KIXObjectSocketClient.getInstance().getCollectionsLimit(
-                    collectionId
-                );
-            }
+            objects = await this.context.getObjectList(this.objectType, this.currentLoadLimit);
+            const collectionId = this.context.getCollectionId() || this.context.contextId + this.objectType;
+            this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
+                collectionId
+            );
+            this.currentLimit = KIXObjectSocketClient.getInstance().getCollectionsLimit(
+                collectionId
+            );
         } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
             const forceIds = (this.objectIds && this.objectIds.length > 0) ? true : false;
             const loadingOptions = await this.prepareLoadingOptions();
@@ -226,8 +214,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             return this.loadingOptions?.limit;
         } else if (this.isBackendSortSupported()) {
             if (this.contextId) {
-                const context = ContextService.getInstance().getActiveContext();
-                return await context.getPageSize(this.objectType);
+                return await this.context.getPageSize(this.objectType);
             }
             return 20;
         }
@@ -327,8 +314,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             loadingOptions.filter.push(...JSON.parse(this.filter));
         }
 
-        const context = ContextService.getInstance().getActiveContext();
-        const contextObject = await context?.getObject();
+        const contextObject = await this.context?.getObject();
         if (this.loadingOptions && Array.isArray(this.loadingOptions.filter)) {
             for (const criterion of this.loadingOptions.filter) {
                 if (typeof criterion.value === 'string') {
@@ -398,12 +384,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 this.sort = [property, descending];
 
                 if (this.contextId) {
-                    const context = ContextService.getInstance().getActiveContext();
-                    if (context && context.contextId === this.contextId) {
-                        context.setSortOrder(
-                            this.objectType, property, descending, reload, this.currentLoadLimit
-                        );
-                    }
+                    this.context.setSortOrder(
+                        this.objectType, property, descending, reload, this.currentLoadLimit
+                    );
                 } else if (reload) {
                     await this.table.reload();
                 }
@@ -417,10 +400,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public isBackendSortSupported(): boolean {
         let supportsBackendSort = this.useBackendSort;
         if (supportsBackendSort && this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            if (context && context.contextId === this.contextId) {
-                supportsBackendSort = context.supportsBackendSort(this.objectType);
-            }
+            supportsBackendSort = this.context.supportsBackendSort(this.objectType);
         }
         return supportsBackendSort;
     }
@@ -449,12 +429,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 this.filter = criteriaString;
 
                 if (this.contextId) {
-                    const context = ContextService.getInstance().getActiveContext();
-                    if (context && context.contextId === this.contextId) {
-                        context.setFilterCriteria(
-                            this.objectType, criteria, reload, this.currentLoadLimit
-                        );
-                    }
+                    this.context.setFilterCriteria(
+                        this.objectType, criteria, reload, this.currentLoadLimit
+                    );
                 } else if (reload) {
                     await this.table.reload();
                 }
@@ -465,10 +442,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public isBackendFilterSupported(): boolean {
         let supportsBackendFilter = this.useBackendSort;
         if (supportsBackendFilter && this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            if (context && context.contextId === this.contextId) {
-                supportsBackendFilter = context.supportsBackendFilter(this.objectType);
-            }
+            supportsBackendFilter = this.context.supportsBackendFilter(this.objectType);
         }
         return supportsBackendFilter;
     }
@@ -477,9 +451,8 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         property: string, dep?: string, objectType = this.objectType
     ): Promise<boolean> {
         if (this.isBackendFilterSupported()) {
-            const context = ContextService.getInstance().getActiveContext();
-            if (context && context.contextId === this.contextId) {
-                return context.supportsBackendFilterForProperty(objectType, property, dep);
+            if (this.context) {
+                return this.context.supportsBackendFilterForProperty(objectType, property, dep);
             } else {
                 return KIXObjectService.isBackendFilterSupportedForProperty(objectType, property, dep) || false;
             }

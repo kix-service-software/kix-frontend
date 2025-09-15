@@ -13,7 +13,6 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ConfigItemClass } from '../../../model/ConfigItemClass';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { CMDBContext } from '../../core';
 import { TreeNode, TreeNodeProperty } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
@@ -23,10 +22,10 @@ import { DataType } from '../../../../../model/DataType';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-export class Component {
+export class Component extends AbstractMarkoComponent<ComponentState, CMDBContext> {
 
-    private state: ComponentState;
     private subscriber: IEventSubscriber;
 
     public listenerId: string;
@@ -38,6 +37,7 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.includes = ['ConfigItemStats'];
         loadingOptions.cacheType = `${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`;
@@ -47,16 +47,13 @@ export class Component {
         );
         this.state.nodes = await this.prepareTreeNodes(ciClasses);
 
-        const context = ContextService.getInstance().getActiveContext() as CMDBContext;
-        if (context) {
-            this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
-            this.state.activeNode = this.getActiveNode(context.classId);
-        }
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
+        this.state.activeNode = this.getActiveNode(this.context?.classId);
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (data: any, eventId: string): void => {
-                this.state.activeNode = this.getActiveNode(context?.classId);
+                this.state.activeNode = this.getActiveNode(this.context?.classId);
             }
         };
 
@@ -112,14 +109,13 @@ export class Component {
         }
 
         this.state.activeNode = node;
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof CMDBContext) {
-            this.state.loading = true;
-            context.setAdditionalInformation('STRUCTURE', [node.label]);
-            await context.setCIClass(node.id);
 
-            this.state.loading = false;
-        }
+        this.state.loading = true;
+        this.context?.setAdditionalInformation('STRUCTURE', [node.label]);
+        await this.context?.setCIClass(node.id);
+
+        this.state.loading = false;
+
     }
 
     public async showAll(): Promise<void> {
@@ -127,19 +123,15 @@ export class Component {
             return;
         }
 
-        const context = ContextService.getInstance().getActiveContext();
+        this.state.activeNode = null;
+        this.state.filterValue = null;
 
-        if (context instanceof CMDBContext) {
-            this.state.activeNode = null;
-            this.state.filterValue = null;
+        const allText = await TranslationService.translate('Translatable#All');
+        this.context?.setAdditionalInformation('STRUCTURE', [allText]);
 
-            const allText = await TranslationService.translate('Translatable#All');
-            context.setAdditionalInformation('STRUCTURE', [allText]);
+        this.context?.setCIClass(null);
 
-            context.setCIClass(null);
-
-            (this as any).getComponent('ci-class-explorer-filter').reset();
-        }
+        (this as any).getComponent('ci-class-explorer-filter').reset();
     }
 
     public async filter(textFilterValue?: string): Promise<void> {

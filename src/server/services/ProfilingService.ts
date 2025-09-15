@@ -9,10 +9,11 @@
 
 // eslint-disable-next-line max-classes-per-file
 import { ConfigurationService } from './ConfigurationService';
-import { LoggingService } from './LoggingService';
 import { IServerConfiguration } from '../model/IServerConfiguration';
 import { ServerUtil } from '../ServerUtil';
 import { RequestCounter } from './RequestCounter';
+import winston from 'winston';
+import { LoggingService } from './LoggingService';
 
 export class ProfilingService {
 
@@ -29,15 +30,79 @@ export class ProfilingService {
     private tasks: Map<number, ProfileTask> = new Map();
     private taskCounter: number = 0;
 
+    private logger: winston.Logger;
+
     private constructor() {
         const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
 
-        this.active = serverConfig ? serverConfig.ENABLE_PROFILING || false : false;
+        this.active = serverConfig?.ENABLE_PROFILING;
 
         // deactivate in test mode
         if (ServerUtil.isTestMode()) {
             this.active = false;
         }
+
+        if (this.active) {
+            const logDirectory = LoggingService.createLogDirectory();
+
+            try {
+                this.createLogger(logDirectory);
+            } catch (error) {
+                console.error(error);
+                console.error(error.stack);
+            }
+        }
+
+    }
+
+    private createLogger(logDirectory?: string): void {
+        const winstonLevels = {
+            ERROR: 'error',
+            WARNING: 'warn',
+            INFO: 'info',
+            DEBUG: 'debug',
+        };
+
+        this.logger = winston.createLogger({
+            level: winstonLevels.INFO,
+            format: winston.format.combine(
+                winston.format.timestamp({
+                    format: () => {
+                        const date = new Date();
+                        const year = date.getFullYear();
+                        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                        const day = date.getDate().toString().padStart(2, '0');
+
+                        const hours = date.getHours().toString().padStart(2, '0');
+                        const minutes = date.getMinutes().toString().padStart(2, '0');
+                        const seconds = date.getSeconds().toString().padStart(2, '0');
+
+                        return `${year}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+                    }
+                }),
+                winston.format.printf((info) => {
+                    const {
+                        timestamp, level, message, ...args
+                    } = info;
+
+                    let params = Object.keys(args).length ? JSON.stringify(args, null, 2) : '';
+                    params = params.replace((/[\t\n\r]/gm), '');
+                    return `${timestamp}\t${level}\t${message}\t${params}`;
+                }),
+            ),
+            transports: [
+                new (require('winston-daily-rotate-file'))({
+                    level: winstonLevels.INFO,
+                    name: 'default-file',
+                    filename: logDirectory + '/profile.log',
+                    humanReadableUnhandledException: true,
+                    handleExceptions: true,
+                    maxSize: '100m',
+                    prepend: true,
+                    maxFiles: '20'
+                })
+            ]
+        });
     }
 
     public start(category: string, message: string, inputData?: ProfilingData, logEntry: boolean = true): number {
@@ -61,7 +126,7 @@ export class ProfilingService {
     public logStart(taskId: number): void {
         const task = this.tasks.get(taskId);
         if (task) {
-            LoggingService.getInstance().debug(
+            this.logger.info(
                 '[Profiling]'
                 + '\t' + task.clientRequestId
                 + '\t' + task.id
@@ -90,7 +155,7 @@ export class ProfilingService {
             task.stop(outputData);
             this.tasks.delete(profileTaskId);
 
-            LoggingService.getInstance().debug(
+            this.logger.info(
                 '[Profiling]'
                 + '\t' + task.clientRequestId
                 + '\t' + task.id

@@ -12,12 +12,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div class="d-flex justify-content-end m-0 mb-3 expand-hover border-bottom border-secondary pb-2">
             <i
                 class="fa-solid fa-angles-up mx-2"
-                on-click("expandOrCollapseAll", false)
+                on-click("expandOrCollapseAll", false, true)
                 title=(state.translations["Translatable#Collapse All"])
             />
             <i
                 class="fa-solid fa-angles-down"
-                on-click("expandOrCollapseAll", true)
+                on-click("expandOrCollapseAll", true, true)
                 title=(state.translations["Translatable#Expand All"])
             />
         </div>

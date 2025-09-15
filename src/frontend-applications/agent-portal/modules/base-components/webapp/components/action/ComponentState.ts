@@ -8,9 +8,10 @@
  */
 
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public action: AbstractAction = null,
@@ -18,6 +19,8 @@ export class ComponentState {
         public text: string = '',
         public actionData: string = '',
         public canRunAction: boolean = true,
-    ) { }
+    ) {
+        super();
+    }
 
 }

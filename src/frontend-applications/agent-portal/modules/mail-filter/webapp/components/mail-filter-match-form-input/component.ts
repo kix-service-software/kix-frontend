@@ -14,7 +14,6 @@ import { MailFilterMatchManager } from '../../core';
 import { MailFilterMatch } from '../../../model/MailFilterMatch';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<any[], ComponentState> {
 
@@ -69,8 +68,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<MailFilterMatch[]>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             value.value.forEach((match: MailFilterMatch) => {

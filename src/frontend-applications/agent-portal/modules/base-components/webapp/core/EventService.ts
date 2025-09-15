@@ -25,6 +25,10 @@ export class EventService {
     private constructor() { }
 
     public subscribe(eventId: string, subscriber: IEventSubscriber): void {
+        if (!subscriber) {
+            return;
+        }
+
         if (this.eventSubscribers.has(eventId)) {
             const subscriberIndex = this.eventSubscribers.get(eventId).findIndex(
                 (s) => s.eventSubscriberId === subscriber.eventSubscriberId

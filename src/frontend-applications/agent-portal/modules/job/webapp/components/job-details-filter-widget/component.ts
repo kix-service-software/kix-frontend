@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { Job } from '../../../model/Job';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
@@ -36,6 +35,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.subscriber = {
             eventSubscriberId: 'object-details',
             eventPublished: (data: any, eventId: string): void => {
@@ -46,11 +46,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         };
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
-            this.initWidget();
-        }
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
+        this.initWidget();
         this.state.prepared = true;
     }
 
@@ -59,8 +56,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initWidget(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const job = await context.getObject<Job>();
+        const job = await this.context?.getObject<Job>();
         const manager = JobFormService.getInstance().getJobFormManager(job.Type);
         if (manager && manager.supportFilter() && this.state.widgetConfiguration) {
             this.state.title = this.state.widgetConfiguration.title;

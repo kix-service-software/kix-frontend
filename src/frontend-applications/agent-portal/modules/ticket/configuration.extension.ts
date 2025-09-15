@@ -8,7 +8,7 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { TicketContext, TicketChartWidgetConfiguration } from './webapp/core';
+import { TicketContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
@@ -17,7 +17,6 @@ import { UIFilterCriterion } from '../../model/UIFilterCriterion';
 import { TicketProperty } from './model/TicketProperty';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
-import { ChartComponentConfiguration } from '../report-charts/model/ChartComponentConfiguration';
 import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
@@ -84,148 +83,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         ];
 
         // content
-        const chartConfig1 = new ChartComponentConfiguration(
-            'ticket-dashboard-chart-priorities-config', 'Chart Config', ConfigurationType.Chart,
-            {
-                type: 'bar',
-                data: {
-                    datasets: [
-                        {
-                            backgroundColor: [
-                                'rgb(91, 91, 91)',
-                                'rgb(4, 83, 125)',
-                                'rgb(0, 141, 210)',
-                                'rgb(129, 189, 223)',
-                                'rgb(160, 230, 200)',
-                                'rgb(130, 200, 38)',
-                                'rgb(0, 152, 70)',
-                                'rgb(227, 30, 36)',
-                                'rgb(239, 127, 26)',
-                                'rgb(254, 204, 0)'
-                            ]
-                        }
-                    ]
-                },
-                options: {
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                maxTicksLimit: 6
-                            }
-                        }]
-                    }
-                }
-            }
-        );
-        configurations.push(chartConfig1);
-
-        const chartWidgetConfig1 = new TicketChartWidgetConfiguration(
-            'ticket-dashboard-chart-priorities', 'Ticket Chart Priorities', ConfigurationType.ChartWidget,
-            TicketProperty.PRIORITY_ID,
-            new ConfigurationDefinition('ticket-dashboard-chart-priorities-config', ConfigurationType.Chart), null
-        );
-        configurations.push(chartWidgetConfig1);
-
-        const chartPrioritiesConfig = new WidgetConfiguration(
-            'ticket-dashboard-chart-widget-priorities', 'Ticket Chart Priorities', ConfigurationType.Widget,
-            'ticket-chart-widget', 'Translatable#Overview Ticket Priorities', [],
-            new ConfigurationDefinition('ticket-dashboard-chart-priorities', ConfigurationType.ChartWidget),
-            null, false, true, null, true
-        );
-        chartPrioritiesConfig.valid = false;
-        configurations.push(chartPrioritiesConfig);
-
-        const chartConfig2 = new ChartComponentConfiguration(
-            'ticket-dashboard-chart-states-config', 'Chart Config', ConfigurationType.Chart,
-            {
-                type: 'pie',
-                data: {
-                    datasets: [{
-                        fill: true,
-                        backgroundColor: [
-                            'rgb(91, 91, 91)',
-                            'rgb(4, 83, 125)',
-                            'rgb(0, 141, 210)',
-                            'rgb(129, 189, 223)',
-                            'rgb(160, 230, 200)',
-                            'rgb(130, 200, 38)',
-                            'rgb(0, 152, 70)',
-                            'rgb(227, 30, 36)',
-                            'rgb(239, 127, 26)',
-                            'rgb(254, 204, 0)'
-                        ]
-                    }]
-                },
-                options: {
-                    legend: {
-                        display: true,
-                        position: 'right'
-                    }
-                }
-            }
-        );
-        configurations.push(chartConfig2);
-
-        const chartWidgetConfig2 = new TicketChartWidgetConfiguration(
-            'ticket-dashboard-chart-states', 'Ticket Chart States', ConfigurationType.ChartWidget,
-            TicketProperty.STATE_ID,
-            new ConfigurationDefinition('ticket-dashboard-chart-states-config', ConfigurationType.Chart), null
-        );
-        configurations.push(chartWidgetConfig2);
-
-        const chartStatesConfig = new WidgetConfiguration(
-            'ticket-dashboard-chart-widget-states', 'Ticket Chart States', ConfigurationType.Widget,
-            'ticket-chart-widget', 'Translatable#Overview Ticket States', [],
-            new ConfigurationDefinition('ticket-dashboard-chart-states', ConfigurationType.ChartWidget),
-            null, false, true, null, true
-        );
-        chartStatesConfig.valid = false;
-        configurations.push(chartStatesConfig);
-
-        const chartConfig3 = new ChartComponentConfiguration(
-            'ticket-dashboard-chart-new-config', 'Chart Config', ConfigurationType.Chart,
-            {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        backgroundColor: 'rgb(91, 91, 91)'
-                    }]
-                },
-                options: {
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                maxTicksLimit: 6
-                            }
-                        }]
-                    }
-                }
-            });
-        configurations.push(chartConfig3);
-
-        const chartWidgetConfig3 = new TicketChartWidgetConfiguration(
-            'ticket-dashboard-chart-new', 'Ticket Chart New Tickets', ConfigurationType.ChartWidget,
-            TicketProperty.CREATED,
-            new ConfigurationDefinition('ticket-dashboard-chart-new-config', ConfigurationType.Chart), null
-        );
-        configurations.push(chartWidgetConfig3);
-
-        const chartNewConfig = new WidgetConfiguration(
-            'ticket-dashboard-chart-widget-new-tickets', 'Ticket Chart New Tickets', ConfigurationType.Widget,
-            'ticket-chart-widget', 'Translatable#New Tickets (recent 7 days)', [],
-            new ConfigurationDefinition('ticket-dashboard-chart-new', ConfigurationType.ChartWidget),
-            null, false, true, null, true
-        );
-        chartNewConfig.valid = false;
-        configurations.push(chartNewConfig);
 
         const tableConfig = new TableConfiguration(
             'ticket-dashboard-table-config', 'Ticket Dashboard Table Configuration', ConfigurationType.Table,
@@ -269,18 +126,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 )
             ], [],
             [
-                new ConfiguredWidget(
-                    'ticket-dashboard-chart-widget-priorities', 'ticket-dashboard-chart-widget-priorities', null,
-                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-                ),
-                new ConfiguredWidget(
-                    'ticket-dashboard-chart-widget-states', 'ticket-dashboard-chart-widget-states', null,
-                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-                ),
-                new ConfiguredWidget(
-                    'ticket-dashboard-chart-widget-new-tickets', 'ticket-dashboard-chart-widget-new-tickets', null,
-                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-                ),
                 new ConfiguredWidget(
                     'ticket-dashboard-ticket-list-widget', 'ticket-dashboard-ticket-list-widget', null,
                     [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.LARGE

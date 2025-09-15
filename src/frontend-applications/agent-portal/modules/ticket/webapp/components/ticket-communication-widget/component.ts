@@ -9,7 +9,6 @@
 
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Article } from '../../../model/Article';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
@@ -25,17 +24,14 @@ import { BackendNotification } from '../../../../../model/BackendNotification';
 import { TicketUIEvent } from '../../../model/TicketUIEvent';
 import { TicketCommunicationConfiguration } from '../../../model/TicketCommunicationConfiguration';
 import { Ticket } from '../../../model/Ticket';
-import { SortUtil } from '../../../../../model/SortUtil';
-import { SortOrder } from '../../../../../model/SortOrder';
 
-export class Component extends AbstractMarkoComponent<ComponentState> {
+export class Component extends AbstractMarkoComponent<ComponentState, TicketDetailsContext> {
 
     private readonly displayView = 'selectedListView';
-    private context: TicketDetailsContext;
     private sortOrder: string;
     private subscriber: IEventSubscriber;
     private communicationConfig: TicketCommunicationConfiguration;
-    private articleIds: number[];
+    private articleIds: number[] = [];
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -46,7 +42,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         this.communicationConfig = this.state.widgetConfiguration?.configuration as TicketCommunicationConfiguration;
 
@@ -89,7 +85,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         EventService.getInstance().subscribe(TicketUIEvent.SCROLL_TO_ARTICLE, this.subscriber);
 
-        this.context.registerListener('communication-widget', {
+        this.context?.registerListener('communication-widget', {
             filteredObjectListChanged: (objectType: KIXObjectType) => {
                 if (objectType === KIXObjectType.ARTICLE) {
                     this.setArticleIDs();
@@ -97,7 +93,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             },
             objectListChanged: (objectType: KIXObjectType) => {
                 if (objectType === KIXObjectType.ARTICLE) {
-                    this.articleIds = null;
+                    this.articleIds = [];
                     this.setArticleIDs();
                 }
             },
@@ -149,8 +145,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (isArticleDelete) {
             const objectIds = data?.ObjectID?.split('::');
             if (objectIds?.length === 2) {
-                const allArticleIndex = this.articleIds.findIndex((a) => a.toString() === objectIds[1].toString());
-                if (allArticleIndex !== -1) {
+                const allArticleIndex = this.articleIds?.findIndex((a) => a.toString() === objectIds[1].toString());
+                if (typeof allArticleIndex !== 'undefined' && allArticleIndex !== -1) {
                     this.articleIds.splice(allArticleIndex, 1);
                     this.setArticleIDs();
                 }
@@ -216,7 +212,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public changeSortDirection(): void {
         if (this.sortOrder === 'newest') {
-            this.sortOrder = 'odlest';
+            this.sortOrder = 'oldest';
         } else {
             this.sortOrder = 'newest';
         }
@@ -226,7 +222,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public getArticleCountNumber(articleId: number): number {
-        return this.articleIds.findIndex((aid) => aid === articleId) + 1;
+        const list = Array.isArray(this.articleIds) ? this.articleIds : [];
+        const idx = list.findIndex((aid) => aid === articleId);
+        return idx >= 0 ? idx + 1 : 0;
     }
 }
 

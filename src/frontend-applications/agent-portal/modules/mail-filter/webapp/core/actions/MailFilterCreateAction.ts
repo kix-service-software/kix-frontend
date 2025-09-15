@@ -14,6 +14,7 @@ import { NewMailFilterDialogContext } from '../context';
 export class MailFilterCreateAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Filter';
         this.icon = 'kix-icon-new-gear';
     }

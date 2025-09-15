@@ -58,8 +58,7 @@ class Component extends FormInputComponent<JSON, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const defaultValue = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
 
         const typeValue = await formInstance.getFormFieldValueByProperty<string>(DynamicFieldProperty.FIELD_TYPE);

@@ -8,9 +8,10 @@
  */
 
 import { IdService } from '../../../../../../model/IdService';
+import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 import { Row } from '../../../../model/Row';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public rows: Row[] = null,
@@ -18,5 +19,7 @@ export class ComponentState {
         public rowKey: string = IdService.generateDateBasedId(),
         public loadMoreButtonId: string = IdService.generateDateBasedId('load-more-button'),
         public canLoadMore: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 }

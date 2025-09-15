@@ -25,14 +25,18 @@ import { OverlayType } from '../../../base-components/webapp/core/OverlayType';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { FormConfigurationObject } from '../../model/FormConfigurationObject';
+import { DynamicFieldCountableFormValue } from '../../model/FormValues/DynamicFields/DynamicFieldCountableFormValue';
 import { ObjectFormValue } from '../../model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../model/ObjectFormEvent';
+import { ObjectFormEventData } from '../../model/ObjectFormEventData';
 import { ObjectFormValueMapper } from '../../model/ObjectFormValueMapper';
 import { RuleResult } from '../../model/RuleResult';
 import { ObjectFormRegistry } from './ObjectFormRegistry';
 import { ObjectFormValidator } from './validation/ObjectFormValidator';
 
 export class ObjectFormHandler {
+
+    public static TEXTFIELD_SUBMISSION_TIMEOUT = 500;
 
     public form: FormConfiguration;
 
@@ -110,8 +114,12 @@ export class ObjectFormHandler {
         if (this.context.contextId === 'ObjectFormConfigurationContext') return;
         await this.objectFormValidator?.enable();
         const formValues = this.objectFormValueMapper.getFormValues(pageId);
+
+        await this.waitForDirtyFields(pageId);
+
         await this.objectFormValidator?.validateFormValues(formValues);
         const valid = this.objectFormValidator.isFormValid(formValues);
+
         if (!valid) {
             const validationResults = this.objectFormValueMapper.getValidationResults();
             console.debug('ValidationResults:');
@@ -124,10 +132,40 @@ export class ObjectFormHandler {
         }
     }
 
+    private async waitForDirtyFields(pageId: string): Promise<void> {
+        let formValues = this.objectFormValueMapper.getFormValues(pageId);
+        let dirty = formValues.some((fv) => fv.dirty);
+
+        let retryCount = 0;
+
+        while (dirty || retryCount < 10) {
+            const waitPromise = new Promise<void>((resolve, reject) => {
+                setTimeout(() => resolve(), 50);
+            });
+
+            formValues = this.objectFormValueMapper.getFormValues(pageId);
+            dirty = formValues.some((fv) => fv.dirty);
+            retryCount++;
+            await waitPromise;
+        }
+    }
+
     public async commit(): Promise<string | number> {
 
         await this.objectFormValidator?.enable();
-        const valid = await this.objectFormValidator?.validateForm();
+        let valid = false;
+        const formValues = this.objectFormValueMapper.getFormValues();
+        if (formValues.some((fv) => fv.dirty)) {
+            valid = await new Promise((resolve, reject) => {
+                setTimeout(async () => {
+                    const validation = await this.objectFormValidator?.validateForm();
+                    resolve(validation);
+                }, 500);
+            });
+        } else {
+            valid = await this.objectFormValidator?.validateForm();
+        }
+
         if (!valid) {
             const validationResults = this.objectFormValueMapper.getValidationResults();
             console.debug('ValidationResults:');
@@ -175,14 +213,20 @@ export class ObjectFormHandler {
 
     public setActivePageId(pageId: string): void {
         this.activePageId = pageId;
-        EventService.getInstance().publish(ObjectFormEvent.PAGE_CHANGED, pageId);
+        EventService.getInstance().publish(
+            ObjectFormEvent.PAGE_CHANGED,
+            new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, null, null, null, pageId)
+        );
     }
 
     public async addPage(): Promise<void> {
         const newPage = await TranslationService.translate('Translatable#New Page');
         const page = new FormPageConfiguration(IdService.generateDateBasedId(), newPage);
         this.form.pages.push(page);
-        EventService.getInstance().publish(ObjectFormEvent.PAGE_ADDED, page);
+        EventService.getInstance().publish(
+            ObjectFormEvent.PAGE_ADDED,
+            new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, null, page)
+        );
 
         setTimeout(() => this.setActivePageId(page.id), 150);
     }
@@ -200,7 +244,10 @@ export class ObjectFormHandler {
                 this.setActivePageId(this.form.pages[newPageIndex]?.id);
             }
 
-            EventService.getInstance().publish(ObjectFormEvent.PAGE_DELETED);
+            EventService.getInstance().publish(
+                ObjectFormEvent.PAGE_DELETED,
+                new ObjectFormEventData(this.context?.instanceId)
+            );
         }
     }
 
@@ -211,7 +258,10 @@ export class ObjectFormHandler {
         page?.groups?.push(group);
         const configObject = new FormConfigurationObject();
         configObject.groupId = group.id;
-        EventService.getInstance().publish(ObjectFormEvent.GROUP_ADDED, group);
+        EventService.getInstance().publish(
+            ObjectFormEvent.GROUP_ADDED,
+            new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, null, null, group)
+        );
     }
 
     public addNewField(field: FormFieldConfiguration, groupId: string): void {
@@ -262,8 +312,14 @@ export class ObjectFormHandler {
             const configObject = new FormConfigurationObject();
             configObject.fieldId = fieldId;
             configObject.groupId = formGroup.id;
-            EventService.getInstance().publish(ObjectFormEvent.FIELD_DELETED, configObject);
-            EventService.getInstance().publish(ObjectFormEvent.GROUP_UPDATED, configObject);
+            EventService.getInstance().publish(
+                ObjectFormEvent.FIELD_DELETED,
+                new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, configObject)
+            );
+            EventService.getInstance().publish(
+                ObjectFormEvent.GROUP_UPDATED,
+                new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, configObject)
+            );
         }
     }
 
@@ -287,7 +343,10 @@ export class ObjectFormHandler {
 
         const configObject = new FormConfigurationObject();
         configObject.groupId = groupId;
-        EventService.getInstance().publish(ObjectFormEvent.GROUP_UPDATED, configObject);
+        EventService.getInstance().publish(
+            ObjectFormEvent.GROUP_UPDATED,
+            new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, configObject)
+        );
     }
 
     public deleteGroup(groupId: string): void {
@@ -304,14 +363,21 @@ export class ObjectFormHandler {
             const configObject = new FormConfigurationObject();
             configObject.groupId = groupId;
             configObject.pageId = page.id;
-            EventService.getInstance().publish(ObjectFormEvent.GROUP_DELETED, configObject);
+            EventService.getInstance().publish(
+                ObjectFormEvent.GROUP_DELETED,
+                new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, configObject)
+            );
         }
     }
 
     public async reInitField(fieldId: string): Promise<void> {
         const field = this.getFormField(fieldId);
         const formValue = await this.objectFormValueMapper.mapFormField(field, this.objectFormValueMapper.object);
-        await formValue.initFormValue();
+        if (formValue.hasOwnProperty('IS_COUNTABLE') && formValue['IS_COUNTABLE'] === true) {
+            await (formValue as DynamicFieldCountableFormValue).reInitFormValue();
+        } else {
+            await formValue.initFormValue();
+        }
 
         const configObject = new FormConfigurationObject();
         configObject.fieldId = fieldId;
@@ -323,7 +389,10 @@ export class ObjectFormHandler {
             formValue.parent?.initFormValue();
         }
 
-        EventService.getInstance().publish(ObjectFormEvent.FIELD_REINITIALIZED, configObject);
+        EventService.getInstance().publish(
+            ObjectFormEvent.FIELD_REINITIALIZED,
+            new ObjectFormEventData(this.context?.instanceId, null, null, null, null, null, configObject)
+        );
     }
 
     public setConfigurationObject(configurationObject: any): void {

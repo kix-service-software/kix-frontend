@@ -12,8 +12,9 @@ import { TranslationService } from '../../../../../translation/webapp/core/Trans
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { WindowListener } from '../../../../../base-components/webapp/core/WindowListener';
 import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 

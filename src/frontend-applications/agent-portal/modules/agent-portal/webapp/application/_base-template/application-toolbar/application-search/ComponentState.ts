@@ -7,14 +7,17 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../../../base-components/webapp/core/AbstractComponentState';
 import { ObjectIcon } from '../../../../../../icon/model/ObjectIcon';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public values: Array<[string, string, string | ObjectIcon]> = [],
         public canShow: boolean = false,
         public title: string = 'Search menu'
-    ) { }
+    ) {
+        super();
+    }
 
 }

@@ -27,14 +27,12 @@ import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredW
 import { ClientStorageService } from '../../core/ClientStorageService';
 import { PlaceholderService } from '../../core/PlaceholderService';
 import { BrowserUtil } from '../../core/BrowserUtil';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class TabLaneComponent implements IEventSubscriber {
+class TabLaneComponent extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
     public eventSubscriberId: string;
     public contextListenerId: string;
-    public contextServiceListenerId: string;
-
-    private state: ComponentState;
 
     private initialTabId: string;
     private tabIcons: Map<string, string | ObjectIcon>;
@@ -42,7 +40,6 @@ class TabLaneComponent implements IEventSubscriber {
     private hideSidebar: boolean;
 
     private id: string;
-    private context: Context;
     private tabContainerPrefId: string;
 
     private keyDownEventFunction: () => {
@@ -55,7 +52,6 @@ class TabLaneComponent implements IEventSubscriber {
         this.tabIcons = new Map();
         this.eventSubscriberId = IdService.generateDateBasedId('tab-container');
         this.contextListenerId = IdService.generateDateBasedId('tab-container');
-        this.contextServiceListenerId = IdService.generateDateBasedId('tab-container');
 
         this.state.tabWidgets = input.tabWidgets ? input.tabWidgets.filter((widget) => widget.configuration) : [];
         this.initialTabId = input.tabId;
@@ -72,7 +68,7 @@ class TabLaneComponent implements IEventSubscriber {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         this.tabContainerPrefId = `${this.context?.descriptor?.contextId}-${this.context?.getObjectId()}-${this.id}-activetab`;
         const tabId = ClientStorageService.getOption(this.tabContainerPrefId);
         if (this.state.tabWidgets.length) {
@@ -97,22 +93,7 @@ class TabLaneComponent implements IEventSubscriber {
         }
 
         if (this.state.contextType && this.state.contextType === ContextType.DIALOG && !this.hideSidebar) {
-            ContextService.getInstance().registerListener({
-                constexServiceListenerId: this.contextServiceListenerId,
-                contextChanged: (
-                    contextId: string, context: Context, type: ContextType, history, oldContext: Context
-                ) => {
-                    if (type === ContextType.DIALOG) {
-                        this.prepareContext(context);
-                    }
-                    if (oldContext && oldContext.descriptor.contextType === ContextType.DIALOG) {
-                        oldContext.unregisterListener(this.contextListenerId);
-                    }
-                },
-                contextRegistered: () => { return; },
-                beforeDestroy: () => null
-            });
-            this.prepareContext();
+            this.setSidebars();
         }
 
         if (this.state.tabWidgets.length && this.state.activeTab && this.state.tabId) {
@@ -134,11 +115,7 @@ class TabLaneComponent implements IEventSubscriber {
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TITLE, this);
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_ICON, this);
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TAB, this);
-        const context: Context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.unregisterListener(this.contextListenerId);
-        }
-        ContextService.getInstance().unregisterListener(this.contextServiceListenerId);
+        this.context?.unregisterListener(this.contextListenerId);
 
         if (this.state.contextType === ContextType.DIALOG && this.keyDownEventFunction) {
             document.body.removeEventListener('keydown', this.keyDownEventFunction, false);
@@ -158,14 +135,11 @@ class TabLaneComponent implements IEventSubscriber {
             ? this.state.activeTab.configuration.title
             : '';
         if (tab) {
-            const context = ContextService.getInstance().getActiveContext();
-            if (context) {
-                const object = await context.getObject(context.descriptor.kixObjectTypes[0]);
+            const object = await this.context?.getObject(this.context?.descriptor.kixObjectTypes[0]);
 
-                this.state.contentActions = await ActionFactory.getInstance().generateActions(
-                    tab.configuration ? tab.configuration.actions : [], [object]
-                );
-            }
+            this.state.contentActions = await ActionFactory.getInstance().generateActions(
+                tab.configuration ? tab.configuration.actions : [], [object]
+            );
         }
 
         ClientStorageService.setOption(this.tabContainerPrefId, this.state.activeTab?.instanceId);
@@ -181,26 +155,8 @@ class TabLaneComponent implements IEventSubscriber {
             : undefined;
     }
 
-    private prepareContext(
-        context: Context = ContextService.getInstance().getActiveContext()
-    ): void {
-        context.registerListener(this.contextListenerId, {
-            sidebarRightToggled: () => {
-                // this.state.showSidebar = context.areSidebarsRightShown();
-            },
-            sidebarLeftToggled: (): void => { return; },
-            objectChanged: (): void => { return; },
-            objectListChanged: () => { return; },
-            filteredObjectListChanged: (): void => { return; },
-            scrollInformationChanged: () => { return; },
-            additionalInformationChanged: (): void => { return; }
-        });
-        this.setSidebars();
-    }
-
     private async setSidebars(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const sidebars = await context?.getSidebarsRight() || [];
+        const sidebars = await this.context?.getSidebarsRight() || [];
         this.state.hasSidebars = sidebars.length > 0;
     }
 

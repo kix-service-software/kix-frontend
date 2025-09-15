@@ -9,11 +9,12 @@
 
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { ObjectIconLoadingOptions } from '../../../../../../../server/model/ObjectIconLoadingOptions';
+import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { KIXObjectService } from '../../../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../../../../../../icon/model/ObjectIcon';
 import { ComponentState } from './ComponentState';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 

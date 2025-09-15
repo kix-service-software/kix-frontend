@@ -21,6 +21,7 @@ export class ShowUserTicketsAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         return;
     }
 

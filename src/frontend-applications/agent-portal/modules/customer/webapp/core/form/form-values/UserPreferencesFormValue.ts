@@ -19,8 +19,16 @@ import { PersonalSettingsProperty } from '../../../../../user/model/PersonalSett
 import { User } from '../../../../../user/model/User';
 import { UserPreference } from '../../../../../user/model/UserPreference';
 import { UserProperty } from '../../../../../user/model/UserProperty';
+import { InitialSiteURLFormValue } from './InitialSiteURLFormValue';
 import { LanguageFormValue } from './LanguageFormValue';
 import { NotificationFormValue } from './NotificationFormValue';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../../model/FilterType';
+import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
+import { AutoCompleteConfiguration } from '../../../../../../model/configuration/AutoCompleteConfiguration';
 
 export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> {
 
@@ -47,7 +55,8 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
         const preferences = user?.Preferences;
 
         this.addLanguageFormValue(preferences, objectValueMapper);
-        this.oooFormValue = this.addOutOfOfficeFormValues(preferences, objectValueMapper);
+        this.oooFormValue = this.addOutOfOfficeFormValues(preferences, objectValueMapper, user.UserID);
+        this.addInitialSiteURLFormValue(preferences, objectValueMapper);
         this.myQueuesFormValue = this.addMyQueuesFormValue(preferences, objectValueMapper);
         this.notificationsFormValue = this.addNotificationFormValue(preferences, objectValueMapper);
 
@@ -79,14 +88,31 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
             if (!this.user?.IsAgent && agentPreferencesIds.some((id) => id === fv.instanceId)) {
                 continue;
             }
+            if (this.user && !Array.isArray(this.user.Preferences)) {
+                this.user.Preferences = [];
+            }
 
             if (fv.formValues?.length) {
                 for (const sfv of fv.formValues) {
                     await sfv.enable();
+
+                    if (
+                        sfv['object']
+                        && !this.user.Preferences.some((p) => p.ID === sfv['object'].ID)
+                    ) {
+                        this.user.Preferences.push(sfv['object']);
+                    }
                 }
             }
 
             await fv.enable();
+
+            if (
+                fv['object']
+                && !this.user.Preferences.some((p) => p.ID === fv['object'].ID)
+            ) {
+                this.user.Preferences.push(fv['object']);
+            }
         }
 
         await super.enable();
@@ -115,7 +141,7 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
     }
 
     private addOutOfOfficeFormValues(
-        preferences: UserPreference[], objectValueMapper: ObjectFormValueMapper
+        preferences: UserPreference[], objectValueMapper: ObjectFormValueMapper, userId: number
     ): ObjectFormValue {
 
         const oofFormValue = new ObjectFormValue(null, null, objectValueMapper, null);
@@ -151,7 +177,63 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
         endFormValue.isControlledByParent = true;
         oofFormValue.formValues.push(endFormValue);
 
+        let substitutePreference = preferences.find((p) => p.ID === PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE);
+        if (!substitutePreference) {
+            substitutePreference = new UserPreference();
+            substitutePreference.ID = PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE;
+            preferences.push(substitutePreference);
+        }
+
+        const myQueues = preferences.find((p) => p.ID === PersonalSettingsProperty.MY_QUEUES);
+        const myQueuesValue = Array.isArray(myQueues?.Value)
+            ? myQueues?.Value
+            : isNaN(Number(myQueues?.Value)) ? [0] : [myQueues?.Value];
+        const substituteFormValue = new SelectObjectFormValue('Value', substitutePreference, objectValueMapper, oofFormValue);
+        substituteFormValue.label = 'Translatable#Substitute';
+        substituteFormValue.objectType = KIXObjectType.USER;
+        substituteFormValue.isAutoComplete = true;
+        substituteFormValue.autoCompleteConfiguration = new AutoCompleteConfiguration();
+        substituteFormValue.multiselect = false;
+        substituteFormValue.loadingOptions = new KIXObjectLoadingOptions(
+            [
+                new FilterCriteria(
+                    UserProperty.PREFERENCES + '.' + PersonalSettingsProperty.MY_QUEUES,
+                    SearchOperator.IN, FilterDataType.NUMERIC,
+                    FilterType.AND, myQueuesValue
+                ),
+                new FilterCriteria(
+                    UserProperty.IS_AGENT,
+                    SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                    FilterType.AND, 1
+                ),
+                new FilterCriteria(
+                    'UserIDs',
+                    SearchOperator.NOT_IN, FilterDataType.NUMERIC,
+                    FilterType.AND, [1, userId]
+                ),
+                new FilterCriteria(
+                    KIXObjectProperty.VALID_ID,
+                    SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                    FilterType.AND, 1
+                )
+            ]
+        );
+        substituteFormValue.visible = true;
+        substituteFormValue.isControlledByParent = true;
+        oofFormValue.formValues.push(substituteFormValue);
+
         return oofFormValue;
+    }
+
+    private addInitialSiteURLFormValue(preferences: UserPreference[], objectValueMapper: ObjectFormValueMapper): void {
+        let preference = preferences.find((p) => p.ID === PersonalSettingsProperty.INITIAL_SITE_URL);
+        if (!preference) {
+            preference = new UserPreference();
+            preference.ID = PersonalSettingsProperty.INITIAL_SITE_URL;
+            preferences.push(preference);
+        }
+        const formValue = new InitialSiteURLFormValue('Value', preference, objectValueMapper, this);
+        this.formValues.push(formValue);
     }
 
     private addMyQueuesFormValue(

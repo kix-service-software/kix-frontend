@@ -494,6 +494,9 @@ msgstr "Asset-Explorer"
 msgid "CMDB: CI Classes"
 msgstr "Assets: Asset-Klassen"
 
+msgid "CMDB View"
+msgstr "Assets-Ansicht"
+
 msgid "CNO"
 msgstr "KNR"
 
@@ -3907,6 +3910,9 @@ msgstr "Organisationen"
 msgid "Organisations Dashboard"
 msgstr "Organisationen Dashboard"
 
+msgid "Organizations and Contacts View"
+msgstr "Organisationen und Kontakte Ansicht"
+
 msgid "Other"
 msgstr "andere"
 
@@ -5007,6 +5013,9 @@ msgstr "Team"
 
 msgid "Team Backlog"
 msgstr "Team Backlog"
+
+msgid "Team View"
+msgstr "Teamansicht"
 
 msgid ""
 "Technical Customer Service mit KIX - work order documentation, checklists, "

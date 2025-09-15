@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,6 +16,7 @@ import { AdditionalContextInformation } from '../../../../../base-components/web
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFormFieldOption } from '../../../../../dynamic-fields/webapp/core';
+import { FormValueProperty } from '../../../../../object-forms/model/FormValueProperty';
 import { DynamicFieldObjectFormValue } from '../../../../../object-forms/model/FormValues/DynamicFieldObjectFormValue';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
@@ -111,7 +112,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
 
         // do not show in article edit forms
-        if ((this.object as Article).ArticleID) {
+        if (this.shouldSetInvisible()) {
             this.visible = false;
             this.readonly = true;
         } else {
@@ -127,6 +128,27 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
 
         this.sortArticleDFs(field);
+    }
+
+    private shouldSetInvisible(): boolean {
+        const context = ContextService.getInstance().getActiveContext();
+        return (this.object as Article).ArticleID && context.getAdditionalInformation('ARTICLE_FORWARD');
+    }
+
+    protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
+        const defaultValue = field.defaultValue?.value;
+        let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null && defaultValue !== '');
+        if (Array.isArray(defaultValue)) {
+            hasDefaultValue = defaultValue.length > 0;
+        }
+
+        if (field.empty) {
+            this.defaultValue = null;
+            this.empty = true;
+        } else if (hasDefaultValue) {
+            const value = await this.handlePlaceholders(field.defaultValue?.value);
+            this.defaultValue = value;
+        }
     }
 
     protected sortArticleDFs(field: FormFieldConfiguration): void {
@@ -342,6 +364,8 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
                 if (property === ArticleProperty.TO && isEdit) {
                     formValue.visible = true;
+                    formValue.setNewInitialState(FormValueProperty.VISIBLE, true);
+                    formValue.setNewInitialState(FormValueProperty.ENABLED, true);
                 }
 
                 if (property === ArticleProperty.CC) {
@@ -387,6 +411,8 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
             if (formValue) {
                 await formValue.disable();
+                formValue.setNewInitialState(FormValueProperty.VISIBLE, false);
+                formValue.setNewInitialState(FormValueProperty.ENABLED, false);
                 formValue.isConfigurable = false;
             }
         }

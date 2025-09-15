@@ -10,6 +10,7 @@
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
+import { ObjectFormHandler } from '../../../core/ObjectFormHandler';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
@@ -62,14 +63,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public valueChanged(event: any): void {
+        this.formValue.dirty = true;
         if (this.changeTimeout) {
             window.clearTimeout(this.changeTimeout);
         }
 
         this.changeTimeout = setTimeout(async () => {
             this.state.value = event.target.value;
-            this.formValue.setFormValue(this.state.value);
-        }, 500);
+            await this.formValue.setFormValue(this.state.value);
+            this.formValue.dirty = false;
+        }, ObjectFormHandler.TEXTFIELD_SUBMISSION_TIMEOUT);
     }
 
 }

@@ -8,36 +8,29 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ComponentInput } from './ComponentInput';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextType } from '../../../../../model/ContextType';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TabWidgetConfiguration } from '../../../../../model/configuration/TabWidgetConfiguration';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
-
-    private contextType: ContextType;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public onInput(input: ComponentInput): void {
+    public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
-        this.contextType = input.contextType;
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         if (this.state.widgetConfiguration) {
             const settings = this.state.widgetConfiguration.configuration as TabWidgetConfiguration;
             const widgets = [];
             for (const w of settings.widgets) {
-                const config = await context.getConfiguredWidget(w);
+                const config = await this.context?.getConfiguredWidget(w);
                 if (config) {
                     widgets.push(config);
                 }

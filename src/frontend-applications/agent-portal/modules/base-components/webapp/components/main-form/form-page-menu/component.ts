@@ -13,10 +13,9 @@ import { EventService } from '../../../core/EventService';
 import { IdService } from '../../../../../../model/IdService';
 import { IEventSubscriber } from '../../../core/IEventSubscriber';
 import { ContextService } from '../../../core/ContextService';
+import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private eventSubscriber: IEventSubscriber;
     private keyUpEventFunction: () => {
         // do nothing ...
@@ -33,13 +32,13 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.prepareTranslations();
         this.eventSubscriber = {
             eventSubscriberId: IdService.generateDateBasedId('page-subscriber-'),
             eventPublished: (data: any, eventId: string): void => {
                 if (eventId === 'PAGE_CHANGED') {
-                    const context = ContextService.getInstance().getActiveContext();
-                    const index = context?.getFormManager()?.getActiveFormPageIndex();
+                    const index = this.context?.getFormManager()?.getActiveFormPageIndex();
                     if (Number.isInteger(index) && index !== this.state.activePageIndex) {
                         this.state.pageChanged = true;
                     }

@@ -20,6 +20,7 @@ export class FAQCategoryCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Category';
         this.icon = 'kix-icon-new-gear';
     }

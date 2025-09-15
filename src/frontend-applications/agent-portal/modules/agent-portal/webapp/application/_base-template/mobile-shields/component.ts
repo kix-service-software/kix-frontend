@@ -15,8 +15,9 @@ import { EventService } from '../../../../../base-components/webapp/core/EventSe
 import { MobileShowEvent } from '../../../../model/MobileShowEvent';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { MobileShowEventData } from '../../../../model/MobileShowEventData';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
     public eventSubscriber: IEventSubscriber;

@@ -113,20 +113,20 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     public async getInputType(property: string, operator?: SearchOperator): Promise<InputFieldTypes | string> {
-        let inputType: InputFieldTypes | string;
         const searchProperty = Ticket.SEARCH_PROPERTIES.find((p) => p.Property === property);
 
-        if (searchProperty) {
-            inputType = searchProperty.InputType;
+        if (
+            searchProperty
+            && operator !== SearchOperator.EMPTY
+        ) {
+            return searchProperty.InputType;
         } else if (this.isDropDown(property)) {
-            inputType = InputFieldTypes.DROPDOWN;
+            return InputFieldTypes.DROPDOWN;
         } else if (this.isDateTime(property)) {
-            inputType = InputFieldTypes.DATE_TIME;
-        } else {
-            inputType = await super.getInputType(property);
+            return InputFieldTypes.DATE_TIME;
         }
 
-        return inputType;
+        return await super.getInputType(property, operator);
     }
 
     private isDropDown(property: string): boolean {
@@ -144,6 +144,9 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     public async isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean> {
+        if (operator === SearchOperator.EMPTY) {
+            return false;
+        }
         const result = await super.isMultiselect(property, operator, true);
         if (result !== null && typeof result !== 'undefined') {
             return result;
@@ -156,13 +159,16 @@ export class TicketSearchFormManager extends SearchFormManager {
             || property === TicketProperty.OWNER_OOO
             || property === TicketProperty.RESPONSIBLE_OOO
             || property === TicketProperty.MY_QUEUES
+            || property === TicketProperty.HISTORIC_MY_QUEUES
         ) {
             return false;
         }
         return true;
     }
 
-    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, objectIds?: Array<string | number>, operator?: string
+    ): Promise<TreeNode[]> {
         const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
         let nodes = [];
         switch (property) {
@@ -182,6 +188,7 @@ export class TicketSearchFormManager extends SearchFormManager {
                 break;
             case TicketProperty.OWNER_OOO:
             case TicketProperty.MY_QUEUES:
+            case TicketProperty.HISTORIC_MY_QUEUES:
             case TicketProperty.RESPONSIBLE_OOO:
             case ArticleProperty.CUSTOMER_VISIBLE:
                 const no = await TranslationService.translate('No');
@@ -192,11 +199,12 @@ export class TicketSearchFormManager extends SearchFormManager {
                 ];
                 break;
             case TicketProperty.QUEUE_ID:
+            case TicketProperty.HISTORIC_QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['READ']);
                 nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, showInvalid, showInvalid);
                 break;
             default:
-                nodes = await super.getTreeNodes(property);
+                nodes = await super.getTreeNodes(property, objectIds, operator);
                 if (!nodes || !nodes.length) {
                     if (property === 'Queue.FollowUpID') {
                         nodes = await QueueService.getInstance().getTreeNodes(
@@ -216,7 +224,11 @@ export class TicketSearchFormManager extends SearchFormManager {
         const options = await super.getInputTypeOptions(property, operator);
         const freeTextProperties = [
             TicketProperty.OWNER_ID,
+            TicketProperty.OWNER_OOO_SUBSTITUTE,
+            TicketProperty.HISTORIC_OWNER_ID,
             TicketProperty.RESPONSIBLE_ID,
+            TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE,
+            TicketProperty.TICKET_OOO_SUBSTITUTE,
             TicketProperty.CONTACT_ID,
             TicketProperty.ORGANISATION_ID,
             TicketProperty.CHANGED,

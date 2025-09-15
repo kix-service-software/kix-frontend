@@ -7,10 +7,8 @@
  * --
  */
 
-import { Context } from '../../../../../../model/Context';
 import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
@@ -23,7 +21,6 @@ declare const bootstrap: any;
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private contextInstanceId: string;
-    private context: Context;
     private formHandler: ObjectFormHandler;
     private subscriber: IEventSubscriber;
 
@@ -39,11 +36,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        if (this.contextInstanceId) {
-            this.context = ContextService.getInstance().getContext(this.contextInstanceId);
-        } else {
-            this.context = ContextService.getInstance().getActiveContext();
-        }
+        await super.onMount(this.contextInstanceId);
 
         this.formHandler = await this.context.getFormManager().getObjectFormHandler();
 

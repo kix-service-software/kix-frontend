@@ -27,7 +27,8 @@ export class AgentPortalConfiguration implements IConfiguration {
                 public type: string = 'Agent Portal',
                 public valid: boolean = true,
                 public minimizeSearchCriteriaWidget: boolean = true,
-                public footerInformation: string[] = []
+                public footerInformation: string[] = [],
+                public editorType: string = 'ckeditor5'
         ) { }
 
 }

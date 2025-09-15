@@ -1,0 +1,10 @@
+{
+   "name": "kix-module-summernote",
+   "extensions": {
+       "kix:modules": {
+           "kix-module-summernote-module": {
+               "module": "kix-module.extension"
+           }
+       }
+   }
+}

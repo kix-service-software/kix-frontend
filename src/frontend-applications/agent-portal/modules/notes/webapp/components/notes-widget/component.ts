@@ -13,8 +13,9 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { NotesService } from '../../core/NotesService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-export class Component {
+export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
     private editorValue: string;
@@ -28,16 +29,13 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
-
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Submit'
         ]);
 
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.contextId = context.contextId;
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.contextId = this.context?.contextId;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         this.state.actions = [new NotesEditAction(this)];
         WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
         this.state.value = await NotesService.getInstance().loadNotes(this.state.contextId);
@@ -47,10 +45,6 @@ export class Component {
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
-    }
-
-    public valueChanged(value): void {
-        this.editorValue = value;
     }
 
     public setEditorActive(): void {
@@ -65,12 +59,11 @@ export class Component {
         this.state.editorActive = false;
     }
 
-    public submitEditor(): void {
-        setTimeout(() => {
-            this.state.value = this.editorValue;
-            this.state.editorActive = false;
-            NotesService.getInstance().saveNotes(this.state.contextId, this.state.value);
-        }, 200);
+    public async submitEditor(): Promise<void> {
+        const component = (this as any).getComponent('notes-editor');
+        this.state.value = component?.getValue();
+        await NotesService.getInstance().saveNotes(this.state.contextId, this.state.value);
+        this.state.editorActive = false;
     }
 
 }

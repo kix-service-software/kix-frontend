@@ -8,7 +8,6 @@
  */
 
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Job } from '../../../model/Job';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
@@ -27,63 +26,57 @@ import { StringContent } from '../../../../../modules/base-components/webapp/cor
 export class JobExecuteAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Run';
         this.icon = 'kix-icon-open-right';
     }
 
     public async run(event: any): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            const job = await context.getObject<Job>();
+        const job = await this.context?.getObject<Job>();
 
-            if (job) {
-                const question = await TranslationService.translate(
-                    'Translatable#The Job {0} will be ran now. Are you sure?', [job.Name]
-                );
-                const content = new ComponentContent(
-                    'confirm-overlay',
-                    new ConfirmOverlayContent(question, this.executeJob.bind(this))
-                );
+        if (job) {
+            const question = await TranslationService.translate(
+                'Translatable#The Job {0} will be ran now. Are you sure?', [job.Name]
+            );
+            const content = new ComponentContent(
+                'confirm-overlay',
+                new ConfirmOverlayContent(question, this.executeJob.bind(this))
+            );
 
-                OverlayService.getInstance().openOverlay(
-                    OverlayType.CONFIRM, null, content, 'Translatable#Run', null, false
-                );
-            }
+            OverlayService.getInstance().openOverlay(
+                OverlayType.CONFIRM, null, content, 'Translatable#Run', null, false
+            );
         }
     }
 
     private async executeJob(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            const job = await context.getObject<Job>();
+        const job = await this.context?.getObject<Job>();
 
-            if (job) {
-                EventService.getInstance().publish(
-                    ApplicationEvent.APP_LOADING, { loading: true, hint: 'Job is running' }
-                );
+        if (job) {
+            EventService.getInstance().publish(
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Job is running' }
+            );
 
-                await KIXObjectService.updateObject(KIXObjectType.JOB, [[JobProperty.EXEC, true]], job.ID, false)
-                    .then(() => {
-                        setTimeout(() => {
-                            const content = new ComponentContent(
-                                'toast',
-                                new ToastContent('kix-icon-check', 'Translatable#Job successfully ran.')
-                            );
-                            OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
-                        }, 1000);
-                    }).catch((error: Error) => {
-                        const content = new StringContent(
-                            'Translatable#An error occured during job execution. See system log for details.'
+            await KIXObjectService.updateObject(KIXObjectType.JOB, [[JobProperty.EXEC, true]], job.ID, false)
+                .then(() => {
+                    setTimeout(() => {
+                        const content = new ComponentContent(
+                            'toast',
+                            new ToastContent('kix-icon-check', 'Translatable#Job successfully ran.')
                         );
+                        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
+                    }, 1000);
+                }).catch((error: Error) => {
+                    const content = new StringContent(
+                        'Translatable#An error occured during job execution. See system log for details.'
+                    );
 
-                        OverlayService.getInstance().openOverlay(
-                            OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
-                        );
-                    });
+                    OverlayService.getInstance().openOverlay(
+                        OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
+                    );
+                });
 
-                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-            }
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
         }
-
     }
 }

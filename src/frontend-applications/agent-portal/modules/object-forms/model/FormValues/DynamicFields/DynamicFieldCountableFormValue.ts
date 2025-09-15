@@ -86,9 +86,19 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
     }
 
+    public async reInitFormValue(): Promise<void> {
+        this.defaultValue = this.dfValues.map((dfValue) => dfValue.Value);
+        await this.initFormValue();
+    }
+
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
         this.formValuesVisible = this.visible;
+        if (
+            this.objectValueMapper.objectFormHandler.configurationMode &&
+            field.options?.find((option) => option.option === 'set hidden')?.value) {
+            this.visible = true;
+        }
         this.field = field;
     }
 

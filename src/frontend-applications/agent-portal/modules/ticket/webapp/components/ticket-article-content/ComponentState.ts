@@ -7,12 +7,14 @@
  * --
  */
 
-import { InlineContent } from '../../../../../modules/base-components/webapp/core/InlineContent';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public url: string = null,
         public frameId: string = null
-    ) { }
+    ) {
+        super();
+    }
 }

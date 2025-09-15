@@ -9,8 +9,6 @@
 
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { Context } from '../../../../../model/Context';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ReportChartWidgetConfiguration } from '../../../model/ReportChartWidgetConfiguration';
 import { ChartWidgetService } from '../../core/ChartWidgetService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
@@ -24,7 +22,6 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
     private subscriber: IEventSubscriber;
 
     private chartWidgetConfig: ReportChartWidgetConfiguration;
@@ -38,7 +35,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         this.chartWidgetConfig = this.state.widgetConfiguration.configuration as ReportChartWidgetConfiguration;

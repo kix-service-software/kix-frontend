@@ -40,6 +40,8 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
 
     private userLanguage: string = null;
 
+    private readonly STORAGE_KEY = 'i18n-translations';
+
     private constructor() {
         super(KIXObjectType.TRANSLATION);
         this.init();
@@ -70,12 +72,11 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         if (eventId === ApplicationEvent.CACHE_KEYS_DELETED) {
             if (data.some((d) => d === KIXObjectType.TRANSLATION)) {
                 this.translations = null;
-            }
-            if (data.some((d) => d === KIXObjectType.CURRENT_USER)) {
-                this.translations = null;
+                ClientStorageService.deleteState(this.STORAGE_KEY);
             }
         } else if (eventId === ApplicationEvent.CACHE_CLEARED) {
             this.translations = null;
+            ClientStorageService.deleteState(this.STORAGE_KEY);
         }
     }
 
@@ -189,6 +190,11 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
 
     public async getTranslationObject(translationValue: string): Promise<Translation> {
         if (!this.translations) {
+            const cachedValue = ClientStorageService.getOption(this.STORAGE_KEY);
+            this.translations = cachedValue ? JSON.parse(cachedValue) : null;
+        }
+
+        if (!this.translations) {
             if (!this.loadTranslationPromise) {
                 this.loadTranslationPromise = new Promise<void>(async (resolve, reject) => {
                     this.userLanguage = await TranslationService.getUserLanguage();
@@ -204,6 +210,8 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
                         for (let i = 0; i < translations.length; i++) {
                             this.translations[translations[i].ObjectId] = translations[i];
                         }
+
+                        ClientStorageService.setOption(this.STORAGE_KEY, JSON.stringify(this.translations));
                     }
                     this.loadTranslationPromise = null;
 

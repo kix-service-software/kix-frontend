@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ImportExportTemplateRunTypes } from '../../../model/ImportExportTemplateRunTypes';
 import { ImportExportTemplateRun } from '../../../model/ImportExportTemplateRun';
 
@@ -26,6 +25,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         if (this.state.template) {
             await this.prepareTable();
         }
@@ -33,27 +33,23 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         if (this.state.template) {
-            const context = ContextService.getInstance().getActiveContext();
-            if (context) {
-                context.deleteObjectList('RUNS_OF_TEMPLATE_' + this.state.template.ID);
-            }
+            this.context?.deleteObjectList('RUNS_OF_TEMPLATE_' + this.state.template.ID);
         }
     }
 
     private async prepareTable(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context && Array.isArray(this.state.template.Runs)) {
+        if (Array.isArray(this.state.template.Runs)) {
 
             const objects = this.state.template.Runs
                 .filter((r) => r.Type === ImportExportTemplateRunTypes.IMPORT)
                 .map((r, i) => new ImportExportTemplateRun(r, ++i));
 
-            context.setObjectList('RUNS_OF_TEMPLATE_' + this.state.template.ID, objects);
+            this.context?.setObjectList('RUNS_OF_TEMPLATE_' + this.state.template.ID, objects);
             const table = await TableFactoryService.getInstance().createTable(
                 'import-export-template-' + this.state.template.ID + '-runs',
                 KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN, null,
                 // use template id
-                [this.state.template.ID], context.contextId
+                [this.state.template.ID], this.context?.contextId
             );
 
             this.state.table = table;

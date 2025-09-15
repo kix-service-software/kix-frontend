@@ -305,6 +305,17 @@ export class MacroAPIService extends KIXObjectAPIService {
             action.Parameters['MacroID'] = subMacroId;
         }
 
+
+        if (action.Parameters['ElseMacroID']) {
+            let macro = action.Parameters['ElseMacroID'];
+            if (Array.isArray(macro) && macro.length) {
+                macro = macro[0];
+            }
+
+            const subMacroId = await this.createOrUpdateMacro(token, requestId, macro, update);
+            action.Parameters['ElseMacroID'] = subMacroId;
+        }
+
         const actionId = await super.executeUpdateOrCreateRequest(
             token, requestId, parameter, uri, KIXObjectType.MACRO_ACTION, 'MacroActionID', create
         );

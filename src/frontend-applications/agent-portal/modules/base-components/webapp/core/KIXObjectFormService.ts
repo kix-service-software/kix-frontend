@@ -48,7 +48,7 @@ export abstract class KIXObjectFormService {
         form: FormConfiguration, formInstance: FormInstance, kixObject?: KIXObject
     ): Promise<void> {
         if (!kixObject) {
-            const dialogContext = ContextService.getInstance().getActiveContext();
+            const dialogContext = formInstance.context;
             if (dialogContext) {
                 kixObject = await dialogContext.getObject(form.objectType);
             }
@@ -435,5 +435,9 @@ export abstract class KIXObjectFormService {
             }
         }
         return foundField;
+    }
+
+    public getObjectTagPositionProperty(): Map<string, any> {
+        return null;
     }
 }

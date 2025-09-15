@@ -13,8 +13,9 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { IdService } from '../../../../../model/IdService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class HomeComponent {
+class HomeComponent extends AbstractMarkoComponent {
 
     public state: ComponentState;
     private subscriber: IEventSubscriber;
@@ -24,6 +25,7 @@ class HomeComponent {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (): void => {
@@ -36,10 +38,9 @@ class HomeComponent {
     }
 
     private async prepareWidgets(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
         this.state.prepared = false;
         setTimeout(async () => {
-            this.state.contentWidgets = await context.getContent();
+            this.state.contentWidgets = await this.context?.getContent() || [];
             this.state.prepared = true;
         }, 100);
     }

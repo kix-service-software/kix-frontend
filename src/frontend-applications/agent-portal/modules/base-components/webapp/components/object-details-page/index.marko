@@ -8,36 +8,43 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.error)>
-    <span.error>${state.error}</span>
+    <span class="error">
+        ${state.error}
+    </span>
 </if>
-<else>
-    <div.details-container>
+<else-if(state.prepared)>
+    <div key=state.instanceId class="details-container">
         <widget
             instanceId=state.instanceId
-            minimizable=true
+            minimizable
             title=state.title
             contentActions=state.actions>
             <@content>
-                <ul.lane-list>
+                <ul class="lane-list">
                     <for|lane| of=state.lanes>
-                        <li.lane key=lane[0]>
+                        <li key=lane[0] class="lane">
                             <${lane[1]} ...{
                                 contextType: "MAIN",
                                 instanceId: lane[0],
-                                type: component.getLaneWidgetType()
+                                type: component.getLaneWidgetType(),
                             }/>
                         </li>
                     </for>
                 </ul>
             </@content>
         </widget>
-        <div.object-details-content-widget key="object-details-content">
+        <div
+            key=state.instanceId + "-object-details-content"
+            class="object-details-content-widget">
             <for|contentWidget| of=state.contentWidgets>
                 <${contentWidget[1]} ...{
                     contextType: "MAIN",
-                    instanceId: contentWidget[0]
+                    instanceId: contentWidget[0],
                 }/>
             </for>
         </div>
     </div>
+</else-if>
+<else>
+    <loading-spinner/>
 </else>

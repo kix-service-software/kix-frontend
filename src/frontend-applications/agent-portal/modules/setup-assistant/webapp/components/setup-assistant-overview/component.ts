@@ -75,8 +75,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public stepClicked(step: SetupStep): void {
+        this.state.loading = true;
         this.state.activeStep = step;
         this.state.template = KIXModulesService.getComponentTemplate(step.componentId);
+        setTimeout(() => this.state.loading = false, 50);
     }
 
 }

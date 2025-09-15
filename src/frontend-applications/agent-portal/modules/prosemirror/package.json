@@ -1,0 +1,10 @@
+{
+   "name": "kix-module-prosemirror",
+   "extensions": {
+       "kix:modules": {
+           "kix-module-prosemirror-module": {
+               "module": "kix-module.extension"
+           }
+       }
+   }
+}

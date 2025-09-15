@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { FAQContext } from '../../../core/context/FAQContext';
 import { KIXObjectPropertyFilter } from '../../../../../../model/KIXObjectPropertyFilter';
 import { UIFilterCriterion } from '../../../../../../model/UIFilterCriterion';
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { WidgetService } from '../../../../../../modules/base-components/webapp/core/WidgetService';
 import { TableFactoryService } from '../../../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObject } from '../../../../../../model/kix/KIXObject';
@@ -21,10 +20,9 @@ import { FAQArticleProperty } from '../../../../model/FAQArticleProperty';
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { ActionFactory } from '../../../../../../modules/base-components/webapp/core/ActionFactory';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState, FAQContext> {
 
     private predefinedFilter: KIXObjectPropertyFilter;
     private textFilterValue: string;
@@ -39,14 +37,12 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.additionalFilterCriteria = [];
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         if (this.state.widgetConfiguration.contextDependent) {
-            context.registerListener('faq-article-list-context-listener', {
+            this.context?.registerListener('faq-article-list-context-listener', {
                 sidebarLeftToggled: (): void => { return; },
                 sidebarRightToggled: (): void => { return; },
                 objectChanged: (): void => { return; },
@@ -101,10 +97,9 @@ class Component {
 
         this.state.table = table;
 
-        const context = ContextService.getInstance().getActiveContext() as FAQContext;
-        this.setCategoryFilter(context.categoryId);
+        this.setCategoryFilter(this.context.categoryId);
         if (this.state.widgetConfiguration.contextDependent && context) {
-            const objects = await context.getObjectList(KIXObjectType.FAQ_ARTICLE);
+            const objects = await this.context.getObjectList(KIXObjectType.FAQ_ARTICLE);
             this.setTitle(objects.length);
         }
     }

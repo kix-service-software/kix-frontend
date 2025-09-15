@@ -8,12 +8,15 @@
  */
 
 import { IdService } from '../../../../../model/IdService';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public chartId: string = IdService.generateDateBasedId(),
         public loading: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

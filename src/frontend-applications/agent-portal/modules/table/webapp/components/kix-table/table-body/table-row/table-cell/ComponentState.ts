@@ -8,8 +8,9 @@
  */
 
 import { RoutingConfiguration } from '../../../../../../../../model/configuration/RoutingConfiguration';
+import { AbstractComponentState } from '../../../../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public routingConfiguration: RoutingConfiguration = null,
@@ -18,6 +19,8 @@ export class ComponentState {
         public showDefaultCell: boolean = true,
         public stateClasses: string[] = null,
         public loading: boolean = true
-    ) { }
+    ) {
+        super();
+    }
 
 }

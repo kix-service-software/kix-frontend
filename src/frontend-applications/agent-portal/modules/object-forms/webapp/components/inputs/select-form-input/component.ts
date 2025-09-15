@@ -77,10 +77,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (data: any, eventId: string): void => {
-                if (data.blocked) {
-                    this.state.readonly = true;
-                } else {
-                    this.state.readonly = this.formValue.readonly;
+                if (this.context?.instanceId === data.contextInstanceId) {
+                    if (data.blocked) {
+                        this.state.readonly = true;
+                    } else {
+                        this.state.readonly = this.formValue.readonly;
+                    }
                 }
             }
         };
@@ -186,11 +188,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         if (event.key === 'Enter' && this.formValue.freeText && this.isFocusFreeText) {
+            const value = event?.target?.value?.trim();
             if (Array.isArray(this.formValue.value) && this.formValue.multiselect) {
-                this.formValue.setFormValue([...this.formValue.value, event.target.value]);
-            } else {
-                this.formValue.setFormValue([event.target.value]);
+                if (!this.formValue.value.some((fv) => fv === value)) {
+                    this.formValue.setFormValue([...this.formValue.value, value]);
+                }
+            } else if (this.formValue.value !== value) {
+                this.formValue.setFormValue([value]);
             }
+
         }
     }
 

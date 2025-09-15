@@ -7,16 +7,25 @@
  * --
  */
 
+
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { IAction } from '../../core/IAction';
 import { ActionFactory } from '../../core/ActionFactory';
 import { ActionGroup } from '../../../model/ActionGroup';
 import { BrowserUtil } from '../../core/BrowserUtil';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-export class Component {
-
-    private state: ComponentState;
+export class Component extends AbstractMarkoComponent<ComponentState> {
     private resizeTimeout: any = null;
     private prepareTimeout: any;
     private observer: ResizeObserver;
@@ -68,14 +77,16 @@ export class Component {
         if (this.observer) {
             this.observer.disconnect();
         }
+
+        WidgetService.getInstance().unregisterActionListener(this.listenerInstanceId);
     }
 
     private actionPreparationRunning = false;
     private prepareObserver(): void {
         if (window.ResizeObserver) {
-            const rootElement: HTMLElement = (this as any).getEl('action-list-wrapper');
+            const rootElement: HTMLElement = (this as any).getEl(this.state.key + '-action-list-wrapper');
             const container = rootElement?.parentElement;
-            const actionListElement: HTMLElement = (this as any).getEl('action-list');
+            const actionListElement: HTMLElement = (this as any).getEl(this.state.key + '-action-list');
 
             let containerWidth = container.offsetWidth;
             this.observer = new ResizeObserver((entries) => {
@@ -112,7 +123,7 @@ export class Component {
             window.clearTimeout(this.prepareTimeout);
         }
 
-        const actionListElement: HTMLElement = (this as any).getEl('action-list');
+        const actionListElement: HTMLElement = (this as any).getEl(this.state.key + '-action-list');
         const maxWidth = actionListElement?.parentElement?.offsetWidth || 0;
 
         // hide action during preparation
@@ -130,7 +141,7 @@ export class Component {
             if (this.actionsToShow.length) {
                 let actionsWidth = 0;
                 for (const action of this.actionsToShow) {
-                    const element = (this as any).getEl(action['key']);
+                    const element = (this as any).getEl(this.state.key + action['key']);
                     const width = element?.offsetWidth || ((this.state.displayText ? 16 : 3) * this.fontSize);
 
                     if (actionsWidth + width < maxWidth) {
@@ -166,6 +177,13 @@ export class Component {
     }
     public actionListClicked(event: any): any {
         (this as any).emit('actionListClicked');
+    }
+
+    public preventDefault(event: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
     }
 
 }

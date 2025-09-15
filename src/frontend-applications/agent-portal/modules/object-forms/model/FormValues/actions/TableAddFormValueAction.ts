@@ -14,6 +14,7 @@ export class TableAddFormValueAction extends FormValueAction {
 
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Add initial table';
         this.icon = 'fas fa-plus x-small';
     }

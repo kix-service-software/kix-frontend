@@ -15,12 +15,11 @@ import { TreeNode } from '../../core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { TimeoutTimer } from '../../core/TimeoutTimer';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
 declare const JSONEditor: any;
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private manager: IDynamicFormManager;
     private provideTimeout: any;
 
@@ -35,6 +34,8 @@ class Component {
     private mouseY: number;
 
     private updatePromiseResolve: () => void;
+
+    private refreshNeededValues: string[] = [];
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -139,7 +140,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-
+        this.refreshNeededValues = [];
         this.advancedOptionsMap = new Map();
         this.optionEditor = new Map();
 
@@ -191,12 +192,26 @@ class Component {
     }
 
     public async propertyChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): Promise<void> {
-        await value.setProperty(nodes && nodes.length ? nodes[0].id : null, true);
+        this.refreshNeededValues.push(value.id);
+        (this as any).setStateDirty('dynamicValues');
         if (await this.manager.clearValueOnPropertyChange(value.getValue().property)) {
             value.clearValue();
         }
+        await value.setProperty(nodes && nodes.length ? nodes[0].id : null, true);
 
         this.provideValue(value);
+
+        setTimeout(() => {
+            const index = this.refreshNeededValues.findIndex((v) => v === value.id);
+            if (index !== -1) {
+                this.refreshNeededValues.splice(index, 1);
+                (this as any).setStateDirty('dynamicValues');
+            }
+        }, 100);
+    }
+
+    public isRefreshNeeded(valueId: string): boolean {
+        return this.refreshNeededValues.some((v) => v === valueId);
     }
 
     public async operationChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): Promise<void> {

@@ -20,6 +20,8 @@ export class UpdateObjectRequest implements ISocketRequest {
         public parameter: Array<[string, any]>,
         public objectId: number | string,
         public updateOptions?: KIXObjectSpecificCreateOptions
-    ) { }
+    ) {
+        this.parameter = this.parameter?.filter((p) => p?.length === 2 && p[0]) || [];
+    }
 
 }

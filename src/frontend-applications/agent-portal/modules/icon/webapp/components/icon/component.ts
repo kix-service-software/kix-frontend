@@ -14,10 +14,9 @@ import { ObjectIconLoadingOptions } from '../../../../../server/model/ObjectIcon
 import { ObjectIcon } from '../../../model/ObjectIcon';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { PlaceholderService } from '../../../../base-components/webapp/core/PlaceholderService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -30,7 +29,8 @@ class Component {
         this.setIcon(this.state.icon);
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
+        await super.onMount();
         this.setIcon(this.state.icon);
     }
 
@@ -40,8 +40,7 @@ class Component {
             this.state.content = icon;
         } else if (icon) {
 
-            const context = ContextService.getInstance().getActiveContext();
-            const contextObject = await context?.getObject();
+            const contextObject = await this.context?.getObject();
 
             if (icon.tooltip) {
                 this.state.tooltip = await PlaceholderService.getInstance().replacePlaceholders(

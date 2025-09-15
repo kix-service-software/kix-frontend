@@ -749,10 +749,7 @@ export abstract class Context {
     public async reloadObjectList(
         objectType: KIXObjectType | string, silent: boolean = false, limit?: number
     ): Promise<void> {
-        const reloadPromises = [];
-        this.contextExtensions.forEach((ce) => {
-            reloadPromises.push(ce.reloadObjectList(objectType, this, silent, limit));
-        });
+        const reloadPromises = this.contextExtensions.map((ce) => ce.reloadObjectList(objectType, this, silent, limit));
         await Promise.allSettled(reloadPromises);
     }
 

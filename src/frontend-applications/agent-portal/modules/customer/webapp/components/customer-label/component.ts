@@ -18,10 +18,9 @@ import { ContactProperty } from '../../../model/ContactProperty';
 import { UserProperty } from '../../../../user/model/UserProperty';
 import { OrganisationDetailsContext } from '../../core/context/OrganisationDetailsContext';
 import { ContactDetailsContext } from '../../core/context/ContactDetailsContext';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public routingConfiguration: RoutingConfiguration;
     public objectId: number;

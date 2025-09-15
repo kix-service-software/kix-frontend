@@ -12,8 +12,9 @@ import { TableWidgetConfiguration } from '../../../../../model/configuration/Tab
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TicketStateProperty } from '../../../model/TicketStateProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = 'admin-ticket-states-list',
@@ -27,6 +28,8 @@ export class ComponentState {
                 KIXObjectType.TICKET_STATE,
                 [TicketStateProperty.NAME, SortOrder.UP]
             ), false, false, 'kix-icon-gears')
-    ) { }
+    ) {
+        super();
+    }
 
 }

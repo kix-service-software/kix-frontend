@@ -12,19 +12,7 @@ import { KIXObjectService } from './KIXObjectService';
 
 export class ObjectLoader {
 
-    private static INSTANCE: ObjectLoader;
-
-    public static getInstance(): ObjectLoader {
-        if (!ObjectLoader.INSTANCE) {
-            ObjectLoader.INSTANCE = new ObjectLoader();
-        }
-        return ObjectLoader.INSTANCE;
-    }
-
-    private constructor() { }
-
     private objectIdMap: Map<string, Map<string, Array<[(object: any) => void, (error: any) => void]>>> = new Map();
-
 
     private loadingOptionsMap: Map<string, KIXObjectLoadingOptions> = new Map();
 
@@ -35,26 +23,26 @@ export class ObjectLoader {
     }
 
     public queue<T = any>(objectType: string, objectId: string | number): Promise<T> {
-        if (!objectType || !objectId) {
-            return null;
-        }
-
         return new Promise<T>((resolve, reject) => {
+            if (!objectType || !objectId) {
+                return resolve(null);
+            } else {
 
-            if (!this.objectIdMap.has(objectType)) {
-                this.objectIdMap.set(objectType, new Map());
+                if (!this.objectIdMap.has(objectType)) {
+                    this.objectIdMap.set(objectType, new Map());
+                }
+
+                const objectMap = this.objectIdMap.get(objectType);
+                const key = objectId.toString();
+
+                if (!objectMap.has(key)) {
+                    objectMap.set(key, []);
+                }
+
+                objectMap.get(key).push([resolve, reject]);
+
+                this.load();
             }
-
-            const objectMap = this.objectIdMap.get(objectType);
-            const key = objectId.toString();
-
-            if (!objectMap.has(key)) {
-                objectMap.set(key, []);
-            }
-
-            objectMap.get(key).push([resolve, reject]);
-
-            this.load();
         });
     }
 
@@ -67,7 +55,6 @@ export class ObjectLoader {
             this.objectIdMap.forEach((value, key) => {
                 this.loadObjects(key, value);
                 this.objectIdMap.delete(key);
-                this.loadingOptionsMap.delete(key);
             });
         }, 150);
     }

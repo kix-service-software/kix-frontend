@@ -11,9 +11,7 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { ComponentState } from './ComponentState';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { CalendarConfiguration } from '../../core/CalendarConfiguration';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
-import { Context } from '../../../../../model/Context';
 
 declare const tui: any;
 
@@ -21,7 +19,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private contextListenerId: string;
     private widgetConfiguration: WidgetConfiguration;
-    private context: Context;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -32,13 +29,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         if (this.context) {
             this.widgetConfiguration = await this.context.getWidgetConfiguration(this.state.instanceId);
             this.state.calendarConfig = this.widgetConfiguration?.configuration as CalendarConfiguration;
             if (this.widgetConfiguration?.contextDependent) {
                 this.contextListenerId = 'calendar widget' + this.widgetConfiguration.instanceId;
-                this.context.registerListener(this.contextListenerId, {
+                this.context?.registerListener(this.contextListenerId, {
                     additionalInformationChanged: () => null,
                     sidebarLeftToggled: () => null,
                     filteredObjectListChanged: async () => {

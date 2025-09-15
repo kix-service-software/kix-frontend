@@ -7,11 +7,15 @@
  * --
  */
 
+import { IdService } from '../../../../model/IdService';
+
 export class AbstractComponentState {
 
     public constructor(
+        public prepared: boolean = false,
         public translations: any = {},
-        public formId: string = null
+        public formId: string = null,
+        public componentId: string = IdService.generateDateBasedId()
     ) { }
 
 }

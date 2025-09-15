@@ -17,6 +17,8 @@ export enum OAuth2ProfileProperty {
 
     NAME = 'Name',
 
+    PKCE = 'PKCE',
+
     SCOPE = 'Scope',
 
     URL_AUTH = 'URLAuth',

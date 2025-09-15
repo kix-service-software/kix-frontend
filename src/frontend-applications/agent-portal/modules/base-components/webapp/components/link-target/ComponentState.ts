@@ -7,15 +7,16 @@
  * --
  */
 
-import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
-import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public url: string = null,
         public isExternalUrl: boolean = false,
         public loading: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

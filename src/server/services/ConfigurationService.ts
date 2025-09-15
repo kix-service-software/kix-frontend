@@ -10,6 +10,7 @@
 import fs from 'fs';
 import path from 'path';
 import { IServerConfiguration } from '../model/IServerConfiguration';
+import { LoggingService } from './LoggingService';
 
 export class ConfigurationService {
 
@@ -42,6 +43,24 @@ export class ConfigurationService {
 
     public getServerConfiguration(): IServerConfiguration {
         return this.serverConfiguration;
+    }
+
+    public getDataFileContents<T = any>(fileNameRegex: RegExp): Map<string, T> {
+        const result = new Map();
+
+        try {
+            const filenames = fs.readdirSync(this.dataDir);
+            for (const fn of filenames) {
+                if (fn.match(fileNameRegex)) {
+                    const content = this.getDataFileContent(fn, []);
+                    result.set(fn, content);
+                }
+            }
+        } catch (e) {
+            LoggingService.getInstance().error(e);
+        }
+
+        return result;
     }
 
     public getDataFileContent<T = any>(fileName: string, defaultContent: any = {}): T {

@@ -9,8 +9,10 @@
 
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
+import { UserProperty } from '../../../../user/model/UserProperty';
 import { Contact } from '../../../model/Contact';
 import { NewContactDialogContext } from '../context/NewContactDialogContext';
 
@@ -38,7 +40,33 @@ export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {
             delete newContact.User;
         }
 
+        if (Array.isArray(newContact.User?.Preferences)) {
+            const userAccessFormValue = objectValueMapper.findFormValue(UserProperty.USER_ACCESS);
+            const preferencesFormValue = userAccessFormValue?.findFormValue(UserProperty.PREFERENCES);
+            newContact.User.Preferences = newContact.User.Preferences.filter(
+                (pref) => this.checkPerferenceFormValues(pref.ID, preferencesFormValue?.formValues)
+            );
+        }
+
         return newContact;
+    }
+
+    private checkPerferenceFormValues(property: any, formValues?: ObjectFormValue[]): boolean {
+        if (formValues?.length) {
+            return formValues.some(
+                (fv) => {
+                    let result: boolean = false;
+                    if (fv?.getObjectProperty('ID') === property) {
+                        result = true;
+                    }
+                    else if (fv?.formValues?.length) {
+                        result = this.checkPerferenceFormValues(property, fv?.formValues);
+                    }
+                    return result;
+                }
+            );
+        }
+        return false;
     }
 
 }

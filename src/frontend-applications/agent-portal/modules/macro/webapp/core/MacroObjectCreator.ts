@@ -122,7 +122,10 @@ export class MacroObjectCreator {
         for (const parameterField of parameterFields) {
             const value = formInstance.getFormFieldValue(parameterField.instanceId);
             const optionNameValue = parameterField.options.find((o) => o.option === 'OptionName');
-            if (optionNameValue?.value === 'MacroID') {
+            if (
+                optionNameValue?.value === 'MacroID'
+                || optionNameValue?.value === 'ElseMacroID'
+            ) {
                 const macro = await this.createMacro(parameterField, formInstance, macroComment);
                 macro.Name += '-' + IdService.generateDateBasedId();
                 macro.Comment += ` - Referenced by Action: ${action.Type}`;

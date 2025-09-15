@@ -14,7 +14,6 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { JobRunLogProperty } from '../../../model/JobRunLogProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { Job } from '../../../model/Job';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
 import { Cell } from '../../../../table/model/Cell';
@@ -38,6 +37,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const jobRun: JobRun = cell.getRow().getRowObject().getObject();
             this.update(jobRun);
         }
+    }
+
+    public async onMount(contextInstanceId?: string): Promise<void> {
+        await super.onMount(contextInstanceId);
     }
 
     private async update(jobRun: JobRun): Promise<void> {
@@ -66,12 +69,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             await table.initialize();
 
             let fileName;
-            const context = ContextService.getInstance().getActiveContext();
-            if (context) {
-                const job = await context.getObject<Job>();
-                if (job) {
-                    fileName = `${job.Name}_Run_${this.jobRun.ID}`;
-                }
+            const job = await this.context?.getObject<Job>();
+            if (job) {
+                fileName = `${job.Name}_Run_${this.jobRun.ID}`;
             }
 
             if (!fileName) {

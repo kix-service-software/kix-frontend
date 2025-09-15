@@ -7,10 +7,11 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../../../base-components/webapp/core/AbstractComponentState';
 import { ObjectIcon } from '../../../../../../icon/model/ObjectIcon';
 import { Column } from '../../../../../model/Column';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public column: Column = null;
     public icon: string | ObjectIcon = null;

@@ -110,9 +110,6 @@ export class DynamicFormFieldValue {
         this.operationTreeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler('operation-' + this.id, this.operationTreeHandler);
 
-        this.valueTreeHandler = new TreeHandler();
-        TreeService.getInstance().registerTreeHandler('value-' + this.id, this.valueTreeHandler, true);
-
         this.relativeTimeUnitTreeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler('relativeTimeUnit-' + this.id, this.relativeTimeUnitTreeHandler);
 
@@ -339,10 +336,16 @@ export class DynamicFormFieldValue {
 
     private async createValueInput(): Promise<void> {
         if (this.manager.showValueInput(this.value)) {
+
+            TreeService.getInstance().removeTreeHandler('value-' + this.id);
+            this.valueTreeHandler = new TreeHandler();
+            TreeService.getInstance().registerTreeHandler('value-' + this.id, this.valueTreeHandler, true);
+
             const property = this.value.property ? this.value.property : null;
-            const inputType = await this.manager.getInputType(property, this.value.operator as SearchOperator);
+            const operator = this.value.operator ? this.value.operator : null;
+            const inputType = await this.manager.getInputType(property, operator as SearchOperator);
             this.inputOptions = await this.manager.getInputTypeOptions(
-                property, this.value.operator ? this.value.operator : null
+                property, operator
             );
 
             this.isDate = inputType === InputFieldTypes.DATE;
@@ -351,7 +354,7 @@ export class DynamicFormFieldValue {
             this.isTable = inputType === InputFieldTypes.TABLE;
             this.isDropdown = inputType === InputFieldTypes.DROPDOWN || inputType === InputFieldTypes.OBJECT_REFERENCE;
             this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE;
-            this.isMultiselect = await this.manager.isMultiselect(property, this.value.operator);
+            this.isMultiselect = await this.manager.isMultiselect(property, operator);
             this.isFreeText = this.inputOptions
                 ? this.inputOptions.some((o) => o[0] === ObjectReferenceOptions.FREETEXT && Boolean(o[1]))
                 : false;
@@ -374,24 +377,29 @@ export class DynamicFormFieldValue {
                 }
             }
 
-            if (this.value.property && this.isDropdown && !this.isAutocomplete) {
-                const valueNodes = await this.manager.getTreeNodes(this.value.property);
+            if (property && this.isDropdown && !this.isAutocomplete) {
+                const valueNodes = await this.manager.getTreeNodes(property, null, operator);
                 this.valueTreeHandler.setTree(valueNodes);
             }
 
-            const preloadOption = this.inputOptions.find(
-                (o) => o[0] === ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN
-            );
-            if (this.isAutocomplete && preloadOption && preloadOption[1]) {
-                const tree = await this.doAutocompleteSearch(10, preloadOption[1].toString());
-                this.valueTreeHandler.setTree(tree);
+            if (this.isAutocomplete) {
+                const preloadOption = this.inputOptions.find(
+                    (o) => o[0] === ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN
+                );
+                if (preloadOption && preloadOption[1]) {
+                    const tree = await this.doAutocompleteSearch(10, preloadOption[1].toString());
+                    this.valueTreeHandler.setTree(tree);
+                }
+                else {
+                    this.valueTreeHandler.setTree([]);
+                }
             }
         }
     }
 
     public async reloadValueTree(): Promise<void> {
         if (this.value.property && this.isDropdown && !this.isAutocomplete) {
-            const valueNodes = await this.manager.getTreeNodes(this.value.property);
+            const valueNodes = await this.manager.getTreeNodes(this.value.property, null, this.value.operator);
             this.valueTreeHandler.setTree(valueNodes, undefined, true);
         }
     }
@@ -417,7 +425,7 @@ export class DynamicFormFieldValue {
                 const selectValues = Array.isArray(this.value.value) ? this.value.value : [this.value.value];
                 currentValues = await this.manager.getTreeNodes(
                     // filter placeholder values
-                    this.value.property, selectValues.filter((v) => typeof v !== 'string' || !v.match(/<KIX_.+>/))
+                    this.value.property, selectValues.filter((v) => typeof v !== 'string' || !v.match(/<KIX_.+>/)), this.value.operator
                 );
                 this.valueTreeHandler.setTree(currentValues);
                 if (this.isFreeText) {

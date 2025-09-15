@@ -9,9 +9,10 @@
 
 import { WidgetConfiguration } from '../../../../../../model/configuration/WidgetConfiguration';
 import { ContextType } from '../../../../../../model/ContextType';
+import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 import { TreeNode } from '../../../../../base-components/webapp/core/tree';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = null,
@@ -21,6 +22,8 @@ export class ComponentState {
         public nodes: TreeNode[] = [],
         public activeNode: TreeNode = null,
         public prepared: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

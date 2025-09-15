@@ -13,10 +13,9 @@ import { ComponentInput } from './ComponentInput';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private keepExpanded: boolean = false;
     private toggleButtonClicked: boolean = false;
     private treeHandler: TreeHandler;

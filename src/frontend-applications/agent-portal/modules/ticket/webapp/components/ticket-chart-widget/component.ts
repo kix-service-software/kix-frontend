@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { TicketChartWidgetConfiguration, TicketChartFactory } from '../../core';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
@@ -18,8 +17,9 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
     private ticketChartConfiguration: TicketChartWidgetConfiguration;
@@ -34,10 +34,8 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const currentContext = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = currentContext
-            ? await currentContext.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         if (this.state.widgetConfiguration) {
             this.state.title = this.state.widgetConfiguration.title;
@@ -50,7 +48,7 @@ class Component {
                 this.ticketChartConfiguration.configuration.chartConfiguration.data.labels = [];
                 this.ticketChartConfiguration.configuration.chartConfiguration.data.datasets[0].data = [];
 
-                currentContext.registerListener('TicketChartComponent' + IdService.generateDateBasedId(), {
+                this.context?.registerListener('TicketChartComponent' + IdService.generateDateBasedId(), {
                     sidebarLeftToggled: (): void => { return; },
                     sidebarRightToggled: (): void => { return; },
                     objectChanged: (): void => { return; },
@@ -61,7 +59,7 @@ class Component {
                 });
 
                 this.contextFilteredObjectListChanged(
-                    KIXObjectType.TICKET, currentContext.getFilteredObjectList(KIXObjectType.TICKET)
+                    KIXObjectType.TICKET, this.context?.getFilteredObjectList(KIXObjectType.TICKET)
                 );
 
                 this.subscriber = {

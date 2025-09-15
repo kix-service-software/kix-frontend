@@ -7,13 +7,17 @@
  * --
  */
 
-export class ComponentState {
+import { AbstractComponentState } from '../../../core/AbstractComponentState';
+
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public text: string = '',
         public hasButtons: boolean = false,
         public decision: [string, string] = null,
         public decisionChecked: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

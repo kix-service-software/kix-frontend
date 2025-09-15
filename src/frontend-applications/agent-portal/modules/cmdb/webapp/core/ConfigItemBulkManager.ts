@@ -106,7 +106,9 @@ export class ConfigItemBulkManager extends BulkManager {
         return inputFieldType;
     }
 
-    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, objectIds?: Array<string | number>, operator?: string
+    ): Promise<TreeNode[]> {
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
             case VersionProperty.DEPL_STATE_ID:
@@ -146,7 +148,7 @@ export class ConfigItemBulkManager extends BulkManager {
                         );
                     } else {
                         // use type rather than property
-                        return await super.getTreeNodes(input.Type);
+                        return await super.getTreeNodes(input.Type, objectIds, operator);
                     }
                 }
         }

@@ -7,6 +7,16 @@
  * --
  */
 
+/* eslint-disable max-lines-per-function */
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { ContextType } from '../../../../../model/ContextType';
 import { Context } from '../../../../../model/Context';
@@ -25,8 +35,9 @@ import { IKIXModuleExtension } from '../../../../../model/IKIXModuleExtension';
 import { KIXStyle } from '../../../../base-components/model/KIXStyle';
 import { PortalNotificationService } from '../../../../portal-notification/webapp/core/PortalNotificationService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
@@ -56,6 +67,7 @@ class Component {
 
         await this.checkAuthentication();
 
+        await ContextService.getInstance().initialize();
         ClientNotificationSocketClient.getInstance();
         PortalNotificationService.getInstance();
         ContextHistory.getInstance();
@@ -92,19 +104,7 @@ class Component {
 
                 setTimeout(() => {
                     this.state.reload = false;
-                    RoutingService.getInstance().routeToInitialContext(false);
-                }, 500);
-            }
-        });
-
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, {
-            eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
-            eventPublished: (data: any, eventId: string): void => {
-                this.state.reloadContent = true;
-
-                setTimeout(() => {
-                    this.state.reloadContent = false;
-                }, 500);
+                }, 25);
             }
         });
 
@@ -127,7 +127,7 @@ class Component {
 
         const end = Date.now();
 
-        console.debug(`mount base template: ${(end - start) / 1000} sec.`);
+        console.debug(`mount base template: ${end - start} ms.`);
     }
 
     private setBaseLink(): void {

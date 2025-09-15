@@ -21,6 +21,11 @@
                 "module": "menu.extension"
             }
         },
+        "kix:initial-data": {
+            "ticket-initial-data": {
+                "module": "initial-data.extension"
+            }
+        },
         "kix:configuration": {
             "ticket-configuration": {
                 "module": "configuration.extension"

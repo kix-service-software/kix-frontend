@@ -7,15 +7,18 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { Table } from '../../../model/Table';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public table: Table = null,
         public tableHeight: string = 'unset',
         public prepared: boolean = false,
         public showLoadingShield: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

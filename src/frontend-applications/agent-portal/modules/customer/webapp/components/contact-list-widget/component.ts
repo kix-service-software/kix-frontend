@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { OrganisationAdditionalInformationKeys } from '../../core/context/OrganisationContext';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
@@ -27,22 +26,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
-        if (context) {
-            context.registerListener('contact-list-widget', {
-                sidebarRightToggled: (): void => { return; },
-                scrollInformationChanged: () => { return; },
-                objectListChanged: () => { return; },
-                objectChanged: (): void => { return; },
-                filteredObjectListChanged: (): void => { return; },
-                sidebarLeftToggled: (): void => { return; },
-                additionalInformationChanged: (key: string, value: any) => {
-                    this.setWidgetDependingMode();
-                }
-            });
-
-        }
+        this.context?.registerListener('contact-list-widget', {
+            sidebarRightToggled: (): void => { return; },
+            scrollInformationChanged: () => { return; },
+            objectListChanged: () => { return; },
+            objectChanged: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            additionalInformationChanged: (key: string, value: any) => {
+                this.setWidgetDependingMode();
+            }
+        });
 
         this.state.filterActions = await ActionFactory.getInstance().generateActions(
             ['contact-table-depending-action']
@@ -53,33 +49,26 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onDestroy(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.unregisterListener('contact-list-widget');
-        }
+        this.context?.unregisterListener('contact-list-widget');
     }
 
     private async setWidgetDependingMode(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        const depending = this.context?.getAdditionalInformation(
+            OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
+        );
 
-        if (context) {
-            const depending = context.getAdditionalInformation(
-                OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
-            );
-
-            if (typeof depending !== 'undefined' && depending) {
-                WidgetService.getInstance().setWidgetTitle(this.instanceId, 'Translatable#Assigned Contacts');
-                WidgetService.getInstance().setWidgetClasses(this.instanceId, ['depending-widget']);
-            } else {
-                WidgetService.getInstance().setWidgetTitle(this.instanceId, null);
-                WidgetService.getInstance().setWidgetClasses(this.instanceId, []);
-            }
-
-            this.state.filterActions = await ActionFactory.getInstance().generateActions(
-                ['contact-table-depending-action']
-            );
-            WidgetService.getInstance().updateActions(this.instanceId);
+        if (typeof depending !== 'undefined' && depending) {
+            WidgetService.getInstance().setWidgetTitle(this.instanceId, 'Translatable#Assigned Contacts');
+            WidgetService.getInstance().setWidgetClasses(this.instanceId, ['depending-widget']);
+        } else {
+            WidgetService.getInstance().setWidgetTitle(this.instanceId, null);
+            WidgetService.getInstance().setWidgetClasses(this.instanceId, []);
         }
+
+        this.state.filterActions = await ActionFactory.getInstance().generateActions(
+            ['contact-table-depending-action']
+        );
+        WidgetService.getInstance().updateActions(this.instanceId);
     }
 
 }

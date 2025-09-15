@@ -212,7 +212,7 @@ export class TreeHandler {
                         silent = true;
                         selectionChanged = false;
                     } else {
-                        this.selectedNodes.forEach((n) => n.selected = false);
+                        this.tree.forEach((n) => n.selected = false);
                         this.selectedNodes = [];
                         this.setSelectedNode(nodes[0].id, selected);
                     }

@@ -7,27 +7,28 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div class=[
-    "container-fluid",
-    {
-        "text-center": !state.prepared,
-    },
-]>
+<div
+    key=state.componentId + "-object-form"
+    id=state.componentId + "-object-form"
+    class=[
+        "container-fluid",
+        {
+            "text-center": !state.prepared,
+        },
+    ]>
 
-    <if(state.prepared)>
+    <if(state.prepared && Array.isArray(state.pages))>
         <if(state.pages.length > 1 || input.contextInstanceId)>
             <object-form-page-slider
                 pages=state.pages
                 carouselId=state.carouselId
-                contextInstanceId=state.contextInstanceId
-            />
+                contextInstanceId=state.contextInstanceId/>
         </if>
         <div class=component.getLayoutClasses()>
             <for|page| of=state.pages>
                 <object-form-page
                     page=page
-                    contextInstanceId=input.contextInstanceId
-                />
+                    contextInstanceId=input.contextInstanceId/>
             </for>
             <object-form-other-information contextInstanceId=input.contextInstanceId/>
         </div>
@@ -42,8 +43,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 width="24"
                 height="24"
                 role="img"
-                aria-label="Danger:"
-            >
+                aria-label="Danger:">
                 <use xlink:href="#exclamation-triangle-fill"/>
             </svg>
             <div>

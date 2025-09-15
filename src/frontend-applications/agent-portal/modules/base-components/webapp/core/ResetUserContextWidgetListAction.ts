@@ -31,6 +31,7 @@ export class ResetUserContextWidgetListAction extends AbstractAction<Table | Use
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Reset User Widgets';
         this.icon = 'fas fa-user-times';
     }

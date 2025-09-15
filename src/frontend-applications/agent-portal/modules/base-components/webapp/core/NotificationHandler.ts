@@ -15,6 +15,7 @@ import { BrowserUtil } from './BrowserUtil';
 import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
 import { BrowserCacheService } from './CacheService';
+import { AdministrationSocketClient } from '../../../admin/webapp/core/AdministrationSocketClient';
 
 export class NotificationHandler {
 
@@ -69,6 +70,7 @@ export class NotificationHandler {
             .some((roleId) => user.RoleIDs.some((rid) => rid === roleId));
 
         if (userIsAffacted) {
+            AdministrationSocketClient.getInstance().clearAdminModuleCache();
             BrowserUtil.openAppRefreshOverlay();
         }
     }

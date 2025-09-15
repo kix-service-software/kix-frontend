@@ -35,6 +35,8 @@ export enum ObjectReferenceOptions {
 
     KEEP_SELECTION = 'KEEP_SELECTION',
 
+    FILTER_SELECTION = 'FILTER_SELECTION',
+
     TRANSLATABLE = 'TRANSLATABLE',
 
     TEXT_AS_ID = 'TEXT_AS_ID',

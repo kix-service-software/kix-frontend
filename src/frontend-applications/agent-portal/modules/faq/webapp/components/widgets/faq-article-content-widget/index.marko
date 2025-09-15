@@ -7,66 +7,62 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<if(state.faqArticle && state.inlineContent)>
+<macro|{ id, title }| name="faq-content-item">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id=id + "header">
+            <button
+                class="accordion-button"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#" + id
+                aria-expanded="true"
+                aria-controls=id>
+                ${title}
+            </button>
+        </h2>
+        <div id=id class="accordion-collapse collapse show" aria-labelledby=id>
+            <div class="accordion-body">
+                <iframe
+                    class="w-100 h-100 bg-white"
+                    id=id + "-frame"
+                    on-load("viewLoaded", id + "-frame")/>
+            </div>
+        </div>
+    </div>
+</macro>
+
+<if(state.faqArticle)>
     <widget
         instanceId=state.instanceId
         contextType="MAIN"
         title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
         actions=state.actions>
         <@content>
-            <div.faq-article-content-container>
-                <div>
-                    <widget
-                        instanceId="faq-article-group"
-                        title=state.translations["Translatable#Symptom"]>
-                        <@content>
-                            <editor
-                                readOnly=true
-                                value=state.faqArticle.Field1
-                                inlineContent=state.inlineContent
-                                useReadonlyStyle=true/>
-                        </@content>
-                    </widget>
-                    <widget
-                        instanceId="faq-article-group"
-                        title=state.translations["Translatable#Cause"]>
-                        <@content>
-                            <editor
-                                readOnly=true
-                                value=state.faqArticle.Field2
-                                inlineContent=state.inlineContent
-                                useReadonlyStyle=true/>
-                        </@content>
-                    </widget>
-                    <widget
-                        instanceId="faq-article-group"
-                        title=state.translations["Translatable#Solution"]>
-                        <@content>
-                            <editor
-                                readOnly=true
-                                value=state.faqArticle.Field3
-                                inlineContent=state.inlineContent
-                                useReadonlyStyle=true/>
-                        </@content>
-                    </widget>
-                    <widget
-                        instanceId="faq-article-group"
-                        title=state.translations["Translatable#Comment"]>
-                        <@content>
-                            <editor
-                                readOnly=true
-                                value=state.faqArticle.Field6
-                                inlineContent=state.inlineContent
-                                useReadonlyStyle=true/>
-                        </@content>
-                    </widget>
+            <div class="row">
+                <div class="col-lg-10 col-md-8 col-sm-6">
+                    <div class="accordion" id="faq-content-accordion">
+                        <faq-content-item
+                            id="field1"
+                            title=(state.translations["Translatable#Symptom"])/>
+                        <faq-content-item
+                            id="field2"
+                            title=(state.translations["Translatable#Cause"])/>
+                        <faq-content-item
+                            id="field3"
+                            title=(
+                                state.translations["Translatable#Solution"]
+                            )/>
+                        <faq-content-item
+                            id="field6"
+                            title=(state.translations["Translatable#Comment"])/>
+                    </div>
                 </div>
-                <div>
-                    <div.faq-rating title=component.getRatingTooltip()>
-                        <span.faq-rating-label>
-                            <translation-string pattern="Translatable#Rating"/>:
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div title=component.getRatingTooltip()>
+                        <span class="fw-bold">
+                            <translation-string pattern="Translatable#Rating"/>
                         </span>
-                        <span.faq-rating-info>
+                        <span class="text-primary">
                             <if(state.faqArticle.VoteCount)>
                                 <for|icon| of=component.stars>
                                     <icon icon=icon/>
@@ -74,18 +70,21 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 <span>(${component.rating})</span>
                             </if>
                             <else>
-                                <span>
-                                    <b><translation-string pattern="Translatable#No rating available."/></b>
+                                <span class="fw-bold">
+                                    <translation-string pattern="Translatable#No rating available."/>
                                 </span>
                             </else>
                         </span>
                     </div>
-                    <div.faq-attachments>
+                    <div>
                         <span>
-                            <translation-string pattern="Translatable#Attachments"/>:
+                            <translation-string pattern="Translatable#Attachments"/>
+                            ${" "}:
                         </span>
                         <for|attachment| of=state.attachments>
-                            <file-entry attachment=attachment on-fileClicked("download", attachment)/>
+                            <file-entry
+                                attachment=attachment
+                                on-fileClicked("download", attachment)/>
                         </for>
                     </div>
                 </div>

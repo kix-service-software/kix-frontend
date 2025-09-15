@@ -8,25 +8,25 @@
  */
 
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
-import { Context } from '../../../../../model/Context';
 import { IdService } from '../../../../../model/IdService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
+import { ActionFactory } from '../../core/ActionFactory';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { ClientStorageService } from '../../core/ClientStorageService';
+import { IAction } from '../../core/IAction';
 import { TabContainerEvent } from '../../core/TabContainerEvent';
 import { TabContainerEventData } from '../../core/TabContainerEventData';
 import { ComponentState } from './ComponentState';
 
-class WidgetComponent implements IEventSubscriber {
+class WidgetComponent extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
-    private state: ComponentState;
     public eventSubscriberId: string;
-    private context: Context;
     private clearMinimizedStateOnDestroy: boolean;
+    private actions: IAction[];
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -50,6 +50,8 @@ class WidgetComponent implements IEventSubscriber {
         if (input.title) {
             this.setTitle(input.title);
         }
+
+        this.actions = input.actions || [];
     }
 
     private async setTitle(title: string): Promise<void> {
@@ -57,7 +59,7 @@ class WidgetComponent implements IEventSubscriber {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
         this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
 
@@ -79,6 +81,12 @@ class WidgetComponent implements IEventSubscriber {
         if (typeof storedMinimized !== 'undefined' && storedMinimized !== null) {
             this.state.minimized = storedMinimized === 'true';
         }
+
+        const additionalActions = await ActionFactory.getInstance().getActionsForWidget(
+            this.state.widgetConfiguration?.widgetId
+        );
+        this.state.actions = [...this.actions || [], ...additionalActions];
+
 
         EventService.getInstance().subscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
         EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TITLE, this);
@@ -121,10 +129,7 @@ class WidgetComponent implements IEventSubscriber {
                 this.state.minimized = !this.state.minimized;
                 (this as any).emit('minimizedChanged', this.state.minimized);
                 if (this.state.widgetType === WidgetType.SIDEBAR) {
-                    const context = ContextService.getInstance().getActiveContext();
-                    if (context) {
-                        context.toggleSidebarWidget(this.state.instanceId);
-                    }
+                    this.context?.toggleSidebarWidget(this.state.instanceId);
                 }
             }
 

@@ -1,0 +1,10 @@
+{
+    "dependencies": [
+        "./static/summernote.min.js",
+        "./static/summernote.min.css",
+        "./static/summernote-bs5.min.js",
+        "./static/summernote-bs5.min.css",
+        "require ./core/SummerNoteUIModule",
+        "require ./components/summernote-editor"
+    ]
+}
