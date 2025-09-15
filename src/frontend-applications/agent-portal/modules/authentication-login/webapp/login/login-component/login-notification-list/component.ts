@@ -8,22 +8,21 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { PortalNotification } from '../../../../../portal-notification/model/PortalNotification';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
+    private notifications: PortalNotification[] = [];
     private expandedNotifications: string[] = [];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
         this.state = new ComponentState();
-    }
-
-    public onInput(input: any): void {
-        const notifications: PortalNotification[] = input.notifications || [];
+        this.notifications = input.notifications || [];
 
         const groupedNotifications: Array<[string, PortalNotification[]]> = [];
-        for (const n of notifications) {
+        for (const n of this.notifications) {
             let group = groupedNotifications.find((gn) => gn[0] === n.group);
             if (group) {
                 group[1].push(n);
@@ -34,6 +33,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.state.notifications = groupedNotifications;
+    }
+
+    public onInput(input: any): void {
+        return;
     }
 
     public async onMount(): Promise<void> {
@@ -49,10 +52,30 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         (this as any).setStateDirty('notifications');
+
+        setTimeout(() => {
+            const iframe: any = document.getElementById(`${this.state.frameId}-${notification.id}`);
+            const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+            iframeDocument.body.innerHTML = notification.fullText;
+            BrowserUtil.cleanupHTML(iframeDocument);
+            BrowserUtil.appendKIXStyling(iframeDocument);
+        }, 100);
     }
 
     public isExpanded(notification: PortalNotification): boolean {
         return this.expandedNotifications?.some((id) => id.toString() === notification.id);
+    }
+
+    public viewLoaded(event: any): void {
+        const frameDocument = event.target.contentWindow.document;
+
+        const bodyElements = frameDocument.documentElement.getElementsByTagName('body');
+        if (bodyElements?.length) {
+            bodyElements[0].addEventListener('click', (event) => {
+                BrowserUtil.handleLinkClicked(event);
+            });
+        }
+
     }
 
 }
