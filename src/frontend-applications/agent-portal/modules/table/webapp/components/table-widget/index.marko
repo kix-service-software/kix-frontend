@@ -20,8 +20,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     },
                 ]
                 on-click("toggleView", "table")
-                title="Table"
-            >
+                title="Table">
                 <icon icon="kix-icon-legend"/>
             </button>
             <for|view| of=state.dataViews>
@@ -35,8 +34,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         },
                     ]
                     on-click("toggleView", view.id)
-                    title=view.name
-                >
+                    title=view.name>
                     <icon icon=view.icon/>
                 </button>
             </for>
@@ -50,8 +48,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         title=state.title
         actions=state.actions
         icon=state.icon
-        contextType=component.contextType
-    >
+        contextType=component.contextType>
         <@headercontent>
             <for|componentId| of=state.headerTitleComponents>
                 <${component.getTemplate(componentId)}/>
@@ -68,8 +65,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     disabled=state.isFiltering
                     filterValue=state.filterValue
                     on-filter("filter")
-                    key="table-widget-filter"
-                />
+                    key="table-widget-filter"/>
             </if>
             <if(input.filterActions)>
                 <div class="filter-action-list">
@@ -80,8 +76,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <span
                     class=["table-reset-filter", "icon", "fas fa-window-close"]
                     title=component.resetFilterTitle
-                    on-click("resetFilter")
-                >
+                    on-click("resetFilter")>
                     <span class="path1"/>
                     <span class="path2"/>
                     <span class="path3"/>
@@ -105,8 +100,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             disabled=state.isFiltering
                             filterValue=state.filterValue
                             on-filter("filter")
-                            key="table-widget-filter"
-                        />
+                            key="table-widget-filter"/>
                     </if>
                     <if(state.showFilterReset && state.showFilterInBody)>
                         <span
@@ -116,8 +110,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 "fas fa-window-close",
                             ]
                             title=component.resetFilterTitle
-                            on-click("resetFilter")
-                        >
+                            on-click("resetFilter")>
                             <span class="path1"/>
                             <span class="path2"/>
                             <span class="path3"/>
@@ -136,8 +129,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <${component.getTemplate(view.componentId)}
                         objects=state.objects
                         active=state.activeViewId === view.id
-                        widgetConfiguration=state.widgetConfiguration
-                    />
+                        widgetConfiguration=state.widgetConfiguration/>
                 </div>
             </for>
             <if(state.table)>
@@ -152,6 +144,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </@content>
     </widget>
 </if>
+<else-if(state.error)>
+    <div class="alert alert-danger" role="alert">
+        ${state.error}
+    </div>
+</else-if>
 <else>
     <table-placeholder/>
 </else>

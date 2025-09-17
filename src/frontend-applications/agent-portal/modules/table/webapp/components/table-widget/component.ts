@@ -79,7 +79,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         }
 
-        if (this.state.widgetConfiguration) {
+        if (this.state.widgetConfiguration?.configuration) {
             const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
 
             await this.initViews(settings?.objectType);
@@ -95,6 +95,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.prepareContextDependency(settings);
             await this.prepareFormDependency();
             this.state.loading = false;
+        } else {
+            this.state.error = await TranslationService.translate(`Translatable#No widget configuration available: ${this.state.instanceId}!`);
         }
     }
 
