@@ -125,7 +125,7 @@ export class DateTimeUtil {
         return `${DateTimeUtil.getKIXDateString(date, asUTC)} ${DateTimeUtil.getKIXTimeString(date, false, null, asUTC)}`;
     }
 
-    public static getKIXDateString(date: Date, asUTC: boolean = false): string {
+    public static getKIXDateString(date: Date | string, asUTC: boolean = false): string {
         let kixDateString, year, month, day;
         if (date) {
             if (typeof date === 'string') {

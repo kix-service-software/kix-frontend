@@ -11,7 +11,7 @@ import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { FormValueProperty } from '../../../../../object-forms/model/FormValueProperty';
-import { DateTimeFormValue } from '../../../../../object-forms/model/FormValues/DateTimeFormValue';
+import { DateFormValue } from '../../../../../object-forms/model/FormValues/DateFormValue';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
@@ -158,7 +158,7 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
             preferences.push(startPreference);
         }
 
-        const startFormValue = new DateTimeFormValue('Value', startPreference, objectValueMapper, oofFormValue);
+        const startFormValue = new DateFormValue('Value', startPreference, objectValueMapper, oofFormValue);
         startFormValue.label = 'Translatable#From';
         startFormValue.visible = true;
         startFormValue.isControlledByParent = true;
@@ -171,7 +171,7 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
             preferences.push(endPreference);
         }
 
-        const endFormValue = new DateTimeFormValue('Value', endPreference, objectValueMapper, oofFormValue);
+        const endFormValue = new DateFormValue('Value', endPreference, objectValueMapper, oofFormValue);
         endFormValue.label = 'Translatable#Till';
         endFormValue.visible = true;
         endFormValue.isControlledByParent = true;
