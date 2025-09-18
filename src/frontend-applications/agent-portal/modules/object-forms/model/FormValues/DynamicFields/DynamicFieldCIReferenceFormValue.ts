@@ -123,6 +123,11 @@ export class DynamicFieldCIReferenceFormValue<T = number> extends SelectObjectFo
         this.minSelectCount = Number(dynamicField?.Config?.CountMin) || 0;
         this.maxSelectCount = Number(dynamicField?.Config?.CountMax) || 1;
         await super.initFormValueByField(field);
+
+        const ciId = this.context?.getAdditionalInformation(`${KIXObjectType.CONFIG_ITEM}-ID`);
+        if (ciId && this.dfName === 'AffectedAsset') {
+            await this.setFormValue(ciId, true);
+        }
     }
 
 }
