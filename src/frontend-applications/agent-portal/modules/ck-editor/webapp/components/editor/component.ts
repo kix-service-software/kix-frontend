@@ -11,7 +11,6 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { CKEditor5 } from '../../core/CKEditor5';
-import { CKEditorService } from '../../core/CKEditorService';
 import { ComponentState } from './ComponentState';
 
 class EditorComponent {
@@ -21,7 +20,6 @@ class EditorComponent {
     private createTimeout: any;
     private input: any;
     private changeTimeout: any;
-
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.readOnly);
@@ -60,10 +58,10 @@ class EditorComponent {
         await this.editor.create();
         if (this.input) {
             await this.editor.update(this.input);
-        }
 
-        if (this.input.style) {
-            BrowserUtil.applyStyle(this.state.id, this.input.style);
+            if (this.input.style) {
+                BrowserUtil.applyStyle(this.state.id, this.input.style);
+            }
         }
     }
 
@@ -88,7 +86,7 @@ class EditorComponent {
     }
 
     public editorClicked(event: any): void {
-        if (this.input.readOnly && event?.srcElement?.tagName !== 'A') {
+        if (this.input?.readOnly && event?.srcElement?.tagName !== 'A') {
             event.stopPropagation();
             event.preventDefault();
         }

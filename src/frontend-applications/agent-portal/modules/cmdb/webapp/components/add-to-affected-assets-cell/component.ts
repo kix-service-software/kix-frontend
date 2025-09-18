@@ -37,11 +37,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const ticket = await this.context?.getObject<Ticket>();
         if (this.context?.descriptor?.contextMode === ContextMode.DETAILS) {
             this.state.readonly = true;
         } else {
-            const formHandler = await this.context.getFormManager().getObjectFormHandler();
+            const formHandler = await this.context?.getFormManager().getObjectFormHandler();
             this.formValue = formHandler?.objectFormValueMapper?.findFormValue('DynamicField.AffectedAsset');
             this.formValueBindingId = this.formValue?.addPropertyBinding(FormValueProperty.VALUE, (value: any) => {
                 this.setStates(value?.value);
