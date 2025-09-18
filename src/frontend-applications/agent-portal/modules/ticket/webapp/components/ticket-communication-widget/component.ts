@@ -204,7 +204,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
         event.stopPropagation();
         event.preventDefault();
 
-        const element: HTMLElement = document.getElementById('communication-top');
+        const element: HTMLElement = document.getElementById(this.state.topId);
         if (element) {
             element.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
         }
