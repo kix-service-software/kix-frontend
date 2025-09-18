@@ -9,10 +9,15 @@
 
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { EventService } from '../../core/EventService';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { ApplicationEvent } from '../../core/ApplicationEvent';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
+import { IdService } from '../../../../../model/IdService';
 
-class ActionComponent {
+class ActionComponent extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -25,7 +30,29 @@ class ActionComponent {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.update();
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (contextInstanceId: string, eventId: string): void => {
+                if (this.context?.instanceId === contextInstanceId) {
+                    if (eventId === ApplicationEvent.UNLOCK_ACTIONS) {
+                        this.state.canRunAction = this.state.action.canRun();
+                    } else if (eventId === ApplicationEvent.LOCK_ACTIONS) {
+                        this.state.canRunAction = false;
+                    }
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(ApplicationEvent.LOCK_ACTIONS, this.subscriber);
+        EventService.getInstance().subscribe(ApplicationEvent.UNLOCK_ACTIONS, this.subscriber);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ApplicationEvent.LOCK_ACTIONS, this.subscriber);
+        EventService.getInstance().unsubscribe(ApplicationEvent.UNLOCK_ACTIONS, this.subscriber);
     }
 
     private async update(): Promise<void> {
