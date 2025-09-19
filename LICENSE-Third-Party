@@ -318,7 +318,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.36
+├─ @marko/compiler@5.39.37
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -740,7 +740,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/mdurl
 │  └─ licenseFile: node_modules/@types/mdurl/LICENSE
-├─ @types/node@22.18.3
+├─ @types/node@22.18.6
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1232,7 +1232,7 @@
 │  ├─ email: faeldt_kristian@cyberagent.co.jp
 │  ├─ path: node_modules/base64id
 │  └─ licenseFile: node_modules/base64id/LICENSE
-├─ baseline-browser-mapping@2.8.3
+├─ baseline-browser-mapping@2.8.6
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/web-platform-dx/baseline-browser-mapping
 │  ├─ path: node_modules/baseline-browser-mapping
@@ -1305,7 +1305,7 @@
 │  ├─ email: andrey@sitnik.ru
 │  ├─ path: node_modules/browserslist
 │  └─ licenseFile: node_modules/babel-preset-env/node_modules/browserslist/LICENSE
-├─ browserslist@4.26.0
+├─ browserslist@4.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/browserslist/browserslist
 │  ├─ publisher: Andrey Sitnik
@@ -1367,7 +1367,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001741
+├─ caniuse-lite@1.0.30001743
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -2094,7 +2094,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.218
+├─ electron-to-chromium@1.5.222
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -3151,7 +3151,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.56
+├─ marko@5.37.57
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
