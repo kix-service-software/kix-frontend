@@ -18,6 +18,7 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
 
 export abstract class ExtendedDynamicFormManager implements IDynamicFormManager {
     resetValue?: boolean;
@@ -188,6 +189,10 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
     }
 
     public setDefaultValues(values?: ObjectPropertyValue[]): void {
+        return;
+    };
+
+    public prepareFilterCriteria(formValue: any): Promise<FilterCriteria | object> {
         return;
     };
 
