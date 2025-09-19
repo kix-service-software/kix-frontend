@@ -596,4 +596,18 @@ export class BrowserUtil {
         htmlDocument.head.appendChild(bootstrapLink);
     }
 
+    public static buildHtmlStructur(html: string): string {
+        return `
+            <html>
+                <head>
+                    <link rel="stylesheet" href="/static/applications/application/lasso-less.css"/>
+                    <link rel="stylesheet" href="/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css"/>
+                </head>
+                <body>
+                    ${html}
+                </body>
+            </html>
+        `;
+    }
+
 }
