@@ -406,7 +406,7 @@ export class DynamicFormFieldValue {
 
     public async setCurrentValue(silent: boolean = true, init?: boolean): Promise<void> {
         let currentValues: TreeNode[] = [];
-        if (this.value.value) {
+        if (this.value.value !== null && typeof this.value.value !== 'undefined') {
             if (this.isDropdown && !this.isAutocomplete) {
                 const valueNodes = this.valueTreeHandler.getTree();
                 const selectValues = Array.isArray(this.value.value) ? this.value.value : [this.value.value];
