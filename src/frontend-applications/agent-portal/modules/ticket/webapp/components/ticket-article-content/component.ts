@@ -12,10 +12,9 @@ import { Article } from '../../../model/Article';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { IdService } from '../../../../../model/IdService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private article: Article = null;
 
@@ -31,6 +30,14 @@ class Component {
             const applicationUrl = ClientStorageService.getApplicationUrl();
             this.state.url = `${applicationUrl}/views/tickets/${this.article?.TicketID}/articles/${this.article?.ArticleID}?prepareInline=true`;
         }
+    }
+
+    public async onMount(): Promise<void> {
+        setTimeout(() => {
+            const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
+            const frameHeight = frame.contentDocument.documentElement.scrollHeight;
+            frame.style.height = frameHeight + 10 + 'px'; // 10 is for the top and bottom padding of 5px each
+        }, 500);
     }
 
     public viewLoaded(event: any): void {
