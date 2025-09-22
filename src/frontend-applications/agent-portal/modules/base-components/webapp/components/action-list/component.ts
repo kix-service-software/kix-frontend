@@ -24,6 +24,12 @@ import { ActionFactory } from '../../core/ActionFactory';
 import { ActionGroup } from '../../../model/ActionGroup';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { EventService } from '../../core/EventService';
+import { ContextEvents } from '../../core/ContextEvents';
+import { Context } from 'mocha';
+import { ContextService } from '../../core/ContextService';
+import { IdService } from '../../../../../model/IdService';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
     private resizeTimeout: any = null;
@@ -35,12 +41,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public listenerInstanceId: string;
     public fontSize: number;
     public expansionWidth: number;
+    private contextSubscriber: IEventSubscriber;
+    private observerTimeout: any;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
         this.fontSize = BrowserUtil.getBrowserFontsize();
         this.expansionWidth = 3 * this.fontSize;
-        this.listenerInstanceId = input.instanceId;
+        this.listenerInstanceId = input.instanceId || this.listenerInstanceId ||
+            IdService.generateDateBasedId('action-list-');
     }
 
     public onInput(input: any): void {
@@ -70,7 +79,31 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.prepared = true;
 
-        setTimeout(() => this.prepareObserver(), 150);
+        this.observerTimeout = setTimeout(() => this.prepareObserver(), 150);
+
+        const context = ContextService.getInstance().getActiveContext();
+        if (context) {
+            this.contextSubscriber = {
+                eventSubscriberId: this.listenerInstanceId,
+                eventPublished: (data: Context, eventId: string): void => {
+                    if (data?.instanceId === context.instanceId) {
+                        if (!this.observer) {
+                            this.observerTimeout = setTimeout(() => this.prepareObserver(), 150);
+                        }
+                    } else {
+                        if (this.observerTimeout) {
+                            clearTimeout(this.observerTimeout);
+                            this.observerTimeout = undefined;
+                        }
+                        if (this.observer) {
+                            this.observer.disconnect();
+                            this.observer = undefined;
+                        }
+                    }
+                }
+            };
+            EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.contextSubscriber);
+        }
     }
 
     public onDestroy(): void {
@@ -79,6 +112,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         WidgetService.getInstance().unregisterActionListener(this.listenerInstanceId);
+        if (this.contextSubscriber) {
+            EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.contextSubscriber);
+        }
     }
 
     private actionPreparationRunning = false;
@@ -110,6 +146,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             });
 
             this.observer.observe(container);
+            this.observerTimeout = undefined;
         }
     }
 
@@ -124,46 +161,50 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         const actionListElement: HTMLElement = (this as any).getEl(this.state.key + '-action-list');
-        const maxWidth = actionListElement?.parentElement?.offsetWidth || 0;
+        // only prepare if visible
+        if (actionListElement.offsetParent) {
 
-        // hide action during preparation
-        actionListElement.classList.add('opacity-0');
+            const maxWidth = actionListElement?.parentElement?.offsetWidth || 0;
 
-        this.actionPreparationRunning = true;
-        this.state.listDefault = [...this.actionsToShow];
-        this.state.listExpansion = [];
-        (this as any).setStateDirty();
+            // hide action during preparation
+            actionListElement.classList.add('opacity-0');
 
-        this.prepareTimeout = setTimeout(() => {
-            this.prepareTimeout = null;
-            const listDefault = [];
-            const listExpansion = [];
-            if (this.actionsToShow.length) {
-                let actionsWidth = 0;
-                for (const action of this.actionsToShow) {
-                    const element = (this as any).getEl(this.state.key + action['key']);
-                    const width = element?.offsetWidth || ((this.state.displayText ? 16 : 3) * this.fontSize);
+            this.actionPreparationRunning = true;
+            this.state.listDefault = [...this.actionsToShow];
+            this.state.listExpansion = [];
+            (this as any).setStateDirty();
 
-                    if (actionsWidth + width < maxWidth) {
-                        listDefault.push(action);
-                        actionsWidth += width;
-                    } else {
-                        listExpansion.push(action);
+            this.prepareTimeout = setTimeout(() => {
+                this.prepareTimeout = null;
+                const listDefault = [];
+                const listExpansion = [];
+                if (this.actionsToShow.length) {
+                    let actionsWidth = 0;
+                    for (const action of this.actionsToShow) {
+                        const element = (this as any).getEl(this.state.key + action['key']);
+                        const width = element?.offsetWidth || ((this.state.displayText ? 16 : 3) * this.fontSize);
+
+                        if (actionsWidth + width < maxWidth) {
+                            listDefault.push(action);
+                            actionsWidth += width;
+                        } else {
+                            listExpansion.push(action);
+                        }
+                    }
+
+                    // if list is wider with expansion button shown, move last action
+                    if (listDefault.length && listExpansion.length && (actionsWidth + this.expansionWidth) > maxWidth) {
+                        const removedElement = listDefault.pop();
+                        listExpansion.unshift(removedElement);
                     }
                 }
-
-                // if list is wider with expansion button shown, move last action
-                if (listDefault.length && listExpansion.length && (actionsWidth + this.expansionWidth) > maxWidth) {
-                    const removedElement = listDefault.pop();
-                    listExpansion.unshift(removedElement);
-                }
-            }
-            this.state.listDefault = listDefault;
-            this.state.listExpansion = listExpansion;
-            (this as any).setStateDirty();
-            actionListElement.classList.remove('opacity-0');
-            this.actionPreparationRunning = false;
-        }, 200);
+                this.state.listDefault = listDefault;
+                this.state.listExpansion = listExpansion;
+                (this as any).setStateDirty();
+                actionListElement.classList.remove('opacity-0');
+                this.actionPreparationRunning = false;
+            }, 200);
+        }
     }
 
     public async actionsChanged(): Promise<void> {
