@@ -51,9 +51,13 @@ export class Cell {
         return matchTextFilter && matchCriteria;
     }
 
-    private matchDisplayValue(filterValue: string): boolean {
+    private async matchDisplayValue(filterValue: string): Promise<boolean> {
         if (!filterValue || filterValue === '') {
             return true;
+        }
+
+        if (!this.tableValue.displayValue) {
+            await this.tableValue.initDisplayText(this);
         }
 
         return FilterUtil.stringContains(this.tableValue.displayValue, filterValue);
