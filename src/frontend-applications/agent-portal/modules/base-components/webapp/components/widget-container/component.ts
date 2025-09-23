@@ -68,6 +68,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('widget-container'),
             eventPublished: (data: any): void => {
+                if (data.contextId !== this.context.contextId) return;
                 if (this.state.configurationMode) {
                     this.disableConfigurationMode(data.cancel);
                 } else {
@@ -177,11 +178,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().publish(
             ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, { widgets: [...this.modifiedWidgets] }
         );
-        EventService.getInstance().publish(ApplicationEvent.TOGGLE_CONFIGURATION_MODE, { cancel: false });
+        EventService.getInstance().publish(
+            ApplicationEvent.TOGGLE_CONFIGURATION_MODE,
+            { cancel: false, contextId: this.context.contextId }
+        );
     }
 
     public cancel(): void {
-        EventService.getInstance().publish(ApplicationEvent.TOGGLE_CONFIGURATION_MODE, { cancel: true });
+        EventService.getInstance().publish(
+            ApplicationEvent.TOGGLE_CONFIGURATION_MODE,
+            { cancel: true, contextId: this.context.contextId }
+        );
     }
 
     public disableConfigurationMode(cancel: boolean): void {
