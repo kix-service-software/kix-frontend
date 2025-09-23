@@ -255,7 +255,10 @@ export class Table implements Table {
             EventService.getInstance().subscribe(TableEvent.COLUMN_RESIZED, this.subscriber);
         } else if (forceReload) {
             await this.reload();
+        } else if (this.filterValue) {
+            await this.filter();
         }
+
     }
 
     private async setSortByContext(): Promise<void> {
