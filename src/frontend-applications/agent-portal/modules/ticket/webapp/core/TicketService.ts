@@ -222,7 +222,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.CREATED_QUEUE_ID:
             case TicketProperty.QUEUE_ID:
             case TicketProperty.HISTORIC_QUEUE_ID:
-                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, undefined, ['READ']);
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(undefined, ['READ']);
                 nodes = await QueueService.getInstance().prepareObjectTree(
                     queuesHierarchy, showInvalid, invalidClickable,
                     filterIds ? filterIds.map((fid) => Number(fid)) : null

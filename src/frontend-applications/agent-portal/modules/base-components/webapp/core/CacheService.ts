@@ -161,6 +161,7 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.TICKET_HISTORY);
                 cacheKeyPrefixes.push('QUEUE_HIERARCHY');
                 cacheKeyPrefixes.push('OPTION_REQUEST');
+                cacheKeyPrefixes.push(KIXObjectType.QUEUE_TICKET_STATS);
                 break;
             case KIXObjectType.FAQ_VOTE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
@@ -218,6 +219,7 @@ export class BrowserCacheService {
             case KIXObjectType.QUEUE:
                 cacheKeyPrefixes.push('QUEUE_HIERARCHY');
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                cacheKeyPrefixes.push(KIXObjectType.QUEUE_TICKET_STATS);
                 break;
             case KIXObjectType.TICKET_PRIORITY:
             case KIXObjectType.TICKET_STATE:

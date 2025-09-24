@@ -10,10 +10,15 @@
 import { ComponentState } from './ComponentState';
 import { TreeNode } from '../../../core/tree';
 import { BrowserUtil } from '../../../core/BrowserUtil';
+import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
+import { EventService } from '../../../core/EventService';
+import { TreeEvent } from '../../../core/tree/TreeEvent';
+import { IEventSubscriber } from '../../../core/IEventSubscriber';
+import { IdService } from '../../../../../../model/IdService';
 
-class TreeNodeComponent {
+class TreeNodeComponent extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
+    private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.node);
@@ -45,23 +50,21 @@ class TreeNodeComponent {
         }
     }
 
-    private hasClickableChildren(tree: TreeNode[]): boolean {
-        for (const t of tree) {
-            if (t.selectable) {
-                return true;
-            }
-
-            if (t.children && t.children.length) {
-                const hasChildren = this.hasClickableChildren(t.children);
-                if (hasChildren) {
-                    return true;
+    public async onMount(contextInstanceId?: string): Promise<void> {
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('tree-node'),
+            eventPublished: (data: any, eventId: string): void => {
+                if (this.state.treeId === data.treeId && this.state.node.id === data.node?.id) {
+                    this.state.node = data.node;
+                    (this as any).setStateDirty('node');
                 }
             }
-        }
-        return false;
+        };
+        EventService.getInstance().subscribe(TreeEvent.NODE_UPDATED, this.subscriber);
     }
 
     public onDestroy(): void {
+        EventService.getInstance().unsubscribe(TreeEvent.NODE_UPDATED, this.subscriber);
         this.state.node = null;
     }
 

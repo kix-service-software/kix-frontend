@@ -9,20 +9,18 @@
 
 import { ComponentState } from './ComponentState';
 import { IdService } from '../../../../../model/IdService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TicketContext, QueueService } from '../../core';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
-import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 export class Component extends AbstractMarkoComponent<ComponentState, TicketContext> {
+
     private subscriber: IEventSubscriber;
-    private contextListenerId: string;
 
     public listenerId: string;
 
@@ -56,33 +54,34 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketCont
 
         this.state.activeNode = this.getActiveNode(this.context?.queueId);
 
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
+        this.prepareTicketStats(this.state.nodes);
 
-        this.contextListenerId = IdService.generateDateBasedId('ticket-queue-explorer');
-        this.context?.registerListener(this.contextListenerId, {
-            filteredObjectListChanged: async () => null,
-            additionalInformationChanged: (key: string, value: any) => {
-                if (key === AdditionalContextInformation.LOADING) {
-                    BrowserUtil.toggleLoadingShield('ticket-queue-explorer', value);
-                }
-            },
-            objectChanged: () => null,
-            objectListChanged: () => null,
-            scrollInformationChanged: () => null,
-            sidebarLeftToggled: () => null,
-            sidebarRightToggled: () => null
-        });
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
+    public nodeToggled(node: TreeNode): void {
+        if (node?.expanded && node.children?.length) {
+            setTimeout(() => this.prepareTicketStats(node.children), 250);
+        }
+    }
+
+    private async prepareTicketStats(nodes: TreeNode[]): Promise<void> {
+        const ticketStats = await QueueService.loadTicketStats(nodes.map((n) => n.id));
+        for (const ts of ticketStats) {
+            const subNode = nodes.find((n) => n.id === ts.QueueID);
+            QueueService.prepareTicketStats(ts, subNode, this.state.treeId);
+        }
+    }
+
     private async loadQueues(context: TicketContext): Promise<void> {
         this.state.nodes = null;
-        const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(true, null, ['READ']);
+        const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(null, ['READ']);
         this.state.nodes = await QueueService.getInstance().prepareObjectTree(
-            queuesHierarchy, true, false, null, undefined, true, true
+            queuesHierarchy, true, false, null, undefined, true
         );
     }
 
