@@ -318,7 +318,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.37
+├─ @marko/compiler@5.39.39
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -355,187 +355,187 @@
 │  ├─ email: damien.arrachequesne@gmail.com
 │  ├─ path: node_modules/@socket.io/sticky
 │  └─ licenseFile: node_modules/@socket.io/sticky/LICENSE
-├─ @tiptap/core@2.26.1
+├─ @tiptap/core@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/core
 │  └─ licenseFile: node_modules/@tiptap/core/README.md
-├─ @tiptap/extension-blockquote@2.26.1
+├─ @tiptap/extension-blockquote@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-blockquote
 │  └─ licenseFile: node_modules/@tiptap/extension-blockquote/README.md
-├─ @tiptap/extension-bold@2.26.1
+├─ @tiptap/extension-bold@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-bold
 │  └─ licenseFile: node_modules/@tiptap/extension-bold/README.md
-├─ @tiptap/extension-bubble-menu@2.26.1
+├─ @tiptap/extension-bubble-menu@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-bubble-menu
 │  └─ licenseFile: node_modules/@tiptap/extension-bubble-menu/README.md
-├─ @tiptap/extension-bullet-list@2.26.1
+├─ @tiptap/extension-bullet-list@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-bullet-list
 │  └─ licenseFile: node_modules/@tiptap/extension-bullet-list/README.md
-├─ @tiptap/extension-code-block@2.26.1
+├─ @tiptap/extension-code-block@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-code-block
 │  └─ licenseFile: node_modules/@tiptap/extension-code-block/README.md
-├─ @tiptap/extension-code@2.26.1
+├─ @tiptap/extension-code@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-code
 │  └─ licenseFile: node_modules/@tiptap/extension-code/README.md
-├─ @tiptap/extension-color@2.26.1
+├─ @tiptap/extension-color@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-color
 │  └─ licenseFile: node_modules/@tiptap/extension-color/README.md
-├─ @tiptap/extension-document@2.26.1
+├─ @tiptap/extension-document@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-document
 │  └─ licenseFile: node_modules/@tiptap/extension-document/README.md
-├─ @tiptap/extension-dropcursor@2.26.1
+├─ @tiptap/extension-dropcursor@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-dropcursor
 │  └─ licenseFile: node_modules/@tiptap/extension-dropcursor/README.md
-├─ @tiptap/extension-floating-menu@2.26.1
+├─ @tiptap/extension-floating-menu@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-floating-menu
 │  └─ licenseFile: node_modules/@tiptap/extension-floating-menu/README.md
-├─ @tiptap/extension-gapcursor@2.26.1
+├─ @tiptap/extension-gapcursor@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-gapcursor
 │  └─ licenseFile: node_modules/@tiptap/extension-gapcursor/README.md
-├─ @tiptap/extension-hard-break@2.26.1
+├─ @tiptap/extension-hard-break@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-hard-break
 │  └─ licenseFile: node_modules/@tiptap/extension-hard-break/README.md
-├─ @tiptap/extension-heading@2.26.1
+├─ @tiptap/extension-heading@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-heading
 │  └─ licenseFile: node_modules/@tiptap/extension-heading/README.md
-├─ @tiptap/extension-highlight@2.26.1
+├─ @tiptap/extension-highlight@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-highlight
 │  └─ licenseFile: node_modules/@tiptap/extension-highlight/README.md
-├─ @tiptap/extension-history@2.26.1
+├─ @tiptap/extension-history@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-history
 │  └─ licenseFile: node_modules/@tiptap/extension-history/README.md
-├─ @tiptap/extension-horizontal-rule@2.26.1
+├─ @tiptap/extension-horizontal-rule@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-horizontal-rule
 │  └─ licenseFile: node_modules/@tiptap/extension-horizontal-rule/README.md
-├─ @tiptap/extension-italic@2.26.1
+├─ @tiptap/extension-italic@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-italic
 │  └─ licenseFile: node_modules/@tiptap/extension-italic/README.md
-├─ @tiptap/extension-link@2.26.1
+├─ @tiptap/extension-link@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-link
 │  └─ licenseFile: node_modules/@tiptap/extension-link/README.md
-├─ @tiptap/extension-list-item@2.26.1
+├─ @tiptap/extension-list-item@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-list-item
 │  └─ licenseFile: node_modules/@tiptap/extension-list-item/README.md
-├─ @tiptap/extension-mention@2.26.1
+├─ @tiptap/extension-mention@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-mention
 │  └─ licenseFile: node_modules/@tiptap/extension-mention/README.md
-├─ @tiptap/extension-ordered-list@2.26.1
+├─ @tiptap/extension-ordered-list@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-ordered-list
 │  └─ licenseFile: node_modules/@tiptap/extension-ordered-list/README.md
-├─ @tiptap/extension-paragraph@2.26.1
+├─ @tiptap/extension-paragraph@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-paragraph
 │  └─ licenseFile: node_modules/@tiptap/extension-paragraph/README.md
-├─ @tiptap/extension-placeholder@2.26.1
+├─ @tiptap/extension-placeholder@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-placeholder
 │  └─ licenseFile: node_modules/@tiptap/extension-placeholder/README.md
-├─ @tiptap/extension-strike@2.26.1
+├─ @tiptap/extension-strike@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-strike
 │  └─ licenseFile: node_modules/@tiptap/extension-strike/README.md
-├─ @tiptap/extension-table-cell@2.26.1
+├─ @tiptap/extension-table-cell@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-table-cell
 │  └─ licenseFile: node_modules/@tiptap/extension-table-cell/README.md
-├─ @tiptap/extension-table-header@2.26.1
+├─ @tiptap/extension-table-header@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-table-header
 │  └─ licenseFile: node_modules/@tiptap/extension-table-header/README.md
-├─ @tiptap/extension-table-row@2.26.1
+├─ @tiptap/extension-table-row@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-table-row
 │  └─ licenseFile: node_modules/@tiptap/extension-table-row/README.md
-├─ @tiptap/extension-table@2.26.1
+├─ @tiptap/extension-table@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-table
 │  └─ licenseFile: node_modules/@tiptap/extension-table/README.md
-├─ @tiptap/extension-task-item@2.26.1
+├─ @tiptap/extension-task-item@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-task-item
 │  └─ licenseFile: node_modules/@tiptap/extension-task-item/README.md
-├─ @tiptap/extension-task-list@2.26.1
+├─ @tiptap/extension-task-list@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-task-list
 │  └─ licenseFile: node_modules/@tiptap/extension-task-list/README.md
-├─ @tiptap/extension-text-align@2.26.1
+├─ @tiptap/extension-text-align@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-text-align
 │  └─ licenseFile: node_modules/@tiptap/extension-text-align/README.md
-├─ @tiptap/extension-text-style@2.26.1
+├─ @tiptap/extension-text-style@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-text-style
 │  └─ licenseFile: node_modules/@tiptap/extension-text-style/README.md
-├─ @tiptap/extension-text@2.26.1
+├─ @tiptap/extension-text@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-text
 │  └─ licenseFile: node_modules/@tiptap/extension-text/README.md
-├─ @tiptap/extension-underline@2.26.1
+├─ @tiptap/extension-underline@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-underline
 │  └─ licenseFile: node_modules/@tiptap/extension-underline/README.md
-├─ @tiptap/extension-youtube@2.26.1
+├─ @tiptap/extension-youtube@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/extension-youtube
 │  └─ licenseFile: node_modules/@tiptap/extension-youtube/README.md
-├─ @tiptap/pm@2.26.1
+├─ @tiptap/pm@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/pm
@@ -545,7 +545,7 @@
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/starter-kit
 │  └─ licenseFile: node_modules/@tiptap/starter-kit/README.md
-├─ @tiptap/suggestion@2.26.1
+├─ @tiptap/suggestion@2.26.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ueberdosis/tiptap
 │  ├─ path: node_modules/@tiptap/suggestion
@@ -2094,7 +2094,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.222
+├─ electron-to-chromium@1.5.223
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -3151,7 +3151,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.57
+├─ marko@5.37.59
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -3668,7 +3668,7 @@
 │  ├─ repository: https://github.com/prosemirror/prosemirror-transform
 │  ├─ path: node_modules/prosemirror-transform
 │  └─ licenseFile: node_modules/prosemirror-transform/LICENSE
-├─ prosemirror-view@1.41.0
+├─ prosemirror-view@1.41.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/prosemirror/prosemirror-view
 │  ├─ path: node_modules/prosemirror-view
