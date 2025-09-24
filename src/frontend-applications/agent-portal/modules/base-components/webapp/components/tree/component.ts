@@ -26,7 +26,7 @@ class TreeComponent extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.state.tree = input.tree;
-        this.state.treeId = input.treeId ? 'tree-' + input.treeId : 'tree-' + IdService.generateDateBasedId();
+        this.state.treeId = input.treeId ? input.treeId : 'tree-' + IdService.generateDateBasedId();
         this.setParentFlags = typeof input.setParentFlags !== 'undefined'
             ? input.setParentFlags
             : true;

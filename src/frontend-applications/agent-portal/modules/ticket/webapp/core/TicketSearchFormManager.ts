@@ -200,7 +200,7 @@ export class TicketSearchFormManager extends SearchFormManager {
                 break;
             case TicketProperty.QUEUE_ID:
             case TicketProperty.HISTORIC_QUEUE_ID:
-                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['READ']);
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(null, ['READ']);
                 nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, showInvalid, showInvalid);
                 break;
             default:

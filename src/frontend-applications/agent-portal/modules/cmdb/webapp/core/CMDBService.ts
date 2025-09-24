@@ -270,7 +270,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                             return await KIXObjectService.prepareTree(items);
                         } else if (input.Type === 'TeamReference') {
                             const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(
-                                false, null, ['READ'], filterIds ? filterIds.map((fid) => Number(fid)) : null
+                                null, ['READ'], filterIds ? filterIds.map((fid) => Number(fid)) : null
                             );
                             return await QueueService.getInstance().prepareObjectTree(
                                 queuesHierarchy, showInvalid, invalidClickable

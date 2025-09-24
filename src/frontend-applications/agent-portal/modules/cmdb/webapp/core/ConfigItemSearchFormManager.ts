@@ -269,7 +269,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
                         return await KIXObjectService.prepareTree(items, showInvalid, showInvalid);
                     } else if (input.Type === 'TeamReference') {
                         const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(
-                            false, null, ['READ'], objectIds ? objectIds.map((oid) => Number(oid)) : null
+                            null, ['READ'], objectIds ? objectIds.map((oid) => Number(oid)) : null
                         );
                         return await QueueService.getInstance().prepareObjectTree(
                             queuesHierarchy, showInvalid, showInvalid
