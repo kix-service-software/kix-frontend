@@ -39,6 +39,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
         const treeHandler = new TreeHandler([], null, null, true);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
         await this.load();
+        await this.setCurrentValue();
 
         this.state.prepared = true;
     }
