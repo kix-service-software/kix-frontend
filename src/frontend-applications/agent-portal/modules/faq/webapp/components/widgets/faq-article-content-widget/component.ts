@@ -88,16 +88,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(this.state.faqArticle);
 
             const field1Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field1, inlineContent);
-            this.prepareFrame('field1-frame', field1Value);
+            this.state.html['field1'] = field1Value;
 
             const field2Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field2, inlineContent);
-            this.prepareFrame('field2-frame', field2Value);
+            this.state.html['field2'] = field2Value;
 
             const field3Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field3, inlineContent);
-            this.prepareFrame('field3-frame', field3Value);
+            this.state.html['field3'] = field3Value;
 
             const field6Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field6, inlineContent);
-            this.prepareFrame('field6-frame', field6Value);
+            this.state.html['field6'] = field6Value;
 
             this.prepareImages();
 
@@ -105,30 +105,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.rating = BrowserUtil.round(this.state.faqArticle?.Rating);
             this.prepareActions();
         }
-    }
-
-    private prepareFrame(frameId: string, value: string): void {
-        const iframe: any = document.getElementById(frameId);
-        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-        iframeDocument.body.innerHTML = value;
-        BrowserUtil.cleanupHTML(iframeDocument);
-        BrowserUtil.appendKIXStyling(iframeDocument);
-    }
-
-    public viewLoaded(frameId: string, event: any): void {
-        const frameDocument = event.target.contentWindow.document;
-
-        const frame = document.getElementById(frameId);
-        const frameHeight = frameDocument.documentElement.scrollHeight;
-        frame.style.height = frameHeight + 10 + 'px'; // 10 is for the top and bottom padding of 5px each
-
-        const bodyElements = frameDocument.documentElement.getElementsByTagName('body');
-        if (bodyElements?.length) {
-            bodyElements[0].addEventListener('click', (event) => {
-                BrowserUtil.handleLinkClicked(event);
-            });
-        }
-
     }
 
     private async prepareImages(): Promise<void> {

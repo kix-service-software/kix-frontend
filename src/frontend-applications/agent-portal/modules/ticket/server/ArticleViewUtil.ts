@@ -70,9 +70,24 @@ export class ArticleViewUtil {
             }
         }
 
-        content = this.prepareContent(content);
-
+        content = this.sanitizeContent(content);
+        content = this.buildHtmlStructur(content);
         return content;
+    }
+
+    private static buildHtmlStructur(content: string): string {
+        return `
+                <html>
+                    <head>
+                        <link rel="stylesheet" href="/static/applications/application/lasso-less.css"/>
+                        <link rel="stylesheet" href="/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css"/>
+                        ${Article.MAIL_STYLE}
+                    </head>
+                    <body>
+                        ${content}
+                    </body>
+                </html>
+            `;
     }
 
     private static async getHTMLContent(
@@ -159,68 +174,24 @@ export class ArticleViewUtil {
         return newString;
     }
 
-    public static prepareContent(content: string): string {
+    public static sanitizeContent(content: string): string {
         try {
-            const jsdom = require('jsdom');
-            const { JSDOM } = jsdom;
+            const { JSDOM } = require('jsdom');
+            const window = new JSDOM('').window;
 
-            const dom = new JSDOM(content);
-            const domWindow = dom.window;
-            const domDocument = domWindow.document;
+            const createDOMPurify = require('dompurify');
+            const DOMPurify = createDOMPurify(window);
+            const cleanHTML = DOMPurify.sanitize(
+                content,
+                {
+                    USE_PROFILES: { html: true },
+                    ADD_TAGS: ['style']
+                }
+            );
 
-            const scriptElements = domDocument.getElementsByTagName('script');
-            for (let i = 0; i < scriptElements.length; i++) {
-                scriptElements.item(i).remove();
-            }
-
-            this.removeListenersFromTags(dom);
-
-            const ckEditorLink = domDocument.createElement('link');
-            ckEditorLink.rel = 'stylesheet';
-            ckEditorLink.href = '/static/thirdparty/ckeditor5/ckeditor5.css';
-            domDocument.head.appendChild(ckEditorLink);
-
-            const bootstrapLink = domDocument.createElement('link');
-            bootstrapLink.rel = 'stylesheet';
-            bootstrapLink.href = '/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css';
-            domDocument.head.appendChild(bootstrapLink);
-
-            domDocument.body.innerHTML = '<div class="ck ck-content">' + domDocument.body.innerHTML + '</div>';
-
-            return domDocument.documentElement.innerHTML;
+            return cleanHTML;
         } catch (e) {
             LoggingService.getInstance().error(e);
-        }
-    }
-
-    private static removeListenersFromTags(dom: any): void {
-        const domWindow = dom.window;
-        const domDocument = domWindow.document;
-
-        // try to remove listener and functions
-        const allElements = Array.prototype.slice.call(domDocument.querySelectorAll('*'));
-        allElements.push(domDocument);
-        allElements.push(domWindow);
-
-        const types = [];
-
-        for (let ev in domWindow) {
-            if (/^on/.test(ev)) {
-                types.push(ev);
-            }
-        }
-
-        for (const currentElement of allElements) {
-            for (const type of types) {
-                try {
-                    const attribute = currentElement.getAttribute(type);
-                    if (attribute) {
-                        currentElement.removeAttribute(type);
-                    }
-                } catch (e) {
-                    // do nothing
-                }
-            }
         }
     }
 

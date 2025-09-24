@@ -16,7 +16,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     ]>
         <if(input.page.description)>
             <div class="alert alert-light" role="alert">
-                $!{input.page.description}
+                <iframe-content html=(input.page.description)/>
             </div>
         </if>
 
@@ -39,8 +39,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                             <object-form-group
                                                 group=group
                                                 pageId=(input.page.id)
-                                                contextInstanceId=input.contextInstanceId
-                                            />
+                                                contextInstanceId=input.contextInstanceId/>
                                         </for>
                                     </div>
                                 </if>

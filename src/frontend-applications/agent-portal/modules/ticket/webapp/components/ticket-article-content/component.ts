@@ -32,6 +32,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+    public async onMount(): Promise<void> {
+        setTimeout(() => {
+            const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
+            const frameHeight = frame.contentDocument.documentElement.scrollHeight;
+            frame.style.height = frameHeight + 10 + 'px'; // 10 is for the top and bottom padding of 5px each
+        }, 500);
+    }
+
     public viewLoaded(event: any): void {
         const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
 

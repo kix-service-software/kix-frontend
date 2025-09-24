@@ -30,6 +30,7 @@ import { RoutingService } from './RoutingService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { DefaultColorConfiguration } from '../../../../model/configuration/DefaultColorConfiguration';
 import { ModalSettings } from '../../../toast/model/ModalSettings';
+import DOMPurify from 'dompurify';
 
 export class BrowserUtil {
 
@@ -597,6 +598,7 @@ export class BrowserUtil {
     }
 
     public static buildHtmlStructur(html: string): string {
+        const cleanHTML = DOMPurify.sanitize(html);
         return `
             <html>
                 <head>
@@ -604,7 +606,7 @@ export class BrowserUtil {
                     <link rel="stylesheet" href="/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css"/>
                 </head>
                 <body>
-                    ${html}
+                    ${cleanHTML}
                 </body>
             </html>
         `;
