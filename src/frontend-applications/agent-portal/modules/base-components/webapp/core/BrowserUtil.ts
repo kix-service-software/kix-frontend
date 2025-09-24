@@ -596,4 +596,13 @@ export class BrowserUtil {
         htmlDocument.head.appendChild(bootstrapLink);
     }
 
+    public static getCurrentContentScrollPosition(): number {
+        return document.getElementsByClassName('content-wrapper')[0].scrollTop;
+    }
+
+    public static setCurrentContentScrollPosition(scrollPosition: number): void {
+        document.getElementsByClassName('content-wrapper')[0].scrollTo(
+            { top: scrollPosition, left: 0, behavior: 'smooth' });
+    }
+
 }
