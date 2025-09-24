@@ -48,8 +48,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state = new ComponentState();
         this.fontSize = BrowserUtil.getBrowserFontsize();
         this.expansionWidth = 3 * this.fontSize;
-        this.listenerInstanceId = input.instanceId || this.listenerInstanceId ||
-            IdService.generateDateBasedId('action-list-');
+        this.listenerInstanceId = input.instanceId || this.listenerInstanceId;
     }
 
     public onInput(input: any): void {
@@ -84,7 +83,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
             this.contextSubscriber = {
-                eventSubscriberId: this.listenerInstanceId,
+                eventSubscriberId: this.listenerInstanceId || IdService.generateDateBasedId('action-list-'),
                 eventPublished: (data: Context, eventId: string): void => {
                     if (data?.instanceId === context.instanceId) {
                         if (!this.observer) {
