@@ -12,11 +12,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       <div class="notification-info-teaser">
          ${state.createTime} - ${state.notification.teaserText}
       </div>
-      <iframe
-         class="w-100 h-100 bg-white"
-         on-load("viewLoaded")
-         id=state.frameId>
-         <body/>
-      </iframe>
+      <iframe-content html=state.html/>
    </if>
 </div>

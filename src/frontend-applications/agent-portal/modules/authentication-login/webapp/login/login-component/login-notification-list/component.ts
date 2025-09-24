@@ -53,13 +53,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         (this as any).setStateDirty('notifications');
 
-        setTimeout(() => {
-            const iframe: any = document.getElementById(`${this.state.frameId}-${notification.id}`);
-            const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-            iframeDocument.body.innerHTML = notification.fullText;
-            BrowserUtil.cleanupHTML(iframeDocument);
-            BrowserUtil.appendKIXStyling(iframeDocument);
-        }, 100);
+        this.state.html = notification.fullText;
     }
 
     public isExpanded(notification: PortalNotification): boolean {

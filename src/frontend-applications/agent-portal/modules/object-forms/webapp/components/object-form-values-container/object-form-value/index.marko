@@ -23,16 +23,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          <label class="form-label d-flex align-items-center m-0 mb-1 text-truncate">
             <add-remove-form-value-control
                formValue=input.formValue
-               key=("control-" + input.formValue.instanceId)
-            />
+               key=("control-" + input.formValue.instanceId)/>
             <if(input.contextInstanceId)>
                <button
                   type="button"
                   class="btn btn-sm btn-light text-black me-3"
                   aria-label="Edit Field"
                   title=(state.translations["Translatable#Edit Field"])
-                  on-click("editField")
-               >
+                  on-click("editField")>
                   <i class="fa-regular fa-pen-to-square"/>
                </button>
             </if>
@@ -69,7 +67,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
          <if(state.formValue.description)>
             <div class="alert alert-light" role="alert">
-               $!{state.formValue.description}
+               <iframe-content html=(state.formValue.description)/>
             </div>
          </if>
          <div class=[
@@ -103,8 +101,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             actions=(state.formValue.actions)
             isSelectInput=(
                state.formValue.inputComponentId === "select-form-input"
-            )
-         />
+            )/>
       </if>
 
       <if(state.validationErrors.length)>
@@ -121,8 +118,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             formValues=state.formValues
             parent=input.formValue
             contextInstanceId=input.contextInstanceId
-            formLayout=input.formLayout
-         />
+            formLayout=input.formLayout/>
       </if>
    </div>
 </if>

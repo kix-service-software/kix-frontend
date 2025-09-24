@@ -17,7 +17,8 @@ export class ComponentState extends WidgetComponentState {
     public constructor(
         public faqArticle: FAQArticle = null,
         public attachments: Attachment[] = [],
-        public actions: AbstractAction[] = []
+        public actions: AbstractAction[] = [],
+        public html: any = {}
     ) {
         super();
     }

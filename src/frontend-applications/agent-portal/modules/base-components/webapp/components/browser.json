@@ -22,6 +22,7 @@
         "require ./form-list-tree",
         "require ./form-list-tree/form-list-tree-node",
         "require ./help-widget",
+        "require ./iframe-content",
         "require ./image-viewer",
         "require ./initial-site-url-select-input",
         "require ./json-input",
