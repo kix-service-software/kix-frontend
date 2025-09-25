@@ -212,7 +212,7 @@ export class TreeHandler {
                         silent = true;
                         selectionChanged = false;
                     } else {
-                        this.tree.forEach((n) => n.selected = false);
+                        this.deselectAll();
                         this.selectedNodes = [];
                         this.setSelectedNode(nodes[0].id, selected);
                     }
@@ -258,6 +258,15 @@ export class TreeHandler {
                 this.selectionListener.forEach((l) => l(this.getSelectedNodes()));
             }
         }
+    }
+
+    private deselectAll(tree: TreeNode[] = this.tree): void {
+        tree.forEach((n) => {
+            n.selected = false;
+            if (n.children) {
+                this.deselectAll(n.children);
+            }
+        });
     }
 
     public expandSelection(tree: TreeNode[] = this.tree || []): boolean {
