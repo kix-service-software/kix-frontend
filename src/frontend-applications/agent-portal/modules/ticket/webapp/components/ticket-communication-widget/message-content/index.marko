@@ -33,25 +33,21 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             class={
                                 "smime-signed-background": true,
                                 "smime-not-signed": !state.smimeSigned,
-                            }
-                        />
+                            }/>
                         <icon
                             icon=state.smimeSignedIcon
                             tooltip=state.smimeSignedTooltip
-                            class="smime-signed-icon"
-                        />
+                            class="smime-signed-icon"/>
                     </if>
                 </div>
                 <div
                     style=`background-color: ${state.backgroundColor};`
-                    class="speech-bubble"
-                />
+                    class="speech-bubble"/>
             </if>
         </div>
         <div
             style=`background-color: ${state.backgroundColor};`
-            class="message"
-        >
+            class="message">
             <div
                 class=[
                     "header",
@@ -61,13 +57,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             !state.compactViewExpanded,
                     },
                 ]
-                on-click("toggleArticleCompactView", false)
-            >
+                on-click("toggleArticleCompactView", false)>
                 <message-header
                     article=state.article
                     articleCountNumber=input.articleCountNumber
-                    fromDisplayName=state.fromDisplayName
-                />
+                    fromDisplayName=state.fromDisplayName/>
             </div>
             <if(!state.selectedCompactView || state.compactViewExpanded)>
                 <if(state.expanded && state.showContent)>
@@ -76,7 +70,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <div class="receiver">
                                 <span class="title">
                                     <translation-string pattern="Translatable#To"/>
-                                     :
+                                    ${" "}:
                                 </span>
                                 <span>${state.articleTo}</span>
                             </div>
@@ -85,7 +79,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <div class="receiver">
                                 <span class="title">
                                     <translation-string pattern="Translatable#Cc"/>
-                                     :
+                                    ${" "}:
                                 </span>
                                 <span>${state.articleCc}</span>
                             </div>
@@ -94,7 +88,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <div class="receiver">
                                 <span class="title">
                                     <translation-string pattern="Translatable#Bcc"/>
-                                     :
+                                    ${" "}:
                                 </span>
                                 <span>${state.articleBcc}</span>
                             </div>
@@ -103,15 +97,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <div key="message-body" class="message-body">
                         <div
                             on-click("toggleArticleListView")
-                            class="show-message hide-top"
-                        >
+                            class="show-message hide-top">
                             <translation-string pattern="Translatable#Hide Message"/>
                         </div>
                         <ticket-article-content article=component.detailedArticle/>
                         <div
                             on-click("toggleArticleListView")
-                            class="show-message"
-                        >
+                            class="show-message">
                             <translation-string pattern="Translatable#Hide Message"/>
                         </div>
                     </div>
@@ -126,89 +118,85 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         </div>
                         <div
                             on-click("toggleArticleListView")
-                            class="show-message"
-                        >
+                            class="show-message">
                             <translation-string pattern="Translatable#Show all"/>
                         </div>
                     </div>
                 </else>
                 <div class="message-footer">
-                    <div class="row attachments-control">
-                        <if(
-                            Array.isArray(state.articleAttachments) &&
-                            state.articleAttachments.length
-                        )>
-                            <div class="attachments-list-container">
-                                <div class={
-                                    "attachments-list": true,
-                                    "one-column-layout": state.oneColumnLayout,
-                                }>
-                                    <for|
-                                        attachment,
-                                    | of=state.articleAttachments>
-                                        <ticket-article-attachment
-                                            article=component.detailedArticle
-                                            attachment=attachment
-                                            images=state.images
-                                            useReadonlyStyle=false
-                                        />
-                                    </for>
+                    <if(state.expanded && state.showContent)>
+                        <div class="row attachments-control">
+                            <if(
+                                Array.isArray(state.articleAttachments) &&
+                                state.articleAttachments.length
+                            )>
+                                <div class="attachments-list-container">
+                                    <div class={
+                                        "attachments-list": true,
+                                        "one-column-layout":
+                                            state.oneColumnLayout,
+                                    }>
+                                        <for|
+                                            attachment,
+                                        | of=state.articleAttachments>
+                                            <ticket-article-attachment
+                                                article=component.detailedArticle
+                                                attachment=attachment
+                                                images=state.images
+                                                useReadonlyStyle=false/>
+                                        </for>
+                                    </div>
+                                    <span
+                                        class="attachment-list-layout-switch"
+                                        on-click("switchAttachmentLayout")>
+                                        <if(state.oneColumnLayout)>
+                                            <icon
+                                                icon="fas fa-angle-double-up"
+                                                tooltip=state.switchAttachmentListTooltip
+                                                class="as-button"/>
+                                        </if>
+                                        <else>
+                                            <icon
+                                                icon="fas fa-angle-double-down"
+                                                tooltip=state.switchAttachmentListTooltip
+                                                class="as-button"/>
+                                        </else>
+                                    </span>
                                 </div>
-                                <span
-                                    class="attachment-list-layout-switch"
-                                    on-click("switchAttachmentLayout")
-                                >
-                                    <if(state.oneColumnLayout)>
-                                        <icon
-                                            icon="fas fa-angle-double-up"
-                                            tooltip=state.switchAttachmentListTooltip
-                                            class="as-button"
-                                        />
-                                    </if>
-                                    <else>
-                                        <icon
-                                            icon="fas fa-angle-double-down"
-                                            tooltip=state.switchAttachmentListTooltip
-                                            class="as-button"
-                                        />
-                                    </else>
-                                </span>
+                            </if>
+                            <if(state.hasInlineAttachments)>
+                                <a
+                                    on-click("toggleAttachments")
+                                    class="attachmentsToggle">
+                                    <translation-string pattern=`Translatable#${
+                                        state.showAllAttachments
+                                            ? "Hide inline attachments"
+                                            : "Show all attachments"
+                                    }`/>
+                                </a>
+                            </if>
+                        </div>
+                        <if(
+                            state.informationConfig &&
+                            Array.isArray(state.informationConfig.rows) &&
+                            state.informationConfig.rows.length
+                        )>
+                            <div
+                                key="article-df-container"
+                                class="bg-white my-2 p-2 overflow-auto">
+                                <object-information-card
+                                    object=component.detailedArticle
+                                    config=state.informationConfig/>
                             </div>
                         </if>
-                        <if(state.hasInlineAttachments)>
-                            <a
-                                on-click("toggleAttachments")
-                                class="attachmentsToggle"
-                            >
-                                <translation-string pattern=`Translatable#${
-                                    state.showAllAttachments
-                                        ? "Hide inline attachments"
-                                        : "Show all attachments"
-                                }`/>
-                            </a>
-                        </if>
-                    </div>
-                    <if(
-                        state.showContent &&
-                        state.informationConfig &&
-                        Array.isArray(state.informationConfig.rows) &&
-                        state.informationConfig.rows.length
-                    )>
-                        <div class="bg-white my-2 p-2">
-                            <object-information-card
-                                object=component.detailedArticle
-                                config=state.informationConfig
-                            />
+                        <div
+                            style=`background-color: ${state.backgroundColor};`
+                            class="row actions-list">
+                            <if(state.actions && state.actions.length)>
+                                <action-list list=state.actions/>
+                            </if>
                         </div>
                     </if>
-                    <div
-                        style=`background-color: ${state.backgroundColor};`
-                        class="row actions-list"
-                    >
-                        <if(state.actions && state.actions.length)>
-                            <action-list list=state.actions/>
-                        </if>
-                    </div>
                 </div>
             </if>
         </div>
@@ -216,8 +204,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if(!state.isExternal)>
                 <div
                     style=`background-color: ${state.backgroundColor};`
-                    class="speech-bubble"
-                />
+                    class="speech-bubble"/>
                 <div class="avatar-container">
                     <div title=state.fromDisplayName class="contact-avatar">
                         <if(state.contactIcon)>
@@ -234,13 +221,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             class={
                                 "smime-signed-background": true,
                                 "smime-not-signed": !state.smimeSigned,
-                            }
-                        />
+                            }/>
                         <icon
                             icon=state.smimeSignedIcon
                             tooltip=state.smimeSignedTooltip
-                            class="smime-signed-icon"
-                        />
+                            class="smime-signed-icon"/>
                     </if>
                 </div>
             </if>
