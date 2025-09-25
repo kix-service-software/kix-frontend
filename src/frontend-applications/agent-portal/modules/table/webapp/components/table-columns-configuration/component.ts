@@ -39,6 +39,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject(
             [
                 'Translatable#Some Translation', 'Translatable#Add Column(s)', 'Translatable#Property',
