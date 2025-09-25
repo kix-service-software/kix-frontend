@@ -121,17 +121,17 @@ export class MacroObjectCreator {
 
         for (const parameterField of parameterFields) {
             const value = formInstance.getFormFieldValue(parameterField.instanceId);
-            const optionNameValue = parameterField.options.find((o) => o.option === 'OptionName');
-            if (
-                optionNameValue?.value === 'MacroID'
-                || optionNameValue?.value === 'ElseMacroID'
-            ) {
-                const macro = await this.createMacro(parameterField, formInstance, macroComment);
-                macro.Name += '-' + IdService.generateDateBasedId();
-                macro.Comment += ` - Referenced by Action: ${action.Type}`;
-                parameter[optionNameValue.value] = macro;
-            } else if (optionNameValue?.value !== 'Skip') {
-                if (value && value.value !== null && typeof value.value !== 'undefined') {
+            if (value && value.value !== null && typeof value.value !== 'undefined') {
+                const optionNameValue = parameterField.options.find((o) => o.option === 'OptionName');
+                if (
+                    optionNameValue?.value === 'MacroID'
+                    || optionNameValue?.value === 'ElseMacroID'
+                ) {
+                    const macro = await this.createMacro(parameterField, formInstance, macroComment);
+                    macro.Name += '-' + IdService.generateDateBasedId();
+                    macro.Comment += ` - Referenced by Action: ${action.Type}`;
+                    parameter[optionNameValue.value] = macro;
+                } else if (optionNameValue?.value !== 'Skip') {
                     const optionFieldHandler = MacroService.getInstance().getOptionFieldHandler() || [];
                     let prepared = false;
                     for (const handler of optionFieldHandler) {
