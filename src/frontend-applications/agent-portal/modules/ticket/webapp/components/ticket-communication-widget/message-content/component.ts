@@ -406,7 +406,14 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
                         || 0
                     ) * 2;
 
-                    element.style.width = `${mainWidth - leftWidth - rightWidth - padding}px`;
+                    const width = `${mainWidth - leftWidth - rightWidth - padding}px`;
+                    element.style.width = width;
+
+                    const dfElement = (this as any).getEl('article-df-container');
+                    if (dfElement) {
+                        dfElement.style.width = width;
+                    }
+
                     clearInterval(this.elementInterval);
                 }
             }
