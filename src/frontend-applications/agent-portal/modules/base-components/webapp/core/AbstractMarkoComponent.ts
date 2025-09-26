@@ -31,12 +31,13 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
             return;
         }
 
-        if (
-            'id' in this
-            && typeof this.id === 'string'
-        ) {
-            const componentContextInstanceId =
-                ContextService.getInstance().getComponentContextInstanceId(this.id);
+        let markoId: string;
+        if ('id' in this && typeof this.id === 'string') {
+            markoId = this.id;
+        }
+
+        if (markoId) {
+            const componentContextInstanceId = ContextService.getInstance().getComponentContextInstanceId(markoId);
             if (componentContextInstanceId) {
                 this.context = ContextService.getInstance().getContext(componentContextInstanceId) as C;
                 return;
@@ -44,11 +45,11 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
         }
         this.context = ContextService.getInstance().getActiveContext<C>();
         if (
-            'id' in this
-            && typeof this.id === 'string'
+            this.context !== null && typeof this.context !== 'undefined'
+            && markoId
         ) {
-            ContextService.getInstance().registerComponentContextInstanceId(
-                this.id, this.context.instanceId
+            ContextService.getInstance().setComponentContextInstanceId(
+                markoId, this.context.instanceId
             );
         }
     }

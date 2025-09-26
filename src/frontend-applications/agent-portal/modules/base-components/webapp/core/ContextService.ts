@@ -789,7 +789,7 @@ export class ContextService {
         return this.toolbarActions.get(key);
     }
 
-    public registerComponentContextInstanceId(componentInstanceId: string, contextInstanceId: string): void {
+    public setComponentContextInstanceId(componentInstanceId: string, contextInstanceId: string): void {
         this.componentContextMap.set(componentInstanceId, contextInstanceId);
     }
 
