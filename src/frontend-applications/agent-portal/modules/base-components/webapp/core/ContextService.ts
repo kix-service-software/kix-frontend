@@ -71,7 +71,7 @@ export class ContextService {
 
     public contextRefreshInterval: ContextRefreshInterval;
 
-    private componentContextMap: Map<string, string> = new Map();
+    private componentContextMap: Object = new Object();
 
     public async initialize(): Promise<void> {
         this.contextRefreshInterval = new ContextRefreshInterval();
@@ -790,13 +790,11 @@ export class ContextService {
     }
 
     public setComponentContextInstanceId(componentInstanceId: string, contextInstanceId: string): void {
-        this.componentContextMap.set(componentInstanceId, contextInstanceId);
+        this.componentContextMap[componentInstanceId] = contextInstanceId;
     }
 
     public getComponentContextInstanceId(componentInstanceId: string): string {
-        if (this.componentContextMap.has(componentInstanceId)) {
-            return this.componentContextMap.get(componentInstanceId);
-        }
+        return this.componentContextMap[componentInstanceId];
     }
 
 }
