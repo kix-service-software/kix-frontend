@@ -28,15 +28,28 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
     public async onMount(contextInstanceId?: string): Promise<void> {
         if (contextInstanceId) {
             this.context = ContextService.getInstance().getContext(contextInstanceId) as C;
-        } else {
-            const componentContextInstanceId = ContextService.getInstance().getComponentContextInstanceId(this.id);
+            return;
+        }
+
+        if (
+            'id' in this
+            && typeof this.id === 'string'
+        ) {
+            const componentContextInstanceId =
+                ContextService.getInstance().getComponentContextInstanceId(this.id);
             if (componentContextInstanceId) {
                 this.context = ContextService.getInstance().getContext(componentContextInstanceId) as C;
+                return;
             }
-            if (this.context === null || typeof this.context === 'undefined') {
-                this.context = ContextService.getInstance().getActiveContext<C>();
-            }
-            ContextService.getInstance().registerComponentContextInstanceId(this.id, this.context.instanceId);
+        }
+        this.context = ContextService.getInstance().getActiveContext<C>();
+        if (
+            'id' in this
+            && typeof this.id === 'string'
+        ) {
+            ContextService.getInstance().registerComponentContextInstanceId(
+                this.id, this.context.instanceId
+            );
         }
     }
 
