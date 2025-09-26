@@ -107,6 +107,9 @@ msgstr "Add Asset Class"
 msgid "Add Column(s)"
 msgstr ""
 
+msgid "Add Field"
+msgstr ""
+
 msgid "Add Table Widget"
 msgstr ""
 
@@ -337,6 +340,9 @@ msgstr ""
 msgid "Asset Classes"
 msgstr ""
 
+msgid "Asset Dashboard"
+msgstr ""
+
 msgid "Asset Graph"
 msgstr ""
 
@@ -480,9 +486,6 @@ msgstr "Asset Explorer"
 
 msgid "CMDB: CI Classes"
 msgstr "Assets: Asset Classes"
-
-msgid "CMDB View"
-msgstr "Assets View"
 
 msgid "CNO"
 msgstr ""
@@ -709,6 +712,9 @@ msgstr "Assets Count: {0}"
 msgid "Configuration"
 msgstr ""
 
+msgid "Configuration Overview"
+msgstr ""
+
 msgid "Confirm New Password"
 msgstr ""
 
@@ -793,6 +799,9 @@ msgstr ""
 msgid "Create Type"
 msgstr ""
 
+msgid "Create new search template"
+msgstr ""
+
 msgid "Create the report with output format {0} and defaults?"
 msgstr ""
 
@@ -855,6 +864,9 @@ msgstr ""
 
 msgid "DOUBLE_QUOTES"
 msgstr "\" (Double Quotes)"
+
+msgid "Dashboard Refresh Interval (Minutes)"
+msgstr ""
 
 msgid "Data Source"
 msgstr ""
@@ -1038,7 +1050,13 @@ msgstr ""
 msgid "Edit FAQ Category"
 msgstr ""
 
+msgid "Edit Field"
+msgstr ""
+
 msgid "Edit General Catalog"
+msgstr ""
+
+msgid "Edit Group"
 msgstr ""
 
 msgid "Edit Job"
@@ -1390,6 +1408,9 @@ msgid "Field {0} has an invalid value (min date: {2})."
 msgstr ""
 
 msgid "Field {0} has an invalid value ({1})."
+msgstr ""
+
+msgid "Field {0} has to be a positive integer number."
 msgstr ""
 
 msgid "File Upload"
@@ -1960,6 +1981,9 @@ msgid "Helptext_Admin_OAuth2ProfileCreate_Client_Secret."
 msgstr ""
 
 msgid "Helptext_Admin_OAuth2ProfileCreate_Name"
+msgstr ""
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_PKCE"
 msgstr ""
 
 msgid "Helptext_Admin_OAuth2ProfileCreate_Scope"
@@ -2574,8 +2598,14 @@ msgstr ""
 msgid "Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint"
 msgstr ""
 
+msgid "Helptext_PersonalSettings_DashboardRefreshInterval_Hint"
+msgstr ""
+
 msgid "Helptext_PersonalSettings_Dont_Ask_On_Exit"
 msgstr "Prevents confirm popup while logging out or closing KIX."
+
+msgid "Helptext_PersonalSettings_InitialSiteURL_Hint"
+msgstr ""
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2592,6 +2622,9 @@ msgstr "Last day of absence."
 
 msgid "Helptext_PersonalSettings_OutOfOfficeStart_Hint"
 msgstr "First day of absence."
+
+msgid "Helptext_PersonalSettings_OutOfOfficeSubstitute_Hint"
+msgstr ""
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr "Choose the language you want to use for this application."
@@ -2906,6 +2939,9 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
+msgid "Home Dashboard"
+msgstr ""
+
 msgid "Host"
 msgstr ""
 
@@ -3008,6 +3044,9 @@ msgid "Information"
 msgstr ""
 
 msgid "Information text"
+msgstr ""
+
+msgid "Initial Content"
 msgstr ""
 
 msgid "Input"
@@ -3154,6 +3193,9 @@ msgstr ""
 msgid "Links will be removed."
 msgstr ""
 
+msgid "Load Form"
+msgstr ""
+
 msgid "Load more"
 msgstr ""
 
@@ -3221,6 +3263,9 @@ msgid "Max Depth"
 msgstr ""
 
 msgid "Max. Reports"
+msgstr ""
+
+msgid "Max. allowed icon size: {0}"
 msgstr ""
 
 msgid "Menu"
@@ -3298,6 +3343,9 @@ msgstr ""
 msgid "My Teams"
 msgstr ""
 
+msgid "My Teams (past)"
+msgstr ""
+
 msgid "My Tickets"
 msgstr ""
 
@@ -3330,9 +3378,6 @@ msgstr ""
 
 msgid "New"
 msgstr ""
-
-msgid "New {0} as copy of"
-msgstr "New {0} as copy of:"
 
 msgid "New Account"
 msgstr ""
@@ -3382,6 +3427,9 @@ msgstr ""
 msgid "New General Catalog"
 msgstr ""
 
+msgid "New Group"
+msgstr ""
+
 msgid "New Job"
 msgstr ""
 
@@ -3398,6 +3446,9 @@ msgid "New Notification"
 msgstr ""
 
 msgid "New Organisation"
+msgstr ""
+
+msgid "New Page"
 msgstr ""
 
 msgid "New Password"
@@ -3445,9 +3496,6 @@ msgstr ""
 msgid "New Tickets"
 msgstr ""
 
-msgid "New Tickets (recent 7 days)"
-msgstr ""
-
 msgid "New Tickets Chart"
 msgstr ""
 
@@ -3480,6 +3528,9 @@ msgstr ""
 
 msgid "New Webform"
 msgstr ""
+
+msgid "New {0} as copy of"
+msgstr "New {0} as copy of:"
 
 msgid "Next"
 msgstr ""
@@ -3587,9 +3638,6 @@ msgid "Nr."
 msgstr ""
 
 msgid "Number"
-msgstr ""
-
-msgid "Number of Actions"
 msgstr ""
 
 msgid "Number of Attachments"
@@ -3715,7 +3763,7 @@ msgstr ""
 msgid "Organisations Dashboard"
 msgstr ""
 
-msgid "Organizations and Contacts View"
+msgid "Organizations and Contacts Dashboard"
 msgstr ""
 
 msgid "Other"
@@ -3769,12 +3817,6 @@ msgstr ""
 msgid "Overview Reports"
 msgstr ""
 
-msgid "Overview Ticket Priorities"
-msgstr "Tickets by Priorities"
-
-msgid "Overview Ticket States"
-msgstr "Tickets by States"
-
 msgid "Overview Tickets"
 msgstr ""
 
@@ -3787,10 +3829,22 @@ msgstr ""
 msgid "Owner"
 msgstr "Owner"
 
+msgid "Owner (past)"
+msgstr ""
+
 msgid "Owner Out Of Office"
 msgstr ""
 
+msgid "Owner Out Of Office Substitute"
+msgstr ""
+
+msgid "PKCE"
+msgstr ""
+
 msgid "Page Size"
+msgstr ""
+
+msgid "Page contains invalid values"
 msgstr ""
 
 msgid "Paramater"
@@ -3967,6 +4021,9 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
+msgid "Priority (past)"
+msgstr ""
+
 msgid "Priority Chart"
 msgstr ""
 
@@ -3984,6 +4041,9 @@ msgstr "Property"
 
 msgid "Queue"
 msgstr "Team"
+
+msgid "Queue (past)"
+msgstr ""
 
 msgid "Queue Fullname"
 msgstr "Team Fullname"
@@ -4198,6 +4258,9 @@ msgstr ""
 msgid "Replace empty value"
 msgstr ""
 
+msgid "Replace existing search template {0}?"
+msgstr ""
+
 msgid "Reply"
 msgstr ""
 
@@ -4280,6 +4343,9 @@ msgid "Responsible"
 msgstr ""
 
 msgid "Responsible Out Of Office"
+msgstr ""
+
+msgid "Responsible Out Of Office Substitute"
 msgstr ""
 
 msgid "Result names"
@@ -4369,9 +4435,6 @@ msgstr ""
 msgid "Save System Settings"
 msgstr ""
 
-msgid "Save new search"
-msgstr ""
-
 msgid "Save notification template"
 msgstr "Save notifications template"
 
@@ -4414,6 +4477,9 @@ msgstr ""
 msgid "Search Title"
 msgstr ""
 
+msgid "Search by tag"
+msgstr ""
+
 msgid "Search defaults for {0} reseted."
 msgstr ""
 
@@ -4428,6 +4494,9 @@ msgstr "Search successfully saved."
 
 msgid "Search template successfully removed."
 msgstr "Search template(s) successfully removed."
+
+msgid "Search template with same title already exists."
+msgstr ""
 
 msgid "Search {0} will be deleted. Are you sure?"
 msgstr ""
@@ -4651,6 +4720,9 @@ msgstr ""
 msgid "State"
 msgstr ""
 
+msgid "State (past)"
+msgstr ""
+
 msgid "State Data"
 msgstr ""
 
@@ -4691,6 +4763,9 @@ msgid "Subject with Ticketnumber"
 msgstr ""
 
 msgid "Submit"
+msgstr ""
+
+msgid "Substitute"
 msgstr ""
 
 msgid "Success"
@@ -4804,7 +4879,7 @@ msgstr ""
 msgid "Team Backlog"
 msgstr ""
 
-msgid "Team View"
+msgid "Team Dashboard"
 msgstr ""
 
 msgid ""
@@ -4913,6 +4988,9 @@ msgstr ""
 msgid "Ticket Number"
 msgstr ""
 
+msgid "Ticket Out Of Office Substitute"
+msgstr ""
+
 msgid "Ticket has printed"
 msgstr "Ticket has been printed"
 
@@ -4984,6 +5062,9 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+msgid "Title is required!"
+msgstr ""
+
 msgid "To"
 msgstr ""
 
@@ -5021,6 +5102,9 @@ msgid "Tuesday"
 msgstr ""
 
 msgid "Type"
+msgstr ""
+
+msgid "Type (past)"
 msgstr ""
 
 msgid "Type Data"
@@ -5356,14 +5440,14 @@ msgstr ""
 msgid "insert filter value"
 msgstr ""
 
+msgid "is empty"
+msgstr ""
+
 msgid "is to large (max {0})."
 msgstr ""
 
 msgid "less than ago"
 msgstr ""
-
-msgid "link {0}"
-msgstr "Link {0}"
 
 msgid "more than ago"
 msgstr ""
@@ -5519,6 +5603,18 @@ msgstr ""
 
 msgid "{0}: just white spaces as value is not allowed."
 msgstr ""
+
+#~ msgid "CMDB View"
+#~ msgstr "Assets View"
+
+#~ msgid "Overview Ticket Priorities"
+#~ msgstr "Tickets by Priorities"
+
+#~ msgid "Overview Ticket States"
+#~ msgstr "Tickets by States"
+
+#~ msgid "link {0}"
+#~ msgstr "Link {0}"
 
 #~ msgid "Helptext_Admin_JobCreateEdit_Actions"
 #~ msgstr ""
