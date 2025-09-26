@@ -58,8 +58,8 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> implements 
         this.state.title = await TranslationService.translate(title);
     }
 
-    public async onMount(contextInstanceId?: string): Promise<void> {
-        await super.onMount(contextInstanceId);
+    public async onMount(): Promise<void> {
+        await super.onMount();
 
         this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
 

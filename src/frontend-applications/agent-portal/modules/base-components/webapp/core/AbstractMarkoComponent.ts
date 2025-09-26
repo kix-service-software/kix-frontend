@@ -27,6 +27,9 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
     }
 
     public async onMount(contextInstanceId?: string): Promise<void> {
+        if (this.context !== null && typeof this.context !== 'undefined') {
+            return;
+        }
         if (contextInstanceId) {
             this.context = ContextService.getInstance().getContext(contextInstanceId) as C;
         } else {
