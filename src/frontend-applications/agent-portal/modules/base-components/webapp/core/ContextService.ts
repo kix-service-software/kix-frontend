@@ -71,6 +71,8 @@ export class ContextService {
 
     public contextRefreshInterval: ContextRefreshInterval;
 
+    private componentContextMap: Map<string, string> = new Map();
+
     public async initialize(): Promise<void> {
         this.contextRefreshInterval = new ContextRefreshInterval();
         await this.contextRefreshInterval.initialize();
@@ -785,6 +787,16 @@ export class ContextService {
 
     public getToolbarAction(key: string): ToolbarAction {
         return this.toolbarActions.get(key);
+    }
+
+    public registerComponentContextInstanceId(componentInstanceId: string, contextInstanceId: string): void {
+        this.componentContextMap.set(componentInstanceId, contextInstanceId);
+    }
+
+    public getComponentContextInstanceId(componentInstanceId: string): string {
+        if (this.componentContextMap.has(componentInstanceId)) {
+            return this.componentContextMap.get(componentInstanceId);
+        }
     }
 
 }

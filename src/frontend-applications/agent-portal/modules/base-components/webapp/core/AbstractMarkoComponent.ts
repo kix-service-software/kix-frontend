@@ -10,7 +10,6 @@
 import { AbstractComponentState } from './AbstractComponentState';
 import { Context } from '../../../../model/Context';
 import { ContextService } from './ContextService';
-import { IdService } from '../../../../model/IdService';
 
 // eslint-disable-next-line max-len
 export abstract class AbstractMarkoComponent<CS extends AbstractComponentState = AbstractComponentState, C extends Context = Context> {
@@ -27,12 +26,10 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
     }
 
     public async onMount(contextInstanceId?: string): Promise<void> {
-        if (this.context !== null && typeof this.context !== 'undefined') {
-            return;
-        }
         if (contextInstanceId) {
             this.context = ContextService.getInstance().getContext(contextInstanceId) as C;
-        } else {
+        }
+        if (this.context === null || typeof this.context === 'undefined') {
             this.context = ContextService.getInstance().getActiveContext<C>();
         }
     }
