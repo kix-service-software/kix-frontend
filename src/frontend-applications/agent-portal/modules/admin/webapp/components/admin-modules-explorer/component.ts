@@ -18,7 +18,6 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
 
@@ -34,9 +33,7 @@ class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
     }
 
     public async onMount(): Promise<void> {
-        const contextInstanceId = ContextService.getInstance().getComponentContextInstanceId(this.state.instanceId);
-        await super.onMount(contextInstanceId);
-        ContextService.getInstance().registerComponentContextInstanceId(this.state.instanceId, this.context.instanceId);
+        await super.onMount();
         this.state.filterValue = this.context?.getAdditionalInformation('EXPLORER_FILTER_ADMIN');
         if (this.state.filterValue) {
             const filter = (this as any).getComponent('admin-modules-explorer-filter');

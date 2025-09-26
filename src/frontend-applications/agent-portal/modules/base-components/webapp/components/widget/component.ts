@@ -21,7 +21,6 @@ import { IAction } from '../../core/IAction';
 import { TabContainerEvent } from '../../core/TabContainerEvent';
 import { TabContainerEventData } from '../../core/TabContainerEventData';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../core/ContextService';
 
 class WidgetComponent extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
@@ -60,9 +59,7 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> implements 
     }
 
     public async onMount(): Promise<void> {
-        const contextInstanceId = ContextService.getInstance().getComponentContextInstanceId(this.state.instanceId);
-        await super.onMount(contextInstanceId);
-        ContextService.getInstance().registerComponentContextInstanceId(this.state.instanceId, this.context.instanceId);
+        await super.onMount();
 
         this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
 
