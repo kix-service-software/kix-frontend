@@ -8,13 +8,11 @@
     line-height: 1.6;
 }
 
-.tiptap-editor-body,
-img {
+.tiptap-editor-body img {
     max-width: 100%;
 }
 
-.tiptap-editor,
-ul {
+.tiptap-editor ul {
     list-style-type: disc !important;
 }
 
