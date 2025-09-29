@@ -43,7 +43,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
     }
 
     public async onMount(setPrepared: boolean = true): Promise<void> {
-        if (this.context !== null && typeof this.context !== 'undefined') {
+        if (this.context === null || typeof this.context === 'undefined') {
             this.context = ContextService.getInstance().getActiveContext<Context>();
         }
 
