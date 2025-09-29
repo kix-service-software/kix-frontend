@@ -18,6 +18,10 @@
                 >.tab-list {
                     list-style: none;
                     margin-top: .22em;
+                    display: grid;
+                    grid-auto-flow: column;
+                    grid-auto-columns: max-content;
+                    overflow: hidden;
 
                     >li {
                         .shadow-1-with-inset(@primary-0, @primary-2);
