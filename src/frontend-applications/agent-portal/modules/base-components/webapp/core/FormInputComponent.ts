@@ -43,28 +43,9 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
     }
 
     public async onMount(setPrepared: boolean = true): Promise<void> {
-        let markoId: string;
-        if ('id' in this && typeof this.id === 'string') {
-            markoId = this.id;
+        if (this.context !== null && typeof this.context !== 'undefined') {
+            this.context = ContextService.getInstance().getActiveContext<Context>();
         }
-
-        if (markoId) {
-            const componentContextInstanceId = ContextService.getInstance().getComponentContextInstanceId(markoId);
-            if (componentContextInstanceId) {
-                this.context = ContextService.getInstance().getContext(componentContextInstanceId) as Context;
-                return;
-            }
-        }
-        this.context = ContextService.getInstance().getActiveContext<Context>();
-        if (
-            this.context !== null && typeof this.context !== 'undefined'
-            && markoId
-        ) {
-            ContextService.getInstance().setComponentContextInstanceId(
-                markoId, this.context.instanceId
-            );
-        }
-
 
         FormInputComponent.prototype.doUpdate.call(this);
 
