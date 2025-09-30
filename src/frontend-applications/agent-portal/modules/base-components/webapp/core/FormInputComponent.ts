@@ -19,6 +19,7 @@ import { Context } from '../../../../model/Context';
 
 export abstract class FormInputComponent<T, C extends FormInputComponentState> {
 
+    private readonly id: string;
     protected state: C;
     private subscriber: IEventSubscriber;
     protected context: Context;
@@ -43,26 +44,20 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
     }
 
     public async onMount(setPrepared: boolean = true): Promise<void> {
-        if (this.context === null || typeof this.context === 'undefined') {
-            let markoId: string;
-            if ('id' in this && typeof this.id === 'string') {
-                markoId = this.id;
-            }
-
-            if (markoId) {
-                const componentContextInstanceId = ContextService.getInstance().getComponentContextInstanceId(markoId);
-                this.context = ContextService.getInstance().getContext(componentContextInstanceId) as Context
+        if (!this.context) {
+            if (this.id) {
+                const componentContextInstanceId = ContextService.getInstance().getComponentContextInstanceId(this.id);
+                this.context = ContextService.getInstance().getContext(componentContextInstanceId) as Context;
             }
 
             if (!this.context) {
                 this.context = ContextService.getInstance().getActiveContext<Context>();
             }
 
-            if (this.context && markoId) {
+            if (this.context && this.id) {
                 ContextService.getInstance().setComponentContextInstanceId(
-                    markoId, this.context.instanceId
+                    this.id, this.context.instanceId
                 );
-
             }
         }
 
