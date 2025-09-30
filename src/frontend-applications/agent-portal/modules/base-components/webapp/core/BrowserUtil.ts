@@ -597,12 +597,22 @@ export class BrowserUtil {
     }
 
     public static getCurrentContentScrollPosition(): number {
-        return document.getElementsByClassName('content-wrapper')[0].scrollTop;
+        const wrapperEl = document.getElementsByClassName('content-wrapper');
+        if (wrapperEl.length) {
+            return wrapperEl[0].scrollTop;
+        } else {
+            return document.getElementById('ssp-content').scrollTop;
+        }
     }
 
     public static setCurrentContentScrollPosition(scrollPosition: number): void {
-        document.getElementsByClassName('content-wrapper')[0].scrollTo(
-            { top: scrollPosition, left: 0, behavior: 'smooth' });
+        const wrapperEl = document.getElementsByClassName('content-wrapper');
+        const options: ScrollToOptions = { top: scrollPosition, left: 0, behavior: 'smooth' };
+        if (wrapperEl.length) {
+            wrapperEl[0].scrollTo(options);
+        } else {
+            return document.getElementById('ssp-content').scrollTo(options);
+        }
     }
 
 }

@@ -15,6 +15,8 @@ import { IdService } from '../../../../../../model/IdService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
+    private nonWrappedLabel: boolean = false;
+
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
@@ -28,14 +30,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
         this.state.label = input.label;
         this.state.labelId = IdService.generateDateBasedId(this.state.label?.id ? this.state.label.id.toString() : '');
+        this.nonWrappedLabel = input.nonWrappedLabel || false;
     }
 
     public async onMount(): Promise<void> {
         await this.state.label.init();
         this.state.prepared = true;
-        setTimeout(() => {
-            this.getLabelValue();
-        }, 50);
+        if (!this.nonWrappedLabel) {
+            setTimeout(() => {
+                this.getLabelValue();
+
+            }, 50);
+        }
     }
 
     public labelClicked(event: any): void {
