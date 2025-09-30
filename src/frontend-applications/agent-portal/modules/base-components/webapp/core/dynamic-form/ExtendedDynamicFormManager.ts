@@ -131,6 +131,10 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
         return null;
     }
 
+    public clearValueOnOperatorChange(operator: string): Promise<boolean> {
+        return null;
+    }
+
     public isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean> {
         return null;
     }

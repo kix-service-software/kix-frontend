@@ -138,10 +138,10 @@ export class DynamicFormFieldValue {
         return this.setPropertyTree();
     }
 
-    public clearValue(): void {
+    public clearValue(silent: boolean = false): void {
         this.value.value = null;
         if (this.isDropdown && this.valueTreeHandler) {
-            this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, false, true);
+            this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, silent, true);
         }
     }
 
@@ -320,7 +320,7 @@ export class DynamicFormFieldValue {
         this.withinEndType = '+';
     }
 
-    public async setOperator(operator: string): Promise<void> {
+    public async setOperator(operator: string, update: boolean = false, silent?: boolean): Promise<void> {
         const relativeDateTimeOperators = SearchDefinition.getRelativeDateTimeOperators();
 
         this.value.operator = operator;
@@ -328,6 +328,12 @@ export class DynamicFormFieldValue {
         this.isWithin = this.value.operator === SearchOperator.WITHIN;
         this.isRelativeTime = relativeDateTimeOperators.includes(operator as SearchOperator)
             || this.manager.isRelativDateTimeOperator(operator);
+
+        if (update) {
+            this.value.objectType = null;
+            this.clearValue(silent);
+            await this.manager.setValue(this.value, silent);
+        }
 
         if (this.manager.resetValue) {
             await this.createValueInput();
