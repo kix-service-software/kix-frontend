@@ -100,8 +100,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_VALIDATED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_READONLY_CHANGED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.FIELD_VALIDATED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.FIELD_READONLY_CHANGED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_VALIDATED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_VALIDATED, this.formSubscriber);
     }
