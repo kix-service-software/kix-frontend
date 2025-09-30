@@ -14,6 +14,7 @@ import { ContextService } from './ContextService';
 // eslint-disable-next-line max-len
 export abstract class AbstractMarkoComponent<CS extends AbstractComponentState = AbstractComponentState, C extends Context = Context> {
 
+    private readonly id: string;
     public state: CS;
     protected context: C;
 
@@ -31,25 +32,18 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
             return;
         }
 
-        let markoId: string;
-        if ('id' in this && typeof this.id === 'string') {
-            markoId = this.id;
+        if (this.id) {
+            const componentContextInstanceId = ContextService.getInstance().getComponentContextInstanceId(this.id);
+            this.context = ContextService.getInstance().getContext(componentContextInstanceId) as C;
         }
 
-        if (markoId) {
-            const componentContextInstanceId = ContextService.getInstance().getComponentContextInstanceId(markoId);
-            if (componentContextInstanceId) {
-                this.context = ContextService.getInstance().getContext(componentContextInstanceId) as C;
-                return;
-            }
+        if (!this.context) {
+            this.context = ContextService.getInstance().getActiveContext<C>();
         }
-        this.context = ContextService.getInstance().getActiveContext<C>();
-        if (
-            this.context !== null && typeof this.context !== 'undefined'
-            && markoId
-        ) {
+
+        if (this.context && this.id) {
             ContextService.getInstance().setComponentContextInstanceId(
-                markoId, this.context.instanceId
+                this.id, this.context.instanceId
             );
         }
     }
