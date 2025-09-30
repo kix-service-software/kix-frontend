@@ -84,6 +84,8 @@ export interface IDynamicFormManager {
 
     clearValueOnPropertyChange(property: string): Promise<boolean>;
 
+    clearValueOnOperatorChange(property: string): Promise<boolean>;
+
     isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean>;
 
     validate(): Promise<ValidationResult[]>;
