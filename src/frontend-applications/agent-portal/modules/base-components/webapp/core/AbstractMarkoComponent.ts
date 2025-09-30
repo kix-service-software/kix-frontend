@@ -38,16 +38,14 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
 
         if (markoId) {
             const componentContextInstanceId = ContextService.getInstance().getComponentContextInstanceId(markoId);
-            if (componentContextInstanceId) {
-                this.context = ContextService.getInstance().getContext(componentContextInstanceId) as C;
-                return;
-            }
+            this.context = ContextService.getInstance().getContext(componentContextInstanceId) as C;
         }
-        this.context = ContextService.getInstance().getActiveContext<C>();
-        if (
-            this.context !== null && typeof this.context !== 'undefined'
-            && markoId
-        ) {
+
+        if (!this.context) {
+            this.context = ContextService.getInstance().getActiveContext<C>();
+        }
+
+        if (this.context && markoId) {
             ContextService.getInstance().setComponentContextInstanceId(
                 markoId, this.context.instanceId
             );
