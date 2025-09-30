@@ -51,20 +51,18 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
 
             if (markoId) {
                 const componentContextInstanceId = ContextService.getInstance().getComponentContextInstanceId(markoId);
-                if (componentContextInstanceId) {
-                    this.context = ContextService.getInstance().getContext(componentContextInstanceId) as Context;
-                }
+                this.context = ContextService.getInstance().getContext(componentContextInstanceId) as Context
             }
-            if (this.context === null || typeof this.context === 'undefined') {
+
+            if (!this.context) {
                 this.context = ContextService.getInstance().getActiveContext<Context>();
             }
-            if (
-                this.context !== null && typeof this.context !== 'undefined'
-                && markoId
-            ) {
+
+            if (this.context && markoId) {
                 ContextService.getInstance().setComponentContextInstanceId(
                     markoId, this.context.instanceId
                 );
+
             }
         }
 
