@@ -227,6 +227,22 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> implements
             this.setActiveTab(nextTab);
         }
     }
+
+    public scrollTabs(left: boolean): void {
+        const element: HTMLElement = (this as any).getEl('tab-list');
+        if (element) {
+            if (left) {
+                element.scrollLeft -= 300;
+            }
+            else {
+                element.scrollLeft += 300;
+            }
+        }
+    }
+
+    public minimizedChanged(minimized: boolean): void {
+        this.state.showTabScrollers = !minimized;
+    }
 }
 
 module.exports = TabLaneComponent;

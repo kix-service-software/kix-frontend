@@ -14,23 +14,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             minimizable=state.minimizable
             contentActions=state.contentActions
             title=state.activeTabTitle
-        >
+            removeGap
+            customGridTemplateColumnsStyle="grid-template-columns: 3rem auto 3rem;"
+            on-minimizedChanged("minimizedChanged")>
             <@headercontent>
-
-                <ul class="tab-list">
+                <if(state.showTabScrollers)>
+                    <div
+                        on-click("scrollTabs", true)
+                        class="px-3 d-grid align-content-center">
+                        <span class="fa fa-caret-left"/>
+                    </div>
+                </if>
+                <ul class="tab-list" key="tab-list">
                     <for|tab| of=state.tabWidgets>
                         <li
                             title=component.getTitle(tab)
                             class={
                                 active: component.isActiveTab(tab.instanceId),
                             }
-                            on-click("tabClicked", tab)
-                        >
+                            on-click("tabClicked", tab)>
                             <if(component.getIcon(tab))>
                                 <icon
                                     icon=component.getIcon(tab)
-                                    showUnknown=false
-                                />
+                                    showUnknown=false/>
                             </if>
                             <span class={
                                 "no-icon": !component.getIcon(tab),
@@ -40,6 +46,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         </li>
                     </for>
                 </ul>
+                <if(state.showTabScrollers)>
+                    <div
+                        on-click("scrollTabs", false)
+                        class="px-3 d-grid align-content-center">
+                        <span class="fa fa-caret-right"/>
+                    </div>
+                </if>
             </@headercontent>
             <@content>
                 <div
@@ -50,8 +63,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             "has-sidebar": state.hasSidebars,
                             "show-sidebar": state.showSidebar,
                         },
-                    ]
-                >
+                    ]>
                     <div class="tab-content">
                         <if(state.activeTab)>
                             <${component.getWidgetTemplate()} ...{
