@@ -256,6 +256,12 @@ export class ContextService {
 
                     removed = true;
                 }
+
+                for (const key in this.componentContextMap) {
+                    if (this.componentContextMap[key] === instanceId) {
+                        this.componentContextMap[key].delete();
+                    }
+                }
             }
         }
 
