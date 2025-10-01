@@ -37,10 +37,14 @@ class ActionComponent extends AbstractMarkoComponent<ComponentState> {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (contextInstanceId: string, eventId: string): void => {
                 if (this.context?.instanceId === contextInstanceId) {
+                    if (this.state.lockTimeout) {
+                        clearTimeout(this.state.lockTimeout);
+                        this.state.lockTimeout = null;
+                    }
                     if (eventId === ApplicationEvent.UNLOCK_ACTIONS) {
-                        this.state.canRunAction = this.state.action.canRun();
+                        this.state.lockRunAction = false;
                     } else if (eventId === ApplicationEvent.LOCK_ACTIONS) {
-                        this.state.canRunAction = false;
+                        this.state.lockRunAction = true;
                     }
                 }
             }
@@ -62,8 +66,8 @@ class ActionComponent extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async doAction(event: any): Promise<void> {
-        if (!this.state.canRunAction) return;
-        this.state.canRunAction = false;
+        if (this.state.lockRunAction || !this.state.canRunAction) return;
+        this.state.lockRunAction = true;
         (this as any).emit('actionClicked');
         if (event) {
             event.stopPropagation();
@@ -71,16 +75,15 @@ class ActionComponent extends AbstractMarkoComponent<ComponentState> {
         }
 
         // enable by timeout if action needs too "long" or results in error
-        let runTimeout = setTimeout(() => {
-            this.state.canRunAction = true;
-            runTimeout = null;
-        }, 2000);
+        if (this.state.lockTimeout) {
+            clearTimeout(this.state.lockTimeout);
+        }
+        this.state.lockTimeout = setTimeout(() => {
+            this.state.lockRunAction = false;
+            this.state.lockTimeout = null;
+        }, 5000);
 
         await this.state.action.run(event);
-        if (runTimeout) {
-            this.state.canRunAction = true;
-            clearTimeout(runTimeout);
-        }
     }
 
     public linkClicked(event: any): void {
