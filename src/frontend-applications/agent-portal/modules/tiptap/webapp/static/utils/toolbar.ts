@@ -91,6 +91,30 @@ export function createToolbar(editor: any): HTMLDivElement {
         reapplyActiveMarksInChain(chain).run();
     };
 
+    function sanitizeHtmlForTiptap(raw: string): string {
+        let h = (raw ?? '').toString();
+        h = h.replace(/<!--[\s\S]*?-->/g, '');
+        h = h.replace(/<\/?(?:tbody|thead|tfoot)\b[^>]*>/gi, '');
+        h = h.replace(/>\s+</g, '><');
+        h = h.replace(/&nbsp;/g, ' ');
+        return h.trim();
+    }
+
+    function withContentCheckDisabled(editor: any, fn: () => void): void {
+        const prev = !!editor.options?.enableContentCheck;
+        try {
+            if (prev && typeof editor.setOptions === 'function') {
+                editor.setOptions({ enableContentCheck: false });
+            }
+            fn();
+        } finally {
+            if (prev && typeof editor.setOptions === 'function') {
+                editor.setOptions({ enableContentCheck: true });
+            }
+        }
+    }
+
+
     function updateActiveButtons(): void {
         const superscriptActive = editor.isActive('superscript');
         const subscriptActive = editor.isActive('subscript');
@@ -950,8 +974,10 @@ export function createToolbar(editor: any): HTMLDivElement {
 
                 const sync = (): void => {
                     if (!sourceTextarea) return;
-                    const html = sourceTextarea.value;
-                    editor.commands.setContent(html, true);
+                    const safeHtml = sanitizeHtmlForTiptap(sourceTextarea.value);
+                    withContentCheckDisabled(editor, () => {
+                        editor.commands.setContent(safeHtml, true);
+                    });
                 };
 
                 let t: number | undefined;
@@ -971,7 +997,12 @@ export function createToolbar(editor: any): HTMLDivElement {
                     const debouncedSync = (sourceTextarea as any)._debouncedSync as () => void;
 
                     if (debouncedSync) sourceTextarea.removeEventListener('input', debouncedSync);
-                    if (sync) sync();
+
+                    try {
+                        if (sync) sync();
+                    } catch (e) {
+                        console.error('[SourceMode] final sync failed:', e);
+                    }
 
                     sourceTextarea.remove();
                     sourceTextarea = null;
