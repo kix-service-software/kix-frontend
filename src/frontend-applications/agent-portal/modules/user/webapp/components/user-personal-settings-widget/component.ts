@@ -30,8 +30,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        super.onMount();
         this.state.labelProvider = new UserLabelProvider();
-        const context = ContextService.getInstance().getActiveContext();
 
         this.context?.registerListener('user-personal-settings-widget', {
             sidebarRightToggled: (): void => { return; },
