@@ -38,7 +38,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private async applyEditorConfiguration(): Promise<void> {
-        const validEditors = ['tiptap', 'quill', 'ckeditor5'];
+        const validEditors = ['tiptap', 'ckeditor5'];
 
         let editorType = 'ckeditor5';
         try {

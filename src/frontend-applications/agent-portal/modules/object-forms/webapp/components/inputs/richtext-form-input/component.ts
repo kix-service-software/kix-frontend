@@ -44,7 +44,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async applyEditorConfiguration(): Promise<void> {
-        const validEditors = ['tiptap', 'quill', 'ckeditor5'];
+        const validEditors = ['tiptap', 'ckeditor5'];
 
         const apConfig = await SysConfigService.getInstance().getPortalConfiguration<AgentPortalConfiguration>();
         const rawType = apConfig?.editorType;
