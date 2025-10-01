@@ -71,6 +71,8 @@ export class ContextService {
 
     public contextRefreshInterval: ContextRefreshInterval;
 
+    private componentContextMap: Object = new Object();
+
     public async initialize(): Promise<void> {
         this.contextRefreshInterval = new ContextRefreshInterval();
         await this.contextRefreshInterval.initialize();
@@ -253,6 +255,12 @@ export class ContextService {
                     }
 
                     removed = true;
+                }
+
+                for (const key in this.componentContextMap) {
+                    if (this.componentContextMap[key] === instanceId) {
+                        this.componentContextMap[key].delete();
+                    }
                 }
             }
         }
@@ -785,6 +793,14 @@ export class ContextService {
 
     public getToolbarAction(key: string): ToolbarAction {
         return this.toolbarActions.get(key);
+    }
+
+    public setComponentContextInstanceId(componentInstanceId: string, contextInstanceId: string): void {
+        this.componentContextMap[componentInstanceId] = contextInstanceId;
+    }
+
+    public getComponentContextInstanceId(componentInstanceId: string): string {
+        return this.componentContextMap[componentInstanceId];
     }
 
 }
