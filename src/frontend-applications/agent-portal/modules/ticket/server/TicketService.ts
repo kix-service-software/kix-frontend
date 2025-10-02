@@ -626,7 +626,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         article.MimeType = 'text/html';
         article.Charset = 'utf-8';
 
-        if (!article.Body?.includes('tiptap-table') && !article.Body?.includes('quill-better-table')) {
+        if (!article.Body?.includes('tiptap-table')) {
             article.Body = Article.MAIL_STYLE + article.Body;
         }
 
