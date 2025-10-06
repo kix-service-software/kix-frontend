@@ -67,6 +67,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
         if (canGeneralCatalog) {
             properties.push([ConfigItemProperty.CUR_DEPL_STATE_ID, null]);
             properties.push([ConfigItemProperty.CUR_INCI_STATE_ID, null]);
+            properties.push([ConfigItemProperty.DEPL_STATE_TYPE, null]);
         }
 
         if (await this.checkReadPermissions('system/users')) {
@@ -137,6 +138,8 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             operations = stringOperators;
         } else if (property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH) {
             operations = [SearchOperator.EQUALS];
+        } else if (property === ConfigItemProperty.DEPL_STATE_TYPE) {
+            operations = [SearchOperator.IN, SearchOperator.NOT_IN];
         } else if (this.isDropDown(property)) {
             operations = numberOperators;
         } else if (this.isDateTime(property)) {
@@ -221,7 +224,8 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             || property === ConfigItemProperty.CLASS_ID
             || property === KIXObjectProperty.CREATE_BY
             || property === KIXObjectProperty.CHANGE_BY
-            || property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH;
+            || property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH
+            || property === ConfigItemProperty.DEPL_STATE_TYPE;
     }
 
     private isDateTime(property: string): boolean {
@@ -240,6 +244,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CHANGE_BY:
             case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
+            case ConfigItemProperty.DEPL_STATE_TYPE:
                 return await CMDBService.getInstance().getTreeNodes(property, showInvalid, showInvalid);
             default:
                 const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);
