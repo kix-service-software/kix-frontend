@@ -115,6 +115,9 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
                 displayValue = 'Translatable#Include Previous Version';
                 break;
+            case ConfigItemProperty.DEPL_STATE_TYPE:
+                displayValue = 'Translatable#Deployment state type';
+                break;
             default:
                 displayValue = await this.getAttributePropertyText(property, configItem, classIds);
 
