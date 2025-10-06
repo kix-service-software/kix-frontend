@@ -127,6 +127,20 @@ function normalizeForTiptap(html: string | undefined | null): string {
     return out;
 }
 
+function withContentCheckDisabled(editor: any, fn: () => void): void {
+    const hadOption = typeof editor?.setOptions === 'function'
+        && Object.prototype.hasOwnProperty.call(editor?.options ?? {}, 'enableContentCheck');
+
+    const prev = hadOption ? !!editor.options.enableContentCheck : undefined;
+
+    try {
+        if (hadOption) editor.setOptions({ enableContentCheck: false });
+        fn();
+    } finally {
+        if (hadOption && prev !== undefined) editor.setOptions({ enableContentCheck: prev });
+    }
+}
+
 export class Component extends AbstractMarkoComponent<ComponentState> {
     private editor: any;
     private readOnly: boolean;
@@ -173,7 +187,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     } catch { }
                 },
                 extensions: [
-                    Tiptap.StarterKit.configure({ bold: false }),
+                    Tiptap.StarterKit.configure({ bold: false, paragraph: false }),
                     Tiptap.TextStyle,
                     Tiptap.Color,
                     Tiptap.Underline,
@@ -273,7 +287,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                                 align: 'left',
                                 isGif: /\.gif(\?.*)?$/i.test(text),
                             });
-                            view.dispatch(view.state.tr.replaceSelectionWith(node));
+                            comp.editor.commands.insertContent(node);;
                             event.preventDefault();
                             return true;
                         }
@@ -282,9 +296,29 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         if (html) {
                             const fragment = normalizeForTiptap(html);
                             if (fragment) {
-                                comp.editor?.commands.insertContent(fragment);
                                 event.preventDefault();
-                                return true;
+                                try {
+                                    if (typeof withContentCheckDisabled === 'function') {
+                                        withContentCheckDisabled(comp.editor, () => {
+                                            comp.editor?.chain().focus().insertContent(fragment).run();
+                                        });
+                                    } else {
+                                        comp.editor?.chain().focus().insertContent(fragment).run();
+                                    }
+                                    return true;
+                                } catch (_e) {
+                                    try {
+                                        comp.editor?.chain().focus().setContent(fragment, false).run();
+                                        return true;
+                                    } catch {
+                                        const plain = cd?.getData('text/plain') || '';
+                                        if (plain) {
+                                            comp.editor?.chain().focus().insertContent(`<p>${plain}</p>`).run();
+                                            return true;
+                                        }
+                                        return false;
+                                    }
+                                }
                             }
                         }
 
