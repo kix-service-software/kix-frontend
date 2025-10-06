@@ -57,7 +57,7 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
         this.addLanguageFormValue(preferences, objectValueMapper);
         this.oooFormValue = this.addOutOfOfficeFormValues(preferences, objectValueMapper, user.UserID);
         this.addInitialSiteURLFormValue(preferences, objectValueMapper);
-        this.myQueuesFormValue = this.addMyQueuesFormValue(preferences, objectValueMapper);
+        this.myQueuesFormValue = this.addMyQueuesFormValue(preferences, objectValueMapper, user.UserID);
         this.notificationsFormValue = this.addNotificationFormValue(preferences, objectValueMapper);
 
         if (objectValueMapper.formContext === FormContext.EDIT) {
@@ -237,7 +237,7 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
     }
 
     private addMyQueuesFormValue(
-        preferences: UserPreference[], objectValueMapper: ObjectFormValueMapper
+        preferences: UserPreference[], objectValueMapper: ObjectFormValueMapper, userId: number
     ): ObjectFormValue {
         let preference = preferences.find((p) => p.ID === PersonalSettingsProperty.MY_QUEUES);
         if (!preference) {
@@ -250,6 +250,19 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
         formValue.label = 'Translatable#My Queues';
         formValue.objectType = KIXObjectType.QUEUE;
         formValue.maxSelectCount = -1;
+        formValue.loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, null, null,
+            [
+                [
+                    'requiredPermission',
+                    JSON.stringify({
+                        Object: KIXObjectType.USER,
+                        ObjectID: userId,
+                        Permission: 'WRITE,READ'
+                    })
+                ]
+            ]
+        );
         formValue.setNewInitialState(FormValueProperty.VISIBLE, true);
         this.formValues.push(formValue);
 
