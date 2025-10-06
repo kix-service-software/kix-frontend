@@ -233,7 +233,7 @@ const ResizableImage = Node.create({
     group: 'inline',
     atom: true,
     draggable: true,
-    selectable: false,
+    selectable: true,
 
     addAttributes() {
         return {
@@ -322,6 +322,7 @@ const ResizableImage = Node.create({
             outer.style.textAlign = node.attrs.align || 'left';
             outer.setAttribute('data-type', 'resizable-image-wrapper');
             outer.setAttribute('data-align', node.attrs.align || 'left');
+            outer.draggable = true;
 
             const wrap = document.createElement('div');
             wrap.style.position = 'relative';
@@ -338,6 +339,8 @@ const ResizableImage = Node.create({
             img.setAttribute('data-width', String(node.attrs.width));
             if (node.attrs.isGif) img.setAttribute('data-gif', '1');
 
+            img.draggable = false;
+
             wrap.appendChild(img);
             outer.appendChild(wrap);
 
@@ -345,7 +348,7 @@ const ResizableImage = Node.create({
                 img.style.width = `${w}px`;
                 img.setAttribute('data-width', String(w));
                 if (typeof updateAttributes === 'function') {
-                    try { updateAttributes({ width: w }); return; } catch { }
+                    try { updateAttributes({ width: w }); return; } catch { /* noop */ }
                 }
                 try {
                     const pos = typeof getPos === 'function' ? getPos() : null;
@@ -353,7 +356,7 @@ const ResizableImage = Node.create({
                         const tr = editor.state.tr.setNodeMarkup(pos, undefined, { ...node.attrs, width: w });
                         editor.view.dispatch(tr);
                     }
-                } catch { }
+                } catch { /* noop */ }
             };
 
             if (editor.isEditable) {
@@ -414,6 +417,33 @@ const ResizableImage = Node.create({
                     wrap.appendChild(handle);
                 });
             }
+
+            outer.addEventListener('dragstart', (event) => {
+                const view = editor.view;
+                const pos = typeof getPos === 'function' ? getPos() : null;
+                if (pos == null || !view) return;
+
+                const { NodeSelection } = require('prosemirror-state');
+                const pv = require('prosemirror-view');
+                const serializeForClipboard = pv.serializeForClipboard || pv.__serializeForClipboard;
+
+                const state = view.state;
+                view.dispatch(state.tr.setSelection(NodeSelection.create(state.doc, pos)));
+
+                const slice = view.state.selection.content();
+                if (serializeForClipboard) {
+                    const { dom, text } = serializeForClipboard(view, slice);
+                    if (event.dataTransfer) {
+                        event.dataTransfer.clearData();
+                        event.dataTransfer.setData('text/html', dom.innerHTML);
+                        event.dataTransfer.setData('text/plain', text);
+                        event.dataTransfer.effectAllowed = 'move';
+                        event.dataTransfer.dropEffect = 'move';
+                    }
+                }
+
+                view.dragging = { slice, move: true };
+            });
 
             return { dom: outer, contentDOM: null };
         };
