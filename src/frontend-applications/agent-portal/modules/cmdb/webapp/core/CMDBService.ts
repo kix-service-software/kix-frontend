@@ -228,6 +228,16 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                     ));
                 }
                 break;
+            case ConfigItemProperty.DEPL_STATE_TYPE:
+                const preproductive = await TranslationService.translate('Preproductive');
+                const productive = await TranslationService.translate('Productive');
+                const postproductive = await TranslationService.translate('Postproductive');
+                nodes = [
+                    new TreeNode('preproductive', preproductive),
+                    new TreeNode('productive', productive),
+                    new TreeNode('postproductive', postproductive)
+                ];
+                break;
             case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
                 const no = await TranslationService.translate('No');
                 const yes = await TranslationService.translate('Yes');
