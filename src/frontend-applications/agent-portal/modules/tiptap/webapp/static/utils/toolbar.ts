@@ -32,6 +32,45 @@ export function createToolbar(editor: any): HTMLDivElement {
         toolbar.style.setProperty('top', '69px', 'important');
     }
 
+    const isTemplates = ((): boolean => {
+        try {
+            const p = (location?.pathname || '') + (location?.hash || '');
+            return /\/templates(\/|$)/.test(p);
+        } catch {
+            return false;
+        }
+    })();
+
+    if (isTemplates) {
+        toolbar.style.setProperty('top', '33px', 'important');
+    }
+
+    const updateStickyTopForRoute = (): void => {
+        const p = (location?.pathname || '') + (location?.hash || '');
+        const nowTemplates = /\/templates(\/|$)/.test(p);
+
+        if (nowTemplates) {
+            toolbar.style.setProperty('top', '33px', 'important');
+        } else if (isSSP) {
+            toolbar.style.setProperty('top', '69px', 'important');
+        } else {
+            toolbar.style.removeProperty('top');
+        }
+    };
+
+    window.addEventListener('popstate', updateStickyTopForRoute);
+    window.addEventListener('hashchange', updateStickyTopForRoute);
+    ['pushState', 'replaceState'].forEach((fn) => {
+        const orig = history[fn as 'pushState' | 'replaceState'];
+        history[fn as 'pushState' | 'replaceState'] = function (...args: any[]) {
+            const ret = orig.apply(this, args as any);
+            try { updateStickyTopForRoute(); } catch { }
+            return ret;
+        } as any;
+    });
+
+    updateStickyTopForRoute();
+
     let isSourceMode = false;
     let sourceTextarea: HTMLTextAreaElement | null = null;
     let skipNextFormatReapply = false;
