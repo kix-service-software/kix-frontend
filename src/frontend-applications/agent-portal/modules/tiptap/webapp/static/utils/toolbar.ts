@@ -862,6 +862,10 @@ export function createToolbar(editor: any): HTMLDivElement {
         zIndex: '1000',
     });
 
+    imageDropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
     const createImageDropdownItem = (label: string, onClick: () => void): HTMLDivElement => {
         const item = document.createElement('div');
         item.textContent = label;
@@ -892,7 +896,8 @@ export function createToolbar(editor: any): HTMLDivElement {
             item.style.color = '#000';
         };
 
-        item.onclick = (): void => {
+        item.onclick = (e): void => {
+            e.stopPropagation();
             imageDropdown.style.display = 'none';
             onClick();
         };
@@ -921,11 +926,15 @@ export function createToolbar(editor: any): HTMLDivElement {
     }));
 
     imageButtonWrapper.onclick = (e): void => {
+        if ((e.target as HTMLElement).closest('.image-dropdown-menu')) return;
+
         e.stopPropagation();
         const isVisible = imageDropdown.style.display === 'block';
+
         document.querySelectorAll('.image-dropdown-menu').forEach((el) => {
             (el as HTMLElement).style.display = 'none';
         });
+
         imageDropdown.style.display = isVisible ? 'none' : 'block';
     };
 
