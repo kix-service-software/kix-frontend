@@ -10,6 +10,7 @@
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
 import { AbstractAction } from '../../../../../base-components/webapp/core/AbstractAction';
+import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { Table } from '../../../../../table/model/Table';
 import { ConfigItemClass } from '../../../../model/ConfigItemClass';
@@ -35,7 +36,12 @@ export class ConfigItemClassDuplicateAction extends AbstractAction {
         if (this.canRun()) {
             const table = this.data as Table;
             const ciClass = table.getSelectedRows()[0].getRowObject()?.getObject() as ConfigItemClass;
-            ContextService.getInstance().setActiveContext(NewConfigItemClassDialogContext.CONTEXT_ID, ciClass.ID);
+            ContextService.getInstance().setActiveContext(
+                NewConfigItemClassDialogContext.CONTEXT_ID, ciClass.ID, null,
+                [
+                    [AdditionalContextInformation.DUPLICATE, true]
+                ]
+            );
         }
     }
 }

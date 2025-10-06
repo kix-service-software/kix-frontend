@@ -29,6 +29,7 @@ import { FormInstance } from './FormInstance';
 import { KIXObjectService } from './KIXObjectService';
 import { FormFactory } from './FormFactory';
 import { FormService } from './FormService';
+import { AdditionalContextInformation } from './AdditionalContextInformation';
 
 export abstract class KIXObjectFormService {
 
@@ -154,10 +155,20 @@ export abstract class KIXObjectFormService {
                 }
                 break;
             case KIXObjectProperty.OBJECT_TAGS:
-                if (object && formContext === FormContext.EDIT) {
-                    value = await KIXObjectService.loadObjectTags(
-                        object.KIXObjectType, object.ObjectId, true
-                    );
+                if (object) {
+                    const context = ContextService.getInstance().getActiveContext();
+                    const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
+                    if (
+                        formContext === FormContext.EDIT
+                        || (
+                            formContext === FormContext.NEW
+                            && duplicate
+                        )
+                    ) {
+                        value = await KIXObjectService.loadObjectTags(
+                            object.KIXObjectType, object.ObjectId, true
+                        );
+                    }
                 }
             default:
         }
