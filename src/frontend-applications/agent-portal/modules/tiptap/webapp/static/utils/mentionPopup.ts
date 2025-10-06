@@ -30,7 +30,7 @@ export function createMentionPopup(): {
 
     const handleReposition = (): void => {
         if (dom && currentClientRect) {
-            positionPopup(currentClientRect(), dom);
+            positionPopup(currentClientRect(), dom, arrow || undefined);
         }
     };
 
@@ -48,7 +48,8 @@ export function createMentionPopup(): {
                 zIndex: '9999',
                 minWidth: '180px',
                 fontSize: '14px',
-            });
+                overflowY: 'auto',
+            } as CSSStyleDeclaration);
 
             updatePopupItems(dom, props.items, props.command);
 
@@ -60,14 +61,12 @@ export function createMentionPopup(): {
                 background: 'white',
                 transform: 'rotate(45deg)',
                 boxShadow: '-1px -1px 1px rgba(0,0,0,0.05)',
-                top: '-4px',
-                left: '8px',
-            });
+            } as CSSStyleDeclaration);
             dom.appendChild(arrow);
 
             document.body.appendChild(dom);
             currentClientRect = props.clientRect;
-            positionPopup(currentClientRect(), dom);
+            positionPopup(currentClientRect(), dom, arrow);
 
             window.addEventListener('scroll', handleReposition, true);
             window.addEventListener('resize', handleReposition);
@@ -84,7 +83,7 @@ export function createMentionPopup(): {
                 update: ({ clientRect }: { clientRect: () => DOMRect }): void => {
                     currentClientRect = clientRect;
                     if (dom) {
-                        positionPopup(clientRect(), dom);
+                        positionPopup(clientRect(), dom, arrow || undefined);
                     }
                 },
             };
@@ -120,7 +119,7 @@ function updatePopupItems(
         Object.assign(emptyDiv.style, {
             padding: '6px 12px',
             color: '#888',
-        });
+        } as CSSStyleDeclaration);
         dom.appendChild(emptyDiv);
         return;
     }
@@ -133,7 +132,7 @@ function updatePopupItems(
             padding: '6px 12px',
             cursor: 'pointer',
             userSelect: 'none',
-        });
+        } as CSSStyleDeclaration);
 
         div.onmouseenter = (): string => (div.style.background = '#f1f1f1');
         div.onmouseleave = (): string => (div.style.background = 'transparent');
@@ -143,7 +142,64 @@ function updatePopupItems(
     });
 }
 
-function positionPopup(rect: DOMRect, popup: HTMLElement): void {
-    popup.style.top = `${rect.bottom}px`;
-    popup.style.left = `${rect.left}px`;
+function positionPopup(rect: DOMRect, popup: HTMLElement, arrow?: HTMLElement): void {
+    const margin = 8;
+    const sideMargin = 8;
+    const vpW = window.innerWidth;
+    const vpH = window.innerHeight;
+
+    const maxH = Math.max(160, Math.floor(vpH * 0.5));
+    popup.style.maxHeight = `${maxH}px`;
+    popup.style.overflowY = 'auto';
+
+    const popupWidth = popup.offsetWidth || 200;
+    const popupHeight = Math.min(popup.offsetHeight || 180, maxH);
+
+    const spaceBelow = vpH - rect.bottom - margin;
+    const spaceAbove = rect.top - margin;
+
+    const placeAbove = popupHeight > spaceBelow && spaceAbove >= spaceBelow;
+
+    let top: number;
+    if (placeAbove) {
+        top = Math.max(margin, rect.top - popupHeight - margin);
+    } else {
+        top = Math.min(vpH - popupHeight - margin, rect.bottom + margin);
+    }
+
+    let left = rect.left;
+    if (left + popupWidth + sideMargin > vpW) {
+        left = vpW - popupWidth - sideMargin;
+    }
+    if (left < sideMargin) {
+        left = sideMargin;
+    }
+
+    popup.style.top = `${Math.max(margin, Math.min(top, vpH - popupHeight - margin))}px`;
+    popup.style.left = `${left}px`;
+
+    if (arrow) {
+        Object.assign(arrow.style, {
+            width: '8px',
+            height: '8px',
+            background: 'white',
+            transform: 'rotate(45deg)',
+            boxShadow: '-1px -1px 1px rgba(0,0,0,0.05)',
+            position: 'absolute',
+        } as CSSStyleDeclaration);
+
+        arrow.style.top = '';
+        arrow.style.bottom = '';
+        if (placeAbove) {
+            arrow.style.bottom = '-4px';
+        } else {
+            arrow.style.top = '-4px';
+        }
+
+        const caretXInside = rect.left - left;
+        const arrowOffset = Math.max(8, Math.min(popupWidth - 16, caretXInside));
+        arrow.style.left = `${arrowOffset}px`;
+    }
+
+    popup.setAttribute('data-placement', placeAbove ? 'top' : 'bottom');
 }
