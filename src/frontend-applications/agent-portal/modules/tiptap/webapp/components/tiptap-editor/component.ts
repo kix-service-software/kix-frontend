@@ -16,6 +16,7 @@ import { TextmodulePlugin } from '../../core/TextmodulePlugin';
 import { prepareHtmlForEmail } from '../../static/utils/prepareHtmlForEmail';
 
 declare const Tiptap: any;
+let applyingDefaults = false;
 
 function stylesWereLost(raw: string, cleaned: string): boolean {
     const keys = ['font-family', 'font-size', 'color:'];
@@ -145,6 +146,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private editor: any;
     private readOnly: boolean;
     private value: string;
+
+
 
     private _onVisChange?: () => void;
     private _onBeforeUnload?: () => void;
@@ -427,11 +430,41 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
                     (comp as any).emit('valueChanged', cleanedHtml);
 
-                    if (editor.getText().trim() === '') {
-                        editor.commands.setFontFamily('Arial');
-                        editor.commands.setFontSize('14');
-                        editor.storage.lastFontFamily = 'Arial';
-                        editor.storage.lastFontSize = '14';
+                    if (applyingDefaults) return;
+
+                    const { state } = editor;
+                    const { doc, selection } = state;
+
+                    let imageCount = 0;
+                    let textChars = 0;
+                    doc.descendants((node: any) => {
+                        if (node.type && node.type.name === 'resizableImage') imageCount += 1;
+                        if (node.isText && node.text) textChars += node.text.trim().length;
+                    });
+                    const onlyImages = imageCount > 0 && textChars === 0;
+
+                    if (onlyImages) return;
+
+                    const $from = selection.$from;
+                    const inEmptyParagraph =
+                        $from.parent?.type?.name === 'paragraph' &&
+                        $from.parent.isTextblock &&
+                        $from.parent.content.size === 0;
+
+                    if (inEmptyParagraph) {
+                        const wantFont = 'Arial';
+                        const wantSize = '14';
+                        const ts = editor.getAttributes('textStyle') || {};
+                        const needFont = ts.fontFamily !== wantFont;
+                        const needSize = String(ts.fontSize || '') !== wantSize;
+
+                        if (needFont || needSize) {
+                            applyingDefaults = true;
+                            editor.chain().setFontFamily(wantFont).setFontSize(wantSize).run();
+                            editor.storage.lastFontFamily = wantFont;
+                            editor.storage.lastFontSize = wantSize;
+                            applyingDefaults = false;
+                        }
                     }
                 },
             });

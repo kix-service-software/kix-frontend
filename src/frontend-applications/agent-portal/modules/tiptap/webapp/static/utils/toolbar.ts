@@ -103,7 +103,7 @@ export function createToolbar(editor: any): HTMLDivElement {
         return chain;
     }
 
-    const alignableTypes = ['paragraph', 'heading', 'customParagraph'] as const;
+    const alignableTypes = ['heading', 'customParagraph'] as const;
     const getCurrentAlign = (): any => {
         for (const t of alignableTypes) {
             const ta = editor.getAttributes(t as any)?.textAlign;
