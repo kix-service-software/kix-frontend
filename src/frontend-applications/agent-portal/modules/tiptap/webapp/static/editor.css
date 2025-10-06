@@ -1,3 +1,21 @@
+:root {
+    --kix-header-h: 56px;
+}
+
+.article-body.input-style .tiptap-toolbar {
+    position: sticky;
+    top: var(--kix-header-h);
+}
+
+.article-body.input-style {
+    overflow: visible;
+}
+
+.article-body.input-style .tiptap-editor,
+.article-body.input-style .tiptap-wrapper {
+    overflow: visible;
+}
+
 .tiptap-editor-body {
     background-color: #ffffff !important;
     color: #1a1a1a;
@@ -135,7 +153,7 @@
 
 .tiptap-toolbar {
     position: sticky;
-    top: 0;
+    top: 0 !important;
     z-index: 20;
     display: flex;
     flex-wrap: wrap;
