@@ -112,7 +112,7 @@ export class QueueAPIService extends KIXObjectAPIService {
                 );
             }
             objectResponse = await super.load<TicketStats>(
-                token, KIXObjectType.FOLLOW_UP_TYPE, uri, loadingOptions, null, KIXObjectType.QUEUE_TICKET_STATS,
+                token, KIXObjectType.QUEUE_TICKET_STATS, uri, loadingOptions, null, KIXObjectType.QUEUE_TICKET_STATS,
                 clientRequestId, TicketStats
             );
         }
