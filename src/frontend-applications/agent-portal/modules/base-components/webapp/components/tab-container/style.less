@@ -92,7 +92,16 @@
 
         &.minimized {
             >.widget-header {
+                overflow: hidden;
+
                 >.header-left {
+                    overflow: hidden;
+
+                    .fa-caret-left,
+                    .fa-caret-right {
+                        display: none;
+                    }
+
                     >.tab-list {
                         display: none;
                     }
