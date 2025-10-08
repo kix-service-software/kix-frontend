@@ -15,10 +15,8 @@ import { FormFieldConfiguration } from '../../../../../model/configuration/FormF
 import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
 import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
@@ -26,8 +24,6 @@ import { ValidationResult } from '../../../../../modules/base-components/webapp/
 import { ValidationSeverity } from '../../../../../modules/base-components/webapp/core/ValidationSeverity';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
-import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
@@ -95,7 +91,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const eventService = EventService.getInstance();
         const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
@@ -112,8 +107,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             });
 
             if (success) {
-                TranslationService.getInstance().resetTranslations();
-                eventService.publish('USER_LANGUAGE_CHANGED');
                 BrowserUtil.handleBeforeUnload();
                 setTimeout(async () => {
                     BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
@@ -121,28 +114,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         this.context.instanceId, undefined, undefined, undefined, true
                     );
 
-                    eventService.publish(ApplicationEvent.REFRESH);
-                    this.updateTabs();
+                    const toast = await TranslationService.translate('Translatable#Changes saved.');
+                    BrowserUtil.openSuccessOverlay(toast);
                 }, 100);
             }
         }
-    }
-
-    private async updateTabs(): Promise<void> {
-        const eventService = EventService.getInstance();
-        setTimeout(() => {
-            const sourceContext = this.context?.getAdditionalInformation(
-                AdditionalContextInformation.SOURCE_CONTEXT
-            );
-            eventService.publish(ApplicationEvent.REFRESH_CONTENT, sourceContext?.instanceId);
-
-            const instances = ContextService.getInstance().getContextInstances();
-            instances.filter((i) => i.instanceId !== sourceContext?.instanceId)
-                .forEach((i) => eventService.publish(ContextEvents.CONTEXT_UPDATE_REQUIRED, i));
-        }, 250);
-
-        const toast = await TranslationService.translate('Translatable#Changes saved.');
-        BrowserUtil.openSuccessOverlay(toast);
     }
 
     public async showValidationError(result: ValidationResult[]): Promise<void> {
