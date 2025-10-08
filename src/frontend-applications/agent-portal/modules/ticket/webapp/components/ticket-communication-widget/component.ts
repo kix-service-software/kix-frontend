@@ -31,7 +31,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     private sortOrder: string;
     private subscriber: IEventSubscriber;
     private communicationConfig: TicketCommunicationConfiguration;
-    private articleIds: number[] = [];
+    private articleIds: number[];
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -93,7 +93,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
             },
             objectListChanged: (objectType: KIXObjectType) => {
                 if (objectType === KIXObjectType.ARTICLE) {
-                    this.articleIds = [];
+                    this.articleIds = null;
                     this.setArticleIDs();
                 }
             },
@@ -222,9 +222,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     }
 
     public getArticleCountNumber(articleId: number): number {
-        const list = Array.isArray(this.articleIds) ? this.articleIds : [];
-        const idx = list.findIndex((aid) => aid === articleId);
-        return idx >= 0 ? idx + 1 : 0;
+        return this.articleIds?.findIndex((aid) => aid === articleId) + 1 || 1;
     }
 }
 
