@@ -13,8 +13,12 @@ import { ClientStorageService } from '../../../../base-components/webapp/core/Cl
 import { IdService } from '../../../../../model/IdService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
+    private resizeTimeout: ReturnType<typeof setTimeout> = null;
+    private frameInterval: ReturnType<typeof setInterval> = null;
+    private observer: ResizeObserver;
 
     private article: Article = null;
 
@@ -33,11 +37,40 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        setTimeout(() => {
+        await super.onMount();
+
+        if (!this.observer) {
+            this.prepareObserver();
+        }
+    }
+
+    public onDestroy(): void {
+        if (this.observer) {
+            this.observer.disconnect();
+        }
+    }
+
+    private prepareObserver(): void {
+        if (window.ResizeObserver) {
             const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
-            const frameHeight = frame.contentDocument.documentElement.scrollHeight;
-            frame.style.height = frameHeight + 10 + 'px'; // 10 is for the top and bottom padding of 5px each
-        }, 500);
+
+            let containerWidth = frame.offsetWidth;
+            this.observer = new ResizeObserver((entries) => {
+                if (frame.offsetWidth !== containerWidth) {
+                    if (this.resizeTimeout) {
+                        clearTimeout(this.resizeTimeout);
+                    }
+
+                    this.resizeTimeout = setTimeout(() => {
+                        containerWidth = frame.offsetWidth;
+                        this.setFrameHeight();
+                        this.resizeTimeout = null;
+                    }, 150);
+                }
+            });
+
+            this.observer.observe(frame);
+        }
     }
 
     public viewLoaded(event: any): void {
@@ -53,8 +86,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 return;
             }
 
-            const frameHeight = frameDocument?.documentElement?.scrollHeight || 0;
-            frame.style.height = frameHeight + 10 + 'px';
+            this.setFrameHeight();
 
             const links = frameDocument.querySelectorAll('a[href]');
             links.forEach((link: HTMLAnchorElement) => {
@@ -76,6 +108,29 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             });
         });
+    }
+
+    private setFrameHeight(): void {
+        const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
+
+        if (frame) {
+            // set frame height to 0px to get minimal scollHeight
+            frame.style.height = '0px';
+
+            const frameHeight = frame?.contentWindow?.document?.body?.scrollHeight || 0;
+            if (frameHeight > 0) {
+                frame.style.height = frameHeight + 10 + 'px';
+
+                clearInterval(this.frameInterval);
+                this.frameInterval = null;
+            }
+            else if (!this.frameInterval) {
+                this.frameInterval = setInterval(() => this.setFrameHeight(), 500);
+            }
+        }
+        else if (!this.frameInterval) {
+            this.frameInterval = setInterval(() => this.setFrameHeight(), 500);
+        }
     }
 }
 

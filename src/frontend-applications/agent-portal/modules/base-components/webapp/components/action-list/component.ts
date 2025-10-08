@@ -28,7 +28,6 @@ import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { EventService } from '../../core/EventService';
 import { ContextEvents } from '../../core/ContextEvents';
 import { Context } from 'mocha';
-import { ContextService } from '../../core/ContextService';
 import { IdService } from '../../../../../model/IdService';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
@@ -60,6 +59,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         this.actionsToShow = await ActionFactory.getActionList(this.actionList);
 
         if (this.listenerInstanceId) {
@@ -80,12 +81,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.observerTimeout = setTimeout(() => this.prepareObserver(), 150);
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
+        if (this.context) {
             this.contextSubscriber = {
                 eventSubscriberId: this.listenerInstanceId || IdService.generateDateBasedId('action-list-'),
                 eventPublished: (data: Context, eventId: string): void => {
-                    if (data?.instanceId === context.instanceId) {
+                    if (data?.instanceId === this.context.instanceId) {
                         if (!this.observer) {
                             this.observerTimeout = setTimeout(() => this.prepareObserver(), 150);
                         }

@@ -58,6 +58,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
         this.state.expanded = this.getArticleToggleState();
         this.state.show = this.state.expanded;
         this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
+
         await this.prepareObserver();
         await this.toggleArticleContent(false);
 
@@ -287,7 +288,9 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
 
             this.loadDetailedArticle(true);
 
-            this.context.setAdditionalInformation('CURRENT_ARTICLE_FOCUS', this.articleId);
+            if (setFocus) {
+                this.context.setAdditionalInformation('CURRENT_ARTICLE_FOCUS', this.articleId);
+            }
         }
 
         this.saveArticleToggleState();
@@ -390,7 +393,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
 
     private resizeHandling(): void {
         if (this.elementInterval) {
-            clearTimeout(this.elementInterval);
+            clearInterval(this.elementInterval);
         }
         this.elementInterval = setInterval(() => {
             const element = (this as any).getEl('message-body');
