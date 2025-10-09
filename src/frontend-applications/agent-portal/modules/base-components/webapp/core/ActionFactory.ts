@@ -147,28 +147,15 @@ export class ActionFactory<T extends AbstractAction> {
     }
 
     public static sortList<T extends ActionGroup | IAction>(list: T[]): T[] {
-        return list.sort((a, b) => {
-            const aHasRank = !isNaN(Number(a.rank));
-            const bHasRank = !isNaN(Number(a.rank));
-
-            if (!aHasRank && !bHasRank) {
-                return SortUtil.compareString(a.text, b.text, SortOrder.UP);
-            }
-
-            if (!aHasRank && bHasRank) {
-                return -1;
-            }
-
-            if (aHasRank && !bHasRank) {
-                return 1;
-            }
-
-            if (a.rank === b.rank) {
-                return SortUtil.compareString(a.text, b.text, SortOrder.UP);
-            } else {
-                return SortUtil.compareNumber(a.rank, b.rank, SortOrder.UP, false);
-            }
+        let rankedActions = list.filter((a) => !isNaN(Number(a.rank)));
+        const unrankedActions = list.filter((a) => isNaN(Number(a.rank)));
+        rankedActions = rankedActions.sort((a, b) => {
+            return a.rank === b.rank
+                ? SortUtil.compareString(a.text, b.text, SortOrder.UP)
+                : SortUtil.compareNumber(a.rank, b.rank, SortOrder.UP, false);
         });
+
+        return [...rankedActions, ...unrankedActions];
     }
 
     public static async getActionList(actionList: IAction[]): Promise<Array<ActionGroup | IAction>> {
