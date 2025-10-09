@@ -46,6 +46,11 @@ export class RouterOutletComponent {
 
                 setTimeout(() => {
                     this.state.reloadContextInstanceId = null;
+
+                    setTimeout(() => EventService.getInstance().publish(
+                        ApplicationEvent.REFRESH_CONTENT_FINISHED), 400
+                    );
+
                 }, 500);
             }
         });

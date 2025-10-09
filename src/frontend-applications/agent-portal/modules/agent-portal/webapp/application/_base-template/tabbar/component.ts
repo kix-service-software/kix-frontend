@@ -78,6 +78,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         tab.refresh = false;
                         (this as any).setStateDirty('contextTabs');
                     }
+                } else if (eventId === ApplicationEvent.REFRESH_CONTENT_FINISHED) {
+                    this.state.blocked = false;
                 }
 
             }
@@ -92,6 +94,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvent.DISPLAY_VALUE_UPDATED, this.subscriber);
         EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, this.subscriber);
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT_FINISHED, this.subscriber);
 
     }
 
@@ -106,6 +109,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvent.DISPLAY_VALUE_UPDATED, this.subscriber);
         EventService.getInstance().unsubscribe(ApplicationEvent.REFRESH_CONTENT, this.subscriber);
+        EventService.getInstance().unsubscribe(ApplicationEvent.REFRESH_CONTENT_FINISHED, this.subscriber);
     }
 
     private toggleActiveEntry(): void {
@@ -154,6 +158,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async refreshTab(tab: ContextTab, event: any): Promise<void> {
+        this.state.blocked = true;
         await this.tabClicked(tab, event);
         tab.refresh = false;
         setTimeout(() => {
