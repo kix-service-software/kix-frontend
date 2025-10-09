@@ -16,6 +16,8 @@ import { IdService } from '../../../../../model/IdService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { TicketEvent } from '../../../model/TicketEvent';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState, TicketContext> {
 
@@ -37,20 +39,27 @@ class Component extends AbstractMarkoComponent<ComponentState, TicketContext> {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (): void => {
-                this.prepareWidgets();
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
+                if (eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED) {
+                    await this.prepareWidgets();
+                } else if (eventId === TicketEvent.MARK_TICKET_AS_SEEN) {
+                    setTimeout(async () => {
+                        await this.context.reloadObjectList(KIXObjectType.TICKET, true);
+                    }, 100);
+                }
             }
         };
         this.prepareWidgets();
 
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
+        EventService.getInstance().subscribe(TicketEvent.MARK_TICKET_AS_SEEN, this.subscriber);
+
     }
 
     private async prepareWidgets(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
         this.state.prepared = false;
         setTimeout(async () => {
-            this.state.contentWidgets = await context.getContent();
+            this.state.contentWidgets = await this.context.getContent();
             this.state.prepared = true;
         }, 100);
     }
@@ -63,10 +72,12 @@ class Component extends AbstractMarkoComponent<ComponentState, TicketContext> {
     }
 
     public async search(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof TicketContext) {
-            context.setFilterValue(this.state.filterValue);
-        }
+        this.context.setFilterValue(this.state.filterValue);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
+        EventService.getInstance().unsubscribe(TicketEvent.MARK_TICKET_AS_SEEN, this.subscriber);
     }
 
 }

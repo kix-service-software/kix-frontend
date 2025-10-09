@@ -66,6 +66,8 @@ import { TicketModuleConfiguration } from '../../model/TicketModuleConfiguration
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
+import { TicketEvent } from '../../model/TicketEvent';
+import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -184,7 +186,10 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public async markTicketAsSeen(ticketId: number): Promise<void> {
         await AgentSocketClient.getInstance().markAsSeen(KIXObjectType.TICKET, [ticketId])
-            .then(() => EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR))
+            .then(() => {
+                EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+                EventService.getInstance().publish(TicketEvent.MARK_TICKET_AS_SEEN, ticketId);
+            })
             .catch((error) => console.error(error));
     }
 
