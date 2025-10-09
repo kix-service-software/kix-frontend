@@ -41,6 +41,14 @@ export class NewContactDialogContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONTACT, reload: boolean = false, changedProperties?: string[]
     ): Promise<O> {
+
+        // use contact from form if already set
+        const formHandler = await this.getFormManager()?.getObjectFormHandler();
+        if (formHandler?.objectFormValueMapper?.object) {
+            return formHandler.objectFormValueMapper.object as O;
+        }
+
+        // else load contact for duplicate or create new one for initialisation
         let contact: Contact;
         const objectId = this.getObjectId();
         if (objectId) {
@@ -51,10 +59,13 @@ export class NewContactDialogContext extends Context {
                 objectType, [objectId], loadingOptions
             ).catch((): Contact[] => []);
             if (objects?.length) {
-                contact = objects[0];
+                // do not loaded overwrite contact
+                contact = new Contact(objects[0]);
+                // remove some data (on duplicate)
                 delete contact.ID;
                 delete contact.User?.UserID;
                 delete contact.AssignedUserID;
+                delete contact.User.UserLogin;
                 delete contact.Email;
                 delete contact.Email1;
                 delete contact.Email2;
