@@ -95,7 +95,7 @@ export class NotificationHandler {
         this.updateTimeout = setTimeout(() => {
             ContextService.getInstance().notifyUpdates(this.updates);
             this.updates = [];
-        }, 3000);
+        }, 1000);
     }
 
     private getObjectType(namespace: string): string {
