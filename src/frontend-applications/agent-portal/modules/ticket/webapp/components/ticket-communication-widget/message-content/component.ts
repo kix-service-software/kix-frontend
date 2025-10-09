@@ -20,6 +20,8 @@ import { LabelService } from '../../../../../base-components/webapp/core/LabelSe
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { Article } from '../../../../model/Article';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
+import { Ticket } from '../../../../model/Ticket';
+import { TicketEvent } from '../../../../model/TicketEvent';
 import { TicketDetailsContext, TicketService } from '../../../core';
 import { ComponentState } from './ComponentState';
 
@@ -68,7 +70,6 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
         }
 
         this.state.switchAttachmentListTooltip = await TranslationService.translate('Translatable#Switch attachment list layout');
-
         this.registerContextListener();
     }
 
@@ -95,6 +96,8 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe('TOGGLE_ARTICLE', this.eventSubscriber);
+        EventService.getInstance().unsubscribe(TicketEvent.MARK_TICKET_AS_SEEN, this.eventSubscriber);
+
 
         if (this.elementInterval) {
             clearInterval(this.elementInterval);
@@ -166,6 +169,9 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
                 }
 
                 this.state.unseen = this.state.article?.Unseen;
+                if (this.state.unseen) {
+                    this.context.registerUnseenArticle(this.state.article.ArticleID);
+                }
                 await this.prepareArticleData();
 
                 if (this.state.expanded) {
@@ -243,16 +249,20 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
 
         this.eventSubscriber = {
             eventSubscriberId: 'message-content-' + this.articleId,
-            eventPublished: (data: any, eventId: string): void => {
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
                 if (eventId === 'TOGGLE_ARTICLE' && data.articleId === this.articleId) {
                     this.state.expanded = data.expanded;
                     this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
                     this.toggleArticleContent();
                 }
+                if (eventId === TicketEvent.MARK_TICKET_AS_SEEN && this.state.article.TicketID === data) {
+                    this.state.unseen = 0;
+                }
             }
         };
 
         EventService.getInstance().subscribe('TOGGLE_ARTICLE', this.eventSubscriber);
+        EventService.getInstance().subscribe(TicketEvent.MARK_TICKET_AS_SEEN, this.eventSubscriber);
     }
 
     private filterAttachments(): void {
@@ -387,6 +397,10 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
             await TicketService.getInstance().setArticleSeenFlag(
                 this.state.article.TicketID, this.state.article.ArticleID
             );
+            const numberOfUnseenArticles = this.context.unregisterUnseenArticle(this.state.article.ArticleID);
+            if (numberOfUnseenArticles === 0) {
+                await TicketService.getInstance().markTicketAsSeen(this.state.article.TicketID);
+            }
             this.context.reloadObjectList(KIXObjectType.ARTICLE, true);
         }
     }

@@ -112,7 +112,13 @@ export class TableFactoryService {
     ): Promise<Table> {
         let table: Table;
 
-        const context = ContextService.getInstance().getActiveContext();
+        let context: Context;
+        if (contextId) {
+            context = ContextService.getInstance().getContextInstances().find((c) => c.contextId === contextId);
+        }
+        if (!context) {
+            context = ContextService.getInstance().getActiveContext();
+        }
         let tableContextId: string;
         if (context) {
             tableContextId = context.instanceId;
