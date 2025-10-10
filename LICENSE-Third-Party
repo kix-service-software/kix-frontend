@@ -1238,7 +1238,7 @@
 │  ├─ email: faeldt_kristian@cyberagent.co.jp
 │  ├─ path: node_modules/base64id
 │  └─ licenseFile: node_modules/base64id/LICENSE
-├─ baseline-browser-mapping@2.8.15
+├─ baseline-browser-mapping@2.8.16
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/web-platform-dx/baseline-browser-mapping
 │  ├─ path: node_modules/baseline-browser-mapping
