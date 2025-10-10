@@ -9,13 +9,11 @@
 
 import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { ObjectFormValue } from '../../../model/FormValues/ObjectFormValue';
-import { GroupRowLayout } from '../object-form-group/GroupRowLayout';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public formValues: ObjectFormValue[] = [],
-        public contextInstanceId: string = null,
         public prepared: boolean = false,
     ) {
         super();

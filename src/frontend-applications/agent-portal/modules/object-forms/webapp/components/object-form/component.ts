@@ -28,11 +28,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.state.contextInstanceId = input.contextInstanceId;
+        super.onInput(input);
     }
 
     public async onMount(): Promise<void> {
-        await super.onMount(this.state.contextInstanceId);
+        await super.onMount(this.contextInstanceId);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
             loading: true, hint: 'Translatable#Load Form'

@@ -20,7 +20,6 @@ declare const bootstrap: any;
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private contextInstanceId: string;
     private formHandler: ObjectFormHandler;
     private subscriber: IEventSubscriber;
 
@@ -29,9 +28,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.pages = input.pages || [];
         this.state.carouselId = input.carouselId;
-        this.contextInstanceId = input.contextInstanceId;
         this.update();
     }
 

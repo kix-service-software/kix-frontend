@@ -27,7 +27,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private subscriber: IEventSubscriber;
     private contextListenerId: string;
-    private contextInstanceId: string;
     private formhandler: ObjectFormHandler;
     private submitTimeout: any;
 
@@ -36,7 +35,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.contextInstanceId = input.contextInstanceId;
+        super.onInput(input);
     }
 
     public async onMount(): Promise<void> {

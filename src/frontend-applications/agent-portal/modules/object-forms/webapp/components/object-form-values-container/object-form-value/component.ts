@@ -26,13 +26,13 @@ import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
 import { ObjectFormEventData } from '../../../../model/ObjectFormEventData';
 import { FieldLayout } from '../../../../model/layout/FieldLayout';
+import { ObjectFormConfigurationContext } from '../../../core/ObjectFormConfigurationContext';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private bindingIds: string[];
     private subscriber: IEventSubscriber;
-    private contextInstanceId: string;
     private fieldLayout: FieldLayout[];
     private field: FormFieldConfiguration;
 
@@ -43,10 +43,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.parent = input.parent;
-        this.contextInstanceId = input.contextInstanceId;
         this.fieldLayout = input.fieldLayout;
-        if (this.state.formValue?.instanceId !== input.formValue?.instanceId || this.contextInstanceId) {
+
+        const context = ContextService.getInstance().getContext(this.contextInstanceId);
+        const isConfigContext = context?.contextId === ObjectFormConfigurationContext.CONTEXT_ID;
+        if (this.state.formValue?.instanceId !== input.formValue?.instanceId || isConfigContext) {
             this.state.formValue?.removePropertyBinding(this.bindingIds);
 
             this.state.formValue = input.formValue;
@@ -214,15 +217,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             let canShow = false;
 
+            const isConfigContext = this.context.contextId === ObjectFormConfigurationContext.CONTEXT_ID;
             // in configuration context
-            if (this.contextInstanceId) {
+            if (isConfigContext) {
                 let hasField = true;
                 if (formValue['IS_COUNTABLE'] === true && !formValue['COUNT_CONTAINER']) {
                     hasField = formValue?.parent?.fieldId !== undefined;
                 } else {
                     hasField = !!formValue.fieldId;
                 }
-                canShow = this.contextInstanceId !== undefined && hasField;
+                canShow = isConfigContext && hasField;
 
                 if (formValue['COUNT_CONTAINER']) {
                     canShow = formValue.formValues.length === 0 && hasField;

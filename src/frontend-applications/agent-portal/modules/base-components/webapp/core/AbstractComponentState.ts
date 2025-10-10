@@ -15,7 +15,8 @@ export class AbstractComponentState {
         public prepared: boolean = false,
         public translations: any = {},
         public formId: string = null,
-        public componentId: string = IdService.generateDateBasedId()
+        public componentId: string = IdService.generateDateBasedId(),
+        public isConfigContext: boolean = false
     ) { }
 
 }

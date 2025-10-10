@@ -21,7 +21,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.state.contextInstanceId = input.contextInstanceId;
+        super.onInput(input);
         this.state.formValues = input.formValues || [];
     }
 
