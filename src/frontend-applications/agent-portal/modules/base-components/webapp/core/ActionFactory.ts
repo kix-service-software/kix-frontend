@@ -85,12 +85,16 @@ export class ActionFactory<T extends AbstractAction> {
         return this.actions.has(actionId) && !this.blacklist.some((a) => a === actionId);
     }
 
-    public async generateActions(actionIds: string[] = [], data?: any): Promise<AbstractAction[]> {
+    public async generateActions(
+        actionIds: string[] = [], data?: any, contextInstanceId?: string
+    ): Promise<AbstractAction[]> {
         if (!Array.isArray(actionIds)) {
             actionIds = [];
         }
 
-        const contextInstanceId = ContextService.getInstance().getActiveContext()?.instanceId;
+        if (!contextInstanceId) {
+            contextInstanceId = ContextService.getInstance().getActiveContext()?.instanceId;
+        }
         if (!this.actionInstances.has(contextInstanceId)) {
             this.actionInstances.set(contextInstanceId, new Map());
         }

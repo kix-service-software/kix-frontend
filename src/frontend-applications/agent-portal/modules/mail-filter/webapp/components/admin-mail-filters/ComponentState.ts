@@ -20,8 +20,10 @@ export class ComponentState extends AbstractComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Communication: Email: Email Filters',
             ['mail-filter-create', 'mail-filter-table-duplicate', 'mail-filter-table-delete', 'csv-export-action'],
-            null, new TableWidgetConfiguration(null, null, null, KIXObjectType.MAIL_FILTER,
-                [MailFilterProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
+            null, new TableWidgetConfiguration(
+                null, null, null, KIXObjectType.MAIL_FILTER, [MailFilterProperty.NAME, SortOrder.UP],
+                null, null, null, true, null, null, null, false
+            ), false, false, 'kix-icon-gears')
     ) {
         super();
     }

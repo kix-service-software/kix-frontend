@@ -27,7 +27,8 @@ export class ComponentState extends AbstractComponentState {
             ],
             null,
             new TableWidgetConfiguration(
-                null, null, null, KIXObjectType.ROLE, [RoleProperty.NAME, SortOrder.UP]
+                null, null, null, KIXObjectType.ROLE, [RoleProperty.NAME, SortOrder.UP],
+                null, null, null, true, null, null, null, false
             ), false, false, 'kix-icon-gears'
         )
     ) {

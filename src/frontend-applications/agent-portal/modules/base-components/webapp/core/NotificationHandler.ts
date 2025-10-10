@@ -77,7 +77,7 @@ export class NotificationHandler {
 
     private checkForDataUpdate(events: BackendNotification[]): void {
         for (const e of events) {
-            const objectType = this.getObjectType(e.Namespace);
+            const objectType = NotificationHandler.getObjectType(e.Namespace);
             let eventObjectId = e.ObjectID;
             if (eventObjectId && typeof eventObjectId === 'string') {
                 eventObjectId = eventObjectId.split('::')[0];
@@ -98,7 +98,7 @@ export class NotificationHandler {
         }, 1000);
     }
 
-    private getObjectType(namespace: string): string {
+    public static getObjectType(namespace: string): string {
         const objects = namespace?.split('.');
         if (objects.length > 1) {
             if (objects[0] === 'FAQ') {

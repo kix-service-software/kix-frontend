@@ -31,7 +31,8 @@ export class ComponentState extends AbstractComponentState {
                     null, null, null,
                     KIXObjectType.JOB, null, null, null, null, true, false, null, null,
                     TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                )
+                ),
+                null, true, null, null, null, false
             ),
             false, false, 'kix-icon-gears'
         )
