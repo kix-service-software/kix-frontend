@@ -18,7 +18,6 @@ import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private formhandler: ObjectFormHandler;
-    private contextInstanceId: string;
     private subscriber: IEventSubscriber;
 
     public onCreate(): void {
@@ -26,7 +25,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.contextInstanceId = input.contextInstanceId;
+        super.onInput(input);
         this.update();
     }
 

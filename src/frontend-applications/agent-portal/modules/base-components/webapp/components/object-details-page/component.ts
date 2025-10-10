@@ -24,12 +24,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private subscriber: IEventSubscriber;
 
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        await super.onMount();
+        await super.onMount(this.contextInstanceId);
         this.subscriber = {
             eventSubscriberId: 'object-details',
             eventPublished: async (data: any, eventId: string): Promise<void> => {

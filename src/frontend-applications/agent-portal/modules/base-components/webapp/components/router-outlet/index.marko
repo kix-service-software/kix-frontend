@@ -17,7 +17,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             },
         ]>
         <if(state.reloadContextInstanceId !== context.instanceId)>
-            <${context.template} ...context.data/>
+            <${context.template}
+                ...context.data
+                contextInstanceId=context.instanceId/>
         </if>
     </div>
 </for>

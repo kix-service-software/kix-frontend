@@ -24,7 +24,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <add-remove-form-value-control
                formValue=input.formValue
                key=("control-" + input.formValue.instanceId)/>
-            <if(input.contextInstanceId)>
+            <if(state.isConfigContext)>
                <button
                   type="button"
                   class="btn btn-sm btn-light text-black me-3"
@@ -41,7 +41,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if(state.hint)>
                <overlay-icon isHint content=state.hint title=state.label/>
             </if>
-            <if(input.contextInstanceId)>
+            <if(state.isConfigContext)>
                <if(!state.enabled)>
                   <span class="badge text-bg-danger mx-2">
                      <translation-string pattern="Translatable#Disabled"/>
@@ -79,7 +79,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                rounded: !state.valid,
             },
          ]>
-            <if(input.contextInstanceId && state.isEmpty)/>
+            <if(state.isConfigContext && state.isEmpty)/>
             <else-if(!state.formValue["COUNT_CONTAINER"])>
                <if(state.inputTemplate)>
                   <${state.inputTemplate} formValue=input.formValue/>

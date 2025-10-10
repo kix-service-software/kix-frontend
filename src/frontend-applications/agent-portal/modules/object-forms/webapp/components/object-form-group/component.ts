@@ -31,7 +31,6 @@ import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private formhandler: ObjectFormHandler;
-    private contextInstanceId: string;
     private subscriber: IEventSubscriber;
     private group: FormGroupConfiguration;
 
@@ -40,7 +39,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.contextInstanceId = input.contextInstanceId;
+        super.onInput(input);
         this.group = input.group;
     }
 

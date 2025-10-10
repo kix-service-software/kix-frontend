@@ -35,7 +35,6 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
     private subscriber: IEventSubscriber;
     private managerListenerId: string;
-    private contextInstanceId: string;
 
     private keyListenerElement: any;
     private keyListener: any;

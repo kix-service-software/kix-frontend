@@ -28,13 +28,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                      <if(Array.isArray(column.fields) && column.fields.length)>
                         <for|field| of=column.fields>
                            <object-form-value
-                              contextInstanceId=state.contextInstanceId
+                              contextInstanceId=component.contextInstanceId
                               formValue=component.getFormValue(field)
                               parent=input.parent
                               key=component.getKey()
                               formLayout=input.formLayout
-                              fieldLayout=input.fieldLayout
-                           />
+                              fieldLayout=input.fieldLayout/>
                         </for>
                      </if>
                   </div>
@@ -45,13 +44,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       <else>
          <for|formValue| of=state.formValues>
             <object-form-value
-               contextInstanceId=state.contextInstanceId
+               contextInstanceId=component.contextInstanceId
                formValue=formValue
                parent=input.parent
                key=component.getKey()
                formLayout=input.formLayout
-               fieldLayout=input.fieldLayout
-            />
+               fieldLayout=input.fieldLayout/>
          </for>
       </else>
    </div>

@@ -18,11 +18,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     ]>
 
     <if(state.prepared && Array.isArray(state.pages))>
-        <if(state.pages.length > 1 || input.contextInstanceId)>
+        <if(state.pages.length > 1 || state.isConfigContext)>
             <object-form-page-slider
                 pages=state.pages
                 carouselId=state.carouselId
-                contextInstanceId=state.contextInstanceId/>
+                contextInstanceId=component.contextInstanceId/>
         </if>
         <div class=component.getLayoutClasses()>
             <for|page| of=state.pages>
@@ -32,7 +32,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </for>
             <object-form-other-information contextInstanceId=input.contextInstanceId/>
         </div>
-        <if(!input.contextInstanceId)>
+        <if(!state.isConfigContext)>
             <object-form-buttonbar contextInstanceId=input.contextInstanceId/>
         </if>
     </if>
