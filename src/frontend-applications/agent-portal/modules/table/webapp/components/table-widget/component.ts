@@ -23,7 +23,6 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
-import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { IContextListener } from '../../../../base-components/webapp/core/IContextListener';
 import { Table } from '../../../model/Table';
 import { TableEvent } from '../../../model/TableEvent';
@@ -38,12 +37,15 @@ import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { DataViewService } from '../../core/DataViewService';
 import { WidgetSize } from '../../../../../model/configuration/WidgetSize';
+import { BackendNotification } from '../../../../../model/BackendNotification';
+import { NotificationHandler } from '../../../../base-components/webapp/core/NotificationHandler';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private additionalFilterCriteria: UIFilterCriterion[] = [];
     private objectType: KIXObjectType | string;
-    private subscriber: IEventSubscriber;
+    private tableSubscriber: IEventSubscriber;
+    private applicationSubscriber: IEventSubscriber;
     private configuredTitle: boolean = true;
     private useContext: boolean = true;
     private contextListener: IContextListener;
@@ -127,9 +129,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private initEventSubscriber(): void {
         const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
-        this.subscriber = {
+        this.tableSubscriber = {
             eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-            eventPublished: async (data: any, eventId: string): Promise<void> => {
+            eventPublished: async function (data: any, eventId: string): Promise<void> {
                 if (data?.tableId === this.state.table?.getTableId()) {
                     const isdependent = this.state.widgetConfiguration.contextDependent;
                     if (eventId === TableEvent.TABLE_FILTERED) {
@@ -175,13 +177,34 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     }
                 }
 
-            }
+            }.bind(this)
         };
+        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.RELOADED, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this.tableSubscriber);
 
-        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.RELOADED, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this.subscriber);
+        const isContextDependend = this.state.widgetConfiguration.contextDependent ||
+            this.state.widgetConfiguration.contextObjectDependent;
+        if (!isContextDependend) {
+            this.applicationSubscriber = {
+                eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
+                eventPublished: async function (data: any, eventId: string): Promise<void> {
+                    let objectType = data?.objectType;
+                    if (!objectType && data instanceof BackendNotification) {
+                        objectType = NotificationHandler.getObjectType(data.Namespace);
+                    }
+                    if (objectType === this.objectType) {
+                        this.state.loading = true;
+                        await this.reloadTable(settings);
+                        setTimeout(() => this.state.loading = false, 50);
+                    }
+                }.bind(this)
+            };
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_CREATED, this.applicationSubscriber);
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.applicationSubscriber);
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.applicationSubscriber);
+        }
     }
 
     private async prepare(): Promise<void> {
@@ -236,7 +259,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         };
 
-        EventService.getInstance().subscribe(TableEvent.COLUMN_FILTERED, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.COLUMN_FILTERED, this.tableSubscriber);
 
         this.context?.registerListener('table-widget-' + this.state.instanceId, this.contextListener);
     }
@@ -258,7 +281,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareFormDependency(): Promise<void> {
         if (this.state.widgetConfiguration.formDependent) {
             this.formBindingIds = new Map();
-            EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
+            EventService.getInstance().subscribe(
+                ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.tableSubscriber
+            );
             // add bindings if mapper already initialized
             await this.addFormBindings();
         }
@@ -317,16 +342,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
 
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.RELOADED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.RELOAD, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.COLUMN_FILTERED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.RELOADED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.COLUMN_FILTERED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(
+            ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.tableSubscriber
+        );
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this.tableSubscriber);
+
+        if (this.applicationSubscriber) {
+            EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_CREATED, this.applicationSubscriber);
+            EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.applicationSubscriber);
+            EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.applicationSubscriber);
+        }
 
         this.context?.unregisterListener('table-widget-' + this.state.instanceId);
     }
@@ -422,7 +451,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, this.state.table
+                this.state.widgetConfiguration.actions, this.state.table, this.context.instanceId
             );
 
             WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);

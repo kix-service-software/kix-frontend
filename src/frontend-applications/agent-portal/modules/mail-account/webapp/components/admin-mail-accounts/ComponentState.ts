@@ -20,8 +20,10 @@ export class ComponentState extends AbstractComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Communication: Email: Inbox',
             ['mail-account-create', 'mail-account-table-delete', 'csv-export-action'], null,
-            new TableWidgetConfiguration(null, null, null, KIXObjectType.MAIL_ACCOUNT,
-                [MailAccountProperty.HOST, SortOrder.UP]), false, false, 'kix-icon-gears')
+            new TableWidgetConfiguration(
+                null, null, null, KIXObjectType.MAIL_ACCOUNT, [MailAccountProperty.HOST, SortOrder.UP],
+                null, null, null, true, null, null, null, false
+            ), false, false, 'kix-icon-gears')
     ) {
         super();
     }

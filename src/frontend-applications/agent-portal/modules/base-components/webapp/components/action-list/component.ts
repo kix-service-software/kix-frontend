@@ -66,11 +66,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.listenerInstanceId) {
             WidgetService.getInstance().registerActionListener({
                 listenerInstanceId: this.listenerInstanceId,
-                actionDataChanged: () => {
+                actionDataChanged: function (): void {
                     (this as any).setStateDirty('listDefault');
                     (this as any).setStateDirty('listExpansion');
-                },
-                actionsChanged: () => this.actionsChanged()
+                }.bind(this),
+                actionsChanged: this.actionsChanged.bind(this)
             });
             await this.actionsChanged();
         } else if (this.actionsToShow.length) {
@@ -84,7 +84,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.context) {
             this.contextSubscriber = {
                 eventSubscriberId: this.listenerInstanceId || IdService.generateDateBasedId('action-list-'),
-                eventPublished: (data: Context, eventId: string): void => {
+                eventPublished: function (data: Context, eventId: string): void {
                     if (data?.instanceId === this.context.instanceId) {
                         if (!this.observer) {
                             this.observerTimeout = setTimeout(() => this.prepareObserver(), 150);
@@ -99,7 +99,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                             this.observer = undefined;
                         }
                     }
-                }
+                }.bind(this)
             };
             EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.contextSubscriber);
         }
