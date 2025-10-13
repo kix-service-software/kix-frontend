@@ -94,7 +94,7 @@ export abstract class SearchContext extends Context {
         super.destroy();
         // remove all table-states if no other instance of this context is open, to "reset" sort
         if (!ContextService.getInstance().hasContextInstance(this.contextId)) {
-            TableFactoryService.getInstance().deleteContextTables(this.contextId, undefined, false);
+            TableFactoryService.getInstance().deleteContextTables(this.instanceId, undefined, false);
         }
 
         return;

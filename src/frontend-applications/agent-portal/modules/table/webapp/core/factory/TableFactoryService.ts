@@ -53,22 +53,26 @@ export class TableFactoryService {
         this.tableDeps = new Map();
     }
 
-    public deleteContextTables(contextId: string, objectType?: KIXObjectType | string, keepState?: boolean): void {
-        if (this.contextTableInstances.has(contextId)) {
-            this.contextTableInstances.get(contextId).forEach((table) => {
-                if (!objectType) {
+    public deleteContextTables(
+        contextInstanceId: string, objectType?: KIXObjectType | string, keepState?: boolean
+    ): void {
+        if (this.contextTableInstances.has(contextInstanceId)) {
+            let destroyCount = this.contextTableInstances.get(contextInstanceId).size;
+            this.contextTableInstances.get(contextInstanceId).forEach((table) => {
+                if (
+                    !objectType
+                    || table.getObjectType() === objectType
+                ) {
                     table.destroy();
-                    if (!keepState) {
-                        table.deleteTableState();
-                    }
-                } else if (table.getObjectType() === objectType) {
-                    table.destroy();
+                    destroyCount--;
                     if (!keepState) {
                         table.deleteTableState();
                     }
                 }
             });
-            this.contextTableInstances.delete(contextId);
+            if (!destroyCount) {
+                this.contextTableInstances.delete(contextInstanceId);
+            }
         }
     }
 
