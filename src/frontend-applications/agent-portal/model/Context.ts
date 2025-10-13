@@ -179,9 +179,9 @@ export abstract class Context {
                     Array.isArray(this.configuration?.tableWidgetInstanceIds);
                 if (this.descriptor.contextMode !== ContextMode.SEARCH) {
 
-                    if (data?.contextId === this.contextId) {
+                    if (data?.instanceId === this.instanceId) {
                         TableFactoryService.getInstance().deleteContextTables(
-                            this.contextId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
+                            this.instanceId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
                         );
                     }
                     const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&

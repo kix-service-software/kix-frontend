@@ -734,7 +734,7 @@ export class ContextService {
     ): Promise<void> {
         const contextId = context?.descriptor.contextId;
 
-        TableFactoryService.getInstance().deleteContextTables(context?.contextId);
+        TableFactoryService.getInstance().deleteContextTables(context?.instanceId);
 
         const currentUser = await AgentService.getInstance().getCurrentUser();
         const preference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
