@@ -292,7 +292,6 @@ export class MacroFieldCreator {
                     resultField.instanceId = `${actionFieldInstanceId}-${actionType.Name}###ResultGroup###${result.Name}`;
                     resultField.required = false;
                     resultField.hint = result.Description;
-                    resultField.translateLabel = false;
 
                     let defaultValue: string;
                     if (action && action.ResultVariables) {
