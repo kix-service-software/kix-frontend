@@ -44,6 +44,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.activePageIndex = this.state.pages?.findIndex((p) => p.id === this.formHandler.activePageId) || 0;
         this.state.prepared = true;
 
+
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (data: any, eventId: string): void => {
@@ -82,7 +83,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
         this.state.activePageIndex = index;
         const page = this.state.pages[index];
-        this.state.title = page?.name;
         formHandler?.setActivePageId(page?.id);
     }
 
