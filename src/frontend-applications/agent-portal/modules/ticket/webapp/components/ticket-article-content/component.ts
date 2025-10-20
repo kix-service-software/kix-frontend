@@ -13,11 +13,9 @@ import { ClientStorageService } from '../../../../base-components/webapp/core/Cl
 import { IdService } from '../../../../../model/IdService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
     private resizeTimeout: ReturnType<typeof setTimeout> = null;
-    private frameInterval: ReturnType<typeof setInterval> = null;
     private observer: ResizeObserver;
 
     private article: Article = null;
@@ -63,7 +61,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
                     this.resizeTimeout = setTimeout(() => {
                         containerWidth = frame.offsetWidth;
-                        this.setFrameHeight();
+                        BrowserUtil.setFrameHeight(this.state.frameId);
                         this.resizeTimeout = null;
                     }, 150);
                 }
@@ -86,7 +84,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 return;
             }
 
-            this.setFrameHeight();
+            BrowserUtil.setFrameHeight(this.state.frameId);
 
             const links = frameDocument.querySelectorAll('a[href]');
             links.forEach((link: HTMLAnchorElement) => {
@@ -108,29 +106,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             });
         });
-    }
-
-    private setFrameHeight(): void {
-        const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
-
-        if (frame) {
-            // set frame height to 0px to get minimal scollHeight
-            frame.style.height = '0px';
-
-            const frameHeight = frame?.contentWindow?.document?.body?.scrollHeight || 0;
-            if (frameHeight > 0) {
-                frame.style.height = frameHeight + 10 + 'px';
-
-                clearInterval(this.frameInterval);
-                this.frameInterval = null;
-            }
-            else if (!this.frameInterval) {
-                this.frameInterval = setInterval(() => this.setFrameHeight(), 500);
-            }
-        }
-        else if (!this.frameInterval) {
-            this.frameInterval = setInterval(() => this.setFrameHeight(), 500);
-        }
     }
 }
 

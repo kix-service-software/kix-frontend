@@ -12,6 +12,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.prepareContent(input.html);
+        this.state.calculateHeight = input.calculateHeight;
     }
 
     public async onMount(): Promise<void> {
@@ -29,6 +30,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 iframe.srcdoc = BrowserUtil.buildHtmlStructur(html);
             }
         }, 150);
+    }
+
+    public viewLoaded(event: any): void {
+        if (this.state.calculateHeight) {
+            BrowserUtil.setFrameHeight(this.state.frameId);
+        }
     }
 
 }
