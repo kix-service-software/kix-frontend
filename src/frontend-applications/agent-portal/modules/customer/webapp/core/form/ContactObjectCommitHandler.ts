@@ -12,9 +12,11 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
+import { User } from '../../../../user/model/User';
 import { UserProperty } from '../../../../user/model/UserProperty';
 import { Contact } from '../../../model/Contact';
 import { NewContactDialogContext } from '../context/NewContactDialogContext';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 
 export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {
 
@@ -36,11 +38,34 @@ export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {
     ): Promise<Contact> {
         const newContact = await super.prepareObject(contact, objectValueMapper, forCommit);
 
-        if (!newContact.User?.UserID && !newContact.User?.IsAgent && !newContact.User?.IsCustomer) {
+        // no user assigned and no context => delete user data
+        if (
+            !newContact.AssignedUserID
+            && !newContact.User?.IsAgent
+            && !newContact.User?.IsCustomer
+        ) {
             delete newContact.User;
         }
-
-        if (Array.isArray(newContact.User?.Preferences)) {
+        // user assigned and no context => only update context for user
+        else if (
+            newContact.AssignedUserID
+            && !newContact.User?.IsAgent
+            && !newContact.User?.IsCustomer
+        ) {
+            const users = await KIXObjectService.loadObjects<User>(KIXObjectType.USER, [newContact.AssignedUserID])
+                .catch((): User[] => []);
+            if (Array.isArray(users) && users.length) {
+                newContact.User = users[0];
+                newContact.User.IsAgent = 0;
+                newContact.User.IsCustomer = 0;
+            }
+            // unassign user from contact
+            else {
+                delete newContact.User;
+                newContact.AssignedUserID = null;
+            }
+        }
+        else if (Array.isArray(newContact.User?.Preferences)) {
             const userAccessFormValue = objectValueMapper.findFormValue(UserProperty.USER_ACCESS);
             const preferencesFormValue = userAccessFormValue?.findFormValue(UserProperty.PREFERENCES);
             newContact.User.Preferences = newContact.User.Preferences.filter(
