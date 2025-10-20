@@ -612,4 +612,23 @@ export class BrowserUtil {
         `;
     }
 
+    public static getCurrentContentScrollPosition(): number {
+        const wrapperEl = document.getElementsByClassName('content-wrapper');
+        if (wrapperEl.length) {
+            return wrapperEl[0].scrollTop;
+        } else {
+            return document.getElementById('ssp-content').scrollTop;
+        }
+    }
+
+    public static setCurrentContentScrollPosition(scrollPosition: number): void {
+        const wrapperEl = document.getElementsByClassName('content-wrapper');
+        const options: ScrollToOptions = { top: scrollPosition, left: 0, behavior: 'smooth' };
+        if (wrapperEl.length) {
+            wrapperEl[0].scrollTo(options);
+        } else {
+            return document.getElementById('ssp-content').scrollTo(options);
+        }
+    }
+
 }

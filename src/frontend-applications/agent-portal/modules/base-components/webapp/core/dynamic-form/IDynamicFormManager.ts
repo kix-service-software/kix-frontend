@@ -17,6 +17,7 @@ import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyVa
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
 
 export interface IDynamicFormManager {
 
@@ -111,5 +112,7 @@ export interface IDynamicFormManager {
     isRelativDateTimeOperator(operator: string): boolean;
 
     setDefaultValues(values?: ObjectPropertyValue[]): void;
+
+    prepareFilterCriteria(formValue: any): Promise<FilterCriteria | object>;
 
 }

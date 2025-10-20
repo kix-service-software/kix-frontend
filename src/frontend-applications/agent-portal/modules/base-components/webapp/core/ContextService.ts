@@ -378,7 +378,9 @@ export class ContextService {
             'APP_SHIELD', true, hint, undefined,
         );
         if (context && context.instanceId !== this.activeContext?.instanceId) {
-
+            if (this.activeContext) {
+                this.activeContext.lastScrollPosition = Math.round(BrowserUtil.getCurrentContentScrollPosition());
+            }
             EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
 
             const previousContext = this.getActiveContext();
@@ -402,7 +404,9 @@ export class ContextService {
             await context.update(null);
 
             EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
-
+            setTimeout(() => {
+                BrowserUtil.setCurrentContentScrollPosition(this.activeContext.lastScrollPosition);
+            }, 100);
             // TODO: Use Event
             this.serviceListener.forEach(
                 (sl) => sl.contextChanged(

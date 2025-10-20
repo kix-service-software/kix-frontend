@@ -807,4 +807,8 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         this.defaultValues = values;
     }
 
+    public async prepareFilterCriteria(formValue: any): Promise<FilterCriteria | object> {
+        return;
+    }
+
 }

@@ -123,6 +123,10 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     searchCriteria.type = FilterDataType.NUMERIC;
                     newCriteria.push(searchCriteria);
                     break;
+                case ConfigItemProperty.DEPL_STATE_TYPE:
+                    searchCriteria.type = FilterDataType.STRING;
+                    newCriteria.push(searchCriteria);
+                    break;
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
                 case 'InciStateIDs':
                     searchCriteria.property = 'InciStateIDs';

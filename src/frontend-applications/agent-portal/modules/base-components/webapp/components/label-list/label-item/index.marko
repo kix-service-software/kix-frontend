@@ -11,8 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <span
         class=["label-item-container", state.label.classes]
         title=(state.label.tooltip)
-        on-click("labelClicked")
-    >
+        on-click("labelClicked")>
         <div class=[
             "label-item",
             {
@@ -22,8 +21,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if(state.label.icon || state.label.showUnknownIcon)>
                 <icon
                     icon=(state.label.icon)
-                    showUnknown=(state.label.showUnknownIcon)
-                />
+                    showUnknown=(state.label.showUnknownIcon)/>
             </if>
             <if(state.label.text)>
                 <if(input.translatable)>
@@ -39,7 +37,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </if>
                 </if>
                 <else>
-                    <span id=state.labelId class="label-text"/>
+                    <span id=state.labelId class="label-text">
+                        <if(input.nonWrappedLabel)>
+                            ${state.label.text}
+                        </if>
+                    </span>
                     <if(state.label.additionalText)>
                         <span>${state.label.additionalText}</span>
                     </if>
@@ -51,8 +53,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     content=(state.label.infoOverlay.content)
                     instanceId=(state.label.infoOverlay.instanceId)
                     data=(state.label.infoOverlay.data)
-                    large=(state.label.infoOverlay.large)
-                />
+                    large=(state.label.infoOverlay.large)/>
             </if>
             <if(state.label.additionalIcons)>
                 <for|icon| of=(state.label.additionalIcons)>
@@ -62,8 +63,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if(input.removeLabels)>
                 <span
                     on-click("removeLabel")
-                    class="kix-icon-close label-item-remove"
-                />
+                    class="kix-icon-close label-item-remove"/>
             </if>
         </div>
     </span>

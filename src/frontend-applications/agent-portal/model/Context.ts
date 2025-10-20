@@ -56,6 +56,8 @@ export abstract class Context {
 
     public contextId: string;
 
+    public lastScrollPosition: number;
+
     private dialogSubscriberId: string = null;
     protected additionalInformation: Map<string, any> = new Map();
 
