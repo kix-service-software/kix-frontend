@@ -37,6 +37,7 @@ import { FormFieldOption } from '../../../../../model/configuration/FormFieldOpt
 import { DynamicFieldFormUtil } from '../DynamicFieldFormUtil';
 import { ContextService } from '../ContextService';
 import { ContextMode } from '../../../../../model/ContextMode';
+import { BrowserUtil } from '../BrowserUtil';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -402,8 +403,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             ) {
                 for (const pv in field.Config.PossibleValues) {
                     if (field.Config.PossibleValues[pv]) {
-                        const value = field.Config.PossibleValues[pv]
-                            ? await TranslationService.translate(field.Config.PossibleValues[pv]) : pv;
+                        const value = field.Config.PossibleValues[pv] &&
+                            BrowserUtil.isBooleanTrue(field.Config.TranslatableValues) ?
+                            await TranslationService.translate(field.Config.PossibleValues[pv]) : pv;
                         const node = new TreeNode(pv, value);
                         nodes.push(node);
                     }
