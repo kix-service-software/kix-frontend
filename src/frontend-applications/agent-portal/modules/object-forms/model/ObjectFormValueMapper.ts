@@ -194,10 +194,18 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         parentField?: FormFieldConfiguration, parentFormValue?: ObjectFormValue
     ): Promise<void> {
         for (const field of fields) {
-            if (!parentField) {
-                if (field.property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                    const nameOption = field.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
-                    field.property = `${KIXObjectProperty.DYNAMIC_FIELDS}.${nameOption?.value}`;
+
+            if (field.property.startsWith(KIXObjectProperty.DYNAMIC_FIELDS)) {
+                const nameOption = field.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+                const df = await KIXObjectService.loadDynamicField(nameOption.value);
+                if (!df) {
+                    continue;
+                }
+
+                if (!parentField) {
+                    if (field.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                        field.property = `${KIXObjectProperty.DYNAMIC_FIELDS}.${nameOption?.value}`;
+                    }
                 }
             }
 
