@@ -38,6 +38,8 @@ export class BrowserUtil {
 
     public static readonly URL_REGEX = /(https?|ftps?|sftp):\/\/[^\s]+/;
 
+    private static frameIntervals: Map<string, ReturnType<typeof setInterval>> = new Map();
+
     public static openErrorOverlay(error: string): void {
         ToastUtil.showErrorToast(error);
     }
@@ -628,6 +630,30 @@ export class BrowserUtil {
             wrapperEl[0].scrollTo(options);
         } else {
             return document.getElementById('ssp-content').scrollTo(options);
+        }
+    }
+
+    public static setFrameHeight(frameId: string): void {
+        const frame = document.getElementById(frameId) as HTMLIFrameElement;
+
+        const frameInterval = this.frameIntervals.get(frameId);
+
+        if (frame) {
+            // set frame height to 0px to get minimal scollHeight
+            frame.style.height = '0px';
+
+            const frameHeight = frame?.contentWindow?.document?.body?.scrollHeight || 0;
+            if (frameHeight > 0) {
+                frame.style.height = frameHeight + 20 + 'px';
+
+                clearInterval(frameInterval);
+                this.frameIntervals.delete(frameId);
+            } else if (!frameInterval) {
+                this.frameIntervals.set(frameId, setInterval(() => this.setFrameHeight(frameId), 500));
+            }
+        }
+        else if (!frameInterval) {
+            this.frameIntervals.set(frameId, setInterval(() => this.setFrameHeight(frameId), 500));
         }
     }
 

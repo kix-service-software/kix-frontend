@@ -4,7 +4,8 @@ import { AbstractComponentState } from '../../../../base-components/webapp/core/
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public frameId: string = IdService.generateDateBasedId('frame-')
+        public frameId: string = IdService.generateDateBasedId('frame-'),
+        public calculateHeight: boolean = false
     ) {
         super();
     }
