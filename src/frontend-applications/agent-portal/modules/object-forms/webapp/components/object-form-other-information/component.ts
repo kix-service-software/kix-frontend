@@ -41,7 +41,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         };
 
-        if (!this.contextInstanceId) {
+        if (!this.state.isConfigContext) {
             this.formhandler = await this.context?.getFormManager().getObjectFormHandler();
             this.update();
         }
