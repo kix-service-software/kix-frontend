@@ -943,6 +943,9 @@ msgstr ""
 msgid "Deployment state"
 msgstr ""
 
+msgid "Deployment state type"
+msgstr ""
+
 msgid "Descending:"
 msgstr ""
 
