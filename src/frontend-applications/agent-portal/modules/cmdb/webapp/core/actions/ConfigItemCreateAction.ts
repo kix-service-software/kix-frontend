@@ -11,6 +11,8 @@ import { ConfigItemDialogUtil } from '../ConfigItemDialogUtil';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
+import { ConfigItem } from '../../../model/ConfigItem';
 
 export class ConfigItemCreateAction extends AbstractAction {
 
@@ -26,7 +28,12 @@ export class ConfigItemCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ConfigItemDialogUtil.create();
+        const additionalInformation: Array<[string, any]> = [];
+        const configItem = await this.context?.getObject<ConfigItem>();
+        if (configItem) {
+            additionalInformation.push([ConfigItemProperty.CLASS_ID, configItem.ClassID]);
+        }
+        await ConfigItemDialogUtil.create(additionalInformation);
     }
 
 }
