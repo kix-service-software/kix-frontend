@@ -619,7 +619,7 @@ export class BrowserUtil {
         if (wrapperEl.length) {
             return wrapperEl[0].scrollTop;
         } else {
-            return document.getElementById('ssp-content').scrollTop;
+            return document.documentElement.scrollTop;
         }
     }
 
@@ -629,7 +629,7 @@ export class BrowserUtil {
         if (wrapperEl.length) {
             wrapperEl[0].scrollTo(options);
         } else {
-            return document.getElementById('ssp-content').scrollTo(options);
+            document.documentElement.scrollTo(options);
         }
     }
 
