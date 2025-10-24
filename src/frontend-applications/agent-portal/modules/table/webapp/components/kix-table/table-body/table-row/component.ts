@@ -179,7 +179,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async setRowClasses(): Promise<void> {
         const object = this.state.row.getRowObject().getObject();
-        let stateClass = [];
+        let stateClass: string[] = [];
 
         if (this.state.open) {
             stateClass.push('opened');
@@ -195,7 +195,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (cssHandler) {
                 for (const handler of cssHandler) {
                     const classes = await handler.getRowCSSClasses(object);
-                    classes.forEach((c) => stateClass.push(c));
+                    classes.forEach((c: string) => stateClass.push(c));
                 }
             }
 
@@ -209,7 +209,35 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.rowClasses = stateClass;
     }
 
-    public rowClicked(event): void {
+    private hasActiveTextSelection(): boolean {
+        const getSel = (global as any).getSelection || (typeof window !== 'undefined' ? window.getSelection : undefined);
+        const sel = typeof getSel === 'function' ? getSel.call(global) : undefined;
+        return !!(sel && typeof sel.toString === 'function' && sel.toString().length > 0);
+    }
+
+    private isPlainLeftClick(event: MouseEvent): boolean {
+        return event && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+    }
+
+    private isInteractiveTarget(el?: HTMLElement | null): boolean {
+        if (!el) return false;
+        return !!el.closest('a,button,input,textarea,select,[contenteditable="true"],.no-row-route');
+    }
+
+    public rowClicked(event: MouseEvent): void {
+        if (this.hasActiveTextSelection()) {
+            return;
+        }
+
+        if (!this.isPlainLeftClick(event)) {
+            return;
+        }
+
+        const target = event?.target as HTMLElement;
+        if (this.isInteractiveTarget(target)) {
+            return;
+        }
+
         const config = this.state.row.getTable().getTableConfiguration();
         if (!config?.routingConfiguration && config?.toggle) {
             this.toggleRow(event);
@@ -217,7 +245,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (config.routingConfiguration) {
             const object = this.state.row?.getRowObject()?.getObject();
-
             const objectId = RoutingService.getObjectId(object, config.routingConfiguration);
             RoutingService.getInstance().routeTo(config?.routingConfiguration, objectId);
         }
