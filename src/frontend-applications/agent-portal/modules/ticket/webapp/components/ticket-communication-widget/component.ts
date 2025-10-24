@@ -18,8 +18,6 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { TicketDetailsContext, TicketService } from '../../core';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
 import { BackendNotification } from '../../../../../model/BackendNotification';
 import { TicketUIEvent } from '../../../model/TicketUIEvent';
 import { TicketCommunicationConfiguration } from '../../../model/TicketCommunicationConfiguration';
@@ -29,15 +27,16 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
 
     private readonly displayView = 'selectedListView';
     private sortOrder: string;
-    private subscriber: IEventSubscriber;
     private communicationConfig: TicketCommunicationConfiguration;
     private articleIds: number[];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'ticket-communication-widget');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -71,32 +70,21 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     }
 
     private initListener(): void {
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('communication-widget'),
-            eventPublished: (data: any, eventId: string): void => {
-                if (eventId === ApplicationEvent.OBJECT_DELETED) {
-                    this.handleObjectDeleted(data);
-                } else if (eventId === TicketUIEvent.SCROLL_TO_ARTICLE) {
-                    this.handleScrollToArticle(data);
-                }
-            }
-        };
-        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.subscriber);
-
-        EventService.getInstance().subscribe(TicketUIEvent.SCROLL_TO_ARTICLE, this.subscriber);
+        super.registerEventSubscriber(this.handleObjectDeleted, [ApplicationEvent.OBJECT_DELETED]);
+        super.registerEventSubscriber(this.handleScrollToArticle, [TicketUIEvent.SCROLL_TO_ARTICLE]);
 
         this.context?.registerListener('communication-widget', {
-            filteredObjectListChanged: (objectType: KIXObjectType) => {
+            filteredObjectListChanged: function (objectType: KIXObjectType): void {
                 if (objectType === KIXObjectType.ARTICLE) {
                     this.setArticleIDs();
                 }
-            },
-            objectListChanged: (objectType: KIXObjectType) => {
+            }.bind(this),
+            objectListChanged: function (objectType: KIXObjectType): void {
                 if (objectType === KIXObjectType.ARTICLE) {
                     this.articleIds = null;
                     this.setArticleIDs();
                 }
-            },
+            }.bind(this),
             additionalInformationChanged: () => null,
             objectChanged: () => null,
             scrollInformationChanged: () => null,
@@ -106,10 +94,8 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         this.context.unregisterListener('communication-widget');
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.subscriber);
-
-        EventService.getInstance().unsubscribe(TicketUIEvent.SCROLL_TO_ARTICLE, this.subscriber);
     }
 
     private async setArticleIDs(): Promise<void> {
@@ -120,7 +106,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
         }
 
         const filterComponent = (this as any).getComponent('article-filter');
-        if (filterComponent && filterComponent.isFiltered) {
+        if (filterComponent?.isFiltered) {
             const articles: Article[] = this.context?.getFilteredObjectList(KIXObjectType.ARTICLE) || [];
             this.state.articleIds = articles.map((a) => a.ArticleID);
         } else {

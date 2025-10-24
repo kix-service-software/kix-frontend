@@ -9,14 +9,14 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-
 import { SysConfigService } from '../../../../../modules/sysconfig/webapp/core';
 import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -33,8 +33,11 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         await this.applyEditorConfiguration();
-        await this.setCurrentValue();
     }
 
     private async applyEditorConfiguration(): Promise<void> {
@@ -86,6 +89,10 @@ class Component extends FormInputComponent<string, ComponentState> {
     public valueChanged(value: string): void {
         this.state.currentValue = value || null;
         super.provideValue(this.state.currentValue);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

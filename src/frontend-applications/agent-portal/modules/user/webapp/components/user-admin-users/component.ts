@@ -11,12 +11,10 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
 import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { UserProperty } from '../../../model/UserProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
@@ -35,12 +33,10 @@ import { BackendNotification } from '../../../../../model/BackendNotification';
 import { NotificationHandler } from '../../../../base-components/webapp/core/NotificationHandler';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
-
-    private tableSubscriber: IEventSubscriber;
-    private applicationSubscriber: IEventSubscriber;
     public filterValue: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'user-admin-users');
         this.state = new ComponentState();
     }
 
@@ -55,7 +51,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 'reset-user-context-widget-list'
             ], this.state.table
         );
-        WidgetService.getInstance().registerActions(this.state.instanceId, actions);
+        this.context.widgetService.registerActions(this.state.instanceId, actions);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#Users']);
@@ -66,9 +62,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
         this.search();
 
-        this.applicationSubscriber = {
-            eventSubscriberId: 'admin-users',
-            eventPublished: async function (data: any, eventId: string): Promise<void> {
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
                 let objectType = data?.objectType;
                 if (!objectType && data instanceof BackendNotification) {
                     objectType = NotificationHandler.getObjectType(data.Namespace);
@@ -76,11 +71,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (objectType === this.state.table.getObjectType()) {
                     this.search();
                 }
-            }.bind(this)
-        };
-        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_CREATED, this.applicationSubscriber);
-        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.applicationSubscriber);
-        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.applicationSubscriber);
+            },
+            [
+                ApplicationEvent.OBJECT_CREATED,
+                ApplicationEvent.OBJECT_UPDATED,
+                ApplicationEvent.OBJECT_DELETED
+            ]
+        );
 
         this.state.prepared = true;
     }
@@ -94,16 +91,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.table.setContentProvider(new UserContentProvider(this));
         this.state.table.sort(UserProperty.USER_LOGIN, SortOrder.UP);
 
-        this.tableSubscriber = {
-            eventSubscriberId: 'admin-users',
-            eventPublished: function (data: TableEventData, eventId: string): void {
-                if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
-                    WidgetService.getInstance().updateActions(this.state.instanceId);
+        super.registerEventSubscriber(
+            function (data: TableEventData, eventId: string): void {
+                if (data?.tableId === this.state.table?.getTableId()) {
+                    this.context.widgetService.updateActions(this.state.instanceId);
                 }
-            }.bind(this)
-        };
-
-        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+            },
+            [TableEvent.ROW_SELECTION_CHANGED]
+        );
 
         await this.state.table.initialize();
     }
@@ -124,11 +119,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+        super.onDestroy();
+    }
 
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_CREATED, this.applicationSubscriber);
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.applicationSubscriber);
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.applicationSubscriber);
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 
 }

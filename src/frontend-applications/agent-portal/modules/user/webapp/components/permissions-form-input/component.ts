@@ -26,10 +26,11 @@ class Component extends FormInputComponent<any[], ComponentState> {
     private formListenerId: string;
     private permissionFormTimeout: any;
 
-    public async onCreate(): Promise<void> {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.formListenerId = IdService.generateDateBasedId('permission-form-listener-');
-        await this.prepareTitles();
+        this.prepareTitles();
     }
 
     public onInput(input: any): void {
@@ -38,6 +39,10 @@ class Component extends FormInputComponent<any[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         const permissionManager = new PermissionManager();
         if (permissionManager) {
             permissionManager.init();
@@ -74,7 +79,8 @@ class Component extends FormInputComponent<any[], ComponentState> {
         }
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
+        super.onDestroy();
         if (this.state.permissionManager) {
             this.state.permissionManager.unregisterListener(this.formListenerId);
         }

@@ -12,12 +12,12 @@ import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOp
 import { FormInputComponent } from '../../core/FormInputComponent';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
-import { ContextService } from '../../core/ContextService';
 import { SearchService } from '../../../../search/webapp/core/SearchService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -27,8 +27,11 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
         const option = this.state.field?.options.find((o) => o.option === FormFieldOptions.OBJECT_TYPE);
-        if (option && option.value) {
+        if (option?.value) {
             const searchDefinition = SearchService.getInstance().getSearchDefinition(option.value);
 
             let ignoreProperties = [];
@@ -54,11 +57,10 @@ class Component extends FormInputComponent<any, ComponentState> {
                 super.provideValue(filterCriteria, true);
             });
         }
-
-        await super.onMount();
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
+        super.onDestroy();
         this.state.manager?.unregisterListener(this.state.field?.instanceId);
     }
 

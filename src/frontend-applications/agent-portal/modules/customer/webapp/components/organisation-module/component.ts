@@ -15,11 +15,12 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 class Component extends AbstractMarkoComponent<ComponentState, OrganisationContext> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        super.onMount();
+        await super.onMount();
         this.state.contentWidgets = await this.context.getContent();
 
         this.state.translations = await TranslationService.createTranslationObject([
@@ -44,6 +45,14 @@ class Component extends AbstractMarkoComponent<ComponentState, OrganisationConte
         this.context.setFilterValue(this.state.filterValue);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

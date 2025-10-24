@@ -28,16 +28,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private contextListenerId: string;
     private images: DisplayImageDescription[];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.contextListenerId = IdService.generateDateBasedId('config-item-images-widget');
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Large View'
@@ -105,6 +108,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             ImageViewerEvent.OPEN_VIEWER,
             new ImageViewerEventData(this.images, imageId)
         );
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

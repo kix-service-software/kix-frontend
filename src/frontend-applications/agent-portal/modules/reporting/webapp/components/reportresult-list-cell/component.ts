@@ -26,11 +26,13 @@ import { Attachment } from '../../../../../model/kix/Attachment';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         const results: ReportResult[] = input.cell.getValue().objectValue;
         const labels = results?.map((r) => new Label(
             r, r.ID, null, r.Format, null, Attachment.getHumanReadableContentSize(r.ContentSize), false
@@ -71,6 +73,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         } else {
             console.error(`No report with ID ${reportResult?.ReportID} found!`);
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
     }
 }
 

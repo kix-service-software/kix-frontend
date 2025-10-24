@@ -12,10 +12,23 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

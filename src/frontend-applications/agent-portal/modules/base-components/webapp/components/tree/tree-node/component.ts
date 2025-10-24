@@ -11,20 +11,17 @@ import { ComponentState } from './ComponentState';
 import { TreeNode } from '../../../core/tree';
 import { BrowserUtil } from '../../../core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
-import { EventService } from '../../../core/EventService';
 import { TreeEvent } from '../../../core/tree/TreeEvent';
-import { IEventSubscriber } from '../../../core/IEventSubscriber';
-import { IdService } from '../../../../../../model/IdService';
 
 class TreeNodeComponent extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
     public onCreate(input: any): void {
+        super.onCreate(input, 'tree/tree-node');
         this.state = new ComponentState(input.node);
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.node = input.node;
 
         if (this.state.node) {
@@ -50,21 +47,22 @@ class TreeNodeComponent extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public async onMount(contextInstanceId?: string): Promise<void> {
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('tree-node'),
-            eventPublished: (data: any, eventId: string): void => {
+    public async onMount(): Promise<void> {
+        await super.onMount();
+
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
                 if (this.state.treeId === data.treeId && this.state.node.id === data.node?.id) {
                     this.state.node = data.node;
                     (this as any).setStateDirty('node');
                 }
-            }
-        };
-        EventService.getInstance().subscribe(TreeEvent.NODE_UPDATED, this.subscriber);
+            },
+            [TreeEvent.NODE_UPDATED]
+        );
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TreeEvent.NODE_UPDATED, this.subscriber);
+        super.onDestroy();
         this.state.node = null;
     }
 

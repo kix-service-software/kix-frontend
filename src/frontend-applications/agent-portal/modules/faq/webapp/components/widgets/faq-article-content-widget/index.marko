@@ -30,6 +30,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.faqArticle)>
     <widget
+        contextInstanceId=input.contextInstanceId
         instanceId=state.instanceId
         contextType="MAIN"
         title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")

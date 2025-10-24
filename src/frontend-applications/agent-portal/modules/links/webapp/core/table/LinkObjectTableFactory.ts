@@ -24,7 +24,7 @@ export class LinkObjectTableFactory extends TableFactory {
     public objectType: KIXObjectType = KIXObjectType.LINK_OBJECT;
 
     public async createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextInstanceId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): Promise<Table> {
@@ -32,7 +32,9 @@ export class LinkObjectTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
         const table = new Table(tableKey, tableConfiguration);
-        table.setContentProvider(new LinkObjectTableContentProvider(table, objectIds, null, contextId, objects));
+        table.setContentProvider(new LinkObjectTableContentProvider(
+            table, objectIds, null, contextInstanceId, objects
+        ));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;

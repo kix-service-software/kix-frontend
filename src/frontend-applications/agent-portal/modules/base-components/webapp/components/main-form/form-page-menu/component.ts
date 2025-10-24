@@ -10,22 +10,21 @@
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { EventService } from '../../../core/EventService';
-import { IdService } from '../../../../../../model/IdService';
-import { IEventSubscriber } from '../../../core/IEventSubscriber';
-import { ContextService } from '../../../core/ContextService';
 import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
+import { ObjectFormEvent } from '../../../../../object-forms/model/ObjectFormEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
-    private eventSubscriber: IEventSubscriber;
     private keyUpEventFunction: () => {
         // do nothing ...
     };
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'main-form/form-page-menu');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.activePageIndex = input.activePageIndex;
         this.state.pages = input.pages;
         this.prepareTranslations();
@@ -34,26 +33,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.prepareTranslations();
-        this.eventSubscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('page-subscriber-'),
-            eventPublished: (data: any, eventId: string): void => {
-                if (eventId === 'PAGE_CHANGED') {
-                    const index = this.context?.getFormManager()?.getActiveFormPageIndex();
-                    if (Number.isInteger(index) && index !== this.state.activePageIndex) {
-                        this.state.pageChanged = true;
-                    }
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
+                const index = this.context?.getFormManager()?.getActiveFormPageIndex();
+                if (Number.isInteger(index) && index !== this.state.activePageIndex) {
+                    this.state.pageChanged = true;
                 }
-            }
-        };
-        EventService.getInstance().subscribe('PAGE_CHANGED', this.eventSubscriber);
+            },
+            [ObjectFormEvent.PAGE_CHANGED]
+        );
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         if (this.keyUpEventFunction) {
             document.body.removeEventListener('keyup', this.keyUpEventFunction, false);
-        }
-        if (this.eventSubscriber) {
-            EventService.getInstance().unsubscribe('PAGE_CHANGED', this.eventSubscriber);
         }
     }
 
@@ -89,7 +83,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public showPage(index: number): void {
         if (index >= this.state.pages.length || index < 0) return;
-        EventService.getInstance().publish('PAGE_CHANGED');
+        EventService.getInstance().publish(ObjectFormEvent.PAGE_CHANGED);
         (this as any).emit('showPage', index);
     }
 }

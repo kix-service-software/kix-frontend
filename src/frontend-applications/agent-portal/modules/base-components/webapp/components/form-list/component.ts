@@ -28,10 +28,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'form-list');
         this.state = new ComponentState();
     }
 
     public onInput(input: ComponentInput): void {
+        super.onInput(input);
         this.state.treeId = typeof input.treeId !== 'undefined' ? input.treeId : this.state.treeId;
         this.state.loadNodes = input.loadNodes;
         this.state.disabled = typeof input.disabled !== 'undefined' ? input.disabled : false;
@@ -55,6 +57,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const containerElement = (this as any).getEl(this.state.listId);
 
         this.treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
@@ -89,14 +92,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.prepared = true;
 
-        EventService.getInstance().subscribe(ApplicationEvent.DROPDOWN_OPENED, {
-            eventSubscriberId: 'form-list-' + this.state.treeId,
-            eventPublished: (data) => {
+        super.registerEventSubscriber(
+            function (data): void {
                 if (data !== this.state.treeId && this.state.expanded) {
                     this.toggleList(true, null, false);
                 }
-            }
-        });
+            },
+            [ApplicationEvent.DROPDOWN_OPENED]
+        );
     }
 
     public focus(event: any): void {
@@ -111,6 +114,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         document.removeEventListener('click', this.checkExpandState.bind(this));
         if (this.removeTreeHandler) {
             TreeService.getInstance().removeTreeHandler(this.state.treeId);

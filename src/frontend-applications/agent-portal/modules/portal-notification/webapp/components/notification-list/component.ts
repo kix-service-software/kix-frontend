@@ -13,11 +13,13 @@ import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         const notifications: PortalNotification[] = input.notifications || [];
 
         const groupedNotifications: Array<[string, PortalNotification[]]> = [];
@@ -35,9 +37,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         return;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

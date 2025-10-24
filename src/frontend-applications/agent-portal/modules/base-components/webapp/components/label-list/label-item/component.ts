@@ -18,10 +18,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private nonWrappedLabel: boolean = false;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.showToggle = typeof input.showToggle !== 'undefined' ? input.showToggle : false;
         if (this.state.showToggle) {
             this.state.toggled = typeof input.toggle !== 'undefined' ? input.toggle : false;
@@ -34,6 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.state.label.init();
         this.state.prepared = true;
         if (!this.nonWrappedLabel) {
@@ -42,6 +45,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             }, 50);
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     public labelClicked(event: any): void {

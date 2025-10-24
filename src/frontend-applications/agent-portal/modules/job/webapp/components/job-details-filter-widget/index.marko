@@ -8,7 +8,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.show)>
-    <widget instanceId=state.instanceId title=state.title>
+    <widget
+        contextInstanceId=input.contextInstanceId
+        instanceId=state.instanceId
+        title=state.title>
         <@content>
             <if(state.prepared)>
                 <for|table, index| of=state.tables>
@@ -33,8 +36,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         ? "kix-icon-sort-down"
                                         : "kix-icon-sort-up"
                                 )
-                                tooltip=state.sortDescendingTooltip
-                            />
+                                tooltip=state.sortDescendingTooltip/>
                         </span>
                         <span>(${state.sortDescendingTooltip})</span>
                     </div>

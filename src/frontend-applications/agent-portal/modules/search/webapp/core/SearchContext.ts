@@ -43,6 +43,8 @@ export abstract class SearchContext extends Context {
     }
 
     public async initContext(urlParams: URLSearchParams): Promise<void> {
+        await super.initContext(urlParams);
+
         if (urlParams) {
             if (urlParams.has('search')) {
                 try {

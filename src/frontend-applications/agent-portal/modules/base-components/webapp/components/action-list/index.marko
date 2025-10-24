@@ -105,7 +105,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         class="d-flex justify-content-end action-list opacity-0"
         on-click("actionListClicked")>
         <div class="btn-group" role="group">
-            <action-list actionList=state.listDefault/>
+            <action-list
+                contextInstanceId=input.contextInstanceId
+                actionList=state.listDefault/>
             <if(state.listExpansion && state.listExpansion.length > 0)>
                 <action-list-dropdown
                     actions=state.listExpansion

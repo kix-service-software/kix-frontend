@@ -19,16 +19,18 @@ import { TableContentProvider } from '../../../../table/webapp/core/TableContent
 import { DynamicField } from '../../../model/DynamicField';
 import { ComponentState } from './ComponentState';
 
-class Component extends AbstractMarkoComponent<ComponentState>{
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private dynamicField: DynamicField;
     private tableValues: Array<string[]>;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (input.table) {
             this.tableValues = input.table;
             this.dynamicField = input.dynamicField;
@@ -60,6 +62,10 @@ class Component extends AbstractMarkoComponent<ComponentState>{
             table.setColumnConfiguration(tableConfiguration.tableColumns);
             this.state.table = table;
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

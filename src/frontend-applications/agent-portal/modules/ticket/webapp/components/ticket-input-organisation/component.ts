@@ -19,7 +19,8 @@ import { Organisation } from '../../../../customer/model/Organisation';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -34,11 +35,15 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         this.setPossibleValue();
     }
 
-    public async onDestroy(): Promise<void> {
-        await super.onDestroy();
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     public async setPossibleValue(): Promise<void> {

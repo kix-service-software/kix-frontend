@@ -26,7 +26,7 @@ export class DynamicFieldTableFactory extends TableFactory {
     public objectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD;
 
     public async createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextInstanceId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
 
@@ -34,7 +34,7 @@ export class DynamicFieldTableFactory extends TableFactory {
 
         const table = new Table(tableKey, tableConfiguration);
         table.setContentProvider(
-            new DynamicFieldTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
+            new DynamicFieldTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextInstanceId)
         );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 

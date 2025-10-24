@@ -8,10 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { IdService } from '../../../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { EventService } from '../../../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../../../base-components/webapp/core/IEventSubscriber';
 import { KIXModulesService } from '../../../../../../../base-components/webapp/core/KIXModulesService';
 import { ServiceRegistry } from '../../../../../../../base-components/webapp/core/ServiceRegistry';
 import { Cell } from '../../../../../../model/Cell';
@@ -25,45 +22,42 @@ import { RoutingService } from '../../../../../../../base-components/webapp/core
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private column: Column;
-    private subscriber: IEventSubscriber;
     private cell: Cell;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'kix-table/table-body/table-row/table-cell');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.column = input.column;
         this.cell = input.cell;
         this.initCellComponent();
     }
 
     public async onMount(): Promise<void> {
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: string, eventId: string): void => {
-                if (this.cell && data === this.cell.getValue().instanceId) {
-                    (this as any).setStateDirty();
-                    setTimeout(() => this.state.loading = false, 5);
-                } else if (eventId === TableEvent.ROW_VALUE_STATE_CHANGED) {
-                    this.setValueStateClass();
-                }
-            }
-        };
+        await super.onMount();
 
         await this.cell.getValue().initDisplayValue(this.cell);
 
         this.initCellComponent();
 
         this.state.loading = false;
-
-        EventService.getInstance().subscribe(TableEvent.DISPLAY_VALUE_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this.subscriber);
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.DISPLAY_VALUE_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this.subscriber);
+        super.registerEventSubscriber(
+            function (data: string, eventId: string): void {
+                if (data === this.cell?.getValue().instanceId) {
+                    (this as any).setStateDirty();
+                    setTimeout(() => this.state.loading = false, 5);
+                } else if (eventId === TableEvent.ROW_VALUE_STATE_CHANGED) {
+                    this.setValueStateClass();
+                }
+            },
+            [
+                TableEvent.DISPLAY_VALUE_CHANGED,
+                TableEvent.ROW_VALUE_STATE_CHANGED
+            ]
+        );
     }
 
     private initCellComponent(): void {
@@ -76,10 +70,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const table = this.cell.getRow().getTable();
             const tableConfiguration = table.getTableConfiguration();
             const object = this.cell.getRow().getRowObject().getObject();
-            if (tableConfiguration && tableConfiguration.routingConfiguration) {
+            if (tableConfiguration?.routingConfiguration) {
                 this.state.object = object;
                 this.state.routingConfiguration = tableConfiguration.routingConfiguration;
-            } else if (object && object.KIXObjectType) {
+            } else if (object?.KIXObjectType) {
                 const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(object.KIXObjectType);
                 if (service) {
                     this.state.routingConfiguration = service.getObjectRoutingConfiguration(
@@ -89,8 +83,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
 
             if (
-                this.state.routingConfiguration
-                && this.state.routingConfiguration.objectIdProperty
+                this.state.routingConfiguration?.objectIdProperty
                 && object
             ) {
 
@@ -165,6 +158,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.state.stateClasses = classes;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

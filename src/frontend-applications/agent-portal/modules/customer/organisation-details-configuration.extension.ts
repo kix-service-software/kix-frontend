@@ -431,7 +431,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         )
                                     ]
                                 ), null, false
-                            )
+                            ), false, true, null, false
                         ),
                         [new UIComponentPermission('tickets', [CRUD.READ])]
                     )

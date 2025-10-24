@@ -30,14 +30,14 @@ export class ConfigItemClassTableFactory extends TableFactory {
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS;
 
     public async createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextInstanceId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        table.setContentProvider(new ConfigItemClassTableContentProvider(table, objectIds, null, contextId));
+        table.setContentProvider(new ConfigItemClassTableContentProvider(table, objectIds, null, contextInstanceId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;

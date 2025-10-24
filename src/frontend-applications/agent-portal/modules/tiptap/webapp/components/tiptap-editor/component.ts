@@ -156,16 +156,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private _lastRawHtml?: string;
     private _lastCleanHtml?: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.readOnly = input.readOnly ?? false;
         this.value = input.value;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const mountElement = document.querySelector(`#${this.state.editorId}`) as HTMLElement | null;
         if (!mountElement || !Tiptap?.Editor || !Tiptap?.StarterKit) {
             return;

@@ -20,7 +20,8 @@ import { Context } from '../../../../../model/Context';
 export class RouterOutletComponent {
 
     private state: ComponentState;
-    private subscriber: IEventSubscriber;
+    private contextSubscriber: IEventSubscriber;
+    private applicationSubscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -32,16 +33,16 @@ export class RouterOutletComponent {
 
     public async onMount(): Promise<void> {
 
-        this.subscriber = {
+        this.contextSubscriber = {
             eventSubscriberId: IdService.generateDateBasedId('RouterOutlet'),
             eventPublished: this.updateContextList.bind(this)
         };
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.contextSubscriber);
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.contextSubscriber);
 
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, {
-            eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
-            eventPublished: (reloadContextInstanceId: string, eventId: string): void => {
+        this.applicationSubscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('RouterOutlet'),
+            eventPublished: function (reloadContextInstanceId: string, eventId: string): void {
                 this.state.reloadContextInstanceId = reloadContextInstanceId;
 
                 setTimeout(() => {
@@ -50,16 +51,17 @@ export class RouterOutletComponent {
                     setTimeout(() => EventService.getInstance().publish(
                         ApplicationEvent.REFRESH_CONTENT_FINISHED), 400
                     );
-
                 }, 500);
-            }
-        });
+            }.bind(this)
+        };
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, this.applicationSubscriber);
 
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.contextSubscriber);
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REMOVED, this.contextSubscriber);
+        EventService.getInstance().unsubscribe(ApplicationEvent.REFRESH_CONTENT, this.applicationSubscriber);
     }
 
     public updateContextList(data: Context, eventId: string): void {

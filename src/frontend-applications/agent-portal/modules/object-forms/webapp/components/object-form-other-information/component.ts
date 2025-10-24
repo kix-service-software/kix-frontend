@@ -10,17 +10,14 @@
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ObjectFormHandler } from '../../core/ObjectFormHandler';
 import { ComponentState } from './ComponentState';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private formhandler: ObjectFormHandler;
-    private subscriber: IEventSubscriber;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-form-other-information');
         this.state = new ComponentState();
     }
 
@@ -30,26 +27,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        await super.onMount(this.contextInstanceId);
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('object-form-other-information'),
-            eventPublished: async (data: any, eventId: string): Promise<void> => {
-                if (eventId === ObjectFormEvent.OTHER_INFORMATION_CHANGED) {
-                    this.state.prepared = false;
-                    this.update();
-                }
-            }
-        };
+        await super.onMount();
+
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
+                this.state.prepared = false;
+                this.update();
+            },
+            [ObjectFormEvent.OTHER_INFORMATION_CHANGED]
+        );
 
         if (!this.state.isConfigContext) {
             this.formhandler = await this.context?.getFormManager().getObjectFormHandler();
             this.update();
         }
-        EventService.getInstance().subscribe(ObjectFormEvent.OTHER_INFORMATION_CHANGED, this.subscriber);
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ObjectFormEvent.OTHER_INFORMATION_CHANGED, this.subscriber);
     }
 
     private update(): void {
@@ -58,6 +49,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.prepared = this.state.formValues?.filter((fv) => fv.enabled && fv.visible).length > 0;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

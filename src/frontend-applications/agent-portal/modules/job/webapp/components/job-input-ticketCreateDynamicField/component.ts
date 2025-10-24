@@ -24,7 +24,8 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 
 class Component extends FormInputComponent<[string, string], ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -39,11 +40,14 @@ class Component extends FormInputComponent<[string, string], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         const treeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
         await this.load();
-        await super.onMount();
-        this.state.prepared = true;
     }
 
     private async load(): Promise<void> {
@@ -109,6 +113,10 @@ class Component extends FormInputComponent<[string, string], ComponentState> {
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
 }

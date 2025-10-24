@@ -16,17 +16,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public searchValueKey: '';
     private multiselect: boolean;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.nodes = input.nodes;
         this.searchValueKey = input.searchValueKey ?? '';
         this.multiselect = input.multiselect || false;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         // ...
     }
 
@@ -72,6 +75,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

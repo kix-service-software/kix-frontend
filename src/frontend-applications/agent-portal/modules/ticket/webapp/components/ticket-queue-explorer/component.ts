@@ -8,28 +8,23 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { IdService } from '../../../../../model/IdService';
 import { TicketContext, QueueService } from '../../core';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { Context } from '../../../../../model/Context';
 
 export class Component extends AbstractMarkoComponent<ComponentState, TicketContext> {
 
-    private subscriber: IEventSubscriber;
-
-    public listenerId: string;
-
     public onCreate(input: any): void {
+        super.onCreate(input, 'ticket-queue-explorer');
         this.state = new ComponentState(input.instanceId);
-        this.listenerId = IdService.generateDateBasedId('ticket-queue-explorer-');
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.contextType = input.contextType;
     }
 
@@ -40,27 +35,22 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketCont
 
         this.state.myTeamsActive = this.context?.queueId === 0;
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
+        this.state.activeNode = this.getActiveNode(this.context?.queueId);
+
+        this.prepareTicketStats(this.state.nodes);
+
+        super.registerEventSubscriber(
+            function (data: Context, eventId: string): void {
+                if (data?.instanceId !== this.contextInstanceId) return;
                 if (this.context?.queueId) {
                     this.state.activeNode = this.getActiveNode(this.context?.queueId);
                 } else {
                     this.state.activeNode = undefined;
                     this.state.myTeamsActive = this.context?.queueId === 0;
                 }
-            }
-        };
-
-        this.state.activeNode = this.getActiveNode(this.context?.queueId);
-
-        this.prepareTicketStats(this.state.nodes);
-
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
+            },
+            [ContextEvents.CONTEXT_PARAMETER_CHANGED]
+        );
     }
 
     public nodeToggled(node: TreeNode): void {
@@ -136,6 +126,10 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketCont
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

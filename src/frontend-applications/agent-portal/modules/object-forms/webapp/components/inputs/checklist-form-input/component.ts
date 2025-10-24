@@ -7,11 +7,8 @@
  * --
  */
 
-import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { DynamicFieldFormUtil } from '../../../../../base-components/webapp/core/DynamicFieldFormUtil';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { DynamicFieldChecklistFormValue } from '../../../../model/FormValues/DynamicFields/DynamicFieldChecklistFormValue';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
@@ -24,13 +21,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private formValue: DynamicFieldChecklistFormValue;
     private bindingIds: string[];
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'inputs/checklist-form-input');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;
@@ -39,13 +36,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         this.state.value = this.formValue?.value;
         this.setProgressValues();
         this.state.prepared = true;
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: ObjectFormEventData, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: ObjectFormEventData, eventId: string): void {
                 if (this.context?.instanceId === data.contextInstanceId) {
                     if (data.blocked) {
                         this.state.readonly = true;
@@ -53,14 +51,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         this.state.readonly = this.formValue.readonly;
                     }
                 }
-            }
-        };
-        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+            },
+            [ObjectFormEvent.BLOCK_FORM]
+        );
     }
 
     public onDestroy(): void {
+        super.onDestroy();
+
         this.formValue?.removePropertyBinding(this.bindingIds);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     private async update(): Promise<void> {

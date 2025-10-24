@@ -71,6 +71,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </span>
         <span on-click("minimizeWidget", true) class="header-right">
             <action-list
+                contextInstanceId=input.contextInstanceId
                 list=state.actions
                 instanceId=state.instanceId
                 displayText=component.getWidgetTypeActionDisplaySetting()
@@ -125,7 +126,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <div
                         key="content-actions" + Math.random()
                         class="content-actions">
-                        <action-list list=input.contentActions/>
+                        <action-list
+                            contextInstanceId=input.contextInstanceId
+                            list=input.contentActions/>
                     </div>
                 </if>
             </if>

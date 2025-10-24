@@ -14,6 +14,7 @@ import { BrowserCacheService } from '../../../base-components/webapp/core/CacheS
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
+import { IdService } from '../../../../model/IdService';
 
 export class UserCounterEventHandler {
 
@@ -26,22 +27,21 @@ export class UserCounterEventHandler {
         return UserCounterEventHandler.INSTANCE;
     }
 
-    private subscriber: IEventSubscriber;
+    private readonly subscriber: IEventSubscriber;
 
     private constructor() {
 
         this.subscriber = {
-            eventSubscriberId: 'TicketStatsEventHandler',
-            eventPublished: (data: BackendNotification): void => {
+            eventSubscriberId: IdService.generateDateBasedId('UserCounterEventHandler'),
+            eventPublished: function (data: BackendNotification): void {
                 if (data instanceof BackendNotification && data.Namespace === 'User.Counters') {
                     const userId = AgentSocketClient.getInstance().userId;
                     if (!data.UserID || data.UserID?.toString() === userId?.toString()) {
                         this.updateCurrentUserCache();
                     }
                 }
-            }
+            }.bind(this)
         };
-
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
     }
 

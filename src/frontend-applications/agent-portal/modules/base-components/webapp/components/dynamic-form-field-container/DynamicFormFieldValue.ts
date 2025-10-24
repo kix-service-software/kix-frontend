@@ -758,6 +758,7 @@ export class DynamicFormFieldValue {
 
         loadingOptions.limit = limit;
         loadingOptions.searchLimit = limit;
+        // FIXME: use form context not just active one (could be the same, could be not)
         const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
         loadingOptions = await this.manager.prepareLoadingOptions(this.value, loadingOptions);
 

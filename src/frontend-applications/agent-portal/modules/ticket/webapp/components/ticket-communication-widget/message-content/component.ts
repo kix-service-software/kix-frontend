@@ -13,21 +13,17 @@ import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IContextListener } from '../../../../../base-components/webapp/core/IContextListener';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { Article } from '../../../../model/Article';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
-import { Ticket } from '../../../../model/Ticket';
 import { TicketEvent } from '../../../../model/TicketEvent';
 import { TicketDetailsContext, TicketService } from '../../../core';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState, TicketDetailsContext> {
 
-    private eventSubscriber: IEventSubscriber;
     private contextListener: IContextListener;
     private contextListenerId: string;
     private articleId: number;
@@ -39,11 +35,13 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     private observer: IntersectionObserver;
     private resizeObserver: ResizeObserver;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'ticket-communication-widget/message-content');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.update(input);
         this.articleIndex = input.articleIndex;
     }
@@ -95,9 +93,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe('TOGGLE_ARTICLE', this.eventSubscriber);
-        EventService.getInstance().unsubscribe(TicketEvent.MARK_TICKET_AS_SEEN, this.eventSubscriber);
-
+        super.onDestroy();
 
         if (this.elementInterval) {
             clearInterval(this.elementInterval);
@@ -117,7 +113,6 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     }
 
     private async prepareObserver(): Promise<void> {
-
         if (window.ResizeObserver) {
             this.resizeObserver = new ResizeObserver((entries) => {
                 this.resizeHandling();
@@ -199,7 +194,6 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
         } else {
             this.prepareArticleContent(allowSetSeen);
         }
-
     }
 
     public scrollToArticle(): void {
@@ -247,9 +241,8 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
             this.state.smimeSigned = this.state.article[property];
         }
 
-        this.eventSubscriber = {
-            eventSubscriberId: 'message-content-' + this.articleId,
-            eventPublished: async (data: any, eventId: string): Promise<void> => {
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
                 if (eventId === 'TOGGLE_ARTICLE' && data.articleId === this.articleId) {
                     this.state.expanded = data.expanded;
                     this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
@@ -258,11 +251,12 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
                 if (eventId === TicketEvent.MARK_TICKET_AS_SEEN && this.state.article.TicketID === data) {
                     this.state.unseen = 0;
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe('TOGGLE_ARTICLE', this.eventSubscriber);
-        EventService.getInstance().subscribe(TicketEvent.MARK_TICKET_AS_SEEN, this.eventSubscriber);
+            },
+            [
+                'TOGGLE_ARTICLE',
+                TicketEvent.MARK_TICKET_AS_SEEN
+            ]
+        );
     }
 
     private filterAttachments(): void {

@@ -32,7 +32,7 @@ export abstract class ExtendedTableFactory {
 
     public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<string | number>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
+        contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: string, objects?: KIXObject[]
     ): Promise<Table> {
         return null;

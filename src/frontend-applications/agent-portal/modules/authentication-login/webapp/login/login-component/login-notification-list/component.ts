@@ -18,6 +18,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private expandedNotifications: string[] = [];
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.notifications = input.notifications || [];
 
@@ -36,11 +37,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         return;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.expandedNotifications = [];
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     public toggleNotification(notification: PortalNotification): void {

@@ -24,13 +24,15 @@ export class ConfigItemClassDefinitionTableFactory extends TableFactory {
 
     public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
+        contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        table.setContentProvider(new ConfigItemClassDefinitionTableContentProvider(table, objectIds, null, contextId));
+        table.setContentProvider(new ConfigItemClassDefinitionTableContentProvider(
+            table, objectIds, null, contextInstanceId
+        ));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;

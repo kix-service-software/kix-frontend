@@ -26,7 +26,7 @@ export class LogFileTableFactory extends TableFactory {
     public objectType: KIXObjectType | string = KIXObjectType.LOG_FILE;
 
     public async createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextInstanceId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
 
@@ -34,7 +34,7 @@ export class LogFileTableFactory extends TableFactory {
         const table = new Table(LogFileTableFactory.TABLE_ID, tableConfiguration);
 
         table.setContentProvider(
-            new LogFileTableContentProvider(table, objectIds, null, contextId)
+            new LogFileTableContentProvider(table, objectIds, null, contextInstanceId)
         );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 

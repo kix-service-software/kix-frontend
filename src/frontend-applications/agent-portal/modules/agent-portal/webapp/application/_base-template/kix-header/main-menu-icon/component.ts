@@ -18,18 +18,28 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Open main menu'
         ]);
     }
 
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
     public showMobileMainMenu(): void {
         EventService.getInstance().publish(MobileShowEvent.SHOW_MOBILE, MobileShowEventData.SHOW_MAIN_MENU);
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

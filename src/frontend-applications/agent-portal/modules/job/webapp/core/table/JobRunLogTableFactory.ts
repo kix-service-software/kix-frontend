@@ -26,7 +26,7 @@ export class JobRunLogTableFactory extends TableFactory {
 
     public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, sshort?: boolean,
+        contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean, sshort?: boolean,
         objectType?: KIXObjectType, objects?: KIXObject[]
     ): Promise<Table> {
 

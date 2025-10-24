@@ -10,7 +10,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <for|context| of=state.contextList>
     <div
         key="sidebar-" + context.instanceId + (input.isLeft ? "-left" : "")
-        id="sidebar-" + context.instanceId + (input.isLeft ? "-right" : "")
+        id="sidebar-" + context.instanceId + (input.isLeft ? "-left" : "")
+        data-contextinstanceid=context.instanceId
         class=[
             "sidebar",
             {
@@ -19,7 +20,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             },
         ]>
         <if(state.reloadSidebarId !== context.instanceId)>
-            <${component.getSidebarTemplate()} isLeft=input.isLeft/>
+            <${component.getSidebarTemplate()}
+                isLeft=input.isLeft
+                contextInstanceId=context.instanceId/>
         </if>
     </div>
 </for>

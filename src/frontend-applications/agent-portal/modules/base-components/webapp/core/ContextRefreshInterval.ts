@@ -29,6 +29,9 @@ export class ContextRefreshInterval {
     private updateRequired: boolean = false;
     private updateTimeout: any;
 
+    private eventSubscriberId: string;
+    private userId: number;
+
     public constructor() {
         document.addEventListener('visibilitychange', () => {
             // update state of active browser tab
@@ -39,40 +42,47 @@ export class ContextRefreshInterval {
     }
 
     public async initialize(): Promise<void> {
-        const user = await AgentService.getInstance().getCurrentUser();
+        if (!this.userId) {
+            const user = await AgentService.getInstance().getCurrentUser();
+            this.userId = user?.UserID;
+        }
 
-        this.notificationSubscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: BackendNotification, eventId: string): void => {
-                if (eventId === ApplicationEvent.OBJECT_UPDATED) {
-                    const isNamespace = data.Namespace === 'User.UserPreference';
-                    const isObjectId = data.ObjectID === `${user?.UserID}::${PersonalSettingsProperty.AGENT_PORTAL_DASHBOARD_REFRESH_INTERVAL}`;
-                    if (isNamespace && isObjectId) {
-                        this.initAutoUpdate();
+        if (!this.eventSubscriberId) {
+            this.eventSubscriberId = IdService.generateDateBasedId('ContextRefreshInterval');
+
+            this.notificationSubscriber = {
+                eventSubscriberId: this.eventSubscriberId,
+                eventPublished: function (data: BackendNotification, eventId: string): void {
+                    if (eventId === ApplicationEvent.OBJECT_UPDATED) {
+                        const isNamespace = data.Namespace === 'User.UserPreference';
+                        const isObjectId = data.ObjectID === `${this.userId}::${PersonalSettingsProperty.AGENT_PORTAL_DASHBOARD_REFRESH_INTERVAL}`;
+                        if (isNamespace && isObjectId) {
+                            this.initAutoUpdate();
+                        }
                     }
-                }
-            }
-        };
-        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.notificationSubscriber);
+                }.bind(this)
+            };
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.notificationSubscriber);
 
-        this.contextSubscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: Context, eventId: string): void => {
-                if (eventId === ApplicationEvent.REFRESH_CONTENT) {
-                    this.resetAutoUpdate();
-                }
-                else if (
-                    eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED
-                    && data?.instanceId === ContextService.getInstance().getActiveContext().instanceId
-                ) {
-                    this.updateRequired = true;
+            this.contextSubscriber = {
+                eventSubscriberId: this.eventSubscriberId,
+                eventPublished: function (data: Context, eventId: string): void {
+                    if (eventId === ApplicationEvent.REFRESH_CONTENT) {
+                        this.resetAutoUpdate();
+                    }
+                    else if (
+                        eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED
+                        && data?.instanceId === ContextService.getInstance().getActiveContext().instanceId
+                    ) {
+                        this.updateRequired = true;
 
-                    this.refreshContent();
-                }
-            }
-        };
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, this.contextSubscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.contextSubscriber);
+                        this.refreshContent();
+                    }
+                }.bind(this)
+            };
+            EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, this.contextSubscriber);
+            EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.contextSubscriber);
+        }
 
         this.initAutoUpdate();
     }

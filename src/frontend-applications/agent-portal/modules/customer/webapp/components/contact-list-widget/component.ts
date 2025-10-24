@@ -15,14 +15,16 @@ import { WidgetService } from '../../../../../modules/base-components/webapp/cor
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private instanceId: string;
+    private inputInstanceId: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'contact-list-widget');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        this.instanceId = input.instanceId;
+        super.onInput(input);
+        this.inputInstanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
@@ -48,7 +50,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.prepared = true;
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
+        super.onDestroy();
         this.context?.unregisterListener('contact-list-widget');
     }
 
@@ -58,17 +61,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         if (typeof depending !== 'undefined' && depending) {
-            WidgetService.getInstance().setWidgetTitle(this.instanceId, 'Translatable#Assigned Contacts');
-            WidgetService.getInstance().setWidgetClasses(this.instanceId, ['depending-widget']);
+            this.context.widgetService.setWidgetTitle(this.inputInstanceId, 'Translatable#Assigned Contacts');
+            this.context.widgetService.setWidgetClasses(this.inputInstanceId, ['depending-widget']);
         } else {
-            WidgetService.getInstance().setWidgetTitle(this.instanceId, null);
-            WidgetService.getInstance().setWidgetClasses(this.instanceId, []);
+            this.context.widgetService.setWidgetTitle(this.inputInstanceId, null);
+            this.context.widgetService.setWidgetClasses(this.inputInstanceId, []);
         }
 
         this.state.filterActions = await ActionFactory.getInstance().generateActions(
             ['contact-table-depending-action']
         );
-        WidgetService.getInstance().updateActions(this.instanceId);
+        this.context.widgetService.updateActions(this.inputInstanceId);
     }
 
 }

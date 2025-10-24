@@ -8,36 +8,61 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId=state.instanceId
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions>
     <@content>
         <if(state.role)>
-            <div.user-role-information>
-                <div.information-list>
+            <div class="user-role-information">
+                <div class="information-list">
                     <div>
-                        <object-property-label object=state.role property="Name" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.role
+                            property="Name"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.role property="UsageContext" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.role
+                            property="UsageContext"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.role property="Comment" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.role
+                            property="Comment"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.role property="ValidID" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.role
+                            property="ValidID"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.role property="CreateTime" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.role
+                            property="CreateTime"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.role property="CreateBy" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.role
+                            property="CreateBy"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.role property="ChangeTime" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.role
+                            property="ChangeTime"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.role property="ChangeBy" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.role
+                            property="ChangeBy"
+                            labelProvider=state.labelProvider/>
                     </div>
                 </div>
             </div>

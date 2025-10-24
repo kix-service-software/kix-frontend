@@ -14,26 +14,26 @@ import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ConfigItem } from '../../../model/ConfigItem';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
     private cmdbChartConfiguration: ConfigItemChartWidgetConfiguration;
-    private subscriber: IEventSubscriber;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'config-item-chart-widget');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const currentContext = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = currentContext
             ? await currentContext.getWidgetConfiguration(this.state.instanceId)
@@ -63,15 +63,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 KIXObjectType.CONFIG_ITEM, currentContext.getFilteredObjectList(KIXObjectType.CONFIG_ITEM)
             );
 
-            this.subscriber = {
-                eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-                eventPublished: (data: any, eventId: string): void => {
-                    if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.CONFIG_ITEM) {
+            super.registerEventSubscriber(
+                function (data: any, eventId: string): void {
+                    if (data === KIXObjectType.CONFIG_ITEM) {
                         this.state.loading = true;
                     }
-                }
-            };
-            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
+                },
+                [ContextUIEvent.RELOAD_OBJECTS]
+            );
         }
 
         this.state.chartConfig = this.cmdbChartConfiguration.configuration.chartConfiguration;
@@ -106,6 +105,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.loading = false;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

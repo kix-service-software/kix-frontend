@@ -20,18 +20,15 @@ import { LabelService } from '../../../../../modules/base-components/webapp/core
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
 export class Component extends AbstractMarkoComponent<ComponentState, CMDBContext> {
-
-    private subscriber: IEventSubscriber;
 
     public listenerId: string;
     public textFilterValue: string;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'config-item-class-explorer');
         this.state = new ComponentState(input.instanceId);
         this.listenerId = IdService.generateDateBasedId('config-item-class-explorer-');
     }
@@ -50,18 +47,12 @@ export class Component extends AbstractMarkoComponent<ComponentState, CMDBContex
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         this.state.activeNode = this.getActiveNode(this.context?.classId);
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (): void {
                 this.state.activeNode = this.getActiveNode(this.context?.classId);
-            }
-        };
-
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
+            },
+            [ContextEvents.CONTEXT_PARAMETER_CHANGED]
+        );
     }
 
     private getActiveNode(classId: number, nodes: TreeNode[] = this.state.nodes
@@ -138,6 +129,14 @@ export class Component extends AbstractMarkoComponent<ComponentState, CMDBContex
         this.state.filterValue = textFilterValue;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

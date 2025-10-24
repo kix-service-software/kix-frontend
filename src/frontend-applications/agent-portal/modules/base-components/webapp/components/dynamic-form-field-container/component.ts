@@ -37,12 +37,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private refreshNeededValues: string[] = [];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.timoutTimer = new TimeoutTimer();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.manager = input.manager;
         this.state.invalid = input.invalid;
     }
@@ -140,6 +142,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.refreshNeededValues = [];
         this.advancedOptionsMap = new Map();
         this.optionEditor = new Map();

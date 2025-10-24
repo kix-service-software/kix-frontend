@@ -35,11 +35,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private step: SetupStep;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Save & Continue', 'Translatable#Skip & Continue'
         ]);
@@ -49,6 +51,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.step = input.step;
         this.state.completed = this.step ? this.step.completed : false;
     }
@@ -156,6 +159,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public skip(): void {
         SetupService.getInstance().stepSkipped(this.step.id);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

@@ -22,14 +22,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private jobRun: JobRun;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.jobRun = input.jobRun;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.prepareTable();
     }
 
@@ -50,6 +53,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

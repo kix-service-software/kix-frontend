@@ -7,16 +7,14 @@
  * --
  */
 
-import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { DateTimeUtil } from '../../../../../base-components/webapp/core/DateTimeUtil';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { InputFieldTypes } from '../../../../../base-components/webapp/core/InputFieldTypes';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { DateTimeFormValue } from '../../../../model/FormValues/DateTimeFormValue';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
+import { ObjectFormEventData } from '../../../../model/ObjectFormEventData';
 import { ObjectFormHandler } from '../../../core/ObjectFormHandler';
 import { ComponentState } from './ComponentState';
 
@@ -26,17 +24,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private formValue: DateTimeFormValue;
     private formHandler: ObjectFormHandler;
 
-    private subscriber: IEventSubscriber;
-
     private value: string;
 
     private setValueTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'inputs/datetime-form-input');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;
@@ -64,6 +62,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
         this.state.displayInputChangeButton = this.context.descriptor.contextMode.toLowerCase().includes('admin');
         this.formHandler = await this.context.getFormManager().getObjectFormHandler();
         this.state.inputType = this.formValue?.inputType || InputFieldTypes.DATE;
@@ -83,9 +82,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.maxDate = DateTimeUtil.getKIXDateString(new Date(this.formValue.maxDate));
         }
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: ObjectFormEventData, eventId: string): void {
                 if (this.context?.instanceId === data.contextInstanceId) {
                     if (data.blocked) {
                         this.state.readonly = true;
@@ -93,9 +91,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         this.state.readonly = this.formValue.readonly;
                     }
                 }
-            }
-        };
-        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+            },
+            [ObjectFormEvent.BLOCK_FORM]
+        );
 
         this.state.prepared = true;
     }
@@ -116,8 +114,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
+        super.onDestroy();
+
         this.formValue?.removePropertyBinding(this.bindingIds);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public setValue(): void {

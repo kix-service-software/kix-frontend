@@ -10,7 +10,6 @@
 import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { Job } from '../../../model/Job';
 import { MacroAction } from '../../../../macro/model/MacroAction';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
@@ -36,7 +35,7 @@ export class JobMacroActionTableContentProvider extends TableContentProvider<any
         const job = await this.context?.getObject<Job>(KIXObjectType.MACRO_ACTION);
 
         const rowObjectPromises: Array<Promise<RowObject<MacroAction>>> = [];
-        if (job && job.Macros && job.Macros.length) {
+        if (job?.Macros?.length) {
             const actions = [...job.Macros[0].Actions];
 
             for (const o of actions) {

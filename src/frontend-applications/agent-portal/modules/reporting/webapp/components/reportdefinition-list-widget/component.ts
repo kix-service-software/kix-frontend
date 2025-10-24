@@ -9,34 +9,25 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
-import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableEvent } from '../../../../table/model/TableEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private instanceId: string;
-    private subscriber: IEventSubscriber;
-    private selectionTimeout;
+    private selectionTimeout: ReturnType<typeof setTimeout>;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'reportdefinition-list-widget');
         this.state = new ComponentState();
-    }
-
-    public onInput(input: any): void {
-        this.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
 
         if (this.context) {
-            this.subscriber = {
-                eventSubscriberId: IdService.generateDateBasedId(this.instanceId),
-                eventPublished: (data: any, eventId: string): void => {
+            super.registerEventSubscriber(
+                function (data: any, eventId: string): void {
                     if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.REPORT_DEFINITION) {
                         this.state.prepared = false;
                     } else if (
@@ -56,9 +47,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         }, 150);
                     } else if (
                         eventId === TableEvent.ROW_SELECTION_CHANGED &&
-                        data.table.getObjectType() === KIXObjectType.REPORT_DEFINITION &&
-                        !this.selectionTimeout // wait for possible further selection changes (select ALL)
+                        data.table.getObjectType() === KIXObjectType.REPORT_DEFINITION
                     ) {
+                        if (this.selectionTimeout) {
+                            clearTimeout(this.selectionTimeout);
+                        }
                         this.selectionTimeout = setTimeout(() => {
                             this.context?.setFilteredObjectList(
                                 KIXObjectType.REPORT_DEFINITION,
@@ -66,22 +59,26 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                             );
                             this.state.prepared = true;
                             this.selectionTimeout = null;
-                        }, 200);
+                        }, 100);
                     }
-                }
-            };
-            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
-            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS_FINISHED, this.subscriber);
-            EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
+                },
+                [
+                    ContextUIEvent.RELOAD_OBJECTS,
+                    ContextUIEvent.RELOAD_OBJECTS_FINISHED,
+                    TableEvent.ROW_SELECTION_CHANGED
+                ]
+            );
         }
 
         this.state.prepared = true;
     }
 
-    public async onDestroy(): Promise<void> {
-        EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS_FINISHED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

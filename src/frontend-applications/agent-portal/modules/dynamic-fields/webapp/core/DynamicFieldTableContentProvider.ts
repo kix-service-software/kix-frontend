@@ -23,13 +23,13 @@ export class DynamicFieldTableContentProvider extends TableContentProvider<Dynam
         protected table: Table,
         protected objectIds: Array<number | string>,
         protected loadingOptions: KIXObjectLoadingOptions,
-        protected contextId?: string,
+        protected contextInstanceId?: string,
         protected objects?: KIXObject[],
         protected specificLoadingOptions?: KIXObjectSpecificLoadingOptions
     ) {
         super(
             KIXObjectType.DYNAMIC_FIELD, table, objectIds,
-            loadingOptions, contextId, objects, specificLoadingOptions
+            loadingOptions, contextInstanceId, objects, specificLoadingOptions
         );
     }
 

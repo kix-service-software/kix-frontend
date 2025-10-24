@@ -18,7 +18,8 @@ import { SearchDefinition } from '../../../../search/webapp/core/SearchDefinitio
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -44,6 +45,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

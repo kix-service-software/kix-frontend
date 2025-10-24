@@ -13,10 +13,7 @@ import { AbstractMarkoComponent } from '../../../../../base-components/webapp/co
 import { FormValueProperty } from '../../../../../object-forms/model/FormValueProperty';
 import { ChannelFormValue } from '../../../core/form/form-values/ChannelFormValue';
 import { TreeNode } from '../../../../../base-components/webapp/core/tree';
-import { IdService } from '../../../../../../model/IdService';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { ObjectFormEvent } from '../../../../../object-forms/model/ObjectFormEvent';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { ObjectFormEventData } from '../../../../../object-forms/model/ObjectFormEventData';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -24,13 +21,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private bindingIds: string[];
     private formValue: ChannelFormValue;
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'channel-form-input');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;
@@ -86,9 +83,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         ]);
         this.state.loading = false;
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: ObjectFormEventData, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: ObjectFormEventData, eventId: string): void {
                 if (data.contextInstanceId === this.context?.instanceId) {
                     if (data.blocked) {
                         this.state.readonly = true;
@@ -96,14 +92,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         this.state.readonly = this.formValue.readonly;
                     }
                 }
-            }
-        };
-        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+            },
+            [ObjectFormEvent.BLOCK_FORM]
+        );
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         this.formValue?.removePropertyBinding(this.bindingIds);
-        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public selectChannel(node: TreeNode): void {

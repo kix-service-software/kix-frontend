@@ -193,7 +193,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             style=`background-color: ${state.backgroundColor};`
                             class="row actions-list">
                             <if(state.actions && state.actions.length)>
-                                <action-list list=state.actions/>
+                                <action-list
+                                    contextInstanceId=input.contextInstanceId
+                                    list=state.actions/>
                             </if>
                         </div>
                     </if>

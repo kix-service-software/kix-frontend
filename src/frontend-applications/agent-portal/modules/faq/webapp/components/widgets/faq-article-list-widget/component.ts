@@ -29,10 +29,12 @@ class Component extends AbstractMarkoComponent<ComponentState, FAQContext> {
     private additionalFilterCriteria: UIFilterCriterion[] = [];
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -59,7 +61,7 @@ class Component extends AbstractMarkoComponent<ComponentState, FAQContext> {
     }
 
     public onDestroy(): void {
-        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        this.context.widgetService.unregisterActions(this.state.instanceId);
     }
 
     private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {
@@ -87,12 +89,12 @@ class Component extends AbstractMarkoComponent<ComponentState, FAQContext> {
                 this.state.widgetConfiguration.actions, null
             );
         }
-        WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
+        this.context.widgetService.registerActions(this.state.instanceId, this.state.actions);
     }
 
     private async prepareTable(): Promise<void> {
         const table = await TableFactoryService.getInstance().createTable(
-            'faq-articles', KIXObjectType.FAQ_ARTICLE, null, null, FAQContext.CONTEXT_ID
+            'faq-articles', KIXObjectType.FAQ_ARTICLE, null, null, this.contextInstanceId
         );
 
         this.state.table = table;
@@ -105,7 +107,7 @@ class Component extends AbstractMarkoComponent<ComponentState, FAQContext> {
     }
 
     private setActionsDirty(): void {
-        WidgetService.getInstance().updateActions(this.state.instanceId);
+        this.context.widgetService.updateActions(this.state.instanceId);
     }
 
     private setTitle(count: number = 0): void {

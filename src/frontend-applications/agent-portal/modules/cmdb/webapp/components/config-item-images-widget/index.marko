@@ -7,23 +7,36 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget instanceId=state.instanceId title=state.widgetTitle contentActions=state.actions>
+<widget
+    contextInstanceId=input.contextInstanceId
+    instanceId=state.instanceId
+    title=state.widgetTitle
+    contentActions=state.actions>
     <@content>
         <if(state.loading)>
             <loading-spinner/>
         </if>
         <else>
-            <div.config-item-images-container>
+            <div class="config-item-images-container">
                 <for|image| of=state.thumbnails>
-                    <div.image-container>
-                        <div.image>
-                            <img alt=image.title src=image.content/>
-                            <div.image-title>${image.title}</div>
+                    <div class="image-container">
+                        <div class="image">
+                            <img alt=image.title src=image.content>
+                            <div class="image-title">
+                                ${image.title}
+                            </div>
                         </div>
-                        <div.hover-shield on-click("openImageDialog", image.imageId) title=state.translations["Translatable#Large View"]>
-                            <div.hover-info>
-                                <span.hover-icon.kix-icon-arrow-fullscreen/>
-                                <span.hover-hint.no-select>Großansicht</span>
+                        <div
+                            on-click("openImageDialog", image.imageId)
+                            title=(
+                                state.translations["Translatable#Large View"]
+                            )
+                            class="hover-shield">
+                            <div class="hover-info">
+                                <span class="hover-icon kix-icon-arrow-fullscreen"/>
+                                <span class="hover-hint no-select">
+                                    Großansicht
+                                </span>
                             </div>
                         </div>
                     </div>

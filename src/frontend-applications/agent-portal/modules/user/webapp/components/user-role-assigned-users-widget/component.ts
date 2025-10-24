@@ -22,16 +22,17 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContactProperty } from '../../../../customer/model/ContactProperty';
-import { RoleDetailsContext } from '../../core/admin/context/RoleDetailsContext';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -83,7 +84,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             );
             const table = await TableFactoryService.getInstance().createTable(
                 'user-role-assigned-users', KIXObjectType.USER, tableConfiguration, role.UserIDs,
-                RoleDetailsContext.CONTEXT_ID, true, undefined, false, true, true
+                this.contextInstanceId, true, undefined, false, true, true
             );
             this.state.table = table;
             this.prepareActions(role);
@@ -106,6 +107,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

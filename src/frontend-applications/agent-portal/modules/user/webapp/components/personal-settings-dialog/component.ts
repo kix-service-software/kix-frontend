@@ -37,6 +37,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private searchObject: KIXObjectType | string;
 
     public async onCreate(input: any): Promise<void> {
+        super.onCreate(input);
         this.state = new ComponentState(input.instanceId);
     }
 
@@ -169,6 +170,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Search defaults for {0} reseted.', [this.searchObject]
         );
         BrowserUtil.openSuccessOverlay(message);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

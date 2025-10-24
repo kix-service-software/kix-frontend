@@ -7,13 +7,10 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { Column } from '../../../model/Column';
 import { Row } from '../../../model/Row';
 import { Table } from '../../../model/Table';
@@ -23,16 +20,16 @@ import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public eventSubscriberId: string;
     private browserFontSize: number;
-    private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'kix-table');
         this.state = new ComponentState();
         this.browserFontSize = BrowserUtil.getBrowserFontsize();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (!this.state.table && input.table || this.isTableChanged(input.table)) {
             if (this.state.table && this.isTableChanged(input.table)) {
                 this.state.table.destroy();
@@ -47,24 +44,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async init(table: Table): Promise<void> {
-        this.eventSubscriberId = table.getTableId();
-
         await table.initialize(false);
         this.setTableHeight();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: async (data: TableEventData, eventId: string): Promise<void> => {
-                if (this.state.table && data && data.tableId === this.state.table.getTableId()) {
+        super.registerEventSubscriber(
+            async function (data: TableEventData, eventId: string): Promise<void> {
+                if (data?.tableId === this.state.table?.getTableId()) {
                     if (eventId === TableEvent.TABLE_WAITING_START || eventId === TableEvent.TABLE_WAITING_END) {
                         this.state.showLoadingShield = Boolean(eventId === TableEvent.TABLE_WAITING_START);
                     }
 
                     if (eventId === TableEvent.REFRESH) {
-                        //await this.provideContextContent();
                         this.setTableHeight();
                     }
 
@@ -85,7 +79,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
 
                 if (eventId === TableEvent.SCROLL_TO_AND_TOGGLE_ROW) {
-                    if (data && data.tableId && data.tableId === this.state.table.getTableId() && data.rowId) {
+                    if (data?.tableId === this.state.table.getTableId() && data?.rowId) {
                         const row: Row = this.state.table.getRow(data.rowId);
                         if (row) {
                             row.expand(true);
@@ -105,17 +99,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         }
                     }
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(TableEvent.REFRESH, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.RERENDER_TABLE, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.SORTED, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.TABLE_WAITING_START, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.TABLE_WAITING_END, this.subscriber);
+            },
+            [
+                TableEvent.REFRESH,
+                TableEvent.RERENDER_TABLE,
+                TableEvent.ROW_TOGGLED,
+                TableEvent.SORTED,
+                TableEvent.TABLE_FILTERED,
+                TableEvent.SCROLL_TO_AND_TOGGLE_ROW,
+                TableEvent.TABLE_WAITING_START,
+                TableEvent.TABLE_WAITING_END
+            ]
+        );
 
         setTimeout(() => {
             const scrollPosString = ClientStorageService.getOption(`${this.state.table?.getTableId()}-scrollpos`);
@@ -131,21 +126,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
         }, 500);
-    }
-
-    public onUpdate(): void {
-        // nothing
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.SORTED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_WAITING_START, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_WAITING_END, this.subscriber);
     }
 
     public setTableHeight(): void {
@@ -221,6 +201,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const scrollInfo = [element?.scrollLeft, element?.scrollTop];
             ClientStorageService.setOption(`${this.state.table.getTableId()}-scrollpos`, JSON.stringify(scrollInfo));
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

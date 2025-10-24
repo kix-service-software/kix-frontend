@@ -9,7 +9,6 @@
 
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { EventService } from '../../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../../base-components/webapp/core/IEventSubscriber';
 import { RoutingService } from '../../../../../../base-components/webapp/core/RoutingService';
 import { Cell } from '../../../../../model/Cell';
 import { Column } from '../../../../../model/Column';
@@ -18,19 +17,19 @@ import { TableEventData } from '../../../../../model/TableEventData';
 import { TableCSSHandlerRegistry } from '../../../../core/css-handler/TableCSSHandlerRegistry';
 import { ComponentState } from './ComponentState';
 
-class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
-
-    public eventSubscriberId: string;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private observer: IntersectionObserver;
 
     private bindingIds: string[] = [];
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'kix-table/table-body/table-row');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.bindingIds?.length) {
             this.state.row?.removeBindings(this.bindingIds);
         }
@@ -55,22 +54,47 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async onMount(): Promise<void> {
-        if (this.state.row) {
-            this.eventSubscriberId = this.state.row.getTable().getTableId() + '-' + this.state.row.getRowId();
+        await super.onMount();
 
-            EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
-            EventService.getInstance().subscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
-            EventService.getInstance().subscribe(TableEvent.ROW_VALUE_CHANGED, this);
-            EventService.getInstance().subscribe(TableEvent.TOGGLE_ROWS, this);
+        if (this.state.row) {
+            super.registerEventSubscriber(
+                function (data: TableEventData, eventId: string, subscriberId?: string): void {
+                    if (data?.tableId !== this.state.row.getTable().getTableId()) return;
+
+                    if (data?.rowId === this.state.row.getRowId()) {
+                        if (eventId === TableEvent.ROW_TOGGLED) {
+                            this.state.open = this.state.row.isExpanded();
+                        }
+                        if (
+                            eventId === TableEvent.ROW_VALUE_STATE_CHANGED
+                            || eventId === TableEvent.ROW_VALUE_CHANGED
+                        ) {
+                            this.setRowClasses();
+                        }
+
+                        (this as any).setStateDirty();
+                    }
+
+                    if (eventId === TableEvent.TOGGLE_ROWS) {
+                        this.state.open = data.openRows;
+                        this.state.row.expand(data.openRows);
+                        this.setRowClasses();
+                    }
+                },
+                [
+                    TableEvent.ROW_TOGGLED,
+                    TableEvent.ROW_VALUE_STATE_CHANGED,
+                    TableEvent.ROW_VALUE_CHANGED,
+                    TableEvent.TOGGLE_ROWS
+                ]
+            );
+
             this.prepareObserver();
         }
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_CHANGED, this);
-        EventService.getInstance().unsubscribe(TableEvent.TOGGLE_ROWS, this);
+        super.onDestroy();
 
         if (this.bindingIds?.length) {
             this.state.row.removeBindings(this.bindingIds);
@@ -111,27 +135,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 this.observer.disconnect();
             }
         });
-    }
-
-    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
-        if (data && data.tableId === this.state.row.getTable().getTableId()) {
-            if (data.rowId === this.state.row.getRowId()) {
-                if (eventId === TableEvent.ROW_TOGGLED) {
-                    this.state.open = this.state.row.isExpanded();
-                }
-                if ((eventId === TableEvent.ROW_VALUE_STATE_CHANGED || eventId === TableEvent.ROW_VALUE_CHANGED)) {
-                    this.setRowClasses();
-                }
-
-                (this as any).setStateDirty();
-            }
-
-            if (eventId === TableEvent.TOGGLE_ROWS) {
-                this.state.open = data.openRows;
-                this.state.row.expand(data.openRows);
-                this.setRowClasses();
-            }
-        }
     }
 
     public toggleRow(event?: any): void {

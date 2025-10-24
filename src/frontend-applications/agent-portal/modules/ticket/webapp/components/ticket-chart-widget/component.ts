@@ -14,22 +14,20 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Ticket } from '../../../model/Ticket';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
     private ticketChartConfiguration: TicketChartWidgetConfiguration;
-    private subscriber: IEventSubscriber;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -61,16 +59,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.contextFilteredObjectListChanged(
                     KIXObjectType.TICKET, this.context?.getFilteredObjectList(KIXObjectType.TICKET)
                 );
-
-                this.subscriber = {
-                    eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-                    eventPublished: (data: any, eventId: string): void => {
-                        if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.TICKET) {
-                            // this.state.loading = true;
-                        }
-                    }
-                };
-                EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
             } else {
                 const tickets = await KIXObjectService.loadObjects<Ticket>(
                     KIXObjectType.TICKET, null, this.ticketChartConfiguration.loadingOptions
@@ -78,10 +66,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.contextFilteredObjectListChanged(KIXObjectType.TICKET, tickets);
             }
         }
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
     }
 
     private initChartConfig(): void {
@@ -119,6 +103,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.chartConfig = this.ticketChartConfiguration.configuration.chartConfiguration;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

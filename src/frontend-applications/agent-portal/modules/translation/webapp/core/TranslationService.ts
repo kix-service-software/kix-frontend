@@ -26,6 +26,7 @@ import { BackendNotification } from '../../../../model/BackendNotification';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { IdService } from '../../../../model/IdService';
 
 export class TranslationService extends KIXObjectService<TranslationPattern> {
 
@@ -39,6 +40,8 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         return TranslationService.INSTANCE;
     }
 
+    private readonly eventSubscriberId: string;
+
     private loadTranslationPromise: Promise<void>;
     private translations: any = null;
 
@@ -48,6 +51,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
 
     private constructor() {
         super(KIXObjectType.TRANSLATION);
+        this.eventSubscriberId = IdService.generateDateBasedId('TranslationService');
         this.init();
 
         this.objectConstructors.set(KIXObjectType.TRANSLATION, [Translation]);
@@ -57,17 +61,17 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
     private async init(): Promise<void> {
         this.userLanguage = await TranslationService.getUserLanguage();
         EventService.getInstance().subscribe(ApplicationEvent.CACHE_KEYS_DELETED, {
-            eventSubscriberId: 'TranslationService',
+            eventSubscriberId: this.eventSubscriberId,
             eventPublished: this.cacheChanged.bind(this)
         });
 
         EventService.getInstance().subscribe(ApplicationEvent.CACHE_CLEARED, {
-            eventSubscriberId: 'TranslationService',
+            eventSubscriberId: this.eventSubscriberId,
             eventPublished: this.cacheChanged.bind(this)
         });
 
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
-            eventSubscriberId: 'TranslationService',
+            eventSubscriberId: this.eventSubscriberId,
             eventPublished: this.languageChanged.bind(this)
         });
     }

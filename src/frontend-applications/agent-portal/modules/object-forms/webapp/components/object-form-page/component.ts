@@ -7,13 +7,9 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 import { ComponentState } from './ComponentState';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { Context } from '../../../../../model/Context';
 import { RowLayout } from '../../../model/layout/RowLayout';
 import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
 import { PageRowLayout } from './PageRowLayout';
@@ -23,11 +19,11 @@ import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
     private page: FormPageConfiguration;
     private formHandler: ObjectFormHandler;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-form-page');
         this.state = new ComponentState();
     }
 
@@ -37,16 +33,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        await super.onMount(this.contextInstanceId);
+        await super.onMount();
 
         this.formHandler = await this.context?.getFormManager()?.getObjectFormHandler();
 
         await this.prepareRowLayout();
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('object-form-group'),
-            eventPublished: async (data: ObjectFormEventData, eventId: string): Promise<void> => {
-                if (this.context?.instanceId === data.contextInstanceId) {
+        super.registerEventSubscriber(
+            async function (data: ObjectFormEventData, eventId: string): Promise<void> {
+                if (this.contextInstanceId === data.contextInstanceId) {
                     this.state.prepared = false;
 
                     this.page = this.formHandler.form.pages.find((p) => p.id === this.page?.id);
@@ -59,23 +54,18 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
                     setTimeout(() => this.state.prepared = true, 10);
                 }
-            }
-        };
+            },
+            [
+                ObjectFormEvent.GROUP_ADDED,
+                ObjectFormEvent.GROUP_DELETED,
+                ObjectFormEvent.PAGE_CHANGED,
+                ObjectFormEvent.PAGE_UPDATED
+            ]
+        );
 
         this.state.active = this.formHandler?.activePageId === this.page?.id;
 
-        EventService.getInstance().subscribe(ObjectFormEvent.GROUP_ADDED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.GROUP_DELETED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.PAGE_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.PAGE_UPDATED, this.subscriber);
         this.state.prepared = true;
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ObjectFormEvent.GROUP_ADDED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.GROUP_DELETED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.PAGE_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.PAGE_UPDATED, this.subscriber);
     }
 
     private async prepareRowLayout(): Promise<void> {
@@ -142,6 +132,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         return classes.join(' ');
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

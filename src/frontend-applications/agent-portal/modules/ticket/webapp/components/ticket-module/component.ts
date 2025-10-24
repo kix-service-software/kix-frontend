@@ -8,22 +8,17 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TicketContext } from '../../core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { TicketEvent } from '../../../model/TicketEvent';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState, TicketContext> {
 
-    private subscriber: IEventSubscriber;
-
     public onCreate(input: any): void {
+        super.onCreate(input, 'ticket-module');
         this.state = new ComponentState();
     }
 
@@ -37,22 +32,25 @@ class Component extends AbstractMarkoComponent<ComponentState, TicketContext> {
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
         this.state.filterValue = this.context?.filterValue;
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: async (data: any, eventId: string): Promise<void> => {
+        this.prepareWidgets();
+
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
                 if (eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED) {
-                    await this.prepareWidgets();
+                    if (data?.contextId === this.context.contextId) {
+                        await this.prepareWidgets();
+                    }
                 } else if (eventId === TicketEvent.MARK_TICKET_AS_SEEN) {
                     setTimeout(async () => {
                         await this.context.reloadObjectList(KIXObjectType.TICKET, true);
                     }, 100);
                 }
-            }
-        };
-        this.prepareWidgets();
-
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(TicketEvent.MARK_TICKET_AS_SEEN, this.subscriber);
+            },
+            [
+                ContextEvents.CONTEXT_USER_WIDGETS_CHANGED,
+                TicketEvent.MARK_TICKET_AS_SEEN
+            ]
+        );
 
     }
 
@@ -75,11 +73,14 @@ class Component extends AbstractMarkoComponent<ComponentState, TicketContext> {
         this.context.setFilterValue(this.state.filterValue);
     }
 
+
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(TicketEvent.MARK_TICKET_AS_SEEN, this.subscriber);
+        super.onDestroy();
     }
 
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

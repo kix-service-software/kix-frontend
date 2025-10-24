@@ -22,11 +22,13 @@ import { ObjectDialogService } from '../../../../base-components/webapp/core/Obj
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const context = await ContextService.getInstance().getContext(EditSysConfigDialogContext.CONTEXT_ID);
         if (context && !context.getObjectId()) {
             this.state.reset = false;
@@ -102,6 +104,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 );
             }
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

@@ -18,11 +18,13 @@ import { Cell } from '../../../../../../../model/Cell';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         const cell: Cell = input.cell;
         if (cell) {
             const property = cell.getProperty();
@@ -65,6 +67,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.optionText = optionText;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

@@ -37,11 +37,8 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
     private contacts = [];
 
-    public constructor() {
-        super();
-    }
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -62,6 +59,10 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         await this.prepareAutoComplete();
 
         const additionalTypeOption = this.state.field?.options.find((o) => o.option === 'SHOW_NEW_CONTACT');
@@ -241,6 +242,10 @@ class Component extends FormInputComponent<number | string, ComponentState> {
     private async createTreeNode(contact: KIXObject): Promise<TreeNode> {
         const displayValue = await LabelService.getInstance().getObjectText(contact);
         return new TreeNode(contact.ObjectId, displayValue, 'kix-icon-man-bubble');
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

@@ -21,11 +21,13 @@ import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.article = input.article;
 
         if (this.state.article?.ChangeTime !== input.article?.ChangeTime) {
@@ -125,6 +127,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             );
             BrowserUtil.startFileDownload(attachment);
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

@@ -21,11 +21,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private article: Article = null;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.state.frameId = IdService.generateDateBasedId('article-view-');
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.article?.ChangeTime !== input.article?.ChangeTime) {
             this.article = input.article;
 

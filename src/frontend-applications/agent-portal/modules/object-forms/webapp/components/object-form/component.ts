@@ -10,20 +10,19 @@
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
 import { ObjectFormHandler } from '../../core/ObjectFormHandler';
 import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 import { FormLayoutFontSize } from '../../../model/layout/FormLayoutFontSize';
 import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { ObjectFormConfigurationContext } from '../../core/ObjectFormConfigurationContext';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
     private formHandler: ObjectFormHandler;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-form');
         this.state = new ComponentState();
     }
 
@@ -32,7 +31,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        await super.onMount(this.contextInstanceId);
+        await super.onMount();
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
             loading: true, hint: 'Translatable#Load Form'
@@ -59,37 +58,29 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private registerEventHandler(): void {
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('object-form'),
-            eventPublished: async (data: ObjectFormEventData, eventId: string): Promise<void> => {
-                if (data.contextInstanceId === this.context?.instanceId) {
-                    if (
-                        this.state.prepared &&
-                        (
-                            eventId === ObjectFormEvent.OBJECT_FORM_HANDLER_CHANGED ||
-                            eventId === ObjectFormEvent.PAGE_ADDED ||
-                            eventId === ObjectFormEvent.PAGE_DELETED
-                        )
-                    ) {
-                        this.updateForm();
-                    } else if (eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED) {
-                        this.state.prepared = true;
-                    }
+        super.registerEventSubscriber(
+            async function (data: ObjectFormEventData, eventId: string): Promise<void> {
+                if (data.contextInstanceId !== this.contextInstanceId) return;
+                if (
+                    this.state.prepared &&
+                    (
+                        eventId === ObjectFormEvent.OBJECT_FORM_HANDLER_CHANGED ||
+                        eventId === ObjectFormEvent.PAGE_ADDED ||
+                        eventId === ObjectFormEvent.PAGE_DELETED
+                    )
+                ) {
+                    this.updateForm();
+                } else if (eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED) {
+                    this.state.prepared = true;
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_HANDLER_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.PAGE_ADDED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.PAGE_DELETED, this.subscriber);
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ObjectFormEvent.OBJECT_FORM_HANDLER_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.PAGE_ADDED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.PAGE_DELETED, this.subscriber);
+            },
+            [
+                ObjectFormEvent.OBJECT_FORM_HANDLER_CHANGED,
+                ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED,
+                ObjectFormEvent.PAGE_ADDED,
+                ObjectFormEvent.PAGE_DELETED
+            ]
+        );
     }
 
     private async updateForm(): Promise<void> {
@@ -129,6 +120,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         return classes.join(' ');
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

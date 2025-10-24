@@ -44,6 +44,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(!state.loading)>
     <widget
+        contextInstanceId=input.contextInstanceId
         instanceId=state.instanceId
         title=state.title
         actions=state.actions
@@ -69,7 +70,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </if>
             <if(input.filterActions)>
                 <div class="filter-action-list">
-                    <action-list list=input.filterActions displayText=false/>
+                    <action-list
+                        contextInstanceId=input.contextInstanceId
+                        list=input.filterActions
+                        displayText=false/>
                 </div>
             </if>
             <if(state.showFilterReset && !state.showFilterInBody)>

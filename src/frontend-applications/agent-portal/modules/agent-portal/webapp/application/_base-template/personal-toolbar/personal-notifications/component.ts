@@ -9,8 +9,6 @@
 
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentContent } from '../../../../../../base-components/webapp/core/ComponentContent';
-import { EventService } from '../../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../../base-components/webapp/core/IEventSubscriber';
 import { OverlayService } from '../../../../../../base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../../base-components/webapp/core/OverlayType';
 import { PortalNotification } from '../../../../../../portal-notification/model/PortalNotification';
@@ -27,14 +25,16 @@ import { SortOrder } from '../../../../../../../model/SortOrder';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
     private createTimes: Map<string, string> = new Map();
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'personal-toolbar/personal-notifications');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         this.createTimes = new Map();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Notifications'
@@ -42,18 +42,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.prepareNotifications();
 
-        this.subscriber = {
-            eventSubscriberId: 'personal-notifications',
-            eventPublished: async (): Promise<void> => {
-                this.prepareNotifications();
-            }
-        };
-
-        EventService.getInstance().subscribe(PortalNotificationEvent.NOTIFICATION_PUSHED, this.subscriber);
+        super.registerEventSubscriber(this.prepareNotifications, [PortalNotificationEvent.NOTIFICATION_PUSHED]);
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(PortalNotificationEvent.NOTIFICATION_PUSHED, this.subscriber);
+        super.onDestroy();
     }
 
     private async prepareNotifications(): Promise<void> {
@@ -135,6 +128,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public removeGroup(group: string): void {
         PortalNotificationService.getInstance().removeNotifications([group]);
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

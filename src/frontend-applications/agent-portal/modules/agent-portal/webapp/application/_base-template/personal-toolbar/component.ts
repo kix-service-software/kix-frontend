@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { ToolbarAction } from './ToolbarAction';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../../base-components/webapp/core/ApplicationEvent';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ActionFactory } from '../../../../../base-components/webapp/core/ActionFactory';
@@ -17,7 +16,6 @@ import { ShowUserTicketsAction } from '../../../../../ticket/webapp/core';
 import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { AgentService } from '../../../../../user/webapp/core/AgentService';
 import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
@@ -27,28 +25,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
-    private subscriber: IEventSubscriber;
-
     public onCreate(input: any): void {
+        super.onCreate(input, 'personal-toolbar');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        this.subscriber = {
-            eventSubscriberId: 'personal-toolbar-subscriber',
-            eventPublished: (data: any, eventId: string): void => {
-                if (eventId === ApplicationEvent.REFRESH_TOOLBAR) {
-                    this.initTicketActions();
-                }
-            }
-        };
+        await super.onMount();
 
         const permissions = [new UIComponentPermission('tickets', [CRUD.READ])];
         if (await AuthenticationSocketClient.getInstance().checkPermissions(permissions)) {
             this.state.showTicketActions = true;
             this.initTicketActions();
 
-            EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, this.subscriber);
+            super.registerEventSubscriber(this.initTicketActions, [ApplicationEvent.REFRESH_TOOLBAR]);
         }
 
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
@@ -57,10 +47,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
 
     public onDestroy(): void {
+        super.onDestroy();
         window.removeEventListener('resize', this.resizeHandling.bind(this), false);
-        if (this.subscriber) {
-            EventService.getInstance().unsubscribe(ApplicationEvent.REFRESH_TOOLBAR, this.subscriber);
-        }
     }
 
     private resizeHandling(): void {
@@ -143,6 +131,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public showKanban(): void {
         ContextService.getInstance().setActiveContext('kanban');
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

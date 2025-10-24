@@ -7,37 +7,33 @@
  * --
  */
 
-import { Context } from '../../../../../model/Context';
-import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
 import { ContextEvents } from '../../core/ContextEvents';
 import { ContextService } from '../../core/ContextService';
-import { EventService } from '../../core/EventService';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { KIXModulesService } from '../../core/KIXModulesService';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public subscriber: IEventSubscriber;
     private isLeft: boolean;
     private hasSidebars: boolean;
 
-    public onInput(input: any): void {
-        this.isLeft = input.isLeft;
+    public onCreate(input: any): void {
+        super.onCreate(input, 'sidebar');
+        this.state = new ComponentState();
     }
 
-    public onCreate(input: any): void {
-        this.state = new ComponentState();
+    public onInput(input: any): void {
+        super.onInput(input);
+        this.isLeft = input.isLeft;
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('Sidebar'),
-            eventPublished: async (data: any, eventId: string): Promise<void> => {
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
                 if (eventId === ContextEvents.CONTEXT_REMOVED) {
                     const index = this.state.contextList.findIndex((c) => c.instanceId === data?.instanceId);
                     if (index !== -1) {
@@ -64,18 +60,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.hasSidebars = sidebars?.length > 0;
 
                 (this as any).setStateDirty('contextList');
-            }
-        };
-
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
+            },
+            [
+                ApplicationEvent.REFRESH_CONTENT,
+                ContextEvents.CONTEXT_CHANGED,
+                ContextEvents.CONTEXT_REMOVED
+            ]
+        );
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ApplicationEvent.REFRESH_CONTENT, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
+        super.onDestroy();
     }
 
     public isActiveContext(instanceId: string): boolean {

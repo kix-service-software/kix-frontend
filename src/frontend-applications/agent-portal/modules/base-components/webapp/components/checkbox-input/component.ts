@@ -12,7 +12,8 @@ import { FormInputComponent } from '../../../../../modules/base-components/webap
 
 class Component extends FormInputComponent<any, ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -23,6 +24,10 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
     }
 
     public async setCurrentValue(): Promise<void> {
@@ -36,6 +41,10 @@ class Component extends FormInputComponent<any, ComponentState> {
     public checkboxClicked(): void {
         this.state.checked = !this.state.checked;
         super.provideValue(this.state.checked);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

@@ -65,17 +65,22 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         protected table: Table,
         protected objectIds: Array<number | string>,
         protected loadingOptions: KIXObjectLoadingOptions,
-        protected contextId?: string,
+        protected contextInstanceId?: string,
         protected objects?: KIXObject[],
         protected specificLoadingOptions?: KIXObjectSpecificLoadingOptions
     ) {
-        this.context = ContextService.getInstance().getActiveContext();
+        if (this.contextInstanceId) {
+            this.context = ContextService.getInstance().getContext(contextInstanceId);
+        }
+        else {
+            this.context = ContextService.getInstance().getActiveContext();
+        }
     }
 
     public async initialize(): Promise<void> {
         if (!this.initialized) {
 
-            if (this.contextId) {
+            if (this.table.isContextDependent()) {
 
                 this.context?.registerListener(this.table.getTableId() + '-content-provider', {
                     sidebarLeftToggled: (): void => { return; },
@@ -88,12 +93,11 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 });
 
                 this.subscriber = {
-                    eventSubscriberId: IdService.generateDateBasedId(),
-                    eventPublished: (context: Context): void => {
+                    eventSubscriberId: IdService.generateDateBasedId('TableContentProvider'),
+                    eventPublished: function (context: Context): void {
                         this.currentPageIndex = 1;
-                    }
+                    }.bind(this)
                 };
-
                 EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
             }
             this.initialized = true;
@@ -101,7 +105,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     }
 
     public async destroy(): Promise<void> {
-        if (this.contextId) {
+        if (this.table.isContextDependent()) {
             this.context.unregisterListener(this.table.getTableId() + '-content-provider');
 
             if (this.subscriber) {
@@ -120,7 +124,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     private objectListChanged(objectType: KIXObjectType | string): void {
         if (objectType === this.getContextObjectType()) {
             // set sort in table if needed
-            if (this.isBackendSortSupported()) {
+            if (this.table.isContextDependent() && this.isBackendSortSupported()) {
                 const sort = this.context.getSort(this.objectType);
                 if (sort?.length) {
                     this.table.setSort(sort[0], sort[1] ? SortOrder.DOWN : SortOrder.UP);
@@ -140,7 +144,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     public async loadMore(): Promise<void> {
         this.currentPageIndex++;
-        if (this.contextId && !this.objectIds) {
+        if (this.table.isContextDependent() && !this.objectIds) {
             const pageSize = await this.context?.getPageSize(this.objectType) || this.loadingOptions?.limit || 20;
             const currentLimit = this.currentPageIndex * pageSize;
 
@@ -173,9 +177,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             this.currentLimit = KIXObjectSocketClient.getInstance().getCollectionsLimit(
                 this.table.getTableConfiguration().searchId
             );
-        } else if (this.contextId && !this.objectIds) {
+        } else if (this.table.isContextDependent() && !this.objectIds) {
             objects = await this.context.getObjectList(this.objectType, this.currentLoadLimit);
-            const collectionId = this.context.getCollectionId() || this.context.contextId + this.objectType;
+            const collectionId = this.context.getCollectionId() || this.contextInstanceId + this.objectType;
             this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
                 collectionId
             );
@@ -213,7 +217,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         if (typeof this.loadingOptions?.limit !== 'undefined' && this.loadingOptions?.limit !== null) {
             return this.loadingOptions?.limit;
         } else if (this.isBackendSortSupported()) {
-            if (this.contextId) {
+            if (this.table.isContextDependent()) {
                 return await this.context.getPageSize(this.objectType);
             }
             return 20;
@@ -383,7 +387,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             if (!this.sort?.length || this.sort[0] !== property || this.sort[1] !== descending) {
                 this.sort = [property, descending];
 
-                if (this.contextId) {
+                if (this.table.isContextDependent()) {
                     this.context.setSortOrder(
                         this.objectType, property, descending, reload, this.currentLoadLimit
                     );
@@ -399,7 +403,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     public isBackendSortSupported(): boolean {
         let supportsBackendSort = this.useBackendSort;
-        if (supportsBackendSort && this.contextId) {
+        if (supportsBackendSort && this.table.isContextDependent()) {
             supportsBackendSort = this.context.supportsBackendSort(this.objectType);
         }
         return supportsBackendSort;
@@ -428,7 +432,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             if (!this.filter || this.filter !== criteriaString) {
                 this.filter = criteriaString;
 
-                if (this.contextId) {
+                if (this.table.isContextDependent()) {
                     this.context.setFilterCriteria(
                         this.objectType, criteria, reload, this.currentLoadLimit
                     );
@@ -441,7 +445,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     public isBackendFilterSupported(): boolean {
         let supportsBackendFilter = this.useBackendSort;
-        if (supportsBackendFilter && this.contextId) {
+        if (supportsBackendFilter && this.table.isContextDependent()) {
             supportsBackendFilter = this.context.supportsBackendFilter(this.objectType);
         }
         return supportsBackendFilter;
