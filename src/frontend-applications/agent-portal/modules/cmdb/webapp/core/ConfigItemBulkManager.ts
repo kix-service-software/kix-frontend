@@ -114,7 +114,7 @@ export class ConfigItemBulkManager extends BulkManager {
             case VersionProperty.DEPL_STATE_ID:
             case VersionProperty.INCI_STATE_ID:
             case ConfigItemProperty.CHANGE_BY:
-                return await CMDBService.getInstance().getTreeNodes(property, true, true);
+                return await CMDBService.getInstance().getTreeNodes(property, false, false);
             default:
                 const classIds = this.getClassIds();
                 const input = await ConfigItemClassAttributeUtil.getAttributeInput(property, classIds);

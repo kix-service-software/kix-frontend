@@ -210,6 +210,14 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                         'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classId
                     )]
                 );
+                if (!showInvalid) {
+                    loadingOptions.filter.push(
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                            FilterDataType.NUMERIC, FilterType.AND, 1
+                        )
+                    );
+                }
 
                 const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
                     KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
