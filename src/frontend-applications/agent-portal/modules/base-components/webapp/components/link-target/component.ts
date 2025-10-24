@@ -20,11 +20,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private objectId: number;
     private object: KIXObject;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.routingConfiguration = input.routingConfiguration ? { ...input.routingConfiguration } : null;
         this.objectId = input.objectId || this.routingConfiguration?.replaceObjectId;
         this.object = input.object;
@@ -57,6 +59,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.loading = false;
     }
 
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
     private setContextIdIfNecessary(): void {
         if (!this.routingConfiguration?.contextId &&
             this.routingConfiguration?.contextMode &&
@@ -87,6 +93,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

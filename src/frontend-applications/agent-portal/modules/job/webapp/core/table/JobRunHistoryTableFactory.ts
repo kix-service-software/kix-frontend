@@ -27,7 +27,7 @@ export class JobRunHistoryTableFactory extends TableFactory {
 
     public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
+        contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
         const context = ContextService.getInstance().getActiveContext();
         const jobId = context?.getObjectId();

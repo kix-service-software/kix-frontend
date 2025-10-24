@@ -15,20 +15,27 @@ import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState(input.instanceId);
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
         this.state.contextType = input.contextType;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         const configuration = this.state.widgetConfiguration.configuration as HelpWidgetConfiguration;
         this.state.helpText = await TranslationService.translate(configuration.helpText);
         this.state.links = configuration.links;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
 }

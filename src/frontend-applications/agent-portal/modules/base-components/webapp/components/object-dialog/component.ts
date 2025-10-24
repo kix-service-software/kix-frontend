@@ -13,16 +13,12 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ObjectDialogService } from '../../core/ObjectDialogService';
 import { AdditionalContextInformation } from '../../core/AdditionalContextInformation';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
-import { EventService } from '../../core/EventService';
 import { FormEvent } from '../../core/FormEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-dialog');
         this.state = new ComponentState();
     }
 
@@ -47,20 +43,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.canSubmit = canSubmit;
         }
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
-                if (eventId === FormEvent.BLOCK) {
-                    this.state.processing = data;
-                }
-            }
-        };
-
-        EventService.getInstance().subscribe(FormEvent.BLOCK, this.subscriber);
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
+                this.state.processing = data;
+            },
+            [FormEvent.BLOCK]
+        );
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(FormEvent.BLOCK, this.subscriber);
+        super.onDestroy();
     }
 
     public async submit(): Promise<void> {
@@ -71,6 +63,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await ContextService.getInstance().toggleActiveContext();
     }
 
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

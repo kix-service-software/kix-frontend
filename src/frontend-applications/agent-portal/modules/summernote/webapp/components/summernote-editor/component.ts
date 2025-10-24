@@ -15,15 +15,18 @@ declare const $: any;
 export class Component extends AbstractMarkoComponent<ComponentState> {
     private value: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.value = input.value || '';
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const container = document.getElementById(this.state.editorId);
         if (!container) {
             console.error(`[Summernote] Container with ID "${this.state.editorId}" not found.`);

@@ -27,11 +27,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private name: string;
     private object: KIXObject;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.name = input.name;
         this.object = input.object;
         this.update();
@@ -134,6 +136,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

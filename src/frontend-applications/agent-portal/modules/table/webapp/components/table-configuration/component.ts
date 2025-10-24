@@ -17,17 +17,20 @@ import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.configuration = { ...input.configuration };
         this.state.searchLimit = this.state.configuration.loadingOptions?.searchLimit;
         this.state.limit = this.state.configuration.loadingOptions?.limit;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject(
             ['Translatable#Some Translation']
         );
@@ -100,5 +103,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 module.exports = Component;

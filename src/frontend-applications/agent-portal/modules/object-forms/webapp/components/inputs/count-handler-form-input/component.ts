@@ -15,11 +15,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private formValue: DynamicFieldCountableFormValue;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue = input.formValue;
         }
@@ -29,6 +31,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.formValue?.addFormValue(null, null);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

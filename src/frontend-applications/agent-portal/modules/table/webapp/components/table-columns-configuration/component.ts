@@ -27,11 +27,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private objectType: KIXObjectType;
     private columns: IColumnConfiguration[];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.columns = Array.isArray(input.columns) ? [...input.columns] : [];
         this.objectType = input.objectType;
         this.updateColumnNames();
@@ -265,5 +267,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.emitConfigurationChanged();
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 module.exports = Component;

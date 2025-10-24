@@ -45,6 +45,7 @@ import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
 import { BackendNotification } from './BackendNotification';
 import { NotificationHandler } from '../modules/base-components/webapp/core/NotificationHandler';
+import { WidgetService } from '../modules/base-components/webapp/core/WidgetService';
 
 export abstract class Context {
 
@@ -78,6 +79,8 @@ export abstract class Context {
     protected objectSorts: Map<string, [string, boolean]> = new Map();
 
     private objectFilter: Map<string, FilterCriteria[]> = new Map();
+
+    public readonly widgetService: WidgetService = new WidgetService();
 
     public constructor(
         public descriptor: ContextDescriptor,
@@ -176,9 +179,10 @@ export abstract class Context {
         this.eventSubscriber = {
             eventSubscriberId: this.instanceId,
             eventPublished: async function (data: any, eventId: string): Promise<void> {
-                const reloadObjectList = eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED &&
-                    Array.isArray(data?.widgets) &&
-                    Array.isArray(this.configuration?.tableWidgetInstanceIds);
+                const reloadObjectList = eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
+                    && data?.contextId === this.contextId
+                    && Array.isArray(data?.widgets)
+                    && Array.isArray(this.configuration?.tableWidgetInstanceIds);
                 if (this.descriptor.contextMode !== ContextMode.SEARCH) {
 
                     if (data?.instanceId === this.instanceId) {

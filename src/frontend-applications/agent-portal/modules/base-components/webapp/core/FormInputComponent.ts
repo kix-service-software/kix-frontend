@@ -12,19 +12,24 @@ import { EventService } from './EventService';
 import { FormEvent } from './FormEvent';
 import { IEventSubscriber } from './IEventSubscriber';
 import { FormValuesChangedEventData } from './FormValuesChangedEventData';
-import { ContextService } from './ContextService';
 import { KIXObjectService } from './KIXObjectService';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core';
 import { Context } from '../../../../model/Context';
+import { AbstractMarkoComponent } from './AbstractMarkoComponent';
 
-export abstract class FormInputComponent<T, C extends FormInputComponentState> {
+export abstract class FormInputComponent<T, CS extends FormInputComponentState>
+    extends AbstractMarkoComponent<CS, Context> {
 
-    private readonly id: string;
-    protected state: C;
-    private subscriber: IEventSubscriber;
-    protected context: Context;
+    public onCreate(input: any, eventSubscriberPrefix: string = ''): void {
+        if (typeof this.prepareMount !== 'function') {
+            this.prepareMount = FormInputComponent.prototype.prepareMount.bind(this);
+        }
+
+        super.onCreate(input, eventSubscriberPrefix);
+    }
 
     public onInput(input: FormInputComponentState): any {
+        super.onInput(input);
         this.state.field = input.field;
         this.state.fieldId = input.fieldId;
         this.state.formId = input.formId;
@@ -44,28 +49,13 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
     }
 
     public async onMount(setPrepared: boolean = true): Promise<void> {
-        if (!this.context) {
-            if (this.id) {
-                const componentContextInstanceId = ContextService.getInstance().getComponentContextInstanceId(this.id);
-                this.context = ContextService.getInstance().getContext(componentContextInstanceId) as Context;
-            }
-
-            if (!this.context) {
-                this.context = ContextService.getInstance().getActiveContext<Context>();
-            }
-
-            if (this.context && this.id) {
-                ContextService.getInstance().setComponentContextInstanceId(
-                    this.id, this.context.instanceId
-                );
-            }
-        }
+        await super.onMount();
 
         FormInputComponent.prototype.doUpdate.call(this);
 
-        this.subscriber = {
-            eventSubscriberId: `${this.state.field?.instanceId}_FormInputComponent`,
-            eventPublished: async (data: any, eventId: string): Promise<void> => {
+        const subscriber: IEventSubscriber = {
+            eventSubscriberId: 'FormInputComponent/' + super.getEventSubscriberId(),
+            eventPublished: async function (data: any, eventId: string): Promise<void> {
                 if (data?.formInstance?.getForm()?.id === this.state.formId) {
                     if (eventId === FormEvent.VALUES_CHANGED && this.state.field && data) {
                         const changedData: FormValuesChangedEventData = data;
@@ -102,16 +92,29 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
                         }
                     }
                 }
-            }
+            }.bind(this)
         };
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_VALIDATED, this.subscriber);
-        EventService.getInstance().subscribe(FormEvent.POSSIBLE_VALUE_CHANGED, this.subscriber);
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, subscriber);
+        EventService.getInstance().subscribe(FormEvent.FORM_VALIDATED, subscriber);
+        EventService.getInstance().subscribe(FormEvent.POSSIBLE_VALUE_CHANGED, subscriber);
 
         FormInputComponent.prototype.callSetInvalidState.call(this);
         await this.setCurrentValue();
         if (setPrepared) {
             this.state.prepared = true;
+        }
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
+    }
+
+    protected setComponentContext(context: Context): void {
+        const oldEventSubscriberId = super.getEventSubscriberId();
+        super.setComponentContext(context);
+        const newEventSubscriberId = super.getEventSubscriberId();
+        if (oldEventSubscriberId !== newEventSubscriberId) {
+            EventService.getInstance().renameSubscriber(oldEventSubscriberId, newEventSubscriberId);
         }
     }
 
@@ -123,10 +126,9 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
         }
     }
 
-    public async onDestroy(): Promise<void> {
-        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_VALIDATED, this.subscriber);
-        EventService.getInstance().unsubscribe(FormEvent.POSSIBLE_VALUE_CHANGED, this.subscriber);
+    public onDestroy(): void {
+        super.onDestroy();
+        EventService.getInstance().unsubscribeSubscriber('FormInputComponent/' + super.getEventSubscriberId());
     }
 
     public abstract setCurrentValue(): Promise<void>;
@@ -154,7 +156,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
 
     public async focusLost(event?: any): Promise<void> {
         const formInstance = await this.context?.getFormManager()?.getFormInstance();
-        if (formInstance && formInstance.getForm().validation) {
+        if (formInstance?.getForm().validation) {
             await formInstance.validateField(this.state.field);
             FormInputComponent.prototype.callSetInvalidState.call(this);
         }

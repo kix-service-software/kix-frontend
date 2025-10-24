@@ -11,22 +11,20 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
-import { EventService } from '../../../core/EventService';
 import { FormEvent } from '../../../core/FormEvent';
-import { IEventSubscriber } from '../../../core/IEventSubscriber';
 import { LabelService } from '../../../core/LabelService';
 import { KIXModulesService } from '../../../core/KIXModulesService';
 import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private formSubscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'field-container/form-field');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.field = input.field;
 
         this.state.formId = input.formId;
@@ -38,6 +36,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             ? input.draggable : this.state.canDraggable;
 
         this.update();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async update(): Promise<void> {
@@ -72,9 +74,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.formSubscriber = {
-            eventSubscriberId: this.state.field?.instanceId,
-            eventPublished: async (data: any, eventId: string): Promise<void> => {
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
                 if (this.hasChildren()) {
                     this.state.minimized = this.state.minimized && !(await this.hasInvalidChildren());
                 }
@@ -85,25 +86,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (isUpdateEvent && this.state.field?.instanceId === data?.instanceId) {
                     this.update();
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_VALIDATED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_READONLY_CHANGED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_VALIDATED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_PAGE_VALIDATED, this.formSubscriber);
-
+            },
+            [
+                FormEvent.FIELD_CHILDREN_ADDED,
+                FormEvent.FIELD_VALIDATED,
+                FormEvent.FIELD_READONLY_CHANGED,
+                FormEvent.FORM_VALIDATED,
+                FormEvent.FORM_PAGE_VALIDATED
+            ]
+        );
 
         this.update();
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_VALIDATED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_READONLY_CHANGED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_VALIDATED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_VALIDATED, this.formSubscriber);
     }
 
     private async hasInvalidChildren(field: FormFieldConfiguration = this.state.field): Promise<boolean> {

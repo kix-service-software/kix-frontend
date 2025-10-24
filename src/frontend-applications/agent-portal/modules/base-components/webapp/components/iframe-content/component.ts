@@ -6,17 +6,23 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private updateTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.prepareContent(input.html);
         this.state.calculateHeight = input.calculateHeight;
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private prepareContent(html: string): void {

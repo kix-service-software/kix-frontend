@@ -7,23 +7,27 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget instanceId=input.instanceId title="Translatable#Legend" icon="kix-icon-legend">
+<widget
+    contextInstanceId=input.contextInstanceId
+    instanceId=input.instanceId
+    title="Translatable#Legend"
+    icon="kix-icon-legend">
     <@content>
         <if(state.show)>
-            <div.legend>
-                <div.legend-item.yellow/>
+            <div class="legend">
+                <div class="legend-item yellow"/>
                 <span>
                     <translation-string pattern="Translatable#Changed"/>
                 </span>
-                <div.legend-item.red/>
+                <div class="legend-item red"/>
                 <span>
                     <translation-string pattern="Translatable#Deleted"/>
                 </span>
-                <div.legend-item.green/>
+                <div class="legend-item green"/>
                 <span>
                     <translation-string pattern="Translatable#New"/>
                 </span>
-                <div.legend-item.gray/>
+                <div class="legend-item gray"/>
                 <span>
                     <translation-string pattern="Translatable#Not available (not any more or not yet)"/>
                 </span>

@@ -31,8 +31,8 @@ export class TableFactoryService {
 
     private static INSTANCE: TableFactoryService;
 
-    private subscriber: IEventSubscriber;
-    private tableDeps: Map<string, string>;
+    private readonly subscriber: IEventSubscriber;
+    private readonly tableDeps: Map<string, string>;
 
     public static getInstance(): TableFactoryService {
         if (!TableFactoryService.INSTANCE) {
@@ -44,10 +44,10 @@ export class TableFactoryService {
 
     private constructor() {
         this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (context: Context): void => {
+            eventSubscriberId: IdService.generateDateBasedId('TableFactoryService'),
+            eventPublished: function (context: Context): void {
                 this.deleteContextTables(context?.contextId, undefined, true);
-            }
+            }.bind(this)
         };
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
         this.tableDeps = new Map();
@@ -110,22 +110,24 @@ export class TableFactoryService {
 
     public async createTable(
         tableKey: string, objectType: KIXObjectType | string, tableConfiguration?: TableConfiguration,
-        objectIds?: Array<number | string>, contextId?: string, defaultRouting?: boolean,
+        objectIds?: Array<number | string>, contextInstanceId?: string, defaultRouting?: boolean,
         defaultToggle?: boolean, short: boolean = false, reload: boolean = true, recreate: boolean = true,
-        objects: KIXObject[] = null
+        objects: KIXObject[] = null, contextDependent?: boolean
     ): Promise<Table> {
         let table: Table;
 
         let context: Context;
-        if (contextId) {
-            context = ContextService.getInstance().getContextInstances().find((c) => c.contextId === contextId);
+        if (contextInstanceId) {
+            context = ContextService.getInstance().getContextInstances().find(
+                (c) => c.instanceId === contextInstanceId
+            );
         }
         if (!context) {
             context = ContextService.getInstance().getActiveContext();
         }
-        let tableContextId: string;
+        let tableContextInstanceId: string;
         if (context) {
-            tableContextId = context.instanceId;
+            tableContextInstanceId = context.instanceId;
 
             let dependency = context.getAdditionalInformation(AdditionalContextInformation.OBJECT_DEPENDENCY);
             if (Array.isArray(dependency)) {
@@ -136,8 +138,8 @@ export class TableFactoryService {
                 recreate = true;
             }
 
-            if (!recreate && this.contextTableInstances.has(tableContextId)) {
-                const tableInstances = this.contextTableInstances.get(tableContextId);
+            if (!recreate && this.contextTableInstances.has(tableContextInstanceId)) {
+                const tableInstances = this.contextTableInstances.get(tableContextInstanceId);
                 if (tableInstances.has(tableKey)) {
                     table = tableInstances.get(tableKey);
                     if (reload) {
@@ -151,9 +153,12 @@ export class TableFactoryService {
             const factory = this.factories.find((f) => f.isFactoryFor(objectType));
             if (factory) {
                 table = await factory.createTable(
-                    tableKey, tableConfiguration, objectIds, contextId,
+                    tableKey, tableConfiguration, objectIds, contextInstanceId,
                     defaultRouting, defaultToggle, short, objectType, objects
                 );
+                if (typeof contextDependent !== 'undefined') {
+                    table.setContextDependent(contextDependent);
+                }
 
                 if (context?.getConfiguration()?.application === 'agent-portal') {
                     const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(
@@ -174,11 +179,11 @@ export class TableFactoryService {
                     }
                 }
 
-                if (tableContextId) {
-                    if (!this.contextTableInstances.has(tableContextId)) {
-                        this.contextTableInstances.set(tableContextId, new Map());
+                if (tableContextInstanceId) {
+                    if (!this.contextTableInstances.has(tableContextInstanceId)) {
+                        this.contextTableInstances.set(tableContextInstanceId, new Map());
                     }
-                    this.contextTableInstances.get(tableContextId).set(tableKey, table);
+                    this.contextTableInstances.get(tableContextInstanceId).set(tableKey, table);
                 }
             }
         }

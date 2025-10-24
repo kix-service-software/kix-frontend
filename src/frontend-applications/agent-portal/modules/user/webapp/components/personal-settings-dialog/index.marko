@@ -8,18 +8,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId="personal-settings-dialog"
     title="Translatable#Reset specific user settings"
-    icon="kix-icon-arrow-rotate-left"
->
+    icon="kix-icon-arrow-rotate-left">
     <@content>
         <div class="row p-3">
             <div class="col-6">
                 <form-list
                     placeholder="Translatable#Search Object"
                     loadNodes=component.loadSearchObjectNodes
-                    on-nodesChanged("searchObjectChanged")
-                />
+                    on-nodesChanged("searchObjectChanged")/>
             </div>
             <div class="col-6">
                 <button
@@ -30,8 +29,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             "Translatable#Reset Search To Default"
                         ]
                     )
-                    class="kix-button cancel-button"
-                >
+                    class="kix-button cancel-button">
                     <span class="kix-icon-arrow-rotate-left"/>
                     <span>
                         ${state.translations[
@@ -45,10 +43,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 </widget>
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId="personal-settings-dialog"
     title="Translatable#Personal Settings"
-    icon="kix-icon-gear"
->
+    icon="kix-icon-gear">
     <@content>
         <div class="personal-settings-dialog-container">
             <main-form/>
@@ -58,8 +56,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         type="button"
                         on-click("cancel")
                         title=(state.translations["Translatable#Cancel"])
-                        class="kix-button cancel-button"
-                    >
+                        class="kix-button cancel-button">
                         <span class="kix-icon-close"/>
                         <span>
                             ${state.translations["Translatable#Cancel"]}
@@ -69,8 +66,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         type="button"
                         on-click("submit")
                         title=(state.translations["Translatable#Save"])
-                        class="kix-button submit-button"
-                    >
+                        class="kix-button submit-button">
                         <span class="kix-icon-check"/>
                         <span>${state.translations["Translatable#Save"]}</span>
                     </button>

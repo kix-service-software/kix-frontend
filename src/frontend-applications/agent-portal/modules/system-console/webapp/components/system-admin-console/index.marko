@@ -7,42 +7,46 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget instanceId="system-admin-console" title="Translatable#System: Console">
+<widget
+    contextInstanceId=input.contextInstanceId
+    instanceId="system-admin-console"
+    title="Translatable#System: Console">
     <@content>
-        <div.console>
-            <div.console-command>
+        <div class="console">
+            <div class="console-command">
                 <form-list
                     loadNodes=state.loadNodes
                     placeholder="Translatable#Choose a command"
                     readonly=state.run
-                    on-nodesChanged("commandChanged")
-                />
-                <button.kix-button.button.button-without-text
+                    on-nodesChanged("commandChanged")/>
+                <button
                     type="button"
                     title=(state.translations["Translatable#Help"])
                     disabled=state.run
                     on-click("showCommandHelp", false)
-                >
-                    <span.kix-icon-question/>
+                    class="kix-button button button-without-text">
+                    <span class="kix-icon-question"/>
                 </button>
-                <input.input-style
+                <input
                     type="text"
                     value=state.parameter
                     disabled=state.run
                     on-keydown("keydown")
                     onChange("parameterChanged")
-                >
-                <button.kix-button.submit-button
+                    class="input-style">
+                <button
                     type="button"
                     title=(state.translations["Translatable#Execute"])
                     disabled=!state.canRun || state.run
                     on-click("run")
-                >
-                    <span.kix-icon-check/>
+                    class="kix-button submit-button">
+                    <span class="kix-icon-check"/>
                     <translation-string pattern="Translatable#Execute"/>
                 </button>
             </div>
-            <textarea.input-style.console-output readonly>${state.output}</textarea>
+            <textarea
+                readonly
+                class="input-style console-output">${state.output}</textarea>
         </div>
     </@content>
 </widget>

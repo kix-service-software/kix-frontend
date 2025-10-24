@@ -15,10 +15,7 @@ import { ServiceType } from '../../../../../modules/base-components/webapp/core/
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
-import { EventService } from '../../core/EventService';
 import { FormEvent } from '../../core/FormEvent';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -26,13 +23,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private formId: string;
     private fields: FormFieldConfiguration[];
     private updateTimeout: any;
-    private formSubscriber: IEventSubscriber;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'field-container');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.level = typeof input.level !== 'undefined' ? input.level : 0;
         this.formId = input.formId;
         this.fields = input.fields;
@@ -47,31 +45,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.initFields(this.fields);
 
-        this.formSubscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('fields-container-'),
-            eventPublished: async (data: any, eventId: string): Promise<void> => {
-                const isUpdateEvent = eventId === FormEvent.FIELD_REMOVED
-                    || eventId === FormEvent.FIELD_CHILDREN_ADDED;
-
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
                 if (
-                    isUpdateEvent &&
-                    (
-                        this.state.fields[0]?.parentInstanceId === data?.parent?.instanceId ||
-                        this.state.fields[0]?.parentInstanceId === data?.formField?.parentInstanceId
-                    )
+                    this.state.fields[0]?.parentInstanceId === data?.parent?.instanceId ||
+                    this.state.fields[0]?.parentInstanceId === data?.formField?.parentInstanceId
                 ) {
                     (this as any).setStateDirty('fields');
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
+            },
+            [
+                FormEvent.FIELD_CHILDREN_ADDED,
+                FormEvent.FIELD_REMOVED
+            ]
+        );
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
+        super.onDestroy();
     }
 
     private async initFields(fields: FormFieldConfiguration[] = []): Promise<void> {

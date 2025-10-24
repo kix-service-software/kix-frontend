@@ -11,7 +11,6 @@ import { TableContentProvider } from '../../../../table/webapp/core/TableContent
 import { TicketHistory } from '../../../model/TicketHistory';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
 import { TableValue } from '../../../../table/model/TableValue';
@@ -29,9 +28,8 @@ export class TicketHistoryContentProvider extends TableContentProvider<TicketHis
 
     public async loadData(): Promise<Array<RowObject<TicketHistory>>> {
         const rowObjects = [];
-        if (this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            const history = await context.getObjectList<TicketHistory>(KIXObjectType.TICKET_HISTORY);
+        if (this.table.isContextDependent()) {
+            const history = await this.context?.getObjectList<TicketHistory>(KIXObjectType.TICKET_HISTORY);
             for (const th of history) {
                 const values: TableValue[] = [];
 

@@ -7,6 +7,7 @@
  * --
  */
 
+import { IdService } from '../../../../model/IdService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
@@ -29,22 +30,23 @@ export class ObjectSearchService extends KIXObjectService {
         return ObjectSearchService.INSTANCE;
     }
 
-    private subscriber: IEventSubscriber;
+    private readonly subscriber: IEventSubscriber;
 
     private constructor() {
         super(KIXObjectType.OBJECT_SEARCH);
         this.objectConstructors.set(KIXObjectType.OBJECT_SEARCH, [ObjectSearch]);
 
         this.subscriber = {
-            eventSubscriberId: 'ObjectSearchService',
-            eventPublished: (data: string, eventId: string): void => {
+            eventSubscriberId: IdService.generateDateBasedId('ObjectSearchService'),
+            eventPublished: function (data: string, eventId: string): void {
                 if (data === KIXObjectType.OBJECT_SEARCH) {
                     const keys = ClientStorageService.getAllKeys(KIXObjectType.OBJECT_SEARCH);
-                    keys.forEach((k) => ClientStorageService.deleteState(k));
+                    for (let key of keys) {
+                        ClientStorageService.deleteState(key);
+                    }
                 }
             }
         };
-
         EventService.getInstance().subscribe(ApplicationEvent.CACHE_KEY_DELETED, this.subscriber);
         EventService.getInstance().subscribe(ApplicationEvent.CACHE_KEY_PREFIX_DELETED, this.subscriber);
     }

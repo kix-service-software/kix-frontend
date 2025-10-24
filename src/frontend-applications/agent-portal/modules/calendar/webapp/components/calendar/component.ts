@@ -43,11 +43,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private updateTimeout: any;
     private changeTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (input.active) {
             this.tickets = input.tickets || [];
             this.calendarConfig = input.calendarConfig;
@@ -121,8 +123,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         let created: boolean = false;
         if (!this.calendar) {
-            created = true;
-            await this.createCalendarElement();
+            created = await this.createCalendarElement();
         }
 
         await this.updateCalendarSchedules(tickets);
@@ -181,7 +182,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return userIds;
     }
 
-    private async createCalendarElement(): Promise<void> {
+    private async createCalendarElement(): Promise<boolean> {
         const dayNames = await this.getDayNames();
         const calendar = document.getElementById(this.state.calendarId);
         const pendingTranslation = await TranslationService.translate('Translatable#Pending');
@@ -214,7 +215,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     },
                 },
             });
+            return true;
         }
+        return false;
     }
 
     private async getDayNames(): Promise<string[]> {
@@ -477,7 +480,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async setCurrentDate(): Promise<void> {
-        const currentDate = this.calendar?.getDate().toDate();
+        if (!this.calendar) return;
+        const currentDate = this.calendar.getDate().toDate();
         const month = currentDate.getMonth();
 
         const monthLabel = await DateTimeUtil.getMonthName(currentDate);

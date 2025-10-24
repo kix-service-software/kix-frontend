@@ -7,16 +7,12 @@
  * --
  */
 
-import { FormContext } from '../../../../../model/configuration/FormContext';
-import { ContextMode } from '../../../../../model/ContextMode';
 import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
-import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { ObjectFormValue } from '../../../model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
@@ -25,12 +21,12 @@ import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
     private contextListenerId: string;
     private formhandler: ObjectFormHandler;
     private submitTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-form-buttonbar');
         this.state = new ComponentState();
     }
 
@@ -39,7 +35,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        await super.onMount(this.contextInstanceId);
+        await super.onMount();
 
         this.formhandler = await this.context.getFormManager().getObjectFormHandler();
 
@@ -50,26 +46,27 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.FORM_SUBMIT_ENABLED, this.subscriber);
+        super.onDestroy();
         this.context?.unregisterListener(this.contextListenerId);
     }
 
     private registerListener(): void {
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('object-form-buttonbar'),
-            eventPublished: async (data: ObjectFormEventData, eventId: string): Promise<void> => {
-                if (this.context?.instanceId === data.contextInstanceId) {
-                    if (eventId === ObjectFormEvent.FORM_SUBMIT_ENABLED) {
-                        this.state.canSubmit = data.canSubmit;
-                    } else if (eventId === ObjectFormEvent.BLOCK_FORM) {
-                        this.state.blocked = data.blocked;
-                    }
+        super.registerEventSubscriber(
+            async function (data: ObjectFormEventData, eventId: string): Promise<void> {
+                if (this.contextInstanceId !== data.contextInstanceId) return;
+                if (eventId === ObjectFormEvent.FORM_SUBMIT_ENABLED) {
+                    this.state.canSubmit = data.canSubmit;
+                } else if (eventId === ObjectFormEvent.BLOCK_FORM) {
+                    this.state.blocked = data.blocked;
                 }
-            }
-        };
+            },
+            [
+                ObjectFormEvent.BLOCK_FORM,
+                ObjectFormEvent.FORM_SUBMIT_ENABLED
+            ]
+        );
 
-        this.contextListenerId = IdService.generateDateBasedId('object-forms-buttonbar');
+        this.contextListenerId = IdService.generateDateBasedId('object-form-buttonbar');
         this.context?.registerListener(this.contextListenerId, {
             additionalInformationChanged: (key: string, value: any) => {
                 if (key === AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT) {
@@ -83,9 +80,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             sidebarLeftToggled: () => null,
             sidebarRightToggled: () => null
         });
-
-        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.FORM_SUBMIT_ENABLED, this.subscriber);
     }
 
     private prepareSubmitButton(): void {

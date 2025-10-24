@@ -14,11 +14,9 @@ import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ContextMode } from '../../../../../../model/ContextMode';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 import { TicketProperty } from '../../../../../ticket/model/TicketProperty';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { KanbanEvent } from '../../../core/KanbanEvent';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 import { ObjectIconLoadingOptions } from '../../../../../../server/model/ObjectIconLoadingOptions';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
@@ -28,13 +26,13 @@ import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private kanbanSubscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'kanban-widget/kanban-item');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.ticket = input.ticket;
         this.state.properties =
             input.kanbanConfig && input.kanbanConfig.cardProperties && Array.isArray(input.kanbanConfig.cardProperties)
@@ -43,6 +41,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
 
         this.state.routingConfiguration = new RoutingConfiguration(
             'ticket-details', KIXObjectType.TICKET, ContextMode.DETAILS, null
@@ -64,19 +63,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.icon = icons && icons.length ? icons[0] : 'kix-icon-unknown';
 
-        this.kanbanSubscriber = {
-            eventSubscriberId: 'kanban-item-' + this.state.ticket.TicketID,
-            eventPublished: this.ticketChanged.bind(this)
-        };
-        EventService.getInstance().subscribe(KanbanEvent.TICKET_CHANGED, this.kanbanSubscriber);
+        super.registerEventSubscriber(this.ticketChanged, [KanbanEvent.TICKET_CHANGED]);
 
         await this.prepareAvatar();
 
         this.state.prepared = true;
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe('kanban-item-' + this.state.ticket.TicketID, this.kanbanSubscriber);
     }
 
     public expand(): void {
@@ -129,6 +120,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

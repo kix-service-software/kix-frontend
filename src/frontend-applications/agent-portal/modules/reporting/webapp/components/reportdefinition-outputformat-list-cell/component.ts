@@ -35,11 +35,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private definition: ReportDefinition;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.definition = input.cell.getRow().getRowObject().getObject();
         this.updateCell();
     }
@@ -167,6 +169,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
     }
 }
 

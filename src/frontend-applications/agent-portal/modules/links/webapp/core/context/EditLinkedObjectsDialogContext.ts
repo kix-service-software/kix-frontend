@@ -60,7 +60,7 @@ export class EditLinkedObjectsDialogContext extends Context {
 
             const objects = await KIXObjectService.loadObjects(
                 objectType, null, loadingOptionsToUse, null, true,
-                undefined, undefined, this.contextId + objectType
+                undefined, undefined, this.instanceId + objectType
             ).catch(() => []);
 
             this.setObjectList(objectType, objects);

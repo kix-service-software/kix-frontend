@@ -23,7 +23,6 @@ import { ContextEvents } from './ContextEvents';
 import { EventService } from './EventService';
 import { BrowserUtil } from './BrowserUtil';
 import { ContextPreference } from '../../../../model/ContextPreference';
-import { RoutingEvent } from './RoutingEvent';
 import { ConfiguredWidget } from '../../../../model/configuration/ConfiguredWidget';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
@@ -805,14 +804,6 @@ export class ContextService {
 
     public getToolbarAction(key: string): ToolbarAction {
         return this.toolbarActions.get(key);
-    }
-
-    public setComponentContextInstanceId(componentInstanceId: string, contextInstanceId: string): void {
-        this.componentContextMap[componentInstanceId] = contextInstanceId;
-    }
-
-    public getComponentContextInstanceId(componentInstanceId: string): string {
-        return this.componentContextMap[componentInstanceId];
     }
 
 }

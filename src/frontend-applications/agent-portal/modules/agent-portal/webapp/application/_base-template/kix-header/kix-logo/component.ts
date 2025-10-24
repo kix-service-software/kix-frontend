@@ -18,11 +18,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const logoLoadingOptions = new ObjectIconLoadingOptions('agent-portal-logo', 'agent-portal-logo');
         const icons = await KIXObjectService.loadObjects<ObjectIcon>(
             KIXObjectType.OBJECT_ICON, null, null, logoLoadingOptions
@@ -30,6 +32,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (icons && icons.length) {
             this.state.logoIcon = icons[0];
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

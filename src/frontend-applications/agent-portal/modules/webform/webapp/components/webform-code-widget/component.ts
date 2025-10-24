@@ -14,15 +14,18 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.context?.registerListener('webform-code-widget', {
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
@@ -46,7 +49,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'Translatable#Code';
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
+        super.onDestroy();
         this.context?.unregisterListener('webform-code-widget');
     }
 

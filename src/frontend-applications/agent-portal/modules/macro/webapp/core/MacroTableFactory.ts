@@ -27,7 +27,7 @@ export class MacroTableFactory extends TableFactory {
     public objectType: KIXObjectType | string = KIXObjectType.MACRO;
 
     public async createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextInstanceId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
 
@@ -35,7 +35,7 @@ export class MacroTableFactory extends TableFactory {
 
         const table = new Table(tableKey, tableConfiguration);
         table.setContentProvider(new MacroTableContentProvider(
-            table, objectIds, tableConfiguration.loadingOptions, contextId));
+            table, objectIds, tableConfiguration.loadingOptions, contextInstanceId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;

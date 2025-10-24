@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { Ticket } from '../../../model/Ticket';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -19,15 +18,18 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
         this.state.ticketId = Number(input.ticketId);
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Description', 'Translatable#Comment'
@@ -35,8 +37,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        WidgetService.getInstance().setWidgetType('ticket-description-widget', WidgetType.GROUP);
-        WidgetService.getInstance().setWidgetType('ticket-description-notes', WidgetType.GROUP);
+        this.context.widgetService.setWidgetType('ticket-description-widget', WidgetType.GROUP);
+        this.context.widgetService.setWidgetType('ticket-description-notes', WidgetType.GROUP);
 
         this.context?.registerListener('ticket-description-widget', {
             sidebarLeftToggled: (): void => { return; },
@@ -89,6 +91,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 content.style.maxHeight = 'unset';
             }
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

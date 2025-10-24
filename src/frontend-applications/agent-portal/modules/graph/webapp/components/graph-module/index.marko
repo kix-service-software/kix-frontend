@@ -7,6 +7,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.dashboard.graph>
-    <widget-container widgets=state.contentWidgets contextWidgetList="content"/>
+<div class="dashboard graph">
+    <widget-container
+        contextInstanceId=input.contextInstanceId
+        widgets=state.contentWidgets
+        contextWidgetList="content"/>
 </div>

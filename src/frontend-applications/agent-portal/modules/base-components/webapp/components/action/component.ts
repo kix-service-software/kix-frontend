@@ -9,21 +9,18 @@
 
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { EventService } from '../../core/EventService';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
-import { IdService } from '../../../../../model/IdService';
 
 class ActionComponent extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'action');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.action = input.action;
         this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
         this.update();
@@ -33,9 +30,8 @@ class ActionComponent extends AbstractMarkoComponent<ComponentState> {
         await super.onMount();
         this.update();
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (contextInstanceId: string, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (contextInstanceId: string, eventId: string): void {
                 if (this.context?.instanceId === contextInstanceId) {
                     if (this.state.lockTimeout) {
                         clearTimeout(this.state.lockTimeout);
@@ -47,16 +43,16 @@ class ActionComponent extends AbstractMarkoComponent<ComponentState> {
                         this.state.lockRunAction = true;
                     }
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(ApplicationEvent.LOCK_ACTIONS, this.subscriber);
-        EventService.getInstance().subscribe(ApplicationEvent.UNLOCK_ACTIONS, this.subscriber);
+            },
+            [
+                ApplicationEvent.LOCK_ACTIONS,
+                ApplicationEvent.UNLOCK_ACTIONS
+            ]
+        );
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ApplicationEvent.LOCK_ACTIONS, this.subscriber);
-        EventService.getInstance().unsubscribe(ApplicationEvent.UNLOCK_ACTIONS, this.subscriber);
+        super.onDestroy();
     }
 
     private async update(): Promise<void> {

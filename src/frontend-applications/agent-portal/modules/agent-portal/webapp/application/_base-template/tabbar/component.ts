@@ -9,7 +9,6 @@
 
 import { Context } from '../../../../../../model/Context';
 import { ContextType } from '../../../../../../model/ContextType';
-import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ApplicationEvent } from '../../../../../base-components/webapp/core/ApplicationEvent';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
@@ -17,22 +16,26 @@ import { ContextEvent } from '../../../../../base-components/webapp/core/Context
 import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { MobileShowEvent } from '../../../../model/MobileShowEvent';
 import { ComponentState } from './ComponentState';
 import { ContextTab } from './ContextTab';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'tabbar');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         this.initContextEventListener();
         await this.addContextTabs();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async addContextTabs(): Promise<void> {
@@ -43,9 +46,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private initContextEventListener(): void {
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('tabbar-menu-context-event'),
-            eventPublished: async (data: any, eventId: string): Promise<void> => {
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
                 if (eventId === ContextEvents.CONTEXT_CHANGED || eventId === ContextEvents.CONTEXT_CREATED) {
                     await this.addEntry(data, true);
                 } else if (eventId === ContextEvents.CONTEXT_REMOVED) {
@@ -81,35 +83,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 } else if (eventId === ApplicationEvent.REFRESH_CONTENT_FINISHED) {
                     this.state.blocked = false;
                 }
-
-            }
-        };
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CREATED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_ICON_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_REORDERED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvent.DISPLAY_VALUE_UPDATED, this.subscriber);
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, this.subscriber);
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT_FINISHED, this.subscriber);
-
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CREATED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_ICON_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REORDERED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvent.DISPLAY_VALUE_UPDATED, this.subscriber);
-        EventService.getInstance().unsubscribe(ApplicationEvent.REFRESH_CONTENT, this.subscriber);
-        EventService.getInstance().unsubscribe(ApplicationEvent.REFRESH_CONTENT_FINISHED, this.subscriber);
+            },
+            [
+                ContextEvents.CONTEXT_CREATED,
+                ContextEvents.CONTEXT_REMOVED,
+                ContextEvents.CONTEXT_UPDATE_REQUIRED,
+                ContextEvents.CONTEXT_CHANGED,
+                ContextEvents.CONTEXT_ICON_CHANGED,
+                ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED,
+                ContextEvents.CONTEXT_REORDERED,
+                ContextEvents.CONTEXT_PARAMETER_CHANGED,
+                ContextEvent.DISPLAY_VALUE_UPDATED,
+                ApplicationEvent.REFRESH_CONTENT,
+                ApplicationEvent.REFRESH_CONTENT_FINISHED
+            ]
+        );
     }
 
     private toggleActiveEntry(): void {
@@ -158,12 +146,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async refreshTab(tab: ContextTab, event: any): Promise<void> {
-        this.state.blocked = true;
-        await this.tabClicked(tab, event);
-        tab.refresh = false;
-        setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT, tab.contextInstanceId);
-        }, 500);
+        if (!this.state.blocked) {
+            await this.tabClicked(tab, event);
+            tab.refresh = false;
+            setTimeout(() => {
+                EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT, tab.contextInstanceId);
+            }, 500);
+        }
     }
 
     public canClose(): boolean {
@@ -297,6 +286,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const sourceInstanceId = event.dataTransfer.getData('text');
         ContextService.getInstance().reorderContext(sourceInstanceId, tab.contextInstanceId);
         this.state.dragOverInstanceId = null;
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

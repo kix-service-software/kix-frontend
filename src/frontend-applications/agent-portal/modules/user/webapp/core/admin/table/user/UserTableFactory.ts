@@ -31,7 +31,7 @@ export class UserTableFactory extends TableFactory {
 
     public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
+        contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
@@ -39,7 +39,7 @@ export class UserTableFactory extends TableFactory {
 
         table.setContentProvider(
             new UserTableContentProvider(
-                table, objectIds, tableConfiguration.loadingOptions, contextId
+                table, objectIds, tableConfiguration.loadingOptions, contextInstanceId
             )
         );
         table.setColumnConfiguration(tableConfiguration.tableColumns);

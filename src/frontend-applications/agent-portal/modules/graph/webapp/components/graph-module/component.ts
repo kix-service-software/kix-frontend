@@ -16,6 +16,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public state: ComponentState;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -26,6 +27,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareWidgets(): Promise<void> {
         this.state.contentWidgets = await this.context.getContent();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

@@ -8,6 +8,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId=state.instanceId
     contextType="MAIN"
     title=state.title
@@ -16,18 +17,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         state.widgetConfiguration && state.widgetConfiguration.icon
             ? state.widgetConfiguration.icon
             : ""
-    )
->
+    )>
     <@headerfilter>
         <filter
             filterCount=state.filterCount
             predefinedFilter=state.predefinedTableFilter
             predefinedFilterPlaceholder="Alle FAQ"
-            on-filter("filter")
-        />
+            on-filter("filter")/>
     </@headerfilter>
     <@content>
-        <div.faq-article-history-container>
+        <div class="faq-article-history-container">
             <if(state.table)>
                 <kix-table table=state.table/>
             </if>

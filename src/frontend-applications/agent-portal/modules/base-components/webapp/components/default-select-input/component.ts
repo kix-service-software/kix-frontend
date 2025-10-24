@@ -12,20 +12,17 @@ import { FormInputComponent } from '../../../../../modules/base-components/webap
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { DefaultSelectInputFormOption } from '../../../../../model/configuration/DefaultSelectInputFormOption';
 import { TreeNode, TreeService, TreeHandler } from '../../core/tree';
-import { EventService } from '../../core/EventService';
 import { FormEvent } from '../../core/FormEvent';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
 import { PlaceholderService } from '../../core/PlaceholderService';
 
 class Component extends FormInputComponent<string | number | string[] | number[], CompontentState> {
 
-    private formSubscriber: IEventSubscriber;
-
     // TODO: move to FormInstance/ValueHandler as universal solution for unique handling (possible values)
     private uniqueNodes: boolean;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'default-select-input');
         this.state = new CompontentState();
     }
 
@@ -45,6 +42,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         if (this.state.field && this.state.field?.options && !!this.state.field?.options) {
             const asMultiselectOption = this.state.field?.options.find(
                 (o) => o.option === DefaultSelectInputFormOption.MULTI
@@ -64,14 +65,12 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
 
         await this.load();
-        await super.onMount();
 
         if (this.uniqueNodes) {
-            this.formSubscriber = {
-                eventSubscriberId: this.state.field?.instanceId,
-                eventPublished: (data: any, eventId: string): void => {
+            super.registerEventSubscriber(
+                function (data: any, eventId: string): void {
                     if (
-                        this.uniqueNodes && eventId === FormEvent.VALUES_CHANGED &&
+                        this.uniqueNodes &&
                         data && (data as FormValuesChangedEventData).changedValues?.length
                     ) {
                         const samePropertyFieldChanged = (data as FormValuesChangedEventData).changedValues.some(
@@ -81,12 +80,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                             this.load();
                         }
                     }
-                }
-            };
-            EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+                },
+                [FormEvent.VALUES_CHANGED]
+            );
         }
-
-        this.state.prepared = true;
     }
 
     public async setPossibleValue(): Promise<void> {
@@ -96,9 +93,6 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     public async onDestroy(): Promise<void> {
         super.onDestroy();
         TreeService.getInstance().removeTreeHandler(this.state.treeId);
-        if (this.uniqueNodes) {
-            EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-        }
     }
 
     public async load(filterSelection?: boolean): Promise<void> {

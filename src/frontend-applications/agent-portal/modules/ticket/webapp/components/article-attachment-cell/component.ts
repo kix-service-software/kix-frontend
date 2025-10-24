@@ -19,11 +19,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private article: Article;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         const cell: Cell = input.cell;
         if (cell) {
             this.article = cell.getRow().getRowObject().getObject();
@@ -36,6 +38,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         return;
     }
 
@@ -62,6 +65,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

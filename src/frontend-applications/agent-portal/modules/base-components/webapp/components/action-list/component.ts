@@ -24,15 +24,10 @@ import { ActionFactory } from '../../core/ActionFactory';
 import { ActionGroup } from '../../../model/ActionGroup';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
-import { EventService } from '../../core/EventService';
 import { ContextEvents } from '../../core/ContextEvents';
 import { Context } from 'mocha';
-import { IdService } from '../../../../../model/IdService';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
-    private resizeTimeout: any = null;
-    private prepareTimeout: any;
     private observer: ResizeObserver;
     private actionList: IAction[];
     private actionsToShow: Array<ActionGroup | IAction>;
@@ -40,10 +35,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public listenerInstanceId: string;
     public fontSize: number;
     public expansionWidth: number;
-    private contextSubscriber: IEventSubscriber;
-    private observerTimeout: any;
+
+    private resizeTimeout: ReturnType<typeof setTimeout>;
+    private prepareTimeout: ReturnType<typeof setTimeout>;
+    private visibleTimeout: ReturnType<typeof setTimeout>;
+    private observerTimeout: ReturnType<typeof setTimeout>;
 
     public onCreate(input: any): void {
+        super.onCreate(input), 'action-list';
         this.state = new ComponentState();
         this.fontSize = BrowserUtil.getBrowserFontsize();
         this.expansionWidth = 3 * this.fontSize;
@@ -51,6 +50,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
         this.actionList = input.list || [];
         if (this.state.prepared && this.actionList.length) {
@@ -64,14 +64,26 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.actionsToShow = await ActionFactory.getActionList(this.actionList);
 
         if (this.listenerInstanceId) {
-            WidgetService.getInstance().registerActionListener({
-                listenerInstanceId: this.listenerInstanceId,
-                actionDataChanged: function (): void {
-                    (this as any).setStateDirty('listDefault');
-                    (this as any).setStateDirty('listExpansion');
-                }.bind(this),
-                actionsChanged: this.actionsChanged.bind(this)
-            });
+            if (this.context) {
+                this.context.widgetService.registerActionListener({
+                    listenerInstanceId: this.listenerInstanceId,
+                    actionDataChanged: function (): void {
+                        (this as any).setStateDirty('listDefault');
+                        (this as any).setStateDirty('listExpansion');
+                    }.bind(this),
+                    actionsChanged: this.actionsChanged.bind(this)
+                });
+            }
+            else {
+                WidgetService.getInstance().registerActionListener({
+                    listenerInstanceId: this.listenerInstanceId,
+                    actionDataChanged: function (): void {
+                        (this as any).setStateDirty('listDefault');
+                        (this as any).setStateDirty('listExpansion');
+                    }.bind(this),
+                    actionsChanged: this.actionsChanged.bind(this)
+                });
+            }
             await this.actionsChanged();
         } else if (this.actionsToShow.length) {
             this.prepareActionLists();
@@ -82,14 +94,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.observerTimeout = setTimeout(() => this.prepareObserver(), 150);
 
         if (this.context) {
-            this.contextSubscriber = {
-                eventSubscriberId: this.listenerInstanceId || IdService.generateDateBasedId('action-list-'),
-                eventPublished: function (data: Context, eventId: string): void {
-                    if (data?.instanceId === this.context.instanceId) {
+            super.registerEventSubscriber(
+                function (data: Context, eventId: string): void {
+                    if (data?.instanceId === this.context?.instanceId) {
                         if (!this.observer) {
                             this.observerTimeout = setTimeout(() => this.prepareObserver(), 150);
                         }
-                    } else {
+                    }
+                    else {
                         if (this.observerTimeout) {
                             clearTimeout(this.observerTimeout);
                             this.observerTimeout = undefined;
@@ -99,20 +111,23 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                             this.observer = undefined;
                         }
                     }
-                }.bind(this)
-            };
-            EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.contextSubscriber);
+                },
+                [ContextEvents.CONTEXT_CHANGED]
+            );
         }
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         if (this.observer) {
             this.observer.disconnect();
         }
 
-        WidgetService.getInstance().unregisterActionListener(this.listenerInstanceId);
-        if (this.contextSubscriber) {
-            EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.contextSubscriber);
+        if (this.context) {
+            this.context.widgetService.unregisterActionListener(this.listenerInstanceId);
+        }
+        else {
+            WidgetService.getInstance().unregisterActionListener(this.listenerInstanceId);
         }
     }
 
@@ -145,7 +160,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             });
 
             this.observer.observe(container);
-            this.observerTimeout = undefined;
+            this.observerTimeout = null;
         }
     }
 
@@ -155,8 +170,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public prepareActionLists(): void {
+        if (this.visibleTimeout) {
+            clearTimeout(this.visibleTimeout);
+            this.visibleTimeout = null;
+        }
         if (this.prepareTimeout) {
-            window.clearTimeout(this.prepareTimeout);
+            clearTimeout(this.prepareTimeout);
         }
 
         const actionListElement: HTMLElement = (this as any).getEl(this.state.key + '-action-list');
@@ -204,10 +223,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.actionPreparationRunning = false;
             }, 200);
         }
+        else {
+            this.visibleTimeout = setTimeout(this.prepareActionLists.bind(this), 200);
+        }
     }
 
     public async actionsChanged(): Promise<void> {
-        const actions = WidgetService.getInstance().getRegisteredActions(this.listenerInstanceId);
+        let actions;
+        if (this.context) {
+            actions = this.context.widgetService.getRegisteredActions(this.listenerInstanceId);
+        }
+        else {
+            actions = WidgetService.getInstance().getRegisteredActions(this.listenerInstanceId);
+        }
         if (actions) {
             this.actionList = actions[0];
             this.actionsToShow = await ActionFactory.getActionList(this.actionList);

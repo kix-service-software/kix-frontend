@@ -9,8 +9,6 @@
 
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { IdService } from '../../../../../model/IdService';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
@@ -22,18 +20,19 @@ import { TabContainerEvent } from '../../core/TabContainerEvent';
 import { TabContainerEventData } from '../../core/TabContainerEventData';
 import { ComponentState } from './ComponentState';
 
-class WidgetComponent extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
+class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
 
-    public eventSubscriberId: string;
     private clearMinimizedStateOnDestroy: boolean;
     private actions: IAction[];
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'widget');
         this.state = new ComponentState();
         this.clearMinimizedStateOnDestroy = input.clearMinimizedStateOnDestroy || false;
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
 
         this.state.widgetConfiguration = input.configuration;
@@ -44,9 +43,6 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> implements 
 
         this.state.closable = typeof input.closable !== 'undefined' ? input.closable : false;
         this.state.contextType = input.contextType;
-        this.eventSubscriberId = typeof input.eventSubscriberPrefix !== 'undefined'
-            ? input.eventSubscriberPrefix
-            : 'GeneralWidget';
         if (input.title) {
             this.setTitle(input.title);
         }
@@ -61,15 +57,20 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> implements 
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
+        if (this.context) {
+            this.state.widgetType = this.context.widgetService.getWidgetType(this.state.instanceId, this.context);
+        }
+        else {
+            this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
+        }
 
         // set before config (prevent await delay)
         if (this.state.widgetType === WidgetType.SIDEBAR) {
-            this.state.minimized = !this.context.isSidebarWidgetOpen(this.state.instanceId);
+            this.state.minimized = !this.context?.isSidebarWidgetOpen(this.state.instanceId);
         }
 
         if (!this.state.widgetConfiguration) {
-            const config = await this.context.getWidgetConfiguration(this.state.instanceId);
+            const config = await this.context?.getWidgetConfiguration(this.state.instanceId);
             this.state.widgetConfiguration = config;
         }
 
@@ -87,14 +88,18 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> implements 
         );
         this.state.actions = [...this.actions || [], ...additionalActions];
 
-
-        EventService.getInstance().subscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
-        EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TITLE, this);
+        super.registerEventSubscriber(
+            async function (data: TabContainerEventData, eventId: string): Promise<void> {
+                if (data.tabId === this.state.instanceId) {
+                    this.setTitle(data.title);
+                }
+            },
+            [TabContainerEvent.CHANGE_TITLE]
+        );
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
-        EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TITLE, this);
+        super.onDestroy();
         if (this.clearMinimizedStateOnDestroy) {
             ClientStorageService.deleteState(`${this.state.instanceId}-minimized`);
         }
@@ -166,7 +171,13 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> implements 
         }
 
         classes.push(this.getWidgetTypeClass(this.state.widgetType));
-        classes.push(WidgetService.getInstance().getWidgetClasses(this.state.instanceId));
+
+        if (this.context) {
+            classes.push(this.context.widgetService.getWidgetClasses(this.state.instanceId));
+        }
+        else {
+            classes.push(WidgetService.getInstance().getWidgetClasses(this.state.instanceId));
+        }
 
         return classes;
     }
@@ -208,17 +219,6 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> implements 
 
     public closeClicked(): void {
         (this as any).emit('closeWidget');
-    }
-
-    public async eventPublished(data: any, eventId: string): Promise<void> {
-        if (eventId === (this.eventSubscriberId + 'SetMinimizedToFalse')) {
-            this.state.minimized = false;
-        } else if (eventId === TabContainerEvent.CHANGE_TITLE) {
-            const changeData: TabContainerEventData = data;
-            if (changeData.tabId === this.state.instanceId) {
-                this.setTitle(changeData.title);
-            }
-        }
     }
 
     public headerMousedown(force: boolean = false, event: any): void {

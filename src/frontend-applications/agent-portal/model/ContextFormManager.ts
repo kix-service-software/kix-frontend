@@ -47,16 +47,15 @@ export class ContextFormManager {
 
     public constructor(protected context?: Context) {
         this.formSubscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: ObjectFormEventData | any, eventId: string): void => {
+            eventSubscriberId: IdService.generateDateBasedId('ContextFormManager'),
+            eventPublished: function (data: ObjectFormEventData | any, eventId: string): void {
                 if (eventId === FormEvent.VALUES_CHANGED) {
                     this.handleValueChanged(data.formInstance);
                 } else if ((data as ObjectFormEventData).contextInstanceId === this.context?.instanceId) {
                     this.handleValueChanged();
                 }
-            }
+            }.bind(this)
         };
-
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_CHANGED, this.formSubscriber);
     }

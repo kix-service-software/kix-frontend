@@ -9,16 +9,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.table)>
     <widget
+        contextInstanceId=input.contextInstanceId
         instanceId=state.instanceId
         title=state.title
-        contentActions=state.actions
-    >
+        contentActions=state.actions>
         <@content>
-            <div.organisation-filter>
+            <div class="organisation-filter">
                 <filter filterCount=state.filterCount on-filter("filter")/>
             </div>
             <kix-table table=state.table/>
         </@content>
     </widget>
 </if>
-<else><table-placeholder/></else>
+<else>
+    <table-placeholder/>
+</else>

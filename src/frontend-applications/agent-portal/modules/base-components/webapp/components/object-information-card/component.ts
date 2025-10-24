@@ -20,11 +20,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private config: ObjectInformationCardConfiguration;
     private widgetInstanceId: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (input.config) {
             this.config = JSON.parse(JSON.stringify(input.config));
         }
@@ -35,6 +37,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.initWidget();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async initWidget(): Promise<void> {

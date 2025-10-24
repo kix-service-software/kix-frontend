@@ -11,9 +11,7 @@ import { ComponentState } from './ComponentState';
 import * as Bowser from 'bowser';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { PortalNotificationService } from '../../../../portal-notification/webapp/core/PortalNotificationService';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { PortalNotificationEvent } from '../../../../portal-notification/model/PortalNotificationEvent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 import { AuthMethod } from '../../../../../model/AuthMethod';
 import { PasswordResetState } from '../../../../../model/PasswordResetState';
@@ -32,20 +30,19 @@ declare const window: Window;
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public state: ComponentState;
-
     private redirectUrl: string;
     private translations: Array<[string, string]>;
-    private subscriber: IEventSubscriber;
 
     private authMethods: AuthMethod[];
     private mfaConfig: MFAConfig;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'login-component');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.logout = input.logout;
         this.redirectUrl = input.redirectUrl;
         this.authMethods = input.authMethods || [];
@@ -57,18 +54,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         this.initTranslations();
         this.checkBrowser();
 
         this.state.loading = false;
 
-        this.subscriber = {
-            eventSubscriberId: 'login-component',
-            eventPublished: async (): Promise<void> => {
+        super.registerEventSubscriber(
+            async function (): Promise<void> {
                 this.state.notifications = await PortalNotificationService.getInstance().getPreLoginNotifications();
-            }
-        };
-        EventService.getInstance().subscribe(PortalNotificationEvent.PRE_LOGIN_NOTIFICATIONS_UPDATED, this.subscriber);
+            },
+            [PortalNotificationEvent.PRE_LOGIN_NOTIFICATIONS_UPDATED]
+        );
 
         if (this.authMethods?.length) {
             this.state.hasLogin = this.authMethods.some((am) => am.type === 'LOGIN');
@@ -98,9 +96,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(
-            PortalNotificationEvent.PRE_LOGIN_NOTIFICATIONS_UPDATED, this.subscriber
-        );
+        super.onDestroy();
     }
 
     private initTranslations(): void {

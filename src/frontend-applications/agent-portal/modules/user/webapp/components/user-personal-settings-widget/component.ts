@@ -21,16 +21,18 @@ import { Notification } from '../../../../notification/model/Notification';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        super.onMount();
+        await super.onMount();
         this.state.labelProvider = new UserLabelProvider();
 
         this.context?.registerListener('user-personal-settings-widget', {
@@ -99,6 +101,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

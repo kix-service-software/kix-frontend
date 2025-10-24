@@ -7,10 +7,7 @@
  * --
  */
 
-import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { BooleanFormValue } from '../../../../model/FormValues/BooleanFormValue';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
@@ -23,13 +20,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private bindingIds: string[];
     private formValue: BooleanFormValue;
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'inputs/checkbox-form-input');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;
@@ -63,9 +60,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.value = Boolean(this.formValue?.value);
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: ObjectFormEventData, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: ObjectFormEventData, eventId: string): void {
                 if (this.context?.instanceId === data.contextInstanceId) {
                     if (data.blocked) {
                         this.state.readonly = true;
@@ -73,14 +69,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         this.state.readonly = this.formValue.readonly;
                     }
                 }
-            }
-        };
-        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+            },
+            [ObjectFormEvent.BLOCK_FORM]
+        );
     }
 
     public onDestroy(): void {
+        super.onDestroy();
+
         this.formValue?.removePropertyBinding(this.bindingIds);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public valueChanged(value: string): void {

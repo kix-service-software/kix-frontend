@@ -47,31 +47,28 @@ export class ReportDefinitionFormService extends KIXObjectFormService {
         return ReportDefinitionFormService.INSTANCE;
     }
 
-    private subscriber: IEventSubscriber;
+    private readonly subscriber: IEventSubscriber;
 
     private constructor() {
         super();
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('ReportDefinitionFormService'),
-            eventPublished: (data: any, eventId: string): void => {
-                if (eventId === FormEvent.FIELD_EMPTY_STATE_CHANGED) {
-                    const field: FormFieldConfiguration = data.field;
-                    if (field && field.property === ReportDefinitionProperty.PARAMTER) {
-                        const formInstance: FormInstance = data.formInstance;
-                        if (field.empty) {
-                            field.empty = true;
-                            formInstance.addFieldChildren(field, [], true);
-                        } else {
-                            field.empty = false;
-                            ReportDefinitionFormCreator.createParameterFields(field, null, formInstance);
-                        }
+            eventPublished: function (data: any, eventId: string): void {
+                const field: FormFieldConfiguration = data.field;
+                if (field?.property === ReportDefinitionProperty.PARAMTER) {
+                    const formInstance: FormInstance = data.formInstance;
+                    if (field.empty) {
+                        field.empty = true;
+                        formInstance.addFieldChildren(field, [], true);
+                    } else {
+                        field.empty = false;
+                        ReportDefinitionFormCreator.createParameterFields(field, null, formInstance);
                     }
                 }
             }
         };
 
-        EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.subscriber);
         EventService.getInstance().subscribe(FormEvent.FIELD_EMPTY_STATE_CHANGED, this.subscriber);
     }
 

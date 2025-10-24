@@ -15,10 +15,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.cell = input.cell;
         this.update();
     }
@@ -48,6 +50,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

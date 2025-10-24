@@ -20,7 +20,8 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
 
     private timoutTimer: TimeoutTimer;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.timoutTimer = new TimeoutTimer();
     }
@@ -60,6 +61,10 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
     }
 
     public async setCurrentValue(): Promise<void> {
@@ -120,6 +125,10 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

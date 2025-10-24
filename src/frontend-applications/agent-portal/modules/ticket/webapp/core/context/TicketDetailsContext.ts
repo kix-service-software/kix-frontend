@@ -37,6 +37,8 @@ export class TicketDetailsContext extends Context {
     private unseenArticles: number[] = [];
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        await super.initContext(urlParams);
+
         this.articleLoader = new ArticleLoader(Number(this.objectId), this, false);
         this.articleDetailsLoader = new ArticleLoader(Number(this.objectId), this, true);
     }

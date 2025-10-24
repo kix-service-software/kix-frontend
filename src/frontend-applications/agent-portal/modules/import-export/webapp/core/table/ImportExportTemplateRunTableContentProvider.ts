@@ -11,7 +11,6 @@ import { TableContentProvider } from '../../../../table/webapp/core/TableContent
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ImportExportTemplateRun } from '../../../model/ImportExportTemplateRun';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
 
@@ -29,9 +28,8 @@ export class ImportExportTemplateRunTableContentProvider extends TableContentPro
     public async loadData(): Promise<Array<RowObject<ImportExportTemplateRun>>> {
         let objects = [];
         // first object id is template id
-        if (this.contextId && this.objectIds && this.objectIds[0]) {
-            const context = ContextService.getInstance().getActiveContext();
-            objects = context ? await context.getObjectList('RUNS_OF_TEMPLATE_' + this.objectIds[0]) : [];
+        if (this.table.isContextDependent() && this.objectIds?.[0]) {
+            objects = this.context ? await this.context.getObjectList('RUNS_OF_TEMPLATE_' + this.objectIds[0]) : [];
         }
         return await this.getRowObjects(objects);
     }

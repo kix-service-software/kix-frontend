@@ -9,9 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { IdService } from '../../../../../../model/IdService';
-import { WidgetService } from '../../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../../model/configuration/WidgetType';
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { FAQArticle } from '../../../../model/FAQArticle';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../../../modules/base-components/webapp/core/LabelService';
@@ -24,7 +22,6 @@ import { FAQArticleAttachmentLoadingOptions } from '../../../../model/FAQArticle
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
-import { Context } from '../../../../../../model/Context';
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
 import { FAQArticleHandler } from '../../../core/FAQArticleHandler';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
@@ -35,20 +32,20 @@ import { AbstractMarkoComponent } from '../../../../../base-components/webapp/co
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public eventSubscriberId: string = 'FAQContentComponent';
-
     private contextListenerId: string = null;
 
     public stars: Array<string | ObjectIcon> = [];
     public rating: number;
     private images: DisplayImageDescription[];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'faq-article-content-widget');
         this.state = new ComponentState();
         this.contextListenerId = IdService.generateDateBasedId('faq-content-widget');
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -59,7 +56,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Number of ratings'
         ]);
 
-        WidgetService.getInstance().setWidgetType('faq-article-group', WidgetType.GROUP);
+        this.context.widgetService.setWidgetType('faq-article-group', WidgetType.GROUP);
 
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
@@ -188,6 +185,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [attachment.ID], loadingOptions, faqArticleAttachmentOptions, silent
         ).catch(() => [] as Attachment[]);
         return attachments && attachments.length ? attachments[0] : null;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

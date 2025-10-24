@@ -7,10 +7,7 @@
  * --
  */
 
-import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
 import { ObjectFormHandler } from '../../../core/ObjectFormHandler';
@@ -21,9 +18,9 @@ declare const bootstrap: any;
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private formHandler: ObjectFormHandler;
-    private subscriber: IEventSubscriber;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-form/object-form-page-slider');
         this.state = new ComponentState();
     }
 
@@ -35,7 +32,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        await super.onMount(this.contextInstanceId);
+        await super.onMount();
 
         this.formHandler = await this.context.getFormManager().getObjectFormHandler();
 
@@ -44,25 +41,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.activePageIndex = this.state.pages?.findIndex((p) => p.id === this.formHandler.activePageId) || 0;
         this.state.prepared = true;
 
-
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
                 (this as any).setStateDirty('pages');
 
                 if (eventId === ObjectFormEvent.PAGE_ADDED) {
                     this.setPage(this.formHandler?.form?.pages?.length - 1);
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(ObjectFormEvent.PAGE_UPDATED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.PAGE_ADDED, this.subscriber);
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ObjectFormEvent.PAGE_UPDATED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.PAGE_ADDED, this.subscriber);
+            },
+            [
+                ObjectFormEvent.PAGE_UPDATED,
+                ObjectFormEvent.PAGE_ADDED
+            ]
+        );
     }
 
     private async update(): Promise<void> {
@@ -108,6 +99,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.setPage(index);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

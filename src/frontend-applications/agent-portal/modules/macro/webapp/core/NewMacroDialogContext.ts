@@ -18,6 +18,8 @@ export class NewMacroDialogContext extends Context {
     public static CONTEXT_ID: string = 'new-macro-dialog-context';
 
     public async initContext(): Promise<void> {
+        await super.initContext();
+
         const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
         if (formId) {
             const context = ContextService.getInstance().getActiveContext();

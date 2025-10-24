@@ -38,10 +38,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private step: SetupStep;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.step = input.step;
         this.state.completed = this.step ? this.step.completed : false;
     }
@@ -54,6 +56,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         await this.prepareForm();
         this.state.prepared = true;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async prepareForm(): Promise<void> {

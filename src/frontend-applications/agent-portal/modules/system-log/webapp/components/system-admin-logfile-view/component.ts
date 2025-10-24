@@ -27,7 +27,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private intervalId: number;
     private codeMirror: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -207,6 +208,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.loadLogFile();
             }, this.state.refreshInterval * 1000);
         }
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

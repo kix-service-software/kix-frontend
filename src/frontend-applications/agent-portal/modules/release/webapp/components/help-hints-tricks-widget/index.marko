@@ -7,7 +7,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget title=(state.translations["Translatable#Help, hints & tricks"])>
+<widget
+    contextInstanceId=input.contextInstanceId
+    title=(state.translations["Translatable#Help, hints & tricks"])>
     <@content>
         <div class="help-and-info-widget">
             <div>
@@ -16,8 +18,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         alt=(state.translations["Translatable#Field Agent App"])
                         src=state.baseRoute +
                         "/static/img/release/kix_field_agent_app.png"
-                        class="app-logo"
-                    >
+                        class="app-logo">
                     <h2>
                         <translation-string pattern="Translatable#Field Agent App"/>
                     </h2>
@@ -28,8 +29,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <div class="app-links">
                     <a
                         href="https://apps.apple.com/de/app/kix-field-agent/id1489588005"
-                        target="_blank"
-                    >
+                        target="_blank">
                         <img
                             alt=(
                                 state.translations[
@@ -38,13 +38,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             )
                             src=state.baseRoute +
                             "/static/img/release/" +
-                            state.appleImg
-                        >
+                            state.appleImg>
                     </a>
                     <a
                         href="https://play.google.com/store/apps/details?id=com.compl3te.fieldservices"
-                        target="_blank"
-                    >
+                        target="_blank">
                         <img
                             alt=(
                                 state.translations[
@@ -53,8 +51,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             )
                             src=state.baseRoute +
                             "/static/img/release/" +
-                            state.googleImg
-                        >
+                            state.googleImg>
                     </a>
                 </div>
             </div>
@@ -64,8 +61,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         alt=(state.translations["Translatable#Field Agent App"])
                         src=state.baseRoute +
                         "/static/img/release/community.svg"
-                        class="app-logo"
-                    >
+                        class="app-logo">
                     <h2>
                         <translation-string pattern="Translatable#Community"/>
                     </h2>
@@ -77,13 +73,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <a
                         href="https://www.youtube.com/watch?v=CqCNIvdhayo&list=PLyKz2PdXNlw3b13FZEPP9CcFMTFRvFQh-"
                         target="_blank"
-                        class="link-entry"
-                    >
+                        class="link-entry">
                         <img
                             alt=(state.translations["Translatable#Youtube"])
                             src=state.baseRoute +
-                            "/static/img/release/youtube.svg"
-                        >
+                            "/static/img/release/youtube.svg">
                         <span>
                             ${state.translations[
                                 "Translatable#Quick Start Guide"
@@ -93,13 +87,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <a
                         href="https://forum.kixdesk.com/"
                         target="_blank"
-                        class="link-entry"
-                    >
+                        class="link-entry">
                         <img
                             alt=(state.translations["Translatable#Forum"])
                             src=state.baseRoute +
-                            "/static/img/release/forum.svg"
-                        >
+                            "/static/img/release/forum.svg">
                         <span>
                             ${state.translations["Translatable#KIX Forum"]}
                         </span>
@@ -114,8 +106,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             alt=(state.translations["Translatable#Manuals"])
                             src=state.baseRoute +
                             "/static/img/release/manual.svg"
-                            class="app-logo"
-                        >
+                            class="app-logo">
                         <h2>
                             <translation-string pattern="Translatable#Manuals"/>
                         </h2>
@@ -128,8 +119,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <a
                                 href=state.userManualLink
                                 target="_blank"
-                                class="link-entry"
-                            >
+                                class="link-entry">
                                 <img
                                     alt=(
                                         state.translations[
@@ -137,8 +127,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         ]
                                     )
                                     src=state.baseRoute +
-                                    "/static/img/release/manual-user.svg"
-                                >
+                                    "/static/img/release/manual-user.svg">
                                 <span>
                                     ${state.translations[
                                         "Translatable#User Manual"
@@ -150,8 +139,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <a
                                 href=state.adminManualLink
                                 target="_blank"
-                                class="link-entry"
-                            >
+                                class="link-entry">
                                 <img
                                     alt=(
                                         state.translations[
@@ -159,8 +147,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         ]
                                     )
                                     src=state.baseRoute +
-                                    "/static/img/release/manual-admin.svg"
-                                >
+                                    "/static/img/release/manual-admin.svg">
                                 <span>
                                     ${state.translations[
                                         "Translatable#Admin Manual"
@@ -173,8 +160,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <a
                                 href=state.selfServiceManualLink
                                 target="_blank"
-                                class="link-entry"
-                            >
+                                class="link-entry">
                                 <img
                                     alt=(
                                         state.translations[
@@ -182,8 +168,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         ]
                                     )
                                     src=state.baseRoute +
-                                    "/static/img/release/selfserviceportal.svg"
-                                >
+                                    "/static/img/release/selfserviceportal.svg">
                                 <span>
                                     ${state.translations[
                                         "Translatable#Self Service Manual"

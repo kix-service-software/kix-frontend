@@ -8,18 +8,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId=state.instanceId
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions
-    icon=(state.widgetConfiguration ? state.widgetConfiguration.icon : null)
->
+    icon=(state.widgetConfiguration ? state.widgetConfiguration.icon : null)>
     <@content>
         <if(state.config)>
             <object-information-card
                 object=state.object
                 config=state.config
-                widgetInstanceId=state.instanceId
-            />
+                widgetInstanceId=state.instanceId/>
         </if>
     </@content>
 </widget>

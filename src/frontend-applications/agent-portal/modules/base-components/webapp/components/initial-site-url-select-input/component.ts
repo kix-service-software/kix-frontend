@@ -18,7 +18,8 @@ import { PersonalSettingsService } from '../../../../user/model/PersonalSettings
 
 class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -28,6 +29,12 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     public async onMount(): Promise<void> {
         await super.onMount(false);
+
+        this.state.prepared = true;
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
 
         const nodes = await PersonalSettingsService.getInitialURLSiteNodes();
 
@@ -42,8 +49,6 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         if (initialSelectedNode) {
             treeHandler.setSelection([initialSelectedNode], true);
         }
-
-        this.state.prepared = true;
     }
 
     public async setCurrentValue(): Promise<void> {
@@ -79,7 +84,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         super.provideValue(nodes[0]?.id);
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
+        super.onDestroy();
         TreeService.getInstance().removeTreeHandler(this.state.treeId);
     }
 

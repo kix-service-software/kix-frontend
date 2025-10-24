@@ -7,7 +7,6 @@
  * --
  */
 
-import { rejects } from 'node:assert';
 import { IdService } from '../../../../../model/IdService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
@@ -21,7 +20,7 @@ import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
 
 export class ObjectFormValidator {
 
-    private validators: ObjectFormValueValidator[];
+    private readonly validators: ObjectFormValueValidator[];
     private subscriber: IEventSubscriber;
 
     private enabled: boolean = true;
@@ -38,14 +37,13 @@ export class ObjectFormValidator {
     }
 
     private initValidator(): void {
-
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('ObjectFormValidator'),
-            eventPublished: (data: ObjectFormEventData, eventId, subscriberId?): void => {
+            eventPublished: function (data: ObjectFormEventData, eventId, subscriberId?): void {
                 if (data.contextInstanceId === this.objectFormValueMapper?.instanceId) {
                     this.validate(data.formValue);
                 }
-            }
+            }.bind(this)
         };
         EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_CHANGED, this.subscriber);
     }

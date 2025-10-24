@@ -7,9 +7,7 @@
  * --
  */
 
-import { Context } from 'vm';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ObjectFormValue } from '../../../model/FormValues/ObjectFormValue';
 import { FieldLayout } from '../../../model/layout/FieldLayout';
 import { FormLayout } from '../../../model/layout/FormLayout';
@@ -19,22 +17,21 @@ import { ConfigurationType } from '../../../../../model/configuration/Configurat
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormConfigurationObject } from '../../../model/FormConfigurationObject';
 import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
 import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
 import { GroupRowLayout } from './GroupRowLayout';
 import { RowColumnLayout } from '../../../model/layout/RowColumnLayout';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
+import { ObjectFormConfigurationContext } from '../../core/ObjectFormConfigurationContext';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private formhandler: ObjectFormHandler;
-    private subscriber: IEventSubscriber;
     private group: FormGroupConfiguration;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-form-group');
         this.state = new ComponentState();
     }
 
@@ -44,7 +41,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        await super.onMount(this.contextInstanceId);
+        await super.onMount();
+
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Edit Group', 'Translatable#Add Field'
         ]);
@@ -53,10 +51,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         await this.prepareRowLayout();
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('object-form-group'),
-            eventPublished: async (data: ObjectFormEventData, eventId: string): Promise<void> => {
-                if (this.context?.instanceId === data.contextInstanceId) {
+        super.registerEventSubscriber(
+            async function (data: ObjectFormEventData, eventId: string): Promise<void> {
+                if (this.contextInstanceId === data.contextInstanceId) {
                     if (data?.formConfigurationObject?.groupId === this.group.id) {
                         this.formhandler = await this.context?.getFormManager().getObjectFormHandler();
                         this.state.prepared = false;
@@ -64,22 +61,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         setTimeout(() => this.state.prepared = true, 0);
                     }
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(ObjectFormEvent.GROUP_UPDATED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.FIELD_REINITIALIZED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.FIELD_DELETED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.FIELD_ADDED, this.subscriber);
+            },
+            [
+                ObjectFormEvent.GROUP_UPDATED,
+                ObjectFormEvent.FIELD_REINITIALIZED,
+                ObjectFormEvent.FIELD_DELETED,
+                ObjectFormEvent.FIELD_ADDED
+            ]
+        );
 
         this.state.prepared = true;
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ObjectFormEvent.GROUP_UPDATED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.FIELD_REINITIALIZED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.FIELD_DELETED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.FIELD_ADDED, this.subscriber);
     }
 
     private async prepareRowLayout(): Promise<void> {
@@ -183,6 +174,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().publish(formEvent, configObject);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

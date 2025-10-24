@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { Webform } from '../../../model/Webform';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
@@ -22,12 +21,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private editorTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        WidgetService.getInstance().setWidgetType('web-form-code-group', WidgetType.GROUP);
+    public onInput(input: any): void {
+        super.onInput(input);
         const webform: Webform = input.webform;
         this.state.loading = true;
         if (this.editorTimeout) {
@@ -59,6 +59,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }, 500);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+        this.context.widgetService.setWidgetType('web-form-code-group', WidgetType.GROUP);
+    }
 }
 
 module.exports = Component;

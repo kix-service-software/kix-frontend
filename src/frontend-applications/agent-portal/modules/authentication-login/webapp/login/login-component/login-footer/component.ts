@@ -24,15 +24,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private translations: Map<string, string>;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: ComponentInput): void {
+        super.onInput(input);
         this.state.releaseInfo = input.releaseInfo;
         this.state.imprintLink = input.imprintLink;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.initTranslations();
         if (!this.state.releaseInfo) {
             this.state.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
@@ -60,6 +63,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private initTranslations(): void {

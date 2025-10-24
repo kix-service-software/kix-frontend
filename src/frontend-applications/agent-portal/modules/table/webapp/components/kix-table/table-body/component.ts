@@ -9,16 +9,12 @@
 
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { Table } from '../../../../model/Table';
 import { TableEvent } from '../../../../model/TableEvent';
 import { TableEventData } from '../../../../model/TableEventData';
 import { ComponentState } from './ComponentState';
 
-class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
-
-    public eventSubscriberId: string = 'table-body';
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public columnLength: number = 0;
     public selectionEnabled: boolean;
@@ -27,13 +23,14 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     private table: Table;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'kix-table/table-body');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (input.table) {
             const t: Table = input.table;
-            this.eventSubscriberId = 'table-body-' + t.getTableId();
             this.columnLength = t.getColumns().length;
             this.selectionEnabled = t.getTableConfiguration().enableSelection;
             this.toggleEnabled = t.getTableConfiguration().toggle;
@@ -42,33 +39,28 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async onMount(): Promise<void> {
-        EventService.getInstance().subscribe(TableEvent.REFRESH, this);
-        EventService.getInstance().subscribe(TableEvent.RERENDER_TABLE, this);
-        EventService.getInstance().subscribe(TableEvent.SORTED, this);
-        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this);
-        EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this);
-        EventService.getInstance().subscribe(TableEvent.RELOAD, this);
-        EventService.getInstance().subscribe(TableEvent.RELOADED, this);
+        await super.onMount();
+
+        super.registerEventSubscriber(
+            async function (data: TableEventData, eventId: string, subscriberId?: string): Promise<void> {
+                if (data.tableId === this.table?.getTableId()) {
+                    this.state.rows = this.table.getRows();
+                    this.prepareLoadMore();
+                }
+            },
+            [
+                TableEvent.REFRESH,
+                TableEvent.RERENDER_TABLE,
+                TableEvent.SORTED,
+                TableEvent.TABLE_FILTERED,
+                TableEvent.TABLE_INITIALIZED,
+                TableEvent.RELOAD,
+                TableEvent.RELOADED
+            ]
+        );
 
         this.state.rows = this.table.getRows();
         this.prepareLoadMore();
-    }
-
-    public async eventPublished(data: TableEventData, eventId: string, subscriberId?: string): Promise<void> {
-        if (this.table && data.tableId === this.table.getTableId()) {
-            this.state.rows = this.table.getRows();
-            this.prepareLoadMore();
-        }
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
-        EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this);
-        EventService.getInstance().unsubscribe(TableEvent.SORTED, this);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this);
-        EventService.getInstance().unsubscribe(TableEvent.RELOAD, this);
-        EventService.getInstance().unsubscribe(TableEvent.RELOADED, this);
     }
 
     private prepareLoadMore(): void {
@@ -109,6 +101,10 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 BrowserUtil.scrollIntoViewIfNeeded(loadMoreButton);
             }
         }, 20);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

@@ -38,6 +38,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private previewWindow: any;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.state.isSetup = typeof input.setup === 'undefined' ? false : input.setup;
     }
@@ -57,6 +58,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.step = input.step;
         this.state.completed = this.step ? this.step.completed : false;
     }
@@ -190,6 +192,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

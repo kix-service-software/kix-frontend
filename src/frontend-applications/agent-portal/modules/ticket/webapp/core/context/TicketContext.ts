@@ -171,7 +171,7 @@ export class TicketContext extends Context {
 
         const tickets = await KIXObjectService.loadObjects(
             KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined,
-            this.contextId + KIXObjectType.TICKET
+            this.instanceId + KIXObjectType.TICKET
         ).catch((error) => []);
 
         this.setObjectList(KIXObjectType.TICKET, tickets, silent);

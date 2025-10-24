@@ -21,7 +21,6 @@ import { OverlayType } from '../../../../../modules/base-components/webapp/core/
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { EventService } from '../../core/EventService';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { FormEvent } from '../../core/FormEvent';
 import { ContextFormManagerEvents } from '../../core/ContextFormManagerEvents';
 import { BrowserUtil } from '../../core/BrowserUtil';
@@ -34,9 +33,9 @@ class FormComponent extends AbstractMarkoComponent<ComponentState> {
     private changePageTimeout: any;
     private keyListenerElement: any;
     private keyListener: any;
-    private formSubscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'main-form');
         this.state = new ComponentState(input.formId);
     }
 
@@ -62,9 +61,8 @@ class FormComponent extends AbstractMarkoComponent<ComponentState> {
             }, 500);
         }
 
-        this.formSubscriber = {
-            eventSubscriberId: this.state.formId,
-            eventPublished: (data: any, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
                 if (eventId === ContextFormManagerEvents.FORM_INSTANCE_CHANGED) {
                     this.state.formInstance = null;
                     this.state.formId = null;
@@ -79,37 +77,28 @@ class FormComponent extends AbstractMarkoComponent<ComponentState> {
                     this.setNeeded();
                     (this as any).setStateDirty('formInstance');
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(ContextFormManagerEvents.FORM_INSTANCE_CHANGED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_PAGES_REMOVED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.GO_TO_INVALID_FIELD, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_PAGE_VALIDITY_CHANGED, this.formSubscriber);
+            },
+            [
+                ContextFormManagerEvents.FORM_INSTANCE_CHANGED,
+                FormEvent.FORM_FIELD_ORDER_CHANGED,
+                FormEvent.VALUES_CHANGED,
+                FormEvent.FIELD_CHILDREN_ADDED,
+                FormEvent.FIELD_REMOVED,
+                FormEvent.FORM_PAGE_ADDED,
+                FormEvent.FORM_PAGES_REMOVED,
+                FormEvent.GO_TO_INVALID_FIELD,
+                FormEvent.FORM_PAGE_VALIDITY_CHANGED
+            ]
+        );
 
         this.state.loading = false;
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         if (this.keyListenerElement) {
             this.keyListenerElement.removeEventListener('keydown', this.keyDown.bind(this));
         }
-
-        EventService.getInstance().unsubscribe(ContextFormManagerEvents.FORM_INSTANCE_CHANGED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_PAGES_REMOVED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.GO_TO_INVALID_FIELD, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_VALIDITY_CHANGED, this.formSubscriber);
-
     }
 
     public keyDown(event: any): void {
@@ -129,7 +118,7 @@ class FormComponent extends AbstractMarkoComponent<ComponentState> {
             this.setNeeded();
             this.state.objectType = this.state.formInstance.getObjectType();
             this.state.isSearchContext = this.state.formInstance.getFormContext() === FormContext.SEARCH;
-            WidgetService.getInstance().setWidgetType('form-group', WidgetType.GROUP);
+            this.context.widgetService.setWidgetType('form-group', WidgetType.GROUP);
 
             this.prepareMultiGroupHandling();
         }
@@ -291,6 +280,10 @@ class FormComponent extends AbstractMarkoComponent<ComponentState> {
             return this.state.formInstance.getForm().pages.filter((page) => page.valid);
         }
         return [];
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

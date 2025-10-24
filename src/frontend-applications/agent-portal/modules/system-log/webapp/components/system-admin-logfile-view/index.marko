@@ -7,7 +7,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget instanceId="system-admin-logfile-view" title=state.title>
+<widget
+    contextInstanceId=input.contextInstanceId
+    instanceId="system-admin-logfile-view"
+    title=state.title>
     <@content>
         <div class="logFileView">
             <if(state.prepared)>
@@ -21,8 +24,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             multiselect
                             placeholder=component.getString("Filter Log Level")
                             readonly=state.run
-                            on-nodesChanged("logLevelFilterChanged")
-                        />
+                            on-nodesChanged("logLevelFilterChanged")/>
                     </label>
                     <label>
                         <span class="field">
@@ -34,8 +36,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             value=state.tailCount
                             disabled=state.run
                             onChange("tailCountChanged")
-                            class="form-control"
-                        >
+                            class="form-control">
                     </label>
                     <label>
                         <span class="field">
@@ -47,8 +48,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             value=state.refreshInterval
                             disabled=state.run
                             onChange("refreshIntervalChanged")
-                            class="form-control"
-                        >
+                            class="form-control">
                     </label>
                     <label>
                         <span class="field">
@@ -58,8 +58,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             loadNodes=state.loadWrapLinesNodes
                             placeholder="Translatable#Wrap Lines"
                             readonly=state.run
-                            on-nodesChanged("wrapLinesChanged")
-                        />
+                            on-nodesChanged("wrapLinesChanged")/>
                     </label>
                     <label>
                         <span class="field">
@@ -71,8 +70,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             disabled=state.run
                             on-keydown("keydown")
                             onChange("filterChanged")
-                            class="form-control"
-                        >
+                            class="form-control">
                     </label>
                 </div>
             </if>

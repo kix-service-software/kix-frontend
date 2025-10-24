@@ -12,11 +12,27 @@ import { FormInputAction } from '../../../../../../modules/base-components/webap
 
 class Component extends AbstractMarkoComponent {
 
+    public onCreate(input: any): void {
+        super.onCreate(input);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
     public actionClicked(action: FormInputAction): void {
         action.active = !action.active;
         action.callback(action);
     }
 
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;
