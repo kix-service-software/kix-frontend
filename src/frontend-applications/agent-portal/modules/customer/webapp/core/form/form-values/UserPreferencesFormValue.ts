@@ -251,7 +251,13 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
         formValue.objectType = KIXObjectType.QUEUE;
         formValue.maxSelectCount = -1;
         formValue.loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null,
+            [
+                new FilterCriteria(
+                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                    FilterDataType.NUMERIC, FilterType.AND, 1
+                )
+            ],
+            null, null, null, null,
             [
                 [
                     'requiredPermission',
