@@ -103,7 +103,9 @@ export class ActionFactory<T extends AbstractAction> {
         const actions = [];
         for (const actionId of actionIds) {
             if (actionMap.has(actionId)) {
-                actions.push(actionMap.get(actionId));
+                const action = actionMap.get(actionId);
+                action.setData(data);
+                actions.push(action);
             } else if (this.actions.has(actionId) && !this.blacklist.some((a) => a === actionId)) {
                 const actionPrototype = this.actions.get(actionId);
                 const action = await this.createActionInstance(actionPrototype, actionId, data);
