@@ -14,6 +14,10 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { Role } from '../../../model/Role';
 import { BasePermission } from '../../../model/BasePermission';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { RoleProperty } from '../../../model/RoleProperty';
+import { DataType } from '../../../../../model/DataType';
+import { SortOrder } from '../../../../../model/SortOrder';
 
 export class BasePermissionManager extends AbstractDynamicFormManager {
 
@@ -31,7 +35,9 @@ export class BasePermissionManager extends AbstractDynamicFormManager {
         const roles = [];
         const roleObjects = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE);
         roleObjects.forEach((r) => roles.push([r.ID.toString(), r.Name]));
-        return roles;
+        return roles.sort((curr, next) => {
+            return SortUtil.compareString(curr[1], next[1], SortOrder.UP);
+        });
     }
 
     public async getPropertiesPlaceholder(): Promise<string> {
