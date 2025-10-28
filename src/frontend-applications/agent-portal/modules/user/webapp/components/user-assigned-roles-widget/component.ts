@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { User } from '../../../model/User';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
@@ -73,7 +72,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
         const table = await TableFactoryService.getInstance().createTable(
             IdService.generateDateBasedId('user-assigned-roles-'), KIXObjectType.ROLE, tableConfiguration, null,
-            this.contextInstanceId, true, undefined, false, true, true
+            this.contextInstanceId, true, undefined, false, true, true, null, true
         );
         this.state.table = table;
         this.prepareActions(user);
