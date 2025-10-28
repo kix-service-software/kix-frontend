@@ -71,7 +71,11 @@ export class ArticleViewUtil {
         }
 
         content = this.sanitizeContent(content);
-        content = this.buildHtmlStructur(content);
+
+        // ignore kix styling (not needed in placeholder context, where reduce is used)
+        if (!reduceContent) {
+            content = this.buildHtmlStructur(content);
+        }
         return content;
     }
 
@@ -210,12 +214,20 @@ export class ArticleViewUtil {
         }
 
         if (!isNaN(linesCount) && linesCount > 0) {
+
             // cut pre body html (only reduce "visible" content)
             let preBodyHTML = '';
             const closingHeadIndex = result.indexOf('</head>');
             if (closingHeadIndex !== -1) {
                 preBodyHTML = result.slice(0, closingHeadIndex + 7);
                 result = result.slice(closingHeadIndex + 7);
+            }
+
+            // cut also default kix style content
+            const closingStyleIndex = result.indexOf('</style>');
+            if (closingStyleIndex !== -1) {
+                preBodyHTML += result.slice(0, closingStyleIndex + 8);
+                result = result.slice(closingStyleIndex + 8);
             }
 
             const lines = result.split(/\n/);
