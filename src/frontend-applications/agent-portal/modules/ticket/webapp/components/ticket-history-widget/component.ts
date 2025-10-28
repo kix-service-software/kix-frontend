@@ -64,9 +64,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareTable(): Promise<void> {
         const table = await TableFactoryService.getInstance().createTable(
-            'ticket-history', KIXObjectType.TICKET_HISTORY, null, null, this.contextInstanceId
+            'ticket-history', KIXObjectType.TICKET_HISTORY, null, null, this.contextInstanceId,
+            undefined, undefined, undefined, undefined, undefined, undefined, true
         );
-
+        await table.initialize(true);
         this.state.table = table;
     }
 
