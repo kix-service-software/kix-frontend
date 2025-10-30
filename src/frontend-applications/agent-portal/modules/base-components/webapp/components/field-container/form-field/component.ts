@@ -63,6 +63,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             ? (hint.startsWith('Helptext_') ? null : hint)
             : null;
 
+        if (this.state.hint) {
+            // keep line breaks
+            this.state.hint = this.state.hint.replace(/\\n/g, '\n');
+        }
+
         const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const value = formInstance?.getFormFieldValue(this.state.field?.instanceId);
