@@ -546,11 +546,21 @@ export function createToolbar(editor: any): HTMLDivElement {
     const fontButton = fontDropdown.querySelector('.tiptap-font-dropdown-button') as HTMLButtonElement;
     fontButton.title = 'Font Family';
 
-    editor.on('transaction', () => {
-        const currentFont = editor.getAttributes('fontFamily')?.fontFamily ?? editor.storage.lastFontFamily ?? 'Arial';
-        editor.storage.lastFontFamily = currentFont;
-        fontButton.childNodes[0].textContent = currentFont;
-    });
+    function updateFontFamilyButtonLabel(): void {
+        const ts = editor.getAttributes('textStyle') || {};
+        const currentFont = ts.fontFamily ?? editor.storage.lastFontFamily ?? 'Arial';
+
+        if (fontButton && fontButton.childNodes[0]) {
+            (fontButton.childNodes[0] as any).textContent = currentFont;
+        }
+        (fontButton as HTMLButtonElement).style.fontFamily = currentFont;
+    }
+
+    editor.on('transaction', updateFontFamilyButtonLabel);
+    editor.on('selectionUpdate', updateFontFamilyButtonLabel);
+    editor.on('update', updateFontFamilyButtonLabel);
+
+    updateFontFamilyButtonLabel();
 
     // === Font Size ===
     const fontSizes = [
@@ -570,7 +580,7 @@ export function createToolbar(editor: any): HTMLDivElement {
     ];
 
     const fontSizeDropdown = createDropdown(
-        'Font Size',
+        '14px',
         fontSizes.map(({ label, size }) => ({
             label,
             action: (): void => {
@@ -593,7 +603,7 @@ export function createToolbar(editor: any): HTMLDivElement {
         const ts = editor.getAttributes('textStyle') || {};
         const fontSizeAttr = ts.fontSize ?? null;
 
-        let label = 'Font Size';
+        let label = '14px';
         if (fontSizeAttr) {
             const matched = fontSizes.find((f) => f.size === String(fontSizeAttr));
             label = matched?.label || `${fontSizeAttr}px`;
@@ -638,22 +648,25 @@ export function createToolbar(editor: any): HTMLDivElement {
 
     toolbar.appendChild(headingDropdown);
 
-    editor.on('transaction', () => {
+    function updateHeadingButtonLabel(): void {
         let currentLabel = 'Paragraph';
-
         for (let i = 1; i <= 6; i++) {
             if (editor.isActive('heading', { level: i })) {
                 currentLabel = `Heading ${i}`;
                 break;
             }
         }
+        if (editor.isActive('paragraph')) currentLabel = 'Paragraph';
 
-        if (editor.isActive('paragraph')) {
-            currentLabel = 'Paragraph';
+        if (headingButton && headingButton.childNodes[0]) {
+            (headingButton.childNodes[0] as any).textContent = currentLabel;
         }
+    }
 
-        headingButton.childNodes[0].textContent = currentLabel;
-    });
+    editor.on('transaction', updateHeadingButtonLabel);
+    editor.on('selectionUpdate', updateHeadingButtonLabel);
+    editor.on('update', updateHeadingButtonLabel);
+    updateHeadingButtonLabel();
 
     // === Table Dropdown ===
     const tableDropdown = createDropdown(
@@ -1076,68 +1089,53 @@ export function createToolbar(editor: any): HTMLDivElement {
         'fas fa-eraser',
         () => {
             const { state, view } = editor;
-            const { from, to } = state.selection;
-            const tr = state.tr;
+            const wantFamily = 'Arial';
+            const wantSize = '14';
 
-            const allMarkTypes = [
-                'bold', 'italic', 'underline', 'strike',
-                'link', 'highlight', 'fontSize', 'fontFamily', 'color'
-            ];
+            const stored: any[] = [];
+            const m = state.schema.marks as any;
 
-            allMarkTypes.forEach((mark) => {
-                if (state.schema.marks[mark]) {
-                    tr.removeMark(from, to, state.schema.marks[mark]);
-                }
-            });
+            if (m.textStyle) {
+                stored.push(
+                    m.textStyle.create({
+                        fontFamily: wantFamily,
+                        fontSize: wantSize,
+                    })
+                );
+            } else {
+                if (m.fontFamily) stored.push(m.fontFamily.create({ fontFamily: wantFamily }));
+                if (m.fontSize) stored.push(m.fontSize.create({ fontSize: wantSize }));
+            }
 
-            state.doc.nodesBetween(from, to, (node, pos) => {
-                if (node.isTextblock && node.attrs) {
-                    const newAttrs = { ...node.attrs, style: null, textAlign: null };
-                    tr.setNodeMarkup(pos, undefined, newAttrs);
-                }
-            });
-
-            tr.setStoredMarks([]);
+            const tr = state.tr.setStoredMarks(stored);
             view.dispatch(tr);
             view.focus();
 
-            editor.chain()
-                .focus()
-                .unsetColor()
-                .unsetHighlight()
-                .unsetFontSize()
-                .unsetAllMarks()
-                .run();
-
-            editor.chain().focus()
-                .setFontFamily('Arial')
-                .setFontSize('14')
-                .run();
-
-            editor.storage.lastFontFamily = 'Arial';
-            editor.storage.lastFontSize = null;
+            editor.storage.lastFontFamily = wantFamily;
+            editor.storage.lastFontSize = wantSize;
             editor.storage.lastFontColor = null;
-
-            const defaultSizeItem = toolbar.querySelector(
-                '.tiptap-fontsize-dropdown-menu .dropdown-item'
-            ) as HTMLElement;
-            if (defaultSizeItem && defaultSizeItem.textContent?.toLowerCase().includes('default')) {
-                defaultSizeItem.click();
-            }
+            editor.storage.lastHighlightColor = null;
+            editor.storage.lastBold = false;
+            editor.storage.lastItalic = false;
+            editor.storage.lastUnderline = false;
+            editor.storage.lastStrike = false;
+            skipNextFormatReapply = true;
 
             const highlightIcon = toolbar.querySelector('.highlight-icon') as HTMLElement;
-            if (highlightIcon) {
-                highlightIcon.style.backgroundColor = 'transparent';
-            }
+            if (highlightIcon) highlightIcon.style.backgroundColor = 'transparent';
 
-            const colorButton = toolbar.querySelector('.color-picker-wrapper') as HTMLElement;
-            if (colorButton) {
-                colorButton.style.backgroundColor = 'transparent';
-            }
+            const colorBtn = toolbar.querySelector('.color-picker-wrapper') as HTMLElement;
+            if (colorBtn) colorBtn.style.backgroundColor = 'transparent';
+
+            const fontBtn = toolbar.querySelector('.tiptap-font-dropdown-button') as HTMLElement;
+            if (fontBtn?.childNodes?.[0]) (fontBtn.childNodes[0] as any).textContent = wantFamily;
+
+            const fontSizeBtn = toolbar.querySelector('.tiptap-fontsize-dropdown-button') as HTMLElement;
+            if (fontSizeBtn?.childNodes?.[0]) (fontSizeBtn.childNodes[0] as any).textContent = `${wantSize}px`;
 
             updateActiveButtons();
         },
-        'Clear All Formatting'
+        'Plain typing (reset)'
     );
 
     toolbar.appendChild(clearFormattingButton);
