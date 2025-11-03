@@ -69,8 +69,13 @@ export function prepareHtmlForEmail(rawHtml: string): string {
                 );
             }
 
-            const inlineStyles = 'border-collapse: collapse; border-spacing: 0;';
-            return `<table class="${[...tableClasses, ...keptClasses].join(' ')}" cellpadding="6" cellspacing="0" width="100%" style="${inlineStyles}">${newInner}</table>`;
+            const inlineStyles =
+                'border-collapse: collapse; border-spacing: 0;' +
+                ' border: 0 !important; border-top: 0 !important;' +
+                ' border-right: 0 !important; border-bottom: 0 !important; border-left: 0 !important;' +
+                ' height: 0 !important;';
+
+            return `<table frame="void" rules="none" class="${[...tableClasses, ...keptClasses].join(' ')}" cellpadding="6" cellspacing="0" width="100%" height="0 !important" style="${inlineStyles}">${newInner}</table>`;
         }
     );
 
