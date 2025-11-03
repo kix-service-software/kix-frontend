@@ -58,9 +58,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             additionalInformation.push([`${KIXObjectType.CONFIG_ITEM}-ID`, [this.object.ConfigItemID]]);
         }
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context.contextId === OrganisationDetailsContext.CONTEXT_ID) {
-            additionalInformation.push([TicketProperty.ORGANISATION_ID, context.getObjectId()]);
+        if (this.context?.contextId === OrganisationDetailsContext.CONTEXT_ID) {
+            additionalInformation.push([TicketProperty.ORGANISATION_ID, this.context.getObjectId()]);
         }
 
         TicketDialogUtil.createTicket(null, null, null, null, additionalInformation);

@@ -145,8 +145,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async createReport(label: Label): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext() as ReportingContext;
-        if (context && this.definition) {
+        if (this.context && this.definition) {
             EventService.getInstance().publish(
                 ApplicationEvent.APP_LOADING, { loading: true, hint: 'Creating Report' }
             );
@@ -165,7 +164,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     );
                 });
 
-            await context.reloadObjectList(KIXObjectType.REPORT_DEFINITION);
+            await this.context.reloadObjectList(KIXObjectType.REPORT_DEFINITION);
 
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
         }

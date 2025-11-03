@@ -12,7 +12,6 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { SearchService } from '../../core/SearchService';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { SearchContext } from '../../core/SearchContext';
@@ -20,7 +19,7 @@ import { KIXModulesService } from '../../../../base-components/webapp/core/KIXMo
 
 declare const bootstrap: any;
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
     public loadedSearchId: string;
     private titleTimeout: any;
@@ -37,8 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Search Title'
         ]);
 
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        const cache = context?.getSearchCache();
+        const cache = this.context?.getSearchCache();
 
         // saved search?
         if (cache?.name) {
@@ -163,8 +161,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async saveSearch(id?: string): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        await context?.saveCache(id, this.state.name, this.state.share);
+        await this.context?.saveCache(id, this.state.name, this.state.share);
         BrowserUtil.openSuccessOverlay('Translatable#Search successfully saved.');
 
         EventService.getInstance().publish(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, context);

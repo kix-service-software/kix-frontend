@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { DisplayImageDescription } from '../../../../../modules/base-components/webapp/core/DisplayImageDescription';
 import { IdService } from '../../../../../model/IdService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ConfigItem } from '../../../model/ConfigItem';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -46,13 +45,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Large View'
         ]);
 
-        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         this.context?.registerListener(this.contextListenerId, {
             objectChanged: (id: string | number, object: ConfigItem, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONFIG_ITEM) {
-                    this.initWidget(context, object);
+                    this.initWidget(this.context, object);
                 }
             },
             sidebarRightToggled: (): void => { return; },
@@ -63,7 +61,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             additionalInformationChanged: (): void => { return; }
         });
 
-        await this.initWidget(context, await context.getObject<ConfigItem>());
+        await this.initWidget(this.context, await this.context?.getObject<ConfigItem>());
     }
 
     private async initWidget(context: Context, configItem?: ConfigItem): Promise<void> {

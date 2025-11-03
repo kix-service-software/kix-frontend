@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { Label } from '../../../../base-components/webapp/core/Label';
 import { ReportingContext } from '../../core/context/ReportingContext';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { ReportResult } from '../../../model/ReportResult';
@@ -24,7 +23,7 @@ import mimeTypes from 'mime-types';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
 import { Attachment } from '../../../../../model/kix/Attachment';
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractMarkoComponent<ComponentState, ReportingContext> {
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -45,14 +44,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         event?.stopPropagation();
         event?.preventDefault();
 
-        const context: ReportingContext = ContextService.getInstance().getActiveContext();
         const reportResult: ReportResult = (label.object as ReportResult);
 
-        const reports = await context.getObjectList<Report>(KIXObjectType.REPORT);
+        const reports = await this.context?.getObjectList<Report>(KIXObjectType.REPORT);
         const report: Report = reports?.find((r) => r.ObjectId === reportResult?.ReportID);
 
         if (report) {
-            const resultWithContent = await context.loadReportResultWithContent(reportResult.ReportID, reportResult.ID);
+            const resultWithContent = await this.context?.loadReportResultWithContent(
+                reportResult.ReportID, reportResult.ID
+            );
 
             let fileExtension = mimeTypes.extension(reportResult.ContentType);
             if (!fileExtension) {
@@ -65,7 +65,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const dateString = report.CreateTime?.replace(/-/g, '/');
             const currentDate = DateTimeUtil.format(new Date(dateString), 'yyyy-mm-dd_HHMMss');
 
-            const definitions = context.getFilteredObjectList<ReportDefinition>(KIXObjectType.REPORT_DEFINITION);
+            const definitions = this.context?.getFilteredObjectList<ReportDefinition>(KIXObjectType.REPORT_DEFINITION);
             const reportDefinition: ReportDefinition = definitions?.find((rd) => rd.ObjectId === report.DefinitionID);
             const fileName = `${reportDefinition?.Name || 'unknown'}_${currentDate}.${fileExtension}`;
 

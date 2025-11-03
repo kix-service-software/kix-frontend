@@ -29,7 +29,6 @@ import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
 import { User } from '../../../model/User';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -98,8 +97,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
 
-        const context = ContextService.getInstance().getActiveContext();
-        context?.getFormManager()?.setFormId(this.state.formId);
+        this.context?.getFormManager()?.setFormId(this.state.formId);
 
         setTimeout(() => this.initFormValues(form.id), 500);
     }
@@ -109,8 +107,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             .catch((): User[] => []);
 
         if (users && users.length) {
-            const context = ContextService.getInstance().getActiveContext();
-            const formInstance = await context?.getFormManager()?.getFormInstance();
+            const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
             formInstance.provideFormFieldValuesForProperties([
                 [UserProperty.USER_LOGIN, users[0].UserLogin]
@@ -119,8 +116,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);

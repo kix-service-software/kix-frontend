@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TimeoutTimer } from '../../../../base-components/webapp/core/TimeoutTimer';
 import { TicketService } from '../../core';
 
@@ -37,9 +36,8 @@ class Component extends FormInputComponent<Date, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        let date = new Date();
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        let date: Date;
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         if (value.value) {
             date = new Date(value.value);

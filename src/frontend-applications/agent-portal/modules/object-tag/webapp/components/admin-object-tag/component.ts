@@ -18,9 +18,7 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { ObjectTagProperty } from '../../../model/ObjectTagProperty';
-import { ObjectTagService } from '../../core/ObjectTagService';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { IdService } from '../../../../../model/IdService';
 import { QueueProperty } from '../../../../ticket/model/QueueProperty';
 import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
@@ -28,7 +26,6 @@ import { ObjectTagLink } from '../../../model/ObjectTagLink';
 import { ObjectTagLinkProperty } from '../../../model/ObjectTagLinkProperty';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
-import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { Table } from '../../../../table/model/Table';
 import { SysConfigOptionProperty } from '../../../../sysconfig/model/SysConfigOptionProperty';
@@ -54,7 +51,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async loadNodes(): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
-        nodes = ContextService.getInstance().getActiveContext<AdminContext>().getAdditionalInformation('tagNodes');
+        nodes = this.context?.getAdditionalInformation('tagNodes');
         this.nodes = nodes;
         return nodes;
     }
@@ -112,7 +109,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        ContextService.getInstance().getActiveContext().setAdditionalInformation('tagNodes', nodes);
+        this.context?.setAdditionalInformation('tagNodes', nodes);
 
         return null;
     }
