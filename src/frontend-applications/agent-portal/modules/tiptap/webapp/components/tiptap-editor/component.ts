@@ -74,7 +74,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     } catch { /* noop */ }
                 },
                 extensions: [
-                    Tiptap.StarterKit.configure({ bold: false }),
+                    Tiptap.StarterKit.configure({ bold: false, paragraph: false }),
                     Tiptap.TextStyle,
                     Tiptap.Color,
                     Tiptap.Underline,
@@ -310,7 +310,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         if (!inTextblock(comp.editor)) {
                             moveIntoNewParagraph(comp.editor);
                             applyLastUsedMarks(comp.editor);
-                            comp.editor.chain().focus().insertText(text).run();
+
+                            const chain: any = comp.editor.chain().focus();
+                            if (typeof chain.insertText === 'function') {
+                                chain.insertText(text).run();
+                            } else {
+                                chain.insertContent({ type: 'text', text }).run();
+                            }
                             return true;
                         }
                         return false;
@@ -421,13 +427,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         (function installEmptyDocDefaultReset(ed: any, toolbarEl: HTMLElement): void {
-            const normalizeToParagraphIfNeeded = (): void => {
+            const isOnlyEmptyParagraph = (): boolean => {
                 const doc = ed.state.doc;
-                const isParagraphOnly =
-                    doc.childCount === 1 && doc.firstChild?.type?.name === 'paragraph';
-                if (!isParagraphOnly) {
-                    ed.commands.setContent('<p></p>', false);
-                }
+                return (
+                    doc.childCount === 1 &&
+                    doc.firstChild?.type?.name === 'paragraph' &&
+                    doc.firstChild.content.size === 0
+                );
             };
 
             const setToolbarUIToDefaults = (): void => {
@@ -442,9 +448,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             };
 
             const ensureDefaultsIfEmpty = (): void => {
-                if (ed.getText().trim() !== '') return;
+                if (!isOnlyEmptyParagraph()) return;
 
-                normalizeToParagraphIfNeeded();
                 setPlainTypingDefaults(ed);
                 setToolbarUIToDefaults();
 
