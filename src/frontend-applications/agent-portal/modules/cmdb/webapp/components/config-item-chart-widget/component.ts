@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { ConfigItemChartWidgetConfiguration, ConfigItemChartFactory } from '../../core';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
@@ -34,10 +33,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const currentContext = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = currentContext
-            ? await currentContext.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'CMDB';
         this.cmdbChartConfiguration =
@@ -60,7 +56,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             });
 
             this.contextFilteredObjectListChanged(
-                KIXObjectType.CONFIG_ITEM, currentContext.getFilteredObjectList(KIXObjectType.CONFIG_ITEM)
+                KIXObjectType.CONFIG_ITEM, this.context?.getFilteredObjectList(KIXObjectType.CONFIG_ITEM)
             );
 
             super.registerEventSubscriber(

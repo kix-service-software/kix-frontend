@@ -13,7 +13,6 @@ import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { Context } from '../../../../../model/Context';
 
 export class Component extends AbstractMarkoComponent<ComponentState, TicketContext> {
@@ -93,9 +92,8 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketCont
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
 
-        const context = ContextService.getInstance().getActiveContext() as TicketContext;
-        context.setQueue(node.id);
-        context.setAdditionalInformation('STRUCTURE', this.getStructureInformation());
+        this.context.setQueue(node.id);
+        this.context.setAdditionalInformation('STRUCTURE', this.getStructureInformation());
     }
 
     private getStructureInformation(node: TreeNode = this.state.activeNode): string[] {
@@ -112,18 +110,12 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketCont
         this.state.activeNode = null;
         const allText = await TranslationService.translate('Translatable#All');
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof TicketContext) {
-            context.setQueue(null);
-        }
-        context.setAdditionalInformation('STRUCTURE', [allText]);
+        this.context.setQueue(null);
+        this.context.setAdditionalInformation('STRUCTURE', [allText]);
     }
 
     public async showMyTeams(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof TicketContext) {
-            context.setQueue(0);
-        }
+        this.context.setQueue(0);
     }
 
 

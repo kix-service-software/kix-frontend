@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
 import { TranslationService } from '../../core/TranslationService';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -24,7 +23,6 @@ import { FilterType } from '../../../../../model/FilterType';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { SortOrder } from '../../../../../model/SortOrder';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
@@ -100,11 +98,8 @@ class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
     }
 
     public search(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof AdminContext) {
-            context.setFilterValue(this.state.filterValue);
-            this.state.table.reload(true);
-        }
+        this.context.setFilterValue(this.state.filterValue);
+        this.state.table.reload(true);
     }
 
     public onDestroy(): void {

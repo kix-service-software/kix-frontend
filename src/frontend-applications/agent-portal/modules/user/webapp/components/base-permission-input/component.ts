@@ -12,7 +12,6 @@ import { FormInputComponent } from '../../../../base-components/webapp/core/Form
 import { IdService } from '../../../../../model/IdService';
 import { IDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { BasePermissionManager } from '../../core/admin/BasePermissionManager';
 import { PermissionDescription } from '../../../../../model/PermissionDescription';
 
@@ -83,8 +82,7 @@ class Component extends FormInputComponent<any[],
     }
 
     public async setCurrentNode(permissionManager: IDynamicFormManager): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
 
         if (value && Array.isArray(value.value)) {

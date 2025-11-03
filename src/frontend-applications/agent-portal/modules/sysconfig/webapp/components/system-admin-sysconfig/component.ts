@@ -26,7 +26,6 @@ import { SysConfigOption } from '../../../model/SysConfigOption';
 import { SysConfigOptionType } from '../../../model/SysConfigOptionType';
 import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { RowObject } from '../../../../table/model/RowObject';
 import { TableEvent } from '../../../../table/model/TableEvent';
@@ -35,7 +34,7 @@ import { TableValue } from '../../../../table/model/TableValue';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
 
     public filterValue: string;
 
@@ -56,8 +55,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#SysConfig']);
 
-        const context = ContextService.getInstance().getActiveContext<AdminContext>();
-        this.filterValue = context.filterValue;
+        this.filterValue = this.context.filterValue;
         this.search();
 
         this.state.prepared = true;
@@ -102,9 +100,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public search(): void {
         this.state.filterValue = this.filterValue;
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof AdminContext) {
-            context.setFilterValue(this.filterValue);
+        if (this.context instanceof AdminContext) {
+            this.context.setFilterValue(this.filterValue);
         }
 
         this.state.table.reload(true);

@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormContext } from '../../../../../model/configuration/FormContext';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormInstance } from '../../../../../modules/base-components/webapp/core/FormInstance';
@@ -63,19 +62,23 @@ class FormComponent extends AbstractMarkoComponent<ComponentState> {
 
         super.registerEventSubscriber(
             function (data: any, eventId: string): void {
-                if (eventId === ContextFormManagerEvents.FORM_INSTANCE_CHANGED) {
-                    this.state.formInstance = null;
-                    this.state.formId = null;
-                    setTimeout(() => this.prepareForm(), 20);
-                } if (eventId === FormEvent.GO_TO_INVALID_FIELD && data.formId === this.state.formId) {
-                    this.goToInvalidField();
-                }
-                if (eventId === FormEvent.FORM_PAGE_VALIDITY_CHANGED) {
-                    const targetPage = this.state.formInstance.getForm().pages.find((page) => page.id === data.pageId);
-                    targetPage.valid = data.valid;
-                } else {
-                    this.setNeeded();
-                    (this as any).setStateDirty('formInstance');
+                if (this.state.formInstance?.instanceId === data?.formInstance?.instanceId) {
+                    if (eventId === ContextFormManagerEvents.FORM_INSTANCE_CHANGED) {
+                        this.state.formInstance = null;
+                        this.state.formId = null;
+                        setTimeout(() => this.prepareForm(), 20);
+                    } if (eventId === FormEvent.GO_TO_INVALID_FIELD && data.formId === this.state.formId) {
+                        this.goToInvalidField();
+                    }
+                    if (eventId === FormEvent.FORM_PAGE_VALIDITY_CHANGED) {
+                        const targetPage = this.state.formInstance?.getForm()?.pages?.find(
+                            (page) => page.id === data.pageId
+                        );
+                        targetPage.valid = data.valid;
+                    } else {
+                        this.setNeeded();
+                        (this as any).setStateDirty('formInstance');
+                    }
                 }
             },
             [

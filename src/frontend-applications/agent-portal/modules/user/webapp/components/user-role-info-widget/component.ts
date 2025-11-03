@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { RoleLabelProvider } from '../../core/RoleLabelProvider';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Role } from '../../../model/Role';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -30,8 +29,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.state.labelProvider = new RoleLabelProvider();
-
-        const context = ContextService.getInstance().getActiveContext();
 
         this.context?.registerListener('user-role-info-widget', {
             sidebarRightToggled: (): void => { return; },
