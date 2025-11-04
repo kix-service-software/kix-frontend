@@ -12,6 +12,7 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Attachment } from '../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { HTMLUtil } from '../../../server/routes/HTMLUtil';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { InlineContent } from '../../base-components/webapp/core/InlineContent';
 import { SysConfigKey } from '../../sysconfig/model/SysConfigKey';
@@ -70,28 +71,13 @@ export class ArticleViewUtil {
             }
         }
 
-        content = this.sanitizeContent(content);
+        content = HTMLUtil.sanitizeContent(content);
 
         // ignore kix styling (not needed in placeholder context, where reduce is used)
         if (!reduceContent) {
-            content = this.buildHtmlStructur(content);
+            content = HTMLUtil.buildHtmlStructur(content, [Article.MAIL_STYLE]);
         }
         return content;
-    }
-
-    private static buildHtmlStructur(content: string): string {
-        return `
-                <html>
-                    <head>
-                        <link rel="stylesheet" href="/static/applications/application/lasso-less.css"/>
-                        <link rel="stylesheet" href="/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css"/>
-                        ${Article.MAIL_STYLE}
-                    </head>
-                    <body>
-                        ${content}
-                    </body>
-                </html>
-            `;
     }
 
     private static async getHTMLContent(
@@ -176,27 +162,6 @@ export class ArticleViewUtil {
             }
         }
         return newString;
-    }
-
-    public static sanitizeContent(content: string): string {
-        try {
-            const { JSDOM } = require('jsdom');
-            const window = new JSDOM('').window;
-
-            const createDOMPurify = require('dompurify');
-            const DOMPurify = createDOMPurify(window);
-            const cleanHTML = DOMPurify.sanitize(
-                content,
-                {
-                    USE_PROFILES: { html: true },
-                    ADD_TAGS: ['style']
-                }
-            );
-
-            return cleanHTML;
-        } catch (e) {
-            LoggingService.getInstance().error(e);
-        }
     }
 
     public static async reduceContent(result: string, linesCount?: number): Promise<string> {

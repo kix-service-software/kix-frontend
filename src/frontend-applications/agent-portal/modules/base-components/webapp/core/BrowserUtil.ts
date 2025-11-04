@@ -31,6 +31,7 @@ import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigServic
 import { DefaultColorConfiguration } from '../../../../model/configuration/DefaultColorConfiguration';
 import { ModalSettings } from '../../../toast/model/ModalSettings';
 import DOMPurify from 'dompurify';
+import { ClientStorageService } from './ClientStorageService';
 
 export class BrowserUtil {
 
@@ -599,19 +600,28 @@ export class BrowserUtil {
         htmlDocument.head.appendChild(bootstrapLink);
     }
 
-    public static buildHtmlStructur(html: string): string {
-        const cleanHTML = DOMPurify.sanitize(html);
-        return `
-            <html>
-                <head>
-                    <link rel="stylesheet" href="/static/applications/application/lasso-less.css"/>
-                    <link rel="stylesheet" href="/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css"/>
-                </head>
-                <body>
-                    ${cleanHTML}
-                </body>
-            </html>
-        `;
+    public static async buildHtmlStructur(html: string): Promise<string> {
+        const applicationUrl = ClientStorageService.getApplicationUrl();
+        const url = `${applicationUrl}/sanitize-html`;
+
+        const body = { html };
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (response.status === 201) {
+            const result = await response.json();
+            html = result?.html || '';
+        } else {
+            const errorMessage = 'API Error - Sanitize HTML';
+            throw errorMessage;
+        }
+
+        return html;
     }
 
     public static getCurrentContentScrollPosition(): number {
