@@ -13,7 +13,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
+        if (Array.isArray(input.sanboxAttributes)) {
+            for (const attribute of input.sanboxAttributes) {
+                if (!this.state.sandboxAttributes.some((a) => a === attribute)) {
+                    this.state.sandboxAttributes.push(attribute);
+                }
+            }
+        }
+
         this.prepareContent(input.html);
+
         this.state.calculateHeight = input.calculateHeight;
     }
 
@@ -30,10 +39,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             clearTimeout(this.updateTimeout);
         }
 
-        this.updateTimeout = setTimeout(() => {
+        this.updateTimeout = setTimeout(async () => {
             const iframe: any = document.getElementById(`${this.state.frameId}`);
             if (iframe) {
-                iframe.srcdoc = BrowserUtil.buildHtmlStructur(html);
+                iframe.srcdoc = await BrowserUtil.buildHtmlStructur(html);
             }
         }, 150);
     }

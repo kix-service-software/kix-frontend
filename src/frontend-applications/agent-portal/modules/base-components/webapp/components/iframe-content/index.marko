@@ -6,5 +6,5 @@
             "h-100": !state.calculateHeight,
         },
     ]
-    sandbox="allow-same-origin allow-same-site-none-cookies"
+    sandbox=state.sandboxAttributes.join(" ")
     on-load("viewLoaded")/>
