@@ -164,7 +164,7 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
         await this.context?.saveCache(id, this.state.name, this.state.share);
         BrowserUtil.openSuccessOverlay('Translatable#Search successfully saved.');
 
-        EventService.getInstance().publish(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, context);
+        EventService.getInstance().publish(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.context);
 
         (this as any).emit('closeOverlay');
     }
