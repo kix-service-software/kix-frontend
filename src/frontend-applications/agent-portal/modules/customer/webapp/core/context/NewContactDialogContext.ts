@@ -65,7 +65,7 @@ export class NewContactDialogContext extends Context {
                 delete contact.ID;
                 delete contact.User?.UserID;
                 delete contact.AssignedUserID;
-                delete contact.User.UserLogin;
+                delete contact.User?.UserLogin;
                 delete contact.Email;
                 delete contact.Email1;
                 delete contact.Email2;
