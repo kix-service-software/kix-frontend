@@ -32,7 +32,7 @@ export class OAuth2ProfileTableFactory extends TableFactory {
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         table.setContentProvider(new OAuth2ProfileTableContentProvider(
             table, objectIds, tableConfiguration.loadingOptions, contextInstanceId

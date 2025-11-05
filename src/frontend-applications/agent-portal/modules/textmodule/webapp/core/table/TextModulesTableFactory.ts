@@ -34,7 +34,7 @@ export class TextModulesTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short
         );
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         table.setContentProvider(new TextModulesTableContentProvider(table, objectIds, null, contextInstanceId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);

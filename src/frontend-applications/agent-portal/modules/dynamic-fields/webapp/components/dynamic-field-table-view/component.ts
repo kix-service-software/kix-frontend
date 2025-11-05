@@ -57,7 +57,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 return column;
             });
 
-            const table = new Table(IdService.generateDateBasedId('dynamic-field-table'), tableConfiguration);
+            const table = new Table(IdService.generateDateBasedId('dynamic-field-table'), tableConfiguration, this.context?.instanceId);
             table.setContentProvider(new DFTableContentProvider(table, columns, this.tableValues));
             table.setColumnConfiguration(tableConfiguration.tableColumns);
             this.state.table = table;

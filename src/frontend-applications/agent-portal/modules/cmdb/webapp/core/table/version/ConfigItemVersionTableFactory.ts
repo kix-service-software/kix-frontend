@@ -30,7 +30,7 @@ export class ConfigItemVersionTableFactory extends TableFactory {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         const contentProvider = new ConfigItemVersionContentProvider(table, null, null, contextInstanceId);
 

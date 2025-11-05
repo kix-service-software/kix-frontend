@@ -31,7 +31,7 @@ export class SysConfigTableFactory extends TableFactory {
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         table.setContentProvider(new SysConfigTableContentProvider(
             table, objectIds, tableConfiguration.loadingOptions, contextInstanceId

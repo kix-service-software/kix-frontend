@@ -33,7 +33,7 @@ export class JobRunHistoryTableFactory extends TableFactory {
         const jobId = context?.getObjectId();
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         table.setContentProvider(
             new JobRunHistoryContentProvider(

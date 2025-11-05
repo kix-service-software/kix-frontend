@@ -31,7 +31,7 @@ export class CompareConfigItemVersionTableFactory extends TableFactory {
 
         tableConfiguration = await this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         const contentProvider = new CompareConfigItemVersionTableContentProvider(table, null, null, contextInstanceId);
 
