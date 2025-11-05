@@ -39,7 +39,7 @@ export class ArticleTableFactory extends TableFactory {
             tableConfiguration, defaultRouting, defaultToggle, short
         );
 
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         const contentProvider = new ArticleTableContentProvider(table, null, null, contextInstanceId);
 

@@ -27,7 +27,7 @@ export class TicketHistoryTableFactory extends TableFactory {
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         table.setContentProvider(new TicketHistoryContentProvider(table, null, null, contextInstanceId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);

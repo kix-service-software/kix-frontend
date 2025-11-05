@@ -34,7 +34,7 @@ export class TicketStateTableFactory extends TableFactory {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
         table.setContentProvider(new TicketStateTableContentProvider(table, objectIds, null, contextInstanceId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 

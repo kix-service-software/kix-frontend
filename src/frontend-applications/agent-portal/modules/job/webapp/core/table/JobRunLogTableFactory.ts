@@ -31,7 +31,7 @@ export class JobRunLogTableFactory extends TableFactory {
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration);
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         table.setContentProvider(new JobRunLogContentProvider(objects as JobRunLog[], table));
         table.setColumnConfiguration(tableConfiguration.tableColumns);

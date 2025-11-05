@@ -31,7 +31,7 @@ export class LogFileTableFactory extends TableFactory {
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        const table = new Table(LogFileTableFactory.TABLE_ID, tableConfiguration);
+        const table = new Table(LogFileTableFactory.TABLE_ID, tableConfiguration, contextInstanceId);
 
         table.setContentProvider(
             new LogFileTableContentProvider(table, objectIds, null, contextInstanceId)

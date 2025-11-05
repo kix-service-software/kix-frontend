@@ -33,7 +33,7 @@ export class MacroTableFactory extends TableFactory {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
         table.setContentProvider(new MacroTableContentProvider(
             table, objectIds, tableConfiguration.loadingOptions, contextInstanceId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);

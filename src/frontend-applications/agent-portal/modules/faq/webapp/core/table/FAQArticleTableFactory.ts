@@ -40,7 +40,7 @@ export class FAQArticleTableFactory extends TableFactory {
             tableConfiguration, defaultRouting, defaultToggle, short
         );
 
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
         const contentProvider = new FAQArticleTableContentProvider(
             table, objectIds, tableConfiguration.loadingOptions, contextInstanceId, objects
         );
