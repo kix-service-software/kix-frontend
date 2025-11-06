@@ -40,6 +40,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, SearchCont
 
         super.registerEventSubscriber(
             function (data: any, eventId: string): void {
+                if (data.instanceId !== this.contextInstanceId) return;
                 if (eventId === SearchEvent.SEARCH_CACHE_CHANGED) {
                     this.setActiveNode();
                 } else {
@@ -99,9 +100,9 @@ export class Component extends AbstractMarkoComponent<ComponentState, SearchCont
         this.context.setSearchCache(node.id);
         this.context.setSearchResult([]);
 
-        EventService.getInstance().publish(SearchEvent.SHOW_CRITERIA);
+        EventService.getInstance().publish(SearchEvent.SHOW_CRITERIA, { instanceId: this.contextInstanceId });
         if ((this.context.getConfiguration() as SearchContextConfiguration).enableSidebarAutoSearch) {
-            EventService.getInstance().publish(SearchEvent.CALL_SEARCH);
+            EventService.getInstance().publish(SearchEvent.CALL_SEARCH, { instanceId: this.contextInstanceId });
         }
     }
 
