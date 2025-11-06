@@ -100,7 +100,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async setToggleActions(): Promise<void> {
         let actions = this.toggleOptions && this.state.row
             ? await ActionFactory.getInstance().generateActions(
-                this.toggleOptions.actions, [this.state.row.getRowObject().getObject()]
+                this.toggleOptions.actions, [this.state.row.getRowObject().getObject()],
+                this.context?.instanceId
             )
             : [];
 

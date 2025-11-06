@@ -8,12 +8,10 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
 import { Job } from '../../../model/Job';
-import { JobDetailsContext } from '../../core/context/JobDetailsContext';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -62,7 +60,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(job: Job): Promise<void> {
         if (this.state.widgetConfiguration && job) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [job]
+                this.state.widgetConfiguration.actions, [job], this.contextInstanceId
             );
         }
     }

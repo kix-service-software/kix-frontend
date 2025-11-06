@@ -89,7 +89,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(user: User): Promise<void> {
         if (this.state.widgetConfiguration && user) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [user]
+                this.state.widgetConfiguration.actions, [user], this.contextInstanceId
             );
         }
     }

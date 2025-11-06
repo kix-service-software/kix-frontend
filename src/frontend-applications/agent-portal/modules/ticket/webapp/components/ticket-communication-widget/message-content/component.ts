@@ -329,7 +329,9 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     }
 
     private async prepareActions(article: Article = this.state.article): Promise<void> {
-        this.state.actions = await this.context?.articleLoader?.prepareArticleActions(article);
+        this.state.actions = await this.context?.articleLoader?.prepareArticleActions(
+            article, this.context?.instanceId
+        );
     }
 
     private saveArticleToggleState(): void {

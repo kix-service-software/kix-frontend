@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { SearchService } from '../../core/SearchService';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
@@ -19,7 +18,6 @@ import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { TreeHandler, TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
-import { SearchFormManager } from '../../../../base-components/webapp/core/SearchFormManager';
 import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
 import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
@@ -206,7 +204,8 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
     private async prepareActions(): Promise<void> {
         this.state.contentActions = await ActionFactory.getInstance().generateActions(
-            ['save-search-action', 'save-user-default-search-action', 'delete-search-action']
+            ['save-search-action', 'save-user-default-search-action', 'delete-search-action'], null,
+            this.context?.instanceId
         );
     }
 

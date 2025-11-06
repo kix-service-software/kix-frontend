@@ -181,7 +181,7 @@ class OverlayComponent extends AbstractMarkoComponent {
             const widgetConfiguration = await this.context?.getWidgetConfiguration(widgetInstanceId);
             if (widgetConfiguration) {
                 this.state.actions = await ActionFactory.getInstance().generateActions(
-                    widgetConfiguration.actions, this.state.content.getActionObject()
+                    widgetConfiguration.actions, this.state.content.getActionObject(), this.contextInstanceId
                 );
                 this.context.widgetService.registerActions(this.state.overlayInstanceId, this.state.actions, false);
                 this.state.title = widgetConfiguration.title || this.state.title;

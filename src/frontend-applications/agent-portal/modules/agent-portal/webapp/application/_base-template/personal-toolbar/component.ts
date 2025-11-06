@@ -116,7 +116,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async actionClicked(action: ToolbarAction): Promise<void> {
-        const actions = await ActionFactory.getInstance().generateActions([action.actionId], action.actionData);
+        const actions = await ActionFactory.getInstance().generateActions(
+            [action.actionId], action.actionData, this.contextInstanceId
+        );
         if (actions && actions.length) {
             const showTicketsAction = actions[0] as ShowUserTicketsAction;
             showTicketsAction.setText(action.title);

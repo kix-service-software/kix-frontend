@@ -73,7 +73,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.notification) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.notification]
+                this.state.widgetConfiguration.actions, [this.state.notification], this.contextInstanceId
             );
         }
     }

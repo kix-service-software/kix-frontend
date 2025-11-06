@@ -8,7 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { FAQDetailsContext } from '../../../core/context/FAQDetailsContext';
 import { FAQArticle } from '../../../../model/FAQArticle';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -59,7 +58,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(faqArticle: FAQArticle): Promise<void> {
         if (this.state.widgetConfiguration && faqArticle) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [faqArticle]
+                this.state.widgetConfiguration.actions, [faqArticle], this.contextInstanceId
             );
         }
     }

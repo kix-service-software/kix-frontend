@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Role } from '../../../model/Role';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
@@ -102,7 +101,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(role: Role): Promise<void> {
         if (this.state.widgetConfiguration && role) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [role]
+                this.state.widgetConfiguration.actions, [role], this.contextInstanceId
             );
         }
     }

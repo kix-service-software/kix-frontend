@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { FAQCategoryLabelProvider } from '../../../../core';
 import { AbstractMarkoComponent } from '../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
 import { FAQCategory } from '../../../../../model/FAQCategory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -56,7 +55,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.faqCategory) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.faqCategory]
+                this.state.widgetConfiguration.actions, [this.state.faqCategory], this.contextInstanceId
             );
         }
     }

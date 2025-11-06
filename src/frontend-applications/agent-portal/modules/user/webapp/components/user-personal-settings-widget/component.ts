@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { UserLabelProvider } from '../../core/UserLabelProvider';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { User } from '../../../model/User';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -63,7 +62,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(user: User): Promise<void> {
         if (this.state.widgetConfiguration && user) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [user]
+                this.state.widgetConfiguration.actions, [user], this.contextInstanceId
             );
         }
     }

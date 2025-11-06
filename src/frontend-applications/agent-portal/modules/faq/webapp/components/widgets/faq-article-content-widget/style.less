@@ -1,0 +1,31 @@
+.faq-rating {
+    height: @default-widget-header-height;
+    line-height: @default-widget-header-height;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    align-content: center;
+
+    >span:first-child {
+        font-weight: bold;
+        margin-right: @margin-small;
+    }
+
+    >span:last-child {
+        color: @primary-2;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+        grid-column-gap: 0.25rem;
+        align-content: center;
+    }
+
+    margin-bottom: 1rem;
+}
+
+.faq-attachments {
+    >span {
+        font-weight: bold;
+        display: block;
+    }
+}

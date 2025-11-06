@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { FAQContext } from '../../../core/context/FAQContext';
 import { KIXObjectPropertyFilter } from '../../../../../../model/KIXObjectPropertyFilter';
 import { UIFilterCriterion } from '../../../../../../model/UIFilterCriterion';
-import { WidgetService } from '../../../../../../modules/base-components/webapp/core/WidgetService';
 import { TableFactoryService } from '../../../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObject } from '../../../../../../model/kix/KIXObject';
 import { ServiceRegistry } from '../../../../../../modules/base-components/webapp/core/ServiceRegistry';
@@ -86,7 +85,7 @@ class Component extends AbstractMarkoComponent<ComponentState, FAQContext> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, null
+                this.state.widgetConfiguration.actions, null, this.contextInstanceId
             );
         }
         this.context.widgetService.registerActions(this.state.instanceId, this.state.actions);

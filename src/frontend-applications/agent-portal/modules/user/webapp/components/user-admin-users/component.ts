@@ -12,7 +12,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
-import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
@@ -49,7 +48,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 'user-admin-user-create-action',
                 'csv-export-action',
                 'reset-user-context-widget-list'
-            ], this.state.table
+            ], this.state.table, this.context?.instanceId
         );
         this.context.widgetService.registerActions(this.state.instanceId, actions);
 

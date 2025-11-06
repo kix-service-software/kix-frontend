@@ -23,7 +23,7 @@ import { ComponentState } from './ComponentState';
 class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
 
     private clearMinimizedStateOnDestroy: boolean;
-    private actions: IAction[];
+    private additionalActions: IAction[] = [];
 
     public onCreate(input: any): void {
         super.onCreate(input, 'widget');
@@ -47,7 +47,7 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
             this.setTitle(input.title);
         }
 
-        this.actions = input.actions || [];
+        this.prepareActions(input?.actions);
     }
 
     private async setTitle(title: string): Promise<void> {
@@ -82,11 +82,10 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
         if (typeof storedMinimized !== 'undefined' && storedMinimized !== null) {
             this.state.minimized = storedMinimized === 'true';
         }
-
-        const additionalActions = await ActionFactory.getInstance().getActionsForWidget(
+        this.additionalActions = await ActionFactory.getInstance().getActionsForWidget(
             this.state.widgetConfiguration?.widgetId
         );
-        this.state.actions = [...this.actions || [], ...additionalActions];
+        this.prepareActions(this.state.actions);
 
         super.registerEventSubscriber(
             async function (data: TabContainerEventData, eventId: string): Promise<void> {
@@ -245,6 +244,10 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
 
     public isSidebarWidget(): boolean {
         return this.state.widgetType === WidgetType.SIDEBAR;
+    }
+
+    private prepareActions(actions: IAction[] = []): void {
+        this.state.actions = [...actions, ...this.additionalActions || []];
     }
 
 }
