@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { OrganisationAdditionalInformationKeys } from '../../core/context/OrganisationContext';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -43,7 +42,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         });
 
         this.state.filterActions = await ActionFactory.getInstance().generateActions(
-            ['contact-table-depending-action']
+            ['contact-table-depending-action'], null, this.contextInstanceId
         );
 
         this.setWidgetDependingMode();
@@ -69,7 +68,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.state.filterActions = await ActionFactory.getInstance().generateActions(
-            ['contact-table-depending-action']
+            ['contact-table-depending-action'], null, this.contextInstanceId
         );
         this.context.widgetService.updateActions(this.inputInstanceId);
     }

@@ -145,11 +145,13 @@ export class ActionFactory<T extends AbstractAction> {
         this.actionInstances.get(contextInstanceId).set(actionId, action);
     }
 
-    public async getActionsForType(type: ConfigurationType | string): Promise<AbstractAction[]> {
+    public async getActionsForType(
+        type: ConfigurationType | string, contextInstanceId?: string
+    ): Promise<AbstractAction[]> {
         const actionIds = this.widgetConfigurationActions.has(type)
             ? this.widgetConfigurationActions.get(type)
             : [];
-        return this.generateActions(actionIds);
+        return this.generateActions(actionIds, null, contextInstanceId);
     }
 
     public static sortList<T extends ActionGroup | IAction>(list: T[]): T[] {

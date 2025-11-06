@@ -74,7 +74,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             scrollInformationChanged: () => { return; },
             additionalInformationChanged: (): void => { return; }
         });
-
+        this.state.contextInstanceId = this.contextInstanceId;
         this.state.faqArticle = await this.context.getObject<FAQArticle>();
         setTimeout(() => this.initWidget(), 200);
     }
@@ -129,7 +129,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.faqArticle) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.faqArticle]
+                this.state.widgetConfiguration.actions, [this.state.faqArticle], this.contextInstanceId
             );
         }
     }

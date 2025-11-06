@@ -48,7 +48,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareActionNodes(): Promise<void> {
         const actions = await ActionFactory.getInstance().getActionsForType(
-            this.state.widget.configuration?.configuration?.type
+            this.state.widget.configuration?.configuration?.type, this.context?.instanceId
         );
         const configuredActions = this.state.widget.configuration.actions;
 

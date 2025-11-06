@@ -10,7 +10,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
@@ -102,11 +101,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (config && object) {
 
             const objectActions = await this.context?.getAdditionalActions();
-            const configuredActions = await ActionFactory.getInstance().generateActions(config.actions, object);
+            const configuredActions = await ActionFactory.getInstance().generateActions(
+                config.actions, object, this.contextInstanceId
+            );
             this.state.actions = [...objectActions, ...configuredActions];
 
             const generalActions = await ActionFactory.getInstance().generateActions(
-                config.generalActions, object
+                config.generalActions, object, this.contextInstanceId
             );
 
             this.context.widgetService.registerActions(this.state.instanceId, generalActions);

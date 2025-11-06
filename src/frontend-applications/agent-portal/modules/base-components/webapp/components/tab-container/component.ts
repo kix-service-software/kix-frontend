@@ -8,7 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { TabContainerEvent } from '../../../../../modules/base-components/webapp/core/TabContainerEvent';
 import { ContextType } from '../../../../../model/ContextType';
@@ -159,7 +158,7 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> {
             const object = await this.context?.getObject(this.context?.descriptor.kixObjectTypes[0]);
 
             this.state.contentActions = await ActionFactory.getInstance().generateActions(
-                tab.configuration ? tab.configuration.actions : [], [object]
+                tab.configuration ? tab.configuration.actions : [], [object], this.contextInstanceId
             );
         }
 

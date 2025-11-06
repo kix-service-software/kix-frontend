@@ -33,7 +33,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.faqArticle)>
     <widget
-        contextInstanceId=input.contextInstanceId
+        contextInstanceId=state.contextInstanceId
         instanceId=state.instanceId
         contextType="MAIN"
         title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
@@ -59,11 +59,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div title=component.getRatingTooltip()>
-                        <span class="fw-bold">
-                            <translation-string pattern="Translatable#Rating"/>
+                    <div.faq-rating title=component.getRatingTooltip()>
+                        <span>
+                            <translation-string pattern="Translatable#Rating"/>:
                         </span>
-                        <span class="text-primary">
+                        <span>
                             <if(state.faqArticle.VoteCount)>
                                 <for|icon| of=component.stars>
                                     <icon icon=icon/>
@@ -77,10 +77,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             </else>
                         </span>
                     </div>
-                    <div>
+                    <div.faq-attachments>
                         <span>
-                            <translation-string pattern="Translatable#Attachments"/>
-                            ${" "}:
+                            <translation-string pattern="Translatable#Attachments"/>:
                         </span>
                         <for|attachment| of=state.attachments>
                             <file-entry

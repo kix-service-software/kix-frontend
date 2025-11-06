@@ -154,7 +154,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async getActions(): Promise<AbstractAction[]> {
-        const actions = await ActionFactory.getInstance().getActionsForType(KIXObjectType.OBJECT_TAG);
+        const actions = await ActionFactory.getInstance().getActionsForType(
+            KIXObjectType.OBJECT_TAG, this.context?.instanceId
+        );
         const filteredActions: AbstractAction[] = [];
         for (const a of actions) {
             if (await a.canShow()) {

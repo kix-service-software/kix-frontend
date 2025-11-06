@@ -46,7 +46,7 @@ class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
                 'i18n-admin-translation-create',
                 'i18n-admin-translation-import',
                 'i18n-admin-translation-csv-export'
-            ], this.state.table
+            ], this.state.table, this.context?.instanceId
         );
         this.context.widgetService.registerActions(this.state.instanceId, actions);
 
