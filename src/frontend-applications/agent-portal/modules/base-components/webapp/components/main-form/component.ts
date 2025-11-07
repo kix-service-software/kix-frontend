@@ -62,7 +62,7 @@ class FormComponent extends AbstractMarkoComponent<ComponentState> {
 
         super.registerEventSubscriber(
             function (data: any, eventId: string): void {
-                if (this.state.formInstance?.instanceId === data?.formInstance?.instanceId) {
+                if (this.contextInstanceId === data?.context?.instanceId) {
                     if (eventId === ContextFormManagerEvents.FORM_INSTANCE_CHANGED) {
                         this.state.formInstance = null;
                         this.state.formId = null;

@@ -195,7 +195,7 @@ export class ContextFormManager {
                 );
                 if (!silent) {
                     EventService.getInstance().publish(
-                        ContextFormManagerEvents.FORM_INSTANCE_CHANGED, this.formInstance
+                        ContextFormManagerEvents.FORM_INSTANCE_CHANGED, this
                     );
                 }
             }
