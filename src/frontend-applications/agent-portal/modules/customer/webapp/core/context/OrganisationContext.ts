@@ -172,7 +172,7 @@ export class OrganisationContext extends Context {
         loadingOptions.limit = limit;
         loadingOptions.searchLimit = (limit && limit > 100) ? limit : 100;
 
-        const collectionId = this.contextId + KIXObjectType.CONTACT;
+        const collectionId = this.instanceId + KIXObjectType.CONTACT;
 
         if (organisations && organisations.length && isOrganisationDepending) {
             const organisationIds = organisations.map((o) => Number(o.ObjectId));
