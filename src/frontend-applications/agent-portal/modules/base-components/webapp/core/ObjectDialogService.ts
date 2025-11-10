@@ -125,6 +125,7 @@ export class ObjectDialogService {
             BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
         } else {
             EventService.getInstance().publish(FormEvent.GO_TO_INVALID_FIELD, {
+                context: context,
                 contextId: context.descriptor.contextId,
                 formId
             });

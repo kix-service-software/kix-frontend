@@ -46,6 +46,18 @@ class Component extends FormInputComponent<any, ComponentState> {
             this.state.manager.reset();
             this.state.manager.init();
 
+            // prepare addtional parameters for manager
+            const additionalParameters = this.state.field?.options.find(
+                (o) => o.option === FormFieldOptions.ADDITIONAL_MANAGER_PARAMETERS
+            );
+            if (additionalParameters && typeof additionalParameters.value === 'object') {
+                for (const key in additionalParameters.value) {
+                    if (key && typeof additionalParameters.value[key] !== 'undefined') {
+                        this.state.manager[key] = additionalParameters.value[key];
+                    }
+                }
+            }
+
             this.state.manager.registerListener(this.state.field?.instanceId, () => {
                 const filterCriteria = [];
                 const values = this.state.manager.getValues();
