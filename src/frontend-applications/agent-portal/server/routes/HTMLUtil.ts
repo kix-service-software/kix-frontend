@@ -1,3 +1,4 @@
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { LoggingService } from '../../../../server/services/LoggingService';
 
 export class HTMLUtil {
@@ -36,11 +37,13 @@ export class HTMLUtil {
     }
 
     public static buildHtmlStructur(content: string, additionalHeader: string[] = []): string {
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        const baseRoute = config?.BASE_ROUTE || '';
         return `
                     <html>
                         <head>
-                            <link rel="stylesheet" href="/static/applications/application/lasso-less.css"/>
-                            <link rel="stylesheet" href="/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="${baseRoute}/static/applications/application/lasso-less.css"/>
+                            <link rel="stylesheet" href="${baseRoute}/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css"/>
                             ${additionalHeader.join('\n')}
                         </head>
                         <body>

@@ -104,9 +104,10 @@ export class BrowserUtil {
             () => console.error('Could not get current user to start download.')
         );
         if (user) {
+            const baseRoute = ClientStorageService.getBaseRoute();
             const a = document.createElement('a');
             a.style.display = 'none';
-            a.href = `/files/download/${encodeURIComponent(file.downloadId)}`;
+            a.href = `${baseRoute}/files/download/${encodeURIComponent(file.downloadId)}`;
             a.download = file.Filename;
             a.target = '_blank';
             document.body.appendChild(a);
@@ -589,14 +590,16 @@ export class BrowserUtil {
     }
 
     public static appendKIXStyling(htmlDocument: Document): void {
+        const baseRoute = ClientStorageService.getBaseRoute();
+
         const kixLink = htmlDocument.createElement('link');
         kixLink.rel = 'stylesheet';
-        kixLink.href = '/static/applications/application/lasso-less.css';
+        kixLink.href = `${baseRoute}/static/applications/application/lasso-less.css`;
         htmlDocument.head.appendChild(kixLink);
 
         const bootstrapLink = htmlDocument.createElement('link');
         bootstrapLink.rel = 'stylesheet';
-        bootstrapLink.href = '/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css';
+        bootstrapLink.href = `${baseRoute}/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css`;
         htmlDocument.head.appendChild(bootstrapLink);
     }
 
