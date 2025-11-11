@@ -21,7 +21,6 @@ import { KIXObject } from '../../../model/kix/KIXObject';
 import { CacheService } from '../../../server/services/cache';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { QueueProperty } from '../model/QueueProperty';
-import { SystemAddress } from '../../system-address/model/SystemAddress';
 
 export class QueueAPIService extends KIXObjectAPIService {
 
@@ -88,7 +87,7 @@ export class QueueAPIService extends KIXObjectAPIService {
             );
             if (objectIds && objectIds.length) {
                 objectResponse.objects = objectResponse?.objects?.filter(
-                    (f: FollowUpType) => objectIds.some((oid) => oid.toString() === f.ObjectId.toString())
+                    (f: FollowUpType) => objectIds.some((oid) => oid.toString() === f.ID.toString())
                 );
             }
         }
