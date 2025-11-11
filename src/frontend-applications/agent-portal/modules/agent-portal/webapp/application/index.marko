@@ -23,38 +23,31 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     input.favIcon.ContentType +
                     ";base64," +
                     input.favIcon.Content
-                )
-            >
+                )>
         </if>
         <else>
             <link
                 rel="shortcut icon"
                 type="image/png"
                 sizes="32x32"
-                href=input.baseRoute + "/static/img/kix_default.png"
-            >
+                href=input.baseRoute + "/static/img/kix_default.png">
         </else>
         <link
             rel="stylesheet"
             href=input.baseRoute +
-            "/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css"
-        >
+            "/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css">
         <link
             rel="stylesheet"
-            href=input.baseRoute + "/static/font-awesome/css/all.min.css"
-        >
+            href=input.baseRoute + "/static/font-awesome/css/all.min.css">
         <link
             rel="stylesheet"
-            href=input.baseRoute + "/static/codemirror/codemirror.css"
-        >
+            href=input.baseRoute + "/static/codemirror/codemirror.css">
         <link
             rel="stylesheet"
-            href=input.baseRoute + "/static/codemirror/hint/show-hint.css"
-        >
+            href=input.baseRoute + "/static/codemirror/hint/show-hint.css">
         <link
             rel="stylesheet"
-            href=input.baseRoute + "/static/thirdparty/ckeditor5/ckeditor5.css"
-        >
+            href=input.baseRoute + "/static/thirdparty/ckeditor5/ckeditor5.css">
         <script src=input.baseRoute + "/static/codemirror/codemirror.js"/>
         <script src=input.baseRoute + "/static/codemirror/hint/show-hint.js"/>
         <script src=input.baseRoute + "/static/codemirror/mode/sql.js"/>
@@ -96,7 +89,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 src:
                     url("${input.baseRoute}/static/font/carlito-italic.woff")
                         format("woff"),
-                    url(/ap/static/font/carlito-italic.ttf) format("truetype");
+                    url("${input.baseRoute}/static/font/carlito-italic.ttf")
+                        format("truetype");
                 font-style: italic;
             }
 
@@ -117,8 +111,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <_base-template
             socketTimeout=input.socketTimeout
             modules=input.modules
-            baseRoute=input.baseRoute
-        />
+            baseRoute=input.baseRoute/>
 
         <script src=input.baseRoute +
         "/static/thirdparty/bootstrap-5.3.2/js/bootstrap.bundle.min.js"/>
