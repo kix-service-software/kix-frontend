@@ -20,7 +20,15 @@ export class ComponentState extends WidgetComponentState {
         public labelProvider: UserLabelProvider = null,
         public user: User = null,
         public queueLabels: Label[] = [],
-        public notificationLabels: Label[] = []
+        public notificationLabels: Label[] = [],
+        public substitute: Label[] = [],
+        public showUserLanguage: boolean = true,
+        public showNotificationTransport: boolean = true,
+        public showMyQueues: boolean = true,
+        public showOutOfOfficeStart: boolean = true,
+        public showOutOfOfficeEnd: boolean = true,
+        public showOutOfOfficeSubstitute: boolean = true,
+
     ) {
         super();
     }

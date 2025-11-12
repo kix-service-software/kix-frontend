@@ -3736,6 +3736,9 @@ msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
 msgid "Not more than 5 files possible."
 msgstr "Nicht mehr als 5 Dateien möglich."
 
+msgid "Not set"
+msgstr "Nicht festgelegt"
+
 msgid "Note"
 msgstr "Notiz"
 

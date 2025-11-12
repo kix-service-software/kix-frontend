@@ -37,16 +37,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </div>
     <div
         title=(!input.noValueTitle ? state.propertyDisplayText : "")
-        class=["value", component.getValueClasses()]
-    >
-        <if(input.value)>
-            <${input.value}/>
+        class=["value", component.getValueClasses()]>
+        <if(state.value)>
+            <${state.value}/>
         </if>
         <else-if(state.propertyDisplayText !== null)>
             <link-target
                 routingConfiguration=input.routingConfiguration
-                objectId=input.objectId
-            >
+                objectId=input.objectId>
                 <@content>
                     <if(state.hasText)>
                         <span>${state.propertyDisplayText}</span>
@@ -66,8 +64,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     data={
                         object: state.overlay.Data,
                         properties: state.overlay.Data.Properties,
-                    }
-                />
+                    }/>
             </if>
         </else-if>
     </div>
