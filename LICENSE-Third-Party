@@ -318,7 +318,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.41
+├─ @marko/compiler@5.39.42
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -746,7 +746,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/mdurl
 │  └─ licenseFile: node_modules/@types/mdurl/LICENSE
-├─ @types/node@22.19.0
+├─ @types/node@22.19.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1238,7 +1238,7 @@
 │  ├─ email: faeldt_kristian@cyberagent.co.jp
 │  ├─ path: node_modules/base64id
 │  └─ licenseFile: node_modules/base64id/LICENSE
-├─ baseline-browser-mapping@2.8.25
+├─ baseline-browser-mapping@2.8.26
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/web-platform-dx/baseline-browser-mapping
 │  ├─ path: node_modules/baseline-browser-mapping
@@ -3151,7 +3151,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.61
+├─ marko@5.37.62
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -3663,7 +3663,7 @@
 │  ├─ repository: https://github.com/remirror/remirror
 │  ├─ path: node_modules/prosemirror-trailing-node
 │  └─ licenseFile: node_modules/prosemirror-trailing-node/LICENSE
-├─ prosemirror-transform@1.10.4
+├─ prosemirror-transform@1.10.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/prosemirror/prosemirror-transform
 │  ├─ path: node_modules/prosemirror-transform
