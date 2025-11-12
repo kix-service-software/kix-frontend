@@ -9,22 +9,80 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <widget
     instanceId=state.instanceId
-    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Translatable#Preferences")
+    title=(
+        state.widgetConfiguration
+            ? state.widgetConfiguration.title
+            : "Translatable#Preferences"
+    )
     contentActions=state.actions>
     <@content>
         <if(state.user)>
-            <div.user-preferences>
-                <object-property-label object=state.user property="UserLanguage" labelProvider=state.labelProvider/>
-                <object-property-label object=state.user property="NotificationTransport" labelProvider=state.labelProvider>
-                    <@value>
-                        <label-list labels=state.notificationLabels removeLabels=false/>
-                    </@value>
-                </object-property-label>
-                <object-property-label object=state.user property="MyQueues" labelProvider=state.labelProvider>
-                    <@value>
-                        <label-list labels=state.queueLabels removeLabels=false/>
-                    </@value>
-                </object-property-label>
+            <div class="user-preferences">
+                <if(state.showUserLanguage)>
+                    <object-property-label
+                        object=state.user
+                        property="UserLanguage"
+                        labelProvider=state.labelProvider
+                        on-noValueToDisplay("changeShowProperty")/>
+                </if>
+                <if(
+                    state.showNotificationTransport &&
+                    state.notificationLabels?.length
+                )>
+                    <object-property-label
+                        object=state.user
+                        property="NotificationTransport"
+                        labelProvider=state.labelProvider
+                        on-noValueToDisplay("changeShowProperty")>
+                        <@value>
+                            <label-list
+                                labels=state.notificationLabels
+                                removeLabels=false/>
+                        </@value>
+                    </object-property-label>
+                </if>
+                <if(state.showMyQueues && state.queueLabels?.length)>
+                    <object-property-label
+                        object=state.user
+                        property="MyQueues"
+                        labelProvider=state.labelProvider
+                        on-noValueToDisplay("changeShowProperty")>
+                        <@value>
+                            <label-list
+                                labels=state.queueLabels
+                                removeLabels=false/>
+                        </@value>
+                    </object-property-label>
+                </if>
+                <if(state.showOutOfOfficeStart)>
+                    <object-property-label
+                        object=state.user
+                        property="OutOfOfficeStart"
+                        labelProvider=state.labelProvider
+                        on-noValueToDisplay("changeShowProperty")/>
+                </if>
+                <if(state.showOutOfOfficeEnd)>
+                    <object-property-label
+                        object=state.user
+                        property="OutOfOfficeEnd"
+                        labelProvider=state.labelProvider
+                        on-noValueToDisplay("changeShowProperty")/>
+                </if>
+                <if(
+                    state.showOutOfOfficeSubstitute && state.substitute?.length
+                )>
+                    <object-property-label
+                        object=state.user
+                        property="OutOfOfficeSubstitute"
+                        labelProvider=state.labelProvider
+                        on-noValueToDisplay("changeShowProperty")>
+                        <@value>
+                            <label-list
+                                labels=state.substitute
+                                removeLabels=false/>
+                        </@value>
+                    </object-property-label>
+                </if>
             </div>
         </if>
     </@content>
