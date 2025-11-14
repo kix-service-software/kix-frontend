@@ -24,8 +24,6 @@ import { ActionFactory } from '../../core/ActionFactory';
 import { ActionGroup } from '../../../model/ActionGroup';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
-import { ContextEvents } from '../../core/ContextEvents';
-import { Context } from 'mocha';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
     private observer: ResizeObserver;
@@ -92,29 +90,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.prepared = true;
 
         this.observerTimeout = setTimeout(() => this.prepareObserver(), 150);
-
-        if (this.context) {
-            super.registerEventSubscriber(
-                function (data: Context, eventId: string): void {
-                    if (data?.instanceId === this.context?.instanceId) {
-                        if (!this.observer) {
-                            this.observerTimeout = setTimeout(() => this.prepareObserver(), 150);
-                        }
-                    }
-                    else {
-                        if (this.observerTimeout) {
-                            clearTimeout(this.observerTimeout);
-                            this.observerTimeout = undefined;
-                        }
-                        if (this.observer) {
-                            this.observer.disconnect();
-                            this.observer = undefined;
-                        }
-                    }
-                },
-                [ContextEvents.CONTEXT_CHANGED]
-            );
-        }
     }
 
     public onDestroy(): void {
@@ -141,7 +116,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             let containerWidth = container.offsetWidth;
             this.observer = new ResizeObserver((entries) => {
                 if (
-                    container.offsetWidth !== containerWidth &&
+                    container.offsetWidth !== 0
+                    && container.offsetWidth !== containerWidth &&
                     !this.actionPreparationRunning && this.actionsToShow.length
                 ) {
                     // hide, so action do not visible overlap if container shrinks
@@ -151,16 +127,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         clearTimeout(this.resizeTimeout);
                     }
 
-                    this.resizeTimeout = setTimeout(() => {
+                    this.resizeTimeout = setTimeout(function (): void {
                         containerWidth = container.offsetWidth;
                         this.prepareActionLists();
                         this.resizeTimeout = null;
-                    }, 150);
+                    }.bind(this), 150);
                 }
             });
 
             this.observer.observe(container);
-            this.observerTimeout = null;
         }
     }
 
