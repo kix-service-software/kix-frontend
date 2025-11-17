@@ -299,7 +299,9 @@ export class TicketAPIService extends KIXObjectAPIService {
             );
 
             if (Array.isArray(objectIds) && objectIds.length) {
-                objectResponse.objects = objectResponse?.objects.filter((o) => objectIds.some((oid) => oid === o.ID));
+                objectResponse.objects = objectResponse?.objects.filter(
+                    (o) => objectIds.some((oid) => Number(oid) === o.ID)
+                );
             }
         } else if (objectType === KIXObjectType.TICKET_LOCK) {
             const uri = this.buildUri('system', 'ticket', 'locks');
