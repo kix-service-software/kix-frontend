@@ -1238,7 +1238,7 @@
 │  ├─ email: faeldt_kristian@cyberagent.co.jp
 │  ├─ path: node_modules/base64id
 │  └─ licenseFile: node_modules/base64id/LICENSE
-├─ baseline-browser-mapping@2.8.26
+├─ baseline-browser-mapping@2.8.28
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/web-platform-dx/baseline-browser-mapping
 │  ├─ path: node_modules/baseline-browser-mapping
@@ -1373,7 +1373,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001754
+├─ caniuse-lite@1.0.30001755
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1430,28 +1430,28 @@
 │  ├─ email: contact@jakubpawlowicz.com
 │  ├─ path: node_modules/clean-css
 │  └─ licenseFile: node_modules/clean-css/LICENSE
-├─ color-convert@3.1.2
+├─ color-convert@3.1.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/Qix-/color-convert
 │  ├─ publisher: Josh Junon
 │  ├─ email: josh@junon.me
 │  ├─ path: node_modules/color-convert
 │  └─ licenseFile: node_modules/color/node_modules/color-convert/LICENSE
-├─ color-name@2.0.2
+├─ color-name@2.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/colorjs/color-name
 │  ├─ publisher: Dmitry Iv
 │  ├─ email: dfcreative@gmail.com
 │  ├─ path: node_modules/color-name
 │  └─ licenseFile: node_modules/color/node_modules/color-name/LICENSE
-├─ color-string@2.1.2
+├─ color-string@2.1.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/Qix-/color-string
 │  ├─ publisher: Josh Junon
 │  ├─ url: https://github.com/qix-
 │  ├─ path: node_modules/color-string
 │  └─ licenseFile: node_modules/color-string/LICENSE
-├─ color@5.0.2
+├─ color@5.0.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/Qix-/color
 │  ├─ path: node_modules/color
@@ -1678,7 +1678,7 @@
 │  ├─ repository: https://github.com/jsdom/cssstyle
 │  ├─ path: node_modules/cssstyle
 │  └─ licenseFile: node_modules/cssstyle/LICENSE
-├─ csstype@3.1.3
+├─ csstype@3.2.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/frenic/csstype
 │  ├─ publisher: Fredrik Nicol
@@ -2087,7 +2087,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.250
+├─ electron-to-chromium@1.5.254
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -2802,7 +2802,7 @@
 │  ├─ publisher: Simon Lydell
 │  ├─ path: node_modules/js-tokens
 │  └─ licenseFile: node_modules/js-tokens/LICENSE
-├─ js-yaml@4.1.0
+├─ js-yaml@4.1.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/nodeca/js-yaml
 │  ├─ publisher: Vladimir Zapparov
@@ -3608,7 +3608,7 @@
 │  ├─ repository: https://github.com/prosemirror/prosemirror-gapcursor
 │  ├─ path: node_modules/prosemirror-gapcursor
 │  └─ licenseFile: node_modules/prosemirror-gapcursor/LICENSE
-├─ prosemirror-history@1.4.1
+├─ prosemirror-history@1.5.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/prosemirror/prosemirror-history
 │  ├─ path: node_modules/prosemirror-history
