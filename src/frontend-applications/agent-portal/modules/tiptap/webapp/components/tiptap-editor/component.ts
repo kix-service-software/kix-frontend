@@ -71,7 +71,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     try {
                         const cleaned = normalizeForTiptap(comp.value);
                         comp.editor?.commands.setContent(cleaned, false);
-                    } catch { /* noop */ }
+                    } catch {
+                        /* noop */
+                    }
                 },
                 extensions: [
                     Tiptap.StarterKit.configure({ bold: false, paragraph: false }),
@@ -189,16 +191,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                             view.dispatch(view.state.tr.replaceSelectionWith(node));
                             event.preventDefault();
                             return true;
-                        }
-
-                        const html = cd?.getData('text/html') || '';
-                        if (html) {
-                            const fragment = normalizeForTiptap(html);
-                            if (fragment) {
-                                comp.editor?.commands.insertContent(fragment);
-                                event.preventDefault();
-                                return true;
-                            }
                         }
 
                         return false;
@@ -330,7 +322,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     let cleanedHtml = rawHtml;
                     try {
                         cleanedHtml = prepareHtmlForEmail(rawHtml);
-                    } catch { /* noop */ }
+                    } catch {
+                        /* noop */
+                    }
                     comp._lastCleanHtml = cleanedHtml;
 
                     if (stylesWereLost(rawHtml, cleanedHtml)) {
@@ -456,7 +450,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 try {
                     const pos = Math.max(1, ed.state.doc.content.size - 1);
                     ed.chain().setTextSelection(pos).run();
-                } catch { /* noop */ }
+                } catch {
+                    /* noop */
+                }
             };
 
             ed.on('update', ensureDefaultsIfEmpty);
@@ -469,12 +465,18 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         const saveRaw = (): void => {
             if (!this.editor) return;
-            try { void this.editor.getHTML(); } catch { /* noop */ }
+            try {
+                void this.editor.getHTML();
+            } catch {
+                /* noop */
+            }
         };
         const onVisChange = (): void => {
             if (document.visibilityState === 'hidden') saveRaw();
         };
-        const onBeforeUnload = (): void => { saveRaw(); };
+        const onBeforeUnload = (): void => {
+            saveRaw();
+        };
 
         document.addEventListener('visibilitychange', onVisChange);
         window.addEventListener('beforeunload', onBeforeUnload);
@@ -495,7 +497,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         if (this.editor) {
-            try { void this.editor.getHTML().length; } catch { /* noop */ }
+            try {
+                void this.editor.getHTML().length;
+            } catch {
+                /* noop */
+            }
             this.editor.destroy();
             this.editor = null;
         }
