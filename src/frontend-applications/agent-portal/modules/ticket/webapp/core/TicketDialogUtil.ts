@@ -27,7 +27,6 @@ export class TicketDialogUtil {
         ticketId?: number, articleId?: number, icon?: ObjectIcon | string, text?: string,
         additionalInformation: Array<[string, any]> = [],
         contextId: string = NewTicketDialogContext.CONTEXT_ID,
-        removeCurrentContext: boolean = false
     ): Promise<Context> {
         const context = ContextService.getInstance().getActiveContext();
 
@@ -53,7 +52,7 @@ export class TicketDialogUtil {
         }
 
         const newContext = await ContextService.getInstance().setActiveContext(
-            contextId, ticketId, undefined, additionalInformation, null, removeCurrentContext
+            contextId, ticketId, undefined, additionalInformation
         );
         newContext?.setIcon(icon);
         newContext?.setDisplayText(text);
@@ -64,8 +63,7 @@ export class TicketDialogUtil {
     public static async editTicket(
         ticketId?: number, articleId?: number, icon?: ObjectIcon | string, text?: string,
         additionalInformation: Array<[string, any]> = [], formId?: string,
-        contextId: string = EditTicketDialogContext.CONTEXT_ID,
-        removeCurrentContext: boolean = false
+        contextId: string = EditTicketDialogContext.CONTEXT_ID
     ): Promise<Context> {
 
         const context = ContextService.getInstance().getActiveContext();
@@ -91,7 +89,7 @@ export class TicketDialogUtil {
             }
 
             editContext = await ContextService.getInstance().setActiveContext(
-                contextId, ticketId, null, additionalInformation, null, removeCurrentContext
+                contextId, ticketId, null, additionalInformation
             );
 
             editContext?.setIcon(icon);
