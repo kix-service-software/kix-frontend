@@ -237,11 +237,15 @@ export function createToolbar(editor: any): HTMLDivElement {
         button.className = 'btn btn-sm btn-outline-secondary';
         button.title = tooltip;
 
+        button.type = 'button';
 
-        button.onclick = (): void => {
+        button.addEventListener('click', (ev: MouseEvent): void => {
+            ev.preventDefault();
+            ev.stopPropagation();
+
             command();
             updateActiveButtons();
-        };
+        });
 
         const wrapper = document.createElement('span');
         wrapper.className = 'icon-wrapper';
