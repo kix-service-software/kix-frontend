@@ -60,8 +60,10 @@ export class MacroTableContentProvider extends TableContentProvider<Macro> {
             const macroId = m.getObject()?.ID;
             const hasParent = macros.some((sm) => {
                 const actions = sm.getObject()?.Actions || [];
-                return actions.filter((a) => a.Type === 'ExecuteMacro')
-                    .some((a) => a.Parameters?.MacroID === macroId);
+                return actions.some(
+                    (a) => a.Parameters?.MacroID === macroId
+                        || a.Parameters?.ElseMacroID === macroId
+                );
             });
             return !hasParent;
         });

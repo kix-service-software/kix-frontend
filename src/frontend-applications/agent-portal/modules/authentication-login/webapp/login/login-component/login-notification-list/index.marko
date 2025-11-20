@@ -40,12 +40,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
             <if(component.isExpanded(notification))>
                <div class="notification-content">
-                  <iframe
-                     class="w-100 h-100 bg-white"
-                     on-load("viewLoaded")
-                     id=state.frameId + "-" + notification.id>
-                     <body/>
-                  </iframe>
+                  <iframe-content html=state.html/>
                </div>
             </if>
          </div>

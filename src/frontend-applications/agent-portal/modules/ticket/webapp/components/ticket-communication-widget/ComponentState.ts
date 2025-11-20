@@ -7,6 +7,7 @@
  * --
  */
 
+import { IdService } from '../../../../../model/IdService';
 import { ObjectInformationCardConfiguration } from '../../../../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { WidgetComponentState } from '../../../../base-components/webapp/core/WidgetComponentState';
 import { Article } from '../../../model/Article';
@@ -21,7 +22,8 @@ export class ComponentState extends WidgetComponentState {
         public activeUnreadAction: boolean = false,
         public selectedCompactView: boolean = false,
         public collapseAll: boolean = false,
-        public informationConfig: ObjectInformationCardConfiguration = null
+        public informationConfig: ObjectInformationCardConfiguration = null,
+        public topId: string = IdService.generateDateBasedId('communication-top')
     ) {
         super();
     }

@@ -23,7 +23,6 @@ import { ConfigItemClass } from '../../../model/ConfigItemClass';
 import { ConfigItemFormFactory } from '../ConfigItemFormFactory';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvent } from '../../../../base-components/webapp/core/ContextEvent';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
@@ -47,7 +46,7 @@ export class NewConfigItemDialogContext extends Context {
                 ]
             );
             const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions);
-            object = objects && objects.length ? objects[0] : null;
+            object = objects?.length ? objects[0] : null;
         }
         return object;
     }
@@ -77,6 +76,7 @@ export class NewConfigItemDialogContext extends Context {
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
         await super.initContext(urlParams);
+
         let classId = this.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
         if (!classId) {
             const previousContext = ContextService.getInstance().getActiveContext();
@@ -120,7 +120,7 @@ export class NewConfigItemDialogContext extends Context {
         if (widget) {
             this.classChanged = !postInit;
             const title = await this.getDisplayText();
-            WidgetService.getInstance().setWidgetTitle(widget.instanceId, title);
+            this.widgetService.setWidgetTitle(widget.instanceId, title);
         }
         EventService.getInstance().publish(ContextEvent.DISPLAY_VALUE_UPDATED, this);
         ConfigItemFormFactory.getInstance().createAndProvideForm(classId, this);

@@ -72,14 +72,18 @@ export class Table implements Table {
     private tableState: TableState;
 
     private subscriber: IEventSubscriber;
-    private context: Context;
+    private readonly context: Context;
+    private contextDependent: boolean = false;
 
     public constructor(
-        private tableKey: string,
-        private tableConfiguration?: TableConfiguration,
-        private contextId?: string
+        private readonly tableKey: string,
+        private readonly tableConfiguration?: TableConfiguration,
+        private readonly contextInstanceId?: string
     ) {
-        this.context = ContextService.getInstance().getActiveContext();
+        if (contextInstanceId) {
+            this.context = ContextService.getInstance().getContext(contextInstanceId);
+            this.contextDependent = true;
+        }
     }
 
     public destroy(): void {
@@ -151,10 +155,6 @@ export class Table implements Table {
 
     public getTableId(): string {
         return this.tableKey;
-    }
-
-    public getContextId(): string {
-        return this.contextId;
     }
 
     public getTableConfiguration(): TableConfiguration {
@@ -242,12 +242,12 @@ export class Table implements Table {
             );
 
             this.subscriber = {
-                eventSubscriberId: this.getTableId(),
-                eventPublished: (data: TableEventData, eventId: string): void => {
-                    if (data.tableId === this.getTableId()) {
+                eventSubscriberId: 'Table' + this.getTableId(),
+                eventPublished: function (data: TableEventData, eventId: string): void {
+                    if (data?.tableId === this.getTableId()) {
                         this.saveTableState();
                     }
-                }
+                }.bind(this)
             };
             EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
@@ -255,7 +255,10 @@ export class Table implements Table {
             EventService.getInstance().subscribe(TableEvent.COLUMN_RESIZED, this.subscriber);
         } else if (forceReload) {
             await this.reload();
+        } else if (this.filterValue) {
+            await this.filter();
         }
+
     }
 
     private async setSortByContext(): Promise<void> {
@@ -312,7 +315,7 @@ export class Table implements Table {
             if (column) {
                 column.setSortOrder(this.sortOrder);
             }
-        } else if (this.contextId) {
+        } else if (this.contextInstanceId) {
             await this.setSortByContext();
         }
 
@@ -1096,6 +1099,13 @@ export class Table implements Table {
         return this.getContentProvider()?.isBackendFilterSupported();
     }
 
+    public setContextDependent(contextDependent: boolean): void {
+        this.contextDependent = contextDependent;
+    }
+
+    public isContextDependent(): boolean {
+        return this.contextDependent;
+    }
 }
 
 class TableState {

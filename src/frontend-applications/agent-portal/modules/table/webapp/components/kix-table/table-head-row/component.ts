@@ -9,24 +9,23 @@
 
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { SelectionState } from '../../../../model/SelectionState';
 import { Table } from '../../../../model/Table';
 import { TableEvent } from '../../../../model/TableEvent';
 import { TableEventData } from '../../../../model/TableEventData';
 import { ComponentState } from './ComponentState';
 
-class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
-
-    public eventSubscriberId: string;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private table: Table;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'kix-table/table-head-row');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.table = input.table;
         this.state.columns = this.table.getColumns();
         if (this.table.getTableConfiguration().toggleOptions) {
@@ -37,35 +36,25 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async onMount(): Promise<void> {
-        this.eventSubscriberId = this.table.getTableId() + '-head';
-        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this);
-        EventService.getInstance().subscribe(TableEvent.REFRESH, this);
-        EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
-        EventService.getInstance().subscribe(TableEvent.RERENDER_TABLE, this);
-        EventService.getInstance().subscribe(TableEvent.COLUMN_CREATED, this);
-        this.setCheckState();
-    }
+        await super.onMount();
 
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this);
-        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
-        EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this);
-        EventService.getInstance().unsubscribe(TableEvent.COLUMN_CREATED, this);
-    }
+        super.registerEventSubscriber(
+            function (data: TableEventData, eventId: string, subscriberId?: string): void {
+                if (data?.tableId !== this.table.getTableId()) return;
 
-    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
-        if (data && data.tableId === this.table.getTableId()) {
-            if (eventId === TableEvent.ROW_SELECTION_CHANGED
-                || eventId === TableEvent.REFRESH
-                || eventId === TableEvent.ROW_TOGGLED
-                || eventId === TableEvent.RERENDER_TABLE
-                || eventId === TableEvent.COLUMN_CREATED
-            ) {
                 this.state.columns = this.table.getColumns();
                 this.setCheckState();
-            }
-        }
+            },
+            [
+                TableEvent.ROW_SELECTION_CHANGED,
+                TableEvent.REFRESH,
+                TableEvent.ROW_TOGGLED,
+                TableEvent.RERENDER_TABLE,
+                TableEvent.COLUMN_CREATED
+            ]
+        );
+
+        this.setCheckState();
     }
 
     private setCheckState(): void {
@@ -117,6 +106,10 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             TableEvent.TOGGLE_ROWS, new TableEventData(this.table.getTableId(), null, null, null, open)
         );
         this.state.closeAll = open;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

@@ -4,7 +4,7 @@
 This component can be used to display a list of action as a styled list element, e.g. in widget headers.
 
 ##### Tag
-`<action-list list=actions instanceId=state.instanceId displayText=true/>`
+`<action-list contextInstanceId=input.contextInstanceId list=actions instanceId=state.instanceId displayText=true/>`
 
 ##### Attributes
 

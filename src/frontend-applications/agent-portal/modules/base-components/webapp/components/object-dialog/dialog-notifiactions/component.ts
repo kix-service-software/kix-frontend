@@ -8,39 +8,38 @@
  */
 
 import { Context } from 'mocha';
-import { IdService } from '../../../../../../model/IdService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 import { ContextEvents } from '../../../core/ContextEvents';
-import { EventService } from '../../../core/EventService';
-import { IEventSubscriber } from '../../../core/IEventSubscriber';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-dialog/dialog-notifications');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: async (data: Context, eventId: string): Promise<void> => {
-                if (eventId === ContextEvents.CONTEXT_STORED) {
-                    this.state.message = await TranslationService.translate('Translatable#draft successfully saved');
-                    setTimeout(() => this.state.message = null, 3000);
-                }
-            }
-        };
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_STORED, this.subscriber);
+        await super.onMount();
+
+        super.registerEventSubscriber(
+            async function (data: Context, eventId: string): Promise<void> {
+                this.state.message = await TranslationService.translate('Translatable#draft successfully saved');
+                setTimeout(() => this.state.message = null, 3000);
+            },
+            [ContextEvents.CONTEXT_STORED]
+        );
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_STORED, this.subscriber);
+        super.onDestroy();
     }
 
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

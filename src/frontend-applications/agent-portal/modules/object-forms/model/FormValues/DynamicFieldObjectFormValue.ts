@@ -104,7 +104,7 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         const dynamicField = await KIXObjectService.loadDynamicField(dfName, null, true);
 
         if (dynamicField) {
-            for (const mapperExtension of this.objectValueMapper.extensions) {
+            for (const mapperExtension of this.objectValueMapper.extensions || []) {
                 formValue = await mapperExtension.createDynamicFieldFormValue(dynamicField, dynamicFieldValue, this);
                 if (formValue) {
                     break;

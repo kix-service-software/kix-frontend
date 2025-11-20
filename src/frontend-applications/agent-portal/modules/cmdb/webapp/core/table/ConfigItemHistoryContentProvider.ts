@@ -11,7 +11,6 @@ import { TableContentProvider } from '../../../../table/webapp/core/TableContent
 import { ConfigItemHistory } from '../../../model/ConfigItemHistory';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ConfigItem } from '../../../model/ConfigItem';
 import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
@@ -30,9 +29,8 @@ export class ConfigItemHistoryContentProvider extends TableContentProvider<Confi
 
     public async loadData(): Promise<Array<RowObject<ConfigItemHistory>>> {
         const rowObjects = [];
-        if (this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            const configItem = await context.getObject<ConfigItem>();
+        if (this.table.isContextDependent()) {
+            const configItem = await this.context?.getObject<ConfigItem>();
             if (configItem) {
                 for (const ch of configItem.History) {
                     const values: TableValue[] = [];

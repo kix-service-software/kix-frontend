@@ -12,11 +12,8 @@ import { LinkTypeDescription } from '../../../model/LinkTypeDescription';
 import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { EditLinkedObjectsDialogContext, LinkService } from '../../core';
@@ -46,16 +43,16 @@ class LinkDialogComponent extends AbstractMarkoComponent<ComponentState, EditLin
 
     private linkLabel: string;
 
-    private tableSubscriber: IEventSubscriber;
-
     private objectType: KIXObjectType;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'link-object-dialog');
         this.state = new ComponentState();
         this.state.loadNodes = this.loadNodes.bind(this);
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (!this.state.linkDescriptions || this.state.linkDescriptions.length === 0) {
             this.state.linkDescriptions = input.linkDescriptions || [];
         }
@@ -66,13 +63,14 @@ class LinkDialogComponent extends AbstractMarkoComponent<ComponentState, EditLin
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
         this.selectedObjects = [];
 
         this.state.translations = await TranslationService.createTranslationObject(
             ['Translatable#Link to', 'Translatable#Search']
         );
 
-        WidgetService.getInstance().setWidgetType('link-object-dialog-form-widget', WidgetType.GROUP);
+        this.context.widgetService.setWidgetType('link-object-dialog-form-widget', WidgetType.GROUP);
 
         this.setLinkTypes();
 
@@ -80,10 +78,9 @@ class LinkDialogComponent extends AbstractMarkoComponent<ComponentState, EditLin
     }
 
     public async onDestroy(): Promise<void> {
+        super.onDestroy();
+
         this.state.linkDescriptions = null;
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this.tableSubscriber);
     }
 
     private async loadNodes(): Promise<TreeNode[]> {
@@ -174,15 +171,14 @@ class LinkDialogComponent extends AbstractMarkoComponent<ComponentState, EditLin
         );
         const table = await TableFactoryService.getInstance().createTable(
             `${IdService.generateDateBasedId()}-link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
-            EditLinkedObjectsDialogContext.CONTEXT_ID, true, null, true
+            this.contextInstanceId, true, null, true
         );
         await table.addAdditionalColumns([
             TableFactoryService.getInstance().getDefaultColumnConfiguration(objectType, 'LinkedAs')
         ]);
 
-        this.tableSubscriber = {
-            eventSubscriberId: 'link-object-dialog',
-            eventPublished: (data: TableEventData, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: TableEventData, eventId: string): void {
                 if (data && data.tableId === table.getTableId()) {
                     if (eventId === TableEvent.REFRESH) {
                         this.state.resultCount = table?.getRowCount();
@@ -194,12 +190,13 @@ class LinkDialogComponent extends AbstractMarkoComponent<ComponentState, EditLin
                     this.selectedObjects = table.getSelectedRows().map((r) => r.getRowObject().getObject());
                     this.setSubmitState();
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        EventService.getInstance().subscribe(TableEvent.REFRESH, this.tableSubscriber);
-        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+            },
+            [
+                TableEvent.TABLE_READY,
+                TableEvent.REFRESH,
+                TableEvent.ROW_SELECTION_CHANGED
+            ]
+        );
 
         table.resetFilter();
         setTimeout(() => this.state.table = table, 50);

@@ -17,18 +17,21 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private readOnly: boolean;
     private value: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         // console.log('[ProseMirror] onCreate');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         // console.log('[ProseMirror] onInput', input);
         this.readOnly = input.readOnly ?? false;
         this.value = input.value;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         // console.log('[ProseMirror] onMount');
 
         const { EditorState } = PM.state;

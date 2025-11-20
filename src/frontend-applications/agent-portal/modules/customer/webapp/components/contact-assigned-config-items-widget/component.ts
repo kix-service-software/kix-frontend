@@ -23,10 +23,12 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -84,6 +86,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 contact.AssignedConfigItems, null, true, true, true
             );
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

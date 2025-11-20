@@ -11,7 +11,6 @@ import { JobFilterTableProperty } from './JobFilterTableProperty';
 import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Job } from '../../../model/Job';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { JobFilterTableContentProviderService } from './JobFilterTableContentProviderService';
@@ -34,8 +33,7 @@ export class JobFilterTableContentProvider extends TableContentProvider<any> {
     public async loadData(): Promise<RowObject[]> {
         const rowObjects: RowObject[] = [];
 
-        const context = ContextService.getInstance().getActiveContext();
-        const job = context ? await context.getObject<Job>() : null;
+        const job = this.context ? await this.context.getObject<Job>() : null;
 
         const filterList = Array.isArray(job?.Filter) && Array.isArray(this.objectIds) ?
             job.Filter[this.objectIds[0]] : null;

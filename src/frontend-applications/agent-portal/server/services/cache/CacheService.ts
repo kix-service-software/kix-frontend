@@ -184,6 +184,7 @@ export class CacheService {
                 types.push(KIXObjectType.TICKET_HISTORY);
                 // needed for permission checks of objectactions (HttpService) - check new after ticket update
                 types.push(RequestMethod.OPTIONS);
+                types.push(KIXObjectType.QUEUE_TICKET_STATS);
                 break;
             case KIXObjectType.FAQ_VOTE:
                 types.push(KIXObjectType.FAQ_ARTICLE);
@@ -271,6 +272,7 @@ export class CacheService {
                 break;
             case KIXObjectType.QUEUE:
                 types.push('QUEUE_HIERARCHY');
+                types.push(KIXObjectType.QUEUE_TICKET_STATS);
                 break;
             case KIXObjectType.GENERAL_CATALOG_ITEM:
                 types.push(KIXObjectType.GENERAL_CATALOG_CLASS);

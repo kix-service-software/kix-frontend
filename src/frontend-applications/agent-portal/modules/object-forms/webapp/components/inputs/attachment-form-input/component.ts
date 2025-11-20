@@ -12,9 +12,6 @@ import { AbstractMarkoComponent } from '../../../../../base-components/webapp/co
 import { Attachment } from '../../../../../../model/kix/Attachment';
 import { ArticleAttachmentFormValue } from '../../../../../ticket/webapp/core/form/form-values/ArticleAttachmentFormValue';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../../model/IdService';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
 import { WindowListener } from '../../../../../base-components/webapp/core/WindowListener';
 import { ObjectFormEventData } from '../../../../model/ObjectFormEventData';
@@ -24,13 +21,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private bindingIds: string[];
     private formValue: ArticleAttachmentFormValue;
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'inputs/attachment-form-input');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;
@@ -65,31 +62,35 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         this.state.prepared = true;
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: ObjectFormEventData, eventId: string): void => {
-                if (this.context?.instanceId === data.contextInstanceId)
+        super.registerEventSubscriber(
+            function (data: ObjectFormEventData, eventId: string): void {
+                if (this.context?.instanceId === data.contextInstanceId) {
                     if (data.blocked) {
                         this.state.readonly = true;
                     } else {
                         this.state.readonly = this.formValue.readonly;
                     }
-            }
-        };
-        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+                }
+            },
+            [ObjectFormEvent.BLOCK_FORM]
+        );
+
         WindowListener.getInstance().addUnloadTask(
             `${this.formValue.instanceId}`, this.formValue.destroy.bind(this.formValue)
         );
     }
 
     public async onDestroy(): Promise<void> {
+        super.onDestroy();
+
         if (this.bindingIds?.length && this.formValue) {
             this.formValue.removePropertyBinding(this.bindingIds);
         }
 
-        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
         WindowListener.getInstance().removeUnloadTask(`${this.formValue.instanceId}`);
     }
 

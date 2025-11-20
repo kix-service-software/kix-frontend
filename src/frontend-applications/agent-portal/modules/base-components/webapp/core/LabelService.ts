@@ -17,6 +17,7 @@ import { ILabelProvider } from './ILabelProvider';
 import { LabelProvider } from './LabelProvider';
 import { EventService } from './EventService';
 import { OverlayIcon } from './OverlayIcon';
+import { IdService } from '../../../../model/IdService';
 
 export class LabelService {
 
@@ -31,11 +32,11 @@ export class LabelService {
 
     private constructor() {
         EventService.getInstance().subscribe('USER_LANGUAGE_CHANGED', {
-            eventSubscriberId: 'LabelService',
-            eventPublished: async (data: any) => {
+            eventSubscriberId: IdService.generateDateBasedId('LabelService'),
+            eventPublished: async function (): Promise<void> {
                 this.displayValueCache.clear();
                 this.requestDisplayValuePromises.clear();
-            }
+            }.bind(this)
         });
     }
 

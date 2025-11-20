@@ -11,7 +11,6 @@ import { TableContentProvider } from '../../../../../../table/webapp/core/TableC
 import { TranslationLanguage } from '../../../../../model/TranslationLanguage';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationPattern } from '../../../../../model/TranslationPattern';
 import { SortUtil } from '../../../../../../../model/SortUtil';
 import { TranslationLanguageProperty } from '../../../../../model/TranslationLanguageProperty';
@@ -34,10 +33,9 @@ export class TranslationLanguageTableContentProvider extends TableContentProvide
 
     public async loadData(): Promise<Array<RowObject<TranslationLanguage>>> {
         const rowObjects = [];
-        if (this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            const translation = await context.getObject<TranslationPattern>();
-            if (translation && translation.Languages && !!translation.Languages.length) {
+        if (this.table.isContextDependent()) {
+            const translation = await this.context?.getObject<TranslationPattern>();
+            if (translation?.Languages && !!translation.Languages.length) {
                 const languages = SortUtil.sortObjects(
                     translation.Languages, TranslationLanguageProperty.LANGUAGE,
                     DataType.STRING, SortOrder.DOWN

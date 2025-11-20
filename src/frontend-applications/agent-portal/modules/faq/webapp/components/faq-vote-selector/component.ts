@@ -28,11 +28,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public rating: number = 0;
     public voteCount: number = 0;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.faqArticle = input.faqArticle;
         if (this.faqArticle?.Rating) {
             this.rating = BrowserUtil.round(this.faqArticle.Rating);
@@ -42,8 +44,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public async onMount(contextInstanceId?: string): Promise<void> {
-        await super.onMount(contextInstanceId);
+    public async onMount(): Promise<void> {
+        await super.onMount();
     }
 
     public setCurrentRating(rating: number): void {
@@ -84,6 +86,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

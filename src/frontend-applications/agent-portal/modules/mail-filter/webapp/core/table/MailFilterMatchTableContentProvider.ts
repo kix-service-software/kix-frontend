@@ -11,7 +11,6 @@ import { TableContentProvider } from '../../../../table/webapp/core/TableContent
 import { MailFilterMatch } from '../../../model/MailFilterMatch';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { MailFilter } from '../../../model/MailFilter';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
@@ -32,9 +31,8 @@ export class MailFilterMatchTableContentProvider extends TableContentProvider<Ma
 
     public async loadData(): Promise<Array<RowObject<MailFilterMatch>>> {
         let rowObjects = [];
-        if (this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            const mailFilter = await context.getObject<MailFilter>();
+        if (this.table.isContextDependent()) {
+            const mailFilter = await this.context?.getObject<MailFilter>();
             if (mailFilter && Array.isArray(mailFilter.Match)) {
                 rowObjects = SortUtil.sortObjects(mailFilter.Match, 'Key', DataType.STRING)
                     .map((m, i) => {

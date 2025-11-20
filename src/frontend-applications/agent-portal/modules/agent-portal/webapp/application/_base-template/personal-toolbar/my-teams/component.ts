@@ -13,8 +13,6 @@ import { KIXStyle } from '../../../../../../base-components/model/KIXStyle';
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ApplicationEvent } from '../../../../../../base-components/webapp/core/ApplicationEvent';
 import { ContextService } from '../../../../../../base-components/webapp/core/ContextService';
-import { EventService } from '../../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../../base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../../../../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../../base-components/webapp/core/LabelService';
 import { Queue } from '../../../../../../ticket/model/Queue';
@@ -27,37 +25,29 @@ import { QueueInformation } from './QueueInformation';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'personal-toolbar/my-teams');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#My Queues'
         ]);
 
         await this.initQueues();
 
-        this.subscriber = {
-            eventSubscriberId: 'personal-toolbar-my-teams-subscriber',
-            eventPublished: (): void => {
-                this.initQueues();
-            }
-        };
-
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, this.subscriber);
+        super.registerEventSubscriber(this.initQueues, [ApplicationEvent.REFRESH_TOOLBAR]);
 
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
         this.resizeHandling();
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         window.removeEventListener('resize', this.resizeHandling.bind(this), false);
-        if (this.subscriber) {
-            EventService.getInstance().unsubscribe(ApplicationEvent.REFRESH_TOOLBAR, this.subscriber);
-        }
     }
 
     private async initQueues(): Promise<void> {
@@ -102,6 +92,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
     }
 
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

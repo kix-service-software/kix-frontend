@@ -21,7 +21,8 @@ export class ComponentState extends AbstractComponentState {
         public contextId: string = null,
         public nodes: TreeNode[] = [],
         public activeNode: TreeNode = null,
-        public myTeamsActive: boolean = false
+        public myTeamsActive: boolean = false,
+        public treeId: string = 'ticket-queues-tree'
     ) {
         super();
     }

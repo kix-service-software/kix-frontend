@@ -125,6 +125,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'initial-site-url-select-input', '/kix-module-base-components$0/webapp/components/initial-site-url-select-input', []
         ),
+        new UIComponent(
+            'iframe-content',
+            '/kix-module-base-components$0/webapp/components/iframe-content',
+            []
+        )
     ];
 
     public webDependencies: string[] = [

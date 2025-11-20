@@ -167,9 +167,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     {
                                         property: ContactProperty.EMAIL
                                     }, null, null, '', '', null, '', '2'
-                                )
-                            ],
-                            [
+                                ),
                                 new InformationConfiguration(
                                     'object-avatar-label',
                                     {
@@ -183,9 +181,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         )
                                     ],
                                     null, '', '', null, '', '2'
-                                )
-                            ],
-                            [
+                                ),
                                 new InformationConfiguration(
                                     'object-avatar-label',
                                     {
@@ -199,9 +195,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         )
                                     ],
                                     null, '', '', null, '', '2'
-                                )
-                            ],
-                            [
+                                ),
                                 new InformationConfiguration(
                                     'object-avatar-label',
                                     {
@@ -215,9 +209,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         )
                                     ],
                                     null, '', '', null, '', '2'
-                                )
-                            ],
-                            [
+                                ),
                                 new InformationConfiguration(
                                     'object-avatar-label',
                                     {
@@ -231,9 +223,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         )
                                     ],
                                     null, '', '', null, '', '2'
-                                )
-                            ],
-                            [
+                                ),
                                 new InformationConfiguration(
                                     'object-avatar-label',
                                     {
@@ -550,7 +540,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         )
                                     ]
                                 ), null, false
-                            )
+                            ), false, true, null, false
                         ),
                         [new UIComponentPermission('tickets', [CRUD.READ])]
                     )

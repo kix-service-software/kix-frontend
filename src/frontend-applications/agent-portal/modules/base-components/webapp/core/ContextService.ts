@@ -23,7 +23,6 @@ import { ContextEvents } from './ContextEvents';
 import { EventService } from './EventService';
 import { BrowserUtil } from './BrowserUtil';
 import { ContextPreference } from '../../../../model/ContextPreference';
-import { RoutingEvent } from './RoutingEvent';
 import { ConfiguredWidget } from '../../../../model/configuration/ConfiguredWidget';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
@@ -36,6 +35,7 @@ import { TableFactoryService } from '../../../table/webapp/core/factory/TableFac
 import { ClientStorageService } from './ClientStorageService';
 import { ContextRefreshInterval } from './ContextRefreshInterval';
 import { RoutingService } from './RoutingService';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class ContextService {
 
@@ -70,6 +70,8 @@ export class ContextService {
     public supportContextStorage: boolean = true;
 
     public contextRefreshInterval: ContextRefreshInterval;
+
+    private componentContextMap: Object = new Object();
 
     public async initialize(): Promise<void> {
         this.contextRefreshInterval = new ContextRefreshInterval();
@@ -254,6 +256,12 @@ export class ContextService {
 
                     removed = true;
                 }
+
+                for (const key in this.componentContextMap) {
+                    if (this.componentContextMap[key] === instanceId) {
+                        delete this.componentContextMap[key];
+                    }
+                }
             }
         }
 
@@ -363,6 +371,11 @@ export class ContextService {
         instanceId: string, objectId?: string | number, history: boolean = true
     ): Promise<Context> {
         const context = this.contextInstances.find((i) => i.instanceId === instanceId);
+        const hint = await TranslationService.translate('Translatable#Loading ...');
+
+        BrowserUtil.toggleLoadingShield(
+            'APP_SHIELD', true, hint, undefined,
+        );
         if (context && context.instanceId !== this.activeContext?.instanceId) {
             if (this.activeContext) {
                 this.activeContext.lastScrollPosition = Math.round(BrowserUtil.getCurrentContentScrollPosition());
@@ -399,7 +412,9 @@ export class ContextService {
                     context.contextId, context, context.descriptor.contextType, null, previousContext
                 )
             );
+
         }
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
 
         return context;
     }
@@ -730,7 +745,7 @@ export class ContextService {
     ): Promise<void> {
         const contextId = context?.descriptor.contextId;
 
-        TableFactoryService.getInstance().deleteContextTables(context?.contextId);
+        TableFactoryService.getInstance().deleteContextTables(context?.instanceId);
 
         const currentUser = await AgentService.getInstance().getCurrentUser();
         const preference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');

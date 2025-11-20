@@ -16,7 +16,7 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public notification: PortalNotification = null,
         public createTime: string = '',
-        public frameId: string = IdService.generateDateBasedId('notification-info')
+        public html: string = ''
     ) {
         super();
     }

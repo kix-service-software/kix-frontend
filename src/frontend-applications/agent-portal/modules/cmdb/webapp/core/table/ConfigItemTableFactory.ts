@@ -31,7 +31,7 @@ export class ConfigItemTableFactory extends TableFactory {
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
     public async createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextInstanceId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): Promise<Table> {
 
@@ -39,12 +39,12 @@ export class ConfigItemTableFactory extends TableFactory {
             tableConfiguration, defaultRouting, defaultToggle, short
         );
 
-        const table = new Table(tableKey, tableConfiguration, contextId);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
         table.setContentProvider(
-            new ConfigItemTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
+            new ConfigItemTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextInstanceId)
         );
 
-        const tableColumns = await this.filterColumns(contextId, tableConfiguration);
+        const tableColumns = await this.filterColumns(contextInstanceId, tableConfiguration);
         table.setColumnConfiguration(tableColumns);
 
         if (

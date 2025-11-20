@@ -25,11 +25,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private contextListenerId: string;
     private labels: Map<string, Label[]>;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -75,7 +77,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.notification) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.notification]
+                this.state.widgetConfiguration.actions, [this.state.notification], this.contextInstanceId
             );
         }
     }

@@ -20,7 +20,8 @@ import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState, GraphContext> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
 
     }
@@ -69,6 +70,14 @@ class Component extends AbstractMarkoComponent<ComponentState, GraphContext> {
         this.context.setGraphOptions(graphContextOptions);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

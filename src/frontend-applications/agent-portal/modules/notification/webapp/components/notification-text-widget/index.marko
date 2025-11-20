@@ -8,24 +8,52 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId=state.instanceId
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions>
     <@content>
         <if(state.notification)>
             <for|group, index| of=state.messageGroups>
-                <widget instanceId="notification-message-group" key=("notification-message-group-" + index) title=group[0]>
+                <widget
+                    contextInstanceId=input.contextInstanceId
+                    instanceId="notification-message-group"
+                    key="notification-message-group-" + index
+                    title=group[0]>
                     <@content>
-                        <div.notification-message>
-                            <object-property-label object=group[1] property="Subject" labelProvider=state.labelProvider/>
-                            <object-property-label object=group[1] property="ContentType" labelProvider=state.labelProvider/>
-                            <object-property-label object=group[1] property="Body" labelProvider=state.labelProvider>
+                        <div class="notification-message">
+                            <object-property-label
+                                object=group[1]
+                                property="Subject"
+                                labelProvider=state.labelProvider/>
+                            <object-property-label
+                                object=group[1]
+                                property="ContentType"
+                                labelProvider=state.labelProvider/>
+                            <object-property-label
+                                object=group[1]
+                                property="Body"
+                                labelProvider=state.labelProvider>
                                 <@value>
-                                    <if(group[1].ContentType && group[1].ContentType === "text/html")> 
-                                        <editor readOnly=true value=group[1].Body useReadonlyStyle=true/>
+                                    <if(
+                                        group[1].ContentType &&
+                                        group[1].ContentType === "text/html"
+                                    )>
+                                        ${" "}
+                                        <editor
+                                            readOnly
+                                            value=(group[1].Body)
+                                            useReadonlyStyle/>
                                     </if>
                                     <else>
-                                        <textarea.input-style.content readonly class={nowrap: true}>${group[1].Body}</textarea>
+                                        <textarea
+                                            readonly
+                                            class=[
+                                                "input-style content",
+                                                {
+                                                    nowrap: true,
+                                                },
+                                            ]>${group[1].Body}</textarea>
                                     </else>
                                 </@value>
                             </object-property-label>

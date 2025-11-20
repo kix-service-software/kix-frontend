@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TimeoutTimer } from '../../../../base-components/webapp/core/TimeoutTimer';
 import { TicketService } from '../../core';
 
@@ -18,7 +17,8 @@ class Component extends FormInputComponent<Date, ComponentState> {
 
     private timoutTimer: TimeoutTimer;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.timoutTimer = new TimeoutTimer();
     }
@@ -29,13 +29,15 @@ class Component extends FormInputComponent<Date, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.setCurrentValue();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
     }
 
     public async setCurrentValue(): Promise<void> {
-        let date = new Date();
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        let date: Date;
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         if (value.value) {
             date = new Date(value.value);
@@ -68,6 +70,10 @@ class Component extends FormInputComponent<Date, ComponentState> {
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

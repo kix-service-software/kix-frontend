@@ -8,7 +8,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <div class="object-dialog" key=state.instanceId>
-    <widget-container widgets=state.widgets/>
+    <widget-container
+        contextInstanceId=input.contextInstanceId
+        widgets=state.widgets/>
     <if(state.canSubmit)>
         <div class="dialog-control">
             <dialog-notifiactions/>
@@ -18,8 +20,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     type="button"
                     on-click("cancel")
                     title=(state.translations["Translatable#Cancel"])
-                    class="kix-button cancel-button"
-                >
+                    class="kix-button cancel-button">
                     <span class="kix-icon-close"/>
                     <span>${state.translations["Translatable#Cancel"]}</span>
                 </button>
@@ -28,8 +29,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     type="button"
                     on-click("submit")
                     title=state.submitButtonText
-                    class="kix-button submit-button"
-                >
+                    class="kix-button submit-button">
                     <span class="kix-icon-check"/>
                     <span>${state.submitButtonText}</span>
                 </button>

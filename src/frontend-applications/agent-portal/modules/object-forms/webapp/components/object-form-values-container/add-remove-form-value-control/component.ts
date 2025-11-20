@@ -15,17 +15,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private formValue: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.formValue = input.formValue;
         this.state.readonly = this.formValue?.readonly;
         this.prepareControls();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.prepareControls();
     }
 
@@ -57,6 +60,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         return formValue instanceof DynamicFieldCountableFormValue ? formValue : null;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

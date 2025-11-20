@@ -11,7 +11,6 @@ import { TableContentProvider } from '../../../../../table/webapp/core/TableCont
 import { Version } from '../../../../model/Version';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { DateTimeUtil } from '../../../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { VersionProperty } from '../../../../model/VersionProperty';
@@ -32,9 +31,8 @@ export class ConfigItemVersionContentProvider extends TableContentProvider<Versi
 
     public async loadData(): Promise<Array<RowObject<Version>>> {
         const rowObjects = [];
-        if (this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            const versions = await context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
+        if (this.table.isContextDependent()) {
+            const versions = await this.context?.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
             if (versions) {
                 const translatedCurrentVersion = await TranslationService.translate('Translatable#current');
                 const translatedCreated = await TranslationService.translate('Translatable#created');

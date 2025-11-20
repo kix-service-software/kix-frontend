@@ -128,7 +128,6 @@ export class UserService extends KIXObjectAPIService {
 
             const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
             if (myQueues) {
-                myQueues[1] = myQueues[1] === null ? '' : myQueues[1];
                 preferences.push({ ID: PersonalSettingsProperty.MY_QUEUES, Value: myQueues[1] });
             }
 
@@ -215,7 +214,6 @@ export class UserService extends KIXObjectAPIService {
 
             const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
             if (myQueues) {
-                myQueues[1] = myQueues[1] === null ? '' : myQueues[1];
                 preferences.push({ ID: PersonalSettingsProperty.MY_QUEUES, Value: myQueues[1] });
             }
 
@@ -368,17 +366,21 @@ export class UserService extends KIXObjectAPIService {
                         });
                 }
             } else {
-                const paramValue = param[1] === null ? '' : param[1];
-                await this.createObject(
-                    token, clientRequestId, KIXObjectType.USER_PREFERENCE,
-                    [
-                        ['ID', param[0]],
-                        ['Value', paramValue]
-                    ],
-                    options
-                ).catch((error: Error) => {
-                    errors.push(error);
-                });
+                if (
+                    typeof param[1] !== 'undefined' &&
+                    param[1] !== null
+                ) {
+                    await this.createObject(
+                        token, clientRequestId, KIXObjectType.USER_PREFERENCE,
+                        [
+                            ['ID', param[0]],
+                            ['Value', param[1]]
+                        ],
+                        options
+                    ).catch((error: Error) => {
+                        errors.push(error);
+                    });
+                }
             }
         }
 

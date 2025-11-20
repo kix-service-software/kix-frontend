@@ -27,6 +27,8 @@ import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { UIFilterCriterion } from '../../model/UIFilterCriterion';
+import { ActionFactory } from '../base-components/webapp/core/ActionFactory';
+import { FAQArticleEditAction, FAQArticleVoteAction } from './webapp/core';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -196,6 +198,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             ['faq-article-vote-action', 'faq-article-edit-action'],
             null, null, false, true, null, false
         );
+
         configurations.push(faqArticleWidget);
 
         configurations.push(

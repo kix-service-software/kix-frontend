@@ -8,15 +8,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId=state.instanceId
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions>
     <@content>
-        <div.notification-information>
-            <object-information object=state.notification properties=state.properties flat=false/>
-            <div.event-list>
+        <div class="notification-information">
+            <object-information
+                object=state.notification
+                properties=state.properties
+                flat=false/>
+            <div class="event-list">
                 <span>
-                    <translation-string pattern="Translatable#Events"/>:
+                    <translation-string pattern="Translatable#Events"/>
+                    :
                 </span>
                 <label-list labels=state.eventLabels removeLabels=false/>
             </div>

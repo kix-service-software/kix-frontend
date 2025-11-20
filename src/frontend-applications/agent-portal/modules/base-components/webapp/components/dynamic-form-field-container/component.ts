@@ -37,12 +37,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private refreshNeededValues: string[] = [];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.timoutTimer = new TimeoutTimer();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.manager = input.manager;
         this.state.invalid = input.invalid;
     }
@@ -76,7 +78,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     if (existingValue) {
 
                         if (existingValue.value.operator !== cv.operator) {
-                            await existingValue.setOperator(cv.operator);
+                            await existingValue.setOperator(cv.operator, true);
                         }
 
                         if (!existingValue.value.operator) {
@@ -140,6 +142,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.refreshNeededValues = [];
         this.advancedOptionsMap = new Map();
         this.optionEditor = new Map();
@@ -215,13 +218,27 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async operationChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): Promise<void> {
-        await value.setOperator(nodes && nodes.length ? nodes[0].id : null);
+        this.refreshNeededValues.push(value.id);
+        (this as any).setStateDirty('dynamicValues');
+        if (await this.manager.clearValueOnOperatorChange(value.getValue().operator), true) {
+            value.clearValue();
+        }
+        await value.setOperator(nodes && nodes.length ? nodes[0].id : null, true);
+
         this.provideValue(value);
+
+        setTimeout(() => {
+            const index = this.refreshNeededValues.findIndex((v) => v === value.id);
+            if (index !== -1) {
+                this.refreshNeededValues.splice(index, 1);
+                (this as any).setStateDirty('dynamicValues');
+            }
+        }, 100);
     }
 
     public operationStringChanged(value: DynamicFormFieldValue, event: any): void {
         const operationString = event.target.value;
-        value.setOperator(operationString);
+        value.setOperator(operationString, true);
         this.provideValue(value);
     }
 

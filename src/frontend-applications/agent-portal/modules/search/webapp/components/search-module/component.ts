@@ -13,7 +13,8 @@ import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -25,6 +26,14 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
     private async initContentWidgets(): Promise<void> {
         this.state.contentWidgets = await this.context?.getContent();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

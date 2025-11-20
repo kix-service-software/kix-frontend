@@ -9,18 +9,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.table)>
     <widget
+        contextInstanceId=input.contextInstanceId
         instanceId=state.instanceId
         title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
-        contentActions=state.actions
-    >
+        contentActions=state.actions>
         <@content>
             <if(state.prepared)>
                 <div class="job-run-history-content">
                     <div class="history-filter">
                         <filter
                             filterCount=state.filterCount
-                            on-filter("filter")
-                        />
+                            on-filter("filter")/>
                     </div>
                     <div class="history-container">
                         <kix-table table=state.table/>

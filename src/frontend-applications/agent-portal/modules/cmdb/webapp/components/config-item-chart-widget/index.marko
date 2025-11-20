@@ -7,9 +7,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget instanceId=state.instanceId title=state.title>
+<widget
+    contextInstanceId=input.contextInstanceId
+    instanceId=state.instanceId
+    title=state.title>
     <@content>
-        <div.chart-container>
+        <div class="chart-container">
             <if(state.chartConfig)>
                 <chart config=state.chartConfig/>
             </if>

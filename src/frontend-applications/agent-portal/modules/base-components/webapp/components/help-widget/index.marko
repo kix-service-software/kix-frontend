@@ -7,23 +7,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.help-container class={
-    "note-editor-active": state.editorActive
-}>
+<div class=[
+    "help-container",
+    {
+        "note-editor-active": state.editorActive,
+    },
+]>
     <widget
+        contextInstanceId=input.contextInstanceId
         instanceId=input.instanceId
         minimizable=false
         contextType=state.contextType
         title=(
-                state.widgetConfiguration && state.widgetConfiguration.title
-                        ? state.widgetConfiguration.title
-                        : "Translatable#Help"
-            )
+            state.widgetConfiguration && state.widgetConfiguration.title
+                ? state.widgetConfiguration.title
+                : "Translatable#Help"
+        )
         icon=(
-                state.widgetConfiguration && state.widgetConfiguration.icon && state.widgetConfiguration.icon !== ""
-                        ? state.widgetConfiguration.icon
-                        : "kix-icon-query"
-            )>
+            state.widgetConfiguration &&
+            state.widgetConfiguration.icon &&
+            state.widgetConfiguration.icon !== ""
+                ? state.widgetConfiguration.icon
+                : "kix-icon-query"
+        )>
         <@content>
             <span>${state.helpText}</span>
             <if(state.links && !!state.links.length)>

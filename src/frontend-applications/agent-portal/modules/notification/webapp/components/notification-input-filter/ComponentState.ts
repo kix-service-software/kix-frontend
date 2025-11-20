@@ -25,6 +25,8 @@ export class ComponentState extends FormInputComponentState {
         this.manager = searchDefinition.createFormManager([SearchProperty.FULLTEXT], false);
         // do not mark viewable states as required
         (this.manager as TicketSearchFormManager).handleViewableStateType = false;
+        // base read permission on queues not needed
+        (this.manager as TicketSearchFormManager).queuePermissionCheck = false;
     }
 
 }

@@ -35,6 +35,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, NewConfigI
     public textFilterValue: string;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState(input.instanceId);
         this.listenerId = IdService.generateDateBasedId('asset-class-chooser-');
     }
@@ -93,6 +94,14 @@ export class Component extends AbstractMarkoComponent<ComponentState, NewConfigI
         this.state.filterValue = textFilterValue;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

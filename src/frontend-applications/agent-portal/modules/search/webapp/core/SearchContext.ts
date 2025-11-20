@@ -43,6 +43,8 @@ export abstract class SearchContext extends Context {
     }
 
     public async initContext(urlParams: URLSearchParams): Promise<void> {
+        await super.initContext(urlParams);
+
         if (urlParams) {
             if (urlParams.has('search')) {
                 try {
@@ -94,7 +96,7 @@ export abstract class SearchContext extends Context {
         super.destroy();
         // remove all table-states if no other instance of this context is open, to "reset" sort
         if (!ContextService.getInstance().hasContextInstance(this.contextId)) {
-            TableFactoryService.getInstance().deleteContextTables(this.contextId, undefined, false);
+            TableFactoryService.getInstance().deleteContextTables(this.instanceId, undefined, false);
         }
 
         return;

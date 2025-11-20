@@ -19,6 +19,8 @@ export class ComponentState extends AbstractComponentState {
         public text: string = '',
         public actionData: string = '',
         public canRunAction: boolean = true,
+        public lockRunAction: boolean = false,
+        public lockTimeout: ReturnType<typeof setTimeout> = null
     ) {
         super();
     }

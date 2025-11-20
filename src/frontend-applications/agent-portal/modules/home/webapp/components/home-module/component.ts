@@ -8,33 +8,31 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
 class HomeComponent extends AbstractMarkoComponent {
 
     public state: ComponentState;
-    private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'home-module');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (): void => {
-                this.prepareWidgets();
-            }
-        };
+
         this.prepareWidgets();
 
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
+        super.registerEventSubscriber(
+            function (data: any): void {
+                if (data?.contextId === this.context.contextId) {
+                    this.prepareWidgets();
+                }
+            },
+            [ContextEvents.CONTEXT_USER_WIDGETS_CHANGED]
+        );
     }
 
     private async prepareWidgets(): Promise<void> {
@@ -45,10 +43,14 @@ class HomeComponent extends AbstractMarkoComponent {
         }, 100);
     }
 
+
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
+        super.onDestroy();
     }
 
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = HomeComponent;

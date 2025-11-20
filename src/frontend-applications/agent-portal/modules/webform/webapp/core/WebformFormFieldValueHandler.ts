@@ -35,7 +35,7 @@ export class WebformFormFieldValueHandler extends FormFieldValueHandler {
         const queueValue = changedFieldValues.find(
             (cv) => cv[0] && cv[0].property === WebformProperty.QUEUE_ID
         );
-        this.setQueueId(queueValue[1]);
+        this.setQueueId(queueValue?.[1]);
     }
 
     private setQueueId(queueValue: FormFieldValue): void {

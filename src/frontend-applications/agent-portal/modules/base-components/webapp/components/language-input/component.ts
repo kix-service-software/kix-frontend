@@ -14,7 +14,8 @@ import { TreeNode, TreeService, TreeHandler } from '../../core/tree';
 
 class Component extends FormInputComponent<string, CompontentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new CompontentState();
     }
 
@@ -33,11 +34,13 @@ class Component extends FormInputComponent<string, CompontentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         const treeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
         await this.load();
-        await super.onMount();
-        this.state.prepared = true;
     }
 
     private async load(): Promise<void> {
@@ -81,6 +84,10 @@ class Component extends FormInputComponent<string, CompontentState> {
     public valueChanged(nodes: TreeNode[]): void {
         const currentNode = nodes && nodes.length ? nodes[0] : null;
         super.provideValue(currentNode ? currentNode.id : null);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

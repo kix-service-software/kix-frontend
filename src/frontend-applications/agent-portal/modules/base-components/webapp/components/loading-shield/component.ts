@@ -10,29 +10,28 @@
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { EventService } from '../../core/EventService';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
 import { LoadingShieldEventData } from '../../core/LoadingShieldEventData';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
     private shieldId: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'loading-shield');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.shieldId = input.shieldId;
     }
 
     public async onMount(): Promise<void> {
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('LoadingShield'),
-            eventPublished: (data: LoadingShieldEventData, eventId: string): void => {
+        await super.onMount();
+
+        super.registerEventSubscriber(
+            function (data: LoadingShieldEventData, eventId: string): void {
                 if (data.shieldId === this.shieldId) {
                     this.state.show = data.isLoading;
                     this.state.hint = data.loadingHint;
@@ -41,10 +40,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     this.state.time = data.time;
                     this.update();
                 }
-            }
-        };
+            },
+            [ApplicationEvent.TOGGLE_LOADING_SHIELD]
+        );
+    }
 
-        EventService.getInstance().subscribe(ApplicationEvent.TOGGLE_LOADING_SHIELD, this.subscriber);
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     public async update(): Promise<void> {

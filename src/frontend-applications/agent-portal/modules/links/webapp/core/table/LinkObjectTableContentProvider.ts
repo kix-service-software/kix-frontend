@@ -46,11 +46,15 @@ export class LinkObjectTableContentProvider extends TableContentProvider<LinkObj
 
     public async loadData(): Promise<RowObject<LinkObject>[]> {
 
+        let rowObjects: RowObject<LinkObject>[] = [];
         let contextObject: KIXObject;
         if (this.context instanceof EditLinkedObjectsDialogContext) {
-            contextObject = await this.context.getObject('LinkObject');
+            contextObject = await this.context?.getObject('LinkObject');
         } else {
-            contextObject = await this.context.getObject();
+            contextObject = await this.context?.getObject();
+        }
+        if (!contextObject) {
+            return rowObjects;
         }
 
         const pageSize = await this.getPageSize();
@@ -80,7 +84,6 @@ export class LinkObjectTableContentProvider extends TableContentProvider<LinkObj
             null, null, 20, [KIXObjectProperty.LINKS], [KIXObjectProperty.LINKS]
         );
 
-        let rowObjects: RowObject<LinkObject>[] = [];
         if (links?.length) {
             const linkedObjects = await this.prepareLinkObjects({
                 KIXObjectType: contextObject.KIXObjectType,

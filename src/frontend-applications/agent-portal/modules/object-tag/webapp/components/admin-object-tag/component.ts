@@ -18,9 +18,7 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { ObjectTagProperty } from '../../../model/ObjectTagProperty';
-import { ObjectTagService } from '../../core/ObjectTagService';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { IdService } from '../../../../../model/IdService';
 import { QueueProperty } from '../../../../ticket/model/QueueProperty';
 import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
@@ -28,18 +26,18 @@ import { ObjectTagLink } from '../../../model/ObjectTagLink';
 import { ObjectTagLinkProperty } from '../../../model/ObjectTagLinkProperty';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
-import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { Table } from '../../../../table/model/Table';
 import { SysConfigOptionProperty } from '../../../../sysconfig/model/SysConfigOptionProperty';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private preparedObjects: Map<string,any[]>;
+    private preparedObjects: Map<string, any[]>;
     private selectedTags: Array<string>;
     private nodes: TreeNode[];
 
-    public async onCreate(): Promise<void> {
+    public async onCreate(input: any): Promise<void> {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.state.loadNodes = this.loadNodes.bind(this);
         this.state.searchCallback = this.doAutocompleteSearch.bind(this);
@@ -47,12 +45,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.search();
     }
 
     public async loadNodes(): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
-        nodes = ContextService.getInstance().getActiveContext<AdminContext>().getAdditionalInformation('tagNodes');
+        nodes = this.context?.getAdditionalInformation('tagNodes');
         this.nodes = nodes;
         return nodes;
     }
@@ -83,13 +82,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const treeHandler = TreeService.getInstance().getTreeHandler('object-tag-value');
         let nodes: TreeNode[] = treeHandler?.getSelectedNodes();
 
-        if ( !nodes?.length && this.nodes?.length ) {
+        if (!nodes?.length && this.nodes?.length) {
             nodes = this.nodes;
             this.nodes = [];
         }
 
-        if ( nodes?.length ) {
-            this.selectedTags = nodes.map( (n) => n.id);
+        if (nodes?.length) {
+            this.selectedTags = nodes.map((n) => n.id);
             const loadingOptions = new KIXObjectLoadingOptions();
             loadingOptions.limit = 0;
             loadingOptions.searchLimit = 0;
@@ -100,50 +99,50 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 )
             ];
             const tags = await KIXObjectService.loadObjects<ObjectTagLink>(
-                KIXObjectType.OBJECT_TAG_LINK, null,loadingOptions,
-                null,null,false
-            ).catch( () => [] );
+                KIXObjectType.OBJECT_TAG_LINK, null, loadingOptions,
+                null, null, false
+            ).catch(() => []);
 
-            if ( tags?.length ) {
+            if (tags?.length) {
                 await this.prepareObjects(tags);
                 await this.prepareTable();
             }
         }
 
-        ContextService.getInstance().getActiveContext().setAdditionalInformation('tagNodes', nodes);
+        this.context?.setAdditionalInformation('tagNodes', nodes);
 
         return null;
     }
 
     private async prepareObjects(tags: ObjectTagLink[]): Promise<void> {
         const types = await KIXObjectService.prepareObjectTagTypes(true);
-        tags.forEach( (o) => {
+        tags.forEach((o) => {
             const type = types.has(o.ObjectType) ? types.get(o.ObjectType) : o.ObjectType;
             if (this.preparedObjects.has(type)) {
                 const objectIds = this.preparedObjects.get(type);
-                if ( !objectIds.includes( o.ObjectID) ) {
+                if (!objectIds.includes(o.ObjectID)) {
                     objectIds.push(o.ObjectID);
                 }
             }
             else {
-                this.preparedObjects.set(type,[o.ObjectID]);
+                this.preparedObjects.set(type, [o.ObjectID]);
             }
         });
     }
     private async prepareTable(): Promise<void> {
         const createPromises = [];
         const objects = [];
-        for( const object of this.preparedObjects ) {
+        for (const object of this.preparedObjects) {
             createPromises.push(
                 TableFactoryService.getInstance().createTable(
-                `table-object-tag-${object[0]}`, object[0], null, object[1], null, true
+                    `table-object-tag-${object[0]}`, object[0], null, object[1], null, true
                 )
             );
             objects.push(object);
         }
         const tables = await Promise.all(createPromises);
-        tables.forEach( (table,index) => {
-            if ( typeof table !== 'undefined' ) {
+        tables.forEach((table, index) => {
+            if (typeof table !== 'undefined') {
                 table.getTableConfiguration().enableSelection = Boolean(this.state.actions);
                 table['title'] = LabelService.getInstance().getObjectName(objects[index][0], true, true);
                 table['instanceId'] = IdService.generateDateBasedId();
@@ -155,7 +154,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async getActions(): Promise<AbstractAction[]> {
-        const actions = await ActionFactory.getInstance().getActionsForType(KIXObjectType.OBJECT_TAG);
+        const actions = await ActionFactory.getInstance().getActionsForType(
+            KIXObjectType.OBJECT_TAG, this.context?.instanceId
+        );
         const filteredActions: AbstractAction[] = [];
         for (const a of actions) {
             if (await a.canShow()) {
@@ -196,13 +197,21 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public runAction(action:AbstractAction): void {
+    public runAction(action: AbstractAction): void {
         action.setData({
             tables: this.state.tables,
             tags: this.selectedTags,
             objects: this.preparedObjects
         });
         action.run(null);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

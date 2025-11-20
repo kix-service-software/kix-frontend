@@ -20,6 +20,7 @@ import { UIComponent } from '../../model/UIComponent';
 import { PermissionService } from '../services/PermissionService';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { ProfilingService } from '../../../../server/services/ProfilingService';
+import { HTMLUtil } from './HTMLUtil';
 
 export class ApplicationRouter extends KIXRouter {
 
@@ -48,6 +49,17 @@ export class ApplicationRouter extends KIXRouter {
         await this.handleRoute(req, res);
     }
 
+    public async sanitizeHTML(req: Request, res: Response, next: () => void): Promise<void> {
+        let html = req.body?.html || '';
+
+        html = HTMLUtil.sanitizeContent(html, true);
+        html = HTMLUtil.buildHtmlStructur(html);
+
+        res.status(201).send({
+            html
+        });
+    }
+
     public async getModule(req: Request, res: Response, next: () => void): Promise<void> {
         const moduleId = req.params.moduleId;
 
@@ -64,6 +76,11 @@ export class ApplicationRouter extends KIXRouter {
             '/',
             AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getDefaultModule.bind(this)
+        );
+
+        this.router.post(
+            '/sanitize-html',
+            this.sanitizeHTML.bind(this)
         );
 
         this.router.get(

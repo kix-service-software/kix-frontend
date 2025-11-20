@@ -23,10 +23,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private changeSliderTimeout;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -124,6 +126,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 )
             );
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

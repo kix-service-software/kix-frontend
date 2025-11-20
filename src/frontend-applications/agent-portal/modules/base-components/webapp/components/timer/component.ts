@@ -15,15 +15,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private interval: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.time = input.time;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         if (this.state.time) {
             this.interval = setInterval(() => {
                 this.state.time = this.state.time - 1000;

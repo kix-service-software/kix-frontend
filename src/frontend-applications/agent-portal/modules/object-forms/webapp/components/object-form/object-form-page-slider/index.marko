@@ -8,13 +8,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.prepared)>
-   <div class="row mb-3 py-0 pb-2 bg-white sticky-top">
+   <div class="object-form-page-slider row mb-3 py-0 pb-2 bg-white sticky-top">
       <div class="col-4 d-flex align-items-center justify-content-end">
          <div
+            style="cursor:pointer"
             class="kix-icon-nook-left fs-3"
             title=(state.translations["Translatable#Previous"])
-            on-click("previousPage")
-         />
+            on-click("previousPage")/>
       </div>
       <div class="col-4 text-center fw-bold">
          <h2 class="fw-bold fs-3">
@@ -25,29 +25,27 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </if>
          </h2>
          <div class="d-flex justify-content-center mt-2">
-
             <for|page, index| of=state.pages>
                <div
-                  style="width:1rem;height:1rem"
+                  style="width:1rem;height:1rem;cursor:pointer"
                   class=[
-                     "rounded-circle me-2",
+                     "object-form-page-slider-circle rounded-circle me-2",
                      {
                         "bg-secondary": index !== state.activePageIndex,
                         "bg-primary": index === state.activePageIndex,
                      },
                   ]
-                  title=page.name
-                  on-click("setPage", index)
-               />
+                  title=(state.translations[page.name])
+                  on-click("setPage", index)/>
             </for>
          </div>
       </div>
       <div class="col-4 d-flex align-items-center justify-content-start">
          <div
+            style="cursor:pointer"
             class="kix-icon-nook-right fs-3"
             title=(state.translations["Translatable#Next"])
-            on-click("nextPage")
-         />
+            on-click("nextPage")/>
       </div>
    </div>
 </if>

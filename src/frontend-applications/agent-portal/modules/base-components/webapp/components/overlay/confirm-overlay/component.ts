@@ -19,11 +19,13 @@ class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
     private buttonLabels: [string, string];
     private confirmed: boolean;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: ConfirmOverlayContent): void {
+        super.onInput(input);
         this.confirmCallback = input.confirmCallback;
         this.cancelCallback = input.cancelCallback;
         this.update(input);
@@ -82,6 +84,10 @@ class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
     public toggleDecision(event: any): void {
         this.state.decisionChecked = !this.state.decisionChecked;
         AgentService.getInstance().setPreferences([[this.state.decision[0], this.state.decisionChecked]]);
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
     }
 }
 

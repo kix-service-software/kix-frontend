@@ -8,7 +8,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.instanceId)>
-    <widget instanceId=state.instanceId title=state.title icon=state.icon>
+    <widget
+        contextInstanceId=input.contextInstanceId
+        instanceId=state.instanceId
+        title=state.title
+        icon=state.icon>
         <@content>
             <main-form/>
         </@content>

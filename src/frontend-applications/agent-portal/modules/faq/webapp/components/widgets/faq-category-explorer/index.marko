@@ -9,13 +9,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <div class="faq-category-explorer">
     <widget
+        contextInstanceId=input.contextInstanceId
         instanceId=state.instanceId
         title=(
             state.widgetConfiguration
                 ? state.widgetConfiguration.title
                 : "Translatable#FAQ Categories"
-        )
-    >
+        )>
         <@content>
             <if(state.prepared)>
                 <div
@@ -25,8 +25,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             active: !state.activeNode,
                         },
                     ]
-                    on-click("showAll")
-                >
+                    on-click("showAll")>
                     <translation-string pattern="Translatable#Show all"/>
                 </div>
                 <if(state.nodes && state.nodes.length)>
@@ -34,8 +33,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         treeId="faq-category-tree"
                         tree=state.nodes
                         activeNode=state.activeNode
-                        on-nodeClicked("activeNodeChanged")
-                    />
+                        on-nodeClicked("activeNodeChanged")/>
                 </if>
             </if>
         </@content>

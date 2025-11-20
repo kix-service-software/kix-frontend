@@ -19,17 +19,13 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { SysconfigEvent } from '../../core/SysconfigEvent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { SysConfigOption } from '../../../model/SysConfigOption';
 import { SysConfigOptionType } from '../../../model/SysConfigOptionType';
 import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { RowObject } from '../../../../table/model/RowObject';
 import { TableEvent } from '../../../../table/model/TableEvent';
@@ -38,28 +34,29 @@ import { TableValue } from '../../../../table/model/TableValue';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
 
-    private subscriber: IEventSubscriber;
     public filterValue: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'system-admin-sysconfig');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.prepareTable();
 
         const actions = await ActionFactory.getInstance().generateActions(
-            ['sysconfig-edit-action', 'sysconfig-reset-action', 'activate-configuration'], this.state.table
+            ['sysconfig-edit-action', 'sysconfig-reset-action', 'activate-configuration'], this.state.table,
+            this.context?.instanceId
         );
-        WidgetService.getInstance().registerActions(this.state.instanceId, actions);
+        this.context.widgetService.registerActions(this.state.instanceId, actions);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#SysConfig']);
 
-        const context = ContextService.getInstance().getActiveContext<AdminContext>();
-        this.filterValue = context.filterValue;
+        this.filterValue = this.context.filterValue;
         this.search();
 
         this.state.prepared = true;
@@ -75,21 +72,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.table.setContentProvider(new SysConfigContentProvider(this));
         this.state.table.sort(SysConfigOptionProperty.NAME, SortOrder.UP);
 
-        this.subscriber = {
-            eventSubscriberId: 'admin-sysconfig',
-            eventPublished: (data: TableEventData, eventId: string): void => {
-                if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
-                    WidgetService.getInstance().updateActions(this.state.instanceId);
+        super.registerEventSubscriber(
+            function (data: TableEventData, eventId: string): void {
+                if (data?.tableId === this.state.table?.getTableId()) {
+                    this.context.widgetService.updateActions(this.state.instanceId);
                 }
 
                 if (eventId === SysconfigEvent.SYSCONFIG_OPTIONS_UPDATED) {
                     this.search();
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(SysconfigEvent.SYSCONFIG_OPTIONS_UPDATED, this.subscriber);
+            },
+            [
+                TableEvent.ROW_SELECTION_CHANGED,
+                SysconfigEvent.SYSCONFIG_OPTIONS_UPDATED
+            ]
+        );
 
         await this.state.table.initialize();
     }
@@ -104,13 +101,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public search(): void {
         this.state.filterValue = this.filterValue;
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof AdminContext) {
-            context.setFilterValue(this.filterValue);
+        if (this.context instanceof AdminContext) {
+            this.context.setFilterValue(this.filterValue);
         }
 
         this.state.table.reload(true);
 
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

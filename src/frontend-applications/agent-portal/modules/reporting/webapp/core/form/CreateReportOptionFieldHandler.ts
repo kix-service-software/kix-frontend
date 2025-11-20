@@ -29,17 +29,17 @@ import { ReportObjectCreator } from './ReportObjectCreator';
 
 export class CreateReportOptionFieldHandler extends OptionFieldHandler {
 
-    private subscriber: IEventSubscriber;
+    private readonly subscriber: IEventSubscriber;
 
     public constructor() {
         super();
         this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('CreateReportActionJobFormManager'),
-            eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
+            eventSubscriberId: IdService.generateDateBasedId('CreateReportOptionFieldHandler'),
+            eventPublished: function (data: FormValuesChangedEventData, eventId: string): void {
                 const definitionValue = data.changedValues.find(
                     (cv) => cv[0] && cv[0].property === KIXObjectType.REPORT_DEFINITION
                 );
-                if (definitionValue && definitionValue[1]) {
+                if (definitionValue?.[1]) {
                     const definitionId = definitionValue[1]?.value;
 
                     const parameterField = definitionValue[0]?.parent?.children?.find(
@@ -52,7 +52,7 @@ export class CreateReportOptionFieldHandler extends OptionFieldHandler {
                     );
                     this.handleOutputFormatField(data.formInstance, outputFormatField, definitionId);
                 }
-            }
+            }.bind(this)
         };
 
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.subscriber);
@@ -184,7 +184,6 @@ export class CreateReportOptionFieldHandler extends OptionFieldHandler {
                 return field;
             }
         }
-        return;
     }
 
     public async postPrepareOptionValue(
@@ -206,8 +205,6 @@ export class CreateReportOptionFieldHandler extends OptionFieldHandler {
                 return config;
             }
         }
-
-        return;
     }
 
 }

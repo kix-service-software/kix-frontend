@@ -25,21 +25,20 @@ import { TranslationService } from '../../../../../../modules/translation/webapp
 import { SortUtil } from '../../../../../../model/SortUtil';
 import { DataType } from '../../../../../../model/DataType';
 import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
 export class Component extends AbstractMarkoComponent<ComponentState, FAQContext> {
-    private subscriber: IEventSubscriber;
 
     public listenerId: string;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'widgets/faq-category-explorer');
         this.state = new ComponentState(input.instanceId);
         this.listenerId = IdService.generateDateBasedId('faq-category-explorer-');
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.contextType = input.contextType;
     }
 
@@ -66,18 +65,12 @@ export class Component extends AbstractMarkoComponent<ComponentState, FAQContext
 
         this.state.prepared = true;
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (): void {
                 this.state.activeNode = this.getActiveNode(this.context?.categoryId);
-            }
-        };
-
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
+            },
+            [ContextEvents.CONTEXT_PARAMETER_CHANGED]
+        );
     }
 
     private getActiveNode(categoryId: number, nodes: TreeNode[] = this.state.nodes
@@ -143,6 +136,10 @@ export class Component extends AbstractMarkoComponent<ComponentState, FAQContext
         this.context.setFAQCategoryId(null);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

@@ -18,7 +18,8 @@ import { Label } from '../../../../../modules/base-components/webapp/core/Label'
 
 class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescription[], ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -28,6 +29,10 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Assign Links'
@@ -73,6 +78,10 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
             labels.push(new Label(ld.linkableObject, null, null, null, `(${linkLabel})`));
         }
         this.state.labels = labels;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
 }

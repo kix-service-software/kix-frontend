@@ -7,10 +7,7 @@
  * --
  */
 
-import { rejects } from 'node:assert';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
-import { ContextService } from '../../../base-components/webapp/core/ContextService';
-import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
 import { CKEditor5Configuration } from '../../model/CKEditor5Configuration';
 import { CKEditor5Classes } from './CKEditor5Classes';
 import { CKEditorService } from './CKEditorService';
@@ -19,7 +16,7 @@ import { TextmodulePlugin } from './TextmodulePlugin';
 
 export class CKEditor5 {
 
-    public static editorTimeout = 2000;
+    public static editorTimeout = 1000;
 
     private editor: any;
 
@@ -61,8 +58,8 @@ export class CKEditor5 {
                     }
 
                     const isFocused = (this.editor.focusManager && !this.editor.focusManager.hasFocus);
-                    // if editor has no value or is not focused, set 'new' value
-                    if (input.value !== null || (isFocused || !this.editor.getData())) {
+                    // if editor has no value or is not focused, set 'new' value - if external, add it
+                    if (input.value !== null && (isFocused || !this.editor.getData() || input.externallyUpdated)) {
                         let contentString = BrowserUtil.replaceInlineContent(
                             input.value ? input.value : '', input.inlineContent
                         );

@@ -11,7 +11,6 @@ import { TableContentProvider } from '../../../../../table/webapp/core/TableCont
 import { Article } from '../../../../model/Article';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { RowObject } from '../../../../../table/model/RowObject';
 import { Table } from '../../../../../table/model/Table';
@@ -30,9 +29,8 @@ export class ArticleTableContentProvider extends TableContentProvider<Article> {
 
     public async loadData(): Promise<Array<RowObject<Article>>> {
         const rowObjects = [];
-        if (this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            const articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
+        if (this.table.isContextDependent) {
+            const articles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE);
             if (articles) {
                 articles.sort((a, b) => b.ArticleID - a.ArticleID);
 

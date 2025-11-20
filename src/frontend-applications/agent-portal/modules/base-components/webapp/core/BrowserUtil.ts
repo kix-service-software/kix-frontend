@@ -30,12 +30,16 @@ import { RoutingService } from './RoutingService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { DefaultColorConfiguration } from '../../../../model/configuration/DefaultColorConfiguration';
 import { ModalSettings } from '../../../toast/model/ModalSettings';
+import DOMPurify from 'dompurify';
+import { ClientStorageService } from './ClientStorageService';
 
 export class BrowserUtil {
 
     private static userColors: Map<number, string> = new Map();
 
     public static readonly URL_REGEX = /(https?|ftps?|sftp):\/\/[^\s]+/;
+
+    private static frameIntervals: Map<string, ReturnType<typeof setInterval>> = new Map();
 
     public static openErrorOverlay(error: string): void {
         ToastUtil.showErrorToast(error);
@@ -100,9 +104,10 @@ export class BrowserUtil {
             () => console.error('Could not get current user to start download.')
         );
         if (user) {
+            const baseRoute = ClientStorageService.getBaseRoute();
             const a = document.createElement('a');
             a.style.display = 'none';
-            a.href = `/files/download/${encodeURIComponent(file.downloadId)}`;
+            a.href = `${baseRoute}/files/download/${encodeURIComponent(file.downloadId)}`;
             a.download = file.Filename;
             a.target = '_blank';
             document.body.appendChild(a);
@@ -585,15 +590,41 @@ export class BrowserUtil {
     }
 
     public static appendKIXStyling(htmlDocument: Document): void {
+        const baseRoute = ClientStorageService.getBaseRoute();
+
         const kixLink = htmlDocument.createElement('link');
         kixLink.rel = 'stylesheet';
-        kixLink.href = '/static/applications/application/lasso-less.css';
+        kixLink.href = `${baseRoute}/static/applications/application/lasso-less.css`;
         htmlDocument.head.appendChild(kixLink);
 
         const bootstrapLink = htmlDocument.createElement('link');
         bootstrapLink.rel = 'stylesheet';
-        bootstrapLink.href = '/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css';
+        bootstrapLink.href = `${baseRoute}/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css`;
         htmlDocument.head.appendChild(bootstrapLink);
+    }
+
+    public static async buildHtmlStructur(html: string): Promise<string> {
+        const applicationUrl = ClientStorageService.getApplicationUrl();
+        const url = `${applicationUrl}/sanitize-html`;
+
+        const body = { html };
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (response.status === 201) {
+            const result = await response.json();
+            html = result?.html || '';
+        } else {
+            const errorMessage = 'API Error - Sanitize HTML';
+            throw errorMessage;
+        }
+
+        return html;
     }
 
     public static getCurrentContentScrollPosition(): number {
@@ -601,7 +632,7 @@ export class BrowserUtil {
         if (wrapperEl.length) {
             return wrapperEl[0].scrollTop;
         } else {
-            return document.getElementById('ssp-content').scrollTop;
+            return document.documentElement.scrollTop;
         }
     }
 
@@ -611,7 +642,31 @@ export class BrowserUtil {
         if (wrapperEl.length) {
             wrapperEl[0].scrollTo(options);
         } else {
-            return document.getElementById('ssp-content').scrollTo(options);
+            document.documentElement.scrollTo(options);
+        }
+    }
+
+    public static setFrameHeight(frameId: string): void {
+        const frame = document.getElementById(frameId) as HTMLIFrameElement;
+
+        const frameInterval = this.frameIntervals.get(frameId);
+
+        if (frame) {
+            // set frame height to 0px to get minimal scollHeight
+            frame.style.height = '0px';
+
+            const frameHeight = frame?.contentWindow?.document?.body?.scrollHeight || 0;
+            if (frameHeight > 0) {
+                frame.style.height = frameHeight + 20 + 'px';
+
+                clearInterval(frameInterval);
+                this.frameIntervals.delete(frameId);
+            } else if (!frameInterval) {
+                this.frameIntervals.set(frameId, setInterval(() => this.setFrameHeight(frameId), 500));
+            }
+        }
+        else if (!frameInterval) {
+            this.frameIntervals.set(frameId, setInterval(() => this.setFrameHeight(frameId), 500));
         }
     }
 

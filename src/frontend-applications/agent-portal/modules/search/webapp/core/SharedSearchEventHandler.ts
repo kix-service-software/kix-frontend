@@ -11,8 +11,8 @@ import { BackendNotification } from '../../../../model/BackendNotification';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
-import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { SearchService } from './SearchService';
+import { IdService } from '../../../../model/IdService';
 
 export class SharedSearchEventHandler {
 
@@ -25,22 +25,20 @@ export class SharedSearchEventHandler {
         return SharedSearchEventHandler.INSTANCE;
     }
 
-    private subscriber: IEventSubscriber;
+    private readonly subscriber: IEventSubscriber;
 
     private constructor() {
 
         this.subscriber = {
-            eventSubscriberId: 'SharedSearchEventHandler',
-            eventPublished: (data: BackendNotification): void => {
+            eventSubscriberId: IdService.generateDateBasedId('SharedSearchEventHandler'),
+            eventPublished: function (data: BackendNotification): void {
                 if (data instanceof BackendNotification && data.Namespace === 'Search.Shared') {
-                    const userId = AgentSocketClient.getInstance().userId;
                     if (data.ObjectID === 'SharedSearch') {
                         SearchService.getInstance().getSearchBookmarks(true);
                     }
                 }
             }
         };
-
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
     }
 

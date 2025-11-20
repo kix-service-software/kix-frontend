@@ -10,18 +10,19 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { SystemAddressLabelProvider } from '../../core';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { SystemAddress } from '../../../model/SystemAddress';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -54,11 +55,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.systemAddress) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.systemAddress]
+                this.state.widgetConfiguration.actions, [this.state.systemAddress], this.contextInstanceId
             );
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

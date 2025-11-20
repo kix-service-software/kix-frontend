@@ -29,14 +29,14 @@ export class WebformTableFactory extends TableFactory {
     public objectType: KIXObjectType = KIXObjectType.WEBFORM;
 
     public async createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextInstanceId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
-        const table = new Table(tableKey, tableConfiguration);
-        table.setContentProvider(new WebformTableContentProvider(table, objectIds, null, contextId));
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
+        table.setContentProvider(new WebformTableContentProvider(table, objectIds, null, contextInstanceId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;

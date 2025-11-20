@@ -7,7 +7,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget title=(state.translations["Translatable#Welcome to KIX 18"])>
+<widget
+    contextInstanceId=input.contextInstanceId
+    title=(state.translations["Translatable#Welcome to KIX 18"])>
     <@content>
         <div class="slider-widget">
             <div class="slider-menu">
@@ -17,8 +19,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             active: index === state.activeSliderIndex,
                         }
                         title=(state.translations[sliderElement.title])
-                        on-click("showSlider", index)
-                    />
+                        on-click("showSlider", index)/>
                 </for>
             </div>
             <div key="slider-image" class="slider-image">
@@ -26,8 +27,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <if(state.activeSlider.imageIsBase64)>
                         <img
                             alt=(state.translations[state.activeSlider.title])
-                            src=(state.activeSlider.image)
-                        >
+                            src=(state.activeSlider.image)>
                     </if>
                     <else>
                         <img
@@ -36,8 +36,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 state.baseRoute +
                                 "/static/img/release/" +
                                 state.activeSlider.image
-                            )
-                        >
+                            )>
                     </else>
                 </if>
             </div>
@@ -46,8 +45,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <div
                         title=(state.translations["Translatable#previous"])
                         on-click("previousSlider")
-                        class="slider-button useable"
-                    >
+                        class="slider-button useable">
                         <span class="kix-icon-nook-left"/>
                     </div>
                 </if>
@@ -83,8 +81,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     state.translations["Translatable#Let's go"]
                                 )
                                 on-click("closeReleaseInfos")
-                                class="kix-button submit-button"
-                            >
+                                class="kix-button submit-button">
                                 <span class="kix-icon-check"/>
                                 <translation-string pattern="Translatable#Let's go"/>
                             </button>
@@ -100,8 +97,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     ]
                                 )
                                 on-click("closeReleaseInfos")
-                                class="kix-button"
-                            >
+                                class="kix-button">
                                 <span class="kix-icon-close"/>
                                 <translation-string pattern="Translatable#No, thank you"/>
                             </button>
@@ -113,8 +109,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     ]
                                 )
                                 on-click("showSlider", 1)
-                                class="kix-button"
-                            >
+                                class="kix-button">
                                 <span class="kix-icon-check"/>
                                 <translation-string pattern="Translatable#Yes, please"/>
                             </button>
@@ -128,8 +123,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <div
                         title=(state.translations["Translatable#next"])
                         on-click("nextSlider")
-                        class="slider-button useable"
-                    >
+                        class="slider-button useable">
                         <span class="kix-icon-nook-right"/>
                     </div>
                 </if>
@@ -139,8 +133,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
             <div
                 class="p-3 d-flex flex-column align-items-center justify-content-evenly"
-                id="release-information"
-            >
+                id="release-information">
                 <div class="mb-3 h3" id="release-information-title">
                     <translation-string pattern="Translatable#Latest releases"/>
                 </div>

@@ -15,20 +15,61 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
+    private resizeTimeout: ReturnType<typeof setTimeout> = null;
+    private observer: ResizeObserver;
 
     private article: Article = null;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.state.frameId = IdService.generateDateBasedId('article-view-');
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.article?.ChangeTime !== input.article?.ChangeTime) {
             this.article = input.article;
 
             const applicationUrl = ClientStorageService.getApplicationUrl();
             this.state.url = `${applicationUrl}/views/tickets/${this.article?.TicketID}/articles/${this.article?.ArticleID}?prepareInline=true`;
+        }
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+
+        if (!this.observer) {
+            this.prepareObserver();
+        }
+    }
+
+    public onDestroy(): void {
+        if (this.observer) {
+            this.observer.disconnect();
+        }
+    }
+
+    private prepareObserver(): void {
+        if (window.ResizeObserver) {
+            const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
+
+            let containerWidth = frame.offsetWidth;
+            this.observer = new ResizeObserver((entries) => {
+                if (frame.offsetWidth !== containerWidth) {
+                    if (this.resizeTimeout) {
+                        clearTimeout(this.resizeTimeout);
+                    }
+
+                    this.resizeTimeout = setTimeout(() => {
+                        containerWidth = frame.offsetWidth;
+                        BrowserUtil.setFrameHeight(this.state.frameId);
+                        this.resizeTimeout = null;
+                    }, 150);
+                }
+            });
+
+            this.observer.observe(frame);
         }
     }
 
@@ -45,8 +86,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 return;
             }
 
-            const frameHeight = frameDocument?.documentElement?.scrollHeight || 0;
-            frame.style.height = frameHeight + 10 + 'px';
+            BrowserUtil.setFrameHeight(this.state.frameId);
 
             const links = frameDocument.querySelectorAll('a[href]');
             links.forEach((link: HTMLAnchorElement) => {

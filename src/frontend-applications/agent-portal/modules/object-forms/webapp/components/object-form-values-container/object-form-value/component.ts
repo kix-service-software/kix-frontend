@@ -7,7 +7,6 @@
  * --
  */
 
-import { IdService } from '../../../../../../model/IdService';
 import { ConfigurationType } from '../../../../../../model/configuration/ConfigurationType';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FormGroupConfiguration } from '../../../../../../model/configuration/FormGroupConfiguration';
@@ -15,7 +14,6 @@ import { AbstractMarkoComponent } from '../../../../../base-components/webapp/co
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { KIXModulesService } from '../../../../../base-components/webapp/core/KIXModulesService';
 import { ValidationSeverity } from '../../../../../base-components/webapp/core/ValidationSeverity';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
@@ -26,27 +24,29 @@ import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
 import { ObjectFormEventData } from '../../../../model/ObjectFormEventData';
 import { FieldLayout } from '../../../../model/layout/FieldLayout';
+import { ObjectFormConfigurationContext } from '../../../core/ObjectFormConfigurationContext';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private bindingIds: string[];
-    private subscriber: IEventSubscriber;
-    private contextInstanceId: string;
     private fieldLayout: FieldLayout[];
     private field: FormFieldConfiguration;
 
     private parent: ObjectFormValue;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-form-values-container/object-form-value');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.parent = input.parent;
-        this.contextInstanceId = input.contextInstanceId;
         this.fieldLayout = input.fieldLayout;
-        if (this.state.formValue?.instanceId !== input.formValue?.instanceId || this.contextInstanceId) {
+
+        const isConfigContext = this.context?.contextId === ObjectFormConfigurationContext.CONTEXT_ID;
+        if (this.state.formValue?.instanceId !== input.formValue?.instanceId || isConfigContext) {
             this.state.formValue?.removePropertyBinding(this.bindingIds);
 
             this.state.formValue = input.formValue;
@@ -57,7 +57,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             this.update();
 
-            this.state.isEmpty = this.state.formValue?.empty;
+            if (this.state.formValue) {
+                this.state.isEmpty = this.state.formValue.empty || this.state.formValue['isEmpty'];
+            }
             if (this.state.formValue?.inputComponentId) {
                 this.state.inputTemplate = KIXModulesService.getComponentTemplate(
                     this.state.formValue?.inputComponentId
@@ -72,27 +74,26 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        await super.onMount(this.contextInstanceId);
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Edit Field'
         ]);
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(this.state.formValue?.instanceId),
-            eventPublished: (data: ObjectFormEventData): void => {
+        super.registerEventSubscriber(
+            function (data: ObjectFormEventData): void {
                 if (this.state.formValue?.instanceId === data?.formValueInstanceId) {
                     const element = (this as any).getEl();
                     if (element) {
                         BrowserUtil.scrollIntoViewIfNeeded(element);
                     }
                 }
-            }
-        };
-        EventService.getInstance().subscribe(ObjectFormEvent.SCROLL_TO_FORM_VALUE, this.subscriber);
+            },
+            [ObjectFormEvent.SCROLL_TO_FORM_VALUE]
+        );
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         this.state.formValue?.removePropertyBinding(this.bindingIds);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.SCROLL_TO_FORM_VALUE, this.subscriber);
     }
 
     private async update(): Promise<void> {
@@ -214,15 +215,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             let canShow = false;
 
+            const isConfigContext = this.context.contextId === ObjectFormConfigurationContext.CONTEXT_ID;
             // in configuration context
-            if (this.contextInstanceId) {
+            if (isConfigContext) {
                 let hasField = true;
                 if (formValue['IS_COUNTABLE'] === true && !formValue['COUNT_CONTAINER']) {
                     hasField = formValue?.parent?.fieldId !== undefined;
                 } else {
                     hasField = !!formValue.fieldId;
                 }
-                canShow = this.contextInstanceId !== undefined && hasField;
+                canShow = isConfigContext && hasField;
 
                 if (formValue['COUNT_CONTAINER']) {
                     canShow = formValue.formValues.length === 0 && hasField;

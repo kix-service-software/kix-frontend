@@ -21,12 +21,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private treeId: string;
 
     public onCreate(input: ComponentInput): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.listenerId = IdService.generateDateBasedId('dropdown-selected-nodes-list');
         this.treeId = input.treeId;
     }
 
     public onInput(input: ComponentInput): void {
+        super.onInput(input);
         this.state.placeholder = input.placeholder;
         if (input.treeId && this.treeId !== input.treeId) {
             this.treeId = input.treeId;
@@ -35,7 +37,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.setNodes();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async setNodes(): Promise<void> {

@@ -9,14 +9,11 @@
 
 import { ComponentState } from './ComponentState';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ImportService } from '../../core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { Error } from '../../../../../../../server/model/Error';
@@ -37,24 +34,23 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private objectType: KIXObjectType | string;
-    private tableSubscriber: IEventSubscriber;
 
     private cancelImportProcess: boolean;
     private errorObjects: KIXObject[];
     private finishedObjects: KIXObject[];
 
-    private importFormTimeout;
-    private formSubscriber: IEventSubscriber;
+    private importFormTimeout: ReturnType<typeof setTimeout>;
 
     private importRunner: ImportRunner;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'import-dialog');
         this.state = new ComponentState();
-        WidgetService.getInstance().setWidgetType('dynamic-form-field-group', WidgetType.GROUP);
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
+        this.context.widgetService.setWidgetType('dynamic-form-field-group', WidgetType.GROUP);
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Replace Values', 'Translatable#Start Import'
         ]);
@@ -70,16 +66,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         importManager.reset(false);
         this.state.importManager = importManager;
 
-        this.formSubscriber = {
-            eventSubscriberId: 'ImportDialog',
-            eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: FormValuesChangedEventData, eventId: string): void {
                 if (this.importFormTimeout) {
                     clearTimeout(this.importFormTimeout);
                 }
                 this.loadCSV();
-            }
-        };
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+            },
+            [FormEvent.VALUES_CHANGED]
+        );
 
         await this.context?.getFormManager().setFormId(ImportConfig.FORM_ID);
         this.state.prepared = true;
@@ -88,28 +83,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.createTable();
     }
 
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-    }
-
     private registerTableListener(): void {
-        this.tableSubscriber = {
-            eventSubscriberId: 'import-table-listener',
-            eventPublished: async (data: TableEventData, eventId: string): Promise<void> => {
-                const isTable = data?.tableId === this.state.table?.getTableId();
-                if (isTable && eventId === TableEvent.ROW_SELECTION_CHANGED) {
+        super.registerEventSubscriber(
+            async function (data: TableEventData, eventId: string): Promise<void> {
+                if (data?.tableId === this.state.table?.getTableId()) {
                     const rows = this.state.table.getSelectedRows();
                     const objects = rows.map((r) => r.getRowObject().getObject());
                     this.state.importManager.objects = objects;
                     this.state.canRun = !!objects.length;
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+            },
+            [TableEvent.ROW_SELECTION_CHANGED]
+        );
     }
 
     private async createTable(): Promise<void> {
@@ -126,7 +111,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             const table = await TableFactoryService.getInstance().createTable(
                 `import-dialog-list-${this.objectType}`, this.objectType, tableConfiguration, null,
-                this.context?.contextId, false
+                this.contextInstanceId, false
             );
 
             this.prepareTableTitle();
@@ -336,6 +321,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 undefined, undefined, true
             );
         });
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

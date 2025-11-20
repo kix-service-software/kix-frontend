@@ -26,7 +26,8 @@ export class RoutingConfiguration {
         public resetContext: boolean = true,
         public params: Array<[string, any]> = null,
         public additionalInformation: Array<[string, any]> = [],
-        public url?: string
+        public url?: string,
+        public removeCurrent: boolean = false,
     ) { }
 
 }

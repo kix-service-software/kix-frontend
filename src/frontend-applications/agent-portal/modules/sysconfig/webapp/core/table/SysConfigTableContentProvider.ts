@@ -24,8 +24,6 @@ import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
 import { TableValue } from '../../../../table/model/TableValue';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
-import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
-import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty';
 
 export class SysConfigTableContentProvider extends TableContentProvider<SysConfigOptionDefinition> {
 

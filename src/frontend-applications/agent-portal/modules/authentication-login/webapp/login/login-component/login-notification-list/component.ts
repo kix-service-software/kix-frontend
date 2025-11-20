@@ -18,6 +18,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private expandedNotifications: string[] = [];
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.notifications = input.notifications || [];
 
@@ -36,11 +37,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         return;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.expandedNotifications = [];
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     public toggleNotification(notification: PortalNotification): void {
@@ -53,13 +60,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         (this as any).setStateDirty('notifications');
 
-        setTimeout(() => {
-            const iframe: any = document.getElementById(`${this.state.frameId}-${notification.id}`);
-            const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-            iframeDocument.body.innerHTML = notification.fullText;
-            BrowserUtil.cleanupHTML(iframeDocument);
-            BrowserUtil.appendKIXStyling(iframeDocument);
-        }, 100);
+        this.state.html = notification.fullText;
     }
 
     public isExpanded(notification: PortalNotification): boolean {

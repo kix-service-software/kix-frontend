@@ -85,12 +85,16 @@ export class ActionFactory<T extends AbstractAction> {
         return this.actions.has(actionId) && !this.blacklist.some((a) => a === actionId);
     }
 
-    public async generateActions(actionIds: string[] = [], data?: any): Promise<AbstractAction[]> {
+    public async generateActions(
+        actionIds: string[] = [], data?: any, contextInstanceId?: string
+    ): Promise<AbstractAction[]> {
         if (!Array.isArray(actionIds)) {
             actionIds = [];
         }
 
-        const contextInstanceId = ContextService.getInstance().getActiveContext()?.instanceId;
+        if (!contextInstanceId) {
+            contextInstanceId = ContextService.getInstance().getActiveContext()?.instanceId;
+        }
         if (!this.actionInstances.has(contextInstanceId)) {
             this.actionInstances.set(contextInstanceId, new Map());
         }
@@ -99,7 +103,9 @@ export class ActionFactory<T extends AbstractAction> {
         const actions = [];
         for (const actionId of actionIds) {
             if (actionMap.has(actionId)) {
-                actions.push(actionMap.get(actionId));
+                const action = actionMap.get(actionId);
+                action.setData(data);
+                actions.push(action);
             } else if (this.actions.has(actionId) && !this.blacklist.some((a) => a === actionId)) {
                 const actionPrototype = this.actions.get(actionId);
                 const action = await this.createActionInstance(actionPrototype, actionId, data);
@@ -139,36 +145,25 @@ export class ActionFactory<T extends AbstractAction> {
         this.actionInstances.get(contextInstanceId).set(actionId, action);
     }
 
-    public async getActionsForType(type: ConfigurationType | string): Promise<AbstractAction[]> {
+    public async getActionsForType(
+        type: ConfigurationType | string, contextInstanceId?: string
+    ): Promise<AbstractAction[]> {
         const actionIds = this.widgetConfigurationActions.has(type)
             ? this.widgetConfigurationActions.get(type)
             : [];
-        return this.generateActions(actionIds);
+        return this.generateActions(actionIds, null, contextInstanceId);
     }
 
     public static sortList<T extends ActionGroup | IAction>(list: T[]): T[] {
-        return list.sort((a, b) => {
-            const aHasRank = !isNaN(Number(a.rank));
-            const bHasRank = !isNaN(Number(a.rank));
-
-            if (!aHasRank && !bHasRank) {
-                return SortUtil.compareString(a.text, b.text, SortOrder.UP);
-            }
-
-            if (!aHasRank && bHasRank) {
-                return -1;
-            }
-
-            if (aHasRank && !bHasRank) {
-                return 1;
-            }
-
-            if (a.rank === b.rank) {
-                return SortUtil.compareString(a.text, b.text, SortOrder.UP);
-            } else {
-                return SortUtil.compareNumber(a.rank, b.rank, SortOrder.UP, false);
-            }
+        let rankedActions = list.filter((a) => !isNaN(Number(a.rank)));
+        const unrankedActions = list.filter((a) => isNaN(Number(a.rank)));
+        rankedActions = rankedActions.sort((a, b) => {
+            return a.rank === b.rank
+                ? SortUtil.compareString(a.text, b.text, SortOrder.UP)
+                : SortUtil.compareNumber(a.rank, b.rank, SortOrder.UP, false);
         });
+
+        return [...rankedActions, ...unrankedActions];
     }
 
     public static async getActionList(actionList: IAction[]): Promise<Array<ActionGroup | IAction>> {

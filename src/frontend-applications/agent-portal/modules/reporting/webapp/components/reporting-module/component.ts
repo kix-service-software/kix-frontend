@@ -16,12 +16,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public state: ComponentState;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
         this.state.contentWidgets = await this.context?.getContent();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

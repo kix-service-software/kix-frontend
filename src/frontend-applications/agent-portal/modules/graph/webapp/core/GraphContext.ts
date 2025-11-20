@@ -34,6 +34,8 @@ export class GraphContext extends Context {
     private subscriber: IEventSubscriber;
 
     public async initContext(urlParams: URLSearchParams): Promise<void> {
+        await super.initContext(urlParams);
+
         if (urlParams?.has('requestURI')) {
             this.setAdditionalInformation(GraphContextOptions.GRAPH_REQUEST_URI, decodeURIComponent(urlParams.get('requestURI')));
         }
@@ -54,12 +56,12 @@ export class GraphContext extends Context {
         }
 
         this.subscriber = {
-            eventSubscriberId: this.instanceId,
-            eventPublished: (prefixes: string[], eventId: string): void => {
+            eventSubscriberId: 'GraphContext' + this.instanceId,
+            eventPublished: function (prefixes: string[], eventId: string): void {
                 if (prefixes.some((p) => p === KIXObjectType.GRAPH || p === KIXObjectType.GRAPH_INSTANCE)) {
                     EventService.getInstance().publish(ContextEvents.CONTEXT_UPDATE_REQUIRED, this);
                 }
-            }
+            }.bind(this)
         };
         EventService.getInstance().subscribe(ApplicationEvent.CACHE_KEYS_DELETED, this.subscriber);
     }

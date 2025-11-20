@@ -20,7 +20,8 @@ class Component extends FormInputComponent<string, ComponentState> {
     private userId: number;
     private secretPreference: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -30,14 +31,16 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
 
         const userIdOption = this.state.field?.options?.find((o) => o.option === UserProperty.USER_ID);
         this.userId = userIdOption?.value;
 
         const secretPropertyOption = this.state.field?.options?.find((o) => o.option === 'SecretProperty');
         this.secretPreference = secretPropertyOption?.value;
-
-        this.setCurrentValue();
     }
 
     public async generateNewSecret(event: any): Promise<void> {
@@ -56,6 +59,10 @@ class Component extends FormInputComponent<string, ComponentState> {
     public async setCurrentValue(): Promise<void> {
         this.state.currentValue = await MFAService.getInstance().getTOTPSecret(this.userId, this.secretPreference);
         (this as any).setStateDirty('currentValue');
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
 }

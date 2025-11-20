@@ -9,22 +9,17 @@
 
 import { ComponentState } from './ComponentState';
 import { IdService } from '../../../../../../model/IdService';
-import { ContextService } from '../../../core/ContextService';
-import { Context } from '../../../../../../model/Context';
 import { KIXModulesService } from '../../../core/KIXModulesService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
-import { IEventSubscriber } from '../../../core/IEventSubscriber';
 import { MobileShowEvent } from '../../../../../agent-portal/model/MobileShowEvent';
-import { EventService } from '../../../core/EventService';
 import { MobileShowEventData } from '../../../../../agent-portal/model/MobileShowEventData';
 import { KIXStyle } from '../../../../model/KIXStyle';
 import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public eventSubscriber: IEventSubscriber;
-
     public onCreate(input: any): void {
+        super.onCreate(input, 'sidebar/context-sidebar');
         this.state = new ComponentState();
         this.state.isLeft = input.isLeft;
     }
@@ -40,18 +35,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
         this.resizeHandling();
 
-        this.eventSubscriber = {
-            eventSubscriberId: `sidebar-mobile-${this.state.isLeft ? 'left' : 'right'}`,
-            eventPublished: (data, eventId: MobileShowEvent | string): void => {
-                if (eventId === MobileShowEvent.SHOW_MOBILE) {
-                    this.state.showMobile
-                        = (this.state.isLeft && data === MobileShowEventData.SHOW_LEFT_SIDEBAR)
-                        || (!this.state.isLeft && data === MobileShowEventData.SHOW_RIGHT_SIDEBAR);
-                }
-            }
-        };
-
-        EventService.getInstance().subscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
+        super.registerEventSubscriber(
+            function (data, eventId: MobileShowEvent | string): void {
+                this.state.showMobile =
+                    (this.state.isLeft && data === MobileShowEventData.SHOW_LEFT_SIDEBAR)
+                    || (!this.state.isLeft && data === MobileShowEventData.SHOW_RIGHT_SIDEBAR);
+            },
+            [MobileShowEvent.SHOW_MOBILE]
+        );
     }
 
     private resizeHandling(): void {
@@ -61,19 +52,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.handleShowSidebarAreaState();
     }
 
-    private handleShowSidebarAreaState(context: Context = ContextService.getInstance().getActiveContext()): void {
+    private handleShowSidebarAreaState(): void {
         if (this.state.isSmall) {
             if (this.state.showSidebarArea) {
                 this.toggleSidebarArea();
             }
-        } else if (context) {
-            this.state.showSidebarArea = context.isSidebarOpen(this.state.isLeft);
+        } else if (this.context) {
+            this.state.showSidebarArea = this.context.isSidebarOpen(this.state.isLeft);
         }
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         window.removeEventListener('resize', this.resizeHandling.bind(this), false);
-        EventService.getInstance().unsubscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
     }
 
     private async prepareSidebars(): Promise<void> {
@@ -103,6 +94,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async getSidebarTemplate(instanceId: string): Promise<any> {
         const config = await this.context?.getWidgetConfiguration(instanceId);
         return KIXModulesService.getComponentTemplate(config?.widgetId);
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

@@ -56,7 +56,7 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
         const context = ContextService.getInstance().getActiveContext();
         const contact = context?.getAdditionalInformation(KIXObjectType.CONTACT);
         if (contact) {
-            this.setFormValue(contact.ID);
+            this.setFormValue(this.defaultValue || contact.ID);
         }
     }
 

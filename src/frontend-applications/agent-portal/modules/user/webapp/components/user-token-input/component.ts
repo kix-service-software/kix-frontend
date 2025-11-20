@@ -24,7 +24,8 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     private userId: number;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -34,11 +35,13 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
 
         const userIdOption = this.state.field?.options?.find((o) => o.option === UserProperty.USER_ID);
         this.userId = userIdOption?.value;
-
-        this.setCurrentValue();
     }
 
     public async generateNewToken(event: any): Promise<void> {
@@ -72,6 +75,10 @@ class Component extends FormInputComponent<string, ComponentState> {
             );
             this.state.currentValue = tokenPreference?.Value;
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
 }

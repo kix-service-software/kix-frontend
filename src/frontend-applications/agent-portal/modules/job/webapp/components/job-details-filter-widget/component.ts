@@ -15,8 +15,6 @@ import { TableFactoryService } from '../../../../table/webapp/core/factory/Table
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
@@ -24,41 +22,37 @@ import { JobFormService } from '../../core/JobFormService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'job-details-filter-widget');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.subscriber = {
-            eventSubscriberId: 'object-details',
-            eventPublished: (data: any, eventId: string): void => {
+
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
                 if (data.objectType === KIXObjectType.JOB) {
                     this.initWidget();
                 }
-            }
-        };
-        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
+            },
+            [ApplicationEvent.OBJECT_UPDATED]
+        );
 
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         this.initWidget();
         this.state.prepared = true;
     }
 
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
-    }
-
     private async initWidget(): Promise<void> {
         const job = await this.context?.getObject<Job>();
         const manager = JobFormService.getInstance().getJobFormManager(job.Type);
-        if (manager && manager.supportFilter() && this.state.widgetConfiguration) {
+        if (manager?.supportFilter() && this.state.widgetConfiguration) {
             this.state.title = this.state.widgetConfiguration.title;
             await this.prepareFilter(job);
             await this.prepareSort(job);
@@ -101,12 +95,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 new TableConfiguration(
                     null, null, null, KIXObjectType.JOB_FILTER, null, null, null, null, null, null, null, null,
                     TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                ), [filterIndex], null, true, false, false, true, true
+                ), [filterIndex], this.context.instanceId, true, false, false, true, true, null, false
             );
         }
         return table;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

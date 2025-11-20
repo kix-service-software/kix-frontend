@@ -48,7 +48,8 @@ export class HTMLToPDFService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.HTML_TO_PDF) {
             objectResponse = await super.load<HTMLToPDF>(
                 token, KIXObjectType.HTML_TO_PDF, this.RESOURCE_URI, loadingOptions,
-                objectIds, KIXObjectType.HTML_TO_PDF, clientRequestId, HTMLToPDF
+                objectIds, KIXObjectType.HTML_TO_PDF, clientRequestId, HTMLToPDF,
+                false
             );
         }
 

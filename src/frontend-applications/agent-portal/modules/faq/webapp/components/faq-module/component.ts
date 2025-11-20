@@ -10,31 +10,29 @@
 import { ComponentState } from './ComponentState';
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
-import { IdService } from '../../../../../model/IdService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
-    private subscriber: IEventSubscriber;
 
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'faq-module');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (): void => {
-                this.prepareWidgets();
-            }
-        };
+
         this.prepareWidgets();
 
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
+        super.registerEventSubscriber(
+            function (data: any): void {
+                if (data?.contextId === this.context.contextId) {
+                    this.prepareWidgets();
+                }
+            },
+            [ContextEvents.CONTEXT_USER_WIDGETS_CHANGED]
+        );
     }
 
     private async prepareWidgets(): Promise<void> {
@@ -49,6 +47,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return KIXModulesService.getComponentTemplate(widget.configuration.widgetId);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

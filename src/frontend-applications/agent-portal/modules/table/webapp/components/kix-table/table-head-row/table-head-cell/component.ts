@@ -12,21 +12,18 @@ import { TranslationService } from '../../../../../../translation/webapp/core/Tr
 import { SortOrder } from '../../../../../../../model/SortOrder';
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { BrowserUtil } from '../../../../../../base-components/webapp/core/BrowserUtil';
-import { EventService } from '../../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../../base-components/webapp/core/IEventSubscriber';
 import { LabelService } from '../../../../../../base-components/webapp/core/LabelService';
 import { TableEvent } from '../../../../../model/TableEvent';
 import { TableEventData } from '../../../../../model/TableEventData';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 
-class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
-
-    public eventSubscriberId: string;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public size: number;
     private startOffset: number;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'kix-table/table-head-row/table-head-cell');
         this.state = new ComponentState();
         this.state.column = input.column;
         this.state.isSorted = Boolean(this.state.column.getSortOrder());
@@ -35,6 +32,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.column = input.column;
         this.state.isSorted = Boolean(this.state.column.getSortOrder());
         this.state.sortOrderDown = this.isSortOrderDown();
@@ -45,19 +43,31 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.setIconAndTitle();
 
-        this.eventSubscriberId = this.state.column.getTable().getTableId() + '-' + this.state.column.getColumnId();
-        EventService.getInstance().subscribe(TableEvent.SORTED, this);
+        super.registerEventSubscriber(
+            function (data: TableEventData, eventId: string, subscriberId?: string): void {
+                if (data?.tableId === this.state.column.getTable().getTableId()) {
+                    if (data?.columnId === this.state.column.getColumnId()) {
+                        this.state.isSorted = true;
+                    } else {
+                        this.state.isSorted = false;
+                    }
+                    this.state.sortOrderDown = this.isSortOrderDown();
+                }
+            },
+            [TableEvent.SORTED]
+        );
 
         document.addEventListener('mousemove', this.mousemove.bind(this));
         document.addEventListener('mouseup', this.mouseup.bind(this));
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         document.removeEventListener('mousemove', this.mousemove.bind(this));
         document.removeEventListener('mouseup', this.mouseup.bind(this));
-        EventService.getInstance().unsubscribe(TableEvent.SORTED, this);
     }
 
     private async setIconAndTitle(): Promise<void> {
@@ -90,20 +100,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                     objectId
                 );
             }
-        }
-    }
-
-    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
-        if (eventId === TableEvent.SORTED
-            && data
-            && data.tableId && data.tableId === this.state.column.getTable().getTableId()
-        ) {
-            if (data.columnId && data.columnId === this.state.column.getColumnId()) {
-                this.state.isSorted = true;
-            } else {
-                this.state.isSorted = false;
-            }
-            this.state.sortOrderDown = this.isSortOrderDown();
         }
     }
 

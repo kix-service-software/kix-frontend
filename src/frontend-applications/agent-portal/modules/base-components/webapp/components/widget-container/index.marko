@@ -10,8 +10,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <div
     id=state.instanceId + state.componentId
     key=state.instanceId + state.componentId
-    class="widget-container"
->
+    class="widget-container">
     <if(state.configurationMode)>
         <div class="widget-configuration-toolbar">
             <div class="widget-chooser">
@@ -23,8 +22,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     type="button"
                     on-click("addSearchbookmarkWidget")
                     title=(state.translations["Translatable#Add Widget"])
-                    class="kix-button form-button"
-                >
+                    class="kix-button form-button">
                     <span class="kix-icon-plus-blank"/>
                     <translation-string pattern="Translatable#Add Widget"/>
                 </button>
@@ -38,8 +36,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     type="button"
                     on-click("addContextWidget")
                     title=(state.translations["Translatable#Add Widget"])
-                    class="kix-button form-button"
-                >
+                    class="kix-button form-button">
                     <span class="kix-icon-plus-blank"/>
                     <translation-string pattern="Translatable#Add Widget"/>
                 </button>
@@ -75,19 +72,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     draggable=(state.configurationMode ? "true" : "false")
                     on-dragstart("drag", kixWidget)
                     on-drop("drop", kixWidget)
-                    on-dragover("allowDrop", kixWidget)
-                >
+                    on-dragover("allowDrop", kixWidget)>
                     <if(state.configurationMode)>
                         <widget-configuration
                             widget=component.copyWidget(kixWidget)
                             on-removeWidget("removeWidget")
                             on-configurationChanged("configurationChanged")
-                        />
+                            contextInstanceId=input.contextInstanceId/>
                     </if>
                     <else>
                         <${component.getTemplate(kixWidget)} ...{
                             instanceId: kixWidget.instanceId,
                             contextType: "MAIN",
+                            contextInstanceId: input.contextInstanceId,
                         }/>
                     </else>
                 </div>
@@ -101,8 +98,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     type="button"
                     on-click("cancel")
                     title=(state.translations["Translatable#Cancel"])
-                    class="kix-button cancel-button"
-                >
+                    class="kix-button cancel-button">
                     <span class="kix-icon-close"/>
                     <translation-string pattern="Translatable#Cancel"/>
                 </button>
@@ -110,8 +106,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     type="button"
                     on-click("saveWidgets")
                     title=(state.translations["Translatable#Save"])
-                    class="kix-button submit-button"
-                >
+                    class="kix-button submit-button">
                     <span class="kix-icon-plus-blank"/>
                     <translation-string pattern="Translatable#Save"/>
                 </button>

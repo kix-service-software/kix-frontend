@@ -59,4 +59,27 @@ export class EventService {
             this.eventSubscribers.get(eventId).forEach((l) => l.eventPublished(data, eventId, subscriberId));
         }
     }
+
+    public unsubscribeSubscriber(eventSubscriberId: string): void {
+        this.eventSubscribers.forEach((eventSubscriberArray: IEventSubscriber[], eventId: string) => {
+            const subscriberIndex = eventSubscriberArray.findIndex(
+                (s) => s.eventSubscriberId === eventSubscriberId
+            );
+            if (subscriberIndex !== -1) {
+                eventSubscriberArray.splice(subscriberIndex, 1);
+            }
+        });
+    }
+
+    public renameSubscriber(oldEventSubscriberId: string, newEventSubscriberId: string): void {
+        this.eventSubscribers.forEach((eventSubscriberArray: IEventSubscriber[], eventId: string) => {
+            eventSubscriberArray.forEach(
+                (s) => {
+                    if (s.eventSubscriberId === oldEventSubscriberId) {
+                        s.eventSubscriberId = newEventSubscriberId;
+                    }
+                }
+            );
+        });
+    }
 }

@@ -15,6 +15,7 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -23,6 +24,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.contentWidgets = await this.context?.getContent();
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

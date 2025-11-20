@@ -19,11 +19,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private formValue: ObjectFormValue;
     private changeTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;
@@ -51,6 +53,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.value = this.formValue?.value;
 
         if (this.formValue && this.formValue['rowCount']) {

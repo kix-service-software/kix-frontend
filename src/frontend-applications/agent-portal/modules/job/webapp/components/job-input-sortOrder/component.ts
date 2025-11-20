@@ -10,11 +10,8 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
 import { JobProperty } from '../../../model/JobProperty';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TreeHandler, TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { IdService } from '../../../../../model/IdService';
 import { AbstractJobFormManager } from '../../core/AbstractJobFormManager';
@@ -24,10 +21,10 @@ import { JobFormService } from '../../core/JobFormService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
-    private formSubscriber: IEventSubscriber;
     private sortAttributeTreeHandler: TreeHandler;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'job-input-sortOrder');
         this.state = new ComponentState();
     }
 
@@ -37,28 +34,29 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         await this.prepareSort();
 
-        this.formSubscriber = {
-            eventSubscriberId: 'JobInputSortOrder',
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
+        super.registerEventSubscriber(
+            async function (data: FormValuesChangedEventData, eventId: string): Promise<void> {
                 const jobTypeValue = data.changedValues.find((cv) => cv[0] && cv[0].property === JobProperty.TYPE);
                 if (jobTypeValue) {
                     this.state.prepared = false;
                     this.prepareSort();
                     this.state.prepared = true;
                 }
-            }
-        };
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-
-        this.state.prepared = true;
+            },
+            [FormEvent.VALUES_CHANGED]
+        );
     }
 
     private async prepareSort(): Promise<void> {
         const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
-        const type = typeValue && typeValue.value ? typeValue.value : null;
+        const type = typeValue?.value ? typeValue.value : null;
         const jobFormManager: AbstractJobFormManager = JobFormService.getInstance().getJobFormManager(type);
         const filterManager = jobFormManager?.getFilterManager() || jobFormManager?.filterManager;
 
@@ -82,15 +80,11 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     }
 
-    public async onDestroy(): Promise<void> {
-        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-    }
-
     public async setCurrentValue(): Promise<void> {
         const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const value = formInstance.getFormFieldValue<any>(this.state.field?.instanceId);
-        if (value && value.value) {
+        if (value?.value) {
             this.state.sortAttribute = (value.value as JobSortOrder).Field;
             this.state.sortDescending = Boolean((value.value as JobSortOrder).Direction === 'descending');
         }
@@ -118,6 +112,10 @@ class Component extends FormInputComponent<any, ComponentState> {
         } else {
             super.provideValue(null);
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

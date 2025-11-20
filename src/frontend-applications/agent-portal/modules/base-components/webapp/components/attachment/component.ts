@@ -29,11 +29,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private options: Array<[string, any]>;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.files = [];
         this.attachments = [];
         if (Array.isArray(input.value)) {
@@ -47,6 +49,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Select file'
         ]);

@@ -7,10 +7,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId="configuration-overview"
     minimizable=false
-    title="Translatable#Configuration Overview"
->
+    title="Translatable#Configuration Overview">
     <@content>
         <div class="admin-object-tag-container">
             <div class="object-tag-search">
@@ -23,24 +23,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     loadNodes=state.loadNodes
                     autoCompleteConfiguration=state.autoCompleteConfiguration
                     searchCallback=state.searchCallback
-                    placeholder="Translatable#Search by tag"
-                />
+                    placeholder="Translatable#Search by tag"/>
                 <button
                     type="button"
                     title=(state.translations["Translatable#Help"])
-                    class="kix-button button button-without-text"
-                >
+                    class="kix-button button button-without-text">
                     <overlay-icon
                         isHint
                         content="Translatable#Helptext_Object_Tag_Search"
-                        title=(state.translations["Translatable#Search"])
-                    />
+                        title=(state.translations["Translatable#Search"])/>
                 </button>
                 <button
                     type="button"
                     on-click("search")
-                    class="kix-button submit-button"
-                >
+                    class="kix-button submit-button">
                     <span class="kix-icon-search"/>
                     <translation-string pattern="Translatable#Search"/>
                 </button>
@@ -49,8 +45,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <span
                             title=action.displayName
                             class=[action.icon]
-                            on-click("runAction", action)
-                        />
+                            on-click("runAction", action)/>
                     </div>
                 </for>
             </div>
@@ -64,11 +59,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 ]>
                     <for|table| of=state.tables>
                         <widget
+                            contextInstanceId=input.contextInstanceId
                             class="object-tag-widget"
                             instanceId=table.instanceId
                             minimizable=false
-                            title=table.title
-                        >
+                            title=table.title>
                             <@content>
                                 <kix-table table=table/>
                             </@content>

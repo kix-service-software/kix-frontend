@@ -45,6 +45,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private canOrganisationUpdate: boolean;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -80,6 +81,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.step = input.step;
         this.state.completed = this.step ? this.step.completed : false;
     }
@@ -215,6 +217,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         SetupService.getInstance().stepSkipped(this.step.id);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

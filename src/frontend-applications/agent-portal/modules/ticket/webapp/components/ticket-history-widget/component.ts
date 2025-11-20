@@ -8,7 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { TicketDetailsContext } from '../../core';
 import { Ticket } from '../../../model/Ticket';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -18,10 +17,12 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -56,16 +57,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(ticket: Ticket): Promise<void> {
         if (this.state.widgetConfiguration && ticket) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, this.state.table
+                this.state.widgetConfiguration.actions, this.state.table, this.contextInstanceId
             );
         }
     }
 
     private async prepareTable(): Promise<void> {
         const table = await TableFactoryService.getInstance().createTable(
-            'ticket-history', KIXObjectType.TICKET_HISTORY, null, null, TicketDetailsContext.CONTEXT_ID
+            'ticket-history', KIXObjectType.TICKET_HISTORY, null, null, this.contextInstanceId,
+            undefined, undefined, undefined, undefined, undefined, undefined, true
         );
-
+        await table.initialize(true);
         this.state.table = table;
     }
 
@@ -74,6 +76,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.table.filter();
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

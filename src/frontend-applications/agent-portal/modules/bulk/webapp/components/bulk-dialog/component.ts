@@ -19,10 +19,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private listenerId: string;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState(input.instanceId);
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 

@@ -79,7 +79,7 @@ export class RoutingService {
 
             ContextService.getInstance().setActiveContext(
                 routingConfiguration?.contextId, objectId, urlSearchParams,
-                routingConfiguration?.additionalInformation
+                routingConfiguration?.additionalInformation, undefined, routingConfiguration?.removeCurrent
             );
         }
     }

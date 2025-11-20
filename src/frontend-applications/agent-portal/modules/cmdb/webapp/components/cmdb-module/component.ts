@@ -10,17 +10,13 @@
 import { ComponentState } from './ComponentState';
 import { CMDBContext } from '../../core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
-import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
 class Component extends AbstractMarkoComponent<ComponentState, CMDBContext> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'cmdb-module');
         this.state = new ComponentState();
     }
 
@@ -34,15 +30,16 @@ class Component extends AbstractMarkoComponent<ComponentState, CMDBContext> {
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
         this.state.filterValue = this.context?.filterValue;
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (): void => {
-                this.prepareWidgets();
-            }
-        };
         this.prepareWidgets();
 
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
+        super.registerEventSubscriber(
+            function (data: any): void {
+                if (data?.contextId === this.context.contextId) {
+                    this.prepareWidgets();
+                }
+            },
+            [ContextEvents.CONTEXT_USER_WIDGETS_CHANGED]
+        );
     }
 
     private async prepareWidgets(): Promise<void> {
@@ -64,6 +61,14 @@ class Component extends AbstractMarkoComponent<ComponentState, CMDBContext> {
         this.context?.setFilterValue(this.state.filterValue);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

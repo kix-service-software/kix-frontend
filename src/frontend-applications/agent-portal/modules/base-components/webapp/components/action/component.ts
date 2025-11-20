@@ -9,23 +9,50 @@
 
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { ApplicationEvent } from '../../core/ApplicationEvent';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class ActionComponent {
+class ActionComponent extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'action');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.action = input.action;
         this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
         this.update();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.update();
+
+        super.registerEventSubscriber(
+            function (contextInstanceId: string, eventId: string): void {
+                if (this.context?.instanceId === contextInstanceId) {
+                    if (this.state.lockTimeout) {
+                        clearTimeout(this.state.lockTimeout);
+                        this.state.lockTimeout = null;
+                    }
+                    if (eventId === ApplicationEvent.UNLOCK_ACTIONS) {
+                        this.state.lockRunAction = false;
+                    } else if (eventId === ApplicationEvent.LOCK_ACTIONS) {
+                        this.state.lockRunAction = true;
+                    }
+                }
+            },
+            [
+                ApplicationEvent.LOCK_ACTIONS,
+                ApplicationEvent.UNLOCK_ACTIONS
+            ]
+        );
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async update(): Promise<void> {
@@ -35,8 +62,8 @@ class ActionComponent {
     }
 
     public async doAction(event: any): Promise<void> {
-        if (!this.state.canRunAction) return;
-        this.state.canRunAction = false;
+        if (this.state.lockRunAction || !this.state.canRunAction) return;
+        this.state.lockRunAction = true;
         (this as any).emit('actionClicked');
         if (event) {
             event.stopPropagation();
@@ -44,16 +71,15 @@ class ActionComponent {
         }
 
         // enable by timeout if action needs too "long" or results in error
-        let runTimeout = setTimeout(() => {
-            this.state.canRunAction = true;
-            runTimeout = null;
-        }, 2000);
+        if (this.state.lockTimeout) {
+            clearTimeout(this.state.lockTimeout);
+        }
+        this.state.lockTimeout = setTimeout(() => {
+            this.state.lockRunAction = false;
+            this.state.lockTimeout = null;
+        }, 5000);
 
         await this.state.action.run(event);
-        if (runTimeout) {
-            this.state.canRunAction = true;
-            clearTimeout(runTimeout);
-        }
     }
 
     public linkClicked(event: any): void {

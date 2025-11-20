@@ -9,7 +9,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <macro|{ info }| name="show-text">
    <if(info.renderHTML)>
-      $!{info.preparedText}
+      <iframe-content html=info.preparedText/>
    </if>
    <else>${info.preparedText}</else>
 </macro>
@@ -55,8 +55,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                      separator: row.separator,
                   },
                ]
-               style=component.getCustomRowStyle(index)
-            >
+               style=component.getCustomRowStyle(index)>
                <for|group, groupIndex| of=row.values>
                   <div class=[
                      "info-group",
@@ -76,8 +75,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                               <div class="component-value">
                                  <link-target
                                     routingConfiguration=info.routingConfiguration
-                                    objectId=info.routingObjectId
-                                 >
+                                    objectId=info.routingObjectId>
                                     <@content>
                                        <${
                                           component.getTemplate(
@@ -85,8 +83,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                           )
                                        }
                                           ...info.componentData
-                                          object=state.object
-                                       />
+                                          object=state.object/>
                                     </@content>
                                  </link-target>
                               </div>
@@ -104,13 +101,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                               </div>
                               <span
                                  style=info.textStyle
-                                 title=info.preparedText
-                              >
+                                 title=info.preparedText>
                                  <if(info.routingConfiguration)>
                                     <link-target
                                        routingConfiguration=info.routingConfiguration
-                                       objectId=info.routingObjectId
-                                    >
+                                       objectId=info.routingObjectId>
                                        <@content>
                                           <show-text info=info/>
                                        </@content>
@@ -119,8 +114,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                  <else-if(info.linkSrc && info.preparedLinkSrc)>
                                     <a
                                        href=info.preparedLinkSrc
-                                       target="_blank"
-                                    >
+                                       target="_blank">
                                        <show-text info=info/>
                                     </a>
                                  </else-if>

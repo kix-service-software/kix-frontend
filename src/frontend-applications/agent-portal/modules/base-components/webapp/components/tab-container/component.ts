@@ -8,38 +8,29 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { TabContainerEvent } from '../../../../../modules/base-components/webapp/core/TabContainerEvent';
 import { ContextType } from '../../../../../model/ContextType';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { TabContainerEventData } from '../../../../../modules/base-components/webapp/core/TabContainerEventData';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-import { Context } from '../../../../../model/Context';
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 import { ClientStorageService } from '../../core/ClientStorageService';
 import { PlaceholderService } from '../../core/PlaceholderService';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class TabLaneComponent extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
-
-    public eventSubscriberId: string;
-    public contextListenerId: string;
+class TabLaneComponent extends AbstractMarkoComponent<ComponentState> {
 
     private initialTabId: string;
     private tabIcons: Map<string, string | ObjectIcon>;
     private tabTitles: Map<string, string>;
     private hideSidebar: boolean;
 
-    private id: string;
+    private inputId: string;
     private tabContainerPrefId: string;
 
     private keyDownEventFunction: () => {
@@ -47,29 +38,25 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> implements
     };
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'tab-container');
         this.state = new ComponentState(input.tabWidgets);
         this.tabTitles = new Map();
         this.tabIcons = new Map();
-        this.eventSubscriberId = IdService.generateDateBasedId('tab-container');
-        this.contextListenerId = IdService.generateDateBasedId('tab-container');
 
         this.state.tabWidgets = input.tabWidgets ? input.tabWidgets.filter((widget) => widget.configuration) : [];
         this.initialTabId = input.tabId;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.contextType = input.contextType;
         this.hideSidebar = typeof input.hideSidebar !== 'undefined' ? input.hideSidebar : false;
-        this.id = input.id;
-
-        WidgetService.getInstance().setWidgetType('tab-widget', WidgetType.LANE);
-
-        EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TITLE, this);
-        EventService.getInstance().subscribe(TabContainerEvent.CHANGE_ICON, this);
-        EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TAB, this);
+        this.inputId = input.id;
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.tabContainerPrefId = `${this.context?.descriptor?.contextId}-${this.context?.getObjectId()}-${this.id}-activetab`;
+
+        this.context.widgetService.setWidgetType('tab-widget', WidgetType.LANE);
+
+        this.tabContainerPrefId = `${this.context?.descriptor?.contextId}-${this.context?.getObjectId()}-${this.inputId}-activetab`;
         const tabId = ClientStorageService.getOption(this.tabContainerPrefId);
         if (this.state.tabWidgets.length) {
             const object = await this.context?.getObject();
@@ -108,14 +95,47 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> implements
             document.body.addEventListener('keydown', this.keyDownEventFunction, false);
         }
 
+        super.registerEventSubscriber(
+            async function (data: TabContainerEventData, eventId: string): Promise<void> {
+                if (eventId === TabContainerEvent.CHANGE_TITLE) {
+                    const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
+                    if (tab) {
+                        const newTitle = await TranslationService.translate(data.title);
+                        this.tabTitles.set(tab.instanceId, newTitle);
+                        if (data.icon) {
+                            this.tabIcons.set(tab.instanceId, data.icon);
+                        }
+                        (this as any).setStateDirty('tabWidgets');
+                    }
+                }
+                if (eventId === TabContainerEvent.CHANGE_ICON) {
+                    const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
+                    if (tab) {
+                        this.tabIcons.set(tab.instanceId, data.icon);
+                        (this as any).setStateDirty('tabWidgets');
+                    }
+                }
+                if (eventId === TabContainerEvent.CHANGE_TAB) {
+                    const tab = this.state.tabWidgets.find(
+                        (t) => t.configuration && t.configuration.widgetId === data.tabId
+                    );
+                    if (tab) {
+                        this.setActiveTab(tab);
+                    }
+                }
+            },
+            [
+                TabContainerEvent.CHANGE_TITLE,
+                TabContainerEvent.CHANGE_ICON,
+                TabContainerEvent.CHANGE_TAB
+            ]
+        );
+
         this.state.prepared = true;
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TITLE, this);
-        EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_ICON, this);
-        EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TAB, this);
-        this.context?.unregisterListener(this.contextListenerId);
+        super.onDestroy();
 
         if (this.state.contextType === ContextType.DIALOG && this.keyDownEventFunction) {
             document.body.removeEventListener('keydown', this.keyDownEventFunction, false);
@@ -138,7 +158,7 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> implements
             const object = await this.context?.getObject(this.context?.descriptor.kixObjectTypes[0]);
 
             this.state.contentActions = await ActionFactory.getInstance().generateActions(
-                tab.configuration ? tab.configuration.actions : [], [object]
+                tab.configuration ? tab.configuration.actions : [], [object], this.contextInstanceId
             );
         }
 
@@ -162,33 +182,6 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> implements
 
     public isActiveTab(tabId: string): boolean {
         return this.state.activeTab && this.state.activeTab.instanceId === tabId;
-    }
-
-    public async eventPublished(data: TabContainerEventData, eventId: string): Promise<void> {
-        if (eventId === TabContainerEvent.CHANGE_TITLE) {
-            const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
-            if (tab) {
-                const newTitle = await TranslationService.translate(data.title);
-                this.tabTitles.set(tab.instanceId, newTitle);
-                if (data.icon) {
-                    this.tabIcons.set(tab.instanceId, data.icon);
-                }
-                (this as any).setStateDirty('tabWidgets');
-            }
-        }
-        if (eventId === TabContainerEvent.CHANGE_ICON) {
-            const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
-            if (tab) {
-                this.tabIcons.set(tab.instanceId, data.icon);
-                (this as any).setStateDirty('tabWidgets');
-            }
-        }
-        if (eventId === TabContainerEvent.CHANGE_TAB) {
-            const tab = this.state.tabWidgets.find((t) => t.configuration && t.configuration.widgetId === data.tabId);
-            if (tab) {
-                this.setActiveTab(tab);
-            }
-        }
     }
 
     public getTitle(tab: WidgetConfiguration): string {
@@ -226,6 +219,26 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> implements
 
             this.setActiveTab(nextTab);
         }
+    }
+
+    public scrollTabs(left: boolean): void {
+        const element: HTMLElement = (this as any).getEl('tab-list');
+        if (element) {
+            if (left) {
+                element.scrollLeft -= 300;
+            }
+            else {
+                element.scrollLeft += 300;
+            }
+        }
+    }
+
+    public minimizedChanged(minimized: boolean): void {
+        this.state.showTabScrollers = !minimized;
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

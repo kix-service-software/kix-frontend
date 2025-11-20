@@ -8,10 +8,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId="edit-linked-objects-dialog"
     icon="kix-icon-link"
-    title=state.title
->
+    title=state.title>
     <@content>
         <if(state.mainObject)>
             <div class="edit-linked-objects-dialog-container">
@@ -19,8 +19,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <span>
                         <translation-string
                             pattern="Translatable#Existing Links ({0})"
-                            placeholders=[state.linkObjectCount]
-                        />
+                            placeholders=[state.linkObjectCount]/>
                     </span>
                 </div>
                 <if(state.table)>
@@ -28,8 +27,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         type="text"
                         placeholder=state.filterPlaceholder
                         class="input-style mb-2"
-                        on-keydown("filterKeyDown")
-                    >
+                        on-keydown("filterKeyDown")>
                     <kix-table table=state.table/>
                 </if>
                 <div class="dialog-button-container">
@@ -40,8 +38,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             title=(
                                 state.translations["Translatable#Delete Link"]
                             )
-                            class="kix-button form-blank-cancel-button"
-                        >
+                            class="kix-button form-blank-cancel-button">
                             <span class="kix-icon-trash"/>
                             <translation-string pattern="Translatable#Delete Link"/>
                         </button>
@@ -49,18 +46,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
             </div>
             <widget
+                contextInstanceId=input.contextInstanceId
                 instanceId="add-linked-objects-form"
                 minimizable
                 minimized=false
-                title="Translatable#Add new Links"
-            >
+                title="Translatable#Add new Links">
                 <@content>
                     <link-object-dialog
                         linkDescriptions=state.linkDescriptions
                         objectType=(state.mainObject.KIXObjectType)
                         rootObject=state.mainObject
-                        on-linksAdded("linksAdded")
-                    />
+                        on-linksAdded("linksAdded")/>
                 </@content>
             </widget>
         </if>
@@ -73,8 +69,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             type="button"
             on-click("cancel")
             title=(state.translations["Translatable#Cancel"])
-            class="kix-button cancel-button"
-        >
+            class="kix-button cancel-button">
             <span class="kix-icon-close"/>
             <span>${state.translations["Translatable#Cancel"]}</span>
         </button>
@@ -83,8 +78,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             type="button"
             on-click("submit")
             title=(state.translations["Translatable#Submit"])
-            class="kix-button submit-button"
-        >
+            class="kix-button submit-button">
             <span class="kix-icon-check"/>
             <span>${state.translations["Translatable#Submit"]}</span>
         </button>

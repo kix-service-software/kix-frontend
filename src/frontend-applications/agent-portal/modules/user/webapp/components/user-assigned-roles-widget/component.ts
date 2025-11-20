@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { User } from '../../../model/User';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
@@ -20,16 +19,17 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { IdService } from '../../../../../model/IdService';
-import { UserDetailsContext } from '../../core/admin/context/user';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -72,7 +72,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
         const table = await TableFactoryService.getInstance().createTable(
             IdService.generateDateBasedId('user-assigned-roles-'), KIXObjectType.ROLE, tableConfiguration, null,
-            UserDetailsContext.CONTEXT_ID, true, undefined, false, true, true
+            this.contextInstanceId, true, undefined, false, true, true, null, true
         );
         this.state.table = table;
         this.prepareActions(user);
@@ -89,11 +89,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(user: User): Promise<void> {
         if (this.state.widgetConfiguration && user) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [user]
+                this.state.widgetConfiguration.actions, [user], this.contextInstanceId
             );
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

@@ -153,12 +153,20 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
 
+                    new FormFieldOption(FormFieldOptions.SHOW_INVALID, false),
+                    new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, false),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                     new FormFieldOption(
                         ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
-                            [], null, null, null, null,
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                                    FilterDataType.NUMERIC, FilterType.AND, 1
+                                )
+                            ],
+                            null, null, null, null,
                             [
                                 [
                                     'requiredPermission',

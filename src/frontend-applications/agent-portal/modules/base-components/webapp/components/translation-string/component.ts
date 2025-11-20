@@ -16,13 +16,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private pattern: string = '';
     private placeholders: string[] = [];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.pattern = '';
         this.placeholders = [];
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         const placeholders = typeof input.placeholders !== 'undefined' ? input.placeholders : [];
         if (this.pattern !== input.pattern || this.placeholdersChanged(placeholders)) {
             this.placeholders = placeholders;
@@ -46,7 +48,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.setText();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async setText(): Promise<void> {

@@ -8,34 +8,41 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(!state.loading)>
-    <widget instanceId="edit-sysconfig-dialog">
+    <widget
+        contextInstanceId=input.contextInstanceId
+        instanceId="edit-sysconfig-dialog">
         <@content>
             <main-form/>
-            <div.dialog-control>
-                <div.dialog-button-container>
-                    <button.kix-button.cancel-button
+            <div class="dialog-control">
+                <div class="dialog-button-container">
+                    <button
                         type="button"
                         on-click("cancel")
-                        title=state.translations["Translatable#Cancel"]>
-                        <span.kix-icon-close/>
+                        title=(state.translations["Translatable#Cancel"])
+                        class="kix-button cancel-button">
+                        <span class="kix-icon-close"/>
                         <translation-string pattern="Translatable#Cancel"/>
                     </button>
                     <if(state.reset)>
-                        <button.kix-button.form-blank-cancel-button
+                        <button
                             type="button"
                             on-click("reset")
-                            title=state.translations[
-                                "Translatable#Reset to Default"
-                            ]>
-                            <span.kix-icon-arrow-rotate-left/>
+                            title=(
+                                state.translations[
+                                    "Translatable#Reset to Default"
+                                ]
+                            )
+                            class="kix-button form-blank-cancel-button">
+                            <span class="kix-icon-arrow-rotate-left"/>
                             <translation-string pattern="Translatable#Reset to Default"/>
                         </button>
                     </if>
-                    <button.kix-button.submit-button
+                    <button
                         type="button"
                         on-click("submit")
-                        title=state.translations["Translatable#Save"]>
-                        <span.kix-icon-check/>
+                        title=(state.translations["Translatable#Save"])
+                        class="kix-button submit-button">
+                        <span class="kix-icon-check"/>
                         <translation-string pattern="Translatable#Save"/>
                     </button>
                 </div>

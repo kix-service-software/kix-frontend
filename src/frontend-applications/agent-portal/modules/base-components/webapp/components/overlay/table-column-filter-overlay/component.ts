@@ -29,11 +29,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private column: Column;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (!this.column || this.column !== input.column) {
             this.column = input.column;
             this.state.filterText = null;
@@ -123,6 +125,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const treeHandler = new TreeHandler([], null);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
         treeHandler.registerSelectionListener(this.state.treeId, (nodes: TreeNode[]) => {

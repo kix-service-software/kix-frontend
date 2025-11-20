@@ -20,15 +20,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private handler: TreeHandler;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.treeId = input.treeId;
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.autocompleteConfiguration = input.autocompleteConfiguration;
         this.state.searchCallback = input.autocompleteSearchCallback;
         this.state.freeText = typeof input.freeText !== 'undefined' ? input.freeText : false;
         this.update();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async update(): Promise<void> {
@@ -38,6 +44,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         if (this.treeId) {
             this.handler = TreeService.getInstance().getTreeHandler(this.treeId);
             this.state.tree = this.handler.getTree();

@@ -9,9 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Job } from '../../../model/Job';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ExecPlanTypes } from '../../../model/ExecPlanTypes';
@@ -24,17 +22,19 @@ import { JobFormService } from '../../core/JobFormService';
 
 class Component extends AbstractMarkoComponent<ComponentState, JobDetailsContext> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        WidgetService.getInstance().setWidgetType('job-exec-plan-group', WidgetType.GROUP);
+        this.context.widgetService.setWidgetType('job-exec-plan-group', WidgetType.GROUP);
 
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         this.initWidget(this.context);
@@ -113,6 +113,10 @@ class Component extends AbstractMarkoComponent<ComponentState, JobDetailsContext
 
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

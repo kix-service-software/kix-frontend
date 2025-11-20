@@ -11,26 +11,23 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { ComponentState } from './ComponentState';
 import { ReportChartWidgetConfiguration } from '../../../model/ReportChartWidgetConfiguration';
 import { ChartWidgetService } from '../../core/ChartWidgetService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { BackendNotification } from '../../../../../model/BackendNotification';
-import { IdService } from '../../../../../model/IdService';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ReportDefinition } from '../../../../reporting/model/ReportDefinition';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
     private chartWidgetConfig: ReportChartWidgetConfiguration;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'report-chart-widget');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -43,18 +40,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.prepareTitle();
         await this.updateChart();
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('MapLayer'),
-            eventPublished: this.handleEvent.bind(this)
-        };
-
-        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
+        super.registerEventSubscriber(this.handleEvent, [ApplicationEvent.OBJECT_CREATED]);
 
         this.state.prepared = true;
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
     }
 
     private async handleEvent(data: BackendNotification, eventId: string): Promise<void> {
@@ -105,6 +93,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.state.prepared = true;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

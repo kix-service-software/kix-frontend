@@ -59,6 +59,12 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                 this.objectValueMapper?.validateFormValue(this, true);
             }
         );
+        const contactFV = this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID);
+        if (contactFV?.value) {
+            await this.loadSelectableValues();
+            await this.setOrganisationValue(contactFV.value);
+            this.objectValueMapper?.validateFormValue(this, true);
+        }
     }
 
     public destroy(): void {

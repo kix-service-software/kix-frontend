@@ -16,11 +16,13 @@ import { ActionFactory } from '../../../../../modules/base-components/webapp/cor
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -53,11 +55,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.ciClass) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.ciClass]
+                this.state.widgetConfiguration.actions, [this.state.ciClass], this.contextInstanceId
             );
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

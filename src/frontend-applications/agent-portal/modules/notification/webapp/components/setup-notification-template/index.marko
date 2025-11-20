@@ -9,30 +9,35 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.formId && state.prepared)>
     <if(state.isSetup)>
-        <div.notification-template-form>
+        <div class="notification-template-form">
             <main-form/>
-            <div.button-container>
-                <button.kix-button.form-button
+            <div class="button-container">
+                <button
                     type="button"
                     on-click("preview")
-                    title=state.translations["Translatable#Preview"]>
-                    <span.kix-icon-image/>
+                    title=(state.translations["Translatable#Preview"])
+                    class="kix-button form-button">
+                    <span class="kix-icon-image"/>
                     <translation-string pattern="Translatable#Preview"/>
                 </button>
                 <if(!state.completed)>
-                    <button.kix-button.form-button
+                    <button
                         type="button"
                         on-click("skip")
-                        title=state.translations["Translatable#Skip & Continue"]>
-                        <span.kix-icon-arrow-outward/>
+                        title=(
+                            state.translations["Translatable#Skip & Continue"]
+                        )
+                        class="kix-button form-button">
+                        <span class="kix-icon-arrow-outward"/>
                         <translation-string pattern="Translatable#Skip & Continue"/>
                     </button>
                 </if>
-                <button.kix-button.submit-button
+                <button
                     type="button"
                     on-click("submit")
-                    title=state.translations["Translatable#Save & Continue"]>
-                    <span.kix-icon-arrow-outward/>
+                    title=(state.translations["Translatable#Save & Continue"])
+                    class="kix-button submit-button">
+                    <span class="kix-icon-arrow-outward"/>
                     <translation-string pattern="Translatable#Save & Continue"/>
                 </button>
             </div>
@@ -41,26 +46,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </if>
     <else>
         <widget
+            contextInstanceId=input.contextInstanceId
             instanceId=state.instanceId
             title=state.title
             icon="kix-icon-gears"
             minimizable=false>
             <@content>
-                <div.notification-template-form.in-widget>
+                <div class="notification-template-form in-widget">
                     <main-form/>
-                    <div.button-container>
-                        <button.kix-button.form-button
+                    <div class="button-container">
+                        <button
                             type="button"
                             on-click("preview")
-                            title=state.translations["Translatable#Preview"]>
-                            <span.kix-icon-image/>
+                            title=(state.translations["Translatable#Preview"])
+                            class="kix-button form-button">
+                            <span class="kix-icon-image"/>
                             <translation-string pattern="Translatable#Preview"/>
                         </button>
-                        <button.kix-button.submit-button
+                        <button
                             type="button"
                             on-click("submit")
-                            title=state.translations["Translatable#Save"]>
-                            <span.kix-icon-arrow-outward/>
+                            title=(state.translations["Translatable#Save"])
+                            class="kix-button submit-button">
+                            <span class="kix-icon-arrow-outward"/>
                             <translation-string pattern="Translatable#Save"/>
                         </button>
                     </div>

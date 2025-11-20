@@ -8,45 +8,31 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.notification = input.notification;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.createTime = await DateTimeUtil.getLocalDateTimeString(this.state.notification?.createTime);
-
-        setTimeout(() => {
-            const iframe: any = document.getElementById(this.state.frameId);
-            const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-            iframeDocument.body.innerHTML = this.state.notification.fullText;
-            BrowserUtil.cleanupHTML(iframeDocument);
-            BrowserUtil.appendKIXStyling(iframeDocument);
-        }, 100);
-
+        this.state.html = this.state.notification.fullText;
     }
 
-    public viewLoaded(event: any): void {
-        const frameDocument = event.target.contentWindow.document;
 
-        const bodyElements = frameDocument.documentElement.getElementsByTagName('body');
-        if (bodyElements?.length) {
-            bodyElements[0].addEventListener('click', (event) => {
-                BrowserUtil.handleLinkClicked(event);
-            });
-        }
-
+    public onDestroy(): void {
+        super.onDestroy();
     }
-
 }
 
 module.exports = Component;

@@ -24,18 +24,18 @@ import { OptionFieldHandler } from '../../../../macro/model/OptionFieldHandler';
 
 export class AssembleObjectOptionFieldHandler extends OptionFieldHandler {
 
-    private subscriber: IEventSubscriber;
+    private readonly subscriber: IEventSubscriber;
 
     public constructor() {
         super();
 
         this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('AssembleObject'),
-            eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
+            eventSubscriberId: IdService.generateDateBasedId('AssembleObjectOptionFieldHandler'),
+            eventPublished: function (data: FormValuesChangedEventData, eventId: string): void {
                 const definitionValue = data.changedValues.find(
                     (cv) => cv[0] && cv[0].property === 'AssembleObjectType'
                 );
-                if (definitionValue && definitionValue[1]) {
+                if (definitionValue?.[1]) {
                     const type = Array.isArray(definitionValue[1]?.value) ? definitionValue[1].value[0]
                         : definitionValue[1]?.value ? definitionValue[1]?.value : 'JSON';
 
@@ -44,9 +44,8 @@ export class AssembleObjectOptionFieldHandler extends OptionFieldHandler {
                     );
                     this.handleType(data.formInstance, definitionField, type);
                 }
-            }
+            }.bind(this)
         };
-
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.subscriber);
     }
 

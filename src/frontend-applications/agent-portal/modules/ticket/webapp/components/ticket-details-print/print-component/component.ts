@@ -14,11 +14,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (Array.isArray(input.properties)) {
             const count = Math.round(input.properties.length / 2);
             this.state.leftProperties = input.properties.slice(0, count);
@@ -27,9 +29,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.prepared = true;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

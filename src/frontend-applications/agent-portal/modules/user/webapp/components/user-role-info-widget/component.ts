@@ -10,26 +10,25 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { RoleLabelProvider } from '../../core/RoleLabelProvider';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Role } from '../../../model/Role';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
         this.state.labelProvider = new RoleLabelProvider();
-
-        const context = ContextService.getInstance().getActiveContext();
 
         this.context?.registerListener('user-role-info-widget', {
             sidebarRightToggled: (): void => { return; },
@@ -57,11 +56,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.role) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.role]
+                this.state.widgetConfiguration.actions, [this.state.role], this.contextInstanceId
             );
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

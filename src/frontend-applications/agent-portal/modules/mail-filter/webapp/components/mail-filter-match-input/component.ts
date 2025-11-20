@@ -17,10 +17,12 @@ class Component extends AbstractMarkoComponent {
     public state: ComponentState;
 
     public async onCreate(input: any): Promise<void> {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.update(input);
 
         return input;
@@ -57,6 +59,10 @@ class Component extends AbstractMarkoComponent {
 
     private emitChanges(): void {
         (this as any).emit('change', new MailFilterMatch(null, this.state.value, this.state.negate));
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

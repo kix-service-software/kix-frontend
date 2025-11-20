@@ -8,10 +8,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId=state.instanceId
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
-    contentActions=state.actions
->
+    contentActions=state.actions>
     <@content>
         <if(state.systemAddress)>
             <div class="system-address-information">
@@ -20,64 +20,55 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <object-property-label
                             object=state.systemAddress
                             property="Name"
-                            labelProvider=state.labelProvider
-                        />
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
                         <object-property-label
                             object=state.systemAddress
                             property="Realname"
-                            labelProvider=state.labelProvider
-                        />
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
                         <object-property-label
                             object=state.systemAddress
                             property="QueueID"
-                            labelProvider=state.labelProvider
-                        />
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
                         <object-property-label
                             object=state.systemAddress
                             property="Comment"
-                            labelProvider=state.labelProvider
-                        />
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
                         <object-property-label
                             object=state.systemAddress
                             property="ValidID"
-                            labelProvider=state.labelProvider
-                        />
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
                         <object-property-label
                             object=state.systemAddress
                             property="CreateTime"
-                            labelProvider=state.labelProvider
-                        />
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
                         <object-property-label
                             object=state.systemAddress
                             property="CreateBy"
-                            labelProvider=state.labelProvider
-                        />
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
                         <object-property-label
                             object=state.systemAddress
                             property="ChangeTime"
-                            labelProvider=state.labelProvider
-                        />
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
                         <object-property-label
                             object=state.systemAddress
                             property="ChangeBy"
-                            labelProvider=state.labelProvider
-                        />
+                            labelProvider=state.labelProvider/>
                     </div>
                 </div>
             </div>

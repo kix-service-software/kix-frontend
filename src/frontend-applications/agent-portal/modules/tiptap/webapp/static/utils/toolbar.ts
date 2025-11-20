@@ -32,6 +32,45 @@ export function createToolbar(editor: any): HTMLDivElement {
         toolbar.style.setProperty('top', '69px', 'important');
     }
 
+    const isTemplates = ((): boolean => {
+        try {
+            const p = (location?.pathname || '') + (location?.hash || '');
+            return /\/templates(\/|$)/.test(p);
+        } catch {
+            return false;
+        }
+    })();
+
+    if (isTemplates) {
+        toolbar.style.setProperty('top', '33px', 'important');
+    }
+
+    const updateStickyTopForRoute = (): void => {
+        const p = (location?.pathname || '') + (location?.hash || '');
+        const nowTemplates = /\/templates(\/|$)/.test(p);
+
+        if (nowTemplates) {
+            toolbar.style.setProperty('top', '33px', 'important');
+        } else if (isSSP) {
+            toolbar.style.setProperty('top', '69px', 'important');
+        } else {
+            toolbar.style.removeProperty('top');
+        }
+    };
+
+    window.addEventListener('popstate', updateStickyTopForRoute);
+    window.addEventListener('hashchange', updateStickyTopForRoute);
+    ['pushState', 'replaceState'].forEach((fn) => {
+        const orig = history[fn as 'pushState' | 'replaceState'];
+        history[fn as 'pushState' | 'replaceState'] = function (...args: any[]) {
+            const ret = orig.apply(this, args as any);
+            try { updateStickyTopForRoute(); } catch { }
+            return ret;
+        } as any;
+    });
+
+    updateStickyTopForRoute();
+
     let isSourceMode = false;
     let sourceTextarea: HTMLTextAreaElement | null = null;
     let skipNextFormatReapply = false;
@@ -64,7 +103,7 @@ export function createToolbar(editor: any): HTMLDivElement {
         return chain;
     }
 
-    const alignableTypes = ['paragraph', 'heading', 'customParagraph'] as const;
+    const alignableTypes = ['heading', 'customParagraph'] as const;
     const getCurrentAlign = (): any => {
         for (const t of alignableTypes) {
             const ta = editor.getAttributes(t as any)?.textAlign;
@@ -90,6 +129,30 @@ export function createToolbar(editor: any): HTMLDivElement {
         }
         reapplyActiveMarksInChain(chain).run();
     };
+
+    function sanitizeHtmlForTiptap(raw: string): string {
+        let h = (raw ?? '').toString();
+        h = h.replace(/<!--[\s\S]*?-->/g, '');
+        h = h.replace(/<\/?(?:tbody|thead|tfoot)\b[^>]*>/gi, '');
+        h = h.replace(/>\s+</g, '><');
+        h = h.replace(/&nbsp;/g, ' ');
+        return h.trim();
+    }
+
+    function withContentCheckDisabled(editor: any, fn: () => void): void {
+        const prev = !!editor.options?.enableContentCheck;
+        try {
+            if (prev && typeof editor.setOptions === 'function') {
+                editor.setOptions({ enableContentCheck: false });
+            }
+            fn();
+        } finally {
+            if (prev && typeof editor.setOptions === 'function') {
+                editor.setOptions({ enableContentCheck: true });
+            }
+        }
+    }
+
 
     function updateActiveButtons(): void {
         const superscriptActive = editor.isActive('superscript');
@@ -174,11 +237,15 @@ export function createToolbar(editor: any): HTMLDivElement {
         button.className = 'btn btn-sm btn-outline-secondary';
         button.title = tooltip;
 
+        button.type = 'button';
 
-        button.onclick = (): void => {
+        button.addEventListener('click', (ev: MouseEvent): void => {
+            ev.preventDefault();
+            ev.stopPropagation();
+
             command();
             updateActiveButtons();
-        };
+        });
 
         const wrapper = document.createElement('span');
         wrapper.className = 'icon-wrapper';
@@ -483,11 +550,21 @@ export function createToolbar(editor: any): HTMLDivElement {
     const fontButton = fontDropdown.querySelector('.tiptap-font-dropdown-button') as HTMLButtonElement;
     fontButton.title = 'Font Family';
 
-    editor.on('transaction', () => {
-        const currentFont = editor.getAttributes('fontFamily')?.fontFamily ?? editor.storage.lastFontFamily ?? 'Arial';
-        editor.storage.lastFontFamily = currentFont;
-        fontButton.childNodes[0].textContent = currentFont;
-    });
+    function updateFontFamilyButtonLabel(): void {
+        const ts = editor.getAttributes('textStyle') || {};
+        const currentFont = ts.fontFamily ?? editor.storage.lastFontFamily ?? 'Arial';
+
+        if (fontButton && fontButton.childNodes[0]) {
+            (fontButton.childNodes[0] as any).textContent = currentFont;
+        }
+        (fontButton as HTMLButtonElement).style.fontFamily = currentFont;
+    }
+
+    editor.on('transaction', updateFontFamilyButtonLabel);
+    editor.on('selectionUpdate', updateFontFamilyButtonLabel);
+    editor.on('update', updateFontFamilyButtonLabel);
+
+    updateFontFamilyButtonLabel();
 
     // === Font Size ===
     const fontSizes = [
@@ -507,7 +584,7 @@ export function createToolbar(editor: any): HTMLDivElement {
     ];
 
     const fontSizeDropdown = createDropdown(
-        'Font Size',
+        '14px',
         fontSizes.map(({ label, size }) => ({
             label,
             action: (): void => {
@@ -530,7 +607,7 @@ export function createToolbar(editor: any): HTMLDivElement {
         const ts = editor.getAttributes('textStyle') || {};
         const fontSizeAttr = ts.fontSize ?? null;
 
-        let label = 'Font Size';
+        let label = '14px';
         if (fontSizeAttr) {
             const matched = fontSizes.find((f) => f.size === String(fontSizeAttr));
             label = matched?.label || `${fontSizeAttr}px`;
@@ -575,22 +652,25 @@ export function createToolbar(editor: any): HTMLDivElement {
 
     toolbar.appendChild(headingDropdown);
 
-    editor.on('transaction', () => {
+    function updateHeadingButtonLabel(): void {
         let currentLabel = 'Paragraph';
-
         for (let i = 1; i <= 6; i++) {
             if (editor.isActive('heading', { level: i })) {
                 currentLabel = `Heading ${i}`;
                 break;
             }
         }
+        if (editor.isActive('paragraph')) currentLabel = 'Paragraph';
 
-        if (editor.isActive('paragraph')) {
-            currentLabel = 'Paragraph';
+        if (headingButton && headingButton.childNodes[0]) {
+            (headingButton.childNodes[0] as any).textContent = currentLabel;
         }
+    }
 
-        headingButton.childNodes[0].textContent = currentLabel;
-    });
+    editor.on('transaction', updateHeadingButtonLabel);
+    editor.on('selectionUpdate', updateHeadingButtonLabel);
+    editor.on('update', updateHeadingButtonLabel);
+    updateHeadingButtonLabel();
 
     // === Table Dropdown ===
     const tableDropdown = createDropdown(
@@ -838,6 +918,10 @@ export function createToolbar(editor: any): HTMLDivElement {
         zIndex: '1000',
     });
 
+    imageDropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
     const createImageDropdownItem = (label: string, onClick: () => void): HTMLDivElement => {
         const item = document.createElement('div');
         item.textContent = label;
@@ -868,7 +952,8 @@ export function createToolbar(editor: any): HTMLDivElement {
             item.style.color = '#000';
         };
 
-        item.onclick = (): void => {
+        item.onclick = (e): void => {
+            e.stopPropagation();
             imageDropdown.style.display = 'none';
             onClick();
         };
@@ -897,11 +982,15 @@ export function createToolbar(editor: any): HTMLDivElement {
     }));
 
     imageButtonWrapper.onclick = (e): void => {
+        if ((e.target as HTMLElement).closest('.image-dropdown-menu')) return;
+
         e.stopPropagation();
         const isVisible = imageDropdown.style.display === 'block';
+
         document.querySelectorAll('.image-dropdown-menu').forEach((el) => {
             (el as HTMLElement).style.display = 'none';
         });
+
         imageDropdown.style.display = isVisible ? 'none' : 'block';
     };
 
@@ -950,8 +1039,10 @@ export function createToolbar(editor: any): HTMLDivElement {
 
                 const sync = (): void => {
                     if (!sourceTextarea) return;
-                    const html = sourceTextarea.value;
-                    editor.commands.setContent(html, true);
+                    const safeHtml = sanitizeHtmlForTiptap(sourceTextarea.value);
+                    withContentCheckDisabled(editor, () => {
+                        editor.commands.setContent(safeHtml, true);
+                    });
                 };
 
                 let t: number | undefined;
@@ -971,7 +1062,12 @@ export function createToolbar(editor: any): HTMLDivElement {
                     const debouncedSync = (sourceTextarea as any)._debouncedSync as () => void;
 
                     if (debouncedSync) sourceTextarea.removeEventListener('input', debouncedSync);
-                    if (sync) sync();
+
+                    try {
+                        if (sync) sync();
+                    } catch (e) {
+                        console.error('[SourceMode] final sync failed:', e);
+                    }
 
                     sourceTextarea.remove();
                     sourceTextarea = null;
@@ -997,68 +1093,53 @@ export function createToolbar(editor: any): HTMLDivElement {
         'fas fa-eraser',
         () => {
             const { state, view } = editor;
-            const { from, to } = state.selection;
-            const tr = state.tr;
+            const wantFamily = 'Arial';
+            const wantSize = '14';
 
-            const allMarkTypes = [
-                'bold', 'italic', 'underline', 'strike',
-                'link', 'highlight', 'fontSize', 'fontFamily', 'color'
-            ];
+            const stored: any[] = [];
+            const m = state.schema.marks as any;
 
-            allMarkTypes.forEach((mark) => {
-                if (state.schema.marks[mark]) {
-                    tr.removeMark(from, to, state.schema.marks[mark]);
-                }
-            });
+            if (m.textStyle) {
+                stored.push(
+                    m.textStyle.create({
+                        fontFamily: wantFamily,
+                        fontSize: wantSize,
+                    })
+                );
+            } else {
+                if (m.fontFamily) stored.push(m.fontFamily.create({ fontFamily: wantFamily }));
+                if (m.fontSize) stored.push(m.fontSize.create({ fontSize: wantSize }));
+            }
 
-            state.doc.nodesBetween(from, to, (node, pos) => {
-                if (node.isTextblock && node.attrs) {
-                    const newAttrs = { ...node.attrs, style: null, textAlign: null };
-                    tr.setNodeMarkup(pos, undefined, newAttrs);
-                }
-            });
-
-            tr.setStoredMarks([]);
+            const tr = state.tr.setStoredMarks(stored);
             view.dispatch(tr);
             view.focus();
 
-            editor.chain()
-                .focus()
-                .unsetColor()
-                .unsetHighlight()
-                .unsetFontSize()
-                .unsetAllMarks()
-                .run();
-
-            editor.chain().focus()
-                .setFontFamily('Arial')
-                .setFontSize('14')
-                .run();
-
-            editor.storage.lastFontFamily = 'Arial';
-            editor.storage.lastFontSize = null;
+            editor.storage.lastFontFamily = wantFamily;
+            editor.storage.lastFontSize = wantSize;
             editor.storage.lastFontColor = null;
-
-            const defaultSizeItem = toolbar.querySelector(
-                '.tiptap-fontsize-dropdown-menu .dropdown-item'
-            ) as HTMLElement;
-            if (defaultSizeItem && defaultSizeItem.textContent?.toLowerCase().includes('default')) {
-                defaultSizeItem.click();
-            }
+            editor.storage.lastHighlightColor = null;
+            editor.storage.lastBold = false;
+            editor.storage.lastItalic = false;
+            editor.storage.lastUnderline = false;
+            editor.storage.lastStrike = false;
+            skipNextFormatReapply = true;
 
             const highlightIcon = toolbar.querySelector('.highlight-icon') as HTMLElement;
-            if (highlightIcon) {
-                highlightIcon.style.backgroundColor = 'transparent';
-            }
+            if (highlightIcon) highlightIcon.style.backgroundColor = 'transparent';
 
-            const colorButton = toolbar.querySelector('.color-picker-wrapper') as HTMLElement;
-            if (colorButton) {
-                colorButton.style.backgroundColor = 'transparent';
-            }
+            const colorBtn = toolbar.querySelector('.color-picker-wrapper') as HTMLElement;
+            if (colorBtn) colorBtn.style.backgroundColor = 'transparent';
+
+            const fontBtn = toolbar.querySelector('.tiptap-font-dropdown-button') as HTMLElement;
+            if (fontBtn?.childNodes?.[0]) (fontBtn.childNodes[0] as any).textContent = wantFamily;
+
+            const fontSizeBtn = toolbar.querySelector('.tiptap-fontsize-dropdown-button') as HTMLElement;
+            if (fontSizeBtn?.childNodes?.[0]) (fontSizeBtn.childNodes[0] as any).textContent = `${wantSize}px`;
 
             updateActiveButtons();
         },
-        'Clear All Formatting'
+        'Plain typing (reset)'
     );
 
     toolbar.appendChild(clearFormattingButton);
@@ -1178,10 +1259,6 @@ export function createToolbar(editor: any): HTMLDivElement {
 
     // === Find & Replace ===
     addFindReplace(toolbar, editor, createIconButton);
-
-    requestAnimationFrame(() => {
-        editor.commands.focus('end');
-    });
 
     return toolbar;
 }

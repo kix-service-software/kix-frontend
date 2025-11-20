@@ -23,7 +23,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private timoutTimer: TimeoutTimer;
     public isFiltered: boolean;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.timoutTimer = new TimeoutTimer();
     }
@@ -168,6 +169,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private setDateChanged(event: any): void {
         this.state.selectedDate = event.target.value;
         this.filter();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

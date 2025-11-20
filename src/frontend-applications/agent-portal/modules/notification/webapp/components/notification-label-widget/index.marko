@@ -9,26 +9,24 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.prepared)>
     <widget
+        contextInstanceId=input.contextInstanceId
         instanceId=state.instanceId
         title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
-        contentActions=state.actions
-    >
+        contentActions=state.actions>
         <@content>
             <if(state.notification)>
-                <div.notification-recipients>
+                <div class="notification-recipients">
                     <for|property| of=state.properties>
                         <if(component.isLabelList(property))>
                             <object-property-label
                                 object=state.notification
                                 property=property
                                 labelProvider=state.labelProvider
-                                noValueTitle
-                            >
+                                noValueTitle>
                                 <@value>
                                     <label-list
                                         labels=component.getLabelList(property)
-                                        removeLabels=false
-                                    />
+                                        removeLabels=false/>
                                 </@value>
                             </object-property-label>
                         </if>
@@ -36,8 +34,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <object-property-label
                                 object=state.notification
                                 property=property
-                                labelProvider=state.labelProvider
-                            />
+                                labelProvider=state.labelProvider/>
                         </else>
                     </for>
                 </div>

@@ -16,12 +16,18 @@ import { ContextMode } from '../../../../../../../model/ContextMode';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.entry = input.entry;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     public getRoutingConfiguration(): RoutingConfiguration {
@@ -31,6 +37,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
 
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

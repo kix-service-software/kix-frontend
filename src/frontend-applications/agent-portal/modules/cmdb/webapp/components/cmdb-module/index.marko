@@ -14,33 +14,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             on-keyup("keyUp")
             value=state.filterValue
             placeholder=state.placeholder
-            class="input-style"
-        >
+            class="input-style">
         <button
             type="button"
             title=(state.translations["Translatable#Help"])
             on-click("showCommandHelp", false)
-            class="kix-button button button-without-text"
-        >
+            class="kix-button button button-without-text">
             <overlay-icon
                 isHint
                 content="Translatable#Helptext_CMDB_Dashboard_Search"
-                title=(state.translations["Translatable#Search"])
-            />
+                title=(state.translations["Translatable#Search"])/>
         </button>
         <button
             type="button"
             on-click("search")
-            class="kix-button submit-button"
-        >
+            class="kix-button submit-button">
             <span class="kix-icon-search"/>
             <translation-string pattern="Translatable#Search"/>
         </button>
     </div>
     <if(state.prepared)>
         <widget-container
+            contextInstanceId=input.contextInstanceId
             widgets=state.contentWidgets
-            contextWidgetList="content"
-        />
+            contextWidgetList="content"/>
     </if>
 </div>

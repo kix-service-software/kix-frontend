@@ -7,12 +7,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.object-dialog>
-    <widget instanceId=state.instanceId title=state.title icon=state.icon>
+<div class="object-dialog">
+    <widget
+        contextInstanceId=input.contextInstanceId
+        instanceId=state.instanceId
+        title=state.title
+        icon=state.icon>
         <@content>
             <if(state.bulkManager)>
-                <form.form autocomplete="off">
-                    <bulk-form bulkManager=state.bulkManager/> 
+                <form autocomplete="off" class="form">
+                    <bulk-form bulkManager=state.bulkManager/>
+                    ${" "}
                 </form>
             </if>
         </@content>

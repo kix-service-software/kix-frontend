@@ -9,19 +9,15 @@
 
 import { ComponentState } from './ComponentState';
 import { SearchService } from '../../core/SearchService';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { SearchEvent } from '../../../model/SearchEvent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { TreeHandler, TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
-import { SearchFormManager } from '../../../../base-components/webapp/core/SearchFormManager';
 import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
 import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
@@ -31,11 +27,7 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 
 class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
-    public listenerId: string = 'search-criteria-widget';
-
-    private subscriber: IEventSubscriber;
     private managerListenerId: string;
-    private contextInstanceId: string;
 
     private keyListenerElement: any;
     private keyListener: any;
@@ -45,7 +37,8 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
     private sortAttributeTreeHandler: TreeHandler;
     private searchDefinition: SearchDefinition;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'search-criteria-widget');
         this.state = new ComponentState();
         const instanceId = this.context?.getAdditionalInformation('SEARCH_WIDGET_INSTANCE_ID');
         if (instanceId) {
@@ -67,29 +60,7 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
         await this.prepareActions();
 
-        WidgetService.getInstance().updateActions(this.state.instanceId);
-
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('search-criteria-widget'),
-            eventPublished: async (data: SearchContext, eventId: string): Promise<void> => {
-                if (data.instanceId === this.contextInstanceId) {
-                    if (eventId === SearchEvent.SEARCH_DELETED || eventId === SearchEvent.SEARCH_CACHE_CHANGED) {
-                        this.initManager();
-                        this.initSort();
-                    }
-                    this.setTitle();
-                }
-                if (eventId === SearchEvent.SHOW_CRITERIA) {
-                    const groupComponent = (this as any).getComponent(this.state.instanceId);
-                    if (groupComponent) {
-                        groupComponent.setMinizedState(false);
-                    }
-                }
-                if (eventId === SearchEvent.CALL_SEARCH) {
-                    await this.search();
-                }
-            }
-        };
+        this.context.widgetService.updateActions(this.state.instanceId);
 
         this.keyListenerElement = (this as any).getEl('search-criteria-container');
         if (this.keyListenerElement) {
@@ -97,11 +68,10 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
             this.keyListenerElement.addEventListener('keydown', this.keyListener);
         }
 
-        this.contextInstanceId = this.context?.instanceId;
         this.searchDefinition = SearchService.getInstance().getSearchDefinition(
             this.context.descriptor.kixObjectTypes[0]
         );
-        this.state.manager = (this.searchDefinition?.formManager as SearchFormManager);
+        this.state.manager = this.searchDefinition?.createFormManager();
         await this.setTitle();
         await this.initManager();
         await this.initSort();
@@ -121,11 +91,33 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
             }, 100);
         });
 
-        EventService.getInstance().subscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
-        EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
-        EventService.getInstance().subscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(SearchEvent.SHOW_CRITERIA, this.subscriber);
-        EventService.getInstance().subscribe(SearchEvent.CALL_SEARCH, this.subscriber);
+        super.registerEventSubscriber(
+            async function (data: SearchContext, eventId: string): Promise<void> {
+                if (data.instanceId !== this.contextInstanceId) return;
+
+                if (eventId === SearchEvent.SEARCH_DELETED || eventId === SearchEvent.SEARCH_CACHE_CHANGED) {
+                    this.initManager();
+                    this.initSort();
+                }
+                this.setTitle();
+                if (eventId === SearchEvent.SHOW_CRITERIA) {
+                    const groupComponent = (this as any).getComponent(this.state.instanceId);
+                    if (groupComponent) {
+                        groupComponent.setMinizedState(false);
+                    }
+                }
+                if (eventId === SearchEvent.CALL_SEARCH) {
+                    await this.search();
+                }
+            },
+            [
+                SearchEvent.SAVE_SEARCH_FINISHED,
+                SearchEvent.SEARCH_DELETED,
+                SearchEvent.SEARCH_CACHE_CHANGED,
+                SearchEvent.SHOW_CRITERIA,
+                SearchEvent.CALL_SEARCH
+            ]
+        );
 
         const groupComponent = (this as any).getComponent(this.state.instanceId);
         if (groupComponent) {
@@ -149,11 +141,7 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
-        EventService.getInstance().unsubscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
-        EventService.getInstance().unsubscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(SearchEvent.SHOW_CRITERIA, this.subscriber);
-        EventService.getInstance().unsubscribe(SearchEvent.CALL_SEARCH, this.subscriber);
+        super.onDestroy();
 
         this.state.manager?.unregisterListener(this.managerListenerId);
 
@@ -216,7 +204,8 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
     private async prepareActions(): Promise<void> {
         this.state.contentActions = await ActionFactory.getInstance().generateActions(
-            ['save-search-action', 'save-user-default-search-action', 'delete-search-action']
+            ['save-search-action', 'save-user-default-search-action', 'delete-search-action'], null,
+            this.context?.instanceId
         );
     }
 
@@ -228,7 +217,7 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
             this.context?.setSortOrder(cache.objectType, cache.sortAttribute, cache.sortDescending, false);
             TableFactoryService.getInstance().resetFilterOfContextTables(this.context?.contextId, cache.objectType);
         }
-        await SearchService.getInstance().searchObjects(this.context?.getSearchCache());
+        await SearchService.getInstance().searchObjects(this.context?.getSearchCache(), this.context);
         BrowserUtil.toggleLoadingShield('SEARCH_CRITERIA_SHIELD', false);
 
         const agentPortalConfig = await SysConfigService.getInstance()
@@ -294,6 +283,10 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
         }
     }
 
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

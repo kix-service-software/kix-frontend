@@ -7,35 +7,63 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+<widget
+    contextInstanceId=input.contextInstanceId
+    instanceId=state.instanceId
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions>
     <@content>
         <if(state.ciClass)>
-            <div.config-item-class-info>
-                <div.information-list>
+            <div class="config-item-class-info">
+                <div class="information-list">
                     <div>
-                        <object-property-label object=state.ciClass property="Name" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.ciClass
+                            property="Name"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.ciClass property="ICON" labelProvider=state.labelProvider showText=false/>
+                        <object-property-label
+                            object=state.ciClass
+                            property="ICON"
+                            labelProvider=state.labelProvider
+                            showText=false/>
                     </div>
                     <div>
-                        <object-property-label object=state.ciClass property="Comment" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.ciClass
+                            property="Comment"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.ciClass property="ValidID" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.ciClass
+                            property="ValidID"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.ciClass property="CreateTime" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.ciClass
+                            property="CreateTime"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.ciClass property="CreateBy" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.ciClass
+                            property="CreateBy"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.ciClass property="ChangeTime" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.ciClass
+                            property="ChangeTime"
+                            labelProvider=state.labelProvider/>
                     </div>
                     <div>
-                        <object-property-label object=state.ciClass property="ChangeBy" labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.ciClass
+                            property="ChangeBy"
+                            labelProvider=state.labelProvider/>
                     </div>
                 </div>
             </div>

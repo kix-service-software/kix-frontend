@@ -23,9 +23,10 @@ class Component extends FormInputComponent<string, ComponentState> {
     private typeID: string;
     public treeId: string;
 
-    public onCreate(): void {
-        this.treeId = IdService.generateDateBasedId('mail-account-input-types-'),
-            this.state = new ComponentState();
+    public onCreate(input: any): void {
+        super.onCreate(input);
+        this.treeId = IdService.generateDateBasedId('mail-account-input-types-');
+        this.state = new ComponentState();
         this.state.loadNodes = this.load.bind(this);
     }
 
@@ -52,15 +53,16 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         const treeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler(this.treeId, treeHandler);
         await this.load();
-        await super.onMount();
-
-        this.state.prepared = true;
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
         super.onDestroy();
         TreeService.getInstance().removeTreeHandler(this.treeId);
     }

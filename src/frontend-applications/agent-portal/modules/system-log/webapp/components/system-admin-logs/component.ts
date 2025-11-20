@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { TableEvent } from '../../../../table/model/TableEvent';
 import { TableEventData } from '../../../../table/model/TableEventData';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -17,39 +16,31 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { LogFile } from '../../../model/LogFile';
-import { LogFileProperty } from '../../../model/LogFileProperty';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { LogFileTableFactory } from '../../core/table/LogFileTableFactory';
 import { IDownloadableFile } from '../../../../../model/IDownloadableFile';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'system-admin-log');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
 
-        this.subscriber = {
-            eventSubscriberId: 'logs-table-listener',
-            eventPublished: (data: TableEventData, eventId: string, subscriberId?: string): void => {
-                if (data?.tableId === LogFileTableFactory.TABLE_ID && eventId === TableEvent.ROW_CLICKED) {
+        super.registerEventSubscriber(
+            function (data: TableEventData, eventId: string, subscriberId?: string): void {
+                if (data?.tableId === LogFileTableFactory.TABLE_ID) {
                     const row = data?.table?.getRow(data.rowId);
                     const logFile = row?.getRowObject()?.getObject();
                     if (logFile instanceof LogFile) {
                         this.downloadLogFile(logFile);
                     }
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(TableEvent.ROW_CLICKED, this.subscriber);
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.ROW_CLICKED, this.subscriber);
+            },
+            [TableEvent.ROW_CLICKED]
+        );
     }
 
     private async downloadLogFile(logFile: LogFile): Promise<void> {
@@ -60,11 +51,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             KIXObjectType.LOG_FILE_DOWNLOAD, [logFile.ID], loadingOptions, null, false, false
         );
 
-        if (files && files.length) {
+        if (files?.length) {
             BrowserUtil.startFileDownload(files[0]);
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

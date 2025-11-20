@@ -20,11 +20,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private config: ObjectInformationCardConfiguration;
     private widgetInstanceId: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (input.config) {
             this.config = JSON.parse(JSON.stringify(input.config));
         }
@@ -35,6 +37,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.initWidget();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async initWidget(): Promise<void> {
@@ -57,6 +63,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public getCustomRowStyle(index: number): string {
+        const basicColumnWidth = 15;
         const row = this.state.information[index] as InformationRowConfiguration;
         if (
             this.isRowWithCreatedBy(index) ||
@@ -64,16 +71,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         ) {
             return;
         }
-        const basicColumnWidth = 15;
-        let largestFactor = 1;
-        row.values.forEach((value) => {
-            const newLargestFactor = this.getLargestWidthFactor(value);
-            if (newLargestFactor > largestFactor) {
-                largestFactor = newLargestFactor;
+        let style = 'grid-auto-columns:';
+        row.values.forEach((value, index) => {
+            const largestFactor = this.getLargestWidthFactor(value);
+            style += ` ${largestFactor * basicColumnWidth + (largestFactor - 1)}rem`;
+            if (index === row.values.length - 1) {
+                style += ';';
             }
         });
-        const size = largestFactor * basicColumnWidth + (largestFactor - 1);
-        return `grid-template-columns: repeat(auto-fill,${size}rem)`;
+        return style;
     }
 
     private getLargestWidthFactor(group: InformationConfiguration[]): number {

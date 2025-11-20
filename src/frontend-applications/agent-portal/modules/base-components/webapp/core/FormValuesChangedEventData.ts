@@ -9,11 +9,13 @@
 
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { Context } from '../../../../model/Context';
 import { FormInstance } from './FormInstance';
 
 export class FormValuesChangedEventData {
 
     public constructor(
+        public context: Context,
         public formInstance: FormInstance,
         public changedValues: Array<[FormFieldConfiguration, FormFieldValue]> = [],
         public originInstanceId: string

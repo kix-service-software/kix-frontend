@@ -24,6 +24,8 @@ export class CompareConfigItemVersionContext extends Context {
     public static CONTEXT_ID: string = 'compare-config-item-version-context';
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        await super.initContext(urlParams);
+
         const configItem = await this.getObject<ConfigItem>();
 
         this.handleURLParams(urlParams);

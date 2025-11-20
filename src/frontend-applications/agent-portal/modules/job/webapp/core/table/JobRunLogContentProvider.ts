@@ -26,7 +26,7 @@ export class JobRunLogContentProvider extends TableContentProvider<JobRunLog> {
 
     public async loadData(): Promise<Array<RowObject<JobRunLog>>> {
         const rowObjects = [];
-        if (this.logs && this.logs.length) {
+        if (this.logs?.length) {
             let number = 1;
             for (const log of this.logs) {
                 const values: TableValue[] = [];

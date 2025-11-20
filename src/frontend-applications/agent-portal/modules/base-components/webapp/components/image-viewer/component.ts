@@ -14,9 +14,12 @@ import { DisplayImageDescription } from '../../core/DisplayImageDescription';
 import { EventService } from '../../core/EventService';
 import { ImageViewerEvent } from '../../../../agent-portal/model/ImageViewerEvent';
 import { ImageViewerEventData } from '../../../../agent-portal/model/ImageViewerEventData';
+import { IdService } from '../../../../../../agent-portal/model/IdService';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
 
 export class Component implements IImageDialogListener {
 
+    private subscriber: IEventSubscriber;
     private state: ComponentState;
     private currImageIndex: number = 0;
     private keyDownEventFunction: () => {
@@ -27,23 +30,27 @@ export class Component implements IImageDialogListener {
         this.state = new ComponentState();
     }
 
-
     public async onMount(): Promise<void> {
-        EventService.getInstance().subscribe(ImageViewerEvent.OPEN_VIEWER, {
-            eventSubscriberId: 'image-viewer',
-            eventPublished: async (data: ImageViewerEventData) => {
-                if (data && data.imageDescriptions) {
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('image-viewer'),
+            eventPublished: async function (data: ImageViewerEventData): Promise<void> {
+                if (data?.imageDescriptions) {
                     if (this.state.show) {
                         this.close();
                     }
                     this.open(data.imageDescriptions, data.showImageId);
                 }
-            }
-        });
+            }.bind(this)
+        };
+        EventService.getInstance().subscribe(ImageViewerEvent.OPEN_VIEWER, this.subscriber);
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Next Image', 'Translatable#Previous Image', 'Translatable#Download'
         ]);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ImageViewerEvent.OPEN_VIEWER, this.subscriber);
     }
 
     public open(imageDescriptions: DisplayImageDescription[], showImageId?: string | number): void {

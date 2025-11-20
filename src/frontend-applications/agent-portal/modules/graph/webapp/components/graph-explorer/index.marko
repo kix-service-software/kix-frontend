@@ -7,7 +7,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget instanceId=state.instanceId title="Translatable#Graph Options">
+<widget
+    contextInstanceId=input.contextInstanceId
+    instanceId=state.instanceId
+    title="Translatable#Graph Options">
     <@content>
         <div class="graph-explorer-container">
             <div class="graph-options">
@@ -18,8 +21,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <form-list
                         treeId=option.key
                         freeText=option.freeText
-                        multiselect=option.multiselect
-                    />
+                        multiselect=option.multiselect/>
                 </for>
             </div>
 
@@ -29,8 +31,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         type="button"
                         on-click("apply")
                         title=(state.translations["Translatable#Apply"])
-                        class="kix-button submit-button"
-                    >
+                        class="kix-button submit-button">
                         <span class="kix-icon-check"/>
                         <translation-string pattern="Translatable#Apply"/>
                     </button>

@@ -24,6 +24,7 @@ import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { Ticket } from '../../model/Ticket';
 import { TicketUIEvent } from '../../model/TicketUIEvent';
 import { TicketDetailsContext } from './context';
+import { IdService } from '../../../../model/IdService';
 
 export class DoNotSentEventHandler {
 
@@ -36,19 +37,18 @@ export class DoNotSentEventHandler {
         return DoNotSentEventHandler.INSTANCE;
     }
 
-    private subscriber: IEventSubscriber;
+    private readonly subscriber: IEventSubscriber;
 
     private constructor() {
 
         this.subscriber = {
-            eventSubscriberId: 'TicketNotificationHandler',
-            eventPublished: (data: BackendNotification): void => {
+            eventSubscriberId: IdService.generateDateBasedId('DoNotSentEventHandler'),
+            eventPublished: function (data: BackendNotification): void {
                 if (data instanceof BackendNotification && data.Namespace === 'Ticket.Article.Flag') {
                     this.checkForNotSentError(data);
                 }
-            }
+            }.bind(this)
         };
-
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
     }
 

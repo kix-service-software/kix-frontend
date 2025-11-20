@@ -23,7 +23,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     class="accordion-button fw-bold p-2 flex-wrap"
                     type="button"
                     aria-expanded="true">
-                    <if(input.contextInstanceId)>
+                    <if(state.isConfigContext)>
                         <button
                             type="button"
                             class="btn btn-sm btn-light text-black me-3"
@@ -54,7 +54,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <div class="accordion-body">
                     <if(input.group.description)>
                         <div class="alert alert-light" role="alert">
-                            $!{input.group.description}
+                            <iframe-content html=(input.group.description)/>
                         </div>
                     </if>
 

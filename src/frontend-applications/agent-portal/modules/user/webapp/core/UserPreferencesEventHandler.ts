@@ -10,12 +10,12 @@
 import { BackendNotification } from '../../../../model/BackendNotification';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
-import { BookmarkService } from '../../../base-components/webapp/core/BookmarkService';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
 import { SearchService } from '../../../search/webapp/core/SearchService';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
+import { IdService } from '../../../../model/IdService';
 
 export class UserPreferencesEventHandler {
 
@@ -28,13 +28,12 @@ export class UserPreferencesEventHandler {
         return UserPreferencesEventHandler.INSTANCE;
     }
 
-    private subscriber: IEventSubscriber;
+    private readonly subscriber: IEventSubscriber;
 
     private constructor() {
-
         this.subscriber = {
-            eventSubscriberId: 'UserPreferencesEventHandler',
-            eventPublished: (data: BackendNotification): void => {
+            eventSubscriberId: IdService.generateDateBasedId('UserPreferencesEventHandler'),
+            eventPublished: function (data: BackendNotification): void {
                 if (data instanceof BackendNotification && data.Namespace === 'User.UserPreference') {
                     const userId = AgentSocketClient.getInstance().userId;
                     const objectIds = data.ObjectID?.split('::') || [];
@@ -42,9 +41,8 @@ export class UserPreferencesEventHandler {
                         this.updateCurrentUserCache(data);
                     }
                 }
-            }
+            }.bind(this)
         };
-
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
     }
 

@@ -25,11 +25,9 @@ import { TableRowHeight } from '../../../../table/model/TableRowHeight';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
-    }
-
-    public async onMount(): Promise<void> {
         const ignoreTypes = DynamicFieldService.getInstance().ignoreDFTypes;
 
         const tableWidgetConfiguration = new TableWidgetConfiguration(null, null, null, KIXObjectType.DYNAMIC_FIELD);
@@ -60,6 +58,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
     }
 
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
+
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

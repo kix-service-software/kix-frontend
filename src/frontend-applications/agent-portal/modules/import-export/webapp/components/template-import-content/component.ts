@@ -17,10 +17,12 @@ import { ImportExportTemplateRun } from '../../../model/ImportExportTemplateRun'
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.template = input.template;
     }
 
@@ -49,7 +51,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 'import-export-template-' + this.state.template.ID + '-runs',
                 KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN, null,
                 // use template id
-                [this.state.template.ID], this.context?.contextId
+                [this.state.template.ID], this.contextInstanceId
             );
 
             this.state.table = table;

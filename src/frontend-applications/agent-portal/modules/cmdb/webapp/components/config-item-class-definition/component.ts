@@ -15,16 +15,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private definition: ConfigItemClassDefinition;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.definition = input.definition;
 
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.definitionString = this.definition ? this.definition.DefinitionString : '';
         const area = (this as any).getEl();
         if (area) {
@@ -35,6 +38,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

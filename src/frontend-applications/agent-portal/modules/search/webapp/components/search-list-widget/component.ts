@@ -16,8 +16,6 @@ import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { SearchService } from '../../core/SearchService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { SearchEvent } from '../../../model/SearchEvent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { SearchContextConfiguration } from '../../../../../model/configuration/SearchContextConfiguration';
 import { SearchContext } from '../../core/SearchContext';
@@ -25,14 +23,10 @@ import { SearchContext } from '../../core/SearchContext';
 export class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
     private objectType: KIXObjectType | string;
-    private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'search-list-widget');
         this.state = new ComponentState(input.instanceId);
-    }
-
-    public onInput(input: any): void {
-        return;
     }
 
     public async onMount(): Promise<void> {
@@ -44,26 +38,21 @@ export class Component extends AbstractMarkoComponent<ComponentState, SearchCont
 
         this.loadSearches();
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
+                if (data.instanceId !== this.contextInstanceId) return;
                 if (eventId === SearchEvent.SEARCH_CACHE_CHANGED) {
                     this.setActiveNode();
                 } else {
                     setTimeout(() => this.loadSearches(), 500);
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
-        EventService.getInstance().subscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
-        EventService.getInstance().unsubscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
+            },
+            [
+                SearchEvent.SEARCH_DELETED,
+                SearchEvent.SEARCH_CACHE_CHANGED,
+                SearchEvent.SAVE_SEARCH_FINISHED
+            ]
+        );
     }
 
     private async loadSearches(): Promise<void> {
@@ -111,12 +100,20 @@ export class Component extends AbstractMarkoComponent<ComponentState, SearchCont
         this.context.setSearchCache(node.id);
         this.context.setSearchResult([]);
 
-        EventService.getInstance().publish(SearchEvent.SHOW_CRITERIA);
+        EventService.getInstance().publish(SearchEvent.SHOW_CRITERIA, { instanceId: this.contextInstanceId });
         if ((this.context.getConfiguration() as SearchContextConfiguration).enableSidebarAutoSearch) {
-            EventService.getInstance().publish(SearchEvent.CALL_SEARCH);
+            EventService.getInstance().publish(SearchEvent.CALL_SEARCH, { instanceId: this.contextInstanceId });
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

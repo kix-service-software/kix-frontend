@@ -21,11 +21,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private formValue: IconFormValue;
     private options: FormFieldOption[];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;
@@ -73,6 +75,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
         this.state.value = icon;
         this.formValue.setFormValue(this.state.value);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

@@ -15,6 +15,7 @@ import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSub
 import { PortalNotification } from '../../model/PortalNotification';
 import { PortalNotificationEvent } from '../../model/PortalNotificationEvent';
 import { PortalNotificationSocketClient } from './PortalNotificationSocketClient';
+import { IdService } from '../../../../model/IdService';
 
 export class PortalNotificationService {
 
@@ -27,13 +28,15 @@ export class PortalNotificationService {
         return PortalNotificationService.INSTANCE;
     }
 
+    private readonly subscriber: IEventSubscriber;
+
     private constructor() {
-        const subscriber: IEventSubscriber = {
-            eventSubscriberId: 'PortalNotificationService',
-            eventPublished: () => this.loadNotifications()
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('PortalNotificationService'),
+            eventPublished: this.loadNotifications.bind(this)
         };
         PortalNotificationSocketClient.getInstance();
-        EventService.getInstance().subscribe(PortalNotificationEvent.NOTIFICATIONS_UPDATED, subscriber);
+        EventService.getInstance().subscribe(PortalNotificationEvent.NOTIFICATIONS_UPDATED, this.subscriber);
     }
 
     private notifications: PortalNotification[] = null;

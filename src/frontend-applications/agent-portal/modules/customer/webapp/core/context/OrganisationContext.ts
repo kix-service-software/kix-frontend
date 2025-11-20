@@ -37,7 +37,7 @@ export class OrganisationContext extends Context {
     private currentContactLimit: number = 20;
 
     public async initContext(urlParams: URLSearchParams): Promise<void> {
-        super.initContext(urlParams);
+        await super.initContext(urlParams);
 
         this.additionalInformation.set(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, false);
     }
@@ -138,14 +138,14 @@ export class OrganisationContext extends Context {
             const filter = await OrganisationService.getInstance().prepareFullTextFilter(this.filterValue);
             let loadingOptions = new KIXObjectLoadingOptions(filter);
             loadingOptions.limit = limit;
-            loadingOptions.searchLimit = ( limit && limit > 100 ) ? limit : 100;
+            loadingOptions.searchLimit = (limit && limit > 100) ? limit : 100;
             loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
 
             loadingOptions = await this.prepareContextLoadingOptions(KIXObjectType.ORGANISATION, loadingOptions);
 
             const organisations = await KIXObjectService.loadObjects(
                 KIXObjectType.ORGANISATION, null, loadingOptions, null, false, undefined, undefined,
-                this.contextId + KIXObjectType.ORGANISATION
+                this.instanceId + KIXObjectType.ORGANISATION
             ).catch((error) => []);
 
             this.setObjectList(KIXObjectType.ORGANISATION, organisations);
@@ -170,9 +170,9 @@ export class OrganisationContext extends Context {
         let loadingOptions = new KIXObjectLoadingOptions([]);
         loadingOptions.includes = [ContactProperty.USER, KIXObjectProperty.DYNAMIC_FIELDS];
         loadingOptions.limit = limit;
-        loadingOptions.searchLimit = ( limit && limit > 100 ) ? limit : 100;
+        loadingOptions.searchLimit = (limit && limit > 100) ? limit : 100;
 
-        const collectionId = this.contextId + KIXObjectType.CONTACT;
+        const collectionId = this.instanceId + KIXObjectType.CONTACT;
 
         if (organisations && organisations.length && isOrganisationDepending) {
             const organisationIds = organisations.map((o) => Number(o.ObjectId));

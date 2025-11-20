@@ -32,15 +32,15 @@ export class ContactTableFactory extends TableFactory {
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
 
     public async createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: string[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: string[], contextInstanceId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, short);
 
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
         table.setContentProvider(
-            new ContactTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
+            new ContactTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextInstanceId)
         );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
         return table;

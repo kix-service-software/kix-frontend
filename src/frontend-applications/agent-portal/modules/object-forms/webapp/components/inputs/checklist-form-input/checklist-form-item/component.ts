@@ -16,15 +16,18 @@ import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.item = input.item;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const states = this.state.item.inputStates || DynamicFieldFormUtil.getDefaultChecklistStates();
         this.state.nodes = states.map((s) => new TreeNode(s.value, s.value, s.icon));
         this.state.selectedNode = this.state.nodes.find(
@@ -75,6 +78,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.lastChangeDate = await DateTimeUtil.getLocalDateTimeString(changeDate);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

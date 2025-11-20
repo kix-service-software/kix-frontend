@@ -14,7 +14,8 @@ import { FormFieldValue } from '../../../../../model/configuration/FormFieldValu
 
 class Component extends FormInputComponent<any, ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -24,8 +25,11 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         await this.setFieldConfiguration();
-        await this.setCurrentValue();
     }
 
     private async setFieldConfiguration(): Promise<void> {
@@ -62,6 +66,10 @@ class Component extends FormInputComponent<any, ComponentState> {
         }
         this.state.icon = icon;
         super.provideValue(icon);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

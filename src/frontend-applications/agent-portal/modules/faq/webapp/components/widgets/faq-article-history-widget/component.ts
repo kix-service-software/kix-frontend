@@ -8,7 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { FAQDetailsContext } from '../../../core/context/FAQDetailsContext';
 import { FAQArticle } from '../../../../model/FAQArticle';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -18,10 +17,12 @@ import { AbstractMarkoComponent } from '../../../../../base-components/webapp/co
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -57,14 +58,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(faqArticle: FAQArticle): Promise<void> {
         if (this.state.widgetConfiguration && faqArticle) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [faqArticle]
+                this.state.widgetConfiguration.actions, [faqArticle], this.contextInstanceId
             );
         }
     }
 
     private async prepareTable(): Promise<void> {
         const table = await TableFactoryService.getInstance().createTable(
-            'faq-article-history', KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, FAQDetailsContext.CONTEXT_ID
+            'faq-article-history', KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, this.contextInstanceId
         );
 
         this.state.table = table;
@@ -75,6 +76,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.table.filter();
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

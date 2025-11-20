@@ -26,7 +26,7 @@ export class TicketDialogUtil {
     public static async createTicket(
         ticketId?: number, articleId?: number, icon?: ObjectIcon | string, text?: string,
         additionalInformation: Array<[string, any]> = [],
-        contextId: string = NewTicketDialogContext.CONTEXT_ID
+        contextId: string = NewTicketDialogContext.CONTEXT_ID,
     ): Promise<Context> {
         const context = ContextService.getInstance().getActiveContext();
 

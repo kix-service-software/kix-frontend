@@ -30,7 +30,7 @@ export class TicketTypeLabelProvider extends LabelProvider<TicketType> {
                 displayValue = 'Translatable#Name';
                 break;
             case TicketTypeProperty.ID:
-                displayValue = 'Translatable#Icon';
+                displayValue = 'Translatable#ID';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);

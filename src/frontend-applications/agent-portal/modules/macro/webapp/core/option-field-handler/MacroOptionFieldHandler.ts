@@ -22,18 +22,18 @@ import { MacroProperty } from '../../../model/MacroProperty';
 
 export class MacroOptionFieldHandler extends OptionFieldHandler {
 
-    private subscriber: IEventSubscriber;
+    private readonly subscriber: IEventSubscriber;
 
     public constructor() {
         super();
 
         this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('MacroFieldFormManager'),
-            eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
+            eventSubscriberId: IdService.generateDateBasedId('MacroOptionFieldHandler'),
+            eventPublished: function (data: FormValuesChangedEventData, eventId: string): void {
                 const macroValue = data.changedValues.find(
                     (cv) => cv[0] && cv[0].property === 'Macros'
                 );
-                if (macroValue && macroValue[1]) {
+                if (macroValue?.[1]) {
                     const macroType = macroValue[1]?.value;
                     this.handleMacro(data.formInstance, macroType, macroValue[0]);
                 }
@@ -41,15 +41,14 @@ export class MacroOptionFieldHandler extends OptionFieldHandler {
                 const actionValue = data.changedValues.find(
                     (cv) => cv[0] && cv[0].property === MacroProperty.ACTIONS
                 );
-                if (actionValue && actionValue[1]) {
+                if (actionValue?.[1]) {
                     const actionType = Array.isArray(actionValue[1].value)
                         ? actionValue[1]?.value[0]
                         : actionValue[1]?.value;
                     this.handleMacroAction(data.formInstance, actionType, actionValue[0]);
                 }
-            }
+            }.bind(this)
         };
-
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.subscriber);
     }
 

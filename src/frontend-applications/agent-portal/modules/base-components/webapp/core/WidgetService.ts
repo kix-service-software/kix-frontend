@@ -22,10 +22,10 @@ export class WidgetService {
 
     private static INSTANCE: WidgetService;
 
-    private widgetActions: Map<string, [IAction[], boolean]> = new Map();
-    private widgetClasses: Map<string, string[]> = new Map();
-    private widgetTitle: Map<string, string> = new Map();
-    private actionListenerListeners: IActionListener[] = [];
+    private readonly widgetActions: Map<string, [IAction[], boolean]> = new Map();
+    private readonly widgetClasses: Map<string, string[]> = new Map();
+    private readonly widgetTitle: Map<string, string> = new Map();
+    private readonly actionListenerListeners: IActionListener[] = [];
 
     public static getInstance(): WidgetService {
         if (!WidgetService.INSTANCE) {
@@ -34,7 +34,7 @@ export class WidgetService {
         return WidgetService.INSTANCE;
     }
 
-    private widgetTypes: Map<string, WidgetType> = new Map();
+    private readonly widgetTypes: Map<string, WidgetType> = new Map();
 
     public setWidgetTitle(instanceId: string, title: string, icon?: ObjectIcon | string): void {
         this.widgetTitle.set(instanceId, title);
@@ -67,6 +67,10 @@ export class WidgetService {
 
         if (!widgetType && this.widgetTypes.has(instanceId)) {
             widgetType = this.widgetTypes.get(instanceId);
+        }
+
+        if (!widgetType && !Object.is(this, WidgetService.INSTANCE)) {
+            return WidgetService.INSTANCE.getWidgetType(instanceId, context);
         }
 
         return widgetType || WidgetType.CONTENT;

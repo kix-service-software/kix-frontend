@@ -21,12 +21,14 @@ class TreeComponent extends AbstractMarkoComponent<ComponentState> {
     private allowExpandCollapseAll: boolean;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.tree = input.tree;
-        this.state.treeId = input.treeId ? 'tree-' + input.treeId : 'tree-' + IdService.generateDateBasedId();
+        this.state.treeId = input.treeId ? input.treeId : 'tree-' + IdService.generateDateBasedId();
         this.setParentFlags = typeof input.setParentFlags !== 'undefined'
             ? input.setParentFlags
             : true;
@@ -55,6 +57,10 @@ class TreeComponent extends AbstractMarkoComponent<ComponentState> {
         ]);
         this.prepareExpandCollapseAll();
         this.prepareUserPreference();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async prepareExpandCollapseAll(): Promise<void> {

@@ -9,20 +9,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <div class="admin-modules-explorer">
     <widget
+        contextInstanceId=input.contextInstanceId
         instanceId=state.instanceId
         title=(
             state.widgetConfiguration
                 ? state.widgetConfiguration.title
                 : "Translatable#Administration"
-        )
-    >
+        )>
         <@content>
             <filter
                 on-filter("filter")
                 key="admin-modules-explorer-filter"
                 filterValue=state.filterValue
-                showFilterCount=false
-            />
+                showFilterCount=false/>
             <if(state.nodes && state.prepared)>
                 <tree
                     treeId="admin-modules-tree"
@@ -30,8 +29,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     key="admin-modules-tree"
                     activeNode=state.activeNode
                     filterValue=state.filterValue
-                    on-nodeClicked("activeNodeChanged")
-                />
+                    on-nodeClicked("activeNodeChanged")/>
             </if>
         </@content>
     </widget>

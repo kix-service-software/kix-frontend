@@ -9,49 +9,41 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableEvent } from '../../../../table/model/TableEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private instanceId: string;
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'report-list-widget');
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
-        this.instanceId = input.instanceId;
-    }
-
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
-        if (context) {
-            this.subscriber = {
-                eventSubscriberId: IdService.generateDateBasedId(this.instanceId),
-                eventPublished: (data: any, eventId: string): void => {
-                    if (eventId === TableEvent.ROW_SELECTION_CHANGED &&
-                        data.table.getObjectType() === KIXObjectType.REPORT) {
-                        context.setFilteredObjectList(KIXObjectType.REPORT,
+        if (this.context) {
+            super.registerEventSubscriber(
+                function (data: any, eventId: string): void {
+                    if (data.table.getObjectType() === KIXObjectType.REPORT) {
+                        this.context.setFilteredObjectList(KIXObjectType.REPORT,
                             data.table.getSelectedRows().map((r) => r.getRowObject().getObject()));
                         this.state.prepared = true;
                     }
-                }
-            };
-            EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
+                },
+                [TableEvent.ROW_SELECTION_CHANGED]
+            );
         }
 
         this.state.prepared = true;
     }
 
-    public async onDestroy(): Promise<void> {
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

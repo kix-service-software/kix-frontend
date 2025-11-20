@@ -11,7 +11,6 @@ import { AbstractMarkoComponent } from '../../../../../../../base-components/web
 import { ApplicationEvent } from '../../../../../../../base-components/webapp/core/ApplicationEvent';
 import { ComponentContent } from '../../../../../../../base-components/webapp/core/ComponentContent';
 import { EventService } from '../../../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../../../base-components/webapp/core/IEventSubscriber';
 import { OverlayService } from '../../../../../../../base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../../../base-components/webapp/core/OverlayType';
 import { Column } from '../../../../../../model/Column';
@@ -19,24 +18,31 @@ import { TableEvent } from '../../../../../../model/TableEvent';
 import { TableEventData } from '../../../../../../model/TableEventData';
 import { ComponentState } from './ComponentState';
 
-class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
-
-    public eventSubscriberId: string;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private column: Column;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'kix-table/table-head-row/table-head-cell/column-filter');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.column = input.column;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         if (this.column) {
-            this.eventSubscriberId = this.column.getTable().getTableId() + '-' + this.column.getColumnId();
-            EventService.getInstance().subscribe(TableEvent.COLUMN_FILTERED, this);
+            super.registerEventSubscriber(
+                function (data: TableEventData, eventId: string, subscriberId?: string): void {
+                    if (data?.tableId === this.column.getTable().getTableId()) {
+                        this.setActiveState();
+                    }
+                },
+                [TableEvent.COLUMN_FILTERED]
+            );
             this.setActiveState();
 
             const overlayIconListener = {
@@ -49,19 +55,13 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                     (this as any).emit('changeFilterShownState', false);
                 }
             };
-            OverlayService.getInstance().registerOverlayListener(this.eventSubscriberId, overlayIconListener);
+            OverlayService.getInstance().registerOverlayListener(super.getEventSubscriberId(), overlayIconListener);
         }
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.COLUMN_FILTERED, this);
+        super.onDestroy();
         OverlayService.getInstance().unregisterOverlayListener(this.column.getColumnId());
-    }
-
-    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
-        if (eventId === TableEvent.COLUMN_FILTERED && data && data.tableId === this.column.getTable().getTableId()) {
-            this.setActiveState();
-        }
     }
 
     private setActiveState(): void {
@@ -93,7 +93,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             }
             OverlayService.getInstance().openOverlay(
                 OverlayType.TABLE_COLUMN_FILTER, null, content, '', null, false,
-                position, this.eventSubscriberId
+                position, super.getEventSubscriberId()
             );
         } else {
             EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);

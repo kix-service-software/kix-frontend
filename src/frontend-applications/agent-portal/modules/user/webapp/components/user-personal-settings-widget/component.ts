@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { UserLabelProvider } from '../../core/UserLabelProvider';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { User } from '../../../model/User';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -21,11 +20,13 @@ import { Notification } from '../../../../notification/model/Notification';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -61,7 +62,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(user: User): Promise<void> {
         if (this.state.widgetConfiguration && user) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [user]
+                this.state.widgetConfiguration.actions, [user], this.contextInstanceId
             );
         }
     }

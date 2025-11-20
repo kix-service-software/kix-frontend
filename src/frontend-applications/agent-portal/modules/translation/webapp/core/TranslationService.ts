@@ -22,6 +22,11 @@ import { EventService } from '../../../base-components/webapp/core/EventService'
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { User } from '../../../user/model/User';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { BackendNotification } from '../../../../model/BackendNotification';
+import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
+import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { IdService } from '../../../../model/IdService';
 
 export class TranslationService extends KIXObjectService<TranslationPattern> {
 
@@ -35,6 +40,8 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         return TranslationService.INSTANCE;
     }
 
+    private readonly eventSubscriberId: string;
+
     private loadTranslationPromise: Promise<void>;
     private translations: any = null;
 
@@ -44,6 +51,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
 
     private constructor() {
         super(KIXObjectType.TRANSLATION);
+        this.eventSubscriberId = IdService.generateDateBasedId('TranslationService');
         this.init();
 
         this.objectConstructors.set(KIXObjectType.TRANSLATION, [Translation]);
@@ -53,19 +61,19 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
     private async init(): Promise<void> {
         this.userLanguage = await TranslationService.getUserLanguage();
         EventService.getInstance().subscribe(ApplicationEvent.CACHE_KEYS_DELETED, {
-            eventSubscriberId: 'TranslationService',
+            eventSubscriberId: this.eventSubscriberId,
             eventPublished: this.cacheChanged.bind(this)
         });
 
         EventService.getInstance().subscribe(ApplicationEvent.CACHE_CLEARED, {
-            eventSubscriberId: 'TranslationService',
+            eventSubscriberId: this.eventSubscriberId,
             eventPublished: this.cacheChanged.bind(this)
         });
-    }
 
-    public resetTranslations(): void {
-        this.translations = null;
-        this.userLanguage = null;
+        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
+            eventSubscriberId: this.eventSubscriberId,
+            eventPublished: this.languageChanged.bind(this)
+        });
     }
 
     private async cacheChanged(data: string[], eventId: string): Promise<void> {
@@ -77,6 +85,29 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         } else if (eventId === ApplicationEvent.CACHE_CLEARED) {
             this.translations = null;
             ClientStorageService.deleteState(this.STORAGE_KEY);
+        }
+    }
+
+    private async languageChanged(data: BackendNotification, eventId: string): Promise<void> {
+        if (
+            eventId === ApplicationEvent.OBJECT_UPDATED
+            && data.Namespace === 'User.UserPreference'
+        ) {
+            const currentUser = await AgentService.getInstance().getCurrentUser().catch((): User => null);
+            if (data.ObjectID === `${currentUser.UserID}::${PersonalSettingsProperty.USER_LANGUAGE}`) {
+                this.userLanguage = await TranslationService.getUserLanguage();
+                this.translations = null;
+                ClientStorageService.deleteState(this.STORAGE_KEY);
+
+                const eventService = EventService.getInstance();
+
+                const instances = ContextService.getInstance().getContextInstances();
+                instances.forEach((i) => {
+                    eventService.publish(ContextEvents.CONTEXT_UPDATE_REQUIRED, i);
+                });
+
+                eventService.publish('USER_LANGUAGE_CHANGED');
+            }
         }
     }
 

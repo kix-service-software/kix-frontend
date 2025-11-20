@@ -7,16 +7,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.web-form-code>
+<div class="web-form-code">
     <if(!state.loading)>
         <widget
+            contextInstanceId=input.contextInstanceId
             instanceId="web-form-code-group"
             title=(
                 state.translations[
                     "Translatable#Include this code into the <head> area of your webpage."
                 ]
-            )
-        >
+            )>
             <@content>
                 <if(state.headCode)>
                     <p>
@@ -27,13 +27,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </@content>
         </widget>
         <widget
+            contextInstanceId=input.contextInstanceId
             instanceId="web-form-code-group"
             title=(
                 state.translations[
                     "Translatable#Place this code wherever you want to open the webform dialog."
                 ]
-            )
-        >
+            )>
             <@content>
                 <if(state.buttonCode)>
                     <editor readOnly value=state.buttonCode useReadonlyStyle/>
@@ -41,5 +41,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </@content>
         </widget>
     </if>
-    <else><table-placeholder/></else>
+    <else>
+        <table-placeholder/>
+    </else>
 </div>

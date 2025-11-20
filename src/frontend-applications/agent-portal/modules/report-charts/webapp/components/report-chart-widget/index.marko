@@ -8,11 +8,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.prepared)>
-    <widget instanceId=state.instanceId title=state.title>
+    <widget
+        contextInstanceId=input.contextInstanceId
+        instanceId=state.instanceId
+        title=state.title>
         <@content>
-            <div.chart-container>
+            <div class="chart-container">
                 <if(state.errorMessage)>
-                    <span.error>${state.errorMessage}</span>
+                    <span class="error">
+                        ${state.errorMessage}
+                    </span>
                 </if>
                 <if(state.chartConfig)>
                     <chart config=state.chartConfig/>

@@ -15,15 +15,18 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: RefreshToastSettings): void {
+        super.onInput(input);
         return;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.time = DateTimeUtil.getKIXTimeString(new Date());
     }
 
@@ -34,6 +37,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         location.reload();
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

@@ -8,5 +8,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.prepared)>
-    <widget-container widgets=state.contentWidgets contextWidgetList="content"/>
+    <widget-container
+        contextInstanceId=input.contextInstanceId
+        widgets=state.contentWidgets
+        contextWidgetList="content"/>
 </if>

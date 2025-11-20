@@ -14,21 +14,19 @@ import { AdminContext } from '../../core/AdminContext';
 import { ContextType } from '../../../../../model/ContextType';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { AdministrationSocketClient } from '../../core/AdministrationSocketClient';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
-import { IdService } from '../../../../../model/IdService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { Context } from '../../../../../model/Context';
 
 class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'admin-module');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
         ContextService.getInstance().registerListener({
             constexServiceListenerId: 'admin-module-context-service-listener',
             contextChanged: (contextId: string, c: AdminContext, type: ContextType, history: boolean) => {
@@ -41,18 +39,18 @@ class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
         });
         this.moduleChanged();
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
-                this.moduleChanged();
-            }
-        };
-
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
+        super.registerEventSubscriber(
+            function (data: Context, eventId: string): void {
+                if (data?.instanceId === this.contextInstanceId) {
+                    this.moduleChanged();
+                }
+            },
+            [ContextEvents.CONTEXT_PARAMETER_CHANGED]
+        );
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
+        super.onDestroy();
     }
 
     public async moduleChanged(): Promise<void> {
@@ -63,6 +61,10 @@ class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
         else {
             this.state.template = KIXModulesService.getComponentTemplate('admin-object-tag');
         }
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

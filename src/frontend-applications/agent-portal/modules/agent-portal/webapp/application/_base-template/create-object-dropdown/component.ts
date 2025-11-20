@@ -15,21 +15,21 @@ import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
-    private subscriber: IEventSubscriber;
     private values: Array<[string, string, string | ObjectIcon]>;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'create-object-dropdown');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Create'
         ]);
@@ -42,26 +42,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         if (this.values.length) {
-            this.setValues(
-                descriptors,
-                ContextService.getInstance().getActiveContext()?.descriptor
-            );
+            this.setValues(descriptors);
         }
 
-        this.subscriber = {
-            eventSubscriberId: 'new-object-dropdown',
-            eventPublished: (data: Context, eventId: string): void => {
-                if (eventId === ContextEvents.CONTEXT_CHANGED) {
-                    this.setValues(descriptors, data.descriptor);
-                }
-            }
-        };
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
+        super.registerEventSubscriber(
+            function (data: Context, eventId: string): void {
+                this.setValues(descriptors, data?.descriptor);
+            },
+            [ContextEvents.CONTEXT_CHANGED]
+        );
+
         this.state.prepared = true;
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
+        super.onDestroy();
     }
 
     public async valueClicked(value: [string, string, string | ObjectIcon], event: any): Promise<void> {
@@ -70,7 +65,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         ContextService.getInstance().setActiveContext(value[0]);
     }
 
-    private setValues(descriptors: ContextDescriptor[], currentDescriptor?: ContextDescriptor): void {
+    private setValues(
+        descriptors: ContextDescriptor[],
+        currentDescriptor: ContextDescriptor = this.context?.descriptor
+    ): void {
         let createDescriptor = descriptors.find((d) => d.kixObjectTypes[0] === currentDescriptor?.kixObjectTypes[0]);
         if (!createDescriptor) {
             createDescriptor = descriptors.find((d) => d.kixObjectTypes[0] === KIXObjectType.TICKET);
@@ -89,6 +87,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

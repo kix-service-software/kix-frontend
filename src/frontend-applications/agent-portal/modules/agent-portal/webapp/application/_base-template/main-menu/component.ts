@@ -14,9 +14,7 @@ import { ContextType } from '../../../../../../model/ContextType';
 import { Context } from '../../../../../../model/Context';
 import { ContextDescriptor } from '../../../../../../model/ContextDescriptor';
 import { MenuEntry } from '../../../../../../model/MenuEntry';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { MobileShowEvent } from '../../../../model/MobileShowEvent';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { MobileShowEventData } from '../../../../model/MobileShowEventData';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
@@ -25,13 +23,15 @@ import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
 class Component extends AbstractMarkoComponent {
 
     public state: ComponentState;
-    public eventSubscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'main-menu');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         ContextService.getInstance().registerListener({
             constexServiceListenerId: 'main-menu-listener',
             contextChanged: (contextId: string, newContext: Context, type: ContextType) => {
@@ -48,15 +48,12 @@ class Component extends AbstractMarkoComponent {
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
         this.resizeHandling();
 
-        this.eventSubscriber = {
-            eventSubscriberId: 'main-menu-mobile',
-            eventPublished: (data, eventId: MobileShowEvent | string): void => {
-                if (eventId === MobileShowEvent.SHOW_MOBILE) {
-                    this.state.showMobile = data === MobileShowEventData.SHOW_MAIN_MENU;
-                }
-            }
-        };
-        EventService.getInstance().subscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
+        super.registerEventSubscriber(
+            function (data: MobileShowEventData, eventId: MobileShowEvent | string): void {
+                this.state.showMobile = data === MobileShowEventData.SHOW_MAIN_MENU;
+            },
+            [MobileShowEvent.SHOW_MOBILE]
+        );
 
         await this.loadEntries();
         const context = ContextService.getInstance().getActiveContext();
@@ -65,9 +62,9 @@ class Component extends AbstractMarkoComponent {
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         ContextService.getInstance().unregisterListener('main-menu-listener');
         window.removeEventListener('resize', this.resizeHandling.bind(this), false);
-        EventService.getInstance().unsubscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
     }
 
     private resizeHandling(): void {
@@ -114,6 +111,10 @@ class Component extends AbstractMarkoComponent {
         }
     }
 
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

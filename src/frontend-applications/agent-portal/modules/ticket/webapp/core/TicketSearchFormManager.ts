@@ -43,6 +43,8 @@ export class TicketSearchFormManager extends SearchFormManager {
     // mark viewable states as required
     public handleViewableStateType: boolean = true;
 
+    public queuePermissionCheck: boolean = true;
+
     public constructor(
         public ignorePropertiesFixed: string[] = [],
         private validDynamicFields: boolean = true
@@ -205,7 +207,10 @@ export class TicketSearchFormManager extends SearchFormManager {
                 break;
             case TicketProperty.QUEUE_ID:
             case TicketProperty.HISTORIC_QUEUE_ID:
-                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['READ']);
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(
+                    null,
+                    this.queuePermissionCheck ? ['READ'] : undefined
+                );
                 nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, showInvalid, showInvalid);
                 break;
             default:

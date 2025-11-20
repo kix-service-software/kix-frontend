@@ -9,9 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { IdService } from '../../../../../../model/IdService';
-import { WidgetService } from '../../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../../model/configuration/WidgetType';
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { FAQArticle } from '../../../../model/FAQArticle';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../../../modules/base-components/webapp/core/LabelService';
@@ -24,7 +22,6 @@ import { FAQArticleAttachmentLoadingOptions } from '../../../../model/FAQArticle
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
-import { Context } from '../../../../../../model/Context';
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
 import { FAQArticleHandler } from '../../../core/FAQArticleHandler';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
@@ -35,20 +32,20 @@ import { AbstractMarkoComponent } from '../../../../../base-components/webapp/co
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public eventSubscriberId: string = 'FAQContentComponent';
-
     private contextListenerId: string = null;
 
     public stars: Array<string | ObjectIcon> = [];
     public rating: number;
     private images: DisplayImageDescription[];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'faq-article-content-widget');
         this.state = new ComponentState();
         this.contextListenerId = IdService.generateDateBasedId('faq-content-widget');
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
@@ -59,7 +56,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Number of ratings'
         ]);
 
-        WidgetService.getInstance().setWidgetType('faq-article-group', WidgetType.GROUP);
+        this.context.widgetService.setWidgetType('faq-article-group', WidgetType.GROUP);
 
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
@@ -77,7 +74,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             scrollInformationChanged: () => { return; },
             additionalInformationChanged: (): void => { return; }
         });
-
+        this.state.contextInstanceId = this.contextInstanceId;
         this.state.faqArticle = await this.context.getObject<FAQArticle>();
         setTimeout(() => this.initWidget(), 200);
     }
@@ -88,16 +85,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(this.state.faqArticle);
 
             const field1Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field1, inlineContent);
-            this.prepareFrame('field1-frame', field1Value);
+            this.state.html['field1'] = field1Value;
 
             const field2Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field2, inlineContent);
-            this.prepareFrame('field2-frame', field2Value);
+            this.state.html['field2'] = field2Value;
 
             const field3Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field3, inlineContent);
-            this.prepareFrame('field3-frame', field3Value);
+            this.state.html['field3'] = field3Value;
 
             const field6Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field6, inlineContent);
-            this.prepareFrame('field6-frame', field6Value);
+            this.state.html['field6'] = field6Value;
 
             this.prepareImages();
 
@@ -105,30 +102,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.rating = BrowserUtil.round(this.state.faqArticle?.Rating);
             this.prepareActions();
         }
-    }
-
-    private prepareFrame(frameId: string, value: string): void {
-        const iframe: any = document.getElementById(frameId);
-        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-        iframeDocument.body.innerHTML = value;
-        BrowserUtil.cleanupHTML(iframeDocument);
-        BrowserUtil.appendKIXStyling(iframeDocument);
-    }
-
-    public viewLoaded(frameId: string, event: any): void {
-        const frameDocument = event.target.contentWindow.document;
-
-        const frame = document.getElementById(frameId);
-        const frameHeight = frameDocument.documentElement.scrollHeight;
-        frame.style.height = frameHeight + 10 + 'px'; // 10 is for the top and bottom padding of 5px each
-
-        const bodyElements = frameDocument.documentElement.getElementsByTagName('body');
-        if (bodyElements?.length) {
-            bodyElements[0].addEventListener('click', (event) => {
-                BrowserUtil.handleLinkClicked(event);
-            });
-        }
-
     }
 
     private async prepareImages(): Promise<void> {
@@ -156,7 +129,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.faqArticle) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.faqArticle]
+                this.state.widgetConfiguration.actions, [this.state.faqArticle], this.contextInstanceId
             );
         }
     }
@@ -212,6 +185,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [attachment.ID], loadingOptions, faqArticleAttachmentOptions, silent
         ).catch(() => [] as Attachment[]);
         return attachments && attachments.length ? attachments[0] : null;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

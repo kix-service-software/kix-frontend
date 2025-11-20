@@ -15,8 +15,10 @@ import { AdditionalContextInformation } from '../../../base-components/webapp/co
 
 export class ConfigItemDialogUtil {
 
-    public static async create(): Promise<void> {
-        ContextService.getInstance().setActiveContext(NewConfigItemDialogContext.CONTEXT_ID);
+    public static async create(additionalInformation: Array<[string, any]> = []): Promise<void> {
+        ContextService.getInstance().setActiveContext(
+            NewConfigItemDialogContext.CONTEXT_ID, undefined, undefined, additionalInformation
+        );
     }
 
     public static async edit(configItemId?: string | number): Promise<void> {

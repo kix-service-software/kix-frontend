@@ -23,7 +23,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private commands: ConsoleCommand[];
     private command: ConsoleCommand;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.state.loadNodes = this.load.bind(this);
     }
@@ -35,6 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = TranslationService.createTranslationObject(['Translatable#Execute']);
     }
 
@@ -144,6 +146,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.output = `Commands: \n\n${commands.join('')} `;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

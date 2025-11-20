@@ -21,10 +21,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private editorValue: string;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState(input.instanceId);
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.contextType = input.contextType;
     }
 
@@ -37,14 +39,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.contextId = this.context?.contextId;
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         this.state.actions = [new NotesEditAction(this)];
-        WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
+        this.context.widgetService.registerActions(this.state.instanceId, this.state.actions);
         this.state.value = await NotesService.getInstance().loadNotes(this.state.contextId);
         this.editorValue = this.state.value;
         this.state.editorReady = true;
     }
 
     public onDestroy(): void {
-        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        this.context.widgetService.unregisterActions(this.state.instanceId);
     }
 
     public setEditorActive(): void {

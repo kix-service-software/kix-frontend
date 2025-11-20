@@ -8,39 +8,38 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId=state.instanceId
     title=state.title
     icon="kix-icon-gears"
-    minimizable=false
->
+    minimizable=false>
     <@content>
         <if(state.prepared)>
-            <div.translations-container>
-                <div.translations-search>
-                    <input.input-style
+            <div class="translations-container">
+                <div class="translations-search">
+                    <input
                         type="text"
                         on-keyup("keyUp")
                         value=state.filterValue
                         placeholder=state.placeholder
-                    >
-                    <button.kix-button.button.button-without-text
+                        class="input-style">
+                    <button
                         type="button"
                         title=(state.translations["Translatable#Help"])
                         on-click("showCommandHelp", false)
-                    >
+                        class="kix-button button button-without-text">
                         <overlay-icon
                             isHint
                             content="Translatable#Helptext_Admin_TranslationSearch"
                             title=(
                                 state.translations["Translatable#Translations"]
-                            )
-                        />
+                            )/>
                     </button>
-                    <button.kix-button.submit-button
+                    <button
                         type="button"
                         on-click("search")
-                    >
-                        <span.kix-icon-search/>
+                        class="kix-button submit-button">
+                        <span class="kix-icon-search"/>
                         <translation-string pattern="Translatable#Search"/>
                     </button>
                 </div>

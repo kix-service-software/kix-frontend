@@ -7,16 +7,14 @@
  * --
  */
 
-import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { TreeNode } from '../../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../model/FormValues/SelectObjectFormValue';
 import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
+import { ObjectFormEventData } from '../../../../model/ObjectFormEventData';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
@@ -27,16 +25,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private isFocusFreeText: boolean;
     private isMouseOnNodeRemove: boolean = false;
 
-    private subscriber: IEventSubscriber;
-
     private valueUpdateTimeout: any;
     private selectedNodesUpdateTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'inputs/select-form-input');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.treeId = this.formValue?.instanceId;
 
         this.state.searchPlaceholder = await TranslationService.translate('Translatable#search ...');
@@ -78,9 +76,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         }, 100);
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: ObjectFormEventData, eventId: string): void {
                 if (this.context?.instanceId === data.contextInstanceId) {
                     if (data.blocked) {
                         this.state.readonly = true;
@@ -88,14 +85,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         this.state.readonly = this.formValue.readonly;
                     }
                 }
-            }
-        };
-        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+            },
+            [ObjectFormEvent.BLOCK_FORM]
+        );
     }
 
     public onDestroy(): void {
+        super.onDestroy();
+
         this.formValue?.removePropertyBinding(this.bindingIds);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public onUpdate(): void {
@@ -109,6 +107,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;

@@ -20,12 +20,17 @@ import { BrowserUtil } from '../../../../modules/base-components/webapp/core/Bro
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
+import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 
 export class FAQArticleSearchDefinition extends SearchDefinition {
 
     public constructor() {
         super(KIXObjectType.FAQ_ARTICLE);
         this.formManager = new FAQArticleSearchFormManager();
+    }
+
+    public createFormManager(ignoreProperties: string[] = []): SearchFormManager {
+        return new FAQArticleSearchFormManager(ignoreProperties);
     }
 
     public async getLoadingOptions(

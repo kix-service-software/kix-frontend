@@ -468,6 +468,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return true;
     }
 
+    public async clearValueOnOperatorChange(operator: string): Promise<boolean> {
+        return true;
+    }
+
     // eslint-disable-next-line max-lines-per-function
     public async validate(): Promise<ValidationResult[]> {
 
@@ -671,6 +675,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             if (result !== undefined && result !== null) {
                 return result;
             }
+        }
+
+        if (operator === SearchOperator.EMPTY) {
+            return false;
         }
 
         const dfName = KIXObjectService.getDynamicFieldName(property);

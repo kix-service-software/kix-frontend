@@ -13,11 +13,13 @@ import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/Dy
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (input.checklist) {
             const values = DynamicFieldFormUtil.getInstance().countValues(input.checklist);
             this.state.progressValue = values[0];
@@ -25,6 +27,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;
