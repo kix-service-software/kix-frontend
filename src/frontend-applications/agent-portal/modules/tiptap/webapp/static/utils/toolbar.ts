@@ -1260,9 +1260,5 @@ export function createToolbar(editor: any): HTMLDivElement {
     // === Find & Replace ===
     addFindReplace(toolbar, editor, createIconButton);
 
-    requestAnimationFrame(() => {
-        editor.commands.focus('end');
-    });
-
     return toolbar;
 }
