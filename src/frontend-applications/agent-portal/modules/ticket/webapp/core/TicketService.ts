@@ -332,15 +332,27 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE:
             case TicketProperty.TICKET_OOO_SUBSTITUTE:
             case TicketProperty.HISTORIC_OWNER_ID:
+                const loadingOptionsFilter = [
+                    new FilterCriteria(
+                        UserProperty.IS_AGENT,
+                        SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                        FilterType.AND, 1
+                    )
+                ];
                 if (loadingOptions) {
                     if (Array.isArray(loadingOptions.includes)) {
                         loadingOptions.includes.push(UserProperty.CONTACT);
                     } else {
                         loadingOptions.includes = [UserProperty.CONTACT];
                     }
+                    if (Array.isArray(loadingOptions.filter)) {
+                        loadingOptions.filter.push(...loadingOptionsFilter);
+                    } else {
+                        loadingOptions.filter = loadingOptionsFilter;
+                    }
                 } else {
                     loadingOptions = new KIXObjectLoadingOptions(
-                        null, null, null, [UserProperty.CONTACT], null
+                        loadingOptionsFilter, null, null, [UserProperty.CONTACT], null
                     );
                 }
                 let users = await KIXObjectService.loadObjects<User>(
