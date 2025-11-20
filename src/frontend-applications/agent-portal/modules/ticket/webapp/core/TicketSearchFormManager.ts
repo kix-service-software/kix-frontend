@@ -30,6 +30,11 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
 import { SearchOperatorUtil } from '../../../search/webapp/core/SearchOperatorUtil';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { UserProperty } from '../../../user/model/UserProperty';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -236,9 +241,34 @@ export class TicketSearchFormManager extends SearchFormManager {
             TicketProperty.CREATED,
             KIXObjectProperty.CREATE_BY
         ];
-
         if (freeTextProperties.some((p) => p === property)) {
             options.push([ObjectReferenceOptions.FREETEXT, true]);
+        }
+
+        const agentProperties = [
+            TicketProperty.OWNER_ID,
+            TicketProperty.RESPONSIBLE_ID,
+            TicketProperty.CREATED_USER_ID,
+            TicketProperty.WATCHER_USER_ID,
+            TicketProperty.OWNER_OOO_SUBSTITUTE,
+            TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE,
+            TicketProperty.TICKET_OOO_SUBSTITUTE,
+            TicketProperty.HISTORIC_OWNER_ID
+        ];
+        if (agentProperties.some((p) => p === property)) {
+            options.push([
+                ObjectReferenceOptions.LOADINGOPTIONS,
+                new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            UserProperty.IS_AGENT,
+                            SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                            FilterType.AND, 1
+                        )
+                    ],
+                    null, null, [UserProperty.CONTACT], null
+                )
+            ]);
         }
 
         return options;
