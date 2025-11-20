@@ -339,7 +339,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             const dfValue = ticket.DynamicFields.find((df) => df.Name === dfName);
-            value = dfValue?.Value?.length ? new Date(dfValue.Value[0]) : new Date();
+            value = dfValue?.Value?.length ? new Date(dfValue.Value[0]) : null;
         }
         return value;
     }
