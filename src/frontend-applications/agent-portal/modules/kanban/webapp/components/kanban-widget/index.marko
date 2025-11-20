@@ -7,11 +7,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.kix-kanban-container>
-    <widget instanceId=input.instanceId title="Translatable#Personal Kanban Board" minimizable=false>
+<div class="kix-kanban-container">
+    <widget
+        contextInstanceId=input.contextInstanceId
+        instanceId=input.instanceId
+        title="Translatable#Personal Kanban Board"
+        minimizable=false>
         <@content>
             <if(state.prepared)>
-                <div.kix-kanban-board id="kanban-board"/>
+                <div id="kanban-board" class="kix-kanban-board"/>
             </if>
             <else>
                 <loading-spinner/>

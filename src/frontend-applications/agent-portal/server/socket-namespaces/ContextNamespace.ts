@@ -162,7 +162,7 @@ export class ContextNamespace extends SocketNameSpace {
                 );
 
                 if (hasCacheBackend) {
-                    await CacheService.getInstance().set(
+                    CacheService.getInstance().set(
                         newConfig.contextId, newConfig, `${application.name}ContextConfiguration`
                     );
                 } else {
@@ -248,7 +248,7 @@ export class ContextNamespace extends SocketNameSpace {
             contextList = await CacheService.getInstance().get(fileName);
             if (!contextList) {
                 contextList = ConfigurationService.getInstance().getDataFileContent(fileName, []);
-                await CacheService.getInstance().set(fileName, contextList);
+                CacheService.getInstance().set(fileName, contextList);
             }
         }
 
@@ -277,7 +277,7 @@ export class ContextNamespace extends SocketNameSpace {
         let contextList = await CacheService.getInstance().get(fileName);
         if (!contextList) {
             contextList = ConfigurationService.getInstance().getDataFileContent(fileName, []);
-            await CacheService.getInstance().set(fileName, contextList);
+            CacheService.getInstance().set(fileName, contextList);
         }
 
         const index = contextList
@@ -291,7 +291,7 @@ export class ContextNamespace extends SocketNameSpace {
             contextList.push(data.contextPreference);
         }
 
-        await CacheService.getInstance().set(fileName, contextList);
+        CacheService.getInstance().set(fileName, contextList);
         ConfigurationService.getInstance().saveDataFileContent(fileName, contextList);
     }
 
@@ -322,7 +322,7 @@ export class ContextNamespace extends SocketNameSpace {
             contextList.splice(index, 1);
         }
 
-        await CacheService.getInstance().set(fileName, contextList);
+        CacheService.getInstance().set(fileName, contextList);
         ConfigurationService.getInstance().saveDataFileContent(fileName, contextList);
     }
 

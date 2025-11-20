@@ -16,16 +16,18 @@ import { FormFieldConfiguration } from '../../../../../model/configuration/FormF
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-form-values-container');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        this.state.contextInstanceId = input.contextInstanceId;
+        super.onInput(input);
         this.state.formValues = input.formValues || [];
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.prepared = true;
     }
 
@@ -59,6 +61,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         return this.state.formValues.find((fv) => fv.fieldId === field.id);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

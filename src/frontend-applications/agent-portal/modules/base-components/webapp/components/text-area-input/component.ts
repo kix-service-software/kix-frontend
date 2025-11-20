@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { ContextService } from '../../core/ContextService';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 
 declare let CodeMirror: any;
@@ -21,7 +20,8 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     private createEditorTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -33,6 +33,10 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
 
         const placeholderText = this.state.field?.placeholder
             ? this.state.field?.placeholder
@@ -110,13 +114,12 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
         super.onDestroy();
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value) {
             this.state.currentValue = value.value;

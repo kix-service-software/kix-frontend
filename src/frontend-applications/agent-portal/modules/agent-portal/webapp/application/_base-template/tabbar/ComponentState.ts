@@ -7,14 +7,17 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 import { ContextTab } from './ContextTab';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public contextTabs: ContextTab[] = [],
         public blocked: boolean = false,
         public dragOverInstanceId: string = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

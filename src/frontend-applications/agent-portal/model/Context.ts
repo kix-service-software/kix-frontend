@@ -43,6 +43,9 @@ import { KIXObject } from './kix/KIXObject';
 import { KIXObjectType } from './kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
+import { BackendNotification } from './BackendNotification';
+import { NotificationHandler } from '../modules/base-components/webapp/core/NotificationHandler';
+import { WidgetService } from '../modules/base-components/webapp/core/WidgetService';
 
 export abstract class Context {
 
@@ -53,6 +56,8 @@ export abstract class Context {
     public openSidebarWidgets: string[] = [];
 
     public contextId: string;
+
+    public lastScrollPosition: number;
 
     private dialogSubscriberId: string = null;
     protected additionalInformation: Map<string, any> = new Map();
@@ -75,6 +80,8 @@ export abstract class Context {
 
     private objectFilter: Map<string, FilterCriteria[]> = new Map();
 
+    public readonly widgetService: WidgetService = new WidgetService();
+
     public constructor(
         public descriptor: ContextDescriptor,
         protected objectId: string | number = null,
@@ -83,7 +90,7 @@ export abstract class Context {
         protected formManager?: ContextFormManager,
         protected storageManager?: ContextStorageManager
     ) {
-        if (this.configuration) {
+        if (configuration) {
             this.setConfiguration(configuration);
         }
 
@@ -91,7 +98,7 @@ export abstract class Context {
             this.instanceId = IdService.generateDateBasedId();
         }
 
-        const extensions = ContextService?.getInstance()?.getContextExtensions(this.descriptor?.contextId);
+        const extensions = ContextService?.getInstance()?.getContextExtensions(descriptor?.contextId);
         if (Array.isArray(extensions)) {
             this.contextExtensions = extensions.map((e) => new e());
         }
@@ -108,58 +115,7 @@ export abstract class Context {
             this.storageManager.setContext(this);
         }
 
-        if (this.descriptor) {
-
-            this.contextId = descriptor.contextId;
-
-            this.eventSubscriber = {
-                eventSubscriberId: this.instanceId,
-                eventPublished: async (data: any, eventId: string): Promise<void> => {
-                    const reloadObjectList = eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED &&
-                        Array.isArray(data?.widgets) &&
-                        Array.isArray(this.configuration?.tableWidgetInstanceIds);
-                    if (this.descriptor.contextMode !== ContextMode.SEARCH) {
-                        const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
-                            data?.instanceId === this.instanceId;
-
-                        const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
-                        const objectDelete = eventId === ApplicationEvent.OBJECT_DELETED && data?.objectType;
-
-                        if (data?.contextId === this.contextId) {
-                            TableFactoryService.getInstance().deleteContextTables(
-                                this.contextId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
-                            );
-                        }
-
-                        if (objectUpdate || objectDelete) {
-                            if (this.objectLists.has(data.objectType)) {
-                                this.deleteObjectList(data.objectType);
-                            }
-
-                            const objectReloadRequired = this.descriptor.contextMode === ContextMode.DETAILS
-                                && this.descriptor.kixObjectTypes?.some((t) => t === data.objectType);
-
-                            const activeContext = ContextService.getInstance().getActiveContext();
-                            if (objectReloadRequired && activeContext.instanceId === this.instanceId) {
-                                await this.getObject(data.objectType, true);
-                            }
-
-                        } else if (contextUpdateRequired) {
-                            this.deleteObjectLists();
-                        } else if (reloadObjectList) {
-                            this.reloadRelevantObjectLists(data.widgets);
-                        }
-                    } else if (reloadObjectList) {
-                        this.reloadRelevantObjectLists(data.widgets);
-                    }
-                }
-            };
-
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.eventSubscriber);
-            EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
-            EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.eventSubscriber);
-        }
+        this.contextId = descriptor.contextId;
     }
 
     private reloadRelevantObjectLists(widgets: ConfiguredWidget[]): void {
@@ -192,6 +148,7 @@ export abstract class Context {
     }
 
     public async destroy(): Promise<void> {
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_CREATED, this.eventSubscriber);
         EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
         EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.eventSubscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
@@ -207,6 +164,8 @@ export abstract class Context {
             await extension.initContext(this, urlParams);
         }
 
+        this.subscribeEvents();
+
         if (urlParams) {
             urlParams.forEach((value: string, key: string) => this.setAdditionalInformation(key, value));
         }
@@ -214,6 +173,64 @@ export abstract class Context {
         if (urlParams) {
             await this.update(urlParams);
         }
+    }
+
+    private subscribeEvents(): void {
+        this.eventSubscriber = {
+            eventSubscriberId: this.instanceId,
+            eventPublished: async function (data: any, eventId: string): Promise<void> {
+                const reloadObjectList = eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
+                    && data?.contextId === this.contextId
+                    && Array.isArray(data?.widgets)
+                    && Array.isArray(this.configuration?.tableWidgetInstanceIds);
+                if (this.descriptor.contextMode !== ContextMode.SEARCH) {
+
+                    if (data?.instanceId === this.instanceId) {
+                        TableFactoryService.getInstance().deleteContextTables(
+                            this.instanceId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
+                        );
+                    }
+                    const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
+                        data?.instanceId === this.instanceId;
+
+                    let objectType = data?.objectType;
+                    if (!objectType && data instanceof BackendNotification) {
+                        objectType = NotificationHandler.getObjectType(data.Namespace);
+                    }
+                    if (
+                        objectType
+                        && (
+                            eventId === ApplicationEvent.OBJECT_CREATED
+                            || eventId === ApplicationEvent.OBJECT_UPDATED
+                            || eventId === ApplicationEvent.OBJECT_DELETED
+                        )
+                    ) {
+                        this.deleteObjectList(objectType);
+
+                        const objectReloadRequired = this.descriptor.contextMode === ContextMode.DETAILS
+                            && this.descriptor.kixObjectTypes?.some((t) => t === objectType);
+
+                        const activeContext = ContextService.getInstance().getActiveContext();
+                        if (objectReloadRequired && activeContext.instanceId === this.instanceId) {
+                            await this.getObject(objectType, true);
+                        }
+
+                    } else if (contextUpdateRequired) {
+                        this.deleteObjectLists();
+                    } else if (reloadObjectList) {
+                        this.reloadRelevantObjectLists(data.widgets);
+                    }
+                } else if (reloadObjectList) {
+                    this.reloadRelevantObjectLists(data.widgets);
+                }
+            }.bind(this)
+        };
+
+        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_CREATED, this.eventSubscriber);
+        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
+        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.eventSubscriber);
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.eventSubscriber);
     }
 
     public async postInit(): Promise<void> {
@@ -749,10 +766,7 @@ export abstract class Context {
     public async reloadObjectList(
         objectType: KIXObjectType | string, silent: boolean = false, limit?: number
     ): Promise<void> {
-        const reloadPromises = [];
-        this.contextExtensions.forEach((ce) => {
-            reloadPromises.push(ce.reloadObjectList(objectType, this, silent, limit));
-        });
+        const reloadPromises = this.contextExtensions.map((ce) => ce.reloadObjectList(objectType, this, silent, limit));
         await Promise.allSettled(reloadPromises);
     }
 

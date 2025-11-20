@@ -30,7 +30,10 @@ export class ArticleFormValue extends ObjectFormValue<Article[]> {
         let article: Article;
 
         const context = ContextService.getInstance().getActiveContext();
-        const updateArticleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+        let updateArticleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+        if (!updateArticleId) {
+            updateArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+        }
 
         const hasArticles = ticket.Articles?.length > 0;
         if (hasArticles) {

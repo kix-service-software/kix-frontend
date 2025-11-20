@@ -8,10 +8,11 @@
  */
 
 import { AuthMethod } from '../../../../../model/AuthMethod';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 import { PortalNotification } from '../../../../portal-notification/model/PortalNotification';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public loading: boolean = true,
@@ -35,6 +36,8 @@ export class ComponentState {
         public showPWResetDialog: boolean = false,
         public pwResetState: string = '',
         public pwResetProcess: boolean = false,
-    ) { }
+    ) {
+        super();
+    }
 
 }

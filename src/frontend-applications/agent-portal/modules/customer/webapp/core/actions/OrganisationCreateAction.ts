@@ -19,6 +19,7 @@ export class OrganisationCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Organisation';
         this.icon = 'kix-icon-man-house-new';
     }

@@ -20,18 +20,15 @@ export class JobEditAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
     }
 
     public async run(event: any): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-
-        if (context) {
-            const id = context.getObjectId();
-            if (id) {
-                ContextService.getInstance().setActiveContext(EditJobDialogContext.CONTEXT_ID, id);
-            }
+        const id = this.context?.getObjectId();
+        if (id) {
+            ContextService.getInstance().setActiveContext(EditJobDialogContext?.CONTEXT_ID, id);
         }
     }
 

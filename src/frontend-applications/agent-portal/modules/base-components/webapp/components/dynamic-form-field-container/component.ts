@@ -15,12 +15,11 @@ import { TreeNode } from '../../core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { TimeoutTimer } from '../../core/TimeoutTimer';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
 declare const JSONEditor: any;
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private manager: IDynamicFormManager;
     private provideTimeout: any;
 
@@ -36,12 +35,16 @@ class Component {
 
     private updatePromiseResolve: () => void;
 
-    public onCreate(): void {
+    private refreshNeededValues: string[] = [];
+
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.timoutTimer = new TimeoutTimer();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.manager = input.manager;
         this.state.invalid = input.invalid;
     }
@@ -75,7 +78,7 @@ class Component {
                     if (existingValue) {
 
                         if (existingValue.value.operator !== cv.operator) {
-                            await existingValue.setOperator(cv.operator);
+                            await existingValue.setOperator(cv.operator, true);
                         }
 
                         if (!existingValue.value.operator) {
@@ -139,7 +142,8 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-
+        await super.onMount();
+        this.refreshNeededValues = [];
         this.advancedOptionsMap = new Map();
         this.optionEditor = new Map();
 
@@ -191,22 +195,50 @@ class Component {
     }
 
     public async propertyChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): Promise<void> {
-        await value.setProperty(nodes && nodes.length ? nodes[0].id : null, true);
+        this.refreshNeededValues.push(value.id);
+        (this as any).setStateDirty('dynamicValues');
         if (await this.manager.clearValueOnPropertyChange(value.getValue().property)) {
             value.clearValue();
         }
+        await value.setProperty(nodes && nodes.length ? nodes[0].id : null, true);
 
         this.provideValue(value);
+
+        setTimeout(() => {
+            const index = this.refreshNeededValues.findIndex((v) => v === value.id);
+            if (index !== -1) {
+                this.refreshNeededValues.splice(index, 1);
+                (this as any).setStateDirty('dynamicValues');
+            }
+        }, 100);
+    }
+
+    public isRefreshNeeded(valueId: string): boolean {
+        return this.refreshNeededValues.some((v) => v === valueId);
     }
 
     public async operationChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): Promise<void> {
-        await value.setOperator(nodes && nodes.length ? nodes[0].id : null);
+        this.refreshNeededValues.push(value.id);
+        (this as any).setStateDirty('dynamicValues');
+        if (await this.manager.clearValueOnOperatorChange(value.getValue().operator), true) {
+            value.clearValue();
+        }
+        await value.setOperator(nodes && nodes.length ? nodes[0].id : null, true);
+
         this.provideValue(value);
+
+        setTimeout(() => {
+            const index = this.refreshNeededValues.findIndex((v) => v === value.id);
+            if (index !== -1) {
+                this.refreshNeededValues.splice(index, 1);
+                (this as any).setStateDirty('dynamicValues');
+            }
+        }, 100);
     }
 
     public operationStringChanged(value: DynamicFormFieldValue, event: any): void {
         const operationString = event.target.value;
-        value.setOperator(operationString);
+        value.setOperator(operationString, true);
         this.provideValue(value);
     }
 

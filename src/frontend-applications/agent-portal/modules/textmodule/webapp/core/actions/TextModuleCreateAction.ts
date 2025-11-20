@@ -19,6 +19,7 @@ export class TextModuleCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Text Module';
         this.icon = 'kix-icon-new-gear';
     }

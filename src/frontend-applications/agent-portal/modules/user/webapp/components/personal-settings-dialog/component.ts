@@ -15,16 +15,15 @@ import { FormFieldConfiguration } from '../../../../../model/configuration/FormF
 import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
 import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { ValidationResult } from '../../../../../modules/base-components/webapp/core/ValidationResult';
 import { ValidationSeverity } from '../../../../../modules/base-components/webapp/core/ValidationSeverity';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
@@ -34,25 +33,23 @@ import { AgentService } from '../../core/AgentService';
 import { ComponentState } from './ComponentState';
 
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private searchObject: KIXObjectType | string;
 
     public async onCreate(input: any): Promise<void> {
+        super.onCreate(input);
         this.state = new ComponentState(input.instanceId);
     }
 
     public async onMount(): Promise<void> {
-
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject(
             ['Translatable#Cancel', 'Translatable#Save', 'Translatable#Reset Search To Default']
         );
 
         await this.prepareForm();
 
-        const context = ContextService.getInstance().getActiveContext();
-        context.getFormManager().setFormId('personal-settings');
+        this.context?.getFormManager().setFormId('personal-settings');
 
         this.state.loading = false;
     }
@@ -95,8 +92,7 @@ class Component {
     }
 
     public async submit(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
         if (validationError) {
@@ -104,22 +100,25 @@ class Component {
         } else {
             const loadingHint = await TranslationService.translate('Translatable#Save Settings');
             BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', true, loadingHint);
-            await AgentService.getInstance().setPreferencesByForm()
-                .then(async () => {
-                    TranslationService.getInstance().resetTranslations();
-                    EventService.getInstance().publish('USER_LANGUAGE_CHANGED');
-                    BrowserUtil.handleBeforeUnload();
-                    setTimeout(async () => {
-                        BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
-                        await ContextService.getInstance().toggleActiveContext(null, null, true);
-                        EventService.getInstance().publish(ApplicationEvent.REFRESH);
-                        const toast = await TranslationService.translate('Translatable#Changes saved.');
-                        BrowserUtil.openSuccessOverlay(toast);
-                    }, 100);
-                }).catch((error: Error) => {
+            let success = true;
+            await AgentService.getInstance().setPreferencesByForm().catch((error: Error) => {
+                BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
+                BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
+                success = false;
+            });
+
+            if (success) {
+                BrowserUtil.handleBeforeUnload();
+                setTimeout(async () => {
                     BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
-                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
-                });
+                    await ContextService.getInstance().removeContext(
+                        this.context.instanceId, undefined, undefined, undefined, true
+                    );
+
+                    const toast = await TranslationService.translate('Translatable#Changes saved.');
+                    BrowserUtil.openSuccessOverlay(toast);
+                }, 100);
+            }
         }
     }
 
@@ -171,6 +170,14 @@ class Component {
             'Translatable#Search defaults for {0} reseted.', [this.searchObject]
         );
         BrowserUtil.openSuccessOverlay(message);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

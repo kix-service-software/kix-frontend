@@ -18,6 +18,7 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
 
 export abstract class ExtendedDynamicFormManager implements IDynamicFormManager {
     resetValue?: boolean;
@@ -87,7 +88,7 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
         return null;
     }
 
-    public getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public getTreeNodes(property: string, objectIds?: Array<string | number>, operator?: string): Promise<TreeNode[]> {
         return null;
     }
 
@@ -128,6 +129,10 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
     }
 
     public clearValueOnPropertyChange(property: string): Promise<boolean> {
+        return null;
+    }
+
+    public clearValueOnOperatorChange(operator: string): Promise<boolean> {
         return null;
     }
 
@@ -186,4 +191,13 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
     public prepareValuesForParameter(values: ObjectPropertyValue[], selectedObjects: KIXObject[]): void {
         return;
     }
+
+    public setDefaultValues(values?: ObjectPropertyValue[]): void {
+        return;
+    };
+
+    public prepareFilterCriteria(formValue: any): Promise<FilterCriteria | object> {
+        return;
+    };
+
 }

@@ -9,41 +9,38 @@
 
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { Ticket } from '../../../model/Ticket';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
         this.state.ticketId = Number(input.ticketId);
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Description', 'Translatable#Comment'
         ]);
 
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        WidgetService.getInstance().setWidgetType('ticket-description-widget', WidgetType.GROUP);
-        WidgetService.getInstance().setWidgetType('ticket-description-notes', WidgetType.GROUP);
+        this.context.widgetService.setWidgetType('ticket-description-widget', WidgetType.GROUP);
+        this.context.widgetService.setWidgetType('ticket-description-notes', WidgetType.GROUP);
 
-        context.registerListener('ticket-description-widget', {
+        this.context?.registerListener('ticket-description-widget', {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
@@ -58,7 +55,7 @@ class Component {
         });
 
         this.setWidgetContentHeight();
-        await this.initWidget(await context.getObject<Ticket>());
+        await this.initWidget(await this.context?.getObject<Ticket>());
     }
 
     private async initWidget(ticket: Ticket): Promise<void> {
@@ -81,7 +78,7 @@ class Component {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.firstArticle) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.firstArticle]
+                this.state.widgetConfiguration.actions, [this.state.firstArticle], this.contextInstanceId
             );
         }
     }
@@ -94,6 +91,10 @@ class Component {
                 content.style.maxHeight = 'unset';
             }
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

@@ -21,10 +21,12 @@ class Component extends AbstractMarkoComponent {
     public state: ComponentState;
 
     public async onCreate(input: any): Promise<void> {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.update(input);
 
         return input;
@@ -47,6 +49,7 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.commentPlaceholder = await TranslationService.translate('Translatable#Comment');
     }
 
@@ -89,6 +92,10 @@ class Component extends AbstractMarkoComponent {
         permissiondata.Comment = this.state.comment;
 
         (this as any).emit('change', permissiondata);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

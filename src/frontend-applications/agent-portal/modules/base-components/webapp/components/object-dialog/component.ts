@@ -13,56 +13,46 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ObjectDialogService } from '../../core/ObjectDialogService';
 import { AdditionalContextInformation } from '../../core/AdditionalContextInformation';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
-import { EventService } from '../../core/EventService';
 import { FormEvent } from '../../core/FormEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-dialog');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Save'
         ]);
 
         this.state.submitButtonText = this.state.translations['Translatable#Save'];
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            const submitButtonText = context.getAdditionalInformation(
-                AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT
-            );
-            if (submitButtonText) {
-                this.state.submitButtonText = await TranslationService.translate(submitButtonText);
-            }
-            this.state.widgets = await context.getContent();
+        const submitButtonText = this.context?.getAdditionalInformation(
+            AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT
+        );
+        if (submitButtonText) {
+            this.state.submitButtonText = await TranslationService.translate(submitButtonText);
+        }
+        this.state.widgets = await this.context?.getContent();
 
-            const canSubmit = context.getAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_ENABLED);
-            if (typeof canSubmit === 'boolean') {
-                this.state.canSubmit = canSubmit;
-            }
+        const canSubmit = this.context?.getAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_ENABLED);
+        if (typeof canSubmit === 'boolean') {
+            this.state.canSubmit = canSubmit;
         }
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
-                if (eventId === FormEvent.BLOCK) {
-                    this.state.processing = data;
-                }
-            }
-        };
-
-        EventService.getInstance().subscribe(FormEvent.BLOCK, this.subscriber);
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
+                this.state.processing = data;
+            },
+            [FormEvent.BLOCK]
+        );
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(FormEvent.BLOCK, this.subscriber);
+        super.onDestroy();
     }
 
     public async submit(): Promise<void> {
@@ -73,6 +63,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await ContextService.getInstance().toggleActiveContext();
     }
 
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

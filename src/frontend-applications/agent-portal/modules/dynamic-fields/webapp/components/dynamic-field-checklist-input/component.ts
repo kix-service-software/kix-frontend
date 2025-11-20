@@ -16,7 +16,8 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 
 class Component extends FormInputComponent<CheckListItem[], ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -26,12 +27,14 @@ class Component extends FormInputComponent<CheckListItem[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.state.prepared = true;
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<[]>(this.state.field?.instanceId);
         if (value) {
             let checklist = value.value;
@@ -64,6 +67,10 @@ class Component extends FormInputComponent<CheckListItem[], ComponentState> {
 
     public minimize(): void {
         this.state.minimized = !this.state.minimized;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
 }

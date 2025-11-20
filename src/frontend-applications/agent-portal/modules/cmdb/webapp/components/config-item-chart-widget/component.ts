@@ -9,34 +9,31 @@
 
 import { ComponentState } from './ComponentState';
 import { ConfigItemChartWidgetConfiguration, ConfigItemChartFactory } from '../../core';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ConfigItem } from '../../../model/ConfigItem';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
     private cmdbChartConfiguration: ConfigItemChartWidgetConfiguration;
-    private subscriber: IEventSubscriber;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'config-item-chart-widget');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        const currentContext = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = currentContext
-            ? await currentContext.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'CMDB';
         this.cmdbChartConfiguration =
@@ -48,7 +45,7 @@ class Component {
             this.cmdbChartConfiguration.configuration.chartConfiguration.data.labels = [];
             this.cmdbChartConfiguration.configuration.chartConfiguration.data.datasets[0].data = [];
 
-            currentContext.registerListener('CMDBChartComponent' + IdService.generateDateBasedId(), {
+            this.context?.registerListener('CMDBChartComponent' + IdService.generateDateBasedId(), {
                 sidebarLeftToggled: (): void => { return; },
                 sidebarRightToggled: (): void => { return; },
                 objectChanged: (): void => { return; },
@@ -59,18 +56,17 @@ class Component {
             });
 
             this.contextFilteredObjectListChanged(
-                KIXObjectType.CONFIG_ITEM, currentContext.getFilteredObjectList(KIXObjectType.CONFIG_ITEM)
+                KIXObjectType.CONFIG_ITEM, this.context?.getFilteredObjectList(KIXObjectType.CONFIG_ITEM)
             );
 
-            this.subscriber = {
-                eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-                eventPublished: (data: any, eventId: string): void => {
-                    if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.CONFIG_ITEM) {
+            super.registerEventSubscriber(
+                function (data: any, eventId: string): void {
+                    if (data === KIXObjectType.CONFIG_ITEM) {
                         this.state.loading = true;
                     }
-                }
-            };
-            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
+                },
+                [ContextUIEvent.RELOAD_OBJECTS]
+            );
         }
 
         this.state.chartConfig = this.cmdbChartConfiguration.configuration.chartConfiguration;
@@ -105,6 +101,10 @@ class Component {
         this.state.loading = false;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

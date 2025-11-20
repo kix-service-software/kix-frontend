@@ -7,21 +7,30 @@
  * --
  */
 
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
 
 const marked = require('marked');
 
-export class Component {
+export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         const lexed = marked.lexer(input.content);
         this.state.content = marked.parser(lexed);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
     }
 }
 

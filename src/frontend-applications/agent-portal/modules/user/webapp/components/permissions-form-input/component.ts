@@ -18,7 +18,6 @@ import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { PermissionManager } from '../../core/admin/PermissionManager';
 
 class Component extends FormInputComponent<any[], ComponentState> {
@@ -26,10 +25,11 @@ class Component extends FormInputComponent<any[], ComponentState> {
     private formListenerId: string;
     private permissionFormTimeout: any;
 
-    public async onCreate(): Promise<void> {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.formListenerId = IdService.generateDateBasedId('permission-form-listener-');
-        await this.prepareTitles();
+        this.prepareTitles();
     }
 
     public onInput(input: any): void {
@@ -38,6 +38,10 @@ class Component extends FormInputComponent<any[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         const permissionManager = new PermissionManager();
         if (permissionManager) {
             permissionManager.init();
@@ -74,7 +78,8 @@ class Component extends FormInputComponent<any[], ComponentState> {
         }
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
+        super.onDestroy();
         if (this.state.permissionManager) {
             this.state.permissionManager.unregisterListener(this.formListenerId);
         }
@@ -86,8 +91,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
 
     public async setCurrentNode(permissionManager: IDynamicFormManager): Promise<void> {
         const permissionDescriptions: CreatePermissionDescription[] = [];
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             value.value.forEach((permission: Permission) => {

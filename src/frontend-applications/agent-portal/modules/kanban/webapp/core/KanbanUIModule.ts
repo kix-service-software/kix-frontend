@@ -14,6 +14,8 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { PersonalSettingsService } from '../../../user/model/PersonalSettingsService';
+import { KanbanInitialSiteURLNodesService } from './KanbanInitialSiteURLNodesService';
 
 export class UIModule implements IUIModule {
 
@@ -32,6 +34,10 @@ export class UIModule implements IUIModule {
             false, 'kanban-module', ['kanban'], KanbanContext
         );
         ContextService.getInstance().registerContext(kanbanContext);
+
+        PersonalSettingsService.getInstance().registerInitialURLSiteExtendedService(
+            new KanbanInitialSiteURLNodesService()
+        );
     }
 
     public async registerExtensions(): Promise<void> {

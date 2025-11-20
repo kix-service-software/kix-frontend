@@ -117,6 +117,7 @@ export class UserService extends KIXObjectAPIService {
                 p[0] !== PersonalSettingsProperty.NOTIFICATIONS &&
                 p[0] !== PersonalSettingsProperty.OUT_OF_OFFICE_END &&
                 p[0] !== PersonalSettingsProperty.OUT_OF_OFFICE_START &&
+                p[0] !== PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE &&
                 p[0] !== UserProperty.PREFERENCES
             );
 
@@ -127,7 +128,6 @@ export class UserService extends KIXObjectAPIService {
 
             const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
             if (myQueues) {
-                myQueues[1] = myQueues[1] === null ? '' : myQueues[1];
                 preferences.push({ ID: PersonalSettingsProperty.MY_QUEUES, Value: myQueues[1] });
             }
 
@@ -144,6 +144,15 @@ export class UserService extends KIXObjectAPIService {
             const outOfOfficeEnd = parameter.find((p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_END);
             if (outOfOfficeEnd) {
                 preferences.push({ ID: PersonalSettingsProperty.OUT_OF_OFFICE_END, Value: outOfOfficeEnd[1] });
+            }
+
+            const outOfOfficeSubstitute = parameter.find(
+                (p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE
+            );
+            if (outOfOfficeSubstitute) {
+                preferences.push(
+                    { ID: PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE, Value: outOfOfficeSubstitute[1] }
+                );
             }
 
             createParameter.push([UserProperty.PREFERENCES, preferences]);
@@ -189,11 +198,55 @@ export class UserService extends KIXObjectAPIService {
                 p[0] !== PersonalSettingsProperty.NOTIFICATIONS &&
                 p[0] !== PersonalSettingsProperty.OUT_OF_OFFICE_END &&
                 p[0] !== PersonalSettingsProperty.OUT_OF_OFFICE_START &&
+                p[0] !== PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE &&
                 p[0] !== UserProperty.ROLE_IDS &&
                 p[0] !== UserProperty.PREFERENCES
             );
 
             const userId = Number(objectId);
+
+            const preferences = this.getParameterValue(parameter, UserProperty.PREFERENCES) || [];
+
+            const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
+            if (userLanguage) {
+                preferences.push({ ID: PersonalSettingsProperty.USER_LANGUAGE, Value: userLanguage[1] });
+            }
+
+            const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
+            if (myQueues) {
+                preferences.push({ ID: PersonalSettingsProperty.MY_QUEUES, Value: myQueues[1] });
+            }
+
+            const notifications = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
+            if (notifications) {
+                preferences.push({ ID: PersonalSettingsProperty.NOTIFICATIONS, Value: notifications[1] });
+            }
+
+            const outOfOfficeStart = parameter.find((p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_START);
+            if (outOfOfficeStart) {
+                preferences.push({ ID: PersonalSettingsProperty.OUT_OF_OFFICE_START, Value: outOfOfficeStart[1] });
+            }
+
+            const outOfOfficeEnd = parameter.find((p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_END);
+            if (outOfOfficeEnd) {
+                preferences.push({ ID: PersonalSettingsProperty.OUT_OF_OFFICE_END, Value: outOfOfficeEnd[1] });
+            }
+
+            const outOfOfficeSubstitute = parameter.find(
+                (p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE
+            );
+            if (outOfOfficeSubstitute) {
+                preferences.push(
+                    { ID: PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE, Value: outOfOfficeSubstitute[1] }
+                );
+            }
+
+            updateParameter.push([UserProperty.PREFERENCES, preferences]);
+
+            const roleIds = this.getParameterValue(parameter, UserProperty.ROLE_IDS);
+            if (roleIds) {
+                updateParameter.push([UserProperty.ROLE_IDS, Array.isArray(roleIds) ? roleIds : [roleIds]]);
+            }
 
             const uri = this.buildUri(this.RESOURCE_URI, userId);
             const id = await super.executeUpdateOrCreateRequest(
@@ -202,49 +255,6 @@ export class UserService extends KIXObjectAPIService {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
             });
-
-            const roleIds = this.getParameterValue(parameter, UserProperty.ROLE_IDS);
-            if (roleIds) {
-                await this.updateUserRoles(
-                    token, clientRequestId, Array.isArray(roleIds) ? roleIds : [roleIds], userId
-                );
-            }
-
-            const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
-            if (userLanguage) {
-                await this.setPreferences(token, clientRequestId, [userLanguage], userId);
-            }
-
-            const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
-            if (myQueues) {
-                await this.setPreferences(token, clientRequestId, [myQueues], userId);
-            }
-
-            const notifications = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
-            if (notifications) {
-                await this.setPreferences(token, clientRequestId, [notifications], userId);
-            }
-
-            const outOfOfficeStart = parameter.find((p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_START);
-            if (outOfOfficeStart) {
-                await this.setPreferences(token, clientRequestId, [outOfOfficeStart], userId);
-            }
-
-            const outOfOfficeEnd = parameter.find((p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_END);
-            if (outOfOfficeEnd) {
-                await this.setPreferences(token, clientRequestId, [outOfOfficeEnd], userId);
-            }
-
-            const contextWIdgetLists = parameter.find((p) => p[0] === PersonalSettingsProperty.CONTEXT_WIDGET_LISTS);
-            if (contextWIdgetLists) {
-                await this.setPreferences(token, clientRequestId, [contextWIdgetLists], userId);
-            }
-
-            const preferences = this.getParameterValue(parameter, UserProperty.PREFERENCES);
-            if (preferences?.length) {
-                const preferenceValue = preferences.map((p): [string, any] => [p.ID, p.Value]);
-                await this.setPreferences(token, clientRequestId, preferenceValue, userId);
-            }
 
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
@@ -356,17 +366,21 @@ export class UserService extends KIXObjectAPIService {
                         });
                 }
             } else {
-                const paramValue = param[1] === null ? '' : param[1];
-                await this.createObject(
-                    token, clientRequestId, KIXObjectType.USER_PREFERENCE,
-                    [
-                        ['ID', param[0]],
-                        ['Value', paramValue]
-                    ],
-                    options
-                ).catch((error: Error) => {
-                    errors.push(error);
-                });
+                if (
+                    typeof param[1] !== 'undefined' &&
+                    param[1] !== null
+                ) {
+                    await this.createObject(
+                        token, clientRequestId, KIXObjectType.USER_PREFERENCE,
+                        [
+                            ['ID', param[0]],
+                            ['Value', param[1]]
+                        ],
+                        options
+                    ).catch((error: Error) => {
+                        errors.push(error);
+                    });
+                }
             }
         }
 
@@ -401,7 +415,6 @@ export class UserService extends KIXObjectAPIService {
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const filterProperties = [
-            KIXObjectProperty.VALID_ID,
             UserProperty.USAGE_CONTEXT
         ];
         const filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
@@ -417,6 +430,7 @@ export class UserService extends KIXObjectAPIService {
             UserProperty.PREFERENCES + '\..*?',
             KIXObjectProperty.VALID_ID,
             UserProperty.USER_ID,
+            'UserIDs',
             'IsOutOfOffice'
         ];
 
@@ -424,7 +438,57 @@ export class UserService extends KIXObjectAPIService {
             (f) => searchProperties.some((sp) => f.property.match(sp)) && f.operator !== SearchOperator.NOT_EQUALS
         );
 
+        await this.setUserID(searchCriteria, token);
+
+        await this.setMyQueues(searchCriteria, token);
+
         return searchCriteria;
+    }
+
+    private async setUserID(criteria: FilterCriteria[], token: string): Promise<void> {
+        const user = await UserService.getInstance().getUserByToken(token);
+
+        criteria.forEach(
+            (c, cIndex) => {
+                if (
+                    c.property === UserProperty.USER_ID
+                    || c.property === 'UserIDs'
+                ) {
+                    if (Array.isArray(c?.value)) {
+                        c.value.forEach(
+                            (cv, cvIndex) => {
+                                if (cv === KIXObjectType.CURRENT_USER) {
+                                    criteria[cIndex].value[cvIndex] = user.UserID;
+                                }
+                            }
+                        );
+                    }
+                    else if (c?.value === KIXObjectType.CURRENT_USER) {
+                        criteria[cIndex].value = user.UserID;
+                    }
+                }
+            }
+        );
+    }
+
+    private async setMyQueues(criteria: FilterCriteria[], token: string): Promise<void> {
+        const myQueuesCriteria = criteria.find(
+            (c) => (
+                c.property === (UserProperty.PREFERENCES + '.' + PersonalSettingsProperty.MY_QUEUES)
+                && c.value === KIXObjectType.CURRENT_USER
+            )
+        );
+
+        if (myQueuesCriteria) {
+            const user = await UserService.getInstance().getUserByToken(token);
+
+            const myQueues = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.MY_QUEUES);
+            const myQueuesValue = Array.isArray(myQueues?.Value)
+                ? myQueues?.Value
+                : isNaN(Number(myQueues?.Value)) ? [0] : [myQueues?.Value];
+
+            myQueuesCriteria.value = myQueuesValue;
+        }
     }
 
     public async commitObject(
@@ -447,20 +511,7 @@ export class UserService extends KIXObjectAPIService {
             throw new Error(error.Code, error.Message);
         });
 
-        const userId = response.UserID;
-
-        if (Array.isArray(user?.RoleIDs)) {
-            await this.updateUserRoles(token, clientRequestId, user.RoleIDs, userId);
-        }
-
-        if (!create && user?.Preferences?.length) {
-            const preferences: Array<[string, any]> = user.Preferences.map((p) => {
-                return [p.ID, p.Value];
-            });
-            await this.setPreferences(token, clientRequestId, preferences, userId);
-        }
-
-        return userId;
+        return response.UserID;
     }
 
 }

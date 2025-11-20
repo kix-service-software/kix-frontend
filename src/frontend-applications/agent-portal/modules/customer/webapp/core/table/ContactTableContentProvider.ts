@@ -21,7 +21,6 @@ import { Table } from '../../../../table/model/Table';
 import { TableValue } from '../../../../table/model/TableValue';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ContextMode } from '../../../../../model/ContextMode';
-import { SortOrder } from '../../../../../model/SortOrder';
 
 export class ContactTableContentProvider extends TableContentProvider<Contact> {
 
@@ -57,17 +56,24 @@ export class ContactTableContentProvider extends TableContentProvider<Contact> {
         await super.prepareSpecificValues(values, contact);
         for (const value of values) {
             if (this.isUserProperty(value.property)) {
-                let user = contact.User;
-                if (!user && contact.AssignedUserID) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [contact.AssignedUserID], null, null, true, true, true
-                    ).catch(() => [] as User[]);
-                    user = users && users.length ? users[0] : null;
-                }
-                if (user) {
-                    value.objectValue = user[value.property];
-                } else if (value.property === UserProperty.IS_AGENT || value.property === UserProperty.IS_CUSTOMER) {
-                    value.objectValue = 0;
+                if (value.property === UserProperty.USER_LOGIN && contact['Login']) {
+                    value.objectValue = contact['Login'];
+                } else {
+                    let user = contact.User;
+                    if (!user && contact.AssignedUserID) {
+                        const users = await KIXObjectService.loadObjects<User>(
+                            KIXObjectType.USER, [contact.AssignedUserID], null, null, true, true, true
+                        ).catch(() => [] as User[]);
+                        user = users && users.length ? users[0] : null;
+                    }
+                    if (user) {
+                        value.objectValue = user[value.property];
+                    } else if (
+                        value.property === UserProperty.IS_AGENT ||
+                        value.property === UserProperty.IS_CUSTOMER
+                    ) {
+                        value.objectValue = 0;
+                    }
                 }
             } else if (value.property === ContactProperty.EMAIL) {
                 // show all email addresses in email columns (in search result table)

@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormContext } from '../../../../../model/configuration/FormContext';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormInstance } from '../../../../../modules/base-components/webapp/core/FormInstance';
@@ -21,31 +20,28 @@ import { OverlayType } from '../../../../../modules/base-components/webapp/core/
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { EventService } from '../../core/EventService';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { FormEvent } from '../../core/FormEvent';
-import { ContextService } from '../../core/ContextService';
 import { ContextFormManagerEvents } from '../../core/ContextFormManagerEvents';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
 
-class FormComponent {
+class FormComponent extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
     private changePageTimeout: any;
     private keyListenerElement: any;
     private keyListener: any;
-    private formSubscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'main-form');
         this.state = new ComponentState(input.formId);
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.prepareForm();
-
-        const context = ContextService.getInstance().getActiveContext();
-        const pageIndex = context?.getFormManager()?.getActiveFormPageIndex();
+        const pageIndex = this.context?.getFormManager()?.getActiveFormPageIndex();
         if (pageIndex) {
             this.state.activePageIndex = pageIndex;
         }
@@ -64,54 +60,48 @@ class FormComponent {
             }, 500);
         }
 
-        this.formSubscriber = {
-            eventSubscriberId: this.state.formId,
-            eventPublished: (data: any, eventId: string): void => {
-                if (eventId === ContextFormManagerEvents.FORM_INSTANCE_CHANGED) {
-                    this.state.formInstance = null;
-                    this.state.formId = null;
-                    setTimeout(() => this.prepareForm(), 20);
-                } if (eventId === FormEvent.GO_TO_INVALID_FIELD && data.formId === this.state.formId) {
-                    this.goToInvalidField();
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
+                if (this.contextInstanceId === data?.context?.instanceId) {
+                    if (eventId === ContextFormManagerEvents.FORM_INSTANCE_CHANGED) {
+                        this.state.formInstance = null;
+                        this.state.formId = null;
+                        setTimeout(() => this.prepareForm(), 20);
+                    } if (eventId === FormEvent.GO_TO_INVALID_FIELD && data.formId === this.state.formId) {
+                        this.goToInvalidField();
+                    }
+                    if (eventId === FormEvent.FORM_PAGE_VALIDITY_CHANGED) {
+                        const targetPage = this.state.formInstance?.getForm()?.pages?.find(
+                            (page) => page.id === data.pageId
+                        );
+                        targetPage.valid = data.valid;
+                    } else {
+                        this.setNeeded();
+                        (this as any).setStateDirty('formInstance');
+                    }
                 }
-                if (eventId === FormEvent.FORM_PAGE_VALIDITY_CHANGED) {
-                    const targetPage = this.state.formInstance.getForm().pages.find((page) => page.id === data.pageId);
-                    targetPage.valid = data.valid;
-                } else {
-                    this.setNeeded();
-                    (this as any).setStateDirty('formInstance');
-                }
-            }
-        };
-
-        EventService.getInstance().subscribe(ContextFormManagerEvents.FORM_INSTANCE_CHANGED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_PAGES_REMOVED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.GO_TO_INVALID_FIELD, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_PAGE_VALIDITY_CHANGED, this.formSubscriber);
+            },
+            [
+                ContextFormManagerEvents.FORM_INSTANCE_CHANGED,
+                FormEvent.FORM_FIELD_ORDER_CHANGED,
+                FormEvent.VALUES_CHANGED,
+                FormEvent.FIELD_CHILDREN_ADDED,
+                FormEvent.FIELD_REMOVED,
+                FormEvent.FORM_PAGE_ADDED,
+                FormEvent.FORM_PAGES_REMOVED,
+                FormEvent.GO_TO_INVALID_FIELD,
+                FormEvent.FORM_PAGE_VALIDITY_CHANGED
+            ]
+        );
 
         this.state.loading = false;
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         if (this.keyListenerElement) {
             this.keyListenerElement.removeEventListener('keydown', this.keyDown.bind(this));
         }
-
-        EventService.getInstance().unsubscribe(ContextFormManagerEvents.FORM_INSTANCE_CHANGED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_PAGES_REMOVED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.GO_TO_INVALID_FIELD, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_VALIDITY_CHANGED, this.formSubscriber);
-
     }
 
     public keyDown(event: any): void {
@@ -125,14 +115,13 @@ class FormComponent {
     }
 
     private async prepareForm(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.formInstance = await context?.getFormManager()?.getFormInstance();
+        this.state.formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (this.state.formInstance) {
             this.state.formId = this.state.formInstance.getForm()?.id;
             this.setNeeded();
             this.state.objectType = this.state.formInstance.getObjectType();
             this.state.isSearchContext = this.state.formInstance.getFormContext() === FormContext.SEARCH;
-            WidgetService.getInstance().setWidgetType('form-group', WidgetType.GROUP);
+            this.context.widgetService.setWidgetType('form-group', WidgetType.GROUP);
 
             this.prepareMultiGroupHandling();
         }
@@ -233,8 +222,7 @@ class FormComponent {
             const validateOk = await this.validateActivePage();
             if (validateOk) {
                 this.state.activePageIndex = index;
-                const context = ContextService.getInstance().getActiveContext();
-                context?.getFormManager()?.setActiveFormPageIndex(index);
+                this.context?.getFormManager()?.setActiveFormPageIndex(index);
             }
         }, 150);
     }
@@ -295,6 +283,10 @@ class FormComponent {
             return this.state.formInstance.getForm().pages.filter((page) => page.valid);
         }
         return [];
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

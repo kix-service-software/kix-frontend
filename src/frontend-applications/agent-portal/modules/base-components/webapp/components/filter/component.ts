@@ -12,10 +12,9 @@ import { ComponentInput } from './ComponentInput';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
 import { TreeHandler, TreeService, TreeNode } from '../../core/tree';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private predefinedFilter: KIXObjectPropertyFilter[];
 
@@ -25,14 +24,20 @@ class Component {
 
     private updateTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.treeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, this.treeHandler);
     }
 
     public onInput(input: ComponentInput): void {
+        super.onInput(input);
         this.update(input);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private update(input: any): void {
@@ -135,6 +140,10 @@ class Component {
         } else {
             this.state.filterCountString = '';
         }
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
     }
 }
 

@@ -23,14 +23,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private changeSliderTimeout;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.baseRoute = ClientStorageService.getBaseRoute();
         const currentUser = await AgentService.getInstance().getCurrentUser();
         if (currentUser && currentUser.UserID !== 1) {
@@ -95,10 +98,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareSliderList(userId: number): Promise<void> {
-        const currentContext = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = currentContext
-            ? await currentContext.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         if (this.state.widgetConfiguration) {
             this.state.sliderList = [
@@ -126,6 +126,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 )
             );
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

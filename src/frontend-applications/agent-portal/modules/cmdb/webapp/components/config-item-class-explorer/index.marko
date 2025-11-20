@@ -9,19 +9,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <div class="ci-category-explorer">
     <widget
+        contextInstanceId=input.contextInstanceId
         instanceId=state.instanceId
         title=(
             state.widgetConfiguration
                 ? state.widgetConfiguration.title
                 : "Translatable#CI Classes"
-        )
-    >
+        )>
         <@content>
             <filter
                 on-filter("filter")
                 key="ci-class-explorer-filter"
-                showFilterCount=false
-            />
+                showFilterCount=false/>
             <if(state.loading)>
                 <loading-spinner/>
             </if>
@@ -32,8 +31,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         active: !state.activeNode,
                     },
                 ]
-                on-click("showAll")
-            >
+                on-click("showAll")>
                 <translation-string pattern="Translatable#Overview"/>
             </div>
             <if(state.nodes)>
@@ -42,8 +40,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     tree=state.nodes
                     activeNode=state.activeNode
                     filterValue=state.filterValue
-                    on-nodeClicked("activeNodeChanged")
-                />
+                    on-nodeClicked("activeNodeChanged")/>
             </if>
         </@content>
     </widget>

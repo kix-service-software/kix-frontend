@@ -11,8 +11,6 @@ import { ComponentState } from './ComponentState';
 import { FAQContext } from '../../../core/context/FAQContext';
 import { KIXObjectPropertyFilter } from '../../../../../../model/KIXObjectPropertyFilter';
 import { UIFilterCriterion } from '../../../../../../model/UIFilterCriterion';
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { WidgetService } from '../../../../../../modules/base-components/webapp/core/WidgetService';
 import { TableFactoryService } from '../../../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObject } from '../../../../../../model/kix/KIXObject';
 import { ServiceRegistry } from '../../../../../../modules/base-components/webapp/core/ServiceRegistry';
@@ -21,32 +19,31 @@ import { FAQArticleProperty } from '../../../../model/FAQArticleProperty';
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { ActionFactory } from '../../../../../../modules/base-components/webapp/core/ActionFactory';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState, FAQContext> {
 
     private predefinedFilter: KIXObjectPropertyFilter;
     private textFilterValue: string;
     private additionalFilterCriteria: UIFilterCriterion[] = [];
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.additionalFilterCriteria = [];
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         if (this.state.widgetConfiguration.contextDependent) {
-            context.registerListener('faq-article-list-context-listener', {
+            this.context?.registerListener('faq-article-list-context-listener', {
                 sidebarLeftToggled: (): void => { return; },
                 sidebarRightToggled: (): void => { return; },
                 objectChanged: (): void => { return; },
@@ -63,7 +60,7 @@ class Component {
     }
 
     public onDestroy(): void {
-        WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        this.context.widgetService.unregisterActions(this.state.instanceId);
     }
 
     private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {
@@ -88,29 +85,28 @@ class Component {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, null
+                this.state.widgetConfiguration.actions, null, this.contextInstanceId
             );
         }
-        WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
+        this.context.widgetService.registerActions(this.state.instanceId, this.state.actions);
     }
 
     private async prepareTable(): Promise<void> {
         const table = await TableFactoryService.getInstance().createTable(
-            'faq-articles', KIXObjectType.FAQ_ARTICLE, null, null, FAQContext.CONTEXT_ID
+            'faq-articles', KIXObjectType.FAQ_ARTICLE, null, null, this.contextInstanceId
         );
 
         this.state.table = table;
 
-        const context = ContextService.getInstance().getActiveContext() as FAQContext;
-        this.setCategoryFilter(context.categoryId);
+        this.setCategoryFilter(this.context.categoryId);
         if (this.state.widgetConfiguration.contextDependent && context) {
-            const objects = await context.getObjectList(KIXObjectType.FAQ_ARTICLE);
+            const objects = await this.context.getObjectList(KIXObjectType.FAQ_ARTICLE);
             this.setTitle(objects.length);
         }
     }
 
     private setActionsDirty(): void {
-        WidgetService.getInstance().updateActions(this.state.instanceId);
+        this.context.widgetService.updateActions(this.state.instanceId);
     }
 
     private setTitle(count: number = 0): void {

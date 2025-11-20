@@ -8,11 +8,13 @@
  */
 
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
+import { IdService } from '../../../../../model/IdService';
 import { AbstractComponentState } from '../../core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
+        public instanceId: string = IdService.generateDateBasedId('widget-container'),
         public widgets: ConfiguredWidget[] = null,
         public customizable: boolean = false,
         public configurationMode: boolean = false,

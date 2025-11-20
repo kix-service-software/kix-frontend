@@ -8,12 +8,15 @@
  */
 
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public contentWidgets: ConfiguredWidget[] = [],
         public prepared: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

@@ -45,31 +45,23 @@ export class ObjectReferenceLabelProvider extends ExtendedLabelProvider {
     }
 
     private async getObjects(values: string[]): Promise<KIXObject[]> {
-        const objectPromises = [];
+        let objectPromises = [];
         if (values) {
             if (!Array.isArray(values)) {
                 values = [values];
             }
 
             // load objects separately, to prevent empty value if "no permission" error occurs
-            values.forEach(async (v) =>
-                objectPromises.push(this.getObject(v).catch(() => []))
-            );
+            objectPromises = values.map((v) => this.getObject(v));
         }
 
-        const objects = [];
-        await Promise.allSettled<Array<KIXObject[]>>(objectPromises).then((results) =>
-            results.forEach((r) => {
-                if (r.status === 'fulfilled' && r.value?.length) {
-                    objects.push(...r.value);
-                }
-            })
-        );
-        return objects;
+        const result = await Promise.allSettled(objectPromises);
+        const objects = result.filter((r) => r.status === 'fulfilled').map((r) => r.value);
+        return objects.filter((o) => o);
     }
 
-    protected async getObject(value: any): Promise<KIXObject[]> {
-        return [];
+    protected async getObject(value: any): Promise<KIXObject> {
+        return null;
     }
 
     protected async getObjectTexts(short: boolean, objects: KIXObject[]): Promise<string[]> {
@@ -101,23 +93,9 @@ export class ObjectReferenceLabelProvider extends ExtendedLabelProvider {
         if (dynamicField && this.isLabelProviderForDFType(dynamicField.FieldType)) {
             if (dfValue.Value) {
                 const objects = await this.getObjects(dfValue.Value);
-
-                const labelPromises = [];
-                objects.forEach((o) =>
-                    labelPromises.push(
-                        this.getLabel(o).catch(() => null)
-                    )
-                );
-
-                const labels = [];
-                await Promise.allSettled(labelPromises).then((results) =>
-                    results.forEach((r) => {
-                        if (r.status === 'fulfilled' && r.value) {
-                            labels.push(r.value);
-                        }
-                    })
-                );
-
+                const labelPromises = objects.map((o) => this.getLabel(o).catch(() => null));
+                const result = await Promise.allSettled(labelPromises);
+                const labels = result.filter((r) => r.status === 'fulfilled').map((r) => r.value);
                 return labels;
             }
         }

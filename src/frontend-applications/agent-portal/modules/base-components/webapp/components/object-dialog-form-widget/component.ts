@@ -10,64 +10,60 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../core/ContextService';
 import { LabelService } from '../../core/LabelService';
 import { EventService } from '../../core/EventService';
 import { ContextEvents } from '../../core/ContextEvents';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
-import { Context } from 'mocha';
+import { Context } from '../../../../../model/Context';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-dialog-form-widget');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.setTitle();
         this.setIcon();
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-            eventPublished: async (data: Context, eventId: string): Promise<void> => {
+        super.registerEventSubscriber(
+            async function (data: Context, eventId: string): Promise<void> {
                 if (eventId === ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED) {
                     await this.setTitle();
                 } else if (eventId === ContextEvents.CONTEXT_ICON_CHANGED) {
                     this.setIcon();
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_ICON_CHANGED, this.subscriber);
+            },
+            [
+                ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED,
+                ContextEvents.CONTEXT_ICON_CHANGED
+            ]
+        );
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_ICON_CHANGED, this.subscriber);
+        super.onDestroy();
     }
 
     private async setTitle(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
         let objectText = '';
-        const object = await context.getObject();
+        const object = await this.context.getObject();
         if (object) {
             objectText = await LabelService.getInstance().getObjectText(object);
         }
-        const displayText = await context.getDisplayText();
+        const displayText = await this.context?.getDisplayText();
         this.state.title = objectText ? `${displayText} (${objectText})` : displayText;
     }
 
     private setIcon(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.icon = context.getIcon();
+        this.state.icon = this.context.getIcon();
     }
 
 }

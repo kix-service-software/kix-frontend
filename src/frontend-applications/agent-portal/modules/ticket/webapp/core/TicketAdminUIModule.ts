@@ -40,6 +40,8 @@ export class UIModule extends TicketReadUIModule {
     protected doRegisterContexts: boolean = false;
 
     public async register(): Promise<void> {
+        // FIXME super-call may register some things again because super could be already used on its own
+        // e.g. TicketTableCSSHandler
         super.register();
         ServiceRegistry.registerServiceInstance(TicketTypeFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityFormService.getInstance());

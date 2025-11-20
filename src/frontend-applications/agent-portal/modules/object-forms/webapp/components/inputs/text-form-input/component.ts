@@ -7,9 +7,12 @@
  * --
  */
 
+import { FormFieldOptions } from '../../../../../../model/configuration/FormFieldOptions';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { InputFieldTypes } from '../../../../../base-components/webapp/core/InputFieldTypes';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
+import { ObjectFormHandler } from '../../../core/ObjectFormHandler';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
@@ -18,14 +21,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private formValue: ObjectFormValue;
     private changeTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;
+            this.state.isPassword = this.formValue.formField?.options.some(
+                (option) => option.option === FormFieldOptions.INPUT_FIELD_TYPE &&
+                    option.value === InputFieldTypes.PASSWORD
+            );
             this.update();
         }
     }
@@ -54,6 +63,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         return;
     }
 
@@ -69,14 +79,26 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public valueChanged(event: any): void {
+        this.formValue.dirty = true;
         if (this.changeTimeout) {
             window.clearTimeout(this.changeTimeout);
         }
-
+        this.state.value = event.target.value;
         this.changeTimeout = setTimeout(async () => {
-            this.state.value = event.target.value;
-            this.formValue.setFormValue(this.state.value);
-        }, 500);
+            await this.formValue.setFormValue(this.state.value);
+            this.formValue.dirty = false;
+        }, ObjectFormHandler.TEXTFIELD_SUBMISSION_TIMEOUT);
+    }
+
+    public togglePasswordVisible(): void {
+        if (this.state.isPassword) {
+            this.state.isPasswordVisible = !this.state.isPasswordVisible;
+        }
+    }
+
+    public getInputType(isPasswordVisible: boolean): string {
+        if (isPasswordVisible) return InputFieldTypes.TEXT;
+        return this.state.inputType;
     }
 
 }

@@ -7,9 +7,10 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../../../base-components/webapp/core/AbstractComponentState';
 import { Row } from '../../../../../model/Row';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public row: Row = null,
@@ -19,5 +20,7 @@ export class ComponentState {
         public selectable: boolean = true,
         public show: boolean = false,
         public rowClasses: string[] = [],
-    ) { }
+    ) {
+        super();
+    }
 }

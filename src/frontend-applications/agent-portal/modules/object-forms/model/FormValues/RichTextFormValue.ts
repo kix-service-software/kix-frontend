@@ -18,6 +18,7 @@ export class RichTextFormValue extends ObjectFormValue<string> {
 
     public noImages: boolean = false;
     public autocompleteOption: AutocompleteFormFieldOption;
+    private externallyUpdated: boolean = false;
 
     public constructor(
         public property: string,
@@ -51,5 +52,18 @@ export class RichTextFormValue extends ObjectFormValue<string> {
 
     protected async handlePlaceholders(value: any): Promise<any> {
         return super.handlePlaceholders(value, true);
+    }
+
+    public async setFormValueFromExtern(value: any): Promise<void> {
+        this.externallyUpdated = true;
+        await this.setFormValue(value);
+    }
+
+    public isExternallyUpdated(): boolean {
+        return this.externallyUpdated;
+    }
+
+    public setExternallyUpdatedFalse(): void {
+        this.externallyUpdated = false;
     }
 }

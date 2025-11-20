@@ -66,11 +66,11 @@ export class ArticleLoader {
         this.articleIds = new Map();
 
         const loadingOptions = new KIXObjectLoadingOptions();
-        loadingOptions.includes = [KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON];
+        loadingOptions.includes = [KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON, 'ObjectActions'];
 
         if (this.loadArticleDetails) {
             loadingOptions.includes.push(
-                ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN, 'ObjectActions', KIXObjectProperty.DYNAMIC_FIELDS
+                ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN, KIXObjectProperty.DYNAMIC_FIELDS
             );
         }
 
@@ -90,25 +90,29 @@ export class ArticleLoader {
         }
     }
 
-    public async prepareArticleActions(article: Article): Promise<AbstractAction[]> {
+    public async prepareArticleActions(article: Article, contextInstanceId?: string): Promise<AbstractAction[]> {
         const actions = await this.context?.getAdditionalActions(article) || [];
 
         const hasKIXPro = await KIXModulesService.getInstance().hasPlugin('KIXPro');
         if (!hasKIXPro) {
             const startActions = ['article-reply-action', 'article-forward-action'];
             const actionInstance = await ActionFactory.getInstance().generateActions(
-                startActions, article
+                startActions, article, contextInstanceId
             );
             actions.push(...actionInstance);
         }
 
-        const plainTextAction = await ActionFactory.getInstance().generateActions(['article-get-plain-action'], article);
+        const plainTextAction = await ActionFactory.getInstance().generateActions(
+            ['article-get-plain-action'], article, contextInstanceId
+        );
         if (plainTextAction?.length) {
             plainTextAction[0].setData(article);
             actions.push(...plainTextAction);
         }
 
-        const printAction = await ActionFactory.getInstance().generateActions(['article-print-action'], article);
+        const printAction = await ActionFactory.getInstance().generateActions(
+            ['article-print-action'], article, contextInstanceId
+        );
         if (printAction?.length) {
             printAction[0].setData(article);
             actions.push(...printAction);

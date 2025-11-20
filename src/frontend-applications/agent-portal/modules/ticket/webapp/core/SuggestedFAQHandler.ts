@@ -25,7 +25,6 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
-import { ObjectFormHandler } from '../../../object-forms/webapp/core/ObjectFormHandler';
 import { FAQService } from '../../../faq/webapp/core';
 
 export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
@@ -43,7 +42,7 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
             const filter: FilterCriteria[] = await this.getFilter(handlerConfig);
             if (filter?.length) {
                 this.applyValidFilter(handlerConfig, filter);
-
+                this.addUniqueFilters(loadingOptions.filter, filter);
                 loadingOptions.filter = filter;
                 const preparedLoadingOptions = KIXObjectLoadingOptions.clone(loadingOptions);
                 articles = await KIXObjectService.loadObjects<FAQArticle>(
@@ -52,6 +51,15 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
             }
         }
         return articles;
+    }
+
+    private addUniqueFilters(from: FilterCriteria[], to: FilterCriteria[]): void {
+        from.forEach((fromFilterCriteria) => {
+            const exists = to.some((toFilterCriteria) => toFilterCriteria.property === fromFilterCriteria.property);
+            if (!exists) {
+                to.push(fromFilterCriteria);
+            }
+        });
     }
 
     private applyValidFilter(

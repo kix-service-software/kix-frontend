@@ -27,11 +27,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private objectType: KIXObjectType;
     private columns: IColumnConfiguration[];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.columns = Array.isArray(input.columns) ? [...input.columns] : [];
         this.objectType = input.objectType;
         this.updateColumnNames();
@@ -39,6 +41,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject(
             [
                 'Translatable#Some Translation', 'Translatable#Add Column(s)', 'Translatable#Property',
@@ -64,7 +67,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async updateColumnNames(): Promise<void> {
         this.state.loading = true;
-        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
+        const showInvalid = this.context?.getConfiguration()?.provideInvalidValues;
         const dependencies = await KIXObjectService.getObjectDependencies(this.objectType, showInvalid);
         this.state.dependencyName = await KIXObjectService.getObjectDependencyName(this.objectType);
 
@@ -131,7 +134,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async updateDependencyNodes(): Promise<void> {
-        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
+        const showInvalid = this.context?.getConfiguration()?.provideInvalidValues;
         const nodes = await KIXObjectService.getObjectDependencieNodes(this.objectType, showInvalid);
 
         this.dependencyTreeHandler = TreeService.getInstance().getTreeHandler(this.state.dependencyTreeId);
@@ -264,5 +267,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.emitConfigurationChanged();
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 module.exports = Component;

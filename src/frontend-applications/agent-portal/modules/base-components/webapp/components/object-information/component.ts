@@ -17,17 +17,23 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private routingConfigurations: Array<[string, RoutingConfiguration]>;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: ComponentInput): void {
+        super.onInput(input);
         this.state.properties = [];
         this.state.prepared = false;
         this.state.properties = input.properties;
         this.routingConfigurations = input.routingConfigurations;
         this.state.flat = input.flat;
         this.init(input.object);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async init(object: KIXObject): Promise<void> {
@@ -75,6 +81,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         return id;
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
     }
 }
 

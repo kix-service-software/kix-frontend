@@ -29,6 +29,7 @@ import { CreateImportExportTemplateRunOptions } from '../../../model/CreateImpor
 export class TemplateImportAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Import';
         this.icon = 'kix-icon-import';
     }

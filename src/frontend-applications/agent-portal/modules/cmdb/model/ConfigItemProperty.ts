@@ -35,6 +35,7 @@ export enum ConfigItemProperty {
     // search properties
     ASSIGNED_CONTACT = 'AssignedContact',
     ASSIGNED_ORGANISATION = 'AssignedOrganisation',
-    PREVIOUS_VERSION_SEARCH = 'PreviousVersionSearch'
+    PREVIOUS_VERSION_SEARCH = 'PreviousVersionSearch',
+    DEPL_STATE_TYPE = 'DeplStateType'
 
 }

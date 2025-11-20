@@ -20,6 +20,7 @@ export class NotesEditAction extends AbstractAction {
     }
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
     }

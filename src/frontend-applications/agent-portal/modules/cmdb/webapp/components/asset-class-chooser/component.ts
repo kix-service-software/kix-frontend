@@ -13,7 +13,6 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ConfigItemClass } from '../../../model/ConfigItemClass';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
@@ -25,27 +24,24 @@ import { FilterType } from '../../../../../model/FilterType';
 import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
-import { NewConfigItemDialogContext } from '../../core';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvent } from '../../../../base-components/webapp/core/ContextEvent';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { NewConfigItemDialogContext } from '../../core/context/NewConfigItemDialogContext';
 
-export class Component {
-
-    private state: ComponentState;
-
-    private context: NewConfigItemDialogContext;
+export class Component extends AbstractMarkoComponent<ComponentState, NewConfigItemDialogContext> {
 
     public listenerId: string;
-
     public textFilterValue: string;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState(input.instanceId);
         this.listenerId = IdService.generateDateBasedId('asset-class-chooser-');
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext<NewConfigItemDialogContext>();
+        await super.onMount();
         this.state.widgetConfiguration = await this.context.getWidgetConfiguration(this.state.instanceId);
 
         const loadingOptions = new KIXObjectLoadingOptions([
@@ -98,6 +94,14 @@ export class Component {
         this.state.filterValue = textFilterValue;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

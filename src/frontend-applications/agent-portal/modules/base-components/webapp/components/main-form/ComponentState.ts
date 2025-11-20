@@ -8,9 +8,10 @@
  */
 
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 import { FormInstance } from '../../core/FormInstance';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public formId: string = null,
@@ -20,6 +21,8 @@ export class ComponentState {
         public loading: boolean = true,
         public additionalFieldControlsNeeded: boolean = false,
         public activePageIndex: number = 0
-    ) { }
+    ) {
+        super();
+    }
 
 }

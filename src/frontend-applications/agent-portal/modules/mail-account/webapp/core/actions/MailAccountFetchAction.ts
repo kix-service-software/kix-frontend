@@ -24,14 +24,14 @@ import { AuthenticationSocketClient } from '../../../../base-components/webapp/c
 export class MailAccountFetchAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Fetch now';
         this.icon = 'kix-icon-arrow-refresh';
     }
 
     public async canShow(): Promise<boolean> {
         let show = false;
-        const context = ContextService.getInstance().getActiveContext();
-        const objectId = context.getObjectId();
+        const objectId = this.context?.getObjectId();
 
         const permissions = [
             new UIComponentPermission(
@@ -44,29 +44,25 @@ export class MailAccountFetchAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        const id = this.context?.getObjectId();
 
-        if (context) {
-            const id = context.getObjectId();
+        if (id) {
+            EventService.getInstance().publish(
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Fetching Mail Account' }
+            );
 
-            if (id) {
-                EventService.getInstance().publish(
-                    ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Fetching Mail Account' }
+            await KIXObjectService.updateObject(
+                KIXObjectType.MAIL_ACCOUNT, [[MailAccountProperty.EXEC_FETCH, 1]], id, false
+            ).then(async () => {
+                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
+                const toast = await TranslationService.translate(
+                    'Translatable#Mail Account successfully fetched.'
                 );
-
-                await KIXObjectService.updateObject(
-                    KIXObjectType.MAIL_ACCOUNT, [[MailAccountProperty.EXEC_FETCH, 1]], id, false
-                ).then(async () => {
-                    EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
-                    const toast = await TranslationService.translate(
-                        'Translatable#Mail Account successfully fetched.'
-                    );
-                    BrowserUtil.openSuccessOverlay(toast);
-                }).catch((error: Error) => {
-                    EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
-                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
-                });
-            }
+                BrowserUtil.openSuccessOverlay(toast);
+            }).catch((error: Error) => {
+                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
+                BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
+            });
         }
     }
 }

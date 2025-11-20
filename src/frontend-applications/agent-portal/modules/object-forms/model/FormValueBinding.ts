@@ -13,6 +13,7 @@ import { EventService } from '../../base-components/webapp/core/EventService';
 import { FormValueProperty } from './FormValueProperty';
 import { ObjectFormValue } from './FormValues/ObjectFormValue';
 import { ObjectFormEvent } from './ObjectFormEvent';
+import { ObjectFormEventData } from './ObjectFormEventData';
 
 export class FormValueBinding {
 
@@ -63,8 +64,13 @@ export class FormValueBinding {
 
         if (this.property === FormValueProperty.VALUE) {
             await this.formValue.setObjectValue(val);
+            const contextInstanceId = this.formValue.objectValueMapper?.objectFormHandler?.context?.instanceId;
             EventService.getInstance().publish(
-                ObjectFormEvent.OBJECT_FORM_VALUE_CHANGED, this.formValue);
+                ObjectFormEvent.OBJECT_FORM_VALUE_CHANGED,
+                new ObjectFormEventData(
+                    contextInstanceId, this.formValue.objectValueMapper?.instanceId, null, this.formValue
+                )
+            );
         }
 
         for (const binding of this.elementBindings) {

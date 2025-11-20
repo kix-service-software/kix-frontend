@@ -19,11 +19,13 @@ import { AuthURLLoadingOptions } from '../../../model/AuthURLLoadingOptions';
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private profile: OAuth2Profile;
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (input.cell) {
             const cell: Cell = input.cell;
             this.profile = cell?.getRow()?.getRowObject()?.getObject();
@@ -32,6 +34,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = [
             await TranslationService.translate('Translatable#Renew Authorization')
         ];
@@ -55,6 +58,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

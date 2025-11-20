@@ -22,11 +22,13 @@ import { TicketProperty } from '../../../../ticket/model/TicketProperty';
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private object: KIXObject;
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (input.cell) {
             const cell: Cell = input.cell;
             this.object = cell.getRow().getRowObject().getObject();
@@ -56,14 +58,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             additionalInformation.push([`${KIXObjectType.CONFIG_ITEM}-ID`, [this.object.ConfigItemID]]);
         }
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context.contextId === OrganisationDetailsContext.CONTEXT_ID) {
-            additionalInformation.push([TicketProperty.ORGANISATION_ID, context.getObjectId()]);
+        if (this.context?.contextId === OrganisationDetailsContext.CONTEXT_ID) {
+            additionalInformation.push([TicketProperty.ORGANISATION_ID, this.context.getObjectId()]);
         }
 
         TicketDialogUtil.createTicket(null, null, null, null, additionalInformation);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

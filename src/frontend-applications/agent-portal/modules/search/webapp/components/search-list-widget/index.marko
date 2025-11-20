@@ -7,7 +7,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget title="Searches" instanceId=state.instanceId key=state.instanceId>
+<widget
+   contextInstanceId=input.contextInstanceId
+   title="Searches"
+   instanceId=state.instanceId
+   key=state.instanceId>
    <@content>
 
       <if(state.prepared)>
@@ -18,8 +22,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <tree
                tree=state.userSearches
                activeNode=state.activeNode
-               on-nodeClicked("searchClicked")
-            />
+               on-nodeClicked("searchClicked")/>
          </if>
 
          <if(state.sharedSearches.length)>
@@ -29,8 +32,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <tree
                tree=state.sharedSearches
                activeNode=state.activeNode
-               on-nodeClicked("searchClicked")
-            />
+               on-nodeClicked("searchClicked")/>
          </if>
       </if>
       <else>

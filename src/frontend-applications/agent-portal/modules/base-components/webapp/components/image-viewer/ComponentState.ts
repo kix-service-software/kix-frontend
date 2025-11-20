@@ -7,15 +7,18 @@
  * --
  */
 
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 import { DisplayImageDescription } from '../../core/DisplayImageDescription';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public show: boolean = false,
         public image: DisplayImageDescription = null,
         public imageDescriptions: DisplayImageDescription[] = [],
         public translations: any = {}
-    ) { }
+    ) {
+        super();
+    }
 
 }

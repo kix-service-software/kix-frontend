@@ -14,6 +14,7 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 export class LoadFAQAricleAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.icon = 'kix-icon-faq';
         this.text = 'Translatable#FAQ Article';
     }

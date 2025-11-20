@@ -1,0 +1,10 @@
+<iframe
+    id=state.frameId
+    class=[
+        "w-100 bg-white",
+        {
+            "h-100": !state.calculateHeight,
+        },
+    ]
+    sandbox=state.sandboxAttributes.join(" ")
+    on-load("viewLoaded")/>

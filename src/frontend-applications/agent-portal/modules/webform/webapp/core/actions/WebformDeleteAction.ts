@@ -28,6 +28,7 @@ export class WebformDeleteAction extends AbstractAction {
     public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Delete';
         this.icon = 'kix-icon-trash';
     }

@@ -14,6 +14,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     },
 ]>
     <widget
+        contextInstanceId=input.contextInstanceId
         instanceId=input.instanceId
         title=(
             state.widgetConfiguration
@@ -24,17 +25,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             state.widgetConfiguration && state.widgetConfiguration.icon
                 ? state.widgetConfiguration.icon
                 : "kix-icon-note"
-        )
-    >
+        )>
         <@content>
             <if((state.value || state.editorActive) && state.editorReady)>
                 <editor
                     value=state.value
-                    on-valueChanged("valueChanged")
                     simple
                     readOnly=!state.editorActive
-                    keyValue="notes-sidebar"
-                />
+                    key="notes-editor"/>
             </if>
             <else>
                 <div class="empty-notes">
@@ -46,15 +44,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <button
                         title=(state.translations["Translatable#Cancel"])
                         on-click("cancelEditor")
-                        class="kix-button form-button button-without-text"
-                    >
+                        class="kix-button form-button button-without-text">
                         <span class="kix-icon-close"/>
                     </button>
                     <button
                         title=(state.translations["Translatable#Submit"])
                         on-click("submitEditor")
-                        class="kix-button form-button"
-                    >
+                        class="kix-button form-button">
                         <span class="kix-icon-check"/>
                         <translation-string pattern="Translatable#Submit"/>
                     </button>

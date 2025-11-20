@@ -9,7 +9,6 @@
 
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Article } from '../../../model/Article';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
@@ -19,34 +18,30 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { TicketDetailsContext, TicketService } from '../../core';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
 import { BackendNotification } from '../../../../../model/BackendNotification';
 import { TicketUIEvent } from '../../../model/TicketUIEvent';
 import { TicketCommunicationConfiguration } from '../../../model/TicketCommunicationConfiguration';
 import { Ticket } from '../../../model/Ticket';
-import { SortUtil } from '../../../../../model/SortUtil';
-import { SortOrder } from '../../../../../model/SortOrder';
 
-export class Component extends AbstractMarkoComponent<ComponentState> {
+export class Component extends AbstractMarkoComponent<ComponentState, TicketDetailsContext> {
 
     private readonly displayView = 'selectedListView';
-    private context: TicketDetailsContext;
     private sortOrder: string;
-    private subscriber: IEventSubscriber;
     private communicationConfig: TicketCommunicationConfiguration;
     private articleIds: number[];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'ticket-communication-widget');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         this.communicationConfig = this.state.widgetConfiguration?.configuration as TicketCommunicationConfiguration;
 
@@ -75,32 +70,21 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private initListener(): void {
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('communication-widget'),
-            eventPublished: (data: any, eventId: string): void => {
-                if (eventId === ApplicationEvent.OBJECT_DELETED) {
-                    this.handleObjectDeleted(data);
-                } else if (eventId === TicketUIEvent.SCROLL_TO_ARTICLE) {
-                    this.handleScrollToArticle(data);
-                }
-            }
-        };
-        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.subscriber);
+        super.registerEventSubscriber(this.handleObjectDeleted, [ApplicationEvent.OBJECT_DELETED]);
+        super.registerEventSubscriber(this.handleScrollToArticle, [TicketUIEvent.SCROLL_TO_ARTICLE]);
 
-        EventService.getInstance().subscribe(TicketUIEvent.SCROLL_TO_ARTICLE, this.subscriber);
-
-        this.context.registerListener('communication-widget', {
-            filteredObjectListChanged: (objectType: KIXObjectType) => {
+        this.context?.registerListener('communication-widget', {
+            filteredObjectListChanged: function (objectType: KIXObjectType): void {
                 if (objectType === KIXObjectType.ARTICLE) {
                     this.setArticleIDs();
                 }
-            },
-            objectListChanged: (objectType: KIXObjectType) => {
+            }.bind(this),
+            objectListChanged: function (objectType: KIXObjectType): void {
                 if (objectType === KIXObjectType.ARTICLE) {
                     this.articleIds = null;
                     this.setArticleIDs();
                 }
-            },
+            }.bind(this),
             additionalInformationChanged: () => null,
             objectChanged: () => null,
             scrollInformationChanged: () => null,
@@ -110,10 +94,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         this.context.unregisterListener('communication-widget');
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.subscriber);
-
-        EventService.getInstance().unsubscribe(TicketUIEvent.SCROLL_TO_ARTICLE, this.subscriber);
     }
 
     private async setArticleIDs(): Promise<void> {
@@ -124,7 +106,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         const filterComponent = (this as any).getComponent('article-filter');
-        if (filterComponent && filterComponent.isFiltered) {
+        if (filterComponent?.isFiltered) {
             const articles: Article[] = this.context?.getFilteredObjectList(KIXObjectType.ARTICLE) || [];
             this.state.articleIds = articles.map((a) => a.ArticleID);
         } else {
@@ -149,8 +131,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (isArticleDelete) {
             const objectIds = data?.ObjectID?.split('::');
             if (objectIds?.length === 2) {
-                const allArticleIndex = this.articleIds.findIndex((a) => a.toString() === objectIds[1].toString());
-                if (allArticleIndex !== -1) {
+                const allArticleIndex = this.articleIds?.findIndex((a) => a.toString() === objectIds[1].toString());
+                if (typeof allArticleIndex !== 'undefined' && allArticleIndex !== -1) {
                     this.articleIds.splice(allArticleIndex, 1);
                     this.setArticleIDs();
                 }
@@ -208,7 +190,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         event.stopPropagation();
         event.preventDefault();
 
-        const element: HTMLElement = document.getElementById('communication-top');
+        const element: HTMLElement = document.getElementById(this.state.topId);
         if (element) {
             element.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
         }
@@ -216,7 +198,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public changeSortDirection(): void {
         if (this.sortOrder === 'newest') {
-            this.sortOrder = 'odlest';
+            this.sortOrder = 'oldest';
         } else {
             this.sortOrder = 'newest';
         }
@@ -226,7 +208,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public getArticleCountNumber(articleId: number): number {
-        return this.articleIds.findIndex((aid) => aid === articleId) + 1;
+        return this.articleIds?.findIndex((aid) => aid === articleId) + 1 || 1;
     }
 }
 

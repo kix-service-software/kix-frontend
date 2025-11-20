@@ -8,23 +8,25 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { RefreshToastSettings } from '../../../../base-components/webapp/core/RefreshToastSettings';
+import { RefreshToastSettings } from '../../../model/RefreshToastSettings';
 import { WindowListener } from '../../../../base-components/webapp/core/WindowListener';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: RefreshToastSettings): void {
+        super.onInput(input);
         return;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.time = DateTimeUtil.getKIXTimeString(new Date());
     }
 
@@ -35,6 +37,10 @@ class Component {
         location.reload();
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

@@ -61,8 +61,10 @@ export class User extends KIXObject {
     public toString(): string {
         if (this.Contact) {
             return this.Contact ? `${this.Contact.Firstname} ${this.Contact.Lastname}` : this.UserLogin;
-        } else {
+        } else if (this.UserFirstname || this.UserLastname) {
             return `${this.UserFirstname}, ${this.UserLastname}`;
+        } else {
+            return this.UserLogin;
         }
     }
 

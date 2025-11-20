@@ -263,11 +263,11 @@ export class SearchNamespace extends SocketNameSpace {
     }
 
     private async loadSharedSearch(data: ISocketRequest, client: Socket): Promise<SocketResponse> {
-        const response = new LoadSearchResponse(data.requestId, this.getSharedSearces());
+        const response = new LoadSearchResponse(data.requestId, this.getSharedSearches());
         return new SocketResponse(SearchEvent.SHARED_SEARCHES_LOADED, response);
     }
 
-    private getSharedSearces(): SearchCache[] {
+    private getSharedSearches(): SearchCache[] {
         const fileName = 'shared_searches.json';
         const sharedSearches: SearchCache[] = ConfigurationService.getInstance().getDataFileContent(
             fileName, []

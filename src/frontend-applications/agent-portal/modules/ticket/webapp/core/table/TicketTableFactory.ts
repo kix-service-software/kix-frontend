@@ -33,7 +33,7 @@ export class TicketTableFactory extends TableFactory {
 
     public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[],
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
+        contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): Promise<Table> {
 
@@ -41,15 +41,15 @@ export class TicketTableFactory extends TableFactory {
             tableConfiguration, defaultRouting, defaultToggle, short
         );
 
-        const table = new Table(tableKey, tableConfiguration, contextId);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         const contentProvider = new TicketTableContentProvider(
-            table, objectIds, tableConfiguration.loadingOptions, contextId, objects
+            table, objectIds, tableConfiguration.loadingOptions, contextInstanceId, objects
         );
 
         table.setContentProvider(contentProvider);
 
-        const tableColumns = await this.filterColumns(contextId, tableConfiguration);
+        const tableColumns = await this.filterColumns(contextInstanceId, tableConfiguration);
         table.setColumnConfiguration(tableColumns);
 
         return table;

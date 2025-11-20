@@ -1,0 +1,8 @@
+{
+    "dependencies": [
+        "./static/prosemirror.min.js",
+        "./static/editor.css",
+        "require ./core/ProsemirrorEditorUIModule",
+        "require ./components/prosemirror-editor"
+    ]
+}

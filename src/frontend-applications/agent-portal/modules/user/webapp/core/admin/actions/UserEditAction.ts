@@ -31,25 +31,22 @@ export class UserEditAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
     }
 
     public async run(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-
-        if (context) {
-            const userId = context.getObjectId();
-            if (userId) {
-                const contactId = await this.getContactId(userId);
-                const additionalInformation: Array<[string, any]> = [
-                    ['CONTACT_ID', contactId],
-                    ['USE_SOURCE_CONTEXT', true]
-                ];
-                await ContextService.getInstance().setActiveContext(
-                    EditContactDialogContext.CONTEXT_ID, contactId, null, additionalInformation
-                );
-            }
+        const userId = this.context?.getObjectId();
+        if (userId) {
+            const contactId = await this.getContactId(userId);
+            const additionalInformation: Array<[string, any]> = [
+                ['CONTACT_ID', contactId],
+                ['USE_SOURCE_CONTEXT', true]
+            ];
+            await ContextService.getInstance().setActiveContext(
+                EditContactDialogContext.CONTEXT_ID, contactId, null, additionalInformation
+            );
         }
     }
 

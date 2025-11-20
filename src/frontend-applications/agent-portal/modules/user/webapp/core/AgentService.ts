@@ -198,11 +198,12 @@ export class AgentService extends KIXObjectService<User> {
             : isNaN(Number(myQueues?.Value)) ? [] : [myQueues?.Value];
 
         let outOfOfficeUsersIDs: Array<string | number> = [];
+        let loadingOptions;
         if (
             myQueueValue
             && myQueueValue.length
         ) {
-            const loadingOptions = new KIXObjectLoadingOptions(
+            loadingOptions = new KIXObjectLoadingOptions(
                 [
                     new FilterCriteria(`${UserProperty.PREFERENCES}.${UserProperty.MY_QUEUES}`,
                         SearchOperator.IN, FilterDataType.STRING,
@@ -220,15 +221,34 @@ export class AgentService extends KIXObjectService<User> {
                     )
                 ]
             );
-            loadingOptions.includes = [KIXObjectType.CONTACT, UserProperty.PREFERENCES];
-
-            const outOfOfficeUsers = await KIXObjectService.loadObjects<User>(
-                KIXObjectType.USER, null,
-                loadingOptions, null, true, true, false
-            ).catch((error) => [] as User[]);
-
-            outOfOfficeUsers.forEach((u) => outOfOfficeUsersIDs.push(u.ObjectId));
+        } else {
+            loadingOptions = new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(`${UserProperty.USER_ID}`,
+                        SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                        FilterType.AND, KIXObjectType.CURRENT_USER
+                    ),
+                    new FilterCriteria(
+                        'IsOutOfOffice',
+                        SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                        FilterType.AND, 1
+                    ),
+                    new FilterCriteria(
+                        'IsAgent',
+                        SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                        FilterType.AND, 1
+                    )
+                ]
+            );
         }
+        loadingOptions.includes = [KIXObjectType.CONTACT, UserProperty.PREFERENCES];
+
+        const outOfOfficeUsers = await KIXObjectService.loadObjects<User>(
+            KIXObjectType.USER, null,
+            loadingOptions, null, true, true, false
+        ).catch((error) => [] as User[]);
+
+        outOfOfficeUsers.forEach((u) => outOfOfficeUsersIDs.push(u.ObjectId));
 
         return outOfOfficeUsersIDs;
     }

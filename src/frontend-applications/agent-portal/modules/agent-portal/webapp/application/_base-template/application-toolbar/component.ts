@@ -12,16 +12,19 @@ import { TranslationService } from '../../../../../translation/webapp/core/Trans
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { WindowListener } from '../../../../../base-components/webapp/core/WindowListener';
 import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Personal Settings', 'Translatable#Switch to customer portal.',
             'Translatable#Help', 'Translatable#Logout'
@@ -52,6 +55,10 @@ class Component {
         WindowListener.getInstance().logout();
     }
 
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

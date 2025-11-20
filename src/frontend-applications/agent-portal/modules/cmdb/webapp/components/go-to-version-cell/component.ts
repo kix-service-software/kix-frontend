@@ -9,16 +9,17 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.cell = input.cell;
         if (this.state.cell) {
             const value = this.state.cell.getValue().objectValue;
@@ -30,12 +31,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         event.stopPropagation();
         event.preventDefault();
 
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.provideScrollInformation(KIXObjectType.CONFIG_ITEM_VERSION, this.state.cell.getValue().objectValue);
-        }
+        this.context?.provideScrollInformation(
+            KIXObjectType.CONFIG_ITEM_VERSION, this.state.cell.getValue().objectValue
+        );
     }
 
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

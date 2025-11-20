@@ -12,12 +12,12 @@ import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOp
 import { FormInputComponent } from '../../core/FormInputComponent';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
-import { ContextService } from '../../core/ContextService';
 import { SearchService } from '../../../../search/webapp/core/SearchService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -26,8 +26,12 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
         const option = this.state.field?.options.find((o) => o.option === FormFieldOptions.OBJECT_TYPE);
-        if (option && option.value) {
+        if (option?.value) {
             const searchDefinition = SearchService.getInstance().getSearchDefinition(option.value);
 
             let ignoreProperties = [];
@@ -42,6 +46,18 @@ class Component extends FormInputComponent<any, ComponentState> {
             this.state.manager.reset();
             this.state.manager.init();
 
+            // prepare addtional parameters for manager
+            const additionalParameters = this.state.field?.options.find(
+                (o) => o.option === FormFieldOptions.ADDITIONAL_MANAGER_PARAMETERS
+            );
+            if (additionalParameters && typeof additionalParameters.value === 'object') {
+                for (const key in additionalParameters.value) {
+                    if (key && typeof additionalParameters.value[key] !== 'undefined') {
+                        this.state.manager[key] = additionalParameters.value[key];
+                    }
+                }
+            }
+
             this.state.manager.registerListener(this.state.field?.instanceId, () => {
                 const filterCriteria = [];
                 const values = this.state.manager.getValues();
@@ -53,17 +69,15 @@ class Component extends FormInputComponent<any, ComponentState> {
                 super.provideValue(filterCriteria, true);
             });
         }
-
-        await super.onMount();
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
+        super.onDestroy();
         this.state.manager?.unregisterListener(this.state.field?.instanceId);
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<FilterCriteria[]>(this.state.field?.instanceId);
         if (this.state.manager && value && Array.isArray(value.value)) {
             for (const criteria of value.value) {

@@ -20,6 +20,7 @@ export class DynamicFieldCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Field';
         this.icon = 'kix-icon-new-gear';
     }

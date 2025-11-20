@@ -19,11 +19,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private bookmarks: Bookmark[] = [];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.bookmarks = [];
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Favorites'
@@ -36,6 +38,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         await this.bookmarksChanged();
 
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async bookmarksChanged(): Promise<void> {
@@ -81,6 +87,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public getBookmarks(group: string): Bookmark[] {
         return this.bookmarks.filter((b) => b.group === group);
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

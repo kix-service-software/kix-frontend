@@ -7,11 +7,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.label-list>
+<div class="label-list">
     <for|label| of=state.labels>
         <label-item
             label=label
             removeLabels=state.removeLabels
+            nonWrappedLabel=input.nonWrappedLabel
             on-removeLabel("removeLabel", label)
             on-labelClicked("labelClicked", label)/>
     </for>

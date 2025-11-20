@@ -20,8 +20,9 @@ import { FilterType } from '../../../../../model/FilterType';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { TableHeaderHeight } from '../../../../table/model/TableHeaderHeight';
 import { TableRowHeight } from '../../../../table/model/TableRowHeight';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
     public constructor(
         public instanceId: string = 'admin-assets-import-export-templates-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
@@ -46,6 +47,8 @@ export class ComponentState {
                 )
             ), false, false, 'kix-icon-gears'
         )
-    ) { }
+    ) {
+        super();
+    }
 
 }

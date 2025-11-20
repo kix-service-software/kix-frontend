@@ -14,6 +14,8 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { HomeContext } from './HomeContext';
+import { PersonalSettingsService } from '../../../user/model/PersonalSettingsService';
+import { HomeInitialSiteURLNodesService } from './HomeInitialSiteURLNodesService';
 
 export class UIModule implements IUIModule {
 
@@ -27,6 +29,11 @@ export class UIModule implements IUIModule {
             false, 'home', ['home'], HomeContext
         );
         ContextService.getInstance().registerContext(homeContext);
+
+        PersonalSettingsService.getInstance().registerInitialURLSiteExtendedService(
+            new HomeInitialSiteURLNodesService()
+        );
+
     }
 
     public async registerExtensions(): Promise<void> {

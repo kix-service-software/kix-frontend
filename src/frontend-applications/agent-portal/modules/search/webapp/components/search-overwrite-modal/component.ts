@@ -14,16 +14,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private callback: (result: boolean) => void;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.searchName = input.searchName;
         this.callback = input.askCallback;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         return;
     }
 
@@ -35,6 +38,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.callback(true);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

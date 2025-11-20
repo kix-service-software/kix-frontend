@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { UserLabelProvider } from '../../core/UserLabelProvider';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { User } from '../../../model/User';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -21,19 +20,21 @@ import { Notification } from '../../../../notification/model/Notification';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.labelProvider = new UserLabelProvider();
-        const context = ContextService.getInstance().getActiveContext();
 
-        context.registerListener('user-personal-settings-widget', {
+        this.context?.registerListener('user-personal-settings-widget', {
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
@@ -46,11 +47,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             additionalInformationChanged: (): void => { return; }
         });
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        await this.initWidget(await context.getObject<User>());
+        await this.initWidget(await this.context?.getObject<User>());
     }
 
     private async initWidget(user: User): Promise<void> {
@@ -63,7 +62,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(user: User): Promise<void> {
         if (this.state.widgetConfiguration && user) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [user]
+                this.state.widgetConfiguration.actions, [user], this.contextInstanceId
             );
         }
     }
@@ -101,6 +100,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

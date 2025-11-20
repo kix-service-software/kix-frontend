@@ -30,7 +30,6 @@ import { FormFactory } from './FormFactory';
 import { KIXObjectFormService } from './KIXObjectFormService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
-import { ContextService } from './ContextService';
 import { Context } from '../../../../model/Context';
 
 export class FormInstance {
@@ -64,7 +63,10 @@ export class FormInstance {
                 this.form.pages.push(page);
             }
 
-            EventService.getInstance().publish(FormEvent.FORM_PAGE_ADDED, { formInstance: this, page });
+            EventService.getInstance().publish(
+                FormEvent.FORM_PAGE_ADDED,
+                { context: this.context, formInstance: this, page }
+            );
         }
     }
 
@@ -95,7 +97,10 @@ export class FormInstance {
                     }
                 }
 
-                EventService.getInstance().publish(FormEvent.FORM_PAGES_REMOVED, { formInstance: this, pageIds });
+                EventService.getInstance().publish(
+                    FormEvent.FORM_PAGES_REMOVED,
+                    { context: this.context, formInstance: this, pageIds }
+                );
             }
         }
     }
@@ -243,7 +248,10 @@ export class FormInstance {
                         await service.updateFields(fields, this);
                     }
 
-                    EventService.getInstance().publish(FormEvent.FIELD_REMOVED, { formInstance: this, formField });
+                    EventService.getInstance().publish(
+                        FormEvent.FIELD_REMOVED,
+                        { context: this.context, formInstance: this, formField }
+                    );
                 }
             }
         }
@@ -340,7 +348,8 @@ export class FormInstance {
                 );
 
                 EventService.getInstance().publish(
-                    FormEvent.FIELD_CHILDREN_ADDED, { formInstance: this, parent, field: newField }
+                    FormEvent.FIELD_CHILDREN_ADDED,
+                    { context: this.context, formInstance: this, parent, field: newField }
                 );
                 return newField;
             }
@@ -363,7 +372,8 @@ export class FormInstance {
                 this.setDefaultValueAndParent(newFormFields, afterField.parent);
 
                 EventService.getInstance().publish(
-                    FormEvent.FIELD_CHILDREN_ADDED, { formInstance: this, parent: afterField.parent }
+                    FormEvent.FIELD_CHILDREN_ADDED,
+                    { context: this.context, formInstance: this, parent: afterField.parent }
                 );
             }
         }
@@ -391,7 +401,10 @@ export class FormInstance {
             }
             this.setDefaultValueAndParent(children, parent);
 
-            EventService.getInstance().publish(FormEvent.FIELD_CHILDREN_ADDED, { formInstance: this, parent });
+            EventService.getInstance().publish(
+                FormEvent.FIELD_CHILDREN_ADDED,
+                { context: this.context, formInstance: this, parent }
+            );
         }
     }
 
@@ -446,14 +459,13 @@ export class FormInstance {
         }
 
         if (!silent) {
-            const dialogContext = ContextService.getInstance().getActiveContext();
-
-            if (dialogContext) {
-                await dialogContext.setFormObject();
+            if (this.context) {
+                await this.context.setFormObject();
             }
 
             EventService.getInstance().publish(
-                FormEvent.VALUES_CHANGED, new FormValuesChangedEventData(this, changedFieldValues, originInstanceId)
+                FormEvent.VALUES_CHANGED,
+                new FormValuesChangedEventData(this.context, this, changedFieldValues, originInstanceId)
             );
 
             const valueHandler = FormService.getInstance().getFormFieldValueHandler(this.form.objectType);
@@ -667,10 +679,9 @@ export class FormInstance {
             });
             result = fieldResult;
 
-            const context = ContextService.getInstance().getActiveContext();
-            if (context) {
+            if (this.context) {
                 const key = 'DynamicFormValidationResults-' + field.instanceId;
-                const dynamicFormResults = context.getAdditionalInformation(key) || [];
+                const dynamicFormResults = this.context.getAdditionalInformation(key) || [];
                 dynamicFormResults.forEach((r) => {
                     if (r.severity === ValidationSeverity.ERROR) {
                         formFieldValue.valid = false;
@@ -731,7 +742,10 @@ export class FormInstance {
                             await service.updateFields(fields, this);
                         }
 
-                        EventService.getInstance().publish(FormEvent.FORM_FIELD_ORDER_CHANGED, { formInstance: this });
+                        EventService.getInstance().publish(
+                            FormEvent.FORM_FIELD_ORDER_CHANGED,
+                            { context: this.context, formInstance: this }
+                        );
                     }
                 }
             }

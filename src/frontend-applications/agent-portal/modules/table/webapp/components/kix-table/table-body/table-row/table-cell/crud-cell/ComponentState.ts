@@ -7,13 +7,17 @@
  * --
  */
 
-export class ComponentState {
+import { AbstractComponentState } from '../../../../../../../../base-components/webapp/core/AbstractComponentState';
+
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public optionText: string = null,
         public tooltip: string = null,
         public active: boolean = false,
         public deny: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

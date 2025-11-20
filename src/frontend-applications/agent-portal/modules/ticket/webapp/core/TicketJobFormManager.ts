@@ -69,15 +69,17 @@ class TicketJobFilterFormManager extends TicketSearchFormManager {
     // do not mark viewable states as required
     public handleViewableStateType: boolean = false;
 
-    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, objectIds?: Array<string | number>, operator?: string
+    ): Promise<TreeNode[]> {
         let nodes = [];
         switch (property) {
             case TicketProperty.QUEUE_ID:
-                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false);
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
                 nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, true, true);
                 break;
             default:
-                nodes = await super.getTreeNodes(property, objectIds);
+                nodes = await super.getTreeNodes(property, objectIds, operator);
         }
         return nodes;
     }

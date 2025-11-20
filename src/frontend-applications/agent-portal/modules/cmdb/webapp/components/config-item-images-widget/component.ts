@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { DisplayImageDescription } from '../../../../../modules/base-components/webapp/core/DisplayImageDescription';
 import { IdService } from '../../../../../model/IdService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ConfigItem } from '../../../model/ConfigItem';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -22,37 +21,36 @@ import { Context } from '../../../../../model/Context';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ImageViewerEvent } from '../../../../agent-portal/model/ImageViewerEvent';
 import { ImageViewerEventData } from '../../../../agent-portal/model/ImageViewerEventData';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private contextListenerId: string;
     private images: DisplayImageDescription[];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.contextListenerId = IdService.generateDateBasedId('config-item-images-widget');
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Large View'
         ]);
 
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             objectChanged: (id: string | number, object: ConfigItem, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONFIG_ITEM) {
-                    this.initWidget(context, object);
+                    this.initWidget(this.context, object);
                 }
             },
             sidebarRightToggled: (): void => { return; },
@@ -63,7 +61,7 @@ class Component {
             additionalInformationChanged: (): void => { return; }
         });
 
-        await this.initWidget(context, await context.getObject<ConfigItem>());
+        await this.initWidget(this.context, await this.context?.getObject<ConfigItem>());
     }
 
     private async initWidget(context: Context, configItem?: ConfigItem): Promise<void> {
@@ -82,7 +80,7 @@ class Component {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.configItem) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.configItem]
+                this.state.widgetConfiguration.actions, [this.state.configItem], this.contextInstanceId
             );
         }
     }
@@ -108,6 +106,10 @@ class Component {
             ImageViewerEvent.OPEN_VIEWER,
             new ImageViewerEventData(this.images, imageId)
         );
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

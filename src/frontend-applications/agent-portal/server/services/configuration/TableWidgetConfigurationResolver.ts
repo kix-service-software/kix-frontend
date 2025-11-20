@@ -12,6 +12,7 @@ import { TableConfigurationResolver } from './TableConfigurationResolver';
 import { IConfigurationResolver } from './IConfigurationResolver';
 import { TableWidgetConfiguration } from '../../../model/configuration/TableWidgetConfiguration';
 import { SysConfigOption } from '../../../modules/sysconfig/model/SysConfigOption';
+import { TableConfiguration } from '../../../model/configuration/TableConfiguration';
 
 export class TableWidgetConfigurationResolver implements IConfigurationResolver<TableWidgetConfiguration> {
 
@@ -40,8 +41,10 @@ export class TableWidgetConfigurationResolver implements IConfigurationResolver<
                 configuration.configuration = tableConfig;
                 await TableConfigurationResolver.getInstance().resolve(token, tableConfig, sysConfigOptions);
             }
-        } else if (!configuration.configuration && (configuration as any)?.tableConfiguration) {
-            configuration.configuration = (configuration as any).tableConfiguration;
+        } else if (configuration.configuration) {
+            await TableConfigurationResolver.getInstance().resolve(
+                token, configuration.configuration as TableConfiguration, sysConfigOptions
+            );
         }
     }
 

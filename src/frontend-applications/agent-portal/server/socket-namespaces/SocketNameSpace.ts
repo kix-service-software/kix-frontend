@@ -77,9 +77,10 @@ export abstract class SocketNameSpace implements ISocketNamespace {
                 }
             }
 
+            const requestId = `${data.clientRequestId}#${data.requestId}`;
             const message = event + '\t' + this.getNamespace() + '\t' + JSON.stringify(logData);
             const profileTaskId = ProfilingService.getInstance().start(
-                'SocketIO', message, { data: [data], requestId: data.clientRequestId }, false
+                'SocketIO', message, { data: [data], requestId }, false
             );
             RequestCounter.getInstance().countSocketRequestCounter();
             ProfilingService.getInstance().logStart(profileTaskId);

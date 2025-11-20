@@ -12,22 +12,18 @@ import { Attachment } from '../../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IContextListener } from '../../../../../base-components/webapp/core/IContextListener';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { Article } from '../../../../model/Article';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
+import { TicketEvent } from '../../../../model/TicketEvent';
 import { TicketDetailsContext, TicketService } from '../../../core';
 import { ComponentState } from './ComponentState';
 
-export class Component extends AbstractMarkoComponent<ComponentState> {
+export class Component extends AbstractMarkoComponent<ComponentState, TicketDetailsContext> {
 
-    private context: TicketDetailsContext;
-    private eventSubscriber: IEventSubscriber;
     private contextListener: IContextListener;
     private contextListenerId: string;
     private articleId: number;
@@ -39,11 +35,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private observer: IntersectionObserver;
     private resizeObserver: ResizeObserver;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'ticket-communication-widget/message-content');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.update(input);
         this.articleIndex = input.articleIndex;
     }
@@ -55,11 +53,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext<TicketDetailsContext>();
+        await super.onMount();
 
         this.state.expanded = this.getArticleToggleState();
         this.state.show = this.state.expanded;
         this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
+
         await this.prepareObserver();
         await this.toggleArticleContent(false);
 
@@ -69,7 +68,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.state.switchAttachmentListTooltip = await TranslationService.translate('Translatable#Switch attachment list layout');
-
         this.registerContextListener();
     }
 
@@ -91,11 +89,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             },
             additionalInformationChanged: (): void => { return; }
         };
-        this.context.registerListener(this.contextListenerId, this.contextListener);
+        this.context?.registerListener(this.contextListenerId, this.contextListener);
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe('TOGGLE_ARTICLE', this.eventSubscriber);
+        super.onDestroy();
 
         if (this.elementInterval) {
             clearInterval(this.elementInterval);
@@ -115,7 +113,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareObserver(): Promise<void> {
-
         if (window.ResizeObserver) {
             this.resizeObserver = new ResizeObserver((entries) => {
                 this.resizeHandling();
@@ -167,15 +164,22 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 }
 
                 this.state.unseen = this.state.article?.Unseen;
+                if (this.state.unseen) {
+                    this.context.registerUnseenArticle(this.state.article.ArticleID);
+                }
                 await this.prepareArticleData();
 
                 if (this.state.expanded) {
                     this.loadDetailedArticle();
+                } else {
+                    await this.prepareActions();
                 }
 
                 this.observer?.disconnect();
                 this.state.show = true;
             });
+        } else if (this.state.article) {
+            await this.prepareActions();
         }
 
         this.resizeHandling();
@@ -237,18 +241,22 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.smimeSigned = this.state.article[property];
         }
 
-        this.eventSubscriber = {
-            eventSubscriberId: 'message-content-' + this.articleId,
-            eventPublished: (data: any, eventId: string): void => {
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
                 if (eventId === 'TOGGLE_ARTICLE' && data.articleId === this.articleId) {
                     this.state.expanded = data.expanded;
                     this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
                     this.toggleArticleContent();
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe('TOGGLE_ARTICLE', this.eventSubscriber);
+                if (eventId === TicketEvent.MARK_TICKET_AS_SEEN && this.state.article.TicketID === data) {
+                    this.state.unseen = 0;
+                }
+            },
+            [
+                'TOGGLE_ARTICLE',
+                TicketEvent.MARK_TICKET_AS_SEEN
+            ]
+        );
     }
 
     private filterAttachments(): void {
@@ -284,7 +292,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             this.loadDetailedArticle(true);
 
-            this.context.setAdditionalInformation('CURRENT_ARTICLE_FOCUS', this.articleId);
+            if (setFocus) {
+                this.context.setAdditionalInformation('CURRENT_ARTICLE_FOCUS', this.articleId);
+            }
         }
 
         this.saveArticleToggleState();
@@ -315,7 +325,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.loadingContent = false;
         this.state.showContent = true;
 
-        this.state.actions = await this.context?.articleLoader?.prepareArticleActions(this.detailedArticle);
+        await this.prepareActions(this.detailedArticle);
+    }
+
+    private async prepareActions(article: Article = this.state.article): Promise<void> {
+        this.state.actions = await this.context?.articleLoader?.prepareArticleActions(
+            article, this.context?.instanceId
+        );
     }
 
     private saveArticleToggleState(): void {
@@ -377,13 +393,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             await TicketService.getInstance().setArticleSeenFlag(
                 this.state.article.TicketID, this.state.article.ArticleID
             );
+            const numberOfUnseenArticles = this.context.unregisterUnseenArticle(this.state.article.ArticleID);
+            if (numberOfUnseenArticles === 0) {
+                await TicketService.getInstance().markTicketAsSeen(this.state.article.TicketID);
+            }
             this.context.reloadObjectList(KIXObjectType.ARTICLE, true);
         }
     }
 
     private resizeHandling(): void {
         if (this.elementInterval) {
-            clearTimeout(this.elementInterval);
+            clearInterval(this.elementInterval);
         }
         this.elementInterval = setInterval(() => {
             const element = (this as any).getEl('message-body');
@@ -399,7 +419,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         || 0
                     ) * 2;
 
-                    element.style.width = `${mainWidth - leftWidth - rightWidth - padding}px`;
+                    const width = `${mainWidth - leftWidth - rightWidth - padding}px`;
+                    element.style.width = width;
+
+                    const dfElement = (this as any).getEl('article-df-container');
+                    if (dfElement) {
+                        dfElement.style.width = width;
+                    }
+
                     clearInterval(this.elementInterval);
                 }
             }

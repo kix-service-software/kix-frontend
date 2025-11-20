@@ -9,69 +9,65 @@
 
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { AdministrationSocketClient } from '../../core/AdministrationSocketClient';
 import { AdminContext } from '../../core/AdminContext';
 import { AdminModule } from '../../../model/AdminModule';
 import { TreeNode, TreeUtil } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
+import { Context } from '../../../../../model/Context';
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'admin-modules-explorer');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.contextType = input.contextType;
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext() as AdminContext;
-        if (context instanceof AdminContext) {
-            this.state.filterValue = context.getAdditionalInformation('EXPLORER_FILTER_ADMIN');
-            if (this.state.filterValue) {
-                const filter = (this as any).getComponent('admin-modules-explorer-filter');
-                if (filter) {
-                    filter.textFilterValueChanged(null, this.state.filterValue);
-                }
+        await super.onMount();
+
+        this.state.filterValue = this.context?.getAdditionalInformation('EXPLORER_FILTER_ADMIN');
+        if (this.state.filterValue) {
+            const filter = (this as any).getComponent('admin-modules-explorer-filter');
+            if (filter) {
+                filter.textFilterValueChanged(null, this.state.filterValue);
             }
-            this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
-
-            const categories = await AdministrationSocketClient.getInstance().loadAdminCategories();
-
-            if (categories) {
-                await this.prepareAdminTreeNodes(categories);
-                this.state.nodes = TreeUtil.sortNodes(this.state.nodes);
-            }
-
-            this.state.prepared = true;
-
-            setTimeout(() => {
-                this.state.activeNode = this.getActiveNode(context?.adminModuleId);
-            }, 500);
-
-            this.subscriber = {
-                eventSubscriberId: IdService.generateDateBasedId(),
-                eventPublished: (data: any, eventId: string): void => {
-                    this.state.activeNode = this.getActiveNode(context?.adminModuleId);
-                }
-            };
-
-            EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
         }
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
+
+        const categories = await AdministrationSocketClient.getInstance().loadAdminCategories();
+
+        if (categories) {
+            await this.prepareAdminTreeNodes(categories);
+            this.state.nodes = TreeUtil.sortNodes(this.state.nodes);
+        }
+
+        this.state.prepared = true;
+
+        setTimeout(() => {
+            this.state.activeNode = this.getActiveNode(this.context?.adminModuleId);
+        }, 500);
+
+        super.registerEventSubscriber(
+            function (data: Context, eventId: string): void {
+                if (data?.instanceId === this.contextInstanceId) {
+                    this.state.activeNode = this.getActiveNode(this.context?.adminModuleId);
+                }
+            },
+            [ContextEvents.CONTEXT_PARAMETER_CHANGED]
+        );
+
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
+        super.onDestroy();
     }
 
     private getActiveNode(adminModuleId: string, nodes: TreeNode[] = this.state.nodes): TreeNode {
@@ -120,20 +116,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async publishToContext(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
-        if (node) {
-            const context = await ContextService.getInstance().getActiveContext();
-            if (context instanceof AdminContext) {
-                context.setAdminModule(node.id);
-            }
-        }
+        this.context.setAdminModule(node?.id);
     }
 
     public async filter(textFilterValue?: string): Promise<void> {
         this.state.filterValue = textFilterValue;
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof AdminContext) {
-            context.setAdditionalInformation('EXPLORER_FILTER_ADMIN', this.state.filterValue);
-        }
+        this.context.setAdditionalInformation('EXPLORER_FILTER_ADMIN', this.state.filterValue);
     }
 
 }

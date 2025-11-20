@@ -11,17 +11,15 @@ import { ComponentState } from './ComponentState';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { LinkObject } from '../../../model/LinkObject';
 import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
-import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { AuthenticationSocketClient } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
-import { LinkUtil, EditLinkedObjectsDialogContext } from '../../core';
+import { LinkUtil } from '../../core';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { LinkType } from '../../../model/LinkType';
@@ -40,10 +38,10 @@ import { TableEventData } from '../../../../table/model/TableEventData';
 import { ValueState } from '../../../../table/model/ValueState';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { IdService } from '../../../../../model/IdService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
     private availableLinkObjects: LinkObject[] = [];
     private newLinkObjects: LinkObject[] = [];
     private deleteLinkObjects: LinkObject[] = [];
@@ -51,9 +49,8 @@ class Component {
     private linkedObjects: KIXObject[] = [];
     private linkDescriptions: CreateLinkDescription[] = [];
 
-    private tableSubscriber: IEventSubscriber;
-
     public onCreate(input: any): void {
+        super.onCreate(input, 'edit-linked-objects-dialog');
         this.state = new ComponentState(input.instanceId);
         this.availableLinkObjects = [];
         this.newLinkObjects = [];
@@ -64,6 +61,8 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         this.state.filterPlaceholder = await TranslationService.translate('Translatable#enter filter value');
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Assign Link', 'Translatable#Delete Link', 'Translatable#Submit'
@@ -75,10 +74,11 @@ class Component {
 
         this.state.allowDelete = this.state.allowCreate;
 
-        const context = ContextService.getInstance().getActiveContext();
         let sourceContext: Context;
 
-        const sourceContextInformation = context?.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
+        const sourceContextInformation = this.context?.getAdditionalInformation(
+            AdditionalContextInformation.SOURCE_CONTEXT
+        );
         if (sourceContextInformation) {
             sourceContext = ContextService.getInstance().getContext(sourceContextInformation?.instanceId);
         }
@@ -105,12 +105,11 @@ class Component {
                 await this.reviseLinkObjects();
                 await this.setInitialLinkDescriptions();
 
-                const editLinksContext = ContextService.getInstance().getActiveContext();
-                editLinksContext.setObjectList(KIXObjectType.LINK_OBJECT, this.availableLinkObjects);
+                this.context?.setObjectList(KIXObjectType.LINK_OBJECT, this.availableLinkObjects);
 
                 await this.prepareTable();
 
-                const previousAddedLinks = context.getAdditionalInformation('CreateLinkDescription') ?? [];
+                const previousAddedLinks = this.context?.getAdditionalInformation('CreateLinkDescription') ?? [];
                 if (previousAddedLinks?.length) {
                     await this.linksAdded(previousAddedLinks);
                 }
@@ -131,19 +130,12 @@ class Component {
         );
     }
 
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this.tableSubscriber);
-    }
-
     public async linksAdded(result: CreateLinkDescription[][]): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const previousAddedLinks = context.getAdditionalInformation('CreateLinkDescription') ?? [];
+        const previousAddedLinks = this.context?.getAdditionalInformation('CreateLinkDescription') ?? [];
         if (previousAddedLinks?.length && this.compareLinksArrays(previousAddedLinks[1], result[1])) {
             result = [result[0], [...previousAddedLinks[1], ...result[1]]];
         }
-        context.setAdditionalInformation('CreateLinkDescription', result);
+        this.context?.setAdditionalInformation('CreateLinkDescription', result);
         this.linkDescriptions = result[0];
         await this.addNewLinks(result[1]);
 
@@ -233,12 +225,11 @@ class Component {
 
         const table = await TableFactoryService.getInstance().createTable(
             `${IdService.generateDateBasedId()}-edit-linked-objects-dialog`, KIXObjectType.LINK_OBJECT,
-            null, null, EditLinkedObjectsDialogContext.CONTEXT_ID, null, null, null, null, true
+            null, null, this.contextInstanceId, null, null, null, null, true
         );
 
-        this.tableSubscriber = {
-            eventSubscriberId: 'edit-link-object-dialog',
-            eventPublished: (data: TableEventData, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: TableEventData, eventId: string): void {
                 if (data && data.tableId === table.getTableId()) {
                     if (eventId === TableEvent.ROW_SELECTION_CHANGED) {
                         this.objectSelectionChanged(table.getSelectedRows().map((r) => r.getRowObject().getObject()));
@@ -251,12 +242,13 @@ class Component {
                         this.state.linkObjectCount = this.state.table.getRows().length;
                     }
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this.tableSubscriber);
+            },
+            [
+                TableEvent.ROW_SELECTION_CHANGED,
+                TableEvent.TABLE_READY,
+                TableEvent.TABLE_FILTERED
+            ]
+        );
 
         table.resetFilter();
         this.state.table = table;
@@ -291,9 +283,8 @@ class Component {
             this.availableLinkObjects = this.filterUniqueLinks([...this.availableLinkObjects, ...newLinkObjects]);
             this.newLinkObjects = this.filterUniqueLinks([...this.newLinkObjects, ...newLinkObjects]);
 
-            const context = ContextService.getInstance().getActiveContext();
-            context.setObjectList(KIXObjectType.LINK_OBJECT, [...this.availableLinkObjects]);
-            context.setObjectList('newLinkObjects', this.newLinkObjects);
+            this.context?.setObjectList(KIXObjectType.LINK_OBJECT, [...this.availableLinkObjects]);
+            this.context?.setObjectList('newLinkObjects', this.newLinkObjects);
 
             this.state.linkObjectCount = this.availableLinkObjects.length;
 
@@ -428,6 +419,14 @@ class Component {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

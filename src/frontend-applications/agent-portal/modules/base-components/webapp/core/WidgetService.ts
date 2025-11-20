@@ -22,10 +22,10 @@ export class WidgetService {
 
     private static INSTANCE: WidgetService;
 
-    private widgetActions: Map<string, [IAction[], boolean]> = new Map();
-    private widgetClasses: Map<string, string[]> = new Map();
-    private widgetTitle: Map<string, string> = new Map();
-    private actionListenerListeners: IActionListener[] = [];
+    private readonly widgetActions: Map<string, [IAction[], boolean]> = new Map();
+    private readonly widgetClasses: Map<string, string[]> = new Map();
+    private readonly widgetTitle: Map<string, string> = new Map();
+    private readonly actionListenerListeners: IActionListener[] = [];
 
     public static getInstance(): WidgetService {
         if (!WidgetService.INSTANCE) {
@@ -34,7 +34,7 @@ export class WidgetService {
         return WidgetService.INSTANCE;
     }
 
-    private widgetTypes: Map<string, WidgetType> = new Map();
+    private readonly widgetTypes: Map<string, WidgetType> = new Map();
 
     public setWidgetTitle(instanceId: string, title: string, icon?: ObjectIcon | string): void {
         this.widgetTitle.set(instanceId, title);
@@ -69,6 +69,10 @@ export class WidgetService {
             widgetType = this.widgetTypes.get(instanceId);
         }
 
+        if (!widgetType && !Object.is(this, WidgetService.INSTANCE)) {
+            return WidgetService.INSTANCE.getWidgetType(instanceId, context);
+        }
+
         return widgetType || WidgetType.CONTENT;
     }
 
@@ -93,13 +97,20 @@ export class WidgetService {
     }
 
     public registerActionListener(listener: IActionListener): void {
-        const existingListenerIndex = this.actionListenerListeners.findIndex(
+        const exists = this.actionListenerListeners.some(
             (l) => l.listenerInstanceId === listener.listenerInstanceId
         );
-        if (existingListenerIndex !== -1) {
-            this.actionListenerListeners.splice(existingListenerIndex, 1, listener);
-        } else {
+        if (!exists) {
             this.actionListenerListeners.push(listener);
+        }
+    }
+
+    public unregisterActionListener(listenerId: string): void {
+        const existingListenerIndex = this.actionListenerListeners.findIndex(
+            (l) => l.listenerInstanceId === listenerId
+        );
+        if (existingListenerIndex !== -1) {
+            this.actionListenerListeners.splice(existingListenerIndex, 1);
         }
     }
 

@@ -9,11 +9,11 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -26,9 +26,12 @@ class Component extends FormInputComponent<any, ComponentState> {
         await super.onMount();
     }
 
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
+    }
+
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<boolean>(this.state.field?.instanceId);
         if (value) {
             this.state.checked = Boolean(value.value);
@@ -38,6 +41,10 @@ class Component extends FormInputComponent<any, ComponentState> {
     public checkboxClicked(): void {
         this.state.checked = !this.state.checked;
         super.provideValue(this.state.checked);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

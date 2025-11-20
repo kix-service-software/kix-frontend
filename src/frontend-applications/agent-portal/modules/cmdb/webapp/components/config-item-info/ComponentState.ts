@@ -7,16 +7,19 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { ConfigItem } from '../../../model/ConfigItem';
 
 import { ConfigItemLabelProvider } from '../../core';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public configItem: ConfigItem = null,
         public loading: boolean = true,
         public labelProvider: ConfigItemLabelProvider = new ConfigItemLabelProvider()
-    ) { }
+    ) {
+        super();
+    }
 
 }

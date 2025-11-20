@@ -30,11 +30,19 @@ import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { QueueLabelProvider } from './QueueLabelProvider';
-import { ObjectLoader } from '../../../base-components/webapp/core/ObjectLoader';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET;
+
+    public constructor() {
+        super();
+        this.objectLoader.setLoadingoptions(KIXObjectType.USER,
+            new KIXObjectLoadingOptions(
+                null, null, 1, [UserProperty.CONTACT, UserProperty.PREFERENCES]
+            )
+        );
+    }
 
     public isLabelProviderFor(object: Ticket | KIXObject): boolean {
         return object instanceof Ticket || object?.KIXObjectType === this.kixObjectType;
@@ -83,7 +91,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.QUEUE_FULLNAME:
-                const queue = await ObjectLoader.getInstance().queue(
+                const queue = await this.objectLoader.queue(
                     KIXObjectType.QUEUE, value
                 ).catch(() => null);
                 if (queue) {
@@ -116,7 +124,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.ORGANISATION_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    const organisation = await ObjectLoader.getInstance().queue(
+                    const organisation = await this.objectLoader.queue(
                         KIXObjectType.ORGANISATION, value
                     ).catch(() => null);
                     if (organisation) {
@@ -126,7 +134,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.CONTACT_ID:
                 if (value !== null && !isNaN(Number(value))) {
-                    const contact = await ObjectLoader.getInstance().queue(
+                    const contact = await this.objectLoader.queue(
                         KIXObjectType.CONTACT, value
                     ).catch(() => null);
                     if (contact) {
@@ -334,14 +342,41 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.OWNER_OOO:
                 displayValue = 'Translatable#Owner Out Of Office';
                 break;
+            case TicketProperty.OWNER_OOO_SUBSTITUTE:
+                displayValue = 'Translatable#Owner Out Of Office Substitute';
+                break;
             case TicketProperty.RESPONSIBLE_OOO:
                 displayValue = 'Translatable#Responsible Out Of Office';
+                break;
+            case TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE:
+                displayValue = 'Translatable#Responsible Out Of Office Substitute';
+                break;
+            case TicketProperty.TICKET_OOO_SUBSTITUTE:
+                displayValue = 'Translatable#Ticket Out Of Office Substitute';
                 break;
             case TicketProperty.MY_QUEUES:
                 displayValue = 'Translatable#My Teams';
                 break;
             case TicketProperty.ATTACHMENT_COUNT:
                 displayValue = 'Translatable#Number of Attachments';
+                break;
+            case TicketProperty.HISTORIC_MY_QUEUES:
+                displayValue = 'Translatable#My Teams (past)';
+                break;
+            case TicketProperty.HISTORIC_OWNER_ID:
+                displayValue = 'Translatable#Owner (past)';
+                break;
+            case TicketProperty.HISTORIC_PRIORITY_ID:
+                displayValue = 'Translatable#Priority (past)';
+                break;
+            case TicketProperty.HISTORIC_QUEUE_ID:
+                displayValue = 'Translatable#Queue (past)';
+                break;
+            case TicketProperty.HISTORIC_STATE_ID:
+                displayValue = 'Translatable#State (past)';
+                break;
+            case TicketProperty.HISTORIC_TYPE_ID:
+                displayValue = 'Translatable#Type (past)';
                 break;
             default:
                 if (Article.isArticleProperty(property)) {
@@ -392,10 +427,10 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     break;
                 case TicketProperty.STATE_TYPE:
                     if (ticket.StateID) {
-                        const states: TicketState[] = await KIXObjectService.loadObjects<TicketState>(
-                            KIXObjectType.TICKET_STATE, [ticket.StateID], null, null, true
-                        ).catch((error) => []);
-                        displayValue = states && !!states.length ? states[0].TypeName : '';
+                        const state = await this.objectLoader.queue<TicketState>(
+                            KIXObjectType.TICKET_STATE, ticket.StateID
+                        );
+                        displayValue = state?.TypeName;
                     }
                     break;
                 case TicketProperty.CREATED_PRIORITY_ID:
@@ -578,51 +613,17 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.CREATED_USER_ID:
-                if (value) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value],
-                        new KIXObjectLoadingOptions(
-                            null, null, 1, [UserProperty.CONTACT]
-                        ), null, true, true, true
-                    ).catch((error) => [] as User[]);
-                    if (Array.isArray(users) && users.length) {
-                        icons.push(new ObjectIcon(
-                            null, KIXObjectType.CONTACT, users[0].Contact.ID, null, null,
-                            LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER))
-                        );
-                    }
-                }
-                break;
             case TicketProperty.OWNER_ID:
-                if (value) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value],
-                        new KIXObjectLoadingOptions(
-                            null, null, 1, [UserProperty.CONTACT]
-                        ), null, true, true, true
-                    ).catch((error) => [] as User[]);
-                    if (Array.isArray(users) && users.length) {
-                        icons.push(new ObjectIcon(
-                            null, KIXObjectType.CONTACT, users[0].Contact.ID, null, null,
-                            LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER))
-                        );
-                    }
-                }
-                break;
             case TicketProperty.RESPONSIBLE_ID:
                 if (value) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value],
-                        new KIXObjectLoadingOptions(
-                            null, null, 1, [UserProperty.CONTACT]
-                        ), null, true, true, true
-                    ).catch((error) => [] as User[]);
-                    if (Array.isArray(users) && users.length) {
-                        icons.push(new ObjectIcon(
-                            null, KIXObjectType.CONTACT, users[0].Contact.ID, null, null,
-                            LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER))
-                        );
-                    }
+                    const user = await this.objectLoader.queue<User>(
+                        KIXObjectType.USER, value
+                    );
+
+                    icons.push(new ObjectIcon(
+                        null, KIXObjectType.CONTACT, user?.Contact?.ID, null, null,
+                        LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER))
+                    );
                 }
                 break;
             case TicketProperty.CREATED_QUEUE_ID:

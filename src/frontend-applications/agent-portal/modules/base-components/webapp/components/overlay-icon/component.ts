@@ -17,24 +17,25 @@ import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { EventService } from '../../core/EventService';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private listenerId: string;
     private isHintOverlay: boolean;
     private isCustomOverlay: boolean;
     private content: StringContent<any> | ComponentContent<any>;
-    private instanceId: string;
+    private inputInstanceId: string;
     private title: string;
     private large: boolean;
     private icon: string | ObjectIcon;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.isHintOverlay = input.isHint || false;
         this.isCustomOverlay = input.isCustom || false;
         this.large = typeof input.large !== 'undefined' ? input.large : false;
@@ -44,12 +45,13 @@ class Component {
             this.content = new ComponentContent(input.content, input.data);
         }
 
-        this.instanceId = input.instanceId;
+        this.inputInstanceId = input.instanceId;
         this.title = input.title;
         this.icon = input.icon;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
+        await super.onMount();
         this.listenerId = IdService.generateDateBasedId('icon-');
         OverlayService.getInstance().registerOverlayListener(this.listenerId, this);
     }
@@ -69,7 +71,7 @@ class Component {
         if (!this.state.show) {
             OverlayService.getInstance().openOverlay(
                 this.isHintOverlay ? OverlayType.HINT : OverlayType.INFO,
-                this.instanceId,
+                this.inputInstanceId,
                 this.content,
                 this.title,
                 this.icon,

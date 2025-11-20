@@ -38,11 +38,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private previewWindow: any;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.state.isSetup = typeof input.setup === 'undefined' ? false : input.setup;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.configKeys = [
             'Notification::Template'
         ];
@@ -56,6 +58,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.step = input.step;
         this.state.completed = this.step ? this.step.completed : false;
     }
@@ -103,15 +106,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
 
-        const context = ContextService.getInstance().getActiveContext();
-        context?.getFormManager()?.setFormId(this.state.formId);
+        this.context?.getFormManager()?.setFormId(this.state.formId);
 
         setTimeout(() => this.initFormValues(form.id), 100);
     }
 
     private async initFormValues(formId: string, configKeys: string[] = this.configKeys): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         if (formInstance) {
             const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
@@ -129,8 +130,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         if (formInstance) {
             const result = await formInstance.validateForm();
@@ -173,8 +173,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async preview(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (formInstance) {
             const htmlStringValue = await formInstance.getFormFieldValueByProperty<string>('Notification::Template');
             if (htmlStringValue && htmlStringValue.value) {
@@ -193,6 +192,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

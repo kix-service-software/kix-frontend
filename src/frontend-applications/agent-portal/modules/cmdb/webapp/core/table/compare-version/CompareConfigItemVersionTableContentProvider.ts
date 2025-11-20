@@ -11,7 +11,6 @@ import { TableContentProvider } from '../../../../../table/webapp/core/TableCont
 import { Version } from '../../../../model/Version';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { AttributeDefinition } from '../../../../model/AttributeDefinition';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { SortUtil } from '../../../../../../model/SortUtil';
@@ -37,9 +36,8 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
 
     public async loadData(): Promise<Array<RowObject<Version>>> {
         let rowObjects = [];
-        if (this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            const versionList = await context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
+        if (this.table.isContextDependent()) {
+            const versionList = await this.context?.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
             const versions = versionList as Version[];
             if (versions) {
                 rowObjects = await this.buildRowObjects(versions);

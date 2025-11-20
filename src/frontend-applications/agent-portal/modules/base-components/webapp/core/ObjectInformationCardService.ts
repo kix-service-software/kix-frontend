@@ -144,7 +144,9 @@ export class ObjectInformationCardService {
             }
 
             let text = await PlaceholderService.getInstance().replacePlaceholders(value.text, object);
-            text = await TranslationService.translate(text, placeholders);
+            if (!value.text.match(/^<[^>]+>$/)) {
+                text = await TranslationService.translate(text, placeholders);
+            }
             infoValue.preparedText = text;
 
             // if text is given and the prepared text is empty then do not display this info

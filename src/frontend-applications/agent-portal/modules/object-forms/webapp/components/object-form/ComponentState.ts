@@ -18,7 +18,6 @@ export class ComponentState extends AbstractComponentState {
         public error: string = null,
         public pages: FormPageConfiguration[] = [],
         public carouselId: string = 'Carousel-' + IdService.generateDateBasedId(),
-        public configurationMode: boolean = false,
         public contextInstanceId: string = null,
     ) {
         super();

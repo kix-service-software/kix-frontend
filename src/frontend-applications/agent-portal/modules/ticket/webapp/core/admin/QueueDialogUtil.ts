@@ -11,6 +11,7 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { NewQueueDialogContext } from './context/ticket-queue/NewQueueDialogContext';
 import { EditQueueDialogContext } from './context';
 import { Queue } from '../../../model/Queue';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class QueueDialogUtil {
 
@@ -33,7 +34,12 @@ export class QueueDialogUtil {
     }
 
     public static async duplicate(queue: Queue): Promise<void> {
-        ContextService.getInstance().setActiveContext(NewQueueDialogContext.CONTEXT_ID, queue.QueueID);
+        ContextService.getInstance().setActiveContext(
+            NewQueueDialogContext.CONTEXT_ID, queue.QueueID, null,
+            [
+                [AdditionalContextInformation.DUPLICATE, true]
+            ]
+        );
     }
 
 }

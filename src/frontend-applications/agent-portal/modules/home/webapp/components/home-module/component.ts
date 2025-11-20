@@ -8,46 +8,49 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class HomeComponent {
+class HomeComponent extends AbstractMarkoComponent {
 
     public state: ComponentState;
-    private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'home-module');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (): void => {
-                this.prepareWidgets();
-            }
-        };
+        await super.onMount();
+
         this.prepareWidgets();
 
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
+        super.registerEventSubscriber(
+            function (data: any): void {
+                if (data?.contextId === this.context.contextId) {
+                    this.prepareWidgets();
+                }
+            },
+            [ContextEvents.CONTEXT_USER_WIDGETS_CHANGED]
+        );
     }
 
     private async prepareWidgets(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
         this.state.prepared = false;
         setTimeout(async () => {
-            this.state.contentWidgets = await context.getContent();
+            this.state.contentWidgets = await this.context?.getContent() || [];
             this.state.prepared = true;
         }, 100);
     }
 
+
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
+        super.onDestroy();
     }
 
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = HomeComponent;

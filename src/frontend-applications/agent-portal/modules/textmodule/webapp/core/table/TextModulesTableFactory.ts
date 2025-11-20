@@ -28,15 +28,15 @@ export class TextModulesTableFactory extends TableFactory {
 
     public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
+        contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short
         );
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
-        table.setContentProvider(new TextModulesTableContentProvider(table, objectIds, null, contextId));
+        table.setContentProvider(new TextModulesTableContentProvider(table, objectIds, null, contextInstanceId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;

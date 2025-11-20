@@ -43,29 +43,35 @@ export abstract class SearchContext extends Context {
     }
 
     public async initContext(urlParams: URLSearchParams): Promise<void> {
+        await super.initContext(urlParams);
+
         if (urlParams) {
             if (urlParams.has('search')) {
                 try {
                     const cache = JSON.parse(decodeURIComponent(urlParams.get('search')));
-                    this.searchCache = SearchCache.create(cache);
-                    this.setSearchCache(this.searchCache);
-                    await SearchService.getInstance().executeSearchCache(null, null, this.searchCache, this);
+                    const searchCache = SearchCache.create(cache);
+                    await SearchService.getInstance().executeSearchCache(null, null, searchCache, this,
+                        false, undefined, undefined, undefined, undefined, undefined,
+                        true, 1 // set cache and result, but do it instantly
+                    );
                 } catch (error) {
                     console.error(error);
-                    this.searchCache = new SearchCache(
-                        IdService.generateDateBasedId(), this.descriptor.contextId, this.descriptor.kixObjectTypes[0],
-                        [], [], null
+                    this.setSearchCache(
+                        new SearchCache(
+                            IdService.generateDateBasedId(), this.descriptor.contextId,
+                            this.descriptor.kixObjectTypes[0], [], [], null
+                        )
                     );
                 }
             }
         } else {
-            const defaultSearch = await SearchSocketClient.getInstance().loadDefaultUserSearch(
+            const searchCache = await SearchSocketClient.getInstance().loadDefaultUserSearch(
                 this.descriptor.kixObjectTypes[0]
+            ) || new SearchCache(
+                IdService.generateDateBasedId(), this.descriptor.contextId,
+                this.descriptor.kixObjectTypes[0], [], [], null
             );
-            this.searchCache = defaultSearch || new SearchCache(
-                IdService.generateDateBasedId(), this.descriptor.contextId, this.descriptor.kixObjectTypes[0],
-                [], [], null
-            );
+            this.setSearchCache(searchCache);
         }
     }
 
@@ -90,17 +96,19 @@ export abstract class SearchContext extends Context {
         super.destroy();
         // remove all table-states if no other instance of this context is open, to "reset" sort
         if (!ContextService.getInstance().hasContextInstance(this.contextId)) {
-            TableFactoryService.getInstance().deleteContextTables(this.contextId, undefined, false);
+            TableFactoryService.getInstance().deleteContextTables(this.instanceId, undefined, false);
         }
 
         return;
     }
 
     public setSearchCache(cache: SearchCache): void {
-        this.searchCache = cache;
-        this.searchCache.criteria = JSON.parse(JSON.stringify(this.searchCache.criteria));
-        EventService.getInstance().publish(SearchEvent.SEARCH_CACHE_CHANGED, this);
-        ContextService.getInstance().setDocumentHistory(true, this, this, null);
+        if (!this.searchCache || this.searchCache.id !== cache.id) {
+            this.searchCache = cache;
+            this.searchCache.criteria = JSON.parse(JSON.stringify(this.searchCache.criteria));
+            EventService.getInstance().publish(SearchEvent.SEARCH_CACHE_CHANGED, this);
+            ContextService.getInstance().setDocumentHistory(true, this, this, null);
+        }
     }
 
     public getIcon(): string | ObjectIcon {

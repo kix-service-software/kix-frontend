@@ -21,22 +21,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private contextListenerId: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         this.contextListenerId = IdService.generateDateBasedId('notification-info-widget-');
-        context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
@@ -48,12 +48,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             additionalInformationChanged: (): void => { return; }
         });
 
-        this.initWidget(await context.getObject<Notification>(KIXObjectType.NOTIFICATION));
+        this.initWidget(await this.context?.getObject<Notification>(KIXObjectType.NOTIFICATION));
     }
 
     public onDestroy(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        context.unregisterListener(this.contextListenerId);
+        this.context?.unregisterListener(this.contextListenerId);
     }
 
     private initWidget(notification: Notification): void {
@@ -74,7 +73,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.notification) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.notification]
+                this.state.widgetConfiguration.actions, [this.state.notification], this.contextInstanceId
             );
         }
     }

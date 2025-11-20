@@ -15,11 +15,7 @@ import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../../model/ContextType';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { IdService } from '../../../../../model/IdService';
@@ -29,9 +25,9 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
 
     private listenerId: string;
     private formTimeout: any;
-    private formSubscriber: IEventSubscriber;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'notification-input-filter');
         this.state = new ComponentState();
     }
 
@@ -40,28 +36,23 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         this.listenerId = IdService.generateDateBasedId('notification-input-filter-manager-listener');
         await this.setManager();
-        await super.onMount();
 
-        this.formSubscriber = {
-            eventSubscriberId: 'NotificationInputFilter',
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
-                await this.handleArticleProperties();
-            }
-        };
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        super.registerEventSubscriber(this.handleArticleProperties, [FormEvent.VALUES_CHANGED]);
 
         // do it now (check after tab change)
         this.handleArticleProperties();
-
-        this.state.prepared = true;
     }
 
     private async handleArticleProperties(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context && context.descriptor.contextType === ContextType.DIALOG) {
-            const selectedEvents = context.getAdditionalInformation(NotificationProperty.DATA_EVENTS);
+        if (this.context.descriptor.contextType === ContextType.DIALOG) {
+            const selectedEvents = this.context.getAdditionalInformation(NotificationProperty.DATA_EVENTS);
             const hasArticleEvent = selectedEvents
                 ? await NotificationService.getInstance().hasArticleEvent(selectedEvents)
                 : false;
@@ -150,19 +141,18 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
         }
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
+        super.onDestroy();
         if (this.state.manager) {
             this.state.manager.unregisterListener(this.listenerId);
             this.state.manager.reset(false);
         }
-        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<any>(this.state.field?.instanceId);
-        if (value && value.value) {
+        if (value?.value) {
 
             // value is frontend filter criteria (set in dialog)
             if (Array.isArray(value.value)) {
@@ -172,7 +162,7 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
             } else if (typeof value.value === 'object') {
                 // value is a backend filter criteria (with AND and OR - inital value)
                 for (const filter in value.value) {
-                    if (value.value[filter] && value.value[filter]) {
+                    if (value.value[filter]) {
                         for (const criteria of value.value[filter]) {
                             await this.setCriteria(criteria, true);
                         }

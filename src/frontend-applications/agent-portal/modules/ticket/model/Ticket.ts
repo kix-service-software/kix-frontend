@@ -412,8 +412,8 @@ export class Ticket extends KIXObject {
         },
         {
             Property: TicketProperty.ORGANISATION_ID,
-            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
-            APIOperations: Ticket.STRING_OPERATORS_EXTENDED,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN, SearchOperator.EMPTY],
+            APIOperations: [...Ticket.STRING_OPERATORS_EXTENDED, SearchOperator.EMPTY],
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.OBJECT_REFERENCE
         },
@@ -474,7 +474,7 @@ export class Ticket extends KIXObject {
         },
         {
             Property: TicketProperty.STATE_TYPE_ID,
-            Operations: [SearchOperator.IN],
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.DROPDOWN
         },
@@ -546,8 +546,71 @@ export class Ticket extends KIXObject {
             InputType: InputFieldTypes.DROPDOWN
         },
         {
+            Property: TicketProperty.OWNER_OOO_SUBSTITUTE,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN, SearchOperator.EMPTY],
+            APIOperations: [...Ticket.NUMBER_OPERATORS_EXTENDED, SearchOperator.EMPTY],
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.OBJECT_REFERENCE
+        },
+        {
             Property: TicketProperty.RESPONSIBLE_OOO,
             Operations: [SearchOperator.EQUALS],
+            APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.DROPDOWN
+        },
+        {
+            Property: TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN, SearchOperator.EMPTY],
+            APIOperations: [...Ticket.NUMBER_OPERATORS_EXTENDED, SearchOperator.EMPTY],
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.OBJECT_REFERENCE
+        },
+        {
+            Property: TicketProperty.TICKET_OOO_SUBSTITUTE,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN, SearchOperator.EMPTY],
+            APIOperations: [...Ticket.NUMBER_OPERATORS_EXTENDED, SearchOperator.EMPTY],
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.OBJECT_REFERENCE
+        },
+        {
+            Property: TicketProperty.HISTORIC_MY_QUEUES,
+            Operations: [SearchOperator.EQUALS],
+            APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.DROPDOWN
+        },
+        {
+            Property: TicketProperty.HISTORIC_OWNER_ID,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
+            APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.DROPDOWN
+        },
+        {
+            Property: TicketProperty.HISTORIC_PRIORITY_ID,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
+            APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.DROPDOWN
+        },
+        {
+            Property: TicketProperty.HISTORIC_QUEUE_ID,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
+            APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.DROPDOWN
+        },
+        {
+            Property: TicketProperty.HISTORIC_STATE_ID,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
+            APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.DROPDOWN
+        },
+        {
+            Property: TicketProperty.HISTORIC_TYPE_ID,
+            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
             APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.DROPDOWN

@@ -8,59 +8,54 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
-import { Context } from '../../../../../../model/Context';
-import { ContextType } from '../../../../../../model/ContextType';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { MobileShowEvent } from '../../../../model/MobileShowEvent';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
+import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
 import { MobileShowEventData } from '../../../../model/MobileShowEventData';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
-    public eventSubscriber: IEventSubscriber;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'mobile-shields');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
         this.resizeHandling();
 
-        ContextService.getInstance().registerListener({
-            constexServiceListenerId: 'mobile-shields',
-            contextChanged: (contextId: string, context: Context, type: ContextType): void => {
-                this.closeMobile();
-            },
-            contextRegistered: () => { return; },
-            beforeDestroy: () => null
-        });
-
-        this.eventSubscriber = {
-            eventSubscriberId: 'mobile-shields',
-            eventPublished: (data, eventId: MobileShowEvent | string): void => {
+        super.registerEventSubscriber(
+            function (data: MobileShowEventData, eventId: MobileShowEvent): void {
                 if (eventId === MobileShowEvent.CLOSE_ALL_TABS_MOBILE) {
                     this.closeMobile();
                 }
-                else {
-                    this.state.activeMobile =
-                        (data === MobileShowEventData.SHOW_TOOLBAR || data === MobileShowEventData.SHOW_RIGHT_SIDEBAR) ?
-                            2 : data ? 1 : null;
+                else if (data === MobileShowEventData.SHOW_TOOLBAR || data === MobileShowEventData.SHOW_RIGHT_SIDEBAR) {
+                    this.state.activeMobile = 2;
                 }
-            }
-        };
-        EventService.getInstance().subscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
-        EventService.getInstance().subscribe(MobileShowEvent.CLOSE_ALL_TABS_MOBILE, this.eventSubscriber);
+                else if (data) {
+                    this.state.activeMobile = 1;
+                }
+                else {
+                    this.state.activeMobile = null;
+                }
+            },
+            [
+                MobileShowEvent.SHOW_MOBILE,
+                MobileShowEvent.CLOSE_ALL_TABS_MOBILE
+            ]
+        );
 
+        super.registerEventSubscriber(this.closeMobile, [ContextEvents.CONTEXT_CHANGED]);
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         window.removeEventListener('resize', this.resizeHandling.bind(this), false);
-        EventService.getInstance().unsubscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
-        EventService.getInstance().unsubscribe(MobileShowEvent.CLOSE_ALL_TABS_MOBILE, this.eventSubscriber);
-
     }
 
     private resizeHandling(): void {
@@ -70,6 +65,10 @@ class Component {
     public closeMobile(): void {
         EventService.getInstance().publish(MobileShowEvent.SHOW_MOBILE, null);
         this.state.activeMobile = null;
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

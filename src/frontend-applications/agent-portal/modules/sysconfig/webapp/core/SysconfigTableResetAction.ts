@@ -22,6 +22,7 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 export class SysconfigTableResetAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Reset';
         this.icon = 'kix-icon-arrow-rotate-left';
     }

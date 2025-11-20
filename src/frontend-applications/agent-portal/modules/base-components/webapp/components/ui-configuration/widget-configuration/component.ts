@@ -21,15 +21,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private titleTimeout: any;
     private actionsTreeHandler: TreeHandler;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.widget = { ...input.widget };
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject(
             ['Translatable#Small Widget', 'Translatable#Advanced', 'Translatable#Standard']
         );
@@ -45,7 +48,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareActionNodes(): Promise<void> {
         const actions = await ActionFactory.getInstance().getActionsForType(
-            this.state.widget.configuration?.configuration?.type
+            this.state.widget.configuration?.configuration?.type, this.context?.instanceId
         );
         const configuredActions = this.state.widget.configuration.actions;
 

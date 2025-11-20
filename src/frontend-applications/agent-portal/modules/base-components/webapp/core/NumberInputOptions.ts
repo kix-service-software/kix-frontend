@@ -17,6 +17,8 @@ export enum NumberInputOptions {
 
     UNIT_STRING = 'UNIT_STRING',
 
-    EXCEPTS_EMPTY = 'EXCEPTS_EMPTY'
+    EXCEPTS_EMPTY = 'EXCEPTS_EMPTY',
+
+    POSITIVE_INTEGER = 'POSITIVE_INTEGER'
 
 }

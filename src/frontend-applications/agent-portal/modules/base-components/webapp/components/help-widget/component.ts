@@ -8,32 +8,34 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { HelpWidgetConfiguration } from '../../../../../model/configuration/HelpWidgetConfiguration';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-export class Component {
-
-    private state: ComponentState;
+export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState(input.instanceId);
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
         this.state.contextType = input.contextType;
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         const configuration = this.state.widgetConfiguration.configuration as HelpWidgetConfiguration;
         this.state.helpText = await TranslationService.translate(configuration.helpText);
         this.state.links = configuration.links;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
 }

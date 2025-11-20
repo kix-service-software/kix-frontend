@@ -48,6 +48,7 @@ import { TableFactoryService } from '../../../table/webapp/core/factory/TableFac
 import { UserPreferencesEventHandler } from './UserPreferencesEventHandler';
 import { UserRoleDeleteAction } from './admin/actions/UserRoleDeleteAction';
 import { PasswordConfirmValidator } from './PasswordConfirmValidator';
+import { DashboardIntervallValidator } from './DashboardIntervallValidator';
 
 
 export class UIModule implements IUIModule {
@@ -89,6 +90,7 @@ export class UIModule implements IUIModule {
 
         FormValidationService.getInstance().registerValidator(new UserPasswordValidator());
         FormValidationService.getInstance().registerValidator(new PasswordConfirmValidator());
+        FormValidationService.getInstance().registerValidator(new DashboardIntervallValidator());
 
         UserPreferencesEventHandler.getInstance();
     }

@@ -8,8 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
@@ -18,7 +16,7 @@ import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
-import { BulkDialogContext, BulkService } from '../../core';
+import { BulkService } from '../../core';
 import { ValidationResult } from '../../../../base-components/webapp/core/ValidationResult';
 import { ComponentContent } from '../../../../base-components/webapp/core/ComponentContent';
 import { OverlayService } from '../../../../base-components/webapp/core/OverlayService';
@@ -33,24 +31,24 @@ import { TableFactoryService } from '../../../../table/webapp/core/factory/Table
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { Table } from '../../../../table/model/Table';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
-
-    private tableSubscriber: IEventSubscriber;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'bulk-form');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (!this.state.bulkManager) {
             this.state.bulkManager = input.bulkManager;
         }
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.createTable();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Reset data',
@@ -83,10 +81,10 @@ class Component {
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         this.state.bulkManager?.unregisterListener('bulk-dialog-listener');
         this.state.linkManager?.unregisterListener('bulk-dialog-link-listener');
         this.state.linkManager?.reset();
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
     }
 
     private async setCanRun(): Promise<void> {
@@ -127,21 +125,19 @@ class Component {
 
                 const table = await TableFactoryService.getInstance().createTable(
                     `bulk-form-list-${this.state.bulkManager?.objectType}`, this.state.bulkManager?.objectType,
-                    configuration, null, BulkDialogContext.CONTEXT_ID, true, null, true
+                    configuration, null, this.contextInstanceId, true, null, true
                 );
 
                 await this.prepareTitle();
 
-                this.tableSubscriber = {
-                    eventSubscriberId: 'bulk-table-listener',
-                    eventPublished: async (data: TableEventData, eventId: string): Promise<void> => {
-                        if (data && data.tableId === table.getTableId()) {
+                super.registerEventSubscriber(
+                    async function (data: TableEventData, eventId: string): Promise<void> {
+                        if (data?.tableId === table.getTableId()) {
                             this.mapTableRows();
                         }
-                    }
-                };
-
-                EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+                    },
+                    [TableEvent.ROW_SELECTION_CHANGED]
+                );
 
                 await table.initialize();
                 table.selectAll();
@@ -244,14 +240,13 @@ class Component {
     private async updateTable(table: Table, successObjects: KIXObject[], errorObjects: KIXObject[]): Promise<void> {
         this.state.table = null;
 
-        const context = ContextService.getInstance().getActiveContext();
-        const oldObjects = await context.getObjectList(this.state.bulkManager?.objectType);
+        const oldObjects = await this.context?.getObjectList(this.state.bulkManager?.objectType);
         const idsToLoad = oldObjects ? oldObjects.map((o) => o.ObjectId) : null;
 
         const newObjects = await KIXObjectService.loadObjects(
             this.state.bulkManager?.objectType, idsToLoad, null, null, false
         ).catch(() => []);
-        context.setObjectList(this.state.bulkManager?.objectType, newObjects);
+        this.context?.setObjectList(this.state.bulkManager?.objectType, newObjects);
         this.prepareTitle();
 
         this.state.table = table;

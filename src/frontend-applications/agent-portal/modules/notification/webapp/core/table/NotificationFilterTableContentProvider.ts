@@ -12,7 +12,6 @@ import { NotificationFilterTableProperty } from './NotificationFilterTableProper
 import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
@@ -40,12 +39,11 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
     }
 
     public async loadData(): Promise<RowObject[]> {
-        const context = ContextService.getInstance().getActiveContext();
-        const notification = context ? await context.getObject<Notification>() : null;
+        const notification = this.context ? await this.context.getObject<Notification>() : null;
         const relativeDateTimeOperators = SearchDefinition.getRelativeDateTimeOperators();
 
         const rowObjects: RowObject[] = [];
-        if (notification && notification.Filter) {
+        if (notification?.Filter) {
             for (const filter in notification.Filter) {
                 if (notification.Filter[filter] && Array.isArray(notification.Filter[filter])) {
                     for (const criterion of notification.Filter[filter]) {

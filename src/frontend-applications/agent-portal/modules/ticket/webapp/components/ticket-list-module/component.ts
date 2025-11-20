@@ -10,20 +10,28 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TicketListContext } from '../../core';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    public state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext() as TicketListContext;
-        this.state.contentWidgets = await context.getContent();
+        await super.onMount();
+        this.state.contentWidgets = await this.context?.getContent();
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

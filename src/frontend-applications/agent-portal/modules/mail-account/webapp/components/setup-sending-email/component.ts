@@ -27,9 +27,7 @@ import { ValidationSeverity } from '../../../../base-components/webapp/core/Vali
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 import { SysConfigOptionProperty } from '../../../../sysconfig/model/SysConfigOptionProperty';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
@@ -37,7 +35,6 @@ import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { SystemAddress } from '../../../../system-address/model/SystemAddress';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
@@ -54,22 +51,25 @@ import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private configKeys: string[] = [];
-    private subscriber: IEventSubscriber;
     private step: SetupStep;
     private systemAddress: SystemAddress;
     private canUpdateSystemAddress: boolean;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'setup-sending-email');
         this.state = new ComponentState();
         this.state.isSetup = typeof input.setup === 'undefined' ? false : input.setup;
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.step = input.step;
         this.state.completed = this.step ? this.step.completed : false;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         this.configKeys = [
             'SendmailModule',
             'SendmailEnvelopeFrom', 'SendmailNotificationEnvelopeFrom', 'SendmailNotificationEnvelopeFrom::FallbackToEmailFrom'
@@ -212,13 +212,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             ]
         );
 
-        this.subscriber = {
-            eventSubscriberId: 'setup-sending-mail-subscriber',
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
+        super.registerEventSubscriber(
+            async function (data: FormValuesChangedEventData, eventId: string): Promise<void> {
                 const changedValue = data.changedValues.find((cv) => cv[0]?.property === 'SendmailModule');
                 if (changedValue) {
-                    const context = ContextService.getInstance().getActiveContext();
-                    const formInstance = await context?.getFormManager()?.getFormInstance();
+                    const formInstance = await this.context?.getFormManager()?.getFormInstance();
                     if (changedValue[1].value) {
                         let value = changedValue[1].value;
                         if (Array.isArray(changedValue[1].value) && changedValue[1].value.length) {
@@ -228,20 +226,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         await this.prepareSMTPFields(changedValue[0], value, formInstance);
                     }
                 }
-            }
-        };
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.subscriber);
+            },
+            [FormEvent.VALUES_CHANGED]
+        );
 
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
 
-        const activeContext = ContextService.getInstance().getActiveContext();
-        const contextFormId = await activeContext?.getFormManager()?.getFormId();
+        const contextFormId = await this.context?.getFormManager()?.getFormId();
         if (contextFormId === this.state.formId) {
-            const object = await activeContext.getObject();
-            (await activeContext?.getFormManager()?.getFormInstance()).initFormInstance(form.id, object);
+            const object = await this.context.getObject();
+            (await this.context?.getFormManager()?.getFormInstance()).initFormInstance(form.id, object);
         } else {
-            await activeContext?.getFormManager()?.setFormId(this.state.formId);
+            await this.context?.getFormManager()?.setFormId(this.state.formId);
         }
 
         setTimeout(() => this.initFormValues(
@@ -256,10 +253,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     'SendmailModule::OAuth2_Profile'
                 ] : undefined
         ), 100);
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
     }
 
     private async prepareSMTPFields(
@@ -436,8 +429,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initFormValues(formId: string, configKeys: string[] = this.configKeys): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, configKeys
@@ -458,8 +450,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);
@@ -522,6 +513,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         SetupService.getInstance().stepSkipped(this.step.id);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

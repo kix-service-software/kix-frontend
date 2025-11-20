@@ -17,9 +17,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             step=state.step
             readonly=state.readonly
             disabled=state.readonly
-            on-change("valueChanged")
-            class="form-control"
-        >
+            on-input("valueChanged")
+            class="form-control">
         <span class="unit-string">
             <translation-string pattern=state.unitString/>
         </span>

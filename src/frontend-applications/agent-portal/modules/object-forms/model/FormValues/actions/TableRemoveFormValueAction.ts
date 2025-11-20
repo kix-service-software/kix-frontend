@@ -13,6 +13,7 @@ import { FormValueAction } from '../FormValueAction';
 export class TableRemoveFormValueAction extends FormValueAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Remove table';
         this.icon = 'kix-icon-close';
     }

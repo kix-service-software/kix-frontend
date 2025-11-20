@@ -9,6 +9,7 @@
 
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { OutOfOfficeProperty } from './OutOfOfficeProperty';
+import { User } from '../model/User';
 
 export class OutOfOffice {
 
@@ -20,21 +21,28 @@ export class OutOfOffice {
 
     public End: Date | string = null;
 
+    public Substitute: User = null;
+
     public Properties: string[] = [];
 
-    public constructor(outOfOffice?: OutOfOffice, start?: Date | string, end?: Date | string) {
+    public constructor(
+        outOfOffice?: OutOfOffice, start?: Date | string, end?: Date | string, substitute?: User
+    ) {
 
         if (outOfOffice) {
             this.Start = outOfOffice.Start;
             this.End = outOfOffice.End;
+            this.Substitute = outOfOffice.Substitute;
         }
         else {
             this.Start = start;
             this.End = end;
+            this.Substitute = substitute;
         }
         this.Properties = [
             OutOfOfficeProperty.START,
-            OutOfOfficeProperty.END
+            OutOfOfficeProperty.END,
+            OutOfOfficeProperty.SUBSTITUTE
         ];
     }
 }

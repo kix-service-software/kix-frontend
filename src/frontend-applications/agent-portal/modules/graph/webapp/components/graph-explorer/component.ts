@@ -18,21 +18,20 @@ import { GraphContext } from '../../core/GraphContext';
 import { GraphInstance } from '../../core/GraphInstance';
 import { ComponentState } from './ComponentState';
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractMarkoComponent<ComponentState, GraphContext> {
 
-    private context: GraphContext;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
 
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Default', 'Translatable#Apply'
         ]);
 
-        this.context = ContextService.getInstance().getActiveContext();
         const graphInstance = await this.context?.getObject<GraphInstance>(KIXObjectType.GRAPH_INSTANCE);
 
         this.state.options = await graphInstance.getGraphOptions();
@@ -71,6 +70,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.context.setGraphOptions(graphContextOptions);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

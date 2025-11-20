@@ -17,7 +17,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     data-widgetid=(
         state.widgetConfiguration ? state.widgetConfiguration.widgetid : ""
     )
->
+    key="widget-" + state.instanceId + state.componentId
+    id="widget-" + state.instanceId + state.componentId>
     <div
         class=[
             "widget-header",
@@ -26,9 +27,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             },
         ]
         on-click("minimizeWidget", false)
-        on-mousedown("headerMousedown", false)
-    >
-        <span class="header-left">
+        on-mousedown("headerMousedown", false)>
+        <span
+            class=[
+                "header-left",
+                {
+                    "gap-1": !input.removeGap,
+                },
+            ]
+            style=[
+                input.customGridTemplateColumnsStyle
+                    ? input.customGridTemplateColumnsStyle
+                    : "grid-template-columns: minmax(auto, max-content);",
+            ]>
             <div class=[
                 "widget-title",
                 {
@@ -39,15 +50,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <icon
                         icon=input.icon
                         on-click("minimizeWidget", true)
-                        on-mousedown("headerMousedown", true)
-                    />
+                        on-mousedown("headerMousedown", true)/>
                 </if>
                 <h2
                     title=state.title
                     on-click("minimizeWidget", true)
                     on-mousedown("headerMousedown", true)
-                    class="m-0"
-                >
+                    class="m-0">
                     <translation-string pattern=state.title/>
                 </h2>
             </div>
@@ -62,24 +71,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </span>
         <span on-click("minimizeWidget", true) class="header-right">
             <action-list
-                list=input.actions
+                contextInstanceId=input.contextInstanceId
+                list=state.actions
                 instanceId=state.instanceId
                 displayText=component.getWidgetTypeActionDisplaySetting()
-                on-actionListClicked("doNotChangeMinimize")
-            />
+                on-actionListClicked("doNotChangeMinimize")/>
             <if(state.minimizable)>
                 <span class="minimize-icon-wrapper">
                     <if(state.minimized)>
                         <span
                             on-click("minimizeWidget", true)
-                            class="kix-icon-sort-down as-button"
-                        />
+                            class="kix-icon-sort-down as-button"/>
                     </if>
                     <else>
                         <span
                             on-click("minimizeWidget", true)
-                            class="kix-icon-triangle-up as-button"
-                        >
+                            class="kix-icon-triangle-up as-button">
                             <span class="path1"/>
                             <span class="path2"/>
                         </span>
@@ -90,8 +97,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <span class="close-icon-wrapper">
                     <span
                         on-click("closeClicked")
-                        class="kix-icon-close as-button"
-                    />
+                        class="kix-icon-close as-button"/>
                 </span>
             </if>
         </span>
@@ -119,9 +125,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <if(component.isContentWidget())>
                     <div
                         key="content-actions" + Math.random()
-                        class="content-actions"
-                    >
-                        <action-list list=input.contentActions/>
+                        class="content-actions">
+                        <action-list
+                            contextInstanceId=input.contextInstanceId
+                            list=input.contentActions/>
                     </div>
                 </if>
             </if>

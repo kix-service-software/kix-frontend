@@ -7,57 +7,77 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget instanceId=state.instanceId title=state.title icon="kix-icon-gears" minimizable=false>
+<widget
+    contextInstanceId=input.contextInstanceId
+    instanceId=state.instanceId
+    title=state.title
+    icon="kix-icon-gears"
+    minimizable=false>
     <@content>
         <if(state.prepared)>
-            <div.setup-header>
+            <div class="setup-header">
                 <h1>
                     <translation-string pattern="Translatable#Welcome"/>
                 </h1>
-                <span.setup-header-text>
+                <span class="setup-header-text">
                     <translation-string pattern="Translatable#setup_assistant_welcome_text"/>
                 </span>
             </div>
-            <div.setup-steps>
+            <div class="setup-steps">
                 <for|step, index| of=state.setupSteps>
-                    <div.step
+                    <div
                         on-click("stepClicked", step)
-                        class={
-                                                completed: step.completed,
-                                                skipped: step.skipped,
-                                                active: state.activeStep && state.activeStep.id === step.id
-                                            }>
-                        <div.step-icon-seperator class={
-                            empty: index === 0
-                        }/>
+                        class=[
+                            "step",
+                            {
+                                completed: step.completed,
+                                skipped: step.skipped,
+                                active:
+                                    state.activeStep &&
+                                    state.activeStep.id === step.id,
+                            },
+                        ]>
+                        <div class=[
+                            "step-icon-seperator",
+                            {
+                                empty: index === 0,
+                            },
+                        ]/>
                         <if(step.completed)>
                             <icon icon="kix-icon-check"/>
                         </if>
                         <else>
                             <icon icon=step.icon/>
                         </else>
-                        <div.step-icon-seperator.next class={
-                            empty: index === state.setupSteps.length - 1
-                        }/>
-                        <span.step-name>
+                        <div class=[
+                            "step-icon-seperator next",
+                            {
+                                empty: index === state.setupSteps.length - 1,
+                            },
+                        ]/>
+                        <span class="step-name">
                             <translation-string pattern=step.name/>
                         </span>
                     </div>
                 </for>
             </div>
-            <if(state.activeStep)>
-                <div.step-content>
-                    <div.step-header>
+            <if(state.activeStep && !state.loading)>
+                <div class="step-content">
+                    <div class="step-header">
                         <h2>
-                            <translation-string pattern=state.activeStep.subtitle/>
+                            <translation-string pattern=(
+                                state.activeStep.subtitle
+                            )/>
                         </h2>
-                        <span.text>
-                            <translation-string pattern=state.activeStep.text/>
+                        <span class="text">
+                            <translation-string pattern=(
+                                state.activeStep.text
+                            )/>
                         </span>
                     </div>
-                    <div.step-body>
+                    <div class="step-body">
                         <if(state.template)>
-                            <${state.template} step=state.activeStep setup=true/>
+                            <${state.template} step=state.activeStep setup/>
                         </if>
                     </div>
                 </div>

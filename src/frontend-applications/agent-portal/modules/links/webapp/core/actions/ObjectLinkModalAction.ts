@@ -21,10 +21,10 @@ export class ObjectLinkModalAction extends AbstractAction {
     public permissions: UIComponentPermission[] = [];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.icon = 'kix-icon-link';
 
-        const context = ContextService.getInstance().getActiveContext();
-        const object = await context.getObject();
+        const object = await this.context?.getObject();
 
         const linkCount = await PlaceholderService.getInstance().replacePlaceholders(
             '<KIX_OBJECT_LinkCount>', object

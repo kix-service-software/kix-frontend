@@ -14,37 +14,37 @@ import { ContextService } from '../../../../../../base-components/webapp/core/Co
 import { Context } from '../../../../../../../model/Context';
 import { TranslationService } from '../../../../../../translation/webapp/core/TranslationService';
 import { MobileShowEventData } from '../../../../../model/MobileShowEventData';
+import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        ContextService.getInstance().registerListener({
-            constexServiceListenerId: 'sidebar-left-icon',
-            contextChanged: async (contextId: string, changedContext: Context) => {
-                const sidbebars = await changedContext?.getSidebarsLeft();
-                this.state.hasSidebarsLeft = Boolean(sidbebars?.length);
-            },
-            contextRegistered: () => { return; },
-            beforeDestroy: () => null
-        });
-
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Open left sidebar'
         ]);
 
-        const context: Context = ContextService.getInstance().getActiveContext();
-        const sidbebars = await context?.getSidebarsLeft();
+        const sidbebars = await this.context?.getSidebarsLeft();
         this.state.hasSidebarsLeft = Boolean(sidbebars?.length);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     public showMobileLeftSidebar(): void {
         EventService.getInstance().publish(MobileShowEvent.SHOW_MOBILE, MobileShowEventData.SHOW_LEFT_SIDEBAR);
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

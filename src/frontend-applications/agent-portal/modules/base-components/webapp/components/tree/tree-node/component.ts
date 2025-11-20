@@ -10,16 +10,18 @@
 import { ComponentState } from './ComponentState';
 import { TreeNode } from '../../../core/tree';
 import { BrowserUtil } from '../../../core/BrowserUtil';
+import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
+import { TreeEvent } from '../../../core/tree/TreeEvent';
 
-class TreeNodeComponent {
-
-    private state: ComponentState;
+class TreeNodeComponent extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'tree/tree-node');
         this.state = new ComponentState(input.node);
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.node = input.node;
 
         if (this.state.node) {
@@ -45,23 +47,22 @@ class TreeNodeComponent {
         }
     }
 
-    private hasClickableChildren(tree: TreeNode[]): boolean {
-        for (const t of tree) {
-            if (t.selectable) {
-                return true;
-            }
+    public async onMount(): Promise<void> {
+        await super.onMount();
 
-            if (t.children && t.children.length) {
-                const hasChildren = this.hasClickableChildren(t.children);
-                if (hasChildren) {
-                    return true;
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
+                if (this.state.treeId === data.treeId && this.state.node.id === data.node?.id) {
+                    this.state.node = data.node;
+                    (this as any).setStateDirty('node');
                 }
-            }
-        }
-        return false;
+            },
+            [TreeEvent.NODE_UPDATED]
+        );
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         this.state.node = null;
     }
 

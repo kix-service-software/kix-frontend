@@ -35,11 +35,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private definition: ReportDefinition;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.definition = input.cell.getRow().getRowObject().getObject();
         this.updateCell();
     }
@@ -143,8 +145,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async createReport(label: Label): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext() as ReportingContext;
-        if (context && this.definition) {
+        if (this.context && this.definition) {
             EventService.getInstance().publish(
                 ApplicationEvent.APP_LOADING, { loading: true, hint: 'Creating Report' }
             );
@@ -163,10 +164,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     );
                 });
 
-            await context.reloadObjectList(KIXObjectType.REPORT_DEFINITION);
+            await this.context.reloadObjectList(KIXObjectType.REPORT_DEFINITION);
 
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
     }
 }
 

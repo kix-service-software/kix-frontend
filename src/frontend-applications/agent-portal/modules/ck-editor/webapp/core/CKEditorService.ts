@@ -9,10 +9,13 @@
 
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { CKEditor5Configuration } from '../../model/CKEditor5Configuration';
+import { CKEditor5 } from './CKEditor5';
 
 export class CKEditorService {
 
     private static INSTANCE: CKEditorService;
+
+    private activeEditor: CKEditor5;
 
     public static getInstance(): CKEditorService {
         if (!CKEditorService.INSTANCE) {
@@ -43,6 +46,14 @@ export class CKEditorService {
         }
 
         return editorConfig;
+    }
+
+    public setActiveEditor(editor: CKEditor5): void {
+        this.activeEditor = editor;
+    }
+
+    public getActiveEditor(): CKEditor5 {
+        return this.activeEditor;
     }
 
 }

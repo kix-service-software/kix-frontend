@@ -45,7 +45,9 @@ export class ClientNotificationService {
 
         for (const event of objectEvents) {
             const hasEvent = this.notificationsQueue.some(
-                (e) => e.Namespace === event.Namespace && e.UserID === event.UserID
+                (e) => e.Namespace === event.Namespace
+                    && e.ObjectID === event.ObjectID
+                    && e.UserID === event.UserID
             );
 
             if (!hasEvent) {

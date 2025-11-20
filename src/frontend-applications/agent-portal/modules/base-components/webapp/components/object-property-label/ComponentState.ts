@@ -8,10 +8,11 @@
  */
 
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 import { OverlayIcon } from '../../core/OverlayIcon';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public propertyDisplayText: string = null,
@@ -20,6 +21,8 @@ export class ComponentState {
         public hasText: boolean = true,
         public showLabel: boolean = true,
         public overlay: OverlayIcon = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

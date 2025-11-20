@@ -14,12 +14,12 @@ import { TreeNode, TreeService } from '../../../../base-components/webapp/core/t
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { Organisation } from '../../../../customer/model/Organisation';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -34,17 +34,20 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         this.setPossibleValue();
     }
 
-    public async onDestroy(): Promise<void> {
-        await super.onDestroy();
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     public async setPossibleValue(): Promise<void> {
         this.state.loading = true;
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const possibleValues = formInstance?.getPossibleValue(this.state.field?.property);
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
         if (treeHandler) {
@@ -76,18 +79,16 @@ class Component extends FormInputComponent<number, ComponentState> {
     private async getOrgNode(organisation: Organisation): Promise<TreeNode> {
         if (organisation) {
             const displayValue = await LabelService.getInstance().getObjectText(organisation);
-            const displayIcon = await LabelService.getInstance().getObjectIcon(organisation);
+            const displayIcon = LabelService.getInstance().getObjectIcon(organisation);
             return new TreeNode(organisation.ObjectId, displayValue, displayIcon);
         }
-        return;
     }
 
     public async setCurrentValue(): Promise<void> {
         let nodes = [];
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance?.getFormFieldValue<number>(this.state.field?.instanceId);
-        if (value && value.value) {
+        if (value?.value) {
             if (!isNaN(value.value)) {
                 const organisations = await KIXObjectService.loadObjects<Organisation>(
                     KIXObjectType.ORGANISATION, [value.value]
@@ -114,7 +115,7 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     public nodesChanged(nodes: TreeNode[]): void {
-        const currentNode = nodes && nodes.length ? nodes[0] : null;
+        const currentNode = nodes?.length ? nodes[0] : null;
         super.provideValue(currentNode ? currentNode.id : null);
     }
 }

@@ -22,11 +22,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private reportDefinition: ReportDefinition;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (input.cell) {
             const cell: Cell = input.cell;
             this.reportDefinition = cell.getRow().getRowObject().getObject();
@@ -54,6 +56,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         ReportDefinitionDialogUtil.openCreateReportDialog(this.reportDefinition);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

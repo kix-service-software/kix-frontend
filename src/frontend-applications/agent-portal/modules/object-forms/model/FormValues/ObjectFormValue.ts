@@ -9,6 +9,7 @@
 
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { Context } from '../../../../model/Context';
 import { IdService } from '../../../../model/IdService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
@@ -46,6 +47,7 @@ export class ObjectFormValue<T = any> {
     public visible: boolean = false;
     public enabled: boolean = false;
     public empty: boolean = false;
+    public dirty: boolean = false;
 
     public valid: boolean = true;
     public validationResults: ValidationResult[] = [];
@@ -75,6 +77,8 @@ export class ObjectFormValue<T = any> {
 
     public applyPlaceholders: boolean = true;
 
+    protected context: Context;
+
     public constructor(
         public property: string,
         protected object: any,
@@ -85,6 +89,8 @@ export class ObjectFormValue<T = any> {
         if (object) {
             this.value = object[property];
         }
+
+        this.context = ContextService.getInstance().getActiveContext();
 
         this.createBindings();
     }
@@ -290,8 +296,7 @@ export class ObjectFormValue<T = any> {
     }
 
     protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const isRestoredContext = context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
+        const isRestoredContext = this.context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
         if (!isRestoredContext) {
             const defaultValue = field.defaultValue?.value;
             let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null && defaultValue !== '');
@@ -395,6 +400,12 @@ export class ObjectFormValue<T = any> {
         if (this.object) {
             this.object[this.property] = value;
             // Hint: do not trigger setObjectValueToFormValue here (it is already done by binding (FormValueBinding))
+        }
+    }
+
+    public getObjectProperty(property: string): any {
+        if (this.object) {
+            return this.object[property];
         }
     }
 

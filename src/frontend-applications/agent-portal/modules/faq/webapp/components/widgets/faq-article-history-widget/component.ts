@@ -8,32 +8,29 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { FAQDetailsContext } from '../../../core/context/FAQDetailsContext';
 import { FAQArticle } from '../../../../model/FAQArticle';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../../modules/base-components/webapp/core/ActionFactory';
 import { TableFactoryService } from '../../../../../table/webapp/core/factory/TableFactoryService';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        context.registerListener('faq-history-widget', {
+        this.context?.registerListener('faq-history-widget', {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
@@ -47,7 +44,7 @@ class Component {
             additionalInformationChanged: (): void => { return; }
         });
 
-        await this.initWidget(await context.getObject<FAQArticle>());
+        await this.initWidget(await this.context?.getObject<FAQArticle>());
 
     }
 
@@ -61,14 +58,14 @@ class Component {
     private async prepareActions(faqArticle: FAQArticle): Promise<void> {
         if (this.state.widgetConfiguration && faqArticle) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [faqArticle]
+                this.state.widgetConfiguration.actions, [faqArticle], this.contextInstanceId
             );
         }
     }
 
     private async prepareTable(): Promise<void> {
         const table = await TableFactoryService.getInstance().createTable(
-            'faq-article-history', KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, FAQDetailsContext.CONTEXT_ID
+            'faq-article-history', KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, this.contextInstanceId
         );
 
         this.state.table = table;
@@ -79,6 +76,10 @@ class Component {
         this.state.table.filter();
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

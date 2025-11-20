@@ -10,11 +10,11 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { Attachment } from '../../../../../model/kix/Attachment';
-import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -24,15 +24,17 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         if (Array.isArray(this.state.field?.options)) {
             this.state.field?.options.forEach((o) => this.state.options.push([o.option, o.value]));
         }
-        this.state.prepared = true;
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<Array<Attachment | File> | Attachment | File>(
             this.state.field?.instanceId
         );
@@ -46,6 +48,10 @@ class Component extends FormInputComponent<any, ComponentState> {
     public valueChanged(value: Array<Attachment | File>): void {
         super.provideValue(value);
         this.state.attachments = value;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
 }

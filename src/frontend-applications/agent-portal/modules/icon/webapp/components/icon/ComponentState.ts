@@ -8,10 +8,11 @@
  */
 
 import { IdService } from '../../../../../model/IdService';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { ObjectIcon } from '../../../model/ObjectIcon';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public icon: string | ObjectIcon = null,
@@ -21,6 +22,8 @@ export class ComponentState {
         public showUnknown: boolean = false,
         public iconId: string = IdService.generateDateBasedId(),
         public tooltip: string = ''
-    ) { }
+    ) {
+        super();
+    }
 
 }

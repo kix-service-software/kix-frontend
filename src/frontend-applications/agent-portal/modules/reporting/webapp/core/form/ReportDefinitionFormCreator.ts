@@ -82,7 +82,8 @@ export class ReportDefinitionFormCreator {
             'Translatable#Helptext_Reporting_ReportCreate_MaxReports',
             [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.NUMBER),
-                new FormFieldOption(NumberInputOptions.MIN, 0)
+                new FormFieldOption(NumberInputOptions.MIN, 0),
+                new FormFieldOption(NumberInputOptions.POSITIVE_INTEGER, true)
             ],
             new FormFieldValue(reportDefinition?.MaxReports || 0)
         );

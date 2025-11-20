@@ -13,12 +13,9 @@ import { JobProperty } from '../../../model/JobProperty';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TreeService } from '../../../../base-components/webapp/core/tree';
 import { IdService } from '../../../../../model/IdService';
 import { FilterType } from '../../../../../model/FilterType';
@@ -30,9 +27,10 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     private listenerId: string;
     private formTimeout: any;
-    private formSubscriber: IEventSubscriber;
+    private initialized: boolean;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'job-input-filter');
         this.state = new ComponentState();
     }
 
@@ -41,31 +39,33 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
+
         this.listenerId = IdService.generateDateBasedId('job-input-filter-manager-listener');
         await this.setManager();
-        await super.onMount();
+        this.initialized = true;
 
-        this.formSubscriber = {
-            eventSubscriberId: 'JobInputFilter',
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
+        super.registerEventSubscriber(
+            async function (data: FormValuesChangedEventData, eventId: string): Promise<void> {
                 const jobTypeValue = data.changedValues.find((cv) => cv[0] && cv[0].property === JobProperty.TYPE);
                 if (jobTypeValue) {
                     this.setManager();
                     await this.setCurrentValue();
                 }
-            }
-        };
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-
-        this.state.prepared = true;
+            },
+            [FormEvent.VALUES_CHANGED]
+        );
     }
 
     // eslint-disable-next-line max-lines-per-function
     private async setManager(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
-        const type = typeValue && typeValue.value ? typeValue.value : null;
+        const type = typeValue?.value ? typeValue.value : null;
 
         const jobFormManager = JobFormService.getInstance().getJobFormManager(type);
 
@@ -106,7 +106,8 @@ class Component extends FormInputComponent<any, ComponentState> {
         }
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
+        super.onDestroy();
         if (this.state.manager) {
             this.state.manager.unregisterListener(this.listenerId);
             this.state.manager.getValues().forEach((v) =>
@@ -114,14 +115,15 @@ class Component extends FormInputComponent<any, ComponentState> {
             );
             this.state.manager.reset(false);
         }
-        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        if (!this.initialized) {
+            return;
+        }
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<any>(this.state.field?.instanceId);
-        if (value && value.value) {
+        if (value?.value) {
 
             // value is frontend filter criteria (set in dialog)
             if (Array.isArray(value.value)) {
@@ -131,7 +133,7 @@ class Component extends FormInputComponent<any, ComponentState> {
             } else if (typeof value.value === 'object') {
                 // value is a backend filter criteria (with AND and OR - inital value)
                 for (const filter in value.value) {
-                    if (value.value[filter] && value.value[filter]) {
+                    if (value.value[filter]) {
                         for (const criteria of value.value[filter]) {
                             await this.setCriteria(criteria, true);
                         }
@@ -143,7 +145,7 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     private async setCriteria(criteria: any, fromBackend?: boolean): Promise<void> {
         let objectType: KIXObjectType | string;
-        const inputType = await this.state.manager.getInputType(fromBackend ? criteria.Field : criteria.property);
+        const inputType = await this.state.manager?.getInputType(fromBackend ? criteria.Field : criteria.property);
         if (inputType) {
             if (inputType === InputFieldTypes.OBJECT_REFERENCE) {
                 objectType = await this.state.manager.getObjectReferenceObjectType(
@@ -185,7 +187,7 @@ class Component extends FormInputComponent<any, ComponentState> {
             fromBackend ? criteria.Value : criteria.value,
             [], false, true, objectType
         );
-        this.state.manager.setValue(filterValue);
+        this.state.manager?.setValue(filterValue);
     }
 }
 

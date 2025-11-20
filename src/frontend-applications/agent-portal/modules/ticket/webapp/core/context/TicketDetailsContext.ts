@@ -16,8 +16,6 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformation';
 import { TicketContext } from './TicketContext';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { Article } from '../../../model/Article';
-import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { TicketHistory } from '../../../model/TicketHistory';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
@@ -36,8 +34,11 @@ export class TicketDetailsContext extends Context {
     public articleLoader: ArticleLoader;
     public articleDetailsLoader: ArticleLoader;
     private handleMissingObjectTimeout: any;
+    private unseenArticles: number[] = [];
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        await super.initContext(urlParams);
+
         this.articleLoader = new ArticleLoader(Number(this.objectId), this, false);
         this.articleDetailsLoader = new ArticleLoader(Number(this.objectId), this, true);
     }
@@ -182,6 +183,18 @@ export class TicketDetailsContext extends Context {
             KIXObjectType.TICKET_HISTORY, [this.objectId]
         );
         return ticketHistory;
+    }
+
+    public registerUnseenArticle(articleId: number): void {
+        this.unseenArticles.push(articleId);
+    }
+
+    public unregisterUnseenArticle(articleId: number): number {
+        const articleIndex = this.unseenArticles.findIndex((id) => id === articleId);
+        if (articleIndex !== -1) {
+            this.unseenArticles.splice(articleIndex, 1);
+        }
+        return this.unseenArticles.length;
     }
 
 }

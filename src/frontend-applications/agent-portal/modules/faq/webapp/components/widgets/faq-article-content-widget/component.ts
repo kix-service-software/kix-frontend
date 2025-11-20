@@ -9,9 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { IdService } from '../../../../../../model/IdService';
-import { WidgetService } from '../../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../../model/configuration/WidgetType';
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { FAQArticle } from '../../../../model/FAQArticle';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../../../modules/base-components/webapp/core/LabelService';
@@ -24,52 +22,49 @@ import { FAQArticleAttachmentLoadingOptions } from '../../../../model/FAQArticle
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
-import { Context } from '../../../../../../model/Context';
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
 import { FAQArticleHandler } from '../../../core/FAQArticleHandler';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { ImageViewerEvent } from '../../../../../agent-portal/model/ImageViewerEvent';
 import { ImageViewerEventData } from '../../../../../agent-portal/model/ImageViewerEventData';
 import { ApplicationEvent } from '../../../../../base-components/webapp/core/ApplicationEvent';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public eventSubscriberId: string = 'FAQContentComponent';
-
-    private state: ComponentState;
     private contextListenerId: string = null;
 
     public stars: Array<string | ObjectIcon> = [];
     public rating: number;
     private images: DisplayImageDescription[];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'faq-article-content-widget');
         this.state = new ComponentState();
         this.contextListenerId = IdService.generateDateBasedId('faq-content-widget');
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Symptom', 'Translatable#Cause', 'Translatable#Solution', 'Translatable#Comment',
             'Translatable#Number of ratings'
         ]);
 
-        WidgetService.getInstance().setWidgetType('faq-article-group', WidgetType.GROUP);
+        this.context.widgetService.setWidgetType('faq-article-group', WidgetType.GROUP);
 
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             objectChanged: (id: string | number, faqArticle: FAQArticle, type: KIXObjectType | string) => {
                 if (type === KIXObjectType.FAQ_ARTICLE) {
-                    this.initWidget(context, faqArticle);
+                    this.state.faqArticle = faqArticle;
+                    this.initWidget();
                 }
             },
             sidebarRightToggled: (): void => { return; },
@@ -79,21 +74,32 @@ class Component {
             scrollInformationChanged: () => { return; },
             additionalInformationChanged: (): void => { return; }
         });
-
-        await this.initWidget(context, await context.getObject<FAQArticle>());
-        this.state.loading = false;
+        this.state.contextInstanceId = this.contextInstanceId;
+        this.state.faqArticle = await this.context.getObject<FAQArticle>();
+        setTimeout(() => this.initWidget(), 200);
     }
 
-    private async initWidget(context: Context, faqArticle?: FAQArticle): Promise<void> {
-        this.state.faqArticle = faqArticle;
+    private async initWidget(): Promise<void> {
+        if (this.state.faqArticle?.Attachments) {
+            this.state.attachments = this.state.faqArticle?.Attachments.filter((a) => a.Disposition !== 'inline');
+            const inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(this.state.faqArticle);
 
-        if (faqArticle?.Attachments) {
-            this.state.attachments = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
-            this.state.inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(faqArticle);
+            const field1Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field1, inlineContent);
+            this.state.html['field1'] = field1Value;
+
+            const field2Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field2, inlineContent);
+            this.state.html['field2'] = field2Value;
+
+            const field3Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field3, inlineContent);
+            this.state.html['field3'] = field3Value;
+
+            const field6Value = BrowserUtil.replaceInlineContent(this.state.faqArticle?.Field6, inlineContent);
+            this.state.html['field6'] = field6Value;
+
             this.prepareImages();
 
-            this.stars = await LabelService.getInstance().getIcons(faqArticle, FAQArticleProperty.RATING);
-            this.rating = BrowserUtil.round(faqArticle.Rating);
+            this.stars = await LabelService.getInstance().getIcons(this.state.faqArticle, FAQArticleProperty.RATING);
+            this.rating = BrowserUtil.round(this.state.faqArticle?.Rating);
             this.prepareActions();
         }
     }
@@ -123,7 +129,7 @@ class Component {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.faqArticle) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.faqArticle]
+                this.state.widgetConfiguration.actions, [this.state.faqArticle], this.contextInstanceId
             );
         }
     }
@@ -179,6 +185,10 @@ class Component {
             KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [attachment.ID], loadingOptions, faqArticleAttachmentOptions, silent
         ).catch(() => [] as Attachment[]);
         return attachments && attachments.length ? attachments[0] : null;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

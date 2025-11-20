@@ -10,13 +10,16 @@
 import { DynamicField } from '../../../model/DynamicField';
 import { CheckListItem } from '../../../model/CheckListItem';
 import { Table } from '../../../../table/model/Table';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public field: DynamicField = null,
         public checklist: CheckListItem[] = [],
         public table: Table = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

@@ -9,10 +9,8 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { NotificationLabelProvider } from '../../core';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -23,24 +21,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private contextListenerId: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        WidgetService.getInstance().setWidgetType('notification-message-group', WidgetType.GROUP);
+        await super.onMount();
+        this.context.widgetService.setWidgetType('notification-message-group', WidgetType.GROUP);
         this.state.labelProvider = new NotificationLabelProvider();
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         this.contextListenerId = IdService.generateDateBasedId('notification-text-widget');
 
-        context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
@@ -53,16 +51,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             additionalInformationChanged: (): void => { return; }
         });
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        await this.initWidget(await context.getObject<Notification>());
+        await this.initWidget(await this.context?.getObject<Notification>());
     }
 
     public onDestroy(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        context.unregisterListener(this.contextListenerId);
+        this.context?.unregisterListener(this.contextListenerId);
     }
 
     private async initWidget(notification: Notification): Promise<void> {
@@ -78,7 +73,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.notification) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.notification]
+                this.state.widgetConfiguration.actions, [this.state.notification], this.contextInstanceId
             );
         }
     }

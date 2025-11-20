@@ -31,6 +31,7 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 import { JobService } from './JobService';
 import { MacroProperty } from '../../../macro/model/MacroProperty';
+import { IdService } from '../../../../model/IdService';
 
 export class JobFormService extends KIXObjectFormService {
 
@@ -48,30 +49,29 @@ export class JobFormService extends KIXObjectFormService {
         super();
 
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, {
-            eventSubscriberId: 'JobFormService',
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
+            eventSubscriberId: IdService.generateDateBasedId('JobFormService'),
+            eventPublished: async function (data: FormValuesChangedEventData, eventId: string): Promise<void> {
                 const form = data.formInstance.getForm();
-                if (form.objectType === KIXObjectType.JOB) {
-                    const typeValue = data.changedValues.find((cv) => cv[0] && cv[0].property === JobProperty.TYPE);
-                    if (typeValue) {
-                        await data.formInstance.removePages(null, [data.formInstance.getForm().pages[0].id]);
+                if (form.objectType !== KIXObjectType.JOB) return;
 
-                        if (typeValue[1] && typeValue[1].value) {
-                            const manager: AbstractJobFormManager = this.getJobFormManager(typeValue[1].value);
-                            if (manager) {
-                                if (data.formInstance.getForm().formContext === FormContext.NEW) {
-                                    manager.reset();
-                                }
+                const typeValue = data.changedValues.find((cv) => cv[0] && cv[0].property === JobProperty.TYPE);
+                if (!typeValue) return;
 
-                                const context = ContextService.getInstance().getActiveContext();
-                                const job = await context.getObject<Job>();
-                                const pages = await manager.getPages(job, data.formInstance);
-                                pages.forEach((p) => data.formInstance.addPage(p));
-                            }
-                        }
+                await data.formInstance.removePages(null, [data.formInstance.getForm().pages[0].id]);
+
+                if (typeValue[1]?.value) {
+                    const manager: AbstractJobFormManager = this.getJobFormManager(typeValue[1].value);
+                    if (!manager) return;
+
+                    if (data.formInstance.getForm().formContext === FormContext.NEW) {
+                        manager.reset();
                     }
+
+                    const job = await data?.formInstance?.context.getObject<Job>();
+                    const pages = await manager.getPages(job, data.formInstance);
+                    pages.forEach((p) => data.formInstance.addPage(p));
                 }
-            }
+            }.bind(this)
         });
     }
 
@@ -99,7 +99,7 @@ export class JobFormService extends KIXObjectFormService {
         form.pages = [];
         form.pages.push(AbstractJobFormManager.getJobPage(formInstance));
 
-        const context = ContextService.getInstance().getActiveContext();
+        const context = formInstance.context;
         const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
         if (form.pages.length && job && (form.formContext === FormContext.EDIT || duplicate)) {
             const manager = this.getJobFormManager(job.Type);
@@ -109,7 +109,6 @@ export class JobFormService extends KIXObjectFormService {
             if (execPlans && !!execPlans.length) {
                 const eventExecPlans = execPlans.filter((ep) => ep.Type === ExecPlanTypes.EVENT_BASED);
                 if (eventExecPlans && !!eventExecPlans.length) {
-                    const context = ContextService.getInstance().getActiveContext();
                     if (context) {
                         context.setAdditionalInformation(
                             JobProperty.EXEC_PLAN_EVENTS, eventExecPlans[0].Parameters.Event
@@ -146,8 +145,7 @@ export class JobFormService extends KIXObjectFormService {
         form: FormConfiguration, formInstance: FormInstance, formFieldValues, job: Job
     ): Promise<void> {
 
-        const context = ContextService.getInstance().getActiveContext();
-        const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
+        const duplicate = formInstance?.context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
         if (form.formContext === FormContext.EDIT || duplicate) {
             // add additional filter fields and set filter values
             if (Array.isArray(job.Filter) && job.Filter.length) {

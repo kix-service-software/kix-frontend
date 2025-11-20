@@ -12,8 +12,9 @@ import { TableWidgetConfiguration } from '../../../../../model/configuration/Tab
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { GeneralCatalogItemProperty } from '../../../model/GeneralCatalogItemProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = 'admin-general-catalog-list',
@@ -28,6 +29,8 @@ export class ComponentState {
                 [GeneralCatalogItemProperty.NAME, SortOrder.UP],
                 undefined, undefined, undefined, false
             ), false, false, 'kix-icon-gears')
-    ) { }
+    ) {
+        super();
+    }
 
 }

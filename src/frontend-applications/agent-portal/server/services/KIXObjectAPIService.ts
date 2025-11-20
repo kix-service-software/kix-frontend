@@ -106,7 +106,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             const success = await this.buildFilter(loadingOptions.filter, responseProperty, query, token, objectType);
 
             if (!success) {
-                LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter).replace(/\n/g, ''));
+                LoggingService.getInstance().warning('Invalid api filter.', { filter: loadingOptions.filter });
                 return new ObjectResponse([], 0);
             }
 
@@ -150,7 +150,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         const object = {};
         object[objectType] = new RequestObject(
-            parameter.filter((p) => p[0] !== 'ICON' && p[0] !== KIXObjectProperty.OBJECT_TAGS)
+            parameter.filter((p) => p?.length === 2 && p[0] !== 'ICON' && p[0] !== KIXObjectProperty.OBJECT_TAGS)
         );
 
         const response = await this.sendRequest(token, clientRequestId, uri, object, cacheKeyPrefix, create);
@@ -277,23 +277,24 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                 query = { ...query, expand: loadingOptions.expands.join(',') };
             }
 
-            if (loadingOptions.query) {
-                loadingOptions.query.forEach((q) => query[q[0]] = Array.isArray(q[1]) ? JSON.stringify(q[1]) : q[1]);
-            }
-
             if (loadingOptions?.query?.length && token) {
                 const queryParam = loadingOptions.query.find((q) => q[0] === 'requiredPermission');
-                if (queryParam && queryParam[1]) {
+                if (queryParam?.[1]) {
                     try {
                         const requiredPermission = JSON.parse(queryParam[1]);
                         if (requiredPermission.ObjectID === KIXObjectType.CURRENT_USER) {
                             const user = await HttpService.getInstance().getUserByToken(token);
                             requiredPermission.ObjectID = user?.UserID;
+                            queryParam[1] = JSON.stringify(requiredPermission);
                         }
                     } catch (error) {
                         LoggingService.getInstance().error('Error parsing requiredPermission.', error);
                     }
                 }
+            }
+
+            if (loadingOptions.query) {
+                loadingOptions.query.forEach((q) => query[q[0]] = Array.isArray(q[1]) ? JSON.stringify(q[1]) : q[1]);
             }
 
         }
@@ -379,7 +380,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: string | number,
-        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
+        deleteOptions?: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string = objectType,
+        ressourceUri: string = this.RESOURCE_URI
     ): Promise<Error[]> {
         const uri = [this.buildUri(ressourceUri, objectId)];
 

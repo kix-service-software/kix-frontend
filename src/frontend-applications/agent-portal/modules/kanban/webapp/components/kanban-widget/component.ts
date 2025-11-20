@@ -22,7 +22,6 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KanbanConfiguration } from '../../core/KanbanConfiguration';
 import { KanbanEvent } from '../../core/KanbanEvent';
 import { TicketState } from '../../../../ticket/model/TicketState';
@@ -31,37 +30,32 @@ import { WidgetConfiguration } from '../../../../../model/configuration/WidgetCo
 import { Ticket } from '../../../../ticket/model/Ticket';
 import { TicketStateService } from '../../../../ticket/webapp/core';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
-import { Context } from '../../../../../model/Context';
 
 declare const jKanban: any;
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private dragTo: string[];
-
     private boards: any[] = [];
     private widgetConfiguration: WidgetConfiguration;
     private kanbanConfig: KanbanConfiguration;
     private contextListenerId: string;
-
     private isCreatingBoard: boolean;
-
     private tickets: Ticket[] = [];
-
     private kanban: any;
 
-    private context: Context;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         if (this.context) {
             await this.context.reloadObjectList(KIXObjectType.TICKET);
 
@@ -80,7 +74,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private registerContextListener(): void {
         if (this.widgetConfiguration?.contextDependent) {
             this.contextListenerId = 'kanban-widget' + this.widgetConfiguration.instanceId;
-            this.context.registerListener(this.contextListenerId, {
+            this.context?.registerListener(this.contextListenerId, {
                 additionalInformationChanged: () => null,
                 sidebarLeftToggled: () => null,
                 filteredObjectListChanged: () => {
@@ -270,8 +264,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         let tickets: Ticket[] = [];
 
         if (this.widgetConfiguration.contextDependent) {
-            const context = ContextService.getInstance().getActiveContext();
-            const alltickets = context.getFilteredObjectList<Ticket>(KIXObjectType.TICKET);
+            const alltickets = this.context?.getFilteredObjectList<Ticket>(KIXObjectType.TICKET);
             tickets = alltickets.filter((t) => t.StateType === stateType);
         } else {
             tickets = await this.loadBoardTickets(useUser, stateType, oneDay);

@@ -13,19 +13,20 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { RoutingService } from '../../core/RoutingService';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private routingConfiguration: RoutingConfiguration;
     private objectId: number;
     private object: KIXObject;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.routingConfiguration = input.routingConfiguration ? { ...input.routingConfiguration } : null;
         this.objectId = input.objectId || this.routingConfiguration?.replaceObjectId;
         this.object = input.object;
@@ -58,6 +59,10 @@ class Component {
         this.state.loading = false;
     }
 
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
     private setContextIdIfNecessary(): void {
         if (!this.routingConfiguration?.contextId &&
             this.routingConfiguration?.contextMode &&
@@ -76,6 +81,10 @@ class Component {
 
     public async linkClicked(event: any): Promise<void> {
         if (event.preventDefault) {
+            const target = event.target as HTMLAnchorElement;
+            if (target.target === '_blank') {
+                return;
+            }
             event.preventDefault();
         }
 
@@ -84,6 +93,10 @@ class Component {
         }
     }
 
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

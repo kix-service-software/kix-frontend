@@ -1,0 +1,66 @@
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
+import { InputFieldTypes } from '../../../base-components/webapp/core/InputFieldTypes';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core';
+import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
+import { ObjectFormValue } from './ObjectFormValue';
+
+export class DateFormValue extends ObjectFormValue<string> {
+
+    public inputType: InputFieldTypes = InputFieldTypes.DATE;
+    public minDate: string;
+    public maxDate: string;
+    public isEmpty: boolean;
+    public isRelativeTimeValue: boolean;
+
+    public constructor(
+        public property: string,
+        object: any,
+        objectValueMapper: ObjectFormValueMapper,
+        public parent: ObjectFormValue,
+    ) {
+        super(property, object, objectValueMapper, parent);
+        this.inputComponentId = 'datetime-form-input';
+    }
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        await super.initFormValueByField(field);
+        const typeOption = field?.options.find(
+            (o) => o.option === FormFieldOptions.INPUT_FIELD_TYPE
+        );
+
+        this.isRelativeTimeValue = field.options?.some((o) => o.option === DynamicFormFieldOption.RELATIVE_TIME);
+
+        this.inputType = typeOption?.value?.toString() || InputFieldTypes.DATE;
+
+        const minDateOption = field?.options.find((o) => o.option === FormFieldOptions.MIN_DATE);
+        this.minDate = minDateOption ? minDateOption.value : null;
+
+        const maxDateOption = field?.options.find((o) => o.option === FormFieldOptions.MAX_DATE);
+        this.maxDate = maxDateOption ? maxDateOption.value : null;
+
+        this.isEmpty = field?.empty || false;
+    }
+
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        if (typeof value === 'string') {
+            const dateValue = await PlaceholderService.getInstance().replacePlaceholders(value.trim(), this.object);
+            if (dateValue?.length > 0) {
+                value = DateTimeUtil.getKIXDateString(dateValue);
+            }
+        }
+
+        await super.setFormValue(value);
+    }
+}

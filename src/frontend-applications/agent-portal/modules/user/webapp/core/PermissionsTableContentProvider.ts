@@ -11,7 +11,6 @@ import { TableContentProvider } from '../../../table/webapp/core/TableContentPro
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { Role } from '../../model/Role';
 import { Permission } from '../../model/Permission';
 import { RowObject } from '../../../table/model/RowObject';
@@ -31,9 +30,8 @@ export class PermissionsTableContentProvider extends TableContentProvider<Permis
     }
     public async loadData(): Promise<Array<RowObject<Permission>>> {
         let object: KIXObject;
-        if (this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            object = await context.getObject();
+        if (this.table.isContextDependent()) {
+            object = await this.context?.getObject();
         }
 
         const rowObjects = [];

@@ -7,18 +7,14 @@
  * --
  */
 
+import { Context } from '../../../../../model/Context';
 import { AbstractComponentState } from '../../core/AbstractComponentState';
-
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public isLeft: boolean = false,
-        public isMobile: boolean = false,
-        public isSmall: boolean = false,
-        public sidebars: Array<[string, any, string]> = [],
-        public showSidebarArea: boolean = false,
-        public showMobile: boolean = false
+        public contextList: Context[] = [],
+        public reloadSidebarId: string = null
     ) {
         super();
     }

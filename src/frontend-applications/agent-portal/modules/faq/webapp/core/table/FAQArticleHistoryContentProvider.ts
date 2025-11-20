@@ -11,7 +11,6 @@ import { TableContentProvider } from '../../../../table/webapp/core/TableContent
 import { FAQHistory } from '../../../model/FAQHistory';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { FAQArticle } from '../../../model/FAQArticle';
 import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
@@ -30,9 +29,8 @@ export class FAQArticleHistoryContentProvider extends TableContentProvider<FAQHi
 
     public async loadData(): Promise<Array<RowObject<FAQHistory>>> {
         const rowObjects = [];
-        if (this.contextId) {
-            const context = ContextService.getInstance().getActiveContext();
-            const faqArticle = await context.getObject<FAQArticle>();
+        if (this.table.isContextDependent()) {
+            const faqArticle = await this.context?.getObject<FAQArticle>();
             if (faqArticle) {
                 for (const fh of faqArticle.History) {
                     const values: TableValue[] = [];

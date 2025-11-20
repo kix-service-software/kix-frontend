@@ -14,23 +14,25 @@ import { ObjectIconLoadingOptions } from '../../../../../server/model/ObjectIcon
 import { ObjectIcon } from '../../../model/ObjectIcon';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { PlaceholderService } from '../../../../base-components/webapp/core/PlaceholderService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.icon = input.icon;
         this.state.showUnknown = typeof input.showUnknown !== 'undefined' ? input.showUnknown : false;
         this.state.tooltip = input.tooltip;
         this.setIcon(this.state.icon);
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
+        await super.onMount();
         this.setIcon(this.state.icon);
     }
 
@@ -40,8 +42,7 @@ class Component {
             this.state.content = icon;
         } else if (icon) {
 
-            const context = ContextService.getInstance().getActiveContext();
-            const contextObject = await context?.getObject();
+            const contextObject = await this.context?.getObject();
 
             if (icon.tooltip) {
                 this.state.tooltip = await PlaceholderService.getInstance().replacePlaceholders(
@@ -87,6 +88,10 @@ class Component {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

@@ -106,13 +106,15 @@ export class ConfigItemBulkManager extends BulkManager {
         return inputFieldType;
     }
 
-    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, objectIds?: Array<string | number>, operator?: string
+    ): Promise<TreeNode[]> {
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
             case VersionProperty.DEPL_STATE_ID:
             case VersionProperty.INCI_STATE_ID:
             case ConfigItemProperty.CHANGE_BY:
-                return await CMDBService.getInstance().getTreeNodes(property, true, true);
+                return await CMDBService.getInstance().getTreeNodes(property, false, false);
             default:
                 const classIds = this.getClassIds();
                 const input = await ConfigItemClassAttributeUtil.getAttributeInput(property, classIds);
@@ -139,14 +141,14 @@ export class ConfigItemBulkManager extends BulkManager {
                         return await KIXObjectService.prepareTree(items);
                     } else if (input.Type === 'TeamReference') {
                         const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(
-                            false, null, ['READ'], objectIds ? objectIds.map((oid) => Number(oid)) : null
+                            null, ['READ'], objectIds ? objectIds.map((oid) => Number(oid)) : null
                         );
                         return await QueueService.getInstance().prepareObjectTree(
                             queuesHierarchy, true, false
                         );
                     } else {
                         // use type rather than property
-                        return await super.getTreeNodes(input.Type);
+                        return await super.getTreeNodes(input.Type, objectIds, operator);
                     }
                 }
         }

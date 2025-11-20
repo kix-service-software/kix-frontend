@@ -11,7 +11,6 @@ import { ConfigItemDialogUtil } from '../ConfigItemDialogUtil';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ConfigItem } from '../../../model/ConfigItem';
 
 export class ConfigItemDuplicateAction extends AbstractAction {
@@ -22,13 +21,13 @@ export class ConfigItemDuplicateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Duplicate';
         this.icon = 'kix-icon-copy';
     }
 
     public async run(event: any): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const configItem = await context.getObject<ConfigItem>();
+        const configItem = await this.context?.getObject<ConfigItem>();
         if (configItem) {
             ConfigItemDialogUtil.duplicate(configItem);
         }

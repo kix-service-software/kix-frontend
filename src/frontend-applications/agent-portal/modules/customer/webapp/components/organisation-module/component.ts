@@ -8,21 +8,19 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { OrganisationContext } from '../../core/context/OrganisationContext';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    public state: ComponentState;
-    private context: OrganisationContext;
+class Component extends AbstractMarkoComponent<ComponentState, OrganisationContext> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext() as OrganisationContext;
+        await super.onMount();
         this.state.contentWidgets = await this.context.getContent();
 
         this.state.translations = await TranslationService.createTranslationObject([
@@ -47,6 +45,14 @@ class Component {
         this.context.setFilterValue(this.state.filterValue);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

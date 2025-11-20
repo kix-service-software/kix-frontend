@@ -14,10 +14,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       tabindex="0"
       on-keydown("keydownOnSelectInput")
       on-click("inputClicked")
-      class="select-input-row"
-   >
+      class="select-input-row">
       <div class=[
-         "form-control border-secondary-subtle",
+         "form-control border-secondary-subtle min-w-0",
          {
             readonly: state.readonly,
             rounded: state.readonly,
@@ -34,10 +33,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                <for|node| of=state.selectedNodes>
 
                   <li
-                     class="list-group-item ps-2 pe-2 pt-0 pb-0 mb-1 me-1 border"
+                     class="list-group-item d-flex ps-2 pe-2 pt-0 pb-0 mb-1 me-1 border"
                      style="max-width: 100%;"
-                     title=node.label
-                  >
+                     title=node.label>
                      <if(node.icon !== null)>
                         <icon icon=node.icon withoutStyle class="me-2"/>
                      </if>
@@ -54,16 +52,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                            data={
                               object: node.overlay.Data,
                               properties: node.overlay.Data.Properties,
-                           }
-                        />
+                           }/>
                      </if>
                      <if(!state.readonly)>
                         <i
                            on-mouseenter("setIsMouseOnNodeRemove", true)
                            on-mouseleave("setIsMouseOnNodeRemove", false)
                            on-click("removeValue", node)
-                           class="ms-2 fas fa-times"
-                        />
+                           class="ms-2 fas fa-times"/>
                      </if>
                   </li>
                </for>
@@ -75,27 +71,23 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <button
                type="button"
                on-click("clearValue")
-               class="btn btn-outline-light border-secondary-subtle rounded-0 border-start-0 border-end-0"
-            >
+               class="btn btn-outline-light border-secondary-subtle rounded-0 border-start-0 border-end-0">
                <i class="far fa-times-circle"/>
             </button>
          </if>
          <button
             type="button"
-            class="btn btn-outline-light dropdown-toggle border-secondary-subtle rounded-0 border-start-0 border-start-0 rounded-end"
-         />
+            class="btn btn-outline-light dropdown-toggle border-secondary-subtle rounded-0 border-start-0 border-start-0 rounded-end"/>
       </if>
    </div>
    <div
       on-click("selectInputClicked")
       aria-labelledby=`id_${state.searchValueKey}`
-      class="select-input-list dropdown-menu w-100 pt-0 pb-0"
-   >
+      class="select-input-list dropdown-menu w-100 pt-0 pb-0">
       <if(state.hasFilter)>
          <div
             key=state.searchValueKey + "-keylistener"
-            class="dropdown-item sticky-top bg-white"
-         >
+            class="dropdown-item sticky-top bg-white">
             <input
                type="text"
                placeholder=state.searchPlaceholder
@@ -103,14 +95,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                on-keyup("searchValueChanged")
                on-keydown("keydown")
                no-update
-               class="form-control"
-            >
+               class="form-control">
             <input
                type="text"
                key=state.searchValueKey + "-hidden"
                on-keydown("keydown")
-               class="d-none"
-            >
+               class="d-none">
             <if(state.autoComplete && state.noResult)>
                <div class="mt-2 ms-2 fst-italic text-secondary">
                   ${state.autoCompleteHint}
@@ -130,22 +120,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                <button
                   type="button"
                   on-click("apply")
-                  class="btn btn-outline-success me-3 my-2"
-               >
+                  class="btn btn-outline-success me-3 my-2">
                   <translation-string pattern="Translatable#Apply"/>
                </button>
                <button
                   type="button"
                   on-click("select")
-                  class="btn btn-outline-success me-3 my-2"
-               >
+                  class="btn btn-outline-success me-3 my-2">
                   <translation-string pattern="Translatable#Select"/>
                </button>
                <button
                   type="button"
                   on-click("selectAll")
-                  class="btn btn-outline-success"
-               >
+                  class="btn btn-outline-success">
                   <if(state.selectAll)>
                      <translation-string pattern="Translatable#Select All"/>
                   </if>

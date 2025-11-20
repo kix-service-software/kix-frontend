@@ -8,6 +8,7 @@
  */
 
 import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
+import { ModalSettings } from '../../model/ModalSettings';
 
 declare const bootstrap: any;
 
@@ -51,6 +52,46 @@ export class ToastUtil {
             toastElement.addEventListener('hidden.bs.toast', (event) => {
                 toastElement?.remove();
             });
+        }
+    }
+
+    public static showConfirmModal(modalSettings: ModalSettings): void {
+        const toastArea = document.getElementById('kix-toast-area');
+        if (toastArea) {
+            const confirmModalId = 'confirm-modal';
+
+            let templateModal;
+            let modalElement;
+
+            const okCallback = modalSettings.confirmCallback;
+            modalSettings.confirmCallback = (): void => {
+                if (okCallback) {
+                    okCallback();
+                }
+
+                templateModal?.hide();
+                modalElement?.remove();
+            };
+
+
+            const cancelCallback = modalSettings.cancelCallback;
+            modalSettings.cancelCallback = (): void => {
+                if (cancelCallback) {
+                    cancelCallback();
+                }
+
+                templateModal?.hide();
+                modalElement?.remove();
+            };
+
+            const template = KIXModulesService.getComponentTemplate(confirmModalId);
+            const content = template?.default?.renderSync(modalSettings);
+            content.appendTo(toastArea);
+
+            templateModal = new bootstrap.Modal(`#${confirmModalId}`);
+            templateModal.show();
+
+            modalElement = document.getElementById(confirmModalId);
         }
     }
 

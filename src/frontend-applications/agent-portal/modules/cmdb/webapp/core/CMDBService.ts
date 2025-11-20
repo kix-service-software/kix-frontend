@@ -210,6 +210,14 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                         'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classId
                     )]
                 );
+                if (!showInvalid) {
+                    loadingOptions.filter.push(
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                            FilterDataType.NUMERIC, FilterType.AND, 1
+                        )
+                    );
+                }
 
                 const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
                     KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
@@ -227,6 +235,16 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                         i.ValidID !== 1
                     ));
                 }
+                break;
+            case ConfigItemProperty.DEPL_STATE_TYPE:
+                const preproductive = await TranslationService.translate('Preproductive');
+                const productive = await TranslationService.translate('Productive');
+                const postproductive = await TranslationService.translate('Postproductive');
+                nodes = [
+                    new TreeNode('preproductive', preproductive),
+                    new TreeNode('productive', productive),
+                    new TreeNode('postproductive', postproductive)
+                ];
                 break;
             case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
                 const no = await TranslationService.translate('No');
@@ -270,7 +288,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                             return await KIXObjectService.prepareTree(items);
                         } else if (input.Type === 'TeamReference') {
                             const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(
-                                false, null, ['READ'], filterIds ? filterIds.map((fid) => Number(fid)) : null
+                                null, ['READ'], filterIds ? filterIds.map((fid) => Number(fid)) : null
                             );
                             return await QueueService.getInstance().prepareObjectTree(
                                 queuesHierarchy, showInvalid, invalidClickable

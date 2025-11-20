@@ -25,7 +25,10 @@ export class BooleanFormValue extends ObjectFormValue<boolean> {
 
     async initFormValue(): Promise<void> {
         await super.initFormValue();
-        const value = BrowserUtil.isBooleanTrue(this.object[this.property]);
+        let value = this.value;
+        if (value === null || typeof value === 'undefined') {
+            value = BrowserUtil.isBooleanTrue(this.object[this.property]);
+        }
         this.setFormValue(value, true);
     }
 

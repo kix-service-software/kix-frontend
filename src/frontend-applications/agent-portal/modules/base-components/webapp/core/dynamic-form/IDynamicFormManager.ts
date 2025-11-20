@@ -17,6 +17,7 @@ import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyVa
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
 
 export interface IDynamicFormManager {
 
@@ -62,7 +63,7 @@ export interface IDynamicFormManager {
 
     getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>>;
 
-    getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]>;
+    getTreeNodes(property: string, objectIds?: Array<string | number>, operator?: string): Promise<TreeNode[]>;
 
     getProperties(): Promise<Array<[string, string]>>;
 
@@ -83,6 +84,8 @@ export interface IDynamicFormManager {
     getOperatorDisplayText(o: string): Promise<string>;
 
     clearValueOnPropertyChange(property: string): Promise<boolean>;
+
+    clearValueOnOperatorChange(property: string): Promise<boolean>;
 
     isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean>;
 
@@ -107,4 +110,9 @@ export interface IDynamicFormManager {
     ): Promise<KIXObjectLoadingOptions>;
 
     isRelativDateTimeOperator(operator: string): boolean;
+
+    setDefaultValues(values?: ObjectPropertyValue[]): void;
+
+    prepareFilterCriteria(formValue: any): Promise<FilterCriteria | object>;
+
 }

@@ -22,12 +22,12 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ContactService } from '../../../../customer/webapp/core/ContactService';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.state.loadNodes = this.getCurrentNodes.bind(this);
     }
@@ -38,6 +38,10 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         this.state.searchCallback = this.searchContacts.bind(this);
         const objectName = await LabelService.getInstance().getObjectName(KIXObjectType.CONTACT, true, false);
         this.state.autoCompleteConfiguration = new AutoCompleteConfiguration(10, 2000, 3, objectName);
@@ -49,8 +53,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     public async getCurrentNodes(): Promise<TreeNode[]> {
         const nodes = [];
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const defaultValue = formInstance ? formInstance.getFormFieldValue<string>(this.state.field?.instanceId) : null;
         if (defaultValue && defaultValue.value) {
             const contactEmails: string[] = Array.isArray(defaultValue.value)
@@ -121,6 +124,10 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

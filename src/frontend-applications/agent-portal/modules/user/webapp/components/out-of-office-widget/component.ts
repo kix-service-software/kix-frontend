@@ -10,7 +10,6 @@
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
 import { Context } from '../../../../../model/Context';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { UserProperty } from '../../../model/UserProperty';
 import { AgentService } from '../../core/AgentService';
@@ -28,24 +27,20 @@ import { ContextMode } from '../../../../../model/ContextMode';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
-
-        await this.initWidget(context);
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
+        await this.initWidget(this.context);
     }
 
     private async initWidget(context: Context): Promise<void> {
@@ -67,7 +62,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             new DefaultColumnConfiguration(null, null, null,
                 PersonalSettingsProperty.OUT_OF_OFFICE_END, true, false, true, false, 80, true, false, true,
                 DataType.DATE, true, null, null, false
-            ),
+            )
         ];
         const tableConfiguration = new TableConfiguration(null, null, null,
             KIXObjectType.USER, null, 32, columns, [], false, false, null, null,
@@ -75,13 +70,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         );
         const table = await TableFactoryService.getInstance().createTable(
             'out-of-office-users', KIXObjectType.USER, tableConfiguration, outOfOfficeUsersIDs,
-            context.contextId, false, undefined, false, true, true
+            this.contextInstanceId, false, undefined, false, true, true
         );
         table.getTableConfiguration().routingConfiguration = new RoutingConfiguration(
             ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
             ContextMode.DETAILS, `${UserProperty.CONTACT}.ID`
         );
         this.state.table = table;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

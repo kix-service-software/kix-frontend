@@ -66,6 +66,8 @@ import { TicketModuleConfiguration } from '../../model/TicketModuleConfiguration
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
+import { TicketEvent } from '../../model/TicketEvent';
+import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -184,7 +186,10 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public async markTicketAsSeen(ticketId: number): Promise<void> {
         await AgentSocketClient.getInstance().markAsSeen(KIXObjectType.TICKET, [ticketId])
-            .then(() => EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR))
+            .then(() => {
+                EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+                EventService.getInstance().publish(TicketEvent.MARK_TICKET_AS_SEEN, ticketId);
+            })
             .catch((error) => console.error(error));
     }
 
@@ -221,7 +226,8 @@ export class TicketService extends KIXObjectService<Ticket> {
         switch (property) {
             case TicketProperty.CREATED_QUEUE_ID:
             case TicketProperty.QUEUE_ID:
-                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, undefined, ['READ']);
+            case TicketProperty.HISTORIC_QUEUE_ID:
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(undefined, ['READ']);
                 nodes = await QueueService.getInstance().prepareObjectTree(
                     queuesHierarchy, showInvalid, invalidClickable,
                     filterIds ? filterIds.map((fid) => Number(fid)) : null
@@ -229,6 +235,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.CREATED_TYPE_ID:
             case TicketProperty.TYPE_ID:
+            case TicketProperty.HISTORIC_TYPE_ID:
                 let types = await KIXObjectService.loadObjects<TicketType>(KIXObjectType.TICKET_TYPE);
                 if (!showInvalid) {
                     types = types.filter((t) => t.ValidID === 1);
@@ -249,6 +256,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.CREATED_PRIORITY_ID:
             case TicketProperty.PRIORITY_ID:
+            case TicketProperty.HISTORIC_PRIORITY_ID:
                 let priorities = await KIXObjectService.loadObjects<TicketPriority>(KIXObjectType.TICKET_PRIORITY);
                 if (!showInvalid) {
                     priorities = priorities.filter((p) => p.ValidID === 1);
@@ -269,6 +277,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.CREATED_STATE_ID:
             case TicketProperty.STATE_ID:
+            case TicketProperty.HISTORIC_STATE_ID:
                 let states = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE);
                 if (!showInvalid) {
                     states = states.filter((s) => s.ValidID === 1);
@@ -324,6 +333,10 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.CREATED_USER_ID:
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
+            case TicketProperty.OWNER_OOO_SUBSTITUTE:
+            case TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE:
+            case TicketProperty.TICKET_OOO_SUBSTITUTE:
+            case TicketProperty.HISTORIC_OWNER_ID:
                 if (loadingOptions) {
                     if (Array.isArray(loadingOptions.includes)) {
                         loadingOptions.includes.push(UserProperty.CONTACT);
@@ -693,6 +706,10 @@ export class TicketService extends KIXObjectService<Ticket> {
                 case TicketProperty.RESPONSIBLE_ID:
                 case TicketProperty.CREATED_USER_ID:
                 case TicketProperty.WATCHER_USER_ID:
+                case TicketProperty.OWNER_OOO_SUBSTITUTE:
+                case TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE:
+                case TicketProperty.TICKET_OOO_SUBSTITUTE:
+                case TicketProperty.HISTORIC_OWNER_ID:
                     objectType = KIXObjectType.USER;
                     break;
                 case TicketProperty.CONTACT_ID:
@@ -842,6 +859,10 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.ORGANISATION_ID:
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
+            case TicketProperty.OWNER_OOO_SUBSTITUTE:
+            case TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE:
+            case TicketProperty.TICKET_OOO_SUBSTITUTE:
+            case TicketProperty.HISTORIC_OWNER_ID:
                 return 'Autocomplete';
             // use dropdown (Open, Closed)
             case TicketProperty.STATE_TYPE:

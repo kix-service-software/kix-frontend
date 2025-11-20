@@ -17,15 +17,18 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private iconFilterTimeout;
     private iconCount = 50;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         return;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.iconCount = 50;
         this.setIcons();
     }

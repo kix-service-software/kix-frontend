@@ -11,20 +11,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     on-click("doAction")
     title=state.text
     class=[
-        "action",
-        "d-flex",
-        "align-items-center",
-        "overflow-hidden",
+        "action d-flex align-items-center overflow-hidden p-1",
         {
-            inactive: !state.canRunAction,
+            inactive: !state.canRunAction || state.lockRunAction,
         },
-    ]
->
+    ]>
     <if(state.action.hasLink)>
         <a
             href=("?actionId=" + state.action.id + "&data=" + state.actionData)
-            on-click("linkClicked")
-        >
+            on-click("linkClicked")>
             <icon icon=(state.action.icon)/>
         </a>
     </if>
@@ -35,8 +30,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <a
             class="ms-2 text-truncate"
             href=("?actionId=" + state.action.id + "&data=" + state.actionData)
-            on-click("linkClicked")
-        >
+            on-click("linkClicked")>
             <span class="text text-nowrap">
                 ${state.text}
             </span>

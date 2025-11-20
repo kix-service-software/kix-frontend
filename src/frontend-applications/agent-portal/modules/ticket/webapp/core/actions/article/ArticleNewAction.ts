@@ -24,14 +24,14 @@ export class ArticleNewAction extends AbstractAction {
     private ticketId: number = null;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Article';
         this.icon = 'kix-icon-new-note';
     }
 
     public async canShow(): Promise<boolean> {
         let show = false;
-        const context = ContextService.getInstance().getActiveContext();
-        const objectId = context.getObjectId();
+        const objectId = this.context?.getObjectId();
 
         if (objectId) {
             this.ticketId = Number(objectId);

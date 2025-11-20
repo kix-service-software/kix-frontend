@@ -8,10 +8,11 @@
  */
 
 import { IdService } from '../../../../../../../model/IdService';
+import { AbstractComponentState } from '../../../../../../base-components/webapp/core/AbstractComponentState';
 import { TreeNode } from '../../../../../../base-components/webapp/core/tree';
 import { CheckListItem } from '../../../../../../dynamic-fields/model/CheckListItem';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public item: CheckListItem = null,
@@ -20,6 +21,8 @@ export class ComponentState {
         public dropdownId: string = IdService.generateDateBasedId('-checklist-dropdown'),
         public selectedNode: TreeNode = null,
         public lastChangeDate: string = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

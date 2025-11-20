@@ -9,6 +9,7 @@
 
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 import { ContextType } from '../../../../../model/ContextType';
+import { IdService } from '../../../../../model/IdService';
 import { AbstractComponentState } from '../../core/AbstractComponentState';
 import { ValidationResult } from '../../core/ValidationResult';
 
@@ -23,6 +24,7 @@ export class ComponentState extends AbstractComponentState {
         public submitButtonText: string = null,
         public canSubmit: boolean = true,
         public processing: boolean = false,
+        public instanceId: string = IdService.generateDateBasedId()
     ) {
         super();
     }

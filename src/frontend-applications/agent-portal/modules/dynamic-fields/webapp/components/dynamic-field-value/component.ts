@@ -20,30 +20,35 @@ import { DynamicFieldTypes } from '../../../model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
 import { ComponentState } from './ComponentState';
 import { DynamicFieldService } from '../../core/DynamicFieldService';
+import { IdService } from '../../../../../model/IdService';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private name: string;
     private object: KIXObject;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.name = input.name;
         this.object = input.object;
         this.update();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.update();
     }
 
     private async update(): Promise<void> {
         if (!this.object) {
-            const context = ContextService.getInstance().getActiveContext();
-            const contextObject = await context.getObject();
+            const contextObject = await this.context.getObject();
             if (contextObject) {
                 const loadedObjects = await KIXObjectService.loadObjects(
                     contextObject.KIXObjectType, [contextObject.ObjectId],
@@ -93,12 +98,23 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                             this.object.KIXObjectType, dfValue
                         );
                     } else {
+                        if (
+                            this.state.field?.FieldType === DynamicFieldTypes.TEXT_AREA
+                        ) {
+                            if (!Array.isArray(this.state.dfValue.Value)) {
+                                this.state.dfValue.Value = [this.state.dfValue.Value];
+                            }
+                            this.state.dfValue.Value.forEach((value, index) => {
+                                const id = IdService.generateDateBasedId(`${this.state.dfValue.Label}-${index}-`);
+                                this.state.textareaIds.push(id);
+                            });
+                        }
                         let labels = await LabelService.getInstance().createLabelsFromDFValue(
-                            this.object.KIXObjectType, dfValue
+                            this.object.KIXObjectType, this.state.dfValue
                         );
                         if (!labels) {
                             const value = await LabelService.getInstance().getDFDisplayValues(
-                                this.object.KIXObjectType, dfValue
+                                this.object.KIXObjectType, this.state.dfValue
                             );
                             if (Array.isArray(value[0])) {
                                 labels = value[0].map((v, i) => new Label(null, value[2][i], null, v, null, v));
@@ -135,6 +151,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+    public getTextareaId(index: number): string {
+        return this.state.textareaIds[index];
+    }
+
+    public async getTextareaValue(index: number): Promise<void> {
+        const translatedText = await TranslationService.translate(this.state.dfValue.Value[index]);
+        BrowserUtil.wrapLinksAndEmailsAndAppendToElement(this.getTextareaId(index), translatedText);
+    }
+
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

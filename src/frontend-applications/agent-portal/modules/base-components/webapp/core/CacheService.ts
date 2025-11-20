@@ -70,7 +70,9 @@ export class BrowserCacheService {
         }
 
         this.cache.delete(key);
+        EventService.getInstance().publish(ApplicationEvent.CACHE_KEY_DELETED, key);
         if (cacheKeyPrefix) {
+            EventService.getInstance().publish(ApplicationEvent.CACHE_KEY_PREFIX_DELETED, cacheKeyPrefix);
             if (this.keyIndex.has(cacheKeyPrefix)) {
                 const keys = this.keyIndex.get(cacheKeyPrefix);
                 const index = keys.findIndex((k) => k === key);
@@ -159,6 +161,7 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.TICKET_HISTORY);
                 cacheKeyPrefixes.push('QUEUE_HIERARCHY');
                 cacheKeyPrefixes.push('OPTION_REQUEST');
+                cacheKeyPrefixes.push(KIXObjectType.QUEUE_TICKET_STATS);
                 break;
             case KIXObjectType.FAQ_VOTE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
@@ -216,6 +219,7 @@ export class BrowserCacheService {
             case KIXObjectType.QUEUE:
                 cacheKeyPrefixes.push('QUEUE_HIERARCHY');
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                cacheKeyPrefixes.push(KIXObjectType.QUEUE_TICKET_STATS);
                 break;
             case KIXObjectType.TICKET_PRIORITY:
             case KIXObjectType.TICKET_STATE:

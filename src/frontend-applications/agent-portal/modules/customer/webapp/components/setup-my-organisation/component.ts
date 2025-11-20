@@ -35,7 +35,6 @@ import { AuthenticationSocketClient } from '../../../../base-components/webapp/c
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -46,10 +45,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private canOrganisationUpdate: boolean;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.configKeys = [
             'Organization',
             'OrganizationAddress',
@@ -80,6 +81,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.step = input.step;
         this.state.completed = this.step ? this.step.completed : false;
     }
@@ -111,10 +113,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (formId) {
             this.state.formId = formId;
 
-            const context = ContextService.getInstance().getActiveContext();
-            await context?.getFormManager()?.setFormId(this.state.formId);
+            await this.context?.getFormManager()?.setFormId(this.state.formId);
 
-            const formInstance = await context?.getFormManager()?.getFormInstance(true, undefined, this.organisation);
+            const formInstance = await this.context?.getFormManager()?.getFormInstance(
+                true, undefined, this.organisation
+            );
             const form = formInstance.getForm();
             if (form && Array.isArray(form.pages) && form.pages.length) {
                 if (!this.organisation || !this.canOrganisationUpdate) {
@@ -161,8 +164,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initSysconfigFormValues(formId: string): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, this.configKeys
@@ -176,8 +178,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);
@@ -216,6 +217,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         SetupService.getInstance().stepSkipped(this.step.id);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

@@ -22,12 +22,10 @@ import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
 import { CalendarConfiguration } from '../../core/CalendarConfiguration';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
-import { Context } from '../../../../../model/Context';
 import Calendar from 'tui-calendar';
 import { User } from '../../../../user/model/User';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
@@ -40,17 +38,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private calendarConfig: CalendarConfiguration;
     private contextListenerId: string;
     private schedules: any[];
-    private context: Context;
     private popupTimeout: any;
     private tickets: Ticket[] = [];
     private updateTimeout: any;
     private changeTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (input.active) {
             this.tickets = input.tickets || [];
             this.calendarConfig = input.calendarConfig;
@@ -59,7 +58,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         this.initWidget();
     }
 
@@ -124,8 +123,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         let created: boolean = false;
         if (!this.calendar) {
-            created = true;
-            await this.createCalendarElement();
+            created = await this.createCalendarElement();
         }
 
         await this.updateCalendarSchedules(tickets);
@@ -184,7 +182,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return userIds;
     }
 
-    private async createCalendarElement(): Promise<void> {
+    private async createCalendarElement(): Promise<boolean> {
         const dayNames = await this.getDayNames();
         const calendar = document.getElementById(this.state.calendarId);
         const pendingTranslation = await TranslationService.translate('Translatable#Pending');
@@ -217,7 +215,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     },
                 },
             });
+            return true;
         }
+        return false;
     }
 
     private async getDayNames(): Promise<string[]> {
@@ -407,10 +407,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, id)
                         .then(() => {
                             this.calendar?.updateSchedule(schedule.id, schedule.calendarId, changes);
-                            const context = ContextService.getInstance().getActiveContext();
-                            if (context) {
-                                context.reloadObjectList(KIXObjectType.TICKET, true);
-                            }
+                            this.context?.reloadObjectList(KIXObjectType.TICKET, true);
                         })
                         .catch(() => null);
                 }
@@ -483,7 +480,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async setCurrentDate(): Promise<void> {
-        const currentDate = this.calendar?.getDate().toDate();
+        if (!this.calendar) return;
+        const currentDate = this.calendar.getDate().toDate();
         const month = currentDate.getMonth();
 
         const monthLabel = await DateTimeUtil.getMonthName(currentDate);

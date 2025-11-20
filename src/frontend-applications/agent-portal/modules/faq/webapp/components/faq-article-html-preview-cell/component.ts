@@ -21,11 +21,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private faqArticle: FAQArticle;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         const cell: Cell = input.cell;
         if (cell) {
             this.faqArticle = cell.getRow().getRowObject().getObject();
@@ -33,6 +35,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.title = await TranslationService.translate('Translatable#Preview');
     }
 
@@ -54,6 +57,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

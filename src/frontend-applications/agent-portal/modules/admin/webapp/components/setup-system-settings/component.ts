@@ -28,7 +28,6 @@ import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXModulesSocketClient } from '../../../../base-components/webapp/core/KIXModulesSocketClient';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
 import { DefaultSelectInputFormOption } from '../../../../../model/configuration/DefaultSelectInputFormOption';
@@ -39,21 +38,28 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private step: SetupStep;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.step = input.step;
         this.state.completed = this.step ? this.step.completed : false;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Save & Continue', 'Translatable#Skip & Continue', 'Translatable#Save'
         ]);
 
         await this.prepareForm();
         this.state.prepared = true;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async prepareForm(): Promise<void> {
@@ -130,13 +136,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
 
-        const activeContext = ContextService.getInstance().getActiveContext();
-        await activeContext?.getFormManager()?.setFormId(this.state.formId);
+        this.context?.getFormManager()?.setFormId(this.state.formId);
     }
 
     public async submit(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);
