@@ -4606,9 +4606,6 @@ msgstr ""
 msgid "Shared Searches"
 msgstr ""
 
-msgid "Show Backlog"
-msgstr ""
-
 msgid "Show Filter"
 msgstr ""
 

@@ -4801,9 +4801,6 @@ msgstr "Geteilte Suche"
 msgid "Shared Searches"
 msgstr "geteilte Suchen"
 
-msgid "Show Backlog"
-msgstr "Backlog anzeigen"
-
 msgid "Show Filter"
 msgstr "Filter zeigen"
 
