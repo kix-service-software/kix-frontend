@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { TicketContext, QueueService } from '../../core';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
-import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { Context } from '../../../../../model/Context';
@@ -31,7 +30,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketCont
         await super.onMount();
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         await this.loadQueues(this.context);
-
+        await this.showMyTeams();
         this.state.myTeamsActive = this.context?.queueId === 0;
 
         this.state.activeNode = this.getActiveNode(this.context?.queueId);
@@ -104,14 +103,6 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketCont
         }
 
         return info;
-    }
-
-    public async showAll(): Promise<void> {
-        this.state.activeNode = null;
-        const allText = await TranslationService.translate('Translatable#All');
-
-        this.context.setQueue(null);
-        this.context.setAdditionalInformation('STRUCTURE', [allText]);
     }
 
     public async showMyTeams(): Promise<void> {
