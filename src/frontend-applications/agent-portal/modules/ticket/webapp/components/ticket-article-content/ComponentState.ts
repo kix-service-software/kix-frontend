@@ -7,13 +7,15 @@
  * --
  */
 
+import { IdService } from '../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public url: string = null,
-        public frameId: string = null
+        public frameId: string = IdService.generateDateBasedId('article-view-'),
+        public showFrame: boolean = false
     ) {
         super();
     }
