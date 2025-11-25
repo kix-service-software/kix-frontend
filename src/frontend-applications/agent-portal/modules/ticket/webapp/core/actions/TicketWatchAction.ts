@@ -91,7 +91,9 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
                 BrowserUtil.openSuccessOverlay(successHint);
             }
 
-            EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.TICKET });
+            EventService.getInstance().publish(
+                ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.TICKET, objectId: this.data.TicketID }
+            );
         }, 1500);
     }
 
