@@ -75,12 +75,15 @@ export class ObjectFormHandler {
             this.objectFormValueMapper.formContext = this.form?.formContext;
             this.objectFormValueMapper.setFormConfiguration(this.form);
 
+            const startLoadObject = Date.now();
             let formObject = this.context.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
             if (!formObject) {
                 formObject = await this.context.getObject(
                     this.form?.objectType || this.context.descriptor.kixObjectTypes[0], createNewInstance
                 );
             }
+            const endLoadObject = Date.now();
+            console.debug(`Form Object loaded: ${(endLoadObject - startLoadObject)}ms`);
 
             this.activePageId = this.form?.pages[0]?.id;
 

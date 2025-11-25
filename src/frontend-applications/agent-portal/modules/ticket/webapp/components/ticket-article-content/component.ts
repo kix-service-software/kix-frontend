@@ -10,20 +10,20 @@
 import { ComponentState } from './ComponentState';
 import { Article } from '../../../model/Article';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
-import { IdService } from '../../../../../model/IdService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { Context } from '../../../../../model/Context';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
     private resizeTimeout: ReturnType<typeof setTimeout> = null;
-    private observer: ResizeObserver;
+    private resizeObserver: ResizeObserver;
 
     private article: Article = null;
 
     public onCreate(input: any): void {
         super.onCreate(input);
         this.state = new ComponentState();
-        this.state.frameId = IdService.generateDateBasedId('article-view-');
     }
 
     public onInput(input: any): void {
@@ -39,14 +39,28 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        if (!this.observer) {
-            this.prepareObserver();
-        }
+        this.state.showFrame = true;
+        setTimeout(() => this.prepareObserver(), 50);
+
+        super.registerEventSubscriber((data: Context, eventId: string) => {
+
+            if (data.instanceId === this.contextInstanceId) {
+                this.state.showFrame = true;
+                setTimeout(() => this.prepareObserver(), 50);
+            } else {
+                if (this.resizeObserver) {
+                    this.resizeObserver.disconnect();
+                }
+                this.state.showFrame = false;
+            }
+
+        }, [ContextEvents.CONTEXT_CHANGED]);
     }
 
     public onDestroy(): void {
-        if (this.observer) {
-            this.observer.disconnect();
+        super.onDestroy();
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
         }
     }
 
@@ -55,7 +69,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
 
             let containerWidth = frame.offsetWidth;
-            this.observer = new ResizeObserver((entries) => {
+            this.resizeObserver = new ResizeObserver((entries) => {
                 if (frame.offsetWidth !== containerWidth) {
                     if (this.resizeTimeout) {
                         clearTimeout(this.resizeTimeout);
@@ -69,7 +83,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             });
 
-            this.observer.observe(frame);
+            this.resizeObserver.observe(frame);
         }
     }
 

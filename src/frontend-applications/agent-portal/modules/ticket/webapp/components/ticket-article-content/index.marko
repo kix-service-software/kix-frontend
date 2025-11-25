@@ -6,10 +6,11 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<iframe
-    src=state.url
-    class="w-100 bg-white article-view"
-    on-load("viewLoaded")
-    id=state.frameId
-    sandbox="allow-same-origin allow-same-site-none-cookies"/>
+<if(state.showFrame)>
+    <iframe
+        src=state.url
+        class="w-100 bg-white article-view"
+        on-load("viewLoaded")
+        id=state.frameId
+        sandbox="allow-same-origin allow-same-site-none-cookies"/>
+</if>
