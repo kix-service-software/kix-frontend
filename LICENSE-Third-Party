@@ -1243,7 +1243,7 @@
 │  ├─ email: faeldt_kristian@cyberagent.co.jp
 │  ├─ path: node_modules/base64id
 │  └─ licenseFile: node_modules/base64id/LICENSE
-├─ baseline-browser-mapping@2.8.30
+├─ baseline-browser-mapping@2.8.31
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/web-platform-dx/baseline-browser-mapping
 │  ├─ path: node_modules/baseline-browser-mapping
@@ -1255,7 +1255,7 @@
 │  ├─ email: M8ch88l@gmail.com
 │  ├─ path: node_modules/big.js
 │  └─ licenseFile: node_modules/big.js/LICENCE
-├─ bl@6.1.4
+├─ bl@6.1.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/rvagg/bl
 │  ├─ path: node_modules/bl
@@ -1278,7 +1278,7 @@
 │  ├─ publisher: mdo
 │  ├─ path: node_modules/bootstrap-icons
 │  └─ licenseFile: node_modules/bootstrap-icons/LICENSE
-├─ bowser@2.12.1
+├─ bowser@2.13.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/lancedikson/bowser
 │  ├─ publisher: Dustin Diaz
@@ -1378,7 +1378,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001756
+├─ caniuse-lite@1.0.30001757
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -2092,7 +2092,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.258
+├─ electron-to-chromium@1.5.260
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
