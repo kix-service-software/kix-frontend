@@ -40,13 +40,13 @@ export class HTMLUtil {
         const config = ConfigurationService.getInstance().getServerConfiguration();
         const baseRoute = config?.BASE_ROUTE || '';
         return `
-                    <html>
+                    <html style="height: 100%; overflow: auto">
                         <head>
                             <link rel="stylesheet" href="${baseRoute}/static/applications/application/lasso-less.css"/>
                             <link rel="stylesheet" href="${baseRoute}/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css"/>
                             ${additionalHeader.join('\n')}
                         </head>
-                        <body>
+                        <body style="height: 100%; overflow: auto">
                             ${content}
                         </body>
                     </html>

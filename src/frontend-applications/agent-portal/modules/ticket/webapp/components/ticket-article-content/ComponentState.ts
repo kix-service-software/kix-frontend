@@ -14,8 +14,7 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public url: string = null,
-        public frameId: string = IdService.generateDateBasedId('article-view-'),
-        public showFrame: boolean = false
+        public frameId: string = IdService.generateDateBasedId('article-view-')
     ) {
         super();
     }

@@ -39,22 +39,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        this.state.showFrame = true;
         setTimeout(() => this.prepareObserver(), 50);
-
-        super.registerEventSubscriber((data: Context, eventId: string) => {
-
-            if (data.instanceId === this.contextInstanceId) {
-                this.state.showFrame = true;
-                setTimeout(() => this.prepareObserver(), 50);
-            } else {
-                if (this.resizeObserver) {
-                    this.resizeObserver.disconnect();
-                }
-                this.state.showFrame = false;
-            }
-
-        }, [ContextEvents.CONTEXT_CHANGED]);
     }
 
     public onDestroy(): void {
