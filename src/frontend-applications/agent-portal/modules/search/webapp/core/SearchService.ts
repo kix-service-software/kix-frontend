@@ -617,7 +617,7 @@ export class SearchService {
 
             const widgetConfiguration = new WidgetConfiguration(
                 IdService.generateDateBasedId(), name, ConfigurationType.Widget, 'table-widget', name, [], null,
-                tableWidgetConfiguration, false, true, icon
+                tableWidgetConfiguration, false, true, icon, true
             );
             widgetConfiguration.title = searchCache.name;
 
