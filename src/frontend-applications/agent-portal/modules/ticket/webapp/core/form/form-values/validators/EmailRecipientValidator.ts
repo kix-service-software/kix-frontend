@@ -11,13 +11,12 @@ import { ValidationResult } from '../../../../../../base-components/webapp/core/
 import { ValidationSeverity } from '../../../../../../base-components/webapp/core/ValidationSeverity';
 import { FormValidationService } from '../../../../../../base-components/webapp/core/FormValidationService';
 import { TranslationService } from '../../../../../../translation/webapp/core/TranslationService';
-import { KIXObjectService } from '../../../../../../base-components/webapp/core/KIXObjectService';
-import { SystemAddress } from '../../../../../../system-address/model/SystemAddress';
-import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { ObjectFormValueValidator } from '../../../../../../object-forms/webapp/core/validation/ObjectFormValueValidator';
 import { ObjectFormValue } from '../../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RecipientFormValue } from '../RecipientFormValue';
 import addrparser from 'address-rfc2822';
+import { SystemAddressService } from '../../../../../../system-address/webapp/core';
+import { ContactService } from '../../../../../../customer/webapp/core/ContactService';
 
 export class EmailRecipientValidator implements ObjectFormValueValidator {
 
@@ -42,6 +41,11 @@ export class EmailRecipientValidator implements ObjectFormValueValidator {
                     if (isNaN(value)) {
                         value = value.replace(/^(.*?),$/, '$1');
                         emailAddresses.push(...this.parseAddresses(value));
+                    } else {
+                        const contact = await ContactService.getInstance().getContactById(value);
+                        if (contact) {
+                            emailAddresses.push(...this.parseAddresses(contact.Email));
+                        }
                     }
                 }
 
@@ -57,7 +61,8 @@ export class EmailRecipientValidator implements ObjectFormValueValidator {
         return result;
     }
 
-    private async checkEmail(value: string[]): Promise<ValidationResult> {
+    protected async checkEmail(
+        value: string[]): Promise<ValidationResult> {
         if (value && !!value.length) {
             const mailAddresses = Array.isArray(value) ? value : [value];
             for (const mail of mailAddresses) {
@@ -68,7 +73,7 @@ export class EmailRecipientValidator implements ObjectFormValueValidator {
                     return new ValidationResult(ValidationSeverity.ERROR, errorString);
                 }
 
-                if (await this.isSystemAddress(mail.replace(/.+ <(.+)>/, '$1'))) {
+                if (await SystemAddressService.getInstance().isSystemAddress(mail)) {
                     const errorString = await TranslationService.translate(
                         'Translatable#Inserted email address must not be a system address ({0}).', [mail]
                     );
@@ -79,16 +84,7 @@ export class EmailRecipientValidator implements ObjectFormValueValidator {
         return new ValidationResult(ValidationSeverity.OK, '');
     }
 
-    private async isSystemAddress(mail: string): Promise<boolean> {
-        const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(KIXObjectType.SYSTEM_ADDRESS);
-        if (systemAddresses) {
-            return systemAddresses.some((sa) => sa.Name === mail);
-        }
-
-        return false;
-    }
-
-    private parseAddresses(value: string): string[] {
+    protected parseAddresses(value: string): string[] {
         const emailAddresses = [];
         try {
             const parseResult = addrparser.parse(value);

@@ -19,6 +19,8 @@ import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { TicketDetailsContext } from './context';
 import { DoNotSentEventHandler } from './DoNotSentEventHandler';
+import { ObjectFormRegistry } from '../../../object-forms/webapp/core/ObjectFormRegistry';
+import { ContactFormValueValidator } from './form/form-values/validators/ContactFormValueValidator';
 
 export class UIModule implements IUIModule {
 
@@ -29,6 +31,7 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         // FIXME: switch validator for new object form handling
         // FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
+        ObjectFormRegistry.getInstance().registerObjectFormValueValidator(ContactFormValueValidator);
 
         this.registerContexts();
         this.registerTicketActions();

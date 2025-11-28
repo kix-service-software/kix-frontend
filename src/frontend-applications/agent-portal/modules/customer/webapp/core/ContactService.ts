@@ -318,4 +318,15 @@ export class ContactService extends KIXObjectService<Contact> {
         }
         return super.getBackendFilterType(property, dep);
     }
+
+
+    public async getContactById(id: number): Promise<Contact> {
+        let contacts: Contact[];
+        if (id) {
+            contacts = await KIXObjectService.loadObjects<Contact>(
+                KIXObjectType.CONTACT, [id], null, null, true
+            );
+        }
+        return contacts && !!contacts.length ? contacts[0] : null;
+    }
 }
