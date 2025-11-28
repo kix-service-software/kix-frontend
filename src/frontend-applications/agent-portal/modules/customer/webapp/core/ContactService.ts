@@ -133,7 +133,7 @@ export class ContactService extends KIXObjectService<Contact> {
                     const organisations = await KIXObjectService.loadObjects(
                         KIXObjectType.ORGANISATION, filterIds
                     );
-                    nodes = await KIXObjectService.prepareTree(organisations);
+                    nodes = await KIXObjectService.prepareTree(organisations, showInvalid, invalidClickable);
                 }
                 break;
             default:
