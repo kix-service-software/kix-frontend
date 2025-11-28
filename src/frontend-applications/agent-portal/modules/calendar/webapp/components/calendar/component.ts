@@ -29,19 +29,23 @@ import { AgentService } from '../../../../user/webapp/core/AgentService';
 import Calendar from 'tui-calendar';
 import { User } from '../../../../user/model/User';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
-
-declare const tui: any;
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private calendar: any;
     private calendarConfig: CalendarConfiguration;
     private contextListenerId: string;
-    private schedules: any[];
+    private schedules: any[] = [];
     private popupTimeout: any;
     private tickets: Ticket[] = [];
     private updateTimeout: any;
     private changeTimeout: any;
+    private resizeObserver: ResizeObserver | null = null;
+    private renderTimer: number | null = null;
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -59,12 +63,75 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
+                const isTicketEvent =
+                    data?.objectType === KIXObjectType.TICKET ||
+                    data?.type === KIXObjectType.TICKET ||
+                    data?.KIXObjectType === KIXObjectType.TICKET ||
+                    data?.object === 'Ticket' ||
+                    /TICKET/i.test(eventId || '');
+                if (isTicketEvent) {
+                    this.updateCalendar();
+                }
+            },
+            [
+                ApplicationEvent.OBJECT_CREATED,
+                ApplicationEvent.OBJECT_UPDATED,
+                ApplicationEvent.OBJECT_DELETED,
+                'OBJECTS_RELOADED',
+                'RELOAD_OBJECT_LIST',
+                'RELOAD_OBJECT',
+                'TICKET_CREATED',
+                'TICKET_UPDATED',
+                'TICKET_DELETED',
+                'TICKET_RELOADED'
+            ]
+        );
+
+        await this.waitForContainerReady();
+
         this.initWidget();
     }
 
     public onDestroy(): void {
-        this.context?.unregisterListener(this.contextListenerId);
-        this.calendar?.destroy();
+        super.onDestroy();
+
+        if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout); this.updateTimeout = null;
+        }
+        if (this.changeTimeout) {
+            clearTimeout(this.changeTimeout); this.changeTimeout = null;
+        }
+        if (this.popupTimeout) {
+            clearTimeout(this.popupTimeout); this.popupTimeout = null;
+        }
+
+        if (this.contextListenerId) {
+            this.context?.unregisterListener?.(this.contextListenerId);
+        }
+        try { this.resizeObserver?.disconnect(); } catch { /* ignore */ }
+        if (this.renderTimer) cancelAnimationFrame(this.renderTimer);
+        this.calendar?.destroy?.();
+        this.calendar = null;
+    }
+
+    private async waitForContainerReady(): Promise<void> {
+        const el = document.getElementById(this.state.calendarId);
+        let tries = 0;
+        while (el && (el.offsetWidth === 0 || el.offsetHeight === 0) && tries < 40) {
+            await new Promise((r) => setTimeout(r, 25));
+            tries++;
+        }
+    }
+
+    private scheduleRender(): void {
+        if (!this.calendar) return;
+        if (this.renderTimer) cancelAnimationFrame(this.renderTimer);
+        this.renderTimer = requestAnimationFrame(() => {
+            try { this.calendar.render(true); } catch { /* ignore */ }
+        });
     }
 
     private async updateCalendar(): Promise<void> {
@@ -76,7 +143,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const tickets = await this.loadTickets();
             await this.createCalendar(tickets);
             this.updateTimeout = null;
-        }, 500);
+        }, 300);
     }
 
     private async initWidget(): Promise<void> {
@@ -86,18 +153,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async loadTickets(): Promise<Ticket[]> {
         const user = await AgentService.getInstance().getCurrentUser();
-        let tickets = [];
+        let tickets: Ticket[] = [];
 
         if (this.tickets?.length) {
             tickets = this.tickets;
         } else {
             const ticketFilter = [
                 new FilterCriteria(
-                    TicketProperty.OWNER_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND,
+                    TicketProperty.OWNER_ID, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND,
                     user.UserID
                 ),
                 new FilterCriteria(
-                    TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND,
+                    TicketProperty.STATE_TYPE, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND,
                     ['Open']
                 )
             ];
@@ -109,7 +178,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             );
         }
 
-        return tickets;
+        return tickets || [];
     }
 
     private async createCalendar(tickets: Ticket[]): Promise<void> {
@@ -119,21 +188,26 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.calendars = await this.createCalendarForUser(tickets);
 
+        if (this.calendar && Array.isArray(this.state.calendars)) {
+            try { this.calendar.setCalendars(this.state.calendars); } catch { /* ignore */ }
+        }
+
         this.clearSchedules();
 
-        let created: boolean = false;
+        let created = false;
         if (!this.calendar) {
             created = await this.createCalendarElement();
         }
 
         await this.updateCalendarSchedules(tickets);
 
-        if (created) {
-            await this.setCurrentDate(); this.calendar?.on('beforeUpdateSchedule', this.scheduleChanged.bind(this));
-            this.calendar?.on('clickSchedule', this.scheduleClicked.bind(this));
-            this.calendar?.on('beforeCreateSchedule', (event) => {
-                const guide = event.guide;
-                guide.clearGuideElement();
+        if (created && this.calendar) {
+            await this.setCurrentDate();
+            this.calendar.on('beforeUpdateSchedule', this.scheduleChanged.bind(this));
+            this.calendar.on('clickSchedule', this.scheduleClicked.bind(this));
+            this.calendar.on('beforeCreateSchedule', (event: any): void => {
+                const guide = event?.guide;
+                guide?.clearGuideElement?.();
             });
         }
     }
@@ -141,14 +215,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async createCalendarForUser(tickets: Ticket[]): Promise<any[]> {
         const userIdMap = await this.getUserIdMap(tickets);
 
-        const calendars = [];
+        const calendars: any[] = [];
         for (const u of userIdMap) {
             const bgColor = await BrowserUtil.getUserColor(u[0]);
             const overlay = await LabelService.getInstance().getOverlayIcon(
                 KIXObjectType.USER, u[0]
             );
             calendars.push({
-                id: u[0],
+                id: String(u[0]),
                 name: u[1],
                 color: '#ffffff',
                 bgColor,
@@ -162,7 +236,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async getUserIdMap(tickets: Ticket[]): Promise<Map<number, string>> {
         const userIds: Map<number, string> = new Map();
-        for (const t of tickets) {
+        for (const t of (tickets || [])) {
             if (!userIds.has(t.OwnerID)) {
                 const loadingOptions = new KIXObjectLoadingOptions();
                 loadingOptions.includes = [KIXObjectType.CONTACT];
@@ -170,7 +244,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const user = await KIXObjectService.loadObjects<User>(
                     KIXObjectType.USER, [t.OwnerID], loadingOptions
                 ).catch((): User[] => []);
-
 
                 const fullName = user?.length
                     ? user[0].Contact?.Fullname
@@ -184,9 +257,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async createCalendarElement(): Promise<boolean> {
         const dayNames = await this.getDayNames();
-        const calendar = document.getElementById(this.state.calendarId);
+        const container = document.getElementById(this.state.calendarId);
         const pendingTranslation = await TranslationService.translate('Translatable#Pending');
-        if (calendar) {
+
+        if (container) {
             this.calendar = new Calendar(`#${this.state.calendarId}`, {
                 usageStatistics: false,
                 defaultView: 'month',
@@ -194,27 +268,33 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 taskView: [],
                 calendars: this.state.calendars,
                 month: {
-                    moreLayerSize: {
-                        height: 'auto'
-                    },
+                    moreLayerSize: { height: 'auto' },
                     narrowWeekend: true,
-                    startDayOfWeek: 1, // monday
+                    startDayOfWeek: 1,
                     visibleScheduleCount: 10,
                     daynames: dayNames,
                 },
                 week: {
                     narrowWeekend: true,
-                    startDayOfWeek: 1, // monday
+                    startDayOfWeek: 1,
                     daynames: dayNames,
                 },
                 template: {
                     time(schedule): string {
-                        return `${schedule.raw?.StateType === 'pending reminder' ?
-                            `<i class="fas fa-hourglass-half me-1" title="${pendingTranslation}"></i>` :
-                            ''}${schedule.title}`;
+                        return `${schedule.raw?.StateType === 'pending reminder'
+                            ? `<i class="fas fa-hourglass-half me-1" title="${pendingTranslation}"></i>`
+                            : ''}${schedule.title}`;
                     },
                 },
             });
+
+            try {
+                this.resizeObserver = new ResizeObserver(() => this.scheduleRender());
+                this.resizeObserver.observe(container);
+            } catch { /* older browsers */ }
+
+            this.scheduleRender();
+
             return true;
         }
         return false;
@@ -222,9 +302,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async getDayNames(): Promise<string[]> {
         const dayNameTranslations = await TranslationService.createTranslationObject([
-            'Translatable#Sunday', 'Translatable#Monday', 'Translatable#Tuesday', 'Translatable#Wednesday', 'Translatable#Thursday', 'Translatable#Friday', 'Translatable#Saturday'
+            'Translatable#Sunday', 'Translatable#Monday', 'Translatable#Tuesday', 'Translatable#Wednesday',
+            'Translatable#Thursday', 'Translatable#Friday', 'Translatable#Saturday'
         ]);
-        const dayNames = [];
+        const dayNames: string[] = [];
         for (const key in dayNameTranslations) {
             if (dayNameTranslations[key]) {
                 dayNames.push(dayNameTranslations[key]);
@@ -239,48 +320,56 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (!Array.isArray(this.schedules)) {
             this.schedules = [];
         }
-        if (this.calendar) {
-            if (this.schedules.length > 0) {
-                this.schedules.forEach((s) => this.calendar.deleteSchedule(s.id, s.calendarId));
-            }
 
-            this.calendar?.clear(true);
+        if (this.calendar && this.schedules.length > 0) {
+            try {
+                this.schedules.forEach((s) => {
+                    this.calendar.deleteSchedule(String(s.id), String(s.calendarId), true);
+                });
+            } catch {
+                // ignore
+            }
         }
 
         this.schedules = [];
+        this.scheduleRender();
     }
 
     private async updateCalendarSchedules(tickets: Ticket[]): Promise<void> {
-        this.schedules = (await this.createSchedules(tickets)).filter((s) => s);
-        this.calendar?.createSchedules(this.schedules);
+        this.schedules = (await this.createSchedules(tickets)).filter(Boolean);
+        if (this.calendar && this.schedules.length) {
+            this.calendar.createSchedules(this.schedules, true);
+        }
+        this.scheduleRender();
         this.state.loading = false;
     }
 
     private async createSchedules(tickets: Ticket[]): Promise<any[]> {
-        const schedules = [];
+        let list = tickets || [];
 
-        if (tickets?.length && !tickets.every((t) => t.DynamicFields)) {
+        if (list.length && !list.every((t) => t.DynamicFields)) {
             const ticketsWithDF = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, tickets.map((t) => t.TicketID),
+                KIXObjectType.TICKET, list.map((t) => t.TicketID),
                 new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
             );
 
             if (Array.isArray(ticketsWithDF) && ticketsWithDF.length) {
-                tickets = ticketsWithDF;
+                list = ticketsWithDF;
             }
         }
 
-
+        const schedules: any[] = [];
         const promises: Promise<void>[] = [];
-        for (const ticket of tickets) {
-            const promise = new Promise<void>(async (resolve) => {
 
+        for (const ticket of list) {
+            const p = new Promise<void>(async (resolve) => {
                 const title = await LabelService.getInstance().getObjectText(ticket, true);
                 const isPending = ticket.StateType === 'pending reminder';
                 const bgColor = await BrowserUtil.getUserColor(ticket.OwnerID);
-                const schedule: any = {
-                    id: ticket.TicketID,
-                    calendarId: ticket.OwnerID,
+
+                const base: any = {
+                    id: String(ticket.TicketID),
+                    calendarId: String(ticket.OwnerID),
                     title,
                     category: 'time',
                     raw: ticket,
@@ -288,27 +377,26 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 };
 
                 if (isPending) {
-                    const pendingSchedule = { ...schedule };
-                    pendingSchedule.id = 'pending-' + pendingSchedule.id;
+                    const pendingSchedule = { ...base };
+                    pendingSchedule.id = 'pending-' + base.id;
 
                     const pendingDate = new Date(ticket.PendingTime);
                     if (!isNaN(pendingDate.getTime())) {
                         pendingSchedule.start = pendingDate;
                         const endDate = new Date(pendingDate);
                         endDate.setHours(endDate.getHours() + 1);
-
-                        pendingSchedule.end = pendingDate;
+                        pendingSchedule.end = endDate;
                         schedules.push(pendingSchedule);
                     }
                 }
 
-                if (await this.setScheduleDates(ticket, schedule)) {
-                    schedules.push(schedule);
+                if (await this.setScheduleDates(ticket, base)) {
+                    schedules.push(base);
                 }
 
                 resolve();
             });
-            promises.push(promise);
+            promises.push(p);
         }
 
         await Promise.all(promises);
@@ -319,35 +407,42 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const startValue = this.getScheduleDateValue(this.calendarConfig.startDateProperty, ticket);
         const endValue = this.getScheduleDateValue(this.calendarConfig.endDateProperty, ticket);
 
-        let isSchedule = false;
-
         if (!startValue && !endValue) {
-            isSchedule = false;
-        } else if (startValue && endValue) {
+            return false;
+        }
+
+        if (startValue && endValue) {
             schedule.start = startValue;
             schedule.end = endValue;
-            isSchedule = true;
-        } else if (((startValue && !endValue) || (!startValue && endValue))) {
-            schedule.isAllDay = true;
-            schedule.start = startValue ? startValue : endValue;
-            schedule.end = endValue ? endValue : startValue;
-            isSchedule = true;
+            return true;
         }
 
-        return isSchedule;
+        schedule.isAllDay = true;
+        schedule.start = startValue ? startValue : endValue;
+        schedule.end = endValue ? endValue : startValue;
+        return true;
     }
 
-    public getScheduleDateValue(property: string, ticket: Ticket): Date {
-        let value = new Date(ticket[property]);
+    public getScheduleDateValue(property: string, ticket: Ticket): Date | null {
+        if (ticket && (ticket as any)[property]) {
+            const direct = new Date((ticket as any)[property]);
+            return isNaN(direct.getTime()) ? null : direct;
+        }
+
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
-            const dfValue = ticket.DynamicFields.find((df) => df.Name === dfName);
-            value = dfValue?.Value?.length ? new Date(dfValue.Value[0]) : null;
+            const dfValue = ticket?.DynamicFields?.find((df) => df.Name === dfName);
+            const raw = dfValue?.Value?.[0];
+            if (raw) {
+                const parsed = new Date(raw);
+                return isNaN(parsed.getTime()) ? null : parsed;
+            }
         }
-        return value;
+
+        return null;
     }
 
-    private async scheduleChanged(event): Promise<void> {
+    private async scheduleChanged(event: any): Promise<void> {
         const schedule = event.schedule;
         const changes = event.changes;
 
@@ -355,62 +450,60 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             clearTimeout(this.changeTimeout);
         }
         this.changeTimeout = setTimeout(async () => {
-            if (changes) {
-                const parameter = [];
+            if (!changes) return;
 
-                const today = new Date();
+            const parameter: Array<[string, any]> = [];
+            const today = new Date();
 
-                if (schedule.raw.StateType === 'pending reminder' && isNaN(Number(schedule.id))) {
-                    if (changes.start) {
-                        if (today > changes.start.toDate()) {
-                            BrowserUtil.openErrorOverlay('Translatable#Pending date is not in the future.');
-                        } else {
-                            const pendingDate = DateTimeUtil.getKIXDateTimeString(changes.start.toDate());
-                            parameter.push([TicketProperty.STATE_ID, schedule.raw.StateID]);
-                            parameter.push([TicketProperty.PENDING_TIME, pendingDate]);
-                        }
-                    } else if (changes.end) {
-                        const newStart = schedule.end.toDate();
-                        newStart.setHours(changes.end.toDate().getHours() - 1);
-                        const pendingDate = DateTimeUtil.getKIXDateTimeString(newStart);
+            if (schedule.raw.StateType === 'pending reminder' && isNaN(Number(schedule.id))) {
+                if (changes.start) {
+                    if (today > changes.start.toDate()) {
+                        BrowserUtil.openErrorOverlay('Translatable#Pending date is not in the future.');
+                    } else {
+                        const pendingDate = DateTimeUtil.getKIXDateTimeString(changes.start.toDate());
                         parameter.push([TicketProperty.STATE_ID, schedule.raw.StateID]);
                         parameter.push([TicketProperty.PENDING_TIME, pendingDate]);
-
-                        changes.start = newStart;
                     }
-                } else {
-                    const dfValue = [];
-                    if (changes.start) {
-                        const startDate = DateTimeUtil.getKIXDateTimeString(changes.start.toDate());
-                        dfValue.push({ Name: this.calendarConfig.startDateProperty, Value: [startDate] });
-                    }
-
-                    if (changes.end) {
-                        let end = changes.end.toDate();
-                        if (changes.start?.toDate()?.getTime() === end.getTime()) {
-                            end = changes.end.addMinutes(30).toDate();
-                        }
-                        const endDate = DateTimeUtil.getKIXDateTimeString(end);
-                        dfValue.push({ Name: this.calendarConfig.endDateProperty, Value: [endDate] });
-                    }
-
-                    if (dfValue.length) {
-                        dfValue.forEach((df: DynamicFieldValue) => df.Name = df.Name.replace(
-                            /^DynamicFields\.(.+)$/, '$1'
-                        ));
-                        parameter.push([KIXObjectProperty.DYNAMIC_FIELDS, dfValue]);
-                    }
+                } else if (changes.end) {
+                    const newStart = schedule.end.toDate();
+                    newStart.setHours(changes.end.toDate().getHours() - 1);
+                    const pendingDate = DateTimeUtil.getKIXDateTimeString(newStart);
+                    parameter.push([TicketProperty.STATE_ID, schedule.raw.StateID]);
+                    parameter.push([TicketProperty.PENDING_TIME, pendingDate]);
+                    (changes as any).start = newStart;
+                }
+            } else {
+                const dfValue: DynamicFieldValue[] = [];
+                if (changes.start) {
+                    const startDate = DateTimeUtil.getKIXDateTimeString(changes.start.toDate());
+                    dfValue.push({ Name: this.calendarConfig.startDateProperty, Value: [startDate] } as any);
                 }
 
-                if (parameter.length) {
-                    const id = isNaN(Number(schedule.id)) ? schedule.id.replace(/^pending-/, '') : schedule.id;
-                    KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, id)
-                        .then(() => {
-                            this.calendar?.updateSchedule(schedule.id, schedule.calendarId, changes);
-                            this.context?.reloadObjectList(KIXObjectType.TICKET, true);
-                        })
-                        .catch(() => null);
+                if (changes.end) {
+                    let end = changes.end.toDate();
+                    if (changes.start?.toDate()?.getTime() === end.getTime()) {
+                        end = changes.end.addMinutes(30).toDate();
+                    }
+                    const endDate = DateTimeUtil.getKIXDateTimeString(end);
+                    dfValue.push({ Name: this.calendarConfig.endDateProperty, Value: [endDate] } as any);
                 }
+
+                if (dfValue.length) {
+                    dfValue.forEach((df: DynamicFieldValue) => df.Name = df.Name.replace(
+                        /^DynamicFields\.(.+)$/, '$1'
+                    ));
+                    parameter.push([KIXObjectProperty.DYNAMIC_FIELDS, dfValue]);
+                }
+            }
+
+            if (parameter.length) {
+                const id = isNaN(Number(schedule.id)) ? String(schedule.id).replace(/^pending-/, '') : schedule.id;
+                KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, id)
+                    .then(() => {
+                        this.calendar?.updateSchedule(String(schedule.id), String(schedule.calendarId), changes, true);
+                        this.scheduleRender();
+                    })
+                    .catch(() => null);
             }
         }, 100);
     }
@@ -420,27 +513,31 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.toggleLabel = this.state.view === 'month' ? 'Translatable#Week' : 'Translatable#Month';
         await this.setCurrentDate();
         this.calendar?.changeView(this.state.view, true);
+        this.scheduleRender();
     }
 
     public async today(): Promise<void> {
         if (this.calendar) {
-            this.calendar?.setDate(new Date());
-            this.calendar?.changeView(this.state.view, true);
+            this.calendar.setDate(new Date());
+            this.calendar.changeView(this.state.view, true);
             await this.setCurrentDate();
+            this.scheduleRender();
         }
     }
 
     public async next(): Promise<void> {
         if (this.calendar) {
-            this.calendar?.next();
+            this.calendar.next();
             await this.setCurrentDate();
+            this.scheduleRender();
         }
     }
 
     public async prev(): Promise<void> {
         if (this.calendar) {
-            this.calendar?.prev();
+            this.calendar.prev();
             await this.setCurrentDate();
+            this.scheduleRender();
         }
     }
 
@@ -471,7 +568,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
                     const items = document.getElementsByClassName('tui-full-calendar-popup-container');
                     if (items?.length) {
-                        items.item(0).innerHTML = '';
+                        (items.item(0) as HTMLElement).innerHTML = '';
                         content.appendTo(items.item(0));
                     }
                 }, 50);
@@ -480,10 +577,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async setCurrentDate(): Promise<void> {
-        if (!this.calendar) return;
-        const currentDate = this.calendar.getDate().toDate();
-        const month = currentDate.getMonth();
+        if (!this.calendar || typeof this.calendar.getDate !== 'function') return;
 
+        const tz = this.calendar.getDate && this.calendar.getDate();
+        const currentDate: Date =
+            tz && typeof tz.toDate === 'function'
+                ? tz.toDate()
+                : (tz instanceof Date ? tz : new Date());
+
+        if (!(currentDate instanceof Date) || isNaN(currentDate.getTime())) return;
+
+        const month = currentDate.getMonth();
         const monthLabel = await DateTimeUtil.getMonthName(currentDate);
 
         const weekLabel = await TranslationService.translate('Translatable#CW');
@@ -505,10 +609,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public toggleCalendar(calendar: any): void {
-        const cal = this.state.calendars.find((c) => c.id === calendar.id);
+        const cal = this.state.calendars.find((c) => String(c.id) === String(calendar.id));
+        if (!cal) return;
         cal.visible = !cal.visible;
         (this as any).setStateDirty('calendars');
-        this.calendar?.toggleSchedules(cal.id, !cal.visible);
+        this.calendar?.toggleSchedules(String(cal.id), !cal.visible, true);
+        this.scheduleRender();
     }
 
 }
