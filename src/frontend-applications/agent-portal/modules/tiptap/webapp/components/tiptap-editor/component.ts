@@ -24,6 +24,44 @@ import {
 } from '../../static/utils/helpers';
 
 declare const Tiptap: any;
+function sanitizeTextmoduleHtml(html: string): string {
+    if (!html) return html;
+
+    try {
+        const container = document.createElement('div');
+        container.innerHTML = html;
+
+        const tbodies = Array.from(container.querySelectorAll('tbody'));
+        for (const tbody of tbodies) {
+            const parent = tbody.parentElement;
+            if (!parent || parent.tagName.toLowerCase() !== 'table') {
+                const table = document.createElement('table');
+
+                while (tbody.firstChild) {
+                    table.appendChild(tbody.firstChild);
+                }
+
+                tbody.replaceWith(table);
+            }
+        }
+
+        container
+            .querySelectorAll('tbody')
+            .forEach((t) => {
+                while (t.firstChild) {
+                    t.parentElement?.insertBefore(t.firstChild, t);
+                }
+                t.remove();
+            });
+
+        const result = container.innerHTML;
+        const normalized = normalizeForTiptap(result);
+
+        return normalized;
+    } catch {
+        return html;
+    }
+}
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
     private editor: any;
@@ -66,15 +104,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const createEditor = (content: string, _tag: string): any =>
             new Tiptap.Editor({
                 element: wrapper,
-                enableContentCheck: true,
-                onContentError: (_error): void => {
-                    try {
-                        const cleaned = normalizeForTiptap(comp.value);
-                        comp.editor?.commands.setContent(cleaned, false);
-                    } catch {
-                        /* noop */
-                    }
-                },
+                enableContentCheck: false,
                 extensions: [
                     Tiptap.StarterKit.configure({ bold: false, paragraph: false }),
                     Tiptap.TextStyle,
@@ -105,12 +135,28 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         suggestion: {
                             char: TextmodulePlugin.TRIGGER,
                             startOfLine: false,
-                            items: async ({ query }): Promise<any[]> =>
-                                await TextmodulePlugin.fetchSuggestions(query),
-                            render: (): any => createMentionPopup(),
+                            items: ({ query }) => TextmodulePlugin.fetchSuggestions(query),
+                            render: () => createMentionPopup(),
                             command: async ({ editor, range, props }): Promise<void> => {
-                                const c2 = await TextmodulePlugin.prepareTextContent(props);
-                                editor.chain().focus().deleteRange(range).insertContent(c2).run();
+                                let resolvedContent: string;
+                                try {
+                                    resolvedContent = await TextmodulePlugin.prepareTextContent(props);
+                                } catch {
+                                    return;
+                                }
+
+                                const safeContent = sanitizeTextmoduleHtml(resolvedContent);
+
+                                try {
+                                    editor
+                                        .chain()
+                                        .focus()
+                                        .deleteRange(range)
+                                        .insertContent(safeContent)
+                                        .run();
+                                } catch {
+                                    // swallow Tiptap errors during insertion
+                                }
                             },
                         },
                     }),
