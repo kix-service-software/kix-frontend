@@ -401,14 +401,14 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         return await this.setFormValue(newValue.length ? newValue as any : null);
     }
 
-    public async loadSelectableValues(): Promise<void> {
+    public async loadSelectableValues(allowAll: boolean = true): Promise<void> {
         let objects = [];
         if (this.enabled) {
             if (this.isAutoComplete) {
                 objects = await this.searchObjects();
             } else if (this.possibleValues) {
                 objects = await KIXObjectService.loadObjects(this.objectType, this.possibleValues, this.loadingOptions);
-            } else {
+            } else if (allowAll) {
                 objects = await KIXObjectService.loadObjects(this.objectType, null, this.loadingOptions);
             }
 
@@ -572,7 +572,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                     : objectIds.filter((id) => !id.toString().match(/<KIX_.+>/))
                 : [];
             if (idsToLoad.length) {
-                selectedNodes = await this.loadNodes(idsToLoad);
+                // use true, to show selected values (even if they otherwise hidden as selectABLE values)
+                selectedNodes = await this.loadNodes(idsToLoad, true);
             }
 
             if (this.freeText || idsToLoad.length !== objectIds.length) {
@@ -594,7 +595,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.selectedNodes = selectedNodes.sort((a, b) => a.id - b.id);
     }
 
-    private async loadNodes(idsToLoad: T[]): Promise<TreeNode[]> {
+    private async loadNodes(idsToLoad: T[], showInvalidNodes: boolean = this.showInvalidNodes): Promise<TreeNode[]> {
         const selectedNodes: TreeNode[] = [];
         if (this.isAutoComplete) {
             let objects = [];
@@ -609,7 +610,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
             for (const object of objects) {
                 const node = await ObjectReferenceUtil.createTreeNode(
-                    object, this.showInvalidNodes, this.isInvalidClickable, this.useTextAsId,
+                    object, showInvalidNodes, this.isInvalidClickable, this.useTextAsId,
                     this.translatable
                 );
                 if (node) {
@@ -630,7 +631,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             if (objects && !!objects.length) {
                 for (const object of objects) {
                     const node = await ObjectReferenceUtil.createTreeNode(
-                        object, this.translatable, this.isInvalidClickable, this.useTextAsId, this.translatable
+                        object, showInvalidNodes, this.isInvalidClickable, this.useTextAsId, this.translatable
                     );
                     if (node) {
                         node.selected = true;

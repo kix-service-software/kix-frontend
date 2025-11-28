@@ -516,8 +516,8 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public async prepareObjectTree(
-        objects: KIXObject[], showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>,
-        translatable?: boolean, useTextAsId?: boolean
+        objects: KIXObject[], showInvalid?: boolean, invalidClickable: boolean = true,
+        filterIds?: Array<string | number>, translatable?: boolean, useTextAsId?: boolean
     ): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
         if (objects && !!objects.length) {
@@ -535,7 +535,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             for (const o of objects) {
                 const label = await LabelService.getInstance().getObjectText(o, true, true, translatable);
                 const icon = LabelService.getInstance().getObjectIcon(o);
-                nodes.push(new TreeNode(o.ObjectId, label, icon));
+                const node = new TreeNode(o.ObjectId, label, icon);
+                node.selectable = typeof o.ValidID === 'undefined' || o.ValidID === 1 || invalidClickable;
+                node.showAsInvalid = typeof o.ValidID !== 'undefined' && o.ValidID !== 1;
+                nodes.push(node);
             }
         }
         return nodes;
