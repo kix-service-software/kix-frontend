@@ -22,6 +22,9 @@ import {
     moveIntoNewParagraph,
     applyLastUsedMarks,
 } from '../../static/utils/helpers';
+import { TiptapEditorService } from '../../core/TipTapEditorService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 
 declare const Tiptap: any;
 function sanitizeTextmoduleHtml(html: string): string {
@@ -67,6 +70,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private editor: any;
     private readOnly: boolean;
     private value: string;
+    private changeTimeout: any;
+    private editorTimeout = 1000;
+    private changeListener: Array<() => null> = [];
+    private focusListener: Array<(value: string) => null> = [];
+
+    private focusListenerEnabled = true;
 
     private _onVisChange?: () => void;
     private _onBeforeUnload?: () => void;
@@ -78,12 +87,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public onCreate(input: any): void {
         super.onCreate(input);
         this.state = new ComponentState();
+        this.changeListener = [];
+        this.focusListener = [];
     }
 
     public onInput(input: any): void {
         super.onInput(input);
         this.readOnly = input.readOnly ?? false;
         this.value = input.value;
+        if (this.editor) {
+            this.editor.commands.setContent(this.value);
+        }
     }
 
     public async onMount(): Promise<void> {
@@ -389,7 +403,42 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.editor = createEditor(fixed, 'E2');
         }
 
+        Tiptap.Editor.prototype.getValue = (): any => {
+            return comp.editor.getHTML();
+        };
+
+        Tiptap.Editor.prototype.addFocusListener = (listener: (value: string) => null): void => {
+            comp.focusListener.push(listener);
+        };
+
+        Tiptap.Editor.prototype.addChangeListener = (listener: () => null): void => {
+            comp.changeListener.push(listener);
+        };
+
+        Tiptap.Editor.prototype.disableFocusListener = comp.disableFocusListener;
+
+        this.editor.addChangeListener(() => {
+            if (this.changeTimeout) {
+                clearTimeout(this.changeTimeout);
+            } else {
+                EventService.getInstance().publish(FormEvent.BLOCK, true);
+            }
+            this.changeTimeout = setTimeout(() => {
+                if (!(this as any).isDestroyed()) {
+                    const value = this.editor.getValue();
+                    (this as any).emit('valueChanged', value);
+                    EventService.getInstance().publish(FormEvent.BLOCK, false);
+                }
+                this.changeTimeout = null;
+            }, this.editorTimeout);
+            return null;
+        });
+
+        this.editor.addFocusListener(this.focusLostFallback.bind(this));
+
+
         const editor = this.editor;
+        TiptapEditorService.getInstance().setActiveEditor(editor);
 
         const applyDefaultsIntoEmptyBlock = (ed: any): void => {
             const { state } = ed;
@@ -530,6 +579,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this._onVisChange = onVisChange;
         this._onBeforeUnload = onBeforeUnload;
         this._saveRaw = saveRaw;
+    }
+
+    private focusLostFallback(): any {
+        if (!(this as any).isDestroyed() && this.editor?.isFocusListenerEnabled()) {
+            const editorValue = this.editor.getValue();
+            (this as any).emit('focusLost', editorValue);
+        }
+    }
+
+    public disableFocusListener(disableTimeout: number = 1000): void {
+        this.focusListenerEnabled = false;
+        setTimeout(() => {
+            this.focusListenerEnabled = true;
+        }, disableTimeout);
     }
 
     public onDestroy(): void {
