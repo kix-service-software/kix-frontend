@@ -10,6 +10,7 @@
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { SystemAddress } from '../../model/SystemAddress';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import addrparser from 'address-rfc2822';
 
 export class SystemAddressService extends KIXObjectService<SystemAddress> {
 
@@ -34,6 +35,24 @@ export class SystemAddressService extends KIXObjectService<SystemAddress> {
 
     public getLinkObjectName(): string {
         return 'SystemAddress';
+    }
+
+    public async isSystemAddress(mail: string): Promise<boolean> {
+        const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(KIXObjectType.SYSTEM_ADDRESS);
+        if (systemAddresses) {
+            try {
+                const parseResult = addrparser.parse(mail);
+                for (const address of parseResult) {
+                    if (systemAddresses.some(
+                        (sa) => sa.Name.toLowerCase() === address.address.toLowerCase())
+                    ) return true;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        return false;
     }
 
 }
