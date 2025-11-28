@@ -22,6 +22,8 @@ import { ContextTab } from './ContextTab';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
+    private pendingScrollId: string | null = null;
+
     public onCreate(input: any): void {
         super.onCreate(input, 'tabbar');
         this.state = new ComponentState();
@@ -32,6 +34,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.initContextEventListener();
         await this.addContextTabs();
+
+        const ctx = ContextService.getInstance().getActiveContext();
+        if (ctx?.instanceId) {
+            this.pendingScrollId = ctx.instanceId;
+            requestAnimationFrame(() => this.scrollIntoView(ctx.instanceId));
+        }
+    }
+
+    public onUpdate(): void {
+        super.onUpdate();
+        if (this.pendingScrollId) {
+            const id = this.pendingScrollId;
+            this.pendingScrollId = null;
+            requestAnimationFrame(() => this.scrollIntoView(id));
+        }
     }
 
     public onDestroy(): void {
@@ -64,7 +81,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         tab.icon = data.getIcon();
                         tab.displayText = await data.getDisplayText();
                     }
-
                     (this as any).setStateDirty('contextTabs');
                 } else if (eventId === ContextEvents.CONTEXT_REORDERED) {
                     this.state.contextTabs = [];
@@ -102,9 +118,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private toggleActiveEntry(): void {
         const context = ContextService.getInstance().getActiveContext();
-        this.state.contextTabs.forEach((e) => e.active = context?.instanceId === e.contextInstanceId);
+        const activeId = context?.instanceId;
+
+        this.state.contextTabs.forEach((e) => e.active = activeId === e.contextInstanceId);
         this.state.contextTabs = [...this.state.contextTabs];
-        this.scrollIntoView(context?.instanceId);
+        this.pendingScrollId = activeId || null;
     }
 
     private async addEntry(context: Context, setActive: boolean = false): Promise<void> {
@@ -261,12 +279,41 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private scrollIntoView(instanceId: string): void {
-        const tabContent: HTMLElement = (this as any).getEl('tabbar-tab-content');
-        const tabElement: HTMLElement = (this as any).getEl(instanceId);
+    private scrollIntoView(instanceId: string | null): void {
+        if (!instanceId) return;
 
-        if (tabContent && tabElement) {
-            tabContent.scrollLeft = tabElement.offsetLeft - 50;
+        const tabContent = (this as any).getEl('tabbar-tab-content') as HTMLElement;
+        if (!tabContent) return;
+
+        const tabElement = tabContent.querySelector(`[data-instanceid="${instanceId}"]`) as HTMLElement | null;
+        if (!tabElement) return;
+
+        // No horizontal scrolling necessary if all tabs already fit into the visible area.
+        if (tabContent.scrollWidth <= tabContent.clientWidth) return;
+
+        // Current visible horizontal range of the tab container (scroll offset + viewport width).
+        const viewLeft = tabContent.scrollLeft;
+        const viewRight = viewLeft + tabContent.clientWidth;
+
+        // Horizontal position and width of the tab inside the container.
+        const left = tabElement.offsetLeft;
+        const right = left + tabElement.offsetWidth;
+
+        if (left < viewLeft) {
+            // Tab starts left of the visible area:
+            // scroll so that the left edge becomes visible with a small margin.
+            // The "16" adds a bit of padding so the tab is not directly at the border.
+            const target = Math.max(0, left - 16);
+            tabContent.scrollTo({ left: target, behavior: 'auto' });
+        } else if (right > viewRight) {
+            // Tab extends beyond the right edge of the visible area:
+            // scroll so that the right edge is visible, again leaving 16px padding.
+            // The Math.min(...) ensures we don't scroll beyond the maximum range.
+            const target = Math.min(
+                right - tabContent.clientWidth + 16,
+                tabContent.scrollWidth - tabContent.clientWidth
+            );
+            tabContent.scrollTo({ left: target, behavior: 'auto' });
         }
     }
 
