@@ -7,6 +7,7 @@
  * --
  */
 
+import { AgentPortalConfiguration } from '../../../../model/configuration/AgentPortalConfiguration';
 import { Attachment } from '../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
@@ -17,7 +18,9 @@ import { KIXObjectService } from '../../../base-components/webapp/core/KIXObject
 import { CKEditorService } from '../../../ck-editor/webapp/core/CKEditorService';
 import { RichTextFormValue } from '../../../object-forms/model/FormValues/RichTextFormValue';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigService } from '../../../sysconfig/webapp/core';
 import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
+import { TiptapEditorService } from '../../../tiptap/webapp/core/TipTapEditorService';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { FAQArticle } from '../../model/FAQArticle';
 import { FAQArticleAttachmentLoadingOptions } from '../../model/FAQArticleAttachmentLoadingOptions';
@@ -33,7 +36,13 @@ export class FAQArticleHandler {
         if (objectFormValueMapper) {
             const faqArticleHTML = await FAQArticleHandler.prepareFAQArticleHTML(articleId);
             if (faqArticleHTML) {
-                const editor = CKEditorService.getInstance().getActiveEditor();
+                let editor;
+                const editorType = await this.getEditorType();
+                if (editorType === 'ckeditor5') {
+                    editor = CKEditorService.getInstance().getActiveEditor();
+                } else {
+                    editor = TiptapEditorService.getInstance().getActiveEditor();
+                }
                 const bodyValue = objectFormValueMapper.findFormValue(
                     ArticleProperty.BODY) as RichTextFormValue;
                 if (!editor?.getValue()) {
@@ -61,6 +70,21 @@ export class FAQArticleHandler {
                 }
             }
         }
+    }
+
+    private static async getEditorType(): Promise<string> {
+        const validEditors = ['tiptap', 'ckeditor5'];
+
+        const apConfig = await SysConfigService.getInstance().getPortalConfiguration<AgentPortalConfiguration>();
+        const rawType = apConfig?.editorType;
+        let editorType = rawType?.toLowerCase() || 'ckeditor5';
+
+        if (!validEditors.includes(editorType)) {
+            console.warn(`[AgentPortal] Invalid editorType "${editorType}". Falling back to "ckeditor5".`);
+            editorType = 'ckeditor5';
+        }
+
+        return editorType;
     }
 
     public static async getFAQArticleAttachments(articleId: number): Promise<Attachment[]> {
