@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -14,6 +14,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         data-contextinstanceid=context.instanceId
         class=[
             "sidebar",
+            `sidebar-${input.isLeft ? "left" : 'right'}`,
             {
                 "d-none": !component.isActiveContext(context.instanceId),
                 "sidebars-shown": state.showSidebarArea || state.isMobile,
@@ -22,7 +23,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <if(state.reloadSidebarId !== context.instanceId)>
             <${component.getSidebarTemplate()}
                 isLeft=input.isLeft
-                contextInstanceId=context.instanceId/>
+                contextInstanceId=context.instanceId
+                on-sidebarToggled('sidebarToggled')/>
         </if>
     </div>
 </for>
