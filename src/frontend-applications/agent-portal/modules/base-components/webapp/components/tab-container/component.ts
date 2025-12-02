@@ -100,7 +100,8 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> {
                 if (eventId === TabContainerEvent.CHANGE_TITLE) {
                     const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
                     if (tab) {
-                        const newTitle = await TranslationService.translate(data.title);
+                        const object = await this.context?.getObject();
+                        const newTitle = await TranslationService.translate(data.title, object);
                         this.tabTitles.set(tab.instanceId, newTitle);
                         if (data.icon) {
                             this.tabIcons.set(tab.instanceId, data.icon);
