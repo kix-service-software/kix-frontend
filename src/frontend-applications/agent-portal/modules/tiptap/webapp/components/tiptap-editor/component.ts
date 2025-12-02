@@ -467,20 +467,145 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         };
 
         editor.on('transaction', ({ editor: ed, transaction }: any): void => {
-            if (!transaction.docChanged) return;
+            const { state } = ed;
+            const $from = state.selection.$from;
 
-            const ts = ed.getAttributes('textStyle') || {};
-            if (ts.fontFamily) ed.storage.lastFontFamily = ts.fontFamily;
-            if (ts.fontSize) ed.storage.lastFontSize = ts.fontSize;
-            if (ts.color) ed.storage.lastFontColor = ts.color;
+            let blockDepth = $from.depth;
+            while (blockDepth > 0 && !$from.node(blockDepth).isBlock) {
+                blockDepth--;
+            }
 
-            if (ed.isActive('bold')) ed.storage.lastBold = true;
-            if (ed.isActive('italic')) ed.storage.lastItalic = true;
-            if (ed.isActive('underline')) ed.storage.lastUnderline = true;
-            if (ed.isActive('strike')) ed.storage.lastStrike = true;
+            const blockNode = $from.node(blockDepth);
+            const parentNode = blockDepth > 0 ? $from.node(blockDepth - 1) : null;
 
-            const hl = ed.getAttributes('highlight')?.color;
-            if (hl) ed.storage.lastHighlightColor = hl;
+            const indexInParent = parentNode ? $from.index(blockDepth - 1) : 0;
+
+            const prevSibling =
+                parentNode && indexInParent > 0 ? parentNode.child(indexInParent - 1) : null;
+
+            const nextSibling =
+                parentNode && indexInParent + 1 < parentNode.childCount
+                    ? parentNode.child(indexInParent + 1)
+                    : null;
+
+            const isEmptyTextblock =
+                !!blockNode?.isTextblock && blockNode.content.size === 0;
+
+            const justAfterTableEmptyPara =
+                isEmptyTextblock &&
+                !!prevSibling &&
+                prevSibling.type?.name === 'table';
+
+            const justBeforeTableEmptyPara =
+                isEmptyTextblock &&
+                !!nextSibling &&
+                nextSibling.type?.name === 'table';
+
+            if (justAfterTableEmptyPara && prevSibling) {
+                try {
+                    let lastTextNode: any = null;
+
+                    (prevSibling as any).descendants((node: any) => {
+                        if (node.isText && node.marks && node.marks.length) {
+                            lastTextNode = node;
+                        }
+                    });
+
+                    if (lastTextNode) {
+                        const marks = lastTextNode.marks || [];
+
+                        ed.storage.lastBold = false;
+                        ed.storage.lastItalic = false;
+                        ed.storage.lastUnderline = false;
+                        ed.storage.lastStrike = false;
+                        ed.storage.lastHighlightColor = null;
+                        ed.storage.lastFontFamily = null;
+                        ed.storage.lastFontSize = null;
+                        ed.storage.lastFontColor = null;
+
+                        for (const mark of marks) {
+                            switch (mark.type.name) {
+                                case 'bold':
+                                    ed.storage.lastBold = true;
+                                    break;
+                                case 'italic':
+                                    ed.storage.lastItalic = true;
+                                    break;
+                                case 'underline':
+                                    ed.storage.lastUnderline = true;
+                                    break;
+                                case 'strike':
+                                    ed.storage.lastStrike = true;
+                                    break;
+                                case 'highlight':
+                                    ed.storage.lastHighlightColor = mark.attrs?.color ?? null;
+                                    break;
+                                case 'textStyle':
+                                    if (mark.attrs?.fontFamily) {
+                                        ed.storage.lastFontFamily = mark.attrs.fontFamily;
+                                    }
+                                    if (mark.attrs?.fontSize) {
+                                        ed.storage.lastFontSize = mark.attrs.fontSize;
+                                    }
+                                    if (typeof mark.attrs?.color !== 'undefined') {
+                                        ed.storage.lastFontColor = mark.attrs.color ?? null;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.warn(
+                        '[Tiptap] Could not derive styles from table for paragraph after table:',
+                        e,
+                    );
+                }
+            }
+
+            let inTable = false;
+            for (let d = $from.depth; d > 0; d--) {
+                const node = $from.node(d);
+                if (!node) continue;
+                if (node.type && (node.type.name === 'tableCell' || node.type.name === 'tableHeader')) {
+                    inTable = true;
+                    break;
+                }
+            }
+
+            const inFormattingRegion =
+                inTable || justAfterTableEmptyPara || justBeforeTableEmptyPara;
+
+            if (transaction.docChanged && !justAfterTableEmptyPara) {
+                const ts = ed.getAttributes('textStyle') || {};
+
+                if (ts.fontFamily) {
+                    ed.storage.lastFontFamily = ts.fontFamily;
+                }
+                if (ts.fontSize) {
+                    ed.storage.lastFontSize = ts.fontSize;
+                }
+
+                ed.storage.lastFontColor = typeof ts.color !== 'undefined' ? ts.color : null;
+            }
+
+            if (inFormattingRegion) {
+                if (ed.isActive('bold')) ed.storage.lastBold = true;
+                if (ed.isActive('italic')) ed.storage.lastItalic = true;
+                if (ed.isActive('underline')) ed.storage.lastUnderline = true;
+                if (ed.isActive('strike')) ed.storage.lastStrike = true;
+
+                const hl = ed.getAttributes('highlight')?.color;
+                if (hl) ed.storage.lastHighlightColor = hl;
+            } else {
+                ed.storage.lastBold = ed.isActive('bold');
+                ed.storage.lastItalic = ed.isActive('italic');
+                ed.storage.lastUnderline = ed.isActive('underline');
+                ed.storage.lastStrike = ed.isActive('strike');
+                ed.storage.lastHighlightColor =
+                    ed.getAttributes('highlight')?.color ?? null;
+            }
         });
 
         editor.on('selectionUpdate', (): void => applyDefaultsIntoEmptyBlock(editor));
