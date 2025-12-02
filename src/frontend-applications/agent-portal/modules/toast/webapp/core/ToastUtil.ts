@@ -7,6 +7,7 @@
  * --
  */
 
+import { IdService } from '../../../../model/IdService';
 import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
 import { ModalSettings } from '../../model/ModalSettings';
 
@@ -42,13 +43,17 @@ export class ToastUtil {
         const toastArea = document.getElementById('kix-toast-area');
         if (toastArea) {
             const template = KIXModulesService.getComponentTemplate(toastId);
+
+            // create always new one with different id
+            toastData.domToastId = IdService.generateDateBasedId(toastId);
+
             const content = template?.default?.renderSync(toastData);
             content.appendTo(toastArea);
 
-            const templateToast = new bootstrap.Toast(`#${toastId}`);
+            const templateToast = new bootstrap.Toast(`#${toastData.domToastId}`);
             templateToast.show();
 
-            const toastElement = document.getElementById(toastId);
+            const toastElement = document.getElementById(toastData.domToastId);
             toastElement.addEventListener('hidden.bs.toast', (event) => {
                 toastElement?.remove();
             });
