@@ -28,6 +28,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 contextType: "MAIN",
                                 instanceId: lane[0],
                                 type: component.getLaneWidgetType(),
+                                contextInstanceId: input.contextInstanceId,
                             }/>
                         </li>
                     </for>
@@ -41,6 +42,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <${contentWidget[1]} ...{
                     contextType: "MAIN",
                     instanceId: contentWidget[0],
+                    contextInstanceId: input.contextInstanceId,
                 }/>
             </for>
         </div>
