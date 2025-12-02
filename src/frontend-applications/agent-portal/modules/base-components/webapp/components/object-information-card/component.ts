@@ -66,8 +66,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const basicColumnWidth = 15;
         const row = this.state.information[index] as InformationRowConfiguration;
         if (
-            this.isRowWithCreatedBy(index) ||
-            this.context.openSidebarWidgets.some((osw) => osw === this.widgetInstanceId)
+            this.widgetInstanceId &&
+            (this.isRowWithCreatedBy(index) ||
+                this.context.openSidebarWidgets.some((osw) => osw === this.widgetInstanceId))
         ) {
             return;
         }

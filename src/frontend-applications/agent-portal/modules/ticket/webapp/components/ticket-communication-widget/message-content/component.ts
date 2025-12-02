@@ -159,17 +159,15 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
                 this.state.article['countNumber'] = countNumber;
                 this.articleLoaded = true;
 
-                if (this.articleIndex === 0) {
-                    this.toggleArticleCompactView(true);
-                }
-
                 this.state.unseen = this.state.article?.Unseen;
                 if (this.state.unseen) {
                     this.context.registerUnseenArticle(this.state.article.ArticleID);
                 }
                 await this.prepareArticleData();
 
-                if (this.state.expanded) {
+                if (this.articleIndex === 0) {
+                    this.toggleArticleCompactView(true);
+                } else if (this.state.expanded) {
                     this.loadDetailedArticle();
                 } else {
                     await this.prepareActions();
