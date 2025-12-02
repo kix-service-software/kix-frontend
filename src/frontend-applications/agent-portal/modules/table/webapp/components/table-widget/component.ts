@@ -509,6 +509,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.context?.setFilteredObjectList(this.state.table.getObjectType(), filteredObjects);
     }
 
+    public preventDefault(event: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    }
+
 }
 
 module.exports = Component;

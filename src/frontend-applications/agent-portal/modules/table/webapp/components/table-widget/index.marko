@@ -65,6 +65,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     predefinedFilterPlaceholder=state.filterPlaceholder
                     disabled=state.isFiltering
                     filterValue=state.filterValue
+                    on-click("preventDefault")
                     on-filter("filter")
                     key="table-widget-filter"/>
             </if>
