@@ -146,6 +146,13 @@ class Component extends AbstractMarkoComponent<ComponentState, FAQContext> {
         this.filter(this.textFilterValue, this.predefinedFilter);
     }
 
+    public preventDefault(event: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    }
+
 }
 
 module.exports = Component;
