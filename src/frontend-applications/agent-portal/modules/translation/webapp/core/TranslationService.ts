@@ -48,6 +48,30 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
     private userLanguage: string = null;
 
     private readonly STORAGE_KEY = 'i18n-translations';
+    private activeLanguage: string | null = null;
+
+    public static getCurrentLanguage(): string | null {
+        return this.getInstance().activeLanguage;
+    }
+
+    public static async setLanguage(lang: string): Promise<void> {
+        const instance = this.getInstance();
+
+        if (!lang || instance.activeLanguage === lang) {
+            return;
+        }
+        instance.activeLanguage = lang;
+
+        try {
+            document.documentElement.lang = lang;
+            document.documentElement.dir = ['ar', 'he', 'fa', 'ur'].includes(lang) ? 'rtl' : 'ltr';
+        } catch {
+            /* ignore */
+        }
+
+        EventService.getInstance().publish(ApplicationEvent.LANGUAGE_CHANGED, { language: lang });
+        EventService.getInstance().publish(ApplicationEvent.REFRESH);
+    }
 
     private constructor() {
         super(KIXObjectType.TRANSLATION);
@@ -179,7 +203,9 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
     }
 
     public static async translate(
-        pattern: string = '', placeholderValues: Array<string | number> = [], language?: string,
+        pattern: string = '',
+        placeholderValues: Array<string | number> = [],
+        language?: string,
         getOnlyPattern: boolean = false
     ): Promise<string> {
         let translationValue = pattern ? pattern : '';
@@ -189,13 +215,16 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
                 translationValue = this.prepareValue(translationValue);
 
                 if (!getOnlyPattern) {
+                    const instance = this.getInstance();
 
-                    const translation = await this.getInstance().getTranslationObject(translationValue);
+                    const translation = await instance.getTranslationObject(translationValue);
 
                     if (translation) {
-                        language = language ? language : this.getInstance().userLanguage;
-                        if (language) {
-                            const translationLanguageValue = translation.Languages[language];
+                        const langToUse =
+                            instance.activeLanguage ?? language ?? instance.userLanguage;
+
+                        if (langToUse) {
+                            const translationLanguageValue = translation.Languages[langToUse];
                             if (translationLanguageValue) {
                                 translationValue = translationLanguageValue;
                             }
