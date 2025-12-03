@@ -1243,7 +1243,7 @@
 │  ├─ email: faeldt_kristian@cyberagent.co.jp
 │  ├─ path: node_modules/base64id
 │  └─ licenseFile: node_modules/base64id/LICENSE
-├─ baseline-browser-mapping@2.8.31
+├─ baseline-browser-mapping@2.9.0
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/web-platform-dx/baseline-browser-mapping
 │  ├─ path: node_modules/baseline-browser-mapping
@@ -1260,7 +1260,7 @@
 │  ├─ repository: https://github.com/rvagg/bl
 │  ├─ path: node_modules/bl
 │  └─ licenseFile: node_modules/bl/LICENSE.md
-├─ body-parser@1.20.3
+├─ body-parser@1.20.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/expressjs/body-parser
 │  ├─ path: node_modules/body-parser
@@ -1278,7 +1278,7 @@
 │  ├─ publisher: mdo
 │  ├─ path: node_modules/bootstrap-icons
 │  └─ licenseFile: node_modules/bootstrap-icons/LICENSE
-├─ bowser@2.13.0
+├─ bowser@2.13.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/lancedikson/bowser
 │  ├─ publisher: Dustin Diaz
@@ -1316,7 +1316,7 @@
 │  ├─ email: andrey@sitnik.ru
 │  ├─ path: node_modules/browserslist
 │  └─ licenseFile: node_modules/babel-preset-env/node_modules/browserslist/LICENSE
-├─ browserslist@4.28.0
+├─ browserslist@4.28.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/browserslist/browserslist
 │  ├─ publisher: Andrey Sitnik
@@ -1378,7 +1378,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001757
+├─ caniuse-lite@1.0.30001759
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1583,13 +1583,6 @@
 │  ├─ email: shtylman@gmail.com
 │  ├─ path: node_modules/cookie
 │  └─ licenseFile: node_modules/cookie/LICENSE
-├─ cookie@0.7.1
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/jshttp/cookie
-│  ├─ publisher: Roman Shtylman
-│  ├─ email: shtylman@gmail.com
-│  ├─ path: node_modules/cookie
-│  └─ licenseFile: node_modules/express/node_modules/cookie/LICENSE
 ├─ cookie@0.7.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jshttp/cookie
@@ -2092,7 +2085,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.262
+├─ electron-to-chromium@1.5.263
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -2123,7 +2116,7 @@
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/pillarjs/encodeurl
 │  ├─ path: node_modules/encodeurl
-│  └─ licenseFile: node_modules/send/node_modules/encodeurl/LICENSE
+│  └─ licenseFile: node_modules/serve-static/node_modules/send/node_modules/encodeurl/LICENSE
 ├─ encodeurl@2.0.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/pillarjs/encodeurl
@@ -2312,7 +2305,7 @@
 │  ├─ url: http://jeditoolkit.com
 │  ├─ path: node_modules/events
 │  └─ licenseFile: node_modules/events/LICENSE
-├─ express@4.21.2
+├─ express@4.22.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/expressjs/express
 │  ├─ publisher: TJ Holowaychuk
@@ -2338,7 +2331,7 @@
 │  ├─ publisher: Roger Castells
 │  ├─ path: node_modules/file-stream-rotator
 │  └─ licenseFile: node_modules/file-stream-rotator/LICENSE.txt
-├─ finalhandler@1.3.1
+├─ finalhandler@1.3.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/pillarjs/finalhandler
 │  ├─ publisher: Douglas Christopher Wilson
@@ -2546,6 +2539,14 @@
 │  ├─ path: node_modules/htmlparser2
 │  └─ licenseFile: node_modules/htmlparser2/LICENSE
 ├─ http-errors@2.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jshttp/http-errors
+│  ├─ publisher: Jonathan Ong
+│  ├─ email: me@jongleberry.com
+│  ├─ url: http://jongleberry.com
+│  ├─ path: node_modules/http-errors
+│  └─ licenseFile: node_modules/send/node_modules/http-errors/LICENSE
+├─ http-errors@2.0.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jshttp/http-errors
 │  ├─ publisher: Jonathan Ong
@@ -3607,9 +3608,9 @@
 │  ├─ repository: https://github.com/prosemirror/prosemirror-state
 │  ├─ path: node_modules/prosemirror-state
 │  └─ licenseFile: node_modules/prosemirror-state/LICENSE
-├─ prosemirror-tables@1.8.1
+├─ prosemirror-tables@1.8.3
 │  ├─ licenses: MIT
-│  ├─ repository: https://github.com/prosemirror/prosemirror-tables
+│  ├─ repository: https://github.com/ProseMirror/prosemirror-tables
 │  ├─ path: node_modules/prosemirror-tables
 │  └─ licenseFile: node_modules/prosemirror-tables/LICENSE
 ├─ prosemirror-trailing-node@3.0.0
@@ -3622,7 +3623,7 @@
 │  ├─ repository: https://github.com/prosemirror/prosemirror-transform
 │  ├─ path: node_modules/prosemirror-transform
 │  └─ licenseFile: node_modules/prosemirror-transform/LICENSE
-├─ prosemirror-view@1.41.3
+├─ prosemirror-view@1.41.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/prosemirror/prosemirror-view
 │  ├─ path: node_modules/prosemirror-view
@@ -3671,7 +3672,7 @@
 │  ├─ url: https://github.com/kriskowal
 │  ├─ path: node_modules/q
 │  └─ licenseFile: node_modules/q/LICENSE
-├─ qs@6.13.0
+├─ qs@6.14.0
 │  ├─ licenses: BSD-3-Clause
 │  ├─ repository: https://github.com/ljharb/qs
 │  ├─ path: node_modules/qs
@@ -3763,7 +3764,7 @@
 │  ├─ publisher: Patrick Steele-Idem
 │  ├─ email: pnidem@gmail.com
 │  └─ path: node_modules/raptor-util
-├─ raw-body@2.5.2
+├─ raw-body@2.5.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/stream-utils/raw-body
 │  ├─ publisher: Jonathan Ong
@@ -4005,6 +4006,13 @@
 │  ├─ publisher: TJ Holowaychuk
 │  ├─ email: tj@vision-media.ca
 │  ├─ path: node_modules/send
+│  └─ licenseFile: node_modules/serve-static/node_modules/send/LICENSE
+├─ send@0.19.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/pillarjs/send
+│  ├─ publisher: TJ Holowaychuk
+│  ├─ email: tj@vision-media.ca
+│  ├─ path: node_modules/send
 │  └─ licenseFile: node_modules/send/LICENSE
 ├─ serve-static@1.16.2
 │  ├─ licenses: MIT
@@ -4133,6 +4141,11 @@
 │  ├─ path: node_modules/stackframe
 │  └─ licenseFile: node_modules/stackframe/LICENSE
 ├─ statuses@2.0.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jshttp/statuses
+│  ├─ path: node_modules/statuses
+│  └─ licenseFile: node_modules/send/node_modules/statuses/LICENSE
+├─ statuses@2.0.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jshttp/statuses
 │  ├─ path: node_modules/statuses
@@ -4387,7 +4400,7 @@
 │  ├─ email: doug@somethingdoug.com
 │  ├─ path: node_modules/unpipe
 │  └─ licenseFile: node_modules/unpipe/LICENSE
-├─ update-browserslist-db@1.1.4
+├─ update-browserslist-db@1.2.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/browserslist/update-db
 │  ├─ publisher: Andrey Sitnik
