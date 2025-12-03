@@ -107,7 +107,55 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                             startOfLine: false,
                             items: async ({ query }): Promise<any[]> =>
                                 await TextmodulePlugin.fetchSuggestions(query),
-                            render: (): any => createMentionPopup(),
+
+                            render: (): any => {
+                                const base = createMentionPopup();
+                                let editorInstance: any;
+
+                                function handleBlur(): void {
+                                    if (typeof base.onExit === 'function') {
+                                        base.onExit();
+                                    }
+                                    if (
+                                        editorInstance &&
+                                        typeof editorInstance.off === 'function'
+                                    ) {
+                                        editorInstance.off('blur', handleBlur);
+                                    }
+                                }
+
+                                return {
+                                    ...base,
+
+                                    onStart(props: any): void {
+                                        editorInstance = props.editor;
+
+                                        if (typeof base.onStart === 'function') {
+                                            base.onStart(props);
+                                        }
+
+                                        if (
+                                            editorInstance &&
+                                            typeof editorInstance.on === 'function'
+                                        ) {
+                                            editorInstance.on('blur', handleBlur);
+                                        }
+                                    },
+
+                                    onExit(): void {
+                                        if (typeof base.onExit === 'function') {
+                                            base.onExit();
+                                        }
+
+                                        if (
+                                            editorInstance &&
+                                            typeof editorInstance.off === 'function'
+                                        ) {
+                                            editorInstance.off('blur', handleBlur);
+                                        }
+                                    },
+                                };
+                            },
                             command: async ({ editor, range, props }): Promise<void> => {
                                 const c2 = await TextmodulePlugin.prepareTextContent(props);
                                 editor.chain().focus().deleteRange(range).insertContent(c2).run();
