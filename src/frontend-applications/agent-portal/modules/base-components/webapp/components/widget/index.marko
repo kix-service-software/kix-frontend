@@ -64,7 +64,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <${input.headercontent}/>
             </if>
             <if(input.headerfilter)>
-                <div class="widget-filter">
+                <div class="widget-filter" on-click("preventDefault")>
                     <${input.headerfilter}/>
                 </div>
             </if>

@@ -250,6 +250,13 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
         this.state.actions = [...actions, ...this.additionalActions || []];
     }
 
+    public preventDefault(event: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    }
+
 }
 
 module.exports = WidgetComponent;
