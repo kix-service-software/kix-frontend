@@ -318,7 +318,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.42
+├─ @marko/compiler@5.39.43
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -1243,7 +1243,7 @@
 │  ├─ email: faeldt_kristian@cyberagent.co.jp
 │  ├─ path: node_modules/base64id
 │  └─ licenseFile: node_modules/base64id/LICENSE
-├─ baseline-browser-mapping@2.9.0
+├─ baseline-browser-mapping@2.9.2
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/web-platform-dx/baseline-browser-mapping
 │  ├─ path: node_modules/baseline-browser-mapping
@@ -1255,7 +1255,7 @@
 │  ├─ email: M8ch88l@gmail.com
 │  ├─ path: node_modules/big.js
 │  └─ licenseFile: node_modules/big.js/LICENCE
-├─ bl@6.1.5
+├─ bl@6.1.6
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/rvagg/bl
 │  ├─ path: node_modules/bl
@@ -2085,7 +2085,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.263
+├─ electron-to-chromium@1.5.266
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -2853,7 +2853,7 @@
 │  ├─ email: jprichardson@gmail.com
 │  ├─ path: node_modules/jsonfile
 │  └─ licenseFile: node_modules/jsonfile/LICENSE
-├─ jsonwebtoken@9.0.2
+├─ jsonwebtoken@9.0.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/auth0/node-jsonwebtoken
 │  ├─ publisher: auth0
@@ -2864,14 +2864,14 @@
 │  ├─ repository: https://github.com/Automattic/juice
 │  ├─ path: node_modules/juice
 │  └─ licenseFile: node_modules/juice/LICENSE.md
-├─ jwa@1.4.2
+├─ jwa@2.0.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/brianloveswords/node-jwa
 │  ├─ publisher: Brian J. Brennan
 │  ├─ email: brianloveswords@gmail.com
 │  ├─ path: node_modules/jwa
 │  └─ licenseFile: node_modules/jwa/LICENSE
-├─ jws@3.2.2
+├─ jws@4.0.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/brianloveswords/node-jws
 │  ├─ publisher: Brian J Brennan
@@ -3118,7 +3118,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.37.62
+├─ marko@5.37.63
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -4400,7 +4400,7 @@
 │  ├─ email: doug@somethingdoug.com
 │  ├─ path: node_modules/unpipe
 │  └─ licenseFile: node_modules/unpipe/LICENSE
-├─ update-browserslist-db@1.2.0
+├─ update-browserslist-db@1.2.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/browserslist/update-db
 │  ├─ publisher: Andrey Sitnik
