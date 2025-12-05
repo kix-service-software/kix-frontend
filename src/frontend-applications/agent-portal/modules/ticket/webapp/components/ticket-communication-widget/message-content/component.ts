@@ -15,6 +15,7 @@ import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserU
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
 import { IContextListener } from '../../../../../base-components/webapp/core/IContextListener';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
+import { ObjectInformationCardService } from '../../../../../base-components/webapp/core/ObjectInformationCardService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { Article } from '../../../../model/Article';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
@@ -300,6 +301,12 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
 
     private async prepareArticleContent(allowSetSeen: boolean = false): Promise<void> {
         this.prepareAttachments();
+
+        if (this.state.informationConfig.rows?.length) {
+            this.state.showArticleDFContainer = await ObjectInformationCardService.getInstance().hasValuesToShow(
+                this.state.informationConfig, this.detailedArticle
+            );
+        }
 
         if (this.state.compactViewExpanded) {
             await this.prepareImages();
