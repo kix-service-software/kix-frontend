@@ -65,35 +65,37 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
             <if(!state.selectedCompactView || state.compactViewExpanded)>
                 <if(state.expanded && state.showContent)>
-                    <div class="receiver-list">
-                        <if(state.articleTo)>
-                            <div class="receiver">
-                                <span class="title">
-                                    <translation-string pattern="Translatable#To"/>
-                                    ${" "}:
-                                </span>
-                                <span>${state.articleTo}</span>
-                            </div>
-                        </if>
-                        <if(state.articleCc)>
-                            <div class="receiver">
-                                <span class="title">
-                                    <translation-string pattern="Translatable#Cc"/>
-                                    ${" "}:
-                                </span>
-                                <span>${state.articleCc}</span>
-                            </div>
-                        </if>
-                        <if(state.articleBcc)>
-                            <div class="receiver">
-                                <span class="title">
-                                    <translation-string pattern="Translatable#Bcc"/>
-                                    ${" "}:
-                                </span>
-                                <span>${state.articleBcc}</span>
-                            </div>
-                        </if>
-                    </div>
+                    <if(state.articleTo || state.articleCc || state.articleBcc)>
+                        <div class="receiver-list">
+                            <if(state.articleTo)>
+                                <div class="receiver">
+                                    <span class="title">
+                                        <translation-string pattern="Translatable#To"/>
+                                        ${" "}:
+                                    </span>
+                                    <span>${state.articleTo}</span>
+                                </div>
+                            </if>
+                            <if(state.articleCc)>
+                                <div class="receiver">
+                                    <span class="title">
+                                        <translation-string pattern="Translatable#Cc"/>
+                                        ${" "}:
+                                    </span>
+                                    <span>${state.articleCc}</span>
+                                </div>
+                            </if>
+                            <if(state.articleBcc)>
+                                <div class="receiver">
+                                    <span class="title">
+                                        <translation-string pattern="Translatable#Bcc"/>
+                                        ${" "}:
+                                    </span>
+                                    <span>${state.articleBcc}</span>
+                                </div>
+                            </if>
+                        </div>
+                    </if>
                     <div key="message-body" class="message-body">
                         <div
                             on-click("toggleArticleListView")
@@ -176,11 +178,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 </a>
                             </if>
                         </div>
-                        <if(
-                            state.informationConfig &&
-                            Array.isArray(state.informationConfig.rows) &&
-                            state.informationConfig.rows.length
-                        )>
+                        <if(state.showArticleDFContainer)>
                             <div
                                 key="article-df-container"
                                 class="bg-white my-2 p-2 overflow-auto">
