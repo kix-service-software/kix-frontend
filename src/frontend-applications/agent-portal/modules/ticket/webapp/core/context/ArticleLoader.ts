@@ -56,9 +56,7 @@ export class ArticleLoader {
             clearTimeout(this.timeout);
         }
 
-        this.timeout = setTimeout(() => {
-            this.loadArticles();
-        }, 150);
+        this.timeout = setTimeout(this.loadArticles.bind(this), 150);
     }
 
     private async loadArticles(): Promise<void> {
