@@ -62,6 +62,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <if(state.articleIds)>
                     <for|articleId, index| of=state.articleIds>
                         <message-content
+                            contextInstanceId=input.contextInstanceId
                             articleId=articleId
                             articleIndex=index
                             articleCountNumber=component.getArticleCountNumber(
