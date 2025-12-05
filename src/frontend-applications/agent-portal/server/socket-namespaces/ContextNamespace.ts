@@ -134,7 +134,7 @@ export class ContextNamespace extends SocketNameSpace {
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 SysConfigOptionProperty.CONTEXT, SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.OR, application.name
+                FilterType.AND, application.name
             )
         ], null, 0);
 
@@ -210,7 +210,7 @@ export class ContextNamespace extends SocketNameSpace {
                 SysConfigOptionProperty.CONTEXT, SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, data.application
             )
-        ]);
+        ], null, 0);
 
         const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
             serverConfig.BACKEND_API_TOKEN, 'ContextConfiguration', KIXObjectType.SYS_CONFIG_OPTION, null,
