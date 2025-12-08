@@ -84,6 +84,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private _lastRawHtml?: string;
     private _lastCleanHtml?: string;
 
+    private _lastEmittedValue?: string;
+
     public onCreate(input: any): void {
         super.onCreate(input);
         this.state = new ComponentState();
@@ -94,10 +96,31 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any): void {
         super.onInput(input);
         this.readOnly = input.readOnly ?? false;
-        this.value = input.value;
-        if (this.editor) {
-            this.editor.commands.setContent(this.value);
+
+        const newValue: string = input.value ?? '';
+        this.value = newValue;
+
+        if (!this.editor) {
+            return;
         }
+
+        if (this._lastEmittedValue === newValue) {
+            return;
+        }
+
+        const { from, to } = this.editor.state.selection;
+
+        this.editor.commands.setContent(normalizeForTiptap(newValue), false);
+
+        const size = this.editor.state.doc.content.size;
+        const safeFrom = Math.min(from, size);
+        const safeTo = Math.min(to, size);
+
+        this.editor
+            .chain()
+            .setTextSelection({ from: safeFrom, to: safeTo })
+            .focus()
+            .run();
     }
 
     public async onMount(): Promise<void> {
@@ -391,6 +414,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         cleanedHtml = rawHtml;
                     }
 
+                    comp._lastEmittedValue = cleanedHtml;
+
                     (comp as any).emit('valueChanged', cleanedHtml);
                 },
             });
@@ -426,6 +451,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.changeTimeout = setTimeout(() => {
                 if (!(this as any).isDestroyed()) {
                     const value = this.editor.getValue();
+
+                    this._lastEmittedValue = value;
+
                     (this as any).emit('valueChanged', value);
                     EventService.getInstance().publish(FormEvent.BLOCK, false);
                 }
@@ -435,7 +463,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         });
 
         this.editor.addFocusListener(this.focusLostFallback.bind(this));
-
 
         const editor = this.editor;
         TiptapEditorService.getInstance().setActiveEditor(editor);
@@ -485,8 +512,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             const nextSibling =
                 parentNode && indexInParent + 1 < parentNode.childCount
-                    ? parentNode.child(indexInParent + 1)
-                    : null;
+                    ? parentNode.child(indexInParent + 1) : null;
 
             const isEmptyTextblock =
                 !!blockNode?.isTextblock && blockNode.content.size === 0;
