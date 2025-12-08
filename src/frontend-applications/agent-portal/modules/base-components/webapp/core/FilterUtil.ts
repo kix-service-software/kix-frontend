@@ -15,7 +15,10 @@ import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PlaceholderService } from './PlaceholderService';
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { ArticleLoadingOptions } from '../../../../modules/ticket/model/ArticleLoadingOptions';
+import { Article } from '../../../../modules/ticket/model/Article';
 
 export class FilterUtil {
 
@@ -72,10 +75,15 @@ export class FilterUtil {
         let dfValue = null;
         const dfName = KIXObjectService.getDynamicFieldName(criterion.property);
         if (dfName) {
-            if (!object?.DynamicFields || !object?.DynamicFields?.length) {
+            if (!object?.DynamicFields?.length) {
+                let objectLoadingOptions: KIXObjectSpecificLoadingOptions = null;
+                if (object.KIXObjectType === KIXObjectType.ARTICLE) {
+                    objectLoadingOptions = new ArticleLoadingOptions((object as Article).TicketID);
+                }
                 const objects = await KIXObjectService.loadObjects(
                     object.KIXObjectType, [object.ObjectId],
-                    new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
+                    new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]),
+                    objectLoadingOptions
                 ).catch(() => []);
 
                 if (objects?.length) {

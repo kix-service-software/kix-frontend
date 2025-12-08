@@ -13,8 +13,6 @@ import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
-import { SortUtil } from '../../../../../model/SortUtil';
-import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
