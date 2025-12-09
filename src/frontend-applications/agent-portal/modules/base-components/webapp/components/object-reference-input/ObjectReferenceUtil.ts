@@ -138,7 +138,16 @@ export class ObjectReferenceUtil {
                 }
             }
         }
-        nodes = SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+
+        const fieldLoadingOptions = options.find(
+            (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
+        );
+        const loadingOptions: KIXObjectLoadingOptions = fieldLoadingOptions
+            ? { ...fieldLoadingOptions.value }
+            : new KIXObjectLoadingOptions();
+        if (!loadingOptions.sortOrder) {
+            nodes = SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+        }
 
         return nodes;
     }

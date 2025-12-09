@@ -200,7 +200,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             nodes.filter((n) => n instanceof TreeNode);
         }
 
-        SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+        if (!this.loadingOptions?.sortOrder) {
+            SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+        }
 
         return nodes;
     }
