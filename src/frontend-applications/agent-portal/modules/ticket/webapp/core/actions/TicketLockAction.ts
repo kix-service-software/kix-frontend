@@ -16,6 +16,7 @@ import { ApplicationEvent } from '../../../../../modules/base-components/webapp/
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TicketProperty } from '../../../model/TicketProperty';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
@@ -72,9 +73,15 @@ export class TicketLockAction extends AbstractAction<Ticket> {
         ).catch((error) => null);
 
         setTimeout(async () => {
-            await this.context?.getObject(KIXObjectType.TICKET, true);
+            EventService.getInstance().publish(
+                ApplicationEvent.REFRESH_CONTENT, ContextService.getInstance().getActiveContext().instanceId
+            );
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
-            BrowserUtil.openSuccessOverlay(successHint);
+
+            if (successHint) {
+                await this.context?.getObject(KIXObjectType.TICKET, true);
+                BrowserUtil.openSuccessOverlay(successHint);
+            }
         }, 1500);
     }
 
