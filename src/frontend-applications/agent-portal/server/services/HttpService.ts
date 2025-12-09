@@ -90,22 +90,28 @@ export class HttpService {
             }
         }
 
-        if (this.requestPromises.has(cacheKey)) {
+        if (cacheKey && this.requestPromises.has(cacheKey)) {
             return this.requestPromises.get(cacheKey);
         }
 
         const requestPromise = this.executeRequest<HTTPResponse>(resource, token, clientRequestId, options);
-        this.requestPromises.set(cacheKey, requestPromise);
+        if (cacheKey) {
+            this.requestPromises.set(cacheKey, requestPromise);
+        }
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size, true);
 
         const response = await requestPromise.catch((error) => {
-            this.requestPromises.delete(cacheKey);
+            if (cacheKey) {
+                this.requestPromises.delete(cacheKey);
+            }
             RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
             throw error;
         });
 
-        this.requestPromises.delete(cacheKey);
+        if (cacheKey) {
+            this.requestPromises.delete(cacheKey);
+        }
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
 
