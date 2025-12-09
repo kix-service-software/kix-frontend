@@ -746,7 +746,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/mdurl
 │  └─ licenseFile: node_modules/@types/mdurl/LICENSE
-├─ @types/node@22.19.1
+├─ @types/node@22.19.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1243,7 +1243,7 @@
 │  ├─ email: faeldt_kristian@cyberagent.co.jp
 │  ├─ path: node_modules/base64id
 │  └─ licenseFile: node_modules/base64id/LICENSE
-├─ baseline-browser-mapping@2.9.2
+├─ baseline-browser-mapping@2.9.5
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/web-platform-dx/baseline-browser-mapping
 │  ├─ path: node_modules/baseline-browser-mapping
@@ -1378,7 +1378,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001759
+├─ caniuse-lite@1.0.30001760
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -2042,7 +2042,7 @@
 │  ├─ url: https://cure53.de/
 │  ├─ path: node_modules/dompurify
 │  └─ licenseFile: node_modules/tui-calendar/node_modules/dompurify/LICENSE
-├─ dompurify@3.3.0
+├─ dompurify@3.3.1
 │  ├─ licenses: (MPL-2.0 OR Apache-2.0)
 │  ├─ repository: https://github.com/cure53/DOMPurify
 │  ├─ publisher: Dr.-Ing. Mario Heiderich, Cure53
@@ -2085,7 +2085,7 @@
 │  ├─ url: http://jongleberry.com
 │  ├─ path: node_modules/ee-first
 │  └─ licenseFile: node_modules/ee-first/LICENSE
-├─ electron-to-chromium@1.5.266
+├─ electron-to-chromium@1.5.267
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/kilian/electron-to-chromium
 │  ├─ publisher: Kilian Valkhof
@@ -3321,7 +3321,7 @@
 │  ├─ email: me@feedic.com
 │  ├─ path: node_modules/nth-check
 │  └─ licenseFile: node_modules/nth-check/LICENSE
-├─ nwsapi@2.2.22
+├─ nwsapi@2.2.23
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/dperini/nwsapi
 │  ├─ publisher: Diego Perini
@@ -4534,7 +4534,7 @@
 │  ├─ email: charlie.robbins@gmail.com
 │  ├─ path: node_modules/winston-transport
 │  └─ licenseFile: node_modules/winston-transport/LICENSE
-├─ winston@3.18.3
+├─ winston@3.19.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/winstonjs/winston
 │  ├─ publisher: Charlie Robbins
