@@ -426,11 +426,11 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 );
             }
 
-            await this.prepareSelectableNodes(objects);
+            await this.prepareSelectableNodes(objects, !!this.loadingOptions?.sortOrder);
         }
     }
 
-    protected async prepareSelectableNodes(objects: KIXObject[]): Promise<void> {
+    protected async prepareSelectableNodes(objects: KIXObject[], keepSortOrder: boolean = false): Promise<void> {
         // prevent that possible slower prior prepare overwrites current prepare (see "setTree" below)
         if (this.prepareSelectableController) {
             this.prepareSelectableController.abort();
@@ -459,7 +459,9 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 }
 
                 nodes = nodes.filter((node, index) => nodes.findIndex((n) => n.id === node.id) === index);
-                SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+                if (!keepSortOrder) {
+                    SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+                }
             }
 
             const value = this.value !== undefined && this.value !== null
