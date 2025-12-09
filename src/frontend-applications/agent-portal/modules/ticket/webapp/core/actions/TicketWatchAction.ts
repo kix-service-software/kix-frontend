@@ -18,7 +18,6 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { CreateTicketWatcherOptions } from '../../../model/CreateTicketWatcherOptions';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { BrowserCacheService } from '../../../../../modules/base-components/webapp/core/CacheService';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
 
 export class TicketWatchAction extends AbstractAction<Ticket> {
@@ -84,16 +83,15 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
         }
 
         setTimeout(async () => {
+            EventService.getInstance().publish(
+                ApplicationEvent.REFRESH_CONTENT, ContextService.getInstance().getActiveContext().instanceId
+            );
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
 
             if (successHint) {
                 await this.context?.getObject(KIXObjectType.TICKET, true);
                 BrowserUtil.openSuccessOverlay(successHint);
             }
-
-            EventService.getInstance().publish(
-                ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.TICKET, objectId: this.data.TicketID }
-            );
         }, 1500);
     }
 
