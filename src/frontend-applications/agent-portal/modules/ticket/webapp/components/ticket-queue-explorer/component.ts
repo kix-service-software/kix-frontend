@@ -30,7 +30,9 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketCont
         await super.onMount();
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         await this.loadQueues(this.context);
-        await this.showMyTeams();
+        if (!this.context?.queueId) {
+            await this.showMyTeams();
+        }
         this.state.myTeamsActive = this.context?.queueId === 0;
 
         this.state.activeNode = this.getActiveNode(this.context?.queueId);
