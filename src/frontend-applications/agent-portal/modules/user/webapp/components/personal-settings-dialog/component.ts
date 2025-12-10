@@ -111,10 +111,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 BrowserUtil.handleBeforeUnload();
                 setTimeout(async () => {
                     BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
+                    await ContextService.getInstance().setDefaultFallbackContext();
                     await ContextService.getInstance().removeContext(
                         this.context.instanceId, undefined, undefined, undefined, true
                     );
-
                     const toast = await TranslationService.translate('Translatable#Changes saved.');
                     BrowserUtil.openSuccessOverlay(toast);
                 }, 100);

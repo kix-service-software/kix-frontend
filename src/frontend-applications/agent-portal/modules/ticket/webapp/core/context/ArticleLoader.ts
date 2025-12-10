@@ -13,8 +13,6 @@ import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
-import { SortUtil } from '../../../../../model/SortUtil';
-import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
@@ -56,9 +54,7 @@ export class ArticleLoader {
             clearTimeout(this.timeout);
         }
 
-        this.timeout = setTimeout(() => {
-            this.loadArticles();
-        }, 150);
+        this.timeout = setTimeout(this.loadArticles.bind(this), 150);
     }
 
     private async loadArticles(): Promise<void> {
@@ -66,11 +62,11 @@ export class ArticleLoader {
         this.articleIds = new Map();
 
         const loadingOptions = new KIXObjectLoadingOptions();
-        loadingOptions.includes = [KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON, 'ObjectActions'];
+        loadingOptions.includes = [KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON];
 
         if (this.loadArticleDetails) {
             loadingOptions.includes.push(
-                ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN, KIXObjectProperty.DYNAMIC_FIELDS
+                ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN, KIXObjectProperty.DYNAMIC_FIELDS, 'ObjectActions'
             );
         }
 

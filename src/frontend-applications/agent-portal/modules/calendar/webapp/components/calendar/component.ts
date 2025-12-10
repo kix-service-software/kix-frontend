@@ -54,8 +54,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
-        if (input.active) {
-            this.tickets = input.tickets || [];
+        if (input.active || typeof input.active === 'undefined') {
+            this.tickets = input.objects || input.tickets || [];
             this.calendarConfig = input.calendarConfig;
             this.updateCalendar();
         }

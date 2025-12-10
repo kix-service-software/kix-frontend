@@ -29,11 +29,17 @@ export class JobRunHistoryTableFactory extends TableFactory {
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
-        const context = ContextService.getInstance().getActiveContext();
+        let context;
+        if (contextInstanceId) {
+            context = ContextService.getInstance().getContext(contextInstanceId);
+        }
+        else {
+            context = ContextService.getInstance().getActiveContext();
+        }
         const jobId = context?.getObjectId();
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
+        const table = new Table(tableKey, tableConfiguration);
 
         table.setContentProvider(
             new JobRunHistoryContentProvider(

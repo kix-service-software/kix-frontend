@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,7 +19,7 @@ import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
-        super.onCreate(input, 'sidebar/context-sidebar');
+        super.onCreate(input, `sidebar/context-sidebar-${input.isLeft ? 'left' : 'right'}`);
         this.state = new ComponentState();
         this.state.isLeft = input.isLeft;
     }
@@ -59,6 +59,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         } else if (this.context) {
             this.state.showSidebarArea = this.context.isSidebarOpen(this.state.isLeft);
+            (this as any).emit('sidebarToggled', this.state.showSidebarArea);
         }
     }
 
@@ -89,6 +90,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public toggleSidebarArea(): void {
         this.state.showSidebarArea = !this.state.showSidebarArea;
         this.context?.toggleSidebar(this.state.showSidebarArea, this.state.isLeft, !this.state.isSmall);
+        (this as any).emit('sidebarToggled', this.state.showSidebarArea);
     }
 
     public async getSidebarTemplate(instanceId: string): Promise<any> {

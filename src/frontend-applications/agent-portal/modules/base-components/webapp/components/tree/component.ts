@@ -51,9 +51,7 @@ class TreeComponent extends AbstractMarkoComponent<ComponentState> {
             this.state.allowExpandCollapseAll = this.allowExpandCollapseAll;
         }
 
-        if (this.previousTreeLength !== input.tree.length) {
-            this.prepare();
-        }
+        this.prepareExpandCollapseAll();
     }
 
     public async onMount(): Promise<void> {
@@ -61,11 +59,7 @@ class TreeComponent extends AbstractMarkoComponent<ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Expand All', 'Translatable#Collapse All'
         ]);
-    }
-
-    private async prepare(): Promise<void> {
-        await this.prepareExpandCollapseAll();
-        await this.prepareUserPreference();
+        this.prepareUserPreference();
     }
 
     public onDestroy(): void {

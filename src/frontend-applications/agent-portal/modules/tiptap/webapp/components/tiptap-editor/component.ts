@@ -22,13 +22,60 @@ import {
     moveIntoNewParagraph,
     applyLastUsedMarks,
 } from '../../static/utils/helpers';
+import { TiptapEditorService } from '../../core/TipTapEditorService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 
 declare const Tiptap: any;
+function sanitizeTextmoduleHtml(html: string): string {
+    if (!html) return html;
+
+    try {
+        const container = document.createElement('div');
+        container.innerHTML = html;
+
+        const tbodies = Array.from(container.querySelectorAll('tbody'));
+        for (const tbody of tbodies) {
+            const parent = tbody.parentElement;
+            if (!parent || parent.tagName.toLowerCase() !== 'table') {
+                const table = document.createElement('table');
+
+                while (tbody.firstChild) {
+                    table.appendChild(tbody.firstChild);
+                }
+
+                tbody.replaceWith(table);
+            }
+        }
+
+        container
+            .querySelectorAll('tbody')
+            .forEach((t) => {
+                while (t.firstChild) {
+                    t.parentElement?.insertBefore(t.firstChild, t);
+                }
+                t.remove();
+            });
+
+        const result = container.innerHTML;
+        const normalized = normalizeForTiptap(result);
+
+        return normalized;
+    } catch {
+        return html;
+    }
+}
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
     private editor: any;
     private readOnly: boolean;
     private value: string;
+    private changeTimeout: any;
+    private editorTimeout = 1000;
+    private changeListener: Array<() => null> = [];
+    private focusListener: Array<(value: string) => null> = [];
+
+    private focusListenerEnabled = true;
 
     private _onVisChange?: () => void;
     private _onBeforeUnload?: () => void;
@@ -37,15 +84,43 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private _lastRawHtml?: string;
     private _lastCleanHtml?: string;
 
+    private _lastEmittedValue?: string;
+
     public onCreate(input: any): void {
         super.onCreate(input);
         this.state = new ComponentState();
+        this.changeListener = [];
+        this.focusListener = [];
     }
 
     public onInput(input: any): void {
         super.onInput(input);
         this.readOnly = input.readOnly ?? false;
-        this.value = input.value;
+
+        const newValue: string = input.value ?? '';
+        this.value = newValue;
+
+        if (!this.editor) {
+            return;
+        }
+
+        if (this._lastEmittedValue === newValue) {
+            return;
+        }
+
+        const { from, to } = this.editor.state.selection;
+
+        this.editor.commands.setContent(normalizeForTiptap(newValue), false);
+
+        const size = this.editor.state.doc.content.size;
+        const safeFrom = Math.min(from, size);
+        const safeTo = Math.min(to, size);
+
+        this.editor
+            .chain()
+            .setTextSelection({ from: safeFrom, to: safeTo })
+            .focus()
+            .run();
     }
 
     public async onMount(): Promise<void> {
@@ -66,15 +141,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const createEditor = (content: string, _tag: string): any =>
             new Tiptap.Editor({
                 element: wrapper,
-                enableContentCheck: true,
-                onContentError: (_error): void => {
-                    try {
-                        const cleaned = normalizeForTiptap(comp.value);
-                        comp.editor?.commands.setContent(cleaned, false);
-                    } catch {
-                        /* noop */
-                    }
-                },
+                enableContentCheck: false,
                 extensions: [
                     Tiptap.StarterKit.configure({ bold: false, paragraph: false }),
                     Tiptap.TextStyle,
@@ -105,60 +172,28 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         suggestion: {
                             char: TextmodulePlugin.TRIGGER,
                             startOfLine: false,
-                            items: async ({ query }): Promise<any[]> =>
-                                await TextmodulePlugin.fetchSuggestions(query),
-
-                            render: (): any => {
-                                const base = createMentionPopup();
-                                let editorInstance: any;
-
-                                function handleBlur(): void {
-                                    if (typeof base.onExit === 'function') {
-                                        base.onExit();
-                                    }
-                                    if (
-                                        editorInstance &&
-                                        typeof editorInstance.off === 'function'
-                                    ) {
-                                        editorInstance.off('blur', handleBlur);
-                                    }
+                            items: ({ query }) => TextmodulePlugin.fetchSuggestions(query),
+                            render: () => createMentionPopup(),
+                            command: async ({ editor, range, props }): Promise<void> => {
+                                let resolvedContent: string;
+                                try {
+                                    resolvedContent = await TextmodulePlugin.prepareTextContent(props);
+                                } catch {
+                                    return;
                                 }
 
-                                return {
-                                    ...base,
+                                const safeContent = sanitizeTextmoduleHtml(resolvedContent);
 
-                                    onStart(props: any): void {
-                                        editorInstance = props.editor;
-
-                                        if (typeof base.onStart === 'function') {
-                                            base.onStart(props);
-                                        }
-
-                                        if (
-                                            editorInstance &&
-                                            typeof editorInstance.on === 'function'
-                                        ) {
-                                            editorInstance.on('blur', handleBlur);
-                                        }
-                                    },
-
-                                    onExit(): void {
-                                        if (typeof base.onExit === 'function') {
-                                            base.onExit();
-                                        }
-
-                                        if (
-                                            editorInstance &&
-                                            typeof editorInstance.off === 'function'
-                                        ) {
-                                            editorInstance.off('blur', handleBlur);
-                                        }
-                                    },
-                                };
-                            },
-                            command: async ({ editor, range, props }): Promise<void> => {
-                                const c2 = await TextmodulePlugin.prepareTextContent(props);
-                                editor.chain().focus().deleteRange(range).insertContent(c2).run();
+                                try {
+                                    editor
+                                        .chain()
+                                        .focus()
+                                        .deleteRange(range)
+                                        .insertContent(safeContent)
+                                        .run();
+                                } catch {
+                                    // swallow Tiptap errors during insertion
+                                }
                             },
                         },
                     }),
@@ -379,6 +414,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         cleanedHtml = rawHtml;
                     }
 
+                    comp._lastEmittedValue = cleanedHtml;
+
                     (comp as any).emit('valueChanged', cleanedHtml);
                 },
             });
@@ -391,7 +428,44 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.editor = createEditor(fixed, 'E2');
         }
 
+        Tiptap.Editor.prototype.getValue = (): any => {
+            return comp.editor.getHTML();
+        };
+
+        Tiptap.Editor.prototype.addFocusListener = (listener: (value: string) => null): void => {
+            comp.focusListener.push(listener);
+        };
+
+        Tiptap.Editor.prototype.addChangeListener = (listener: () => null): void => {
+            comp.changeListener.push(listener);
+        };
+
+        Tiptap.Editor.prototype.disableFocusListener = comp.disableFocusListener;
+
+        this.editor.addChangeListener(() => {
+            if (this.changeTimeout) {
+                clearTimeout(this.changeTimeout);
+            } else {
+                EventService.getInstance().publish(FormEvent.BLOCK, true);
+            }
+            this.changeTimeout = setTimeout(() => {
+                if (!(this as any).isDestroyed()) {
+                    const value = this.editor.getValue();
+
+                    this._lastEmittedValue = value;
+
+                    (this as any).emit('valueChanged', value);
+                    EventService.getInstance().publish(FormEvent.BLOCK, false);
+                }
+                this.changeTimeout = null;
+            }, this.editorTimeout);
+            return null;
+        });
+
+        this.editor.addFocusListener(this.focusLostFallback.bind(this));
+
         const editor = this.editor;
+        TiptapEditorService.getInstance().setActiveEditor(editor);
 
         const applyDefaultsIntoEmptyBlock = (ed: any): void => {
             const { state } = ed;
@@ -420,20 +494,144 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         };
 
         editor.on('transaction', ({ editor: ed, transaction }: any): void => {
-            if (!transaction.docChanged) return;
+            const { state } = ed;
+            const $from = state.selection.$from;
 
-            const ts = ed.getAttributes('textStyle') || {};
-            if (ts.fontFamily) ed.storage.lastFontFamily = ts.fontFamily;
-            if (ts.fontSize) ed.storage.lastFontSize = ts.fontSize;
-            if (ts.color) ed.storage.lastFontColor = ts.color;
+            let blockDepth = $from.depth;
+            while (blockDepth > 0 && !$from.node(blockDepth).isBlock) {
+                blockDepth--;
+            }
 
-            if (ed.isActive('bold')) ed.storage.lastBold = true;
-            if (ed.isActive('italic')) ed.storage.lastItalic = true;
-            if (ed.isActive('underline')) ed.storage.lastUnderline = true;
-            if (ed.isActive('strike')) ed.storage.lastStrike = true;
+            const blockNode = $from.node(blockDepth);
+            const parentNode = blockDepth > 0 ? $from.node(blockDepth - 1) : null;
 
-            const hl = ed.getAttributes('highlight')?.color;
-            if (hl) ed.storage.lastHighlightColor = hl;
+            const indexInParent = parentNode ? $from.index(blockDepth - 1) : 0;
+
+            const prevSibling =
+                parentNode && indexInParent > 0 ? parentNode.child(indexInParent - 1) : null;
+
+            const nextSibling =
+                parentNode && indexInParent + 1 < parentNode.childCount
+                    ? parentNode.child(indexInParent + 1) : null;
+
+            const isEmptyTextblock =
+                !!blockNode?.isTextblock && blockNode.content.size === 0;
+
+            const justAfterTableEmptyPara =
+                isEmptyTextblock &&
+                !!prevSibling &&
+                prevSibling.type?.name === 'table';
+
+            const justBeforeTableEmptyPara =
+                isEmptyTextblock &&
+                !!nextSibling &&
+                nextSibling.type?.name === 'table';
+
+            if (justAfterTableEmptyPara && prevSibling) {
+                try {
+                    let lastTextNode: any = null;
+
+                    (prevSibling as any).descendants((node: any) => {
+                        if (node.isText && node.marks && node.marks.length) {
+                            lastTextNode = node;
+                        }
+                    });
+
+                    if (lastTextNode) {
+                        const marks = lastTextNode.marks || [];
+
+                        ed.storage.lastBold = false;
+                        ed.storage.lastItalic = false;
+                        ed.storage.lastUnderline = false;
+                        ed.storage.lastStrike = false;
+                        ed.storage.lastHighlightColor = null;
+                        ed.storage.lastFontFamily = null;
+                        ed.storage.lastFontSize = null;
+                        ed.storage.lastFontColor = null;
+
+                        for (const mark of marks) {
+                            switch (mark.type.name) {
+                                case 'bold':
+                                    ed.storage.lastBold = true;
+                                    break;
+                                case 'italic':
+                                    ed.storage.lastItalic = true;
+                                    break;
+                                case 'underline':
+                                    ed.storage.lastUnderline = true;
+                                    break;
+                                case 'strike':
+                                    ed.storage.lastStrike = true;
+                                    break;
+                                case 'highlight':
+                                    ed.storage.lastHighlightColor = mark.attrs?.color ?? null;
+                                    break;
+                                case 'textStyle':
+                                    if (mark.attrs?.fontFamily) {
+                                        ed.storage.lastFontFamily = mark.attrs.fontFamily;
+                                    }
+                                    if (mark.attrs?.fontSize) {
+                                        ed.storage.lastFontSize = mark.attrs.fontSize;
+                                    }
+                                    if (typeof mark.attrs?.color !== 'undefined') {
+                                        ed.storage.lastFontColor = mark.attrs.color ?? null;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.warn(
+                        '[Tiptap] Could not derive styles from table for paragraph after table:',
+                        e,
+                    );
+                }
+            }
+
+            let inTable = false;
+            for (let d = $from.depth; d > 0; d--) {
+                const node = $from.node(d);
+                if (!node) continue;
+                if (node.type && (node.type.name === 'tableCell' || node.type.name === 'tableHeader')) {
+                    inTable = true;
+                    break;
+                }
+            }
+
+            const inFormattingRegion =
+                inTable || justAfterTableEmptyPara || justBeforeTableEmptyPara;
+
+            if (transaction.docChanged && !justAfterTableEmptyPara) {
+                const ts = ed.getAttributes('textStyle') || {};
+
+                if (ts.fontFamily) {
+                    ed.storage.lastFontFamily = ts.fontFamily;
+                }
+                if (ts.fontSize) {
+                    ed.storage.lastFontSize = ts.fontSize;
+                }
+
+                ed.storage.lastFontColor = typeof ts.color !== 'undefined' ? ts.color : null;
+            }
+
+            if (inFormattingRegion) {
+                if (ed.isActive('bold')) ed.storage.lastBold = true;
+                if (ed.isActive('italic')) ed.storage.lastItalic = true;
+                if (ed.isActive('underline')) ed.storage.lastUnderline = true;
+                if (ed.isActive('strike')) ed.storage.lastStrike = true;
+
+                const hl = ed.getAttributes('highlight')?.color;
+                if (hl) ed.storage.lastHighlightColor = hl;
+            } else {
+                ed.storage.lastBold = ed.isActive('bold');
+                ed.storage.lastItalic = ed.isActive('italic');
+                ed.storage.lastUnderline = ed.isActive('underline');
+                ed.storage.lastStrike = ed.isActive('strike');
+                ed.storage.lastHighlightColor =
+                    ed.getAttributes('highlight')?.color ?? null;
+            }
         });
 
         editor.on('selectionUpdate', (): void => applyDefaultsIntoEmptyBlock(editor));
@@ -532,6 +730,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this._onVisChange = onVisChange;
         this._onBeforeUnload = onBeforeUnload;
         this._saveRaw = saveRaw;
+    }
+
+    private focusLostFallback(): any {
+        if (!(this as any).isDestroyed() && this.editor?.isFocusListenerEnabled()) {
+            const editorValue = this.editor.getValue();
+            (this as any).emit('focusLost', editorValue);
+        }
+    }
+
+    public disableFocusListener(disableTimeout: number = 1000): void {
+        this.focusListenerEnabled = false;
+        setTimeout(() => {
+            this.focusListenerEnabled = true;
+        }, disableTimeout);
     }
 
     public onDestroy(): void {

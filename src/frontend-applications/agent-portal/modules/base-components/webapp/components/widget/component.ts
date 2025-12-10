@@ -83,7 +83,7 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
             this.state.minimized = storedMinimized === 'true';
         }
         this.additionalActions = await ActionFactory.getInstance().getActionsForWidget(
-            this.state.widgetConfiguration?.widgetId
+            this.state.widgetConfiguration?.widgetId, this.contextInstanceId
         );
         this.prepareActions(this.state.actions);
 

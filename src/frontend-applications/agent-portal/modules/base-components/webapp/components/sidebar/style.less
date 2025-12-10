@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -30,13 +30,13 @@
         background-color: #ededed;
         box-shadow: 0 1px 0 fade(#000, 8%);
     }
-    
+
     // hide scrollbar for webkit browser
     &::-webkit-scrollbar {
         display: none;
     }
 
-    &#sidebar-left {
+    &.sidebar-left {
         border-top-right-radius: @border-radius;
         border-bottom-right-radius: @border-radius;
 
@@ -66,13 +66,13 @@
         max-width: @sidebar-width;
         width: 100%;
 
-        &#sidebar-left {
+        &.sidebar-left {
             >.sidebar-widgets-container {
                 padding-right: 0;
             }
         }
 
-        &#sidebar-right {
+        &.sidebar-right {
             >.sidebar-widgets-container {
                 padding-left: 0;
             }
@@ -97,9 +97,9 @@
 
         &.sidebars-shown {
             max-width: @sidebar-width + (2 * @margin-small);
-            min-width: @sidebar-width/2 + (2 * @margin-small);
+            min-width: (@sidebar-width/2) + (2 * @margin-small);
 
-            &#sidebar-right {
+            &.sidebar-right {
                 width: @sidebar-width;
             }
         }
@@ -137,7 +137,7 @@
 
 // overflow left
 @media only screen and (min-width: @mobile-breakpoint + 1px) and (max-width: @sidebar-left-breakpoint) {
-    #sidebar-left {
+    .sidebar-left {
         position: absolute;
         top: 0;
         left: 0;
@@ -160,7 +160,7 @@
 
 // no overflow left
 @media only screen and (min-width: @sidebar-left-breakpoint + 1px) {
-    #sidebar-left {
+    .sidebar-left {
         .sidebar-toggle:not(:hover) {
             background-color: #ededed;
         }
@@ -169,7 +169,7 @@
 
 // overflow right
 @media only screen and (min-width: @mobile-breakpoint + 1px) and (max-width: @sidebar-right-breakpoint) {
-    #sidebar-right {
+    .sidebar-right {
         position: absolute;
         top: 0;
         right: 0;
@@ -193,7 +193,7 @@
 
 // no overflow right
 @media only screen and (min-width: @sidebar-right-breakpoint + 1px) {
-    #sidebar-right {
+    .sidebar-right {
         .sidebar-toggle:not(:hover) {
             background-color: #ededed;
         }

@@ -26,22 +26,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        super.registerEventSubscriber(
-            async function (data: any, eventId: string): Promise<void> {
-                this.state.prepared = false;
-                const activeContext = ContextService.getInstance().getActiveContext();
-                if (
-                    activeContext?.instanceId === this.contextInstanceId
-                    && data.objectType === this.context?.descriptor?.kixObjectTypes[0]
-                ) {
-                    await this.prepareWidget();
-                    await this.prepareActions();
-                }
-                this.state.prepared = true;
-            },
-            [ApplicationEvent.OBJECT_UPDATED]
-        );
-
         await this.update();
         this.state.prepared = true;
     }

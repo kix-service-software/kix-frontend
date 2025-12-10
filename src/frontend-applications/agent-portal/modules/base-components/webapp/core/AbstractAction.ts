@@ -34,7 +34,17 @@ export abstract class AbstractAction<T = any, C extends Context = Context> imple
     protected context: C;
 
     public async initAction(): Promise<void> {
+        // FIXME: remove it someday,
+        // kept because backward compatibility if some "caller" does not use/know about setContext function
         this.context = ContextService.getInstance().getActiveContext();
+    }
+
+    public setContext(contextInstanceId?: string): void {
+        if (contextInstanceId) {
+            this.context = ContextService.getInstance().getContext(contextInstanceId);
+        } else {
+            this.context = ContextService.getInstance().getActiveContext();
+        }
     }
 
     public async setData(data: T): Promise<void> {

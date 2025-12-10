@@ -26,22 +26,22 @@ export class TextmodulePlugin {
                     label: name,
                     content: mod.Text,
                     keywords: mod.Keywords?.join(', ') || '',
-                    language: mod.Language
+                    language: mod.Language,
                 };
-            })
+            }),
         );
-
-        console.log('[TextmodulePlugin] ALL suggestions for query:', query, results);
 
         return results;
     }
 
     public static async prepareTextContent(textmodule: any): Promise<string> {
         try {
-            const replaced = await PlaceholderService.getInstance().replacePlaceholders(
+            const placeholderService = await PlaceholderService.getInstance();
+            const replaced = await placeholderService.replacePlaceholders(
                 textmodule.content,
                 null,
-                textmodule.language
+                textmodule.language,
+                true,
             );
             return replaced;
         } catch (e) {

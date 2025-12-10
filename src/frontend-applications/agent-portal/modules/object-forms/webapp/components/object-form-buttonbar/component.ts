@@ -10,6 +10,7 @@
 import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';

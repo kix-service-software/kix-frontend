@@ -45,7 +45,8 @@ export class ComponentState extends AbstractComponentState {
         public smimeSignedIcon: ObjectIcon | string = null,
         public smimeSignedTooltip: string = null,
         public smimeSigned: boolean = true,
-        public informationConfig: ObjectInformationCardConfiguration = null
+        public informationConfig: ObjectInformationCardConfiguration = null,
+        public showArticleDFContainer: boolean = false
     ) {
         super();
     }
