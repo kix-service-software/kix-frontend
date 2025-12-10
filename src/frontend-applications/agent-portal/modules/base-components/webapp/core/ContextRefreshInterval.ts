@@ -135,7 +135,7 @@ export class ContextRefreshInterval {
             && this.updateRequired
         ) {
             EventService.getInstance().publish(
-                ApplicationEvent.REFRESH_CONTENT, ContextService.getInstance().getActiveContext()
+                ApplicationEvent.REFRESH_CONTENT, ContextService.getInstance().getActiveContext().instanceId
             );
         }
     }
