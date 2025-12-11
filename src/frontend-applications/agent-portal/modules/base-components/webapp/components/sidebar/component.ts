@@ -43,6 +43,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     if (!this.state.contextList.some((c) => c.instanceId === data.instanceId)) {
                         this.state.contextList.push(data);
                     }
+
+                    const activeContext = ContextService.getInstance().getActiveContext();
+
+                    const sidebars = this.isLeft
+                        ? await activeContext?.getSidebarsLeft() || []
+                        : await activeContext?.getSidebarsRight() || [];
+
+                    this.hasSidebars = sidebars?.length > 0;
+
                 } else if (eventId === ApplicationEvent.REFRESH_CONTENT) {
                     this.state.reloadSidebarId = data;
 
@@ -51,13 +60,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     }, 25);
                 }
 
-                const activeContext = ContextService.getInstance().getActiveContext();
 
-                const sidebars = this.isLeft
-                    ? await activeContext?.getSidebarsLeft() || []
-                    : await activeContext?.getSidebarsRight() || [];
-
-                this.hasSidebars = sidebars?.length > 0;
 
                 (this as any).setStateDirty('contextList');
             },
