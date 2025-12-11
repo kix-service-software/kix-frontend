@@ -139,7 +139,7 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
             KIXObjectType.SYS_CONFIG_OPTION, [key]
         ).catch((): SysConfigOption[] => []);
 
-        if (sysconfigOptions?.length) {
+        if (sysconfigOptions?.length && Array.isArray(sysconfigOptions[0].Value)) {
             stopWords = sysconfigOptions[0].Value;
         }
 
