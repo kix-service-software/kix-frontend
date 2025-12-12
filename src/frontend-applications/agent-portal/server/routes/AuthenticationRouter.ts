@@ -187,8 +187,6 @@ export class AuthenticationRouter extends KIXRouter {
 
                 const logout = req.query.logout !== undefined;
 
-                const releaseInfo = await ReleaseInfoUtil.getInstance().getReleaseInfo();
-
                 const imprintLink = await this.getImprintLink()
                     .catch((e) => '');
 
@@ -213,7 +211,7 @@ export class AuthenticationRouter extends KIXRouter {
                 const baseRoute = config?.BASE_ROUTE || '';
 
                 (res as any).marko(template, {
-                    login: true, logout, releaseInfo, imprintLink, redirectUrl,
+                    login: true, logout, imprintLink, redirectUrl,
                     favIcon, logo, authMethods, mfaConfig, pwResetEnabled, pwResetState, error, baseRoute
                 });
             } catch (error) {
