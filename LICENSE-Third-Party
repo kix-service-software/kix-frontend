@@ -318,7 +318,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.44
+├─ @marko/compiler@5.39.45
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -331,6 +331,11 @@
 │  ├─ email: dpiercey@ebay.com
 │  ├─ path: node_modules/@marko/express
 │  └─ licenseFile: node_modules/@marko/express/LICENSE
+├─ @marko/runtime-tags@6.0.122
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/marko-js/marko
+│  ├─ path: node_modules/@marko/runtime-tags
+│  └─ licenseFile: node_modules/@marko/runtime-tags/README.md
 ├─ @popperjs/core@2.11.8
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/popperjs/popper-core
@@ -3118,7 +3123,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.38.0
+├─ marko@5.38.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
