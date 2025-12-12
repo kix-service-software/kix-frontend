@@ -270,11 +270,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </else>
             </div>
         </if>
-        <if(input.releaseInfo)>
-            <login-footer
-                releaseInfo=input.releaseInfo
-                imprintLink=input.imprintLink
-                unauthorized/>
+        <if(input.imprintLink)>
+            <login-footer imprintLink=input.imprintLink unauthorized/>
         </if>
     </div>
 </div>
