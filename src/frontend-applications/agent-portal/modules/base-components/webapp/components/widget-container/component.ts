@@ -264,7 +264,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public drag(widget: ConfiguredWidget, event: any): void {
-        if (event.srcElement?.id === `widget-frame-${widget.instanceId}`) {
+        if (event.srcElement?.id === `widget-frame-${widget.instanceId}${this.state.componentId}`) {
             event.dataTransfer.setData('text', widget.instanceId);
         } else {
             event.stopPropagation();
