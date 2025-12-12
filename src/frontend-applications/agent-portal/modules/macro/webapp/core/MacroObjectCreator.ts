@@ -9,7 +9,9 @@
 
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { IdService } from '../../../../model/IdService';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { Macro } from '../../model/Macro';
 import { MacroAction } from '../../model/MacroAction';
@@ -26,8 +28,13 @@ export class MacroObjectCreator {
         const macroIdOption = macroField.options.find((o) => o.option === 'MacroId');
         macro.ID = macroIdOption ? macroIdOption.value : null;
 
-        const macroNameValue = await formInstance.getFormFieldValueByProperty(MacroProperty.NAME);
-        macro.Name = macroNameValue?.value ? macroNameValue.value.toString() : IdService.generateDateBasedId('Macro-');
+        const formNameValue = await formInstance.getFormFieldValueByProperty(MacroProperty.NAME);
+        if (formInstance.getObjectType() === KIXObjectType.MACRO) {
+            macro.Name = formNameValue?.value ? formNameValue.value.toString() : IdService.generateDateBasedId('Macro-');
+        }
+        else {
+            macro.Name = IdService.generateDateBasedId(formInstance.getObjectType() + '-Macro-');
+        }
 
         const typeValue = formInstance.getFormFieldValue<string>(macroField?.instanceId);
         macro.Type = Array.isArray(typeValue?.value) ? typeValue.value[0] : typeValue.value;
@@ -38,8 +45,13 @@ export class MacroObjectCreator {
             macro.Scope = Array.isArray(scopeValue?.value) ? scopeValue.value[0] : scopeValue.value;
         }
 
-        if (!macroComment && macro.Scope !== 'Ruleset') {
-            macroComment = `Macro for "${macroNameValue.value}"`;
+        if (
+            !macroComment
+            && formNameValue?.value
+            && formInstance.getObjectType() !== KIXObjectType.MACRO
+            && macro.Scope !== 'Ruleset'
+        ) {
+            macroComment = `Macro for ${formInstance.getObjectType()} "${formNameValue.value}"`;
         }
         macro.Comment = macroComment || '';
 
