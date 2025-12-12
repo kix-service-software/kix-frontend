@@ -4601,7 +4601,7 @@ msgid "Setup email server"
 msgstr ""
 
 msgid "Share_Search_Template"
-msgstr "share search template"
+msgstr "Share search template"
 
 msgid "Shared Search"
 msgstr ""
