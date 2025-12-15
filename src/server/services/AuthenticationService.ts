@@ -31,6 +31,7 @@ import { ClientNotificationService } from '../../frontend-applications/agent-por
 import { BackendNotification } from '../../frontend-applications/agent-portal/model/BackendNotification';
 import { SysConfigKey } from '../../frontend-applications/agent-portal/modules/sysconfig/model/SysConfigKey';
 import { CacheService } from '../../frontend-applications/agent-portal/server/services/cache';
+import { AdministrationSocketClient } from '../../frontend-applications/agent-portal/modules/admin/webapp/core/AdministrationSocketClient';
 
 export class AuthenticationService {
 
@@ -180,6 +181,7 @@ export class AuthenticationService {
             throw new SocketAuthenticationError('No contact available for user!');
         }
 
+        AdministrationSocketClient.getInstance().clearAdminModuleCache();
         HttpService.getInstance().setUserRoleIds(user);
 
         return token;
