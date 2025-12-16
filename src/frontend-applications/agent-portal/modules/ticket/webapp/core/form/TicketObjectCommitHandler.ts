@@ -32,6 +32,7 @@ import { ArticleProperty } from '../../../model/ArticleProperty';
 import { Channel } from '../../../model/Channel';
 import { Queue } from '../../../model/Queue';
 import { Ticket } from '../../../model/Ticket';
+import { QueueSignatureConfiguration } from '../../../model/TicketModuleConfiguration';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { TicketService } from '../TicketService';
 
@@ -121,7 +122,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             }
 
             const ticketOrQueueId = ticket.QueueID ? ticket : orgTicketQueueID;
-            article.Body = await this.addQueueSignature(ticketOrQueueId, article.Body, article.ChannelID);
+            article.Body = await this.addQueueSignature(ticket, ticket?.QueueID, article.Body, article.ChannelID);
 
             await this.prepareReferencedArticle(article, ticket);
         } else {
@@ -198,17 +199,17 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         }
     }
 
-    public async addQueueSignature(ticketOrQueueId: number | Ticket, body: string, channelId: number): Promise<string> {
-        const queueId = typeof ticketOrQueueId === 'number' ? ticketOrQueueId : ticketOrQueueId?.QueueID;
+    public async addQueueSignature(ticket: Ticket, queueId: number, body: string, channelId: number): Promise<string> {
+        queueId = ticket.QueueID || queueId;
 
         if (channelId && queueId) {
             const channels = await KIXObjectService.loadObjects<Channel>(
                 KIXObjectType.CHANNEL, [channelId], null, null, true
             ).catch(() => []);
             if (channels && channels[0] && channels[0].Name === 'email') {
-                const config = await TicketService.getTicketModuleConfiguration().catch(() => null);
+                const addQueueSignature = await this.getAddQueueSignature(ticket);
 
-                if (config?.addQueueSignature) {
+                if (addQueueSignature) {
                     const queues = await KIXObjectService.loadObjects<Queue>(
                         KIXObjectType.QUEUE, [queueId], null, null, true
                     );
@@ -217,7 +218,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                         const signature =
                             await PlaceholderService.getInstance().replacePlaceholders(
                                 queue.Signature,
-                                (ticketOrQueueId instanceof Ticket ? ticketOrQueueId : undefined)
+                                queueId ? undefined : ticket
                             );
                         body += `\n\n${signature}`;
                     }
@@ -225,6 +226,22 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             }
         }
         return body;
+    }
+
+    private async getAddQueueSignature(ticket: Ticket): Promise<boolean> {
+        const config = await TicketService.getTicketModuleConfiguration().catch(() => null);
+
+        let addQueueSignature = true;
+        if (typeof config?.addQueueSignature === 'boolean') {
+            addQueueSignature = config?.addQueueSignature;
+        } else {
+            const queueSignatureConfig = config.addQueueSignature as QueueSignatureConfiguration;
+            addQueueSignature = queueSignatureConfig.addQueueSignature;
+            if (queueSignatureConfig && queueSignatureConfig.newTicketOnly && ticket?.TicketID) {
+                addQueueSignature = false;
+            }
+        }
+        return addQueueSignature;
     }
 
     protected async prepareAttachments(files: Array<Attachment | File>): Promise<Attachment[]> {
