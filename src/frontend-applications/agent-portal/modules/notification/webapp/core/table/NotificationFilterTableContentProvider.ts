@@ -55,7 +55,7 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
                         );
 
                         const displayValuesAndIcons = await this.prepareValue(
-                            relativeDateTimeOperators, criterion, displayKey, isArticleProperty
+                            relativeDateTimeOperators, criterion, isArticleProperty
                         );
 
                         const displayString = displayValuesAndIcons[2] ? displayValuesAndIcons[2] :
@@ -64,6 +64,8 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
                                 : '';
 
                         const operatorLabel = await SearchOperatorUtil.getText(criterion.Operator);
+                        const allStrings = Array.isArray(displayValuesAndIcons[0]) &&
+                            displayValuesAndIcons[0].every((dv) => typeof dv === 'string');
 
                         const values: TableValue[] = [
                             new TableValue(NotificationFilterTableProperty.FIELD, criterion.Field, displayKey),
@@ -72,7 +74,8 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
                                 NotificationFilterTableProperty.VALUE,
                                 displayValuesAndIcons[0],
                                 displayString,
-                                null, displayValuesAndIcons[1]
+                                null, displayValuesAndIcons[1], undefined,
+                                allStrings ? displayValuesAndIcons[0] : undefined
                             )
                         ];
                         rowObjects.push(new RowObject<any>(values));
@@ -85,12 +88,12 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
     }
 
     private async prepareValue(
-        relativeDateTimeOperators: SearchOperator[], criterion: any, displayKey: any, isArticleProperty: boolean
+        relativeDateTimeOperators: SearchOperator[], criterion: any, isArticleProperty: boolean
     ): Promise<[string[], Array<string | ObjectIcon>, any]> {
         if (relativeDateTimeOperators.includes(criterion.Operator as SearchOperator)) {
             const valueList = await this.getRelativedateTimeValues(criterion.Value);
             return [valueList, null, null];
-        } else if (KIXObjectService.getDynamicFieldName(displayKey)) {
+        } else if (KIXObjectService.getDynamicFieldName(criterion.Field)) {
             return await this.getDFValues(
                 criterion.Field, criterion.Value, KIXObjectType.TICKET
             );
@@ -180,14 +183,13 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
         const dfName = key.replace(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`), '$1');
         let displayValues: string[] = [];
         let displayString: string = '';
-        if (dfName) {
-            const preparedValue = await LabelService.getInstance().getDFDisplayValues(
-                objectType,
-                new DynamicFieldValue({
-                    Name: dfName,
-                    Value: value
-                } as DynamicFieldValue)
-            );
+        if (dfName && value) {
+
+            const val = Array.isArray(value) ? value : [value];
+            const preDFValue = { Name: dfName, Value: val } as DynamicFieldValue;
+            const dfValue = new DynamicFieldValue(preDFValue);
+
+            const preparedValue = await LabelService.getInstance().getDFDisplayValues(objectType, dfValue);
             displayValues = preparedValue ? preparedValue[0] : Array.isArray(value) ? value : [value];
             displayString = preparedValue ? preparedValue[1] : '';
         }
