@@ -97,7 +97,7 @@
         "js-yaml": "^4.1.0",
         "jsdom": "^26.0.0",
         "jsonfile": "^6.1.0",
-        "jsonwebtoken": "^9.0.2",
+        "jsonwebtoken": "^9.0.3",
         "juice": "^11.0.0",
         "lasso": "^4.0.4",
         "lasso-clean-css": "^2.1.0",

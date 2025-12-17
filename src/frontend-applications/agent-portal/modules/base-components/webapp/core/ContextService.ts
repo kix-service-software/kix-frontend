@@ -305,7 +305,7 @@ export class ContextService {
         if (this.contextInstances.length === 1) {
             const context = this.getContext(instanceId);
             const urlPaths = context?.descriptor.urlPaths;
-            if (urlPaths?.length) {
+            if (context.descriptor.contextMode === ContextMode.DASHBOARD && urlPaths?.length) {
                 canRemove = !this.DEFAULT_FALLBACK_CONTEXT_URL.startsWith(urlPaths[0]);
             }
         }
