@@ -65,8 +65,10 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
         this.keyListenerElement = (this as any).getEl('search-criteria-container');
         if (this.keyListenerElement) {
             this.keyListener = this.keyDown.bind(this);
-            this.keyListenerElement.addEventListener('keydown', this.keyListener);
+            //this.keyListenerElement.addEventListener('keydown', this.keyListener, true);
+            document.addEventListener('keydown', this.keyListener);
         }
+
 
         this.searchDefinition = SearchService.getInstance().getSearchDefinition(
             this.context.descriptor.kixObjectTypes[0]
@@ -146,7 +148,7 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
         this.state.manager?.unregisterListener(this.managerListenerId);
 
         if (this.keyListenerElement) {
-            this.keyListenerElement.removeEventListener('keydown', this.keyListener);
+            document.removeEventListener('keydown', this.keyListener);
         }
 
         if (this.sortAttributeTreeHandler && this.state.sortTreeId) {
@@ -275,11 +277,14 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
     }
 
     public keyDown(event: any): void {
-        if ((event.ctrlKey && event.key === 'Enter') && this.state.canSearch) {
+        if ((event.key === 'Enter') && this.state.canSearch) {
             if (event.preventDefault) {
                 event.preventDefault();
             }
-            this.search();
+            const isFieldDropdownActive = document.getElementsByClassName('form-list-tree').length > 0;
+            if (!isFieldDropdownActive) {
+                this.search();
+            }
         }
     }
 
