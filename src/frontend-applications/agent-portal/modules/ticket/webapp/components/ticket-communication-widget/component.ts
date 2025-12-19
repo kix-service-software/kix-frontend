@@ -204,6 +204,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+    public expandAll(): void {
+        for (const articleId of this.state.articleIds) {
+            EventService.getInstance().publish('TOGGLE_ARTICLE', { articleId, expanded: true });
+        }
+    }
+
     public scrollToTop(event: any): void {
         event.stopPropagation();
         event.preventDefault();

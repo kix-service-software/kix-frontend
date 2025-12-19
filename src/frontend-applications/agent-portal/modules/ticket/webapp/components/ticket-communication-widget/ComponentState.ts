@@ -21,6 +21,7 @@ export class ComponentState extends WidgetComponentState {
         public activeUnreadAction: boolean = false,
         public selectedCompactView: boolean = false,
         public collapseAll: boolean = false,
+        public expandAll: boolean = false,
         public informationConfig: ObjectInformationCardConfiguration = null
     ) {
         super();
