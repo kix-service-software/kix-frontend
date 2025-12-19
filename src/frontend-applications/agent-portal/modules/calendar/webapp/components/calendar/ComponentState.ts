@@ -18,7 +18,6 @@ export class ComponentState extends WidgetComponentState {
         public view: string = 'month',
         public currentDate: string = '',
         public calendars: any[] = [],
-        public loading: boolean = false,
         public calendarId: string = IdService.generateDateBasedId('calendar-')
     ) {
         super();
