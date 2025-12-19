@@ -101,7 +101,11 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
 
                     SortUtil.sortObjects(nodes, 'label', DataType.STRING);
 
-                    this.possibleValues = contact.OrganisationIDs;
+                    // check for changed value to prevent infinite loop by triggered valueSetter listener
+                    const possibleValues = contact.OrganisationIDs.filter((id) => nodes.some((node) => node.id === id));
+                    if (JSON.stringify(this.possibleValues) !== JSON.stringify(possibleValues)) {
+                        this.possibleValues = possibleValues;
+                    }
                     this.treeHandler.setTree(nodes);
                 }
             } else if (typeof contactId === 'string') {
@@ -151,7 +155,8 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                 if (contacts.length) {
                     const contact = contacts[0];
 
-                    organisationId = contact.PrimaryOrganisationID;
+                    organisationId = this.possibleValues.some((v) => v === contact.PrimaryOrganisationID) ?
+                        contact.PrimaryOrganisationID : null;
 
                     // current value is acceptable - do not changed
                     if (this.value && this.possibleValues?.some((pv) => pv?.toString() === this.value?.toString())) {
@@ -165,7 +170,9 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
             }
         }
 
-        await this.setFormValue(organisationId, true);
+        if (organisationId) {
+            await this.setFormValue(organisationId, true);
+        }
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
