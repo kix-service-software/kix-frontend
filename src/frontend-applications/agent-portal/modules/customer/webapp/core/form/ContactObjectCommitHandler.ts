@@ -66,7 +66,7 @@ export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {
             }
         }
         else if (Array.isArray(newContact.User?.Preferences)) {
-            const userAccessFormValue = objectValueMapper.findFormValue(UserProperty.USER_ACCESS);
+            const userAccessFormValue = objectValueMapper?.findFormValue(UserProperty.USER_ACCESS);
             const preferencesFormValue = userAccessFormValue?.findFormValue(UserProperty.PREFERENCES);
             newContact.User.Preferences = newContact.User.Preferences.filter(
                 (pref) => this.checkPerferenceFormValues(pref.ID, preferencesFormValue?.formValues)
