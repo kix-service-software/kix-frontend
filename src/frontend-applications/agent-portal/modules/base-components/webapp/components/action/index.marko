@@ -6,39 +6,53 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<div
-    on-click("doAction")
-    title=state.text
+<button
+    key=(state.key + state.action.id)
+    type="button"
     class=[
-        "action d-flex align-items-center overflow-hidden p-1",
+        "btn p-0",
         {
-            inactive: !state.canRunAction || state.lockRunAction,
+            "disabled border-0": !state.canRunAction || state.lockRunAction,
         },
-    ]>
-    <if(state.action.hasLink)>
-        <a
-            href=("?actionId=" + state.action.id + "&data=" + state.actionData)
-            on-click("linkClicked")>
+    ]
+    style=[
+        {
+            "cursor:auto": !state.canRunAction,
+        },
+    ]
+    on-click("preventDefault")>
+    <div
+        on-click("doAction")
+        title=state.text
+        class=["action d-flex align-items-center overflow-hidden p-1"]>
+        <if(state.action.hasLink)>
+            <a
+                href=(
+                    "?actionId=" + state.action.id + "&data=" + state.actionData
+                )
+                on-click("linkClicked")>
+                <icon icon=(state.action.icon)/>
+            </a>
+        </if>
+        <else>
             <icon icon=(state.action.icon)/>
-        </a>
-    </if>
-    <else>
-        <icon icon=(state.action.icon)/>
-    </else>
-    <if(state.displayText && state.action.hasLink)>
-        <a
-            class="ms-2 text-truncate"
-            href=("?actionId=" + state.action.id + "&data=" + state.actionData)
-            on-click("linkClicked")>
-            <span class="text text-nowrap">
+        </else>
+        <if(state.displayText && state.action.hasLink)>
+            <a
+                class="ms-2 text-truncate"
+                href=(
+                    "?actionId=" + state.action.id + "&data=" + state.actionData
+                )
+                on-click("linkClicked")>
+                <span class="text text-nowrap">
+                    ${state.text}
+                </span>
+            </a>
+        </if>
+        <else-if(state.displayText)>
+            <span class="ms-2 text text-nowrap text-truncate">
                 ${state.text}
             </span>
-        </a>
-    </if>
-    <else-if(state.displayText)>
-        <span class="ms-2 text text-nowrap text-truncate">
-            ${state.text}
-        </span>
-    </else-if>
-</div>
+        </else-if>
+    </div>
+</button>

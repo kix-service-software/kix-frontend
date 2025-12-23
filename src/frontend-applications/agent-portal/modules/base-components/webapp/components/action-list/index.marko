@@ -87,14 +87,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </if>
         <!-- create a single action -->
         <else>
-            <button
-                key=state.key + element.key
-                type="button"
-                class="btn p-0"
-                style=(!element.canRun() ? "cursor:auto" : "")
-                on-click("preventDefault")>
-                <action action=element displayText=state.displayText/>
-            </button>
+            <action action=element displayText=state.displayText/>
         </else>
     </for>
 </macro>
