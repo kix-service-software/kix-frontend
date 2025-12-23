@@ -10,9 +10,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     key=(state.key + state.action.id)
     type="button"
     class=[
-        "btn p-0",
+        "btn p-0 border-0",
         {
-            "disabled border-0": !state.canRunAction || state.lockRunAction,
+            disabled: !state.canRunAction || state.lockRunAction,
         },
     ]
     style=[
