@@ -401,7 +401,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         new UIFilterCriterion(
                                             'AccountedTime',
                                             SearchOperator.NOT_EQUALS,
-                                            null
+                                            0
                                         )
                                     ],
                                     roleIds: []
