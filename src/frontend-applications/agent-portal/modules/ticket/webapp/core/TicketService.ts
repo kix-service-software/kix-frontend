@@ -913,4 +913,23 @@ export class TicketService extends KIXObjectService<Ticket> {
         return config as any;
     }
 
+    public async searchObjectTree(
+        property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions,
+        additionalData?: any, showInvalid?: boolean
+    ): Promise<TreeNode[]> {
+        const objectTypeForSearch = await this.getObjectTypeForProperty(property);
+        const isUserProperty = property === TicketProperty.OWNER_ID || property === TicketProperty.RESPONSIBLE_ID;
+
+        if (objectTypeForSearch === KIXObjectType.USER && isUserProperty) {
+            if (!loadingOptions) {
+                loadingOptions = new KIXObjectLoadingOptions();
+            }
+
+            loadingOptions.filter.push(new FilterCriteria(
+                UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+            ));
+        }
+        return super.searchObjectTree(property, searchValue, loadingOptions, additionalData, showInvalid);
+    }
+
 }
