@@ -2149,7 +2149,7 @@
 │  ├─ repository: https://github.com/socketio/socket.io
 │  ├─ path: node_modules/engine.io-parser
 │  └─ licenseFile: node_modules/engine.io-parser/LICENSE
-├─ engine.io@6.6.4
+├─ engine.io@6.6.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/socketio/socket.io
 │  ├─ publisher: Guillermo Rauch
@@ -4076,9 +4076,9 @@
 │  ├─ url: http://mad4milk.net
 │  ├─ path: node_modules/slick
 │  └─ licenseFile: node_modules/slick/README.md
-├─ socket.io-adapter@2.5.5
+├─ socket.io-adapter@2.5.6
 │  ├─ licenses: MIT
-│  ├─ repository: https://github.com/socketio/socket.io-adapter
+│  ├─ repository: https://github.com/socketio/socket.io
 │  ├─ path: node_modules/socket.io-adapter
 │  └─ licenseFile: node_modules/socket.io-adapter/LICENSE
 ├─ socket.io-client@4.1.3
@@ -4091,12 +4091,12 @@
 │  ├─ repository: https://github.com/socketio/socket.io-parser
 │  ├─ path: node_modules/socket.io-parser
 │  └─ licenseFile: node_modules/socket.io-client/node_modules/socket.io-parser/LICENSE
-├─ socket.io-parser@4.2.4
+├─ socket.io-parser@4.2.5
 │  ├─ licenses: MIT
-│  ├─ repository: https://github.com/socketio/socket.io-parser
+│  ├─ repository: https://github.com/socketio/socket.io
 │  ├─ path: node_modules/socket.io-parser
 │  └─ licenseFile: node_modules/socket.io-parser/LICENSE
-├─ socket.io@4.8.1
+├─ socket.io@4.8.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/socketio/socket.io
 │  ├─ path: node_modules/socket.io
@@ -4555,14 +4555,6 @@
 │  ├─ url: http://2x.io
 │  ├─ path: node_modules/ws
 │  └─ licenseFile: node_modules/engine.io-client/node_modules/ws/LICENSE
-├─ ws@8.17.1
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/websockets/ws
-│  ├─ publisher: Einar Otto Stangvik
-│  ├─ email: einaros@gmail.com
-│  ├─ url: http://2x.io
-│  ├─ path: node_modules/ws
-│  └─ licenseFile: node_modules/engine.io/node_modules/ws/LICENSE
 ├─ ws@8.18.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/websockets/ws
