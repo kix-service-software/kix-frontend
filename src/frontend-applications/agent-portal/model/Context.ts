@@ -112,7 +112,7 @@ export abstract class Context {
             this.storageManager.setContext(this);
         }
 
-        this.contextId = descriptor.contextId;
+        this.contextId = descriptor?.contextId;
     }
 
     private reloadRelevantObjectLists(widgets: ConfiguredWidget[]): void {

@@ -124,12 +124,12 @@ describe('JSONFormFieldValidator', () => {
     });
 
     describe('Check validate', () => {
-        let originalFunction: <T extends Context>() => T;
+        let originalFunction: <T = Context>() => T;
         let validJSON = true;
 
         before(() => {
             originalFunction = ContextService.getInstance().getActiveContext;
-            ContextService.getInstance().getActiveContext = <T extends Context>(): T => {
+            ContextService.getInstance().getActiveContext = <T = Context>(): T => {
                 return new TestContext(validJSON) as any;
             }
         });
