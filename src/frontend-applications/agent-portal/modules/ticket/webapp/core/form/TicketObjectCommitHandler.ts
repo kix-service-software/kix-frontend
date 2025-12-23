@@ -136,8 +136,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
     private deleteArticleProperties(article: Article): void {
         const context = ContextService.getInstance().getActiveContext();
-        const isNewArticleContext = context.getAdditionalInformation('NEW_ARTICLE');
-        const referencedArticleId = context.getAdditionalInformation('ReferencedArticleID');
+        const isNewArticleContext = context?.getAdditionalInformation('NEW_ARTICLE');
+        const referencedArticleId = context?.getAdditionalInformation('ReferencedArticleID');
         if (isNewArticleContext && referencedArticleId === article.ArticleID) {
             delete article.ArticleID;
         }

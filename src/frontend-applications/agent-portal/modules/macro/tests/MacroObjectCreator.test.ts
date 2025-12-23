@@ -939,7 +939,7 @@ function checkMacro(macro: Macro, field: FormFieldConfiguration, formInstance: F
     if (checkComment && macro.Scope !== 'Ruleset') {
         const nameValue = formInstance.getFormFieldValue(JobProperty.NAME);
         expect(nameValue).exist;
-        expect(macro.Comment).equals(`Macro for "${nameValue.value}"`);
+        expect(macro.Comment).equals(`Macro for Job "${nameValue.value}"`);
     }
 
     const typeValue = formInstance.getFormFieldValue(JobProperty.TYPE);

@@ -280,7 +280,7 @@ describe('Placeholder replacement for article', () => {
                 const newArticleContext = new newArticlePlaceholderDialogContext();
                 newArticleContext.setAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID, ticket.Articles[5].ArticleID);
                 orgFunction = ContextService.getInstance().getActiveContext;
-                ContextService.getInstance().getActiveContext = <T extends Context>(): T => {
+                ContextService.getInstance().getActiveContext = <T = Context>(): T => {
                     return newArticleContext as any;
                 }
             });
@@ -306,7 +306,7 @@ describe('Placeholder replacement for article', () => {
                 const newArticleContext = new newArticlePlaceholderDialogContext();
                 newArticleContext.setAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID, ticket.Articles[5].ArticleID);
                 orgContextFunction = ContextService.getInstance().getActiveContext;
-                ContextService.getInstance().getActiveContext = <T extends Context>(): T => {
+                ContextService.getInstance().getActiveContext = <T = Context>(): T => {
                     return newArticleContext as any;
                 }
 

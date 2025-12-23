@@ -762,7 +762,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
-        if (this.context.descriptor.contextMode.toLowerCase().includes('admin')) {
+        if (this.context?.descriptor?.contextMode.toLowerCase().includes('admin')) {
             const isRestoredContext = this.context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
             if (!isRestoredContext) {
                 this.defaultValue = field?.defaultValue?.value || [];
