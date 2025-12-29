@@ -238,7 +238,7 @@ export class TranslationAPIService extends KIXObjectAPIService {
     }
     public async translate(
         pattern: string = '', placeholderValues: Array<string | number> = [],
-        language: string = 'en', // language?: string,
+        language: string = 'en',
         getOnlyPattern: boolean = false
     ): Promise<string> {
         let translationValue = pattern;
@@ -249,17 +249,16 @@ export class TranslationAPIService extends KIXObjectAPIService {
             if (!getOnlyPattern) {
                 const config = ConfigurationService.getInstance().getServerConfiguration();
                 if (config && config.BACKEND_API_TOKEN) {
-                    // const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
+                    const loadingOptions = new KIXObjectLoadingOptions([], null, 0);
                     const objectResponse = await TranslationAPIService.getInstance().loadObjects<Translation>(
                         config.BACKEND_API_TOKEN, IdService.generateDateBasedId('translation-service-'),
-                        KIXObjectType.TRANSLATION, null, null, null
+                        KIXObjectType.TRANSLATION, null, loadingOptions, null
                     ).catch(() => new ObjectResponse<Translation>());
 
 
                     const translation = objectResponse?.objects?.find((t) => t.Pattern === translationValue);
 
                     if (translation) {
-                        // language = language ? language : await this.getUserLanguage();
                         if (language) {
                             const translationLanguageValue = translation.Languages[language];
                             if (translationLanguageValue) {
