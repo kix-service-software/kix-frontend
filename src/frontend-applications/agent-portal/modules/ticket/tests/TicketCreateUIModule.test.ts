@@ -8,8 +8,8 @@
  */
 
 // tslint:disable
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
 import { NewTicketDialogContext } from '../webapp/core';
 import { UIModule as TicketCreateUIModule } from '../webapp/core/TicketCreateUIModule';

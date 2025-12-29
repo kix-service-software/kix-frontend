@@ -8,8 +8,8 @@
  */
 
 // tslint:disable
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { Queue } from '../model/Queue';
 import { QueueService } from '../webapp/core/admin/QueueService';
 

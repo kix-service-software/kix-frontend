@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { NotesNamespace } from '../server/NotesNamespace';
 import { UserService } from '../../user/server/UserService';
 import { User } from '../../user/model/User';

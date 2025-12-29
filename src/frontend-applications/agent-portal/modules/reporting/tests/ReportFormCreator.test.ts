@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { DefaultSelectInputFormOption } from '../../../model/configuration/DefaultSelectInputFormOption';
 import { FormConfiguration } from '../../../model/configuration/FormConfiguration';
 import { FormContext } from '../../../model/configuration/FormContext';

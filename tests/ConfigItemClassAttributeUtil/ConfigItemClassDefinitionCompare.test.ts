@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
 import { ConfigItemClassAttributeUtil } from '../../src/frontend-applications/agent-portal/modules/cmdb/webapp/core/ConfigItemClassAttributeUtil';
 import { TranslationService } from '../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';

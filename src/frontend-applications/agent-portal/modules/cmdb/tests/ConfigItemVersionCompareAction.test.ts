@@ -8,8 +8,8 @@
  */
 
 // tslint:disable
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { Row } from '../../table/model/Row';
 import { RowObject } from '../../table/model/RowObject';
 import { Table } from '../../table/model/Table';
