@@ -3613,7 +3613,7 @@
 │  ├─ repository: https://github.com/prosemirror/prosemirror-state
 │  ├─ path: node_modules/prosemirror-state
 │  └─ licenseFile: node_modules/prosemirror-state/LICENSE
-├─ prosemirror-tables@1.8.4
+├─ prosemirror-tables@1.8.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ProseMirror/prosemirror-tables
 │  ├─ path: node_modules/prosemirror-tables
@@ -4096,7 +4096,7 @@
 │  ├─ repository: https://github.com/socketio/socket.io
 │  ├─ path: node_modules/socket.io-parser
 │  └─ licenseFile: node_modules/socket.io-parser/LICENSE
-├─ socket.io@4.8.2
+├─ socket.io@4.8.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/socketio/socket.io
 │  ├─ path: node_modules/socket.io
