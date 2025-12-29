@@ -7,8 +7,8 @@
  * --
  */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
 import { ConfigurationType } from '../../src/frontend-applications/agent-portal/model/configuration/ConfigurationType';
 import { ContextConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/ContextConfiguration';

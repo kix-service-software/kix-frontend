@@ -7,8 +7,8 @@
  * --
  */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { SelectObjectFormValue } from '../../model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../model/ObjectFormValueMapper';
 import { RuleResult } from '../../model/RuleResult';

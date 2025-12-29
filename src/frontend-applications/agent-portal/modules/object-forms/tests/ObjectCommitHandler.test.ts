@@ -7,8 +7,8 @@
  * --
  */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { ObjectCommitHandler } from '../webapp/core/ObjectCommitHandler';
 import { TestFormObject } from './MockData';
 

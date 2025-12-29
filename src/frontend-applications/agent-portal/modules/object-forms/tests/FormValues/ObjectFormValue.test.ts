@@ -7,8 +7,8 @@
  * --
  */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { TestObjectValueMapper, TestFormObject } from '../MockData';
 import { ObjectFormValue } from '../../model/FormValues/ObjectFormValue';

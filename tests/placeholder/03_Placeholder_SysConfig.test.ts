@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { SysConfigPlaceholderHandler } from '../../src/frontend-applications/agent-portal/modules/sysconfig/webapp/core/SysConfigPlaceholderHandler';
 import { KIXObjectService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { SysConfigOptionType } from '../../src/frontend-applications/agent-portal/modules/sysconfig/model/SysConfigOptionType';

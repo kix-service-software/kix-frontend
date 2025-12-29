@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { KIXObjectType } from '../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { KIXObject } from '../../src/frontend-applications/agent-portal/model/kix/KIXObject';
 import { DefaultColumnConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/DefaultColumnConfiguration';
