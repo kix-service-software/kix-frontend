@@ -783,16 +783,11 @@
 │  ├─ repository: https://github.com/acornjs/acorn-jsx
 │  ├─ path: node_modules/acorn-jsx
 │  └─ licenseFile: node_modules/acorn-jsx/LICENSE
-├─ acorn@7.4.1
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/acornjs/acorn
-│  ├─ path: node_modules/acorn
-│  └─ licenseFile: node_modules/acorn/LICENSE
 ├─ acorn@8.15.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/acornjs/acorn
 │  ├─ path: node_modules/acorn
-│  └─ licenseFile: node_modules/lasso/node_modules/acorn/LICENSE
+│  └─ licenseFile: node_modules/acorn/LICENSE
 ├─ address-rfc2822@2.2.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/haraka/node-address-rfc2822
@@ -820,7 +815,7 @@
 │  ├─ publisher: Brian Woodward
 │  ├─ url: https://github.com/doowb
 │  ├─ path: node_modules/ansi-colors
-│  └─ licenseFile: node_modules/ansi-colors/LICENSE
+│  └─ licenseFile: node_modules/web-resource-inliner/node_modules/ansi-colors/LICENSE
 ├─ ansi-regex@2.1.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/chalk/ansi-regex
@@ -1298,7 +1293,7 @@
 │  ├─ email: mail@juliangruber.com
 │  ├─ url: http://juliangruber.com
 │  ├─ path: node_modules/brace-expansion
-│  └─ licenseFile: node_modules/brace-expansion/LICENSE
+│  └─ licenseFile: node_modules/babel-core/node_modules/brace-expansion/LICENSE
 ├─ brace-expansion@2.0.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/juliangruber/brace-expansion
@@ -1306,7 +1301,7 @@
 │  ├─ email: mail@juliangruber.com
 │  ├─ url: http://juliangruber.com
 │  ├─ path: node_modules/brace-expansion
-│  └─ licenseFile: node_modules/lasso/node_modules/brace-expansion/LICENSE
+│  └─ licenseFile: node_modules/brace-expansion/LICENSE
 ├─ browser-refresh-client@1.1.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/patrick-steele-idem/browser-refresh-client
@@ -2258,7 +2253,7 @@
 │  ├─ publisher: Toru Nagashima
 │  ├─ url: https://github.com/mysticatea
 │  ├─ path: node_modules/eslint-visitor-keys
-│  └─ licenseFile: node_modules/lasso/node_modules/eslint-visitor-keys/LICENSE
+│  └─ licenseFile: node_modules/eslint-visitor-keys/LICENSE
 ├─ espree@9.6.1
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/eslint/espree
@@ -2270,7 +2265,7 @@
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/estools/estraverse
 │  ├─ path: node_modules/estraverse
-│  └─ licenseFile: node_modules/lasso/node_modules/estraverse/LICENSE.BSD
+│  └─ licenseFile: node_modules/estraverse/LICENSE.BSD
 ├─ esutils@2.0.3
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/estools/esutils
@@ -3229,7 +3224,7 @@
 │  ├─ email: i@izs.me
 │  ├─ url: http://blog.izs.me
 │  ├─ path: node_modules/minimatch
-│  └─ licenseFile: node_modules/minimatch/LICENSE
+│  └─ licenseFile: node_modules/babel-core/node_modules/minimatch/LICENSE
 ├─ minimatch@5.1.6
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/isaacs/minimatch
@@ -3245,7 +3240,7 @@
 │  ├─ email: i@izs.me
 │  ├─ url: http://blog.izs.me
 │  ├─ path: node_modules/minimatch
-│  └─ licenseFile: node_modules/marko/node_modules/minimatch/LICENSE
+│  └─ licenseFile: node_modules/minimatch/LICENSE
 ├─ minimist@1.2.8
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/minimistjs/minimist
