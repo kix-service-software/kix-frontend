@@ -121,8 +121,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 article.Attachments = await this.prepareAttachments(article.Attachments);
             }
 
-            const ticketOrQueueId = ticket.QueueID ? ticket : orgTicketQueueID;
-            article.Body = await this.addQueueSignature(ticket, ticket?.QueueID, article.Body, article.ChannelID);
+            const ticketOrQueueId = ticket.QueueID || orgTicketQueueID;
+            article.Body = await this.addQueueSignature(ticket, ticketOrQueueId, article.Body, article.ChannelID);
 
             await this.prepareReferencedArticle(article, ticket);
         } else {
