@@ -136,11 +136,11 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
                     );
                     break;
                 case DynamicFieldTypes.CI_REFERENCE:
-                    dfName === 'AffectedAsset' ?
-                        formValue = new DynamicFieldAffectedAssetFormValue(
+                    formValue = dfName === 'AffectedAsset'
+                        ? new DynamicFieldAffectedAssetFormValue(
                             'Value', dynamicFieldValue, this.objectValueMapper, this, dfName
-                        ) :
-                        formValue = new DynamicFieldCIReferenceFormValue(
+                        )
+                        : new DynamicFieldCIReferenceFormValue(
                             'Value', dynamicFieldValue, this.objectValueMapper, this, dfName
                         );
                     break;

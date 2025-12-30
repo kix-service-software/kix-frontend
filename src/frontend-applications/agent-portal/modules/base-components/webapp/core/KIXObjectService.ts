@@ -848,7 +848,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public async getObjectDependencies(objectType: KIXObjectType): Promise<KIXObject[]> {
-        let dependencies: KIXObject[] = [];
+        const dependencies: KIXObject[] = [];
 
         for (const extendedService of this.extendedServices) {
             const extendedDependencies = await extendedService.getObjectDependencies(objectType);
@@ -1283,7 +1283,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     private static async prepareSysConfigForObjectTag(
         objectType: KIXObjectType | string, objectId: number | string
     ): Promise<Map<string, string | number>> {
-        let result: Map<string, string | number> = new Map();
+        const result: Map<string, string | number> = new Map();
 
         if (
             objectType === KIXObjectType.SYS_CONFIG_OPTION

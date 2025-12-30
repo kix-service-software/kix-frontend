@@ -82,7 +82,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.state.activePageIndex === 0) {
             index = this.state.pages.length - 1;
         } else {
-            index === this.state.activePageIndex - 1;
+            index = this.state.activePageIndex - 1;
         }
 
         this.setPage(index);

@@ -81,7 +81,7 @@ export class MFAService {
             serverConfig?.BACKEND_API_TOKEN, 'MultiFactorAuthentication'
         ).catch(() => null);
 
-        let mfaConfigs: MFAConfig[] = [];
+        const mfaConfigs: MFAConfig[] = [];
 
         if (mfaSysconfig) {
             for (const key in mfaSysconfig) {

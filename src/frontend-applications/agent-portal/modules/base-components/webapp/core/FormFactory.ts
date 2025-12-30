@@ -24,7 +24,8 @@ export class FormFactory {
                         const group = new FormGroupConfiguration(g.id, g.name);
                         group.fieldConfigurationIds = [];
                         group.separatorString = g.separatorString;
-                        group.formFields = this.initFormFields(g.formFields), g.draggableFields;
+                        group.formFields = this.initFormFields(g.formFields);
+                        group.draggableFields = g.draggableFields;
                         group.description = g.description;
                         return group;
                     });

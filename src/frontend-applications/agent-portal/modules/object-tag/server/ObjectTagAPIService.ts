@@ -74,7 +74,7 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
         }
         else if (objectType === KIXObjectType.OBJECT_TAG_LINK) {
 
-            const uri = this.buildUri(this.RESOURCE_URI,'taglinks');
+            const uri = this.buildUri(this.RESOURCE_URI, 'taglinks');
             objectResponse = new ObjectResponse<ObjectTagLink>();
             objectResponse = await super.load<ObjectTagLink>(
                 token, KIXObjectType.OBJECT_TAG_LINK, uri, loadingOptions, null, KIXObjectType.OBJECT_TAG_LINK,
@@ -159,7 +159,7 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
 
         if (objectResponse?.objects?.length) {
             for (const tag of objectResponse.objects) {
-                const uri = [this.buildUri(this.RESOURCE_URI,tag.ID)];
+                const uri = [this.buildUri(this.RESOURCE_URI, tag.ID)];
                 const errors = await this.sendDeleteRequest<void>(token, clientRequestId, uri, cacheKeyPrefix)
                     .catch((error: Error) => {
                         LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
@@ -176,9 +176,9 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
         return [];
     }
 
-    private async prepareObjectTagTypes(token:string): Promise<Map<string,string>> {
+    private async prepareObjectTagTypes(token: string): Promise<Map<string, string>> {
         const config = await SysConfigService.getInstance().getSysConfigOptionValue(
-            token,'ObjectTag::ObjectTypes'
+            token, 'ObjectTag::ObjectTypes'
         );
         if (config) {
             const types: Map<string, string> = new Map();
@@ -194,7 +194,7 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
     private async prepareSysConfig(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: number | string
     ): Promise<Map<string, string | number>> {
-        let result: Map<string, string | number> = new Map();
+        const result: Map<string, string | number> = new Map();
         if (
             objectType !== KIXObjectType.SYS_CONFIG_OPTION
             && objectType !== KIXObjectType.SYS_CONFIG_OPTION_DEFINITION

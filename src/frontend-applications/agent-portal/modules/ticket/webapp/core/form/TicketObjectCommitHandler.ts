@@ -245,7 +245,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     }
 
     protected async prepareAttachments(files: Array<Attachment | File>): Promise<Attachment[]> {
-        let attachments = [];
+        const attachments = [];
 
         let loadingHint = await TranslationService.translate('Translatable#Prepare Attachments (0/{0})', [files.length]);
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
@@ -258,7 +258,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         for (let f of files) {
 
             index++;
-            let loadingHint = await TranslationService.translate(
+            loadingHint = await TranslationService.translate(
                 'Translatable#Prepare Attachments ({0}/{1})', [index, files.length]
             );
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {

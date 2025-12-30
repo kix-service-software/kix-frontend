@@ -155,7 +155,7 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         if (translate) {
                             result = await DateTimeUtil.getLocalDateTimeString(article[attribute], language);
                         } else {
-                            article[attribute];
+                            result = article[attribute];
                         }
                         break;
                     default:

@@ -41,8 +41,7 @@ export class VirtualFSService extends KIXObjectService {
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
         cache: boolean = true, forceIds?: boolean, silent?: boolean, collectionId?: string
     ): Promise<O[]> {
-        let objects: O[];
-        objects = await super.loadObjects<O>(
+        const objects = await super.loadObjects<O>(
             objectType, objectIds, loadingOptions, objectLoadingOptions, cache, forceIds, silent, collectionId
         );
 

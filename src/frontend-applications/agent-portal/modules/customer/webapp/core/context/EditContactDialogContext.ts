@@ -59,7 +59,7 @@ export class EditContactDialogContext extends Context {
                     UserProperty.PREFERENCES
                 ]
             );
-            let contacts = await KIXObjectService.loadObjects<Contact>(
+            const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, [objectId], loadingOptions
             ).catch((): Contact[] => []);
             if (contacts?.length) {

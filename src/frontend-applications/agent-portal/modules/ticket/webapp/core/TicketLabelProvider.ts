@@ -639,9 +639,11 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.LOCK_ID:
-                value === 2
-                    ? icons.push('kix-icon-lock-close')
-                    : icons.push('kix-icon-lock-open');
+                if (value === 2) {
+                    icons.push('kix-icon-lock-close');
+                } else {
+                    icons.push('kix-icon-lock-open');
+                }
                 break;
             case TicketProperty.WATCHERS:
             case TicketProperty.WATCHER_ID:

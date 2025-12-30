@@ -34,7 +34,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private lastContentWidth = 0;
 
     public onCreate(input: any): void {
-        super.onCreate(input), 'action-list';
+        super.onCreate(input, 'action-list');
         this.state = new ComponentState();
         this.fontSize = BrowserUtil.getBrowserFontsize();
         this.expansionWidth = 3 * this.fontSize;

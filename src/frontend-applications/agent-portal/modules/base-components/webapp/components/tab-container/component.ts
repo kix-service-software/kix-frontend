@@ -33,9 +33,7 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> {
     private inputId: string;
     private tabContainerPrefId: string;
 
-    private keyDownEventFunction: () => {
-        // do nothing ...
-    };
+    private keyDownEventFunction: () => null;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'tab-container');
