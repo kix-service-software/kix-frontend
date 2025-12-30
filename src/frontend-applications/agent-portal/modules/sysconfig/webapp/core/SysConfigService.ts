@@ -75,7 +75,7 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
     }
 
     public async getPortalConfiguration<T = any>(): Promise<T> {
-        const config = this.getUIConfiguration<T>(AgentPortalConfiguration.CONFIGURATION_ID);
+        const config = await this.getUIConfiguration<T>(AgentPortalConfiguration.CONFIGURATION_ID);
         return config as any;
     }
 
