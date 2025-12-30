@@ -18,7 +18,7 @@ import { Ticket } from '../model/Ticket';
 import { TicketProperty } from '../model/TicketProperty';
 import { TicketObjectCommitHandler } from '../webapp/core/form/TicketObjectCommitHandler';
 import { TicketService } from '../webapp/core';
-import { TicketModuleConfiguration } from '../model/TicketModuleConfiguration';
+import { QueueSignatureConfiguration, TicketModuleConfiguration } from '../model/TicketModuleConfiguration';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -179,7 +179,7 @@ describe('ObjectCommitHandler', () => {
         const testRegex: RegExp = new RegExp(`.*${signature}.*`);
 
         before(async () => {
-            ticketModuleConfig.addQueueSignature = false;
+            ticketModuleConfig.addQueueSignature = new QueueSignatureConfiguration(false);
 
             orgLoadObjectsFunction = KIXObjectService.loadObjects;
             KIXObjectService.loadObjects = async <T>(objectType: KIXObjectType | string, objectIds?: Array<number | string>): Promise<T> => {
