@@ -1,7 +1,5 @@
 import { defineConfig, globalIgnores } from 'eslint/config';
-import tsParser from '@typescript-eslint/parser';
 import tseslint from 'typescript-eslint';
-
 
 export default defineConfig(
     tseslint.configs.recommended,
@@ -16,6 +14,7 @@ export default defineConfig(
             '@typescript-eslint/no-var-requires': 0,
             '@typescript-eslint/no-duplicate-enum-values': 'off',
             '@typescript-eslint/no-this-alias': 'off',
+            '@typescript-eslint/no-unused-expressions': 'off',
 
             'max-lines-per-function': ['warn', {
                 max: 30,
