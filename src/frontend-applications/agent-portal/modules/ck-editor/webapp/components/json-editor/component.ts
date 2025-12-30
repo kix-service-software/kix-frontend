@@ -53,7 +53,50 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         };
         this.editor = new JSONEditor(container, options);
         this.editor?.set(this.value || {});
+        this.addFullscreenButton();
+
+        document.addEventListener('fullscreenchange', () => {
+            this.editor.resize();
+        }, { once: true });
     }
+
+    private addFullscreenButton(): void {
+        const menu = document.querySelector('.jsoneditor-menu');
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'fullscreen-button';
+        fullscreenBtn.innerHTML = '<i class="fas fa-expand-arrows-alt"></i>';
+        fullscreenBtn.title = 'Toggle Fullscreen';
+        menu.appendChild(fullscreenBtn);
+
+        const container = document.getElementById(this.state.editorId);
+
+        fullscreenBtn.addEventListener('click', () => {
+            this.toggleFullscreen(container, fullscreenBtn);
+        });
+
+    }
+
+    private toggleFullscreen(container: HTMLElement, fullscreenBtn: HTMLButtonElement): void {
+        container.focus();
+        if (!document.fullscreenElement) {
+            // Enter fullscreen
+            container.requestFullscreen?.() ||
+                (container as any).webkitRequestFullscreen?.() ||
+                (container as any).mozRequestFullScreen?.() ||
+                (container as any).msRequestFullscreen?.();
+            //this.editor.resize();
+            fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+        } else {
+            // Exit fullscreen
+            document.exitFullscreen?.() ||
+                (document as any).webkitExitFullscreen?.() ||
+                (document as any).mozCancelFullScreen?.() ||
+                (document as any).msExitFullscreen?.();
+            //this.editor.resize();
+            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+        }
+    }
+
 
 }
 
