@@ -33,7 +33,7 @@ describe('ActionFactory', () => {
         });
 
         it('Should register the action', () => {
-            expect(ActionFactory.getInstance().hasAction('test-action')).true;
+            expect(ActionFactory.getInstance().hasAction('test-action11111')).true;
         });
 
         it('Should overwrite existing action without error', () => {
