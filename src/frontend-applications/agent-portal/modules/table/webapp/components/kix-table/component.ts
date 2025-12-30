@@ -7,10 +7,12 @@
  * --
  */
 
+import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { SysConfigService } from '../../../../sysconfig/webapp/core';
 import { Column } from '../../../model/Column';
 import { Row } from '../../../model/Row';
 import { Table } from '../../../model/Table';
@@ -21,6 +23,7 @@ import { ComponentState } from './ComponentState';
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private browserFontSize: number;
+    private resizeHandler: () => void;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'kix-table');
@@ -30,7 +33,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
-        if (!this.state.table && input.table || this.isTableChanged(input.table)) {
+        if ((!this.state.table && input.table) || this.isTableChanged(input.table)) {
             if (this.state.table && this.isTableChanged(input.table)) {
                 this.state.table.destroy();
             }
@@ -40,7 +43,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private isTableChanged(table: Table): boolean {
-        return table && this.state.table.getTableId() !== table.getTableId();
+        return Boolean(table && this.state.table?.getTableId() !== table.getTableId());
     }
 
     private async init(table: Table): Promise<void> {
@@ -58,15 +61,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         this.state.showLoadingShield = Boolean(eventId === TableEvent.TABLE_WAITING_START);
                     }
 
-                    if (eventId === TableEvent.REFRESH) {
-                        this.setTableHeight();
-                    }
-
-                    if (eventId === TableEvent.RERENDER_TABLE) {
-                        this.setTableHeight();
-                    }
-
-                    if (eventId === TableEvent.ROW_TOGGLED) {
+                    if (
+                        eventId === TableEvent.REFRESH ||
+                        eventId === TableEvent.RERENDER_TABLE ||
+                        eventId === TableEvent.ROW_TOGGLED
+                    ) {
                         this.setTableHeight();
                     }
 
@@ -112,6 +111,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             ]
         );
 
+        this.resizeHandler = (): void => this.setTableHeight();
+        window.addEventListener('resize', this.resizeHandler);
+
         setTimeout(() => {
             const scrollPosString = ClientStorageService.getOption(`${this.state.table?.getTableId()}-scrollpos`);
             const element: HTMLElement = (this as any).getEl(this.state.table?.getTableId() + 'table-container');
@@ -129,11 +131,46 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public setTableHeight(): void {
-        this.state.tableHeight = '100%';
         const tableConfiguration = this.state.table?.getTableConfiguration();
 
-        if (tableConfiguration?.displayLimit) {
+        let height: number = null;
 
+        const container: HTMLElement = (this as any).getEl(
+            this.state.table?.getTableId() + 'table-container'
+        );
+
+        const allRows: Row[] = this.state.table?.getRows(false) || [];
+        if (allRows.length === 0) {
+            this.state.tableHeight = 'auto';
+            return;
+        }
+
+        if (container) {
+            const widgetFrame = container.closest('.widget-frame') as HTMLElement;
+            const isHomeDashboard = Boolean(
+                widgetFrame?.id && widgetFrame.id.indexOf('widget-frame-home-dashboard-') === 0
+            );
+
+            if (!isHomeDashboard) {
+                const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+                const rect = container.getBoundingClientRect();
+
+                let bottomLimit = viewportHeight;
+                const footer = document.querySelector('.footer-wrapper') as HTMLElement;
+                if (footer) {
+                    const footerRect = footer.getBoundingClientRect();
+                    bottomLimit = footerRect.top;
+                }
+
+                const bottomGap = 16;
+                const availableHeight = bottomLimit - rect.top - bottomGap;
+                if (availableHeight > 0) {
+                    height = availableHeight;
+                }
+            }
+        }
+
+        if (height === null && tableConfiguration?.displayLimit) {
             const rows = this.state.table.getRows(false);
             const displayLimit = tableConfiguration.displayLimit;
 
@@ -142,14 +179,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const headerRowHeight = this.browserFontSize * Number(tableConfiguration.headerHeight);
 
                 const rowHeight = this.browserFontSize * Number(tableConfiguration.rowHeight);
-                let height = ((displayLimit * rowHeight) + headerRowHeight);
+                let calcHeight = (displayLimit * rowHeight) + headerRowHeight;
 
                 const expandedRowHeight = (31.5 + 10) / 2 * this.browserFontSize;
                 const expandedRowCount = rows.filter((r) => r.isExpanded()).length;
-                height = height + (expandedRowCount * expandedRowHeight);
+                calcHeight = calcHeight + (expandedRowCount * expandedRowHeight);
 
-                this.state.tableHeight = height + 'px';
+                height = calcHeight;
             }
+        }
+
+        if (height !== null) {
+            this.state.tableHeight = height + 'px';
+        } else {
+            this.state.tableHeight = '100%';
         }
     }
 
@@ -204,6 +247,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
+        if (this.resizeHandler) {
+            window.removeEventListener('resize', this.resizeHandler);
+        }
         super.onDestroy();
     }
 }
