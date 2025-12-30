@@ -124,7 +124,7 @@ export class ArticleViewUtil {
             }
         }
 
-        let content = buffer.toString('utf8');
+        const content = buffer.toString('utf8');
         let htmlContent: string = content;
 
         if (!contentAttachment.Filename.match(/^file-(1|2|1\.html)$/)) {

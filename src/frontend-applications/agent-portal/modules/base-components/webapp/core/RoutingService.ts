@@ -120,7 +120,7 @@ export class RoutingService {
 
         const prefixLength = KIXModulesService.urlPrefix.length;
         const pathName = parsedUrl.pathname.substring(prefixLength + 1, parsedUrl.pathname.length);
-        let path = parsedUrl.pathname === '/' ? [] : this.removeEmptyPaths(pathName.split('/'));
+        const path = parsedUrl.pathname === '/' ? [] : this.removeEmptyPaths(pathName.split('/'));
 
         let contextUrl: string;
         let objectId: string;

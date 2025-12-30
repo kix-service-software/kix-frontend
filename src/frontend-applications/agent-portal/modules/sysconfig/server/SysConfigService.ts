@@ -183,7 +183,7 @@ export class SysConfigService extends KIXObjectAPIService {
     public async getPortalConfiguration(token: string): Promise<AgentPortalConfiguration> {
         let config: AgentPortalConfiguration = new AgentPortalConfiguration();
         try {
-            let value = await this.getSysConfigOptionValue(token, AgentPortalConfiguration.CONFIGURATION_ID);
+            const value = await this.getSysConfigOptionValue(token, AgentPortalConfiguration.CONFIGURATION_ID);
             config = JSON.parse(value);
         } catch (error) {
             LoggingService.getInstance().error(error);

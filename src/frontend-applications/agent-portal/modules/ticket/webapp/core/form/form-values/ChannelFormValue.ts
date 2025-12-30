@@ -212,7 +212,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         const dfValue = this.findFormValue(KIXObjectProperty.DYNAMIC_FIELDS);
         if (channelGroup && channelGroup.formFields?.length && dfValue?.formValues?.length) {
             // get all ArticleDFs from Group
-            let newFormValues = [];
+            const newFormValues = [];
             const dfFields = channelGroup.formFields?.filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
             for (const field of dfFields) {
                 const option = field.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);

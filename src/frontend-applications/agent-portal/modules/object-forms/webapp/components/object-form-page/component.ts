@@ -111,7 +111,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public getColumnClasses(column: PageRowLayout): string {
-        let classes = [];
+        const classes = [];
 
         if (column?.colSM > 0) {
             classes.push('col-sm-' + (column.colSM < 3 ? 3 : column.colSM));

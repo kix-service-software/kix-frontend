@@ -197,7 +197,7 @@ export class AgentService extends KIXObjectService<User> {
             ? myQueues?.Value
             : isNaN(Number(myQueues?.Value)) ? [] : [myQueues?.Value];
 
-        let outOfOfficeUsersIDs: Array<string | number> = [];
+        const outOfOfficeUsersIDs: Array<string | number> = [];
         let loadingOptions;
         if (
             myQueueValue

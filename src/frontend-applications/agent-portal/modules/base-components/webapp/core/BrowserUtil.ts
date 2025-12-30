@@ -569,7 +569,7 @@ export class BrowserUtil {
         allElements.push(htmlDocument);
         const types = [];
 
-        for (let ev in htmlDocument) {
+        for (const ev in htmlDocument) {
             if (/^on/.test(ev)) {
                 types.push(ev);
             }

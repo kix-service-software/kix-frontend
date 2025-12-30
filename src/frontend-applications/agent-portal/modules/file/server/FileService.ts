@@ -24,7 +24,7 @@ export class FileService {
     public static initialize(): void {
         const folder = ['downloads', 'uploads'];
         for (const f of folder) {
-            let folderPath = path.join(__dirname, '..', '..', '..', '..', '..', '..', 'data', f);
+            const folderPath = path.join(__dirname, '..', '..', '..', '..', '..', '..', 'data', f);
             if (!fs.existsSync(folderPath)) {
                 fs.mkdirSync(folderPath);
             }

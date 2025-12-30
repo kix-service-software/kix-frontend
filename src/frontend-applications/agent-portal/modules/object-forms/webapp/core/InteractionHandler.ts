@@ -32,7 +32,7 @@ export class InteractionHandler {
         return new Promise<void>((resolve, reject) => {
             const modalArea = document.getElementById('kix-modal-area');
             if (modalArea) {
-                let tellModal;
+                let tellModal = null;
                 const template = KIXModulesService.getComponentTemplate(modalId);
                 const content = template?.default?.renderSync({
                     title: tell.Title,
@@ -58,7 +58,7 @@ export class InteractionHandler {
         return new Promise<void>((resolve, reject) => {
             const modalArea = document.getElementById('kix-modal-area');
             if (modalArea) {
-                let askModal;
+                let askModal = null;
                 const template = KIXModulesService.getComponentTemplate(modalId);
                 const content = template?.default?.renderSync({
                     title: ask.Title,

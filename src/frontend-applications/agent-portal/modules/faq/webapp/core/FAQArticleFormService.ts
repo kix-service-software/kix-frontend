@@ -118,7 +118,7 @@ export class FAQArticleFormService extends KIXObjectFormService {
 
         for (const f of newFiles) {
             index++;
-            let loadingHint = await TranslationService.translate(
+            loadingHint = await TranslationService.translate(
                 'Translatable#Prepare Attachments ({0}/{1})', [index, files.length]
             );
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {

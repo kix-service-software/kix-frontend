@@ -62,7 +62,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
             // FIXME: This should be removed once the revised layout structure (KIX2018-14141) is implemented,
             // provided it has been taken into account.
-            let component = document.querySelector('.content-wrapper');
+            const component = document.querySelector('.content-wrapper');
             component['style'].marginBottom = 2 + (1.1 * this.state.footerInformation.length) + 'rem';
         }
     }

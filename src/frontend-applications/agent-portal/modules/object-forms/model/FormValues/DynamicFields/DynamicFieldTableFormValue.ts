@@ -177,7 +177,7 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
     protected async handlePlaceholders(value: any): Promise<any> {
         const newTableValues = [];
         if (Array.isArray(value)) {
-            for (let rowValue of value) {
+            for (const rowValue of value) {
                 const handledRowValue = await super.handlePlaceholders(rowValue);
                 newTableValues.push(handledRowValue);
             }

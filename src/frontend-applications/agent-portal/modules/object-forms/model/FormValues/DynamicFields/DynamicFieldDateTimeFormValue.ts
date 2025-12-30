@@ -49,7 +49,7 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
         if (dynamicField.FieldType === DynamicFieldTypes.DATE) {
             this.inputType = InputFieldTypes.DATE;
         } else if (dynamicField.FieldType === DynamicFieldTypes.DATE_TIME) {
-            this.inputType === InputFieldTypes.DATE_TIME;
+            this.inputType = InputFieldTypes.DATE_TIME;
         }
 
         return dynamicField.Config;

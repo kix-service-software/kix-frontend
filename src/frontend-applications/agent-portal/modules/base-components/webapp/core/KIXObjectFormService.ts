@@ -111,7 +111,7 @@ export abstract class KIXObjectFormService {
                 continue;
             }
 
-            let value = await this.getValue(
+            const value = await this.getValue(
                 f.property,
                 kixObject ? kixObject[f.property] : (f.defaultValue ? f.defaultValue.value : null),
                 kixObject,

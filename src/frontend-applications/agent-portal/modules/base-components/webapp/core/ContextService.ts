@@ -71,7 +71,7 @@ export class ContextService {
 
     public contextRefreshInterval: ContextRefreshInterval;
 
-    private componentContextMap: Object = new Object();
+    private componentContextMap: object = new Object();
 
     public async initialize(): Promise<void> {
         this.contextRefreshInterval = new ContextRefreshInterval();

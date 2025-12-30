@@ -7,7 +7,7 @@
  * --
  */
 
-export interface IMarkoComponent<CS extends any, I extends any> {
+export interface IMarkoComponent<CS, I> {
 
     state: CS;
 

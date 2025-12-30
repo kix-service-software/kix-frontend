@@ -430,7 +430,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     public static async getDFTableFieldValues(
         field: DynamicField, fieldValue: DynamicFieldValue, language?: string
     ): Promise<string[]> {
-        let values = [];
+        const values = [];
         if (Array.isArray(fieldValue.Value)) {
             let columns = field.Config.Columns;
             if (Array.isArray(fieldValue?.Value) && Array.isArray(columns) && columns.length) {

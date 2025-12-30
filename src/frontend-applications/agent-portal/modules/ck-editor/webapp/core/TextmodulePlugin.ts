@@ -494,7 +494,7 @@ export class TextmodulePlugin {
                         return false;
                     }
 
-                    let splitStrinFrom = markerIndex !== 0 ? markerIndex : 0;
+                    const splitStrinFrom = markerIndex !== 0 ? markerIndex : 0;
                     const textToTest = text.substring(splitStrinFrom);
                     return textToTest.startsWith(this.MARKER);
                 };

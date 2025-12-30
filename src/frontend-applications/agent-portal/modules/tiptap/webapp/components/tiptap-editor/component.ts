@@ -477,7 +477,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                                 const currentNode = newPos.parent;
 
                                 if (currentNode.type.name === 'paragraph') {
-                                    let chain = comp.editor.chain().focus();
+                                    const chain = comp.editor.chain().focus();
                                     let appliedFont = false;
                                     let appliedSize = false;
                                     let appliedColor = false;

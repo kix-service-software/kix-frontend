@@ -152,9 +152,9 @@ export class SortUtil {
     public static compareObjectByObjectId<T>(a: T, b: T, sortOrder: SortOrder): number {
         let sort = 0;
         if (a['ObjectId']) {
-            typeof a['ObjectId'] === 'number'
-                ? sort = SortUtil.compareNumber(a['ObjectId'], b['ObjectId'], sortOrder)
-                : sort = SortUtil.compareString(a['ObjectId'], b['ObjectId'], sortOrder);
+            sort = typeof a['ObjectId'] === 'number'
+                ? SortUtil.compareNumber(a['ObjectId'], b['ObjectId'], sortOrder)
+                : SortUtil.compareString(a['ObjectId'], b['ObjectId'], sortOrder);
         }
         return sort;
     }

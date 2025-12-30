@@ -65,8 +65,8 @@ export class ToastUtil {
         if (toastArea) {
             const confirmModalId = 'confirm-modal';
 
-            let templateModal;
-            let modalElement;
+            let templateModal = null;
+            let modalElement = null;
 
             const okCallback = modalSettings.confirmCallback;
             modalSettings.confirmCallback = (): void => {
