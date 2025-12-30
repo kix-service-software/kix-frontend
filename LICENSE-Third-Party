@@ -1383,7 +1383,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001761
+├─ caniuse-lite@1.0.30001762
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -3677,7 +3677,7 @@
 │  ├─ url: https://github.com/kriskowal
 │  ├─ path: node_modules/q
 │  └─ licenseFile: node_modules/q/LICENSE
-├─ qs@6.14.0
+├─ qs@6.14.1
 │  ├─ licenses: BSD-3-Clause
 │  ├─ repository: https://github.com/ljharb/qs
 │  ├─ path: node_modules/qs
