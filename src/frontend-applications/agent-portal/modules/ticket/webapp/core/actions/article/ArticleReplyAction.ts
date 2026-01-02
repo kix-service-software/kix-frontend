@@ -74,7 +74,8 @@ export class ArticleReplyAction extends AbstractAction<Article> {
                     ['REFERENCED_SOURCE_OBJECT_ID', this.ticketId],
                     [ArticleProperty.REFERENCED_ARTICLE_ID, this.articleId],
                     ['ARTICLE_REPLY', true],
-                    [AdditionalContextInformation.FORM_ID, 'article-reply']
+                    [AdditionalContextInformation.FORM_ID, 'article-reply'],
+                    ['NEW_ARTICLE', true]
                 ]
             );
             editContext.setIcon(this.icon);
