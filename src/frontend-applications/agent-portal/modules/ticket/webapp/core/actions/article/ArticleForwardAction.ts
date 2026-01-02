@@ -75,7 +75,8 @@ export class ArticleForwardAction extends AbstractAction<Article> {
                     ['REFERENCED_SOURCE_OBJECT_ID', this.ticketId],
                     [ArticleProperty.REFERENCED_ARTICLE_ID, this.articleId],
                     ['ARTICLE_FORWARD', true],
-                    [AdditionalContextInformation.FORM_ID, 'article-forward']
+                    [AdditionalContextInformation.FORM_ID, 'article-forward'],
+                    ['NEW_ARTICLE', true]
                 ]
             );
             editContext.setIcon(this.icon);
