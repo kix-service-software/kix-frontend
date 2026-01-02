@@ -155,7 +155,6 @@ if (process.env.NODE_ENV === 'development') {
     if (process.env.COMPILE_CODE === '1') {
         build = series(
             // parallel(licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber),
-            lint,
             compileSrc,
             parallel(copyPlugins, buildAgentPortalApp)
         );
