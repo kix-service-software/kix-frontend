@@ -9,6 +9,7 @@
 
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { User } from '../../../user/model/User';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { InformationConfiguration, InformationRowConfiguration, ObjectInformationCardConfiguration } from '../components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { FilterUtil } from './FilterUtil';
@@ -39,17 +40,15 @@ export class ObjectInformationCardService {
     public async prepareInformation(
         config: ObjectInformationCardConfiguration, object: KIXObject
     ): Promise<InformationRowConfiguration[]> {
-
         if (!Array.isArray(config.avatar) && config.avatar) {
             config.avatar = [config.avatar];
         } else if (Array.isArray(config.avatar) && !config.avatar.length) {
             config.avatar = null;
         }
 
-        const currentUser = await AgentService.getInstance().getCurrentUser();
-
         const information: InformationRowConfiguration[] = [];
         if (config?.rows?.length) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
             for (const row of config.rows.filter((r) => r.values?.length)) {
                 if (!AgentService.userHasRole(row.roleIds, currentUser)) {
                     continue;
@@ -57,12 +56,7 @@ export class ObjectInformationCardService {
 
                 const infoRow = new InformationRowConfiguration([], row.title, row.style, row.separator);
                 for (const value of row.values) {
-                    if (value?.length) {
-                        if (!AgentService.userHasRole(row.roleIds, currentUser)) {
-                            continue;
-                        }
-                    }
-                    await this.prepareValue(value, object, infoRow);
+                    await this.prepareValue(value, object, infoRow, currentUser);
                 }
 
                 if (infoRow.values?.length) {
@@ -74,14 +68,43 @@ export class ObjectInformationCardService {
         return information;
     }
 
+    public async hasValuesToShow(
+        config: ObjectInformationCardConfiguration, object: KIXObject
+    ): Promise<boolean> {
+        if (config?.rows?.length) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            for (const row of config.rows.filter((r) => r.values?.length)) {
+                if (!AgentService.userHasRole(row.roleIds, currentUser)) {
+                    continue;
+                }
+
+                const values = row.values.flat();
+                for (let value of values) {
+                    if (
+                        value &&
+                        AgentService.userHasRole(value.roleIds, currentUser) &&
+                        await FilterUtil.checkCriteriaByPropertyValue(value.conditions, object)
+                    ) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     private async prepareValue(
         value: InformationConfiguration | InformationConfiguration[],
         object: KIXObject,
-        row: InformationRowConfiguration
+        row: InformationRowConfiguration,
+        currentUser: User
     ): Promise<void> {
         if (Array.isArray(value)) {
             const group: InformationConfiguration[] = [];
             for (const v of value) {
+                if (!AgentService.userHasRole(v.roleIds, currentUser)) {
+                    continue;
+                }
                 const infoValue = await this.createInfoValue(v, object);
                 if (infoValue) {
                     group.push(infoValue);
@@ -91,7 +114,7 @@ export class ObjectInformationCardService {
             if (group.length) {
                 row.values.push(group);
             }
-        } else {
+        } else if (value && AgentService.userHasRole(value.roleIds, currentUser)) {
             const infoValue = await this.createInfoValue(value, object);
             if (infoValue) {
                 row.values.push([infoValue]);
@@ -144,7 +167,9 @@ export class ObjectInformationCardService {
             }
 
             let text = await PlaceholderService.getInstance().replacePlaceholders(value.text, object);
-            text = await TranslationService.translate(text, placeholders);
+            if (!value.text.match(/^<[^>]+>$/)) {
+                text = await TranslationService.translate(text, placeholders);
+            }
             infoValue.preparedText = text;
 
             // if text is given and the prepared text is empty then do not display this info

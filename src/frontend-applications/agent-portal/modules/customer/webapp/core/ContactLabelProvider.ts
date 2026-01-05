@@ -34,11 +34,18 @@ import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsPr
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
-import { ObjectLoader } from '../../../base-components/webapp/core/ObjectLoader';
 
 export class ContactLabelProvider extends LabelProvider<Contact> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONTACT;
+
+    public constructor() {
+        super();
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, [UserProperty.CONTACT, UserProperty.PREFERENCES]
+        );
+        this.objectLoader.setLoadingoptions(KIXObjectType.USER, loadingOptions);
+    }
 
     public isLabelProviderFor(object: Contact | KIXObject): boolean {
         return object instanceof Contact || object?.KIXObjectType === this.kixObjectType;
@@ -56,7 +63,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 break;
             case ContactProperty.PRIMARY_ORGANISATION_NUMBER:
                 if (value) {
-                    const organisation = await ObjectLoader.getInstance().queue(
+                    const organisation = await this.objectLoader.queue(
                         KIXObjectType.ORGANISATION, value
                     ).catch(() => null);
                     if (organisation) {
@@ -66,12 +73,14 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 break;
             case ContactProperty.ORGANISATION_IDS:
                 if (value && Array.isArray(value) && value.length) {
-                    const organisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, value, null, null, true, true, false
-                    ).catch((error) => console.error(error));
-                    const organisationNames = organisations && organisations.length
-                        ? organisations.map((c) => c.Name)
-                        : [];
+                    const promises = value.map(
+                        (v) => this.objectLoader.queue<Organisation>(KIXObjectType.ORGANISATION, v)
+                    );
+
+                    const orgResult = await Promise.allSettled(promises);
+                    const organisationNames = orgResult
+                        .map((or) => or.status === 'fulfilled' ? or.value.Name : '')
+                        .filter((n) => n);
                     displayValue = organisationNames.join(', ');
                 }
                 break;
@@ -195,6 +204,15 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         return userProperties.some((p) => p === property);
     }
 
+    private isUserCoreProperty(property: string): boolean {
+        return [
+            UserProperty.USER_ID, UserProperty.USER_LOGIN, UserProperty.USER_FULLNAME,
+            UserProperty.USER_PASSWORD, UserProperty.USER_COMMENT,
+            UserProperty.USAGE_CONTEXT, UserProperty.IS_AGENT, UserProperty.IS_CUSTOMER,
+            UserProperty.ROLE_IDS,
+        ].some((p) => p === property);
+    }
+
     public async getExportPropertyValue(property: string, value: any, object?: any): Promise<any> {
         let newValue = value;
         switch (property) {
@@ -202,7 +220,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 if (object) {
                     const orgId = object[ContactProperty.PRIMARY_ORGANISATION_ID];
                     if (orgId) {
-                        const organisation = await ObjectLoader.getInstance().queue(
+                        const organisation = await this.objectLoader.queue(
                             KIXObjectType.ORGANISATION, orgId
                         ).catch(() => null);
                         newValue = organisation ? organisation.Number : orgId;
@@ -295,14 +313,20 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 break;
             default:
                 if (this.isUserProperty(property)) {
-                    const user = await this.getUserByContact(
-                        contact, property !== PersonalSettingsProperty.USER_LANGUAGE
-                    );
-                    if (user) {
-                        displayValue = await LabelService.getInstance().getDisplayText(
-                            user, property, defaultValue, translatable
+                    if (property === UserProperty.USER_LOGIN && contact['Login']) {
+                        displayValue = contact['Login'];
+                    } else {
+                        const user = await this.getUserByContact(
+                            contact, property !== PersonalSettingsProperty.USER_LANGUAGE,
+                            !this.isUserCoreProperty(property)
                         );
+                        if (user) {
+                            displayValue = await LabelService.getInstance().getDisplayText(
+                                user, property, defaultValue, translatable
+                            );
+                        }
                     }
+                    translatable = false;
                 } else {
                     displayValue = await super.getDisplayText(contact, property, defaultValue, translatable);
                 }
@@ -327,7 +351,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             if (pattern) {
                 displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, contact);
             } else {
-                const user = await this.getUserByContact(contact);
+                const user = await this.getUserByContact(contact, true, false);
                 const idString = user ? user.UserLogin : contact.Email;
                 if (id) {
                     displayValue = idString;
@@ -386,17 +410,16 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         return icons;
     }
 
-    private async getUserByContact(contact: Contact, useInclude: boolean = true): Promise<User> {
+    private async getUserByContact(
+        contact: Contact, useInclude: boolean = true,
+        includePreferences: boolean = true
+    ): Promise<User> {
         let user;
         if (contact) {
             if (useInclude && contact.User) {
                 user = contact.User;
             } else if (contact.AssignedUserID) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [UserProperty.PREFERENCES]);
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [contact.AssignedUserID], loadingOptions, null, true, true, true
-                ).catch(() => [] as User[]);
-                user = users && users.length ? users[0] : null;
+                user = await this.objectLoader.queue<User>(KIXObjectType.USER, contact.AssignedUserID);
             }
         }
         return user;

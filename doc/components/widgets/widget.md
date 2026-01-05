@@ -1,7 +1,7 @@
 #### Widget
 
 ##### Tag
-`<widget instanceId="widget-one">`
+`<widget contextInstanceId=input.contextInstanceId instanceId="widget-one">`
     `<@content>Some content</@content>`
 `</widget>`
 

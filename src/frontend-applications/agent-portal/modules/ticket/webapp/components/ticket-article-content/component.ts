@@ -10,20 +10,24 @@
 import { ComponentState } from './ComponentState';
 import { Article } from '../../../model/Article';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
-import { IdService } from '../../../../../model/IdService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { Context } from '../../../../../model/Context';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
+    private resizeTimeout: ReturnType<typeof setTimeout> = null;
+    private resizeObserver: ResizeObserver;
 
     private article: Article = null;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
-        this.state.frameId = IdService.generateDateBasedId('article-view-');
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.article?.ChangeTime !== input.article?.ChangeTime) {
             this.article = input.article;
 
@@ -33,27 +37,76 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        setTimeout(() => {
+        await super.onMount();
+
+        setTimeout(() => this.prepareObserver(), 50);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
+        }
+    }
+
+    private prepareObserver(): void {
+        if (window.ResizeObserver) {
             const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
-            const frameHeight = frame.contentDocument.documentElement.scrollHeight;
-            frame.style.height = frameHeight + 10 + 'px'; // 10 is for the top and bottom padding of 5px each
-        }, 500);
+
+            let containerWidth = frame.offsetWidth;
+            this.resizeObserver = new ResizeObserver((entries) => {
+                if (frame.offsetWidth !== containerWidth) {
+                    if (this.resizeTimeout) {
+                        clearTimeout(this.resizeTimeout);
+                    }
+
+                    this.resizeTimeout = setTimeout(() => {
+                        containerWidth = frame.offsetWidth;
+                        BrowserUtil.setFrameHeight(this.state.frameId);
+                        this.resizeTimeout = null;
+                    }, 150);
+                }
+            });
+
+            this.resizeObserver.observe(frame);
+        }
     }
 
     public viewLoaded(event: any): void {
-        const frameDocument = event.target.contentWindow.document;
+        const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
 
-        const frame = document.getElementById(this.state.frameId);
-        const frameHeight = frameDocument.documentElement.scrollHeight;
-        frame.style.height = frameHeight + 10 + 'px'; // 10 is for the top and bottom padding of 5px each
+        frame.addEventListener('load', () => {
+            let frameDocument: Document;
 
-        const bodyElements = frameDocument.documentElement.getElementsByTagName('body');
-        if (bodyElements?.length) {
-            bodyElements[0].addEventListener('click', (event) => {
-                BrowserUtil.handleLinkClicked(event);
+            try {
+                frameDocument = frame.contentWindow.document;
+            } catch (e) {
+                console.warn('iframe content not accessible due to cross-origin policy:', e);
+                return;
+            }
+
+            BrowserUtil.setFrameHeight(this.state.frameId);
+
+            const links = frameDocument.querySelectorAll('a[href]');
+            links.forEach((link: HTMLAnchorElement) => {
+                const href = link.href;
+                const isInternal = href?.startsWith(window.location.origin);
+
+                if (isInternal) {
+                    link.addEventListener('click', (event): void => {
+                        event.preventDefault();
+                        BrowserUtil.handleLinkClicked(event);
+                    });
+                } else {
+                    link.setAttribute('target', '_blank');
+                    link.setAttribute('rel', 'noopener noreferrer');
+                    link.addEventListener('click', (event): void => {
+                        event.preventDefault();
+                        window.open(href, '_blank', 'noopener,noreferrer');
+                    });
+                }
             });
-        }
-
+        });
     }
 }
 

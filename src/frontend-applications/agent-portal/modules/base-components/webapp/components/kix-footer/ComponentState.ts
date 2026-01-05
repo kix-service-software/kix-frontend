@@ -8,14 +8,17 @@
  */
 
 import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public kixVersion: string = 'KIX 18',
         public currentUserLogin: string = null,
         public imprintLink: string = null,
         public footerInformation: string[] = []
-    ) { }
+    ) {
+        super();
+    }
 
 }

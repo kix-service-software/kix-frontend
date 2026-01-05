@@ -55,6 +55,11 @@ export class Row extends BindableObject {
         children?.forEach((c) => this.children.push(new Row(this.table, c)));
     }
 
+    private updateChildren(children: RowObject[]): void {
+        this.children = [];
+        children?.forEach((c) => this.children.push(new Row(this.table, c)));
+    }
+
     public async initializeDisplayValues(): Promise<any[]> {
         const promises = [];
         this.cells.forEach((c) => {
@@ -302,11 +307,17 @@ export class Row extends BindableObject {
             }
             else {
                 const newCell = newCells.find((nC) => nC.getProperty() === c.getColumnId());
-                if (newCell.getDisplayValue() !== cell.getDisplayValue()) {
+                if (newCell && newCell.getDisplayValue() !== cell.getDisplayValue()) {
                     cell.setValue(new TableValue(c.getColumnId(), newCell.getValue().objectValue));
                 }
             }
         });
+
+        this.updateChildren(this.rowObject.getChildren());
+        const children = this.getChildren();
+        if (Array.isArray(children)) {
+            children.forEach((r) => r.updateValues());
+        }
     }
 
     public setValueState(state: ValueState): void {

@@ -7,10 +7,11 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { Article } from '../../../model/Article';
 import { ArticleLabelProvider } from '../../core';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public article: Article = null,
@@ -21,6 +22,8 @@ export class ComponentState {
         public showTo: boolean = false,
         public showCc: boolean = false,
         public showBcc: boolean = false,
-    ) { }
+    ) {
+        super();
+    }
 
 }

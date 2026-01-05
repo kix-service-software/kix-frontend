@@ -9,7 +9,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.prepared && state.field)>
     <if(state.field.FieldType === "CheckList")>
-        <div.df-checklist>
+        <div class="df-checklist">
             <dynamic-field-checklist-progress checklist=state.checklist/>
             <overlay-icon
                 title=(state.field.Label)
@@ -27,8 +27,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </else-if>
     <else-if(state.field.FieldType === "TextArea")>
         <if(state.dfValue && Array.isArray(state.dfValue.Value))>
-            <for|value| of=(state.dfValue.Value)>
-                <pre.df-textarea>${value}</pre>
+            <for|value, index| of=(state.dfValue.Value)>
+                <pre
+                    id=component.getTextareaId(index)
+                    class="df-textarea"
+                >${component.getTextareaValue(index)}</pre>
             </for>
         </if>
     </else-if>

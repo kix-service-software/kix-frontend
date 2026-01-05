@@ -29,6 +29,7 @@ export class TeamSetOptionFieldHandler extends OptionFieldHandler {
         if (
             jobType === JobTypes.TICKET
             && (actionType === 'TeamSet' || actionType === 'Team')
+            && option.Name === 'Team'
         ) {
             let defaultValue;
             if (action && action.Parameters) {
@@ -43,7 +44,7 @@ export class TeamSetOptionFieldHandler extends OptionFieldHandler {
             field.options.push(new FormFieldOption(ObjectReferenceOptions.TEXT_AS_ID, true));
             return field;
         }
-        return;
+        return null;
     }
 
     private setReferencedObjectOptions(

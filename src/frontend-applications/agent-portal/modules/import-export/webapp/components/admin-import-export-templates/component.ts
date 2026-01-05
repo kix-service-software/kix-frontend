@@ -10,9 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
-import { IdService } from '../../../../../model/IdService';
 import { BackendNotification } from '../../../../../model/BackendNotification';
 import { Table } from '../../../../table/model/Table';
 import { TableEvent } from '../../../../table/model/TableEvent';
@@ -20,30 +18,25 @@ import { TableEventData } from '../../../../table/model/TableEventData';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'admin-import-export-templates');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: BackendNotification, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: BackendNotification, eventId: string): void {
                 if (data.Namespace === 'ImportExportTemplate.ImportExportTemplateRun') {
                     this.updateTable();
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
-        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
+            },
+            [
+                ApplicationEvent.OBJECT_UPDATED,
+                ApplicationEvent.OBJECT_CREATED
+            ]
+        );
     }
 
     private async updateTable(): Promise<void> {
@@ -62,6 +55,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

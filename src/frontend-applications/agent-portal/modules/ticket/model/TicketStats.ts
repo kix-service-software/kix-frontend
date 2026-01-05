@@ -6,8 +6,14 @@
  * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
  * --
  */
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class TicketStats {
+export class TicketStats extends KIXObject {
+
+    public ObjectId: string | number;
+
+    public KIXObjectType: string = KIXObjectType.QUEUE_TICKET_STATS;
 
     public TotalCount: number;
 
@@ -15,7 +21,11 @@ export class TicketStats {
 
     public LockCount: number;
 
+    public QueueID: number;
+
     public constructor(ticketStats?: TicketStats) {
+        super(ticketStats);
+
         if (ticketStats) {
             this.TotalCount = ticketStats.TotalCount ? Number(ticketStats.TotalCount) : 0;
             this.EscalatedCount = ticketStats.EscalatedCount ? Number(ticketStats.EscalatedCount) : 0;

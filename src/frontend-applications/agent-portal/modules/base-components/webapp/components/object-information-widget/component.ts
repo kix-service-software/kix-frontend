@@ -9,34 +9,30 @@
 
 import { ComponentState } from './ComponentState';
 import { ComponentInput } from './ComponentInput';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import {
-    ObjectInformationWidgetConfiguration
-} from '../../../../../model/configuration/ObjectInformationWidgetConfiguration';
+import { ObjectInformationWidgetConfiguration } from '../../../../../model/configuration/ObjectInformationWidgetConfiguration';
 import { IdService } from '../../../../../model/IdService';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private contextListenerId: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: ComponentInput): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         const settings = this.state.widgetConfiguration
             ? this.state.widgetConfiguration.configuration as ObjectInformationWidgetConfiguration
@@ -49,7 +45,7 @@ class Component {
         }
 
         this.contextListenerId = IdService.generateDateBasedId('object-information-widget-');
-        context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
@@ -65,13 +61,11 @@ class Component {
     }
 
     public onDestroy(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        context.unregisterListener(this.contextListenerId);
+        this.context?.unregisterListener(this.contextListenerId);
     }
 
     private async initWidget(settings: ObjectInformationWidgetConfiguration): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const object = settings ? await context.getObject(settings.objectType) : null;
+        const object = settings ? await this.context?.getObject(settings.objectType) : null;
         this.state.object = null;
 
         setTimeout(() => {
@@ -83,7 +77,7 @@ class Component {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.object) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.object]
+                this.state.widgetConfiguration.actions, [this.state.object], this.contextInstanceId
             );
         }
     }

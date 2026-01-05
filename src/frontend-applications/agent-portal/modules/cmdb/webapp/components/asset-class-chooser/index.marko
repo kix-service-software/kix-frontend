@@ -9,27 +9,25 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <div class="ci-category-explorer">
     <widget
+        contextInstanceId=input.contextInstanceId
         instanceId=state.instanceId
         title=(
             state.widgetConfiguration
                 ? state.widgetConfiguration.title
                 : "Translatable#Asset Classes"
-        )
-    >
+        )>
         <@content>
             <if(state.nodes)>
                 <filter
                     on-filter("filter")
                     key="asset-class-chooser-filter"
-                    showFilterCount=false
-                />
+                    showFilterCount=false/>
                 <tree
                     treeId="cmdb-asset-class-chooser-tree"
                     tree=state.nodes
                     activeNode=state.activeNode
                     filterValue=state.filterValue
-                    on-nodeClicked("activeNodeChanged")
-                />
+                    on-nodeClicked("activeNodeChanged")/>
             </if>
         </@content>
     </widget>

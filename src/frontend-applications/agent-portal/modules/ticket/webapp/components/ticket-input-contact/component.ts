@@ -37,11 +37,8 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
     private contacts = [];
 
-    public constructor() {
-        super();
-    }
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -62,6 +59,10 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         await this.prepareAutoComplete();
 
         const additionalTypeOption = this.state.field?.options.find((o) => o.option === 'SHOW_NEW_CONTACT');
@@ -111,19 +112,13 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
     public async setCurrentValue(): Promise<void> {
         let nodes = [];
-        const newTicketDialogContext = ContextService.getInstance().getActiveContext();
 
-        let contactId: number | string = null;
-
-        if (newTicketDialogContext) {
-            contactId = newTicketDialogContext.getAdditionalInformation(`${KIXObjectType.CONTACT}-ID`);
-            if (contactId) {
-                super.provideValue(contactId);
-            }
+        let contactId: number | string = this.context?.getAdditionalInformation(`${KIXObjectType.CONTACT}-ID`);
+        if (contactId) {
+            super.provideValue(contactId);
         }
 
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const contactValue = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
 
         contactId = contactId
@@ -241,6 +236,10 @@ class Component extends FormInputComponent<number | string, ComponentState> {
     private async createTreeNode(contact: KIXObject): Promise<TreeNode> {
         const displayValue = await LabelService.getInstance().getObjectText(contact);
         return new TreeNode(contact.ObjectId, displayValue, 'kix-icon-man-bubble');
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

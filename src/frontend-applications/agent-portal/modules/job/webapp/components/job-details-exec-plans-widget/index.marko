@@ -8,22 +8,32 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId=state.instanceId
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions>
     <@content>
         <if(state.prepared)>
             <if(state.showTimeBased)>
-                <widget key="time-based-group" instanceId="job-exec-plan-group" title="Translatable#Time Based Execution">
+                <widget
+                    contextInstanceId=input.contextInstanceId
+                    key="time-based-group"
+                    instanceId="job-exec-plan-group"
+                    title="Translatable#Time Based Execution">
                     <@content>
-                        <div.exec-plans>
+                        <div class="exec-plans">
                             <object-property-label>
                                 <@propertyValue>
                                     <translation-string pattern="Translatable#Day(s)"/>
                                 </@propertyValue>
                                 <@value>
-                                    <if(state.weekdayLabels && state.weekdayLabels.length)>
-                                        <label-list labels=state.weekdayLabels removeLabels=false/>
+                                    <if(
+                                        state.weekdayLabels &&
+                                        state.weekdayLabels.length
+                                    )>
+                                        <label-list
+                                            labels=state.weekdayLabels
+                                            removeLabels=false/>
                                     </if>
                                 </@value>
                             </object-property-label>
@@ -32,8 +42,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     <translation-string pattern="Translatable#Time"/>
                                 </@propertyValue>
                                 <@value>
-                                    <if(state.timeLabels && state.timeLabels.length)>
-                                        <label-list labels=state.timeLabels removeLabels=false/>
+                                    <if(
+                                        state.timeLabels &&
+                                        state.timeLabels.length
+                                    )>
+                                        <label-list
+                                            labels=state.timeLabels
+                                            removeLabels=false/>
                                     </if>
                                 </@value>
                             </object-property-label>
@@ -42,10 +57,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </widget>
             </if>
             <if(state.showEventBased)>
-                <widget key="event-based-group" instanceId="job-exec-plan-group" title="Translatable#Event Based Execution">
+                <widget
+                    contextInstanceId=input.contextInstanceId
+                    key="event-based-group"
+                    instanceId="job-exec-plan-group"
+                    title="Translatable#Event Based Execution">
                     <@content>
                         <if(state.eventLabels && state.eventLabels.length)>
-                            <label-list labels=state.eventLabels removeLabels=false/>
+                            <label-list
+                                labels=state.eventLabels
+                                removeLabels=false/>
                         </if>
                     </@content>
                 </widget>

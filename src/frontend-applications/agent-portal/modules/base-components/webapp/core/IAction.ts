@@ -30,6 +30,8 @@ export interface IAction<T = any> {
 
     initAction(): Promise<void>;
 
+    setContext(contextInstanceId?: string): void;
+
     setData(data: T): Promise<void>;
 
     canRun(): boolean;

@@ -8,26 +8,40 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.prepared && state.label)>
-    <span.label-item-container class=state.label.classes title=state.label.tooltip on-click("labelClicked")>
-        <div.label-item class={
-            toggled: state.toggled
-        }>
+    <span
+        class=["label-item-container", state.label.classes]
+        title=(state.label.tooltip)
+        on-click("labelClicked")>
+        <div class=[
+            "label-item",
+            {
+                toggled: state.toggled,
+            },
+        ]>
             <if(state.label.icon || state.label.showUnknownIcon)>
-                <icon icon=state.label.icon showUnknown=state.label.showUnknownIcon/>
+                <icon
+                    icon=(state.label.icon)
+                    showUnknown=(state.label.showUnknownIcon)/>
             </if>
             <if(state.label.text)>
                 <if(input.translatable)>
-                    <span.label-text>
-                        <translation-string pattern=state.label.text/>
+                    <span class="label-text">
+                        <translation-string pattern=(state.label.text)/>
                     </span>
                     <if(state.label.additionalText)>
                         <span>
-                            <translation-string pattern=state.label.additionalText/>
+                            <translation-string pattern=(
+                                state.label.additionalText
+                            )/>
                         </span>
                     </if>
                 </if>
                 <else>
-                    <span.label-text>${state.label.text}</span>
+                    <span id=state.labelId class="label-text">
+                        <if(input.nonWrappedLabel)>
+                            ${state.label.text}
+                        </if>
+                    </span>
                     <if(state.label.additionalText)>
                         <span>${state.label.additionalText}</span>
                     </if>
@@ -35,19 +49,21 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </if>
             <if(state.label.infoOverlay)>
                 <overlay-icon
-                    title=state.label.infoOverlay.title
-                    content=state.label.infoOverlay.content
-                    instanceId=state.label.infoOverlay.instanceId
-                    data=state.label.infoOverlay.data
-                    large=state.label.infoOverlay.large/>
+                    title=(state.label.infoOverlay.title)
+                    content=(state.label.infoOverlay.content)
+                    instanceId=(state.label.infoOverlay.instanceId)
+                    data=(state.label.infoOverlay.data)
+                    large=(state.label.infoOverlay.large)/>
             </if>
             <if(state.label.additionalIcons)>
-                <for|icon| of=state.label.additionalIcons>
+                <for|icon| of=(state.label.additionalIcons)>
                     <icon icon=icon/>
                 </for>
             </if>
             <if(input.removeLabels)>
-                <span.kix-icon-close.label-item-remove on-click("removeLabel")/>
+                <span
+                    on-click("removeLabel")
+                    class="kix-icon-close label-item-remove"/>
             </if>
         </div>
     </span>

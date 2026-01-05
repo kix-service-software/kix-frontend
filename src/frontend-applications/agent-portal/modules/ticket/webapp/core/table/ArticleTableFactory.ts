@@ -32,16 +32,16 @@ export class ArticleTableFactory extends TableFactory {
 
     public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
+        contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short
         );
 
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
-        const contentProvider = new ArticleTableContentProvider(table, null, null, contextId);
+        const contentProvider = new ArticleTableContentProvider(table, null, null, contextInstanceId);
 
         table.setContentProvider(contentProvider);
         table.setColumnConfiguration(tableConfiguration.tableColumns);

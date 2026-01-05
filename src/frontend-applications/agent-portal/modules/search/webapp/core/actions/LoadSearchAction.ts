@@ -17,6 +17,7 @@ import { SearchCache } from '../../../model/SearchCache';
 export class LoadSearchAction extends AbstractAction<SearchCache> {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.icon = 'kix-icon-search';
         this.text = 'Translatable#Search';
     }

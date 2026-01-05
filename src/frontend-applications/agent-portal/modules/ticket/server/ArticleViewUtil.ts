@@ -12,6 +12,7 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Attachment } from '../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { HTMLUtil } from '../../../server/routes/HTMLUtil';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { InlineContent } from '../../base-components/webapp/core/InlineContent';
 import { SysConfigKey } from '../../sysconfig/model/SysConfigKey';
@@ -70,8 +71,12 @@ export class ArticleViewUtil {
             }
         }
 
-        content = this.prepareContent(content);
+        content = HTMLUtil.sanitizeContent(content);
 
+        // ignore kix styling (not needed in placeholder context, where reduce is used)
+        if (!reduceContent) {
+            content = HTMLUtil.buildHtmlStructur(content, [Article.MAIL_STYLE]);
+        }
         return content;
     }
 
@@ -159,71 +164,6 @@ export class ArticleViewUtil {
         return newString;
     }
 
-    public static prepareContent(content: string): string {
-        try {
-            const jsdom = require('jsdom');
-            const { JSDOM } = jsdom;
-
-            const dom = new JSDOM(content);
-            const domWindow = dom.window;
-            const domDocument = domWindow.document;
-
-            const scriptElements = domDocument.getElementsByTagName('script');
-            for (let i = 0; i < scriptElements.length; i++) {
-                scriptElements.item(i).remove();
-            }
-
-            this.removeListenersFromTags(dom);
-
-            const ckEditorLink = domDocument.createElement('link');
-            ckEditorLink.rel = 'stylesheet';
-            ckEditorLink.href = '/static/thirdparty/ckeditor5/ckeditor5.css';
-            domDocument.head.appendChild(ckEditorLink);
-
-            const bootstrapLink = domDocument.createElement('link');
-            bootstrapLink.rel = 'stylesheet';
-            bootstrapLink.href = '/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css';
-            domDocument.head.appendChild(bootstrapLink);
-
-            domDocument.body.innerHTML = '<div class="ck ck-content">' + domDocument.body.innerHTML + '</div>';
-
-            return domDocument.documentElement.innerHTML;
-        } catch (e) {
-            LoggingService.getInstance().error(e);
-        }
-    }
-
-    private static removeListenersFromTags(dom: any): void {
-        const domWindow = dom.window;
-        const domDocument = domWindow.document;
-
-        // try to remove listener and functions
-        const allElements = Array.prototype.slice.call(domDocument.querySelectorAll('*'));
-        allElements.push(domDocument);
-        allElements.push(domWindow);
-
-        const types = [];
-
-        for (let ev in domWindow) {
-            if (/^on/.test(ev)) {
-                types.push(ev);
-            }
-        }
-
-        for (const currentElement of allElements) {
-            for (const type of types) {
-                try {
-                    const attribute = currentElement.getAttribute(type);
-                    if (attribute) {
-                        currentElement.removeAttribute(type);
-                    }
-                } catch (e) {
-                    // do nothing
-                }
-            }
-        }
-    }
-
     public static async reduceContent(result: string, linesCount?: number): Promise<string> {
         if (linesCount === null) {
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
@@ -239,12 +179,20 @@ export class ArticleViewUtil {
         }
 
         if (!isNaN(linesCount) && linesCount > 0) {
+
             // cut pre body html (only reduce "visible" content)
             let preBodyHTML = '';
             const closingHeadIndex = result.indexOf('</head>');
             if (closingHeadIndex !== -1) {
                 preBodyHTML = result.slice(0, closingHeadIndex + 7);
                 result = result.slice(closingHeadIndex + 7);
+            }
+
+            // cut also default kix style content
+            const closingStyleIndex = result.indexOf('</style>');
+            if (closingStyleIndex !== -1) {
+                preBodyHTML += result.slice(0, closingStyleIndex + 8);
+                result = result.slice(closingStyleIndex + 8);
             }
 
             const lines = result.split(/\n/);

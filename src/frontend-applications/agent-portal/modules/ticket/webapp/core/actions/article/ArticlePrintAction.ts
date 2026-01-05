@@ -24,6 +24,7 @@ export class ArticlePrintAction extends AbstractAction<Article> {
     private articleId: number = null;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Print';
         this.icon = 'kix-icon-print';
     }
@@ -35,8 +36,7 @@ export class ArticlePrintAction extends AbstractAction<Article> {
 
     public async canShow(): Promise<boolean> {
         let show = false;
-        const context = ContextService.getInstance().getActiveContext();
-        const objectId = context.getObjectId();
+        const objectId = this.context?.getObjectId();
 
         if (objectId) {
             const permissions = [
@@ -49,35 +49,30 @@ export class ArticlePrintAction extends AbstractAction<Article> {
     }
 
     public async run(event: any): Promise<void> {
+        BrowserUtil.openInfoOverlay('Translatable#Prepare Article for print');
 
-        const context = ContextService.getInstance().getActiveContext();
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+        const ticketId = this.context?.getObjectId();
+        const file = await KIXObjectService.loadObjects(
+            KIXObjectType.HTML_TO_PDF, null,
+            new KIXObjectLoadingOptions(
+                null, null, null, null, null,
+                [
+                    ['TemplateName', 'Ticket'],
+                    ['IdentifierType', 'IDKey'],
+                    ['IdentifierIDorNumber', ticketId.toString()],
+                    ['UserID', currentUser.UserID.toString()],
+                    ['Filters', '{"Article":{"AND":[{"Field":"ArticleID","Type":"EQ","Value":"' + this.articleId + '"}]}}'],
+                    ['Filename', 'Ticket_<KIX_TICKET_TicketNumber>_' + this.articleId + '_<TIME_YYMMDD_hhmm>']
+                ]
+            ), null, null, false
+        );
 
-        if (context) {
-            BrowserUtil.openInfoOverlay('Translatable#Prepare Article for print');
-
-            const currentUser = await AgentService.getInstance().getCurrentUser();
-            const ticketId = context.getObjectId();
-            const file = await KIXObjectService.loadObjects(
-                KIXObjectType.HTML_TO_PDF, null,
-                new KIXObjectLoadingOptions(
-                    null, null, null, null, null,
-                    [
-                        ['TemplateName', 'Ticket'],
-                        ['IdentifierType', 'IDKey'],
-                        ['IdentifierIDorNumber', ticketId.toString()],
-                        ['UserID', currentUser.UserID.toString()],
-                        ['Filters', '{"Article":{"AND":[{"Field":"ArticleID","Type":"EQ","Value":"' + this.articleId + '"}]}}'],
-                        ['Filename', 'Ticket_<KIX_TICKET_TicketNumber>_' + this.articleId + '_<TIME_YYMMDD_hhmm>']
-                    ]
-                ), null, null, false
+        if (file && file[0]) {
+            BrowserUtil.openSuccessOverlay('Translatable#Article has printed');
+            BrowserUtil.startBrowserDownload(
+                file[0]['Filename'], file[0]['Content'], file[0]['ContentType'], true
             );
-
-            if (file && file[0]) {
-                BrowserUtil.openSuccessOverlay('Translatable#Article has printed');
-                BrowserUtil.startBrowserDownload(
-                    file[0]['Filename'], file[0]['Content'], file[0]['ContentType'], true
-                );
-            }
         }
     }
 }

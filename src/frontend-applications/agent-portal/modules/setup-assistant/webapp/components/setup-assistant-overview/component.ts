@@ -12,19 +12,17 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { SetupService } from '../../core/SetupService';
 import { SetupStep } from '../../core/SetupStep';
 import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { SetupEvent } from '../../core/SetupEvent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'setup-assistant-overview');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.setupSteps = await SetupService.getInstance().getSetupSteps();
 
         if (Array.isArray(this.state.setupSteps) && this.state.setupSteps.length) {
@@ -35,10 +33,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
         }
-
-        this.subscriber = {
-            eventSubscriberId: 'SetupOverviewSteps',
-            eventPublished: (data: any, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
                 if (data.stepId) {
                     const index = this.state.setupSteps.findIndex((s) => s.id === data.stepId);
                     if (index !== -1 && index < this.state.setupSteps.length - 1) {
@@ -60,25 +56,31 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         }
                     }
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(SetupEvent.STEP_COMPLETED, this.subscriber);
-        EventService.getInstance().subscribe(SetupEvent.STEP_SKIPPED, this.subscriber);
+            },
+            [
+                SetupEvent.STEP_COMPLETED,
+                SetupEvent.STEP_SKIPPED
+            ]
+        );
 
         this.state.prepared = true;
     }
 
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(SetupEvent.STEP_COMPLETED, this.subscriber);
-        EventService.getInstance().unsubscribe(SetupEvent.STEP_SKIPPED, this.subscriber);
-    }
-
     public stepClicked(step: SetupStep): void {
+        this.state.loading = true;
         this.state.activeStep = step;
         this.state.template = KIXModulesService.getComponentTemplate(step.componentId);
+        setTimeout(() => this.state.loading = false, 50);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

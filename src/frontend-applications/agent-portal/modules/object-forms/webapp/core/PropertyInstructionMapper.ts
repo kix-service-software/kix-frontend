@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldObjectFormValue } from '../../model/FormValues/DynamicFieldObjectFormValue';
@@ -5,6 +14,7 @@ import { ObjectFormValue } from '../../model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../model/FormValues/SelectObjectFormValue';
 import { InstructionProperty } from '../../model/InstructionProperty';
 import { ObjectFormEvent } from '../../model/ObjectFormEvent';
+import { ObjectFormEventData } from '../../model/ObjectFormEventData';
 import { ObjectFormValueMapper } from '../../model/ObjectFormValueMapper';
 import { PropertyInstruction } from '../../model/PropertyInstruction';
 
@@ -16,7 +26,12 @@ export class PropertyInstructionMapper {
 
         if (instruction.property === 'Submit') {
             const canSubmit = instruction.Enable === true;
-            EventService.getInstance().publish(ObjectFormEvent.FORM_SUBMIT_ENABLED, canSubmit);
+            EventService.getInstance().publish(
+                ObjectFormEvent.FORM_SUBMIT_ENABLED,
+                new ObjectFormEventData(
+                    mapper?.objectFormHandler?.context?.instanceId, null, null, null, canSubmit
+                )
+            );
             return;
         }
 

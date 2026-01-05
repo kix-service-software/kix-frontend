@@ -47,6 +47,7 @@ import { IdService } from '../../../model/IdService';
 import { DefaultDepColumnConfiguration } from './DefaultDepColumnConfiguration';
 import { SearchContext } from '../../search/webapp/core/SearchContext';
 import { SearchService } from '../../search/webapp/core/SearchService';
+import { Context } from '../../../model/Context';
 
 export class Table implements Table {
 
@@ -71,12 +72,19 @@ export class Table implements Table {
     private tableState: TableState;
 
     private subscriber: IEventSubscriber;
+    private readonly context: Context;
+    private contextDependent: boolean = false;
 
     public constructor(
-        private tableKey: string,
-        private tableConfiguration?: TableConfiguration,
-        private contextId?: string
-    ) { }
+        private readonly tableKey: string,
+        private readonly tableConfiguration?: TableConfiguration,
+        private readonly contextInstanceId?: string
+    ) {
+        if (contextInstanceId) {
+            this.context = ContextService.getInstance().getContext(contextInstanceId);
+            this.contextDependent = true;
+        }
+    }
 
     public destroy(): void {
         this.contentProvider.destroy();
@@ -147,10 +155,6 @@ export class Table implements Table {
 
     public getTableId(): string {
         return this.tableKey;
-    }
-
-    public getContextId(): string {
-        return this.contextId;
     }
 
     public getTableConfiguration(): TableConfiguration {
@@ -238,12 +242,12 @@ export class Table implements Table {
             );
 
             this.subscriber = {
-                eventSubscriberId: this.getTableId(),
-                eventPublished: (data: TableEventData, eventId: string): void => {
-                    if (data.tableId === this.getTableId()) {
+                eventSubscriberId: 'Table' + this.getTableId(),
+                eventPublished: function (data: TableEventData, eventId: string): void {
+                    if (data?.tableId === this.getTableId()) {
                         this.saveTableState();
                     }
-                }
+                }.bind(this)
             };
             EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
@@ -251,25 +255,25 @@ export class Table implements Table {
             EventService.getInstance().subscribe(TableEvent.COLUMN_RESIZED, this.subscriber);
         } else if (forceReload) {
             await this.reload();
+        } else if (this.filterValue) {
+            await this.filter();
         }
+
     }
 
     private async setSortByContext(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context.contextId === this.contextId) {
-            const sort = await context.getSortOrder(this.getObjectType());
-            if (sort) {
-                let property = sort.split('.')[1];
-                if (property) {
-                    property = property.split(':')[0];
-                    this.sortOrder = SortOrder.UP;
-                    if (property.match(/^-.+/)) {
-                        this.sortOrder = SortOrder.DOWN;
-                        property = property.replace(/-(.+)/, '$1');
-                    }
-                    if (this.columns.some((c) => c.getColumnId() === property)) {
-                        this.sortColumnId = property;
-                    }
+        const sort = await this.context.getSortOrder(this.getObjectType());
+        if (sort) {
+            let property = sort.split('.')[1];
+            if (property) {
+                property = property.split(':')[0];
+                this.sortOrder = SortOrder.UP;
+                if (property.match(/^-.+/)) {
+                    this.sortOrder = SortOrder.DOWN;
+                    property = property.replace(/-(.+)/, '$1');
+                }
+                if (this.columns.some((c) => c.getColumnId() === property)) {
+                    this.sortColumnId = property;
                 }
             }
         }
@@ -277,9 +281,12 @@ export class Table implements Table {
 
     private async prepareAdditionalSearchColumns(): Promise<void> {
         let searchCache: SearchCache;
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        if (context?.descriptor.contextMode === ContextMode.SEARCH && context?.getSearchCache()) {
-            searchCache = context.getSearchCache();
+        if (
+            this.context instanceof SearchContext
+            && this.context?.descriptor.contextMode === ContextMode.SEARCH
+            && this.context?.getSearchCache()
+        ) {
+            searchCache = this.context.getSearchCache();
         }
 
         if (searchCache) {
@@ -308,7 +315,7 @@ export class Table implements Table {
             if (column) {
                 column.setSortOrder(this.sortOrder);
             }
-        } else if (this.contextId) {
+        } else if (this.contextInstanceId) {
             await this.setSortByContext();
         }
 
@@ -969,6 +976,7 @@ export class Table implements Table {
 
             this.toggleFirstRow();
             await this.initDisplayRows();
+
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(TableEvent.RELOADED, new TableEventData(this.getTableId()));
 
@@ -1091,6 +1099,13 @@ export class Table implements Table {
         return this.getContentProvider()?.isBackendFilterSupported();
     }
 
+    public setContextDependent(contextDependent: boolean): void {
+        this.contextDependent = contextDependent;
+    }
+
+    public isContextDependent(): boolean {
+        return this.contextDependent;
+    }
 }
 
 class TableState {

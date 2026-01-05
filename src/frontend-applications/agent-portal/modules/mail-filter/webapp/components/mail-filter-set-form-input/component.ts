@@ -21,10 +21,11 @@ class Component extends FormInputComponent<any[], ComponentState> {
     private formListenerId: string;
     private matchFormTimeout: any;
 
-    public async onCreate(): Promise<void> {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.formListenerId = IdService.generateDateBasedId('mail-filter-set-form-listener-');
-        await this.prepareTranslations();
+        this.prepareTranslations();
     }
 
     public onInput(input: any): void {
@@ -32,6 +33,11 @@ class Component extends FormInputComponent<any[], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         this.state.setManager = new MailFilterSetManager();
         this.state.setManager.reset();
         this.state.setManager.init();
@@ -58,18 +64,17 @@ class Component extends FormInputComponent<any[], ComponentState> {
                 super.provideValue(setValues);
             }, 200);
         });
-        await super.onMount();
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
+        super.onDestroy();
         if (this.state.setManager) {
             this.state.setManager.unregisterListener(this.formListenerId);
         }
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = context?.getFormManager()?.getFormInstance();
+        const formInstance = this.context?.getFormManager()?.getFormInstance();
         const value = (await formInstance).getFormFieldValue<string>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             value.value.forEach((set: MailFilterSet) => {

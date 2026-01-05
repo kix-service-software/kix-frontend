@@ -18,7 +18,6 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { CreateTicketWatcherOptions } from '../../../model/CreateTicketWatcherOptions';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { BrowserCacheService } from '../../../../../modules/base-components/webapp/core/CacheService';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
 
 export class TicketWatchAction extends AbstractAction<Ticket> {
@@ -34,6 +33,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
     private isWatching: boolean = false;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Watch';
         this.icon = 'kix-icon-eye';
     }
@@ -83,15 +83,15 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
         }
 
         setTimeout(async () => {
+            EventService.getInstance().publish(
+                ApplicationEvent.REFRESH_CONTENT, ContextService.getInstance().getActiveContext().instanceId
+            );
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
 
             if (successHint) {
-                const context = ContextService.getInstance().getActiveContext();
-                await context.getObject(KIXObjectType.TICKET, true);
+                await this.context?.getObject(KIXObjectType.TICKET, true);
                 BrowserUtil.openSuccessOverlay(successHint);
             }
-
-            EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.TICKET });
         }, 1500);
     }
 

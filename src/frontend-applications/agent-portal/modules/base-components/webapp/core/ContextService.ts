@@ -23,7 +23,6 @@ import { ContextEvents } from './ContextEvents';
 import { EventService } from './EventService';
 import { BrowserUtil } from './BrowserUtil';
 import { ContextPreference } from '../../../../model/ContextPreference';
-import { RoutingEvent } from './RoutingEvent';
 import { ConfiguredWidget } from '../../../../model/configuration/ConfiguredWidget';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
@@ -34,6 +33,9 @@ import { KIXModulesService } from './KIXModulesService';
 import { ToolbarAction } from '../../../agent-portal/webapp/application/_base-template/personal-toolbar/ToolbarAction';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { ClientStorageService } from './ClientStorageService';
+import { ContextRefreshInterval } from './ContextRefreshInterval';
+import { RoutingService } from './RoutingService';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class ContextService {
 
@@ -61,11 +63,20 @@ export class ContextService {
     private storedContexts: ContextPreference[];
     private storageProcessQueue: Array<Promise<boolean>> = [];
 
-    public DEFAULT_FALLBACK_CONTEXT: string = 'home';
+    public DEFAULT_FALLBACK_CONTEXT_URL: string = 'home';
 
     private toolbarActions: Map<string, ToolbarAction> = new Map();
 
     public supportContextStorage: boolean = true;
+
+    public contextRefreshInterval: ContextRefreshInterval;
+
+    private componentContextMap: Object = new Object();
+
+    public async initialize(): Promise<void> {
+        this.contextRefreshInterval = new ContextRefreshInterval();
+        await this.contextRefreshInterval.initialize();
+    }
 
     public registerContext(contextDescriptor: ContextDescriptor): void {
         if (!this.contextDescriptorList.some((d) => d.contextId === contextDescriptor.contextId)) {
@@ -89,7 +100,7 @@ export class ContextService {
                 contextPreference.contextId, contextPreference.objectId, contextPreference.instanceId,
                 contextPreference
             );
-            EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
+            EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, context);
         }
     }
 
@@ -163,7 +174,7 @@ export class ContextService {
         return instances;
     }
 
-    public getActiveContext<T extends Context = Context>(): T {
+    public getActiveContext<T = Context>(): T {
         return this.activeContext as T;
     }
 
@@ -182,7 +193,8 @@ export class ContextService {
         );
         if (!context) {
             context = await this.createContextInstance(
-                contextId, objectId, instanceId, null, null, contextPreference).catch((): Context => null);
+                contextId, objectId, instanceId, null, null, contextPreference).catch((): Context => null
+                );
         }
 
         return context;
@@ -244,6 +256,12 @@ export class ContextService {
 
                     removed = true;
                 }
+
+                for (const key in this.componentContextMap) {
+                    if (this.componentContextMap[key] === instanceId) {
+                        delete this.componentContextMap[key];
+                    }
+                }
             }
         }
 
@@ -254,7 +272,8 @@ export class ContextService {
         for (const c of [...this.contextInstances]) {
             await this.removeContext(c.instanceId, null, null, false, silent);
         }
-        await this.switchToTargetContext(null, this.DEFAULT_FALLBACK_CONTEXT);
+        const url = `${window.location.protocol}//${window.location.host}/${this.DEFAULT_FALLBACK_CONTEXT_URL}`;
+        await RoutingService.getInstance().routeToURL(true, url);
     }
 
     public checkDialogConfirmation(contextInstanceId: string, silent?: boolean): Promise<boolean> {
@@ -281,29 +300,44 @@ export class ContextService {
         });
     }
 
-    private canRemove(instanceId: string): boolean {
+    public canRemove(instanceId: string): boolean {
         let canRemove = true;
         if (this.contextInstances.length === 1) {
             const context = this.getContext(instanceId);
-            canRemove = context?.contextId !== this.DEFAULT_FALLBACK_CONTEXT;
+            const urlPaths = context?.descriptor.urlPaths;
+            if (context.descriptor.contextMode === ContextMode.DASHBOARD && urlPaths?.length) {
+                canRemove = !this.DEFAULT_FALLBACK_CONTEXT_URL.startsWith(urlPaths[0]);
+            }
         }
         return canRemove;
+    }
+
+    public async setDefaultFallbackContext(): Promise<void> {
+        const url = await AgentService.getInstance().getUserPreference(PersonalSettingsProperty.INITIAL_SITE_URL);
+        if (url) {
+            this.DEFAULT_FALLBACK_CONTEXT_URL = url?.Value;
+        }
     }
 
     private async switchToTargetContext(
         sourceContext: any, targetContextId?: string, targetObjectId?: string | number, useSourceContext?: boolean
     ): Promise<void> {
-        const context = this.contextInstances.find((c) => c.instanceId === sourceContext?.instanceId);
+        let context = this.contextInstances.find((c) => c.instanceId === sourceContext?.instanceId);
         if (!useSourceContext && targetContextId) {
-            await this.setActiveContext(targetContextId, targetObjectId);
+            context = await this.setActiveContext(targetContextId, targetObjectId);
         } else if (context) {
             await this.setContextByInstanceId(sourceContext.instanceId);
         } else if (this.contextInstances.length > 0) {
-            await this.setContextByInstanceId(
+            context = await this.setContextByInstanceId(
                 this.contextInstances[this.contextInstances.length - 1].instanceId
             );
         } else {
-            await this.setActiveContext(this.DEFAULT_FALLBACK_CONTEXT);
+            const url = `${window.location.protocol}//${window.location.host}/${this.DEFAULT_FALLBACK_CONTEXT_URL}`;
+            await RoutingService.getInstance().routeToURL(true, url);
+        }
+
+        if (context) {
+            EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT, context.instanceId);
         }
     }
 
@@ -335,10 +369,17 @@ export class ContextService {
 
     public async setContextByInstanceId(
         instanceId: string, objectId?: string | number, history: boolean = true
-    ): Promise<void> {
+    ): Promise<Context> {
         const context = this.contextInstances.find((i) => i.instanceId === instanceId);
-        if (context && context.instanceId !== this.activeContext?.instanceId) {
+        const hint = await TranslationService.translate('Translatable#Loading ...');
 
+        BrowserUtil.toggleLoadingShield(
+            'APP_SHIELD', true, hint, undefined,
+        );
+        if (context && context.instanceId !== this.activeContext?.instanceId) {
+            if (this.activeContext) {
+                this.activeContext.lastScrollPosition = Math.round(BrowserUtil.getCurrentContentScrollPosition());
+            }
             EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
 
             const previousContext = this.getActiveContext();
@@ -348,8 +389,6 @@ export class ContextService {
 
             this.activeContext = context;
             this.activeContextIndex = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
-
-            EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
 
             if (!this.activeContext.initialized) {
                 await this.activeContext.postInit();
@@ -363,20 +402,21 @@ export class ContextService {
 
             await context.update(null);
 
-            EventService.getInstance().publish(RoutingEvent.ROUTE_TO,
-                {
-                    componentId: context.descriptor.componentId,
-                    data: { objectId: context.getObjectId() }
-                }
-            );
-
+            EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
+            setTimeout(() => {
+                BrowserUtil.setCurrentContentScrollPosition(this.activeContext.lastScrollPosition);
+            }, 100);
             // TODO: Use Event
             this.serviceListener.forEach(
                 (sl) => sl.contextChanged(
                     context.contextId, context, context.descriptor.contextType, null, previousContext
                 )
             );
+
         }
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
+
+        return context;
     }
 
     public async setActiveContext(
@@ -395,7 +435,6 @@ export class ContextService {
         if (context) {
             await this.setContextByInstanceId(context.instanceId, objectId, history);
         }
-
 
         return context;
     }
@@ -579,11 +618,8 @@ export class ContextService {
                 publishEvent = updates.some((u) => u[0] === objectType);
             }
 
-            if (publishEvent) {
-                EventService.getInstance().publish(
-                    ContextEvents.CONTEXT_UPDATE_REQUIRED,
-                    context
-                );
+            if (publishEvent && context.descriptor.contextType !== ContextType.DIALOG) {
+                EventService.getInstance().publish(ContextEvents.CONTEXT_UPDATE_REQUIRED, context);
             }
         }
     }
@@ -705,47 +741,44 @@ export class ContextService {
     }
 
     public async saveUserWidgetList(
-        instanceIds: string[], modifiedWidgets: ConfiguredWidget[], contextWidgetList: string
+        context: Context, instanceIds: string[], modifiedWidgets: ConfiguredWidget[], contextWidgetList: string
     ): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            const contextId = context.descriptor.contextId;
+        const contextId = context?.descriptor.contextId;
 
-            TableFactoryService.getInstance().deleteContextTables(context?.contextId);
+        TableFactoryService.getInstance().deleteContextTables(context?.instanceId);
 
-            const currentUser = await AgentService.getInstance().getCurrentUser();
-            const preference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
-            const preferenceValue = preference && preference.Value ? JSON.parse(preference.Value) : {};
-            const userWidgetList: Array<string | ConfiguredWidget> = preferenceValue[contextId]
-                ? preferenceValue[contextId][contextWidgetList] || []
-                : [];
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+        const preference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
+        const preferenceValue = preference && preference.Value ? JSON.parse(preference.Value) : {};
+        const userWidgetList: Array<string | ConfiguredWidget> = preferenceValue[contextId]
+            ? preferenceValue[contextId][contextWidgetList] || []
+            : [];
 
-            const newWidgetList = [];
-            for (const instanceId of instanceIds) {
-                const modifiedWidget = modifiedWidgets.find((w) => w.instanceId === instanceId);
-                if (modifiedWidget) {
-                    newWidgetList.push(modifiedWidget);
+        const newWidgetList = [];
+        for (const instanceId of instanceIds) {
+            const modifiedWidget = modifiedWidgets.find((w) => w.instanceId === instanceId);
+            if (modifiedWidget) {
+                newWidgetList.push(modifiedWidget);
+            } else {
+                const widget = userWidgetList.find((w) => typeof w !== 'string' && w.instanceId === instanceId);
+                if (widget) {
+                    newWidgetList.push(widget);
                 } else {
-                    const widget = userWidgetList.find((w) => typeof w !== 'string' && w.instanceId === instanceId);
-                    if (widget) {
-                        newWidgetList.push(widget);
-                    } else {
-                        newWidgetList.push(instanceId);
-                    }
+                    newWidgetList.push(instanceId);
                 }
             }
-
-            if (!preferenceValue[contextId]) {
-                preferenceValue[contextId] = {};
-            }
-
-            preferenceValue[contextId][contextWidgetList] = newWidgetList;
-
-            const preferences: Array<[string, string]> = [
-                ['ContextWidgetLists', JSON.stringify(preferenceValue)]
-            ];
-            await AgentService.getInstance().setPreferences(preferences);
         }
+
+        if (!preferenceValue[contextId]) {
+            preferenceValue[contextId] = {};
+        }
+
+        preferenceValue[contextId][contextWidgetList] = newWidgetList;
+
+        const preferences: Array<[string, string]> = [
+            ['ContextWidgetLists', JSON.stringify(preferenceValue)]
+        ];
+        await AgentService.getInstance().setPreferences(preferences);
     }
 
     public async reloadContextConfigurations(): Promise<void> {

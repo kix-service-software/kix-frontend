@@ -10,15 +10,12 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { ObjectIcon } from '../../../model/ObjectIcon';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { Context } from '../../../../../model/Context';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
-    private context: Context;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -27,10 +24,12 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         await this.setFieldConfiguration();
-        await this.setCurrentValue();
     }
 
     private async setFieldConfiguration(): Promise<void> {
@@ -67,6 +66,10 @@ class Component extends FormInputComponent<any, ComponentState> {
         }
         this.state.icon = icon;
         super.provideValue(icon);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

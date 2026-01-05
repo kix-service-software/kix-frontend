@@ -9,19 +9,22 @@
 
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { ObjectIconLoadingOptions } from '../../../../../../../server/model/ObjectIconLoadingOptions';
+import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { KIXObjectService } from '../../../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../../../../../../icon/model/ObjectIcon';
 import { ComponentState } from './ComponentState';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const logoLoadingOptions = new ObjectIconLoadingOptions('agent-portal-logo', 'agent-portal-logo');
         const icons = await KIXObjectService.loadObjects<ObjectIcon>(
             KIXObjectType.OBJECT_ICON, null, null, logoLoadingOptions
@@ -29,6 +32,14 @@ class Component {
         if (icons && icons.length) {
             this.state.logoIcon = icons[0];
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

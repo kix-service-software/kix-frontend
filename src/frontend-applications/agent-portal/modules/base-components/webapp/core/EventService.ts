@@ -25,6 +25,10 @@ export class EventService {
     private constructor() { }
 
     public subscribe(eventId: string, subscriber: IEventSubscriber): void {
+        if (!subscriber) {
+            return;
+        }
+
         if (this.eventSubscribers.has(eventId)) {
             const subscriberIndex = this.eventSubscribers.get(eventId).findIndex(
                 (s) => s.eventSubscriberId === subscriber.eventSubscriberId
@@ -54,5 +58,28 @@ export class EventService {
         if (this.eventSubscribers.has(eventId)) {
             this.eventSubscribers.get(eventId).forEach((l) => l.eventPublished(data, eventId, subscriberId));
         }
+    }
+
+    public unsubscribeSubscriber(eventSubscriberId: string): void {
+        this.eventSubscribers.forEach((eventSubscriberArray: IEventSubscriber[], eventId: string) => {
+            const subscriberIndex = eventSubscriberArray.findIndex(
+                (s) => s.eventSubscriberId === eventSubscriberId
+            );
+            if (subscriberIndex !== -1) {
+                eventSubscriberArray.splice(subscriberIndex, 1);
+            }
+        });
+    }
+
+    public renameSubscriber(oldEventSubscriberId: string, newEventSubscriberId: string): void {
+        this.eventSubscribers.forEach((eventSubscriberArray: IEventSubscriber[], eventId: string) => {
+            eventSubscriberArray.forEach(
+                (s) => {
+                    if (s.eventSubscriberId === oldEventSubscriberId) {
+                        s.eventSubscriberId = newEventSubscriberId;
+                    }
+                }
+            );
+        });
     }
 }

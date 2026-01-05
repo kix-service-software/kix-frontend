@@ -7,13 +7,16 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../core/AbstractComponentState';
 import { TreeNode } from '../../../core/tree';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public node: TreeNode,
         public nodeId: string = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

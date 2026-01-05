@@ -32,17 +32,18 @@ import { ContactDetailsContext } from '../../../../customer/webapp/core/context/
 import { ConfigItemDetailsContext } from '../../core';
 import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
     private imagesByGroup: Array<number[]> = [];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (input.version) {
             this.state.version = input.version;
             this.prepareVersion();
@@ -239,6 +240,14 @@ class Component {
         return groups;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

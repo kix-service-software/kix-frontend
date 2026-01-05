@@ -26,15 +26,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public baseFAQUri: string;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.baseFAQUri = 'faqarticles/';
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.baseRoute = ClientStorageService.getBaseRoute();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Help, hints & tricks',
@@ -116,6 +119,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.faqIds = language === 'de' ? [1, 7, 5, 3] : [2, 8, 6, 4];
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

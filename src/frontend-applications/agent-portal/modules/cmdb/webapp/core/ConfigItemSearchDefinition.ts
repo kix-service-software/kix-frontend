@@ -69,12 +69,22 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             loadingOptions.expands.push(VersionProperty.DATA, VersionProperty.PREPARED_DATA);
         }
 
+        if (loadingOptions.filter.length > 0) {
+            loadingOptions.filter = loadingOptions.filter.filter((c) => {
+                if (Array.isArray(c.value)) {
+                    return c.value.length > 0;
+                } else {
+                    return c.value !== null && typeof c.value !== undefined && c.value !== '';
+                }
+            });
+        }
+
         return loadingOptions;
     }
 
 
     public async prepareFormFilterCriteria(
-        criteria: FilterCriteria[], forSearch: boolean = true, allowEmptyValue?: boolean
+        criteria: FilterCriteria[], forSearch: boolean = true, allowEmptyValue: boolean = true
     ): Promise<FilterCriteria[]> {
         criteria = await super.prepareFormFilterCriteria(criteria, forSearch, allowEmptyValue);
 
@@ -113,6 +123,10 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     searchCriteria.type = FilterDataType.NUMERIC;
                     newCriteria.push(searchCriteria);
                     break;
+                case ConfigItemProperty.DEPL_STATE_TYPE:
+                    searchCriteria.type = FilterDataType.STRING;
+                    newCriteria.push(searchCriteria);
+                    break;
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
                 case 'InciStateIDs':
                     searchCriteria.property = 'InciStateIDs';
@@ -134,7 +148,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     newCriteria.push(searchCriteria);
                     break;
                 default:
-                    if (forSearch && !searchCriteria.property.match(/^CurrentVersion.Data/)) {
+                    if (forSearch && !searchCriteria.property?.match(/^CurrentVersion.Data/)) {
                         const path = await ConfigItemClassAttributeUtil.getAttributePath(
                             searchCriteria.property, classIds
                         );

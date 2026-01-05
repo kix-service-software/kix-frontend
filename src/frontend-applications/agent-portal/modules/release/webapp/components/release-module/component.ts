@@ -14,12 +14,21 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.contentWidgets = await context.getContent();
+        await super.onMount();
+        this.state.contentWidgets = await this.context?.getContent();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

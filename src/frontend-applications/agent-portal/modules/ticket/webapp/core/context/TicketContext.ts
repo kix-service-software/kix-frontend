@@ -34,6 +34,7 @@ export class TicketContext extends Context {
 
     public queueId: number;
     public filterValue: string;
+    public limitOverwrite: number;
 
     public getIcon(): string {
         return 'kix-icon-ticket';
@@ -146,7 +147,7 @@ export class TicketContext extends Context {
             loadingOptions.filter.push(fulltextFilter);
         }
 
-        loadingOptions.limit = limit;
+        loadingOptions.limit = this.limitOverwrite >= 0 ? this.limitOverwrite : limit;
 
         if (!this.queueId && this.queueId !== 0) {
             loadingOptions.sortOrder = 'Ticket.-Age:numeric';
@@ -170,7 +171,7 @@ export class TicketContext extends Context {
 
         const tickets = await KIXObjectService.loadObjects(
             KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined,
-            this.contextId + KIXObjectType.TICKET
+            this.instanceId + KIXObjectType.TICKET
         ).catch((error) => []);
 
         this.setObjectList(KIXObjectType.TICKET, tickets, silent);

@@ -15,7 +15,7 @@ import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { Table } from '../../../table/model/Table';
 
-export class BulkAction extends AbstractAction<Table>  {
+export class BulkAction extends AbstractAction<Table> {
 
     public hasLink: boolean = false;
 
@@ -23,6 +23,7 @@ export class BulkAction extends AbstractAction<Table>  {
     public objectType: KIXObjectType | string;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Bulk Action';
         this.icon = 'kix-icon-arrow-collect';
         this.eventSubscriberId = IdService.generateDateBasedId('bulk-action-');

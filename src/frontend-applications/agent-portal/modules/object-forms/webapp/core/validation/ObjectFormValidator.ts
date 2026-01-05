@@ -16,10 +16,11 @@ import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 import { ObjectFormValueMapper } from '../../../model/ObjectFormValueMapper';
 import { ObjectFormRegistry } from '../ObjectFormRegistry';
 import { ObjectFormValueValidator } from './ObjectFormValueValidator';
+import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
 
 export class ObjectFormValidator {
 
-    private validators: ObjectFormValueValidator[];
+    private readonly validators: ObjectFormValueValidator[];
     private subscriber: IEventSubscriber;
 
     private enabled: boolean = true;
@@ -36,12 +37,13 @@ export class ObjectFormValidator {
     }
 
     private initValidator(): void {
-
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('ObjectFormValidator'),
-            eventPublished: (data, eventId, subscriberId?): void => {
-                this.validate(data);
-            }
+            eventPublished: function (data: ObjectFormEventData, eventId, subscriberId?): void {
+                if (data.contextInstanceId === this.objectFormValueMapper?.instanceId) {
+                    this.validate(data.formValue);
+                }
+            }.bind(this)
         };
         EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_CHANGED, this.subscriber);
     }
@@ -79,13 +81,12 @@ export class ObjectFormValidator {
         const validationPromises: Array<Promise<void>> = [];
         for (const fv of formValues) {
             validationPromises.push(this.validate(fv));
-
             if (Array.isArray(fv.formValues) && fv.formValues.length) {
                 validationPromises.push(this.validateFormValues(fv.formValues));
             }
         }
 
-        await Promise.all(validationPromises);
+        await Promise.allSettled(validationPromises);
     }
 
     public async validate(formValue: ObjectFormValue, force?: boolean): Promise<void> {

@@ -7,15 +7,20 @@
  * --
  */
 
+import { IdService } from '../../../../../model/IdService';
 import { ActionGroup } from '../../../model/ActionGroup';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 import { IAction } from '../../core/IAction';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public listDefault: Array<ActionGroup | IAction> = [],
         public listExpansion: Array<ActionGroup | IAction> = [],
         public displayText: boolean = true,
-        public prepared: boolean = false
-    ) { }
+        public prepared: boolean = false,
+        public key: string = IdService.generateDateBasedId()
+    ) {
+        super();
+    }
 }

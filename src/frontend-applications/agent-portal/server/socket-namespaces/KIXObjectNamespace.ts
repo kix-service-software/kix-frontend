@@ -63,7 +63,7 @@ export class KIXObjectNamespace extends SocketNameSpace {
         const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
         if (service) {
             const objectResponse = await service.loadObjects(
-                token, data.clientRequestId, data.objectType, data.objectIds,
+                token, `${data.clientRequestId}#${data.requestId}`, data.objectType, data.objectIds,
                 data.loadingOptions, data.objectLoadingOptions
             );
 

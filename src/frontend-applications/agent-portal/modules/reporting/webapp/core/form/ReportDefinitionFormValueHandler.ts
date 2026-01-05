@@ -19,6 +19,8 @@ import { ReportParameter } from '../../../model/ReportParamater';
 import { ReportParameterProperty } from '../../../model/ReportParameterProperty';
 import { ReportDefinitionFormCreator } from './ReportDefinitionFormCreator';
 import { ReportingFormUtil } from './ReportingFormUtil';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
 
 export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
 
@@ -26,16 +28,18 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
 
     public id: string = 'ReportDataSourceFormValueHandler';
 
-    private timeout;
+    private readonly subscriber: IEventSubscriber;
+
+    private timeout: ReturnType<typeof setTimeout>;
 
     public constructor() {
         super();
 
-        EventService.getInstance().subscribe(FormEvent.FIELD_DUPLICATED, {
-            eventSubscriberId: 'ReportDefinitionFormValueHandler',
-            eventPublished: async (data: any, eventId: string): Promise<void> => {
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('ReportDefinitionFormValueHandler'),
+            eventPublished: async function (data: any, eventId: string): Promise<void> {
                 const field: FormFieldConfiguration = data ? data.field : null;
-                if (field && field.property === ReportDefinitionProperty.PARAMTER) {
+                if (field?.property === ReportDefinitionProperty.PARAMTER) {
                     const formInstance: FormInstance = data.formInstance;
                     const instanceIds = [];
                     field.children.forEach((f) => instanceIds.push(f.instanceId));
@@ -43,7 +47,8 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
                     await formInstance.provideFormFieldValues(values, null);
                 }
             }
-        });
+        };
+        EventService.getInstance().subscribe(FormEvent.FIELD_DUPLICATED, this.subscriber);
 
     }
     public async handleFormFieldValues(

@@ -9,16 +9,17 @@
 
 import { ComponentState } from './ComponentState';
 import { ArticleReceiver } from '../../../model/ArticleReceiver';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.receiverList = input.receiver;
     }
 
@@ -28,6 +29,14 @@ class Component {
             : `${receiver.realName} (${receiver.email})`;
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public async onMount(): Promise<void> {
+        await super.onMount();
+    }
 }
 
 module.exports = Component;

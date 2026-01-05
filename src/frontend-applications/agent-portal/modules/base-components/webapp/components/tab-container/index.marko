@@ -7,51 +7,78 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.tab-container>
-    <widget
-        instanceId="tab-widget"
-        minimizable=state.minimizable
-        contentActions=state.contentActions
-        title=state.activeTabTitle>
-        <@headercontent>
-            <if(state.prepared)>
-                <ul.tab-list>
+<if(state.prepared)>
+    <div key=state.componentId class="tab-container">
+        <widget
+            contextInstanceId=input.contextInstanceId
+            instanceId="tab-widget"
+            minimizable=state.minimizable
+            contentActions=state.contentActions
+            title=state.activeTabTitle
+            removeGap
+            customGridTemplateColumnsStyle="grid-template-columns: 3rem auto 3rem;"
+            on-minimizedChanged("minimizedChanged")>
+            <@headercontent>
+                <if(state.showTabScrollers)>
+                    <div
+                        on-click("scrollTabs", true)
+                        class="px-3 d-grid align-content-center">
+                        <span class="fa fa-caret-left"/>
+                    </div>
+                </if>
+                <ul class="tab-list" key="tab-list">
                     <for|tab| of=state.tabWidgets>
                         <li
                             title=component.getTitle(tab)
                             class={
-                                active: component.isActiveTab(tab.instanceId)
+                                active: component.isActiveTab(tab.instanceId),
                             }
                             on-click("tabClicked", tab)>
                             <if(component.getIcon(tab))>
-                                <icon icon=component.getIcon(tab) showUnknown=false/>
+                                <icon
+                                    icon=component.getIcon(tab)
+                                    showUnknown=false/>
                             </if>
                             <span class={
-                                "no-icon": !component.getIcon(tab)
-                            }>${component.getTitle(tab)}</span>
+                                "no-icon": !component.getIcon(tab),
+                            }>
+                                ${component.getTitle(tab)}
+                            </span>
                         </li>
                     </for>
                 </ul>
-            </if>
-        </@headercontent>
-        <@content>
-            <div.tab-sidebar-grid class={
-                "has-sidebar": state.hasSidebars,
-                "show-sidebar": state.showSidebar
-            }>
-                <div.tab-content>
-                    <if(state.activeTab)>
-                        <${component.getWidgetTemplate()} ...{
-                            instanceId: state.activeTab.instanceId
-                        }/>
+                <if(state.showTabScrollers)>
+                    <div
+                        on-click("scrollTabs", false)
+                        class="px-3 d-grid align-content-center">
+                        <span class="fa fa-caret-right"/>
+                    </div>
+                </if>
+            </@headercontent>
+            <@content>
+                <div
+                    key="tab-content-" + state.componentId
+                    class=[
+                        "tab-sidebar-grid",
+                        {
+                            "has-sidebar": state.hasSidebars,
+                            "show-sidebar": state.showSidebar,
+                        },
+                    ]>
+                    <div class="tab-content">
+                        <if(state.activeTab)>
+                            <${component.getWidgetTemplate()} ...{
+                                instanceId: state.activeTab.instanceId,
+                            }/>
+                        </if>
+                    </div>
+                    <if(state.hasSidebars)>
+                        <if(state.showSidebar)>
+                            <sidebar contextType=state.contextType/>
+                        </if>
                     </if>
                 </div>
-                <if(state.hasSidebars)>
-                    <if(state.showSidebar)>
-                        <sidebar contextType=state.contextType/>
-                    </if>
-                </if>
-            </div>
-        </@content>
-    </widget>
-</div>
+            </@content>
+        </widget>
+    </div>
+</if>

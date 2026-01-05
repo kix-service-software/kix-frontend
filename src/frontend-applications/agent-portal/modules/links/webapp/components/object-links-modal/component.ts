@@ -9,8 +9,6 @@
 
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { Context } from '../../../../../model/Context';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
@@ -22,14 +20,13 @@ import { IdService } from '../../../../../model/IdService';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
         await this.prepareTable();
     }
 
@@ -66,6 +63,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

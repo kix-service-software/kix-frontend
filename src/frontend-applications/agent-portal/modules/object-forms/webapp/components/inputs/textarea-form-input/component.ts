@@ -10,6 +10,7 @@
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
+import { ObjectFormHandler } from '../../../core/ObjectFormHandler';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
@@ -18,11 +19,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private formValue: ObjectFormValue;
     private changeTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;
@@ -50,6 +53,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.value = this.formValue?.value;
 
         if (this.formValue && this.formValue['rowCount']) {
@@ -62,14 +66,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public valueChanged(event: any): void {
+        this.formValue.dirty = true;
         if (this.changeTimeout) {
             window.clearTimeout(this.changeTimeout);
         }
 
         this.changeTimeout = setTimeout(async () => {
             this.state.value = event.target.value;
-            this.formValue.setFormValue(this.state.value);
-        }, 500);
+            await this.formValue.setFormValue(this.state.value);
+            this.formValue.dirty = false;
+        }, ObjectFormHandler.TEXTFIELD_SUBMISSION_TIMEOUT);
     }
 
 }

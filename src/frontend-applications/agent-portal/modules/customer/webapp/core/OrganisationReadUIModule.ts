@@ -31,6 +31,8 @@ import { OrganisationLabelProvider } from './OrganisationLabelProvider';
 import { OrganisationSearchDefinition } from './OrganisationSearchDefinition';
 import { OrganisationService } from './OrganisationService';
 import { SearchService } from '../../../search/webapp/core/SearchService';
+import { PersonalSettingsService } from '../../../user/model/PersonalSettingsService';
+import { OrganisationInitialSiteURLNodesService } from './OrganisationInitialSiteURLNodesService';
 
 export class UIModule implements IUIModule {
 
@@ -50,6 +52,10 @@ export class UIModule implements IUIModule {
 
         await this.registerContexts();
         this.registerActions();
+
+        PersonalSettingsService.getInstance().registerInitialURLSiteExtendedService(
+            new OrganisationInitialSiteURLNodesService()
+        );
     }
 
     public async registerExtensions(): Promise<void> {

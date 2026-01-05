@@ -12,17 +12,13 @@ import { LinkTypeDescription } from '../../../model/LinkTypeDescription';
 import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { EditLinkedObjectsDialogContext, LinkService } from '../../core';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
@@ -35,10 +31,10 @@ import { ValueState } from '../../../../table/model/ValueState';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { IdService } from '../../../../../model/IdService';
 import { SearchService } from '../../../../search/webapp/core/SearchService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class LinkDialogComponent {
+class LinkDialogComponent extends AbstractMarkoComponent<ComponentState, EditLinkedObjectsDialogContext> {
 
-    private state: ComponentState;
     private linkTypeDescriptions: LinkTypeDescription[] = [];
     private newLinks: CreateLinkDescription[] = [];
     private linkPartners: Array<[string, KIXObjectType]> = [];
@@ -47,16 +43,16 @@ class LinkDialogComponent {
 
     private linkLabel: string;
 
-    private tableSubscriber: IEventSubscriber;
-
     private objectType: KIXObjectType;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'link-object-dialog');
         this.state = new ComponentState();
         this.state.loadNodes = this.loadNodes.bind(this);
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (!this.state.linkDescriptions || this.state.linkDescriptions.length === 0) {
             this.state.linkDescriptions = input.linkDescriptions || [];
         }
@@ -66,13 +62,15 @@ class LinkDialogComponent {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+
         this.selectedObjects = [];
 
         this.state.translations = await TranslationService.createTranslationObject(
             ['Translatable#Link to', 'Translatable#Search']
         );
 
-        WidgetService.getInstance().setWidgetType('link-object-dialog-form-widget', WidgetType.GROUP);
+        this.context.widgetService.setWidgetType('link-object-dialog-form-widget', WidgetType.GROUP);
 
         this.setLinkTypes();
 
@@ -80,10 +78,9 @@ class LinkDialogComponent {
     }
 
     public async onDestroy(): Promise<void> {
+        super.onDestroy();
+
         this.state.linkDescriptions = null;
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this.tableSubscriber);
     }
 
     private async loadNodes(): Promise<TreeNode[]> {
@@ -107,8 +104,7 @@ class LinkDialogComponent {
     }
 
     public async keyPressed(event: any): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (event.key === 'Enter' && formInstance.hasValues()) {
             this.executeSearch();
         }
@@ -120,16 +116,14 @@ class LinkDialogComponent {
         this.selectedObjects = [];
         this.state.resultCount = 0;
 
-        const context = ContextService.getInstance().getActiveContext();
-
         if (nodes && nodes.length) {
             const formId = nodes[0].id.toString();
-            await context?.getFormManager()?.setFormId(formId);
+            await this.context?.getFormManager()?.setFormId(formId);
 
             this.linkLabel = nodes[0].label;
-            const formInstance = await context?.getFormManager()?.getFormInstance();
+            const formInstance = await this.context?.getFormManager()?.getFormInstance();
             if (formInstance) {
-                context.setObjectList(formInstance.getObjectType(), []);
+                this.context?.setObjectList(formInstance.getObjectType(), []);
             }
         } else {
             this.state.table = null;
@@ -144,9 +138,8 @@ class LinkDialogComponent {
 
     private async executeSearch(): Promise<void> {
         BrowserUtil.toggleLoadingShield('APP_SHIELD', true);
-        const context = ContextService.getInstance().getActiveContext<EditLinkedObjectsDialogContext>();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
-        if (context && formInstance.hasValues()) {
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
+        if (this.context && formInstance.hasValues()) {
             const excludeObjects = this.rootObject && formInstance.getObjectType() === this.rootObject.KIXObjectType
                 ? [this.rootObject]
                 : null;
@@ -155,8 +148,8 @@ class LinkDialogComponent {
                 formInstance, excludeObjects, null, true
             );
 
-            context.setAdditionalInformation('LinkObjectSearchLoadingOptions', loadingOptions);
-            await context.searchObjects(formInstance.getObjectType(), loadingOptions);
+            this.context.setAdditionalInformation('LinkObjectSearchLoadingOptions', loadingOptions);
+            await this.context?.searchObjects(formInstance.getObjectType(), loadingOptions);
 
             await this.prepareResultTable();
             this.setSubmitState();
@@ -168,8 +161,7 @@ class LinkDialogComponent {
     private async prepareResultTable(): Promise<void> {
         this.state.table = null;
 
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const objectType = formInstance.getObjectType();
 
@@ -179,15 +171,14 @@ class LinkDialogComponent {
         );
         const table = await TableFactoryService.getInstance().createTable(
             `${IdService.generateDateBasedId()}-link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
-            EditLinkedObjectsDialogContext.CONTEXT_ID, true, null, true
+            this.contextInstanceId, true, null, true
         );
         await table.addAdditionalColumns([
             TableFactoryService.getInstance().getDefaultColumnConfiguration(objectType, 'LinkedAs')
         ]);
 
-        this.tableSubscriber = {
-            eventSubscriberId: 'link-object-dialog',
-            eventPublished: (data: TableEventData, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: TableEventData, eventId: string): void {
                 if (data && data.tableId === table.getTableId()) {
                     if (eventId === TableEvent.REFRESH) {
                         this.state.resultCount = table?.getRowCount();
@@ -199,12 +190,13 @@ class LinkDialogComponent {
                     this.selectedObjects = table.getSelectedRows().map((r) => r.getRowObject().getObject());
                     this.setSubmitState();
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        EventService.getInstance().subscribe(TableEvent.REFRESH, this.tableSubscriber);
-        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+            },
+            [
+                TableEvent.TABLE_READY,
+                TableEvent.REFRESH,
+                TableEvent.ROW_SELECTION_CHANGED
+            ]
+        );
 
         table.resetFilter();
         setTimeout(() => this.state.table = table, 50);

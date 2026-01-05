@@ -14,6 +14,8 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { DataViewService } from '../../../table/webapp/core/DataViewService';
+import { DataView } from '../../../table/model/DataView';
 
 export class UIModule implements IUIModule {
 
@@ -30,6 +32,10 @@ export class UIModule implements IUIModule {
             false, 'calendar-module', ['calendar'], CalendarContext
         );
         ContextService.getInstance().registerContext(calendarContext);
+
+        DataViewService.getInstance().registerDataView(
+            new DataView('calendar', 'Calendar', 'calendar', 'kix-icon-calendar')
+        );
     }
 
     public async registerExtensions(): Promise<void> {

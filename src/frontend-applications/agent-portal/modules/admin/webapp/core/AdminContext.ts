@@ -37,7 +37,7 @@ export class AdminContext extends Context {
     }
 
     public async update(urlParams: URLSearchParams): Promise<void> {
-        TableFactoryService.getInstance().deleteContextTables(AdminContext.CONTEXT_ID, null, true);
+        TableFactoryService.getInstance().deleteContextTables(this.instanceId, null, true);
         this.handleURLParams(urlParams);
     }
 
@@ -70,7 +70,6 @@ export class AdminContext extends Context {
 
     public async setAdminModule(adminModuleId: string, history: boolean = true): Promise<void> {
         if (!this.adminModuleId || this.adminModuleId !== adminModuleId) {
-
             TableFactoryService.getInstance().deleteContextTables(AdminContext.CONTEXT_ID, undefined, true);
 
             this.adminModuleId = adminModuleId;

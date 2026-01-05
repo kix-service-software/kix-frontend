@@ -22,6 +22,8 @@ export class CKEditor5Configuration implements IConfiguration {
 
     public plugins = [];
 
+    public licenseKey = 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NzY0NzAzOTksImp0aSI6IjIzM2Q5ZGZiLTQwYTItNDYyZC1iNzkxLTExY2VmODI1YjIxYiIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiXSwiZmVhdHVyZXMiOlsiRFJVUCJdLCJ2YyI6ImE3ZDA1NDVhIn0.DBpqCdjqZIp4JA5_34zHPuGKva1qXlJ_VRBlADLmGfJ1bNEq0YuFhL8zIUO1KYf4ggEbhOVJij2ra4Dxb-FEIA';
+
     public toolbar = {
         shouldNotGroupWhenFull: true,
         items: [

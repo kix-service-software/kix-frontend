@@ -16,27 +16,25 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { LogFileProperty } from '../../../model/LogFileProperty';
-import { Context } from '../../../../../model/Context';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { LogTier } from '../../../model/LogTier';
 
 declare let CodeMirror: any;
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
     private logFile: LogFile;
     private logLevel: string[];
     private intervalId: number;
     private codeMirror: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.logLevel = [];
-        this.context = ContextService.getInstance().getActiveContext();
         this.state.loadLogLevelNodes = this.loadLogLevelNodes.bind(this);
         this.state.loadWrapLinesNodes = this.loadWrapLinesNodes.bind(this);
 
@@ -210,6 +208,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.loadLogFile();
             }, this.state.refreshInterval * 1000);
         }
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

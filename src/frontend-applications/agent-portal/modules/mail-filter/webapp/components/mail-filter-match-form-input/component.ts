@@ -14,17 +14,17 @@ import { MailFilterMatchManager } from '../../core';
 import { MailFilterMatch } from '../../../model/MailFilterMatch';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<any[], ComponentState> {
 
     private formListenerId: string;
     private matchFormTimeout: any;
 
-    public async onCreate(): Promise<void> {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
         this.formListenerId = IdService.generateDateBasedId('mail-filter-match-form-listener-');
-        await this.prepareTranslations();
+        this.prepareTranslations();
     }
 
     public onInput(input: any): void {
@@ -32,6 +32,11 @@ class Component extends FormInputComponent<any[], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         this.state.matchManager = new MailFilterMatchManager();
         this.state.matchManager.reset();
         this.state.matchManager.init();
@@ -59,18 +64,17 @@ class Component extends FormInputComponent<any[], ComponentState> {
                 super.provideValue(matchValues);
             }, 200);
         });
-        await super.onMount();
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
+        super.onDestroy();
         if (this.state.matchManager) {
             this.state.matchManager.unregisterListener(this.formListenerId);
         }
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<MailFilterMatch[]>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             value.value.forEach((match: MailFilterMatch) => {

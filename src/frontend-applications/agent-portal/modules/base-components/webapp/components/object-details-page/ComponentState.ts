@@ -9,8 +9,9 @@
 
 import { IdService } from '../../../../../model/IdService';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = IdService.generateDateBasedId(),
@@ -19,5 +20,7 @@ export class ComponentState {
         public actions: AbstractAction[] = [],
         public error: any = null,
         public title: string = '',
-    ) { }
+    ) {
+        super();
+    }
 }

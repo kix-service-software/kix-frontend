@@ -180,6 +180,8 @@ export class AuthenticationService {
             throw new SocketAuthenticationError('No contact available for user!');
         }
 
+        HttpService.getInstance().setUserRoleIds(user);
+
         return token;
     }
 

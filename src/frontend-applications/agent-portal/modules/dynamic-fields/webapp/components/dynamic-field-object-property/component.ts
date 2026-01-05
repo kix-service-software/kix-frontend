@@ -27,24 +27,26 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private name: string;
     private object: KIXObject;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.name = input.name;
         this.object = input.object;
         this.update();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.update();
     }
 
     private async update(): Promise<void> {
         if (!this.object) {
-            const context = ContextService.getInstance().getActiveContext();
-            const contextObject = await context.getObject();
+            const contextObject = await this.context.getObject();
             if (contextObject) {
                 const loadedObjects = await KIXObjectService.loadObjects(
                     contextObject.KIXObjectType, [contextObject.ObjectId],
@@ -126,7 +128,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (label?.id && label?.object) {
             const contextDescriptorList = ContextService.getInstance().getContextDescriptors(ContextMode.DETAILS);
             for (const contextDescriptor of (contextDescriptorList)) {
-                if(contextDescriptor.isContextFor(label.object.KIXObjectType)) {
+                if (contextDescriptor.isContextFor(label.object.KIXObjectType)) {
                     ContextService.getInstance().setActiveContext(contextDescriptor.contextId, label.id);
                     return;
                 }
@@ -134,6 +136,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

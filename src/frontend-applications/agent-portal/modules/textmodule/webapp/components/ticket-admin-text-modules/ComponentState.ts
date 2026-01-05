@@ -12,9 +12,10 @@ import { TableWidgetConfiguration } from '../../../../../model/configuration/Tab
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { TextModuleProperty } from '../../../model/TextModuleProperty';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = 'admin-ticket-text-modules-list',
@@ -28,6 +29,8 @@ export class ComponentState {
                 KIXObjectType.TEXT_MODULE, [TextModuleProperty.NAME, SortOrder.UP]
             ),
             false, false, 'kix-icon-gears')
-    ) { }
+    ) {
+        super();
+    }
 
 }

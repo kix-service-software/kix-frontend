@@ -16,13 +16,13 @@ export class WebformEditAction extends AbstractAction {
     public hasLink: boolean = true;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
     }
 
     public async run(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        ContextService.getInstance().setActiveContext(EditWebformDialogContext.CONTEXT_ID, context?.getObjectId());
+        ContextService.getInstance().setActiveContext(EditWebformDialogContext.CONTEXT_ID, this.context?.getObjectId());
     }
 
 }

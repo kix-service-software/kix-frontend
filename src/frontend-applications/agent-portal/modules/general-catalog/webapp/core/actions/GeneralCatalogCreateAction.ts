@@ -20,6 +20,7 @@ export class GeneralCatalogCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Value';
         this.icon = 'kix-icon-new-gear';
     }

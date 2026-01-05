@@ -16,6 +16,7 @@ export class WebformCreateAction extends AbstractAction {
     public hasLink: boolean = true;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Webform';
         this.icon = 'kix-icon-new-gear';
     }

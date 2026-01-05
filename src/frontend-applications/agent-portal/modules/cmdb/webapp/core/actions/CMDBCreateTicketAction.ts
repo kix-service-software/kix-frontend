@@ -24,6 +24,7 @@ export class CMDBCreateTicketAction extends AbstractAction<Table> {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Ticket';
         this.icon = 'kix-icon-new-ticket';
     }

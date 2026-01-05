@@ -7,11 +7,12 @@
  * --
  */
 
+import { AbstractComponentState } from '../../../../../../../../base-components/webapp/core/AbstractComponentState';
 import { OverlayIcon } from '../../../../../../../../base-components/webapp/core/OverlayIcon';
 import { ObjectIcon } from '../../../../../../../../icon/model/ObjectIcon';
 import { Cell } from '../../../../../../../model/Cell';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
         public constructor(
                 public icons: Array<string | ObjectIcon> = null,
@@ -21,6 +22,8 @@ export class ComponentState {
                 public showText: boolean = true,
                 public overlay: OverlayIcon = null,
                 public rtl: boolean = false
-        ) { }
+        ) {
+                super();
+        }
 
 }

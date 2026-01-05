@@ -17,6 +17,7 @@ export class TranslationCSVExportAction extends AbstractAction<Table> {
     public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#CSV-Export';
         this.icon = 'kix-icon-export';
     }

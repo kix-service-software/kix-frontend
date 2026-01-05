@@ -12,8 +12,9 @@ import { TableWidgetConfiguration } from '../../../../../model/configuration/Tab
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { OAuth2ProfileProperty } from '../../../model/OAuth2ProfileProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
     public constructor(
         public instanceId: string = 'communication-oauth2-profiles-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
@@ -27,6 +28,8 @@ export class ComponentState {
                 [OAuth2ProfileProperty.NAME, SortOrder.UP]
             ), false, false, 'kix-icon-gears'
         )
-    ) { }
+    ) {
+        super();
+    }
 
 }

@@ -12,15 +12,20 @@ import { TableWidgetConfiguration } from '../../../../../model/configuration/Tab
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { MailAccountProperty } from '../../../model/MailAccountProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
     public constructor(
         public instanceId: string = 'admin-communication-mail-accounts-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Communication: Email: Inbox',
             ['mail-account-create', 'mail-account-table-delete', 'csv-export-action'], null,
-            new TableWidgetConfiguration(null, null, null, KIXObjectType.MAIL_ACCOUNT,
-                [MailAccountProperty.HOST, SortOrder.UP]), false, false, 'kix-icon-gears')
-    ) { }
+            new TableWidgetConfiguration(
+                null, null, null, KIXObjectType.MAIL_ACCOUNT, [MailAccountProperty.HOST, SortOrder.UP],
+                null, null, null, true, null, null, null, false
+            ), false, false, 'kix-icon-gears')
+    ) {
+        super();
+    }
 
 }

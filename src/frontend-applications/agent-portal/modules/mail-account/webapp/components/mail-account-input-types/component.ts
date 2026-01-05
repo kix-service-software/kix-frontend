@@ -23,9 +23,10 @@ class Component extends FormInputComponent<string, ComponentState> {
     private typeID: string;
     public treeId: string;
 
-    public onCreate(): void {
-        this.treeId = IdService.generateDateBasedId('mail-account-input-types-'),
-            this.state = new ComponentState();
+    public onCreate(input: any): void {
+        super.onCreate(input);
+        this.treeId = IdService.generateDateBasedId('mail-account-input-types-');
+        this.state = new ComponentState();
         this.state.loadNodes = this.load.bind(this);
     }
 
@@ -51,22 +52,23 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         const treeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler(this.treeId, treeHandler);
         await this.load();
-        await super.onMount();
-
-        this.state.prepared = true;
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
         super.onDestroy();
         TreeService.getInstance().removeTreeHandler(this.treeId);
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const formValue = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         const treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
         if (formValue && treeHandler) {
@@ -91,8 +93,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private async handlePasswordField(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         let field = this.state.field?.children.find((f) => f.property === MailAccountProperty.PASSWORD);
         const showPasswordField = !this.isOAuth2Type();
         if (field && !showPasswordField) {
@@ -109,8 +110,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private async handleIMAPFolderField(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         let field = this.state.field?.children.find((f) => f.property === MailAccountProperty.IMAP_FOLDER);
         const showFolderField = this.showIMAPFolderField();
         if (field && !showFolderField) {
@@ -131,8 +131,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private async handleOAuth2ProfileField(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         let field = this.state.field?.children.find((f) => f.property === MailAccountProperty.OAUTH2_PROFILEID);
         const showProfileField = this.isOAuth2Type();
         if (field && !showProfileField) {

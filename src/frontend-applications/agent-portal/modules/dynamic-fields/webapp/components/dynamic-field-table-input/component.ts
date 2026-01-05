@@ -18,7 +18,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     private dynamicField: DynamicField;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -28,6 +29,10 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
         await this.loadDynamicField();
 
         const config = this.dynamicField?.Config;
@@ -45,7 +50,6 @@ class Component extends FormInputComponent<string[], ComponentState> {
             }
         }
         this.state.hasAction = min !== max;
-        this.state.prepared = true;
     }
 
     public async addInitialTable(): Promise<void> {
@@ -87,8 +91,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string | string[]>(this.state.field?.instanceId);
         if (value && value.value) {
             const tableValues = value.value;
@@ -153,6 +156,10 @@ class Component extends FormInputComponent<string[], ComponentState> {
         const rowMax = Number(this.dynamicField?.Config?.RowsMax);
         const rowCount = Number(this.state.tableValues?.length);
         return rowCount < rowMax && index === rowCount - 1;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

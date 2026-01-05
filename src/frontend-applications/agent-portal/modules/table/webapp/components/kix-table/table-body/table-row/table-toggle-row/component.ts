@@ -12,25 +12,22 @@ import { IdService } from '../../../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ActionFactory } from '../../../../../../../base-components/webapp/core/ActionFactory';
 import { BrowserUtil } from '../../../../../../../base-components/webapp/core/BrowserUtil';
-import { ContextService } from '../../../../../../../base-components/webapp/core/ContextService';
-import { EventService } from '../../../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../../../base-components/webapp/core/IEventSubscriber';
 import { KIXModulesService } from '../../../../../../../base-components/webapp/core/KIXModulesService';
 import { TableEvent } from '../../../../../../model/TableEvent';
 import { TableEventData } from '../../../../../../model/TableEventData';
 import { ToggleOptions } from '../../../../../../model/ToggleOptions';
 
-class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
-
-    public eventSubscriberId: string;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private toggleOptions: ToggleOptions;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'kix-table/table-body/table-row/table-toggle-row');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.loading = true;
 
         setTimeout(() => {
@@ -48,10 +45,10 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.setWidth();
-        const context = ContextService.getInstance().getActiveContext();
         const listenerId = this.state.row ? this.state.row.getRowId() : IdService.generateDateBasedId();
-        context.registerListener((listenerId + '-toggle'), {
+        this.context?.registerListener((listenerId + '-toggle'), {
             sidebarRightToggled: () => { this.setWidth(); },
             sidebarLeftToggled: () => { this.setWidth(); },
             objectChanged: (): void => { return; },
@@ -61,26 +58,26 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             additionalInformationChanged: (): void => { return; }
         });
         window.addEventListener('resize', this.setWidth.bind(this), false);
-        this.eventSubscriberId = listenerId;
-        EventService.getInstance().subscribe(TableEvent.REFRESH, this);
+
+        super.registerEventSubscriber(
+            function (data: TableEventData, eventId: string, subscriberId?: string): void {
+                if (
+                    this.state.row
+                    && data?.tableId === this.state.row.getTable().getTableId()
+                ) {
+                    this.setWidth();
+                }
+            },
+            [TableEvent.REFRESH]
+        );
 
         await this.setToggleActions();
         setTimeout(() => this.state.loading = false, 50);
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         window.removeEventListener('resize', this.setWidth.bind(this), false);
-        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
-    }
-
-    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
-        if (eventId === TableEvent.REFRESH
-            && this.state.row
-            && data
-            && data.tableId === this.state.row.getTable().getTableId()
-        ) {
-            this.setWidth();
-        }
     }
 
     private setWidth(): void {
@@ -103,14 +100,14 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public async setToggleActions(): Promise<void> {
         let actions = this.toggleOptions && this.state.row
             ? await ActionFactory.getInstance().generateActions(
-                this.toggleOptions.actions, [this.state.row.getRowObject().getObject()]
+                this.toggleOptions.actions, [this.state.row.getRowObject().getObject()],
+                this.context?.instanceId
             )
             : [];
 
         if (this.state.row) {
-            const context = ContextService.getInstance().getActiveContext();
             const object = this.state.row.getRowObject().getObject();
-            const objectActions = await context.getAdditionalActions(object);
+            const objectActions = await this.context.getAdditionalActions(object);
 
             actions = [...objectActions, ...actions];
         }

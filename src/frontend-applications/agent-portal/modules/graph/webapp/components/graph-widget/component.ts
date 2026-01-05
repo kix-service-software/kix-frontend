@@ -8,15 +8,11 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { GraphContext } from '../../core/GraphContext';
 import { ComponentState } from './ComponentState';
 import { GraphInstance } from '../../core/GraphInstance';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { GraphEvents } from '../../../model/GraphEvents';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
 import { GraphContextOptions } from '../../../model/GraphContextOptions';
 import { GraphOption } from '../../../model/GraphOption';
 import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
@@ -24,26 +20,26 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 
 declare let d3;
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractMarkoComponent<ComponentState, GraphContext> {
 
-    private context: GraphContext;
     private d3Graph: GraphInstance;
-    private subscriber: IEventSubscriber;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'graph-widget');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
         await this.loadGraph();
 
-        this.context.registerListener('graph-widget', {
+        this.context?.registerListener('graph-widget', {
             additionalInformationChanged: () => null,
             filteredObjectListChanged: () => null,
             objectChanged: (id: string, graphInstance: GraphInstance) => {
@@ -58,18 +54,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             sidebarRightToggled: () => null,
         });
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (finished?: boolean): void => {
+        super.registerEventSubscriber(
+            function (finished?: boolean): void {
                 this.state.prepared = Boolean(finished);
-            }
-        };
-        EventService.getInstance().subscribe(GraphEvents.GRAPH_LOADING, this.subscriber);
+            },
+            [GraphEvents.GRAPH_LOADING]
+        );
 
         this.createD3Graph();
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         this.removeD3Graph();
         this.context.unregisterListener('graph-widget');
     }
@@ -105,8 +101,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             widgetClasses.push('simulation-active');
         }
 
-        WidgetService.getInstance().setWidgetClasses(this.state.instanceId, widgetClasses);
-        WidgetService.getInstance().setWidgetTitle(this.state.instanceId, title);
+        this.context.widgetService.setWidgetClasses(this.state.instanceId, widgetClasses);
+        this.context.widgetService.setWidgetTitle(this.state.instanceId, title);
     }
 
     private removeD3Graph(): void {

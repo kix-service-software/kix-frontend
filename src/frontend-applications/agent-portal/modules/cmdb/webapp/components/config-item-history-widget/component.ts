@@ -8,33 +8,30 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ConfigItemDetailsContext } from '../../core';
 import { ConfigItem } from '../../../model/ConfigItem';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        context.registerListener('config-item-history-widget', {
+        this.context?.registerListener('config-item-history-widget', {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
@@ -48,7 +45,7 @@ class Component {
             additionalInformationChanged: (): void => { return; }
         });
 
-        await this.initWidget(await context.getObject<ConfigItem>());
+        await this.initWidget(await this.context?.getObject<ConfigItem>());
     }
 
     private async initWidget(configItem: ConfigItem): Promise<void> {
@@ -61,14 +58,14 @@ class Component {
     private async prepareActions(configItem: ConfigItem): Promise<void> {
         if (this.state.widgetConfiguration && configItem) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [configItem]
+                this.state.widgetConfiguration.actions, [configItem], this.contextInstanceId
             );
         }
     }
 
     private async prepareTable(): Promise<void> {
         const table = await TableFactoryService.getInstance().createTable(
-            'config-item-history', KIXObjectType.CONFIG_ITEM_HISTORY, null, null, ConfigItemDetailsContext.CONTEXT_ID
+            'config-item-history', KIXObjectType.CONFIG_ITEM_HISTORY, null, null, this.contextInstanceId
         );
 
         this.state.table = table;
@@ -85,6 +82,10 @@ class Component {
     //     }
     // }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

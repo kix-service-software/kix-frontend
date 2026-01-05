@@ -20,6 +20,7 @@ export class ReportDefinitionCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Report Definition';
         this.icon = 'kix-icon-kpi';
     }

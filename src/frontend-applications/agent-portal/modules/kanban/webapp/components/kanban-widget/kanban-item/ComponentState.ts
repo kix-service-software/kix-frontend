@@ -9,11 +9,11 @@
 
 import { RoutingConfiguration } from '../../../../../../model/configuration/RoutingConfiguration';
 import { Ticket } from '../../../../../ticket/model/Ticket';
-
 import { TicketLabelProvider } from '../../../../../ticket/webapp/core';
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
+import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public routingConfiguration: RoutingConfiguration = null,
@@ -31,6 +31,8 @@ export class ComponentState {
         public contactTooltip: string = '',
         public userColor: string = '',
         public update: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

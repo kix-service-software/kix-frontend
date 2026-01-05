@@ -10,25 +10,26 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ConfigItemClassLabelProvider } from '../../core';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ConfigItemClass } from '../../../model/ConfigItemClass';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.labelProvider = new ConfigItemClassLabelProvider();
-        const context = ContextService.getInstance().getActiveContext();
-        context.registerListener('config-item-class-info-widget', {
+        this.context?.registerListener('config-item-class-info-widget', {
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
@@ -41,11 +42,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             additionalInformationChanged: (): void => { return; }
         });
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        await this.initWidget(await context.getObject<ConfigItemClass>());
+        await this.initWidget(await this.context.getObject<ConfigItemClass>());
     }
 
     private async initWidget(ciClass: ConfigItemClass): Promise<void> {
@@ -56,11 +55,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.ciClass) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.ciClass]
+                this.state.widgetConfiguration.actions, [this.state.ciClass], this.contextInstanceId
             );
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

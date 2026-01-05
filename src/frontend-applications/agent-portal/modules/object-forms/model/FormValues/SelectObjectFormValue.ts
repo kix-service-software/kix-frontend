@@ -254,7 +254,9 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             const configLoadingOptions = field?.options?.find(
                 (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
             );
-            this.loadingOptions = configLoadingOptions?.value || this.loadingOptions;
+            if (configLoadingOptions?.value) {
+                this.loadingOptions = JSON.parse(JSON.stringify(configLoadingOptions.value));
+            }
 
             const specificLoadingOptions = field?.options?.find(
                 (o) => o.option === ObjectReferenceOptions.OBJECT_SPECIFIC_LOADINGOPTIONS
@@ -348,9 +350,9 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.treeHandler = new TreeHandler([], null, null, this.multiselect);
         TreeService.getInstance().registerTreeHandler(this.instanceId, this.treeHandler);
 
-        this.treeHandler?.registerSelectionListener(this.instanceId + '-selection', (nodes: TreeNode[]) => {
+        this.treeHandler?.registerSelectionListener(this.instanceId + '-selection', async (nodes: TreeNode[]) => {
             if (this.initialized && !this.multiselect) {
-                this.setSelectedNodes();
+                await this.setSelectedNodes();
             }
         });
 
@@ -396,7 +398,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             }
         }
 
-        return this.setFormValue(newValue.length ? newValue as any : null);
+        return await this.setFormValue(newValue.length ? newValue as any : null);
     }
 
     public async loadSelectableValues(): Promise<void> {
@@ -641,31 +643,17 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     private async getObjectsSeparately(ids: any[]): Promise<KIXObject[]> {
-        const objectPromises = [];
-        if (ids) {
-            if (!Array.isArray(ids)) {
-                ids = [ids];
-            }
-
-            // load objects separately, to prevent empty value if "no permission" error occurs
-            ids.forEach(async (id) =>
-                objectPromises.push(
-                    KIXObjectService.loadObjects(
-                        this.objectType, [id], this.loadingOptions,
-                        this.specificLoadingOptions, true, null, true
-                    ).catch(() => [])
-                )
-            );
+        if (ids && !Array.isArray(ids)) {
+            ids = [ids];
         }
 
-        const objects = [];
-        await Promise.allSettled<Array<KIXObject[]>>(objectPromises).then((results) =>
-            results.forEach((r) => {
-                if (r.status === 'fulfilled' && r.value?.length) {
-                    objects.push(...r.value);
-                }
-            })
-        );
+        const objectPromises = (ids || []).map(((id) => KIXObjectService.loadObjects(
+            this.objectType, [id], this.loadingOptions,
+            this.specificLoadingOptions, true, null, true
+        )));
+
+        const result = await Promise.allSettled(objectPromises);
+        const objects = result.filter((r) => r.status === 'fulfilled').map((r) => r.value).flat();
         return objects;
     }
 
@@ -688,7 +676,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 await this.setFormValue(newValue, true);
             }
         } else {
-            this.treeHandler?.selectNone();
+            this.treeHandler?.selectNone(true);
             await this.setFormValue(null, true);
         }
     }
@@ -704,8 +692,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     private async prepareOverlayIcon(nodes: TreeNode[]): Promise<TreeNode[]> {
         if (nodes && nodes.length) {
-            const context = ContextService.getInstance().getActiveContext();
-            const form = context?.getFormManager()?.getForm();
+            const form = this.context?.getFormManager()?.getForm();
             if (form?.objectType === KIXObjectType.TICKET) {
                 for (const node of nodes) {
                     const overlay = await LabelService.getInstance().getOverlayIconByProperty(
@@ -772,9 +759,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context.descriptor.contextMode.toLowerCase().includes('admin')) {
-            const isRestoredContext = context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
+        if (this.context.descriptor.contextMode.toLowerCase().includes('admin')) {
+            const isRestoredContext = this.context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
             if (!isRestoredContext) {
                 this.defaultValue = field?.defaultValue?.value || [];
             }

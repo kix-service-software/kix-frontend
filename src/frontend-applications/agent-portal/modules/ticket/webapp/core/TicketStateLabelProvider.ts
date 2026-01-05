@@ -34,7 +34,7 @@ export class TicketStateLabelProvider extends LabelProvider<TicketState> {
                 displayValue = 'Translatable#State Type';
                 break;
             case TicketStateProperty.ID:
-                displayValue = 'Translatable#Icon';
+                displayValue = 'Translatable#ID';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);

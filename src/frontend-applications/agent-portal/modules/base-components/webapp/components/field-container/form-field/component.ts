@@ -11,23 +11,20 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
-import { EventService } from '../../../core/EventService';
 import { FormEvent } from '../../../core/FormEvent';
-import { IEventSubscriber } from '../../../core/IEventSubscriber';
 import { LabelService } from '../../../core/LabelService';
-import { ContextService } from '../../../core/ContextService';
 import { KIXModulesService } from '../../../core/KIXModulesService';
+import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
-    private formSubscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'field-container/form-field');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.field = input.field;
 
         this.state.formId = input.formId;
@@ -39,6 +36,10 @@ class Component {
             ? input.draggable : this.state.canDraggable;
 
         this.update();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async update(): Promise<void> {
@@ -62,8 +63,12 @@ class Component {
             ? (hint.startsWith('Helptext_') ? null : hint)
             : null;
 
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        if (this.state.hint) {
+            // keep line breaks
+            this.state.hint = this.state.hint.replace(/\\n/g, '\n');
+        }
+
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const value = formInstance?.getFormFieldValue(this.state.field?.instanceId);
         this.state.errorMessages = value?.errorMessages || [];
@@ -73,9 +78,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.formSubscriber = {
-            eventSubscriberId: this.state.field?.instanceId,
-            eventPublished: async (data: any, eventId: string): Promise<void> => {
+        await super.onMount();
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
                 if (this.hasChildren()) {
                     this.state.minimized = this.state.minimized && !(await this.hasInvalidChildren());
                 }
@@ -86,30 +91,21 @@ class Component {
                 if (isUpdateEvent && this.state.field?.instanceId === data?.instanceId) {
                     this.update();
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_VALIDATED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_READONLY_CHANGED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_VALIDATED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_PAGE_VALIDATED, this.formSubscriber);
-
+            },
+            [
+                FormEvent.FIELD_CHILDREN_ADDED,
+                FormEvent.FIELD_VALIDATED,
+                FormEvent.FIELD_READONLY_CHANGED,
+                FormEvent.FORM_VALIDATED,
+                FormEvent.FORM_PAGE_VALIDATED
+            ]
+        );
 
         this.update();
     }
 
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_VALIDATED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_READONLY_CHANGED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_VALIDATED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_VALIDATED, this.formSubscriber);
-    }
-
     private async hasInvalidChildren(field: FormFieldConfiguration = this.state.field): Promise<boolean> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance(false);
+        const formInstance = await this.context?.getFormManager()?.getFormInstance(false);
         let hasInvalidChildren = false;
         if (formInstance && Array.isArray(field.children)) {
             for (const child of field.children) {

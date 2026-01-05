@@ -8,49 +8,56 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TicketContext } from '../../core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { IdService } from '../../../../../model/IdService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { TicketEvent } from '../../../model/TicketEvent';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
-class Component {
-
-    public state: ComponentState;
-    private subscriber: IEventSubscriber;
+class Component extends AbstractMarkoComponent<ComponentState, TicketContext> {
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'ticket-module');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext() as TicketContext;
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Search',
             'Translatable#Help'
         ]);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
-        this.state.filterValue = context?.filterValue;
+        this.state.filterValue = this.context?.filterValue;
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (): void => {
-                this.prepareWidgets();
-            }
-        };
         this.prepareWidgets();
 
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
+                if (eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED) {
+                    if (data?.contextId === this.context.contextId) {
+                        await this.prepareWidgets();
+                    }
+                } else if (eventId === TicketEvent.MARK_TICKET_AS_SEEN) {
+                    setTimeout(async () => {
+                        await this.context.reloadObjectList(KIXObjectType.TICKET, true);
+                    }, 100);
+                }
+            },
+            [
+                ContextEvents.CONTEXT_USER_WIDGETS_CHANGED,
+                TicketEvent.MARK_TICKET_AS_SEEN
+            ]
+        );
+
     }
 
     private async prepareWidgets(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
         this.state.prepared = false;
         setTimeout(async () => {
-            this.state.contentWidgets = await context.getContent();
+            this.state.contentWidgets = await this.context.getContent();
             this.state.prepared = true;
         }, 100);
     }
@@ -63,12 +70,17 @@ class Component {
     }
 
     public async search(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof TicketContext) {
-            context.setFilterValue(this.state.filterValue);
-        }
+        this.context.setFilterValue(this.state.filterValue);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

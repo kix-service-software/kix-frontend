@@ -22,11 +22,13 @@ import { ObjectDialogService } from '../../../../base-components/webapp/core/Obj
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         const context = await ContextService.getInstance().getContext(EditSysConfigDialogContext.CONTEXT_ID);
         if (context && !context.getObjectId()) {
             this.state.reset = false;
@@ -38,12 +40,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            if (context.getObjectId()) {
+        if (this.context) {
+            if (this.context.getObjectId()) {
                 ObjectDialogService.getInstance().submit();
             } else {
-                const formInstance = await context.getFormManager().getFormInstance();
+                const formInstance = await this.context.getFormManager().getFormInstance();
                 const result = await formInstance.validateForm();
                 const valid = !result.some((r) => r.severity === ValidationSeverity.ERROR);
                 if (valid) {
@@ -82,8 +83,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
     public async reset(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context.getFormManager().getFormInstance();
+        const formInstance = await this.context.getFormManager().getFormInstance();
         const sysConfigValueField = formInstance.getFormFieldByProperty(SysConfigOptionDefinitionProperty.VALUE);
         const defaultValue = await formInstance.getFormFieldValueByProperty(SysConfigOptionDefinitionProperty.DEFAULT);
         if (sysConfigValueField && defaultValue) {
@@ -91,8 +91,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         const sysConfigValidField = formInstance.getFormFieldByProperty(KIXObjectProperty.VALID_ID);
-        if (sysConfigValidField && context) {
-            const sysConfigId = await context.getObjectId();
+        if (sysConfigValidField && this.context) {
+            const sysConfigId = await this.context.getObjectId();
             const optionDefs = sysConfigId ? await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
                 KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, [sysConfigId]
             ) : null;
@@ -102,6 +102,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 );
             }
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

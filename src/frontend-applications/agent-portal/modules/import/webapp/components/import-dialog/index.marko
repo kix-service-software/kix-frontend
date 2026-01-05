@@ -7,31 +7,36 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget instanceId=state.instanceId title=state.title>
+<widget
+    contextInstanceId=input.contextInstanceId
+    instanceId=state.instanceId
+    title=state.title>
     <@content>
-        <div.import-container>
+        <div class="import-container">
             <if(state.importManager)>
                 <if(state.prepared)>
                     <main-form/>
                 </if>
-                <div.form.import-attributes-container>
+                <div class="form import-attributes-container">
                     <widget
+                        contextInstanceId=input.contextInstanceId
                         instanceId="dynamic-form-field-group"
                         title=(
                             state.translations["Translatable#Replace Values"]
                         )
-                        key="attributes"
-                    >
+                        key="attributes">
                         <@content>
-                            <div.import-attributes>
-                                <dynamic-form-field-container manager=state.importManager invalid=state.invalid/>
+                            <div class="import-attributes">
+                                <dynamic-form-field-container
+                                    manager=state.importManager
+                                    invalid=state.invalid/>
                             </div>
                         </@content>
                     </widget>
                 </div>
                 <if(state.table)>
-                    <div.object-table>
-                        <div.object-table-head>
+                    <div class="object-table">
+                        <div class="object-table-head">
                             <span>${state.tableTitle}</span>
                         </div>
                         <kix-table table=state.table/>
@@ -41,23 +46,23 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </div>
     </@content>
 </widget>
-<div.dialog-control>
-    <div.dialog-button-container>
-        <button.kix-button.cancel-button
+<div class="dialog-control">
+    <div class="dialog-button-container">
+        <button
             type="button"
             on-click("cancel")
             title=(state.translations["Translatable#Cancel"])
-        >
-            <span.kix-icon-close/>
+            class="kix-button cancel-button">
+            <span class="kix-icon-close"/>
             <translation-string pattern="Translatable#Cancel"/>
         </button>
-        <button.kix-button.submit-button
+        <button
             type="button"
             on-click("run")
             title=(state.translations["Translatable#Start Import"])
             disabled=!state.canRun
-        >
-            <span.kix-icon-import/>
+            class="kix-button submit-button">
+            <span class="kix-icon-import"/>
             <translation-string pattern="Translatable#Start Import"/>
         </button>
     </div>

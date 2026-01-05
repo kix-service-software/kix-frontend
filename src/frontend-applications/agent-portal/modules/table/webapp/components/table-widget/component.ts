@@ -10,12 +10,8 @@
 import { ComponentState } from './ComponentState';
 import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { ComponentInput } from './ComponentInput';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
-import { IdService } from '../../../../../model/IdService';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
@@ -24,44 +20,43 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
-import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { IContextListener } from '../../../../base-components/webapp/core/IContextListener';
 import { Table } from '../../../model/Table';
 import { TableEvent } from '../../../model/TableEvent';
 import { TableEventData } from '../../../model/TableEventData';
 import { TableFactoryService } from '../../core/factory/TableFactoryService';
-import { Context } from '../../../../../model/Context';
 import { FormValueProperty } from '../../../../object-forms/model/FormValueProperty';
 import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../../../object-forms/model/ObjectFormEvent';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
-import { WidgetSize } from '../../../../../model/configuration/WidgetSize';
-import { ObjectView } from '../../../../../model/ObjectView';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
-import { WidgetType } from '../../../../../model/configuration/WidgetType';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { DataViewService } from '../../core/DataViewService';
+import { WidgetSize } from '../../../../../model/configuration/WidgetSize';
+import { BackendNotification } from '../../../../../model/BackendNotification';
+import { NotificationHandler } from '../../../../base-components/webapp/core/NotificationHandler';
+import { AdminContext } from '../../../../../modules/admin/webapp/core/AdminContext';
 
-class Component {
-
-    public state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private additionalFilterCriteria: UIFilterCriterion[] = [];
     private objectType: KIXObjectType | string;
-    private subscriber: IEventSubscriber;
     private configuredTitle: boolean = true;
     private useContext: boolean = true;
     private contextListener: IContextListener;
     private prepareTitleTimeout: any;
-    private context: Context;
     private formBindingIds: Map<string, string>;
 
     public resetFilterTitle: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'table-widget');
         this.state = new ComponentState();
     }
 
     public onInput(input: ComponentInput): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
         this.configuredTitle = typeof input.title !== 'undefined';
         if (this.configuredTitle) {
@@ -75,16 +70,16 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.filterPlaceholder = await TranslationService.translate(this.state.filterPlaceholder);
         this.resetFilterTitle = await TranslationService.translate('Translatable#Reset table filters');
         this.additionalFilterCriteria = [];
-        this.context = ContextService.getInstance().getActiveContext();
 
         if (this.useContext) {
             this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         }
 
-        if (this.state.widgetConfiguration) {
+        if (this.state.widgetConfiguration?.configuration) {
             const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
 
             await this.initViews(settings?.objectType);
@@ -100,50 +95,43 @@ class Component {
             this.prepareContextDependency(settings);
             await this.prepareFormDependency();
             this.state.loading = false;
+        } else {
+            this.state.error = await TranslationService.translate(`Translatable#No widget configuration available: ${this.state.instanceId}!`);
         }
     }
 
     private async initViews(objectType: KIXObjectType | string): Promise<void> {
         const configuredWidget = await this.context?.getConfiguredWidget(this.state.instanceId);
-
-        const views = [
-            new ObjectView('table', 'Table', 'kix-icon-legend', null)
-        ];
-
-        const widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
-        const isAllowed = widgetType === WidgetType.SIDEBAR || widgetType === WidgetType.LANE;
-        if (!isAllowed && configuredWidget?.size === WidgetSize.LARGE && objectType === KIXObjectType.TICKET) {
-            const calendarView = new ObjectView('calendar', 'Calendar', 'kix-icon-calendar', 'calendar');
-            views.push(calendarView);
+        if (configuredWidget?.size === WidgetSize.SMALL) {
+            return;
         }
 
-        this.state.views = views;
-        this.state.hasViews = views.length > 1;
+        const widgetType = this.context.widgetService.getWidgetType(this.state.instanceId, this.context);
+        const views = DataViewService.getInstance().getDataViews(objectType, widgetType);
+
+        this.state.dataViews = views;
+        this.state.hasViews = views.length > 0;
 
         const prefId = `table-widget-view-${this.state.instanceId}`;
         const viewPref = await AgentService.getInstance().getUserPreference(prefId);
-        if (this.state.views.some((v) => v.id === viewPref?.Value)) {
+        if (this.state.dataViews.some((v) => v.id === viewPref?.Value)) {
             this.state.activeViewId = viewPref.Value;
         }
     }
 
-    public toggleView(view: ObjectView): void {
-        this.state.activeViewId = view?.id;
+    public toggleView(viewId: string): void {
+        this.state.activeViewId = viewId;
         const prefId = `table-widget-view-${this.state.instanceId}`;
-        AgentService.getInstance().setPreferences([[prefId, view?.id]]);
+        AgentService.getInstance().setPreferences([[prefId, viewId]]);
     }
 
     private initEventSubscriber(): void {
         const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-            eventPublished: async (data: any, eventId: string): Promise<void> => {
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
                 if (data?.tableId === this.state.table?.getTableId()) {
-                    const isdependent = this.state.widgetConfiguration.contextDependent;
                     if (eventId === TableEvent.TABLE_FILTERED) {
                         this.state.showFilterReset = this.state.table.isFiltered();
-                    } else if (eventId === TableEvent.COLUMN_FILTERED && isdependent) {
-                        this.setFilteredObjectListToContext();
                     } else if (eventId === TableEvent.RELOADED) {
                         this.state.showFilterReset = this.state.table.isFiltered();
                         if (
@@ -172,22 +160,42 @@ class Component {
                             this.setObjectList();
                             this.prepareTitle();
                         }
-                        WidgetService.getInstance().updateActions(this.state.instanceId);
+                        this.context.widgetService.updateActions(this.state.instanceId);
                     }
-                } else if (
-                    eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED
-                    && this.formBindingIds.size
-                ) {
-                    this.addFormBindings();
                 }
+            },
+            [
+                TableEvent.TABLE_READY,
+                TableEvent.ROW_SELECTION_CHANGED,
+                TableEvent.RELOADED,
+                TableEvent.TABLE_FILTERED
+            ]
+        );
 
-            }
-        };
-
-        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.RELOADED, this.subscriber);
-        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this.subscriber);
+        // tables in AdminContext dont get objectLists from context, but have to react when
+        // relevant object type has changes
+        const isContextDependent = this.state.widgetConfiguration.contextDependent ||
+            this.state.widgetConfiguration.contextObjectDependent;
+        if (!isContextDependent && this.context instanceof AdminContext) {
+            super.registerEventSubscriber(
+                async function (data: any, eventId: string): Promise<void> {
+                    let objectType = data?.objectType;
+                    if (!objectType && data instanceof BackendNotification) {
+                        objectType = NotificationHandler.getObjectType(data.Namespace);
+                    }
+                    if (objectType === this.objectType) {
+                        this.state.loading = true;
+                        await this.reloadTable(settings);
+                        setTimeout(() => this.state.loading = false, 50);
+                    }
+                },
+                [
+                    ApplicationEvent.OBJECT_CREATED,
+                    ApplicationEvent.OBJECT_UPDATED,
+                    ApplicationEvent.OBJECT_DELETED
+                ]
+            );
+        }
     }
 
     private async prepare(): Promise<void> {
@@ -211,7 +219,7 @@ class Component {
     }
 
     private prepareContextDependency(settings: TableWidgetConfiguration): void {
-        const isContextDependend = this.state.widgetConfiguration.contextDependent ||
+        const isContextDependent = this.state.widgetConfiguration.contextDependent ||
             this.state.widgetConfiguration.contextObjectDependent;
 
         this.contextListener = {
@@ -220,12 +228,12 @@ class Component {
             objectChanged: (
                 objectId: number, object: KIXObject, objectType: KIXObjectType | string
             ): void => {
-                if (isContextDependend && objectType === this.objectType) {
+                if (isContextDependent && objectType === this.objectType) {
                     this.reloadTable(settings);
                 }
             },
             objectListChanged: async (objectType: KIXObjectType | string): Promise<void> => {
-                if (isContextDependend && objectType === this.objectType) {
+                if (isContextDependent && objectType === this.objectType) {
                     this.state.loading = true;
                     await this.reloadTable(settings);
                     setTimeout(() => this.state.loading = false, 50);
@@ -242,33 +250,55 @@ class Component {
             }
         };
 
-        EventService.getInstance().subscribe(TableEvent.COLUMN_FILTERED, this.subscriber);
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
+                if (data?.tableId === this.state.table?.getTableId()) {
+                    const isdependent = this.state.widgetConfiguration.contextDependent;
+                    if (eventId === TableEvent.COLUMN_FILTERED && isdependent) {
+                        this.setFilteredObjectListToContext();
+                    } else {
+                        this.context.widgetService.updateActions(this.state.instanceId);
+                    }
+                }
+            },
+            [TableEvent.COLUMN_FILTERED]
+        );
 
-        const context = ContextService.getInstance().getActiveContext();
-        context.registerListener('table-widget-' + this.state.instanceId, this.contextListener);
+        this.context?.registerListener('table-widget-' + this.state.instanceId, this.contextListener);
     }
 
     private async reloadTable(settings: TableWidgetConfiguration): Promise<void> {
-        const activeContext = ContextService.getInstance().getActiveContext();
-        if (this.context.instanceId === activeContext.instanceId) {
-            if (this.state.table?.isFiltered()) {
-                if (settings?.resetFilterOnReload && !this.state.table.isBackendFilterSupported()) {
-                    this.state.table.resetFilter();
-                    const filterComponent = (this as any).getComponent('table-widget-filter');
-                    filterComponent?.reset();
-                } else {
-                    this.state.filterValue = this.state.table.getFilterValue();
-                }
+        if (this.state.table?.isFiltered()) {
+            if (settings?.resetFilterOnReload && !this.state.table.isBackendFilterSupported()) {
+                this.state.table.resetFilter();
+                const filterComponent = (this as any).getComponent('table-widget-filter');
+                filterComponent?.reset();
+            } else {
+                this.state.filterValue = this.state.table.getFilterValue();
             }
-
-            await this.prepare();
         }
+
+        await this.prepare();
     }
 
     private async prepareFormDependency(): Promise<void> {
         if (this.state.widgetConfiguration.formDependent) {
             this.formBindingIds = new Map();
-            EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
+            super.registerEventSubscriber(
+                async function (data: any, eventId: string): Promise<void> {
+                    if (data?.tableId === this.state.table?.getTableId()) {
+                        this.context.widgetService.updateActions(this.state.instanceId);
+                    } else if (
+                        eventId === ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED
+                        && this.formBindingIds.size
+                    ) {
+                        if (data.contextInstanceId === this.contextInstanceId) {
+                            this.addFormBindings();
+                        }
+                    }
+                },
+                [ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED]
+            );
             // add bindings if mapper already initialized
             await this.addFormBindings();
         }
@@ -325,23 +355,9 @@ class Component {
     }
 
     public onDestroy(): void {
-        WidgetService.getInstance().unregisterActions(this.state.instanceId);
-
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.RELOADED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.RELOAD, this.subscriber);
-        EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.COLUMN_FILTERED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this.subscriber);
-
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.unregisterListener('table-widget-' + this.state.instanceId);
-        }
+        super.onDestroy();
+        this.context.widgetService.unregisterActions(this.state.instanceId);
+        this.context?.unregisterListener('table-widget-' + this.state.instanceId);
     }
 
     private async prepareHeader(): Promise<void> {
@@ -385,7 +401,7 @@ class Component {
             }
 
             if (!this.configuredTitle) {
-                let title = WidgetService.getInstance().getWidgetTitle(this.state.instanceId);
+                let title = this.context.widgetService.getWidgetTitle(this.state.instanceId);
                 if (!title) {
                     title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
                 }
@@ -401,16 +417,13 @@ class Component {
         const tableConfiguration = settings?.configuration as TableConfiguration;
         if (settings?.objectType || tableConfiguration?.objectType) {
             this.objectType = tableConfiguration?.objectType || settings.objectType;
-            const context = ContextService.getInstance().getActiveContext();
-            const contextId = this.state.widgetConfiguration.contextDependent
-                ? context.contextId
-                : null;
 
             const table = await TableFactoryService.getInstance().createTable(
                 `table-widget-${this.state.instanceId}`, this.objectType,
-                tableConfiguration, null, contextId, true,
+                tableConfiguration, null, this.contextInstanceId, true,
                 tableConfiguration ? tableConfiguration.toggle : true,
-                settings.shortTable, false, !settings.cache
+                settings.shortTable, false, !settings.cache, null,
+                this.state.widgetConfiguration.contextDependent
             );
 
             const tableState = table?.loadTableState();
@@ -436,10 +449,10 @@ class Component {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, this.state.table
+                this.state.widgetConfiguration.actions, this.state.table, this.context.instanceId
             );
 
-            WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
+            this.context.widgetService.registerActions(this.state.instanceId, this.state.actions);
         }
     }
 
@@ -484,7 +497,7 @@ class Component {
     }
 
     public getTemplate(componentId: string): any {
-        return KIXModulesService.getComponentTemplate(componentId);
+        return componentId ? KIXModulesService.getComponentTemplate(componentId) : null;
     }
 
     public getTable(): Table {

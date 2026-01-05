@@ -14,6 +14,7 @@ import { Table } from '../../../table/model/Table';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { User } from '../../../user/model/User';
+import { UserProperty } from '../../../user/model/UserProperty';
 import { AbstractAction } from './AbstractAction';
 import { ApplicationEvent } from './ApplicationEvent';
 import { ComponentContent } from './ComponentContent';
@@ -31,6 +32,7 @@ export class ResetUserContextWidgetListAction extends AbstractAction<Table | Use
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Reset User Widgets';
         this.icon = 'fas fa-user-times';
     }
@@ -91,8 +93,9 @@ export class ResetUserContextWidgetListAction extends AbstractAction<Table | Use
         });
 
         for (const userId of userIds) {
+            const preference = { ID: PersonalSettingsProperty.CONTEXT_WIDGET_LISTS, Value: null };
             await KIXObjectService.updateObject(
-                KIXObjectType.USER, [[PersonalSettingsProperty.CONTEXT_WIDGET_LISTS, null]], userId
+                KIXObjectType.USER, [[UserProperty.PREFERENCES, [preference]]], userId
             );
         }
 

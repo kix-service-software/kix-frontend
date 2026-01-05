@@ -67,6 +67,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
         if (canGeneralCatalog) {
             properties.push([ConfigItemProperty.CUR_DEPL_STATE_ID, null]);
             properties.push([ConfigItemProperty.CUR_INCI_STATE_ID, null]);
+            properties.push([ConfigItemProperty.DEPL_STATE_TYPE, null]);
         }
 
         if (await this.checkReadPermissions('system/users')) {
@@ -137,6 +138,8 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             operations = stringOperators;
         } else if (property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH) {
             operations = [SearchOperator.EQUALS];
+        } else if (property === ConfigItemProperty.DEPL_STATE_TYPE) {
+            operations = [SearchOperator.IN, SearchOperator.NOT_IN];
         } else if (this.isDropDown(property)) {
             operations = numberOperators;
         } else if (this.isDateTime(property)) {
@@ -221,7 +224,8 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             || property === ConfigItemProperty.CLASS_ID
             || property === KIXObjectProperty.CREATE_BY
             || property === KIXObjectProperty.CHANGE_BY
-            || property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH;
+            || property === ConfigItemProperty.PREVIOUS_VERSION_SEARCH
+            || property === ConfigItemProperty.DEPL_STATE_TYPE;
     }
 
     private isDateTime(property: string): boolean {
@@ -229,7 +233,9 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             || property === KIXObjectProperty.CHANGE_TIME;
     }
 
-    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, objectIds?: Array<string | number>, operator?: string
+    ): Promise<TreeNode[]> {
         const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
@@ -238,6 +244,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CHANGE_BY:
             case ConfigItemProperty.PREVIOUS_VERSION_SEARCH:
+            case ConfigItemProperty.DEPL_STATE_TYPE:
                 return await CMDBService.getInstance().getTreeNodes(property, showInvalid, showInvalid);
             default:
                 const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);
@@ -267,15 +274,14 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
                         return await KIXObjectService.prepareTree(items, showInvalid, showInvalid);
                     } else if (input.Type === 'TeamReference') {
                         const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(
-                            false, null, ['READ'], objectIds ? objectIds.map((oid) => Number(oid)) : null
+                            null, ['READ'], objectIds ? objectIds.map((oid) => Number(oid)) : null
                         );
                         return await QueueService.getInstance().prepareObjectTree(
                             queuesHierarchy, showInvalid, showInvalid
                         );
                     } else {
-
                         // use type rather than property
-                        return await super.getTreeNodes(input.Type);
+                        return await super.getTreeNodes(input.Type, objectIds, operator);
                     }
                 }
         }

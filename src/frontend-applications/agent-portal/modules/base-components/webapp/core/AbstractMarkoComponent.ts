@@ -7,23 +7,84 @@
  * --
  */
 
-import { IMarkoComponent } from './IMarkoComponent';
 import { AbstractComponentState } from './AbstractComponentState';
+import { Context } from '../../../../model/Context';
+import { ContextService } from './ContextService';
+import { EventService } from './EventService';
+import { IEventSubscriber } from './IEventSubscriber';
+import { IdService } from '../../../../../../frontend-applications/agent-portal/model/IdService';
+import { IMarkoComponent } from './IMarkoComponent';
+import { ObjectFormConfigurationContext } from '../../../object-forms/webapp/core/ObjectFormConfigurationContext';
 
-export abstract class AbstractMarkoComponent<CS = AbstractComponentState, I = any> implements IMarkoComponent<CS, I> {
+// eslint-disable-next-line max-len
+export abstract class AbstractMarkoComponent<CS extends AbstractComponentState = AbstractComponentState, C extends Context = Context> implements IMarkoComponent<CS, any> {
 
+    private instanceId: string;
+    private eventSubscriberPrefix: string;
+    private eventSubscriberId: string;
     public state: CS;
+    protected context: C;
+    protected contextInstanceId: string;
 
-    public onCreate(input: I): void {
-        return;
+    public onCreate(input: any, eventSubscriberPrefix: string = ''): void {
+        this.eventSubscriberPrefix = eventSubscriberPrefix;
+
+        this.instanceId = IdService.generateDateBasedId();
+
+        if (input.contextInstanceId) {
+            AbstractMarkoComponent.prototype.setComponentContext.call(
+                this,
+                ContextService.getInstance().getContext(input.contextInstanceId)
+            );
+        }
+
+        if (!this.eventSubscriberId) {
+            this.eventSubscriberId = this.eventSubscriberPrefix + this.instanceId;
+        }
+
+        if (typeof this.prepareMount !== 'function') {
+            this.prepareMount = AbstractMarkoComponent.prototype.prepareMount.bind(this);
+        }
     }
 
-    public onInput(input: I): void {
+    public onInput(input: any): void {
         return;
     }
 
     public async onMount(): Promise<void> {
-        return;
+        if (!this.contextInstanceId) {
+            let DOMElement = (this as any).getEl();
+            if (!DOMElement) {
+                // TODO: find generic fallback solution if component itself has no regular html-tag (e.g. tab-widget)
+                // e.g. by parent element
+                // or a child element
+                // - if child is already finished (its onMount) => getEl would have returned it already
+                // - but if "this" only shows it after "prepared = true" something similar it still returns undefined
+                // or maybe "split" this.id (would container the keys of parents elements - see router-outlet)
+
+            }
+            if (DOMElement) {
+                const componentContainer = DOMElement.closest('[data-contextinstanceid]');
+                if (componentContainer?.dataset?.contextinstanceid) {
+                    AbstractMarkoComponent.prototype.setComponentContext.call(
+                        this,
+                        ContextService.getInstance().getContext(componentContainer.dataset.contextinstanceid)
+                    );
+                }
+            }
+        }
+
+        if (!this.context) {
+            AbstractMarkoComponent.prototype.setComponentContext.call(
+                this, ContextService.getInstance().getActiveContext()
+            );
+        }
+
+        if (this.state) {
+            this.state.isConfigContext = this.context?.contextId === ObjectFormConfigurationContext.CONTEXT_ID;
+        }
+
+        await this.prepareMount();
     }
 
     public onUpdate(): void {
@@ -31,7 +92,41 @@ export abstract class AbstractMarkoComponent<CS = AbstractComponentState, I = an
     }
 
     public onDestroy(): void {
+        EventService.getInstance().unsubscribeSubscriber(this.eventSubscriberId);
+    }
+
+    protected async prepareMount(): Promise<void> {
         return;
     }
 
+    protected setComponentContext(context: C): void {
+        if (context?.instanceId !== this.contextInstanceId) {
+            const oldEventSubscriberId = this.eventSubscriberId;
+
+            this.context = context;
+            this.contextInstanceId = context.instanceId;
+            this.eventSubscriberId = this.eventSubscriberPrefix + this.contextInstanceId + '-' + this.instanceId;
+
+            if (oldEventSubscriberId) {
+                EventService.getInstance().renameSubscriber(oldEventSubscriberId, this.eventSubscriberId);
+            }
+        }
+    }
+
+    protected registerEventSubscriber(
+        eventPublished: (data: any, eventId: string, subscriberId?: string) => void,
+        events: string[]
+    ): void {
+        const eventSubscriber: IEventSubscriber = {
+            eventSubscriberId: this.eventSubscriberId,
+            eventPublished: eventPublished.bind(this)
+        };
+        for (let event of events) {
+            EventService.getInstance().subscribe(event, eventSubscriber);
+        }
+    }
+
+    protected getEventSubscriberId(): string {
+        return this.eventSubscriberId;
+    }
 }

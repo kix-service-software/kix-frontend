@@ -19,6 +19,7 @@ export class ContactCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#New Contact';
         this.icon = 'kix-icon-man-bubble-new';
     }

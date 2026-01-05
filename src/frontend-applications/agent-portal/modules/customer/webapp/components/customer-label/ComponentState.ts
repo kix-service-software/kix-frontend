@@ -10,8 +10,9 @@
 import { ILabelProvider } from '../../../../../modules/base-components/webapp/core/ILabelProvider';
 import { Organisation } from '../../../model/Organisation';
 import { Contact } from '../../../model/Contact';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public labelProvider: ILabelProvider<Organisation | Contact> = null,
@@ -20,6 +21,8 @@ export class ComponentState {
         public propertyText: string = null,
         public displayText: string = null,
         public title: string = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

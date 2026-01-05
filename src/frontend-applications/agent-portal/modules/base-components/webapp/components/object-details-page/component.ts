@@ -10,43 +10,24 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
-import { Context } from '../../../../../model/Context';
+import { ContextService } from '../../core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-    private context: Context;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-details-page');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
-        this.subscriber = {
-            eventSubscriberId: 'object-details',
-            eventPublished: (data: any, eventId: string): void => {
-                if (eventId === ApplicationEvent.OBJECT_UPDATED) {
-                    if (data.objectType === this.context.descriptor.kixObjectTypes[0]) {
-                        this.prepareWidget();
-                        this.prepareActions();
-                    }
-                }
-            }
-        };
-        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
-        EventService.getInstance().subscribe(ApplicationEvent.CONFIGURATIONS_RELOADED, this.subscriber);
-
-        this.update();
+        await super.onMount();
+        await this.update();
+        this.state.prepared = true;
     }
 
     private async update(): Promise<void> {
@@ -56,9 +37,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
-        WidgetService.getInstance().unregisterActions(this.state.instanceId);
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
-        EventService.getInstance().unsubscribe(ApplicationEvent.CONFIGURATIONS_RELOADED, this.subscriber);
+        super.onDestroy();
+        this.context.widgetService.unregisterActions(this.state.instanceId);
     }
 
     private async prepareConfigurations(): Promise<void> {
@@ -105,14 +85,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (config && object) {
 
             const objectActions = await this.context?.getAdditionalActions();
-            const configuredActions = await ActionFactory.getInstance().generateActions(config.actions, object);
+            const configuredActions = await ActionFactory.getInstance().generateActions(
+                config.actions, object, this.contextInstanceId
+            );
             this.state.actions = [...objectActions, ...configuredActions];
 
             const generalActions = await ActionFactory.getInstance().generateActions(
-                config.generalActions, object
+                config.generalActions, object, this.contextInstanceId
             );
 
-            WidgetService.getInstance().registerActions(this.state.instanceId, generalActions);
+            this.context.widgetService.registerActions(this.state.instanceId, generalActions);
         }
     }
 
@@ -125,6 +107,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return WidgetType.LANE;
     }
 
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

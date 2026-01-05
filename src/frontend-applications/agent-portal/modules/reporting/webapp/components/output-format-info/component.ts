@@ -7,25 +7,27 @@
  * --
  */
 
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ComponentState } from './ComponentState';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.data = input.data;
         this.state.completed = this.state.data.URL ? true : false;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Copy URL To Clipboard And Close'
         ]);
@@ -43,6 +45,10 @@ class Component {
         EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

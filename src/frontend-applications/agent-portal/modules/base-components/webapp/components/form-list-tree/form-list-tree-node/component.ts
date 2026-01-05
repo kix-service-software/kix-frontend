@@ -28,7 +28,7 @@ class TreeNodeComponent {
         this.treeId = input.treeId;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         this.state.nodeId = this.treeId + '-node-' + this.state.node.id;
         this.treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
         this.treeHandler.registerListener(

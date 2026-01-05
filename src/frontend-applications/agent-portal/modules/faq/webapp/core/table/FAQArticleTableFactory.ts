@@ -31,7 +31,7 @@ export class FAQArticleTableFactory extends TableFactory {
     public objectType: KIXObjectType | string = KIXObjectType.FAQ_ARTICLE;
 
     public async createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextInstanceId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean, objectType?: KIXObjectType | string,
         objects?: KIXObject[]
     ): Promise<Table> {
@@ -40,14 +40,14 @@ export class FAQArticleTableFactory extends TableFactory {
             tableConfiguration, defaultRouting, defaultToggle, short
         );
 
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
         const contentProvider = new FAQArticleTableContentProvider(
-            table, objectIds, tableConfiguration.loadingOptions, contextId, objects
+            table, objectIds, tableConfiguration.loadingOptions, contextInstanceId, objects
         );
 
         table.setContentProvider(contentProvider);
 
-        const tableColumns = await super.filterColumns(contextId, tableConfiguration);
+        const tableColumns = await super.filterColumns(contextInstanceId, tableConfiguration);
         table.setColumnConfiguration(tableColumns);
 
         return table;

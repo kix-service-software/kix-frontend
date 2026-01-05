@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { IdService } from '../../../../../model/IdService';
 import { MailAccount } from '../../../model/MailAccount';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -24,22 +23,23 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private contextListenerId: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         this.contextListenerId = IdService.generateDateBasedId('mail-account-info-widget-');
-        context.registerListener(this.contextListenerId, {
+        this.context?.registerListener(this.contextListenerId, {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
@@ -51,12 +51,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             additionalInformationChanged: (): void => { return; }
         });
 
-        this.initWidget(await context.getObject<MailAccount>(KIXObjectType.MAIL_ACCOUNT));
+        this.initWidget(await this.context?.getObject<MailAccount>(KIXObjectType.MAIL_ACCOUNT));
     }
 
     public onDestroy(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        context.unregisterListener(this.contextListenerId);
+        this.context?.unregisterListener(this.contextListenerId);
     }
 
     private initWidget(mailAccount: MailAccount): void {
@@ -79,7 +78,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.account) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.account]
+                this.state.widgetConfiguration.actions, [this.state.account], this.contextInstanceId
             );
         }
     }

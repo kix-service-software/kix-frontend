@@ -1,0 +1,5186 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-21 09:06+0000\n"
+"PO-Revision-Date: 2025-10-22 11:22+0000\n"
+"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"Language-Team: French <http://weblate.vm.devel.cape-it.de/projects/kix18/"
+"frontend-app/fr/>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.6.2\n"
+
+msgid "', "
+msgstr "', "
+
+msgid "(Current definition)"
+msgstr "(Définition actuelle)"
+
+msgid "(Current version)"
+msgstr "(Version actuelle)"
+
+msgid "(Last Change: {0})"
+msgstr "(Dernière modification : {0})"
+
+msgid ", (comma)"
+msgstr ", (virgule)"
+
+msgid "-> (tab)"
+msgstr "-> (onglet)"
+
+msgid ". (dot)"
+msgstr ". (point)"
+
+msgid "0 data sets found."
+msgstr "0 jeux de données trouvés."
+
+msgid ": (colon)"
+msgstr ": (deux points)"
+
+msgid "; (semicolon)"
+msgstr "; (point-virgule)"
+
+msgid "<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname> via Sender Address"
+msgstr "<KIX_CURRENT_Firstname> <KIX_CURRENT_Lastname> via Sender Address"
+
+msgid "A maximum of 1 value can be selected. (SingleSelect)"
+msgstr "Un maximum de 1 valeur peut être sélectionné. (SingleSelect)"
+
+msgid "A maximum of {0} values can be selected."
+msgstr "Un maximum de {0} valeurs peut être sélectionné."
+
+msgid "A product by KIX Service Software GmbH"
+msgstr "Un produit de KIX Service Software GmbH"
+
+msgid "A year after 2200 is not possible."
+msgstr "Une année après 2200 n'est pas possible."
+
+msgid "Aborted by user."
+msgstr "Abandonné par l'utilisateur."
+
+msgid "Accept KIX Header"
+msgstr "Accepter l'en-tête KIX"
+
+msgid "Accepted domains"
+msgstr "Domaines acceptés"
+
+msgid "Access"
+msgstr "Accès"
+
+msgid "Access Level"
+msgstr "Niveau d'accès"
+
+msgid "Access denied"
+msgstr "Accès refusé"
+
+msgid "Account Information"
+msgstr "Informations sur le compte"
+
+msgid "Account time has to be an integer."
+msgstr "L'heure du compte doit être un nombre entier."
+
+msgid "Accounted Time"
+msgstr "Temps comptabilisé"
+
+msgid "Accounted Time: {0}"
+msgstr "Temps comptabilisé : {0}"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Activate dependency to organisation"
+msgstr "Activer la dépendance à l'égard de l'organisation"
+
+msgid "Add"
+msgstr "Ajouter"
+
+msgid "Add CI Class"
+msgstr "Ajouter une classe CI"
+
+msgid "Add Column(s)"
+msgstr "Ajouter une (des) colonne(s)"
+
+msgid "Add Field"
+msgstr "Ajouter un champ"
+
+msgid "Add Table Widget"
+msgstr "Ajouter un widget de tableau"
+
+msgid "Add Widget"
+msgstr "Ajouter un widget"
+
+msgid "Add email account for incoming mails"
+msgstr "Ajouter un compte de messagerie pour les courriers entrants"
+
+msgid "Add initial table"
+msgstr "Ajouter un tableau initial"
+
+msgid "Add new Links"
+msgstr "Ajouter de nouveaux liens"
+
+msgid "Add to Affected Assets"
+msgstr "Ajouter aux actifs affectés"
+
+msgid "Additional recipients"
+msgstr "Bénéficiaires supplémentaires"
+
+msgid "Address successfully removed."
+msgstr "Adresse supprimée avec succès."
+
+msgid "Admin"
+msgstr "Administrateur"
+
+msgid "Admin Manual"
+msgstr "Manuel d'administration"
+
+msgid "Admin Password"
+msgstr "Mot de passe administrateur"
+
+msgid "Admin: {0}"
+msgstr "Admin : {0}"
+
+msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
+msgstr "Admin_DynamicFieldDateTime_DefaultValue_Description"
+
+msgid "Admin_DynamicField_Config_CIRef_DeploymentStates"
+msgstr "Admin_DynamicField_Config_CIRef_DeploymentStates (États de déploiement)"
+
+msgid "Admin_DynamicField_Config_CIRef_IncidentStates"
+msgstr "Admin_DynamicField_Config_CIRef_IncidentStates"
+
+msgid "Admin_DynamicField_Config_CountDefault"
+msgstr "Admin_DynamicField_Config_CountDefault"
+
+msgid "Admin_DynamicField_Config_CountMax"
+msgstr "Admin_DynamicField_Config_CountMax"
+
+msgid "Admin_DynamicField_Config_CountMin"
+msgstr "Admin_DynamicField_Config_CountMin"
+
+msgid "Admin_DynamicField_Config_ItemSeparator"
+msgstr "Admin_DynamicField_Config_ItemSeparator"
+
+msgid "Admin_DynamicField_Config_RegexList"
+msgstr "Admin_DynamicField_Config_RegexList"
+
+msgid "Admin_DynamicField_Config_Table_RowsInit"
+msgstr "Admin_DynamicField_Config_Table_RowsInit"
+
+msgid "Admin_DynamicField_Config_Table_RowsMax"
+msgstr "Admin_DynamicField_Config_Table_RowsMax"
+
+msgid "Admin_DynamicField_Config_Table_RowsMin"
+msgstr "Admin_DynamicField_Config_Table_RowsMin"
+
+msgid "Admin_DynamicField_Config_Value"
+msgstr "Valeur du champ Admin_DynamicField_Config_Value"
+
+msgid "Admin_DynamicField_Edit_Name_Hint"
+msgstr "Admin_DynamicField_Edit_Name_Hint"
+
+msgid "Administration"
+msgstr "Administration"
+
+msgid "Advanced"
+msgstr "Avancé"
+
+msgid "Advanced Options:"
+msgstr "Options avancées :"
+
+msgid "Affected Assets"
+msgstr "Actifs concernés"
+
+msgid "Affected Services"
+msgstr "Services concernés"
+
+msgid "Age"
+msgstr "L'âge"
+
+msgid "Agent"
+msgstr "Agent"
+
+msgid "Agent Assignment"
+msgstr "Affectation des agents"
+
+msgid "Agent Login"
+msgstr "Connexion de l'agent"
+
+msgid "Agent Portal"
+msgstr "Portail des agents"
+
+msgid "Agent Preferences Tooltip"
+msgstr "Infobulle des préférences de l'agent"
+
+msgid "Agents"
+msgstr "Agents"
+
+msgid "All"
+msgstr "Tous"
+
+msgid "All Objects"
+msgstr "Tous les objets"
+
+msgid "All agents subscribed to the tickets queue"
+msgstr "Tous les agents abonnés à la file d'attente des tickets"
+
+msgid "All agents watching this ticket"
+msgstr "Tous les agents qui regardent ce ticket"
+
+msgid "All agents with read permissions for the ticket"
+msgstr "Tous les agents ayant des droits de lecture sur le ticket"
+
+msgid "All agents with update permission for the ticket"
+msgstr "Tous les agents ayant le droit de mettre à jour le ticket"
+
+msgid "All form fields marked by * are required fields."
+msgstr "Tous les champs du formulaire marqués d'un * sont obligatoires."
+
+msgid "All free tickets"
+msgstr "Tous les billets gratuits"
+
+msgid "All open tabs will be closed. Continue?"
+msgstr "Tous les onglets ouverts seront fermés. Poursuivre ?"
+
+msgid "All tickets"
+msgstr "Tous les billets"
+
+msgid "Allow access to admin module"
+msgstr "Autoriser l'accès au module d'administration"
+
+msgid "Always close dialog tab without asking"
+msgstr "Fermez toujours l'onglet de dialogue sans demander"
+
+msgid "An error occured during export execution. See system log for details."
+msgstr ""
+"Une erreur s'est produite pendant l'exécution de l'exportation. Voir le "
+"journal du système pour plus de détails."
+
+msgid "An error occured during import start execution. See system log for details."
+msgstr ""
+"Une erreur s'est produite pendant l'exécution du démarrage de l'importation. "
+"Voir le journal du système pour plus de détails."
+
+msgid "An error occured during job execution. See system log for details."
+msgstr ""
+"Une erreur s'est produite pendant l'exécution du travail. Voir le journal du "
+"système pour plus de détails."
+
+msgid "An error occured during report creation. See system log for details."
+msgstr ""
+"Une erreur s'est produite lors de la création du rapport. Voir le journal du "
+"système pour plus de détails."
+
+msgid "An error occurred."
+msgstr "Une erreur s'est produite."
+
+msgid "Any data you have entered will be lost. Continue?"
+msgstr "Toutes les données que vous avez saisies seront perdues. Poursuivre ?"
+
+msgid "Append Values"
+msgstr "Ajouter des valeurs"
+
+msgid "Append Values - Regex"
+msgstr "Ajouter des valeurs - Regex"
+
+msgid "Append Values - Roles"
+msgstr "Ajouter des valeurs - Rôles"
+
+msgid "Apply"
+msgstr "Appliquer"
+
+msgid "Approved"
+msgstr "Approuvé"
+
+msgid "Archived"
+msgstr "Archivé"
+
+msgid "Article"
+msgstr "Article"
+
+msgid "Article Create Time"
+msgstr "Article Créer du temps"
+
+msgid "Article Data"
+msgstr "Données de l'article"
+
+msgid "Article Id"
+msgstr "Article Id"
+
+msgid "Article Text"
+msgstr "Texte de l'article"
+
+msgid "Article has printed"
+msgstr "L'article a été imprimé"
+
+msgid "Asset"
+msgstr "Actif"
+
+msgid "Asset Class Details"
+msgstr "Détails de la classe d'actifs"
+
+msgid "Asset Classes"
+msgstr "Classes d'actifs"
+
+msgid "Asset Dashboard"
+msgstr "Tableau de bord des actifs"
+
+msgid "Asset Graph"
+msgstr "Graphique des actifs"
+
+msgid "Asset has printed"
+msgstr "L'actif a été imprimé"
+
+msgid "Assets"
+msgstr "Actifs"
+
+msgid "Assets: General Catalog"
+msgstr "Actifs : Catalogue général"
+
+msgid "Assets: Import/Export"
+msgstr "Actifs : Importation/exportation"
+
+msgid "Assign Link"
+msgstr "Attribuer un lien"
+
+msgid "Assign Links"
+msgstr "Attribuer des liens"
+
+msgid "Assign Team / Queue"
+msgstr "Affecter une équipe / une file d'attente"
+
+msgid "Assigned Agents"
+msgstr "Agents assignés"
+
+msgid "Assigned Assets"
+msgstr "Actifs affectés"
+
+msgid "Assigned Contacts"
+msgstr "Contacts assignés"
+
+msgid "Assigned Organisation"
+msgstr "Organisation assignée"
+
+msgid "Assigned Organisations"
+msgstr "Organisations assignées"
+
+msgid "Assigned Roles"
+msgstr "Rôles attribués"
+
+msgid "Assigned Tickets"
+msgstr "Billets attribués"
+
+msgid "Assigned agent"
+msgstr "Agent désigné"
+
+msgid "Assignees"
+msgstr "Destinataires"
+
+msgid "At least one link could not be saved."
+msgstr "Au moins un lien n'a pas pu être sauvegardé."
+
+msgid "At least {0} values must be selected"
+msgstr "Au moins {0} valeurs doivent être sélectionnées"
+
+msgid "Attachment Name"
+msgstr "Nom de la pièce jointe"
+
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgid "Attribute"
+msgstr "Attribut"
+
+msgid "Attributes"
+msgstr "Attributs"
+
+msgid "Attributes to be edited"
+msgstr "Attributs à modifier"
+
+msgid "Authorization URL"
+msgstr "URL d'autorisation"
+
+msgid "Automation"
+msgstr "Automatisation"
+
+msgid "Automation: Jobs"
+msgstr "Automatisation : Emplois"
+
+msgid "Automation: Notifications"
+msgstr "Automatisation : Notifications"
+
+msgid "Available Dashboard Widgets"
+msgstr "Widgets du tableau de bord disponibles"
+
+msgid "Available Output Formats"
+msgstr "Formats de sortie disponibles"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Backend"
+msgstr "Backend"
+
+msgid "Based on class definition"
+msgstr "Basé sur la définition de la classe"
+
+msgid "Bcc"
+msgstr "Cci"
+
+msgid "Begin of Business Day"
+msgstr "Début du jour ouvrable"
+
+msgid "Body"
+msgstr "Corps"
+
+msgid "Bulk"
+msgstr "En vrac"
+
+msgid "Bulk Action"
+msgstr "Action en bloc"
+
+msgid "Bulk Action: {0}"
+msgstr "Action en bloc : {0}"
+
+msgid "Bulk Print"
+msgstr "Impression en masse"
+
+msgid "CI Class"
+msgstr "Classe CI"
+
+msgid "CI Class Definition"
+msgstr "Définition de la classe CI"
+
+msgid "CI Class Definitions"
+msgstr "Définitions des classes de CI"
+
+msgid "CI Class Information"
+msgstr "Informations sur la classe CI"
+
+msgid "CI Classes"
+msgstr "Classes CI"
+
+msgid "CMDB"
+msgstr "CMDB"
+
+msgid "CMDB Explorer"
+msgstr "CMDB Explorer"
+
+msgid "CMDB: CI Classes"
+msgstr "CMDB : Classes CI"
+
+msgid "CNO"
+msgstr "CNO"
+
+msgid "CSV-Export"
+msgstr "Exportation CSV"
+
+msgid "CW"
+msgstr "CW"
+
+msgid "Can not create link ({0})"
+msgstr "Impossible de créer un lien ({0})"
+
+msgid "Can not use file (file is empty)."
+msgstr "Impossible d'utiliser le fichier (le fichier est vide)."
+
+msgid "Can not use file (missing required properties):"
+msgstr "Impossible d'utiliser le fichier (propriétés manquantes) :"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Category"
+msgstr "Catégorie"
+
+msgid "Cause"
+msgstr "Cause"
+
+msgid "Cc"
+msgstr "Cc"
+
+msgid "Change Admin Password"
+msgstr "Modifier le mot de passe administrateur"
+
+msgid "Change Password"
+msgstr "Modifier le mot de passe"
+
+msgid "Change sort direction"
+msgstr "Changer le sens du tri"
+
+msgid "Change to"
+msgstr "Passer à"
+
+msgid "Change to date picker"
+msgstr "Modification du sélecteur de date"
+
+msgid "Change to placeholder"
+msgstr "Remplacer par un espace réservé"
+
+msgid "Changed"
+msgstr "Modifié"
+
+msgid "Changed at"
+msgstr "Modifié à"
+
+msgid "Changed by"
+msgstr "Modifié par"
+
+msgid "Changes cannot be saved. How do you want to proceed?"
+msgstr ""
+"Les modifications ne peuvent pas être sauvegardées. Comment voulez-vous "
+"procéder ?"
+
+msgid "Changes saved."
+msgstr "Changements sauvegardés."
+
+msgid "Channel"
+msgstr "Chaîne"
+
+msgid "Channels"
+msgstr "Canaux"
+
+msgid "Charset"
+msgstr "Jeu de caractères"
+
+msgid "Checklist Item"
+msgstr "Élément de la liste de contrôle"
+
+msgid "Checklist State"
+msgstr "État de la liste de contrôle"
+
+msgid "Checklists"
+msgstr "Listes de contrôle"
+
+msgid "Child Tickets"
+msgstr "Billets pour enfants"
+
+msgid "Choose a command"
+msgstr "Choisir une commande"
+
+msgid "City"
+msgstr "Ville"
+
+msgid "Class"
+msgstr "Classe"
+
+msgid "Class Definition"
+msgstr "Définition de la classe"
+
+msgid "Classes"
+msgstr "Classes"
+
+msgid "Clear"
+msgstr "Clair"
+
+msgid "Clear in mask"
+msgstr "Clair dans le masque"
+
+msgid "Client ID"
+msgstr "Identifiant du client"
+
+msgid "Client Secret"
+msgstr "Secret du client"
+
+msgid "Close"
+msgstr "Fermer"
+
+msgid "Close Overlay"
+msgstr "Fermer la superposition"
+
+msgid "Close Sidebars"
+msgstr "Fermer les barres latérales"
+
+msgid "Close all open tabs"
+msgstr "Fermer tous les onglets ouverts"
+
+msgid "Closed"
+msgstr "Fermé"
+
+msgid "Closed at"
+msgstr "Fermé à"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Collapse All"
+msgstr "Réduire tout"
+
+msgid "Collapse all"
+msgstr "Tout fermer"
+
+msgid "Column Icon"
+msgstr "Icône de colonne"
+
+msgid "Column Title"
+msgstr "Titre de la colonne"
+
+msgid "Columns"
+msgstr "Colonnes"
+
+msgid "Comment"
+msgstr "Commentaire"
+
+msgid "Communication"
+msgstr "Communication"
+
+msgid "Communication History"
+msgstr "Histoire de la communication"
+
+msgid "Communication: Email: Email Addresses"
+msgstr "Communication : Courriel : Adresses électroniques"
+
+msgid "Communication: Email: Email Filters"
+msgstr "Communication : Courriel : Filtres de courrier électronique"
+
+msgid "Communication: Email: Inbox"
+msgstr "Communication : Courriel : Boîte de réception"
+
+msgid "Communication: Email: OAuth2 Profiles"
+msgstr "Communication : Courriel : Profils OAuth2"
+
+msgid "Communication: Email: Outbox"
+msgstr "Communication : Courriel : Boîte d'envoi"
+
+msgid "Communication: Webform"
+msgstr "Communication : Formulaire Web"
+
+msgid "Community"
+msgstr "Communauté"
+
+msgid "Compact View"
+msgstr "Vue compacte"
+
+msgid "Compare"
+msgstr "Comparer"
+
+msgid "Compare Asset Versions"
+msgstr "Comparer les versions des actifs"
+
+msgid "Compare Versions"
+msgstr "Comparer les versions"
+
+msgid "Compare: {0}"
+msgstr "Comparez : {0}"
+
+msgid "Component ID"
+msgstr "ID du composant"
+
+msgid "Config Item"
+msgstr "Config Item"
+
+msgid "Config Item Class"
+msgstr "Classe d'élément de configuration"
+
+msgid "Config Item Data"
+msgstr "Données de l'élément de configuration"
+
+msgid "Config Item History"
+msgstr "Historique des éléments de configuration"
+
+msgid "Config Item ID"
+msgstr "ID de l'élément de configuration"
+
+msgid "Config Item Information"
+msgstr "Informations sur l'élément de configuration"
+
+msgid "Config Item Version Compare"
+msgstr "Config Item Version Compare"
+
+msgid "Config Items"
+msgstr "Éléments de configuration"
+
+msgid "Config Items Count: {0}"
+msgstr "Nombre d'éléments de configuration : {0}"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "Configuration Overview"
+msgstr "Aperçu de la configuration"
+
+msgid "Confirm New Password"
+msgstr "Confirmer le nouveau mot de passe"
+
+msgid "Confirm Password"
+msgstr "Confirmer le mot de passe"
+
+msgid "Console"
+msgstr "Console"
+
+msgid "Contact"
+msgstr "Contact"
+
+msgid "Contact Details"
+msgstr "Coordonnées"
+
+msgid "Contact Information"
+msgstr "Informations sur le contact"
+
+msgid "Contacts"
+msgstr "Contacts"
+
+msgid "Contained in Affected Assets"
+msgstr "Contenus dans les actifs affectés"
+
+msgid "ContentType"
+msgstr "Type de contenu"
+
+msgid "Context"
+msgstr "Contexte"
+
+msgid "Copy URL To Clipboard And Close"
+msgstr "Copier l'URL dans le presse-papiers et fermer"
+
+msgid "Copy of {0}"
+msgstr "Copie de {0}"
+
+msgid "Could not handle request."
+msgstr "Impossible de traiter la demande."
+
+msgid "Could not load file {0}."
+msgstr "Impossible de charger le fichier {0}."
+
+msgid "Count"
+msgstr "Compter"
+
+msgid "Count Default"
+msgstr "Compter Défaut"
+
+msgid "Count Max"
+msgstr "Compter Max"
+
+msgid "Count Min"
+msgstr "Compte Min"
+
+msgid "Country"
+msgstr "Pays"
+
+msgid "Create"
+msgstr "Créer"
+
+msgid "Create Article"
+msgstr "Créer un article"
+
+msgid "Create Email Account"
+msgstr "Créer un compte e-mail"
+
+msgid "Create Links"
+msgstr "Créer des liens"
+
+msgid "Create Priority"
+msgstr "Créer une priorité"
+
+msgid "Create Report"
+msgstr "Créer un rapport"
+
+msgid "Create State"
+msgstr "Créer un État"
+
+msgid "Create Superuser Account"
+msgstr "Créer un compte de superutilisateur"
+
+msgid "Create Type"
+msgstr "Créer un type"
+
+msgid "Create new search template"
+msgstr "Créer un nouveau modèle de recherche"
+
+msgid "Create the report with output format {0} and defaults?"
+msgstr ""
+"Créer le rapport avec le format de sortie {0} et les valeurs par défaut ?"
+
+msgid "Created at"
+msgstr "Créé à"
+
+msgid "Created by"
+msgstr "Créé par"
+
+msgid "Created by {0} at {1}. Last change by {2} at {3}"
+msgstr "Créé par {0} à {1}. Dernière modification par {2} à {3}"
+
+msgid "Created with Priority"
+msgstr "Créé avec priorité"
+
+msgid "Created with Queue"
+msgstr "Créé avec la file d'attente"
+
+msgid "Created with State"
+msgstr "Créé avec l'État"
+
+msgid "Created with Type"
+msgstr "Créé avec le type"
+
+msgid "Created with User"
+msgstr "Créé avec l'utilisateur"
+
+msgid "Current Definition"
+msgstr "Définition actuelle"
+
+msgid "Current Version"
+msgstr "Version actuelle"
+
+msgid "Current deployment state"
+msgstr "État actuel du déploiement"
+
+msgid "Current incident state"
+msgstr "État actuel de l'incident"
+
+msgid "Current version"
+msgstr "Version actuelle"
+
+msgid "Customer"
+msgstr "Client"
+
+msgid "Customer Login"
+msgstr "Connexion client"
+
+msgid "Customer Portal"
+msgstr "Portail clients"
+
+msgid "Customize Dashboard"
+msgstr "Personnaliser le tableau de bord"
+
+msgid "DBMS"
+msgstr "SGBD"
+
+msgid "DESC"
+msgstr "DESC"
+
+msgid "DOUBLE_QUOTES"
+msgstr "DOUBLE_QUOTES"
+
+msgid "Dashboard Refresh Interval (Minutes)"
+msgstr "Intervalle de rafraîchissement du tableau de bord (minutes)"
+
+msgid "Data Source"
+msgstr "Source des données"
+
+msgid "Data Type"
+msgstr "Type de données"
+
+msgid "Datasource"
+msgstr "Source de données"
+
+msgid "Date Restriction"
+msgstr "Restriction de date"
+
+msgid "Day(s)"
+msgstr "Jour(s)"
+
+msgid "Default"
+msgstr "Défaut"
+
+msgid "Default Queue (SysConfig)"
+msgstr "File d'attente par défaut (SysConfig)"
+
+msgid "Default Value"
+msgstr "Valeur par défaut"
+
+msgid "Default Values"
+msgstr "Valeurs par défaut"
+
+msgid "Define notification template"
+msgstr "Définir un modèle de notification"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "Delete Link"
+msgstr "Supprimer le lien"
+
+msgid "Delete Report"
+msgstr "Supprimer le rapport"
+
+msgid "Delete Report Definition"
+msgstr "Supprimer une définition de rapport"
+
+msgid "Delete Search"
+msgstr "Supprimer la recherche"
+
+msgid "Delete Webform"
+msgstr "Supprimer le formulaire Web"
+
+msgid "Delete all selected report definitions?"
+msgstr "Supprimer toutes les définitions de rapport sélectionnées ?"
+
+msgid "Delete all selected reports?"
+msgstr "Supprimer tous les rapports sélectionnés ?"
+
+msgid "Delete all selected webforms?"
+msgstr "Supprimer tous les formulaires web sélectionnés ?"
+
+msgid "Deleted"
+msgstr "Supprimé"
+
+msgid "Dependencies"
+msgstr "Dépendances"
+
+msgid "Dependency"
+msgstr "Dépendance"
+
+msgid "Deployment State"
+msgstr "État de déploiement"
+
+msgid "Deployment States"
+msgstr "États de déploiement"
+
+msgid "Deployment state"
+msgstr "État du déploiement"
+
+msgid "Deployment state type"
+msgstr "Type d'état de déploiement"
+
+msgid "Descending:"
+msgstr "Descendante :"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Detailed search results"
+msgstr "Résultats détaillés de la recherche"
+
+msgid "Disabled"
+msgstr "Handicapés"
+
+msgid "Dispatching"
+msgstr "Dispatching"
+
+msgid "Display Name"
+msgstr "Nom d'affichage"
+
+msgid "Disposition"
+msgstr "Disposition"
+
+msgid "Do not forget to replace the <YOUR_FRONTEND_HOST> placeholder (if it is not already)."
+msgstr ""
+"N'oubliez pas de remplacer le caractère générique <YOUR_FRONTEND_HOST> (s'il "
+"ne l'est pas déjà)."
+
+msgid "Done"
+msgstr "Terminé"
+
+msgid "Download"
+msgstr "Télécharger"
+
+msgid "Download Result"
+msgstr "Télécharger le résultat"
+
+msgid "Download all attachments"
+msgstr "Télécharger toutes les pièces jointes"
+
+msgid "Download log"
+msgstr "Télécharger le journal"
+
+msgid "Duplicate"
+msgstr "Duplicata"
+
+msgid "Duplicate Contact"
+msgstr "Duplicata de contact"
+
+msgid "Dynamic Field"
+msgstr "Champ dynamique"
+
+msgid "Dynamic Field Type"
+msgstr "Type de champ dynamique"
+
+msgid "Dynamic Field Types"
+msgstr "Types de champs dynamiques"
+
+msgid "Dynamic Fields"
+msgstr "Champs dynamiques"
+
+msgid "Dynamic Fields successfully removed."
+msgstr "Champs dynamiques supprimés avec succès."
+
+msgid "DynamicField"
+msgstr "Champ dynamique"
+
+msgid "Edit"
+msgstr "Editer"
+
+msgid "Edit Account"
+msgstr "Modifier le compte"
+
+msgid "Edit Address"
+msgstr "Modifier l'adresse"
+
+msgid "Edit Asset Class"
+msgstr "Modifier la classe d'actifs"
+
+msgid "Edit CI Class"
+msgstr "Modifier la classe CI"
+
+msgid "Edit Class"
+msgstr "Modifier la classe"
+
+msgid "Edit Config Item"
+msgstr "Modifier l'élément de configuration"
+
+msgid "Edit Contact"
+msgstr "Modifier le contact"
+
+msgid "Edit Dynamic Field"
+msgstr "Modifier un champ dynamique"
+
+msgid "Edit Email Address"
+msgstr "Modifier l'adresse électronique"
+
+msgid "Edit Email Filter"
+msgstr "Modifier le filtre d'emails"
+
+msgid "Edit FAQ"
+msgstr "Modifier la FAQ"
+
+msgid "Edit FAQ Article"
+msgstr "Modifier l'article de la FAQ"
+
+msgid "Edit FAQ Category"
+msgstr "Modifier la catégorie FAQ"
+
+msgid "Edit Field"
+msgstr "Modifier le champ"
+
+msgid "Edit General Catalog"
+msgstr "Editer le catalogue général"
+
+msgid "Edit Group"
+msgstr "Groupe d'édition"
+
+msgid "Edit Job"
+msgstr "Modifier l'emploi"
+
+msgid "Edit Key"
+msgstr "Touche de modification"
+
+msgid "Edit Links"
+msgstr "Modifier les liens"
+
+msgid "Edit Mail Account"
+msgstr "Modifier le compte de messagerie"
+
+msgid "Edit Mail Filter"
+msgstr "Modifier le filtre de courrier"
+
+msgid "Edit Notification"
+msgstr "Modifier la notification"
+
+msgid "Edit Objects"
+msgstr "Modifier les objets"
+
+msgid "Edit Organisation"
+msgstr "Modifier l'organisation"
+
+msgid "Edit Personal Settings"
+msgstr "Modifier les paramètres personnels"
+
+msgid "Edit Priority"
+msgstr "Modifier la priorité"
+
+msgid "Edit Profile"
+msgstr "Modifier le profil"
+
+msgid "Edit Queue"
+msgstr "Éditer la file d'attente"
+
+msgid "Edit Report"
+msgstr "Modifier le rapport"
+
+msgid "Edit Report Definition"
+msgstr "Modifier la définition du rapport"
+
+msgid "Edit Role"
+msgstr "Modifier le rôle"
+
+msgid "Edit Ruleset Macro"
+msgstr "Macro d'édition du jeu de règles"
+
+msgid "Edit Search"
+msgstr "Modifier la recherche"
+
+msgid "Edit State"
+msgstr "Editer l'État"
+
+msgid "Edit Sysconfig"
+msgstr "Modifier Sysconfig"
+
+msgid "Edit Team"
+msgstr "Équipe de rédaction"
+
+msgid "Edit Text Module"
+msgstr "Module d'édition de texte"
+
+msgid "Edit Textmodule"
+msgstr "Modifier le module de texte"
+
+msgid "Edit Ticket"
+msgstr "Modifier le ticket"
+
+msgid "Edit Translation"
+msgstr "Editer la traduction"
+
+msgid "Edit Type"
+msgstr "Modifier le type"
+
+msgid "Edit Value"
+msgstr "Editer la valeur"
+
+msgid "Edit Webform"
+msgstr "Modifier le formulaire Web"
+
+msgid "Email"
+msgstr "Courriel"
+
+msgid "Email Account"
+msgstr "Compte e-mail"
+
+msgid "Email Accounts"
+msgstr "Comptes de courrier électronique"
+
+msgid "Email Address"
+msgstr "Adresse électronique"
+
+msgid "Email Address Details"
+msgstr "Détails de l'adresse électronique"
+
+msgid "Email Address Domain"
+msgstr "Adresse électronique Domaine"
+
+msgid "Email Addresses"
+msgstr "Adresses électroniques"
+
+msgid "Email Error"
+msgstr "Erreur d'email"
+
+msgid "Email Filter"
+msgstr "Filtre de courrier électronique"
+
+msgid "Email Filter Information"
+msgstr "Informations sur le filtre de courrier électronique"
+
+msgid "Email Filters"
+msgstr "Filtres de courrier électronique"
+
+msgid "Email Header"
+msgstr "En-tête d'e-mail"
+
+msgid "Email Information"
+msgstr "Informations sur les courriels"
+
+msgid "Email Security"
+msgstr "Sécurité du courrier électronique"
+
+msgid "Email could not be sent"
+msgstr "L'email n'a pas pu être envoyé"
+
+msgid "Email1"
+msgstr "Courriel1"
+
+msgid "Email2"
+msgstr "Courriel2"
+
+msgid "Email3"
+msgstr "Courriel3"
+
+msgid "Email4"
+msgstr "Courriel4"
+
+msgid "Email5"
+msgstr "Courriel5"
+
+msgid "Empty Result Hint"
+msgstr "Résultat vide Indice"
+
+msgid "Enable attachments"
+msgstr "Activer les pièces jointes"
+
+msgid "Enabled"
+msgstr "Activé"
+
+msgid "Encrypt if possible"
+msgstr "Crypter si possible"
+
+msgid "Encrypt or do not send"
+msgstr "Chiffrer ou ne pas envoyer"
+
+msgid "End date/time is not given"
+msgstr "La date/heure de fin n'est pas indiquée"
+
+msgid "End of Business Day"
+msgstr "Fin du jour ouvrable"
+
+msgid "End time"
+msgstr "Heure de fin"
+
+msgid "End value is not given"
+msgstr "La valeur finale n'est pas indiquée"
+
+msgid "Enter search value"
+msgstr "Saisir la valeur de la recherche"
+
+msgid "Entered date-time value is invalid."
+msgstr "La date et l'heure saisies ne sont pas valides."
+
+msgid "Envelope From"
+msgstr "Enveloppe De"
+
+msgid "Error"
+msgstr "Erreur"
+
+msgid "Error on create:"
+msgstr "Erreur lors de la création :"
+
+msgid "Error on form page validation:"
+msgstr "Erreur lors de la validation de la page du formulaire :"
+
+msgid "Error on form validation:"
+msgstr "Erreur lors de la validation du formulaire :"
+
+msgid "Error on update:"
+msgstr "Erreur lors de la mise à jour :"
+
+msgid "Error while adding the attachement:"
+msgstr "Erreur lors de l'ajout de la pièce jointe :"
+
+msgid "Error while adding the image:"
+msgstr "Erreur lors de l'ajout de l'image :"
+
+msgid "Error while deleting Report Definition."
+msgstr "Erreur lors de la suppression d'une définition de rapport."
+
+msgid "Error while deleting Report."
+msgstr "Erreur lors de la suppression du rapport."
+
+msgid "Error while deleting Webform."
+msgstr "Erreur lors de la suppression d'un formulaire Web."
+
+msgid "Error!"
+msgstr "Erreur !"
+
+msgid "Escalated Tickets"
+msgstr "Tickets escaladés"
+
+msgid "Event"
+msgstr "Événement"
+
+msgid "Event Based"
+msgstr "Basé sur les événements"
+
+msgid "Event Based Execution"
+msgstr "Exécution basée sur les événements"
+
+msgid "Events"
+msgstr "Evénements"
+
+msgid "Execute"
+msgstr "Exécuter"
+
+msgid "Execute now"
+msgstr "Exécuter maintenant"
+
+msgid "Execute now?"
+msgstr "Exécuter maintenant ?"
+
+msgid "Execution Plan"
+msgstr "Plan d'exécution"
+
+msgid "Existing Links ({0})"
+msgstr "Liens existants ({0})"
+
+msgid "Exit KIX without asking"
+msgstr "Quitter KIX sans demander"
+
+msgid "Expand All"
+msgstr "Tout développer"
+
+msgid "Explorer"
+msgstr "Explorateur"
+
+msgid "Export"
+msgstr "Exportation"
+
+msgid "Export data"
+msgstr "Exporter des données"
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "FAQ Article"
+msgstr "Article de la FAQ"
+
+msgid "FAQ Article History"
+msgstr "FAQ Historique des articles"
+
+msgid "FAQ Articles successfully removed."
+msgstr "Les articles de la FAQ ont été supprimés avec succès."
+
+msgid "FAQ Attributes"
+msgstr "Attributs de la FAQ"
+
+msgid "FAQ Categories"
+msgstr "Catégories de la FAQ"
+
+msgid "FAQ Category"
+msgstr "Catégorie FAQ"
+
+msgid "FAQ Category Details Context"
+msgstr "FAQ Catégorie Détails Contexte"
+
+msgid "FAQ Category Information"
+msgstr "FAQ Informations sur les catégories"
+
+msgid "FAQ Data"
+msgstr "FAQ Données"
+
+msgid "FAQ Details"
+msgstr "Détails de la FAQ"
+
+msgid "FAQ Information"
+msgstr "Informations sur les FAQ"
+
+msgid "FAQ categories successfully removed."
+msgstr "Les catégories de la FAQ ont été supprimées avec succès."
+
+msgid "FAQ rating"
+msgstr "Évaluation de la FAQ"
+
+msgid "FAQ#"
+msgstr "FAQ# (EN ANGLAIS)"
+
+msgid "FQDN"
+msgstr "FQDN"
+
+msgid "Favorites"
+msgstr "Favoris"
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "Feedback"
+msgstr "Retour d'information"
+
+msgid "Fetch now"
+msgstr "Chercher maintenant"
+
+msgid "Fetching Mail Account"
+msgstr "Récupération du compte de messagerie"
+
+msgid "Field"
+msgstr "Champ d'application"
+
+msgid "Field Agent App"
+msgstr "Application pour les agents de terrain"
+
+msgid "Field Agent App (Android)"
+msgstr "Application pour les agents de terrain (Android)"
+
+msgid "Field Agent App (iOS)"
+msgstr "Application pour les agents de terrain (iOS)"
+
+msgid "Field Information"
+msgstr "Informations sur le terrain"
+
+msgid "Field Type"
+msgstr "Type de champ"
+
+msgid "Field {0} has an empty row ({1})."
+msgstr "Le champ {0} a une ligne vide ({1})."
+
+msgid "Field {0} has an empty rows."
+msgstr "Le champ {0} a des lignes vides."
+
+msgid "Field {0} has an invalid value (max date: {1})."
+msgstr "Le champ {0} a une valeur non valide (date maximale : {1})."
+
+msgid "Field {0} has an invalid value (min date: {2})."
+msgstr "Le champ {0} a une valeur non valide (date min : {2})."
+
+msgid "Field {0} has an invalid value ({1})."
+msgstr "Le champ {0} a une valeur non valide ({1})."
+
+msgid "Field {0} has to be a positive integer number."
+msgstr "Le champ {0} doit être un nombre entier positif."
+
+msgid "File Upload"
+msgstr "Téléchargement de fichiers"
+
+msgid "Filename"
+msgstr "Nom de fichier"
+
+msgid "Filter"
+msgstr "Filtre"
+
+msgid "Filter Conditions"
+msgstr "Conditions de filtrage"
+
+msgid "Filter List"
+msgstr "Liste des filtres"
+
+msgid "Filter Log Level"
+msgstr "Filtrer le niveau du journal"
+
+msgid "Filter in list"
+msgstr "Filtre dans la liste"
+
+msgid "Filter successfully removed."
+msgstr "Le filtre a été supprimé avec succès."
+
+msgid "Filterable"
+msgstr "Filtrable"
+
+msgid "Find this saved search within the Dropdown Bookmarks, located in the header menu right besides the New-button or in the left sidebar"
+msgstr ""
+"Vous trouverez cette recherche sauvegardée dans la liste déroulante des "
+"signets, située dans le menu d'en-tête à côté du bouton \"Nouveau\" ou dans "
+"la barre latérale gauche."
+
+msgid "First Name"
+msgstr "Prénom"
+
+msgid "First number value is missing."
+msgstr "La première valeur numérique est manquante."
+
+msgid "First number value is not an integer."
+msgstr "La première valeur du nombre n'est pas un entier."
+
+msgid "Fixed First Column"
+msgstr "Première colonne fixe"
+
+msgid "Follow Up Ticket Lock"
+msgstr "Verrouillage du ticket de suivi"
+
+msgid "Follow Up on Tickets"
+msgstr "Suivi des billets"
+
+msgid "For Tickets"
+msgstr "Billets d'entrée"
+
+msgid "For a more intensive introduction to the use and administration of KIX, you will find the latest manuals in the online documentation."
+msgstr ""
+"Pour une introduction plus intensive à l'utilisation et à l'administration "
+"de KIX, vous trouverez les derniers manuels dans la documentation en ligne."
+
+msgid "Force"
+msgstr "La force"
+
+msgid "Form contains invalid values"
+msgstr "Le formulaire contient des valeurs non valides"
+
+msgid "Form title"
+msgstr "Titre du formulaire"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "Forum"
+msgstr "Forum"
+
+msgid "Forward"
+msgstr "En avant"
+
+msgid "Friday"
+msgstr "Vendredi"
+
+msgid "From"
+msgstr "De"
+
+msgid "From external"
+msgstr "De l'extérieur"
+
+msgid "From format"
+msgstr "Du format"
+
+msgid "From internal"
+msgstr "De l'interne"
+
+msgid "Frontend"
+msgstr "Frontend"
+
+msgid "Full Text"
+msgstr "Texte intégral"
+
+msgid "Fullname"
+msgstr "Nom complet"
+
+msgid "General Catalog"
+msgstr "Catalogue général"
+
+msgid "General Catalog Item"
+msgstr "Catalogue général Article"
+
+msgid "General Catalog Items"
+msgstr "Articles du catalogue général"
+
+msgid "Generate New Secret"
+msgstr "Générer un nouveau secret"
+
+msgid "Generate New Token"
+msgstr "Générer un nouveau jeton"
+
+msgid "Generate new user secret"
+msgstr "Générer un nouveau secret d'utilisateur"
+
+msgid "Generate new user token"
+msgstr "Générer un nouveau jeton d'utilisateur"
+
+msgid "Go to Asset"
+msgstr "Aller à l'actif"
+
+msgid "Go to top"
+msgstr "Haut de page"
+
+msgid "Graph"
+msgstr "Graphique"
+
+msgid "Graph (simulation active)"
+msgstr "Graphique (simulation active)"
+
+msgid "Graph Options"
+msgstr "Options graphiques"
+
+msgid "HTTP Type"
+msgstr "Type HTTP"
+
+msgid "Has access token"
+msgstr "Possède un jeton d'accès"
+
+msgid "Hello"
+msgstr "Bonjour"
+
+msgid "Help"
+msgstr "Aide"
+
+msgid "Help, hints & tricks"
+msgstr "Aide, conseils et astuces"
+
+msgid "HelptImporConfigext_Import_File"
+msgstr "HelptImporConfigext_Import_File"
+
+msgid "Helptext_Admin_CreateEdit_ActionSkip"
+msgstr "Helptext_Admin_CreateEdit_ActionSkip"
+
+msgid "Helptext_Admin_CreateEdit_Actions"
+msgstr "Helptext_Admin_CreateEdit_Actions"
+
+msgid "Helptext_Admin_DynamicFieldCreate_Config"
+msgstr "Helptext_Admin_DynamicFieldCreate_Config"
+
+msgid "Helptext_Admin_DynamicFieldCreate_CustomerVisible"
+msgstr "Helptext_Admin_DynamicFieldCreate_CustomerVisible"
+
+msgid "Helptext_Admin_DynamicFieldCreate_FieldType"
+msgstr "Helptext_Admin_DynamicFieldCreate_FieldType"
+
+msgid "Helptext_Admin_DynamicFieldCreate_Label"
+msgstr "Helptext_Admin_DynamicFieldCreate_Label"
+
+msgid "Helptext_Admin_DynamicFieldCreate_Name"
+msgstr "Helptext_Admin_DynamicFieldCreate_Name"
+
+msgid "Helptext_Admin_DynamicFieldCreate_ObjectType"
+msgstr "Helptext_Admin_DynamicFieldCreate_ObjectType"
+
+msgid "Helptext_Admin_DynamicFieldCreate_Validity"
+msgstr "Helptext_Admin_DynamicFieldCreate_Validity"
+
+msgid "Helptext_Admin_FAQCategoryCreate_Comment"
+msgstr "Helptext_Admin_FAQCategoryCreate_Comment"
+
+msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgstr "Helptext_Admin_FAQCategoryCreate_Icon"
+
+msgid "Helptext_Admin_FAQCategoryCreate_Name"
+msgstr "Helptext_Admin_FAQCategoryCreate_Name"
+
+msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
+msgstr "Helptext_Admin_FAQCategoryCreate_ParentCategory"
+
+msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgstr "Helptext_Admin_FAQCategoryCreate_Validity"
+
+msgid "Helptext_Admin_GeneralCatalogCreate_Class"
+msgstr "Helptext_Admin_GeneralCatalogCreate_Class"
+
+msgid "Helptext_Admin_GeneralCatalogCreate_Comment"
+msgstr "Helptext_Admin_GeneralCatalogCreate_Comment"
+
+msgid "Helptext_Admin_GeneralCatalogCreate_Name"
+msgstr "Helptext_Admin_GeneralCatalogCreate_Name"
+
+msgid "Helptext_Admin_GeneralCatalogCreate_Validity"
+msgstr "Helptext_Admin_GeneralCatalogCreate_Validity"
+
+msgid "Helptext_Admin_JobCreateEdit_ActionSkip"
+msgstr "Helptext_Admin_JobCreateEdit_ActionSkip"
+
+msgid "Helptext_Admin_JobCreateEdit_Asynchronous"
+msgstr "Helptext_Admin_JobCreateEdit_Asynchronous"
+
+msgid "Helptext_Admin_JobCreateEdit_Comment"
+msgstr "Helptext_Admin_JobCreateEdit_Comment"
+
+msgid "Helptext_Admin_JobCreateEdit_Days"
+msgstr "Helptext_Admin_JobCreateEdit_Days"
+
+msgid "Helptext_Admin_JobCreateEdit_Events"
+msgstr "Helptext_Admin_JobCreateEdit_Events"
+
+msgid "Helptext_Admin_JobCreateEdit_Filter"
+msgstr "Helptext_Admin_JobCreateEdit_Filter"
+
+msgid "Helptext_Admin_JobCreateEdit_Name"
+msgstr "Helptext_Admin_JobCreateEdit_Name"
+
+msgid "Helptext_Admin_JobCreateEdit_SortOrder"
+msgstr "Helptext_Admin_JobCreateEdit_SortOrder"
+
+msgid "Helptext_Admin_JobCreateEdit_Time"
+msgstr "Helptext_Admin_JobCreateEdit_Time"
+
+msgid "Helptext_Admin_JobCreateEdit_Type"
+msgstr "Helptext_Admin_JobCreateEdit_Type"
+
+msgid "Helptext_Admin_JobCreateEdit_Validity"
+msgstr "Helptext_Admin_JobCreateEdit_Validity"
+
+msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
+msgstr "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
+
+msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgstr "Helptext_Admin_MailAccountCreate_Comment"
+
+msgid "Helptext_Admin_MailAccountCreate_Dispachting"
+msgstr "Helptext_Admin_MailAccountCreate_Dispachting"
+
+msgid "Helptext_Admin_MailAccountCreate_Dispatching_Queue"
+msgstr "Helptext_Admin_MailAccountCreate_Dispatching_Queueue"
+
+msgid "Helptext_Admin_MailAccountCreate_Host"
+msgstr "Helptext_Admin_MailAccountCreate_Host"
+
+msgid "Helptext_Admin_MailAccountCreate_IMAPFolder"
+msgstr "Helptext_Admin_MailAccountCreate_IMAPFolder"
+
+msgid "Helptext_Admin_MailAccountCreate_OAuth2_Profile"
+msgstr "Helptext_Admin_MailAccountCreate_OAuth2_Profile"
+
+msgid "Helptext_Admin_MailAccountCreate_Password"
+msgstr "Helptext_Admin_MailAccountCreate_Password"
+
+msgid "Helptext_Admin_MailAccountCreate_Type."
+msgstr "Helptext_Admin_MailAccountCreate_Type."
+
+msgid "Helptext_Admin_MailAccountCreate_UserName"
+msgstr "Helptext_Admin_MailAccountCreate_UserName"
+
+msgid "Helptext_Admin_MailAccountCreate_Validity"
+msgstr "Helptext_Admin_MailAccountCreate_Validity"
+
+msgid "Helptext_Admin_MailFilterCreate_Comment"
+msgstr "Helptext_Admin_MailFilterCreate_Comment"
+
+msgid "Helptext_Admin_MailFilterCreate_FilterConditions"
+msgstr "Helptext_Admin_MailFilterCreate_FilterConditions"
+
+msgid "Helptext_Admin_MailFilterCreate_Name"
+msgstr "Helptext_Admin_MailFilterCreate_Name"
+
+msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
+msgstr "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
+
+msgid "Helptext_Admin_MailFilterCreate_StopAfterMatch"
+msgstr "Helptext_Admin_MailFilterCreate_StopAfterMatch"
+
+msgid "Helptext_Admin_MailFilterCreate_Validity"
+msgstr "Helptext_Admin_MailFilterCreate_Validity"
+
+msgid "Helptext_Admin_MailFilter_FilterConditions_EmailHeader"
+msgstr "Helptext_Admin_MailFilter_FilterConditions_EmailHeader"
+
+msgid "Helptext_Admin_MailFilter_FilterConditions_Negate"
+msgstr "Helptext_Admin_MailFilter_FilterConditions_Negate"
+
+msgid "Helptext_Admin_MailFilter_FilterConditions_Pattern"
+msgstr "Helptext_Admin_MailFilter_FilterConditions_Pattern"
+
+msgid "Helptext_Admin_MailFilter_SetEmailHeader_EmailHeader"
+msgstr "Helptext_Admin_MailFilter_SetEmailHeader_EmailHeader"
+
+msgid "Helptext_Admin_MailFilter_SetEmailHeader_Value"
+msgstr "Helptext_Admin_MailFilter_SetEmailHeader_Value"
+
+msgid "Helptext_Admin_MailFilter_Sidebar"
+msgstr "Helptext_Admin_MailFilter_Sidebar"
+
+msgid "Helptext_Admin_NotificationCreate_AdditionalRecipient"
+msgstr "Helptext_Admin_NotificationCreate_AdditionalRecipient"
+
+msgid "Helptext_Admin_NotificationCreate_Comment"
+msgstr "Helptext_Admin_NotificationCreate_Comment"
+
+msgid "Helptext_Admin_NotificationCreate_CreateArticle"
+msgstr "Helptext_Admin_NotificationCreate_CreateArticle"
+
+msgid "Helptext_Admin_NotificationCreate_EmailSecurity"
+msgstr "Helptext_Admin_NotificationCreate_EmailSecurity"
+
+msgid "Helptext_Admin_NotificationCreate_Event"
+msgstr "Helptext_Admin_NotificationCreate_Event"
+
+msgid "Helptext_Admin_NotificationCreate_Filter"
+msgstr "Helptext_Admin_NotificationCreate_Filter"
+
+msgid "Helptext_Admin_NotificationCreate_MessageContentType"
+msgstr "Helptext_Admin_NotificationCreate_MessageContentType"
+
+msgid "Helptext_Admin_NotificationCreate_MessageSubject"
+msgstr "Helptext_Admin_NotificationCreate_MessageSubject"
+
+msgid "Helptext_Admin_NotificationCreate_MessageText"
+msgstr "Helptext_Admin_NotificationCreate_MessageText"
+
+msgid "Helptext_Admin_NotificationCreate_Name"
+msgstr "Helptext_Admin_NotificationCreate_Name"
+
+msgid "Helptext_Admin_NotificationCreate_PreferencesTooltip"
+msgstr "Helptext_Admin_NotificationCreate_PreferencesTooltip"
+
+msgid "Helptext_Admin_NotificationCreate_SendDespiteOutOfOffice"
+msgstr "Helptext_Admin_NotificationCreate_SendDespiteOutOffice"
+
+msgid "Helptext_Admin_NotificationCreate_SendOnceADay"
+msgstr "Helptext_Admin_NotificationCreate_SendOnceADay"
+
+msgid "Helptext_Admin_NotificationCreate_SendTo"
+msgstr "Helptext_Admin_NotificationCreate_SendTo"
+
+msgid "Helptext_Admin_NotificationCreate_SendToAgents"
+msgstr "Helptext_Admin_NotificationCreate_SendToAgents"
+
+msgid "Helptext_Admin_NotificationCreate_SendToRoleMembers"
+msgstr "Helptext_Admin_NotificationCreate_Send toRoleMembers"
+
+msgid "Helptext_Admin_NotificationCreate_ShowPreferences"
+msgstr "Helptext_Admin_NotificationCreate_ShowPreferences"
+
+msgid "Helptext_Admin_NotificationCreate_SubjectWithTicketNumber"
+msgstr "Helptext_Admin_NotificationCreate_SubjectWithTicketNumber"
+
+msgid "Helptext_Admin_NotificationCreate_Validity"
+msgstr "Helptext_Admin_NotificationCreate_Validity"
+
+msgid "Helptext_Admin_NotificationEdit_AdditionalRecipient"
+msgstr "Helptext_Admin_NotificationEdit_AdditionalRecipient"
+
+msgid "Helptext_Admin_NotificationEdit_Comment"
+msgstr "Helptext_Admin_NotificationEdit_Comment"
+
+msgid "Helptext_Admin_NotificationEdit_CreateArticle"
+msgstr "Helptext_Admin_NotificationEditer_CréerArticle"
+
+msgid "Helptext_Admin_NotificationEdit_EmailSecurity"
+msgstr "Helptext_Admin_NotificationEdit_EmailSecurity"
+
+msgid "Helptext_Admin_NotificationEdit_Event"
+msgstr "Événement Helptext_Admin_NotificationEdit_Event"
+
+msgid "Helptext_Admin_NotificationEdit_Filter"
+msgstr "Helptext_Admin_NotificationEdit_Filter"
+
+msgid "Helptext_Admin_NotificationEdit_MessageContentType"
+msgstr "Helptext_Admin_NotificationEdit_MessageContentType"
+
+msgid "Helptext_Admin_NotificationEdit_MessageSubject"
+msgstr "Helptext_Admin_NotificationEdit_MessageSubject"
+
+msgid "Helptext_Admin_NotificationEdit_MessageText"
+msgstr "Helptext_Admin_NotificationEdit_MessageText"
+
+msgid "Helptext_Admin_NotificationEdit_Name"
+msgstr "Helptext_Admin_NotificationEdit_Name"
+
+msgid "Helptext_Admin_NotificationEdit_PreferencesTooltip"
+msgstr "Helptext_Admin_NotificationEdit_PreferencesTooltip"
+
+msgid "Helptext_Admin_NotificationEdit_SendDespiteOutOfOffice"
+msgstr "Helptext_Admin_NotificationEdit_SendDespiteOutOffice"
+
+msgid "Helptext_Admin_NotificationEdit_SendOnceADay"
+msgstr "Helptext_Admin_NotificationEdit_SendOnceADay"
+
+msgid "Helptext_Admin_NotificationEdit_SendTo"
+msgstr "Helptext_Admin_NotificationEdit_SendTo"
+
+msgid "Helptext_Admin_NotificationEdit_SendToAgents"
+msgstr "Helptext_Admin_NotificationEdit_SendToAgents"
+
+msgid "Helptext_Admin_NotificationEdit_SendToRoleMembers"
+msgstr "Helptext_Admin_NotificationEdit_SendToRoleMembers"
+
+msgid "Helptext_Admin_NotificationEdit_ShowPreferences"
+msgstr "Helptext_Admin_NotificationEdit_ShowPreferences"
+
+msgid "Helptext_Admin_NotificationEdit_SubjectWithTicketNumber"
+msgstr "Helptext_Admin_NotificationEdit_SubjectWithTicketNumber"
+
+msgid "Helptext_Admin_NotificationEdit_Validity"
+msgstr "Helptext_Admin_NotificationEdit_Validité"
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_Client_ID"
+msgstr "Helptext_Admin_OAuth2ProfileCreate_Client_ID"
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_Client_Secret."
+msgstr "Helptext_Admin_OAuth2ProfileCreate_Client_Secret."
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_Name"
+msgstr "Helptext_Admin_OAuth2ProfileCreate_Name"
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_PKCE"
+msgstr "Helptext_Admin_OAuth2ProfileCreate_PKCE"
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_Scope"
+msgstr "Helptext_Admin_OAuth2ProfileCreate_Scope"
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_URL_Auth"
+msgstr "Helptext_Admin_OAuth2ProfileCreate_URL_Auth"
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_URL_Redirect"
+msgstr "Helptext_Admin_OAuth2ProfileCreate_URL_Redirect"
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_URL_Token"
+msgstr "Helptext_Admin_OAuth2ProfileCreate_URL_Token"
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_Validity"
+msgstr "Helptext_Admin_OAuth2ProfileCreate_Validity"
+
+msgid "Helptext_Admin_QueueCreate_FollowUpTicketLock"
+msgstr "Helptext_Admin_QueueueCreate_FollowUpTicketLock"
+
+msgid "Helptext_Admin_QueueEdit_FollowUpTicketLock"
+msgstr "Helptext_Admin_Queuedit_FollowUpTicketLock"
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Comment"
+msgstr "Helptext_Admin_Ruleset_Macro_Create_Comment"
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Name"
+msgstr "Helptext_Admin_Ruleset_Macro_Create_Name"
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Scope"
+msgstr "Helptext_Admin_Ruleset_Macro_Create_Scope"
+
+msgid "Helptext_Admin_Ruleset_Macro_Create_Type"
+msgstr "Helptext_Admin_Ruleset_Macro_Create_Type"
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Comment"
+msgstr "Helptext_Admin_Ruleset_Macro_Edit_Comment"
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Name"
+msgstr "Helptext_Admin_Ruleset_Macro_Edit_Name"
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Scope"
+msgstr "Helptext_Admin_Ruleset_Macro_Edit_Scope"
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Type"
+msgstr "Helptext_Admin_Ruleset_Macro_Edit_Type"
+
+msgid "Helptext_Admin_Ruleset_Macro_Edit_Validity"
+msgstr "Helptext_Admin_Ruleset_Macro_Edit_Validity"
+
+msgid "Helptext_Admin_SysConfigEdit_Default_Value"
+msgstr "Helptext_Admin_SysConfigEdit_Default_Value"
+
+msgid "Helptext_Admin_SysConfigEdit_Description"
+msgstr "Helptext_Admin_SysConfigEdit_Description"
+
+msgid "Helptext_Admin_SysConfigEdit_Name"
+msgstr "Helptext_Admin_SysConfigEdit_Name"
+
+msgid "Helptext_Admin_SysConfigEdit_Validity"
+msgstr "Helptext_Admin_SysConfigEdit_Validité"
+
+msgid "Helptext_Admin_SysConfigEdit_Value"
+msgstr "Helptext_Admin_SysConfigEdit_Value"
+
+msgid "Helptext_Admin_SysConfigSearch"
+msgstr "Helptext_Admin_SysConfigSearch"
+
+msgid "Helptext_Admin_SystemAddressCreate_Comment"
+msgstr "Helptext_Admin_SystemAddressCreate_Comment"
+
+msgid "Helptext_Admin_SystemAddressCreate_DisplayName"
+msgstr "Helptext_Admin_SystemAddressCreate_DisplayName"
+
+msgid "Helptext_Admin_SystemAddressCreate_Name"
+msgstr "Helptext_Admin_SystemAddressCreate_Name"
+
+msgid "Helptext_Admin_SystemAddressCreate_Queue"
+msgstr "Helptext_Admin_SystemAddressCreate_Queueue"
+
+msgid "Helptext_Admin_SystemAddressCreate_Validity"
+msgstr "Helptext_Admin_SystemAddressCreate_Validity"
+
+msgid "Helptext_Admin_Tags."
+msgstr "Mots clés Helptext_Admin_Tags."
+
+msgid "Helptext_Admin_TextModuleCreate_Comment"
+msgstr "Helptext_Admin_TextModuleCreate_Comment"
+
+msgid "Helptext_Admin_TextModuleCreate_Keywords"
+msgstr "Helptext_Admin_TextModuleCreate_Keywords"
+
+msgid "Helptext_Admin_TextModuleCreate_Language"
+msgstr "Helptext_Admin_TextModuleCreate_Language"
+
+msgid "Helptext_Admin_TextModuleCreate_Name"
+msgstr "Helptext_Admin_TextModuleCreate_Name"
+
+msgid "Helptext_Admin_TextModuleCreate_QueueIDs"
+msgstr "Helptext_Admin_TextModuleCreate_QueueIDs"
+
+msgid "Helptext_Admin_TextModuleCreate_Text"
+msgstr "Helptext_Admin_TextModuleCreate_Text"
+
+msgid "Helptext_Admin_TextModuleCreate_TicketTypeIDs"
+msgstr "Helptext_Admin_TextModuleCreate_TicketTypeIDs"
+
+msgid "Helptext_Admin_TextModuleCreate_Validity"
+msgstr "Helptext_Admin_TextModuleCreate_Validity"
+
+msgid "Helptext_Admin_Tickets_GeneralCatalogCreate_Icon."
+msgstr "Helptext_Admin_Tickets_GeneralCatalogCreate_Icon."
+
+msgid "Helptext_Admin_Tickets_PriorityCreate_Comment"
+msgstr "Helptext_Admin_Tickets_PriorityCreate_Comment"
+
+msgid "Helptext_Admin_Tickets_PriorityCreate_Icon"
+msgstr "Helptext_Admin_Tickets_PriorityCreate_Icon"
+
+msgid "Helptext_Admin_Tickets_PriorityCreate_Name"
+msgstr "Helptext_Admin_Tickets_PriorityCreate_Name"
+
+msgid "Helptext_Admin_Tickets_PriorityCreate_Valid"
+msgstr "Helptext_Admin_Tickets_PriorityCreate_Valid"
+
+msgid "Helptext_Admin_Tickets_QueueCreate_Comment"
+msgstr "Helptext_Admin_Tickets_QueueueCreate_Comment"
+
+msgid "Helptext_Admin_Tickets_QueueCreate_FollowUp"
+msgstr "Helptext_Admin_Tickets_QueueueCreate_FollowUp"
+
+msgid "Helptext_Admin_Tickets_QueueCreate_Icon."
+msgstr "Helptext_Admin_Tickets_QueueueCreate_Icon."
+
+msgid "Helptext_Admin_Tickets_QueueCreate_Name"
+msgstr "Helptext_Admin_Tickets_QueueueCreate_Name"
+
+msgid "Helptext_Admin_Tickets_QueueCreate_ParentQueue"
+msgstr "Helptext_Admin_Tickets_QueueueCreate_ParentQueueue"
+
+msgid "Helptext_Admin_Tickets_QueueCreate_Permission"
+msgstr "Helptext_Admin_Tickets_QueueueCreate_Permission"
+
+msgid "Helptext_Admin_Tickets_QueueCreate_SenderAddress."
+msgstr "Helptext_Admin_Tickets_QueueueCreate_SenderAddress."
+
+msgid "Helptext_Admin_Tickets_QueueCreate_Signature"
+msgstr "Helptext_Admin_Tickets_QueueueCreate_Signature"
+
+msgid "Helptext_Admin_Tickets_QueueCreate_UnlockTimeout"
+msgstr "Helptext_Admin_Tickets_QueueueCreate_UnlockTimeout"
+
+msgid "Helptext_Admin_Tickets_QueueCreate_Validity"
+msgstr "Helptext_Admin_Tickets_QueueueCreate_Validity"
+
+msgid "Helptext_Admin_Tickets_StateCreate_Comment"
+msgstr "Helptext_Admin_Tickets_StateCreate_Comment"
+
+msgid "Helptext_Admin_Tickets_StateCreate_Icon"
+msgstr "Helptext_Admin_Tickets_StateCreate_Icon"
+
+msgid "Helptext_Admin_Tickets_StateCreate_Name"
+msgstr "Helptext_Admin_Tickets_StateCreate_Name"
+
+msgid "Helptext_Admin_Tickets_StateCreate_Type"
+msgstr "Helptext_Admin_Tickets_StateCreate_Type"
+
+msgid "Helptext_Admin_Tickets_StateCreate_Valid"
+msgstr "Helptext_Admin_Tickets_StateCreate_Valid"
+
+msgid "Helptext_Admin_Tickets_TypeCreate_Comment"
+msgstr "Helptext_Admin_Tickets_TypeCreate_Comment"
+
+msgid "Helptext_Admin_Tickets_TypeCreate_Icon"
+msgstr "Helptext_Admin_Tickets_TypeCreate_Icon"
+
+msgid "Helptext_Admin_Tickets_TypeCreate_Name"
+msgstr "Helptext_Admin_Tickets_TypeCreate_Name"
+
+msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
+msgstr "Helptext_Admin_Tickets_TypeCreate_Valid"
+
+msgid "Helptext_Admin_TranslationSearch"
+msgstr "Helptext_Admin_TranslationSearch"
+
+msgid "Helptext_Admin_UsersSearch"
+msgstr "Helptext_Admin_UsersSearch"
+
+msgid "Helptext_Admin_Users_RoleCreate_AllowAdminModule"
+msgstr "Helptext_Admin_Users_RoleCreate_AllowAdminModule"
+
+msgid "Helptext_Admin_Users_RoleCreate_Comment"
+msgstr "Helptext_Admin_Users_RoleCreate_Comment"
+
+msgid "Helptext_Admin_Users_RoleCreate_Name"
+msgstr "Helptext_Admin_Users_RoleCreate_Name"
+
+msgid "Helptext_Admin_Users_RoleCreate_UsageContext"
+msgstr "Helptext_Admin_Users_RoleCreate_UsageContext"
+
+msgid "Helptext_Admin_Users_RoleCreate_User"
+msgstr "Helptext_Admin_Users_RoleCreate_User"
+
+msgid "Helptext_Admin_Users_RoleCreate_Valid"
+msgstr "Helptext_Admin_Users_RoleCreate_Valid"
+
+msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
+msgstr "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
+
+msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
+msgstr "Helptext_Admin_WebformCreateEdit_AllowAttachments"
+
+msgid "Helptext_Admin_WebformCreateEdit_AssignedAgent"
+msgstr "Helptext_Admin_WebformCreateEdit_AssignedAgent"
+
+msgid "Helptext_Admin_WebformCreateEdit_AssignedAgentPassword"
+msgstr "Helptext_Admin_WebformCreateEdit_AssignedAgentPassword"
+
+msgid "Helptext_Admin_WebformCreateEdit_ButtonLabel"
+msgstr "Helptext_Admin_WebformCreateEdit_ButtonLabel"
+
+msgid "Helptext_Admin_WebformCreateEdit_HintMessage"
+msgstr "Helptext_Admin_WebformCreateEdit_HintMessage"
+
+msgid "Helptext_Admin_WebformCreateEdit_Modal"
+msgstr "Helptext_Admin_WebformCreateEdit_Modal"
+
+msgid "Helptext_Admin_WebformCreateEdit_PriorityID"
+msgstr "Helptext_Admin_WebformCreateEdit_PriorityID"
+
+msgid "Helptext_Admin_WebformCreateEdit_QueueID"
+msgstr "Helptext_Admin_WebformCreateEdit_QueueID"
+
+msgid "Helptext_Admin_WebformCreateEdit_SaveButtonLabel"
+msgstr "Helptext_Admin_WebformCreateEdit_SaveButtonLabel"
+
+msgid "Helptext_Admin_WebformCreateEdit_ShowTitle"
+msgstr "Helptext_Admin_WebformCreateEdit_ShowTitle"
+
+msgid "Helptext_Admin_WebformCreateEdit_StateID"
+msgstr "Helptext_Admin_WebformCreateEdit_StateID"
+
+msgid "Helptext_Admin_WebformCreateEdit_SuccessMessage"
+msgstr "Helptext_Admin_WebformCreateEdit_SuccessMessage"
+
+msgid "Helptext_Admin_WebformCreateEdit_Title"
+msgstr "Helptext_Admin_WebformCreateEdit_Title"
+
+msgid "Helptext_Admin_WebformCreateEdit_TypeID"
+msgstr "Helptext_Admin_WebformCreateEdit_TypeID"
+
+msgid "Helptext_Admin_WebformCreateEdit_UseKIXCSS"
+msgstr "Helptext_Admin_WebformCreateEdit_UseKIXCSS"
+
+msgid "Helptext_Admin_WebformCreateEdit_Validity"
+msgstr "Helptext_Admin_WebformCreateEdit_Validity"
+
+msgid "Helptext_Admin_Workflow_Create_Validity"
+msgstr "Helptext_Admin_Workflow_Create_Validity"
+
+msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
+msgstr "Helptext_CMDB_ConfigItemClassCreate_Comment"
+
+msgid "Helptext_CMDB_ConfigItemClassCreate_Definition"
+msgstr "Helptext_CMDB_ConfigItemClassCreate_Definition"
+
+msgid "Helptext_CMDB_ConfigItemClassCreate_Icon"
+msgstr "Helptext_CMDB_ConfigItemClassCreate_Icon"
+
+msgid "Helptext_CMDB_ConfigItemClassCreate_Name"
+msgstr "Helptext_CMDB_ConfigItemClassCreate_Name"
+
+msgid "Helptext_CMDB_ConfigItemClassCreate_Valid"
+msgstr "Helptext_CMDB_ConfigItemClassCreate_Valid"
+
+msgid "Helptext_CMDB_ConfigItemCreateEdit_Class"
+msgstr "Helptext_CMDB_ConfigItemCreateEdit_Class"
+
+msgid "Helptext_CMDB_ConfigItemCreateEdit_DeploymentState"
+msgstr "Helptext_CMDB_ConfigItemCreateEdit_DeploymentState"
+
+msgid "Helptext_CMDB_ConfigItemCreateEdit_IncidentState"
+msgstr "Helptext_CMDB_ConfigItemCreateEdit_IncidentState"
+
+msgid "Helptext_CMDB_ConfigItemCreateEdit_Name"
+msgstr "Helptext_CMDB_ConfigItemCreateEdit_Name"
+
+msgid "Helptext_CMDB_ConfigItem_Link_Class"
+msgstr "Helptext_CMDB_ConfigItem_Link_Class"
+
+msgid "Helptext_CMDB_ConfigItem_Link_DeploymentState"
+msgstr "Helptext_CMDB_ConfigItem_Link_DeploymentState"
+
+msgid "Helptext_CMDB_ConfigItem_Link_IncidentState"
+msgstr "Helptext_CMDB_ConfigItem_Link_IncidentState"
+
+msgid "Helptext_CMDB_ConfigItem_Link_Name"
+msgstr "Helptext_CMDB_ConfigItem_Link_Name"
+
+msgid "Helptext_CMDB_ConfigItem_Link_Number"
+msgstr "Helptext_CMDB_ConfigItem_Link_Number"
+
+msgid "Helptext_CMDB_Dashboard_Search"
+msgstr "Helptext_CMDB_Dashboard_Search"
+
+msgid "Helptext_Create_ResultNames"
+msgstr "Helptext_Create_ResultNames (en anglais)"
+
+msgid "Helptext_Customer_Dashboard_Search"
+msgstr "Helptext_Customer_Dashboard_Search"
+
+msgid "Helptext_Customers_ContactCreate_Avatar."
+msgstr "Helptext_Customers_ContactCreate_Avatar."
+
+msgid "Helptext_Customers_ContactCreate_City"
+msgstr "Helptext_Customers_ContactCreate_City"
+
+msgid "Helptext_Customers_ContactCreate_Comment"
+msgstr "Helptext_Customers_ContactCreate_Comment"
+
+msgid "Helptext_Customers_ContactCreate_Country"
+msgstr "Helptext_Customers_ContactCreate_Country"
+
+msgid "Helptext_Customers_ContactCreate_Email"
+msgstr "Helptext_Customers_ContactCreate_Email"
+
+msgid "Helptext_Customers_ContactCreate_Fax"
+msgstr "Helptext_Customers_ContactCreate_Fax"
+
+msgid "Helptext_Customers_ContactCreate_Firstname"
+msgstr "Helptext_Customers_ContactCreate_Firstname"
+
+msgid "Helptext_Customers_ContactCreate_Lastname"
+msgstr "Helptext_Customers_ContactCreate_Lastname"
+
+msgid "Helptext_Customers_ContactCreate_Mobile"
+msgstr "Helptext_Customers_ContactCreate_Mobile"
+
+msgid "Helptext_Customers_ContactCreate_Organisation"
+msgstr "Helptext_Customers_ContactCreate_Organisation"
+
+msgid "Helptext_Customers_ContactCreate_Phone"
+msgstr "Helptext_Customers_ContactCreate_Phone"
+
+msgid "Helptext_Customers_ContactCreate_PrimaryOrganisation"
+msgstr "Helptext_Customers_ContactCreate_PrimaryOrganisation"
+
+msgid "Helptext_Customers_ContactCreate_Street"
+msgstr "Helptext_Customers_ContactCreate_Street"
+
+msgid "Helptext_Customers_ContactCreate_Title"
+msgstr "Helptext_Customers_ContactCreate_Title"
+
+msgid "Helptext_Customers_ContactCreate_Validity"
+msgstr "Helptext_Customers_ContactCreate_Validity"
+
+msgid "Helptext_Customers_ContactCreate_Zip"
+msgstr "Helptext_Customers_ContactCreate_Zip"
+
+msgid "Helptext_Customers_ContactImport"
+msgstr "Helptext_Customers_ContactImport"
+
+msgid "Helptext_Customers_OrganisationCreate_Avatar."
+msgstr "Helptext_Customers_OrganisationCreate_Avatar."
+
+msgid "Helptext_Customers_OrganisationCreate_City"
+msgstr "Helptext_Customers_OrganisationCreate_City"
+
+msgid "Helptext_Customers_OrganisationCreate_Comment"
+msgstr "Helptext_Customers_OrganisationCreate_Comment"
+
+msgid "Helptext_Customers_OrganisationCreate_Country"
+msgstr "Helptext_Customers_OrganisationCreate_Country"
+
+msgid "Helptext_Customers_OrganisationCreate_Name"
+msgstr "Helptext_Customers_OrganisationCreate_Name"
+
+msgid "Helptext_Customers_OrganisationCreate_Number"
+msgstr "Helptext_Customers_OrganisationCreate_Number"
+
+msgid "Helptext_Customers_OrganisationCreate_Street"
+msgstr "Helptext_Customers_OrganisationCreate_Street"
+
+msgid "Helptext_Customers_OrganisationCreate_Type"
+msgstr "Helptext_Customers_OrganisationCreate_Type"
+
+msgid "Helptext_Customers_OrganisationCreate_URL"
+msgstr "Helptext_Customers_OrganisationCreate_URL"
+
+msgid "Helptext_Customers_OrganisationCreate_Validity"
+msgstr "Helptext_Customers_OrganisationCreate_Validity"
+
+msgid "Helptext_Customers_OrganisationCreate_Zip"
+msgstr "Helptext_Customers_OrganisationCreate_Zip"
+
+msgid "Helptext_Customers_OrganisationImport"
+msgstr "Helptext_Customers_OrganisationImport"
+
+msgid "Helptext_FAQ_ArticleCreate_Attachments"
+msgstr "Helptext_FAQ_ArticleCreate_Attachments"
+
+msgid "Helptext_FAQ_ArticleCreate_Category"
+msgstr "Helptext_FAQ_ArticleCreate_Category"
+
+msgid "Helptext_FAQ_ArticleCreate_Cause"
+msgstr "Helptext_FAQ_ArticleCréer_une_cause"
+
+msgid "Helptext_FAQ_ArticleCreate_Comment"
+msgstr "Helptext_FAQ_ArticleCreate_Comment"
+
+msgid "Helptext_FAQ_ArticleCreate_CustomerVisible"
+msgstr "Helptext_FAQ_ArticleCreate_CustomerVisible"
+
+msgid "Helptext_FAQ_ArticleCreate_Language"
+msgstr "Helptext_FAQ_ArticleCreate_Language"
+
+msgid "Helptext_FAQ_ArticleCreate_RelatedAssets"
+msgstr "Helptext_FAQ_ArticleCreate_RelatedAssets"
+
+msgid "Helptext_FAQ_ArticleCreate_Solution"
+msgstr "Aide_FAQ_ArticleCréer_Solution"
+
+msgid "Helptext_FAQ_ArticleCreate_Symptom"
+msgstr "Aide_FAQ_ArticleCréer_Symptôme"
+
+msgid "Helptext_FAQ_ArticleCreate_Tags"
+msgstr "Helptext_FAQ_ArticleCreate_Tags"
+
+msgid "Helptext_FAQ_ArticleCreate_Title"
+msgstr "Helptext_FAQ_ArticleCreate_Title"
+
+msgid "Helptext_FAQ_ArticleCreate_Valid"
+msgstr "Helptext_FAQ_ArticleCreate_Valid"
+
+msgid "Helptext_FAQ_Link_Category"
+msgstr "Catégorie de lien Helptext_FAQ_Link"
+
+msgid "Helptext_FAQ_Link_FullText"
+msgstr "Helptext_FAQ_Link_FullText"
+
+msgid "Helptext_FAQ_Link_Number"
+msgstr "Numéro du lien Helptext_FAQ_Link"
+
+msgid "Helptext_FAQ_Link_Title"
+msgstr "Titre du lien Helptext_FAQ_Link"
+
+msgid "Helptext_FAQ_Link_Validity"
+msgstr "Validité du lien Helptext_FAQ_Link"
+
+msgid "Helptext_Import_CharacterSet."
+msgstr "Jeu de caractères Helptext_Import_CharacterSet."
+
+msgid "Helptext_Import_TextSeparator."
+msgstr "Helptext_Import_TextSeparator."
+
+msgid "Helptext_Import_ValueSeparator."
+msgstr "Helptext_Import_ValueSeparator."
+
+msgid "Helptext_Object_Tag_Search"
+msgstr "Helptext_Object_Tag_Search"
+
+msgid "Helptext_Organisation_Address_Domain_Pattern"
+msgstr "Helptext_Organisation_Address_Domain_Pattern"
+
+msgid "Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint"
+msgstr "Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint"
+
+msgid "Helptext_PersonalSettings_DashboardRefreshInterval_Hint"
+msgstr "Helptext_PersonalSettings_DashboardRefreshInterval_Hint"
+
+msgid "Helptext_PersonalSettings_Dont_Ask_On_Exit"
+msgstr "Helptext_PersonalSettings_Dont_Ask_On_Exit"
+
+msgid "Helptext_PersonalSettings_InitialSiteURL_Hint"
+msgstr "Helptext_PersonalSettings_InitialSiteURL_Hint"
+
+msgid "Helptext_PersonalSettings_MyQueues_Hint"
+msgstr "Helptext_PersonalSettings_MyQueues_Hint"
+
+msgid "Helptext_PersonalSettings_Notifications_Hint"
+msgstr "Helptext_PersonalSettings_Notifications_Hint"
+
+msgid "Helptext_PersonalSettings_OutOfOfficeEnd_Hint"
+msgstr "Helptext_PersonalSettings_OutOfOfficeEnd_Hint"
+
+msgid "Helptext_PersonalSettings_OutOfOfficeStart_Hint"
+msgstr "Helptext_PersonalSettings_OutOfficeStart_Hint"
+
+msgid "Helptext_PersonalSettings_OutOfOfficeSubstitute_Hint"
+msgstr "Helptext_PersonalSettings_OutOfficeSubstitute_Hint"
+
+msgid "Helptext_PersonalSettings_UserLanguage_Hint"
+msgstr "Helptext_PersonalSettings_UserLanguage_Hint"
+
+msgid "Helptext_PersonalSettings_UserNewPasswordConfirm_Hint"
+msgstr "Helptext_PersonalSettings_UserNewPasswordConfirm_Hint"
+
+msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
+msgstr "Helptext_PersonalSettings_UserNewPassword_Hint"
+
+msgid "Helptext_PersonalSettings_article_from_format"
+msgstr "Helptext_PersonalSettings_article_from_format"
+
+msgid "Helptext_PersonalSettings_user_token_Hint"
+msgstr "Helptext_PersonalSettings_user_token_Hint"
+
+msgid "Helptext_Reporting_ReportCreate_Comment"
+msgstr "Aide_Texte_Reporting_ReportCreate_Comment"
+
+msgid "Helptext_Reporting_ReportCreate_Datasource"
+msgstr "Helptext_Reporting_ReportCreate_Datasource"
+
+msgid "Helptext_Reporting_ReportCreate_Datasource_DBMS"
+msgstr "Helptext_Reporting_ReportCreate_Datasource_DBMS"
+
+msgid "Helptext_Reporting_ReportCreate_Datasource_OutputHandler"
+msgstr "Helptext_Reporting_ReportCreate_Datasource_OutputHandler"
+
+msgid "Helptext_Reporting_ReportCreate_MaxReports"
+msgstr "Helptext_Reporting_ReportCreate_MaxReports"
+
+msgid "Helptext_Reporting_ReportCreate_OutputFormat"
+msgstr "Helptext_Reporting_ReportCreate_OutputFormat"
+
+msgid "Helptext_Reporting_ReportCreate_Parameter"
+msgstr "Helptext_Reporting_ReportCreate_Parameter"
+
+msgid "Helptext_Reporting_ReportCreate_ParameterDataType"
+msgstr "Helptext_Reporting_ReportCreate_ParameterDataType"
+
+msgid "Helptext_Reporting_ReportCreate_ParameterDefault"
+msgstr "Helptext_Reporting_ReportCreate_ParameterDefault"
+
+msgid "Helptext_Reporting_ReportCreate_ParameterDescription"
+msgstr "Helptext_Reporting_ReportCreate_ParameterDescription"
+
+msgid "Helptext_Reporting_ReportCreate_ParameterLabel"
+msgstr "Helptext_Reporting_ReportCreate_ParameterLabel"
+
+msgid "Helptext_Reporting_ReportCreate_ParameterMultiple"
+msgstr "Helptext_Reporting_ReportCreate_ParameterMultiple"
+
+msgid "Helptext_Reporting_ReportCreate_ParameterName"
+msgstr "Helptext_Reporting_ReportCreate_ParameterName"
+
+msgid "Helptext_Reporting_ReportCreate_ParameterPossibleValues"
+msgstr "Helptext_Reporting_ReportCreate_ParameterPossibleValues"
+
+msgid "Helptext_Reporting_ReportCreate_ParameterReadonly"
+msgstr "Helptext_Reporting_ReportCreate_ParameterReadonly"
+
+msgid "Helptext_Reporting_ReportCreate_ParameterReferences"
+msgstr "Helptext_Reporting_ReportCreate_ParameterReferences"
+
+msgid "Helptext_Reporting_ReportCreate_ParameterRequired"
+msgstr "Helptext_Reporting_ReportCreate_ParameterRequired"
+
+msgid "Helptext_Reporting_ReportCreate_Periodic"
+msgstr "Helptext_Reporting_ReportCreate_Periodic"
+
+msgid "Helptext_Reporting_ReportCreate_Roles"
+msgstr "Helptext_Reporting_ReportCreate_Roles"
+
+msgid "Helptext_Reporting_ReportCreate_Title"
+msgstr "Helptext_Reporting_ReportCreate_Title"
+
+msgid "Helptext_Reporting_ReportCreate_Validity"
+msgstr "Helptext_Reporting_ReportCreate_Validity"
+
+msgid "Helptext_Reporting_ReportDefinitionCreate_Title"
+msgstr "Helptext_Reporting_ReportDefinitionCreate_Title"
+
+msgid "Helptext_Reporting_Report_OutputFormats"
+msgstr ""
+"Format de sortie des rapports de l'Helptext_Reporting_Report_OutputFormats"
+
+msgid "Helptext_Textmodules_ArticleCreate"
+msgstr "Helptext_Textmodules_ArticleCreate"
+
+msgid "Helptext_Ticket_Dashboard_Search"
+msgstr "Helptext_Ticket_Dashboard_Search"
+
+msgid "Helptext_Tickets_ArticleCreate_Body"
+msgstr "Helptext_Tickets_ArticleCreate_Body"
+
+msgid "Helptext_Tickets_ArticleCreate_Channel"
+msgstr "Helptext_Tickets_ArticleCreate_Channel"
+
+msgid "Helptext_Tickets_ArticleCreate_ReceiverTo"
+msgstr "Helptext_Tickets_ArticleCreate_ReceiverTo"
+
+msgid "Helptext_Tickets_ArticleCreate_Subject"
+msgstr "Helptext_Tickets_ArticleCreate_Subject"
+
+msgid "Helptext_Tickets_Link_FullText"
+msgstr "Helptext_Tickets_Link_FullText"
+
+msgid "Helptext_Tickets_Link_Number"
+msgstr "Numéro du lien Helptext_Tickets_Link"
+
+msgid "Helptext_Tickets_Link_Priority"
+msgstr "Priorité du lien Helptext_Tickets_Link"
+
+msgid "Helptext_Tickets_Link_Queue"
+msgstr "File d'attente Helptext_Tickets_Link"
+
+msgid "Helptext_Tickets_Link_State"
+msgstr "État du lien Helptext_Tickets_Link"
+
+msgid "Helptext_Tickets_Link_Title"
+msgstr "Titre du lien Helptext_Tickets_Link_Title"
+
+msgid "Helptext_Tickets_Link_Type"
+msgstr "Type de lien Helptext_Tickets_Link"
+
+msgid "Helptext_Tickets_TicketCreate_AffectedAsset"
+msgstr "Helptext_Tickets_TicketCreate_AffectedAsset"
+
+msgid "Helptext_Tickets_TicketCreate_Channel"
+msgstr "Helptext_Tickets_TicketCreate_Channel"
+
+msgid "Helptext_Tickets_TicketCreate_Contact"
+msgstr "Helptext_Tickets_TicketCreate_Contact"
+
+msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
+msgstr "Helptext_Tickets_TicketCreate_CustomerVisible"
+
+msgid "Helptext_Tickets_TicketCreate_EncryptIfPossible"
+msgstr "Helptext_Tickets_TicketCreate_EncryptIfPossible"
+
+msgid "Helptext_Tickets_TicketCreate_Organisation"
+msgstr "Helptext_Tickets_TicketCreate_Organisation"
+
+msgid "Helptext_Tickets_TicketCreate_Owner"
+msgstr "Helptext_Tickets_TicketCreate_Owner"
+
+msgid "Helptext_Tickets_TicketCreate_Priority"
+msgstr "Helptext_Tickets_TicketCreate_Priority"
+
+msgid "Helptext_Tickets_TicketCreate_Queue"
+msgstr "Helptext_Tickets_TicketCreate_Queueue"
+
+msgid "Helptext_Tickets_TicketCreate_State"
+msgstr "Helptext_Tickets_TicketCreate_State"
+
+msgid "Helptext_Tickets_TicketCreate_Type"
+msgstr "Helptext_Tickets_TicketCreate_Type"
+
+msgid "Helptext_Tickets_TicketEdit_AffectedAsset"
+msgstr "Helptext_Tickets_TicketEdit_AffectedAsset"
+
+msgid "Helptext_Tickets_TicketEdit_Channel"
+msgstr "Helptext_Tickets_TicketEdit_Channel"
+
+msgid "Helptext_Tickets_TicketEdit_Contact"
+msgstr "Helptext_Tickets_TicketEdit_Contact"
+
+msgid "Helptext_Tickets_TicketEdit_Organisation"
+msgstr "Helptext_Tickets_TicketEdit_Organisation"
+
+msgid "Helptext_Tickets_TicketEdit_Owner"
+msgstr "Helptext_Tickets_TicketEdit_Owner"
+
+msgid "Helptext_Tickets_TicketEdit_Priority"
+msgstr "Helptext_Tickets_TicketEdit_Priority"
+
+msgid "Helptext_Tickets_TicketEdit_Responsible"
+msgstr "Helptext_Tickets_TicketEdit_Responsible"
+
+msgid "Helptext_Tickets_TicketEdit_State"
+msgstr "Helptext_Tickets_TicketEdit_State"
+
+msgid "Helptext_Tickets_TicketEdit_Title"
+msgstr "Helptext_Tickets_TicketEdit_Title"
+
+msgid "Helptext_User_UserCreateEdit_Login"
+msgstr "Helptext_User_UserCreateEdit_Login"
+
+msgid "Helptext_User_UserCreateEdit_Password"
+msgstr "Helptext_User_UserCreateEdit_Password"
+
+msgid "Helptext_User_UserCreateEdit_PasswordConfirm"
+msgstr "Helptext_User_UserCreateEdit_PasswordConfirm"
+
+msgid "Helptext_User_UserCreateEdit_Preferences_UserSecret"
+msgstr "Helptext_User_UserCreateEdit_Preferences_UserSecret"
+
+msgid "Helptext_i18n_TranslationPatternCreateEdit_Translation"
+msgstr "Helptext_i18n_TranslationPatternCreateEdit_Translation"
+
+msgid "Helptext_i18n_TranslationPatternCreate_Pattern"
+msgstr "Helptext_i18n_TranslationPatternCreate_Pattern"
+
+msgid "Hide"
+msgstr "Cacher"
+
+msgid "Hide Message"
+msgstr "Cacher le message"
+
+msgid "Hint"
+msgstr "Indice"
+
+msgid "History"
+msgstr "L'histoire"
+
+msgid "Home"
+msgstr "Accueil"
+
+msgid "Home Dashboard"
+msgstr "Tableau de bord de l'accueil"
+
+msgid "Host"
+msgstr "Hôte"
+
+msgid "Hour(s)"
+msgstr "Heure(s)"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "IMAP Folder"
+msgstr "Dossier IMAP"
+
+msgid "Icon"
+msgstr "Icône"
+
+msgid "Id"
+msgstr "Id"
+
+msgid "If checked, the last change date will be displayed for this item."
+msgstr ""
+"Si cette case est cochée, la date de la dernière modification sera affichée "
+"pour cet élément."
+
+msgid "If true, the value will increase the checklist counter."
+msgstr ""
+"Si la valeur est vraie, elle augmentera le compteur de la liste de contrôle."
+
+msgid "Ignore"
+msgstr "Ignorer"
+
+msgid "Import"
+msgstr "Importation"
+
+msgid "Import Contacts"
+msgstr "Importer des contacts"
+
+msgid "Import Organisations"
+msgstr "Organisations d'importation"
+
+msgid "Import configurations"
+msgstr "Importer des configurations"
+
+msgid "Import successfully started."
+msgstr "L'importation a démarré avec succès."
+
+msgid "Import will be started"
+msgstr "L'importation est lancée"
+
+msgid "Import {0} {1}. Execute?"
+msgstr "Importer {0} {1}. Exécuter ?"
+
+msgid "Import/Export"
+msgstr "Importation/Exportation"
+
+msgid "Import/Export Template"
+msgstr "Modèle d'importation/exportation"
+
+msgid "Import/Export Template Run"
+msgstr "Importation/exportation d'un modèle d'exécution"
+
+msgid "Import/Export Template Runs"
+msgstr "Importation/exportation de séries de modèles"
+
+msgid "Import/Export Templates"
+msgstr "Modèles d'importation/exportation"
+
+msgid "Importstate"
+msgstr "État d'importation"
+
+msgid "Imprint"
+msgstr "Impression"
+
+msgid "Inbox"
+msgstr "Boîte de réception"
+
+msgid "Incident"
+msgstr "Incident"
+
+msgid "Incident State"
+msgstr "État de l'incident"
+
+msgid "Incident state"
+msgstr "État de l'incident"
+
+msgid "Include Previous Version"
+msgstr "Inclure la version précédente"
+
+msgid "Include this code into the <head> area of your webpage."
+msgstr "Incluez ce code dans la zone <head> de votre page web."
+
+msgid "Incoming Time"
+msgstr "Heure d'arrivée"
+
+msgid "Incorrect data mapping. Length of dataset properties is different from value properties."
+msgstr ""
+"Mappage de données incorrect. La longueur des propriétés des ensembles de "
+"données est différente de celle des propriétés des valeurs."
+
+msgid "Incorrectly processed lines"
+msgstr "Lignes traitées de manière incorrecte"
+
+msgid "Information"
+msgstr "Informations"
+
+msgid "Information text"
+msgstr "Texte d'information"
+
+msgid "Initial Content"
+msgstr "Contenu initial"
+
+msgid "Input"
+msgstr "Entrée"
+
+msgid "Insert into article"
+msgstr "Insérer dans l'article"
+
+msgid "Inserted email address is invalid"
+msgstr "L'adresse électronique insérée n'est pas valide"
+
+msgid "Inserted email address must not be a system address ({0})."
+msgstr ""
+"L'adresse électronique insérée ne doit pas être une adresse système ({0})."
+
+msgid "Internal Field"
+msgstr "Champ interne"
+
+msgid "Internationalisation"
+msgstr "Internationalisation"
+
+msgid "Internationalisation: Translations ({0})"
+msgstr "Internationalisation : Traductions ({0})"
+
+msgid "Invalid date for pending date."
+msgstr "Date invalide pour la date en attente."
+
+msgid "Is asynchronous"
+msgstr "Est asynchrone"
+
+msgid "Item Separator"
+msgstr "Séparateur d'articles"
+
+msgid "Job"
+msgstr "Emploi"
+
+msgid "Job Details"
+msgstr "Détails de l'emploi"
+
+msgid "Job Information"
+msgstr "Informations sur l'emploi"
+
+msgid "Job successfully ran."
+msgstr "Le travail a été effectué avec succès."
+
+msgid "Jobs"
+msgstr "Emplois"
+
+msgid "Jobs successfully removed."
+msgstr "Emplois supprimés avec succès."
+
+msgid "KIX"
+msgstr "KIX"
+
+msgid "KIX Forum"
+msgstr "Forum KIX"
+
+msgid "Keywords"
+msgstr "Mots clés"
+
+msgid "Knowledge Database"
+msgstr "Base de données de connaissances"
+
+msgid "Knowledge Database: FAQ Categories"
+msgstr "Base de connaissances : Catégories de FAQ"
+
+msgid "Label"
+msgstr "Étiquette"
+
+msgid "Label / Name"
+msgstr "Label / Nom"
+
+msgid "Lanes"
+msgstr "Couloirs"
+
+msgid "Language"
+msgstr "Langue"
+
+msgid "Languages"
+msgstr "Langues"
+
+msgid "Large View"
+msgstr "Vue large"
+
+msgid "Last Login"
+msgstr "Dernière connexion"
+
+msgid "Last Name"
+msgstr "Nom de famille"
+
+msgid "Last executed at"
+msgstr "Dernière exécution à"
+
+msgid "Latest releases"
+msgstr "Dernières publications"
+
+msgid "Layer"
+msgstr "Couche"
+
+msgid "Legend"
+msgstr "Légende"
+
+msgid "Let's go"
+msgstr "Allons-y"
+
+msgid "Lets go"
+msgstr "Allons-y"
+
+msgid "Library"
+msgstr "Bibliothèque"
+
+msgid "Link Config Item with"
+msgstr "Lier l'élément de configuration avec"
+
+msgid "Link FAQ with"
+msgstr "Lien FAQ avec"
+
+msgid "Link Type"
+msgstr "Type de lien"
+
+msgid "Link Types"
+msgstr "Types de liens"
+
+msgid "Link to"
+msgstr "Lien vers"
+
+msgid "Link to ticket"
+msgstr "Lien vers le billet"
+
+msgid "Linked Objects (<KIX_OBJECT_LinkCount>)"
+msgstr "Objets liés (<KIX_OBJECT_LinkCount>)"
+
+msgid "Linked as"
+msgstr "Lié à"
+
+msgid "Links"
+msgstr "Liens"
+
+msgid "Links for {0}"
+msgstr "Liens pour {0}"
+
+msgid "Links updated."
+msgstr "Liens mis à jour."
+
+msgid "Links will be removed."
+msgstr "Les liens seront supprimés."
+
+msgid "Load Form"
+msgstr "Formulaire de chargement"
+
+msgid "Load more"
+msgstr "En savoir plus"
+
+msgid "Loading ..."
+msgstr "Chargement ..."
+
+msgid "Localisation"
+msgstr "Localisation"
+
+msgid "Lock"
+msgstr "Verrouiller"
+
+msgid "Lock State"
+msgstr "État des serrures"
+
+msgid "Lock Ticket"
+msgstr "Ticket de serrure"
+
+msgid "Locked"
+msgstr "Verrouillé"
+
+msgid "Locked Tickets"
+msgstr "Billets verrouillés"
+
+msgid "Log Level"
+msgstr "Niveau d'enregistrement"
+
+msgid "Logged in"
+msgstr "Connecté"
+
+msgid "Login Name"
+msgstr "Nom de connexion"
+
+msgid "Logout"
+msgstr "Déconnexion"
+
+msgid "Logs"
+msgstr "Journaux"
+
+msgid "Macro"
+msgstr "Macro"
+
+msgid "Macro Information"
+msgstr "Informations macro"
+
+msgid "Mail Account Details"
+msgstr "Détails du compte de messagerie"
+
+msgid "Mail Account successfully fetched."
+msgstr "Le compte de messagerie a été récupéré avec succès."
+
+msgid "Mail Accounts successfully removed."
+msgstr "Comptes de messagerie supprimés avec succès."
+
+msgid "Mail Filter Details"
+msgstr "Détails du filtre de courrier"
+
+msgid "Manuals"
+msgstr "Manuels"
+
+msgid "Marked all articles as read."
+msgstr "Marqué tous les articles comme lus."
+
+msgid "Max Depth"
+msgstr "Profondeur maximale"
+
+msgid "Max. Reports"
+msgstr "Max. Rapports"
+
+msgid "Max. allowed icon size: {0}"
+msgstr "Taille maximale autorisée pour les icônes : {0}"
+
+msgid "Menu"
+msgstr "Menu"
+
+msgid "Merged into the Ticket"
+msgstr "Fusionné dans le ticket"
+
+msgid "Message"
+msgstr "Message"
+
+msgid "Message after sending form"
+msgstr "Message après l'envoi du formulaire"
+
+msgid "Metadata"
+msgstr "Métadonnées"
+
+msgid "Minimizable"
+msgstr "Minimisable"
+
+msgid "Minimized"
+msgstr "Minimisé"
+
+msgid "Minutes"
+msgstr "Procès-verbal"
+
+msgid "Minutes(s)"
+msgstr "Procès-verbal(s)"
+
+msgid "Mobile"
+msgstr "Mobile"
+
+msgid "Modified"
+msgstr "Modifié"
+
+msgid "Monday"
+msgstr "Lundi"
+
+msgid "Month"
+msgstr "Mois"
+
+msgid "Month(s)"
+msgstr "Mois"
+
+msgid "Multifactor Authentication"
+msgstr "Authentification multifactorielle"
+
+msgid "Multiple"
+msgstr "Multiple"
+
+msgid "My Articles"
+msgstr "Mes articles"
+
+msgid "My Open Tickets"
+msgstr "Mes billets ouverts"
+
+msgid "My Open Tickets Table"
+msgstr "Mon tableau de billets ouverts"
+
+msgid "My Open Tickets Table Widget"
+msgstr "Mon widget de tableau de billets ouverts"
+
+msgid "My Open Tickets Widget"
+msgstr "Mon widget Open Tickets"
+
+msgid "My Organisation"
+msgstr "Mon organisation"
+
+msgid "My Queues"
+msgstr "Mes files d'attente"
+
+msgid "My Searches"
+msgstr "Mes recherches"
+
+msgid "My Teams"
+msgstr "Mes équipes"
+
+msgid "My Teams (past)"
+msgstr "Mes équipes (passé)"
+
+msgid "My Tickets"
+msgstr "Mes billets"
+
+msgid "My locked tickets"
+msgstr "Mes tickets bloqués"
+
+msgid "My locked tickets with new articles"
+msgstr "Mes tickets verrouillés avec de nouveaux articles"
+
+msgid "My tickets with new articles"
+msgstr "Mes billets avec de nouveaux articles"
+
+msgid "My watched tickets"
+msgstr "Mes billets regardés"
+
+msgid "My watched tickets with new articles"
+msgstr "Mes tickets surveillés avec de nouveaux articles"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Name of activate form button"
+msgstr "Nom du bouton d'activation du formulaire"
+
+msgid "Name of form submit button"
+msgstr "Nom du bouton de soumission du formulaire"
+
+msgid "Negate"
+msgstr "Négation"
+
+msgid "New"
+msgstr "Nouveau"
+
+msgid "New Account"
+msgstr "Nouveau compte"
+
+msgid "New Address"
+msgstr "Nouvelle adresse"
+
+msgid "New Article"
+msgstr "Nouvel article"
+
+msgid "New Asset Class"
+msgstr "Nouvelle classe d'actifs"
+
+msgid "New Category"
+msgstr "Nouvelle catégorie"
+
+msgid "New Class"
+msgstr "Nouvelle classe"
+
+msgid "New Config Item"
+msgstr "Nouvel élément de configuration"
+
+msgid "New Contact"
+msgstr "Nouveau contact"
+
+msgid "New Dynamic Field"
+msgstr "Nouveau champ dynamique"
+
+msgid "New Email Address"
+msgstr "Nouvelle adresse électronique"
+
+msgid "New Email Filter"
+msgstr "Nouveau filtre de courrier électronique"
+
+msgid "New FAQ"
+msgstr "Nouvelle FAQ"
+
+msgid "New FAQ Category"
+msgstr "Nouvelle catégorie de FAQ"
+
+msgid "New Field"
+msgstr "Nouveau domaine"
+
+msgid "New Filter"
+msgstr "Nouveau filtre"
+
+msgid "New General Catalog"
+msgstr "Nouveau catalogue général"
+
+msgid "New Group"
+msgstr "Nouveau groupe"
+
+msgid "New Job"
+msgstr "Nouvel emploi"
+
+msgid "New Macro"
+msgstr "Nouveau Macro"
+
+msgid "New Mail Account"
+msgstr "Nouveau compte de messagerie"
+
+msgid "New Mail Filter"
+msgstr "Nouveau filtre de courrier"
+
+msgid "New Notification"
+msgstr "Nouvelle notification"
+
+msgid "New Organisation"
+msgstr "Nouvelle organisation"
+
+msgid "New Page"
+msgstr "Nouvelle page"
+
+msgid "New Password"
+msgstr "Nouveau mot de passe"
+
+msgid "New Priority"
+msgstr "Nouvelle priorité"
+
+msgid "New Profile"
+msgstr "Nouveau profil"
+
+msgid "New Queue"
+msgstr "Nouvelle file d'attente"
+
+msgid "New Report"
+msgstr "Nouveau rapport"
+
+msgid "New Report Definition"
+msgstr "Nouvelle définition du rapport"
+
+msgid "New Role"
+msgstr "Nouveau rôle"
+
+msgid "New Ruleset Macro"
+msgstr "Nouveau jeu de règles Macro"
+
+msgid "New Search"
+msgstr "Nouvelle recherche"
+
+msgid "New State"
+msgstr "Nouvel État"
+
+msgid "New Team"
+msgstr "Nouvelle équipe"
+
+msgid "New Text Module"
+msgstr "Nouveau module de texte"
+
+msgid "New Textmodule"
+msgstr "Nouveau module de texte"
+
+msgid "New Ticket"
+msgstr "Nouveau billet"
+
+msgid "New Tickets"
+msgstr "Nouveaux billets"
+
+msgid "New Tickets Chart"
+msgstr "Nouveau tableau des billets"
+
+msgid "New Tickets Chart Widget"
+msgstr "Nouveau widget pour le tableau des billets"
+
+msgid "New Tickets Table"
+msgstr "Nouveau tableau des billets"
+
+msgid "New Tickets Table Widget"
+msgstr "Nouveau widget pour le tableau des billets"
+
+msgid "New Tickets Widget"
+msgstr "Nouveau widget des billets"
+
+msgid "New Translation"
+msgstr "Nouvelle traduction"
+
+msgid "New Translations"
+msgstr "Nouvelles traductions"
+
+msgid "New Type"
+msgstr "Nouveau type"
+
+msgid "New User"
+msgstr "Nouvel utilisateur"
+
+msgid "New Value"
+msgstr "Nouvelle valeur"
+
+msgid "New Webform"
+msgstr "Nouveau formulaire web"
+
+msgid "New {0} as copy of"
+msgstr "Nouveau {0} en tant que copie de"
+
+msgid "Next"
+msgstr "Suivant"
+
+msgid "Next Image"
+msgstr "Image suivante"
+
+msgid "No"
+msgstr "Non"
+
+msgid "No Access"
+msgstr "Pas d'accès"
+
+msgid "No Article"
+msgstr "Pas d'article"
+
+msgid "No Channel"
+msgstr "Pas de canal"
+
+msgid "No article available."
+msgstr "Pas d'article disponible."
+
+msgid "No data available."
+msgstr "Pas de données disponibles."
+
+msgid "No encryption"
+msgstr "Pas de cryptage"
+
+msgid "No object with ID {0} available."
+msgstr "Aucun objet avec l'ID {0} n'est disponible."
+
+msgid "No objects available."
+msgstr "Aucun objet disponible."
+
+msgid "No permission for this object."
+msgstr "Aucune autorisation pour cet objet."
+
+msgid "No rating available."
+msgstr "Aucune évaluation n'est disponible."
+
+msgid "No report available"
+msgstr "Pas de rapport disponible"
+
+msgid "No version available"
+msgstr "Pas de version disponible"
+
+msgid "No {0} found (add at least {1} characters)."
+msgstr "Aucun {0} trouvé (ajouter au moins {1} caractères)."
+
+msgid "No, thank you"
+msgstr "Non, merci"
+
+msgid "No."
+msgstr "Non."
+
+msgid "Not available (not any more or not yet)"
+msgstr "Non disponible (plus ou pas encore)"
+
+msgid "Not more than 5 files possible."
+msgstr "Pas plus de 5 fichiers possibles."
+
+msgid "Note"
+msgstr "Note"
+
+msgid "Notes"
+msgstr "Notes"
+
+msgid "Notification"
+msgstr "Notification"
+
+msgid "Notification Details"
+msgstr "Détails de la notification"
+
+msgid "Notification Envelope From"
+msgstr "Enveloppe de notification De"
+
+msgid "Notification Envelope From Fallback"
+msgstr "Enveloppe de notification de Fallback"
+
+msgid "Notification Information"
+msgstr "Informations sur la notification"
+
+msgid "Notification Methods"
+msgstr "Méthodes de notification"
+
+msgid "Notification Options"
+msgstr "Options de notification"
+
+msgid "Notification Template"
+msgstr "Modèle de notification"
+
+msgid "Notification Text"
+msgstr "Texte de la notification"
+
+msgid "Notifications"
+msgstr "Notifications"
+
+msgid "Notifications for Tickets"
+msgstr "Notifications pour les billets"
+
+msgid "Notifications successfully removed."
+msgstr "Notifications supprimées avec succès."
+
+msgid "Nr."
+msgstr "Nr."
+
+msgid "Number"
+msgstr "Nombre"
+
+msgid "Number of Attachments"
+msgstr "Nombre de pièces jointes"
+
+msgid "Number of Config Items"
+msgstr "Nombre d'éléments de configuration"
+
+msgid "Number of Config Items in critical incident state"
+msgstr "Nombre d'éléments de configuration en état d'incident critique"
+
+msgid "Number of open tickets by priority"
+msgstr "Nombre de tickets ouverts par priorité"
+
+msgid "Number of open tickets by statetype"
+msgstr "Nombre de tickets ouverts par type de statut"
+
+msgid "Number of ratings"
+msgstr "Nombre d'évaluations"
+
+msgid "Number of rows (init)"
+msgstr "Nombre de lignes (init)"
+
+msgid "Number of rows (max)"
+msgstr "Nombre de lignes (max)"
+
+msgid "Number of rows (min)"
+msgstr "Nombre de lignes (min)"
+
+msgid "Number of tickets created within the last 7 days"
+msgstr "Nombre de tickets créés au cours des 7 derniers jours"
+
+msgid "Number of version"
+msgstr "Numéro de la version"
+
+msgid "OAuth2 Profile"
+msgstr "Profil OAuth2"
+
+msgid "OAuth2 Profiles"
+msgstr "Profils OAuth2"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Object"
+msgstr "Objet"
+
+msgid "Object ID"
+msgstr "ID de l'objet"
+
+msgid "Object Id"
+msgstr "Id d'objet"
+
+msgid "Object Tag"
+msgstr "Étiquette d'objet"
+
+msgid "Object Tags"
+msgstr "Tags d'objets"
+
+msgid "Object Type"
+msgstr "Type d'objet"
+
+msgid "Objects"
+msgstr "Objets"
+
+msgid "Observer"
+msgstr "Observateur"
+
+msgid "Once a day"
+msgstr "Une fois par jour"
+
+msgid "Once per day"
+msgstr "Une fois par jour"
+
+msgid "Open"
+msgstr "Ouvrir"
+
+msgid "Open Sidebars"
+msgstr "Ouvrir les barres latérales"
+
+msgid "Open Tickets"
+msgstr "Billets ouverts"
+
+msgid "Open Tickets of Contact"
+msgstr "Billets de contact ouverts"
+
+msgid "Open Tickets of Organisation"
+msgstr "Billets ouverts de l'organisation"
+
+msgid "Open left sidebar"
+msgstr "Ouvrir la barre latérale gauche"
+
+msgid "Open main menu"
+msgstr "Ouvrir le menu principal"
+
+msgid "Open right sidebar"
+msgstr "Ouvrir la barre latérale droite"
+
+msgid "Open toolbar"
+msgstr "Ouvrir la barre d'outils"
+
+msgid "Operator"
+msgstr "Opérateur"
+
+msgid "Option"
+msgstr "Option"
+
+msgid "Organisation"
+msgstr "Organisation"
+
+msgid "Organisation Details"
+msgstr "Détails de l'organisation"
+
+msgid "Organisation ID"
+msgstr "ID de l'organisation"
+
+msgid "Organisation Information"
+msgstr "Informations sur l'organisation"
+
+msgid "Organisations"
+msgstr "Organisations"
+
+msgid "Organisations Dashboard"
+msgstr "Tableau de bord des organisations"
+
+msgid "Organizations and Contacts Dashboard"
+msgstr "Tableau de bord des organisations et des contacts"
+
+msgid "Other"
+msgstr "Autres"
+
+msgid "Out Of Office"
+msgstr "Absence de bureau"
+
+msgid "Out Of Office Agents"
+msgstr "Agents externes"
+
+msgid "Out of office"
+msgstr "Absence de mandat"
+
+msgid "Outbox"
+msgstr "Boîte d'envoi"
+
+msgid "Output Format"
+msgstr "Format de sortie"
+
+msgid "Output Formats"
+msgstr "Formats de sortie"
+
+msgid "Output Handler"
+msgstr "Gestionnaire de sortie"
+
+msgid "Overall"
+msgstr "Dans l'ensemble"
+
+msgid "Overview"
+msgstr "Vue d'ensemble"
+
+msgid "Overview Config Items"
+msgstr "Aperçu des éléments de configuration"
+
+msgid "Overview Config Items Deployment State"
+msgstr "Vue d'ensemble Éléments de configuration État de déploiement"
+
+msgid "Overview Contacts"
+msgstr "Vue d'ensemble Contacts"
+
+msgid "Overview FAQ"
+msgstr "Vue d'ensemble FAQ"
+
+msgid "Overview Organisations"
+msgstr "Aperçu des organisations"
+
+msgid "Overview Report Definitions"
+msgstr "Vue d'ensemble Définitions du rapport"
+
+msgid "Overview Reports"
+msgstr "Rapports de synthèse"
+
+msgid "Overview Tickets"
+msgstr "Aperçu des billets"
+
+msgid "Overview Versions"
+msgstr "Aperçu des versions"
+
+msgid "Overview of {0} to import ({1})"
+msgstr "Vue d'ensemble de {0} à importer ({1})"
+
+msgid "Owner"
+msgstr "Propriétaire"
+
+msgid "Owner (past)"
+msgstr "Propriétaire (passé)"
+
+msgid "Owner Out Of Office"
+msgstr "Propriétaire hors du bureau"
+
+msgid "Owner Out Of Office Substitute"
+msgstr "Propriétaire Absent du bureau Suppléant"
+
+msgid "PKCE"
+msgstr "PKCE"
+
+msgid "Page Size"
+msgstr "Taille de la page"
+
+msgid "Page contains invalid values"
+msgstr "La page contient des valeurs non valides"
+
+msgid "Paramater"
+msgstr "Paramètre"
+
+msgid "Parameter"
+msgstr "Paramètres"
+
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgid "Parent Category"
+msgstr "Catégorie de parents"
+
+msgid "Parent Queue"
+msgstr "File d'attente des parents"
+
+msgid "Password"
+msgstr "Mot de passe"
+
+msgid "Passwords do not match."
+msgstr "Les mots de passe ne correspondent pas."
+
+msgid "Pattern"
+msgstr "Modèle"
+
+msgid "Pending"
+msgstr "En attente"
+
+msgid "Pending Time has invalid date!"
+msgstr "La date de l'heure en attente n'est pas valide !"
+
+msgid "Pending Time has to be in future!"
+msgstr "Le temps en suspens doit être dans le futur !"
+
+msgid "Pending Time is required!"
+msgstr "La période d'attente est requise !"
+
+msgid "Pending date is not in the future."
+msgstr "La date d'attente n'est pas dans le futur."
+
+msgid "Pending time"
+msgstr "Temps d'attente"
+
+msgid "Pending until"
+msgstr "En attente jusqu'à"
+
+msgid "Pending until: {0} ({1})"
+msgstr "En attente jusqu'à : {0} ({1})"
+
+msgid "Periodic"
+msgstr "Périodique"
+
+msgid "Periodic Creation"
+msgstr "Création périodique"
+
+msgid "Permission"
+msgstr "Autorisation"
+
+msgid "Permissions"
+msgstr "Permissions"
+
+msgid "Personal Backlog"
+msgstr "Arriéré personnel"
+
+msgid "Personal Home Dashboard"
+msgstr "Tableau de bord personnel"
+
+msgid "Personal Kanban Board"
+msgstr "Tableau Kanban personnel"
+
+msgid "Personal Settings"
+msgstr "Paramètres personnels"
+
+msgid "Personal Ticket Calendar"
+msgstr "Calendrier des billets personnels"
+
+msgid "Phone"
+msgstr "Téléphone"
+
+msgid "Place this code wherever you want to open the webform dialog."
+msgstr ""
+"Placez ce code à l'endroit où vous souhaitez ouvrir la boîte de dialogue du "
+"formulaire web."
+
+msgid "Plaintext"
+msgstr "Texte en clair"
+
+msgid "Plan Begin"
+msgstr "Début du plan"
+
+msgid "Plan End"
+msgstr "Fin du plan"
+
+msgid "Plan: {0} - {1}"
+msgstr "Plan : {0} - {1}"
+
+msgid "Please enter a search term for a organisation."
+msgstr "Veuillez saisir un terme de recherche pour une organisation."
+
+msgid "Please enter a search term."
+msgstr "Veuillez saisir un terme de recherche."
+
+msgid "Please logout and login again with the new user."
+msgstr ""
+"Veuillez vous déconnecter et vous connecter à nouveau avec le nouvel "
+"utilisateur."
+
+msgid "Please select a contact"
+msgstr "Veuillez sélectionner un contact"
+
+msgid "Plugin"
+msgstr "Plugin"
+
+msgid "Plugins"
+msgstr "Plugins"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "Possible Values"
+msgstr "Valeurs possibles"
+
+msgid "Postal Address"
+msgstr "Adresse postale"
+
+msgid "Preferences"
+msgstr "Préférences"
+
+msgid "Prepare Article for print"
+msgstr "Préparer l'article pour l'impression"
+
+msgid "Prepare Asset for print"
+msgstr "Préparer le document pour l'impression"
+
+msgid "Prepare Attachments (0/{0})"
+msgstr "Préparer les pièces jointes (0/{0})"
+
+msgid "Prepare Attachments ({0}/{1})"
+msgstr "Préparer les pièces jointes ({0}/{1})"
+
+msgid "Prepare File Download"
+msgstr "Préparer le téléchargement du fichier"
+
+msgid "Prepare Ticket for print"
+msgstr "Préparer le billet pour l'impression"
+
+msgid "Prepare Tickets to print & zip"
+msgstr "Préparer les billets pour les imprimer et les zipper"
+
+msgid "Preview"
+msgstr "Avant-première"
+
+msgid "Preview List"
+msgstr "Liste de prévisualisation"
+
+msgid "Previous"
+msgstr "Précédent"
+
+msgid "Previous Image"
+msgstr "Image précédente"
+
+msgid "Primary Organisation"
+msgstr "Organisation primaire"
+
+msgid "Print"
+msgstr "Imprimer"
+
+msgid "Prio"
+msgstr "Prio"
+
+msgid "Priorities"
+msgstr "Priorités"
+
+msgid "Priorities successfully removed."
+msgstr "Les priorités ont été supprimées avec succès."
+
+msgid "Priority"
+msgstr "Priorité"
+
+msgid "Priority (past)"
+msgstr "Priorité (passé)"
+
+msgid "Priority Chart"
+msgstr "Tableau des priorités"
+
+msgid "Priority Data"
+msgstr "Données prioritaires"
+
+msgid "Profiles successfully removed."
+msgstr "Profils supprimés avec succès."
+
+msgid "Properties"
+msgstr "Propriétés"
+
+msgid "Property"
+msgstr "Propriété"
+
+msgid "Queue"
+msgstr "File d'attente"
+
+msgid "Queue (past)"
+msgstr "File d'attente (passé)"
+
+msgid "Queue Fullname"
+msgstr "Nom complet de la file d'attente"
+
+msgid "Queue Information"
+msgstr "Informations sur les files d'attente"
+
+msgid "Queues"
+msgstr "Files d'attente"
+
+msgid "Queues successfully removed."
+msgstr "Les files d'attente ont été supprimées avec succès."
+
+msgid "Quick Start Guide"
+msgstr "Guide de démarrage rapide"
+
+msgid "QuickstartGuide_Text_End"
+msgstr "Guide de démarrage rapide_Texte_Fin"
+
+msgid "QuickstartGuide_Text_Explorer"
+msgstr "Guide de démarrage rapide_Explorateur de texte"
+
+msgid "QuickstartGuide_Text_Lanes"
+msgstr "QuickstartGuide_Text_Lanes"
+
+msgid "QuickstartGuide_Text_Menu"
+msgstr "Guide de démarrage rapide_Menu texte"
+
+msgid "QuickstartGuide_Text_Personal_Home_Dashboard"
+msgstr "QuickstartGuide_Text_Personal_Home_Dashboard"
+
+msgid "QuickstartGuide_Text_Personal_Settings"
+msgstr "Guide de démarrage rapide_Text_Personal_Settings"
+
+msgid "QuickstartGuide_Text_Sidebars"
+msgstr "Guide de démarrage rapide_Texte_Barres latérales"
+
+msgid "QuickstartGuide_Text_Start"
+msgstr "Guide de démarrage rapide_Text_Start"
+
+msgid "QuickstartGuide_Text_Tables"
+msgstr "Guide de démarrage rapide_Tableaux de texte"
+
+msgid "RTL"
+msgstr "RTL"
+
+msgid "Rate"
+msgstr "Taux"
+
+msgid "Rating"
+msgstr "Evaluation"
+
+msgid "Read"
+msgstr "Lire"
+
+msgid "Read & Write"
+msgstr "Lire et écrire"
+
+msgid "Read all"
+msgstr "Tout lire"
+
+msgid "Readonly"
+msgstr "Lecture seule"
+
+msgid "Recently Closed"
+msgstr "Récemment fermé"
+
+msgid "Recipients"
+msgstr "Bénéficiaires"
+
+msgid "Redirect URL"
+msgstr "URL de redirection"
+
+msgid "References"
+msgstr "Références"
+
+msgid "Refresh Application"
+msgstr "Rafraîchir l'application"
+
+msgid "Refresh Interval(sec)"
+msgstr "Intervalle de rafraîchissement (sec)"
+
+msgid "RegEx"
+msgstr "RegEx"
+
+msgid "RegEx List"
+msgstr "Liste RegEx"
+
+msgid "RegExErrorMessage"
+msgstr "RegExErrorMessage"
+
+msgid "Related Assets"
+msgstr "Actifs liés"
+
+msgid "Related Tickets"
+msgstr "Billets associés"
+
+msgid "Relevant Macro type"
+msgstr "Type de macro pertinent"
+
+msgid "Reload Agent Portal Configurations"
+msgstr "Recharger les configurations du portail des agents"
+
+msgid "Reload Application"
+msgstr "Recharger l'application"
+
+msgid "Reload Calendar Data ..."
+msgstr "Recharger les données du calendrier ..."
+
+msgid "Reload Frontend Configurations"
+msgstr "Recharger les configurations du frontend"
+
+msgid "Reload Frontend Configurations?"
+msgstr "Recharger les configurations du frontend ?"
+
+msgid "Reminder Tickets"
+msgstr "Billets de rappel"
+
+msgid "Remove"
+msgstr "Retirer"
+
+msgid "Remove Address"
+msgstr "Supprimer l'adresse"
+
+msgid "Remove Dynamic Fields"
+msgstr "Supprimer les champs dynamiques"
+
+msgid "Remove FAQ Article(s)"
+msgstr "Supprimer l'article ou les articles de la FAQ"
+
+msgid "Remove FAQ Articles"
+msgstr "Supprimer les articles de la FAQ"
+
+msgid "Remove FAQ Categories"
+msgstr "Supprimer les catégories de FAQ"
+
+msgid "Remove Filter"
+msgstr "Supprimer le filtre"
+
+msgid "Remove Jobs"
+msgstr "Supprimer des emplois"
+
+msgid "Remove Mail Accounts"
+msgstr "Supprimer des comptes de messagerie"
+
+msgid "Remove Notifications"
+msgstr "Supprimer les notifications"
+
+msgid "Remove Priorities"
+msgstr "Supprimer les priorités"
+
+msgid "Remove Profiles"
+msgstr "Supprimer les profils"
+
+msgid "Remove Queues"
+msgstr "Supprimer les files d'attente"
+
+msgid "Remove Roles"
+msgstr "Supprimer des rôles"
+
+msgid "Remove States"
+msgstr "Supprimer les États"
+
+msgid "Remove Text Modules"
+msgstr "Supprimer les modules de texte"
+
+msgid "Remove Types"
+msgstr "Supprimer les types"
+
+msgid "Remove dependency to organisation"
+msgstr "Supprimer la dépendance à l'égard de l'organisation"
+
+msgid "Remove from Affected Assets"
+msgstr "Retirer des actifs affectés"
+
+msgid "Remove parameter"
+msgstr "Supprimer le paramètre"
+
+msgid "Remove table"
+msgstr "Retirer la table"
+
+msgid "Remove translations"
+msgstr "Supprimer les traductions"
+
+msgid "Rename Your Organisation"
+msgstr "Renommer votre organisation"
+
+msgid "Renew Authorization"
+msgstr "Renouvellement de l'autorisation"
+
+msgid "Replace Values"
+msgstr "Remplacer les valeurs"
+
+msgid "Replace empty value"
+msgstr "Remplacer une valeur vide"
+
+msgid "Replace existing search template {0}?"
+msgstr "Remplacer le modèle de recherche existant {0} ?"
+
+msgid "Reply"
+msgstr "Répondre"
+
+msgid "Reply All"
+msgstr "Répondre à tous"
+
+msgid "Report"
+msgstr "Rapport"
+
+msgid "Report Chart"
+msgstr "Graphique du rapport"
+
+msgid "Report Definition"
+msgstr "Définition du rapport"
+
+msgid "Report Definition(s) deleted."
+msgstr "Rapport Définition(s) supprimée(s)."
+
+msgid "Report Definitions"
+msgstr "Définitions du rapport"
+
+msgid "Report Information"
+msgstr "Informations sur le rapport"
+
+msgid "Report Parameter"
+msgstr "Paramètre du rapport"
+
+msgid "Report(s) deleted."
+msgstr "Rapport(s) supprimé(s)."
+
+msgid "Reporting"
+msgstr "Rapports"
+
+msgid "Reports"
+msgstr "Rapports"
+
+msgid "Required"
+msgstr "Exigée"
+
+msgid "Required field has no value."
+msgstr "Le champ obligatoire n'a pas de valeur."
+
+msgid "Required field {0} has no value."
+msgstr "Le champ obligatoire {0} n'a pas de valeur."
+
+msgid "Required field {0} is no JSON."
+msgstr "Le champ requis {0} n'est pas JSON."
+
+msgid "Reset"
+msgstr "Remise à zéro"
+
+msgid "Reset Preference"
+msgstr "Réinitialiser les préférences"
+
+msgid "Reset Search To Default"
+msgstr "Rétablir la recherche par défaut"
+
+msgid "Reset User Widgets"
+msgstr "Réinitialiser les widgets de l'utilisateur"
+
+msgid "Reset data"
+msgstr "Réinitialiser les données"
+
+msgid "Reset specific user settings"
+msgstr "Réinitialiser les paramètres spécifiques de l'utilisateur"
+
+msgid "Reset table filters"
+msgstr "Réinitialiser les filtres du tableau"
+
+msgid "Reset to Default"
+msgstr "Rétablissement des valeurs par défaut"
+
+msgid "Reset?"
+msgstr "Remise à zéro ?"
+
+msgid "Resizable"
+msgstr "Redimensionnable"
+
+msgid "Responsible"
+msgstr "Responsable"
+
+msgid "Responsible Out Of Office"
+msgstr "Responsable en dehors du bureau"
+
+msgid "Responsible Out Of Office Substitute"
+msgstr "Responsable de la suppléance en dehors du bureau"
+
+msgid "Result names"
+msgstr "Noms des résultats"
+
+msgid "Results"
+msgstr "Résultats"
+
+msgid "Richtext"
+msgstr "Richtext"
+
+msgid "Role"
+msgstr "Rôle"
+
+msgid "Role Details"
+msgstr "Détails du rôle"
+
+msgid "Role Information"
+msgstr "Informations sur le rôle"
+
+msgid "Roles"
+msgstr "Rôles"
+
+msgid "Roles successfully removed."
+msgstr "Rôles supprimés avec succès."
+
+msgid "Roles/Permissions"
+msgstr "Rôles/autorisations"
+
+msgid "Row"
+msgstr "Rangée"
+
+msgid "Row Number"
+msgstr "Numéro de ligne"
+
+msgid "Row Selection"
+msgstr "Sélection des rangs"
+
+msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
+msgstr ""
+"Ligne {0} du fichier avec {1} {2} : impossible d'importer{3}. Comment "
+"continuer ?"
+
+msgid "Run"
+msgstr "Exécuter"
+
+msgid "Run asynchronously"
+msgstr "Exécution asynchrone"
+
+msgid "SEARCH_OPERATOR_WITHIN_LAST"
+msgstr "SEARCH_OPERATOR_WITHIN_LAST"
+
+msgid "SEARCH_OPERATOR_WITHIN_NEXT"
+msgstr "SEARCH_OPERATOR_WITHIN_NEXT"
+
+msgid "SINGLE_QUOTES"
+msgstr "CITATIONS UNIQUES"
+
+msgid "SSP"
+msgstr "SSP"
+
+msgid "Saturday"
+msgstr "Samedi"
+
+msgid "Save"
+msgstr "Économiser"
+
+msgid "Save & Continue"
+msgstr "Sauvegarder et continuer"
+
+msgid "Save & Fetch"
+msgstr "Sauvegarder et récupérer"
+
+msgid "Save & Logout"
+msgstr "Sauvegarde et déconnexion"
+
+msgid "Save Organisation"
+msgstr "Sauver l'organisation"
+
+msgid "Save Outbox Settings"
+msgstr "Enregistrer les paramètres de la boîte d'envoi"
+
+msgid "Save Search"
+msgstr "Sauvegarder la recherche"
+
+msgid "Save Settings"
+msgstr "Sauvegarder les paramètres"
+
+msgid "Save System Settings"
+msgstr "Sauvegarder les paramètres du système"
+
+msgid "Save notification template"
+msgstr "Sauvegarder le modèle de notification"
+
+msgid "Scheduling"
+msgstr "Programmation"
+
+msgid "Scope"
+msgstr "Champ d'application"
+
+msgid "Search"
+msgstr "Recherche"
+
+msgid "Search Limit"
+msgstr "Limite de recherche"
+
+msgid "Search Object"
+msgstr "Objet de la recherche"
+
+msgid "Search Results ({0})"
+msgstr "Résultats de la recherche ({0})"
+
+msgid "Search Results: Config Items"
+msgstr "Résultats de la recherche : Éléments de configuration"
+
+msgid "Search Results: Contacts"
+msgstr "Résultats de la recherche : Contacts"
+
+msgid "Search Results: FAQ"
+msgstr "Résultats de la recherche : FAQ"
+
+msgid "Search Results: Organisations"
+msgstr "Résultats de la recherche : Organisations"
+
+msgid "Search Results: Tickets"
+msgstr "Résultats de la recherche : Billets"
+
+msgid "Search Templates"
+msgstr "Recherche de modèles"
+
+msgid "Search Title"
+msgstr "Titre de la recherche"
+
+msgid "Search by tag"
+msgstr "Recherche par mot-clé"
+
+msgid "Search defaults for {0} reseted."
+msgstr "Les valeurs par défaut de la recherche pour {0} ont été réinitialisées."
+
+msgid "Search error!"
+msgstr "Erreur de recherche !"
+
+msgid "Search menu"
+msgstr "Menu de recherche"
+
+msgid "Search successfully saved."
+msgstr "Recherche sauvegardée avec succès."
+
+msgid "Search template successfully removed."
+msgstr "Le modèle de recherche a été supprimé avec succès."
+
+msgid "Search template with same title already exists."
+msgstr "Le modèle de recherche avec le même titre existe déjà."
+
+msgid "Search {0} will be deleted. Are you sure?"
+msgstr "La recherche {0} sera supprimée. Vous êtes sûr de vous ?"
+
+msgid "Search: {0}"
+msgstr "Recherche : {0}"
+
+msgid "Searches"
+msgstr "Recherches"
+
+msgid "Second number value is missing."
+msgstr "La deuxième valeur numérique est manquante."
+
+msgid "Second number value is not an integer."
+msgstr "La deuxième valeur numérique n'est pas un entier."
+
+msgid "Seconds(s)"
+msgstr "Secondes(s)"
+
+msgid "Select"
+msgstr "Sélectionner"
+
+msgid "Select All"
+msgstr "Sélectionner tout"
+
+msgid "Select None"
+msgstr "Sélectionner Aucun"
+
+msgid "Select all"
+msgstr "Sélectionner tout"
+
+msgid "Select file"
+msgstr "Sélectionner un fichier"
+
+msgid "Select image file"
+msgstr "Sélectionner un fichier image"
+
+msgid "Selected Search Criteria"
+msgstr "Critères de recherche sélectionnés"
+
+msgid "Selected Versions"
+msgstr "Versions sélectionnées"
+
+msgid "Selected {0} ({1})"
+msgstr "Sélectionné {0} ({1})"
+
+msgid "Self Service Manual"
+msgstr "Manuel de libre-service"
+
+msgid "Send"
+msgstr "Envoyer"
+
+msgid "Send despite out of office"
+msgstr "Renvoyer malgré tout le bureau"
+
+msgid "Send to"
+msgstr "Envoyer à"
+
+msgid "Send to all role members"
+msgstr "Envoyer à tous les membres du rôle"
+
+msgid "Send to these agents"
+msgstr "Envoyer à ces agents"
+
+msgid "Sender Address"
+msgstr "Adresse de l'expéditeur"
+
+msgid "Sender Address (Email)"
+msgstr "Adresse de l'expéditeur (courriel)"
+
+msgid "Sender Type"
+msgstr "Type d'émetteur"
+
+msgid "Set Email Header"
+msgstr "Définir l'en-tête de l'e-mail"
+
+msgid "Set Email Headers"
+msgstr "Définir les en-têtes de l'e-mail"
+
+msgid "Set Hidden"
+msgstr "Set Hidden"
+
+msgid "Set Password for admin"
+msgstr "Définir le mot de passe pour l'administrateur"
+
+msgid "Set Value"
+msgstr "Valeur de consigne"
+
+msgid "Set as Default"
+msgstr "Définir par défaut"
+
+msgid "Setup Assistant"
+msgstr "Assistant d'installation"
+
+msgid "Setup email server"
+msgstr "Configuration du serveur de messagerie"
+
+msgid "Share_Search_Template"
+msgstr "Partager_le_modèle_de_recherche"
+
+msgid "Shared Search"
+msgstr "Recherche partagée"
+
+msgid "Shared Searches"
+msgstr "Recherches partagées"
+
+msgid "Show Filter"
+msgstr "Afficher le filtre"
+
+msgid "Show Graph"
+msgstr "Afficher le graphique"
+
+msgid "Show Last Change Date"
+msgstr "Afficher la date de la dernière modification"
+
+msgid "Show Links"
+msgstr "Liens de l'exposition"
+
+msgid "Show all"
+msgstr "Afficher tout"
+
+msgid "Show in Customer Portal"
+msgstr "Afficher dans le portail client"
+
+msgid "Show in agent preferences"
+msgstr "Afficher dans les préférences de l'agent"
+
+msgid "Show title in form"
+msgstr "Afficher le titre dans le formulaire"
+
+msgid "Sidebars"
+msgstr "Encadrés"
+
+msgid "Signature"
+msgstr "Signature"
+
+msgid "Size"
+msgstr "Taille"
+
+msgid "Size (px)"
+msgstr "Taille (px)"
+
+msgid "Skip"
+msgstr "Sauter"
+
+msgid "Skip & Continue"
+msgstr "Sauter et continuer"
+
+msgid "Small Headers"
+msgstr "Petits en-têtes"
+
+msgid "Small Rows"
+msgstr "Petites rangées"
+
+msgid "Small Widget"
+msgstr "Petit widget"
+
+msgid "Solution"
+msgstr "Solution"
+
+msgid "Some Translation"
+msgstr "Quelques traductions"
+
+msgid "Sort"
+msgstr "Trier"
+
+msgid "Sort attribute:"
+msgstr "Attribut de tri :"
+
+msgid "Sort order"
+msgstr "Ordre de tri"
+
+msgid "Sort order:"
+msgstr "Ordre de tri :"
+
+msgid "Sortable"
+msgstr "Triable"
+
+msgid "Source"
+msgstr "Source"
+
+msgid "Source Message"
+msgstr "Message de la source"
+
+msgid "Split Option"
+msgstr "Option de fractionnement"
+
+msgid "Standard"
+msgstr "Standard"
+
+msgid "Start Import"
+msgstr "Démarrer l'importation"
+
+msgid "Start by"
+msgstr "Commencer par"
+
+msgid "Start date/time is not given"
+msgstr "La date/heure de début n'est pas indiquée"
+
+msgid "Start modal dialog for form"
+msgstr "Démarrer un dialogue modal pour le formulaire"
+
+msgid "Start search"
+msgstr "Démarrer la recherche"
+
+msgid "Start time"
+msgstr "Heure de début"
+
+msgid "Start time has to be before end time"
+msgstr "L'heure de début doit être antérieure à l'heure de fin"
+
+msgid "Start value is greater than end value"
+msgstr "La valeur initiale est supérieure à la valeur finale"
+
+msgid "Start value is not given"
+msgstr "La valeur de départ n'est pas donnée"
+
+msgid "State"
+msgstr "État"
+
+msgid "State (past)"
+msgstr "État (passé)"
+
+msgid "State Data"
+msgstr "Données nationales"
+
+msgid "State Type"
+msgstr "Type d'État"
+
+msgid "State Types"
+msgstr "Types d'États"
+
+msgid "State Types Chart"
+msgstr "Tableau des types d'États"
+
+msgid "State Types Chart Widget"
+msgstr "Widget graphique des types d'État"
+
+msgid "States"
+msgstr "États"
+
+msgid "States successfully removed."
+msgstr "États supprimés avec succès."
+
+msgid "Stop after match"
+msgstr "Arrêt après le match"
+
+msgid "Street"
+msgstr "Rue"
+
+msgid "Sub"
+msgstr "Sous"
+
+msgid "Sub Category"
+msgstr "Sous-catégorie"
+
+msgid "Subject"
+msgstr "Sujet"
+
+msgid "Subject with Ticketnumber"
+msgstr "Objet avec numéro de ticket"
+
+msgid "Submit"
+msgstr "Soumettre"
+
+msgid "Substitute"
+msgstr "Remplaçant(e)"
+
+msgid "Success"
+msgstr "Succès"
+
+msgid "Success!"
+msgstr "Succès !"
+
+msgid "Successfully processed lines"
+msgstr "Lignes traitées avec succès"
+
+msgid "Successfully rated."
+msgstr "Évalué avec succès."
+
+msgid "Suggested FAQ"
+msgstr "FAQ suggérée"
+
+msgid "Summary"
+msgstr "Résumé"
+
+msgid "Sunday"
+msgstr "Dimanche"
+
+msgid "Superuser Account"
+msgstr "Compte de superutilisateur"
+
+msgid "Switch attachment list layout"
+msgstr "Modifier la présentation de la liste des pièces jointes"
+
+msgid "Switch to customer portal."
+msgstr "Passer au portail client."
+
+msgid "Symptom"
+msgstr "Symptôme"
+
+msgid "SysConfig"
+msgstr "SysConfig"
+
+msgid "SysConfig Keys"
+msgstr "Clés SysConfig"
+
+msgid "System"
+msgstr "Système"
+
+msgid "System Address"
+msgstr "Adresse du système"
+
+msgid "System Addresses"
+msgstr "Adresses du système"
+
+msgid "System Settings"
+msgstr "Paramètres du système"
+
+msgid "System address"
+msgstr "Adresse du système"
+
+msgid "System: Console"
+msgstr "Système : Console"
+
+msgid "System: Dynamic Fields"
+msgstr "Système : Champs dynamiques"
+
+msgid "System: Logs"
+msgstr "Système : Journaux"
+
+msgid "System: Plugins"
+msgstr "Système : Plugins"
+
+msgid "System: Sysconfig ({0})"
+msgstr "Système : Sysconfig ({0})"
+
+msgid "Table Columns"
+msgstr "Colonnes du tableau"
+
+msgid "Table Configuration"
+msgstr "Configuration du tableau"
+
+msgid "Table Height (Row Count)"
+msgstr "Hauteur du tableau (nombre de lignes)"
+
+msgid "Table Widget"
+msgstr "Widget de tableau"
+
+msgid "Tables"
+msgstr "Tableaux"
+
+msgid "Tags"
+msgstr "Tags"
+
+msgid "Tail Lines"
+msgstr "Lignes de queue"
+
+msgid "Target"
+msgstr "Cible"
+
+msgid "Task End Time"
+msgstr "Heure de fin de la tâche"
+
+msgid "Task Number"
+msgstr "Numéro de la tâche"
+
+msgid "Task Start Time"
+msgstr "Heure de début de la tâche"
+
+msgid "Task State"
+msgstr "État des tâches"
+
+msgid "Team"
+msgstr "L'équipe"
+
+msgid "Team Backlog"
+msgstr "Backlog de l'équipe"
+
+msgid "Team Dashboard"
+msgstr "Tableau de bord de l'équipe"
+
+msgid "Technical Customer Service mit KIX - work order documentation, checklists, scheduling, offline information for maintenance and repairs."
+msgstr ""
+"Service technique à la clientèle de KIX - documentation des ordres de "
+"travail, listes de contrôle, programmation, informations hors ligne pour "
+"l'entretien et les réparations."
+
+msgid "Template"
+msgstr "Modèle"
+
+msgid "Text"
+msgstr "Texte"
+
+msgid "Text Module"
+msgstr "Module de texte"
+
+msgid "Text Modules"
+msgstr "Modules de texte"
+
+msgid "Text Modules successfully removed."
+msgstr "Modules de texte supprimés avec succès."
+
+msgid "Text separator"
+msgstr "Séparateur de texte"
+
+msgid "The Job {0} will be ran now. Are you sure?"
+msgstr "Le travail {0} sera exécuté maintenant. Êtes-vous sûr ?"
+
+msgid "The entered date is out of boundaries."
+msgstr "La date saisie est en dehors des limites."
+
+msgid "The entered date is out of boundaries.."
+msgstr "La date saisie est hors limites.."
+
+msgid "The file size of {0} is too large ({1}). Max.: {2}"
+msgstr "La taille du fichier {0} est trop importante ({1}). Max : {2}"
+
+msgid "The file {0} has no valid MIME-TYPE."
+msgstr "Le fichier {0} n'a pas de MIME-TYPE valide."
+
+msgid "The following {0} entries and existing sub categories will be deleted. Are you sure?"
+msgstr ""
+"Les {0} entrées suivantes et les sous-catégories existantes seront "
+"supprimées. Êtes-vous sûr de vous ?"
+
+msgid "The following {0} entries will be deleted. Are you sure?"
+msgstr "Les {0} entrées suivantes seront supprimées. Êtes-vous sûr de vous ?"
+
+msgid "The password is changed for Admin."
+msgstr "Le mot de passe est modifié pour Admin."
+
+msgid "The preference ContextWidgetLists will be reseted for the user. Are you sure?"
+msgstr ""
+"Les listes de ContextWidget de préférence seront réinitialisées pour "
+"l'utilisateur. Êtes-vous sûr ?"
+
+msgid "The preference ContextWidgetLists will be reseted for the {0} selected user. Are you sure?"
+msgstr ""
+"Les listes de ContextWidget de préférence seront réinitialisées pour "
+"l'utilisateur sélectionné {0}. Êtes-vous sûr de vous ?"
+
+msgid "The requested ticket is not available due to restricted permissions."
+msgstr ""
+"Le billet demandé n'est pas disponible en raison d'autorisations restreintes."
+
+msgid "The value for the field is in the future! The date needs to be in the past!"
+msgstr ""
+"La valeur du champ se situe dans le futur ! La date doit se situer dans le "
+"passé !"
+
+msgid "The year can be a maximum of {0} years in the future"
+msgstr "L'année peut se situer au maximum {0} ans dans le futur"
+
+msgid "The year can be a maximum of {0} years in the past"
+msgstr "L'année peut se situer au maximum {0} ans dans le passé"
+
+msgid "There are open dialogs. Any data you may have entered will be lost. Continue?"
+msgstr ""
+"Des dialogues sont ouverts. Les données que vous avez éventuellement saisies "
+"seront perdues. Poursuivre ?"
+
+msgid "This is the administration panel. Please select a module from the explorer."
+msgstr ""
+"Ceci est le panneau d'administration. Veuillez sélectionner un module dans "
+"l'explorateur."
+
+msgid "Thursday"
+msgstr "Jeudi"
+
+msgid "Ticket"
+msgstr "Billet"
+
+msgid "Ticket Attributes"
+msgstr "Attributs du billet"
+
+msgid "Ticket Data"
+msgstr "Données sur les billets"
+
+msgid "Ticket Flags"
+msgstr "Drapeaux à billets"
+
+msgid "Ticket History"
+msgstr "Historique des billets"
+
+msgid "Ticket Information"
+msgstr "Information sur les billets"
+
+msgid "Ticket Notifications"
+msgstr "Notifications de billets"
+
+msgid "Ticket Number"
+msgstr "Numéro du billet"
+
+msgid "Ticket Out Of Office Substitute"
+msgstr "Ticket Out Of Office Substitute"
+
+msgid "Ticket has printed"
+msgstr "Le billet a été imprimé"
+
+msgid "Ticket is being watched."
+msgstr "Le ticket est surveillé."
+
+msgid "Ticket is no longer watched."
+msgstr "Le ticket n'est plus surveillé."
+
+msgid "Ticket locked."
+msgstr "Billet bloqué."
+
+msgid "Ticket unlocked."
+msgstr "Ticket déverrouillé."
+
+msgid "Ticket: Priorities"
+msgstr "Billet : Priorités"
+
+msgid "Ticket: Queues"
+msgstr "Billet : Files d'attente"
+
+msgid "Ticket: States"
+msgstr "Billet : États"
+
+msgid "Ticket: Text Modules"
+msgstr "Billet : Modules de texte"
+
+msgid "Ticket: Types"
+msgstr "Billet : Types"
+
+msgid "TicketOwner"
+msgstr "Propriétaire de billet"
+
+msgid "TicketResponsible"
+msgstr "TicketResponsible"
+
+msgid "Tickets"
+msgstr "Billets"
+
+msgid "Tickets for Assets"
+msgstr "Billets pour les actifs"
+
+msgid "Tickets for Contact"
+msgstr "Billets pour Contact"
+
+msgid "Tickets has been printed and zipped"
+msgstr "Les billets ont été imprimés et zippés"
+
+msgid "Tickets: {0}"
+msgstr "Tickets : {0}"
+
+msgid "Till"
+msgstr "Till"
+
+msgid "Time"
+msgstr "L'heure"
+
+msgid "Time Based"
+msgstr "Basé sur le temps"
+
+msgid "Time Based Execution"
+msgstr "Exécution en fonction du temps"
+
+msgid "Tips for getting started quickly with KIX can be found on the KIX YouTube channel. In the forum you can also exchange ideas with other KIX users."
+msgstr ""
+"Des conseils pour démarrer rapidement avec KIX sont disponibles sur la "
+"chaîne YouTube de KIX. Le forum vous permet également d'échanger des idées "
+"avec d'autres utilisateurs de KIX."
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "Title is required!"
+msgstr "Le titre est obligatoire !"
+
+msgid "To"
+msgstr "Pour"
+
+msgid "Today"
+msgstr "Aujourd'hui"
+
+msgid "Token URL"
+msgstr "URL du jeton"
+
+msgid "Translatable"
+msgstr "Traductible"
+
+msgid "Translatable Columns"
+msgstr "Colonnes traduisibles"
+
+msgid "Translatable Title"
+msgstr "Titre traduisible"
+
+msgid "Translate Values"
+msgstr "Traduire les valeurs"
+
+msgid "Translation"
+msgstr "Traduction"
+
+msgid "TranslationLanguage"
+msgstr "TraductionLangue"
+
+msgid "Translations"
+msgstr "Traductions"
+
+msgid "Translations successfully removed."
+msgstr "Traductions supprimées avec succès."
+
+msgid "Tuesday"
+msgstr "Mardi"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Type (past)"
+msgstr "Type (passé)"
+
+msgid "Type Data"
+msgstr "Type de données"
+
+msgid "Type of Job"
+msgstr "Type d'emploi"
+
+msgid "Type of first value is missing."
+msgstr "Le type de la première valeur est manquant."
+
+msgid "Type of second value is missing."
+msgstr "Le type de la deuxième valeur est manquant."
+
+msgid "Types"
+msgstr "Les types"
+
+msgid "Types successfully removed."
+msgstr "Types supprimés avec succès."
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Unit of first value is missing."
+msgstr "L'unité de la première valeur est manquante."
+
+msgid "Unit of second value is missing."
+msgstr "L'unité de la deuxième valeur est manquante."
+
+msgid "Unlock"
+msgstr "Déverrouiller"
+
+msgid "Unlock Ticket"
+msgstr "Déverrouiller le ticket"
+
+msgid "Unlock Timeout"
+msgstr "Délai de déverrouillage"
+
+msgid "Unlock Timeout (min)"
+msgstr "Délai de déverrouillage (min)"
+
+msgid "Unlocked"
+msgstr "Débloqué"
+
+msgid "Unlocked Tickets"
+msgstr "Billets débloqués"
+
+msgid "Unread"
+msgstr "Non lu"
+
+msgid "Unread Articles"
+msgstr "Articles non lus"
+
+msgid "Unwatch"
+msgstr "Déclencher la surveillance"
+
+msgid "Unwatch Ticket"
+msgstr "Ticket Unwatch"
+
+msgid "Update Email Account"
+msgstr "Mise à jour du compte e-mail"
+
+msgid "Usage Context"
+msgstr "Contexte d'utilisation"
+
+msgid "Use KIX CSS"
+msgstr "Utiliser KIX CSS"
+
+msgid "User"
+msgstr "Utilisateur"
+
+msgid "User Access"
+msgstr "Accès des utilisateurs"
+
+msgid "User Details"
+msgstr "Détails de l'utilisateur"
+
+msgid "User Information"
+msgstr "Informations sur l'utilisateur"
+
+msgid "User Management"
+msgstr "Gestion des utilisateurs"
+
+msgid "User Management: Roles"
+msgstr "Gestion des utilisateurs : Rôles"
+
+msgid "User Management: Users ({0})"
+msgstr "Gestion des utilisateurs : Utilisateurs ({0})"
+
+msgid "User Manual"
+msgstr "Manuel de l'utilisateur"
+
+msgid "User Name"
+msgstr "Nom de l'utilisateur"
+
+msgid "User Preferences"
+msgstr "Préférences de l'utilisateur"
+
+msgid "User Secret"
+msgstr "Secret d'utilisateur"
+
+msgid "User Token"
+msgstr "Jeton d'utilisateur"
+
+msgid "User is already assigned"
+msgstr "L'utilisateur est déjà affecté"
+
+msgid "Users"
+msgstr "Utilisateurs"
+
+msgid "Validation error"
+msgstr "Erreur de validation"
+
+msgid "Validity"
+msgstr "Validité"
+
+msgid "Value"
+msgstr "Valeur"
+
+msgid "Value of field {0} is too long (max: {1})."
+msgstr "La valeur du champ {0} est trop longue (max : {1})."
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Version ID"
+msgstr "ID de la version"
+
+msgid "View"
+msgstr "Voir"
+
+msgid "View Log File"
+msgstr "Voir le fichier journal"
+
+msgid "Viewable States"
+msgstr "États consultables"
+
+msgid "Visible in Self Service Portal"
+msgstr "Visible dans le portail en libre-service"
+
+msgid "Visible in customer portal"
+msgstr "Visible sur le portail client"
+
+msgid "Votes"
+msgstr "Votes"
+
+msgid "Wait until"
+msgstr "Attendez jusqu'à ce que"
+
+msgid "Warning"
+msgstr "Avertissement"
+
+msgid "Watch"
+msgstr "Regarder"
+
+msgid "Watch Ticket"
+msgstr "Ticket de surveillance"
+
+msgid "Watch User"
+msgstr "Utilisateur de la montre"
+
+msgid "Watched"
+msgstr "Regardé"
+
+msgid "Watched Tickets"
+msgstr "Billets surveillés"
+
+msgid "We are working on this functionality."
+msgstr "Nous travaillons sur cette fonctionnalité."
+
+msgid "Webform"
+msgstr "Formulaire web"
+
+msgid "Webform Details"
+msgstr "Détails du formulaire Web"
+
+msgid "Webform Options"
+msgstr "Options du formulaire Web"
+
+msgid "Webform(s) deleted."
+msgstr "Formulaire(s) Web supprimé(s)."
+
+msgid "Wednesday"
+msgstr "Mercredi"
+
+msgid "Week"
+msgstr "Semaine"
+
+msgid "Week(s)"
+msgstr "Semaine(s)"
+
+msgid "Weekday(s)"
+msgstr "Jour(s) de la semaine"
+
+msgid "Welcome"
+msgstr "Bienvenue"
+
+msgid "Welcome to KIX 18"
+msgstr "Bienvenue sur KIX 18"
+
+msgid "Widget Configuration"
+msgstr "Configuration des widgets"
+
+msgid "Wildcard Search"
+msgstr "Recherche Wildcard"
+
+msgid "With attachments"
+msgstr "Avec pièces jointes"
+
+msgid "Work in Progress"
+msgstr "Travaux en cours"
+
+msgid "Wrap Lines"
+msgstr "Lignes enveloppantes"
+
+msgid "Write"
+msgstr "Écrire"
+
+msgid "Year(s)"
+msgstr "Année(s)"
+
+msgid "Years in Future"
+msgstr "Années à venir"
+
+msgid "Years in Past"
+msgstr "Années passées"
+
+msgid "Yes"
+msgstr "Oui"
+
+msgid "Yes, please"
+msgstr "Oui, s'il vous plaît"
+
+msgid "You did it!"
+msgstr "Vous avez réussi !"
+
+msgid "You have to confirm your password."
+msgstr "Vous devez confirmer votre mot de passe."
+
+msgid "You will edit {0} attributes for {1} {2}. Execute now?"
+msgstr "Vous allez éditer {0} attributs pour {1} {2}. Exécuter maintenant ?"
+
+msgid "You will reset {0} Sysconfig Options. Execute now?"
+msgstr "Vous allez réinitialiser {0} options Sysconfig. Exécuter maintenant ?"
+
+msgid "Your Permissions have been updated."
+msgstr "Vos autorisations ont été mises à jour."
+
+msgid "Your rating"
+msgstr "Votre note"
+
+msgid "Youtube"
+msgstr "Youtube"
+
+msgid "ZIP"
+msgstr "ZIP"
+
+msgid "Zip"
+msgstr "Zip"
+
+msgid "add notes here"
+msgstr "ajouter des notes ici"
+
+msgid "after"
+msgstr "après"
+
+msgid "agent"
+msgstr "agent"
+
+msgid "and"
+msgstr "et"
+
+msgid "and further"
+msgstr "et en outre"
+
+msgid "ascending"
+msgstr "ascendante"
+
+msgid "before"
+msgstr "avant"
+
+msgid "between"
+msgstr "entre"
+
+msgid "contained in"
+msgstr "contenues dans"
+
+msgid "contains"
+msgstr "contient"
+
+msgid "created"
+msgstr "créé"
+
+msgid "current"
+msgstr "actuel"
+
+msgid "descending"
+msgstr "descendant"
+
+msgid "draft successfully saved"
+msgstr "projet sauvegardé avec succès"
+
+msgid "edited"
+msgstr "édité"
+
+msgid "edited at {0} by {1}"
+msgstr "édité à {0} par {1}"
+
+msgid "ends with"
+msgstr "se termine par"
+
+msgid "enter filter value"
+msgstr "saisir la valeur du filtre"
+
+msgid "equals"
+msgstr "égaux"
+
+msgid "expected time required:"
+msgstr "le temps nécessaire :"
+
+msgid "external"
+msgstr "externe"
+
+msgid "finished"
+msgstr "terminé"
+
+msgid "in less than"
+msgstr "en moins de"
+
+msgid "in more than"
+msgstr "dans plus de"
+
+msgid "insert filter value"
+msgstr "insérer une valeur de filtre"
+
+msgid "is empty"
+msgstr "est vide"
+
+msgid "is to large (max {0})."
+msgstr "est trop grand (max {0})."
+
+msgid "less than ago"
+msgstr "il y a moins d'un an"
+
+msgid "more than ago"
+msgstr "il y a plus d'un an"
+
+msgid "next"
+msgstr "suivant"
+
+msgid "no"
+msgstr "non"
+
+msgid "not contained in"
+msgstr "qui n'est pas contenue dans"
+
+msgid "not modified"
+msgstr "non modifié"
+
+msgid "owned by me"
+msgstr "m'appartient"
+
+msgid "previous"
+msgstr "précédent"
+
+msgid "recipient addresses (To, Cc, etc.)"
+msgstr "les adresses des destinataires (To, Cc, etc.)"
+
+msgid "responsibility by me"
+msgstr "responsabilité de ma part"
+
+msgid "running"
+msgstr "en cours d'exécution"
+
+msgid "search ..."
+msgstr "recherche ..."
+
+msgid "send to background"
+msgstr "envoyer en arrière-plan"
+
+msgid "setup_assistant_add_mail_account_text"
+msgstr "setup_assistant_add_mail_account_text"
+
+msgid "setup_assistant_change_admin_password_text"
+msgstr "setup_assistant_change_admin_password_text"
+
+msgid "setup_assistant_create_superuser_text"
+msgstr "setup_assistant_create_superuser_text"
+
+msgid "setup_assistant_notification_template_text"
+msgstr "setup_assistant_notification_template_text"
+
+msgid "setup_assistant_sending_email_text"
+msgstr "setup_assistant_sending_email_text"
+
+msgid "setup_assistant_system_settings_text"
+msgstr "setup_assistant_system_settings_text"
+
+msgid "setup_assistant_welcome_text"
+msgstr "setup_assistant_welcome_text"
+
+msgid "setupt_assistant_my-organisation_text"
+msgstr "setupt_assistant_mon-organisation_texte"
+
+msgid "since"
+msgstr "depuis"
+
+msgid "starts with"
+msgstr "commence par"
+
+msgid "switch_column_order_action"
+msgstr "action_d'ordre_des_colonnes"
+
+msgid "system"
+msgstr "système"
+
+msgid "to"
+msgstr "à"
+
+msgid "to Article"
+msgstr "à l'article"
+
+msgid "to Version"
+msgstr "vers la version"
+
+msgid "to version"
+msgstr "à la version"
+
+msgid "unequal"
+msgstr "inégal"
+
+msgid "until"
+msgstr "jusqu'à"
+
+msgid "within"
+msgstr "à l'intérieur"
+
+msgid "within the last"
+msgstr "au cours des derniers"
+
+msgid "within the next"
+msgstr "dans les prochains"
+
+msgid "yes"
+msgstr "oui"
+
+msgid "{0} File(s) added"
+msgstr "{0} Fichier(s) ajouté(s)"
+
+msgid "{0} Link created"
+msgstr "{0} Lien créé"
+
+msgid "{0} imported"
+msgstr "{0} importé"
+
+msgid "{0} is required."
+msgstr "{0} est nécessaire."
+
+msgid "{0} link(s) assigned."
+msgstr "{0} lien(s) attribué(s)."
+
+msgid "{0}. Action"
+msgstr "{0}. Action"
+
+msgid "{0}/{1} {2} imported"
+msgstr "{0}/{1} {2} importé"
+
+msgid "{0}: has no value."
+msgstr "{0} : n'a pas de valeur."
+
+msgid "{0}: just white spaces as value is not allowed."
+msgstr "{0} : les espaces blancs ne sont pas autorisés."

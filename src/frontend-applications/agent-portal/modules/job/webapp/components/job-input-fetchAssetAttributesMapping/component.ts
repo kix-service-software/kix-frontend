@@ -10,11 +10,11 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<[string, string], ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -32,9 +32,12 @@ class Component extends FormInputComponent<[string, string], ComponentState> {
         await super.onMount();
     }
 
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
+    }
+
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             this.state.currentAssetValue = value.value[0];
@@ -59,6 +62,10 @@ class Component extends FormInputComponent<[string, string], ComponentState> {
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
 }

@@ -18,19 +18,20 @@ import { ContactProperty } from '../../../model/ContactProperty';
 import { UserProperty } from '../../../../user/model/UserProperty';
 import { OrganisationDetailsContext } from '../../core/context/OrganisationDetailsContext';
 import { ContactDetailsContext } from '../../core/context/ContactDetailsContext';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public routingConfiguration: RoutingConfiguration;
     public objectId: number;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.labelProvider = input.labelProvider;
         this.state.property = input.property;
         this.state.object = input.object;
@@ -42,6 +43,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.propertyText = await this.state.labelProvider.getPropertyText(this.state.property);
         this.state.displayText = await this.state.labelProvider.getDisplayText(this.state.object, this.state.property);
         await this.initRoutingConfiguration();
@@ -71,6 +73,10 @@ class Component {
                 );
             }
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

@@ -30,16 +30,18 @@ export class PermissionsTableFactory extends TableFactory {
 
     public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
+        contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: KIXObjectType | string
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, objectType
         );
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
-        table.setContentProvider(new PermissionsTableContentProvider(objectType, table, objectIds, null, contextId));
+        table.setContentProvider(new PermissionsTableContentProvider(
+            objectType, table, objectIds, null, contextInstanceId
+        ));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;

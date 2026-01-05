@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Role } from '../../../model/Role';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
@@ -22,23 +21,24 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContactProperty } from '../../../../customer/model/ContactProperty';
-import { RoleDetailsContext } from '../../core/admin/context/RoleDetailsContext';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
-        context.registerListener('user-role-assigned-users-widget', {
+        this.context?.registerListener('user-role-assigned-users-widget', {
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
@@ -51,11 +51,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             additionalInformationChanged: (): void => { return; }
         });
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        await this.initWidget(await context.getObject<Role>());
+        await this.initWidget(await this.context?.getObject<Role>());
     }
 
     private async initWidget(role: Role): Promise<void> {
@@ -85,7 +83,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             );
             const table = await TableFactoryService.getInstance().createTable(
                 'user-role-assigned-users', KIXObjectType.USER, tableConfiguration, role.UserIDs,
-                RoleDetailsContext.CONTEXT_ID, true, undefined, false, true, true
+                this.contextInstanceId, true, undefined, false, true, true
             );
             this.state.table = table;
             this.prepareActions(role);
@@ -103,11 +101,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(role: Role): Promise<void> {
         if (this.state.widgetConfiguration && role) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [role]
+                this.state.widgetConfiguration.actions, [role], this.contextInstanceId
             );
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

@@ -10,8 +10,9 @@
 import { Article } from '../../../model/Article';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public article: Article = null,
@@ -19,6 +20,8 @@ export class ComponentState {
         public progress: boolean = false,
         public extension: string = null,
         public icon: ObjectIcon = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

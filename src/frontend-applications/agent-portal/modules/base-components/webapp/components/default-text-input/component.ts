@@ -16,7 +16,8 @@ import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -51,9 +52,12 @@ class Component extends FormInputComponent<string, ComponentState> {
         await super.onMount();
     }
 
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
+    }
+
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value) {
             this.state.currentValue = value.value;
@@ -89,6 +93,10 @@ class Component extends FormInputComponent<string, ComponentState> {
     public getInputType(isPasswordVisible: boolean): string {
         if (isPasswordVisible) return InputFieldTypes.TEXT;
         return this.state.inputType;
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
 }

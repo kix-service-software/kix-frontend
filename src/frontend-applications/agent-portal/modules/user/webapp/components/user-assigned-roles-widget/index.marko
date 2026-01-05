@@ -8,14 +8,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId=state.instanceId
     title=state.title
-    contentActions=state.actions
->
+    contentActions=state.actions>
     <@content>
         <if(state.table)>
             <kix-table table=state.table/>
         </if>
-        <else><table-placeholder/></else>
+        <else>
+            <table-placeholder/>
+        </else>
     </@content>
 </widget>

@@ -135,6 +135,12 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     }
 
     private deleteArticleProperties(article: Article): void {
+        const context = ContextService.getInstance().getActiveContext();
+        const isNewArticleContext = context.getAdditionalInformation('NEW_ARTICLE');
+        const referencedArticleId = context.getAdditionalInformation('ReferencedArticleID');
+        if (isNewArticleContext && referencedArticleId === article.ArticleID) {
+            delete article.ArticleID;
+        }
         delete article.ticket;
         delete article.ChangedBy;
         delete article.Comment;
@@ -144,6 +150,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         delete article.Plain;
         delete article.References;
         delete article.SenderType;
+        delete article.SenderTypeID;
+        delete article.IncomingTime;
         delete article.bccList;
         delete article.bodyAttachment;
         delete article.ccList;

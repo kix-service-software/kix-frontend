@@ -31,7 +31,7 @@ export class TicketPriorityLabelProvider extends LabelProvider<TicketPriority> {
                 displayValue = 'Translatable#Name';
                 break;
             case TicketPriorityProperty.ID:
-                displayValue = 'Translatable#Icon';
+                displayValue = 'Translatable#ID';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);

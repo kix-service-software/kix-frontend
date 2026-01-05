@@ -8,24 +8,21 @@
  */
 
 import { ContextMode } from '../../../../../../model/ContextMode';
-import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { SearchService } from '../../../../../search/webapp/core/SearchService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ComponentState } from './ComponentState';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
-    private subscriber: IEventSubscriber;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Create', 'Translatable#Search'
         ]);
@@ -35,7 +32,7 @@ class Component {
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
+        super.onDestroy();
     }
 
     public async searchClicked(event: any): Promise<void> {
@@ -66,6 +63,10 @@ class Component {
         this.state.searchValue = event ? event.target.value : externalFilterText;
     }
 
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

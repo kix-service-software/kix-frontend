@@ -7,12 +7,10 @@
  * --
  */
 
-import { Context } from '../../../../../../model/Context';
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
@@ -23,13 +21,13 @@ import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private context: Context;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.article = input.article;
 
         if (this.state.article?.ChangeTime !== input.article?.ChangeTime) {
@@ -38,7 +36,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
         if (this.state.article) {
             this.updateArticleData();
@@ -129,6 +127,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             );
             BrowserUtil.startFileDownload(attachment);
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

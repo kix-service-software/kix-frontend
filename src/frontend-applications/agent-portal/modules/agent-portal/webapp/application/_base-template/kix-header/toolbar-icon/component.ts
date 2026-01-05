@@ -12,23 +12,34 @@ import { EventService } from '../../../../../../base-components/webapp/core/Even
 import { MobileShowEvent } from '../../../../../model/MobileShowEvent';
 import { TranslationService } from '../../../../../../translation/webapp/core/TranslationService';
 import { MobileShowEventData } from '../../../../../model/MobileShowEventData';
+import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Open toolbar'
         ]);
     }
 
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
     public showMobileToolbar(): void {
         EventService.getInstance().publish(MobileShowEvent.SHOW_MOBILE, MobileShowEventData.SHOW_TOOLBAR);
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

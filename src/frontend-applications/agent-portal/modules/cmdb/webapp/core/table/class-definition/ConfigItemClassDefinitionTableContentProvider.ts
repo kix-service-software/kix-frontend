@@ -12,7 +12,6 @@ import { ConfigItemClassDefinition } from '../../../../model/ConfigItemClassDefi
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { ConfigItemClass } from '../../../../model/ConfigItemClass';
 import { ConfigItemClassDefinitionProperty } from '../../../../model/ConfigItemClassDefinitionProperty';
 import { RowObject } from '../../../../../table/model/RowObject';
@@ -36,9 +35,8 @@ export class ConfigItemClassDefinitionTableContentProvider extends TableContentP
 
         const isCurrentText = await TranslationService.translate('Translatable#(Current definition)');
 
-        const context = ContextService.getInstance().getActiveContext();
-        const configItemClass = await context.getObject<ConfigItemClass>();
-        if (configItemClass && configItemClass.Definitions && !!configItemClass.Definitions.length) {
+        const configItemClass = await this.context?.getObject<ConfigItemClass>();
+        if (configItemClass?.Definitions && !!configItemClass.Definitions.length) {
 
             for (const d of configItemClass.Definitions) {
                 const values: TableValue[] = [];

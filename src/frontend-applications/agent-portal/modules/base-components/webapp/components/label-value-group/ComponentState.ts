@@ -8,12 +8,15 @@
  */
 
 import { LabelValueGroup } from '../../../../../model/LabelValueGroup';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public groups: LabelValueGroup[] = [],
         public level: number = 0,
         public toggleButtonVisible = true
-    ) { }
+    ) {
+        super();
+    }
 }

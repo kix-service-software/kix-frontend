@@ -13,8 +13,6 @@ import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
-import { SortUtil } from '../../../../../model/SortUtil';
-import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
@@ -56,9 +54,7 @@ export class ArticleLoader {
             clearTimeout(this.timeout);
         }
 
-        this.timeout = setTimeout(() => {
-            this.loadArticles();
-        }, 150);
+        this.timeout = setTimeout(this.loadArticles.bind(this), 150);
     }
 
     private async loadArticles(): Promise<void> {
@@ -70,7 +66,7 @@ export class ArticleLoader {
 
         if (this.loadArticleDetails) {
             loadingOptions.includes.push(
-                ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN, 'ObjectActions', KIXObjectProperty.DYNAMIC_FIELDS
+                ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN, KIXObjectProperty.DYNAMIC_FIELDS, 'ObjectActions'
             );
         }
 
@@ -90,25 +86,29 @@ export class ArticleLoader {
         }
     }
 
-    public async prepareArticleActions(article: Article): Promise<AbstractAction[]> {
+    public async prepareArticleActions(article: Article, contextInstanceId?: string): Promise<AbstractAction[]> {
         const actions = await this.context?.getAdditionalActions(article) || [];
 
         const hasKIXPro = await KIXModulesService.getInstance().hasPlugin('KIXPro');
         if (!hasKIXPro) {
             const startActions = ['article-reply-action', 'article-forward-action'];
             const actionInstance = await ActionFactory.getInstance().generateActions(
-                startActions, article
+                startActions, article, contextInstanceId
             );
             actions.push(...actionInstance);
         }
 
-        const plainTextAction = await ActionFactory.getInstance().generateActions(['article-get-plain-action'], article);
+        const plainTextAction = await ActionFactory.getInstance().generateActions(
+            ['article-get-plain-action'], article, contextInstanceId
+        );
         if (plainTextAction?.length) {
             plainTextAction[0].setData(article);
             actions.push(...plainTextAction);
         }
 
-        const printAction = await ActionFactory.getInstance().generateActions(['article-print-action'], article);
+        const printAction = await ActionFactory.getInstance().generateActions(
+            ['article-print-action'], article, contextInstanceId
+        );
         if (printAction?.length) {
             printAction[0].setData(article);
             actions.push(...printAction);

@@ -8,8 +8,9 @@
  */
 
 import { ReleaseInfo } from '../../../../../../model/ReleaseInfo';
+import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public kixVersion: string = null,
@@ -18,6 +19,8 @@ export class ComponentState {
         public buildNumber: string = null,
         public releaseInfo: ReleaseInfo = null,
         public imprintLink: string = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

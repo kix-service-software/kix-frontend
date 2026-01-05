@@ -11,18 +11,14 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
-import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { UserProperty } from '../../../model/UserProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { User } from '../../../model/User';
 import { SortOrder } from '../../../../../model/SortOrder';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { AgentService } from '../../core/AgentService';
 import { RowObject } from '../../../../table/model/RowObject';
@@ -31,17 +27,20 @@ import { TableEventData } from '../../../../table/model/TableEventData';
 import { TableValue } from '../../../../table/model/TableValue';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { BackendNotification } from '../../../../../model/BackendNotification';
+import { NotificationHandler } from '../../../../base-components/webapp/core/NotificationHandler';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
-
-    private subscriber: IEventSubscriber;
     public filterValue: string;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'user-admin-users');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.prepareTable();
 
         const actions = await ActionFactory.getInstance().generateActions(
@@ -49,17 +48,35 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 'user-admin-user-create-action',
                 'csv-export-action',
                 'reset-user-context-widget-list'
-            ], this.state.table
+            ], this.state.table, this.context?.instanceId
         );
-        WidgetService.getInstance().registerActions(this.state.instanceId, actions);
+        this.context.widgetService.registerActions(this.state.instanceId, actions);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#Users']);
 
-        const context = ContextService.getInstance().getActiveContext<AdminContext>();
-        this.state.filterValue = context.filterValue;
-        this.filterValue = context.filterValue;
+        if (this.context instanceof AdminContext) {
+            this.state.filterValue = this.context.filterValue;
+            this.filterValue = this.context.filterValue;
+        }
         this.search();
+
+        super.registerEventSubscriber(
+            async function (data: any, eventId: string): Promise<void> {
+                let objectType = data?.objectType;
+                if (!objectType && data instanceof BackendNotification) {
+                    objectType = NotificationHandler.getObjectType(data.Namespace);
+                }
+                if (objectType === this.state.table.getObjectType()) {
+                    this.search();
+                }
+            },
+            [
+                ApplicationEvent.OBJECT_CREATED,
+                ApplicationEvent.OBJECT_UPDATED,
+                ApplicationEvent.OBJECT_DELETED
+            ]
+        );
 
         this.state.prepared = true;
     }
@@ -73,16 +90,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.table.setContentProvider(new UserContentProvider(this));
         this.state.table.sort(UserProperty.USER_LOGIN, SortOrder.UP);
 
-        this.subscriber = {
-            eventSubscriberId: 'admin-users',
-            eventPublished: (data: TableEventData, eventId: string): void => {
-                if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
-                    WidgetService.getInstance().updateActions(this.state.instanceId);
+        super.registerEventSubscriber(
+            function (data: TableEventData, eventId: string): void {
+                if (data?.tableId === this.state.table?.getTableId()) {
+                    this.context.widgetService.updateActions(this.state.instanceId);
                 }
-            }
-        };
-
-        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
+            },
+            [TableEvent.ROW_SELECTION_CHANGED]
+        );
 
         await this.state.table.initialize();
     }
@@ -96,11 +111,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public search(): void {
         this.state.filterValue = this.filterValue;
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof AdminContext) {
-            context.setFilterValue(this.state.filterValue);
+        if (this.context instanceof AdminContext) {
+            this.context.setFilterValue(this.state.filterValue);
             this.state.table.reload(true);
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 
 }

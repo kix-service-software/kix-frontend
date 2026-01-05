@@ -23,16 +23,16 @@ export class PluginTableFactory extends TableFactory {
     public objectType: KIXObjectType = KIXObjectType.PLUGIN;
 
     public async createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: string[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: string[], contextInstanceId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting);
         tableConfiguration.enableSelection = false;
-        const table = new Table(tableKey, tableConfiguration, contextId);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         table.setContentProvider(
-            new PluginTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
+            new PluginTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextInstanceId)
         );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 

@@ -20,11 +20,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private title: string;
     private options: AskOption[];
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.closeCallback = input.closeCallback;
         this.question = input.question;
         this.title = input.title;
@@ -32,8 +34,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const object = await context.getObject();
+        await super.onMount();
+        const object = await this.context?.getObject();
         this.state.question = await PlaceholderService.getInstance().replacePlaceholders(this.question, object);
         this.state.title = await PlaceholderService.getInstance().replacePlaceholders(this.title, object);
 
@@ -52,6 +54,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

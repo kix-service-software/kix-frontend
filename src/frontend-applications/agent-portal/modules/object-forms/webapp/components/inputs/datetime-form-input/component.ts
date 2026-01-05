@@ -7,18 +7,14 @@
  * --
  */
 
-import { Context } from '../../../../../../model/Context';
-import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { DateTimeUtil } from '../../../../../base-components/webapp/core/DateTimeUtil';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { InputFieldTypes } from '../../../../../base-components/webapp/core/InputFieldTypes';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { DateTimeFormValue } from '../../../../model/FormValues/DateTimeFormValue';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
+import { ObjectFormEventData } from '../../../../model/ObjectFormEventData';
 import { ObjectFormHandler } from '../../../core/ObjectFormHandler';
 import { ComponentState } from './ComponentState';
 
@@ -26,20 +22,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private bindingIds: string[];
     private formValue: DateTimeFormValue;
-    private context: Context;
     private formHandler: ObjectFormHandler;
-
-    private subscriber: IEventSubscriber;
 
     private value: string;
 
     private setValueTimeout: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'inputs/datetime-form-input');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
             this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;
@@ -66,7 +61,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
+
         this.state.displayInputChangeButton = this.context.descriptor.contextMode.toLowerCase().includes('admin');
         this.formHandler = await this.context.getFormManager().getObjectFormHandler();
         this.state.inputType = this.formValue?.inputType || InputFieldTypes.DATE;
@@ -86,24 +82,25 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.maxDate = DateTimeUtil.getKIXDateString(new Date(this.formValue.maxDate));
         }
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
-                if (data.blocked) {
-                    this.state.readonly = true;
-                } else {
-                    this.state.readonly = this.formValue.readonly;
+        super.registerEventSubscriber(
+            function (data: ObjectFormEventData, eventId: string): void {
+                if (this.context?.instanceId === data.contextInstanceId) {
+                    if (data.blocked) {
+                        this.state.readonly = true;
+                    } else {
+                        this.state.readonly = this.formValue.readonly;
+                    }
                 }
-            }
-        };
-        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+            },
+            [ObjectFormEvent.BLOCK_FORM]
+        );
 
         this.state.prepared = true;
     }
 
     private updateValue(): void {
         if (this.value) {
-            if (this.value.startsWith('<') && this.value.endsWith('>')) {
+            if (typeof this.value === 'string' && this.value.startsWith('<') && this.value.endsWith('>')) {
                 this.state.usePlaceholderDateValue = true;
             } else {
                 this.state.usePlaceholderDateValue = false;
@@ -117,8 +114,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
+        super.onDestroy();
+
         this.formValue?.removePropertyBinding(this.bindingIds);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public setValue(): void {
@@ -129,7 +127,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.setValueTimeout = setTimeout(() => {
             const dateElement = (this as any).getEl(`date-${this.state.inputId}`);
             const dateValue = dateElement?.value;
-            if (dateValue) {
+            if (dateValue !== null && typeof dateValue !== 'undefined') {
                 this.state.dateValue = dateValue;
             }
 
@@ -157,7 +155,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             this.value = date ? DateTimeUtil.getKIXDateTimeString(date) : null;
 
-            const hasValue = this.value !== null && this.value !== undefined;
+            const hasValue = this.value !== '' && typeof this.value !== 'undefined';
             if (hasValue) {
                 this.formValue.setFormValue(this.value);
             }

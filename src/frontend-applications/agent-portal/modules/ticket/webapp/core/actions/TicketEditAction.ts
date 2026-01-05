@@ -19,8 +19,7 @@ export class TicketEditAction extends AbstractAction<Ticket> {
 
     public async canShow(): Promise<boolean> {
         let show = false;
-        const context = ContextService.getInstance().getActiveContext();
-        const objectId = context.getObjectId();
+        const objectId = this.context?.getObjectId();
 
         const permissions = [
             new UIComponentPermission(`tickets/${objectId}`, [CRUD.UPDATE], false, 'Object', false)
@@ -31,6 +30,7 @@ export class TicketEditAction extends AbstractAction<Ticket> {
     }
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
     }

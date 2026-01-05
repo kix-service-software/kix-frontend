@@ -23,8 +23,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             on-dragover("allowDrop")
             on-dragenter("handleDragEnter")
             on-dragleave("handleDragLeave")
-            class="dynamic-form-field-drop-zone"
-        />
+            class="dynamic-form-field-drop-zone"/>
     </if>
     <if(Array.isArray(state.options) && state.options.length)>
         <div class="dynamic-form-field-header">
@@ -48,8 +47,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             key=dynamicValue.id
             draggable=(state.draggableValueId === dynamicValue.id).toString()
             on-dragstart("handleDragStart", dynamicValue.id, index)
-            on-dragend("handleDragEnd", dynamicValue.id)
-        >
+            on-dragend("handleDragEnd", dynamicValue.id)>
             <if(Array.isArray(state.options) && state.options.length)>
                 <div>
                     <for|option| of=state.options>
@@ -58,8 +56,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 type="checkbox"
                                 on-click("optionClicked", option, dynamicValue)
                                 title=option.tooltip
-                                checked=dynamicValue.isOptionSet(option)
-                            >
+                                checked=dynamicValue.isOptionSet(option)>
                         </if>
                     </for>
                 </div>
@@ -76,8 +73,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     canRemoveNode=false
                     readonly=dynamicValue.readonly
                     placeholder=dynamicValue.propertiesPlaceholder
-                    on-nodesChanged("propertyChanged", dynamicValue)
-                />
+                    on-nodesChanged("propertyChanged", dynamicValue)/>
             </else>
             <if(!dynamicValue.operationIsNone && dynamicValue.value.property)>
                 <if(dynamicValue.operationIsStringInput)>
@@ -89,8 +85,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         placeholder=dynamicValue.operationsPlaceholder
                         on-input("operationStringChanged", dynamicValue)
                         key="operation-" + dynamicValue.id
-                        class="input-style"
-                    >
+                        class="input-style">
                 </if>
                 <else>
                     <form-list
@@ -99,28 +94,33 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         canRemoveNode=false
                         readonly=dynamicValue.readonly
                         placeholder=dynamicValue.operationsPlaceholder
-                        on-nodesChanged("operationChanged", dynamicValue)
-                    />
+                        on-nodesChanged("operationChanged", dynamicValue)/>
                 </else>
             </if>
             <div class="value">
-                <if(component.showValueInput(dynamicValue))>
+                <if(
+                    component.showValueInput(dynamicValue) &&
+                    !component.isRefreshNeeded(dynamicValue.id)
+                )>
                     <if(dynamicValue.isDropdown)>
                         <form-list
                             treeId="value-" + dynamicValue.id
                             key="value-" + dynamicValue.id
-                            canRemoveNode=!dynamicValue.readonly ||
-                            dynamicValue.changeable
-                            readonly=dynamicValue.readonly &&
-                            !dynamicValue.changeable &&
-                            !dynamicValue.valueChangeable
+                            canRemoveNode=(
+                                !dynamicValue.readonly ||
+                                dynamicValue.changeable
+                            )
+                            readonly=(
+                                dynamicValue.readonly &&
+                                !dynamicValue.changeable &&
+                                !dynamicValue.valueChangeable
+                            )
                             multiselect=dynamicValue.isMultiselect
                             freeText=dynamicValue.isFreeText
                             invalid=(!dynamicValue.value.valid)
                             autoCompleteConfiguration=dynamicValue.autoCompleteConfiguration
                             searchCallback=dynamicValue.autoCompleteCallback
-                            on-nodesChanged("treeValueChanged", dynamicValue)
-                        />
+                            on-nodesChanged("treeValueChanged", dynamicValue)/>
                     </if>
                     <else-if(dynamicValue.isWithin)>
                         <span class="dynamic-form-within-input">
@@ -134,8 +134,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     "setWithinStartType",
                                     dynamicValue,
                                 )
-                                class="input-style"
-                            />
+                                class="input-style"/>
                             <input
                                 class=[
                                     "input-style",
@@ -147,41 +146,48 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 type="number"
                                 min=1
                                 step=1
-                                disabled=dynamicValue.readonly &&
-                                !dynamicValue.changeable
-                                on-input("setWithinStartValue", dynamicValue)
-                            >
+                                disabled=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
+                                on-input("setWithinStartValue", dynamicValue)>
                             <form-list
                                 treeId="withinStartUnit-" + dynamicValue.id
                                 key="withinStartUnit-" + dynamicValue.id
-                                canRemoveNode=!dynamicValue.readonly ||
-                                dynamicValue.changeable
-                                readonly=dynamicValue.readonly &&
-                                !dynamicValue.changeable
+                                canRemoveNode=(
+                                    !dynamicValue.readonly ||
+                                    dynamicValue.changeable
+                                )
+                                readonly=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
                                 invalid=(!dynamicValue.value.valid)
                                 on-nodesChanged(
                                     "setWithinStartUnit",
                                     dynamicValue,
                                 )
-                                class="input-style"
-                            />
+                                class="input-style"/>
                             <div class="within-space">
                                 <translation-string pattern="Translatable#to"/>
                             </div>
                             <form-list
                                 treeId="withinEndType-" + dynamicValue.id
                                 key="withinEndType-" + dynamicValue.id
-                                canRemoveNode=!dynamicValue.readonly ||
-                                dynamicValue.changeable
-                                readonly=dynamicValue.readonly &&
-                                !dynamicValue.changeable
+                                canRemoveNode=(
+                                    !dynamicValue.readonly ||
+                                    dynamicValue.changeable
+                                )
+                                readonly=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
                                 invalid=(!dynamicValue.value.valid)
                                 on-nodesChanged(
                                     "setWithinEndType",
                                     dynamicValue,
                                 )
-                                class="input-style"
-                            />
+                                class="input-style"/>
                             <input
                                 class=[
                                     "input-style",
@@ -193,24 +199,28 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 type="number"
                                 min=1
                                 step=1
-                                disabled=dynamicValue.readonly &&
-                                !dynamicValue.changeable
-                                on-input("setWithinEndValue", dynamicValue)
-                            >
+                                disabled=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
+                                on-input("setWithinEndValue", dynamicValue)>
                             <form-list
                                 treeId="withinEndUnit-" + dynamicValue.id
                                 key="withinEndUnit-" + dynamicValue.id
-                                canRemoveNode=!dynamicValue.readonly ||
-                                dynamicValue.changeable
-                                readonly=dynamicValue.readonly &&
-                                !dynamicValue.changeable
+                                canRemoveNode=(
+                                    !dynamicValue.readonly ||
+                                    dynamicValue.changeable
+                                )
+                                readonly=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
                                 invalid=(!dynamicValue.value.valid)
                                 on-nodesChanged(
                                     "setWithinEndUnit",
                                     dynamicValue,
                                 )
-                                class="input-style"
-                            />
+                                class="input-style"/>
                         </span>
                     </else-if>
                     <else-if(dynamicValue.isRelativeTime)>
@@ -224,24 +234,28 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 ]
                                 value=dynamicValue.relativeTimeValue
                                 type="text"
-                                disabled=dynamicValue.readonly &&
-                                !dynamicValue.changeable
-                                on-input("setRelativeTimeValue", dynamicValue)
-                            >
+                                disabled=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
+                                on-input("setRelativeTimeValue", dynamicValue)>
                             <form-list
                                 treeId="relativeTimeUnit-" + dynamicValue.id
                                 key="relativeTimeUnit-" + dynamicValue.id
-                                canRemoveNode=!dynamicValue.readonly ||
-                                dynamicValue.changeable
-                                readonly=dynamicValue.readonly &&
-                                !dynamicValue.changeable
+                                canRemoveNode=(
+                                    !dynamicValue.readonly ||
+                                    dynamicValue.changeable
+                                )
+                                readonly=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
                                 invalid=(!dynamicValue.value.valid)
                                 on-nodesChanged(
                                     "setRelativeUnitValue",
                                     dynamicValue,
                                 )
-                                class="input-style"
-                            />
+                                class="input-style"/>
                         </span>
                     </else-if>
                     <else-if(dynamicValue.isDate)>
@@ -260,25 +274,27 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 ]
                                 type="date"
                                 value=dynamicValue.date
-                                disabled=dynamicValue.readonly &&
-                                !dynamicValue.changeable
-                                on-change("dateValueChanged", dynamicValue)
-                            >
+                                disabled=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
+                                on-change("dateValueChanged", dynamicValue)>
                             <if(dynamicValue.isBetween)>
                                 <div class="between-space">
                                     <translation-string pattern="Translatable#and"/>
                                 </div>
                                 <input
                                     type="date"
-                                    disabled=dynamicValue.readonly &&
-                                    !dynamicValue.changeable
+                                    disabled=(
+                                        dynamicValue.readonly &&
+                                        !dynamicValue.changeable
+                                    )
                                     on-change(
                                         "betweenDateValueChanged",
                                         dynamicValue,
                                     )
                                     value=dynamicValue.betweenEndDate
-                                    class="input-style"
-                                >
+                                    class="input-style">
                             </if>
                         </span>
                     </else-if>
@@ -298,10 +314,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 ]
                                 type="date"
                                 value=dynamicValue.date
-                                disabled=dynamicValue.readonly &&
-                                !dynamicValue.changeable
-                                on-change("dateValueChanged", dynamicValue)
-                            >
+                                disabled=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
+                                on-change("dateValueChanged", dynamicValue)>
                             <input
                                 class=[
                                     "input-style",
@@ -315,36 +332,39 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         ? dynamicValue.time.substring(0, 5)
                                         : "00:00"
                                 )
-                                disabled=dynamicValue.readonly &&
-                                !dynamicValue.changeable
-                                on-change("setTimeValue", dynamicValue)
-                            >
+                                disabled=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
+                                on-change("setTimeValue", dynamicValue)>
                             <if(dynamicValue.isBetween)>
                                 <div class="between-space">
                                     <translation-string pattern="Translatable#and"/>
                                 </div>
                                 <input
                                     type="date"
-                                    disabled=dynamicValue.readonly &&
-                                    !dynamicValue.changeable
+                                    disabled=(
+                                        dynamicValue.readonly &&
+                                        !dynamicValue.changeable
+                                    )
                                     on-change(
                                         "betweenDateValueChanged",
                                         dynamicValue,
                                     )
                                     value=dynamicValue.betweenEndDate
-                                    class="input-style"
-                                >
+                                    class="input-style">
                                 <input
                                     type="time"
-                                    disabled=dynamicValue.readonly &&
-                                    !dynamicValue.changeable
+                                    disabled=(
+                                        dynamicValue.readonly &&
+                                        !dynamicValue.changeable
+                                    )
                                     on-change(
                                         "setBetweenEndTimeValue",
                                         dynamicValue,
                                     )
                                     value=dynamicValue.betweenEndTime
-                                    class="input-style"
-                                >
+                                    class="input-style">
                             </if>
                         </span>
                     </else-if>
@@ -363,32 +383,36 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 dynamicValue,
                                 "maxLength",
                             )
-                            disabled=dynamicValue.readonly &&
-                            !dynamicValue.changeable
+                            disabled=(
+                                dynamicValue.readonly &&
+                                !dynamicValue.changeable
+                            )
                             on-input("setValue", dynamicValue)
-                            on-keyup("autoGrow")
-                        >${dynamicValue.value.value}</textarea>
+                            on-keyup("autoGrow")>${dynamicValue.value
+                                .value}</textarea>
                     </else-if>
                     <else-if(dynamicValue.isCheckbox)>
                         <input
                             type="checkbox"
                             checked=(dynamicValue.value.value)
-                            disabled=dynamicValue.readonly &&
-                            !dynamicValue.changeable
-                            on-click("setCheckboxValue", dynamicValue)
-                        >
+                            disabled=(
+                                dynamicValue.readonly &&
+                                !dynamicValue.changeable
+                            )
+                            on-click("setCheckboxValue", dynamicValue)>
                     </else-if>
                     <else-if(dynamicValue.isSpecificInput)>
                         <${dynamicValue.specificInputType}
                             propertyId=(dynamicValue.value.property)
                             operationId=(dynamicValue.value.operator)
                             value=(dynamicValue.value.value)
-                            disabled=dynamicValue.readonly &&
-                            !dynamicValue.changeable
+                            disabled=(
+                                dynamicValue.readonly &&
+                                !dynamicValue.changeable
+                            )
                             options=dynamicValue.inputOptions
                             on-change("setSpecificValue", dynamicValue)
-                            on-valueChanged("setSpecificValue", dynamicValue)
-                        />
+                            on-valueChanged("setSpecificValue", dynamicValue)/>
                     </else-if>
                     <else-if(dynamicValue.isNumber)>
                         <span class=[
@@ -406,22 +430,24 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 ]
                                 value=dynamicValue.numberValue
                                 type="number"
-                                disabled=dynamicValue.readonly &&
-                                !dynamicValue.changeable
-                                on-input("setNumberValue", dynamicValue)
-                            >
+                                disabled=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
+                                on-input("setNumberValue", dynamicValue)>
                             <if(dynamicValue.isBetween)>
                                 <div class="between-space">
                                     <translation-string pattern="Translatable#and"/>
                                 </div>
                                 <input
                                     type="number"
-                                    disabled=dynamicValue.readonly &&
-                                    !dynamicValue.changeable
+                                    disabled=(
+                                        dynamicValue.readonly &&
+                                        !dynamicValue.changeable
+                                    )
                                     on-change("setNumberEndValue", dynamicValue)
                                     value=dynamicValue.betweenEndNumberValue
-                                    class="input-style"
-                                >
+                                    class="input-style">
                             </if>
                         </span>
                     </else-if>
@@ -435,10 +461,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             ]
                             value=(dynamicValue.value.value)
                             type="text"
-                            disabled=dynamicValue.readonly &&
-                            !dynamicValue.changeable
-                            on-input("setValue", dynamicValue)
-                        >
+                            disabled=(
+                                dynamicValue.readonly &&
+                                !dynamicValue.changeable
+                            )
+                            on-input("setValue", dynamicValue)>
                     </else>
                 </if>
             </div>
@@ -470,8 +497,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <if(component.showAdditionalOptions(dynamicValue))>
                     <span
                         on-click("toggleAdvancedOptions", dynamicValue)
-                        class="advanced-options"
-                    >
+                        class="advanced-options">
                         <icon icon="fa-solid fa-angles-left"/>
                         <translation-string pattern="Translatable#Advanced Options:"/>
                     </span>
@@ -482,21 +508,21 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             </div>
                             <textarea
                                 class="form-control"
-                                on-keydown("hintValueChanged", dynamicValue)
-                            >${dynamicValue.value.hint}</textarea>
+                                on-keydown(
+                                    "hintValueChanged",
+                                    dynamicValue,
+                                )>${dynamicValue.value.hint}</textarea>
                         </div>
                         <div
                             id="jsoneditor" + dynamicValue.instanceId
                             style="width: 100%; height: 40rem;"
-                            no-update
-                        />
+                            no-update/>
                     </div>
                 </if>
                 <else>
                     <span
                         on-click("toggleAdvancedOptions", dynamicValue)
-                        class="advanced-options"
-                    >
+                        class="advanced-options">
                         <icon icon="fa-solid fa-angles-right"/>
                         <translation-string pattern="Translatable#Advanced Options:"/>
                     </span>
@@ -512,8 +538,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     type="button"
                     title=(state.translations["Translatable#Remove parameter"])
                     on-click("removeValue", dynamicValue)
-                    class="kix-button form-control-button button-without-text"
-                >
+                    class="kix-button form-control-button button-without-text">
                     <span class="kix-icon-minus"/>
                 </button>
             </if>
@@ -525,8 +550,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     title=(state.translations["Translatable#Sort"])
                     on-mouseenter("setDraggable", dynamicValue.id, true)
                     on-mouseleave("setDraggable", dynamicValue.id, false)
-                    class="form-control-button button-without-text drag-button"
-                >
+                    class="form-control-button button-without-text drag-button">
                     <span class="kix-icon-sort-up"/>
                     <span class="kix-icon-sort-down"/>
                 </div>
@@ -545,8 +569,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 on-dragover("allowDrop")
                 on-dragenter("handleDragEnter")
                 on-dragleave("handleDragLeave")
-                class="dynamic-form-field-drop-zone"
-            />
+                class="dynamic-form-field-drop-zone"/>
         </if>
     </for>
 </div>

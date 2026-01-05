@@ -18,7 +18,6 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { BrowserCacheService } from '../../../../../modules/base-components/webapp/core/CacheService';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class TicketLockAction extends AbstractAction<Ticket> {
@@ -28,14 +27,14 @@ export class TicketLockAction extends AbstractAction<Ticket> {
     private currentLockId: number;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Lock';
         this.icon = 'kix-icon-lock-close';
     }
 
     public async canShow(): Promise<boolean> {
         let show = false;
-        const context = ContextService.getInstance().getActiveContext();
-        const objectId = context.getObjectId();
+        const objectId = this.context?.getObjectId();
 
         const permissions = [
             new UIComponentPermission(`tickets/${objectId}`, [CRUD.UPDATE], false, 'Object', false)
@@ -74,10 +73,15 @@ export class TicketLockAction extends AbstractAction<Ticket> {
         ).catch((error) => null);
 
         setTimeout(async () => {
-            const context = ContextService.getInstance().getActiveContext();
-            await context.getObject(KIXObjectType.TICKET, true);
+            EventService.getInstance().publish(
+                ApplicationEvent.REFRESH_CONTENT, ContextService.getInstance().getActiveContext().instanceId
+            );
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
-            BrowserUtil.openSuccessOverlay(successHint);
+
+            if (successHint) {
+                await this.context?.getObject(KIXObjectType.TICKET, true);
+                BrowserUtil.openSuccessOverlay(successHint);
+            }
         }, 1500);
     }
 

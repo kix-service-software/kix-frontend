@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { IdService } from '../../../../../../model/IdService';
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { FAQContext } from '../../../core/context/FAQContext';
 import { FilterCriteria } from '../../../../../../model/FilterCriteria';
 import { FAQCategoryProperty } from '../../../../model/FAQCategoryProperty';
@@ -26,30 +25,26 @@ import { TranslationService } from '../../../../../../modules/translation/webapp
 import { SortUtil } from '../../../../../../model/SortUtil';
 import { DataType } from '../../../../../../model/DataType';
 import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
-import { EventService } from '../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-export class Component {
-
-    private state: ComponentState;
-    private subscriber: IEventSubscriber;
+export class Component extends AbstractMarkoComponent<ComponentState, FAQContext> {
 
     public listenerId: string;
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'widgets/faq-category-explorer');
         this.state = new ComponentState(input.instanceId);
         this.listenerId = IdService.generateDateBasedId('faq-category-explorer-');
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.contextType = input.contextType;
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext() as FAQContext;
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+        await super.onMount();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         const categoryFilter = [
             new FilterCriteria(
@@ -66,22 +61,16 @@ export class Component {
 
         this.state.nodes = await this.prepareTreeNodes(faqCategories);
 
-        this.state.activeNode = this.getActiveNode(context.categoryId);
+        this.state.activeNode = this.getActiveNode(this.context?.categoryId);
 
         this.state.prepared = true;
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string): void => {
-                this.state.activeNode = this.getActiveNode(context?.categoryId);
-            }
-        };
-
-        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
+        super.registerEventSubscriber(
+            function (): void {
+                this.state.activeNode = this.getActiveNode(this.context?.categoryId);
+            },
+            [ContextEvents.CONTEXT_PARAMETER_CHANGED]
+        );
     }
 
     private getActiveNode(categoryId: number, nodes: TreeNode[] = this.state.nodes
@@ -136,20 +125,21 @@ export class Component {
 
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
-
-        const context = ContextService.getInstance().getActiveContext() as FAQContext;
-        context.setAdditionalInformation('STRUCTURE', [node.label]);
-        context.setFAQCategoryId(node.id);
+        this.context.setAdditionalInformation('STRUCTURE', [node.label]);
+        this.context.setFAQCategoryId(node.id);
     }
 
     public async showAll(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext() as FAQContext;
         this.state.activeNode = null;
         const allText = await TranslationService.translate('Translatable#All');
-        context.setAdditionalInformation('STRUCTURE', [allText]);
-        context.setFAQCategoryId(null);
+        this.context.setAdditionalInformation('STRUCTURE', [allText]);
+        this.context.setFAQCategoryId(null);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

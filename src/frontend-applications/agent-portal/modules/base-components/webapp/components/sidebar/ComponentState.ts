@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,18 +7,15 @@
  * --
  */
 
+import { Context } from '../../../../../model/Context';
 import { AbstractComponentState } from '../../core/AbstractComponentState';
-
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public isLeft: boolean = false,
-        public isMobile: boolean = false,
-        public isSmall: boolean = false,
-        public sidebars: Array<[string, any, string]> = [],
-        public showSidebarArea: boolean = false,
-        public showMobile: boolean = false
+        public contextList: Context[] = [],
+        public reloadSidebarId: string = null,
+        public showSidebarArea: boolean = false
     ) {
         super();
     }

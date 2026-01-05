@@ -9,6 +9,7 @@
 
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
@@ -103,7 +104,7 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         const dynamicField = await KIXObjectService.loadDynamicField(dfName, null, true);
 
         if (dynamicField) {
-            for (const mapperExtension of this.objectValueMapper.extensions) {
+            for (const mapperExtension of this.objectValueMapper.extensions || []) {
                 formValue = await mapperExtension.createDynamicFieldFormValue(dynamicField, dynamicFieldValue, this);
                 if (formValue) {
                     break;
@@ -165,6 +166,7 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
             }
 
             formValue.setInitialState();
+            await this.setFormValueFieldId(formValue, dfName);
         }
 
         return formValue;
@@ -173,5 +175,25 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
     public findFormValue(property: string): ObjectFormValue {
         const dfName = KIXObjectService.getDynamicFieldName(property);
         return super.findFormValue(dfName || property);
+    }
+
+    private async setFormValueFieldId(formValue: ObjectFormValue, dfName: string): Promise<void> {
+        if (Array.isArray(formValue?.objectValueMapper?.form?.pages)) {
+            const pages = formValue?.objectValueMapper?.form?.pages?.filter(
+                (p) => Array.isArray(p.groups)
+            ) || [];
+            for (const p of pages) {
+                const groups = p.groups?.filter((g) => Array.isArray(g.formFields)) || [];
+                for (const g of groups) {
+                    const fields = g.formFields.filter((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS) || [];
+                    for (const f of fields) {
+                        const nameOption = f.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+                        if (nameOption?.value === dfName) {
+                            formValue.fieldId = f.id;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

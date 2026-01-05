@@ -15,23 +15,27 @@ import { SysConfigKey } from '../../../../../sysconfig/model/SysConfigKey';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXModulesSocketClient } from '../../../../../base-components/webapp/core/KIXModulesSocketClient';
 import { ReleaseInfo } from '../../../../../../model/ReleaseInfo';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
     private translations: Map<string, string>;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: ComponentInput): void {
+        super.onInput(input);
         this.state.releaseInfo = input.releaseInfo;
         this.state.imprintLink = input.imprintLink;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.initTranslations();
         if (!this.state.releaseInfo) {
             this.state.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
@@ -59,6 +63,10 @@ class Component {
                 }
             }
         }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private initTranslations(): void {

@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../core/FormInputComponent';
-import { ContextService } from '../../core/ContextService';
 
 declare const JSONEditor: any;
 
@@ -17,7 +16,8 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     private editor: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -27,8 +27,12 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
 
-        if (this.state.field && this.state.field?.options) {
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
+
+        if (this.state.field?.options) {
             setTimeout(() => {
                 this.initCodeEditor();
                 if (this.state.currentValue) {
@@ -55,7 +59,7 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
         super.onDestroy();
         if (this.editor) {
             this.editor.destroy();
@@ -63,8 +67,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value) {
             this.state.currentValue = value.value;

@@ -41,22 +41,26 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { WindowListener } from '../../../../base-components/webapp/core/WindowListener';
+import { Context } from '../../../../../model/Context';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private step: SetupStep;
     private update: boolean;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
     public onInput(input: any): void {
+        super.onInput(input);
         this.step = input.step;
         this.update = this.step && this.step.result && this.step.result.contactId && this.step.result.userId;
         this.state.completed = this.step ? this.step.completed : false;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Save & Continue', 'Translatable#Save & Logout', 'Translatable#Skip & Continue'
         ]);
@@ -127,11 +131,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
 
-        const context = ContextService.getInstance().getActiveContext();
-        context?.getFormManager()?.setFormId(this.state.formId);
+        await this.context?.getFormManager()?.setFormId(this.state.formId);
 
         if (this.update) {
-            setTimeout(() => this.initFormValues(form.id), 500);
+            setTimeout(() => {
+                this.initFormValues(form.id);
+            }, 500);
         }
     }
 
@@ -142,8 +147,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         ).catch((): Contact[] => []);
 
         if (contacts && contacts.length) {
-            const context = ContextService.getInstance().getActiveContext();
-            const formInstance = await context?.getFormManager()?.getFormInstance();
+            const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
             formInstance.provideFormFieldValuesForProperties([
                 [ContactProperty.LASTNAME, contacts[0].Lastname],
@@ -156,8 +160,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(logout: boolean): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
 
         const roles = await KIXObjectService.loadObjects<Role>(
             KIXObjectType.ROLE, null,
@@ -185,58 +188,66 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             BrowserUtil.toggleLoadingShield('SETUP_SUPERUSER_SHIELD', true, 'Translatable#Create Superuser Account');
 
+            let success = true;
             if (this.update) {
                 formInstance.provideFixedValue(
                     ContactProperty.ASSIGNED_USER_ID, new FormFieldValue(this.step.result.userId)
                 );
-                await this.updateUser();
+                success = await this.updateUser();
             } else {
-                await this.createUser();
+                success = await this.createUser();
             }
 
             BrowserUtil.toggleLoadingShield('SETUP_SUPERUSER_SHIELD', false);
 
-            if (logout) {
+            if (success && logout) {
                 WindowListener.getInstance().logout();
             }
         }
     }
 
-    private async updateUser(): Promise<void> {
+    private async updateUser(): Promise<boolean> {
+        let success = true;
+
         const contactId = await KIXObjectService.updateObjectByForm(
             KIXObjectType.CONTACT, this.state.formId, this.step.result.contactId
         ).catch((error: Error) => {
             BrowserUtil.openErrorOverlay(
                 error.Message ? `${error.Code}: ${error.Message}` : error.toString()
             );
-            return null;
+            success = false;
         });
 
-        if (contactId) {
+        if (success && contactId) {
             BrowserUtil.openSuccessOverlay('Translatable#Please logout and login again with the new user.');
             await SetupService.getInstance().stepCompleted(this.step.id, {
                 contactId: this.step.result.contactId,
                 userId: this.step.result.userId
             });
         }
+
+        return success;
     }
 
-    private async createUser(): Promise<void> {
+    private async createUser(): Promise<boolean> {
+        let success = true;
+
         const contactId = await KIXObjectService.createObjectByForm(
             KIXObjectType.CONTACT, this.state.formId, null
         ).catch((error: Error) => {
             BrowserUtil.openErrorOverlay(
                 error.Message ? `${error.Code}: ${error.Message}` : error.toString()
             );
-            return null;
+            success = false;
         });
 
-        if (contactId) {
-            const userId = await this.getUserId(contactId);
-
+        if (success && contactId) {
+            const userId = await this.getUserId(Number(contactId));
             BrowserUtil.openSuccessOverlay('Translatable#Please logout and login again with the new user.');
             await SetupService.getInstance().stepCompleted(this.step.id, { contactId, userId });
         }
+
+        return success;
     }
 
     private async getUserId(contactId: number): Promise<number> {
@@ -251,6 +262,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public skip(): void {
         SetupService.getInstance().stepSkipped(this.step.id);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

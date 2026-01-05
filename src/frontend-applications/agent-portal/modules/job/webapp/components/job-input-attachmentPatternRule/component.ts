@@ -14,7 +14,8 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 
 class Component extends FormInputComponent<[string, string, string], ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -31,12 +32,14 @@ class Component extends FormInputComponent<[string, string, string], ComponentSt
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.state.prepared = true;
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             this.state.currentPatternFilename = value.value[0];
@@ -104,6 +107,10 @@ class Component extends FormInputComponent<[string, string, string], ComponentSt
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
 }

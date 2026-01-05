@@ -8,15 +8,18 @@
  */
 
 import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public object: KIXObject = null,
         public flat: boolean = false,
         public properties: string[] = [],
         public prepared: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

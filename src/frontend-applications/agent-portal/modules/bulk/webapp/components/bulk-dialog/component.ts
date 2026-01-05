@@ -8,30 +8,29 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { BulkService } from '../../core/BulkService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { IdService } from '../../../../../model/IdService';
-import { Context } from '../../../../../model/Context';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
     private listenerId: string;
-    private context: Context;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState(input.instanceId);
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.listenerId = IdService.generateDateBasedId();
-        this.context = ContextService.getInstance().getActiveContext();
         this.context?.registerListener(this.listenerId, {
             additionalInformationChanged: () => null,
             filteredObjectListChanged: () => null,
@@ -49,6 +48,8 @@ class Component {
         this.context.unregisterListener(this.listenerId);
 
         if (this.state.bulkManager) {
+            // resets the defaultValues before the manager is reset
+            this.state.bulkManager.setDefaultValues();
             this.state.bulkManager.reset();
         }
     }

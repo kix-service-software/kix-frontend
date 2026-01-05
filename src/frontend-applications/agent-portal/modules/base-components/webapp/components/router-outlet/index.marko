@@ -7,6 +7,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<if(state.prepared && state.template)>
-    <${state.template} ...state.data/>
-</if>
+<for|context| of=state.contextList>
+    <div
+        key="context-" + context.instanceId
+        id="context-" + context.instanceId
+        data-contextinstanceid=context.instanceId
+        class=[
+            {
+                "d-none": !component.isActiveContext(context.instanceId),
+            },
+        ]>
+        <if(state.reloadContextInstanceId !== context.instanceId)>
+            <${context.template}
+                ...context.data
+                contextInstanceId=context.instanceId/>
+        </if>
+    </div>
+</for>

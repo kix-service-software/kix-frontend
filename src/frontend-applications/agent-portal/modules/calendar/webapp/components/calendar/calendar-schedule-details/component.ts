@@ -23,11 +23,13 @@ import { User } from '../../../../../user/model/User';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.ticket = input.ticket;
         const config = input.calendarConfig;
         this.state.properties = Array.isArray(config?.properties)
@@ -42,6 +44,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.title = this.state.ticket.Title;
 
         this.state.routingConfiguration = new RoutingConfiguration(
@@ -96,6 +99,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

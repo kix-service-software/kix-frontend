@@ -82,7 +82,9 @@ export class ReportingJobFilterManager extends AbstractDynamicFormManager {
         return true;
     }
 
-    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, objectIds?: Array<string | number>, operator?: string
+    ): Promise<TreeNode[]> {
         let nodes = [];
         switch (property) {
             case ReportDefinitionProperty.IS_PERIODIC:

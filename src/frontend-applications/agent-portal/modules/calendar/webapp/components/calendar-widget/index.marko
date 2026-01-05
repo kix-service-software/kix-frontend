@@ -8,13 +8,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <div class="calendar-widget-container">
-    <widget instanceId=input.instanceId title="Ticket Calendar">
+    <widget
+        contextInstanceId=input.contextInstanceId
+        instanceId=input.instanceId
+        title="Ticket Calendar">
         <@content>
             <if(state.prepared)>
                 <calendar
                     tickets=state.tickets
-                    calendarConfig=state.calendarConfig
-                />
+                    calendarConfig=state.calendarConfig/>
             </if>
         </@content>
     </widget>

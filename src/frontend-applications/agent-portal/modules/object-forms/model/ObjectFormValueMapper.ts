@@ -14,6 +14,7 @@ import { IdService } from '../../../model/IdService';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { BrowserCacheService } from '../../base-components/webapp/core/CacheService';
 import { ClientStorageService } from '../../base-components/webapp/core/ClientStorageService';
 import { EventService } from '../../base-components/webapp/core/EventService';
 import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
@@ -29,6 +30,7 @@ import { DynamicFieldObjectFormValue } from './FormValues/DynamicFieldObjectForm
 import { ObjectFormValue } from './FormValues/ObjectFormValue';
 import { InstructionProperty } from './InstructionProperty';
 import { ObjectFormEvent } from './ObjectFormEvent';
+import { ObjectFormEventData } from './ObjectFormEventData';
 import { ObjectFormValueMapperExtension } from './ObjectFormValueMapperExtension';
 import { PropertyInstruction } from './PropertyInstruction';
 import { RuleResult } from './RuleResult';
@@ -71,6 +73,12 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     protected destroyFormValues(formValues: ObjectFormValue[] = this.formValues): void {
+        const formValueObjectTypes = formValues.filter(
+            (fv) => fv.hasOwnProperty('objectType') && (fv as any).objectType?.length > 0
+        ).map(((fv) => (fv as any).objectType));
+        formValueObjectTypes.forEach((ot) => {
+            BrowserCacheService.getInstance().deleteKeys(ot);
+        });
         for (const value of formValues) {
             if (value.formValues?.length) {
                 this.destroyFormValues(value.formValues);
@@ -123,7 +131,10 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
 
         this.initialized = true;
-        EventService.getInstance().publish(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.instanceId);
+        EventService.getInstance().publish(
+            ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED,
+            new ObjectFormEventData(this.objectFormHandler?.context?.instanceId, this.instanceId)
+        );
     }
 
     protected async mapObjectValues(object: T): Promise<void> {
@@ -183,15 +194,22 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         parentField?: FormFieldConfiguration, parentFormValue?: ObjectFormValue
     ): Promise<void> {
         for (const field of fields) {
-            const formValue = await this.mapFormField(field, object, parentFormValue);
 
-            if (!parentField) {
-                let property = field.property;
-                if (field.property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                    const nameOption = field.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
-                    property = `${KIXObjectProperty.DYNAMIC_FIELDS}.${nameOption?.value}`;
+            if (field.property.startsWith(KIXObjectProperty.DYNAMIC_FIELDS)) {
+                const nameOption = field.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+                const df = await KIXObjectService.loadDynamicField(nameOption.value);
+                if (!df) {
+                    continue;
+                }
+
+                if (!parentField) {
+                    if (field.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                        field.property = `${KIXObjectProperty.DYNAMIC_FIELDS}.${nameOption?.value}`;
+                    }
                 }
             }
+
+            const formValue = await this.mapFormField(field, object, parentFormValue);
 
             if (field.children?.length) {
                 await this.mapFormFieldsToValues(object, field.children, field, formValue);
@@ -244,15 +262,19 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 formValue = dfValue?.findFormValue(dfName);
                 if (!formValue) {
                     formValue = await dfValue?.createFormValue(dfName);
+                    if (!formValue) {
+                        console.debug(`No FormValue for ${field.property}: ${dfName}`);
+                    }
                 }
             }
         } else {
             formValue = this.findFormValue(field.property);
+            if (!formValue) {
+                formValue = await this.createFormValue(field.property, field, object, parentFormValue);
+            }
         }
 
-        if (!formValue) {
-            formValue = await this.createFormValue(field.property, field, object, parentFormValue);
-        } else if (parentFormValue) {
+        if (formValue && parentFormValue) {
             formValue.parent = parentFormValue;
             parentFormValue.formValues.push(formValue);
         }
@@ -429,7 +451,9 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
         await this.applyInteractions(result);
 
-        EventService.getInstance().publish(ObjectFormEvent.OTHER_INFORMATION_CHANGED);
+        EventService.getInstance().publish(
+            ObjectFormEvent.OTHER_INFORMATION_CHANGED, new ObjectFormEventData(null, this.instanceId)
+        );
     }
 
     private async applyPropertyInstructions(result: RuleResult): Promise<void> {

@@ -23,7 +23,6 @@ import { PlaceholderService } from '../modules/base-components/webapp/core/Place
 import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
 import { SearchOperator } from '../modules/search/model/SearchOperator';
 import { SearchProperty } from '../modules/search/model/SearchProperty';
-import { TableFactoryService } from '../modules/table/webapp/core/factory/TableFactoryService';
 import { TranslationService } from '../modules/translation/webapp/core/TranslationService';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
 import { ConfiguredWidget } from './configuration/ConfiguredWidget';
@@ -43,6 +42,7 @@ import { KIXObject } from './kix/KIXObject';
 import { KIXObjectType } from './kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
+import { WidgetService } from '../modules/base-components/webapp/core/WidgetService';
 
 export abstract class Context {
 
@@ -53,6 +53,8 @@ export abstract class Context {
     public openSidebarWidgets: string[] = [];
 
     public contextId: string;
+
+    public lastScrollPosition: number;
 
     private dialogSubscriberId: string = null;
     protected additionalInformation: Map<string, any> = new Map();
@@ -65,7 +67,7 @@ export abstract class Context {
     protected displayText: string;
     protected icon: ObjectIcon | string;
 
-    private eventSubscriber: IEventSubscriber;
+    private contextEventSubscriber: IEventSubscriber;
 
     public contextExtensions: ContextExtension[] = [];
 
@@ -75,6 +77,8 @@ export abstract class Context {
 
     private objectFilter: Map<string, FilterCriteria[]> = new Map();
 
+    public readonly widgetService: WidgetService = new WidgetService();
+
     public constructor(
         public descriptor: ContextDescriptor,
         protected objectId: string | number = null,
@@ -83,7 +87,7 @@ export abstract class Context {
         protected formManager?: ContextFormManager,
         protected storageManager?: ContextStorageManager
     ) {
-        if (this.configuration) {
+        if (configuration) {
             this.setConfiguration(configuration);
         }
 
@@ -91,7 +95,7 @@ export abstract class Context {
             this.instanceId = IdService.generateDateBasedId();
         }
 
-        const extensions = ContextService?.getInstance()?.getContextExtensions(this.descriptor?.contextId);
+        const extensions = ContextService?.getInstance()?.getContextExtensions(descriptor?.contextId);
         if (Array.isArray(extensions)) {
             this.contextExtensions = extensions.map((e) => new e());
         }
@@ -108,58 +112,7 @@ export abstract class Context {
             this.storageManager.setContext(this);
         }
 
-        if (this.descriptor) {
-
-            this.contextId = descriptor.contextId;
-
-            this.eventSubscriber = {
-                eventSubscriberId: this.instanceId,
-                eventPublished: async (data: any, eventId: string): Promise<void> => {
-                    const reloadObjectList = eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED &&
-                        Array.isArray(data?.widgets) &&
-                        Array.isArray(this.configuration?.tableWidgetInstanceIds);
-                    if (this.descriptor.contextMode !== ContextMode.SEARCH) {
-                        const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
-                            data?.instanceId === this.instanceId;
-
-                        const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
-                        const objectDelete = eventId === ApplicationEvent.OBJECT_DELETED && data?.objectType;
-
-                        if (data?.contextId === this.contextId) {
-                            TableFactoryService.getInstance().deleteContextTables(
-                                this.contextId, data?.objectType, eventId !== ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
-                            );
-                        }
-
-                        if (objectUpdate || objectDelete) {
-                            if (this.objectLists.has(data.objectType)) {
-                                this.deleteObjectList(data.objectType);
-                            }
-
-                            const objectReloadRequired = this.descriptor.contextMode === ContextMode.DETAILS
-                                && this.descriptor.kixObjectTypes?.some((t) => t === data.objectType);
-
-                            const activeContext = ContextService.getInstance().getActiveContext();
-                            if (objectReloadRequired && activeContext.instanceId === this.instanceId) {
-                                await this.getObject(data.objectType, true);
-                            }
-
-                        } else if (contextUpdateRequired) {
-                            this.deleteObjectLists();
-                        } else if (reloadObjectList) {
-                            this.reloadRelevantObjectLists(data.widgets);
-                        }
-                    } else if (reloadObjectList) {
-                        this.reloadRelevantObjectLists(data.widgets);
-                    }
-                }
-            };
-
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.eventSubscriber);
-            EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
-            EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.eventSubscriber);
-        }
+        this.contextId = descriptor.contextId;
     }
 
     private reloadRelevantObjectLists(widgets: ConfiguredWidget[]): void {
@@ -192,10 +145,8 @@ export abstract class Context {
     }
 
     public async destroy(): Promise<void> {
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.eventSubscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.eventSubscriber);
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.contextEventSubscriber);
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.contextEventSubscriber);
 
         await this.formManager?.destroy();
 
@@ -207,6 +158,8 @@ export abstract class Context {
             await extension.initContext(this, urlParams);
         }
 
+        this.subscribeContextEvents();
+
         if (urlParams) {
             urlParams.forEach((value: string, key: string) => this.setAdditionalInformation(key, value));
         }
@@ -214,6 +167,31 @@ export abstract class Context {
         if (urlParams) {
             await this.update(urlParams);
         }
+    }
+
+    private subscribeContextEvents(): void {
+        this.contextEventSubscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(this.instanceId + 'ContextEventSubscriber'),
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
+                const reloadObjectList = eventId === ContextEvents.CONTEXT_USER_WIDGETS_CHANGED
+                    && data?.contextId === this.contextId
+                    && Array.isArray(data?.widgets)
+                    && Array.isArray(this.configuration?.tableWidgetInstanceIds);
+
+                if (reloadObjectList) {
+                    this.reloadRelevantObjectLists(data.widgets);
+                }
+
+                const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
+                    data?.instanceId === this.instanceId;
+                if (contextUpdateRequired) {
+                    this.deleteObjectLists();
+                }
+            },
+        };
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.contextEventSubscriber);
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.contextEventSubscriber);
     }
 
     public async postInit(): Promise<void> {
@@ -392,7 +370,6 @@ export abstract class Context {
 
     public deleteObjectLists(): void {
         this.objectLists.clear();
-        this.listeners.forEach((l) => l.objectListChanged(null, []));
     }
 
     public async setObjectId(objectId: string | number, objectType: KIXObjectType | string): Promise<void> {
@@ -749,10 +726,7 @@ export abstract class Context {
     public async reloadObjectList(
         objectType: KIXObjectType | string, silent: boolean = false, limit?: number
     ): Promise<void> {
-        const reloadPromises = [];
-        this.contextExtensions.forEach((ce) => {
-            reloadPromises.push(ce.reloadObjectList(objectType, this, silent, limit));
-        });
+        const reloadPromises = this.contextExtensions.map((ce) => ce.reloadObjectList(objectType, this, silent, limit));
         await Promise.allSettled(reloadPromises);
     }
 
@@ -825,10 +799,12 @@ export abstract class Context {
 
         objectId = objectId ? objectId.toString() : null;
         const contextObjectId = this.getObjectId() ? this.getObjectId().toString() : null;
-        if (contextId?.includes('new') &&
+        if (contextId?.includes('new-') &&
             this.descriptor.contextId === contextId &&
             !objectId && !contextObjectId
-        ) return false;
+        ) {
+            return false;
+        }
 
         return contextId === this.descriptor.contextId && objectId === contextObjectId;
     }

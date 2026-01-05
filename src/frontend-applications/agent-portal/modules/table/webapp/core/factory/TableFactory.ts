@@ -43,17 +43,17 @@ export abstract class TableFactory {
 
     public abstract createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<string | number>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
+        contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): Promise<Table>;
 
     public async filterColumns(
-        contextId: string, tableConfiguration: TableConfiguration
+        contextInstanceId: string, tableConfiguration: TableConfiguration
     ): Promise<IColumnConfiguration[]> {
         let tableColumns: IColumnConfiguration[] = JSON.parse(JSON.stringify(tableConfiguration.tableColumns));
         this.prepareDepColumns(tableColumns);
 
-        const context = contextId ? ContextService.getInstance().getActiveContext() : null;
+        const context = contextInstanceId ? ContextService.getInstance().getContext(contextInstanceId) : null;
         const ignoreDependencyCheck = BrowserUtil.isBooleanTrue(
             context?.getAdditionalInformation('IGNORE_OBJECT_DEPENDENCY_CHECK')
         );

@@ -162,7 +162,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
         } else if (loadingOptions.filter) {
             const success = await this.buildFilter(loadingOptions.filter, 'ConfigItem', query, token, this.objectType);
             if (!success) {
-                LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
+                LoggingService.getInstance().warning('Invalid api filter.', { filter: loadingOptions.filter });
                 return new ObjectResponse([], 0);
             }
             const uri = this.buildUri('cmdb', 'configitems');
@@ -226,7 +226,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
             } else if (loadingOptions.filter) {
                 const success = await this.buildFilter(loadingOptions.filter, 'Image', query, token, this.objectType);
                 if (!success) {
-                    LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
+                    LoggingService.getInstance().warning('Invalid api filter.', { filter: loadingOptions.filter });
                     return [];
                 }
                 const uri = this.buildUri('cmdb', subResource);
@@ -367,8 +367,9 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property === ConfigItemProperty.NAME ||
             c.property === 'InciStateIDs' ||
             c.property === 'DeplStateIDs' ||
-            c.property === ConfigItemProperty.CUR_DEPL_STATE_ID ||
             c.property === ConfigItemProperty.CUR_INCI_STATE_ID ||
+            c.property === ConfigItemProperty.CUR_DEPL_STATE_ID ||
+            c.property === ConfigItemProperty.DEPL_STATE_TYPE ||
             c.property === ConfigItemProperty.CLASS_ID ||
             c.property === ConfigItemProperty.CLASS ||
             c.property === 'ClassIDs' ||

@@ -1,52 +1,31 @@
-/**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
- * --
- * This software comes with ABSOLUTELY NO WARRANTY. For details, see
- * the enclosed file LICENSE for license information (GPL3). If you
- * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
- * --
- */
-
-.faq-article-content-container {
+.faq-rating {
+    height: @default-widget-header-height;
+    line-height: @default-widget-header-height;
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-column-gap: 5rem;
-    padding: @margin-widget-content 1.875rem;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    align-content: center;
 
-    >div>.group-widget>.widget-content {
-        background-color: @secondary-5;
-        margin-right: 1.5rem;
+    >span:first-child {
+        font-weight: bold;
+        margin-right: @margin-small;
     }
 
-    .faq-rating {
-        height: @default-widget-header-height;
-        line-height: @default-widget-header-height;
+    >span:last-child {
+        color: @primary-2;
         display: grid;
         grid-auto-flow: column;
         grid-auto-columns: max-content;
+        grid-column-gap: 0.25rem;
         align-content: center;
-
-        >span.faq-rating-label {
-            font-weight: bold;
-            margin-right: @margin-small;
-        }
-
-        >span.faq-rating-info {
-            color: @primary-2;
-            display: grid;
-            grid-auto-flow: column;
-            grid-auto-columns: max-content;
-            grid-column-gap: 0.25rem;
-            align-content: center;
-        }
-
-        margin-bottom: 1rem;
     }
 
-    .faq-attachments {
-        >span {
-            font-weight: bold;
-            display: block;
-        }
+    margin-bottom: 1rem;
+}
+
+.faq-attachments {
+    >span {
+        font-weight: bold;
+        display: block;
     }
 }

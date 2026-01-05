@@ -36,7 +36,6 @@ export class ArticleRouter extends KIXRouter {
     protected async initialize(): Promise<void> {
         this.router.get(
             '/tickets/:ticketId/articles/:articleId',
-            AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getArticlePage.bind(this)
         );
     }

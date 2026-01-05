@@ -11,6 +11,7 @@ import { Error } from '../../../../../../server/model/Error';
 import { ContextMode } from '../../../../model/ContextMode';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ApplicationEvent } from './ApplicationEvent';
 import { BrowserUtil } from './BrowserUtil';
 import { ContextService } from './ContextService';
 import { EventService } from './EventService';
@@ -98,7 +99,10 @@ export class ObjectDialogService {
                         await ContextService.getInstance().toggleActiveContext(
                             context.descriptor.targetContextId, newObjectId, true
                         );
-
+                        const targetInstanceId = ContextService.getInstance().getActiveContext().instanceId;
+                        EventService.getInstance().publish(
+                            ApplicationEvent.REFRESH_CONTENT, targetInstanceId
+                        );
                         await BrowserUtil.openSuccessOverlay('Translatable#Success');
                     }
                 }).catch(async (error: Error) => {
@@ -125,6 +129,7 @@ export class ObjectDialogService {
             BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
         } else {
             EventService.getInstance().publish(FormEvent.GO_TO_INVALID_FIELD, {
+                context: context,
                 contextId: context.descriptor.contextId,
                 formId
             });

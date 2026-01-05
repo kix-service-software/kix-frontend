@@ -9,7 +9,6 @@
 
 import { OverlayService } from './OverlayService';
 import { OverlayType } from './OverlayType';
-import { StringContent } from './StringContent';
 import { ComponentContent } from './ComponentContent';
 import { ToastContent } from './ToastContent';
 import { ConfirmOverlayContent } from './ConfirmOverlayContent';
@@ -30,12 +29,17 @@ import { ToastUtil } from '../../../toast/webapp/core/ToastUtil';
 import { RoutingService } from './RoutingService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { DefaultColorConfiguration } from '../../../../model/configuration/DefaultColorConfiguration';
+import { ModalSettings } from '../../../toast/model/ModalSettings';
+import DOMPurify from 'dompurify';
+import { ClientStorageService } from './ClientStorageService';
 
 export class BrowserUtil {
 
     private static userColors: Map<number, string> = new Map();
 
     public static readonly URL_REGEX = /(https?|ftps?|sftp):\/\/[^\s]+/;
+
+    private static frameIntervals: Map<string, ReturnType<typeof setInterval>> = new Map();
 
     public static openErrorOverlay(error: string): void {
         ToastUtil.showErrorToast(error);
@@ -56,17 +60,15 @@ export class BrowserUtil {
         focusConfirm?: boolean, silent?: boolean
     ): Promise<void> {
         const preference = decision ? await AgentService.getInstance().getUserPreference(decision[0]) : null;
-        if ((preference && Boolean(Number(preference.Value))) || silent) {
+        if ((BrowserUtil.isBooleanTrue(preference?.Value)) || silent) {
             confirmCallback();
         } else {
-            const content = new ComponentContent(
-                'confirm-overlay',
-                new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels, decision, focusConfirm)
-            );
-            OverlayService.getInstance().openOverlay(
-                OverlayType.CONFIRM, null, content, title, null, closeButton,
-                undefined, undefined, undefined, undefined, undefined, undefined
-            );
+            const modalSettings = new ModalSettings(confirmCallback, cancelCallback, title, confirmText);
+            modalSettings.okLabel = labels?.length === 2 ? labels[0] : undefined;
+            modalSettings.cancelLabel = labels?.length === 2 ? labels[1] : undefined;
+            modalSettings.decisionPreference = decision?.length === 2 ? decision[0] : undefined;
+            modalSettings.decisionTitle = decision?.length === 2 ? decision[1] : undefined;
+            ToastUtil.showConfirmModal(modalSettings);
         }
     }
 
@@ -102,9 +104,10 @@ export class BrowserUtil {
             () => console.error('Could not get current user to start download.')
         );
         if (user) {
+            const baseRoute = ClientStorageService.getBaseRoute();
             const a = document.createElement('a');
             a.style.display = 'none';
-            a.href = `/files/download/${encodeURIComponent(file.downloadId)}`;
+            a.href = `${baseRoute}/files/download/${encodeURIComponent(file.downloadId)}`;
             a.download = file.Filename;
             a.target = '_blank';
             document.body.appendChild(a);
@@ -488,17 +491,17 @@ export class BrowserUtil {
     }
 
     public static handleLinkClicked(event): void {
-
+        const linkElement = event?.target?.closest('a');
         // handle links but not if user requested a new browser tab (ctrl) or window (shift)
-        if (event?.target?.closest('a') && !event.ctrlKey && !event.shiftKey) {
+        if (linkElement && !event.ctrlKey && !event.shiftKey) {
             event.preventDefault();
             // "open" KIX internal links as KIX tabs
-            if (window.location.host === event.target.host) {
-                RoutingService.getInstance().routeToURL(true, event.target.href);
+            if (window.location.host === linkElement.host) {
+                RoutingService.getInstance().routeToURL(true, linkElement.href);
             }
             // else open new browser tab
             else {
-                window.open(event.target.href, '_blank', 'noopener, noreferrer');
+                window.open(linkElement.href, '_blank', 'noopener, noreferrer');
             }
         }
     }
@@ -551,6 +554,120 @@ export class BrowserUtil {
         }
     }
 
+    public static cleanupHTML(htmlDocument: Document): void {
+        const scriptElements = htmlDocument.getElementsByTagName('script');
+        for (let i = 0; i < scriptElements.length; i++) {
+            scriptElements.item(i).remove();
+        }
 
+        this.removeListenersFromTags(htmlDocument);
+    }
+
+    private static removeListenersFromTags(htmlDocument: Document): void {
+        // try to remove listener and functions
+        const allElements = Array.prototype.slice.call(htmlDocument.querySelectorAll('*'));
+        allElements.push(htmlDocument);
+        const types = [];
+
+        for (let ev in htmlDocument) {
+            if (/^on/.test(ev)) {
+                types.push(ev);
+            }
+        }
+
+        for (const currentElement of allElements) {
+            for (const type of types) {
+                try {
+                    const attribute = currentElement.getAttribute(type);
+                    if (attribute) {
+                        currentElement.removeAttribute(type);
+                    }
+                } catch (e) {
+                    // do nothing
+                }
+            }
+        }
+    }
+
+    public static appendKIXStyling(htmlDocument: Document): void {
+        const baseRoute = ClientStorageService.getBaseRoute();
+
+        const kixLink = htmlDocument.createElement('link');
+        kixLink.rel = 'stylesheet';
+        kixLink.href = `${baseRoute}/static/applications/application/lasso-less.css`;
+        htmlDocument.head.appendChild(kixLink);
+
+        const bootstrapLink = htmlDocument.createElement('link');
+        bootstrapLink.rel = 'stylesheet';
+        bootstrapLink.href = `${baseRoute}/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css`;
+        htmlDocument.head.appendChild(bootstrapLink);
+    }
+
+    public static async buildHtmlStructur(html: string): Promise<string> {
+        const applicationUrl = ClientStorageService.getApplicationUrl();
+        const url = `${applicationUrl}/sanitize-html`;
+
+        const body = { html };
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (response.status === 201) {
+            const result = await response.json();
+            html = result?.html || '';
+        } else {
+            const errorMessage = 'API Error - Sanitize HTML';
+            throw errorMessage;
+        }
+
+        return html;
+    }
+
+    public static getCurrentContentScrollPosition(): number {
+        const wrapperEl = document.getElementsByClassName('content-wrapper');
+        if (wrapperEl.length) {
+            return wrapperEl[0].scrollTop;
+        } else {
+            return document.documentElement.scrollTop;
+        }
+    }
+
+    public static setCurrentContentScrollPosition(scrollPosition: number): void {
+        const wrapperEl = document.getElementsByClassName('content-wrapper');
+        const options: ScrollToOptions = { top: scrollPosition, left: 0, behavior: 'smooth' };
+        if (wrapperEl.length) {
+            wrapperEl[0].scrollTo(options);
+        } else {
+            document.documentElement.scrollTo(options);
+        }
+    }
+
+    public static setFrameHeight(frameId: string): void {
+        const frame = document.getElementById(frameId) as HTMLIFrameElement;
+
+        const frameInterval = this.frameIntervals.get(frameId);
+
+        if (frame) {
+            // set frame height to 0px to get minimal scollHeight
+            frame.style.height = '0px';
+
+            const frameHeight = frame?.contentWindow?.document?.body?.scrollHeight || 0;
+            if (frameHeight > 0) {
+                frame.style.height = frameHeight + 20 + 'px';
+
+                clearInterval(frameInterval);
+                this.frameIntervals.delete(frameId);
+            } else if (!frameInterval) {
+                this.frameIntervals.set(frameId, setInterval(() => this.setFrameHeight(frameId), 500));
+            }
+        }
+        else if (!frameInterval) {
+            this.frameIntervals.set(frameId, setInterval(() => this.setFrameHeight(frameId), 500));
+        }
+    }
 
 }

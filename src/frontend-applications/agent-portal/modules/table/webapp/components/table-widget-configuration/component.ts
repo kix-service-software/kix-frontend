@@ -21,17 +21,20 @@ import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (!this.state.configuration) {
             this.state.configuration = { ...input.configuration };
         }
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
 
         let tableConfiguration = this.state.configuration.configuration as TableConfiguration;
 
@@ -125,6 +128,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

@@ -18,24 +18,28 @@ import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
     private releaseInfo: ReleaseInfo;
     private unauthorized: boolean;
 
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.releaseInfo = !this.releaseInfo ? input.releaseInfo : this.releaseInfo;
         this.state.imprintLink = !this.state.imprintLink ? input.imprintLink : this.state.imprintLink;
         this.unauthorized = typeof input.unauthorized !== 'undefined' ? input.unauthorized : false;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.prepareImprintLink();
 
         if (!this.releaseInfo) {
@@ -61,7 +65,10 @@ class Component {
             let component = document.querySelector('.content-wrapper');
             component['style'].marginBottom = 2 + (1.1 * this.state.footerInformation.length) + 'rem';
         }
+    }
 
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     private async prepareImprintLink(): Promise<void> {

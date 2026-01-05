@@ -9,14 +9,21 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
+import { BrowserUtil } from '../../../core/BrowserUtil';
+import { IdService } from '../../../../../../model/IdService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
+    private nonWrappedLabel: boolean = false;
+
     public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.showToggle = typeof input.showToggle !== 'undefined' ? input.showToggle : false;
         if (this.state.showToggle) {
             this.state.toggled = typeof input.toggle !== 'undefined' ? input.toggle : false;
@@ -24,11 +31,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.toggled = false;
         }
         this.state.label = input.label;
+        this.state.labelId = IdService.generateDateBasedId(this.state.label?.id ? this.state.label.id.toString() : '');
+        this.nonWrappedLabel = input.nonWrappedLabel || false;
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         await this.state.label.init();
         this.state.prepared = true;
+        if (!this.nonWrappedLabel) {
+            setTimeout(() => {
+                this.getLabelValue();
+
+            }, 50);
+        }
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     public labelClicked(event: any): void {
@@ -46,6 +66,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         event.stopPropagation();
         event.preventDefault();
         (this as any).emit('removeLabel', this.state.label, event);
+    }
+
+    public getLabelValue(): void {
+        BrowserUtil.wrapLinksAndEmailsAndAppendToElement(this.state.labelId, this.state.label.text);
     }
 }
 

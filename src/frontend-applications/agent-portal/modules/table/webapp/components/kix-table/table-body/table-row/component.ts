@@ -9,7 +9,6 @@
 
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { EventService } from '../../../../../../base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../../base-components/webapp/core/IEventSubscriber';
 import { RoutingService } from '../../../../../../base-components/webapp/core/RoutingService';
 import { Cell } from '../../../../../model/Cell';
 import { Column } from '../../../../../model/Column';
@@ -18,19 +17,19 @@ import { TableEventData } from '../../../../../model/TableEventData';
 import { TableCSSHandlerRegistry } from '../../../../core/css-handler/TableCSSHandlerRegistry';
 import { ComponentState } from './ComponentState';
 
-class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
-
-    public eventSubscriberId: string;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     private observer: IntersectionObserver;
 
     private bindingIds: string[] = [];
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'kix-table/table-body/table-row');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (this.bindingIds?.length) {
             this.state.row?.removeBindings(this.bindingIds);
         }
@@ -55,22 +54,47 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async onMount(): Promise<void> {
-        if (this.state.row) {
-            this.eventSubscriberId = this.state.row.getTable().getTableId() + '-' + this.state.row.getRowId();
+        await super.onMount();
 
-            EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
-            EventService.getInstance().subscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
-            EventService.getInstance().subscribe(TableEvent.ROW_VALUE_CHANGED, this);
-            EventService.getInstance().subscribe(TableEvent.TOGGLE_ROWS, this);
+        if (this.state.row) {
+            super.registerEventSubscriber(
+                function (data: TableEventData, eventId: string, subscriberId?: string): void {
+                    if (data?.tableId !== this.state.row.getTable().getTableId()) return;
+
+                    if (data?.rowId === this.state.row.getRowId()) {
+                        if (eventId === TableEvent.ROW_TOGGLED) {
+                            this.state.open = this.state.row.isExpanded();
+                        }
+                        if (
+                            eventId === TableEvent.ROW_VALUE_STATE_CHANGED
+                            || eventId === TableEvent.ROW_VALUE_CHANGED
+                        ) {
+                            this.setRowClasses();
+                        }
+
+                        (this as any).setStateDirty();
+                    }
+
+                    if (eventId === TableEvent.TOGGLE_ROWS) {
+                        this.state.open = data.openRows;
+                        this.state.row.expand(data.openRows);
+                        this.setRowClasses();
+                    }
+                },
+                [
+                    TableEvent.ROW_TOGGLED,
+                    TableEvent.ROW_VALUE_STATE_CHANGED,
+                    TableEvent.ROW_VALUE_CHANGED,
+                    TableEvent.TOGGLE_ROWS
+                ]
+            );
+
             this.prepareObserver();
         }
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_CHANGED, this);
-        EventService.getInstance().unsubscribe(TableEvent.TOGGLE_ROWS, this);
+        super.onDestroy();
 
         if (this.bindingIds?.length) {
             this.state.row.removeBindings(this.bindingIds);
@@ -111,27 +135,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 this.observer.disconnect();
             }
         });
-    }
-
-    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
-        if (data && data.tableId === this.state.row.getTable().getTableId()) {
-            if (data.rowId === this.state.row.getRowId()) {
-                if (eventId === TableEvent.ROW_TOGGLED) {
-                    this.state.open = this.state.row.isExpanded();
-                }
-                if ((eventId === TableEvent.ROW_VALUE_STATE_CHANGED || eventId === TableEvent.ROW_VALUE_CHANGED)) {
-                    this.setRowClasses();
-                }
-
-                (this as any).setStateDirty();
-            }
-
-            if (eventId === TableEvent.TOGGLE_ROWS) {
-                this.state.open = data.openRows;
-                this.state.row.expand(data.openRows);
-                this.setRowClasses();
-            }
-        }
     }
 
     public toggleRow(event?: any): void {
@@ -176,7 +179,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     private async setRowClasses(): Promise<void> {
         const object = this.state.row.getRowObject().getObject();
-        let stateClass = [];
+        let stateClass: string[] = [];
 
         if (this.state.open) {
             stateClass.push('opened');
@@ -192,7 +195,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             if (cssHandler) {
                 for (const handler of cssHandler) {
                     const classes = await handler.getRowCSSClasses(object);
-                    classes.forEach((c) => stateClass.push(c));
+                    classes.forEach((c: string) => stateClass.push(c));
                 }
             }
 
@@ -206,7 +209,35 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         this.state.rowClasses = stateClass;
     }
 
-    public rowClicked(event): void {
+    private hasActiveTextSelection(): boolean {
+        const getSel = (global as any).getSelection || (typeof window !== 'undefined' ? window.getSelection : undefined);
+        const sel = typeof getSel === 'function' ? getSel.call(global) : undefined;
+        return !!(sel && typeof sel.toString === 'function' && sel.toString().length > 0);
+    }
+
+    private isPlainLeftClick(event: MouseEvent): boolean {
+        return event && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+    }
+
+    private isInteractiveTarget(el?: HTMLElement | null): boolean {
+        if (!el) return false;
+        return !!el.closest('a,button,input,textarea,select,[contenteditable="true"],.no-row-route');
+    }
+
+    public rowClicked(event: MouseEvent): void {
+        if (this.hasActiveTextSelection()) {
+            return;
+        }
+
+        if (!this.isPlainLeftClick(event)) {
+            return;
+        }
+
+        const target = event?.target as HTMLElement;
+        if (this.isInteractiveTarget(target)) {
+            return;
+        }
+
         const config = this.state.row.getTable().getTableConfiguration();
         if (!config?.routingConfiguration && config?.toggle) {
             this.toggleRow(event);
@@ -214,7 +245,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         if (config.routingConfiguration) {
             const object = this.state.row?.getRowObject()?.getObject();
-
             const objectId = RoutingService.getObjectId(object, config.routingConfiguration);
             RoutingService.getInstance().routeTo(config?.routingConfiguration, objectId);
         }

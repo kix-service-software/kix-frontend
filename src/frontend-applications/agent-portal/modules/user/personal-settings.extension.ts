@@ -26,6 +26,8 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { DefaultSelectInputFormOption } from '../../model/configuration/DefaultSelectInputFormOption';
 import { TreeNode } from '../base-components/webapp/core/tree';
+import { NumberInputOptions } from '../base-components/webapp/core/NumberInputOptions';
+import { UserProperty } from './model/UserProperty';
 
 class Extension extends KIXExtension implements IPersonalSettingsExtension {
 
@@ -49,6 +51,47 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                 'date-time-input', null, null,
                 [
                     new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE)
+                ]
+            ),
+            new PersonalSetting(
+                'Translatable#Out Of Office',
+                PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE,
+                'Translatable#Substitute',
+                'Translatable#Helptext_PersonalSettings_OutOfOfficeSubstitute_Hint',
+                'object-reference-input',
+                null, null,
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
+
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
+                    new FormFieldOption(
+                        ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    UserProperty.PREFERENCES + '.' + PersonalSettingsProperty.MY_QUEUES,
+                                    SearchOperator.IN, FilterDataType.NUMERIC,
+                                    FilterType.AND, KIXObjectType.CURRENT_USER
+                                ),
+                                new FilterCriteria(
+                                    UserProperty.IS_AGENT,
+                                    SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    'UserIDs',
+                                    SearchOperator.NOT_IN, FilterDataType.NUMERIC,
+                                    FilterType.AND, ['1', KIXObjectType.CURRENT_USER]
+                                ),
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID,
+                                    SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
                 ]
             ),
             new PersonalSetting(
@@ -80,6 +123,28 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
             ),
             new PersonalSetting(
                 'Translatable#Favorites',
+                PersonalSettingsProperty.AGENT_PORTAL_DASHBOARD_REFRESH_INTERVAL,
+                'Translatable#Dashboard Refresh Interval (Minutes)',
+                'Translatable#Helptext_PersonalSettings_DashboardRefreshInterval_Hint',
+                'number-input', null, null,
+                [
+                    new FormFieldOption(NumberInputOptions.MIN, 0),
+                    new FormFieldOption(NumberInputOptions.UNIT_STRING, 'Translatable#Minutes'),
+                    new FormFieldOption(NumberInputOptions.STEP, 1),
+                    new FormFieldOption(NumberInputOptions.EXCEPTS_EMPTY, true),
+                    new FormFieldOption(NumberInputOptions.POSITIVE_INTEGER, true)
+                ]
+            ),
+            new PersonalSetting(
+                'Translatable#Favorites',
+                PersonalSettingsProperty.INITIAL_SITE_URL,
+                'Translatable#Initial Content',
+                'Translatable#Helptext_PersonalSettings_InitialSiteURL_Hint',
+                'initial-site-url-select-input',
+                false, new FormFieldValue('home'),
+            ),
+            new PersonalSetting(
+                'Translatable#Favorites',
                 PersonalSettingsProperty.MY_QUEUES,
                 'Translatable#My Queues',
                 'Translatable#Helptext_PersonalSettings_MyQueues_Hint',
@@ -88,12 +153,20 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
 
+                    new FormFieldOption(FormFieldOptions.SHOW_INVALID, false),
+                    new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, false),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                     new FormFieldOption(
                         ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
-                            [], null, null, null, null,
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                                    FilterDataType.NUMERIC, FilterType.AND, 1
+                                )
+                            ],
+                            null, null, null, null,
                             [
                                 [
                                     'requiredPermission',

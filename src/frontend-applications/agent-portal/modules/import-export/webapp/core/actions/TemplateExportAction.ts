@@ -26,6 +26,7 @@ import { ConfigItemClass } from '../../../../cmdb/model/ConfigItemClass';
 export class TemplateExportAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Export';
         this.icon = 'kix-icon-export';
     }

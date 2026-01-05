@@ -16,11 +16,13 @@ import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.title = await TranslationService.translate('Translatable#Search menu');
         const descriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
         this.state.canShow = Array.isArray(descriptors) && descriptors.length > 0;
@@ -31,10 +33,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         (this as any).setStateDirty('values');
     }
 
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
     public valueClicked(value: [string, string, string | ObjectIcon]): void {
         ContextService.getInstance().setActiveContext(value[0]);
     }
 
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

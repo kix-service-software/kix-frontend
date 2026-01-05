@@ -33,6 +33,9 @@ import { FormLayout } from '../../../../object-forms/model/layout/FormLayout';
 import { RowLayout } from '../../../../object-forms/model/layout/RowLayout';
 import { RowColumnLayout } from '../../../../object-forms/model/layout/RowColumnLayout';
 import { GroupLayout } from '../../../../object-forms/model/layout/GroupLayout';
+import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
+import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
+import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 
 export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact> {
 
@@ -55,16 +58,22 @@ export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact>
         const userGroup = new FormGroupConfiguration('user-form-group', 'Translatable#User Access');
         page.groups.push(userGroup);
 
+        const userPasswordConfiguration = new FormFieldConfiguration(
+            'user-form-user-password', 'Translatable#Password', UserProperty.USER_PASSWORD, null
+        );
+
+        userPasswordConfiguration.options = [
+            new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
+        ];
+
         userGroup.formFields.push(
             new FormFieldConfiguration(
                 'user-form-user-access', 'Translatable#Access', UserProperty.USER_ACCESS, null
             ),
             new FormFieldConfiguration(
-                'user-form-user-login', 'Translatable#Login Name', UserProperty.USER_LOGIN, null
+                'user-form-user-login', 'Translatable#Login Name', UserProperty.USER_LOGIN, null, true
             ),
-            new FormFieldConfiguration(
-                'user-form-user-password', 'Translatable#Password', UserProperty.USER_PASSWORD, null
-            ),
+            userPasswordConfiguration,
             new FormFieldConfiguration(
                 'user-form-user-roles', 'Translatable#Roles', UserProperty.ROLE_IDS, null
             ),

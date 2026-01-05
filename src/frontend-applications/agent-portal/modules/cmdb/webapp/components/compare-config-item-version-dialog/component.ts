@@ -10,22 +10,19 @@
 import { ComponentState } from './ComponentState';
 import { CompareConfigItemVersionContext } from '../../core';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState, CompareConfigItemVersionContext> {
 
-    private state: ComponentState;
-
-    private context: CompareConfigItemVersionContext;
-
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
         const versions = await this.context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
         if (versions) {
@@ -40,6 +37,14 @@ class Component {
         return KIXModulesService.getComponentTemplate(this.state.compareWidget.widgetId);
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

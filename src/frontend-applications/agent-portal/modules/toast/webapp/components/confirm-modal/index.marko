@@ -1,0 +1,63 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div
+    class="modal pe-auto"
+    tabindex="-1"
+    id="confirm-modal"
+    data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <translation-string pattern=state.title/>
+                </h5>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <translation-string pattern=state.confirmText/>
+                </p>
+                <if(state.decisionLabel)>
+                    <div class="form-check mt-3 mb-2">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="decisionlabel"
+                            checked=state.decisionChecked
+                            on-click("decisionChanged")>
+                        <label class="form-check-label" for="decisionlabel">
+                            <translation-string pattern=state.decisionLabel/>
+                        </label>
+                    </div>
+                </if>
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    on-click("cancel")
+                    class="btn btn-outline-danger py-0">
+                    <span class="btn-label-danger">
+                        <i class="fa fa-times text-light"/>
+                    </span>
+                    <translation-string pattern=state.cancelLabel/>
+                </button>
+                <button
+                    type="button"
+                    on-click("submit")
+                    class="btn btn-outline-success py-0">
+                    <span class="btn-label-success">
+                        <i class="fa fa-check text-light"/>
+                    </span>
+                    <translation-string pattern=state.okLabel/>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

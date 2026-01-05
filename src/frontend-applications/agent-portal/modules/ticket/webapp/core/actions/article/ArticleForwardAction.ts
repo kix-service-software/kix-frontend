@@ -26,14 +26,14 @@ export class ArticleForwardAction extends AbstractAction<Article> {
     public hasLink: boolean = true;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Forward';
         this.icon = 'kix-icon-mail-forward-outline';
     }
 
     public async canShow(): Promise<boolean> {
         let show = false;
-        const context = ContextService.getInstance().getActiveContext();
-        const objectId = context.getObjectId();
+        const objectId = this.context?.getObjectId();
 
         if (objectId) {
             this.ticketId = Number(objectId);
@@ -75,7 +75,8 @@ export class ArticleForwardAction extends AbstractAction<Article> {
                     ['REFERENCED_SOURCE_OBJECT_ID', this.ticketId],
                     [ArticleProperty.REFERENCED_ARTICLE_ID, this.articleId],
                     ['ARTICLE_FORWARD', true],
-                    [AdditionalContextInformation.FORM_ID, 'article-forward']
+                    [AdditionalContextInformation.FORM_ID, 'article-forward'],
+                    ['NEW_ARTICLE', true]
                 ]
             );
             editContext.setIcon(this.icon);

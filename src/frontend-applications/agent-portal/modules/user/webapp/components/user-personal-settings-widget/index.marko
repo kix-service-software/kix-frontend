@@ -8,21 +8,39 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <widget
+    contextInstanceId=input.contextInstanceId
     instanceId=state.instanceId
-    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Translatable#Preferences")
+    title=(
+        state.widgetConfiguration
+            ? state.widgetConfiguration.title
+            : "Translatable#Preferences"
+    )
     contentActions=state.actions>
     <@content>
         <if(state.user)>
-            <div.user-preferences>
-                <object-property-label object=state.user property="UserLanguage" labelProvider=state.labelProvider/>
-                <object-property-label object=state.user property="NotificationTransport" labelProvider=state.labelProvider>
+            <div class="user-preferences">
+                <object-property-label
+                    object=state.user
+                    property="UserLanguage"
+                    labelProvider=state.labelProvider/>
+                <object-property-label
+                    object=state.user
+                    property="NotificationTransport"
+                    labelProvider=state.labelProvider>
                     <@value>
-                        <label-list labels=state.notificationLabels removeLabels=false/>
+                        <label-list
+                            labels=state.notificationLabels
+                            removeLabels=false/>
                     </@value>
                 </object-property-label>
-                <object-property-label object=state.user property="MyQueues" labelProvider=state.labelProvider>
+                <object-property-label
+                    object=state.user
+                    property="MyQueues"
+                    labelProvider=state.labelProvider>
                     <@value>
-                        <label-list labels=state.queueLabels removeLabels=false/>
+                        <label-list
+                            labels=state.queueLabels
+                            removeLabels=false/>
                     </@value>
                 </object-property-label>
             </div>

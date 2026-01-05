@@ -144,12 +144,12 @@ export class ModuleConfigurationService {
     }
 
     public async sysconfigChanged(id: string): Promise<void> {
-        await CacheService.getInstance().deleteKeys('ModuleConfigurationService');
+        CacheService.getInstance().deleteKeys('ModuleConfigurationService');
     }
 
     public async applyFormConfigurationsToCache(): Promise<void> {
-        await CacheService.getInstance().set('FORM_IDS', this.forms);
-        await CacheService.getInstance().set('FORM_IDS_WITH_CONTEXT', this.formIDsWithContext);
+        CacheService.getInstance().set('FORM_IDS', this.forms);
+        CacheService.getInstance().set('FORM_IDS_WITH_CONTEXT', this.formIDsWithContext);
         CacheService.getInstance().adddIgnorePrefixes(['FORM_IDS', 'FORM_IDS_WITH_CONTEXT']);
     }
 

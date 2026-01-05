@@ -13,11 +13,11 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { NotificationService } from '../../core';
 import { NotificationProperty } from '../../../model/NotificationProperty';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
@@ -35,8 +35,12 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        await this.load();
         await super.onMount();
+    }
+
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
+        await this.load();
     }
 
     private async load(): Promise<void> {
@@ -50,8 +54,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string[]>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
@@ -67,16 +70,17 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private provideToContext(nodes: TreeNode[]): void {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.setAdditionalInformation(
-                NotificationProperty.DATA_EVENTS, nodes.map((n) => n.id)
-            );
-        }
+        this.context?.setAdditionalInformation(
+            NotificationProperty.DATA_EVENTS, nodes.map((n) => n.id)
+        );
     }
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 }
 

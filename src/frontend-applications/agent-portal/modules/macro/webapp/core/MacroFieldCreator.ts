@@ -57,7 +57,9 @@ export class MacroFieldCreator {
 
     public static async createMacroField(
         macro: Macro, formInstance: FormInstance, parentInstanceId: string = '',
-        allowEmpty: boolean = false, type?: string
+        allowEmpty: boolean = false, type?: string,
+        label: string = 'Translatable#Macro', hint: string = 'Translatable#Relevant Macro type',
+        required: boolean = true
     ): Promise<FormFieldConfiguration> {
         const macroField = new FormFieldConfiguration(
             'macro-form-field-macro', '', 'Macros', 'default-select-input'
@@ -86,16 +88,16 @@ export class MacroFieldCreator {
 
         macroField.defaultValue = new FormFieldValue<string>(type);
 
-        macroField.required = true;
-        macroField.label = 'Translatable#Macro';
-        macroField.hint = 'Translatable#Relevant Macro type';
+        macroField.required = required;
+        macroField.label = label;
+        macroField.hint = hint;
         macroField.showLabel = true;
         macroField.instanceId = `${parentInstanceId}###MACRO###${IdService.generateDateBasedId()}`;
         macroField.draggableFields = true;
 
         if (macro) {
 
-            const context = ContextService.getInstance().getActiveContext();
+            const context = formInstance.context;
             const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
             if (duplicate) {
                 macro.ID = null;
@@ -176,7 +178,7 @@ export class MacroFieldCreator {
             true, 'Translatable#Helptext_Admin_CreateEdit_Actions'
         );
 
-        const context = ContextService.getInstance().getActiveContext();
+        const context = formInstance.context;
         const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
         if (duplicate && action) {
             action.ID = null;
@@ -290,7 +292,6 @@ export class MacroFieldCreator {
                     resultField.instanceId = `${actionFieldInstanceId}-${actionType.Name}###ResultGroup###${result.Name}`;
                     resultField.required = false;
                     resultField.hint = result.Description;
-                    resultField.translateLabel = false;
 
                     let defaultValue: string;
                     if (action && action.ResultVariables) {
@@ -335,7 +336,10 @@ export class MacroFieldCreator {
     ): Promise<FormFieldConfiguration> {
         const nameOption = new FormFieldOption('OptionName', option.Name);
 
-        if (option.Name !== 'MacroID') {
+        if (
+            option.Name !== 'MacroID'
+            && option.Name !== 'ElseMacroID'
+        ) {
             const optionFieldHandler = MacroService.getInstance().getOptionFieldHandler();
             for (const extendedManager of optionFieldHandler) {
                 const result = await extendedManager.createOptionField(
@@ -369,7 +373,10 @@ export class MacroFieldCreator {
         optionField.defaultValue = typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined;
         optionField.property = optionField.instanceId;
 
-        if (option.Name === 'MacroID') {
+        if (
+            option.Name === 'MacroID'
+            || option.Name === 'ElseMacroID'
+        ) {
             let subMacro: Macro;
             if (defaultValue) {
                 let macroIds: number[] = defaultValue;
@@ -387,7 +394,10 @@ export class MacroFieldCreator {
                 }
             }
 
-            optionField = await this.createMacroField(subMacro, formInstance, actionFieldInstanceId);
+            optionField = await this.createMacroField(
+                subMacro, formInstance, actionFieldInstanceId, null, null,
+                option.Label, option.Description, Boolean(option.Required)
+            );
         }
 
         optionField.parentInstanceId = actionFieldInstanceId;

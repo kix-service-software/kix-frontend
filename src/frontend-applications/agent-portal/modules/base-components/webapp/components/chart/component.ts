@@ -9,23 +9,24 @@
 
 import { ComponentState } from './ComponentState';
 import { ChartConfiguration } from 'chart.js';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
 declare let Chart: any;
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public config: ChartConfiguration = null;
     private chart: Chart;
-    private updateTimeout;
+    private updateTimeout: ReturnType<typeof setTimeout>;
+    private visibleTimeout: ReturnType<typeof setTimeout>;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (!this.config) {
             this.setConfig(input.config);
         }
@@ -71,9 +72,9 @@ class Component {
         }
     }
 
-    public onMount(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        context.registerListener(this.state.chartId, {
+    public async onMount(): Promise<void> {
+        await super.onMount();
+        this.context?.registerListener(this.state.chartId, {
             sidebarRightToggled: () => {
                 setTimeout(() => {
                     if (window.innerWidth > 1600) {
@@ -108,18 +109,28 @@ class Component {
     }
 
     private createChart(): void {
+        if (this.visibleTimeout) {
+            clearTimeout(this.visibleTimeout);
+            this.visibleTimeout = null;
+        }
         const canvasElement = (this as any).getEl(this.state.chartId);
         if (canvasElement) {
-            const ctx = canvasElement.getContext('2d');
-            if (ctx) {
-                if (this.chart) {
-                    try {
-                        this.chart.destroy();
-                    } catch (e) {
-                        //
+            // only prepare if visible
+            if (canvasElement.offsetParent) {
+                const ctx = canvasElement.getContext('2d');
+                if (ctx) {
+                    if (this.chart) {
+                        try {
+                            this.chart.destroy();
+                        } catch (e) {
+                            //
+                        }
                     }
+                    this.chart = new Chart(ctx, this.config);
                 }
-                this.chart = new Chart(ctx, this.config);
+            }
+            else {
+                this.visibleTimeout = setTimeout(this.createChart.bind(this), 200);
             }
         }
     }

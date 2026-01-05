@@ -29,15 +29,15 @@ export class TicketQueueTableFactory extends TableFactory {
     public objectType: KIXObjectType = KIXObjectType.QUEUE;
 
     public async createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextInstanceId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         const contentProvider = new TicketQueueTableContentProvider(
-            table, objectIds, tableConfiguration.loadingOptions, contextId
+            table, objectIds, tableConfiguration.loadingOptions, contextInstanceId
         );
 
         table.setContentProvider(contentProvider);

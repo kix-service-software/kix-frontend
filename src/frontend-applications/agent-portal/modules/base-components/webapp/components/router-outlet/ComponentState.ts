@@ -7,14 +7,16 @@
  * --
  */
 
-export class ComponentState {
+import { AbstractComponentState } from '../../core/AbstractComponentState';
+
+export class ComponentState extends AbstractComponentState {
 
         public constructor(
-                public componentId: string = null,
-                public template: any = null,
+                public contextList: any[] = [],
                 public routerId: string = null,
-                public data: any = null,
-                public prepared: boolean = false
-        ) { }
+                public reloadContextInstanceId: string = null
+        ) {
+                super();
+        }
 
 }

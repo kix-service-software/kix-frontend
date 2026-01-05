@@ -10,6 +10,7 @@
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { NewTextModuleDialogContext } from './context';
 import { TextModule } from '../../model/TextModule';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class TextModuleDialogUtil {
 
@@ -18,7 +19,12 @@ export class TextModuleDialogUtil {
     }
 
     public static async duplicate(textModule: TextModule): Promise<void> {
-        ContextService.getInstance().setActiveContext(NewTextModuleDialogContext.CONTEXT_ID, textModule.ID);
+        ContextService.getInstance().setActiveContext(
+            NewTextModuleDialogContext.CONTEXT_ID, textModule.ID, null,
+            [
+                [AdditionalContextInformation.DUPLICATE, true]
+            ]
+        );
     }
 
 }

@@ -42,6 +42,10 @@ export class AdministrationSocketClient extends SocketClient {
         return module;
     }
 
+    public clearAdminModuleCache(): void {
+        this.adminModules = null;
+    }
+
     private findModule(id: string, modules: Array<AdminModule>): AdminModule {
         for (const m of modules) {
             if (m.id === id) {

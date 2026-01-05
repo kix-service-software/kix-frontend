@@ -8,17 +8,20 @@
  */
 
 import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
         this.resizeHandling();
     }
@@ -29,6 +32,10 @@ class Component {
 
     private resizeHandling(): void {
         this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

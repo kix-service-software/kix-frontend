@@ -10,6 +10,7 @@
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { AbstractAction } from '../../../base-components/webapp/core/AbstractAction';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { QueueDialogUtil } from '../../../ticket/webapp/core/admin/QueueDialogUtil';
 import { DynamicField } from '../../model/DynamicField';
@@ -22,6 +23,7 @@ export class DynamicFieldDuplicateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Duplicate';
         this.icon = 'kix-icon-copy';
     }
@@ -33,7 +35,12 @@ export class DynamicFieldDuplicateAction extends AbstractAction {
     public async run(event: any): Promise<void> {
         if (this.canRun()) {
             const dynamicField: DynamicField = this.data.getSelectedRows()[0]?.getRowObject().getObject();
-            ContextService.getInstance().setActiveContext(NewDynamicFieldDialogContext.CONTEXT_ID, dynamicField.ID);
+            ContextService.getInstance().setActiveContext(
+                NewDynamicFieldDialogContext.CONTEXT_ID, dynamicField.ID, null,
+                [
+                    [AdditionalContextInformation.DUPLICATE, true]
+                ]
+            );
         }
     }
 }

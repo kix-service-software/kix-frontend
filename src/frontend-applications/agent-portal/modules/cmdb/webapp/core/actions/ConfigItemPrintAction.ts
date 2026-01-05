@@ -24,14 +24,14 @@ export class ConfigItemPrintAction extends AbstractAction {
     public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Print';
         this.icon = 'kix-icon-print';
     }
 
     public async canShow(): Promise<boolean> {
         let show = false;
-        const context = ContextService.getInstance().getActiveContext();
-        const objectId = context.getObjectId();
+        const objectId = this.context?.getObjectId();
 
         const permissions = [
             new UIComponentPermission(`cmdb/configitems/${objectId}`, [CRUD.READ])
@@ -42,37 +42,32 @@ export class ConfigItemPrintAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
+        BrowserUtil.openInfoOverlay('Translatable#Prepare Asset for print');
 
-        const context = ContextService.getInstance().getActiveContext();
+        const configItem = await this.context?.getObject<ConfigItem>();
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+        const assetId = this.context?.getObjectId();
 
-        if (context) {
-            BrowserUtil.openInfoOverlay('Translatable#Prepare Asset for print');
+        const file = await KIXObjectService.loadObjects(
+            KIXObjectType.HTML_TO_PDF, null,
+            new KIXObjectLoadingOptions(
+                null, null, null, null, null,
+                [
+                    ['TemplateName', configItem.Class],
+                    ['IdentifierType', 'IDKey'],
+                    ['IdentifierIDorNumber', assetId.toString()],
+                    ['UserID', currentUser.UserID.toString()],
+                    ['Filename', 'Asset_<KIX_ASSET_Number>_<TIME_YYMMDD_hhmm>'],
+                    ['FallbackTemplate', 'Asset']
+                ]
+            ), null, null, false
+        );
 
-            const configItem = await context.getObject<ConfigItem>();
-            const currentUser = await AgentService.getInstance().getCurrentUser();
-            const assetId = context.getObjectId();
-
-            const file = await KIXObjectService.loadObjects(
-                KIXObjectType.HTML_TO_PDF, null,
-                new KIXObjectLoadingOptions(
-                    null, null, null, null, null,
-                    [
-                        ['TemplateName', configItem.Class],
-                        ['IdentifierType', 'IDKey'],
-                        ['IdentifierIDorNumber', assetId.toString()],
-                        ['UserID', currentUser.UserID.toString()],
-                        ['Filename', 'Asset_<KIX_ASSET_Number>_<TIME_YYMMDD_hhmm>'],
-                        ['FallbackTemplate', 'Asset']
-                    ]
-                ), null, null, false
+        if (file && file[0]) {
+            BrowserUtil.openSuccessOverlay('Translatable#Asset has printed');
+            BrowserUtil.startBrowserDownload(
+                file[0]['Filename'], file[0]['Content'], file[0]['ContentType'], true
             );
-
-            if (file && file[0]) {
-                BrowserUtil.openSuccessOverlay('Translatable#Asset has printed');
-                BrowserUtil.startBrowserDownload(
-                    file[0]['Filename'], file[0]['Content'], file[0]['ContentType'], true
-                );
-            }
         }
     }
 }

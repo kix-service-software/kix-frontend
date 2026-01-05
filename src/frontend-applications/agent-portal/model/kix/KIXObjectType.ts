@@ -139,6 +139,8 @@ export enum KIXObjectType {
 
     QUEUE = 'Queue',
 
+    QUEUE_TICKET_STATS = 'TicketStats',
+
     PLUGIN = 'Plugin',
 
     PLUGIN_ACTION = 'PluginAction',

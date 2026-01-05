@@ -9,12 +9,9 @@
 
 import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { DynamicFieldProperty } from '../../../model/DynamicFieldProperty';
 import { DynamicFieldService } from '../../core/DynamicFieldService';
 import { FormContext } from '../../../../../model/configuration/FormContext';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/DynamicFieldFormUtil';
@@ -23,9 +20,9 @@ class Component extends FormInputComponent<JSON, ComponentState> {
 
     private schema: JSON = null;
     private editor: any;
-    private formSubscriber: IEventSubscriber;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'dynamic-form-config-input');
         this.state = new ComponentState();
     }
 
@@ -35,14 +32,17 @@ class Component extends FormInputComponent<JSON, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
 
-        this.formSubscriber = {
-            eventSubscriberId: this.state.field?.instanceId,
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
+    protected async prepareMount(): Promise<void> {
+        await super.prepareMount();
+
+        super.registerEventSubscriber(
+            async function (data: FormValuesChangedEventData, eventId: string): Promise<void> {
                 const typeValue = data.changedValues.find(
                     (cv) => cv[0] && cv[0].property === DynamicFieldProperty.FIELD_TYPE
                 );
-                if (typeValue && typeValue[1]) {
+                if (typeValue?.[1]) {
                     if (typeValue[1].value) {
                         if (this.state.formContext === FormContext.NEW) {
                             setTimeout(() => this.createEditor(typeValue[1].value, null), 50);
@@ -52,14 +52,13 @@ class Component extends FormInputComponent<JSON, ComponentState> {
                         this.state.prepared = false;
                     }
                 }
-            }
-        };
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+            },
+            [FormEvent.VALUES_CHANGED]
+        );
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const defaultValue = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
 
         const typeValue = await formInstance.getFormFieldValueByProperty<string>(DynamicFieldProperty.FIELD_TYPE);
@@ -116,9 +115,9 @@ class Component extends FormInputComponent<JSON, ComponentState> {
         }
     }
 
-    public async onDestroy(): Promise<void> {
+    public onDestroy(): void {
+        super.onDestroy();
         this.destroyEditor();
-        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     private destroyEditor(): void {

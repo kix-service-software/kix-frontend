@@ -16,6 +16,7 @@ import { Table } from '../../../table/model/Table';
 export class SysconfigEditAction extends AbstractAction<Table> {
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
     }

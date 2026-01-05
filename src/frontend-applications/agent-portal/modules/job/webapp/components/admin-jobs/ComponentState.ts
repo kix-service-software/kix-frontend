@@ -15,8 +15,9 @@ import { SortOrder } from '../../../../../model/SortOrder';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = 'admin-jobs-list',
@@ -30,10 +31,13 @@ export class ComponentState {
                     null, null, null,
                     KIXObjectType.JOB, null, null, null, null, true, false, null, null,
                     TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                )
+                ),
+                null, true, null, null, null, false
             ),
             false, false, 'kix-icon-gears'
         )
-    ) { }
+    ) {
+        super();
+    }
 
 }

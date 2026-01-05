@@ -8,32 +8,31 @@
  */
 
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
-import { Context } from '../../../../../model/Context';
 import { IdService } from '../../../../../model/IdService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
+import { ActionFactory } from '../../core/ActionFactory';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { ClientStorageService } from '../../core/ClientStorageService';
+import { IAction } from '../../core/IAction';
 import { TabContainerEvent } from '../../core/TabContainerEvent';
 import { TabContainerEventData } from '../../core/TabContainerEventData';
 import { ComponentState } from './ComponentState';
 
-class WidgetComponent implements IEventSubscriber {
+class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
-    public eventSubscriberId: string;
-    private context: Context;
     private clearMinimizedStateOnDestroy: boolean;
+    private additionalActions: IAction[] = [];
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'widget');
         this.state = new ComponentState();
         this.clearMinimizedStateOnDestroy = input.clearMinimizedStateOnDestroy || false;
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
 
         this.state.widgetConfiguration = input.configuration;
@@ -44,12 +43,11 @@ class WidgetComponent implements IEventSubscriber {
 
         this.state.closable = typeof input.closable !== 'undefined' ? input.closable : false;
         this.state.contextType = input.contextType;
-        this.eventSubscriberId = typeof input.eventSubscriberPrefix !== 'undefined'
-            ? input.eventSubscriberPrefix
-            : 'GeneralWidget';
         if (input.title) {
             this.setTitle(input.title);
         }
+
+        this.prepareActions(input?.actions);
     }
 
     private async setTitle(title: string): Promise<void> {
@@ -57,17 +55,22 @@ class WidgetComponent implements IEventSubscriber {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
-        this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
+        if (this.context) {
+            this.state.widgetType = this.context.widgetService.getWidgetType(this.state.instanceId, this.context);
+        }
+        else {
+            this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
+        }
 
         // set before config (prevent await delay)
         if (this.state.widgetType === WidgetType.SIDEBAR) {
-            this.state.minimized = !this.context.isSidebarWidgetOpen(this.state.instanceId);
+            this.state.minimized = !this.context?.isSidebarWidgetOpen(this.state.instanceId);
         }
 
         if (!this.state.widgetConfiguration) {
-            const config = await this.context.getWidgetConfiguration(this.state.instanceId);
+            const config = await this.context?.getWidgetConfiguration(this.state.instanceId);
             this.state.widgetConfiguration = config;
         }
 
@@ -79,14 +82,23 @@ class WidgetComponent implements IEventSubscriber {
         if (typeof storedMinimized !== 'undefined' && storedMinimized !== null) {
             this.state.minimized = storedMinimized === 'true';
         }
+        this.additionalActions = await ActionFactory.getInstance().getActionsForWidget(
+            this.state.widgetConfiguration?.widgetId, this.contextInstanceId
+        );
+        this.prepareActions(this.state.actions);
 
-        EventService.getInstance().subscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
-        EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TITLE, this);
+        super.registerEventSubscriber(
+            async function (data: TabContainerEventData, eventId: string): Promise<void> {
+                if (data.tabId === this.state.instanceId) {
+                    this.setTitle(data.title);
+                }
+            },
+            [TabContainerEvent.CHANGE_TITLE]
+        );
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
-        EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TITLE, this);
+        super.onDestroy();
         if (this.clearMinimizedStateOnDestroy) {
             ClientStorageService.deleteState(`${this.state.instanceId}-minimized`);
         }
@@ -121,10 +133,7 @@ class WidgetComponent implements IEventSubscriber {
                 this.state.minimized = !this.state.minimized;
                 (this as any).emit('minimizedChanged', this.state.minimized);
                 if (this.state.widgetType === WidgetType.SIDEBAR) {
-                    const context = ContextService.getInstance().getActiveContext();
-                    if (context) {
-                        context.toggleSidebarWidget(this.state.instanceId);
-                    }
+                    this.context?.toggleSidebarWidget(this.state.instanceId);
                 }
             }
 
@@ -161,7 +170,13 @@ class WidgetComponent implements IEventSubscriber {
         }
 
         classes.push(this.getWidgetTypeClass(this.state.widgetType));
-        classes.push(WidgetService.getInstance().getWidgetClasses(this.state.instanceId));
+
+        if (this.context) {
+            classes.push(this.context.widgetService.getWidgetClasses(this.state.instanceId));
+        }
+        else {
+            classes.push(WidgetService.getInstance().getWidgetClasses(this.state.instanceId));
+        }
 
         return classes;
     }
@@ -205,17 +220,6 @@ class WidgetComponent implements IEventSubscriber {
         (this as any).emit('closeWidget');
     }
 
-    public async eventPublished(data: any, eventId: string): Promise<void> {
-        if (eventId === (this.eventSubscriberId + 'SetMinimizedToFalse')) {
-            this.state.minimized = false;
-        } else if (eventId === TabContainerEvent.CHANGE_TITLE) {
-            const changeData: TabContainerEventData = data;
-            if (changeData.tabId === this.state.instanceId) {
-                this.setTitle(changeData.title);
-            }
-        }
-    }
-
     public headerMousedown(force: boolean = false, event: any): void {
         if (
             force
@@ -240,6 +244,10 @@ class WidgetComponent implements IEventSubscriber {
 
     public isSidebarWidget(): boolean {
         return this.state.widgetType === WidgetType.SIDEBAR;
+    }
+
+    private prepareActions(actions: IAction[] = []): void {
+        this.state.actions = [...actions, ...this.additionalActions || []];
     }
 
 }

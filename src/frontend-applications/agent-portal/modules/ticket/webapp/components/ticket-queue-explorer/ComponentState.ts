@@ -9,9 +9,10 @@
 
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { ContextType } from '../../../../../model/ContextType';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = null,
@@ -20,7 +21,10 @@ export class ComponentState {
         public contextId: string = null,
         public nodes: TreeNode[] = [],
         public activeNode: TreeNode = null,
-        public myTeamsActive: boolean = false
-    ) { }
+        public myTeamsActive: boolean = false,
+        public treeId: string = 'ticket-queues-tree'
+    ) {
+        super();
+    }
 
 }

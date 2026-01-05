@@ -40,7 +40,7 @@ export class TicketListContext extends Context {
 
         const tickets = await KIXObjectService.loadObjects<Ticket>(
             KIXObjectType.USER_TICKETS, null, loadingOptions, null, false, undefined, undefined,
-            this.contextId + KIXObjectType.TICKET
+            this.instanceId + KIXObjectType.TICKET
         ).catch(() => []);
 
         await this.getUrl();

@@ -15,29 +15,28 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        await super.onMount();
 
-        if (context) {
-            const articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
-            if (Array.isArray(articles)) {
-                let count = 0;
-                articles.forEach((article) => {
-                    if (article.Attachments) {
-                        const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline' || a.ContentID.length === 0 && !a.Filename.match(/^file-(1|2)$/));
-                        if (attachments.length > 0) {
-                            count += attachments.length;
-                        }
+        const articles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE);
+        if (Array.isArray(articles)) {
+            let count = 0;
+            articles.forEach((article) => {
+                if (article.Attachments) {
+                    const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline' || a.ContentID.length === 0 && !a.Filename.match(/^file-(1|2)$/));
+                    if (attachments.length > 0) {
+                        count += attachments.length;
                     }
-                });
+                }
+            });
 
-                this.state.attachmentCount = count;
+            this.state.attachmentCount = count;
 
-            }
         }
     }
 
@@ -46,6 +45,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
+    }
 }
 
 module.exports = Component;

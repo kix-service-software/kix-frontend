@@ -21,7 +21,12 @@ import { KIXObject } from '../../../model/kix/KIXObject';
 import { CacheService } from '../../../server/services/cache';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { QueueProperty } from '../model/QueueProperty';
-import { SystemAddress } from '../../system-address/model/SystemAddress';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { SearchOperator } from '../../search/model/SearchOperator';
+import { FilterDataType } from '../../../model/FilterDataType';
+import { FilterType } from '../../../model/FilterType';
+import { TicketStats } from '../model/TicketStats';
+
 
 export class QueueAPIService extends KIXObjectAPIService {
 
@@ -46,6 +51,7 @@ export class QueueAPIService extends KIXObjectAPIService {
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === this.objectType
+            || kixObjectType === KIXObjectType.QUEUE_TICKET_STATS
             || kixObjectType === KIXObjectType.FOLLOW_UP_TYPE;
     }
 
@@ -62,7 +68,7 @@ export class QueueAPIService extends KIXObjectAPIService {
     }
 
     public async loadObjects<T>(
-        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: number[] | string[],
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<ObjectResponse<T>> {
 
@@ -91,7 +97,26 @@ export class QueueAPIService extends KIXObjectAPIService {
                     (f: FollowUpType) => objectIds.some((oid) => oid.toString() === f.ObjectId.toString())
                 );
             }
+        } else if (objectType === KIXObjectType.QUEUE_TICKET_STATS) {
+            const uri = this.buildUri(this.RESOURCE_URI, 'ticketstats');
+            if (!Array.isArray(loadingOptions.filter)) {
+                loadingOptions.filter = [];
+            }
+
+            if (objectIds?.length) {
+                loadingOptions.filter?.push(
+                    new FilterCriteria(
+                        QueueProperty.QUEUE_ID, SearchOperator.IN, FilterDataType.NUMERIC,
+                        FilterType.AND, objectIds
+                    )
+                );
+            }
+            objectResponse = await super.load<TicketStats>(
+                token, KIXObjectType.QUEUE_TICKET_STATS, uri, loadingOptions, null, KIXObjectType.QUEUE_TICKET_STATS,
+                clientRequestId, TicketStats
+            );
         }
+
         return objectResponse as ObjectResponse<T>;
     }
 

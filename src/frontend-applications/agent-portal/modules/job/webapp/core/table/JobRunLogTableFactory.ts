@@ -26,12 +26,12 @@ export class JobRunLogTableFactory extends TableFactory {
 
     public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, sshort?: boolean,
+        contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean, sshort?: boolean,
         objectType?: KIXObjectType, objects?: KIXObject[]
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration);
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
         table.setContentProvider(new JobRunLogContentProvider(objects as JobRunLog[], table));
         table.setColumnConfiguration(tableConfiguration.tableColumns);

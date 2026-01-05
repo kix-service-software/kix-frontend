@@ -26,14 +26,14 @@ export class CompareConfigItemVersionTableFactory extends TableFactory {
 
     public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
+        contextInstanceId?: string, defaultRouting?: boolean, defaultToggle?: boolean
     ): Promise<Table> {
 
         tableConfiguration = await this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextInstanceId);
 
-        const contentProvider = new CompareConfigItemVersionTableContentProvider(table, null, null, contextId);
+        const contentProvider = new CompareConfigItemVersionTableContentProvider(table, null, null, contextInstanceId);
 
         table.setContentProvider(contentProvider);
         table.setColumnConfiguration(tableConfiguration.tableColumns);

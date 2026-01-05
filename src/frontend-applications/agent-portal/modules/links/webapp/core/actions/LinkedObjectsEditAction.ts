@@ -21,14 +21,14 @@ export class LinkedObjectsEditAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
+        await super.initAction();
         this.text = 'Translatable#Edit Links';
         this.icon = 'kix-icon-link';
     }
 
     public async run(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
         await ContextService.getInstance().setActiveContext(
-            EditLinkedObjectsDialogContext.CONTEXT_ID, context?.getObjectId()
+            EditLinkedObjectsDialogContext.CONTEXT_ID, this.context?.getObjectId()
         );
     }
 }

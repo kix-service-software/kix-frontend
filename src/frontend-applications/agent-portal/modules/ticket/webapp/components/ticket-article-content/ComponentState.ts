@@ -7,12 +7,15 @@
  * --
  */
 
-import { InlineContent } from '../../../../../modules/base-components/webapp/core/InlineContent';
+import { IdService } from '../../../../../model/IdService';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public url: string = null,
-        public frameId: string = null
-    ) { }
+        public frameId: string = IdService.generateDateBasedId('article-view-')
+    ) {
+        super();
+    }
 }

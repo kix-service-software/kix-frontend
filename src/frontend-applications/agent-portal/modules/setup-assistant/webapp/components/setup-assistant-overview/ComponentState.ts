@@ -14,11 +14,11 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = 'admin-setup-assistant-overview',
-        public prepared: boolean = false,
         public title: string = 'Setup Assistant',
         public setupSteps: SetupStep[] = [],
         public activeStep: SetupStep = null,
-        public template: any = null
+        public template: any = null,
+        public loading: boolean = false
     ) {
         super();
     }

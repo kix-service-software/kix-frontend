@@ -26,6 +26,7 @@ import { PlaceholderService } from '../../../base-components/webapp/core/Placeho
 import { OutOfOffice } from '../../model/OutOfOffice';
 import { OutOfOfficeProperty } from '../../model/OutOfOfficeProperty';
 import { OverlayIcon } from '../../../base-components/webapp/core/OverlayIcon';
+import { UserService } from '../../server/UserService';
 
 
 export class UserLabelProvider extends LabelProvider<User> {
@@ -98,6 +99,9 @@ export class UserLabelProvider extends LabelProvider<User> {
             case OutOfOfficeProperty.END:
             case PersonalSettingsProperty.OUT_OF_OFFICE_END:
                 displayValue = 'Translatable#Till';
+                break;
+            case PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE:
+                displayValue = 'Translatable#Substitute';
                 break;
             default:
                 if (this.isContactProperty(property)) {
@@ -344,6 +348,7 @@ export class UserLabelProvider extends LabelProvider<User> {
         if (object && object?.Preferences?.length) {
             const start = object.Preferences.find((p) => p.ObjectId === UserProperty.OUT_OF_OFFICE_START);
             const end = object.Preferences.find((p) => p.ObjectId === UserProperty.OUT_OF_OFFICE_END);
+            const substitute = object.Preferences.find((p) => p.ObjectId === UserProperty.OUT_OF_OFFICE_SUBSTITUTE);
             if (
                 start?.Value
                 && end?.Value
@@ -351,8 +356,15 @@ export class UserLabelProvider extends LabelProvider<User> {
                 if (
                     DateTimeUtil.betweenDays(new Date(start.Value), new Date(end.Value))
                 ) {
+                    let substituteUser = null;
+                    if (substitute?.Value) {
+                        const userWithContact = await KIXObjectService.loadObjects<User>(
+                            KIXObjectType.USER, [substitute?.Value], null, null, true
+                        ).catch((): User[] => []);
+                        substituteUser = userWithContact?.length ? userWithContact[0] : null;
+                    }
                     outOfOffice = new OutOfOffice(
-                        undefined, start?.Value, end?.Value
+                        undefined, start?.Value, end?.Value, substituteUser
                     );
                     return outOfOffice;
                 }

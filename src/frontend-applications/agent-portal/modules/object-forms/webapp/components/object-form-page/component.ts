@@ -7,79 +7,65 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 import { ComponentState } from './ComponentState';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { Context } from '../../../../../model/Context';
 import { RowLayout } from '../../../model/layout/RowLayout';
 import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
 import { PageRowLayout } from './PageRowLayout';
 import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
 import { ObjectFormHandler } from '../../core/ObjectFormHandler';
+import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private subscriber: IEventSubscriber;
-    private contextInstanceId: string;
-    private context: Context;
     private page: FormPageConfiguration;
     private formHandler: ObjectFormHandler;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'object-form-page');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        this.contextInstanceId = input.contextInstanceId;
+        super.onInput(input);
         this.page = input.page;
     }
 
     public async onMount(): Promise<void> {
-        if (this.contextInstanceId) {
-            this.context = ContextService.getInstance().getContext(this.contextInstanceId);
-        } else {
-            this.context = ContextService.getInstance().getActiveContext();
-        }
+        await super.onMount();
 
         this.formHandler = await this.context?.getFormManager()?.getObjectFormHandler();
 
         await this.prepareRowLayout();
 
-        this.subscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('object-form-group'),
-            eventPublished: async (data: Context | any, eventId: string): Promise<void> => {
-                this.state.prepared = false;
+        super.registerEventSubscriber(
+            async function (data: ObjectFormEventData, eventId: string): Promise<void> {
+                if (this.contextInstanceId === data.contextInstanceId) {
+                    this.state.prepared = false;
 
-                this.page = this.formHandler.form.pages.find((p) => p.id === this.page?.id);
+                    this.page = this.formHandler.form.pages.find((p) => p.id === this.page?.id);
 
-                this.state.active = this.formHandler?.activePageId === this.page?.id;
+                    this.state.active = this.formHandler?.activePageId === this.page?.id;
 
-                if (this.state.active) {
-                    await this.prepareRowLayout();
+                    if (this.state.active) {
+                        await this.prepareRowLayout();
+                    }
+
+                    setTimeout(() => this.state.prepared = true, 10);
                 }
-
-                setTimeout(() => this.state.prepared = true, 10);
-            }
-        };
+            },
+            [
+                ObjectFormEvent.GROUP_ADDED,
+                ObjectFormEvent.GROUP_DELETED,
+                ObjectFormEvent.PAGE_CHANGED,
+                ObjectFormEvent.PAGE_UPDATED
+            ]
+        );
 
         this.state.active = this.formHandler?.activePageId === this.page?.id;
 
-        EventService.getInstance().subscribe(ObjectFormEvent.GROUP_ADDED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.GROUP_DELETED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.PAGE_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.PAGE_UPDATED, this.subscriber);
         this.state.prepared = true;
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(ObjectFormEvent.GROUP_ADDED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.GROUP_DELETED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.PAGE_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.PAGE_UPDATED, this.subscriber);
     }
 
     private async prepareRowLayout(): Promise<void> {
@@ -146,6 +132,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         return classes.join(' ');
     }
 
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
 }
 
 module.exports = Component;

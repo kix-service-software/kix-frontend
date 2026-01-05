@@ -13,19 +13,18 @@ import { OverlayService } from '../../../../../modules/base-components/webapp/co
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { ToastContent } from '../../../../../modules/base-components/webapp/core/ToastContent';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 
-class OverlayComponent {
+class OverlayComponent extends AbstractMarkoComponent {
 
-    private state: ComponentState;
+    public state: ComponentState;
     private toastTimeout: any;
     private hintTimeout: any;
     private currentListenerId: string;
@@ -35,11 +34,13 @@ class OverlayComponent {
     private keepShow = true;
     private clickListener: any;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input, 'overlay');
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        super.onMount();
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Close Overlay'
@@ -47,21 +48,27 @@ class OverlayComponent {
 
         OverlayService.getInstance().registerOverlayComponentListener(this.openOverlay.bind(this));
 
-        WidgetService.getInstance().setWidgetType(this.state.overlayInstanceId, WidgetType.OVERLAY);
+        if (this.context) {
+            this.context.widgetService.setWidgetType(this.state.overlayInstanceId, WidgetType.OVERLAY);
+        }
+        else {
+            WidgetService.getInstance().setWidgetType(this.state.overlayInstanceId, WidgetType.OVERLAY);
+        }
 
         document.addEventListener('mousemove', this.mouseMove.bind(this), false);
         document.addEventListener('mouseup', this.mouseUp.bind(this), false);
 
-        EventService.getInstance().subscribe(ApplicationEvent.CLOSE_OVERLAY, {
-            eventSubscriberId: 'overlay',
-            eventPublished: (): void => this.closeOverlay()
-        });
+        super.registerEventSubscriber(this.closeOverlay, [ApplicationEvent.CLOSE_OVERLAY]);
     }
 
     public onUpdate(): void {
         setTimeout(() => {
             this.setOverlayPosition();
         }, 50);
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
     }
 
     public overlayClicked(event: any): void {
@@ -171,13 +178,12 @@ class OverlayComponent {
 
     private async applyWidgetConfiguration(widgetInstanceId: string): Promise<void> {
         if (widgetInstanceId && widgetInstanceId !== '') {
-            const context = ContextService.getInstance().getActiveContext();
-            const widgetConfiguration = await context.getWidgetConfiguration(widgetInstanceId);
+            const widgetConfiguration = await this.context?.getWidgetConfiguration(widgetInstanceId);
             if (widgetConfiguration) {
                 this.state.actions = await ActionFactory.getInstance().generateActions(
-                    widgetConfiguration.actions, this.state.content.getActionObject()
+                    widgetConfiguration.actions, this.state.content.getActionObject(), this.contextInstanceId
                 );
-                WidgetService.getInstance().registerActions(this.state.overlayInstanceId, this.state.actions, false);
+                this.context.widgetService.registerActions(this.state.overlayInstanceId, this.state.actions, false);
                 this.state.title = widgetConfiguration.title || this.state.title;
                 this.state.icon = widgetConfiguration.icon || this.state.icon;
             }
@@ -197,7 +203,7 @@ class OverlayComponent {
             this.currentListenerId = null;
         }
         if (this.state.actions) {
-            WidgetService.getInstance().unregisterActions(this.state.overlayInstanceId);
+            this.context.widgetService.unregisterActions(this.state.overlayInstanceId);
         }
         this.state = new ComponentState();
     }
@@ -396,6 +402,10 @@ class OverlayComponent {
             this.startMoveOffset = null;
             document.body.classList.remove('no-select');
         }
+    }
+
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 }
 

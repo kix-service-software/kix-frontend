@@ -7,10 +7,19 @@
  * --
  */
 
+/* eslint-disable max-lines-per-function */
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { ContextType } from '../../../../../model/ContextType';
 import { Context } from '../../../../../model/Context';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { RoutingService } from '../../../../../modules/base-components/webapp/core/RoutingService';
 import { AuthenticationSocketClient } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
@@ -25,18 +34,22 @@ import { IKIXModuleExtension } from '../../../../../model/IKIXModuleExtension';
 import { KIXStyle } from '../../../../base-components/model/KIXStyle';
 import { PortalNotificationService } from '../../../../portal-notification/webapp/core/PortalNotificationService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
 
     private modules: IKIXModuleExtension[];
 
     public onCreate(input: any): void {
+        super.onCreate(input, 'BASE-TEMPLATE');
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        super.onInput(input);
         if (input && input.socketTimeout) {
             ClientStorageService.setSocketTimeout(input.socketTimeout);
             ClientStorageService.setBaseRoute(input.baseRoute || '');
@@ -46,6 +59,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
 
         // set base for relative links
         this.setBaseLink();
@@ -56,6 +70,7 @@ class Component {
 
         await this.checkAuthentication();
 
+        await ContextService.getInstance().initialize();
         ClientNotificationSocketClient.getInstance();
         PortalNotificationService.getInstance();
         ContextHistory.getInstance();
@@ -69,54 +84,51 @@ class Component {
         ContextService.getInstance().registerListener({
             constexServiceListenerId: 'BASE-TEMPLATE',
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
-                this.setContext(context);
+                this.resizeHandling();
             },
             contextRegistered: () => { return; },
             beforeDestroy: () => null
         });
 
-        EventService.getInstance().subscribe(ApplicationEvent.APP_LOADING, {
-            eventSubscriberId: 'BASE-TEMPLATE',
-            eventPublished: (data: any, eventId: string): void => {
-                if (eventId === ApplicationEvent.APP_LOADING) {
-                    this.state.loading = data.loading;
-                    this.state.loadingHint = data.hint;
-                }
-            }
-        });
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
+                this.state.loading = data.loading;
+                this.state.loadingHint = data.hint;
+            },
+            [ApplicationEvent.APP_LOADING]
+        );
 
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH, {
-            eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
-            eventPublished: (data: any, eventId: string): void => {
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
                 this.state.reload = true;
 
                 setTimeout(() => {
                     this.state.reload = false;
-                    RoutingService.getInstance().routeToInitialContext(false);
-                }, 500);
-            }
-        });
+                }, 25);
+            },
+            [ApplicationEvent.REFRESH]
+        );
 
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, {
-            eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
-            eventPublished: (data: any, eventId: string): void => {
-                this.state.reloadContent = true;
-
-                setTimeout(() => {
-                    this.state.reloadContent = false;
-                }, 500);
-            }
-        });
-
-        EventService.getInstance().subscribe(MobileShowEvent.SHOW_MOBILE, {
-            eventSubscriberId: 'BASE-TEMPLATE-MOBILE',
-            eventPublished: (data, eventId: MobileShowEvent | string) => {
-                this.state.activeMobile = (data === MobileShowEventData.SHOW_MAIN_MENU) ?
-                    1 : (data === MobileShowEventData.SHOW_LEFT_SIDEBAR) ?
-                        2 : (data === MobileShowEventData.SHOW_RIGHT_SIDEBAR) ?
-                            3 : data ? 4 : null;
-            }
-        });
+        super.registerEventSubscriber(
+            function (data, eventId: MobileShowEvent | string): void {
+                if (data === MobileShowEventData.SHOW_MAIN_MENU) {
+                    this.state.activeMobile = 1;
+                }
+                else if (data === MobileShowEventData.SHOW_LEFT_SIDEBAR) {
+                    this.state.activeMobile = 2;
+                }
+                else if (data === MobileShowEventData.SHOW_RIGHT_SIDEBAR) {
+                    this.state.activeMobile = 3;
+                }
+                else if (data) {
+                    this.state.activeMobile = 4;
+                }
+                else {
+                    this.state.activeMobile = null;
+                }
+            },
+            [MobileShowEvent.SHOW_MOBILE]
+        );
 
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
 
@@ -127,7 +139,7 @@ class Component {
 
         const end = Date.now();
 
-        console.debug(`mount base template: ${(end - start) / 1000} sec.`);
+        console.debug(`mount base template: ${end - start} ms.`);
     }
 
     private setBaseLink(): void {
@@ -142,19 +154,13 @@ class Component {
     }
 
     public onDestroy(): void {
+        super.onDestroy();
         window.removeEventListener('resize', this.resizeHandling.bind(this), false);
-        ContextService.getInstance().unregisterListener('BASE-TEMPLATE');
     }
 
     private async checkAuthentication(): Promise<void> {
         if (!AuthenticationSocketClient.getInstance().validateToken()) {
             window.location.replace('/auth');
-        }
-    }
-
-    private setContext(context: Context = ContextService.getInstance().getActiveContext()): void {
-        if (context) {
-            this.resizeHandling();
         }
     }
 

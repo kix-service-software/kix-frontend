@@ -56,11 +56,6 @@ export class AgentSocketClient extends SocketClient {
         }
 
         if (!currentUserRequestPromise) {
-            const hasValidToken = await AuthenticationSocketClient.getInstance().validateToken();
-            if (!hasValidToken) {
-                return null;
-            }
-
             const requestId = IdService.generateDateBasedId();
             const currentUserRequest = new GetCurrentUserRequest(
                 requestId,

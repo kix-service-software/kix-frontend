@@ -19,9 +19,9 @@ export class ComponentState extends WidgetComponentState {
         public userString: string = '',
         public changeSlider: boolean = false,
         public kixReleaseVersions: KIXReleaseVersion[] = [
+            new KIXReleaseVersion('v36 - Release Notes ', 'https://forum.kixdesk.com/index.php?topic=13208.0 '),
             new KIXReleaseVersion('v35.1 - Release Notes ', 'https://forum.kixdesk.com/index.php?topic=12911.0'),
             new KIXReleaseVersion('v35 - Release Notes ', 'https://forum.kixdesk.com/index.php?topic=12783.0'),
-            new KIXReleaseVersion('v34 - Release Notes ', 'https://forum.kixdesk.com/index.php?topic=12539'),
         ],
         public baseRoute: string = ''
     ) {

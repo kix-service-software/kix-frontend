@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,16 +10,23 @@
 import { AutocompleteOption } from '../../../../../../model/AutocompleteOption';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
+import { IdService } from '../../../../../../model/IdService';
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFormFieldOption } from '../../../../../dynamic-fields/webapp/core';
+import { FormConfigurationObject } from '../../../../../object-forms/model/FormConfigurationObject';
+import { FormValueProperty } from '../../../../../object-forms/model/FormValueProperty';
 import { DynamicFieldObjectFormValue } from '../../../../../object-forms/model/FormValues/DynamicFieldObjectFormValue';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
+import { ObjectFormEvent } from '../../../../../object-forms/model/ObjectFormEvent';
+import { ObjectFormEventData } from '../../../../../object-forms/model/ObjectFormEventData';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
 import { Article } from '../../../../model/Article';
 import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
@@ -36,6 +43,8 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     public noChannelSelectable: boolean = false;
 
     private fieldOrder: any = {};
+
+    private subscriber: IEventSubscriber;
 
     public constructor(
         property: string,
@@ -59,6 +68,56 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         this.fieldOrder[ArticleProperty.ATTACHMENTS] = 7;
 
         this.createArticleFormValues(article);
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(this.instanceId),
+            eventPublished: (data: ObjectFormEventData, eventId: string): void =>
+                this.handleNewChannelField(data?.formConfigurationObject?.fieldId)
+        };
+
+        EventService.getInstance().subscribe(ObjectFormEvent.FIELD_ADDED, this.subscriber);
+    }
+
+    public destroy(): void {
+        EventService.getInstance().unsubscribe(ObjectFormEvent.FIELD_ADDED, this.subscriber);
+    }
+
+    private handleNewChannelField(fieldId: string): void {
+        const formValue = this.formValues.find((fv) => fv.fieldId === fieldId);
+        if (formValue) {
+            if (formValue.enabled && !this.enabled) {
+                this.createAndAddChannelField(fieldId);
+            } else if (this.enabled) {
+                this.setChannelFields(this.value);
+            }
+        }
+    }
+
+    private async createAndAddChannelField(fieldId: string): Promise<void> {
+        this.enable();
+        this.show();
+
+        const formHandler = this.objectValueMapper?.objectFormHandler;
+        if (formHandler?.configurationMode) {
+
+            let group = this.objectValueMapper?.objectFormHandler?.getGroupForField(fieldId);
+
+            const channelField = new FormFieldConfiguration(null, null, null, null);
+            channelField.property = ArticleProperty.CHANNEL_ID;
+            formHandler.addNewField(channelField, group?.id);
+            await formHandler?.reInitField(channelField.id);
+
+            if (!group) {
+                group = this.objectValueMapper?.objectFormHandler?.getGroupForField(channelField.id);
+            }
+
+            const configObject = new FormConfigurationObject();
+            configObject.fieldId = channelField.id;
+            configObject.groupId = group.id;
+            const eventData = new ObjectFormEventData(this.context?.instanceId);
+            eventData.formConfigurationObject = configObject;
+            EventService.getInstance().publish(ObjectFormEvent.FIELD_ADDED, eventData);
+        }
     }
 
     public async initFormValue(): Promise<void> {
@@ -91,12 +150,11 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     }
 
     private async getReferencedArticle(): Promise<Article> {
-        const context = ContextService.getInstance().getActiveContext();
-        let article = context.getAdditionalInformation('REFERENCED_ARTICLE');
+        let article = this.context?.getAdditionalInformation('REFERENCED_ARTICLE');
 
-        const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+        const refArticleId = this.context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
         if (!article && refArticleId) {
-            const refTicketId = context?.getObjectId();
+            const refTicketId = this.context?.getObjectId();
             article = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
         }
 
@@ -111,7 +169,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
 
         // do not show in article edit forms
-        if ((this.object as Article).ArticleID) {
+        if (this.shouldSetInvisible()) {
             this.visible = false;
             this.readonly = true;
         } else {
@@ -127,6 +185,26 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
 
         this.sortArticleDFs(field);
+    }
+
+    private shouldSetInvisible(): boolean {
+        return (this.object as Article).ArticleID && this.context?.getAdditionalInformation('ARTICLE_FORWARD');
+    }
+
+    protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
+        const defaultValue = field.defaultValue?.value;
+        let hasDefaultValue = (typeof defaultValue !== 'undefined' && defaultValue !== null && defaultValue !== '');
+        if (Array.isArray(defaultValue)) {
+            hasDefaultValue = defaultValue.length > 0;
+        }
+
+        if (field.empty) {
+            this.defaultValue = null;
+            this.empty = true;
+        } else if (hasDefaultValue) {
+            const value = await this.handlePlaceholders(field.defaultValue?.value);
+            this.defaultValue = value;
+        }
     }
 
     protected sortArticleDFs(field: FormFieldConfiguration): void {
@@ -166,7 +244,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
         // property only needed for article create
         if (
-            !ContextService.getInstance().getActiveContext()?.getAdditionalInformation('ARTICLE_UPDATE_ID') &&
+            !this.context?.getAdditionalInformation('ARTICLE_UPDATE_ID') &&
             // FIXME: hide it in form designer for now (implement it as "real" property which can be configured)
             !this.objectValueMapper?.objectFormHandler?.configurationMode
         ) {
@@ -178,6 +256,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             this.formValues.push(encyptFormValue);
         }
 
+        this.sortFormValues();
+    }
+
+    protected sortFormValues(): void {
         this.formValues.sort((a, b) => {
             const aFieldOrder = this.fieldOrder[a.property];
             const bFieldOrder = this.fieldOrder[b.property];
@@ -263,13 +345,12 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
         const dfFormValue = this.formValues.find((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS);
 
-        if (channelId) {
+        if (channelId || this.objectValueMapper.objectFormHandler.configurationMode) {
             const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL, [channelId])
                 .catch((): Channel[] => []);
             const channel = Array.isArray(channels) && channels.length ? channels[0] : null;
 
-            const context = ContextService.getInstance().getActiveContext();
-            const articleUpdateID = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+            const articleUpdateID = this.context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
 
             const noteFields = [
                 ArticleProperty.CUSTOMER_VISIBLE, ArticleProperty.SUBJECT,
@@ -300,7 +381,9 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 submitPattern = 'Translatable#Send';
             }
 
-            context.setAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT, submitPattern);
+            this.context.setAdditionalInformation(
+                AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT, submitPattern
+            );
 
             // handle enable only on channel switch
             if (dfFormValue?.formValues && !byInit) {
@@ -342,6 +425,8 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
                 if (property === ArticleProperty.TO && isEdit) {
                     formValue.visible = true;
+                    formValue.setNewInitialState(FormValueProperty.VISIBLE, true);
+                    formValue.setNewInitialState(FormValueProperty.ENABLED, true);
                 }
 
                 if (property === ArticleProperty.CC) {
@@ -365,7 +450,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
                 // make sure relevant properties are always required
                 if (!this.objectValueMapper?.objectFormHandler?.configurationMode) {
-                    if (formValue.property === ArticleProperty.TO && isEdit && !formValue.required) {
+                    if (formValue.property === ArticleProperty.TO && isEdit && !formValue.required && channelName) {
                         formValue.required = channelName === 'email' && this.visible;
                     }
 
@@ -387,6 +472,8 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
             if (formValue) {
                 await formValue.disable();
+                formValue.setNewInitialState(FormValueProperty.VISIBLE, false);
+                formValue.setNewInitialState(FormValueProperty.ENABLED, false);
                 formValue.isConfigurable = false;
             }
         }

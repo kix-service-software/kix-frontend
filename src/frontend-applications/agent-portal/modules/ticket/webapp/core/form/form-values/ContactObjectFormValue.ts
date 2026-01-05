@@ -56,7 +56,7 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
         const context = ContextService.getInstance().getActiveContext();
         const contact = context?.getAdditionalInformation(KIXObjectType.CONTACT);
         if (contact) {
-            this.setFormValue(contact.ID);
+            this.setFormValue(this.defaultValue || contact.ID);
         }
     }
 
@@ -70,7 +70,7 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
-        let newValue;
+        let newValue = null;
         if (value) {
             if (Array.isArray(value)) {
                 newValue = value[0];
@@ -83,7 +83,7 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
                 newValue = await this.getPossibleContactId(newValue);
             }
         }
-        return super.setFormValue(newValue, force);
+        return await super.setFormValue(newValue, force);
     }
 
     public async setObjectValue(value: (string | number)[]): Promise<void> {

@@ -8,9 +8,10 @@
  */
 
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = null,
@@ -19,6 +20,8 @@ export class ComponentState {
         public activeNode: TreeNode = null,
         public filterValue: string = null,
         public loading: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }
