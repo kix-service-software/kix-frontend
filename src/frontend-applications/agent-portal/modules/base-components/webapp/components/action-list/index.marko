@@ -27,6 +27,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             class="btn d-flex align-items-center dropdown-toggle"
             data-bs-toggle="dropdown"
             data-bs-auto-close="outside"
+            aria-label=state.translations["Translatable#Action-list"]
             aria-expanded="false"
             on-click("preventDefault")>
             <div class="action d-flex overflow-hidden">
@@ -87,14 +88,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </if>
         <!-- create a single action -->
         <else>
-            <button
-                key=state.key + element.key
-                type="button"
-                class="btn p-0"
-                style=(!element.canRun() ? "cursor:auto" : "")
-                on-click("preventDefault")>
-                <action action=element displayText=state.displayText/>
-            </button>
+            <action action=element displayText=state.displayText/>
         </else>
     </for>
 </macro>

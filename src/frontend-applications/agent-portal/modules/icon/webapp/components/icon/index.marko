@@ -15,7 +15,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 src="data:" + state.contentType + ";base64," + state.content
                 title=state.tooltip
                 key=state.iconId
-                alt=state.tooltip
+                alt=state.tooltip || ""
             >
         </if>
         <else>
@@ -24,6 +24,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 class=state.content
                 title=state.tooltip
                 key=state.iconId
+                aria-hidden="true"
             >
                 <span.path1/>
                 <span.path2/>

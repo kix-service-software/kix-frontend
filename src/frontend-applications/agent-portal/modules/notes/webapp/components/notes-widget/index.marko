@@ -43,6 +43,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <div class="notes-editor-buttons">
                     <button
                         title=(state.translations["Translatable#Cancel"])
+                        aria-label=(state.translations["Translatable#Cancel"])
                         on-click("cancelEditor")
                         class="kix-button form-button button-without-text">
                         <span class="kix-icon-close"/>
@@ -51,7 +52,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         title=(state.translations["Translatable#Submit"])
                         on-click("submitEditor")
                         class="kix-button form-button">
-                        <span class="kix-icon-check"/>
+                        <span class="kix-icon-check" aria-hidden="true"/>
                         <translation-string pattern="Translatable#Submit"/>
                     </button>
                 </div>

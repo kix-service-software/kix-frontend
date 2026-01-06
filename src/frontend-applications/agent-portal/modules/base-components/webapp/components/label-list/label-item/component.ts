@@ -55,6 +55,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.getLabelValue();
             }, 50);
         }
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#remove label'
+        ]);
     }
 
     public labelClicked(event: any): void {

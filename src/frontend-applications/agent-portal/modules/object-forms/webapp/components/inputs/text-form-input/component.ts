@@ -10,6 +10,7 @@
 import { FormFieldOptions } from '../../../../../../model/configuration/FormFieldOptions';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { InputFieldTypes } from '../../../../../base-components/webapp/core/InputFieldTypes';
+import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 import { ObjectFormHandler } from '../../../core/ObjectFormHandler';
@@ -64,6 +65,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Toggle password visibility'
+        ]);
         return;
     }
 

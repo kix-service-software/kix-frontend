@@ -15,13 +15,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div class="graph-explorer-container">
             <div class="graph-options">
                 <for|option| of=state.options>
-                    <span>
+                    <span id="label" + option.key>
                         <translation-string pattern=option.displayValue/>
                     </span>
                     <form-list
                         treeId=option.key
                         freeText=option.freeText
-                        multiselect=option.multiselect/>
+                        multiselect=option.multiselect
+                        labelId="label" + option.key/>
                 </for>
             </div>
 
@@ -32,7 +33,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         on-click("apply")
                         title=(state.translations["Translatable#Apply"])
                         class="kix-button submit-button">
-                        <span class="kix-icon-check"/>
+                        <span class="kix-icon-check" aria-hidden="true"/>
                         <translation-string pattern="Translatable#Apply"/>
                     </button>
                 </div>

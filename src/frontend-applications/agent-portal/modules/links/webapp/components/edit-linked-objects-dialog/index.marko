@@ -39,7 +39,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 state.translations["Translatable#Delete Link"]
                             )
                             class="kix-button form-blank-cancel-button">
-                            <span class="kix-icon-trash"/>
+                            <span class="kix-icon-trash" aria-hidden="true"/>
                             <translation-string pattern="Translatable#Delete Link"/>
                         </button>
                     </if>
@@ -70,7 +70,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             on-click("cancel")
             title=(state.translations["Translatable#Cancel"])
             class="kix-button cancel-button">
-            <span class="kix-icon-close"/>
+            <span class="kix-icon-close" aria-hidden="true"/>
             <span>${state.translations["Translatable#Cancel"]}</span>
         </button>
         <button
@@ -79,7 +79,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             on-click("submit")
             title=(state.translations["Translatable#Submit"])
             class="kix-button submit-button">
-            <span class="kix-icon-check"/>
+            <span class="kix-icon-check" aria-hidden="true"/>
             <span>${state.translations["Translatable#Submit"]}</span>
         </button>
     </div>

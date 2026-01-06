@@ -20,20 +20,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         on-click("cancel")
                         title=(state.translations["Translatable#Cancel"])
                         class="kix-button cancel-button">
-                        <span class="kix-icon-close"/>
+                        <span class="kix-icon-close" aria-hidden="true"/>
                         <translation-string pattern="Translatable#Cancel"/>
                     </button>
                     <if(state.reset)>
                         <button
                             type="button"
                             on-click("reset")
-                            title=(
-                                state.translations[
-                                    "Translatable#Reset to Default"
-                                ]
-                            )
+                            title=(state.translations["Translatable#Reset to Default"])
                             class="kix-button form-blank-cancel-button">
-                            <span class="kix-icon-arrow-rotate-left"/>
+                            <span class="kix-icon-arrow-rotate-left" aria-hidden="true"/>
                             <translation-string pattern="Translatable#Reset to Default"/>
                         </button>
                     </if>
@@ -42,7 +38,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         on-click("submit")
                         title=(state.translations["Translatable#Save"])
                         class="kix-button submit-button">
-                        <span class="kix-icon-check"/>
+                        <span class="kix-icon-check" aria-hidden="true"/>
                         <translation-string pattern="Translatable#Save"/>
                     </button>
                 </div>

@@ -11,6 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <span
         class=["label-item-container", state.label.classes]
         title=(state.label.tooltip)
+        aria-label=(state.label.tooltip)
         on-click("labelClicked")>
         <div class=[
             "label-item",
@@ -63,7 +64,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if(input.removeLabels)>
                 <span
                     on-click("removeLabel")
-                    class="kix-icon-close label-item-remove"/>
+                    class="kix-icon-close label-item-remove"
+                    role="button"
+                    aria-label=state.translations["Translatable#remove label"]/>
             </if>
         </div>
     </span>

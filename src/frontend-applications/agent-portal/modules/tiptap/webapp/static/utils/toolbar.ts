@@ -1182,6 +1182,7 @@ export function createToolbar(editor: any): HTMLDivElement {
     const imageButtonWrapper = document.createElement('div');
     imageButtonWrapper.className = 'btn position-relative';
     imageButtonWrapper.title = 'Insert Image';
+    imageButtonWrapper.tabIndex = 0;
 
     const imageIcon = document.createElement('i');
     imageIcon.className = 'fas fa-image';

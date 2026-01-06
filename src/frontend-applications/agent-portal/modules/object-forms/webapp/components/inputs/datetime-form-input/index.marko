@@ -22,6 +22,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             on-blur("setValue")
             class="form-control"
             disabled=state.readonly
+            aria-labelledby=input.labelId
          >
       </if>
       <if(
@@ -35,10 +36,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             on-blur("setValue")
             class="form-control"
             disabled=state.readonly
+            aria-labelledby=input.labelId
          >
       </if>
       <if(state.usePlaceholderDateValue)>
-         <text-form-input formValue=input.formValue/>
+         <text-form-input formValue=input.formValue aria-labelledby=input.labelId/>
       </if>
    </span>
    <if(state.displayInputChangeButton)>

@@ -20,9 +20,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             invalid: state.invalid,
                             readonly: state.readonly
                         }
-                key=("form-list-input-container-" + state.listId)
-                title=state.placeholder>
-                <div.selected-nodes tabindex="0" on-focus("focus") key=("form-list-selected-nodes-" + state.listId)>
+                key=("form-list-input-container-" + state.listId)>
+                <div.selected-nodes tabindex="0" on-focus("focus") key=("form-list-selected-nodes-" + state.listId) title=state.placeholder role="textbox" aria-labelledby=input.labelId aria-label=input.label> // wrong aria-role (placeholder, so aria-label is accepted), html needs to be modified
                     <dropdown-selected-nodes-list
                         treeId=state.treeId
                         canRemoveNode=state.removeNodes
@@ -41,6 +40,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         autocompleteSearchCallback=input.searchCallback
                         treeId=state.treeId
                         freeText=input.freeText
+                        labelId=input.labelId
                         key=("form-list-input-" + state.listId)/>
                     <form-list-tree key=state.treeId treeId=state.treeId tabIndex=-1/>
                     <if(state.multiselect && !input.hideSubmitButton)>

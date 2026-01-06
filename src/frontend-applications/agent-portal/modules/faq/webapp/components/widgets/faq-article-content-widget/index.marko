@@ -20,7 +20,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 ${title}
             </button>
         </h2>
-        <div id=id class="accordion-collapse collapse show" aria-labelledby=id>
+        <div
+            id=id
+            class="accordion-collapse collapse show"
+            aria-labelledby=id + "header">
             <div class="accordion-body">
                 <iframe-content
                     html=(state.html[id])
@@ -59,9 +62,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div.faq-rating title=component.getRatingTooltip()>
+                    <div title=component.getRatingTooltip() class="faq-rating">
                         <span>
-                            <translation-string pattern="Translatable#Rating"/>:
+                            <translation-string pattern="Translatable#Rating"/>
+                            :
                         </span>
                         <span>
                             <if(state.faqArticle.VoteCount)>
@@ -77,9 +81,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             </else>
                         </span>
                     </div>
-                    <div.faq-attachments>
+                    <div class="faq-attachments">
                         <span>
-                            <translation-string pattern="Translatable#Attachments"/>:
+                            <translation-string pattern="Translatable#Attachments"/>
+                            :
                         </span>
                         <for|attachment| of=state.attachments>
                             <file-entry
