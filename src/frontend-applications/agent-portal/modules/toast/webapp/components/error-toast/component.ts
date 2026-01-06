@@ -12,6 +12,7 @@ import { RefreshToastSettings } from '../../../model/RefreshToastSettings';
 import { WindowListener } from '../../../../base-components/webapp/core/WindowListener';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -28,6 +29,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.state.time = DateTimeUtil.getKIXTimeString(new Date());
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Close'
+        ]);
+
     }
 
     public refreshClicked(event: any): void {

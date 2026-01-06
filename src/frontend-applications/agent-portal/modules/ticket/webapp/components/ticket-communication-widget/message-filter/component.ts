@@ -47,7 +47,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         });
 
         this.state.searchPlaceholder = await TranslationService.translate('Search');
-        this.state.translations = await TranslationService.createTranslationObject(['Translatable#until', 'Translatable#since']);
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#until', 'Translatable#since', 'Translatable#Date Input']);
 
         this.getSettings();
     }

@@ -12,7 +12,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 } style=("height: " + component.getHeaderHeight())>
     <if(component.isSelectable())>
         <th.check>
-            <input style=("height: " + component.getHeaderHeight()) type="checkbox" on-click("selectionChanged") key="allCheck"/>
+            <input style=("height: " + component.getHeaderHeight()) type="checkbox" on-click("selectionChanged") key="allCheck" aria-label=state.translations["Translatable#Select all"]/>
         </th>
     </if>
     <for|column| of=state.columns>

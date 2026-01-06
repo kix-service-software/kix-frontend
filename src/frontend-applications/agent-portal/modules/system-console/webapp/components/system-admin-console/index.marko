@@ -22,6 +22,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <button
                     type="button"
                     title=(state.translations["Translatable#Help"])
+                    aria-label=(state.translations["Translatable#Help"])
                     disabled=state.run
                     on-click("showCommandHelp", false)
                     class="kix-button button button-without-text">
@@ -40,7 +41,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     disabled=!state.canRun || state.run
                     on-click("run")
                     class="kix-button submit-button">
-                    <span class="kix-icon-check"/>
+                    <span class="kix-icon-check" aria-hidden="true"/>
                     <translation-string pattern="Translatable#Execute"/>
                 </button>
             </div>

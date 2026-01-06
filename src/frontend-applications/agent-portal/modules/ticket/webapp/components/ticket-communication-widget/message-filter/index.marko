@@ -104,7 +104,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 : "Translatable#since"
                         ]
                     )
-                    on-click("selectDateOrder")
+                    on-click("selectDateOrder") // not yet clickable with keyboard
+                    tabindex=0
+                    role="button"
+                    aria-label=(
+                        state.translations[
+                            state.isFilterDateBefore
+                                ? "Translatable#until"
+                                : "Translatable#since"
+                        ]
+                    )
                 />
                 <input
                     type="date"
@@ -112,6 +121,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     on-change("dateChanged")
                     value=state.selectedDate
                     class="input-style date-input"
+                    aria-placeholder="mm/dd/yyyy"
+                    aria-label=state.translations["Translatable#Date Input"]
                 >
             </div>
         </if>

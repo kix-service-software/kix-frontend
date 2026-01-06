@@ -51,9 +51,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.nodes = this.treeHandler.getSelectedNodes();
         });
 
-        this.state.translations = await TranslationService.createTranslationObject(
-            this.treeHandler.getTree().map((n) => n.tooltip)
-        );
+        this.state.translations = await TranslationService.createTranslationObject([
+            ...this.treeHandler.getTree().map((n) => n.tooltip), 'Translatable#Remove node'
+        ]);
 
         this.state.nodes = this.treeHandler.getSelectedNodes();
     }
