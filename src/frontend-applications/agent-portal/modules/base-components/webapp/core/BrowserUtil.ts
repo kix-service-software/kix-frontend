@@ -569,7 +569,7 @@ export class BrowserUtil {
         allElements.push(htmlDocument);
         const types = [];
 
-        for (let ev in htmlDocument) {
+        for (const ev in htmlDocument) {
             if (/^on/.test(ev)) {
                 types.push(ev);
             }
@@ -628,21 +628,27 @@ export class BrowserUtil {
     }
 
     public static getCurrentContentScrollPosition(): number {
-        const wrapperEl = document.getElementsByClassName('content-wrapper');
-        if (wrapperEl.length) {
-            return wrapperEl[0].scrollTop;
-        } else {
-            return document.documentElement.scrollTop;
+        if (typeof document !== 'undefined') {
+            const wrapperEl = document.getElementsByClassName('content-wrapper');
+            if (wrapperEl.length) {
+                return wrapperEl[0].scrollTop;
+            } else {
+                return document.documentElement.scrollTop;
+            }
         }
+
+        return 0;
     }
 
     public static setCurrentContentScrollPosition(scrollPosition: number): void {
-        const wrapperEl = document.getElementsByClassName('content-wrapper');
-        const options: ScrollToOptions = { top: scrollPosition, left: 0, behavior: 'smooth' };
-        if (wrapperEl.length) {
-            wrapperEl[0].scrollTo(options);
-        } else {
-            document.documentElement.scrollTo(options);
+        if (typeof document !== 'undefined') {
+            const wrapperEl = document.getElementsByClassName('content-wrapper');
+            const options: ScrollToOptions = { top: scrollPosition, left: 0, behavior: 'smooth' };
+            if (wrapperEl.length) {
+                wrapperEl[0].scrollTo(options);
+            } else {
+                document.documentElement.scrollTo(options);
+            }
         }
     }
 

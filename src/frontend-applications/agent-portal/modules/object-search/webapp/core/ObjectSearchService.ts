@@ -41,7 +41,7 @@ export class ObjectSearchService extends KIXObjectService {
             eventPublished: function (data: string, eventId: string): void {
                 if (data === KIXObjectType.OBJECT_SEARCH) {
                     const keys = ClientStorageService.getAllKeys(KIXObjectType.OBJECT_SEARCH);
-                    for (let key of keys) {
+                    for (const key of keys) {
                         ClientStorageService.deleteState(key);
                     }
                 }

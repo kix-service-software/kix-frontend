@@ -8,8 +8,8 @@
  */
 
 // tslint:disable
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { Queue } from '../model/Queue';
 import { QueueService } from '../webapp/core/admin/QueueService';
 
@@ -38,7 +38,7 @@ describe('QueueService', () => {
         const queues: Queue[] = [];
         queues.push(queue_1_1, queue_1_2, queue_2_1_1);
 
-        const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, queues, undefined);
+        const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(queues, undefined);
 
         it('should contain expected Top1', () => {
             const checkQueue = queuesHierarchy.filter((q) => q.Fullname === 'Top1');

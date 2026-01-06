@@ -16,6 +16,7 @@ import { ContextEvent } from '../../../../../base-components/webapp/core/Context
 import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { MobileShowEvent } from '../../../../model/MobileShowEvent';
 import { ComponentState } from './ComponentState';
 import { ContextTab } from './ContextTab';
@@ -40,6 +41,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.pendingScrollId = ctx.instanceId;
             requestAnimationFrame(() => this.scrollIntoView(ctx.instanceId));
         }
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Scroll tabs to the left', 'Translatable#Scroll tabs to the right', 'Translatable#Close all open tabs'
+        ]);
     }
 
     public onUpdate(): void {

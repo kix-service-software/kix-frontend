@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { Contact } from '../../src/frontend-applications/agent-portal/modules/customer/model/Contact';
 import { ContactLabelProvider } from '../../src/frontend-applications/agent-portal/modules/customer/webapp/core/ContactLabelProvider';
 import { ContactPlaceholderHandler } from '../../src/frontend-applications/agent-portal/modules/customer/webapp/core/ContactPlaceholderHandler';

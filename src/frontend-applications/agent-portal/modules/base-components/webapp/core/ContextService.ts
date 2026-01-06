@@ -71,7 +71,7 @@ export class ContextService {
 
     public contextRefreshInterval: ContextRefreshInterval;
 
-    private componentContextMap: Object = new Object();
+    private componentContextMap: object = new Object();
 
     public async initialize(): Promise<void> {
         this.contextRefreshInterval = new ContextRefreshInterval();
@@ -331,7 +331,7 @@ export class ContextService {
             context = await this.setContextByInstanceId(
                 this.contextInstances[this.contextInstances.length - 1].instanceId
             );
-        } else {
+        } else if (typeof window !== 'undefined') {
             const url = `${window.location.protocol}//${window.location.host}/${this.DEFAULT_FALLBACK_CONTEXT_URL}`;
             await RoutingService.getInstance().routeToURL(true, url);
         }
@@ -390,7 +390,7 @@ export class ContextService {
             this.activeContext = context;
             this.activeContextIndex = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
 
-            if (!this.activeContext.initialized) {
+            if (!this.activeContext?.initialized) {
                 await this.activeContext.postInit();
 
                 for (const extension of context?.contextExtensions) {
@@ -404,7 +404,7 @@ export class ContextService {
 
             EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
             setTimeout(() => {
-                BrowserUtil.setCurrentContentScrollPosition(this.activeContext.lastScrollPosition);
+                BrowserUtil.setCurrentContentScrollPosition(this.activeContext?.lastScrollPosition);
             }, 100);
             // TODO: Use Event
             this.serviceListener.forEach(

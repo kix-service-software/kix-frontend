@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { PlaceholderService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/PlaceholderService';
 import { IPlaceholderHandler } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/IPlaceholderHandler';
 import { AbstractPlaceholderHandler } from "../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/AbstractPlaceholderHandler";

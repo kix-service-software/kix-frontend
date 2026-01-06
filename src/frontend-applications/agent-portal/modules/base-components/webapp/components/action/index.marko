@@ -6,48 +6,25 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<button
-    key=(state.key + state.action.id)
-    type="button"
-    class=[
-        "btn p-0 border-0",
-        {
-            disabled: !state.canRunAction || state.lockRunAction,
-        },
-    ]
-    style=[
-        {
-            "cursor:auto": !state.canRunAction,
-        },
-    ]
-    on-click("preventDefault")>
+<button type="button" class="btn p-0" on-click("doAction")>
     <div
-        on-click("doAction")
         title=state.text
-        class=["action d-flex align-items-center overflow-hidden p-1"]>
+        class=[
+            "action d-flex align-items-center overflow-hidden p-1",
+            {
+                disabled: !state.canRunAction || state.lockRunAction,
+            },
+        ]>
         <if(state.action.hasLink)>
-            <a
-                href=(
-                    "?actionId=" + state.action.id + "&data=" + state.actionData
-                )
-                on-click("linkClicked")>
-                <icon icon=(state.action.icon)/>
-            </a>
+            <icon icon=(state.action.icon)/>
         </if>
         <else>
             <icon icon=(state.action.icon)/>
         </else>
         <if(state.displayText && state.action.hasLink)>
-            <a
-                class="ms-2 text-truncate"
-                href=(
-                    "?actionId=" + state.action.id + "&data=" + state.actionData
-                )
-                on-click("linkClicked")>
-                <span class="text text-nowrap">
-                    ${state.text}
-                </span>
-            </a>
+            <span class="text text-nowrap ms-2 text-truncate">
+                ${state.text}
+            </span>
         </if>
         <else-if(state.displayText)>
             <span class="ms-2 text text-nowrap text-truncate">

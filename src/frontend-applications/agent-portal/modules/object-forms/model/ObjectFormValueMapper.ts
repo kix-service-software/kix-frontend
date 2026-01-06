@@ -544,4 +544,15 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     public validateFormValue(formValue: ObjectFormValue, force?: boolean): void {
         this.objectFormHandler?.objectFormValidator?.validate(formValue, force);
     }
+
+    public canSetDefaultValueForConfig(formValue: ObjectFormValue): boolean {
+        for (const extension of this.extensions) {
+            const extensionResult = extension.canSetDefaultValueForConfig(formValue);
+            if (typeof extensionResult === 'boolean') {
+                return extensionResult;
+            }
+        }
+
+        return true;
+    }
 }

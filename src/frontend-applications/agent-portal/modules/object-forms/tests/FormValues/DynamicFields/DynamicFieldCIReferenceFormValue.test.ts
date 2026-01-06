@@ -7,8 +7,8 @@
  * --
  */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ConfigItemProperty } from '../../../../cmdb/model/ConfigItemProperty';
 import { DynamicField } from '../../../../dynamic-fields/model/DynamicField';

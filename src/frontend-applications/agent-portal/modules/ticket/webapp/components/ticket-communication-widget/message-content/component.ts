@@ -373,7 +373,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
 
     private async prepareImages(): Promise<void> {
         const imageAttachments = this.state.articleAttachments.filter((a) => a.ContentType.match(/^image\//));
-        let images: DisplayImageDescription[] = [];
+        const images: DisplayImageDescription[] = [];
 
         if (imageAttachments?.length) {
             const attachments = await TicketService.getInstance().loadArticleAttachments(

@@ -22,6 +22,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             required=input.required
             readonly=state.field.readonly
             disabled=state.field.readonly
+            aria-labelledby=input.labelId
             on-blur("focusLost")
             on-input("valueChanged")/>
         <span.unit-string class={

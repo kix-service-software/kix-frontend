@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { ConfiguredWidget } from '../../src/frontend-applications/agent-portal/model/configuration/ConfiguredWidget';
 import { Context } from '../../src/frontend-applications/agent-portal/model/Context';
 import { ContextDescriptor } from '../../src/frontend-applications/agent-portal/model/ContextDescriptor';

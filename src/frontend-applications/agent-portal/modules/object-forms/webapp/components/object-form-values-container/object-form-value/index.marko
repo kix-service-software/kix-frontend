@@ -20,7 +20,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             "d-none": state.displayNone,
          },
       ]>
-         <label class="form-label d-flex align-items-center m-0 mb-1 text-truncate">
+         <label id=state.labelId class="form-label d-flex align-items-center m-0 mb-1 text-truncate">
             <add-remove-form-value-control
                formValue=input.formValue
                key=("control-" + input.formValue.instanceId)/>
@@ -28,7 +28,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                <button
                   type="button"
                   class="btn btn-sm btn-light text-black me-3"
-                  aria-label="Edit Field"
+                  aria-label=(state.translations["Translatable#Edit Field"])
                   title=(state.translations["Translatable#Edit Field"])
                   on-click("editField")>
                   <i class="fa-regular fa-pen-to-square"/>
@@ -82,11 +82,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if(state.isConfigContext && state.isEmpty)/>
             <else-if(!state.formValue["COUNT_CONTAINER"])>
                <if(state.inputTemplate)>
-                  <${state.inputTemplate} formValue=input.formValue/>
+                  <${state.inputTemplate} formValue=input.formValue labelId=state.labelId/>
                </if>
                <else-if(input.formValue.inputComponentId === "no-input")/>
                <else>
-                  <text-form-input formValue=input.formValue/>
+                  <text-form-input formValue=input.formValue labelId=state.labelId/>
                </else>
             </else-if>
          </div>

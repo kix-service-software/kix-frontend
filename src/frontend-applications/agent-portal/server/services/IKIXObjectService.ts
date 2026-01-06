@@ -7,7 +7,6 @@
  * --
  */
 
-import { IService } from './IService';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { KIXObject } from '../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
@@ -17,7 +16,7 @@ import { KIXObjectSpecificDeleteOptions } from '../../model/KIXObjectSpecificDel
 import { Error } from '../../../../server/model/Error';
 import { ObjectResponse } from './ObjectResponse';
 
-export interface IKIXObjectService extends IService {
+export interface IKIXObjectService {
 
     isServiceFor(kixObjectType: KIXObjectType | string): boolean;
 

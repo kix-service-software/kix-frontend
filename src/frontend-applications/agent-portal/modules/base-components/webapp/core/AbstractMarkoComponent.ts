@@ -53,7 +53,7 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
 
     public async onMount(): Promise<void> {
         if (!this.contextInstanceId) {
-            let DOMElement = (this as any).getEl();
+            const DOMElement = (this as any).getEl();
             if (!DOMElement) {
                 // TODO: find generic fallback solution if component itself has no regular html-tag (e.g. tab-widget)
                 // e.g. by parent element
@@ -121,7 +121,7 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
             eventSubscriberId: this.eventSubscriberId,
             eventPublished: eventPublished.bind(this)
         };
-        for (let event of events) {
+        for (const event of events) {
             EventService.getInstance().subscribe(event, eventSubscriber);
         }
     }

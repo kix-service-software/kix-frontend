@@ -15,6 +15,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <div
                 title=(state.translations["Translatable#Personal Kanban Board"])
                 on-click("showKanban")
+                aria-label=(state.translations["Translatable#Personal Kanban Board"])
             >
                 <div class="action-icon">
                     <icon icon="kix-icon-kanban"/>
@@ -32,10 +33,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
             </div>
             <div
-                title=(
-                    state.translations["Translatable#Personal Ticket Calendar"]
-                )
+                title=(state.translations["Translatable#Personal Ticket Calendar"])
                 on-click("showCalendar")
+                aria-label=(state.translations["Translatable#Personal Ticket Calendar"])
             >
                 <div class="action-icon">
                     <icon icon="kix-icon-calendar"/>
@@ -58,7 +58,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <for|group| of=state.toolbarGroups>
             <div class="toolbar-group">
                 <for|action| of=group>
-                    <div title=action.title on-click("actionClicked", action)>
+                    <div title=action.title on-click("actionClicked", action) aria-label=action.title>
                         <div class="action-icon">
                             <icon icon=action.icon showUnknown/>
                         </div>

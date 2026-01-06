@@ -112,7 +112,7 @@ export abstract class Context {
             this.storageManager.setContext(this);
         }
 
-        this.contextId = descriptor.contextId;
+        this.contextId = descriptor?.contextId;
     }
 
     private reloadRelevantObjectLists(widgets: ConfiguredWidget[]): void {
@@ -865,7 +865,7 @@ export abstract class Context {
         loadingOptions: KIXObjectLoadingOptions, searchValue?: string
     ): Promise<KIXObjectLoadingOptions> {
 
-        let preparedLoadingOptions = new KIXObjectLoadingOptions(
+        const preparedLoadingOptions = new KIXObjectLoadingOptions(
             [],
             loadingOptions.sortOrder,
             loadingOptions.limit,

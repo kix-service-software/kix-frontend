@@ -154,7 +154,10 @@ export class BulkRunner {
                 `${finishedCount}/${objectCount}`,
                 `${oName} ${identifier}: ` + confirmText,
                 () => resolve(),
-                () => { cancelBulk; resolve(); },
+                () => {
+                    cancelBulk();
+                    resolve();
+                },
                 [ignoreButton, cancelButton],
                 undefined, undefined, true
             );

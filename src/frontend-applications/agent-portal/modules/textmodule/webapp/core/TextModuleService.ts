@@ -104,7 +104,7 @@ export class TextModuleService extends KIXObjectService {
     }
 
     public async searchTextModules(query: string): Promise<TextModule[]> {
-        let filterCriteria = [];
+        const filterCriteria = [];
 
         if (query && query !== '') {
             filterCriteria.push(

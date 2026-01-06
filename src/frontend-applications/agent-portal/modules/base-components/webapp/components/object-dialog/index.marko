@@ -21,7 +21,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     on-click("cancel")
                     title=(state.translations["Translatable#Cancel"])
                     class="kix-button cancel-button">
-                    <span class="kix-icon-close"/>
+                    <span class="kix-icon-close" aria-hidden="true"/>
                     <span>${state.translations["Translatable#Cancel"]}</span>
                 </button>
                 <button
@@ -30,7 +30,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     on-click("submit")
                     title=state.submitButtonText
                     class="kix-button submit-button">
-                    <span class="kix-icon-check"/>
+                    <span class="kix-icon-check" aria-hidden="true"/>
                     <span>${state.submitButtonText}</span>
                 </button>
             </div>

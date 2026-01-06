@@ -88,6 +88,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             },
             [ObjectFormEvent.BLOCK_FORM]
         );
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Clear Value', 'Translatable#Remove node'
+        ]);
+
     }
 
     public onDestroy(): void {

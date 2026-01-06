@@ -14,6 +14,7 @@ import { ActionFactory } from '../../core/ActionFactory';
 import { ActionGroup } from '../../../model/ActionGroup';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
     private observer: ResizeObserver;
@@ -34,7 +35,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private lastContentWidth = 0;
 
     public onCreate(input: any): void {
-        super.onCreate(input), 'action-list';
+        super.onCreate(input, 'action-list');
         this.state = new ComponentState();
         this.fontSize = BrowserUtil.getBrowserFontsize();
         this.expansionWidth = 3 * this.fontSize;
@@ -94,6 +95,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.prepareActionLists();
             }
         }, 600);
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Action-list'
+        ]);
+
     }
 
     public onDestroy(): void {

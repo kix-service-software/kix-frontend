@@ -229,18 +229,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const widget = await this.context?.getConfiguredWidget(nodes[0].id);
                 if (widget) {
                     // Update state widgets
-                    const stateWidgetIndex = this.state.widgets.findIndex((sw) => {
-                        sw.instanceId === widget.instanceId;
-                    });
+                    const stateWidgetIndex = this.state.widgets.findIndex((sw) => sw.instanceId === widget.instanceId);
                     if (stateWidgetIndex === -1) {
                         this.state.widgets.push(widget);
                     } else {
                         this.state.widgets[stateWidgetIndex] = widget;
                     }
                     // Update modified widgets
-                    const modifiedWidgetIndex = this.modifiedWidgets.findIndex((sw) => {
-                        sw.instanceId === widget.instanceId;
-                    });
+                    const modifiedWidgetIndex = this.modifiedWidgets.findIndex(
+                        (sw) => sw.instanceId === widget.instanceId
+                    );
                     if (modifiedWidgetIndex === -1) {
                         this.modifiedWidgets.push(widget);
                     } else {

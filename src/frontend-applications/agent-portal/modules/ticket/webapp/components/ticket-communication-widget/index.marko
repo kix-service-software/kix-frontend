@@ -25,11 +25,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 active: state.activeUnreadAction,
                             },
                         ]
-                        on-click("readAll")/>
+                        on-click("readAll") // not yet clickable with keyboard
+                        tabindex="0"
+                        role="button"
+                        aria-label=(state.translations["Translatable#Read all"])/>
                     <i
                         title=(state.translations["Translatable#Collapse all"])
                         on-click("collapseAll")
-                        class="fas fa-angle-double-up"/>
+                        class="fas fa-angle-double-up"
+                        tabindex="0"
+                        role="button"
+                        aria-label=(state.translations["Translatable#Collapse all"])/>
                     <i
                         title=(state.translations["Translatable#Preview List"])
                         class=[
@@ -38,7 +44,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 selected: !state.selectedCompactView,
                             },
                         ]
-                        on-click("selectNormalDisplay")/>
+                        on-click("selectNormalDisplay")
+                        tabindex="0"
+                        role="button"
+                        aria-label=(state.translations["Translatable#Preview List"])/>
                     <i
                         title=(state.translations["Translatable#Compact View"])
                         class=[
@@ -47,15 +56,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 selected: state.selectedCompactView,
                             },
                         ]
-                        on-click("selectListDisplay")/>
+                        on-click("selectListDisplay")
+                        tabindex="0"
+                        role="button"
+                        aria-label=(state.translations["Translatable#Compact View"])/>
                     <i
-                        title=(
-                            state.translations[
-                                "Translatable#Change sort direction"
-                            ]
-                        )
+                        title=(state.translations["Translatable#Change sort direction"])
                         on-click("changeSortDirection")
-                        class="fas fa-sort"/>
+                        class="fas fa-sort"
+                        tabindex="0"
+                        role="button"
+                        aria-label=(state.translations["Translatable#Change sort direction"])/>
                 </div>
             </div>
             <div class="communication-list">

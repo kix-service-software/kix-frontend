@@ -33,7 +33,7 @@ export function prepareHtmlForEmail(rawHtml: string): string {
             const isFullyBorderless = borderlessCount === totalCount;
             const hasAnyBorderless = borderlessCount > 0 && borderlessCount < totalCount;
 
-            let tableClasses = ['table', 'w-100', 'align-middle'];
+            const tableClasses = ['table', 'w-100', 'align-middle'];
             if (!isFullyBorderless && !hasAnyBorderless) {
                 tableClasses.splice(1, 0, 'table-bordered');
             }
@@ -86,7 +86,7 @@ export function prepareHtmlForEmail(rawHtml: string): string {
 
     html = html.replace(/<blockquote([^>]*)>/gi, (_match, attrs) => {
         const styleMatch = attrs.match(/style="([^"]*)"/i);
-        let style = 'border-left: 3px solid #ccc; padding-left: 10px; margin: 10px 0; font-style: italic;';
+        const style = 'border-left: 3px solid #ccc; padding-left: 10px; margin: 10px 0; font-style: italic;';
         if (styleMatch) {
             const existingStyle = styleMatch[1];
             const cleaned = existingStyle
@@ -283,8 +283,8 @@ export function prepareHtmlForEmail(rawHtml: string): string {
             const width = widthMatch?.[1] || widthMatch?.[2] || widthMatch?.[3];
 
             const styleMatch = newAttrs.match(/style="([^"]*)"/i);
-            let styleVal = styleMatch?.[1] || '';
-            let styles = styleVal
+            const styleVal = styleMatch?.[1] || '';
+            const styles = styleVal
                 .split(';')
                 .map((s) => s.trim())
                 .filter((s) => s && !/^(width|display|margin(-left|-right)?|float)\s*:/i.test(s));

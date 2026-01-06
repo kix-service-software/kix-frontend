@@ -22,22 +22,24 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <button
                     class="accordion-button fw-bold p-2 flex-wrap"
                     type="button"
-                    aria-expanded="true">
+                    data-bs-toggle=(state.isConfigContext ? "" : "collapse")
+                    data-bs-target=("#content-" + input.group.id)
+                    aria-expanded="true"
+                    aria-controls=("content-" + input.group.id)
+                    title=(input.group.name)>
                     <if(state.isConfigContext)>
                         <button
                             type="button"
                             class="btn btn-sm btn-light text-black me-3"
-                            aria-label="Edit Group"
-                            title=(
-                                state.translations["Translatable#Edit Group"]
-                            )
+                            aria-label=(state.translations["Translatable#Edit Group"])
+                            title=(state.translations["Translatable#Edit Group"])
                             on-click("editGroup", input.group.id)>
                             <i class="fa-regular fa-pen-to-square"/>
                         </button>
                         <button
                             type="button"
                             class="btn btn-sm btn-light text-black me-3"
-                            aria-label="Add Field"
+                            aria-label=(state.translations["Translatable#Add Field"])
                             title=(state.translations["Translatable#Add Field"])
                             on-click("addField", input.group.id)>
                             <i class="fa-regular fa-square-plus"/>

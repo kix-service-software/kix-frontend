@@ -102,7 +102,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             : "Cancel"
                     )>
                     <if(input.webform.useKIXCSS)>
-                        <span class="kix-form-cancel-button-icon"/>
+                        <span class="kix-form-cancel-button-icon" aria-hidden="true"/>
                     </if>
                     <${input.webform.useKIXCSS ? "span" : null}>
                         ${input.translations["Translatable#Cancel"]
@@ -118,7 +118,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             : input.webform.saveLabel
                     )>
                     <if(input.webform.useKIXCSS)>
-                        <span.kix-form-submit-button-icon/>
+                        <span.kix-form-submit-button-icon aria-hidden="true"/>
                     </if>
                     <${input.webform.useKIXCSS ? "span" : null}>
                         ${input.translations[input.webform.saveLabel]

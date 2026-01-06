@@ -18,7 +18,7 @@ export class BackendNotification {
     public Event: BackendNotificationEvent;
     public ObjectType: string;
     public UserID: number;
-    public Data: Object;
+    public Data: object;
 
     public constructor(notification?: BackendNotification) {
         if (notification) {

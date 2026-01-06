@@ -33,9 +33,7 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> {
     private inputId: string;
     private tabContainerPrefId: string;
 
-    private keyDownEventFunction: () => {
-        // do nothing ...
-    };
+    private keyDownEventFunction: () => null;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'tab-container');
@@ -223,15 +221,16 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> {
     }
 
     public scrollTabs(left: boolean): void {
-        const element: HTMLElement = (this as any).getEl('tab-list');
-        if (element) {
-            if (left) {
-                element.scrollLeft -= 300;
-            }
-            else {
-                element.scrollLeft += 300;
-            }
+        const activeTabIndex = this.state.tabWidgets.findIndex(
+            (tab) => tab.configurationId === this.state.activeTab.configurationId);
+        let nextIndex: number;
+        if (left) {
+            nextIndex = activeTabIndex === 0 ? this.state.tabWidgets.length - 1 : activeTabIndex - 1;
+        } else {
+            nextIndex = activeTabIndex === this.state.tabWidgets.length - 1 ? 0 : activeTabIndex + 1;
         }
+        const nextTab = this.state.tabWidgets[nextIndex];
+        this.setActiveTab(nextTab);
     }
 
     public minimizedChanged(minimized: boolean): void {

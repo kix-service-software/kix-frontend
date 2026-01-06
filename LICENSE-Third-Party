@@ -318,7 +318,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.46
+├─ @marko/compiler@5.39.47
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -783,16 +783,11 @@
 │  ├─ repository: https://github.com/acornjs/acorn-jsx
 │  ├─ path: node_modules/acorn-jsx
 │  └─ licenseFile: node_modules/acorn-jsx/LICENSE
-├─ acorn@7.4.1
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/acornjs/acorn
-│  ├─ path: node_modules/acorn
-│  └─ licenseFile: node_modules/acorn/LICENSE
 ├─ acorn@8.15.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/acornjs/acorn
 │  ├─ path: node_modules/acorn
-│  └─ licenseFile: node_modules/lasso/node_modules/acorn/LICENSE
+│  └─ licenseFile: node_modules/acorn/LICENSE
 ├─ address-rfc2822@2.2.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/haraka/node-address-rfc2822
@@ -820,7 +815,7 @@
 │  ├─ publisher: Brian Woodward
 │  ├─ url: https://github.com/doowb
 │  ├─ path: node_modules/ansi-colors
-│  └─ licenseFile: node_modules/ansi-colors/LICENSE
+│  └─ licenseFile: node_modules/web-resource-inliner/node_modules/ansi-colors/LICENSE
 ├─ ansi-regex@2.1.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/chalk/ansi-regex
@@ -1298,7 +1293,7 @@
 │  ├─ email: mail@juliangruber.com
 │  ├─ url: http://juliangruber.com
 │  ├─ path: node_modules/brace-expansion
-│  └─ licenseFile: node_modules/brace-expansion/LICENSE
+│  └─ licenseFile: node_modules/babel-core/node_modules/brace-expansion/LICENSE
 ├─ brace-expansion@2.0.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/juliangruber/brace-expansion
@@ -1306,7 +1301,7 @@
 │  ├─ email: mail@juliangruber.com
 │  ├─ url: http://juliangruber.com
 │  ├─ path: node_modules/brace-expansion
-│  └─ licenseFile: node_modules/lasso/node_modules/brace-expansion/LICENSE
+│  └─ licenseFile: node_modules/brace-expansion/LICENSE
 ├─ browser-refresh-client@1.1.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/patrick-steele-idem/browser-refresh-client
@@ -1383,7 +1378,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001761
+├─ caniuse-lite@1.0.30001762
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1997,13 +1992,6 @@
 │  ├─ url: sindresorhus.com
 │  ├─ path: node_modules/detect-indent
 │  └─ licenseFile: node_modules/detect-indent/license
-├─ dom-serializer@1.4.1
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/cheeriojs/dom-renderer
-│  ├─ publisher: Felix Boehm
-│  ├─ email: me@feedic.com
-│  ├─ path: node_modules/dom-serializer
-│  └─ licenseFile: node_modules/web-resource-inliner/node_modules/dom-serializer/LICENSE
 ├─ dom-serializer@2.0.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/cheeriojs/dom-serializer
@@ -2018,20 +2006,6 @@
 │  ├─ email: me@feedic.com
 │  ├─ path: node_modules/domelementtype
 │  └─ licenseFile: node_modules/domelementtype/LICENSE
-├─ domhandler@3.3.0
-│  ├─ licenses: BSD-2-Clause
-│  ├─ repository: https://github.com/fb55/domhandler
-│  ├─ publisher: Felix Boehm
-│  ├─ email: me@feedic.com
-│  ├─ path: node_modules/domhandler
-│  └─ licenseFile: node_modules/web-resource-inliner/node_modules/domhandler/LICENSE
-├─ domhandler@4.3.1
-│  ├─ licenses: BSD-2-Clause
-│  ├─ repository: https://github.com/fb55/domhandler
-│  ├─ publisher: Felix Boehm
-│  ├─ email: me@feedic.com
-│  ├─ path: node_modules/domhandler
-│  └─ licenseFile: node_modules/web-resource-inliner/node_modules/dom-serializer/node_modules/domhandler/LICENSE
 ├─ domhandler@5.0.3
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/fb55/domhandler
@@ -2055,13 +2029,6 @@
 │  ├─ url: https://cure53.de/
 │  ├─ path: node_modules/dompurify
 │  └─ licenseFile: node_modules/dompurify/LICENSE
-├─ domutils@2.8.0
-│  ├─ licenses: BSD-2-Clause
-│  ├─ repository: https://github.com/fb55/domutils
-│  ├─ publisher: Felix Boehm
-│  ├─ email: me@feedic.com
-│  ├─ path: node_modules/domutils
-│  └─ licenseFile: node_modules/web-resource-inliner/node_modules/domutils/LICENSE
 ├─ domutils@3.2.2
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/fb55/domutils
@@ -2149,20 +2116,13 @@
 │  ├─ repository: https://github.com/socketio/socket.io
 │  ├─ path: node_modules/engine.io-parser
 │  └─ licenseFile: node_modules/engine.io-parser/LICENSE
-├─ engine.io@6.6.4
+├─ engine.io@6.6.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/socketio/socket.io
 │  ├─ publisher: Guillermo Rauch
 │  ├─ email: guillermo@learnboost.com
 │  ├─ path: node_modules/engine.io
 │  └─ licenseFile: node_modules/engine.io/LICENSE
-├─ entities@2.2.0
-│  ├─ licenses: BSD-2-Clause
-│  ├─ repository: https://github.com/fb55/entities
-│  ├─ publisher: Felix Boehm
-│  ├─ email: me@feedic.com
-│  ├─ path: node_modules/entities
-│  └─ licenseFile: node_modules/web-resource-inliner/node_modules/entities/LICENSE
 ├─ entities@4.5.0
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/fb55/entities
@@ -2258,7 +2218,7 @@
 │  ├─ publisher: Toru Nagashima
 │  ├─ url: https://github.com/mysticatea
 │  ├─ path: node_modules/eslint-visitor-keys
-│  └─ licenseFile: node_modules/lasso/node_modules/eslint-visitor-keys/LICENSE
+│  └─ licenseFile: node_modules/eslint-visitor-keys/LICENSE
 ├─ espree@9.6.1
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/eslint/espree
@@ -2270,7 +2230,7 @@
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/estools/estraverse
 │  ├─ path: node_modules/estraverse
-│  └─ licenseFile: node_modules/lasso/node_modules/estraverse/LICENSE.BSD
+│  └─ licenseFile: node_modules/estraverse/LICENSE.BSD
 ├─ esutils@2.0.3
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/estools/esutils
@@ -2529,13 +2489,6 @@
 │  ├─ repository: https://github.com/marko-js/htmljs-parser
 │  ├─ path: node_modules/htmljs-parser
 │  └─ licenseFile: node_modules/htmljs-parser/LICENSE
-├─ htmlparser2@5.0.1
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/fb55/htmlparser2
-│  ├─ publisher: Felix Boehm
-│  ├─ email: me@feedic.com
-│  ├─ path: node_modules/htmlparser2
-│  └─ licenseFile: node_modules/web-resource-inliner/node_modules/htmlparser2/LICENSE
 ├─ htmlparser2@9.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/fb55/htmlparser2
@@ -2864,7 +2817,7 @@
 │  ├─ publisher: auth0
 │  ├─ path: node_modules/jsonwebtoken
 │  └─ licenseFile: node_modules/jsonwebtoken/LICENSE
-├─ juice@11.0.3
+├─ juice@11.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/Automattic/juice
 │  ├─ path: node_modules/juice
@@ -3123,7 +3076,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.38.8
+├─ marko@5.38.10
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -3229,7 +3182,7 @@
 │  ├─ email: i@izs.me
 │  ├─ url: http://blog.izs.me
 │  ├─ path: node_modules/minimatch
-│  └─ licenseFile: node_modules/minimatch/LICENSE
+│  └─ licenseFile: node_modules/babel-core/node_modules/minimatch/LICENSE
 ├─ minimatch@5.1.6
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/isaacs/minimatch
@@ -3245,7 +3198,7 @@
 │  ├─ email: i@izs.me
 │  ├─ url: http://blog.izs.me
 │  ├─ path: node_modules/minimatch
-│  └─ licenseFile: node_modules/marko/node_modules/minimatch/LICENSE
+│  └─ licenseFile: node_modules/minimatch/LICENSE
 ├─ minimist@1.2.8
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/minimistjs/minimist
@@ -3613,7 +3566,7 @@
 │  ├─ repository: https://github.com/prosemirror/prosemirror-state
 │  ├─ path: node_modules/prosemirror-state
 │  └─ licenseFile: node_modules/prosemirror-state/LICENSE
-├─ prosemirror-tables@1.8.4
+├─ prosemirror-tables@1.8.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/ProseMirror/prosemirror-tables
 │  ├─ path: node_modules/prosemirror-tables
@@ -3677,7 +3630,7 @@
 │  ├─ url: https://github.com/kriskowal
 │  ├─ path: node_modules/q
 │  └─ licenseFile: node_modules/q/LICENSE
-├─ qs@6.14.0
+├─ qs@6.14.1
 │  ├─ licenses: BSD-3-Clause
 │  ├─ repository: https://github.com/ljharb/qs
 │  ├─ path: node_modules/qs
@@ -4076,9 +4029,9 @@
 │  ├─ url: http://mad4milk.net
 │  ├─ path: node_modules/slick
 │  └─ licenseFile: node_modules/slick/README.md
-├─ socket.io-adapter@2.5.5
+├─ socket.io-adapter@2.5.6
 │  ├─ licenses: MIT
-│  ├─ repository: https://github.com/socketio/socket.io-adapter
+│  ├─ repository: https://github.com/socketio/socket.io
 │  ├─ path: node_modules/socket.io-adapter
 │  └─ licenseFile: node_modules/socket.io-adapter/LICENSE
 ├─ socket.io-client@4.1.3
@@ -4091,12 +4044,12 @@
 │  ├─ repository: https://github.com/socketio/socket.io-parser
 │  ├─ path: node_modules/socket.io-parser
 │  └─ licenseFile: node_modules/socket.io-client/node_modules/socket.io-parser/LICENSE
-├─ socket.io-parser@4.2.4
+├─ socket.io-parser@4.2.5
 │  ├─ licenses: MIT
-│  ├─ repository: https://github.com/socketio/socket.io-parser
+│  ├─ repository: https://github.com/socketio/socket.io
 │  ├─ path: node_modules/socket.io-parser
 │  └─ licenseFile: node_modules/socket.io-parser/LICENSE
-├─ socket.io@4.8.1
+├─ socket.io@4.8.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/socketio/socket.io
 │  ├─ path: node_modules/socket.io
@@ -4379,7 +4332,7 @@
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici-types
 │  └─ licenseFile: node_modules/undici-types/LICENSE
-├─ undici@6.22.0
+├─ undici@6.23.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici
@@ -4472,13 +4425,13 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/warp10
 │  └─ licenseFile: node_modules/warp10/LICENSE
-├─ web-resource-inliner@7.0.0
+├─ web-resource-inliner@8.0.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jrit/web-resource-inliner
 │  ├─ publisher: Jarrett Widman
 │  ├─ url: https://github.com/jrit
 │  ├─ path: node_modules/web-resource-inliner
-│  └─ licenseFile: node_modules/web-resource-inliner/README.md
+│  └─ licenseFile: node_modules/web-resource-inliner/LICENSE
 ├─ webidl-conversions@7.0.0
 │  ├─ licenses: BSD-2-Clause
 │  ├─ repository: https://github.com/jsdom/webidl-conversions
@@ -4555,7 +4508,7 @@
 │  ├─ url: http://2x.io
 │  ├─ path: node_modules/ws
 │  └─ licenseFile: node_modules/engine.io-client/node_modules/ws/LICENSE
-├─ ws@8.17.1
+├─ ws@8.18.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/websockets/ws
 │  ├─ publisher: Einar Otto Stangvik
@@ -4563,7 +4516,7 @@
 │  ├─ url: http://2x.io
 │  ├─ path: node_modules/ws
 │  └─ licenseFile: node_modules/engine.io/node_modules/ws/LICENSE
-├─ ws@8.18.3
+├─ ws@8.19.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/websockets/ws
 │  ├─ publisher: Einar Otto Stangvik

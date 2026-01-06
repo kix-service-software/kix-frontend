@@ -11,7 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <div.url>${state.data.URL}</div>
     <if(window.isSecureContext)>
         <button.kix-button.form-button on-click("copyToClipboard") title=state.translations["Translatable#Copy URL To Clipboard And Close"]>
-            <span.kix-icon-copy/>
+            <span.kix-icon-copy aria-hidden="true"/>
             <translation-string pattern="Translatable#Copy URL To Clipboard And Close"/>
         </button>
     </if>

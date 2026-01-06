@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { FormFieldConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../src/frontend-applications/agent-portal/model/configuration/FormFieldOption';
 import { FormFieldOptions } from '../../src/frontend-applications/agent-portal/model/configuration/FormFieldOptions';
@@ -124,12 +124,12 @@ describe('JSONFormFieldValidator', () => {
     });
 
     describe('Check validate', () => {
-        let originalFunction: <T extends Context>() => T;
+        let originalFunction: <T = Context>() => T;
         let validJSON = true;
 
         before(() => {
             originalFunction = ContextService.getInstance().getActiveContext;
-            ContextService.getInstance().getActiveContext = <T extends Context>(): T => {
+            ContextService.getInstance().getActiveContext = <T = Context>(): T => {
                 return new TestContext(validJSON) as any;
             }
         });

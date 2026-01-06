@@ -32,7 +32,7 @@ export class TreeNode {
         public navigationNode: boolean = false,
         public selected: boolean = false,
         public showAsInvalid: boolean = !selectable,
-        public rank: Number = null,
+        public rank: number = null,
         public overlay: OverlayIcon = null
     ) { }
 }
