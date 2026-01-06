@@ -85,7 +85,7 @@ export class TicketSocketClient extends SocketClient {
     ): Promise<Attachment[]> {
         this.checkSocketConnection();
 
-        const cacheKey = `${ticketId}-${articleId}-${attachmentIds.join(',')}`;
+        const cacheKey = `${ticketId}-${articleId}-${attachmentIds.join(',')}-${asDownload}`;
 
         if (!asDownload && BrowserCacheService.getInstance().has(cacheKey, KIXObjectType.ATTACHMENT)) {
             return BrowserCacheService.getInstance().get(cacheKey, KIXObjectType.ATTACHMENT);
