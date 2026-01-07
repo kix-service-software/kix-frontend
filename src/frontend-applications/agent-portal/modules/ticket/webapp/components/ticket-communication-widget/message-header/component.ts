@@ -15,11 +15,15 @@ import { KIXObjectService } from '../../../../../base-components/webapp/core/KIX
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { User } from '../../../../../user/model/User';
+import { Article } from '../../../../model/Article';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { TicketService } from '../../../core';
+import { ArticleLoader } from '../../../core/context/ArticleLoader';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
+
+    private articleLoader: ArticleLoader;
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -37,6 +41,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        this.articleLoader = new ArticleLoader(this.state.article.TicketID, this.context, false, true);
 
         if (this.state.article) {
             this.updateArticleData();
@@ -131,6 +137,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         super.onDestroy();
+    }
+
+    public loadActions(event: any): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.articleLoader.queueArticle(this.state.article.ArticleID, async (article: Article) => {
+            this.state.actions = await this.articleLoader?.prepareArticleActions(
+                article, this.context?.instanceId
+            );
+        });
     }
 }
 

@@ -25,7 +25,6 @@ import { Ticket } from '../../../model/Ticket';
 
 export class Component extends AbstractMarkoComponent<ComponentState, TicketDetailsContext> {
 
-    private readonly displayView = 'selectedListView';
     private sortOrder: string;
     private communicationConfig: TicketCommunicationConfiguration;
     private articleIds: number[];
@@ -53,11 +52,6 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
             (p) => p.ID === PersonalSettingsProperty.ARTICLE_SORT_ORDER
         ) : null;
         this.sortOrder = articlePreference?.Value;
-
-        const listViewPreference = user?.Preferences ? user.Preferences.find(
-            (p) => p.ID === PersonalSettingsProperty.MESSAGE_COMPACT_VIEW
-        ) : null;
-        this.state.selectedCompactView = !listViewPreference?.Value || listViewPreference?.Value === 'Compact';
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Go to top', 'Translatable#Read all', 'Translatable#Collapse all',
@@ -168,16 +162,6 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
                 EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT);
             }, 50);
         }
-    }
-
-    public selectNormalDisplay(): void {
-        AgentService.getInstance().setPreferences([[PersonalSettingsProperty.MESSAGE_COMPACT_VIEW, 'List']]);
-        this.state.selectedCompactView = false;
-    }
-
-    public selectListDisplay(): void {
-        AgentService.getInstance().setPreferences([[PersonalSettingsProperty.MESSAGE_COMPACT_VIEW, 'Compact']]);
-        this.state.selectedCompactView = true;
     }
 
     public collapseAll(): void {

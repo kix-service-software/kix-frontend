@@ -25,48 +25,31 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 active: state.activeUnreadAction,
                             },
                         ]
-                        on-click("readAll") // not yet clickable with keyboard
+                        on-click("readAll")
                         tabindex="0"
                         role="button"
-                        aria-label=(state.translations["Translatable#Read all"])/>
+                        aria-label=(
+                            state.translations["Translatable#Read all"]
+                        )/>
                     <i
                         title=(state.translations["Translatable#Collapse all"])
                         on-click("collapseAll")
-                        class="fas fa-angle-double-up"
-                        tabindex="0"
-                        role="button"
-                        aria-label=(state.translations["Translatable#Collapse all"])/>
+                        class="fas fa-angle-double-up"/>
                     <i
-                        title=(state.translations["Translatable#Preview List"])
-                        class=[
-                            "fas fa-comment",
-                            {
-                                selected: !state.selectedCompactView,
-                            },
-                        ]
-                        on-click("selectNormalDisplay")
-                        tabindex="0"
-                        role="button"
-                        aria-label=(state.translations["Translatable#Preview List"])/>
-                    <i
-                        title=(state.translations["Translatable#Compact View"])
-                        class=[
-                            "fas fa-list-ul",
-                            {
-                                selected: state.selectedCompactView,
-                            },
-                        ]
-                        on-click("selectListDisplay")
-                        tabindex="0"
-                        role="button"
-                        aria-label=(state.translations["Translatable#Compact View"])/>
-                    <i
-                        title=(state.translations["Translatable#Change sort direction"])
+                        title=(
+                            state.translations[
+                                "Translatable#Change sort direction"
+                            ]
+                        )
                         on-click("changeSortDirection")
                         class="fas fa-sort"
                         tabindex="0"
                         role="button"
-                        aria-label=(state.translations["Translatable#Change sort direction"])/>
+                        aria-label=(
+                            state.translations[
+                                "Translatable#Change sort direction"
+                            ]
+                        )/>
                 </div>
             </div>
             <div class="communication-list">
@@ -79,7 +62,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             articleCountNumber=component.getArticleCountNumber(
                                 articleId,
                             )
-                            selectedCompactView=state.selectedCompactView
                             key="article-" + articleId
                             informationConfig=state.informationConfig/>
                     </for>
