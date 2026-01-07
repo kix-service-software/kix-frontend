@@ -12,6 +12,7 @@ import { DateTimeUtil } from '../../../../../../base-components/webapp/core/Date
 import { DynamicFieldFormUtil } from '../../../../../../base-components/webapp/core/DynamicFieldFormUtil';
 import { TreeNode } from '../../../../../../base-components/webapp/core/tree';
 import { CheckListItem } from '../../../../../../dynamic-fields/model/CheckListItem';
+import { TranslationService } from '../../../../../../translation/webapp/core/TranslationService';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -41,6 +42,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.state.prepared = true;
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#show dropdown'
+        ]);
     }
 
     public valueChanged(event: any): void {
