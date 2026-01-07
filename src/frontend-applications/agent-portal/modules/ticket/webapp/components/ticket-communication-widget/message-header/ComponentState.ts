@@ -8,6 +8,7 @@
  */
 
 import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
+import { IAction } from '../../../../../base-components/webapp/core/IAction';
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 import { Article } from '../../../../model/Article';
 
@@ -25,7 +26,8 @@ export class ComponentState extends AbstractComponentState {
         public smimeEncryptedIcon: ObjectIcon | string = null,
         public smimeEncryptedTooltip: string = null,
         public smimeDecrypted: boolean = true,
-        public from: string = null
+        public from: string = null,
+        public actions: IAction[] = null
     ) {
         super();
     }

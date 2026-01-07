@@ -16,6 +16,8 @@ import { BrowserUtil } from '../../core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
+declare const bootstrap: any;
+
 export class Component extends AbstractMarkoComponent<ComponentState> {
     private observer: ResizeObserver;
     private actionList: IAction[];
@@ -33,6 +35,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private actionPreparationRunning = false;
     private lastWrapperWidth = 0;
     private lastContentWidth = 0;
+    private observeParent: boolean;
+    private initialOpenDropdown: boolean;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'action-list');
@@ -47,6 +51,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
+        this.observeParent = input.observeParent !== null && typeof input.observeParent === 'boolean'
+            ? input.observeParent
+            : true;
+
+        this.initialOpenDropdown = input.initialOpenDropdown;
+
         this.state.displayText =
             typeof input.displayText !== 'undefined' ? input.displayText : true;
         this.actionList = input.list || [];
@@ -89,17 +99,18 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.prepared = true;
 
-        this.observerTimeout = setTimeout(() => this.prepareObserver(), 150);
-        this.initialRefreshTimeout = setTimeout(() => {
-            if (!this.actionPreparationRunning && this.actionsToShow?.length) {
-                this.prepareActionLists();
-            }
-        }, 600);
+        if (this.observeParent) {
+            this.observerTimeout = setTimeout(this.prepareObserver.bind(this), 150);
+            this.initialRefreshTimeout = setTimeout(function (): void {
+                if (!this.actionPreparationRunning && this.actionsToShow?.length) {
+                    this.prepareActionLists();
+                }
+            }.bind(this), 600);
+        }
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Action-list'
         ]);
-
     }
 
     public onDestroy(): void {
@@ -233,7 +244,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.listExpansion = [];
         (this as any).setStateDirty();
 
-        this.prepareTimeout = setTimeout(() => {
+        this.prepareTimeout = setTimeout(function (): void {
             this.prepareTimeout = null;
 
             const listDefault: Array<ActionGroup | IAction> = [];
@@ -276,7 +287,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.actionPreparationRunning = false;
 
             this.lastContentWidth = actionListElement.scrollWidth;
-        }, 200);
+
+            if (this.initialOpenDropdown) {
+                setTimeout(function (): void {
+                    const dropdownElement = (this as any).getEl(`${this.state.key}action-list-expansion-button`);
+                    const dropdown = new bootstrap.Dropdown(dropdownElement);
+                    dropdown?.show();
+                }.bind(this), 50);
+            }
+        }.bind(this), 200);
     }
 
     public async actionsChanged(): Promise<void> {

@@ -38,7 +38,12 @@ export class ArticleLoader {
 
     private articleColorConfiguration: any;
 
-    public constructor(private ticketId: number, private context: Context, private loadArticleDetails: boolean) { }
+    public constructor(
+        private ticketId: number,
+        private context: Context,
+        private loadArticleDetails: boolean,
+        private loadObjectActions?: boolean
+    ) { }
 
     public queueArticle(articleId: number, cb: (article: Article) => void): void {
         this.articleIds.set(articleId, cb);
@@ -63,6 +68,10 @@ export class ArticleLoader {
 
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.includes = [KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON];
+
+        if (this.loadObjectActions) {
+            loadingOptions.includes.push('ObjectActions', ArticleProperty.PLAIN);
+        }
 
         if (this.loadArticleDetails) {
             loadingOptions.includes.push(
