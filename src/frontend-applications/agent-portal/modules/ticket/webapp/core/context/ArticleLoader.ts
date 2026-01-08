@@ -23,6 +23,7 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
 import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
 import { User } from '../../../../user/model/User';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { Article } from '../../../model/Article';
 import { ArticleColorsConfiguration } from '../../../model/ArticleColorsConfiguration';
 import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
@@ -234,7 +235,20 @@ export class ArticleLoader {
                 )
             );
         }
-        loadingOptions.query.push(['fields', 'Article.ArticleID,Article.TicketID,Article.IncomingTime']);
+
+        if (articleFilter.filterMyArticles) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            loadingOptions.filter.push(
+                new FilterCriteria(
+                    ArticleProperty.CREATED_BY, SearchOperator.EQUALS,
+                    FilterDataType.NUMERIC, FilterType.AND, currentUser.UserID
+                )
+            );
+        }
+
+        loadingOptions.query.push(
+            ['fields', 'Article.ArticleID,Article.TicketID,Article.IncomingTime']
+        );
 
         const articles: Article[] = await KIXObjectService.loadObjects<Article>(
             KIXObjectType.ARTICLE, null, loadingOptions, new ArticleLoadingOptions(ticketId)
