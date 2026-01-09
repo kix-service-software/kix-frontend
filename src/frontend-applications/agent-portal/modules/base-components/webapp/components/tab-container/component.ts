@@ -47,6 +47,10 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> {
         this.state.contextType = input.contextType;
         this.hideSidebar = typeof input.hideSidebar !== 'undefined' ? input.hideSidebar : false;
         this.inputId = input.id;
+        this.state.startAsMinimized = input.startAsMinimized ?? false;
+        if (this.state.startAsMinimized) {
+            this.state.showTabScrollers = false;
+        }
     }
 
     public async onMount(): Promise<void> {

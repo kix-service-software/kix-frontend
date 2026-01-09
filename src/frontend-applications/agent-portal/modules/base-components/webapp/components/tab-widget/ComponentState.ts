@@ -14,7 +14,8 @@ export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public widgets: ConfiguredWidget[] = [],
-        public show: boolean = false
+        public show: boolean = false,
+        public startAsMinimized: boolean = false,
     ) {
         super();
     }

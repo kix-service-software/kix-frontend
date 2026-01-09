@@ -25,7 +25,8 @@ export class ComponentState extends AbstractComponentState {
         public showSidebar: boolean = false,
         public contentActions: IAction[] = [],
         public prepared: boolean = false,
-        public showTabScrollers: boolean = true
+        public showTabScrollers: boolean = true,
+        public startAsMinimized: boolean = false,
     ) {
         super();
     }
