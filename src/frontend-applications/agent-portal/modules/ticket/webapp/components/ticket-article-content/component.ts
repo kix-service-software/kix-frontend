@@ -86,26 +86,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
 
             BrowserUtil.setFrameHeight(this.state.frameId);
-
-            const links = frameDocument.querySelectorAll('a[href]');
-            links.forEach((link: HTMLAnchorElement) => {
-                const href = link.href;
-                const isInternal = href?.startsWith(window.location.origin);
-
-                if (isInternal) {
-                    link.addEventListener('click', (event): void => {
-                        event.preventDefault();
-                        BrowserUtil.handleLinkClicked(event);
-                    });
-                } else {
-                    link.setAttribute('target', '_blank');
-                    link.setAttribute('rel', 'noopener noreferrer');
-                    link.addEventListener('click', (event): void => {
-                        event.preventDefault();
-                        window.open(href, '_blank', 'noopener,noreferrer');
-                    });
-                }
-            });
+            BrowserUtil.prepareFrameLinks(frameDocument);
         });
     }
 }

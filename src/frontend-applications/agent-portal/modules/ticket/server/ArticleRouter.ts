@@ -7,7 +7,6 @@
  * --
  */
 
-import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
 import { KIXRouter } from '../../../server/routes/KIXRouter';
 import { Request, Response } from 'express';
 import { ArticleViewUtil } from './ArticleViewUtil';
