@@ -425,7 +425,9 @@ export class ContextService {
     ): Promise<Context> {
         if (removeCurrent) {
             const currentContext = this.getActiveContext();
-            await this.removeContext(currentContext.instanceId);
+            if (currentContext) {
+                await this.removeContext(currentContext.instanceId, undefined, undefined, false);
+            }
         }
 
         const context = await this.getContextInstance(
@@ -471,8 +473,7 @@ export class ContextService {
         }
 
         if (typeof document !== 'undefined') {
-            const documentTitle = displayText;
-            document.title = documentTitle;
+            document.title = displayText;
         }
     }
 
