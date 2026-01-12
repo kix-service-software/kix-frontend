@@ -696,7 +696,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/d3-selection
 │  └─ licenseFile: node_modules/@types/d3-selection/LICENSE
-├─ @types/d3-shape@3.1.7
+├─ @types/d3-shape@3.1.8
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/d3-shape
