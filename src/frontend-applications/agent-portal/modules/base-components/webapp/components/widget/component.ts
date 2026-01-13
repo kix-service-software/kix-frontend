@@ -24,6 +24,7 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
 
     private clearMinimizedStateOnDestroy: boolean;
     private additionalActions: IAction[] = [];
+    private startAsMinimized: boolean = false;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'widget');
@@ -33,6 +34,9 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
+
+        this.startAsMinimized = input.startAsMinimized;
+
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
 
         this.state.widgetConfiguration = input.configuration;
@@ -82,6 +86,9 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
         if (typeof storedMinimized !== 'undefined' && storedMinimized !== null) {
             this.state.minimized = storedMinimized === 'true';
         }
+        if (this.state.minimized) {
+            (this as any).emit('minimizedChanged', this.state.minimized);
+        }
         this.additionalActions = await ActionFactory.getInstance().getActionsForWidget(
             this.state.widgetConfiguration?.widgetId, this.contextInstanceId
         );
@@ -95,6 +102,10 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
             },
             [TabContainerEvent.CHANGE_TITLE]
         );
+        if (this.startAsMinimized) {
+            await this.minimizeWidget(true, null);
+            this.setWidgetClasses(['minimized']);
+        }
     }
 
     public onDestroy(): void {
@@ -172,13 +183,21 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
         classes.push(this.getWidgetTypeClass(this.state.widgetType));
 
         if (this.context) {
-            classes.push(this.context.widgetService.getWidgetClasses(this.state.instanceId));
+            classes.push(...this.context.widgetService.getWidgetClasses(this.state.instanceId));
         }
         else {
-            classes.push(WidgetService.getInstance().getWidgetClasses(this.state.instanceId));
+            classes.push(...WidgetService.getInstance().getWidgetClasses(this.state.instanceId));
         }
 
         return classes;
+    }
+
+    private setWidgetClasses(additionalClasses: string[] = []): void {
+        const widgetDiv = (this as any).getEl('widget-' + this.state.instanceId + this.state.componentId);
+        const classes = [...this.getWidgetClasses(), ...additionalClasses];
+        if (classes?.length) {
+            widgetDiv.classList = [...new Set(classes)].join(' ');
+        }
     }
 
     private getWidgetTypeClass(type: WidgetType): string {
