@@ -331,7 +331,7 @@
 │  ├─ email: dpiercey@ebay.com
 │  ├─ path: node_modules/@marko/express
 │  └─ licenseFile: node_modules/@marko/express/LICENSE
-├─ @marko/runtime-tags@6.0.130
+├─ @marko/runtime-tags@6.0.131
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ path: node_modules/@marko/runtime-tags
@@ -751,7 +751,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/mdurl
 │  └─ licenseFile: node_modules/@types/mdurl/LICENSE
-├─ @types/node@22.19.5
+├─ @types/node@22.19.6
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
