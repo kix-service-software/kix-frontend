@@ -163,7 +163,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public dateChanged(event: any): void {
-        this.timoutTimer.restartTimer(() => this.setDateChanged(event));
+        this.timoutTimer.start(() => this.setDateChanged(event));
     }
 
     private setDateChanged(event: any): void {
