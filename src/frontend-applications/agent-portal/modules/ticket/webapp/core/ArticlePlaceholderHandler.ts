@@ -129,22 +129,22 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         if (article.ReplyTo) {
                             replyProperty = ArticleProperty.REPLY_TO;
                         }
+                        else {
+                            // use To value if From is a system address
+                            let fromValue = typeof article.From === 'string' ? article.From : article.From.Email;
+                            fromValue = fromValue.replace(/.+ <(.+)>/, '$1');
+                            const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
+                                KIXObjectType.SYSTEM_ADDRESS, null
+                            ).catch(() => [] as SystemAddress[]);
+                            if (systemAddresses?.some((sa) => sa.Name === fromValue)) {
+                                replyProperty = ArticleProperty.TO;
+                            }
+                        }
 
                         result = await LabelService.getInstance().getDisplayText(
                             article, replyProperty, undefined, false
                         );
 
-                        // use To value if From is a system address
-                        let fromValue = typeof article.From === 'string' ? article.From : article.From.Email;
-                        fromValue = fromValue.replace(/.+ <(.+)>/, '$1');
-                        const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
-                            KIXObjectType.SYSTEM_ADDRESS, null
-                        ).catch(() => [] as SystemAddress[]);
-                        if (systemAddresses?.some((sa) => sa.Name === fromValue)) {
-                            result = await LabelService.getInstance().getDisplayText(
-                                article, ArticleProperty.TO, undefined, false
-                            );
-                        }
                         if (forRichtext) {
                             result = result.replace(/>/g, '&gt;');
                             result = result.replace(/</g, '&lt;');
