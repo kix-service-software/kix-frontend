@@ -43,6 +43,7 @@ import { KIXObjectType } from './kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
 import { WidgetService } from '../modules/base-components/webapp/core/WidgetService';
+import { LoadingOptionsUtil } from './LoadingOptionsUtil';
 
 export abstract class Context {
 
@@ -864,51 +865,8 @@ export abstract class Context {
     public async prepareLoadingOptions(
         loadingOptions: KIXObjectLoadingOptions, searchValue?: string
     ): Promise<KIXObjectLoadingOptions> {
-
-        const preparedLoadingOptions = new KIXObjectLoadingOptions(
-            [],
-            loadingOptions.sortOrder,
-            loadingOptions.limit,
-            loadingOptions.includes,
-            loadingOptions.expands,
-            [],
-            loadingOptions.cacheType,
-            loadingOptions.searchLimit
-        );
-
-        const contextObject = await this.getObject();
-
-        if (Array.isArray(loadingOptions.filter)) {
-            for (const criterion of loadingOptions.filter) {
-                if (typeof criterion.value === 'string') {
-                    const preparedCriterion = new FilterCriteria(
-                        criterion.property, criterion.operator, criterion.type, criterion.filterType, criterion.value
-                    );
-
-                    preparedCriterion.value = await PlaceholderService.getInstance().replacePlaceholders(
-                        criterion.value, contextObject
-                    );
-                    preparedCriterion.value = preparedCriterion.value.replace(SearchProperty.SEARCH_VALUE, searchValue);
-                    if (preparedCriterion.operator === SearchOperator.LIKE) {
-                        preparedCriterion.value = `*${preparedCriterion.value}*`;
-                    }
-                    preparedLoadingOptions.filter.push(preparedCriterion);
-                } else {
-                    preparedLoadingOptions.filter.push(criterion);
-                }
-            }
-        }
-
-        if (Array.isArray(loadingOptions.query)) {
-            for (const q of loadingOptions.query) {
-                const newQuery: [string, string] = [q[0], ''];
-                newQuery[1] = await PlaceholderService.getInstance().replacePlaceholders(q[1], contextObject);
-                newQuery[1] = newQuery[1].replace(SearchProperty.SEARCH_VALUE, searchValue);
-                preparedLoadingOptions.query.push(newQuery);
-            }
-        }
-
-        return preparedLoadingOptions;
+        const object = await this.getObject();
+        return LoadingOptionsUtil.prepareLoadingOptions(object, loadingOptions, searchValue);
     }
 
     public async getPageSize(type: KIXObjectType | string): Promise<number> {
