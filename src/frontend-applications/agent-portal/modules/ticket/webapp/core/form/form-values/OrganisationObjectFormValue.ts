@@ -176,7 +176,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
-        return this.setFormValueTimeout.restartTimer(async () => {
+        return this.setFormValueTimeout.start(async () => {
             let newValue;
             if (value) {
                 if (Array.isArray(value)) {

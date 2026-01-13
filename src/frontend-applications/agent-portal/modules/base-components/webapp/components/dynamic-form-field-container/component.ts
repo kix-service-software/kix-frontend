@@ -266,7 +266,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public dateValueChanged(value: DynamicFormFieldValue, event: any): void {
-        this.timoutTimer.restartTimer(() => this.setDateValue(value, event), 1200);
+        this.timoutTimer.start(() => this.setDateValue(value, event), 1200);
     }
 
     private setDateValue(value: DynamicFormFieldValue, event: any): void {
@@ -326,7 +326,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public betweenDateValueChanged(value: DynamicFormFieldValue, event: any): void {
-        this.timoutTimer.restartTimer(() => this.setBetweenEndDateValue(value, event), 1200);
+        this.timoutTimer.start(() => this.setBetweenEndDateValue(value, event), 1200);
     }
 
     private setBetweenEndDateValue(value: DynamicFormFieldValue, event: any): void {
@@ -569,7 +569,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public hintValueChanged(value: DynamicFormFieldValue, event: any): void {
-        this.timoutTimer.restartTimer(() => {
+        this.timoutTimer.start(() => {
             const hint = event.target.value;
             value.value.hint = hint;
             this.provideValue(value, false);

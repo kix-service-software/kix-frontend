@@ -11,7 +11,11 @@ export class TimeoutTimer {
 
     private timer = null;
 
-    private startTimer(callback: () => void, timeout: number = 300): Promise<void> {
+    public start(callback: () => void, timeout: number = 300): Promise<void> {
+        if (this.timer) {
+            clearTimeout(this.timer);
+        }
+
         return new Promise<void>((resolve) => {
             this.timer = setTimeout(() => {
                 callback();
@@ -21,13 +25,4 @@ export class TimeoutTimer {
         });
     }
 
-    public restartTimer(callback: () => void, timeout: number = 300): Promise<void> {
-        if (this.timer) {
-            clearTimeout(this.timer);
-            this.timer = null;
-            return this.startTimer(callback, timeout);
-        } else {
-            return this.startTimer(callback, timeout);
-        }
-    }
 }
