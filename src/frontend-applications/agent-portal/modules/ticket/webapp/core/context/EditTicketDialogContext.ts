@@ -27,6 +27,7 @@ export class EditTicketDialogContext extends Context {
 
     private contact: Contact;
     private organisation: Organisation;
+    private sourceTicket: Ticket;
 
     public async initContext(): Promise<void> {
         await this.getObject();
@@ -54,28 +55,29 @@ export class EditTicketDialogContext extends Context {
 
     private async loadTicket(): Promise<void> {
         const ticketId = this.getObjectId();
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]
-        );
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]);
 
         let tickets: Ticket[];
         if (ticketId) {
-            tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, [ticketId], loadingOptions
-            );
+            tickets = await KIXObjectService.loadObjects<Ticket>(KIXObjectType.TICKET, [ticketId], loadingOptions);
         }
 
         let ticket = new Ticket();
-        if (tickets && tickets.length) {
-            ticket = KIXObjectService.createObjectInstance(KIXObjectType.TICKET, tickets[0]);
+        if (tickets?.length) {
+            this.sourceTicket = tickets[0];
+            ticket = KIXObjectService.createObjectInstance(KIXObjectType.TICKET, this.sourceTicket);
         }
 
         this.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, ticket);
     }
 
-    public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType = KIXObjectType.TICKET): Promise<O> {
+    public async getObject<O extends KIXObject>(
+        kixObjectType: KIXObjectType | string = KIXObjectType.TICKET
+    ): Promise<O> {
         let object;
-        if (kixObjectType === KIXObjectType.TICKET) {
+        if (kixObjectType === 'SOURCE_OBJECT') {
+            object = this.sourceTicket;
+        } else if (kixObjectType === KIXObjectType.TICKET) {
             object = this.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
             if (!object) {
                 object = await this.loadTicket();

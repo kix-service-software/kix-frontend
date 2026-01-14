@@ -60,6 +60,8 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     private sort: [string, boolean];
     private filter: string;
 
+    public useSourceObjectForLoadingOptions = false;
+
     public constructor(
         protected objectType: KIXObjectType | string,
         protected table: Table,
@@ -318,7 +320,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             loadingOptions.filter.push(...JSON.parse(this.filter));
         }
 
-        const contextObject = await this.context?.getObject();
+        const contextObject = await this.context?.getObject(
+            this.useSourceObjectForLoadingOptions ? 'SOURCE_OBJECT' : undefined
+        );
         if (this.loadingOptions && Array.isArray(this.loadingOptions.filter)) {
             for (const criterion of this.loadingOptions.filter) {
                 if (typeof criterion.value === 'string') {
