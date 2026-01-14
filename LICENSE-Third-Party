@@ -1766,7 +1766,7 @@
 │  ├─ url: https://bost.ocks.org/mike
 │  ├─ path: node_modules/d3-force
 │  └─ licenseFile: node_modules/d3-force/LICENSE
-├─ d3-format@3.1.0
+├─ d3-format@3.1.1
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/d3/d3-format
 │  ├─ publisher: Mike Bostock
