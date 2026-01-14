@@ -26,6 +26,8 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { TableEvent } from '../../../model/TableEvent';
+import { TableEventData } from '../../../model/TableEventData';
 
 export class TableFactoryService {
 
@@ -108,6 +110,7 @@ export class TableFactoryService {
         return factory as T;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async createTable(
         tableKey: string, objectType: KIXObjectType | string, tableConfiguration?: TableConfiguration,
         objectIds?: Array<number | string>, contextInstanceId?: string, defaultRouting?: boolean,
@@ -184,6 +187,8 @@ export class TableFactoryService {
                         this.contextTableInstances.set(tableContextInstanceId, new Map());
                     }
                     this.contextTableInstances.get(tableContextInstanceId).set(tableKey, table);
+                    const eventData = new TableEventData(table.getTableId(), null, null, table);
+                    EventService.getInstance().publish(TableEvent.TABLE_INSTANCE_REGISTERED, eventData);
                 }
             }
         }

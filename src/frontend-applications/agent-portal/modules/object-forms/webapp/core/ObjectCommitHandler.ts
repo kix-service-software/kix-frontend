@@ -43,7 +43,7 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
         const newObject = await this.prepareObject(this.objectValueMapper.object as any, this.objectValueMapper);
         const id = await ObjectCommitSocketClient.getInstance().commitObject(newObject);
         for (const extension of this.extensions || []) {
-            await extension.postCommitHandling(id);
+            await extension.postCommitHandling(id, newObject);
         }
         return id;
     }
