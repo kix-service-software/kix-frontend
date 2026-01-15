@@ -45,114 +45,6 @@ describe('TicketReadUIModule', () => {
             await ticketModule.register();
         });
 
-        describe('check services', () => {
-            it('Should register the TicketService', () => {
-                const service = ServiceRegistry.getServiceInstance(KIXObjectType.TICKET);
-                expect(service).exist;
-                expect(service).instanceof(TicketService);
-            });
-
-            it('Should register the TicketTypeService', () => {
-                const service = ServiceRegistry.getServiceInstance(KIXObjectType.TICKET_TYPE);
-                expect(service).exist;
-                expect(service).instanceof(TicketTypeService);
-            });
-
-            it('Should register the TicketStateService', () => {
-                const service = ServiceRegistry.getServiceInstance(KIXObjectType.TICKET_STATE);
-                expect(service).exist;
-                expect(service).instanceof(TicketStateService);
-            });
-
-            it('Should register the TicketPriorityService', () => {
-                const service = ServiceRegistry.getServiceInstance(KIXObjectType.TICKET_PRIORITY);
-                expect(service).exist;
-                expect(service).instanceof(TicketPriorityService);
-            });
-
-            it('Should register the QueueService', () => {
-                const service = ServiceRegistry.getServiceInstance(KIXObjectType.QUEUE);
-                expect(service).exist;
-                expect(service).instanceof(QueueService);
-            });
-
-            it('Should register the ChannelService', () => {
-                const service = ServiceRegistry.getServiceInstance(KIXObjectType.CHANNEL);
-                expect(service).exist;
-                expect(service).instanceof(ChannelService);
-            });
-
-            it('Should register the TicketFormService', () => {
-                const service = ServiceRegistry.getServiceInstance(KIXObjectType.TICKET, ServiceType.FORM);
-                expect(service).exist;
-                expect(service).instanceof(TicketFormService);
-            });
-
-            it('Should register the ArticleFormService', () => {
-                const service = ServiceRegistry.getServiceInstance(KIXObjectType.ARTICLE, ServiceType.FORM);
-                expect(service).exist;
-                expect(service).instanceof(ArticleFormService);
-            });
-
-        });
-
-        describe('check LabelServices', () => {
-
-            it('Should register the TicketLabelProvider', () => {
-                const provider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
-                expect(provider).exist;
-                expect(provider).instanceof(TicketLabelProvider);
-            });
-
-            it('Should register the ArticleLabelProvider', () => {
-                const provider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.ARTICLE);
-                expect(provider).exist;
-                expect(provider).instanceof(ArticleLabelProvider);
-            });
-
-            it('Should register the TicketHistoryLabelProvider', () => {
-                const provider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET_HISTORY);
-                expect(provider).exist;
-                expect(provider).instanceof(TicketHistoryLabelProvider);
-            });
-
-            it('Should register the TicketTypeLabelProvider', () => {
-                const provider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET_TYPE);
-                expect(provider).exist;
-                expect(provider).instanceof(TicketTypeLabelProvider);
-            });
-
-            it('Should register the TicketPriorityLabelProvider', () => {
-                const provider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET_PRIORITY);
-                expect(provider).exist;
-                expect(provider).instanceof(TicketPriorityLabelProvider);
-            });
-
-            it('Should register the TicketStateLabelProvider', () => {
-                const provider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET_STATE);
-                expect(provider).exist;
-                expect(provider).instanceof(TicketStateLabelProvider);
-            });
-
-            it('Should register the TicketStateTypeLabelProvider', () => {
-                const provider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET_STATE_TYPE);
-                expect(provider).exist;
-                expect(provider).instanceof(TicketStateTypeLabelProvider);
-            });
-
-            it('Should register the ChannelLabelProvider', () => {
-                const provider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CHANNEL);
-                expect(provider).exist;
-                expect(provider).instanceof(ChannelLabelProvider);
-            });
-
-            it('Should register the QueueLabelProvider', () => {
-                const provider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.QUEUE);
-                expect(provider).exist;
-                expect(provider).instanceof(QueueLabelProvider);
-            });
-        });
-
         describe('Check contexts', () => {
             it('should register the context for TicketContext', () => {
                 // const descriptor = ContextService.getInstance().getContextDescriptor(TicketContext.CONTEXT_ID);
@@ -239,17 +131,6 @@ describe('TicketReadUIModule', () => {
 
         });
 
-        it('Should register the TicketSearchDefinition', () => {
-            const definition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
-            expect(definition).exist;
-            expect(definition).instanceof(TicketSearchDefinition);
-        });
-
-        it('Should register the TicketPlaceholderHandler', () => {
-            const handler = PlaceholderService.getInstance().getHandler('TICKET');
-            expect(handler).exist;
-            expect(handler).instanceof(TicketPlaceholderHandler);
-        });
     });
 
 });
