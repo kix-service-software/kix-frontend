@@ -30,7 +30,7 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> {
     private tabTitles: Map<string, string>;
     private hideSidebar: boolean;
 
-    private inputId: string;
+    private containerId: string;
     private tabContainerPrefId: string;
 
     private keyDownEventFunction: () => null;
@@ -46,7 +46,7 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> {
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.contextType = input.contextType;
         this.hideSidebar = typeof input.hideSidebar !== 'undefined' ? input.hideSidebar : false;
-        this.inputId = input.id;
+        this.containerId = input.containerId;
         this.state.startAsMinimized = input.startAsMinimized ?? false;
         if (this.state.startAsMinimized) {
             this.state.showTabScrollers = false;
@@ -58,7 +58,7 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> {
 
         this.context.widgetService.setWidgetType('tab-widget', WidgetType.LANE);
 
-        this.tabContainerPrefId = `${this.context?.descriptor?.contextId}-${this.context?.getObjectId()}-${this.inputId}-activetab`;
+        this.tabContainerPrefId = `${this.context?.descriptor?.contextId}-${this.context?.getObjectId()}-${this.containerId}-activetab`;
         const tabId = ClientStorageService.getOption(this.tabContainerPrefId);
         if (this.state.tabWidgets.length) {
             const object = await this.context?.getObject();
