@@ -1766,7 +1766,7 @@
 │  ├─ url: https://bost.ocks.org/mike
 │  ├─ path: node_modules/d3-force
 │  └─ licenseFile: node_modules/d3-force/LICENSE
-├─ d3-format@3.1.1
+├─ d3-format@3.1.2
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/d3/d3-format
 │  ├─ publisher: Mike Bostock
@@ -3581,7 +3581,7 @@
 │  ├─ repository: https://github.com/prosemirror/prosemirror-transform
 │  ├─ path: node_modules/prosemirror-transform
 │  └─ licenseFile: node_modules/prosemirror-transform/LICENSE
-├─ prosemirror-view@1.41.4
+├─ prosemirror-view@1.41.5
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/prosemirror/prosemirror-view
 │  ├─ path: node_modules/prosemirror-view
@@ -4463,7 +4463,7 @@
 │  ├─ email: github@smayr.name
 │  ├─ path: node_modules/whatwg-url
 │  └─ licenseFile: node_modules/whatwg-url/LICENSE.txt
-├─ which-typed-array@1.1.19
+├─ which-typed-array@1.1.20
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/inspect-js/which-typed-array
 │  ├─ publisher: Jordan Harband
