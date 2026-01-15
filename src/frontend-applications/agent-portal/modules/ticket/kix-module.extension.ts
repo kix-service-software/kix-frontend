@@ -33,6 +33,17 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
                 new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE], true)
             ]
         ),
+        new UIComponent(
+            'ticket-ui-module-component',
+            '/kix-module-ticket$0/webapp/core/TicketUIModule',
+            [
+                new UIComponentPermission('tickets', [CRUD.READ]),
+                new UIComponentPermission('system/ticket/queues', [CRUD.READ], true),
+                new UIComponentPermission('system/ticket/types', [CRUD.READ], true),
+                new UIComponentPermission('system/ticket/states', [CRUD.READ], true),
+                new UIComponentPermission('system/ticket/priorities', [CRUD.READ], true)
+            ]
+        ),
         new UIComponent('ticket-read-module-component', '/kix-module-ticket$0/webapp/core/TicketReadUIModule',
             [
                 new UIComponentPermission('tickets', [CRUD.READ])
