@@ -15,7 +15,6 @@ import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 import { FormLayoutFontSize } from '../../../model/layout/FormLayoutFontSize';
 import { ObjectFormEventData } from '../../../model/ObjectFormEventData';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
-import { ObjectFormConfigurationContext } from '../../core/ObjectFormConfigurationContext';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {

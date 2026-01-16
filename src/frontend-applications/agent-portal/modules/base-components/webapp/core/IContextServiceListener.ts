@@ -13,7 +13,7 @@ import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 
 export interface IContextServiceListener {
 
-    constexServiceListenerId: string;
+    contextServiceListenerId: string;
 
     contextChanged(
         contextId: string, context: Context, type: ContextType, history: boolean, oldContext: Context

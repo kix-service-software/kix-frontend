@@ -8,38 +8,17 @@
  */
 
 /* eslint-disable max-lines-per-function */
-/**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
- * --
- * This software comes with ABSOLUTELY NO WARRANTY. For details, see
- * the enclosed file LICENSE for license information (GPL3). If you
- * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
- * --
- */
 
 import { ComponentState } from './ComponentState';
-import { ContextType } from '../../../../../model/ContextType';
-import { Context } from '../../../../../model/Context';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { RoutingService } from '../../../../../modules/base-components/webapp/core/RoutingService';
-import { AuthenticationSocketClient } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
-import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
-import { ClientNotificationSocketClient } from '../../../../notification/webapp/core/ClientNotificationSocketClient';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
-import { MobileShowEvent } from '../../../model/MobileShowEvent';
-import { MobileShowEventData } from '../../../model/MobileShowEventData';
-import { ContextHistory } from '../../../../base-components/webapp/core/ContextHistory';
 import { IKIXModuleExtension } from '../../../../../model/IKIXModuleExtension';
-import { KIXStyle } from '../../../../base-components/model/KIXStyle';
-import { PortalNotificationService } from '../../../../portal-notification/webapp/core/PortalNotificationService';
-import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { AgentPortalService } from '../../core/AgentPortalService';
+import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
-
-    public state: ComponentState;
 
     private modules: IKIXModuleExtension[];
 
@@ -60,77 +39,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        // set base for relative links
-        this.setBaseLink();
         const start = Date.now();
 
         this.state.loading = true;
         this.state.loadingHint = 'Loading';
 
-        await this.checkAuthentication();
+        await AgentPortalService.initApplication(this.modules);
 
-        await ContextService.getInstance().initialize();
-        ClientNotificationSocketClient.getInstance();
-        PortalNotificationService.getInstance();
-        ContextHistory.getInstance();
-        BrowserUtil.handleBeforeUnload();
-
-        const startInitModules = Date.now();
-        await KIXModulesService.getInstance().init(this.modules);
-        const endInitModules = Date.now();
-        console.debug(`modules initialization finished: ${endInitModules - startInitModules}ms`);
-
-        ContextService.getInstance().registerListener({
-            constexServiceListenerId: 'BASE-TEMPLATE',
-            contextChanged: (contextId: string, context: Context, type: ContextType) => {
-                this.resizeHandling();
-            },
-            contextRegistered: () => { return; },
-            beforeDestroy: () => null
-        });
-
-        super.registerEventSubscriber(
-            function (data: any, eventId: string): void {
-                this.state.loading = data.loading;
-                this.state.loadingHint = data.hint;
-            },
-            [ApplicationEvent.APP_LOADING]
-        );
-
-        super.registerEventSubscriber(
-            function (data: any, eventId: string): void {
-                this.state.reload = true;
-
-                setTimeout(() => {
-                    this.state.reload = false;
-                }, 25);
-            },
-            [ApplicationEvent.REFRESH]
-        );
-
-        super.registerEventSubscriber(
-            function (data, eventId: MobileShowEvent | string): void {
-                if (data === MobileShowEventData.SHOW_MAIN_MENU) {
-                    this.state.activeMobile = 1;
-                }
-                else if (data === MobileShowEventData.SHOW_LEFT_SIDEBAR) {
-                    this.state.activeMobile = 2;
-                }
-                else if (data === MobileShowEventData.SHOW_RIGHT_SIDEBAR) {
-                    this.state.activeMobile = 3;
-                }
-                else if (data) {
-                    this.state.activeMobile = 4;
-                }
-                else {
-                    this.state.activeMobile = null;
-                }
-            },
-            [MobileShowEvent.SHOW_MOBILE]
-        );
-
-        window.addEventListener('resize', this.resizeHandling.bind(this), false);
+        this.registerListener();
 
         RoutingService.getInstance().routeToInitialContext(true);
 
@@ -142,30 +58,26 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         console.debug(`mount base template: ${end - start} ms.`);
     }
 
-    private setBaseLink(): void {
-        if (window?.location?.origin) {
-            const head = document.getElementsByTagName('head');
-            if (head && head[0]) {
-                const base = document.createElement('base');
-                base.href = window?.location?.origin;
-                head[0].appendChild(base);
-            }
-        }
-    }
-
     public onDestroy(): void {
         super.onDestroy();
-        window.removeEventListener('resize', this.resizeHandling.bind(this), false);
     }
 
-    private async checkAuthentication(): Promise<void> {
-        if (!AuthenticationSocketClient.getInstance().validateToken()) {
-            window.location.replace('/auth');
-        }
-    }
+    private registerListener(): void {
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
+                this.state.loading = data.loading;
+                this.state.loadingHint = data.hint;
+            },
+            [ApplicationEvent.APP_LOADING]
+        );
 
-    private resizeHandling(): void {
-        this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
+                this.state.applicationTemplate = KIXModulesService.getComponentTemplate(data?.componentId);
+                this.state.applicationTemplateData = data?.data || {};
+            },
+            [ApplicationEvent.SWITCH_APPLICATION_TEMPLATE]
+        );
     }
 }
 

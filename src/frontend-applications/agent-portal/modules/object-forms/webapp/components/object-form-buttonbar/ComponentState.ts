@@ -15,7 +15,8 @@ export class ComponentState extends AbstractComponentState {
         public prepared: boolean = false,
         public canSubmit: boolean = true,
         public submitPattern: string = 'Translatable#Save',
-        public blocked: boolean = false
+        public blocked: boolean = false,
+        public canCancel: boolean = true
     ) {
         super();
     }

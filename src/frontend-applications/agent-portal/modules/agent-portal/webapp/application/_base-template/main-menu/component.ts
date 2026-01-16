@@ -33,7 +33,7 @@ class Component extends AbstractMarkoComponent {
         await super.onMount();
 
         ContextService.getInstance().registerListener({
-            constexServiceListenerId: 'main-menu-listener',
+            contextServiceListenerId: 'main-menu-listener',
             contextChanged: (contextId: string, newContext: Context, type: ContextType) => {
                 if (type === ContextType.MAIN) {
                     this.setActiveMenuEntry(newContext);
