@@ -73,6 +73,8 @@ export class ContextService {
 
     private componentContextMap: object = new Object();
 
+    private _allowedContextIds: string[] = [];
+
     public async initialize(): Promise<void> {
         this.contextRefreshInterval = new ContextRefreshInterval();
         await this.contextRefreshInterval.initialize();
@@ -83,6 +85,14 @@ export class ContextService {
             this.contextDescriptorList.push(contextDescriptor);
             this.serviceListener.forEach((l) => l.contextRegistered(contextDescriptor));
         }
+    }
+
+    public set allowedContextIds(contextIds: string[]) {
+        this._allowedContextIds = contextIds || [];
+    }
+
+    public get allowedContextIds(): string[] {
+        return this._allowedContextIds || [];
     }
 
     public async initUserContextInstances(): Promise<void> {
@@ -152,6 +162,12 @@ export class ContextService {
             }
         }
         return context;
+    }
+
+    public findContextInstance(contextId: string, objectId: string | number): Context {
+        return this.contextInstances.find(
+            (ci) => ci.contextId === contextId && ci.getObjectId()?.toString() === objectId?.toString()
+        );
     }
 
     private isStorableDialogContext(context: Context): boolean {
@@ -367,10 +383,16 @@ export class ContextService {
         return context;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async setContextByInstanceId(
         instanceId: string, objectId?: string | number, history: boolean = true
     ): Promise<Context> {
         const context = this.contextInstances.find((i) => i.instanceId === instanceId);
+
+        if (this._allowedContextIds?.length && !this._allowedContextIds.some((c) => c === context.contextId)) {
+            return null;
+        }
+
         const hint = await TranslationService.translate('Translatable#Loading ...');
 
         BrowserUtil.toggleLoadingShield(
@@ -734,7 +756,7 @@ export class ContextService {
 
     // TODO: OBSOLOTE: Do not use listener concept. Use EventService
     public registerListener(listener: IContextServiceListener): void {
-        this.serviceListener.set(listener.constexServiceListenerId, listener);
+        this.serviceListener.set(listener.contextServiceListenerId, listener);
     }
 
     public unregisterListener(listenerId: string): void {

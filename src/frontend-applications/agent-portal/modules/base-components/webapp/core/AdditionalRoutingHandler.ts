@@ -13,6 +13,6 @@ export abstract class AdditionalRoutingHandler {
         public priority: number = 0
     ) { }
 
-    public abstract handleRouting(): Promise<boolean>;
+    public abstract handleRouting(url?: string): Promise<boolean>;
 
 }

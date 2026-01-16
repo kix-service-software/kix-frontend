@@ -8,61 +8,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <div class=[
-    "app-wrapper",
     {
+        "app-wrapper": !state.applicationTemplate,
         blur: state.activeMobile,
     },
 ]>
     <if(state.initialized)>
-        <if(!state.reload)>
-            <div class="header-wrapper">
-                <kix-header baseRoute=input.baseRoute/>
-                <if(!state.isMobile)>
-                    <tabbar/>
-                </if>
-            </div>
-            <div active=state.activeMobile === 1 class="main-menu-wrapper">
-                <main-menu/>
-            </div>
+        <if(state.applicationTemplate)>
+            <${state.applicationTemplate} ...state.applicationTemplateData/>
         </if>
-        <div
-            active=state.activeMobile === 2
-            class="sidebar-left-wrapper"
-            style="max-width: 29.5rem">
-            <sidebar isLeft/>
-        </div>
-        <div class="content-wrapper mt-3">
-            <router-outlet id="base-router"/>
-        </div>
-        <div
-            active=state.activeMobile === 3
-            class="sidebar-right-wrapper"
-            style="max-width: 29.5rem">
-            <sidebar/>
-        </div>
-        <if(!state.reload)>
-            <div class="footer-wrapper row">
-                <kix-footer/>
-            </div>
-            <image-viewer/>
-            <overlay/>
-            <if(state.isMobile)>
-                <if(state.activeMobile === 4)>
-                    <div active class="mobile-toolbar-wrapper">
-                        <div class="application-toolbar-wrapper">
-                            <application-toolbar/>
-                        </div>
-                        <div class="search-object-dropdown-wrapper">
-                            <search-object-dropdown/>
-                        </div>
-                        <div class="personal-toolbar-wrapper">
-                            <personal-toolbar/>
-                        </div>
-                    </div>
-                </if>
-                <mobile-shields/>
-            </if>
-        </if>
+        <else>
+            <agent-portal-template ...input/>
+        </else>
     </if>
     <loading-shield shieldId="APP_SHIELD"/>
     <if(state.loading)>

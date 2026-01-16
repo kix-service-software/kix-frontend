@@ -44,6 +44,8 @@ export class KIXModulesService {
     private uiModules: IUIModule[] = [];
 
     public async init(modules: IKIXModuleExtension[]): Promise<void> {
+        const startInitModules = Date.now();
+
         this.tags = new Map();
         this.modules = modules;
         this.modules.forEach((m) => {
@@ -53,6 +55,9 @@ export class KIXModulesService {
         this.loadModules();
         await this.registerModules();
         await this.registerModuleExtensions();
+
+        const endInitModules = Date.now();
+        console.debug(`modules initialization finished: ${endInitModules - startInitModules}ms`);
     }
 
     private loadModules(): void {

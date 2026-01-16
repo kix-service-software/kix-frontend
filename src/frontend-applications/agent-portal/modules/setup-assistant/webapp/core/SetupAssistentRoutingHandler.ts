@@ -28,7 +28,7 @@ export class SetupAssistentRoutingHandler extends AdditionalRoutingHandler {
             routed = await this.routeToSetupAssistant();
             if (!routed) {
                 ContextService.getInstance().registerListener({
-                    constexServiceListenerId: 'SetupAssistentRoutingHandlerListener',
+                    contextServiceListenerId: 'SetupAssistentRoutingHandlerListener',
                     contextChanged: () => null,
                     contextRegistered: (descriptor: ContextDescriptor) => {
                         if (descriptor.contextId === AdminContext.CONTEXT_ID) {

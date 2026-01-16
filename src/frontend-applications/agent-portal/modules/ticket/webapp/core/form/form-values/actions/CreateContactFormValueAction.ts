@@ -55,7 +55,7 @@ export class CreateContactFormValueAction extends FormValueAction {
         );
 
         ContextService.getInstance().registerListener({
-            constexServiceListenerId: this.contextListenerId,
+            contextServiceListenerId: this.contextListenerId,
             beforeDestroy: async (context: NewContactDialogContext): Promise<void> => {
                 if (context.instanceId === newContactContext.instanceId) {
                     this.setContactId(context.contactId);

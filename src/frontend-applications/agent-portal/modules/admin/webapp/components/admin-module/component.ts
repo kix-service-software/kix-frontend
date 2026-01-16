@@ -28,7 +28,7 @@ class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
         await super.onMount();
 
         ContextService.getInstance().registerListener({
-            constexServiceListenerId: 'admin-module-context-service-listener',
+            contextServiceListenerId: 'admin-module-context-service-listener',
             contextChanged: (contextId: string, c: AdminContext, type: ContextType, history: boolean) => {
                 if (contextId === AdminContext.CONTEXT_ID && c.adminModuleId) {
                     this.moduleChanged();

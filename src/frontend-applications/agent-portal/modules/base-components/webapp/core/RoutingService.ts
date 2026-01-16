@@ -45,13 +45,9 @@ export class RoutingService {
         await ContextService.getInstance().initUserContextInstances();
 
         let routed: boolean = false;
+
         if (useURL) {
             routed = await this.routeToURL(history);
-        }
-
-        const routingHandler = this.additionalRoutingHandler.sort((a, b) => a.priority - b.priority);
-        for (const handler of routingHandler) {
-            routed = await handler.handleRouting() || routed;
         }
 
         if (!routed) {
@@ -115,13 +111,38 @@ export class RoutingService {
 
     public async routeToURL(history: boolean = false, url?: string): Promise<boolean> {
         let routed: boolean = false;
+
+        const routingHandler = this.additionalRoutingHandler.sort((a, b) => a.priority - b.priority);
+        for (const handler of routingHandler) {
+            routed = await handler.handleRouting(url) || routed;
+        }
+
+        if (!routed) {
+            const { contextUrl, objectId, urlParams } = RoutingService.getRouteOptions(url);
+
+            if (contextUrl !== '') {
+                routed = await this.handleURLParams(urlParams, contextUrl, history);
+
+                if (!routed) {
+                    const context = await ContextService.getInstance().setContextByUrl(
+                        contextUrl, objectId, urlParams, history
+                    );
+                    if (context) {
+                        routed = true;
+                    }
+                }
+            }
+        }
+
+        return routed;
+    }
+
+    public static getRouteOptions(url?: string): any {
         const parsedUrl = new URL(url || window.location.href);
         const urlParams = parsedUrl.searchParams;
 
-        const prefixLength = KIXModulesService.urlPrefix.length;
-        const pathName = parsedUrl.pathname.substring(prefixLength + 1, parsedUrl.pathname.length);
+        const pathName = parsedUrl.pathname;
         const path = parsedUrl.pathname === '/' ? [] : this.removeEmptyPaths(pathName.split('/'));
-
         let contextUrl: string;
         let objectId: string;
 
@@ -133,23 +154,10 @@ export class RoutingService {
             objectId = path[1];
         }
 
-        if (contextUrl && contextUrl !== '') {
-            routed = await this.handleURLParams(urlParams, contextUrl, history);
-
-            if (!routed) {
-                const context = await ContextService.getInstance().setContextByUrl(
-                    contextUrl, objectId, urlParams, history
-                );
-                if (context) {
-                    routed = true;
-                }
-            }
-        }
-
-        return routed;
+        return { contextUrl, objectId, urlParams };
     }
 
-    private removeEmptyPaths(path: string[]): string[] {
+    private static removeEmptyPaths(path: string[]): string[] {
         path.forEach((p, i) => {
             if (!p) {
                 path.splice(i, 1);
