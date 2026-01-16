@@ -160,7 +160,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.lastContentWidth = actionListElement.scrollWidth;
 
         this.observer = new ResizeObserver(() => {
-            if (!this.actionsToShow || !this.actionsToShow.length) {
+            if (!this.actionsToShow || !this.actionsToShow.length || this.actionPreparationRunning) {
                 return;
             }
 
@@ -179,15 +179,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
 
             const wrapperChanged = wrapperWidth !== this.lastWrapperWidth;
+            const growCheck = 5;
             const contentGrew = contentWidth > this.lastContentWidth &&
-                contentWidth > wrapperWidth + 1;
+                contentWidth > wrapperWidth + growCheck;
 
             this.lastWrapperWidth = wrapperWidth;
             this.lastContentWidth = contentWidth;
-
-            if (this.actionPreparationRunning) {
-                return;
-            }
 
             if (wrapperChanged || contentGrew) {
                 actionListElement.classList.add('opacity-0');
