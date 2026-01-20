@@ -9,7 +9,6 @@
 
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { DynamicFieldFormUtil } from '../../../../../base-components/webapp/core/DynamicFieldFormUtil';
-import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { DynamicFieldChecklistFormValue } from '../../../../model/FormValues/DynamicFields/DynamicFieldChecklistFormValue';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
@@ -55,11 +54,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             },
             [ObjectFormEvent.BLOCK_FORM]
         );
-
-        this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#checklist progress'
-        ]);
-
     }
 
     public onDestroy(): void {
