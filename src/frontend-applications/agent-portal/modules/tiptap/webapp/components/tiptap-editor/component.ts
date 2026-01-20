@@ -353,7 +353,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 editable: !comp.readOnly,
 
                 editorProps: {
-                    attributes: { class: 'tiptap-editor-body' },
+                    attributes: { class: 'tiptap-editor-body', style: 'overflow-x: scroll;' },
 
                     handleDrop(view: any, event: DragEvent): boolean {
                         const fileList = event.dataTransfer?.files || null;
@@ -379,6 +379,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     handlePaste(view: any, event: ClipboardEvent): boolean {
                         const cd = event.clipboardData || null;
                         const list = cd?.items;
+
+                        const html = cd?.getData('text/html') || '';
+
+                        if (html && /<table[\s>]/i.test(html)) {
+                            return false;
+                        }
 
                         if (list && list.length) {
                             const items: DataTransferItem[] = Array.from(list);
@@ -406,7 +412,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                             }
                         }
 
-                        const html = cd?.getData('text/html') || '';
                         if (html && html.includes('<img')) {
                             event.preventDefault();
 
