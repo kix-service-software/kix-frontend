@@ -18,7 +18,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 "col-sm-9": state.item.input === "ChecklistState",
             },
         ]>
-            <span id=`${state.id}-label` class="text-truncate">
+            <span class="text-truncate">
                 ${state.item.title}
             </span>
         </div>
@@ -30,8 +30,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 disabled=input.readonly
                 on-change("valueChanged")
                 class="form-control"
-                aria-labelledby=`${state.id}-label`
-                aria-describedby=`${state.id}-description`
             >
         </if>
         <else-if(state.item.input === "TextArea")>
@@ -42,8 +40,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 disabled=input.readonly
                 on-change("valueChanged")
                 class="form-control"
-                aria-labelledby=`${state.id}-label`
-                aria-describedby=`${state.id}-description`
             >${state.item.value}</textarea>
         </else-if>
         <else>
@@ -59,8 +55,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     data-bs-toggle=!input.readonly && "dropdown"
                     aria-expanded="false"
                     class="select-input-row"
-                    aria-labelledby=`${state.id}-label`
-                    aria-describedby=`${state.id}-description`
                 >
                     <div class="form-control select-input-container">
                         <ul class="list-group list-group-horizontal">
@@ -80,7 +74,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <button
                             type="button"
                             class="btn btn-outline-secondary dropdown-toggle"
-                            aria-label=state.translations["Translatable#show dropdown"]
                         />
                     </if>
                 </div>
@@ -106,7 +99,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             />
         </div>
     </if>
-    <span id=`${state.id}-description` class="ps-2 pe-2">
+    <span class="ps-2 pe-2">
         <i>${state.item.description}</i>
     </span>
     <if(Array.isArray(state.item.sub))>
