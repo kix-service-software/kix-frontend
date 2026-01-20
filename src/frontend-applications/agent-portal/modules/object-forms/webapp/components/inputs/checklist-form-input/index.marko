@@ -17,7 +17,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         data-bs-toggle="collapse"
                         data-bs-target=`#${state.checklistId}-content`
                         aria-expanded="true"
-                        aria-controls=`#${state.checklistId}-content`
+                        aria-controls=`${state.checklistId}-content`
                     >
                         <div.progress.w-100>
                             <div.progress-bar
@@ -26,6 +26,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 aria-valuenow=state.progressValue
                                 aria-valuemin="0"
                                 aria-valuemax="100"
+                                aria-label=state.translations["Translatable#checklist progress"]
                             >
                                 ${state.progressValue}%
                             </div>
@@ -35,7 +36,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </h2>
                 <div.accordion-collapse.collapse.show
                     id=`${state.checklistId}-content`
-                    aria-labelledby="headingOne"
+                    aria-labelledby=input.labelId
                     data-bs-parent=`#${state.checklistId}`
                 >
                     <div.accordion-body>
