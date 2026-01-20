@@ -7,12 +7,10 @@
  * --
  */
 
-import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { SysConfigService } from '../../../../sysconfig/webapp/core';
 import { Column } from '../../../model/Column';
 import { Row } from '../../../model/Row';
 import { Table } from '../../../model/Table';
@@ -48,7 +46,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async init(table: Table): Promise<void> {
         await table.initialize(false);
-        this.setTableHeight();
+        await this.setTableHeight();
     }
 
     public async onMount(): Promise<void> {
@@ -130,23 +128,23 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }, 500);
     }
 
-    public setTableHeight(): void {
+    private setTableHeight(): void {
         const tableConfiguration = this.state.table?.getTableConfiguration();
 
-        let height: number = null;
+        const allRows: Row[] = this.state.table?.getRows(false) || [];
+        if (allRows.length === 0) {
+            this.state.tableStyle = 'height: auto;';
+            return;
+        }
 
         const container: HTMLElement = (this as any).getEl(
             this.state.table?.getTableId() + 'table-container'
         );
-
-        const allRows: Row[] = this.state.table?.getRows(false) || [];
-        if (allRows.length === 0) {
-            this.state.tableHeight = 'auto';
-            return;
-        }
+        let maxheight: number = null;
 
         if (container) {
             const widgetFrame = container.closest('.widget-frame') as HTMLElement;
+
             const isHomeDashboard = Boolean(
                 widgetFrame?.id && widgetFrame.id.indexOf('widget-frame-home-dashboard-') === 0
             );
@@ -165,34 +163,46 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const bottomGap = 16;
                 const availableHeight = bottomLimit - rect.top - bottomGap;
                 if (availableHeight > 0) {
-                    height = availableHeight;
+                    maxheight = availableHeight;
                 }
             }
-        }
 
-        if (height === null && tableConfiguration?.displayLimit) {
-            const rows = this.state.table.getRows(false);
-            const displayLimit = tableConfiguration.displayLimit;
+            const isReportingContext = this.context.getConfiguration()?.id === 'reporting';
 
-            if (rows && rows.length > displayLimit) {
-
-                const headerRowHeight = this.browserFontSize * Number(tableConfiguration.headerHeight);
-
-                const rowHeight = this.browserFontSize * Number(tableConfiguration.rowHeight);
-                let calcHeight = (displayLimit * rowHeight) + headerRowHeight;
-
-                const expandedRowHeight = (31.5 + 10) / 2 * this.browserFontSize;
-                const expandedRowCount = rows.filter((r) => r.isExpanded()).length;
-                calcHeight = calcHeight + (expandedRowCount * expandedRowHeight);
-
-                height = calcHeight;
+            if (isReportingContext) {
+                // gap is the gap between tables
+                // with the x2 at the end because of the height of the second widget's header
+                const gap = this.browserFontSize * Number(tableConfiguration.rowHeight) * 2;
+                this.state.tableStyle = `height: auto; max-height: ${(maxheight - gap) / 2}px;`;
+                return;
             }
         }
 
-        if (height !== null) {
-            this.state.tableHeight = height + 'px';
+        const rows = this.state.table.getRows(false);
+        const displayLimit = tableConfiguration?.displayLimit;
+
+        let maxHeightByDisplayLimit = maxheight ?? 2000;
+        const isAdminContext = this.context.getConfiguration()?.id === 'admin';
+        if (!isAdminContext) {
+            const headerRowHeight = this.browserFontSize * Number(tableConfiguration.headerHeight) + 2;
+
+            const rowHeight = this.browserFontSize * Number(tableConfiguration.rowHeight);
+            maxHeightByDisplayLimit = (displayLimit * rowHeight) + headerRowHeight;
+
+            const expandedRowHeight = (rowHeight + 10) / 2 * this.browserFontSize;
+            const expandedRowCount = rows.filter((r) => r.isExpanded()).length;
+
+            // The 0.5 * this.browserFontSize is accounting for the padding on the bottom of the table
+            maxHeightByDisplayLimit =
+                maxHeightByDisplayLimit + (expandedRowCount * expandedRowHeight) + 0.5 * this.browserFontSize;
+        }
+
+        maxheight = isNaN(maxheight) ? maxHeightByDisplayLimit : Math.min(maxheight, maxHeightByDisplayLimit);
+
+        if (maxheight > 0) {
+            this.state.tableStyle = `height: auto; max-height: ${maxheight}px;`;
         } else {
-            this.state.tableHeight = '100%';
+            this.state.tableStyle = 'height: auto;';
         }
     }
 
