@@ -3536,7 +3536,7 @@
 │  ├─ repository: https://github.com/prosemirror/prosemirror-keymap
 │  ├─ path: node_modules/prosemirror-keymap
 │  └─ licenseFile: node_modules/prosemirror-keymap/LICENSE
-├─ prosemirror-markdown@1.13.2
+├─ prosemirror-markdown@1.13.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/prosemirror/prosemirror-markdown
 │  ├─ path: node_modules/prosemirror-markdown
