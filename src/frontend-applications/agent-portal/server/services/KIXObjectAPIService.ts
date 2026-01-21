@@ -397,7 +397,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
         else {
             // triggers the deletion of associated tags for the deleted object
-            await this.commitObjectTag(token, clientRequestId, null, objectType, objectId)
+            await this.commitObjectTag(token, clientRequestId, [], objectType, objectId)
                 .catch(() => {
                     // be silent
                 });
