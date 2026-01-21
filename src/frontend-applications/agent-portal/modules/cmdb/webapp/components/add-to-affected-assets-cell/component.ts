@@ -43,6 +43,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const ticket = await this.context?.getObject<Ticket>();
         if (this.context?.descriptor?.contextMode === ContextMode.DETAILS) {
             this.state.readonly = true;
+            this.state.title = await TranslationService.translate('Translatable#Add to Affected Assets');
         } else {
             const formHandler = await this.context?.getFormManager().getObjectFormHandler();
             this.formValue = formHandler?.objectFormValueMapper?.findFormValue('DynamicField.AffectedAsset');
@@ -55,6 +56,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (affectedAssetsDF) {
             this.setStates(affectedAssetsDF.Value);
         }
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Available in Edit'
+        ]);
+
     }
 
     private async setStates(value: any): Promise<void> {

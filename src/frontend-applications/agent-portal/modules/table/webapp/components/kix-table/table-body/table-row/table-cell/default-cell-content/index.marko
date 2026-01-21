@@ -19,6 +19,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         height: input.height,
     }
     title=(state.cell.getValue() ? state.cell.getDisplayValue() : "")
+    aria-label=(state.cell.getValue() ? state.cell.getDisplayValue() : "")
 >
     <if(state.showIcons && state.cell && state.cell.getValue().displayIcons)>
         <span>

@@ -23,12 +23,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div
             id=id
             class="accordion-collapse collapse show"
+            role="document"
             aria-labelledby=id + "header">
             <div class="accordion-body">
                 <iframe-content
                     html=(state.html[id])
                     sanboxAttributes=["allow-popups"]
-                    calculateHeight/>
+                    calculateHeight
+                    title=title/>
             </div>
         </div>
     </div>

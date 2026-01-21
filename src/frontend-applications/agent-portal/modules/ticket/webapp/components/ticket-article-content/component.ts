@@ -12,8 +12,7 @@ import { Article } from '../../../model/Article';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
-import { Context } from '../../../../../model/Context';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
     private resizeTimeout: ReturnType<typeof setTimeout> = null;
@@ -40,6 +39,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await super.onMount();
 
         setTimeout(() => this.prepareObserver(), 50);
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Article content'
+        ]);
     }
 
     public onDestroy(): void {
