@@ -3576,7 +3576,7 @@
 │  ├─ repository: https://github.com/remirror/remirror
 │  ├─ path: node_modules/prosemirror-trailing-node
 │  └─ licenseFile: node_modules/prosemirror-trailing-node/LICENSE
-├─ prosemirror-transform@1.10.5
+├─ prosemirror-transform@1.11.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/prosemirror/prosemirror-transform
 │  ├─ path: node_modules/prosemirror-transform
