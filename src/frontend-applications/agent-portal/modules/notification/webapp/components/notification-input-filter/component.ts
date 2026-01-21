@@ -37,6 +37,9 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        // do it now (check after tab change)
+        this.handleArticleProperties();
     }
 
     protected async prepareMount(): Promise<void> {
@@ -45,9 +48,6 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
         await this.setManager();
 
         super.registerEventSubscriber(this.handleArticleProperties, [FormEvent.VALUES_CHANGED]);
-
-        // do it now (check after tab change)
-        this.handleArticleProperties();
     }
 
     private async handleArticleProperties(): Promise<void> {

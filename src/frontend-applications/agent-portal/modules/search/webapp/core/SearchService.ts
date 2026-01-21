@@ -362,6 +362,9 @@ export class SearchService {
         let context;
         if (setContext) {
             context = await this.setSearchContext(objectType);
+            // set search cache yet, so criteria widget has is on initialisation
+            // else fulltext could be missing (after cache delete)
+            context.setSearchCache(searchCache);
         }
 
         const objects = await this.searchObjects(
