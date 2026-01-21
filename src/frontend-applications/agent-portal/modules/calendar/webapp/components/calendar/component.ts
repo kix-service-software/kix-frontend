@@ -103,6 +103,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
         this.updateTimeout = setTimeout(async () => {
             this.state.calendars = await this.calendarInstance.init();
+            this.state.currentDate = this.calendarInstance.currentDate;
             this.updateTimeout = null;
         }, 300);
     }
@@ -112,6 +113,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.calendarInstance.view = this.state.view;
         this.state.toggleLabel = this.state.view === 'month' ? 'Translatable#Week' : 'Translatable#Month';
         await this.calendarInstance.setCurrentDate(true);
+        this.state.currentDate = this.calendarInstance.currentDate;
     }
 
     public async today(): Promise<void> {
@@ -119,6 +121,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.calendarInstance.setCalendarDate(new Date());
             this.calendarInstance.changeView(this.state.view);
             await this.calendarInstance.setCurrentDate(true);
+            this.state.currentDate = this.calendarInstance.currentDate;
         }
     }
 
@@ -126,6 +129,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.calendarInstance.ready()) {
             this.calendarInstance.next();
             await this.calendarInstance.setCurrentDate(true);
+            this.state.currentDate = this.calendarInstance.currentDate;
         }
     }
 
@@ -133,6 +137,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.calendarInstance.ready()) {
             this.calendarInstance.prev();
             await this.calendarInstance.setCurrentDate(true);
+            this.state.currentDate = this.calendarInstance.currentDate;
         }
     }
 
