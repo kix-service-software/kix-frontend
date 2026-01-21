@@ -76,7 +76,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 for (const cv of currentValues) {
                     const existingValue = this.state.dynamicValues.find((bv) => bv.value.id === cv.id);
                     if (existingValue) {
-
                         if (existingValue.value.operator !== cv.operator) {
                             await existingValue.setOperator(cv.operator, true);
                         }
@@ -124,7 +123,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     toRemove.forEach((p) => this.removeValue(p, false));
                 }
 
-                this.state.dynamicValues = this.state.dynamicValues.sort((a, b) => a.required ? -1 : 0);
+                // keep required values on top
+                this.state.dynamicValues = this.state.dynamicValues.sort((a, b) =>
+                    a.required && !b.required ? -1 :
+                        !a.required && b.required ? 1 : 0
+                );
 
                 await this.addEmptyValue();
 
@@ -158,33 +161,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.manager) {
             this.manager.init();
 
-            const initPromises = [];
-            const values: DynamicFormFieldValue[] = [];
-            for (const v of this.manager.getValues()) {
-                const formFieldValue = new DynamicFormFieldValue(
-                    this.manager,
-                    new ObjectPropertyValue(
-                        v.property, v.operator, v.value, v.options, v.required, v.valid,
-                        v.objectType, v.readonly, v.changeable, v.id, v.additionalOptions,
-                        v.validErrorMessages, v.hint, v.locked, v.valueChangeable
-                    ),
-                    v.id
-                );
-                initPromises.push(formFieldValue.init());
-                values.push(formFieldValue);
-            }
-
-            await Promise.all(initPromises);
-
-            values.forEach((v) => this.advancedOptionsMap.set(v.instanceId, false));
-
-            this.state.dynamicValues = values.sort((a, b) => a.required ? -1 : 0);
-
             this.state.options = await this.manager.getFieldOptions();
 
             this.state.hasAdditionalOptions = this.manager.hasAdditionalOptions();
 
-            await this.addEmptyValue();
+            await this.updateValues();
         }
     }
 
