@@ -18,21 +18,15 @@ export function stripCkWrapperEverywhere(html: string | undefined | null): strin
         const tmp = document.createElement('div');
         tmp.innerHTML = html;
 
-        const ck = tmp.querySelector('[class~="ck"][class~="ck-content"]') as HTMLElement | null;
-        if (ck) return ck.innerHTML || '<p></p>';
-
-        const all = tmp.querySelectorAll('[class]');
+        const all = tmp.querySelectorAll('[class~="ck"][class~="ck-content"]');
         for (let i = 0; i < all.length; i++) {
             const el = all.item(i);
             if (!(el instanceof HTMLElement)) continue;
 
-            const cls = el.getAttribute('class') || '';
-            const hasCk = /\bck\b/.test(cls);
-            const hasCkContent = /\bck-content\b/.test(cls);
-            if (hasCk && hasCkContent) return el.innerHTML || '<p></p>';
+            el.outerHTML = el.innerHTML || '<p></p>';
         }
 
-        return html;
+        return tmp.innerHTML;
     } catch {
         return html || '<p></p>';
     }
@@ -45,9 +39,6 @@ export function extractEditorFragment(html: string | undefined | null): string {
 
     const stripped = stripCkWrapperEverywhere(html);
     if (stripped !== html) return stripped;
-
-    const ck = tmp.querySelector('.ck.ck-content');
-    if (ck) return (ck as HTMLElement).innerHTML;
 
     const body = tmp.querySelector('body');
     if (body) return (body as HTMLElement).innerHTML;
