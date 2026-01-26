@@ -251,7 +251,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         const { from, to } = this.editor.state.selection;
 
-        this.editor.commands.setContent(normalizeForTiptap(newValue), false);
+        this.editor.commands.setContent(normalizeForTiptap(newValue), false, { preserveWhitespace: 'full' });
 
         const size = this.editor.state.doc.content.size;
         const safeFrom = Math.min(from, size);
