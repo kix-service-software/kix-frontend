@@ -36,6 +36,8 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     private observer: IntersectionObserver;
     private resizeObserver: ResizeObserver;
 
+    private preventToggleArticle: boolean;
+
     public onCreate(input: any): void {
         super.onCreate(input, 'ticket-communication-widget/message-content');
         this.state = new ComponentState();
@@ -262,13 +264,21 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
         );
     }
 
+    public doNotToggleArticle(): void {
+        this.preventToggleArticle = true;
+    }
+
     public async toggleArticle(forceOpen?: boolean): Promise<void> {
-        if (forceOpen) {
-            this.toggleArticleContent();
-            this.state.articleExpanded = true;
-        } else if (!await BrowserUtil.isTextSelected()) {
-            this.toggleArticleContent();
-            this.state.articleExpanded = !this.state.articleExpanded;
+        if (this.preventToggleArticle) {
+            this.preventToggleArticle = false;
+        } else {
+            if (forceOpen) {
+                this.toggleArticleContent();
+                this.state.articleExpanded = true;
+            } else if (!await BrowserUtil.isTextSelected()) {
+                this.toggleArticleContent();
+                this.state.articleExpanded = !this.state.articleExpanded;
+            }
         }
     }
 

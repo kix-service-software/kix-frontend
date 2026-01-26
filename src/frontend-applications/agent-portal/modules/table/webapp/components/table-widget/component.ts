@@ -78,9 +78,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.useContext) {
             this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         }
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Show filter', 'Translatable#Table'
+        ]);
 
         if (this.state.widgetConfiguration?.configuration) {
             const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
+
+            const configuredWidget = await this.context?.getConfiguredWidget(this.state.instanceId);
+            this.state.isLarge = configuredWidget?.size === WidgetSize.LARGE;
 
             await this.initViews(settings?.objectType);
 
@@ -101,8 +107,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initViews(objectType: KIXObjectType | string): Promise<void> {
-        const configuredWidget = await this.context?.getConfiguredWidget(this.state.instanceId);
-        if (configuredWidget?.size === WidgetSize.SMALL) {
+        if (!this.state.isLarge) {
             return;
         }
 
@@ -507,13 +512,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private setFilteredObjectListToContext(): void {
         const filteredObjects = this.state.table?.getRows()?.map((r) => r.getRowObject()?.getObject());
         this.context?.setFilteredObjectList(this.state.table.getObjectType(), filteredObjects);
-    }
-
-    public preventDefault(event: any): void {
-        if (event) {
-            event.stopPropagation();
-            event.preventDefault();
-        }
     }
 
 }

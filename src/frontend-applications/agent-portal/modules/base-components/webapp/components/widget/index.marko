@@ -32,13 +32,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             class=[
                 "header-left",
                 {
-                    "gap-1": !input.removeGap,
+                    "without-content": !input.headercontent,
                 },
             ]
             style=[
                 input.customGridTemplateColumnsStyle
                     ? input.customGridTemplateColumnsStyle
-                    : "grid-template-columns: minmax(auto, max-content);",
+                    : "",
             ]>
             <div class=[
                 "widget-title",
@@ -49,12 +49,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <if(input.icon)>
                     <icon
                         icon=input.icon
-                        on-click("minimizeWidget", true)
+                        on-click("minimizeWidgetForce")
                         on-mousedown("headerMousedown", true)/>
                 </if>
                 <h2
                     title=state.title
-                    on-click("minimizeWidget", true)
+                    on-click("minimizeWidgetForce")
                     on-mousedown("headerMousedown", true)
                     class="m-0"
                     tabindex="0">
@@ -65,12 +65,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <${input.headercontent}/>
             </if>
             <if(input.headerfilter)>
-                <div class="widget-filter" on-click("preventDefault")>
+                <div class="widget-filter" on-click("doNotChangeMinimize")>
                     <${input.headerfilter}/>
                 </div>
             </if>
         </span>
-        <span on-click("minimizeWidget", true) class="header-right">
+        <span class="header-right">
             <action-list
                 contextInstanceId=input.contextInstanceId
                 list=state.actions
@@ -81,12 +81,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <span class="minimize-icon-wrapper">
                     <if(state.minimized)>
                         <span
-                            on-click("minimizeWidget", true)
+                            on-click("minimizeWidgetForce")
                             class="kix-icon-sort-down as-button"/>
                     </if>
                     <else>
                         <span
-                            on-click("minimizeWidget", true)
+                            on-click("minimizeWidgetForce")
                             class="kix-icon-triangle-up as-button">
                             <span class="path1"/>
                             <span class="path2"/>
@@ -103,20 +103,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </if>
         </span>
     </div>
-    <!-- TODO: maybe not needed anymore -->
-    <!-- <if(component.isLaneWidget() && !state.minimized)>
-        <if(Array.isArray(input.contentActions) && input.contentActions.length)>
-            <ul.lane-content-actions key=("content-actions" + Math.random())>
-                <if(Array.isArray(input.contentActions))>
-                    <for|action| of=input.contentActions>
-                        <li key=action.id>
-                            <action action=action displayText=false/>
-                        </li>
-                    </for>
-                </if>
-            </ul>
-        </if>
-    </if> -->
     <if(!state.minimized)>
         <div key="widget-content" class="widget-content">
             <if(

@@ -7,9 +7,27 @@
  * --
  */
 
- .table-reset-filter {
+.widget-filter-dropdown {
+
+    .btn {
+        font-size: 1.25rem;
+
+        &:hover,
+        &.show {
+            color: @secondary-7;
+            background: fade(#000, 5%);
+        }
+
+        &::after {
+            content: none
+        }
+    }
+}
+
+.table-reset-filter {
     cursor: pointer;
- }
+}
+
 .filter-action-list {
     min-width: 25px;
 }

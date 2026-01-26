@@ -28,9 +28,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             class="btn d-flex align-items-center dropdown-toggle"
             data-bs-toggle="dropdown"
             data-bs-auto-close="outside"
-            aria-label=state.translations["Translatable#Action-list"]
-            aria-expanded="false"
-            on-click("preventDefault")>
+            aria-label=(state.translations["Translatable#Action-list"])
+            aria-expanded="false">
             <div class="action d-flex overflow-hidden">
                 <icon
                     icon=icon
@@ -97,9 +96,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <div key=state.key + "-action-list-wrapper" class="action-list-wrapper w-100">
     <div
         key=state.key + "-action-list"
-        class="d-flex justify-content-end action-list opacity-0"
-        on-click("actionListClicked")>
-        <div class="btn-group" role="group">
+        class="d-flex justify-content-end action-list opacity-0 h-100">
+        <div class="btn-group" role="group" on-click("actionListClicked")>
             <action-list
                 contextInstanceId=input.contextInstanceId
                 actionList=state.listDefault/>
