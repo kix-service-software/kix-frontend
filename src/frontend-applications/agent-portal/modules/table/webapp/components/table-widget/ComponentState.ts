@@ -36,7 +36,8 @@ export class ComponentState extends WidgetComponentState {
         public hasViews: boolean = false,
         public dataViews: DataView[] = [],
         public activeViewId: string = 'table',
-        public objects: KIXObject[] = []
+        public objects: KIXObject[] = [],
+        public isLarge: boolean = true
     ) {
         super();
     }

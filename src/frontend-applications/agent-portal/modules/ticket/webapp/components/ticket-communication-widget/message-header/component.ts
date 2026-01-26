@@ -24,6 +24,7 @@ import { ComponentState } from './ComponentState';
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private articleLoader: ArticleLoader;
+    private actionLoading: boolean;
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -140,13 +141,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public loadActions(event: any): void {
-        event.preventDefault();
-        event.stopPropagation();
-        this.articleLoader.queueArticle(this.state.article.ArticleID, async (article: Article) => {
-            this.state.actions = await this.articleLoader?.prepareArticleActions(
-                article, this.context?.instanceId
-            );
-        });
+        if (!this.actionLoading) {
+            event.preventDefault();
+            this.actionLoading = true;
+            this.actionListClicked();
+            this.articleLoader.queueArticle(this.state.article.ArticleID, async (article: Article) => {
+                this.state.actions = await this.articleLoader?.prepareArticleActions(
+                    article, this.context?.instanceId
+                );
+            });
+        }
+    }
+
+    public actionListClicked(): void {
+        (this as any).emit('actionListClicked');
     }
 }
 

@@ -64,7 +64,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     contextInstanceId=input.contextInstanceId
                     list=state.actions
                     observeParent=false
-                    initialOpenDropdown/>
+                    initialOpenDropdown
+                    on-actionListClicked("actionListClicked")/>
             </if>
             <else>
                 <div class="action d-flex justify-content-end overflow-hidden">
@@ -72,7 +73,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         type="button"
                         class="btn d-flex align-items-center"
                         on-click("loadActions")>
-                        <icon icon="kix-icon-dots"/>
+                        <icon icon="kix-icon-dots" style="font-size: 1.25rem"/>
                     </button>
                 </div>
             </else>

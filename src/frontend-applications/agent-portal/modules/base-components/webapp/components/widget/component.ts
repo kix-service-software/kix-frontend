@@ -23,13 +23,17 @@ import { ComponentState } from './ComponentState';
 class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
 
     private clearMinimizedStateOnDestroy: boolean;
-    private additionalActions: IAction[] = [];
-    private startAsMinimized: boolean = false;
+    private additionalActions: IAction[];
+    private canChangeMinimize: boolean;
+    private startAsMinimized: boolean;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'widget');
         this.state = new ComponentState();
         this.clearMinimizedStateOnDestroy = input.clearMinimizedStateOnDestroy || false;
+        this.additionalActions = [];
+        this.canChangeMinimize = true;
+        this.startAsMinimized = input.startAsMinimized || false;
     }
 
     public onInput(input: any): void {
@@ -115,7 +119,12 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private canChangeMinimize = true;
+    public minimizeWidgetForce(event): void {
+        this.minimizeWidget(true, event);
+        // prevent state switch back when click event reaches parent element
+        this.canChangeMinimize = false;
+    }
+
     public async minimizeWidget(force: boolean = false, event: any): Promise<void> {
         if (!this.canChangeMinimize) {
             this.canChangeMinimize = true;
@@ -124,7 +133,8 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
             }
         }
         if (event) {
-            event.stopPropagation();
+            // DO NOT stop propagation => e.g. needed to close open action lists
+            // event.stopPropagation();
             event.preventDefault();
         }
 
@@ -138,7 +148,9 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
                     && (event?.target.classList.contains('widget-header')
                         || event.target.classList.contains('header-left')
                         || event.target.classList.contains('header-right')
-                        || event.target.classList.contains('tab-list'))
+                        || event.target.classList.contains('tab-list')
+                        || event.target.classList.contains('action-list-wrapper')
+                        || event.target.classList.contains('action-list'))
                 )
             ) {
                 this.state.minimized = !this.state.minimized;
@@ -267,13 +279,6 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
 
     private prepareActions(actions: IAction[] = []): void {
         this.state.actions = [...actions, ...this.additionalActions || []];
-    }
-
-    public preventDefault(event: any): void {
-        if (event) {
-            event.stopPropagation();
-            event.preventDefault();
-        }
     }
 
 }

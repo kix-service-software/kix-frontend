@@ -60,10 +60,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.displayText =
             typeof input.displayText !== 'undefined' ? input.displayText : true;
         this.actionList = input.list || [];
-
-        if (this.state.prepared && this.actionList.length) {
-            this.initializeActionLists();
-        }
     }
 
     public async onMount(): Promise<void> {
@@ -203,11 +199,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.observer.observe(actionListElement);
     }
 
-    private async initializeActionLists(): Promise<void> {
-        this.actionsToShow = await ActionFactory.getActionList(this.actionList);
-        this.prepareActionLists();
-    }
-
     public prepareActionLists(): void {
         if (this.visibleTimeout) {
             clearTimeout(this.visibleTimeout);
@@ -313,13 +304,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public actionListClicked(event: any): any {
         (this as any).emit('actionListClicked');
-    }
-
-    public preventDefault(event: any): void {
-        if (event) {
-            event.stopPropagation();
-            event.preventDefault();
-        }
     }
 }
 
