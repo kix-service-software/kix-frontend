@@ -98,6 +98,12 @@
                 }
             }
 
+            .widget-viewbar .btn {
+                &:not(.inactive) {
+                    color: @header-color;
+                }
+            }
+
             .widget-filter-dropdown {
                 button {
                     color: @header-color;
@@ -226,6 +232,10 @@
     .widget-header {
         grid-template-columns: 8fr 2fr;
         border-radius: 6px;
+
+        .widget-viewbar .btn {
+            color: @primary-5;
+        }
 
         .action-list {
             .action {

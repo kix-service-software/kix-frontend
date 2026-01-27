@@ -9,14 +9,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <macro name="widget-viewbar">
     <if(state.hasViews)>
-        <div class="d-flex justify-content-start gap-1" role="group">
+        <div
+            class="widget-viewbar d-flex justify-content-start gap-0"
+            role="group">
             <button
                 type="button"
                 class=[
                     "btn btn-sm fs-4 p-0 px-1",
                     {
-                        "border-0 bg-light text-secondary":
-                            state.activeViewId === "table",
+                        show: state.activeViewId === "table",
                     },
                 ]
                 on-click("toggleView", "table")
@@ -29,8 +30,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     class=[
                         "btn btn-sm fs-4 p-0 px-1",
                         {
-                            "border-0 bg-light text-secondary":
-                                state.activeViewId === view.id,
+                            show: state.activeViewId === view.id,
                         },
                     ]
                     on-click("toggleView", view.id)
