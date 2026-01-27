@@ -75,8 +75,10 @@
 
    .left-avatar,
    .right-avatar {
+      @avatar_min_width: 7rem;
       display: grid;
-      width: 8rem;
+      min-width: @avatar_min_width;
+      width: @avatar_min_width + 1;
       gap: @margin-small;
       overflow: hidden;
       height: 100%;
