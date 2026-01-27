@@ -28,6 +28,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     private sortOrder: string;
     private communicationConfig: TicketCommunicationConfiguration;
     private articleIds: number[];
+    private resizeObserver: ResizeObserver;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'ticket-communication-widget');
@@ -58,6 +59,23 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
             'Translatable#Preview List', 'Translatable#Compact View', 'Translatable#Change sort direction'
         ]);
 
+        const container = document.getElementsByClassName('communication-list')[0];
+        const wrapper = document.getElementsByClassName('content-wrapper ')[0];
+        try {
+            this.resizeObserver = new ResizeObserver(() => {
+                const goToTopButton = document.getElementById(`goToTop_${this.state.topId}`);
+                if (wrapper.scrollHeight > wrapper.clientHeight) {
+                    goToTopButton.setAttribute('style', `left: ${container.clientWidth - 10}px;`);
+                }
+                else {
+                    goToTopButton.setAttribute('style', 'display: none;');
+                }
+            });
+        } catch (e) {
+            console.error(e);
+        }
+
+        this.resizeObserver.observe(container);
         this.initListener();
 
         await this.setArticleIDs();
@@ -89,6 +107,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
 
     public onDestroy(): void {
         super.onDestroy();
+        this.resizeObserver?.disconnect();
         this.context.unregisterListener('communication-widget');
     }
 
