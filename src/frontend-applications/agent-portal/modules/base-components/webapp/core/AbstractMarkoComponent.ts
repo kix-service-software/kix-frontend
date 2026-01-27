@@ -81,7 +81,9 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
         }
 
         if (this.state) {
-            this.state.isConfigContext = this.context?.contextId === ObjectFormConfigurationContext.CONTEXT_ID;
+            this.state.isConfigContext =
+                this.context?.contextId === ObjectFormConfigurationContext.CONTEXT_ID ||
+                (this.context?.hasOwnProperty('isConfigurationContext') && this.context['isConfigurationContext']);
         }
 
         await this.prepareMount();
