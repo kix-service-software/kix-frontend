@@ -116,6 +116,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         return KIXModulesService.getComponentTemplate(componentId);
     }
 
+    public rowHasValue(row: any): boolean {
+        let hasValue = false;
+        for (const group of row.values) {
+            hasValue = hasValue || group.some((value) => value.preparedText?.trim().length > 0);
+        }
+        return hasValue;
+    }
+
 }
 
 module.exports = Component;
