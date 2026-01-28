@@ -117,11 +117,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public rowHasValue(row: any): boolean {
-        let hasValue = false;
         for (const group of row.values) {
-            hasValue = hasValue || group.some((value) => value.preparedText?.trim().length > 0);
+            // The componentId must be checked in addition to the preparedText because
+            // the object information is usually supplied via components and the preparedText is often not filled.
+            const hasValue = group.some((value) => Boolean(value.componentId)
+                || Boolean(value.preparedText?.trim().length)
+            );
+            if (hasValue) {
+                return true;
+            }
         }
-        return hasValue;
+        return false;
     }
 
 }
