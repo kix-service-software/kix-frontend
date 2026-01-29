@@ -18,7 +18,6 @@ import { KIXModulesService } from '../../core/KIXModulesService';
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private config: ObjectInformationCardConfiguration;
-    private widgetInstanceId: string;
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -31,7 +30,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.config = JSON.parse(JSON.stringify(input.config));
         }
         this.state.object = input.object;
-        this.widgetInstanceId = input.widgetInstanceId;
     }
 
     public async onMount(): Promise<void> {
@@ -62,29 +60,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.valuesReady = true;
     }
 
-    public getCustomRowStyle(index: number): string {
-        const basicColumnWidth = 15;
-        const row = this.state.information[index] as InformationRowConfiguration;
-        if (
-            this.widgetInstanceId &&
-            (this.isRowWithCreatedBy(index) ||
-                this.context.openSidebarWidgets.some((osw) => osw === this.widgetInstanceId))
-        ) {
-            return;
-        }
-        let style = 'grid-auto-columns:';
-        row.values.forEach((value, index) => {
-            const largestFactor = this.getLargestWidthFactor(value);
-            style += ` ${largestFactor * basicColumnWidth + (largestFactor - 1)}rem`;
-            if (index === row.values.length - 1) {
-                style += ';';
-            }
-        });
-        return style;
-    }
-
-    private getLargestWidthFactor(group: InformationConfiguration[]): number {
+    public getLargestWidthFactor(group: InformationConfiguration[]): string {
         let largestFactor = 1;
+        const basicColumnWidth = 15;
         group.forEach((value) => {
             if (value.detailViewWidthFactor) {
                 let widthFactor: number;
@@ -93,14 +71,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 } catch (e) {
                     widthFactor = 1;
                 }
-                if (widthFactor > 23) widthFactor = 23;
+                if (widthFactor > 12) widthFactor = 12;
                 if (widthFactor < 1) widthFactor = 1;
                 if (widthFactor > largestFactor) {
                     largestFactor = widthFactor;
                 }
             }
         });
-        return largestFactor;
+        return `flex-basis: ${largestFactor * basicColumnWidth + (largestFactor - 1)}rem;`;
     }
 
     public isRowWithCreatedBy(index: number): boolean {

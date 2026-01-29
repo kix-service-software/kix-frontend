@@ -55,8 +55,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         "created-by-row": component.isRowWithCreatedBy(index),
                         separator: row.separator,
                      },
-                  ]
-                  style=component.getCustomRowStyle(index)>
+                  ]>
                   <for|group, groupIndex| of=row.values>
                      <div class=[
                         "info-group",
@@ -66,7 +65,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                               group[0].componentId === "icon",
                            "me-2": groupIndex === row.values.length - 1,
                         },
-                     ]>
+                     ]
+                     style=component.getLargestWidthFactor(group)>
                         <for|info| of=group>
                            <if(info.componentId)>
                               <div>
