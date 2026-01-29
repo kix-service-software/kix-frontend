@@ -91,6 +91,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.settingsLabel = this.state.advancedSettings
             ? this.state.translations['Translatable#Standard']
             : this.state.translations['Translatable#Advanced'];
+        (this as any).emit('advancedModeChanged', this.state.widget.instanceId, this.state.advancedSettings);
     }
 
     public getConfigurationComponent(): any {

@@ -168,6 +168,25 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.modifiedWidgets.push(modifiedWidget);
     }
 
+    public advancedModeChanged(widgetInstanceId: string, isAdvancedMode: boolean): void {
+        if (isAdvancedMode) {
+            this.state.advancedModeWidgets.push(widgetInstanceId);
+        } else {
+            const index = this.state.advancedModeWidgets.findIndex((id) => id === widgetInstanceId);
+            this.state.advancedModeWidgets.splice(index, 1);
+        }
+        this.setAdvancedMode(widgetInstanceId);
+    }
+
+    public setAdvancedMode(widgetInstanceId: string): void {
+        const widgetEl = document.getElementById(`widget-frame-${widgetInstanceId}${this.state.componentId}`);
+        if (this.state.configurationMode && this.state.advancedModeWidgets.some((id) => id === widgetInstanceId)) {
+            widgetEl.classList.add('advanced-mode');
+        } else if (widgetEl.classList.contains('advanced-mode')) {
+            widgetEl.classList.remove('advanced-mode');
+        }
+    }
+
     public async saveWidgets(): Promise<void> {
         await ContextService.getInstance().saveUserWidgetList(
             this.context, this.state.widgets.map((w) => w.instanceId), this.modifiedWidgets, this.contextWidgetList

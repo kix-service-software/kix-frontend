@@ -15,23 +15,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             value=component.getTitle(state.widget.configuration.title)
             on-keyup("titleChanged")
             draggable="true"
-            class="input-style"
-        >
+            class="input-style">
         <button
             type="button"
             on-click("toggleAdvancedMode")
             title=state.settingsLabel
             draggable="true"
-            class="kix-button form-button"
-        >
+            class="kix-button form-button">
             <span class="kix-icon-gears" aria-hidden="true"/>
             ${state.settingsLabel}
         </button>
         <span
             on-click("removeWidget")
             draggable="true"
-            class="fas fa-times close"
-        />
+            class="fas fa-times close"/>
     </div>
     <if(!state.minimized)>
         <div draggable="true" class="widget-configuration-container">
@@ -61,8 +58,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         treeId=state.actionsTreeId
                                         multiselect
                                         freeText
-                                        on-nodesChanged("actionsChanged")
-                                    />
+                                        on-nodesChanged("actionsChanged")/>
                                 </td>
                             </tr>
                             <tr>
@@ -73,8 +69,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     <input
                                         type="checkbox"
                                         on-click("widgetSizeChanged")
-                                        checked=(state.widget.size === "small")
-                                    >
+                                        checked=(state.widget.size === "small")>
                                 </td>
                             </tr>
                             <tr>
@@ -88,8 +83,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         checked=(
                                             state.widget.configuration
                                                 .minimizable
-                                        )
-                                    >
+                                        )>
                                 </td>
                             </tr>
                             <tr>
@@ -103,8 +97,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         checked=(
                                             state.widget.configuration.minimized
                                         )
-                                        disabled=!state.isMinimizeEnabled
-                                    >
+                                        disabled=!state.isMinimizeEnabled>
                                 </td>
                             </tr>
                         </tbody>
@@ -116,8 +109,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <${component.getConfigurationComponent()}
                         configuration=(state.widget.configuration.configuration)
                         advancedSettings=state.advancedSettings
-                        on-configurationChanged("configurationChanged")
-                    />
+                        on-configurationChanged("configurationChanged")/>
                 </if>
             </div>
         </div>
