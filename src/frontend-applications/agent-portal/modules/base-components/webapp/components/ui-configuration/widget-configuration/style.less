@@ -27,6 +27,10 @@
         margin-top: 1rem;
     }
 
+    >.widget-specific-configuration, >.widget-specific-configuration .table-configuration-container {
+        overflow: auto;
+    }
+
     .table-container {
         overflow: unset;
     }
@@ -87,5 +91,65 @@
                 }
             }
         }
+    }
+}
+
+.widget-frame.small {
+    .table-configuration-container {
+
+        .row {
+            flex-wrap: wrap !important;
+            row-gap: @margin-small !important;
+        }
+
+        .row>.col-6 {
+            flex: 0 0 100% !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        .property-chooser {
+            width: 100% !important;
+            min-width: 0 !important;
+            box-sizing: border-box !important;
+
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            grid-auto-rows: auto !important;
+            row-gap: 0.5rem !important;
+            column-gap: 0.5rem !important;
+            align-items: center !important;
+        }
+
+        .property-chooser .form-list,
+        .property-chooser form-list,
+        .property-chooser .form-list-input-container,
+        .property-chooser .form-input-control.list,
+        .property-chooser input,
+        .property-chooser select {
+            max-width: 100% !important;
+            min-width: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        .property-chooser> :nth-child(1) {
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+
+        .property-chooser> :nth-child(2) {
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+
+        .property-chooser> :nth-child(3) {
+            width: 100% !important;
+            justify-self: end !important;
+        }
+
+        *.kix-button {
+            min-width: min(11.75rem, 100%);
+        }
+
     }
 }

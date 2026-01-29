@@ -11,7 +11,10 @@
 @overlay-widget-header-height: 1.75rem;
 @widget-header-grid-gap: 1rem;
 
-.widget(@header-background: @secondary-2, @header-color: @secondary-0, @widget-header-height: @default-widget-header-height, @widget-header-action-separator-color: @secondary-1) {
+.widget(@header-background: @secondary-2,
+    @header-color: @secondary-0,
+    @widget-header-height: @default-widget-header-height,
+    @widget-header-action-separator-color: @secondary-1) {
     .shadow-1();
     position: relative;
     box-sizing: border-box;
@@ -68,6 +71,7 @@
                 grid-gap: @margin-small;
                 min-width: 5rem;
                 align-items: center;
+                min-width: 0;
 
                 &.with-icon {
                     grid-template-columns: min-content;
@@ -118,6 +122,7 @@
                 justify-self: end;
                 display: grid;
                 grid-auto-flow: column;
+                min-width: 0;
 
                 .filter-count {
                     font-size: @h2-font-size;
@@ -131,7 +136,9 @@
         }
 
         >.header-right {
-            justify-self: right;
+            justify-self: end;
+            width: 100%;
+            min-width: 0;
             display: grid;
             grid-gap: @widget-header-grid-gap - .25rem;
             grid-template-columns: auto;
@@ -139,7 +146,6 @@
             grid-auto-flow: column;
             line-height: @widget-header-height;
             text-align: right;
-            width: 100%;
 
             >.minimize-icon-wrapper,
             >.close-icon-wrapper {
@@ -409,7 +415,9 @@
         }
 
         >.header-right {
-            width: 100%;
+            width: auto;
+            justify-self: end;
+            min-width: 0;
 
             >div.action-list-wrapper {
                 height: 1px;

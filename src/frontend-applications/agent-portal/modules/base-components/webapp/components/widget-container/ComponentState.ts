@@ -20,7 +20,8 @@ export class ComponentState extends AbstractComponentState {
         public configurationMode: boolean = false,
         public dragOverInstanceId: string = null,
         public searchBookmarkTreeId: string = null,
-        public contextTreeId: string = null
+        public contextTreeId: string = null,
+        public advancedModeWidgets: string[] = [],
     ) {
         super();
     }
