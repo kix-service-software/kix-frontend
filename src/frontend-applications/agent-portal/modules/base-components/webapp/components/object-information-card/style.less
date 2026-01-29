@@ -51,12 +51,31 @@
       }
 
       .info-row-content {
-         display: grid;
-         grid-auto-flow: column;
-         grid-gap: 1rem;
+         display: flex;
+         flex-wrap: wrap;
+         gap: 1rem;
+
+         &.created-by-row {
+            flex-wrap: nowrap;
+         }
+
+         &.created-by-row>.info-group {
+            flex: 1 1 auto;
+            min-width: 0;
+            overflow: hidden;
+         }
 
          &.created-by-row>.info-group>.info-value {
             grid-template-columns: auto;
+            width: 100%;
+         }
+
+         &.created-by-row>.info-group>.info-value span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+            display: block;
          }
 
          &.no-title {
@@ -89,6 +108,7 @@
                align-items: center;
                grid-template-columns: fit-content(1.5rem) auto;
                column-gap: @margin-small;
+               overflow: hidden;
 
                .icon {
                   font-size: 1.5rem;
