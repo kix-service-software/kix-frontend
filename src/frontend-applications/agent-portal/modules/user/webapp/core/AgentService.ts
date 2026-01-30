@@ -33,6 +33,8 @@ import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { UserProperty } from '../../model/UserProperty';
 import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
+import { OutOfOfficeProperty } from '../../model/OutOfOfficeProperty';
+import { OutOfOffice } from '../../model/OutOfOffice';
 
 export class AgentService extends KIXObjectService<User> {
 
@@ -110,8 +112,11 @@ export class AgentService extends KIXObjectService<User> {
         if (service) {
             parameter = await service.getFormParameter();
         }
+        const currentUser = await this.getCurrentUser();
+        const userParameter = await this.prepareOutOfOfficeParameter(parameter);
 
         await AgentSocketClient.getInstance().setPreferences(parameter);
+        await this.updateObject(KIXObjectType.CURRENT_USER, userParameter, currentUser.UserID);
 
         EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.CURRENT_USER });
     }
@@ -251,5 +256,29 @@ export class AgentService extends KIXObjectService<User> {
         outOfOfficeUsers.forEach((u) => outOfOfficeUsersIDs.push(u.ObjectId));
 
         return outOfOfficeUsersIDs;
+    }
+
+    private async prepareOutOfOfficeParameter(parameter: Array<[string, any]>): Promise<Array<[string, any]>> {
+        const searchParam = [
+            [PersonalSettingsProperty.OUT_OF_OFFICE_START, OutOfOfficeProperty.START],
+            [PersonalSettingsProperty.OUT_OF_OFFICE_END, OutOfOfficeProperty.END],
+            [PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE, OutOfOfficeProperty.SUBSTITUTE]
+        ];
+
+        const oooObject = new OutOfOffice();
+        searchParam.forEach((s) => {
+            const oParamter = parameter?.find((p) => p[0] === s[0]);
+            if (oParamter) {
+                oooObject[s[1]] = oParamter[1];
+            }
+        });
+
+        parameter = parameter?.filter(
+            (p) => p[0] !== PersonalSettingsProperty.OUT_OF_OFFICE_START
+                && p[0] !== PersonalSettingsProperty.OUT_OF_OFFICE_END
+                && p[0] !== PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE
+        );
+
+        return [[UserProperty.OUT_OF_OFFICE, oooObject]];
     }
 }

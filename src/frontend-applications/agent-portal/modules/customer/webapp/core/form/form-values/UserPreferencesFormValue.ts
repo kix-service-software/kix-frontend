@@ -11,7 +11,6 @@ import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { FormValueProperty } from '../../../../../object-forms/model/FormValueProperty';
-import { DateFormValue } from '../../../../../object-forms/model/FormValues/DateFormValue';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
@@ -28,7 +27,6 @@ import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
-import { AutoCompleteConfiguration } from '../../../../../../model/configuration/AutoCompleteConfiguration';
 
 export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> {
 
@@ -55,7 +53,6 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
         const preferences = user?.Preferences;
 
         this.addLanguageFormValue(preferences, objectValueMapper);
-        this.oooFormValue = this.addOutOfOfficeFormValues(preferences, objectValueMapper, user.UserID);
         this.addInitialSiteURLFormValue(preferences, objectValueMapper);
         this.myQueuesFormValue = this.addMyQueuesFormValue(preferences, objectValueMapper, user.UserID);
         this.notificationsFormValue = this.addNotificationFormValue(preferences, objectValueMapper);
@@ -79,7 +76,6 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
 
     public async enable(): Promise<void> {
         const agentPreferencesIds = [
-            this.oooFormValue.instanceId,
             this.notificationsFormValue.instanceId,
             this.myQueuesFormValue.instanceId
         ];
@@ -138,91 +134,6 @@ export class UserPreferencesFormValue extends ObjectFormValue<UserPreference[]> 
 
         const formValue = new LanguageFormValue('Value', preference, objectValueMapper, this);
         this.formValues.push(formValue);
-    }
-
-    private addOutOfOfficeFormValues(
-        preferences: UserPreference[], objectValueMapper: ObjectFormValueMapper, userId: number
-    ): ObjectFormValue {
-
-        const oofFormValue = new ObjectFormValue(null, null, objectValueMapper, null);
-        oofFormValue.label = 'Translatable#Out Of Office';
-        oofFormValue.visible = true;
-        oofFormValue.inputComponentId = 'no-input';
-
-        this.formValues.push(oofFormValue);
-
-        let startPreference = preferences.find((p) => p.ID === PersonalSettingsProperty.OUT_OF_OFFICE_START);
-        if (!startPreference) {
-            startPreference = new UserPreference();
-            startPreference.ID = PersonalSettingsProperty.OUT_OF_OFFICE_START;
-            preferences.push(startPreference);
-        }
-
-        const startFormValue = new DateFormValue('Value', startPreference, objectValueMapper, oofFormValue);
-        startFormValue.label = 'Translatable#From';
-        startFormValue.visible = true;
-        startFormValue.isControlledByParent = true;
-        oofFormValue.formValues.push(startFormValue);
-
-        let endPreference = preferences.find((p) => p.ID === PersonalSettingsProperty.OUT_OF_OFFICE_END);
-        if (!endPreference) {
-            endPreference = new UserPreference();
-            endPreference.ID = PersonalSettingsProperty.OUT_OF_OFFICE_END;
-            preferences.push(endPreference);
-        }
-
-        const endFormValue = new DateFormValue('Value', endPreference, objectValueMapper, oofFormValue);
-        endFormValue.label = 'Translatable#Till';
-        endFormValue.visible = true;
-        endFormValue.isControlledByParent = true;
-        oofFormValue.formValues.push(endFormValue);
-
-        let substitutePreference = preferences.find((p) => p.ID === PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE);
-        if (!substitutePreference) {
-            substitutePreference = new UserPreference();
-            substitutePreference.ID = PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE;
-            preferences.push(substitutePreference);
-        }
-
-        const myQueues = preferences.find((p) => p.ID === PersonalSettingsProperty.MY_QUEUES);
-        const myQueuesValue = Array.isArray(myQueues?.Value)
-            ? myQueues?.Value
-            : isNaN(Number(myQueues?.Value)) ? [0] : [myQueues?.Value];
-        const substituteFormValue = new SelectObjectFormValue('Value', substitutePreference, objectValueMapper, oofFormValue);
-        substituteFormValue.label = 'Translatable#Substitute';
-        substituteFormValue.objectType = KIXObjectType.USER;
-        substituteFormValue.isAutoComplete = true;
-        substituteFormValue.autoCompleteConfiguration = new AutoCompleteConfiguration();
-        substituteFormValue.multiselect = false;
-        substituteFormValue.loadingOptions = new KIXObjectLoadingOptions(
-            [
-                new FilterCriteria(
-                    UserProperty.PREFERENCES + '.' + PersonalSettingsProperty.MY_QUEUES,
-                    SearchOperator.IN, FilterDataType.NUMERIC,
-                    FilterType.AND, myQueuesValue
-                ),
-                new FilterCriteria(
-                    UserProperty.IS_AGENT,
-                    SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                    FilterType.AND, 1
-                ),
-                new FilterCriteria(
-                    'UserIDs',
-                    SearchOperator.NOT_IN, FilterDataType.NUMERIC,
-                    FilterType.AND, [1, userId]
-                ),
-                new FilterCriteria(
-                    KIXObjectProperty.VALID_ID,
-                    SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                    FilterType.AND, 1
-                )
-            ]
-        );
-        substituteFormValue.visible = true;
-        substituteFormValue.isControlledByParent = true;
-        oofFormValue.formValues.push(substituteFormValue);
-
-        return oofFormValue;
     }
 
     private addInitialSiteURLFormValue(preferences: UserPreference[], objectValueMapper: ObjectFormValueMapper): void {

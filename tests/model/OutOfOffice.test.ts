@@ -24,9 +24,9 @@ describe('OutOfOffice', () => {
         let outOfOffice: OutOfOffice;
 
         before(() => {
-            outOfOffice = new OutOfOffice(
-                undefined, '2024-01-01', '2024-01-05'
-            );
+            outOfOffice = new OutOfOffice()
+            outOfOffice.Start = '2024-01-01';
+            outOfOffice.End = '2024-01-05';
         });
 
         it('Have the correct Start', () => {

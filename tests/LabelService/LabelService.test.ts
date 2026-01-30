@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,57 +14,39 @@ import chaiAsPromised from 'chai-as-promised';
 import { LabelService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { User } from '../../src/frontend-applications/agent-portal/modules/user/model/User';
-import { UserPreference } from '../../src/frontend-applications/agent-portal/modules/user/model/UserPreference';
 import { DateTimeUtil } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
 import { UserLabelProvider } from '../../src/frontend-applications/agent-portal/modules/user/webapp/core/UserLabelProvider';
-import { OutOfOfficeProperty } from '../../src/frontend-applications/agent-portal/modules/user/model/OutOfOfficeProperty';
 import { KIXObjectService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
+import { OutOfOffice } from '../../src/frontend-applications/agent-portal/modules/user/model/OutOfOffice';
+import { OutOfOfficeProperty } from '../../src/frontend-applications/agent-portal/modules/user/model/OutOfOfficeProperty';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 describe('LabelService', () => {
-    let oooUser, oooUserFuture, user, orgLoadFunction, orgGetObjectTypeFunction;
+    let oooUser: User, oooUserFuture: User, user: User, orgLoadFunction, orgGetObjectTypeFunction;
     before('Should register handler', () => {
         const start = new Date(), end = new Date();
         start.setDate((start).getDate() - 4);
         end.setDate((end).getDate() + 2);
-        const outOfOfficeStart = new UserPreference();
-        outOfOfficeStart.ID = 'OutOfOfficeStart';
-        outOfOfficeStart.ObjectId = 'OutOfOfficeStart';
-        outOfOfficeStart.Value = DateTimeUtil.getKIXDateString(start);
-        const outOfOfficeEnd = new UserPreference();
-        outOfOfficeEnd.ID = 'OutOfOfficeEnd';
-        outOfOfficeEnd.ObjectId = 'OutOfOfficeEnd';
-        outOfOfficeEnd.Value = DateTimeUtil.getKIXDateString(end);
         oooUser = new User();
         oooUser.KIXObjectType = KIXObjectType.USER;
         oooUser.IsAgent = 1;
         oooUser.UserID = 1;
-        oooUser.Preferences = [
-            outOfOfficeStart,
-            outOfOfficeEnd
-        ];
+        oooUser.OutOfOffice = new OutOfOffice();
+        oooUser.OutOfOffice.Start = DateTimeUtil.getKIXDateString(start);
+        oooUser.OutOfOffice.End = DateTimeUtil.getKIXDateString(end);
 
         const startFuture = new Date(), endFuture = new Date();
         startFuture.setDate((startFuture).getDate() + 7);
         endFuture.setDate((endFuture).getDate() + 14);
-        const outOfOfficeStartFuture = new UserPreference();
-        outOfOfficeStartFuture.ID = 'OutOfOfficeStart';
-        outOfOfficeStartFuture.ObjectId = 'OutOfOfficeStart';
-        outOfOfficeStartFuture.Value = DateTimeUtil.getKIXDateString(startFuture);
-        const outOfOfficeEndFuture = new UserPreference();
-        outOfOfficeEndFuture.ID = 'OutOfOfficeEnd';
-        outOfOfficeEndFuture.ObjectId = 'OutOfOfficeEnd';
-        outOfOfficeEndFuture.Value = DateTimeUtil.getKIXDateString(endFuture);
         oooUserFuture = new User();
         oooUserFuture.KIXObjectType = KIXObjectType.USER;
         oooUserFuture.IsAgent = 1;
         oooUserFuture.UserID = 2;
-        oooUserFuture.Preferences = [
-            outOfOfficeStartFuture,
-            outOfOfficeEndFuture
-        ];
+        oooUserFuture.OutOfOffice = new OutOfOffice();
+        oooUserFuture.OutOfOffice.Start = DateTimeUtil.getKIXDateString(startFuture);
+        oooUserFuture.OutOfOffice.End = DateTimeUtil.getKIXDateString(endFuture);
 
         user = new User();
         user.KIXObjectType = KIXObjectType.USER;
@@ -107,21 +89,25 @@ describe('LabelService', () => {
             const overlay = await LabelService.getInstance().getOverlayIcon('unknown', oooUser.UserID);
             expect(overlay).to.be.null
         });
-        it('overlay / ObjectType: User / Without Preference / should be null', async () => {
+        it('overlay / ObjectType: User / Without OutOfOffice / should be null', async () => {
             const overlay = await LabelService.getInstance().getOverlayIcon(KIXObjectType.USER, user.UserID);
             expect(overlay).to.be.null
         });
-        it('overlay / ObjectType: User / With OutOfOffice Preferences / should be an overlay object', async () => {
-            // const overlay = await LabelService.getInstance().getOverlayIcon(KIXObjectType.USER, oooUser.UserID) || {};
-            // expect(overlay).to.be.deep.property('Data', {
-            //     KIXObjectType: KIXObjectType.USER_PREFERENCE,
-            //     Start: oooUser.Preferences[0].Value,
-            //     End: oooUser.Preferences[1].Value,
-            //     Properties: [OutOfOfficeProperty.START, OutOfOfficeProperty.END],
-            //     Substitute: null
-            // });
+        it('overlay / ObjectType: User / With OutOfOffice / should be an overlay object', async () => {
+            const overlay = await LabelService.getInstance().getOverlayIcon(KIXObjectType.USER, oooUser.UserID) || {};
+            expect(overlay).to.be.deep.property('Data', {
+                KIXObjectType: KIXObjectType.USER,
+                Start: oooUser.OutOfOffice.Start,
+                End: oooUser.OutOfOffice.End,
+                Substitute: null,
+                Properties: [
+                    OutOfOfficeProperty.START,
+                    OutOfOfficeProperty.END,
+                    OutOfOfficeProperty.SUBSTITUTE
+                ]
+            });
         });
-        it('overlay / ObjectType: User / With OutOfOffice Preferences in future / should be null', async () => {
+        it('overlay / ObjectType: User / With OutOfOffice in future / should be null', async () => {
             const overlay = await LabelService.getInstance().getOverlayIcon(KIXObjectType.USER, oooUserFuture.UserID);
             expect(overlay).to.be.null
         });
@@ -134,21 +120,25 @@ describe('LabelService', () => {
             const overlay = await LabelService.getInstance().getOverlayIconByProperty('unknown', 'SomeTestProperty', oooUser.UserID);
             expect(overlay).to.be.null
         });
-        it('overlay / ObjectType: User / Without Preference / should be null', async () => {
+        it('overlay / ObjectType: User / Without OutOfOffice / should be null', async () => {
             const overlay = await LabelService.getInstance().getOverlayIconByProperty(KIXObjectType.USER, 'SomeTestProperty', user.UserID);
             expect(overlay).to.be.null
         });
-        it('overlay / ObjectType: User / With OutOfOffice Preferences / should be an overlay object', async () => {
+        it('overlay / ObjectType: User / With OutOfOffice / should be an overlay object', async () => {
             const overlay = await LabelService.getInstance().getOverlayIconByProperty(KIXObjectType.USER, 'SomeTestProperty', oooUser.UserID) || {};
             expect(overlay).to.be.deep.property('Data', {
-                KIXObjectType: KIXObjectType.USER_PREFERENCE,
-                Start: oooUser.Preferences[0].Value,
-                End: oooUser.Preferences[1].Value,
-                Properties: [OutOfOfficeProperty.START, OutOfOfficeProperty.END, OutOfOfficeProperty.SUBSTITUTE],
-                Substitute: null
+                KIXObjectType: KIXObjectType.USER,
+                Start: oooUser.OutOfOffice.Start,
+                End: oooUser.OutOfOffice.End,
+                Substitute: null,
+                Properties: [
+                    OutOfOfficeProperty.START,
+                    OutOfOfficeProperty.END,
+                    OutOfOfficeProperty.SUBSTITUTE
+                ]
             });
         });
-        it('overlay / ObjectType: User / With OutOfOffice Preferences in future / should be null', async () => {
+        it('overlay / ObjectType: User / With OutOfOffice in future / should be null', async () => {
             const overlay = await LabelService.getInstance().getOverlayIconByProperty(KIXObjectType.USER, 'SomeTestProperty', oooUserFuture.UserID);
             expect(overlay).to.be.null
         });

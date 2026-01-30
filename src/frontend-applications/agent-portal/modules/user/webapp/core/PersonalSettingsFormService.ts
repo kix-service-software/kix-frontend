@@ -56,11 +56,14 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
                 break;
             case PersonalSettingsProperty.OUT_OF_OFFICE_START:
             case PersonalSettingsProperty.OUT_OF_OFFICE_END:
-                if (value) {
-                    value = DateTimeUtil.getKIXDateString(value);
+                if (user[property]) {
+                    value = DateTimeUtil.getKIXDateString(user[property]);
                 }
                 break;
             default:
+                if (user[property]) {
+                    value = user[property];
+                }
                 break;
         }
 

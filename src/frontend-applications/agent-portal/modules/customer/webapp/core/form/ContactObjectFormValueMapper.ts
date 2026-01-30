@@ -84,6 +84,9 @@ export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact>
         page.groups.push(preferencesGroup);
         preferencesGroup.formFields.push(
             new FormFieldConfiguration(
+                'user-form-user-ooo', 'Translatable#Out Of Office', UserProperty.OUT_OF_OFFICE, null
+            ),
+            new FormFieldConfiguration(
                 'user-form-user-preferences', 'Translatable#Preferences', UserProperty.PREFERENCES, null
             )
         );
