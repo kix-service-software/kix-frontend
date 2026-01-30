@@ -331,7 +331,7 @@
 │  ├─ email: dpiercey@ebay.com
 │  ├─ path: node_modules/@marko/express
 │  └─ licenseFile: node_modules/@marko/express/LICENSE
-├─ @marko/runtime-tags@6.0.138
+├─ @marko/runtime-tags@6.0.139
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ path: node_modules/@marko/runtime-tags
@@ -3076,7 +3076,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.38.16
+├─ marko@5.38.17
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
