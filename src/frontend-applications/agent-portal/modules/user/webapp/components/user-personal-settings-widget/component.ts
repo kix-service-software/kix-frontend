@@ -101,10 +101,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async loadSubstitute(user: User): Promise<void> {
-        const substitute = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE);
-        if (substitute?.Value) {
+        if (user?.OutOfOffice?.Substitute) {
             const objects = await KIXObjectService.loadObjects(
-                KIXObjectType.USER, [substitute.Value]);
+                KIXObjectType.USER, [user.OutOfOffice.Substitute]);
             this.state.substitute = [new Label(objects[0], null, null, null, null, null, true)];
         }
     }

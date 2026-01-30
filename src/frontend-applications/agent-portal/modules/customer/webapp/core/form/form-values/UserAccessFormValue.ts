@@ -11,7 +11,6 @@ import { FilterCriteria } from '../../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
-import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { TreeNode } from '../../../../../base-components/webapp/core/tree';
@@ -26,6 +25,7 @@ import { Role } from '../../../../../user/model/Role';
 import { RoleProperty } from '../../../../../user/model/RoleProperty';
 import { User } from '../../../../../user/model/User';
 import { UserProperty } from '../../../../../user/model/UserProperty';
+import { OutOfOfficeFormValue } from './OutOfOfficeFormValue';
 import { UserPreferencesFormValue } from './UserPreferencesFormValue';
 
 export class UserAccessFormValue extends SelectObjectFormValue<string[]> {
@@ -64,6 +64,11 @@ export class UserAccessFormValue extends SelectObjectFormValue<string[]> {
         this.rolesFormValue.objectType = KIXObjectType.ROLE;
         this.rolesFormValue.maxSelectCount = -1;
         this.formValues.push(this.rolesFormValue);
+
+        const oooFormValue = new OutOfOfficeFormValue(
+            UserProperty.OUT_OF_OFFICE, user, objectValueMapper, this
+        );
+        this.formValues.push(oooFormValue);
 
         const preferencesFormValue = new UserPreferencesFormValue(
             UserProperty.PREFERENCES, user, objectValueMapper, this

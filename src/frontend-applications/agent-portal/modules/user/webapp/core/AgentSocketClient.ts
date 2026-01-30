@@ -26,7 +26,6 @@ import { BrowserCacheService } from '../../../../modules/base-components/webapp/
 import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
 import { MarkObjectAsSeenRequest } from '../../../base-components/webapp/core/MarkObjectAsSeenRequest';
 import { MarkObjectAsSeenResponse } from '../../../base-components/webapp/core/MarkObjectAsSeenResponse';
-import { AuthenticationSocketClient } from '../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class AgentSocketClient extends SocketClient {
 
