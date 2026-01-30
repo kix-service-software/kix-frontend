@@ -19,6 +19,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private resizeObserver: ResizeObserver;
 
     private article: Article = null;
+    private isLoaded: boolean = false;
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -76,21 +77,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public viewLoaded(event: any): void {
-        const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
+        if (!this.isLoaded) {
+            this.isLoaded = true;
+            const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
 
-        frame.addEventListener('load', () => {
-            let frameDocument: Document;
+            frame.addEventListener('load', () => {
+                let frameDocument: Document;
 
-            try {
-                frameDocument = frame.contentWindow.document;
-            } catch (e) {
-                console.warn('iframe content not accessible due to cross-origin policy:', e);
-                return;
-            }
+                try {
+                    frameDocument = frame.contentWindow.document;
+                } catch (e) {
+                    console.warn('iframe content not accessible due to cross-origin policy:', e);
+                    return;
+                }
 
-            BrowserUtil.setFrameHeight(this.state.frameId);
-            BrowserUtil.prepareFrameLinks(frameDocument);
-        });
+                BrowserUtil.setFrameHeight(this.state.frameId);
+                BrowserUtil.prepareFrameLinks(frameDocument);
+            });
+        }
     }
 }
 

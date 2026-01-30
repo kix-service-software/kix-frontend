@@ -14,6 +14,7 @@ import { ComponentState } from './ComponentState';
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private updateTimeout: any;
+    private isLoaded: boolean = false;
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -57,8 +58,25 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public viewLoaded(event: any): void {
-        if (this.state.calculateHeight) {
-            BrowserUtil.setFrameHeight(this.state.frameId);
+        if (!this.isLoaded) {
+            this.isLoaded = true;
+            const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
+
+            frame.addEventListener('load', (ev) => {
+                let frameDocument: Document;
+                console.log(ev);
+                try {
+                    frameDocument = frame.contentWindow.document;
+                } catch (e) {
+                    console.warn('iframe content not accessible due to cross-origin policy:', e);
+                    return;
+                }
+
+                if (this.state.calculateHeight) {
+                    BrowserUtil.setFrameHeight(this.state.frameId);
+                    BrowserUtil.prepareFrameLinks(frameDocument);
+                }
+            });
         }
     }
 
