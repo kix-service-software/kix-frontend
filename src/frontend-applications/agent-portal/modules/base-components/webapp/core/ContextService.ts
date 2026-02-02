@@ -806,4 +806,11 @@ export class ContextService {
         return this.toolbarActions.get(key);
     }
 
+    public isBrowserTabActive(): boolean {
+        return this.contextRefreshInterval.isBrowserTabActive;
+    }
+
+    public getAutoRefreshTime(): number {
+        return this.contextRefreshInterval.autoRefreshTime;
+    }
 }
