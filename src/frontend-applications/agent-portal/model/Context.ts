@@ -68,6 +68,7 @@ export abstract class Context {
     protected icon: ObjectIcon | string;
 
     private contextEventSubscriber: IEventSubscriber;
+    private applicationEventSubscriber: IEventSubscriber;
 
     public contextExtensions: ContextExtension[] = [];
 
@@ -76,6 +77,11 @@ export abstract class Context {
     protected objectSorts: Map<string, [string, boolean]> = new Map();
 
     private objectFilter: Map<string, FilterCriteria[]> = new Map();
+
+    private autoRefreshActive: boolean = false;
+    private autoRefreshAllowed: boolean = false;
+    private autoRefreshTimeout: ReturnType<typeof setTimeout> = null;
+    private refreshRequired: boolean = false;
 
     public readonly widgetService: WidgetService = new WidgetService();
 
@@ -158,7 +164,7 @@ export abstract class Context {
             await extension.initContext(this, urlParams);
         }
 
-        this.subscribeContextEvents();
+        this.subscribeEvents();
 
         if (urlParams) {
             urlParams.forEach((value: string, key: string) => this.setAdditionalInformation(key, value));
@@ -169,7 +175,7 @@ export abstract class Context {
         }
     }
 
-    private subscribeContextEvents(): void {
+    private subscribeEvents(): void {
         this.contextEventSubscriber = {
             eventSubscriberId: IdService.generateDateBasedId(this.instanceId + 'ContextEventSubscriber'),
             eventPublished: async (data: any, eventId: string): Promise<void> => {
@@ -185,13 +191,28 @@ export abstract class Context {
                 const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
                     data?.instanceId === this.instanceId;
                 if (contextUpdateRequired) {
+                    this.refreshRequired = true;
+                    this.autoRefreshContent();
+
                     this.deleteObjectLists();
                 }
             },
         };
-
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.contextEventSubscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.contextEventSubscriber);
+
+        this.applicationEventSubscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(this.instanceId + 'ApplicationEventSubscriber'),
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
+                const contextRefreshed = eventId === ApplicationEvent.REFRESH_CONTENT &&
+                    data === this.instanceId;
+                if (contextRefreshed) {
+                    this.refreshRequired = false;
+                    this.resetAutoRefresh();
+                }
+            },
+        };
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, this.applicationEventSubscriber);
     }
 
     public async postInit(): Promise<void> {
@@ -1048,6 +1069,45 @@ export abstract class Context {
         }
 
         return filter;
+    }
+    public async activateAutoRefresh(): Promise<void> {
+        if (!this.autoRefreshActive) {
+            this.autoRefreshActive = true;
+
+            this.resetAutoRefresh();
+        }
+    }
+
+    public resetAutoRefresh(): void {
+        if (this.autoRefreshActive) {
+            if (this.autoRefreshTimeout) {
+                clearTimeout(this.autoRefreshTimeout);
+            }
+
+            this.autoRefreshAllowed = false;
+
+            const autoRefreshTime = ContextService.getInstance().getAutoRefreshTime();
+            if (autoRefreshTime > 0) {
+                this.autoRefreshTimeout = setTimeout(function (): void {
+                    this.autoRefreshAllowed = true;
+
+                    this.autoRefreshContent();
+                }.bind(this), autoRefreshTime);
+            }
+        }
+    }
+
+    public autoRefreshContent(): void {
+        if (
+            ContextService.getInstance().isBrowserTabActive()
+            && ContextService.getInstance().getActiveContext().instanceId === this.instanceId
+            && this.autoRefreshAllowed
+            && this.refreshRequired
+        ) {
+            EventService.getInstance().publish(
+                ApplicationEvent.REFRESH_CONTENT, this.instanceId
+            );
+        }
     }
 
 }

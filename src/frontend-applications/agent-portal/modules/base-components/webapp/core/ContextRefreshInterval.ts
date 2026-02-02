@@ -17,17 +17,15 @@ import { ContextEvents } from './ContextEvents';
 import { EventService } from './EventService';
 import { IEventSubscriber } from './IEventSubscriber';
 import { ContextService } from './ContextService';
+import { ContextMode } from '../../../../model/ContextMode';
 
 export class ContextRefreshInterval {
 
-    private autoUpdateTime: number;
     private notificationSubscriber: IEventSubscriber;
     private contextSubscriber: IEventSubscriber;
 
-    private isBrowserTabActive: boolean = true;
-    private updateAllowed: boolean = false;
-    private updateRequired: boolean = false;
-    private updateTimeout: any;
+    private _isBrowserTabActive: boolean = true;
+    private _autoRefreshTime: number = 0;
 
     private eventSubscriberId: string;
     private userId: number;
@@ -37,8 +35,29 @@ export class ContextRefreshInterval {
             // update state of active browser tab
             this.isBrowserTabActive = !document.hidden;
 
-            this.refreshContent();
+            if (this.isBrowserTabActive) {
+                const activeContext: Context = ContextService.getInstance().getActiveContext();
+                if (activeContext?.descriptor?.contextMode === ContextMode.DASHBOARD) {
+                    activeContext.autoRefreshContent();
+                }
+            }
         });
+    }
+
+    public get isBrowserTabActive(): boolean {
+        return this._isBrowserTabActive;
+    }
+
+    private set isBrowserTabActive(isBrowserTabActive: boolean) {
+        this._isBrowserTabActive = isBrowserTabActive;
+    }
+
+    public get autoRefreshTime(): number {
+        return this._autoRefreshTime;
+    }
+
+    private set autoRefreshTime(autoRefreshTime: number) {
+        this._autoRefreshTime = autoRefreshTime;
     }
 
     public async initialize(): Promise<void> {
@@ -57,7 +76,7 @@ export class ContextRefreshInterval {
                         const isNamespace = data.Namespace === 'User.UserPreference';
                         const isObjectId = data.ObjectID === `${this.userId}::${PersonalSettingsProperty.AGENT_PORTAL_DASHBOARD_REFRESH_INTERVAL}`;
                         if (isNamespace && isObjectId) {
-                            this.initAutoUpdate();
+                            this.setAutoRefreshTime();
                         }
                     }
                 }.bind(this)
@@ -66,78 +85,43 @@ export class ContextRefreshInterval {
 
             this.contextSubscriber = {
                 eventSubscriberId: this.eventSubscriberId,
-                eventPublished: function (data: Context, eventId: string): void {
-                    if (eventId === ApplicationEvent.REFRESH_CONTENT) {
-                        this.resetAutoUpdate();
-                    }
-                    else if (
-                        eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED
-                        && data?.instanceId === ContextService.getInstance().getActiveContext().instanceId
-                    ) {
-                        this.updateRequired = true;
-
-                        this.refreshContent();
+                eventPublished: function (context: Context, eventId: string): void {
+                    if (context?.descriptor?.contextMode === ContextMode.DASHBOARD) {
+                        if (eventId === ContextEvents.CONTEXT_CREATED) {
+                            context.activateAutoRefresh();
+                        }
+                        else if (eventId === ContextEvents.CONTEXT_CHANGED) {
+                            context.autoRefreshContent();
+                        }
                     }
                 }.bind(this)
             };
-            EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, this.contextSubscriber);
-            EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.contextSubscriber);
+            EventService.getInstance().subscribe(ContextEvents.CONTEXT_CREATED, this.contextSubscriber);
+            EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.contextSubscriber);
+
         }
 
-        this.initAutoUpdate();
+        this.setAutoRefreshTime();
     }
 
-    private async initAutoUpdate(): Promise<void> {
+    private async setAutoRefreshTime(): Promise<void> {
         const refreshIntervalPref = await AgentService.getInstance().getUserPreference(
             PersonalSettingsProperty.AGENT_PORTAL_DASHBOARD_REFRESH_INTERVAL
         );
-        this.autoUpdateTime = Number(refreshIntervalPref?.Value);
-        if (!isNaN(this.autoUpdateTime) && this.autoUpdateTime > 0) {
-            this.autoUpdateTime = this.autoUpdateTime * 60 * 1000;
+        this.autoRefreshTime = Number(refreshIntervalPref?.Value);
+        if (!isNaN(this.autoRefreshTime) && this.autoRefreshTime > 0) {
+            this.autoRefreshTime = this.autoRefreshTime * 60 * 1000;
         }
         else {
-            this.autoUpdateTime = 0;
+            this.autoRefreshTime = 0;
         }
 
-        this.resetAutoUpdate();
+        this.resetAutoRefresh();
     }
 
-    // Context is switched by user
-    public resetAutoUpdate(): void {
-        if (this.updateTimeout) {
-            clearTimeout(this.updateTimeout);
-        }
-        this.updateAllowed = false;
-        this.updateRequired = false;
-
-        if (this.autoUpdateTime > 0) {
-            this.updateTimeout = setTimeout(() => this.handleTimeout(), this.autoUpdateTime);
-        }
+    private async resetAutoRefresh(): Promise<void> {
+        ContextService.getInstance().getContextInstances(null, ContextMode.DASHBOARD).forEach(
+            (c) => c.resetAutoRefresh()
+        );
     }
-
-    // update notification recieved
-    public handleNotification(): void {
-        this.updateRequired = true;
-
-        this.refreshContent();
-    }
-
-    public handleTimeout(): void {
-        this.updateAllowed = true;
-
-        this.refreshContent();
-    }
-
-    private refreshContent(): void {
-        if (
-            this.isBrowserTabActive
-            && this.updateAllowed
-            && this.updateRequired
-        ) {
-            EventService.getInstance().publish(
-                ApplicationEvent.REFRESH_CONTENT, ContextService.getInstance().getActiveContext().instanceId
-            );
-        }
-    }
-
 }
