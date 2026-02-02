@@ -214,6 +214,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private editorTimeout = 1000;
     private changeListener: Array<() => null> = [];
     private focusListener: Array<(value: string) => null> = [];
+    private toolbar: HTMLDivElement;
 
     private focusListenerEnabled = true;
 
@@ -245,6 +246,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             return;
         }
 
+        this.editor.setEditable(!this.readOnly);
+        this.setEditorToolbarVisibility(!this.readOnly);
+
         if (this._lastEmittedValue === newValue) {
             return;
         }
@@ -262,6 +266,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             .setTextSelection({ from: safeFrom, to: safeTo })
             .focus()
             .run();
+    }
+
+    private setEditorToolbarVisibility(visibility: boolean): void {
+        if (visibility && this.toolbar?.classList.contains('d-none')) {
+            this.toolbar.classList.remove('d-none');
+        } else if (!visibility && !this.toolbar?.classList.contains('d-none')) {
+            this.toolbar?.classList.add('d-none');
+        }
     }
 
     public async onMount(): Promise<void> {
@@ -798,8 +810,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         editor.on('selectionUpdate', (): void => applyDefaultsIntoEmptyBlock(editor));
 
-        const toolbar: HTMLDivElement = createToolbar(this.editor);
-        mountElement.appendChild(toolbar);
+        this.toolbar = createToolbar(this.editor);
+        mountElement.appendChild(this.toolbar);
         mountElement.appendChild(wrapper);
 
         function setPlainTypingDefaults(ed: any): void {
@@ -869,7 +881,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             });
 
             ensureDefaultsIfEmpty();
-        })(editor, toolbar);
+        })(editor, this.toolbar);
 
         const saveRaw = (): void => {
             if (!this.editor) return;
