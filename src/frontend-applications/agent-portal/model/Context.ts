@@ -9,7 +9,6 @@
 
 import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
 import { AdditionalContextInformation } from '../modules/base-components/webapp/core/AdditionalContextInformation';
-import { ApplicationEvent } from '../modules/base-components/webapp/core/ApplicationEvent';
 import { AuthenticationSocketClient } from '../modules/base-components/webapp/core/AuthenticationSocketClient';
 import { ClientStorageService } from '../modules/base-components/webapp/core/ClientStorageService';
 import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
@@ -19,10 +18,7 @@ import { FilterUtil } from '../modules/base-components/webapp/core/FilterUtil';
 import { IContextListener } from '../modules/base-components/webapp/core/IContextListener';
 import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
-import { PlaceholderService } from '../modules/base-components/webapp/core/PlaceholderService';
 import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
-import { SearchOperator } from '../modules/search/model/SearchOperator';
-import { SearchProperty } from '../modules/search/model/SearchProperty';
 import { TranslationService } from '../modules/translation/webapp/core/TranslationService';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
 import { ConfiguredWidget } from './configuration/ConfiguredWidget';
