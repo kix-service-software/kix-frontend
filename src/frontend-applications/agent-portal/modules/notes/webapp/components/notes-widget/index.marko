@@ -28,11 +28,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         )>
         <@content>
             <if((state.value || state.editorActive) && state.editorReady)>
-                <editor
-                    value=state.value
+                <${state.editorTemplate}
+                    key="notes-editor"
                     simple
+                    value=state.value
                     readOnly=!state.editorActive
-                    key="notes-editor"/>
+                    useReadonlyStyle=!state.editorActive
+                    on-valueChanged("valueChanged")/>
             </if>
             <else>
                 <div class="empty-notes">
