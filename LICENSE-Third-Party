@@ -4,14 +4,14 @@
 │  ├─ publisher: asamuzaK
 │  ├─ path: node_modules/@asamuzakjp/css-color
 │  └─ licenseFile: node_modules/@asamuzakjp/css-color/LICENSE
-├─ @babel/code-frame@7.28.6
+├─ @babel/code-frame@7.29.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/code-frame
 │  └─ licenseFile: node_modules/@babel/code-frame/LICENSE
-├─ @babel/compat-data@7.28.6
+├─ @babel/compat-data@7.29.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -25,14 +25,14 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/core
 │  └─ licenseFile: node_modules/@babel/core/LICENSE
-├─ @babel/core@7.28.6
+├─ @babel/core@7.29.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/core
 │  └─ licenseFile: node_modules/@marko/compiler/node_modules/@babel/core/LICENSE
-├─ @babel/generator@7.28.6
+├─ @babel/generator@7.29.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -144,7 +144,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helpers
 │  └─ licenseFile: node_modules/@babel/helpers/LICENSE
-├─ @babel/parser@7.28.6
+├─ @babel/parser@7.29.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -186,14 +186,14 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/template
 │  └─ licenseFile: node_modules/@babel/template/LICENSE
-├─ @babel/traverse@7.28.6
+├─ @babel/traverse@7.29.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/traverse
 │  └─ licenseFile: node_modules/@babel/traverse/LICENSE
-├─ @babel/types@7.28.6
+├─ @babel/types@7.29.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -318,7 +318,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.48
+├─ @marko/compiler@5.39.49
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -331,7 +331,7 @@
 │  ├─ email: dpiercey@ebay.com
 │  ├─ path: node_modules/@marko/express
 │  └─ licenseFile: node_modules/@marko/express/LICENSE
-├─ @marko/runtime-tags@6.0.139
+├─ @marko/runtime-tags@6.0.140
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ path: node_modules/@marko/runtime-tags
@@ -1378,7 +1378,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001766
+├─ caniuse-lite@1.0.30001767
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -2876,7 +2876,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/lasso-loader
 │  └─ licenseFile: node_modules/lasso-loader/README.md
-├─ lasso-marko@5.0.1
+├─ lasso-marko@5.0.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/lasso-js/lasso-marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -3076,7 +3076,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.38.17
+├─ marko@5.38.18
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
