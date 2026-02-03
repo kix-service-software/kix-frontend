@@ -60,6 +60,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.displayText =
             typeof input.displayText !== 'undefined' ? input.displayText : true;
         this.actionList = input.list || [];
+        if (this.actionListChanged()) {
+            this.updateActionList();
+        }
     }
 
     public async onMount(): Promise<void> {
@@ -92,8 +95,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         } else if (this.actionsToShow.length) {
             this.prepareActionLists();
         }
-
-        this.state.prepared = true;
 
         if (this.observeParent) {
             this.observerTimeout = setTimeout(this.prepareObserver.bind(this), 150);
@@ -206,10 +207,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
         if (this.prepareTimeout) {
             clearTimeout(this.prepareTimeout);
+            this.prepareTimeout = null;
         }
 
         const actionListElement: HTMLElement = (this as any).getEl(this.state.key + '-action-list');
         if (!actionListElement) {
+            this.state.prepared = true;
             return;
         }
 
@@ -222,6 +225,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const maxWidth = parent?.offsetWidth || 0;
 
         if (!maxWidth) {
+            this.state.prepared = true;
             return;
         }
 
@@ -283,6 +287,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     dropdown?.show();
                 }.bind(this), 50);
             }
+            this.state.prepared = true;
+
         }.bind(this), 200);
     }
 
@@ -300,6 +306,28 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.displayText = actions[1];
             this.prepareActionLists();
         }
+    }
+
+    private async updateActionList(): Promise<void> {
+        this.state.prepared = false;
+        this.actionsToShow = await ActionFactory.getActionList(this.actionList);
+        this.prepareActionLists();
+    }
+
+    private actionListChanged(): boolean {
+        const actionListIds = this.actionList.map((a) => a.id);
+        const actionsToShowListIds = this.actionsToShow.reduce((acc, curr) => {
+            if (curr instanceof ActionGroup) {
+                return [...acc, ...curr.actions.map((a) => a.id)];
+            } else {
+                return [...acc, curr.id];
+            }
+        }, []);
+
+        if (actionListIds.length !== actionsToShowListIds.length) return true;
+
+        const set = new Set(actionListIds);
+        return !actionsToShowListIds.every((id) => set.has(id));
     }
 
     public actionListClicked(event: any): any {
