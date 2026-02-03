@@ -98,16 +98,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         key=state.key + "-action-list"
         class="d-flex justify-content-end action-list opacity-0 h-100">
         <div class="btn-group" role="group" on-click("actionListClicked")>
-            <action-list
-                contextInstanceId=input.contextInstanceId
-                actionList=state.listDefault/>
-            <if(state.listExpansion && state.listExpansion.length > 0)>
-                <action-list-dropdown
-                    actions=state.listExpansion
-                    icon="kix-icon-dots"
-                    isExpansion
-                    groupKey="action-list-expansion"
-                    key=state.key + "action-list-expansion-macro"/>
+            <if(state.prepared)>
+                <action-list
+                    contextInstanceId=input.contextInstanceId
+                    actionList=state.listDefault/>
+                <if(state.listExpansion && state.listExpansion.length > 0)>
+                    <action-list-dropdown
+                        actions=state.listExpansion
+                        icon="kix-icon-dots"
+                        isExpansion
+                        groupKey="action-list-expansion"
+                        key=state.key + "action-list-expansion-macro"/>
+                </if>
             </if>
         </div>
     </div>
