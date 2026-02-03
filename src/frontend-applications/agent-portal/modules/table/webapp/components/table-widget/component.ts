@@ -37,6 +37,7 @@ import { WidgetSize } from '../../../../../model/configuration/WidgetSize';
 import { BackendNotification } from '../../../../../model/BackendNotification';
 import { NotificationHandler } from '../../../../base-components/webapp/core/NotificationHandler';
 import { AdminContext } from '../../../../../modules/admin/webapp/core/AdminContext';
+import { ContextEvents } from '../../../../../modules/base-components/webapp/core/ContextEvents';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -189,9 +190,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         objectType = NotificationHandler.getObjectType(data.Namespace);
                     }
                     if (objectType === this.objectType) {
-                        this.state.loading = true;
-                        await this.reloadTable(settings);
-                        setTimeout(() => this.state.loading = false, 50);
+                        EventService.getInstance().publish(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.context);
                     }
                 },
                 [
