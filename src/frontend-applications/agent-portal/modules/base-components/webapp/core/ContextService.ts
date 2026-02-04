@@ -427,7 +427,7 @@ export class ContextService {
             EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
             setTimeout(() => {
                 BrowserUtil.setCurrentContentScrollPosition(this.activeContext?.lastScrollPosition);
-            }, 100);
+            }, 500);
             // TODO: Use Event
             this.serviceListener.forEach(
                 (sl) => sl.contextChanged(
