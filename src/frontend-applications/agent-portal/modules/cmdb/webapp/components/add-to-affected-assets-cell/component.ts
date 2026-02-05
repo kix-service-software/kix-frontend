@@ -52,7 +52,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             });
         }
 
-        const affectedAssetsDF = ticket?.DynamicFields.find((df) => df.Name === 'AffectedAsset');
+        const affectedAssetsDF = ticket?.DynamicFields?.find((df) => df.Name === 'AffectedAsset');
         if (affectedAssetsDF) {
             this.setStates(affectedAssetsDF.Value);
         }

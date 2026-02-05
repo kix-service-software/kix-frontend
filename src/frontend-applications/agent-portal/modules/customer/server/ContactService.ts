@@ -335,7 +335,7 @@ export class ContactAPIService extends KIXObjectAPIService {
             uri = this.buildUri(this.RESOURCE_URI, contact?.ID);
         }
 
-        if (!Array.isArray(contact.DynamicFields) || !contact.DynamicFields.length) {
+        if (!Array.isArray(contact.DynamicFields) || !contact.DynamicFields?.length) {
             delete contact.DynamicFields;
         }
 
