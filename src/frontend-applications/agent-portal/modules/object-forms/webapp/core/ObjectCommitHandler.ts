@@ -157,7 +157,7 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
             object.DynamicFields = dfValues;
         }
 
-        if (!Array.isArray(object.DynamicFields) || !object.DynamicFields.length) {
+        if (!Array.isArray(object.DynamicFields) || !object.DynamicFields?.length) {
             delete object.DynamicFields;
         }
     }

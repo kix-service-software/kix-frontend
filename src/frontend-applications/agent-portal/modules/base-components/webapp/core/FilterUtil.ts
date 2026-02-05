@@ -75,7 +75,7 @@ export class FilterUtil {
         let dfValue = null;
         const dfName = KIXObjectService.getDynamicFieldName(criterion.property);
         if (dfName) {
-            if (!object?.DynamicFields?.length) {
+            if (!Array.isArray(object?.DynamicFields)) {
                 let objectLoadingOptions: KIXObjectSpecificLoadingOptions = null;
                 if (object.KIXObjectType === KIXObjectType.ARTICLE) {
                     objectLoadingOptions = new ArticleLoadingOptions((object as Article).TicketID);

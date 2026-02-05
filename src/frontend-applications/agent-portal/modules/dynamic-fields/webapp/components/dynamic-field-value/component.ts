@@ -70,7 +70,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async createDynamicFieldInfos(): Promise<void> {
         if (this.state.field && this.object) {
             let dynamicFields = this.object.DynamicFields;
-            if (!Array.isArray(this.object.DynamicFields) || !this.object.DynamicFields.length) {
+            if (!Array.isArray(this.object.DynamicFields)) {
                 const objectsWithDF = await KIXObjectService.loadObjects(
                     this.object.KIXObjectType, [this.object.ObjectId],
                     new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])

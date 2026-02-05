@@ -331,7 +331,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
             const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
             let dynamicField: DynamicField;
             if (fieldNameOption) {
-                if (object && object.DynamicFields && object.DynamicFields.length) {
+                if (Array.isArray(object.DynamicFields)) {
                     const objectDFValue: DynamicFieldValue = object.DynamicFields.find(
                         (df) => df.Name === fieldNameOption.value
                     );
