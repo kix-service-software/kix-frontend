@@ -550,7 +550,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             delete ticket.Articles;
         }
 
-        if (!Array.isArray(ticket.DynamicFields) || !ticket.DynamicFields.length) {
+        if (!Array.isArray(ticket.DynamicFields) || !ticket.DynamicFields?.length) {
             delete ticket.DynamicFields;
         }
 

@@ -32,7 +32,7 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/core
 │  └─ licenseFile: node_modules/@marko/compiler/node_modules/@babel/core/LICENSE
-├─ @babel/generator@7.29.0
+├─ @babel/generator@7.29.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
@@ -331,7 +331,7 @@
 │  ├─ email: dpiercey@ebay.com
 │  ├─ path: node_modules/@marko/express
 │  └─ licenseFile: node_modules/@marko/express/LICENSE
-├─ @marko/runtime-tags@6.0.140
+├─ @marko/runtime-tags@6.0.141
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ path: node_modules/@marko/runtime-tags
@@ -1378,7 +1378,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001767
+├─ caniuse-lite@1.0.30001768
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -2817,7 +2817,7 @@
 │  ├─ publisher: auth0
 │  ├─ path: node_modules/jsonwebtoken
 │  └─ licenseFile: node_modules/jsonwebtoken/LICENSE
-├─ juice@11.1.0
+├─ juice@11.1.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/Automattic/juice
 │  ├─ path: node_modules/juice
@@ -3076,7 +3076,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.38.18
+├─ marko@5.38.19
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -3536,7 +3536,7 @@
 │  ├─ repository: https://github.com/prosemirror/prosemirror-keymap
 │  ├─ path: node_modules/prosemirror-keymap
 │  └─ licenseFile: node_modules/prosemirror-keymap/LICENSE
-├─ prosemirror-markdown@1.13.3
+├─ prosemirror-markdown@1.13.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/prosemirror/prosemirror-markdown
 │  ├─ path: node_modules/prosemirror-markdown

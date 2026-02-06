@@ -68,7 +68,7 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
         objectSpecificLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<string> {
         let objectWithDF = object;
-        if (object && (!object.DynamicFields) || !object.DynamicFields.length) {
+        if (object && !Array.isArray(object.DynamicFields)) {
             const objects = await KIXObjectService.loadObjects(
                 object.KIXObjectType, [object.ObjectId],
                 new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]),
@@ -99,7 +99,7 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
                     dfName = dfName.replace(/(.+?)_.+/, '$1');
                 }
 
-                const dfValue = dfName ? objectWithDF.DynamicFields.find((dfv) => dfv.Name === dfName) : null;
+                const dfValue = dfName ? objectWithDF.DynamicFields?.find((dfv) => dfv.Name === dfName) : null;
                 result = await this.getDFDisplayValue(
                     objectWithDF, dfValue, dfValueOptions, language, forRichtext, translate
                 );
