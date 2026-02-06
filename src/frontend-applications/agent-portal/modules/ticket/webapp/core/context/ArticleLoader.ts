@@ -266,11 +266,16 @@ export class ArticleLoader {
         return articles;
     }
 
-    public static async loadArticle(articleId: number, ticketId: number): Promise<Article> {
+    public static async loadArticle(
+        articleId: number, ticketId: number, loadObjectActions: boolean = false
+    ): Promise<Article> {
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.includes = [
             ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, KIXObjectProperty.DYNAMIC_FIELDS
         ];
+        if (loadObjectActions) {
+            loadingOptions.includes.push('ObjectActions', ArticleProperty.PLAIN);
+        }
 
         const articles = await KIXObjectService.loadObjects<Article>(
             KIXObjectType.ARTICLE, [articleId], loadingOptions, new ArticleLoadingOptions(ticketId)
