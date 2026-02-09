@@ -46,6 +46,7 @@
     },
     "author": "KIX Service Software GmbH",
     "dependencies": {
+        "@babel/preset-env": "7.15.4",
         "@json-editor/json-editor": "2.13.2",
         "@lasso/marko-taglib": "^2.0.3",
         "@marko/babel-utils": "6.6.3",
