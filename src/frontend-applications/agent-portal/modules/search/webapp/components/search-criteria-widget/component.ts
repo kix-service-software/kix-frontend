@@ -24,6 +24,7 @@ import { TableFactoryService } from '../../../../table/webapp/core/factory/Table
 import { SearchContext } from '../../core/SearchContext';
 import { SearchDefinition } from '../../core/SearchDefinition';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
@@ -278,12 +279,19 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
     public keyDown(event: any): void {
         if ((event.key === 'Enter') && this.state.canSearch) {
-            if (event.preventDefault) {
-                event.preventDefault();
-            }
-            const isFieldDropdownActive = document.getElementsByClassName('form-list-tree').length > 0;
-            if (!isFieldDropdownActive) {
-                this.search();
+            if (
+                this.context.instanceId === ContextService.getInstance().getActiveContext().instanceId &&
+                event.target.tagName === 'INPUT'
+            ) {
+                if (event.preventDefault) {
+                    event.preventDefault();
+                }
+                const isFieldDropdownActive = Array.from(
+                    document.getElementsByClassName('form-list-tree')
+                ).some((t) => t.checkVisibility());
+                if (!isFieldDropdownActive) {
+                    this.search();
+                }
             }
         }
     }
