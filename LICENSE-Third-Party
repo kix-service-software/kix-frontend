@@ -25,13 +25,6 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/core
 │  └─ licenseFile: node_modules/@babel/core/LICENSE
-├─ @babel/core@7.29.0
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/babel/babel
-│  ├─ publisher: The Babel Team
-│  ├─ url: https://babel.dev/team
-│  ├─ path: node_modules/@babel/core
-│  └─ licenseFile: node_modules/@marko/compiler/node_modules/@babel/core/LICENSE
 ├─ @babel/generator@7.29.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
@@ -60,6 +53,25 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helper-create-class-features-plugin
 │  └─ licenseFile: node_modules/@babel/helper-create-class-features-plugin/LICENSE
+├─ @babel/helper-create-regexp-features-plugin@7.28.5
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/helper-create-regexp-features-plugin
+│  └─ licenseFile: node_modules/@babel/helper-create-regexp-features-plugin/LICENSE
+├─ @babel/helper-define-polyfill-provider@0.2.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel-polyfills
+│  ├─ path: node_modules/@babel/helper-define-polyfill-provider
+│  └─ licenseFile: node_modules/@babel/helper-define-polyfill-provider/LICENSE
+├─ @babel/helper-environment-visitor@7.24.7
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/helper-environment-visitor
+│  └─ licenseFile: node_modules/@babel/helper-environment-visitor/LICENSE
 ├─ @babel/helper-globals@7.28.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
@@ -102,6 +114,13 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helper-plugin-utils
 │  └─ licenseFile: node_modules/@babel/helper-plugin-utils/LICENSE
+├─ @babel/helper-remap-async-to-generator@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/helper-remap-async-to-generator
+│  └─ licenseFile: node_modules/@babel/helper-remap-async-to-generator/LICENSE
 ├─ @babel/helper-replace-supers@7.28.6
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
@@ -137,6 +156,13 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/helper-validator-option
 │  └─ licenseFile: node_modules/@babel/helper-validator-option/LICENSE
+├─ @babel/helper-wrap-function@7.28.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/helper-wrap-function
+│  └─ licenseFile: node_modules/@babel/helper-wrap-function/LICENSE
 ├─ @babel/helpers@7.28.6
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
@@ -151,13 +177,299 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/parser
 │  └─ licenseFile: node_modules/@babel/parser/LICENSE
-├─ @babel/plugin-syntax-typescript@7.28.6
+├─ @babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@7.27.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
-│  ├─ path: node_modules/@babel/plugin-syntax-typescript
-│  └─ licenseFile: node_modules/@babel/plugin-syntax-typescript/LICENSE
+│  ├─ path: node_modules/@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining
+│  └─ licenseFile: node_modules/@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining/LICENSE
+├─ @babel/plugin-proposal-async-generator-functions@7.20.7
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-async-generator-functions
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-async-generator-functions/LICENSE
+├─ @babel/plugin-proposal-class-properties@7.18.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-class-properties
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-class-properties/LICENSE
+├─ @babel/plugin-proposal-class-static-block@7.21.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-class-static-block
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-class-static-block/LICENSE
+├─ @babel/plugin-proposal-dynamic-import@7.18.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-dynamic-import
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-dynamic-import/LICENSE
+├─ @babel/plugin-proposal-export-namespace-from@7.18.9
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-export-namespace-from
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-export-namespace-from/LICENSE
+├─ @babel/plugin-proposal-json-strings@7.18.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-json-strings
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-json-strings/LICENSE
+├─ @babel/plugin-proposal-logical-assignment-operators@7.20.7
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-logical-assignment-operators
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-logical-assignment-operators/LICENSE
+├─ @babel/plugin-proposal-nullish-coalescing-operator@7.18.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-nullish-coalescing-operator
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-nullish-coalescing-operator/LICENSE
+├─ @babel/plugin-proposal-numeric-separator@7.18.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-numeric-separator
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-numeric-separator/LICENSE
+├─ @babel/plugin-proposal-object-rest-spread@7.20.7
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-object-rest-spread
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-object-rest-spread/LICENSE
+├─ @babel/plugin-proposal-optional-catch-binding@7.18.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-optional-catch-binding
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-optional-catch-binding/LICENSE
+├─ @babel/plugin-proposal-optional-chaining@7.21.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-optional-chaining
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-optional-chaining/LICENSE
+├─ @babel/plugin-proposal-private-methods@7.18.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-private-methods
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-private-methods/LICENSE
+├─ @babel/plugin-proposal-private-property-in-object@7.21.11
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-private-property-in-object
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-private-property-in-object/LICENSE
+├─ @babel/plugin-proposal-unicode-property-regex@7.18.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-proposal-unicode-property-regex
+│  └─ licenseFile: node_modules/@babel/plugin-proposal-unicode-property-regex/LICENSE
+├─ @babel/plugin-syntax-async-generators@7.8.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-async-generators
+│  ├─ path: node_modules/@babel/plugin-syntax-async-generators
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-async-generators/LICENSE
+├─ @babel/plugin-syntax-class-properties@7.12.13
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ path: node_modules/@babel/plugin-syntax-class-properties
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-class-properties/LICENSE
+├─ @babel/plugin-syntax-class-static-block@7.14.5
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-syntax-class-static-block
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-class-static-block/LICENSE
+├─ @babel/plugin-syntax-dynamic-import@7.8.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-dynamic-import
+│  ├─ path: node_modules/@babel/plugin-syntax-dynamic-import
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-dynamic-import/LICENSE
+├─ @babel/plugin-syntax-export-namespace-from@7.8.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-export-namespace-from
+│  ├─ path: node_modules/@babel/plugin-syntax-export-namespace-from
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-export-namespace-from/LICENSE
+├─ @babel/plugin-syntax-json-strings@7.8.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-json-strings
+│  ├─ path: node_modules/@babel/plugin-syntax-json-strings
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-json-strings/LICENSE
+├─ @babel/plugin-syntax-logical-assignment-operators@7.10.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ path: node_modules/@babel/plugin-syntax-logical-assignment-operators
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-logical-assignment-operators/LICENSE
+├─ @babel/plugin-syntax-nullish-coalescing-operator@7.8.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-nullish-coalescing-operator
+│  ├─ path: node_modules/@babel/plugin-syntax-nullish-coalescing-operator
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-nullish-coalescing-operator/LICENSE
+├─ @babel/plugin-syntax-numeric-separator@7.10.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ path: node_modules/@babel/plugin-syntax-numeric-separator
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-numeric-separator/LICENSE
+├─ @babel/plugin-syntax-object-rest-spread@7.8.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-object-rest-spread
+│  ├─ path: node_modules/@babel/plugin-syntax-object-rest-spread
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-object-rest-spread/LICENSE
+├─ @babel/plugin-syntax-optional-catch-binding@7.8.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-optional-catch-binding
+│  ├─ path: node_modules/@babel/plugin-syntax-optional-catch-binding
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-optional-catch-binding/LICENSE
+├─ @babel/plugin-syntax-optional-chaining@7.8.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-optional-chaining
+│  ├─ path: node_modules/@babel/plugin-syntax-optional-chaining
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-optional-chaining/LICENSE
+├─ @babel/plugin-syntax-private-property-in-object@7.14.5
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-syntax-private-property-in-object
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-private-property-in-object/LICENSE
+├─ @babel/plugin-syntax-top-level-await@7.14.5
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-syntax-top-level-await
+│  └─ licenseFile: node_modules/@babel/plugin-syntax-top-level-await/LICENSE
+├─ @babel/plugin-transform-arrow-functions@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-arrow-functions
+│  └─ licenseFile: node_modules/@babel/plugin-transform-arrow-functions/LICENSE
+├─ @babel/plugin-transform-async-to-generator@7.28.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-async-to-generator
+│  └─ licenseFile: node_modules/@babel/plugin-transform-async-to-generator/LICENSE
+├─ @babel/plugin-transform-block-scoped-functions@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-block-scoped-functions
+│  └─ licenseFile: node_modules/@babel/plugin-transform-block-scoped-functions/LICENSE
+├─ @babel/plugin-transform-block-scoping@7.28.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-block-scoping
+│  └─ licenseFile: node_modules/@babel/plugin-transform-block-scoping/LICENSE
+├─ @babel/plugin-transform-classes@7.28.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-classes
+│  └─ licenseFile: node_modules/@babel/plugin-transform-classes/LICENSE
+├─ @babel/plugin-transform-computed-properties@7.28.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-computed-properties
+│  └─ licenseFile: node_modules/@babel/plugin-transform-computed-properties/LICENSE
+├─ @babel/plugin-transform-destructuring@7.28.5
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-destructuring
+│  └─ licenseFile: node_modules/@babel/plugin-transform-destructuring/LICENSE
+├─ @babel/plugin-transform-dotall-regex@7.28.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-dotall-regex
+│  └─ licenseFile: node_modules/@babel/plugin-transform-dotall-regex/LICENSE
+├─ @babel/plugin-transform-duplicate-keys@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-duplicate-keys
+│  └─ licenseFile: node_modules/@babel/plugin-transform-duplicate-keys/LICENSE
+├─ @babel/plugin-transform-exponentiation-operator@7.28.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-exponentiation-operator
+│  └─ licenseFile: node_modules/@babel/plugin-transform-exponentiation-operator/LICENSE
+├─ @babel/plugin-transform-for-of@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-for-of
+│  └─ licenseFile: node_modules/@babel/plugin-transform-for-of/LICENSE
+├─ @babel/plugin-transform-function-name@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-function-name
+│  └─ licenseFile: node_modules/@babel/plugin-transform-function-name/LICENSE
+├─ @babel/plugin-transform-literals@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-literals
+│  └─ licenseFile: node_modules/@babel/plugin-transform-literals/LICENSE
+├─ @babel/plugin-transform-member-expression-literals@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-member-expression-literals
+│  └─ licenseFile: node_modules/@babel/plugin-transform-member-expression-literals/LICENSE
+├─ @babel/plugin-transform-modules-amd@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-modules-amd
+│  └─ licenseFile: node_modules/@babel/plugin-transform-modules-amd/LICENSE
 ├─ @babel/plugin-transform-modules-commonjs@7.28.6
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
@@ -165,13 +477,137 @@
 │  ├─ url: https://babel.dev/team
 │  ├─ path: node_modules/@babel/plugin-transform-modules-commonjs
 │  └─ licenseFile: node_modules/@babel/plugin-transform-modules-commonjs/LICENSE
-├─ @babel/plugin-transform-typescript@7.28.6
+├─ @babel/plugin-transform-modules-systemjs@7.29.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
 │  ├─ publisher: The Babel Team
 │  ├─ url: https://babel.dev/team
-│  ├─ path: node_modules/@babel/plugin-transform-typescript
-│  └─ licenseFile: node_modules/@babel/plugin-transform-typescript/LICENSE
+│  ├─ path: node_modules/@babel/plugin-transform-modules-systemjs
+│  └─ licenseFile: node_modules/@babel/plugin-transform-modules-systemjs/LICENSE
+├─ @babel/plugin-transform-modules-umd@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-modules-umd
+│  └─ licenseFile: node_modules/@babel/plugin-transform-modules-umd/LICENSE
+├─ @babel/plugin-transform-named-capturing-groups-regex@7.29.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-named-capturing-groups-regex
+│  └─ licenseFile: node_modules/@babel/plugin-transform-named-capturing-groups-regex/LICENSE
+├─ @babel/plugin-transform-new-target@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-new-target
+│  └─ licenseFile: node_modules/@babel/plugin-transform-new-target/LICENSE
+├─ @babel/plugin-transform-object-super@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-object-super
+│  └─ licenseFile: node_modules/@babel/plugin-transform-object-super/LICENSE
+├─ @babel/plugin-transform-optional-chaining@7.28.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-optional-chaining
+│  └─ licenseFile: node_modules/@babel/plugin-transform-optional-chaining/LICENSE
+├─ @babel/plugin-transform-parameters@7.27.7
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-parameters
+│  └─ licenseFile: node_modules/@babel/plugin-transform-parameters/LICENSE
+├─ @babel/plugin-transform-property-literals@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-property-literals
+│  └─ licenseFile: node_modules/@babel/plugin-transform-property-literals/LICENSE
+├─ @babel/plugin-transform-regenerator@7.29.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-regenerator
+│  └─ licenseFile: node_modules/@babel/plugin-transform-regenerator/LICENSE
+├─ @babel/plugin-transform-reserved-words@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-reserved-words
+│  └─ licenseFile: node_modules/@babel/plugin-transform-reserved-words/LICENSE
+├─ @babel/plugin-transform-shorthand-properties@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-shorthand-properties
+│  └─ licenseFile: node_modules/@babel/plugin-transform-shorthand-properties/LICENSE
+├─ @babel/plugin-transform-spread@7.28.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-spread
+│  └─ licenseFile: node_modules/@babel/plugin-transform-spread/LICENSE
+├─ @babel/plugin-transform-sticky-regex@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-sticky-regex
+│  └─ licenseFile: node_modules/@babel/plugin-transform-sticky-regex/LICENSE
+├─ @babel/plugin-transform-template-literals@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-template-literals
+│  └─ licenseFile: node_modules/@babel/plugin-transform-template-literals/LICENSE
+├─ @babel/plugin-transform-typeof-symbol@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-typeof-symbol
+│  └─ licenseFile: node_modules/@babel/plugin-transform-typeof-symbol/LICENSE
+├─ @babel/plugin-transform-unicode-escapes@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-unicode-escapes
+│  └─ licenseFile: node_modules/@babel/plugin-transform-unicode-escapes/LICENSE
+├─ @babel/plugin-transform-unicode-regex@7.27.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/plugin-transform-unicode-regex
+│  └─ licenseFile: node_modules/@babel/plugin-transform-unicode-regex/LICENSE
+├─ @babel/preset-env@7.15.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: node_modules/@babel/preset-env
+│  └─ licenseFile: node_modules/@babel/preset-env/LICENSE
+├─ @babel/preset-modules@0.1.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/preset-modules
+│  ├─ path: node_modules/@babel/preset-modules
+│  └─ licenseFile: node_modules/@babel/preset-modules/LICENSE
 ├─ @babel/runtime@7.28.6
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel
@@ -250,13 +686,6 @@
 │  ├─ email: justin@ridgewell.name
 │  ├─ path: node_modules/@jridgewell/gen-mapping
 │  └─ licenseFile: node_modules/@jridgewell/gen-mapping/LICENSE
-├─ @jridgewell/remapping@2.3.5
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/jridgewell/sourcemaps
-│  ├─ publisher: Justin Ridgewell
-│  ├─ email: justin@ridgewell.name
-│  ├─ path: node_modules/@jridgewell/remapping
-│  └─ licenseFile: node_modules/@jridgewell/remapping/LICENSE
 ├─ @jridgewell/resolve-uri@3.1.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jridgewell/resolve-uri
@@ -318,7 +747,7 @@
 │  ├─ publisher: Dylan Piercey
 │  ├─ email: dpiercey@ebay.com
 │  └─ path: node_modules/@marko/babel-utils
-├─ @marko/compiler@5.39.49
+├─ @marko/compiler@5.39.55
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Dylan Piercey
@@ -331,7 +760,7 @@
 │  ├─ email: dpiercey@ebay.com
 │  ├─ path: node_modules/@marko/express
 │  └─ licenseFile: node_modules/@marko/express/LICENSE
-├─ @marko/runtime-tags@6.0.141
+├─ @marko/runtime-tags@6.0.144
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ path: node_modules/@marko/runtime-tags
@@ -751,7 +1180,7 @@
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/mdurl
 │  └─ licenseFile: node_modules/@types/mdurl/LICENSE
-├─ @types/node@22.19.8
+├─ @types/node@22.19.10
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
 │  ├─ path: node_modules/@types/node
@@ -1012,6 +1441,21 @@
 │  ├─ repository: https://github.com/babel/babel/tree/master/packages/babel-plugin-check-es2015-constants
 │  ├─ path: node_modules/babel-plugin-check-es2015-constants
 │  └─ licenseFile: node_modules/babel-plugin-check-es2015-constants/README.md
+├─ babel-plugin-polyfill-corejs2@0.2.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel-polyfills
+│  ├─ path: node_modules/babel-plugin-polyfill-corejs2
+│  └─ licenseFile: node_modules/babel-plugin-polyfill-corejs2/LICENSE
+├─ babel-plugin-polyfill-corejs3@0.2.5
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel-polyfills
+│  ├─ path: node_modules/babel-plugin-polyfill-corejs3
+│  └─ licenseFile: node_modules/babel-plugin-polyfill-corejs3/LICENSE
+├─ babel-plugin-polyfill-regenerator@0.2.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel-polyfills
+│  ├─ path: node_modules/babel-plugin-polyfill-regenerator
+│  └─ licenseFile: node_modules/babel-plugin-polyfill-regenerator/LICENSE
 ├─ babel-plugin-syntax-async-functions@6.13.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-async-functions
@@ -1278,9 +1722,9 @@
 │  ├─ publisher: mdo
 │  ├─ path: node_modules/bootstrap-icons
 │  └─ licenseFile: node_modules/bootstrap-icons/LICENSE
-├─ bowser@2.13.1
+├─ bowser@2.14.1
 │  ├─ licenses: MIT
-│  ├─ repository: https://github.com/lancedikson/bowser
+│  ├─ repository: https://github.com/bowser-js/bowser
 │  ├─ publisher: Dustin Diaz
 │  ├─ email: dustin@dustindiaz.com
 │  ├─ url: http://dustindiaz.com
@@ -1378,7 +1822,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001768
+├─ caniuse-lite@1.0.30001769
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -1553,14 +1997,6 @@
 │  ├─ url: http://thlorenz.com
 │  ├─ path: node_modules/convert-source-map
 │  └─ licenseFile: node_modules/convert-source-map/LICENSE
-├─ convert-source-map@2.0.0
-│  ├─ licenses: MIT
-│  ├─ repository: https://github.com/thlorenz/convert-source-map
-│  ├─ publisher: Thorsten Lorenz
-│  ├─ email: thlorenz@gmx.de
-│  ├─ url: http://thlorenz.com
-│  ├─ path: node_modules/convert-source-map
-│  └─ licenseFile: node_modules/@marko/compiler/node_modules/convert-source-map/LICENSE
 ├─ cookie-parser@1.4.7
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/expressjs/cookie-parser
@@ -1596,6 +2032,14 @@
 │  ├─ publisher: Luca Ban - Mesqueeb
 │  ├─ path: node_modules/copy-anything
 │  └─ licenseFile: node_modules/copy-anything/LICENSE
+├─ core-js-compat@3.48.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/zloirock/core-js
+│  ├─ publisher: Denis Pushkarev
+│  ├─ email: zloirock@zloirock.ru
+│  ├─ url: http://zloirock.ru
+│  ├─ path: node_modules/core-js-compat
+│  └─ licenseFile: node_modules/core-js-compat/LICENSE
 ├─ core-js@2.6.12
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/zloirock/core-js
@@ -2639,6 +3083,13 @@
 │  ├─ url: http://ljharb.codes
 │  ├─ path: node_modules/is-callable
 │  └─ licenseFile: node_modules/is-callable/LICENSE
+├─ is-core-module@2.16.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/inspect-js/is-core-module
+│  ├─ publisher: Jordan Harband
+│  ├─ email: ljharb@gmail.com
+│  ├─ path: node_modules/is-core-module
+│  └─ licenseFile: node_modules/is-core-module/LICENSE
 ├─ is-finite@1.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/sindresorhus/is-finite
@@ -2953,6 +3404,14 @@
 │  ├─ publisher: Tobias Koppers @sokra
 │  ├─ path: node_modules/loader-utils
 │  └─ licenseFile: node_modules/loader-utils/LICENSE
+├─ lodash.debounce@4.0.8
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/lodash/lodash
+│  ├─ publisher: John-David Dalton
+│  ├─ email: john.david.dalton@gmail.com
+│  ├─ url: http://allyoucanleet.com/
+│  ├─ path: node_modules/lodash.debounce
+│  └─ licenseFile: node_modules/lodash.debounce/LICENSE
 ├─ lodash.includes@4.3.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/lodash/lodash
@@ -3076,7 +3535,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.38.19
+├─ marko@5.38.22
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
@@ -3444,6 +3903,13 @@
 │  ├─ url: sindresorhus.com
 │  ├─ path: node_modules/path-is-absolute
 │  └─ licenseFile: node_modules/path-is-absolute/license
+├─ path-parse@1.0.7
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jbgutierrez/path-parse
+│  ├─ publisher: Javier Blanco
+│  ├─ email: http://jbgutierrez.info
+│  ├─ path: node_modules/path-parse
+│  └─ licenseFile: node_modules/path-parse/LICENSE
 ├─ path-to-regexp@0.1.12
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/pillarjs/path-to-regexp
@@ -3581,7 +4047,7 @@
 │  ├─ repository: https://github.com/prosemirror/prosemirror-transform
 │  ├─ path: node_modules/prosemirror-transform
 │  └─ licenseFile: node_modules/prosemirror-transform/LICENSE
-├─ prosemirror-view@1.41.5
+├─ prosemirror-view@1.41.6
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/prosemirror/prosemirror-view
 │  ├─ path: node_modules/prosemirror-view
@@ -3767,6 +4233,13 @@
 │  ├─ email: mjr@ranney.com
 │  ├─ path: node_modules/redis
 │  └─ licenseFile: node_modules/redis/LICENSE
+├─ regenerate-unicode-properties@10.2.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/mathiasbynens/regenerate-unicode-properties
+│  ├─ publisher: Mathias Bynens
+│  ├─ url: https://mathiasbynens.be/
+│  ├─ path: node_modules/regenerate-unicode-properties
+│  └─ licenseFile: node_modules/regenerate-unicode-properties/LICENSE-MIT.txt
 ├─ regenerate@1.4.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/mathiasbynens/regenerate
@@ -3795,6 +4268,13 @@
 │  ├─ url: https://mathiasbynens.be/
 │  ├─ path: node_modules/regexpu-core
 │  └─ licenseFile: node_modules/babel-plugin-transform-es2015-unicode-regex/node_modules/regexpu-core/LICENSE-MIT.txt
+├─ regexpu-core@6.4.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/mathiasbynens/regexpu-core
+│  ├─ publisher: Mathias Bynens
+│  ├─ url: https://mathiasbynens.be/
+│  ├─ path: node_modules/regexpu-core
+│  └─ licenseFile: node_modules/regexpu-core/LICENSE-MIT.txt
 ├─ regjsgen@0.2.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/d10/regjsgen
@@ -3803,6 +4283,13 @@
 │  ├─ url: https://d10.github.io/
 │  ├─ path: node_modules/regjsgen
 │  └─ licenseFile: node_modules/babel-plugin-transform-es2015-unicode-regex/node_modules/regjsgen/LICENSE.txt
+├─ regjsgen@0.8.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/bnjmnt4n/regjsgen
+│  ├─ publisher: Benjamin Tan
+│  ├─ url: https://ofcr.se/
+│  ├─ path: node_modules/regjsgen
+│  └─ licenseFile: node_modules/regjsgen/LICENSE-MIT.txt
 ├─ regjsparser@0.1.5
 │  ├─ licenses: BSD*
 │  ├─ repository: https://github.com/jviereck/regjsparser
@@ -3810,6 +4297,13 @@
 │  ├─ email: julian.viereck@gmail.com
 │  ├─ path: node_modules/regjsparser
 │  └─ licenseFile: node_modules/babel-plugin-transform-es2015-unicode-regex/node_modules/regjsparser/LICENSE.BSD
+├─ regjsparser@0.13.0
+│  ├─ licenses: BSD-2-Clause
+│  ├─ repository: https://github.com/jviereck/regjsparser
+│  ├─ publisher: 'Julian Viereck'
+│  ├─ email: julian.viereck@gmail.com
+│  ├─ path: node_modules/regjsparser
+│  └─ licenseFile: node_modules/regjsparser/LICENSE.BSD
 ├─ relative-import-path@1.0.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/relative-import-path
@@ -3849,6 +4343,14 @@
 │  ├─ url: sindresorhus.com
 │  ├─ path: node_modules/resolve-from
 │  └─ licenseFile: node_modules/resolve-from/license
+├─ resolve@1.22.11
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/browserify/resolve
+│  ├─ publisher: James Halliday
+│  ├─ email: mail@substack.net
+│  ├─ url: http://substack.net
+│  ├─ path: node_modules/resolve
+│  └─ licenseFile: node_modules/resolve/LICENSE
 ├─ robust-predicates@3.0.2
 │  ├─ licenses: Unlicense
 │  ├─ repository: https://github.com/mourner/robust-predicates
@@ -3945,7 +4447,7 @@
 │  ├─ publisher: GitHub Inc.
 │  ├─ path: node_modules/semver
 │  └─ licenseFile: node_modules/semver/LICENSE
-├─ semver@7.7.3
+├─ semver@7.7.4
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/npm/node-semver
 │  ├─ publisher: GitHub Inc.
@@ -4153,6 +4655,13 @@
 │  ├─ url: sindresorhus.com
 │  ├─ path: node_modules/supports-color
 │  └─ licenseFile: node_modules/babel-code-frame/node_modules/supports-color/license
+├─ supports-preserve-symlinks-flag@1.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/inspect-js/node-supports-preserve-symlinks-flag
+│  ├─ publisher: Jordan Harband
+│  ├─ email: ljharb@gmail.com
+│  ├─ path: node_modules/supports-preserve-symlinks-flag
+│  └─ licenseFile: node_modules/supports-preserve-symlinks-flag/LICENSE
 ├─ symbol-tree@3.2.4
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/jsdom/js-symbol-tree
@@ -4337,6 +4846,34 @@
 │  ├─ repository: https://github.com/nodejs/undici
 │  ├─ path: node_modules/undici
 │  └─ licenseFile: node_modules/undici/LICENSE
+├─ unicode-canonical-property-names-ecmascript@2.0.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/mathiasbynens/unicode-canonical-property-names-ecmascript
+│  ├─ publisher: Mathias Bynens
+│  ├─ url: https://mathiasbynens.be/
+│  ├─ path: node_modules/unicode-canonical-property-names-ecmascript
+│  └─ licenseFile: node_modules/unicode-canonical-property-names-ecmascript/LICENSE-MIT.txt
+├─ unicode-match-property-ecmascript@2.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/mathiasbynens/unicode-match-property-ecmascript
+│  ├─ publisher: Mathias Bynens
+│  ├─ url: https://mathiasbynens.be/
+│  ├─ path: node_modules/unicode-match-property-ecmascript
+│  └─ licenseFile: node_modules/unicode-match-property-ecmascript/LICENSE-MIT.txt
+├─ unicode-match-property-value-ecmascript@2.2.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/mathiasbynens/unicode-match-property-value-ecmascript
+│  ├─ publisher: Mathias Bynens
+│  ├─ url: https://mathiasbynens.be/
+│  ├─ path: node_modules/unicode-match-property-value-ecmascript
+│  └─ licenseFile: node_modules/unicode-match-property-value-ecmascript/LICENSE-MIT.txt
+├─ unicode-property-aliases-ecmascript@2.2.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/mathiasbynens/unicode-property-aliases-ecmascript
+│  ├─ publisher: Mathias Bynens
+│  ├─ url: https://mathiasbynens.be/
+│  ├─ path: node_modules/unicode-property-aliases-ecmascript
+│  └─ licenseFile: node_modules/unicode-property-aliases-ecmascript/LICENSE-MIT.txt
 ├─ universalify@2.0.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/RyanZim/universalify
