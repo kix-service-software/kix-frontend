@@ -60,7 +60,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.displayText =
             typeof input.displayText !== 'undefined' ? input.displayText : true;
         this.actionList = input.list || [];
-        if (this.actionListChanged()) {
+        if (this.actionList?.length && this.actionListChanged()) {
             this.updateActionList();
         }
     }
