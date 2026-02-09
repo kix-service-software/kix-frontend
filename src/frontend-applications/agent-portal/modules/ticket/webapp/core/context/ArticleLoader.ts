@@ -274,7 +274,7 @@ export class ArticleLoader {
             ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, KIXObjectProperty.DYNAMIC_FIELDS
         ];
         if (loadObjectActions) {
-            loadingOptions.includes.push('ObjectActions', ArticleProperty.PLAIN);
+            loadingOptions.includes.push('ObjectActions');
         }
 
         const articles = await KIXObjectService.loadObjects<Article>(
