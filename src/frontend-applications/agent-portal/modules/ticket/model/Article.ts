@@ -307,12 +307,11 @@ export class Article extends KIXObject {
     <style>
       table {
         display: table;
-        margin: .9em auto;
-        border: 1px double #b3b3b3;
+        margin: .9em;
         border-collapse: collapse;
         border-spacing: 0;
-        height: 100%;
-        width: 100%;
+        height: auto;
+        width: auto;
       }
 
       thead,tbody {
@@ -320,7 +319,7 @@ export class Article extends KIXObject {
         vertical-align: middle;
         unicode-bidi: isolate;
       }
-      
+
       tr {
         display: table-row;
         vertical-align: inherit;
@@ -329,7 +328,6 @@ export class Article extends KIXObject {
       }
 
       th,td {
-        border: 1px solid #bfbfbf;
         min-width: 2em;
         padding: 0.4em;
       }
