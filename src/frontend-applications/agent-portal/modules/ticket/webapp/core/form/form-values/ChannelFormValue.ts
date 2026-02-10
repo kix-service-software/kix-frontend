@@ -66,6 +66,9 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         this.fieldOrder[ArticleProperty.BODY] = 6;
         this.fieldOrder[ArticleProperty.ATTACHMENTS] = 7;
 
+        // init Dynamicfields if needed so that DynamicFieldObjectFormValue is created
+        article.DynamicFields = article.DynamicFields || [];
+
         this.createArticleFormValues(article);
 
         this.subscriber = {
