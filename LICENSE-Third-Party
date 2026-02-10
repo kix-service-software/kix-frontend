@@ -2928,7 +2928,7 @@
 │  ├─ url: https://domenic.me/
 │  ├─ path: node_modules/html-encoding-sniffer
 │  └─ licenseFile: node_modules/html-encoding-sniffer/LICENSE.txt
-├─ htmljs-parser@5.7.4
+├─ htmljs-parser@5.8.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/htmljs-parser
 │  ├─ path: node_modules/htmljs-parser
@@ -3535,7 +3535,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/marko-loader
 │  └─ licenseFile: node_modules/marko-loader/LICENSE
-├─ marko@5.38.22
+├─ marko@5.38.23
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/marko
 │  ├─ publisher: Patrick Steele-Idem
