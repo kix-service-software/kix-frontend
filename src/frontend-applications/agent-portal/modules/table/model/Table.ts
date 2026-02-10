@@ -104,7 +104,7 @@ export class Table implements Table {
 
         this.tableState = new TableState(
             this.filterValue, this.filterCriteria, toggledRows, selectedRows, columnsizes,
-            this.sortColumnId, this.sortOrder
+            this.sortColumnId, this.sortOrder, this.context?.contextId, this.context?.getObjectId()
         );
         const tableStateString = JSON.stringify(this.tableState);
 
@@ -130,6 +130,12 @@ export class Table implements Table {
         const tableStateString = ClientStorageService.getOption(this.getTableId());
         try {
             this.tableState = JSON.parse(tableStateString);
+            if (
+                this.tableState?.contextId !== this.context?.contextId ||
+                this.tableState?.objectId !== this.context?.getObjectId()
+            ) {
+                return null;
+            }
             this.filterValue = this.tableState?.filterValue || this.filterValue;
             this.filterCriteria = this.tableState?.filterCriteria || this.filterCriteria;
             this.tableState?.toggledRows?.forEach((tr) => this.getRow(tr)?.expand(true));
@@ -1117,7 +1123,9 @@ class TableState {
         public selectedRows: string[],
         public columnsizes: Array<[string, number]>,
         public sortColumnId: string,
-        public sortOrder: SortOrder
+        public sortOrder: SortOrder,
+        public contextId: string,
+        public objectId: string | number,
     ) { }
 
 }
