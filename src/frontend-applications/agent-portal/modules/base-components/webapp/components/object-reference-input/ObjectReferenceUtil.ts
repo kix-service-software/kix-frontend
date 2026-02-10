@@ -9,7 +9,6 @@
 
 import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
-import { Context } from '../../../../../model/Context';
 import { DataType } from '../../../../../model/DataType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -106,6 +105,23 @@ export class ObjectReferenceUtil {
         );
 
         return preparedLoadingOptions;
+    }
+
+    public static async shouldFilterByTree(options: FormFieldOption[] = []): Promise<boolean> {
+        const objectOption = options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
+        const autocompleteOption = options.find(
+            (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE
+        );
+
+        if (objectOption && typeof autocompleteOption !== 'undefined' && autocompleteOption !== null && autocompleteOption.value) {
+            const objectType = objectOption.value as KIXObjectType;
+            const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
+            const filter = service ? await service.prepareFullTextFilter('test') : null;
+            if (filter?.length) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static async createTreeNodes(

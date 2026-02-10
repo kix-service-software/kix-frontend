@@ -23,7 +23,8 @@ export class ComponentState extends FormInputComponentState {
         public treeId: string = IdService.generateDateBasedId('object-reference-input-'),
         public prepared: boolean = false,
         public freeText: boolean = false,
-        public possibleValuesOnly: boolean = false
+        public possibleValuesOnly: boolean = false,
+        public filterByTree: boolean = false
     ) {
         super();
     }

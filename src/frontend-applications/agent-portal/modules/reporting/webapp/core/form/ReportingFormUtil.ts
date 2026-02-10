@@ -62,6 +62,7 @@ export class ReportingFormUtil {
                     const autocompleteConfig = new AutoCompleteConfiguration(0);
                     field.options.push(new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, autocompleteConfig));
                     field.options.push(new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true));
+                    field.options.push(new FormFieldOption(ObjectReferenceOptions.FILTER_BY_TREE_IF_NECESSARY, true));
 
                     if (filterPossibleValues) {
                         field.options.push(
