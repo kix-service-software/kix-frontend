@@ -85,9 +85,18 @@ export class ContextNamespace extends SocketNameSpace {
         );
     }
 
-    protected initialize(): Promise<void> {
-        CacheService.getInstance().adddIgnorePrefixes(['ContextConfiguration']);
-        return this.rebuildConfigCache();
+    protected async initialize(): Promise<void> {
+        super.initialize();
+        PluginService.getInstance().getExtensions<IMarkoApplication>(
+            AgentPortalExtensions.MARKO_APPLICATION
+        ).then(
+            async (applications: IMarkoApplication[]) => {
+                for (const application of applications) {
+                    CacheService.getInstance().adddIgnorePrefixes([`${application.name}ContextConfiguration`]);
+                }
+                this.rebuildConfigCache();
+            }
+        );
     }
 
     private async rebuildConfiguration(
