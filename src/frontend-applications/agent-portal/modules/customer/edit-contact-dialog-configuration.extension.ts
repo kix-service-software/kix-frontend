@@ -36,6 +36,8 @@ import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 import { FormLayout } from '../object-forms/model/layout/FormLayout';
 import { RowColumnLayout } from '../object-forms/model/layout/RowColumnLayout';
 import { RowLayout } from '../object-forms/model/layout/RowLayout';
+import { OrganisationProperty } from './model/OrganisationProperty';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -107,7 +109,15 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
-                    new FormFieldOption(FormFieldOptions.SHOW_INVALID, false)
+                    new FormFieldOption(FormFieldOptions.SHOW_INVALID, false),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [],
+                            null, null,
+                            [OrganisationProperty.SUB_ORGANISATIONS],
+                            [OrganisationProperty.SUB_ORGANISATIONS]
+                        )
+                    )
                 ]
             ),
             new FormFieldConfiguration(

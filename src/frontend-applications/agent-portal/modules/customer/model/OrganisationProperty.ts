@@ -21,6 +21,8 @@ export enum OrganisationProperty {
 
     NUMBER = 'Number',
 
+    PARENT_ID = 'ParentID',
+
     STREET = 'Street',
 
     URL = 'Url',
@@ -42,6 +44,8 @@ export enum OrganisationProperty {
     ASSIGNED_CONFIG_ITEMS = 'AssignedConfigItems',
 
     TICKETS = 'Tickets',
+
+    SUB_ORGANISATIONS = 'SubOrganisations',
 
     // UI properties
     VALID = 'Valid'

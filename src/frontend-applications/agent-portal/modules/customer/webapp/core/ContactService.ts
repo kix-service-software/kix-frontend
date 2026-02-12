@@ -28,6 +28,9 @@ import { UserProperty } from '../../../user/model/UserProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { Organisation } from '../../model/Organisation';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { OrganisationProperty } from '../../model/OrganisationProperty';
 
 export class ContactService extends KIXObjectService<Contact> {
 
@@ -130,8 +133,18 @@ export class ContactService extends KIXObjectService<Contact> {
             case ContactProperty.PRIMARY_ORGANISATION_ID:
             case ContactProperty.ORGANISATION_IDS:
                 if (Array.isArray(filterIds)) {
+                    const loadingOptions = new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                OrganisationProperty.ID, SearchOperator.IN, FilterDataType.NUMERIC,
+                                FilterType.AND, filterIds as number[]
+                            )
+                        ], null, null,
+                        [OrganisationProperty.SUB_ORGANISATIONS],
+                        [OrganisationProperty.SUB_ORGANISATIONS]
+                    );
                     const organisations = await KIXObjectService.loadObjects(
-                        KIXObjectType.ORGANISATION, filterIds
+                        KIXObjectType.ORGANISATION, filterIds, loadingOptions
                     );
                     nodes = await KIXObjectService.prepareTree(organisations, showInvalid, invalidClickable);
                 }
@@ -329,4 +342,5 @@ export class ContactService extends KIXObjectService<Contact> {
         }
         return contacts && !!contacts.length ? contacts[0] : null;
     }
+
 }

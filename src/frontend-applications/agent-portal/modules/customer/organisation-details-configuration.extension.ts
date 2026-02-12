@@ -105,6 +105,15 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
+                                        property: OrganisationProperty.PARENT_ID
+                                    },
+                                    roleIds: []
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
                                         property: KIXObjectProperty.VALID_ID
                                     },
                                     roleIds: []
