@@ -91,6 +91,8 @@ export enum SysConfigKey {
 
     TICKET_PLACEHOLDER_BODYRICHTEXT_LINECOUNT = 'Ticket::Placeholder::BodyRichtext::DefaultLineCount',
 
-    USER_PASSWORD_RESET_ENABLED = 'User::Password::Reset::Enabled'
+    USER_PASSWORD_RESET_ENABLED = 'User::Password::Reset::Enabled',
+
+    ORGANISATION_VIRTUALLY_ASSIGN_CONTACTS_TO_SUB_ORGANISATIONS = 'Organisation::VirtuallyAssignContactsToSubOrganisations'
 
 }

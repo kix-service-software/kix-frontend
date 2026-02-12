@@ -68,6 +68,8 @@ import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 import { TicketEvent } from '../../model/TicketEvent';
 import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
+import { OrganisationService } from '../../../customer/webapp/core/OrganisationService';
+import { OrganisationProperty } from '../../../customer/model/OrganisationProperty';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -432,10 +434,10 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.ORGANISATION_ID:
                 if (Array.isArray(filterIds)) {
-                    const organisations = await KIXObjectService.loadObjects(
-                        KIXObjectType.ORGANISATION, filterIds
+                    nodes = await OrganisationService.getInstance().getTreeNodes(
+                        OrganisationProperty.PARENT_ID, showInvalid, invalidClickable,
+                        filterIds ? filterIds.map((fid) => Number(fid)) : null
                     );
-                    nodes = await KIXObjectService.prepareTree(organisations);
                 }
                 break;
             default:

@@ -176,7 +176,13 @@ export class Contact extends KIXObject {
         {
             Property: ContactProperty.PRIMARY_ORGANISATION_ID,
             Operations: Contact.REFERENCE_OPERATORS,
-            DataType: FilterDataType.STRING,
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.OBJECT_REFERENCE
+        },
+        {
+            Property: ContactProperty.ORGANISATION_IDS,
+            Operations: Contact.REFERENCE_OPERATORS,
+            DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.OBJECT_REFERENCE
         },
         {

@@ -35,6 +35,8 @@ import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { UserProperty } from '../../../user/model/UserProperty';
+import { OrganisationProperty } from '../../../customer/model/OrganisationProperty';
+import { OrganisationService } from '../../../customer/webapp/core/OrganisationService';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -44,6 +46,8 @@ export class TicketSearchFormManager extends SearchFormManager {
     public handleViewableStateType: boolean = true;
 
     public queuePermissionCheck: boolean = true;
+
+    public useOwnSearch: boolean = true;
 
     public constructor(
         public ignorePropertiesFixed: string[] = [],
@@ -294,5 +298,42 @@ export class TicketSearchFormManager extends SearchFormManager {
         }
 
         await super.setValue(newValue, silent);
+    }
+
+    public async searchObjectTree(property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<TreeNode[]> {
+
+        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
+
+        let tree = [];
+        switch (property) {
+            case TicketProperty.ORGANISATION_ID:
+                if (!loadingOptions && searchValue)
+                    loadingOptions = new KIXObjectLoadingOptions();
+
+                if (loadingOptions) {
+                    loadingOptions.filter.push(
+                        new FilterCriteria(
+                            OrganisationProperty.NAME, SearchOperator.LIKE, FilterDataType.STRING,
+                            FilterType.AND, '*' + searchValue + '*',
+                        )
+                    );
+                    loadingOptions.includes.push(OrganisationProperty.SUB_ORGANISATIONS);
+                    loadingOptions.expands.push(OrganisationProperty.SUB_ORGANISATIONS);
+                }
+                const organisations = await KIXObjectService.loadObjects(
+                    KIXObjectType.ORGANISATION, undefined, loadingOptions
+                );
+                tree = await OrganisationService.getInstance().prepareObjectTree(
+                    organisations, true, true
+                );
+                break;
+            default:
+                tree = await KIXObjectService.searchObjectTree(
+                    this.objectType, property, searchValue, loadingOptions, undefined, showInvalid
+                );
+        }
+
+        return tree;
     }
 }
