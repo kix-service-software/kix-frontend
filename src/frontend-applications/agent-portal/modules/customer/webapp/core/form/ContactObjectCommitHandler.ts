@@ -17,7 +17,6 @@ import { UserProperty } from '../../../../user/model/UserProperty';
 import { Contact } from '../../../model/Contact';
 import { NewContactDialogContext } from '../context/NewContactDialogContext';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { FormContext } from '../../../../../model/configuration/FormContext';
 import { OutOfOfficeProperty } from '../../../../user/model/OutOfOfficeProperty';
 
 export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {

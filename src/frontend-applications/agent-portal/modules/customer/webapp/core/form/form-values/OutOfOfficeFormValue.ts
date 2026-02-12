@@ -92,6 +92,8 @@ export class OutOfOfficeFormValue extends ObjectFormValue<OutOfOffice> {
         }
 
         await super.disable();
+
+        this.value = new OutOfOffice();
     }
 
     private addOutOfOfficeFormValues(

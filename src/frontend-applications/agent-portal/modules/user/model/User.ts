@@ -33,7 +33,7 @@ export class User extends KIXObject {
     public IsAgent: number;
     public IsCustomer: number;
 
-    public OutOfOffice: OutOfOffice;
+    public OutOfOffice: OutOfOffice = new OutOfOffice();
 
     public Preferences: UserPreference[] = [];
     public RoleIDs: number[];
@@ -54,7 +54,7 @@ export class User extends KIXObject {
             this.UserFirstname = user.UserFirstname;
             this.UserLastname = user.UserLastname;
             this.UserFullname = user.UserFullname;
-            this.OutOfOffice = user.OutOfOffice ? new OutOfOffice(user.OutOfOffice) : null;
+            this.OutOfOffice = user.OutOfOffice ? new OutOfOffice(user.OutOfOffice) : new OutOfOffice();
         }
     }
 
