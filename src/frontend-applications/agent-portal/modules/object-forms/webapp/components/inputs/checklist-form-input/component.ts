@@ -74,6 +74,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.bindingIds.push(
             this.formValue?.addPropertyBinding(
                 FormValueProperty.VALUE, async (formValue: DynamicFieldChecklistFormValue) => {
+                    this.state.value = formValue.value;
                     this.setProgressValues();
                 }
             )
