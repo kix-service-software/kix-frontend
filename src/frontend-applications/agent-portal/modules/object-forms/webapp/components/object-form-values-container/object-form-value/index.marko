@@ -20,7 +20,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             "d-none": state.displayNone,
          },
       ]>
-         <label id=state.labelId class="form-label d-flex align-items-center m-0 mb-1 text-truncate">
+         <label
+            id=state.labelId
+            class="form-label d-flex align-items-center m-0 mb-1 text-truncate">
             <add-remove-form-value-control
                formValue=input.formValue
                key=("control-" + input.formValue.instanceId)/>
@@ -67,7 +69,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
          <if(state.formValue.description)>
             <div class="alert alert-light" role="alert">
-               <iframe-content html=(state.formValue.description)/>
+               <iframe-content
+                  html=(state.formValue.description)
+                  style="min-height: unset;"
+                  calculateHeight
+                  extraSpace=0/>
             </div>
          </if>
          <div class=[
@@ -82,11 +88,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if(state.isConfigContext && state.isEmpty)/>
             <else-if(!state.formValue["COUNT_CONTAINER"])>
                <if(state.inputTemplate)>
-                  <${state.inputTemplate} formValue=input.formValue labelId=state.labelId/>
+                  <${state.inputTemplate}
+                     formValue=input.formValue
+                     labelId=state.labelId/>
                </if>
                <else-if(input.formValue.inputComponentId === "no-input")/>
                <else>
-                  <text-form-input formValue=input.formValue labelId=state.labelId/>
+                  <text-form-input
+                     formValue=input.formValue
+                     labelId=state.labelId/>
                </else>
             </else-if>
          </div>

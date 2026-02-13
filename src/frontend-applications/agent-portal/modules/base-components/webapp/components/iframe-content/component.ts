@@ -34,6 +34,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.prepareContent(input.html);
 
         this.state.calculateHeight = input.calculateHeight;
+        this.state.extraSpace = input.extraSpace;
     }
 
     public async onMount(): Promise<void> {
@@ -73,7 +74,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 }
 
                 if (this.state.calculateHeight) {
-                    BrowserUtil.setFrameHeight(this.state.frameId);
+                    BrowserUtil.setFrameHeight(this.state.frameId, this.state.extraSpace);
                     BrowserUtil.prepareFrameLinks(frameDocument);
                 }
             });
