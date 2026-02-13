@@ -15,6 +15,7 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public frameId: string = IdService.generateDateBasedId('frame-'),
         public calculateHeight: boolean = false,
+        public extraSpace: number = undefined,
         public sandboxAttributes: string[] = [
             'allow-same-origin',
             'allow-same-site-none-cookies',
