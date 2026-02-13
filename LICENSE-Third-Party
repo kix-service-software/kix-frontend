@@ -2928,7 +2928,7 @@
 │  ├─ url: https://domenic.me/
 │  ├─ path: node_modules/html-encoding-sniffer
 │  └─ licenseFile: node_modules/html-encoding-sniffer/LICENSE.txt
-├─ htmljs-parser@5.8.2
+├─ htmljs-parser@5.9.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/htmljs-parser
 │  ├─ path: node_modules/htmljs-parser
