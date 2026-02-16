@@ -1822,7 +1822,7 @@
 │  ├─ email: ljharb@gmail.com
 │  ├─ path: node_modules/call-bound
 │  └─ licenseFile: node_modules/call-bound/LICENSE
-├─ caniuse-lite@1.0.30001769
+├─ caniuse-lite@1.0.30001770
 │  ├─ licenses: CC-BY-4.0
 │  ├─ repository: https://github.com/browserslist/caniuse-lite
 │  ├─ publisher: Ben Briggs
@@ -2928,7 +2928,7 @@
 │  ├─ url: https://domenic.me/
 │  ├─ path: node_modules/html-encoding-sniffer
 │  └─ licenseFile: node_modules/html-encoding-sniffer/LICENSE.txt
-├─ htmljs-parser@5.9.0
+├─ htmljs-parser@5.10.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/marko-js/htmljs-parser
 │  ├─ path: node_modules/htmljs-parser
@@ -3957,7 +3957,7 @@
 │  ├─ email: pnidem@gmail.com
 │  ├─ path: node_modules/property-handlers
 │  └─ licenseFile: node_modules/property-handlers/LICENSE
-├─ prosemirror-changeset@2.3.1
+├─ prosemirror-changeset@2.4.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/prosemirror/prosemirror-changeset
 │  ├─ path: node_modules/prosemirror-changeset
