@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,7 +29,7 @@ import { DynamicFieldTextAreaFormValue } from './DynamicFields/DynamicFieldTextA
 import { DynamicFieldTextFormValue } from './DynamicFields/DynamicFieldTextFormValue';
 import { ObjectFormValue } from './ObjectFormValue';
 
-export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldValue> {
+export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldValue[]> {
 
     public readonly COUNT_CONTAINER = true;
 
@@ -44,6 +44,7 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         this.enabled = true;
         this.showInUI = false;
         this.isConfigurable = false;
+        this.value ||= [];
     }
 
     public async createDFFormValues(): Promise<void> {

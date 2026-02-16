@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -65,9 +65,6 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         this.fieldOrder[ArticleProperty.SUBJECT] = 5;
         this.fieldOrder[ArticleProperty.BODY] = 6;
         this.fieldOrder[ArticleProperty.ATTACHMENTS] = 7;
-
-        // init Dynamicfields if needed so that DynamicFieldObjectFormValue is created
-        article.DynamicFields = article.DynamicFields || [];
 
         this.createArticleFormValues(article);
 
