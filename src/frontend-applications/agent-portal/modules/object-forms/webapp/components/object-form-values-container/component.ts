@@ -58,7 +58,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public getFormValue(field: FormFieldConfiguration): ObjectFormValue {
-        return this.state.formValues.find((fv) => fv.fieldId === field.id);
+        return this.state.formValues.find((fv) => fv.fieldId === field?.id);
     }
 
 
