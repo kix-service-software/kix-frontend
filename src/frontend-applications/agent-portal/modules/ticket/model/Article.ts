@@ -307,11 +307,9 @@ export class Article extends KIXObject {
     <style>
       table {
         display: table;
-        margin: .9em;
         border-collapse: collapse;
         border-spacing: 0;
         height: auto;
-        width: auto;
       }
 
       thead,tbody {
@@ -330,6 +328,10 @@ export class Article extends KIXObject {
       th,td {
         min-width: 2em;
         padding: 0.4em;
+      }
+
+      table td {
+        text-align: revert-layer;
       }
 
       figure.image {
