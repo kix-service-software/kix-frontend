@@ -12,7 +12,6 @@ import path from 'path';
 
 import { KIXRouter } from './KIXRouter';
 import * as Bowser from 'bowser';
-import { ReleaseInfoUtil } from '../../../../server/ReleaseInfoUtil';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { SysConfigService } from '../../modules/sysconfig/server/SysConfigService';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
@@ -53,7 +52,6 @@ export class AuthenticationRouter extends KIXRouter {
         }).catch(() => {
             this.router.get('/', this.login.bind(this));
         });
-
         this.router.get('/logout', this.logout.bind(this));
         this.router.get('/password-reset/:resetToken', this.sendUserPasswordResetRequestConfirmation.bind(this));
     }
@@ -91,8 +89,6 @@ export class AuthenticationRouter extends KIXRouter {
     }
 
     private async doSSOLogin(req: Request, res: Response): Promise<boolean> {
-        let ssoSuccess = false;
-
         const config = ConfigurationService.getInstance().getServerConfiguration();
         const ssoEnabled = config?.SSO_ENABLED;
 
@@ -106,7 +102,6 @@ export class AuthenticationRouter extends KIXRouter {
                 // already negotiated (SSO)
                 negotiationToken = authorization.split(' ')[1];
                 authType = 'negotiate token (SSO)';
-                ssoSuccess = true;
             }
             else if (!req.cookies.authNegotiationDone && !req.cookies.authNoSSO) {
                 // no token - start the negotiation process
@@ -118,11 +113,12 @@ export class AuthenticationRouter extends KIXRouter {
                     <html lang="en">
                         <head>
                             <title>KIX Agent Portal</title>
-                            <meta http-equiv="refresh" content="3; URL=/">
+                            <meta http-equiv="refresh" content="3; URL=${req.url}">
                         </head>
                         <body></body>
                     </html>`
                 );
+                return true;
             }
         }
 
@@ -134,32 +130,25 @@ export class AuthenticationRouter extends KIXRouter {
         }
 
         if (user || negotiationToken) {
-            let success = true;
             const token = await AuthenticationService.getInstance().login(
                 user, null, UserType.AGENT, negotiationToken, null, null, null, false
             ).catch((e) => {
                 LoggingService.getInstance().error('Error when trying to login with ' + authType);
-                success = false;
+                return false;
             });
 
-            if (success) {
-                res.cookie('token', token, { httpOnly: true, path: '/' });
-                res.clearCookie('authNegotiationDone');
-                res.status(200);
-                res.send(
-                    `<!DOCTYPE html>
-                    <html lang="en">
-                        <head>
-                            <title>KIX Agent Portal</title>
-                            <meta http-equiv="refresh" content="3; URL=/">
-                        </head>
-                        <body></body>
-                    </html>`
-                );
-                ssoSuccess = true;
-            }
+            const config = ConfigurationService.getInstance().getServerConfiguration();
+            const baseRoute = config?.BASE_ROUTE || '';
+            const url = req.query['redirectUrl']?.toString();
+            const redirectUrl = decodeURIComponent(url) || '/';
+
+            res.cookie('token', token, { httpOnly: true, path: '/' });
+            res.clearCookie('authNegotiationDone');
+            res.redirect(`${baseRoute}${redirectUrl}`);
+            return true;
         }
-        return ssoSuccess;
+
+        return false;
     }
 
     private async routeToLoginPage(req: Request, res: Response): Promise<void> {
