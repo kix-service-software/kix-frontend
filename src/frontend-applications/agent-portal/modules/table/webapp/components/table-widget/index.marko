@@ -8,10 +8,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <macro name="widget-viewbar">
-    <if(state.hasViews)>
-        <div
-            class="widget-viewbar d-flex justify-content-start gap-0"
-            role="group">
+    <div class="widget-viewbar d-flex justify-content-start gap-0" role="group">
+        <if(state.hasViews)>
             <button
                 type="button"
                 class=[
@@ -38,8 +36,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <icon icon=view.icon/>
                 </button>
             </for>
-        </div>
-    </if>
+        </if>
+    </div>
 </macro>
 
 <macro name="widget-filter">

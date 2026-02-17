@@ -50,14 +50,7 @@
             display: grid;
             grid-auto-flow: column;
             grid-gap: @widget-header-grid-gap;
-
-            &.without-content {
-                grid-template-columns: max-content auto;
-            }
-
-            &:not(.without-content) {
-                grid-template-columns: max-content min-content auto;
-            }
+            grid-template-columns: max-content min-content auto;
 
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
