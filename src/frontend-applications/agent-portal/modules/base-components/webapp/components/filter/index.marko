@@ -25,13 +25,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         disabled=state.disabled
         on-change("textFilterValueChanged")
         on-keydown("keyDown")/>
-    <span.icon class=state.icon on-click("filter")>
+    <button.icon 
+        class=state.icon 
+        on-click("filter")
+        title=state.translations["Translatable#Filter"]
+        aria-label=state.translations["Translatable#Filter"]>
         <span.path1/>
         <span.path2/>
         <span.path3/>
         <span.path4/>
         <span.path5/>
-    </span>
+    </button>
     <if(state.showFilterCount)>
         <span.filter-count>${state.filterCountString}</span>
     </if>
