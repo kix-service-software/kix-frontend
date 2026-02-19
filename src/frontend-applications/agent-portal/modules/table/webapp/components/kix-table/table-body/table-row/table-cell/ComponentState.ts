@@ -18,7 +18,8 @@ export class ComponentState extends AbstractComponentState {
         public objectId: string | number = null,
         public showDefaultCell: boolean = true,
         public stateClasses: string[] = null,
-        public loading: boolean = true
+        public loading: boolean = true,
+        public noLink: boolean = false
     ) {
         super();
     }

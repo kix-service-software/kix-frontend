@@ -94,7 +94,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#select entry'
+            'Translatable#Select entry', 'Translatable#Toggle row'
         ]);
     }
 
