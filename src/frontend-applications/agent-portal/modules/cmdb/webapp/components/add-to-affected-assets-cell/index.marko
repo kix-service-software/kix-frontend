@@ -13,5 +13,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     checked=state.checked
     disabled=state.readonly
     on-click("addChanged")
-    aria-description=state.translations["Translatable#Available in Edit"]
->
+    aria-label=state.title
+    aria-checked=state.selected
+    aria-disabled=state.readonly
+    aria-description=(state.translations["Translatable#Available in Edit"])>

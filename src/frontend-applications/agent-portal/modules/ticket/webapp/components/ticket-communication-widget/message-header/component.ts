@@ -53,7 +53,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             [
                 'Translatable#Visible in customer portal', 'Translatable#Download all attachments',
                 'Translatable#Created at', 'Translatable#From', 'Translatable#edited',
-                'Translatable#Created by'
+                'Translatable#Created by', 'Translatable#Action list'
             ]
         );
     }

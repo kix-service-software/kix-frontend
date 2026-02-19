@@ -106,7 +106,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Action-list'
+            'Translatable#Action list'
         ]);
     }
 
