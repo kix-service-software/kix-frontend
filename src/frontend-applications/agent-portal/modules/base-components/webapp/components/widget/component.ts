@@ -110,6 +110,10 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
             await this.minimizeWidget(true, null);
             this.setWidgetClasses(['minimized']);
         }
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Expand widget', 'Translatable#Collapse widget', 'Translatable#Close widget'
+        ]);
     }
 
     public onDestroy(): void {

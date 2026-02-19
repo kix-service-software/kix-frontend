@@ -53,11 +53,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         on-mousedown("headerMousedown", true)/>
                 </if>
                 <h2
-                    title=state.title
                     on-click("minimizeWidgetForce")
                     on-mousedown("headerMousedown", true)
-                    class="m-0"
-                    tabindex="0">
+                    class="m-0">
                     <translation-string pattern=state.title/>
                 </h2>
             </div>
@@ -80,25 +78,33 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if(state.minimizable)>
                 <span class="minimize-icon-wrapper">
                     <if(state.minimized)>
-                        <span
-                            on-click("minimizeWidgetForce")
-                            class="kix-icon-sort-down as-button"/>
+                        <button
+                            class="kix-icon-sort-down as-button"
+                            title=state.translations["Translatable#Expand widget"]
+                            aria-label=state.translations["Translatable#Expand widget"]
+                            on-click("minimizeWidgetForce")>
+                        </button>
                     </if>
                     <else>
-                        <span
-                            on-click("minimizeWidgetForce")
-                            class="kix-icon-triangle-up as-button">
+                        <button
+                            class="kix-icon-triangle-up as-button"
+                            title=state.translations["Translatable#Collapse widget"]
+                            aria-label=state.translations["Translatable#Collapse widget"]
+                            on-click("minimizeWidgetForce")>
                             <span class="path1"/>
                             <span class="path2"/>
-                        </span>
+                        </button>
                     </else>
                 </span>
             </if>
             <if(state.closable)>
                 <span class="close-icon-wrapper">
-                    <span
-                        on-click("closeClicked")
-                        class="kix-icon-close as-button"/>
+                    <button
+                        class="kix-icon-close as-button"
+                        title=state.translations["Translatable#Close widget"]
+                        aria-label=state.translations["Translatable#Close widget"]
+                        on-click("closeClicked")>
+                    </button>
                 </span>
             </if>
         </span>

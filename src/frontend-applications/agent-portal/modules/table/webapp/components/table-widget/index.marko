@@ -105,18 +105,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
             </else-if>
             <if(state.showFilterReset && !state.showFilterInBody)>
-                <span
+                <button
                     class=["table-reset-filter", "icon", "fas fa-window-close"]
                     title=component.resetFilterTitle
                     aria-label=component.resetFilterTitle
-                    role="button"
                     on-click("resetFilter")>
                     <span class="path1"/>
                     <span class="path2"/>
                     <span class="path3"/>
                     <span class="path4"/>
                     <span class="path5"/>
-                </span>
+                </button>
             </if>
         </@headerfilter>
         <@content>

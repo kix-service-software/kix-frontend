@@ -29,7 +29,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.prepareSidebars();
 
         this.state.translations = await TranslationService.createTranslationObject(
-            ['Translatable#Close Sidebars', 'Translatable#Open Sidebars']
+            ['Translatable#Close Sidebar', 'Translatable#Open Sidebar']
         );
 
         window.addEventListener('resize', this.resizeHandling.bind(this), false);

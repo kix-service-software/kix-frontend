@@ -43,7 +43,7 @@ Certain elements get their name from the content they contain. For example, the 
 `<a href="/">Home</a>`
 
 Elements having one of the following
-[roles]
+roles
 are, by default, named by a string calculated from their descendant content:
 * button
 * cell
@@ -81,6 +81,11 @@ For example `<h1 role="none">text</h1>` is equivalent to `<div>text</div>` for a
 
 [More Detail](https://www.scottohara.me/blog/2018/05/05/hidden-vs-none.html)
 
+### Interactive controls must not be nested
+Focusable elements with an interactive control ancestor (any element that accepts user input such as button or anchor elements) are not announced by screen readers and create an empty tab stop. That is, you could tab to the element but the screen reader will not announce its name, role, or state.
+
+[Source](https://dequeuniversity.com/rules/axe/4.10/nested-interactive?application=AxeFirefox)
+
 ## Elements
 
 ### Buttons
@@ -105,3 +110,8 @@ If the icon is decorative/next to a visual label, hide it with `aria-hidden`.
 ### Iframes
 Iframes should always have a title.  
 Best Practice is to give the document inside the iframe the same title.
+
+### Lists
+`<ul>` and `<ol>` must only directly contain `<li>`, `<script>` or `<template>` elements
+
+[More Detail](https://dequeuniversity.com/rules/axe/4.10/list?application=AxeFirefox)

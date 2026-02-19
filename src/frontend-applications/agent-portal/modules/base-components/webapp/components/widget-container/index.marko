@@ -120,11 +120,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </div>
     </if>
     <if(!state.configurationMode && state.customizable)>
-        <div on-click("toggleConfigurationMode") class="customize-section">
-            <span class="kix-icon-gear"/>
+        <button on-click("toggleConfigurationMode") class="customize-section">
+            <span class="kix-icon-gear" aria-hidden="true"/>
             <span>
                 <translation-string pattern="Translatable#Customize Dashboard"/>
             </span>
-        </div>
+        </button>
     </if>
 </div>
