@@ -9,7 +9,6 @@
 
 import { ContextMode } from '../../../../../model/ContextMode';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { Cell } from '../../../../table/model/Cell';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ConfigItem } from '../../../model/ConfigItem';

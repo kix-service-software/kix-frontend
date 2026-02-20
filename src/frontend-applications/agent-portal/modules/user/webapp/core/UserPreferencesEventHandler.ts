@@ -7,14 +7,15 @@
  * --
  */
 
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { BackendNotification } from '../../../../model/BackendNotification';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
 import { SearchService } from '../../../search/webapp/core/SearchService';
-import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { IdService } from '../../../../model/IdService';
 
 export class UserPreferencesEventHandler {
@@ -35,7 +36,7 @@ export class UserPreferencesEventHandler {
             eventSubscriberId: IdService.generateDateBasedId('UserPreferencesEventHandler'),
             eventPublished: function (data: BackendNotification): void {
                 if (data instanceof BackendNotification && data.Namespace === 'User.UserPreference') {
-                    const userId = AgentSocketClient.getInstance().userId;
+                    const userId = Number(ClientStorageService.getOption('UserId'));
                     const objectIds = data.ObjectID?.split('::') || [];
                     if (objectIds?.length && objectIds[0].toString() === userId?.toString()) {
                         this.updateCurrentUserCache(data);

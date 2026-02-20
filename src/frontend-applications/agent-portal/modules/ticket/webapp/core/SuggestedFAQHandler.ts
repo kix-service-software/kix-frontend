@@ -134,7 +134,7 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
         let stopWords = [];
 
         const language = await TranslationService.getUserLanguage();
-        const key = SysConfigKey.TICKET_SEARCH_INDEX_STOPWORDS + '###' + language;
+        const key = encodeURIComponent(SysConfigKey.TICKET_SEARCH_INDEX_STOPWORDS + '###' + language);
         const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, [key]
         ).catch((): SysConfigOption[] => []);

@@ -9,7 +9,7 @@
 
 import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
 import { AdditionalContextInformation } from '../modules/base-components/webapp/core/AdditionalContextInformation';
-import { AuthenticationSocketClient } from '../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../api-client/session/Session';
 import { ClientStorageService } from '../modules/base-components/webapp/core/ClientStorageService';
 import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
 import { ContextService } from '../modules/base-components/webapp/core/ContextService';
@@ -462,7 +462,7 @@ export abstract class Context {
         for (const widget of widgets) {
             let allowedPermissions = true;
             if (widget.permissions?.length) {
-                allowedPermissions = await AuthenticationSocketClient.getInstance().checkPermissions(
+                allowedPermissions = await SessionAPIClient.checkPermissions(
                     widget.permissions
                 );
             }
@@ -613,7 +613,7 @@ export abstract class Context {
         }
 
         if (configuration?.permissions?.length) {
-            const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(configuration.permissions);
+            const allowed = await SessionAPIClient.checkPermissions(configuration.permissions);
             if (!allowed) {
                 return null;
             }

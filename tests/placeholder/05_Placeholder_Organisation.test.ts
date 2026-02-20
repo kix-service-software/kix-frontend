@@ -9,7 +9,7 @@
 
 /* tslint:disable */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Organisation } from '../../src/frontend-applications/agent-portal/modules/customer/model/Organisation';
 import { OrganisationPlaceholderHandler } from '../../src/frontend-applications/agent-portal/modules/customer/webapp/core/OrganisationPlaceholderHandler';

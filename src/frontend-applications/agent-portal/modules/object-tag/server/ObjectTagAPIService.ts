@@ -16,7 +16,6 @@ import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { Error } from '../../../../../server/model/Error';
-import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { FilterCriteria } from '../../../model/FilterCriteria';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
@@ -128,7 +127,7 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
 
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: number | string,
-        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
+        cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
     ): Promise<Error[]> {
         const types = await this.prepareObjectTagTypes(token);
 

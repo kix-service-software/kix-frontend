@@ -19,7 +19,7 @@ import { MailAccountProperty } from '../../../model/MailAccountProperty';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { Error } from '../../../../../../../server/model/Error';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 
 export class MailAccountFetchAction extends AbstractAction {
 
@@ -39,7 +39,7 @@ export class MailAccountFetchAction extends AbstractAction {
             )
         ];
 
-        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        show = await SessionAPIClient.checkPermissions(permissions);
         return show;
     }
 

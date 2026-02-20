@@ -9,7 +9,7 @@
 
 /* tslint:disable */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { OverlayIcon } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/OverlayIcon';
 

@@ -10,7 +10,7 @@
 import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
 import { IdService } from '../../../../../../../model/IdService';
 import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
-import { AuthenticationSocketClient } from '../../../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../../../api-client/session/Session';
 import { ContextService } from '../../../../../../base-components/webapp/core/ContextService';
 import { NewContactDialogContext } from '../../../../../../customer/webapp/core/context/NewContactDialogContext';
 import { FormValueAction } from '../../../../../../object-forms/model/FormValues/FormValueAction';
@@ -79,7 +79,7 @@ export class CreateContactFormValueAction extends FormValueAction {
     }
 
     private async hasPermissions(): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(this.permissions);
+        return await SessionAPIClient.checkPermissions(this.permissions);
     }
 
 }

@@ -22,7 +22,7 @@ import { MailAccount } from '../../../model/MailAccount';
 import { MailAccountProperty } from '../../../model/MailAccountProperty';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
@@ -66,7 +66,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     `/system/communication/mailaccounts/${this.step.result.accountId}`,
                     [CRUD.UPDATE]
                 )];
-                this.state.canUpdate = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+                this.state.canUpdate = await SessionAPIClient.checkPermissions(permissions);
             } else {
                 this.update = false;
             }

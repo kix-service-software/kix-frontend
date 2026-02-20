@@ -27,8 +27,6 @@ class Extension extends KIXExtension implements IInitialDataExtension {
     public name: string = 'Calendar Module';
 
     public async createData(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-
         const filter = [
             new FilterCriteria(
                 DynamicFieldProperty.NAME, SearchOperator.IN, FilterDataType.STRING,
@@ -37,7 +35,7 @@ class Extension extends KIXExtension implements IInitialDataExtension {
         ];
 
         const objectResponse = await DynamicFieldAPIService.getInstance().loadObjects<DynamicField>(
-            serverConfig.BACKEND_API_TOKEN, 'calendar-initial-data',
+            ConfigurationService.getBackendAPIToken(), 'calendar-initial-data',
             KIXObjectType.DYNAMIC_FIELD, null, new KIXObjectLoadingOptions(filter), null
         );
 
@@ -58,7 +56,7 @@ class Extension extends KIXExtension implements IInitialDataExtension {
 
             if (!fields.some((f) => f.Name === 'PlanBegin')) {
                 await DynamicFieldAPIService.getInstance().createObject(
-                    serverConfig.BACKEND_API_TOKEN, '', KIXObjectType.DYNAMIC_FIELD,
+                    ConfigurationService.getBackendAPIToken(), '', KIXObjectType.DYNAMIC_FIELD,
                     [
                         ...parameter,
                         [DynamicFieldProperty.NAME, 'PlanBegin'],
@@ -72,7 +70,7 @@ class Extension extends KIXExtension implements IInitialDataExtension {
 
             if (!fields.some((f) => f.Name === 'PlanEnd')) {
                 await DynamicFieldAPIService.getInstance().createObject(
-                    serverConfig.BACKEND_API_TOKEN, '', KIXObjectType.DYNAMIC_FIELD,
+                    ConfigurationService.getBackendAPIToken(), '', KIXObjectType.DYNAMIC_FIELD,
                     [
                         ...parameter,
                         [DynamicFieldProperty.NAME, 'PlanEnd'],

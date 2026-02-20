@@ -247,11 +247,11 @@ export class TranslationAPIService extends KIXObjectAPIService {
             translationValue = this.prepareValue(translationValue);
 
             if (!getOnlyPattern) {
-                const config = ConfigurationService.getInstance().getServerConfiguration();
-                if (config && config.BACKEND_API_TOKEN) {
+                const beToken = ConfigurationService.getBackendAPIToken();
+                if (beToken) {
                     const loadingOptions = new KIXObjectLoadingOptions([], null, 0);
                     const objectResponse = await TranslationAPIService.getInstance().loadObjects<Translation>(
-                        config.BACKEND_API_TOKEN, IdService.generateDateBasedId('translation-service-'),
+                        beToken, IdService.generateDateBasedId('translation-service-'),
                         KIXObjectType.TRANSLATION, null, loadingOptions, null
                     ).catch(() => new ObjectResponse<Translation>());
 
@@ -266,11 +266,11 @@ export class TranslationAPIService extends KIXObjectAPIService {
                             }
                         }
                     }
-
-                    translationValue = this.format(translationValue, placeholderValues.map(
-                        (p) => (typeof p !== 'undefined' && p !== null ? p : '').toString()
-                    ));
                 }
+
+                translationValue = this.format(translationValue, placeholderValues.map(
+                    (p) => (typeof p !== 'undefined' && p !== null ? p : '').toString()
+                ));
             }
         }
 

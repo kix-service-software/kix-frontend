@@ -9,9 +9,9 @@
 
 import { ComponentState } from './ComponentState';
 import { Article } from '../../../model/Article';
-import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { APIClient } from '../../../../../api-client/APIClient';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -30,9 +30,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         super.onInput(input);
         if (this.article?.ChangeTime !== input.article?.ChangeTime) {
             this.article = input.article;
-
-            const applicationUrl = ClientStorageService.getApplicationUrl();
-            this.state.url = `${applicationUrl}/views/tickets/${this.article?.TicketID}/articles/${this.article?.ArticleID}?prepareInline=true`;
+            this.state.url = APIClient.getUrl(`/tickets/${this.article?.TicketID}/articles/${this.article?.ArticleID}?prepareInline=true&application=agent-portal`);
         }
     }
 

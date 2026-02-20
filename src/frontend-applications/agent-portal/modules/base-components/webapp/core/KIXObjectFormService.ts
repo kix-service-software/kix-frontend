@@ -17,7 +17,7 @@ import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { LabelService } from './LabelService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
-import { AuthenticationSocketClient } from './AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
@@ -253,7 +253,7 @@ export abstract class KIXObjectFormService {
 
     public async hasReadPermissionFor(objectType: KIXObjectType | string): Promise<boolean> {
         const resource = this.getResource(objectType);
-        return await AuthenticationSocketClient.getInstance().checkPermissions([
+        return await SessionAPIClient.checkPermissions([
             new UIComponentPermission(resource, [CRUD.READ])
         ]);
     }
@@ -263,7 +263,7 @@ export abstract class KIXObjectFormService {
     }
 
     protected async checkPermissions(resource: string, crud: CRUD[] = [CRUD.READ]): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
+        return await SessionAPIClient.checkPermissions(
             [new UIComponentPermission(resource, crud)]
         );
     }

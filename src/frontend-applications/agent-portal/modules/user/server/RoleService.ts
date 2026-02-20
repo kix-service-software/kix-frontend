@@ -145,8 +145,8 @@ export class RoleService extends KIXObjectAPIService {
     }
 
     private async applyAllowAdminModule(roleId: number, remove?: boolean): Promise<void> {
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        const token = config.BACKEND_API_TOKEN;
+
+        const token = ConfigurationService.getBackendAPIToken();
         const agentPortalConfig = await SysConfigService.getInstance().getPortalConfiguration(token);
         if (!Array.isArray(agentPortalConfig?.adminRoleIds)) {
             agentPortalConfig.adminRoleIds = [];

@@ -9,15 +9,14 @@
 
 import { Server } from './server/Server';
 import { IFrontendServerExtension } from '../../server/model/IFrontendServerExtension';
-import { IServer } from '../../server/model/IServer';
 import { KIXExtension } from '../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IFrontendServerExtension {
 
-    public name: string = 'Agent Portal Server';
+    public name: string = 'agent-portal';
 
-    public getServer(): IServer {
-        return new Server();
+    public getServer(): any {
+        return Server.getInstance();
     }
 
 }

@@ -7,10 +7,9 @@
  * --
  */
 
-import { AgentSocketClient } from './AgentSocketClient';
 import { User } from '../../model/User';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { PersonalSetting } from '../../model/PersonalSetting';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
@@ -33,6 +32,7 @@ import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { UserProperty } from '../../model/UserProperty';
 import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
+import { UserAPIClient } from '../../../../api-client/user/User';
 import { OutOfOfficeProperty } from '../../model/OutOfOfficeProperty';
 import { OutOfOffice } from '../../model/OutOfOffice';
 
@@ -93,15 +93,15 @@ export class AgentService extends KIXObjectService<User> {
     public async login(
         userName: string, password: string, redirectUrl: string, mfaToken?: MFAToken
     ): Promise<LoginResult> {
-        return await AuthenticationSocketClient.getInstance().login(userName, password, null, redirectUrl, mfaToken);
+        return await SessionAPIClient.login(userName, password, null, redirectUrl, mfaToken);
     }
 
     public async getPersonalSettings(): Promise<PersonalSetting[]> {
-        return await AgentSocketClient.getInstance().getPersonalSettings();
+        return await UserAPIClient.getPersonalSettings();
     }
 
     public getCurrentUser(): Promise<User> {
-        return AgentSocketClient.getInstance().getCurrentUser();
+        return SessionAPIClient.getCurrentUser();
     }
 
     public async setPreferencesByForm(): Promise<void> {
@@ -115,7 +115,7 @@ export class AgentService extends KIXObjectService<User> {
         const currentUser = await this.getCurrentUser();
         const userParameter = await this.prepareOutOfOfficeParameter(parameter);
 
-        await AgentSocketClient.getInstance().setPreferences(parameter);
+        await UserAPIClient.setPreferences(parameter);
         await this.updateObject(KIXObjectType.CURRENT_USER, userParameter, currentUser.UserID);
 
         EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.CURRENT_USER });
@@ -125,13 +125,13 @@ export class AgentService extends KIXObjectService<User> {
         const parameter: Array<[string, any]> = Array.isArray(preferences) ? preferences : [];
 
         if (parameter.length) {
-            await AgentSocketClient.getInstance().setPreferences(parameter);
+            await UserAPIClient.setPreferences(parameter);
         }
     }
 
     public async checkPassword(password: string): Promise<boolean> {
         const user = await this.getCurrentUser();
-        const result = await AuthenticationSocketClient.getInstance().login(
+        const result = await SessionAPIClient.login(
             user.UserLogin, password, null, null, null, true
         );
         return result.success;
@@ -189,7 +189,7 @@ export class AgentService extends KIXObjectService<User> {
     }
 
     public static async checkPermissions(resource: string, crud: CRUD[] = [CRUD.READ]): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
+        return await SessionAPIClient.checkPermissions(
             [new UIComponentPermission(resource, crud)]
         );
     }

@@ -10,6 +10,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { LoggingService } from './LoggingService';
 import winston from 'winston';
+import { RequestCounter } from './RequestCounter';
 
 export class HTTPRequestLogger {
 
@@ -79,7 +80,9 @@ export class HTTPRequestLogger {
                     Status: ${status}
                     Size: ${size}
                     Resource: ${entry.resource}
-                    Parameters: ${entry.parameter}`
+                    Parameters: ${entry.parameter}
+                    HTTP Request Queue Size: ${RequestCounter.getInstance().getPendingHTTPRequestCount()}
+                    Socket Request Queue Size: ${RequestCounter.getInstance().getPendingSocketRequestCount()}`
                 );
             }
 

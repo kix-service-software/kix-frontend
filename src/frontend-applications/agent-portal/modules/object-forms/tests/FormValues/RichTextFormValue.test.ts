@@ -7,7 +7,7 @@
  * --
  */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { AutocompleteFormFieldOption } from '../../../../model/AutocompleteFormFieldOption';
 import { AutocompleteOption } from '../../../../model/AutocompleteOption';

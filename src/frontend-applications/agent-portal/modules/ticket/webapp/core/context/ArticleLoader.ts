@@ -99,7 +99,7 @@ export class ArticleLoader {
     public async prepareArticleActions(article: Article, contextInstanceId?: string): Promise<AbstractAction[]> {
         const actions = await this.context?.getAdditionalActions(article) || [];
 
-        const hasKIXPro = await KIXModulesService.getInstance().hasPlugin('KIXPro');
+        const hasKIXPro = KIXModulesService.getInstance().hasPlugin('KIXPro');
         if (!hasKIXPro) {
             const startActions = ['article-reply-action', 'article-forward-action'];
             const actionInstance = await ActionFactory.getInstance().generateActions(

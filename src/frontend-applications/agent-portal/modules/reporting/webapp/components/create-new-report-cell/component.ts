@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { Cell } from '../../../../table/model/Cell';
 import { ReportDefinition } from '../../../model/ReportDefinition';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { Report } from '../../../model/Report';
@@ -41,7 +41,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const report = new Report();
             report.DefinitionID = this.reportDefinition.ID;
 
-            AuthenticationSocketClient.getInstance().checkPermissions([
+            SessionAPIClient.checkPermissions([
                 new UIComponentPermission(
                     'reporting/reports', [CRUD.CREATE], true, report
                 )

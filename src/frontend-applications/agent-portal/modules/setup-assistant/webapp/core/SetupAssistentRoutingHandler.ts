@@ -7,9 +7,9 @@
  * --
  */
 
+import { AdminAPIClient } from '../../../../api-client/admin/Admin';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { AdminContext } from '../../../admin/webapp/core/AdminContext';
-import { AdministrationSocketClient } from '../../../admin/webapp/core/AdministrationSocketClient';
 import { AdditionalRoutingHandler } from '../../../base-components/webapp/core/AdditionalRoutingHandler';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { SetupService } from './SetupService';
@@ -48,7 +48,7 @@ export class SetupAssistentRoutingHandler extends AdditionalRoutingHandler {
         let isSetupNeeded = false;
         const adminDescriptor = ContextService.getInstance().getContextDescriptor(AdminContext.CONTEXT_ID);
         if (adminDescriptor) {
-            const setupModule = await AdministrationSocketClient.getInstance().getAdminModule('setup-assistant');
+            const setupModule = await AdminAPIClient.getAdminModule('setup-assistant');
             if (setupModule) {
                 const steps = await SetupService.getInstance().getSetupSteps();
                 isSetupNeeded = steps.some((s) => !s.completed && !s.skipped);

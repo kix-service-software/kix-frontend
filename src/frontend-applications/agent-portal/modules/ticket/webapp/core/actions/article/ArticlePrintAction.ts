@@ -11,7 +11,7 @@ import { AbstractAction } from '../../../../../base-components/webapp/core/Abstr
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
-import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../../api-client/session/Session';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
@@ -43,7 +43,7 @@ export class ArticlePrintAction extends AbstractAction<Article> {
                 new UIComponentPermission(`tickets/${objectId}/articles`, [CRUD.READ])
             ];
 
-            show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+            show = await SessionAPIClient.checkPermissions(permissions);
         }
         return show;
     }

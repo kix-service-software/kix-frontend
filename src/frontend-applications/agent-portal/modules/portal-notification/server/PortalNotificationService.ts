@@ -12,7 +12,7 @@ import { SortOrder } from '../../../model/SortOrder';
 import { SortUtil } from '../../../model/SortUtil';
 import { UserType } from '../../user/model/UserType';
 import { PortalNotification } from '../model/PortalNotification';
-import { PortalNotificationNamespace } from './PortalNotificationNamespace';
+import { PortalNotificationEvent } from '../model/PortalNotificationEvent';
 
 export class PortalNotificationService {
 
@@ -30,13 +30,23 @@ export class PortalNotificationService {
     private notifications: PortalNotification[] = [];
     private preLoginNotifications: PortalNotification[] = [];
 
+    private notificationListener: Map<string, (event: string) => void> = new Map();
+
+    public registerNotificationListener(id: string, listener: (event: string) => void): void {
+        this.notificationListener.set(id, listener);
+    }
+
+    public removeListener(id: string): void {
+        this.notificationListener.delete(id);
+    }
+
     public publishNotifications(notifications: PortalNotification[], removeGroupNotifications: string[] = []): void {
         this.notifications = this.notifications.filter((n) => !removeGroupNotifications.some((g) => g === n.group));
         this.notifications.push(...notifications);
         this.notifications = SortUtil.sortObjects(
             this.notifications, 'createTime', DataType.DATE_TIME, SortOrder.DOWN
         );
-        PortalNotificationNamespace.getInstance().broadcastUpdate();
+        this.notificationListener?.forEach((l) => l(PortalNotificationEvent.NOTIFICATIONS_UPDATED));
     }
 
     public publishPreLoginNotifications(
@@ -50,7 +60,7 @@ export class PortalNotificationService {
         this.preLoginNotifications = SortUtil.sortObjects(
             this.preLoginNotifications, 'createTime', DataType.DATE_TIME, SortOrder.DOWN
         );
-        PortalNotificationNamespace.getInstance().broadcastUpdate(true);
+        this.notificationListener?.forEach((l) => l(PortalNotificationEvent.PRE_LOGIN_NOTIFICATIONS_UPDATED));
     }
 
     public getNotifications(userType: UserType = UserType.AGENT): PortalNotification[] {

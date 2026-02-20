@@ -9,7 +9,7 @@
 
 /* tslint:disable */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { FormConfiguration } from '../../../model/configuration/FormConfiguration';
 import { FormContext } from '../../../model/configuration/FormContext';

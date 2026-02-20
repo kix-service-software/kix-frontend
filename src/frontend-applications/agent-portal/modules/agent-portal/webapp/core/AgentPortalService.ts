@@ -7,13 +7,15 @@
  * --
  */
 
+import { BackendNotificationAPIClient } from '../../../../api-client/notifications/BackendNotificationAPIClient';
+import { PortalNotificationAPIClient } from '../../../../api-client/notifications/PortalNotificationAPIClient';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
-import { AuthenticationSocketClient } from '../../../base-components/webapp/core/AuthenticationSocketClient';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 import { ContextHistory } from '../../../base-components/webapp/core/ContextHistory';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
-import { ClientNotificationSocketClient } from '../../../notification/webapp/core/ClientNotificationSocketClient';
 import { PortalNotificationService } from '../../../portal-notification/webapp/core/PortalNotificationService';
 
 export class AgentPortalService {
@@ -28,12 +30,14 @@ export class AgentPortalService {
         await this.checkAuthentication();
 
         await ContextService.getInstance().initialize();
-        ClientNotificationSocketClient.getInstance();
         PortalNotificationService.getInstance();
         ContextHistory.getInstance();
         BrowserUtil.handleBeforeUnload();
 
         await KIXModulesService.getInstance().init(this.modules);
+
+        BackendNotificationAPIClient.initialize();
+        PortalNotificationAPIClient.initialize();
     }
 
     private static setBaseLink(): void {
@@ -48,9 +52,12 @@ export class AgentPortalService {
     }
 
     private static async checkAuthentication(): Promise<void> {
-        if (!AuthenticationSocketClient.getInstance().validateToken()) {
+        if (!SessionAPIClient.validateToken()) {
             window.location.replace('/auth');
         }
+
+        const currentUser = await SessionAPIClient.getCurrentUser();
+        ClientStorageService.setOption('UserId', currentUser?.UserID?.toString());
     }
 
 }

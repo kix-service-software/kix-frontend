@@ -7,6 +7,7 @@
  * --
  */
 
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { ClientStorageService } from './ClientStorageService';
 
 export class WindowListener {
@@ -53,9 +54,8 @@ export class WindowListener {
         }
     }
 
-    public logout(): void {
-        const baseRoute = ClientStorageService.getBaseRoute();
-        window.location.replace(`${baseRoute}/auth/logout`);
+    public async logout(): Promise<void> {
+        await SessionAPIClient.logout();
     }
 
     public addUnloadTask(taskName: string, task: () => any): void {

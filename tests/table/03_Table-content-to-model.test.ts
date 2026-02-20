@@ -9,7 +9,7 @@
 
 /* tslint:disable */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Table } from '../../src/frontend-applications/agent-portal/modules/table/model/Table';
 import { RowObject } from '../../src/frontend-applications/agent-portal/modules/table/model/RowObject';

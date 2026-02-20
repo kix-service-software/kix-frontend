@@ -10,12 +10,11 @@
 import { Request, Response } from 'express';
 import cors from 'cors';
 
-import { KIXRouter } from '../../../server/routes/KIXRouter';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { WebformService } from './WebformService';
 import { Error } from '../../../../../server/model/Error';
 
-export class KIXIntegrationRouter extends KIXRouter {
+export class KIXIntegrationRouter {
 
     private static INSTANCE: KIXIntegrationRouter;
 
@@ -26,26 +25,21 @@ export class KIXIntegrationRouter extends KIXRouter {
         return KIXIntegrationRouter.INSTANCE;
     }
 
-    private constructor() {
-        super();
-    }
-
     public getBaseRoute(): string {
         return '/integrations';
     }
 
     protected async initialize(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const forms = await WebformService.getInstance().loadWebforms(serverConfig.BACKEND_API_TOKEN);
+        const forms = await WebformService.getInstance().loadWebforms(ConfigurationService.getBackendAPIToken());
         if (forms && !!forms.length) {
             for (const form of forms) {
                 await this.registerRoute(Number(form.ObjectId));
             }
         }
-        this.router.get(
-            '/',
-            this.handleUnsupportedGetRequest.bind(this)
-        );
+        // this.router.get(
+        //     '/',
+        //     this.handleUnsupportedGetRequest.bind(this)
+        // );
     }
 
     private async handleUnsupportedGetRequest(req: Request, res: Response): Promise<void> {
@@ -56,8 +50,9 @@ export class KIXIntegrationRouter extends KIXRouter {
         if (req.path.match(/^\/\d+$/)) {
             const formId = Number(req.path.substring(1));
 
-            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-            const form = await WebformService.getInstance().getWebform(serverConfig.BACKEND_API_TOKEN, formId);
+            const form = await WebformService.getInstance().getWebform(
+                ConfigurationService.getBackendAPIToken(), formId
+            );
             if (form && form.ValidID === 1) {
                 const languages = req.acceptsLanguages();
                 let userLanguage;
@@ -90,8 +85,9 @@ export class KIXIntegrationRouter extends KIXRouter {
         if (req.path.match(/^\/\d+$/)) {
             const formId = Number(req.path.substring(1));
 
-            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-            const form = await WebformService.getInstance().getWebform(serverConfig.BACKEND_API_TOKEN, formId);
+            const form = await WebformService.getInstance().getWebform(
+                ConfigurationService.getBackendAPIToken(), formId
+            );
             if (form && form.ValidID === 1) {
                 const languages = req.acceptsLanguages();
                 const language = languages ? languages[0].split('-')[0] : null;
@@ -116,8 +112,9 @@ export class KIXIntegrationRouter extends KIXRouter {
         let corsOptions;
         if (req.path.match(/^\/\d+$/)) {
             const formId = req.path.substring(1);
-            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-            const form = await WebformService.getInstance().getWebform(serverConfig.BACKEND_API_TOKEN, formId);
+            const form = await WebformService.getInstance().getWebform(
+                ConfigurationService.getBackendAPIToken(), formId
+            );
             if (form && form.ValidID === 1 && form.acceptedDomains) {
                 let regex;
                 try {
@@ -136,18 +133,17 @@ export class KIXIntegrationRouter extends KIXRouter {
     }
 
     public async registerRoute(formId: number): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const form = await WebformService.getInstance().getWebform(serverConfig.BACKEND_API_TOKEN, formId);
+        const form = await WebformService.getInstance().getWebform(ConfigurationService.getBackendAPIToken(), formId);
         if (form && form.acceptedDomains && !!form.acceptedDomains.length) {
-            this.router.route(`/${formId}`)
-                .options(cors(this.getCorsOptions.bind(this)))
-                .get(
-                    cors(this.getCorsOptions.bind(this)),
-                    this.handleGetRequest.bind(this)
-                ).post(
-                    cors(this.getCorsOptions.bind(this)),
-                    this.handlePostRequest.bind(this)
-                );
+            // this.router.route(`/${formId}`)
+            //     .options(cors(this.getCorsOptions.bind(this)))
+            //     .get(
+            //         cors(this.getCorsOptions.bind(this)),
+            //         this.handleGetRequest.bind(this)
+            //     ).post(
+            //         cors(this.getCorsOptions.bind(this)),
+            //         this.handlePostRequest.bind(this)
+            //     );
         }
     }
 }

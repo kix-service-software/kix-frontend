@@ -6,32 +6,43 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<span.icon class=input.class>
-    <if(state.content)>
-        <if(state.base64)>
-            <img.svg-icon
-                style=input.style
-                src="data:" + state.contentType + ";base64," + state.content
-                title=state.tooltip
-                key=state.iconId
-                alt=state.tooltip || ""
-            >
-        </if>
-        <else>
-            <span
-                style=input.style
-                class=state.content
-                title=state.tooltip
-                key=state.iconId
-                aria-hidden="true"
-            >
-                <span.path1/>
-                <span.path2/>
-                <span.path3/>
-                <span.path4/>
-                <span.path5/>
-            </span>
-        </else>
+<macro name="kix-icon">
+    <if(state.base64)>
+        <img
+            style=input.style
+            src="data:" + state.contentType + ";base64," + state.content
+            title=state.tooltip
+            key=state.iconId
+            alt=state.tooltip
+            class="svg-icon">
     </if>
+    <else>
+        <span
+            style=input.style
+            class=state.content
+            title=state.tooltip
+            key=state.iconId>
+            <span class="path1"/>
+            <span class="path2"/>
+            <span class="path3"/>
+            <span class="path4"/>
+            <span class="path5"/>
+        </span>
+    </else>
+</macro>
+
+<span class=["icon", input.class]>
+    <if(state.content)>
+        <kix-icon/>
+    </if>
+    <else-if(state.srcPath)>
+        <img
+            src=state.srcPath
+            style=input.style
+            class="svg-icon"
+            on-error("setFallback")
+            title=state.tooltip
+            key=state.iconId
+            alt=state.tooltip>
+    </else-if>
 </span>

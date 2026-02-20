@@ -24,7 +24,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     ];
 
     public initComponents: UIComponent[] = [
-        new UIComponent('UIModule', '/kix-module-multifactor-authentication$0/webapp/core/MultifactorAuthenticationUIModule', [])
+        new UIComponent('UIModule', '/kix-module-multifactor-authentication$0/webapp/core/MFAUIModule', [])
     ];
 
     public uiComponents: UIComponent[] = [

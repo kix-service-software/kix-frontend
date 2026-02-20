@@ -11,12 +11,9 @@ import jsonfile from 'jsonfile';
 import path from 'path';
 
 import lasso from 'lasso';
-import { ApplicationRouter } from '../routes/ApplicationRouter';
 import { PluginService } from '../../../../server/services/PluginService';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { LoggingService } from '../../../../server/services/LoggingService';
-import { ProfilingService } from '../../../../server/services/ProfilingService';
-
 import { IMarkoApplication } from '../extensions/IMarkoApplication';
 import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
 import { ServerUtil } from '../../../../server/ServerUtil';
@@ -36,27 +33,16 @@ export class MarkoService {
     private ready: boolean = false;
     private appNames: string[] = [];
     private currentApp: string;
+    private configName: string;
 
     private constructor() {
-        let configName = 'lasso.dev.config.json';
-        if (ServerUtil.isProductionMode()) {
-            configName = 'lasso.prod.config.json';
-        }
-        this.clearRequireCache(configName);
-        const lassoConfig = require(path.join(__dirname, '..', configName));
-
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        const baseRoute = config.BASE_ROUTE || '';
-
-        lassoConfig.urlPrefix = `${baseRoute}/static/applications`;
-
-        lasso.configure(lassoConfig);
+        this.configName = ServerUtil.isProductionMode()
+            ? 'lasso.prod.config.json'
+            : 'lasso.dev.config.json';
     }
 
-    public async initializeMarkoApplications(): Promise<void> {
-        ApplicationRouter.getInstance().setUpdate(true);
-
-        const applications = await PluginService.getInstance().getExtensions<IMarkoApplication>(
+    public async initializeMarkoApplications(applicationNames?: string[]): Promise<void> {
+        let applications = await PluginService.getInstance().getExtensions<IMarkoApplication>(
             AgentPortalExtensions.MARKO_APPLICATION
         );
 
@@ -64,10 +50,16 @@ export class MarkoService {
             AgentPortalExtensions.MODULES
         );
 
-        await this.registerModules(applications, modules);
+        if (applicationNames?.length) {
+            applications = applications.filter((a) => applicationNames.some((an) => an === a.applicationName));
+        }
 
-        await this.buildMarkoApplications(applications);
-        ApplicationRouter.getInstance().setUpdate(false);
+        if (applications.length) {
+            await this.registerModules(applications, modules);
+            await this.buildMarkoApplications(applications);
+        } else {
+            LoggingService.getInstance().warning(`[MARKO] stop error - no applications to build! (${applicationNames})`);
+        }
     }
 
     private async registerModules(applications: IMarkoApplication[], modules: IKIXModuleExtension[]): Promise<void> {
@@ -75,7 +67,7 @@ export class MarkoService {
 
             if (moduleExtension.applications?.length) {
                 for (const app of moduleExtension.applications) {
-                    const application = applications.find((a) => a.name === app);
+                    const application = applications.find((a) => a.applicationName === app);
                     if (application) {
                         await this.registerApplicationModule(application, moduleExtension);
                     }
@@ -91,23 +83,30 @@ export class MarkoService {
     private async registerApplicationModule(
         application: IMarkoApplication, moduleExtension: IKIXModuleExtension
     ): Promise<void> {
-        let folder = 'modules';
-        const rootPath = ['..', '..'];
+        try {
+            let folder = 'modules';
+            const rootPath = ['..', '..'];
 
-        if (!application.internal) {
-            folder = 'plugins';
-            rootPath.push('..', '..');
+            if (!application.internal) {
+                folder = 'plugins';
+                rootPath.push('..', '..');
+            }
+
+            const browserJsonPath = path.join(
+                ...rootPath, folder, application.path, 'browser.json'
+            );
+
+            const browserJSON = require(browserJsonPath);
+            this.addMouldeDependencies(browserJSON, moduleExtension, application.internal);
+
+            await this.saveBrowserJSON(browserJSON, browserJsonPath);
+            this.clearRequireCache(browserJsonPath);
+        } catch (e) {
+            LoggingService.getInstance().error(
+                `Error while registerApplicationModule - application: ${JSON.stringify(application)} moduleExtension: ${JSON.stringify(moduleExtension)}`
+            );
+            throw e;
         }
-
-        const browserJsonPath = path.join(
-            ...rootPath, folder, application.name, application.path, 'browser.json'
-        );
-
-        const browserJSON = require(browserJsonPath);
-        this.addMouldeDependencies(browserJSON, moduleExtension, application.internal);
-
-        await this.saveBrowserJSON(browserJSON, browserJsonPath);
-        this.clearRequireCache(browserJsonPath);
     }
 
 
@@ -150,14 +149,11 @@ export class MarkoService {
     }
 
     private async buildMarkoApplications(applications: IMarkoApplication[]): Promise<void> {
-        const profileTaskId = ProfilingService.getInstance().start('MarkoService', 'Build App');
-
         this.ready = false;
 
         this.appIsReady();
 
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        const applicationString = config?.BUILD_MARKO_APPLICATIONS;
+        const applicationString = ConfigurationService.getEnvString('BUILD_MARKO_APPLICATIONS');
         if (applicationString) {
             const applicationsToBuild = applicationString.split(',');
             applications = applications.filter((a) => applicationsToBuild.some((ab) => ab === a.name));
@@ -178,24 +174,24 @@ export class MarkoService {
                 folder = 'plugins';
             }
 
-            const templatePath = path.join(__dirname, ...rootPath, folder, application.name, application.path);
+            const templatePath = path.join(__dirname, ...rootPath, folder, application.path);
 
             const template = require(templatePath).default;
             await this.buildApplication(template, application);
         }
 
         this.ready = true;
-        ProfilingService.getInstance().stop(profileTaskId);
     }
 
     private async buildApplication(template: any, app: IMarkoApplication): Promise<void> {
         try {
-            const profileTaskId = ProfilingService.getInstance().start('MarkoService', `Build App ${app.name}`);
-
             this.currentApp = app.name;
+
+            const baseRoute = ConfigurationService.getEnvString(app.baseRouteENV) || '';
+            this.configureLasso(baseRoute);
+
             const startBuild = Date.now();
             await template.render({}).catch((error) => {
-                ProfilingService.getInstance().stop(profileTaskId, { data: [`[MARKO] ERROR - App Build for ${app.name}`] });
                 LoggingService.getInstance().error(error);
             });
             const endBuild = Date.now();
@@ -206,11 +202,19 @@ export class MarkoService {
             }
 
             LoggingService.getInstance().info(`[MARKO] Finished - App Build for ${app.name} in ${(endBuild - startBuild) / 1000}s.`);
-            ProfilingService.getInstance().stop(profileTaskId);
         } catch (error) {
             LoggingService.getInstance().error(`Error building wep application: ${app}`);
             LoggingService.getInstance().error(error);
         }
+    }
+
+    public configureLasso(baseRoute: string): void {
+        this.clearRequireCache(this.configName);
+        const configPath = path.join(__dirname, '..', this.configName);
+        LoggingService.getInstance().info(`[MARKO] use lasso.js config: ${configPath}`);
+        const lassoConfig = require(configPath);
+        lassoConfig.urlPrefix = `${baseRoute}/static/applications`;
+        lasso.configure(lassoConfig);
     }
 
     public async appIsReady(): Promise<boolean> {

@@ -1,6 +1,6 @@
 {
     "dependencies": [
-        "require ./core/MultifactorAuthenticationUIModule",
+        "require ./core/MFAUIModule",
         "require ./components/user-secret-input",
         "require ./components/user-secret-preference-input"
     ]

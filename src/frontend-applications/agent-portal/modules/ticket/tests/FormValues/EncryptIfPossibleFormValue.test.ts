@@ -7,7 +7,7 @@
  * --
  */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { TestObjectValueMapper } from '../../../object-forms/tests/MockData';
 import { EncryptIfPossibleFormValue } from '../../webapp/core/form/form-values/EncryptIfPossibleFormValue';

@@ -867,7 +867,8 @@ export class Table implements Table {
             }
         }
 
-        await Promise.all(promises);
+        const result = await Promise.allSettled(promises);
+        result.filter((r) => r.status === 'rejected').forEach((r) => console.error(r.reason));
     }
 
     public setRowSelection(rowIds: string[]): void {

@@ -13,7 +13,7 @@ import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { InputFieldTypes } from '../InputFieldTypes';
 import { TreeNode } from '../tree';
 import { DynamicFormOperationsType } from './DynamicFormOperationsType';
-import { AuthenticationSocketClient } from '../AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ValidationResult } from '../ValidationResult';
@@ -739,7 +739,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     protected async checkReadPermissions(resource: string): Promise<boolean> {
         if (!this.readPermissions.has(resource)) {
-            const permission = await AuthenticationSocketClient.getInstance().checkPermissions(
+            const permission = await SessionAPIClient.checkPermissions(
                 [new UIComponentPermission(resource, [CRUD.READ])]
             );
             this.readPermissions.set(resource, permission);

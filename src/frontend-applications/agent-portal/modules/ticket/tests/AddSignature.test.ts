@@ -8,8 +8,8 @@
  */
 
 // tslint:disable
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import * as chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { TicketService } from '../webapp/core/TicketService';
 import { TicketModuleConfiguration } from '../model/TicketModuleConfiguration';
 import { TicketObjectCommitHandler } from '../webapp/core/form/TicketObjectCommitHandler';

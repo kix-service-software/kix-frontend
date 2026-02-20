@@ -1,11 +1,6 @@
 {
     "name": "kix-module-search",
     "extensions": {
-        "kix:socket:namespace": {
-            "socket-namespace-registry-search-module": {
-                "module": "NamespaceRegistry.extension"
-            }
-        },
         "kix:modules": {
             "search-module": {
                 "module": "kix-module.extension"

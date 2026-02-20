@@ -19,8 +19,7 @@ export class LoginRequest {
                 public negotiateToken: string,
                 public redirectUrl: string,
                 public mfaToken: MFAToken,
-                public requestId: string,
-                public clientRequestId: string
+                public fakeLogin: boolean
         ) { }
 
 }

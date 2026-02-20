@@ -10,5 +10,7 @@
 import { ConfigurationService } from "../src/server/services/ConfigurationService";
 import { PluginService } from "../src/server/services/PluginService";
 
-ConfigurationService.getInstance().init(__dirname + '/../config/', __dirname + '/../cert', __dirname + '/../data');
+ConfigurationService.getInstance().init(__dirname + '/../data');
 PluginService.getInstance().init(['extensions']);
+
+process.env['OBJECT_ICONS_PATH'] = '/';

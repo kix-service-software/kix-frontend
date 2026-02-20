@@ -44,7 +44,7 @@ export class DateTimeUtil {
             const date = new Date(value);
 
             if (useOffset) {
-                const offset = await KIXModulesService.getInstance().getBackenTimezoneOffset();
+                const offset = KIXModulesService.getInstance().getBackenTimezoneOffset();
                 date.setSeconds(date.getSeconds() + offset);
             }
 

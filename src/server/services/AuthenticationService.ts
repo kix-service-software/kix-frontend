@@ -9,7 +9,6 @@
 
 /* eslint-disable max-classes-per-file */
 
-import { Request, Response } from 'express';
 import { ConfigurationService } from './ConfigurationService';
 import { HttpService } from '../../frontend-applications/agent-portal/server/services/HttpService';
 import { SessionResponse } from '../model/SessionResponse';
@@ -19,8 +18,6 @@ import { UserLogin } from '../../frontend-applications/agent-portal/modules/user
 import { UserType } from '../../frontend-applications/agent-portal/modules/user/model/UserType';
 
 import jwt from 'jsonwebtoken';
-import cookie from 'cookie';
-import { Socket } from 'socket.io';
 import { LoggingService } from './LoggingService';
 import { HTTPResponse } from '../../frontend-applications/agent-portal/server/services/HTTPResponse';
 import { IncomingHttpHeaders } from 'node:http';
@@ -31,6 +28,8 @@ import { ClientNotificationService } from '../../frontend-applications/agent-por
 import { BackendNotification } from '../../frontend-applications/agent-portal/model/BackendNotification';
 import { SysConfigKey } from '../../frontend-applications/agent-portal/modules/sysconfig/model/SysConfigKey';
 import { CacheService } from '../../frontend-applications/agent-portal/server/services/cache';
+import { randomBytes } from 'node:crypto';
+import { FastifyRequest } from 'fastify';
 
 export class AuthenticationService {
 
@@ -43,14 +42,25 @@ export class AuthenticationService {
         return AuthenticationService.INSTANCE;
     }
 
-    private tokenSecret: string;
+    public tokenSecret: string;
+    public tokenSalt: string;
 
     private constructor() {
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        this.tokenSecret = config?.FRONTEND_TOKEN_SECRET;
+        this.tokenSecret = ConfigurationService.getEnvString('TOKEN_SECRET')
+            || Buffer.from(randomBytes(32)).toString('hex');
+        this.tokenSalt = ConfigurationService.getEnvString('TOKEN_SALT')
+            || Buffer.from(randomBytes(16)).toString('hex');
 
-        ClientNotificationService.getInstance().registerNotificationListener(this.handleBackendNotification.bind(this));
+        if (this.tokenSalt.length > 16) {
+            this.tokenSalt = this.tokenSalt.substring(0, 16);
+        }
+
+        ClientNotificationService.getInstance().registerNotificationListener(
+            'AuthenticationService',
+            this.handleBackendNotification.bind(this)
+        );
     }
+
     private async handleBackendNotification(events: BackendNotification[]): Promise<void> {
         const sysConfigOptionEvents = events?.filter((e) => e.Namespace === 'SysConfigOption');
         if (sysConfigOptionEvents?.some((sco) => sco.ObjectID === SysConfigKey.USER_PASSWORD_RESET_ENABLED)) {
@@ -64,8 +74,8 @@ export class AuthenticationService {
     }
 
     public getBackendToken(token: string): string {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        if (serverConfig.BACKEND_API_TOKEN === token) {
+        const beToken = ConfigurationService.getBackendAPIToken();
+        if (beToken === token) {
             return token;
         }
 
@@ -90,63 +100,6 @@ export class AuthenticationService {
                 resolve(false);
             });
         });
-    }
-
-    public async isAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
-        const token: string = req.cookies.token;
-
-        let redirect = true;
-
-        if (token) {
-            const valid = await this.validateToken(token, 'AuthenticationService').catch((error) => false);
-
-            if (valid) {
-                redirect = false;
-                res.cookie('token', token, { httpOnly: true, path: '/' });
-                next();
-            }
-        }
-
-        if (redirect) {
-            res.clearCookie('token');
-
-            let query = '';
-            if (!req.url?.startsWith('auth')) {
-                const url = encodeURIComponent(req.url);
-                query = `?redirectUrl=${url}`;
-            }
-
-            const config = ConfigurationService.getInstance().getServerConfiguration();
-            const baseRoute = config?.BASE_ROUTE || '';
-            res.redirect(`${baseRoute}/auth${query}`);
-        }
-    }
-
-    public async isSocketAuthenticated(socket: Socket, next: (err?: any) => void): Promise<void> {
-        if (socket?.handshake?.headers?.cookie) {
-            const parsedCookie = cookie.parse(socket.handshake.headers.cookie);
-
-            const tokenPrefix = socket?.handshake?.headers?.tokenprefix || '';
-            const token = parsedCookie[`${tokenPrefix}token`];
-
-            if (token) {
-                const valid = await this.validateToken(token, 'AuthenticationService')
-                    .catch(() => next(new SocketAuthenticationError('Error validating token!')));
-
-                if (valid) {
-                    next();
-                } else {
-                    next(new SocketAuthenticationError('Invalid Token!'));
-                }
-            } else {
-                next(new SocketAuthenticationError('Invalid Token!'));
-            }
-        } else {
-            LoggingService.getInstance().error('Invalid Cookie!');
-            LoggingService.getInstance().error(socket?.handshake?.headers?.cookie);
-            LoggingService.getInstance().error(JSON.stringify(socket?.handshake));
-            next(new SocketAuthenticationError(`Invalid Cookie! ${JSON.stringify(socket?.handshake)}`));
-        }
     }
 
     public async login(
@@ -260,6 +213,10 @@ export class AuthenticationService {
         }
 
         return pwResetState;
+    }
+
+    public static setSessionCookie(req: FastifyRequest, application: string, token: string): void {
+        (req as any)[`${application}-session`].set('session', token);
     }
 
 }

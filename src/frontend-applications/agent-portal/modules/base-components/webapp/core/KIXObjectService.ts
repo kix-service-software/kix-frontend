@@ -16,9 +16,8 @@ import { ServiceRegistry } from './ServiceRegistry';
 import { ComponentContent } from './ComponentContent';
 import { OverlayService } from './OverlayService';
 import { OverlayType } from './OverlayType';
-import { KIXObjectSocketClient } from './KIXObjectSocketClient';
+import { ObjectAPIClient } from '../../../../api-client/object/Object';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
-import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { TreeNode } from './tree';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
@@ -26,7 +25,7 @@ import { User } from '../../../user/model/User';
 import { ValidObject } from '../../../valid/model/ValidObject';
 import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
 import { IAutofillConfiguration } from './IAutofillConfiguration';
-import { AuthenticationSocketClient } from './AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { LabelService } from './LabelService';
@@ -106,7 +105,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public static async loadDisplayValue(
         objectType: KIXObjectType | string, objectId: string | number
     ): Promise<string> {
-        return KIXObjectSocketClient.getInstance().loadDisplayValue(objectType, objectId);
+        return ObjectAPIClient.loadDisplayValue(objectType, objectId);
     }
 
     public static async loadObjects<T extends KIXObject>(
@@ -127,7 +126,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                     const content = new ComponentContent('list-with-title',
                         {
                             title: `Error load object (${objectType}):`,
-                            list: [`${error.Code}: ${error.Message}`]
+                            list: [JSON.stringify(error)]
                         }
                     );
                     OverlayService.getInstance().openOverlay(
@@ -153,13 +152,13 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         let objects = [];
         if (objectIds) {
             if (objectIds.length) {
-                objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
+                objects = await ObjectAPIClient.loadObjects<T>(
                     objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache,
                     undefined, silent, collectionId
                 );
             }
         } else {
-            objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
+            objects = await ObjectAPIClient.loadObjects<T>(
                 objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache,
                 undefined, silent, collectionId
             );
@@ -190,7 +189,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         createOptions?: KIXObjectSpecificCreateOptions,
         catchError: boolean = true, cacheKeyPrefix: string = objectType
     ): Promise<any> {
-        const objectId = await KIXObjectSocketClient.getInstance().createObject(
+        const objectId = await ObjectAPIClient.createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
         ).catch(async (error: Error) => {
             if (catchError) {
@@ -221,7 +220,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         if (service) {
             parameter = service.prepareCreateParameter(object);
         }
-        const objectId = await KIXObjectSocketClient.getInstance().createObject(
+        const objectId = await ObjectAPIClient.createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
         );
         return objectId;
@@ -241,7 +240,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(objectType, ServiceType.FORM);
         const parameter: Array<[string, any]> = await service.getFormParameter(false, createOptions);
-        const objectId = await KIXObjectSocketClient.getInstance().createObject(
+        const objectId = await ObjectAPIClient.createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
         );
         return objectId;
@@ -278,7 +277,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType | string, parameter: Array<[string, any]>, objectId: number | string,
         cacheKeyPrefix: string = objectType, silent?: boolean
     ): Promise<string | number> {
-        const updatedObjectId = await KIXObjectSocketClient.getInstance().updateObject(
+        const updatedObjectId = await ObjectAPIClient.updateObject(
             objectType, parameter, objectId, null, cacheKeyPrefix, silent
         );
 
@@ -315,14 +314,13 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static async deleteObject(
         objectType: KIXObjectType | string, objectIds: Array<number | string>,
-        deleteOptions?: KIXObjectSpecificDeleteOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<Array<number | string>> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         const errors: string[] = [];
         const failIds: Array<number | string> = [];
         for (const objectId of objectIds) {
-            await service.deleteObject(objectType, objectId, deleteOptions, cacheKeyPrefix)
+            await service.deleteObject(objectType, objectId, cacheKeyPrefix)
                 .catch((error: Error) => {
                     errors.push(`${error.Code}: ${error.Message}`);
                     failIds.push(objectId);
@@ -344,10 +342,9 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public async deleteObject(
-        objectType: KIXObjectType | string, objectId: string | number, deleteOptions: KIXObjectSpecificDeleteOptions,
-        cacheKeyPrefix: string = objectType
+        objectType: KIXObjectType | string, objectId: string | number, cacheKeyPrefix: string = objectType
     ): Promise<void> {
-        await KIXObjectSocketClient.getInstance().deleteObject(objectType, objectId, deleteOptions, cacheKeyPrefix);
+        await ObjectAPIClient.deleteObject(objectType, objectId, cacheKeyPrefix);
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
@@ -495,7 +492,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async hasReadPermissionFor(objectType: KIXObjectType | string): Promise<boolean> {
         const resource = this.getResource(objectType);
-        return await AuthenticationSocketClient.getInstance().checkPermissions([
+        return await SessionAPIClient.checkPermissions([
             new UIComponentPermission(resource, [CRUD.READ])
         ]);
     }

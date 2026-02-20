@@ -26,6 +26,7 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
     private additionalActions: IAction[];
     private canChangeMinimize: boolean;
     private startAsMinimized: boolean;
+    private minimizeInstanceId: string;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'widget');
@@ -42,6 +43,7 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
         this.startAsMinimized = input.startAsMinimized;
 
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
+        this.minimizeInstanceId = `${input.minimizeInstanceId || this.state.instanceId}-minimized`;
 
         this.state.widgetConfiguration = input.configuration;
 
@@ -86,7 +88,7 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
             this.state.minimized = this.state.widgetConfiguration?.minimized;
         }
 
-        const storedMinimized = ClientStorageService.getOption(`${this.state.instanceId}-minimized`);
+        const storedMinimized = ClientStorageService.getOption(this.minimizeInstanceId);
         if (typeof storedMinimized !== 'undefined' && storedMinimized !== null) {
             this.state.minimized = storedMinimized === 'true';
         }
@@ -119,7 +121,7 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
     public onDestroy(): void {
         super.onDestroy();
         if (this.clearMinimizedStateOnDestroy) {
-            ClientStorageService.deleteState(`${this.state.instanceId}-minimized`);
+            ClientStorageService.deleteState(this.minimizeInstanceId);
         }
     }
 
@@ -165,7 +167,7 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
             }
 
             if (this.state.minimized) {
-                ClientStorageService.setOption(`${this.state.instanceId}-minimized`, this.state.minimized.toString());
+                ClientStorageService.setOption(this.minimizeInstanceId, this.state.minimized.toString());
             } else {
                 setTimeout(() => {
                     const element = (this as any).getEl('widget-content');
@@ -174,7 +176,7 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
                     }
                 }, 100);
 
-                ClientStorageService.deleteState(`${this.state.instanceId}-minimized`);
+                ClientStorageService.deleteState(this.minimizeInstanceId);
             }
         }
     }

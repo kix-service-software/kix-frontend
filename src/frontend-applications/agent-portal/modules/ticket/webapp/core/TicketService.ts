@@ -16,7 +16,6 @@ import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpec
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { TicketProperty } from '../../model/TicketProperty';
 import { Attachment } from '../../../../model/kix/Attachment';
-import { TicketSocketClient } from './TicketSocketClient';
 import { QueueService, } from './admin/QueueService';
 import { TicketDetailsContext } from './context/TicketDetailsContext';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
@@ -64,12 +63,14 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { BackendSearchDataType } from '../../../../model/BackendSearchDataType';
 import { TicketModuleConfiguration } from '../../model/TicketModuleConfiguration';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
-import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
-import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
+import { UserAPIClient } from '../../../../api-client/user/User';
+import { TicketAPIClient } from '../../../../api-client/ticket/Ticket';
+import { APIClient } from '../../../../api-client/APIClient';
 import { TicketEvent } from '../../model/TicketEvent';
 import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
 import { OrganisationService } from '../../../customer/webapp/core/OrganisationService';
 import { OrganisationProperty } from '../../../customer/model/OrganisationProperty';
+import { RequestMethod } from '../../../../../../server/model/rest/RequestMethod';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -158,36 +159,35 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async loadArticleAttachment(
         ticketId: number, articleId: number, attachmentId: number, asDownload?: boolean
     ): Promise<Attachment> {
-        const attachment = await TicketSocketClient.getInstance().loadArticleAttachment(
+        const attachment = await TicketAPIClient.loadArticleAttachment(
             ticketId, articleId, attachmentId, asDownload
         );
         return attachment;
     }
 
-    public async loadArticleZipAttachment(ticketId: number, articleId: number): Promise<Attachment> {
-        const attachment = await TicketSocketClient.getInstance().loadArticleZipAttachment(
+    public async downloadArticleZipAttachment(ticketId: number, articleId: number): Promise<void> {
+        await TicketAPIClient.downloadArticleZipAttachment(
             ticketId, articleId
         );
-        return attachment;
     }
 
     public async loadArticleAttachments(
         ticketId: number, articleId: number, attachmentIds: number[]
     ): Promise<Attachment[]> {
-        const attachments = await TicketSocketClient.getInstance().loadArticleAttachments(
+        const attachments = await TicketAPIClient.loadArticleAttachments(
             ticketId, articleId, attachmentIds
         );
         return attachments;
     }
 
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
-        await AgentSocketClient.getInstance().markAsSeen(KIXObjectType.ARTICLE, [articleId])
+        await UserAPIClient.markAsSeen(KIXObjectType.ARTICLE, [articleId])
             .then(() => EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR))
             .catch((error) => console.error(error));
     }
 
     public async markTicketAsSeen(ticketId: number): Promise<void> {
-        await AgentSocketClient.getInstance().markAsSeen(KIXObjectType.TICKET, [ticketId])
+        await UserAPIClient.markAsSeen(KIXObjectType.TICKET, [ticketId])
             .then(() => {
                 EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
                 EventService.getInstance().publish(TicketEvent.MARK_TICKET_AS_SEEN, ticketId);
@@ -509,8 +509,8 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async getPreparedArticleBodyContent(
         article: Article, reduceContent: boolean = false, lineCount?: number, prepareInline: boolean = true
     ): Promise<string> {
-        const applicationUrl = ClientStorageService.getApplicationUrl();
-        const response = await fetch(`${applicationUrl}/views/tickets/${article.TicketID}/articles/${article.ArticleID}?resolveInlineCSS=1&reduceContent=${reduceContent}&lineCount=${lineCount}&prepareInline=${prepareInline}`)
+        const url = `/tickets/${article.TicketID}/articles/${article.ArticleID}?resolveInlineCSS=1&reduceContent=${reduceContent}&lineCount=${lineCount}&prepareInline=${prepareInline}`;
+        const response = await APIClient.executeRequest(RequestMethod.GET, url)
             .catch((error): Response => {
                 console.error('Fetch error:', error);
                 return new Response();

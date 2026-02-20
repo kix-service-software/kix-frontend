@@ -7,14 +7,12 @@
  * --
  */
 
-import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
 import { Webform } from './Webform';
 
-export class SaveWebformRequest implements ISocketRequest {
+export class SaveWebformRequest {
 
     public constructor(
-        public requestId: string,
-        public clientRequestId: string,
+
         public webform: Webform,
         public webformId?: number
     ) { }

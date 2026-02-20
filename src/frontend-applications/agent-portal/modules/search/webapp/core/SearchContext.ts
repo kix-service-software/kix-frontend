@@ -21,8 +21,8 @@ import { SearchEvent } from '../../model/SearchEvent';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { SearchSocketClient } from './SearchSocketClient';
 import { AgentService } from '../../../user/webapp/core/AgentService';
+import { SearchAPIClient } from '../../../../api-client/search/Search';
 
 export abstract class SearchContext extends Context {
 
@@ -65,7 +65,7 @@ export abstract class SearchContext extends Context {
                 }
             }
         } else {
-            const searchCache = await SearchSocketClient.getInstance().loadDefaultUserSearch(
+            const searchCache = await SearchAPIClient.loadDefaultUserSearch(
                 this.descriptor.kixObjectTypes[0]
             ) || new SearchCache(
                 IdService.generateDateBasedId(), this.descriptor.contextId,
@@ -104,8 +104,7 @@ export abstract class SearchContext extends Context {
 
     public setSearchCache(cache: SearchCache): void {
         if (!this.searchCache || this.searchCache.id !== cache.id) {
-            this.searchCache = cache;
-            this.searchCache.criteria = JSON.parse(JSON.stringify(this.searchCache.criteria));
+            this.searchCache = SearchCache.create(cache);
             EventService.getInstance().publish(SearchEvent.SEARCH_CACHE_CHANGED, this);
             ContextService.getInstance().setDocumentHistory(true, this, this, null);
         }
@@ -147,7 +146,7 @@ export abstract class SearchContext extends Context {
                 search.userDisplayText = user?.UserLogin;
             }
 
-            await SearchSocketClient.getInstance().saveSearch(search, share)
+            await SearchAPIClient.saveSearch(search, share)
                 .catch((error: Error) => BrowserUtil.openErrorOverlay(error.message));
 
             this.searchCache = search;
@@ -157,9 +156,9 @@ export abstract class SearchContext extends Context {
 
     public async deleteSearch(): Promise<void> {
         if (this.searchCache && this.searchCache.name !== null) {
-            await SearchSocketClient.getInstance().deleteSearch(this.searchCache.id);
+            await SearchAPIClient.deleteSearch(this.searchCache.id);
             await SearchService.getInstance().getSearchBookmarks(true);
-            const defaultSearch = await SearchSocketClient.getInstance().loadDefaultUserSearch(
+            const defaultSearch = await SearchAPIClient.loadDefaultUserSearch(
                 this.searchCache.objectType
             );
             this.searchCache = defaultSearch || new SearchCache(

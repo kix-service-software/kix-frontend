@@ -7,16 +7,14 @@
  * --
  */
 
-import { ISocketRequest } from './ISocketRequest';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 
-export class LoadObjectsRequest implements ISocketRequest {
+export class LoadObjectsRequest {
 
     public constructor(
-        public requestId: string,
-        public clientRequestId: string,
+
         public objectType: KIXObjectType | string,
         public objectIds: Array<string | number> = null,
         public loadingOptions: KIXObjectLoadingOptions = null,

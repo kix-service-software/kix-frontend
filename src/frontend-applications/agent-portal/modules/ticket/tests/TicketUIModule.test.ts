@@ -8,24 +8,19 @@
  */
 
 // tslint:disable
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import { TicketSearchDefinition, TicketHistoryTableFactory, TicketTableCSSHandler, ArticleTableCSSHandler, TicketLabelProvider, QueueLabelProvider, TicketStateTypeLabelProvider, TicketStateLabelProvider, TicketPriorityLabelProvider, TicketTypeLabelProvider, TicketHistoryLabelProvider, ArticleLabelProvider, TicketService, QueueService, TicketPriorityService, TicketStateService, TicketTypeService, TicketFormService, ArticleFormService } from '../webapp/core';
+import { TicketSearchDefinition, TicketLabelProvider, QueueLabelProvider, TicketStateTypeLabelProvider, TicketStateLabelProvider, TicketPriorityLabelProvider, TicketTypeLabelProvider, TicketHistoryLabelProvider, ArticleLabelProvider, TicketService, QueueService, TicketPriorityService, TicketStateService, TicketTypeService, TicketFormService, ArticleFormService } from '../webapp/core';
 import { UIModule as TicketUIModule } from '../webapp/core/TicketUIModule';
-import { TicketTableFactory } from '../webapp/core/table/TicketTableFactory'
 import { TicketPlaceholderHandler } from '../webapp/core/TicketPlaceholderHandler';
-import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 import { PlaceholderService } from '../../base-components/webapp/core/PlaceholderService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { ArticleTableFactory } from '../webapp/core/table/ArticleTableFactory';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { ChannelLabelProvider } from '../webapp/core/ChannelLabelProvider';
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';
 import { ChannelService } from '../webapp/core/ChannelService';
 import { ServiceType } from '../../base-components/webapp/core/ServiceType';
-import { TableCSSHandlerRegistry } from '../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
-import { TableFactoryService } from '../../table/webapp/core/factory/TableFactoryService';
 import { SearchService } from '../../search/webapp/core/SearchService';
 
 chai.use(chaiAsPromised);

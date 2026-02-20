@@ -16,7 +16,7 @@ import { TicketProperty } from '../../../model/TicketProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { FormContext } from '../../../../../model/configuration/FormContext';
-import { KIXModulesSocketClient } from '../../../../base-components/webapp/core/KIXModulesSocketClient';
+import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 
 export class NewTicketDialogContext extends Context {
 
@@ -120,7 +120,7 @@ export class NewTicketDialogContext extends Context {
     }
 
     public async postInit(): Promise<void> {
-        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        const releaseInfo = ClientStorageService.getReleaseInfo();
         const kixPro = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
 
         if (!kixPro) {

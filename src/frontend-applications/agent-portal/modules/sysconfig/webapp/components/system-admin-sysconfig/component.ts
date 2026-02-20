@@ -168,13 +168,8 @@ class SysConfigContentProvider extends TableContentProvider {
                 KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, loadingOptions
             );
 
-            const options = await KIXObjectService.loadObjects<SysConfigOption>(
-                KIXObjectType.SYS_CONFIG_OPTION, definitions.map((d) => d.Name)
-            );
-
             for (const scd of definitions) {
-                const option = options.find((o) => o.Name === scd.Name);
-                const rowObject = await this.createRowObject(scd, option);
+                const rowObject = await this.createRowObject(scd);
                 rowObjects.push(rowObject);
             }
         }
@@ -186,7 +181,7 @@ class SysConfigContentProvider extends TableContentProvider {
         return rowObjects;
     }
 
-    private async createRowObject(definition: SysConfigOptionDefinition, option: SysConfigOption): Promise<RowObject> {
+    private async createRowObject(definition: SysConfigOptionDefinition): Promise<RowObject> {
         const values: TableValue[] = [];
 
         const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
@@ -196,10 +191,9 @@ class SysConfigContentProvider extends TableContentProvider {
 
                 // if no option or value is null and option is invalid, uses values from definition
                 // (check if null-value and invalid comes first, because value could be from config-file)
-                let value = !option || (option.Value === null && definition.ValidID !== 1)
-                    ? !definition.IsModified || definition.Value === null || definition.Value === '' // 0 is valid
-                        ? definition.Default : definition.Value
-                    : option.Value;
+                let value = !definition.IsModified || definition.Value === null || definition.Value === '' // 0 is valid
+                    ? definition.Default
+                    : definition.Value;
 
                 if (
                     value !== '' &&

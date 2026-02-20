@@ -9,12 +9,12 @@
 
 /* tslint:disable */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { FormConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/FormConfiguration';
 import { FormFieldValueHandler } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/FormFieldValueHandler';
 import { FormService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/FormService';
-import { KIXModulesSocketClient } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXModulesSocketClient';
+import { FormAPIClient } from '../../src/frontend-applications/agent-portal/api-client/config/Form';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -190,15 +190,15 @@ describe('FormService', () => {
             let form = new FormConfiguration('test-form', 'test-form', [], 'TestObjectType');
 
             before(() => {
-                originalFunction = KIXModulesSocketClient.getInstance().loadFormConfiguration;
-                KIXModulesSocketClient.getInstance().loadFormConfiguration =
+                originalFunction = FormAPIClient.loadFormConfiguration;
+                FormAPIClient.loadFormConfiguration =
                     async (formId: string): Promise<FormConfiguration> => {
                         return form;
                     };
             });
 
             after(() => {
-                KIXModulesSocketClient.getInstance().loadFormConfiguration = originalFunction;
+                FormAPIClient.loadFormConfiguration = originalFunction;
                 cleanupFormService();
             });
 

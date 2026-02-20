@@ -7,13 +7,13 @@
  * --
  */
 
+import { AdminAPIClient } from '../../../../api-client/admin/Admin';
 import { Context } from '../../../../model/Context';
 import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
-import { AdministrationSocketClient } from './AdministrationSocketClient';
 
 export class AdminContext extends Context {
 
@@ -29,7 +29,7 @@ export class AdminContext extends Context {
     public async getDisplayText(): Promise<string> {
         let text = await TranslationService.translate('Translatable#Admin');
         if (this.adminModuleId) {
-            const module = await AdministrationSocketClient.getInstance().getAdminModule(this.adminModuleId);
+            const module = await AdminAPIClient.getAdminModule(this.adminModuleId);
             const moduleName = await TranslationService.translate(module?.name);
             text = await TranslationService.translate('Translatable#Admin: {0}', [moduleName]);
         }

@@ -13,7 +13,7 @@ import { SearchProperty } from '../../../search/model/SearchProperty';
 import { ContactProperty } from '../../model/ContactProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { SearchOperator } from '../../../search/model/SearchOperator';
@@ -95,7 +95,7 @@ export class ContactSearchFormManager extends SearchFormManager {
 
     protected async checkReadPermissions(resource: string): Promise<boolean> {
         if (!this.readPermissions.has(resource)) {
-            const permission = await AuthenticationSocketClient.getInstance().checkPermissions(
+            const permission = await SessionAPIClient.checkPermissions(
                 [new UIComponentPermission(resource, [CRUD.READ])]
             );
             this.readPermissions.set(resource, permission);

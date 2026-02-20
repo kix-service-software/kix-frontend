@@ -68,7 +68,7 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
         objectSpecificLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<string> {
         let objectWithDF = object;
-        if (object && !Array.isArray(object.DynamicFields)) {
+        if (object?.ObjectId && !Array.isArray(object.DynamicFields)) {
             const objects = await KIXObjectService.loadObjects(
                 object.KIXObjectType, [object.ObjectId],
                 new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]),

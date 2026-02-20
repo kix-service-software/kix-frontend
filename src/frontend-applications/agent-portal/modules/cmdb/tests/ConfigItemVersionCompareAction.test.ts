@@ -8,7 +8,7 @@
  */
 
 // tslint:disable
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Row } from '../../table/model/Row';
 import { RowObject } from '../../table/model/RowObject';

@@ -226,8 +226,9 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(chart3);
 
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const deploymentStates = await CMDBAPIService.getInstance().getDeploymentStates(serverConfig.BACKEND_API_TOKEN);
+        const deploymentStates = await CMDBAPIService.getInstance().getDeploymentStates(
+            ConfigurationService.getBackendAPIToken()
+        );
         const filter: KIXObjectPropertyFilter[] = [];
         deploymentStates.forEach(
             (ds) => filter.push(new KIXObjectPropertyFilter(ds.Name, [
