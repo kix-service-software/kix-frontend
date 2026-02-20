@@ -15,7 +15,6 @@ import { SearchOperator } from '../../model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { SearchProperty } from '../../model/SearchProperty';
-import { SearchSocketClient } from './SearchSocketClient';
 import { Bookmark } from '../../../../model/Bookmark';
 import { SortUtil } from '../../../../model/SortUtil';
 import { BookmarkService } from '../../../../modules/base-components/webapp/core/BookmarkService';
@@ -42,11 +41,12 @@ import { StringContent } from '../../../base-components/webapp/core/StringConten
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
-import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { PortalNotificationService } from '../../../portal-notification/webapp/core/PortalNotificationService';
 import { PortalNotification } from '../../../portal-notification/model/PortalNotification';
 import { PortalNotificationType } from '../../../portal-notification/model/PortalNotificationType';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
+import { SearchAPIClient } from '../../../../api-client/search/Search';
 
 export class SearchService {
 
@@ -152,7 +152,7 @@ export class SearchService {
     }
 
     public async searchObjectsFromSearchId(id: string): Promise<KIXObject[]> {
-        const search = await SearchSocketClient.getInstance().loadSearches();
+        const search = await SearchAPIClient.loadSearches();
         const searchCache = search?.find((s) => s.id === id);
         return this.searchObjects(searchCache);
     }
@@ -342,7 +342,7 @@ export class SearchService {
     public async executeFullTextSearch<T extends KIXObject>(
         objectType: KIXObjectType | string, searchValue: string, setContext?: boolean
     ): Promise<T[]> {
-        const defaultSearch = await SearchSocketClient.getInstance().loadDefaultUserSearch(
+        const defaultSearch = await SearchAPIClient.loadDefaultUserSearch(
             objectType
         );
         if (defaultSearch?.criteria?.length) {
@@ -476,23 +476,23 @@ export class SearchService {
     }
 
     public async getSearchesOfUser(): Promise<SearchCache[]> {
-        let searches = await SearchSocketClient.getInstance().loadAllSearches() || [];
+        let searches = await SearchAPIClient.loadAllSearches() || [];
 
         searches.sort((s1, s2) => SortUtil.compareString(s1.name, s2.name));
 
-        const user = await AgentSocketClient.getInstance().getCurrentUser();
+        const user = await SessionAPIClient.getCurrentUser();
         searches = searches.filter((s) => !s.userId || s.userId === user.UserID);
 
         return searches;
     }
 
     public async getSearchBookmarks(publish?: boolean, userOnly?: boolean): Promise<Bookmark[]> {
-        let searches = await SearchSocketClient.getInstance().loadAllSearches() || [];
+        let searches = await SearchAPIClient.loadAllSearches() || [];
 
         searches.sort((s1, s2) => SortUtil.compareString(s1.name, s2.name));
 
         if (userOnly) {
-            const user = await AgentSocketClient.getInstance().getCurrentUser();
+            const user = await SessionAPIClient.getCurrentUser();
             searches = searches.filter((s) => !s.userId || s.userId === user.UserID);
         }
 
@@ -535,7 +535,7 @@ export class SearchService {
         additionalIncludes: string[] = [], limit?: number, searchLimit?: number, sort?: [string, boolean],
         additionalFilter?: FilterCriteria[], setResult?: boolean, setResultTimeout?: number
     ): Promise<KIXObject[]> {
-        const search = await SearchSocketClient.getInstance().loadAllSearches();
+        const search = await SearchAPIClient.loadAllSearches();
         let searchCache = cache || search.find((s) => s.id === id);
         if (!searchCache && name) {
             searchCache = search.find((s) => s.name === name);
@@ -587,7 +587,7 @@ export class SearchService {
     }
 
     public async loadSearchCache(id: string): Promise<SearchCache> {
-        const search = await SearchSocketClient.getInstance().loadAllSearches();
+        const search = await SearchAPIClient.loadAllSearches();
         let searchCache = search.find((s) => s.id === id);
         if (searchCache) {
             searchCache = SearchCache.create(searchCache);
@@ -597,7 +597,7 @@ export class SearchService {
     }
 
     public async createSearchTableWidget(id: string, name: string): Promise<ConfiguredWidget> {
-        const search = await SearchSocketClient.getInstance().loadAllSearches();
+        const search = await SearchAPIClient.loadAllSearches();
         const searchCache = search.find((s) => s.id === id);
 
         let widget: ConfiguredWidget;
@@ -631,7 +631,7 @@ export class SearchService {
     }
 
     public async setSearchCacheAsDefault(search: SearchCache): Promise<void> {
-        SearchSocketClient.getInstance().saveSearchAsDefault(search);
+        SearchAPIClient.saveSearchAsDefault(search);
     }
 
 }

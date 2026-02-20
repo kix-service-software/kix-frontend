@@ -9,13 +9,13 @@
 
 import { BackendNotification } from '../../../../model/BackendNotification';
 import { ContextService } from './ContextService';
-import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { BrowserUtil } from './BrowserUtil';
 import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
 import { BrowserCacheService } from './CacheService';
-import { AdministrationSocketClient } from '../../../admin/webapp/core/AdministrationSocketClient';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
+import { AdminAPIClient } from '../../../../api-client/admin/Admin';
 
 export class NotificationHandler {
 
@@ -40,7 +40,7 @@ export class NotificationHandler {
     }
 
     private async checkForPermissionUpdate(events: BackendNotification[]): Promise<void> {
-        const user = await AgentSocketClient.getInstance().getCurrentUser();
+        const user = await SessionAPIClient.getCurrentUser();
 
         const hasCurrenUserEvent = events.some(
             (e) => e.Namespace === KIXObjectType.USER && e.ObjectID.toString() === user.UserID.toString()
@@ -70,7 +70,7 @@ export class NotificationHandler {
             .some((roleId) => user.RoleIDs.some((rid) => rid === roleId));
 
         if (userIsAffacted) {
-            AdministrationSocketClient.getInstance().clearAdminModuleCache();
+            AdminAPIClient.clearAdminModuleCache();
             BrowserUtil.openAppRefreshOverlay();
         }
     }

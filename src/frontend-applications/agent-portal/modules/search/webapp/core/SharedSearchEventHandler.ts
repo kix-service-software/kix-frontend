@@ -9,6 +9,7 @@
 
 import { BackendNotification } from '../../../../model/BackendNotification';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
 import { SearchService } from './SearchService';

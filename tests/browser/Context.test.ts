@@ -9,7 +9,7 @@
 
 /* tslint:disable */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ConfiguredWidget } from '../../src/frontend-applications/agent-portal/model/configuration/ConfiguredWidget';
 import { Context } from '../../src/frontend-applications/agent-portal/model/Context';

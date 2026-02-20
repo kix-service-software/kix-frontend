@@ -15,7 +15,8 @@ export class ObjectIconLoadingOptions extends KIXObjectSpecificLoadingOptions {
 
     public constructor(
         public object: string,
-        public objectId: string | number
+        public objectId: string | number,
+        public keepBase64Content: boolean = false
     ) {
         super();
     }

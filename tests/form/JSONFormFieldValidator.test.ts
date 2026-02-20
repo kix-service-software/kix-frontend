@@ -9,7 +9,7 @@
 
 /* tslint:disable */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { FormFieldConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../src/frontend-applications/agent-portal/model/configuration/FormFieldOption';

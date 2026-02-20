@@ -7,7 +7,7 @@
  * --
  */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 import { ConfigurationType } from '../../src/frontend-applications/agent-portal/model/configuration/ConfigurationType';
@@ -20,11 +20,11 @@ import { ContextPreference } from '../../src/frontend-applications/agent-portal/
 import { ContextStorageManager } from '../../src/frontend-applications/agent-portal/model/ContextStorageManager';
 import { ContextType } from '../../src/frontend-applications/agent-portal/model/ContextType';
 import { KIXObjectType } from '../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
-import { AuthenticationSocketClient } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/AuthenticationSocketClient';
 
 import { ContextService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/ContextService';
-import { ContextSocketClient } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/ContextSocketClient';
 import { FormInstance } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/FormInstance';
+import { ContextAPIClient } from '../../src/frontend-applications/agent-portal/api-client/context/Context';
+import { SessionAPIClient } from '../../src/frontend-applications/agent-portal/api-client/session/Session';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -163,19 +163,19 @@ describe('ContextService', () => {
                 )
             );
 
-            originalPermissionCheck = AuthenticationSocketClient.getInstance().checkPermissions;
-            originalLoadCOnfiguration = ContextSocketClient.getInstance().loadContextConfiguration;
+            originalPermissionCheck = SessionAPIClient.checkPermissions;
+            originalLoadCOnfiguration = ContextAPIClient.loadContextConfiguration;
 
-            AuthenticationSocketClient.getInstance().checkPermissions =
+            SessionAPIClient.checkPermissions =
                 async () => true;
-            ContextSocketClient.getInstance().loadContextConfiguration =
+            ContextAPIClient.loadContextConfiguration =
                 async () => new ContextConfiguration(TestContext1.CONTEXT_ID, 'TestConfiguration', ConfigurationType.Context, TestContext1.CONTEXT_ID);
         });
 
         after(() => {
             cleanupContextService()
-            AuthenticationSocketClient.getInstance().checkPermissions = originalPermissionCheck;
-            ContextSocketClient.getInstance().loadContextConfiguration = originalLoadCOnfiguration;
+            SessionAPIClient.checkPermissions = originalPermissionCheck;
+            ContextAPIClient.loadContextConfiguration = originalLoadCOnfiguration;
         });
 
         it('should create and provide the context instance', async () => {
@@ -225,19 +225,19 @@ describe('ContextService', () => {
                 )
             );
 
-            originalPermissionCheck = AuthenticationSocketClient.getInstance().checkPermissions;
-            originalLoadCOnfiguration = ContextSocketClient.getInstance().loadContextConfiguration;
+            originalPermissionCheck = SessionAPIClient.checkPermissions;
+            originalLoadCOnfiguration = ContextAPIClient.loadContextConfiguration;
 
-            AuthenticationSocketClient.getInstance().checkPermissions =
+            SessionAPIClient.checkPermissions =
                 async () => true;
-            ContextSocketClient.getInstance().loadContextConfiguration =
+            ContextAPIClient.loadContextConfiguration =
                 async (contextId: string) => new ContextConfiguration(contextId, contextId, ConfigurationType.Context, contextId);
         });
 
         after(() => {
             cleanupContextService()
-            AuthenticationSocketClient.getInstance().checkPermissions = originalPermissionCheck;
-            ContextSocketClient.getInstance().loadContextConfiguration = originalLoadCOnfiguration;
+            SessionAPIClient.checkPermissions = originalPermissionCheck;
+            ContextAPIClient.loadContextConfiguration = originalLoadCOnfiguration;
         });
 
         it('should create and provide TestContext1', async () => {
@@ -316,12 +316,12 @@ describe('ContextService', () => {
                 )
             );
 
-            originalPermissionCheck = AuthenticationSocketClient.getInstance().checkPermissions;
-            originalLoadCOnfiguration = ContextSocketClient.getInstance().loadContextConfiguration;
+            originalPermissionCheck = SessionAPIClient.checkPermissions;
+            originalLoadCOnfiguration = ContextAPIClient.loadContextConfiguration;
 
-            AuthenticationSocketClient.getInstance().checkPermissions =
+            SessionAPIClient.checkPermissions =
                 async () => true;
-            ContextSocketClient.getInstance().loadContextConfiguration =
+            ContextAPIClient.loadContextConfiguration =
                 async (contextId: string) => new ContextConfiguration(contextId, contextId, ConfigurationType.Context, contextId);
 
             await ContextService.getInstance().createContext(TestContext1.CONTEXT_ID, null);
@@ -330,8 +330,8 @@ describe('ContextService', () => {
 
         after(() => {
             cleanupContextService()
-            AuthenticationSocketClient.getInstance().checkPermissions = originalPermissionCheck;
-            ContextSocketClient.getInstance().loadContextConfiguration = originalLoadCOnfiguration;
+            SessionAPIClient.checkPermissions = originalPermissionCheck;
+            ContextAPIClient.loadContextConfiguration = originalLoadCOnfiguration;
         });
 
         it('should not create a new context instances for TestContext1', async () => {
@@ -420,19 +420,19 @@ describe('ContextService', () => {
                 )
             );
 
-            originalPermissionCheck = AuthenticationSocketClient.getInstance().checkPermissions;
-            originalLoadCOnfiguration = ContextSocketClient.getInstance().loadContextConfiguration;
+            originalPermissionCheck = SessionAPIClient.checkPermissions;
+            originalLoadCOnfiguration = ContextAPIClient.loadContextConfiguration;
 
-            AuthenticationSocketClient.getInstance().checkPermissions =
+            SessionAPIClient.checkPermissions =
                 async () => true;
-            ContextSocketClient.getInstance().loadContextConfiguration =
+            ContextAPIClient.loadContextConfiguration =
                 async (contextId: string) => new ContextConfiguration(contextId, contextId, ConfigurationType.Context, contextId);
         });
 
         after(() => {
             cleanupContextService()
-            AuthenticationSocketClient.getInstance().checkPermissions = originalPermissionCheck;
-            ContextSocketClient.getInstance().loadContextConfiguration = originalLoadCOnfiguration;
+            SessionAPIClient.checkPermissions = originalPermissionCheck;
+            ContextAPIClient.loadContextConfiguration = originalLoadCOnfiguration;
         });
 
         describe('provide a not existing active context instance (TestContext1)', () => {
@@ -535,12 +535,12 @@ describe('ContextService', () => {
                 )
             );
 
-            originalPermissionCheck = AuthenticationSocketClient.getInstance().checkPermissions;
-            originalLoadCOnfiguration = ContextSocketClient.getInstance().loadContextConfiguration;
+            originalPermissionCheck = SessionAPIClient.checkPermissions;
+            originalLoadCOnfiguration = ContextAPIClient.loadContextConfiguration;
 
-            AuthenticationSocketClient.getInstance().checkPermissions =
+            SessionAPIClient.checkPermissions =
                 async () => true;
-            ContextSocketClient.getInstance().loadContextConfiguration =
+            ContextAPIClient.loadContextConfiguration =
                 async (contextId: string) => new ContextConfiguration(contextId, contextId, ConfigurationType.Context, contextId);
 
             await ContextService.getInstance().createContext(TestContext1.CONTEXT_ID, null);
@@ -551,8 +551,8 @@ describe('ContextService', () => {
 
         after(() => {
             cleanupContextService()
-            AuthenticationSocketClient.getInstance().checkPermissions = originalPermissionCheck;
-            ContextSocketClient.getInstance().loadContextConfiguration = originalLoadCOnfiguration;
+            SessionAPIClient.checkPermissions = originalPermissionCheck;
+            ContextAPIClient.loadContextConfiguration = originalLoadCOnfiguration;
         });
 
         it('4 instances should be existing', () => {
@@ -625,12 +625,12 @@ describe('ContextService', () => {
                 )
             );
 
-            originalPermissionCheck = AuthenticationSocketClient.getInstance().checkPermissions;
-            originalLoadCOnfiguration = ContextSocketClient.getInstance().loadContextConfiguration;
+            originalPermissionCheck = SessionAPIClient.checkPermissions;
+            originalLoadCOnfiguration = ContextAPIClient.loadContextConfiguration;
 
-            AuthenticationSocketClient.getInstance().checkPermissions =
+            SessionAPIClient.checkPermissions =
                 async () => true;
-            ContextSocketClient.getInstance().loadContextConfiguration =
+            ContextAPIClient.loadContextConfiguration =
                 async (contextId: string) => new ContextConfiguration(contextId, contextId, ConfigurationType.Context, contextId);
 
             await ContextService.getInstance().createContext(TestContext1.CONTEXT_ID, null);
@@ -640,8 +640,8 @@ describe('ContextService', () => {
 
         after(() => {
             cleanupContextService()
-            AuthenticationSocketClient.getInstance().checkPermissions = originalPermissionCheck;
-            ContextSocketClient.getInstance().loadContextConfiguration = originalLoadCOnfiguration;
+            SessionAPIClient.checkPermissions = originalPermissionCheck;
+            ContextAPIClient.loadContextConfiguration = originalLoadCOnfiguration;
         });
 
         it('Should create a new instance after the active context', async () => {
@@ -707,13 +707,13 @@ describe('ContextService', () => {
                 )
             );
 
-            originalPermissionCheck = AuthenticationSocketClient.getInstance().checkPermissions;
-            originalLoadConfiguration = ContextSocketClient.getInstance().loadContextConfiguration;
+            originalPermissionCheck = SessionAPIClient.checkPermissions;
+            originalLoadConfiguration = ContextAPIClient.loadContextConfiguration;
             origianlGetStoredContextList = ContextService.getInstance().getStoredContextList;
 
-            AuthenticationSocketClient.getInstance().checkPermissions =
+            SessionAPIClient.checkPermissions =
                 async () => true;
-            ContextSocketClient.getInstance().loadContextConfiguration =
+            ContextAPIClient.loadContextConfiguration =
                 async (contextId: string) => new ContextConfiguration(contextId, contextId, ConfigurationType.Context, contextId);
             ContextService.getInstance().getStoredContextList =
                 async (): Promise<ContextPreference[]> => [];
@@ -726,8 +726,8 @@ describe('ContextService', () => {
 
         after(() => {
             cleanupContextService()
-            AuthenticationSocketClient.getInstance().checkPermissions = originalPermissionCheck;
-            ContextSocketClient.getInstance().loadContextConfiguration = originalLoadConfiguration;
+            SessionAPIClient.checkPermissions = originalPermissionCheck;
+            ContextAPIClient.loadContextConfiguration = originalLoadConfiguration;
             ContextService.getInstance().getStoredContextList = origianlGetStoredContextList;
         });
 

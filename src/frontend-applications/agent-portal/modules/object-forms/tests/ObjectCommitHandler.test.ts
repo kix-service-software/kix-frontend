@@ -7,7 +7,7 @@
  * --
  */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ObjectCommitHandler } from '../webapp/core/ObjectCommitHandler';
 import { TestFormObject } from './MockData';

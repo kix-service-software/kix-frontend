@@ -1,11 +1,6 @@
 {
     "name": "kix-module-user",
     "extensions": {
-        "kix:socket:namespace": {
-            "socket-namespace-registry-user-module": {
-                "module": "NamespaceRegistry.extension"
-            }
-        },
         "kix:configuration": {
             "new-user-role-dialog-configuration": {
                 "module": "new-user-role-dialog-configuration.extension"

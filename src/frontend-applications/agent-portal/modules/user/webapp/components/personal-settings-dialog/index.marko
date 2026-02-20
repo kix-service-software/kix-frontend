@@ -9,7 +9,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <widget
     contextInstanceId=input.contextInstanceId
-    instanceId="personal-settings-dialog"
+    instanceId="personal-settings-dialog-reset-search"
     title="Translatable#Reset specific user settings"
     icon="kix-icon-arrow-rotate-left">
     <@content>
@@ -24,11 +24,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <button
                     type="button"
                     on-click("resetSearchDefaults")
-                    title=(state.translations["Translatable#Reset Search To Default"])
+                    title=(
+                        state.translations[
+                            "Translatable#Reset Search To Default"
+                        ]
+                    )
                     class="kix-button cancel-button">
-                    <span class="kix-icon-arrow-rotate-left" aria-hidden="true"/>
+                    <span
+                        class="kix-icon-arrow-rotate-left"
+                        aria-hidden="true"/>
                     <span>
-                        ${state.translations["Translatable#Reset Search To Default"]}
+                        ${state.translations[
+                            "Translatable#Reset Search To Default"
+                        ]}
                     </span>
                 </button>
             </div>

@@ -19,7 +19,7 @@ import { OverlayType } from '../../../../../modules/base-components/webapp/core/
 
 import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 
 export class FAQArticleVoteAction extends AbstractAction {
 
@@ -39,7 +39,7 @@ export class FAQArticleVoteAction extends AbstractAction {
             new UIComponentPermission(`faq/articles/${objectId}/votes`, [CRUD.CREATE])
         ];
 
-        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        show = await SessionAPIClient.checkPermissions(permissions);
         return show;
     }
 

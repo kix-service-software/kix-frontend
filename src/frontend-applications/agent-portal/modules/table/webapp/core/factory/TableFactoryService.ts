@@ -23,7 +23,7 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { TableEvent } from '../../../model/TableEvent';
@@ -164,7 +164,7 @@ export class TableFactoryService {
                 }
 
                 if (context?.getConfiguration()?.application === 'agent-portal') {
-                    const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(
+                    const allowed = await SessionAPIClient.checkPermissions(
                         [
                             new UIComponentPermission('system/config', [CRUD.READ]),
                             new UIComponentPermission('objecttags', [CRUD.READ, CRUD.CREATE])

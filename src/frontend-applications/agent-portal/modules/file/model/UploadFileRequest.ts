@@ -8,13 +8,11 @@
  */
 
 import { IDownloadableFile } from '../../../model/IDownloadableFile';
-import { ISocketRequest } from '../../base-components/webapp/core/ISocketRequest';
 
-export class UploadFileRequest implements ISocketRequest {
+export class UploadFileRequest {
 
     public constructor(
-        public requestId: string,
-        public clientRequestId: string,
+
         public file: IDownloadableFile
     ) { }
 

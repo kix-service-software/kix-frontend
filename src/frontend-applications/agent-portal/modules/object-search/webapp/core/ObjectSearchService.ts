@@ -39,7 +39,7 @@ export class ObjectSearchService extends KIXObjectService {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('ObjectSearchService'),
             eventPublished: function (data: string, eventId: string): void {
-                if (data === KIXObjectType.OBJECT_SEARCH) {
+                if (data === KIXObjectType.OBJECT_SEARCH || data === KIXObjectType.DYNAMIC_FIELD) {
                     const keys = ClientStorageService.getAllKeys(KIXObjectType.OBJECT_SEARCH);
                     for (const key of keys) {
                         ClientStorageService.deleteState(key);

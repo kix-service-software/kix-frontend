@@ -8,13 +8,13 @@
  */
 
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { ISocketResponse } from '../../../modules/base-components/webapp/core/ISocketResponse';
+
 import { SearchCache } from './SearchCache';
 
-export class LoadSearchDefaultRequest implements ISocketResponse {
+export class LoadSearchDefaultRequest {
 
     public constructor(
-        public requestId: string,
+
         public objectType: KIXObjectType | string
     ) { }
 

@@ -26,11 +26,6 @@
             "edit-webform-dialog-configuration": {
                 "module": "edit-webform-dialog-configuration.extension"
             }
-        },
-        "kix:socket:namespace": {
-            "socket-namespace-registry-webform-module": {
-                "module": "NamespaceRegistry.extension"
-            }
         }
     }
 }

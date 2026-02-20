@@ -7,24 +7,9 @@
  * --
  */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import { ConfigurationType } from '../../src/frontend-applications/agent-portal/model/configuration/ConfigurationType';
-import { ContextConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/ContextConfiguration';
-import { Context } from '../../src/frontend-applications/agent-portal/model/Context';
-import { ContextDescriptor } from '../../src/frontend-applications/agent-portal/model/ContextDescriptor';
-import { ContextFormManager } from '../../src/frontend-applications/agent-portal/model/ContextFormManager';
-import { ContextMode } from '../../src/frontend-applications/agent-portal/model/ContextMode';
-import { ContextPreference } from '../../src/frontend-applications/agent-portal/model/ContextPreference';
-import { ContextStorageManager } from '../../src/frontend-applications/agent-portal/model/ContextStorageManager';
-import { ContextType } from '../../src/frontend-applications/agent-portal/model/ContextType';
-import { KIXObjectType } from '../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
-import { AuthenticationSocketClient } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/AuthenticationSocketClient';
-
-import { ContextService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/ContextService';
-import { ContextSocketClient } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/ContextSocketClient';
-import { FormInstance } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/FormInstance';
 import { Ticket } from '../../src/frontend-applications/agent-portal/modules/ticket/model/Ticket';
 import { KIXObjectLoadingOptions } from '../../src/frontend-applications/agent-portal/model/KIXObjectLoadingOptions';
 import { FilterCriteria } from '../../src/frontend-applications/agent-portal/model/FilterCriteria';

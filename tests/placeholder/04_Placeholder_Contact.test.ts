@@ -9,7 +9,7 @@
 
 /* tslint:disable */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Contact } from '../../src/frontend-applications/agent-portal/modules/customer/model/Contact';
 import { ContactLabelProvider } from '../../src/frontend-applications/agent-portal/modules/customer/webapp/core/ContactLabelProvider';

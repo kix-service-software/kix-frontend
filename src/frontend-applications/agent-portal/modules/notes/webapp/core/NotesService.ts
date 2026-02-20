@@ -7,7 +7,7 @@
  * --
  */
 
-import { NotesSocketClient } from './NotesSocketClient';
+import { NoteAPIClient } from '../../../../api-client/note/Note';
 
 export class NotesService {
 
@@ -24,11 +24,11 @@ export class NotesService {
     private constructor() { }
 
     public async loadNotes(contextId: string): Promise<string> {
-        const notes = await NotesSocketClient.getInstance().loadNotes();
+        const notes = await NoteAPIClient.loadNotes();
         return notes ? notes[contextId] : null;
     }
 
     public async saveNotes(contextId: string, notes: string): Promise<void> {
-        await NotesSocketClient.getInstance().saveNotes(contextId, notes);
+        await NoteAPIClient.saveNotes(contextId, notes);
     }
 }

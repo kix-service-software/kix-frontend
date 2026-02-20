@@ -11,9 +11,9 @@ import { BackendNotification } from '../../../../model/BackendNotification';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
-import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { IdService } from '../../../../model/IdService';
 
 export class UserCounterEventHandler {
@@ -35,7 +35,7 @@ export class UserCounterEventHandler {
             eventSubscriberId: IdService.generateDateBasedId('UserCounterEventHandler'),
             eventPublished: function (data: BackendNotification): void {
                 if (data instanceof BackendNotification && data.Namespace === 'User.Counters') {
-                    const userId = AgentSocketClient.getInstance().userId;
+                    const userId = Number(ClientStorageService.getOption('UserId'));
                     if (!data.UserID || data.UserID?.toString() === userId?.toString()) {
                         this.updateCurrentUserCache();
                     }

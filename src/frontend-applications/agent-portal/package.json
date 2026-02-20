@@ -5,11 +5,6 @@
             "kix:server": {
                 "module": "server.extension"
             }
-        },
-        "kix:socket:namespace": {
-            "socket-namespace-registry": {
-                "module": "NamespaceRegistry.extension"
-            }
         }
     }
 }

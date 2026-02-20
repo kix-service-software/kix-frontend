@@ -10,14 +10,12 @@
 import { Request, Response } from 'express';
 import cors = require('cors');
 
-import { KIXRouter } from '../../../server/routes/KIXRouter';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
-import { KIXModulesService } from '../../base-components/webapp/core/KIXModulesService';
 
-export class ProfileRedirectRouter extends KIXRouter {
+export class ProfileRedirectRouter {
 
     private static INSTANCE: ProfileRedirectRouter;
 
@@ -28,21 +26,17 @@ export class ProfileRedirectRouter extends KIXRouter {
         return ProfileRedirectRouter.INSTANCE;
     }
 
-    private constructor() {
-        super();
-    }
-
     public getBaseRoute(): string {
         return '/oauth2redirect';
     }
 
     protected async initialize(): Promise<void> {
-        this.router.route('/')
-            .options(cors(this.getCorsOptions.bind(this)))
-            .get(
-                cors(this.getCorsOptions.bind(this)),
-                this.handleGetRequest.bind(this)
-            );
+        // this.router.route('/')
+        //     .options(cors(this.getCorsOptions.bind(this)))
+        //     .get(
+        //         cors(this.getCorsOptions.bind(this)),
+        //         this.handleGetRequest.bind(this)
+        //     );
     }
 
     private async handleUnsupportedGetRequest(req: Request, res: Response): Promise<void> {
@@ -90,9 +84,8 @@ export class ProfileRedirectRouter extends KIXRouter {
         let errorMessage;
         const service = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.OAUTH2_PROFILE_AUTH);
         if (service) {
-            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
             await service.createObject(
-                serverConfig.BACKEND_API_TOKEN,
+                ConfigurationService.getBackendAPIToken(),
                 'oauth2-profile-redirect', KIXObjectType.OAUTH2_PROFILE_AUTH,
                 [
                     ['Code', code],

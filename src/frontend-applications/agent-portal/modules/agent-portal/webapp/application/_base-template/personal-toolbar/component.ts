@@ -13,7 +13,7 @@ import { ApplicationEvent } from '../../../../../base-components/webapp/core/App
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ActionFactory } from '../../../../../base-components/webapp/core/ActionFactory';
 import { ShowUserTicketsAction } from '../../../../../ticket/webapp/core';
-import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
@@ -34,7 +34,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await super.onMount();
 
         const permissions = [new UIComponentPermission('tickets', [CRUD.READ])];
-        if (await AuthenticationSocketClient.getInstance().checkPermissions(permissions)) {
+        if (await SessionAPIClient.checkPermissions(permissions)) {
             this.state.showTicketActions = true;
             this.initTicketActions();
 

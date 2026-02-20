@@ -7,13 +7,13 @@
  * --
  */
 
-import { ISocketResponse } from './ISocketResponse';
+
 import { KIXObject } from '../../../../model/kix/KIXObject';
 
-export class LoadObjectsResponse<T extends KIXObject> implements ISocketResponse {
+export class LoadObjectsResponse<T extends KIXObject> {
 
     public constructor(
-        public requestId: string,
+
         public objects: T[],
         public totalCount: number = 0
     ) { }

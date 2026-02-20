@@ -8,7 +8,7 @@
  */
 
 /* tslint:disable */
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { FormConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/FormConfiguration';
 import { FormGroupConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/FormGroupConfiguration';

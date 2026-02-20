@@ -16,7 +16,6 @@ import { FilterCriteria } from '../../../model/FilterCriteria';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
-import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
@@ -66,9 +65,9 @@ export class SysConfigService extends KIXObjectAPIService {
     }
 
     public async preloadOptions(): Promise<void> {
-        const config = ConfigurationService.getInstance().getServerConfiguration();
+
         LoggingService.getInstance().info('Preload SysconfigOptions');
-        if (config.LOG_LEVEL === LogLevel.DEBUG) {
+        if (ConfigurationService.getEnvNumber('LOG_LEVEL') === LogLevel.DEBUG) {
             for (const o of this.preloadOptionKeys) {
                 LoggingService.getInstance().debug(o);
             }
@@ -76,11 +75,17 @@ export class SysConfigService extends KIXObjectAPIService {
 
         LoggingService.getInstance().info('Preload SysconfigOptions');
 
+        const loadPromises = [];
         for (const key of this.preloadOptionKeys) {
-            await this.loadObjects<SysConfigOption>(
-                config?.BACKEND_API_TOKEN, 'SysConfigServicePreload', KIXObjectType.SYS_CONFIG_OPTION, [key], null, null
-            ).catch((): SysConfigOption[] => []);
+            loadPromises.push(
+                this.loadObjects<SysConfigOption>(
+                    ConfigurationService.getBackendAPIToken(), 'SysConfigServicePreload', KIXObjectType.SYS_CONFIG_OPTION, [key],
+                    null, null
+                )
+            );
         }
+
+        Promise.allSettled(loadPromises);
     }
 
     public async loadObjects<O>(
@@ -155,7 +160,7 @@ export class SysConfigService extends KIXObjectAPIService {
 
     public async deleteObjects(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<string | number>,
-        deleteOptions?: KIXObjectSpecificDeleteOptions, logError: boolean = true
+        logError: boolean = true
     ): Promise<void> {
         if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
             const uris = objectIds.map((id) => this.buildUri(this.RESOURCE_URI, 'definitions', id));

@@ -91,9 +91,9 @@ export class ConfigItemDetailsDataBuilder {
     private static async loadConfigItem(token: string, configItemId: number): Promise<ConfigItem> {
         let ci: ConfigItem;
         if (token && configItemId) {
-            const requestId = IdService.generateDateBasedId();
+
             const objectResponse = await CMDBAPIService.getInstance().loadObjects<ConfigItem>(
-                token, requestId, KIXObjectType.CONFIG_ITEM, [configItemId],
+                token, 'requestId', KIXObjectType.CONFIG_ITEM, [configItemId],
                 new KIXObjectLoadingOptions(null, null, null, [
                     ConfigItemProperty.CURRENT_VERSION,
                     ConfigItemProperty.VERSIONS,

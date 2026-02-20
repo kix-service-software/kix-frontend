@@ -9,10 +9,10 @@
 
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { LoggingService } from '../../../../../server/services/LoggingService';
+import { HTMLUtil } from '../../../model/HTMLUtil';
 import { Attachment } from '../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
-import { HTMLUtil } from '../../../server/routes/HTMLUtil';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { InlineContent } from '../../base-components/webapp/core/InlineContent';
 import { SysConfigKey } from '../../sysconfig/model/SysConfigKey';
@@ -27,14 +27,16 @@ export class ArticleViewUtil {
 
     public static async getArticleHTMLContent(
         token: string, articleId: number, ticketId: number, reduceContent: boolean, resolveInlineCSS: boolean,
-        linesCount?: number, prepareInline: boolean = true, relevantOrganisationID?: number
+        linesCount?: number, prepareInline: boolean = true, relevantOrganisationID?: number,
+        clientRequestId: string = 'ArticleViewUtil'
     ): Promise<string> {
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.includes.push(ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN);
         loadingOptions.query.push(['RelevantOrganisationID', relevantOrganisationID?.toString()]);
 
         const articleResponse = await TicketAPIService.getInstance().loadObjects<Article>(
-            token, 'ArticleRouter', KIXObjectType.ARTICLE, [articleId], loadingOptions, new ArticleLoadingOptions(ticketId)
+            token, clientRequestId, KIXObjectType.ARTICLE, [articleId],
+            loadingOptions, new ArticleLoadingOptions(ticketId)
         );
 
         let content = '';
@@ -166,9 +168,8 @@ export class ArticleViewUtil {
 
     public static async reduceContent(result: string, linesCount?: number): Promise<string> {
         if (linesCount === null) {
-            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
             const response = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-                serverConfig.BACKEND_API_TOKEN, 'ArticleViewUtil', KIXObjectType.SYS_CONFIG_OPTION,
+                ConfigurationService.getBackendAPIToken(), 'ArticleViewUtil', KIXObjectType.SYS_CONFIG_OPTION,
                 [`${SysConfigKey.TICKET_PLACEHOLDER_BODYRICHTEXT_LINECOUNT}`],
                 null, null
             ).catch((): ObjectResponse<SysConfigOption> => new ObjectResponse());

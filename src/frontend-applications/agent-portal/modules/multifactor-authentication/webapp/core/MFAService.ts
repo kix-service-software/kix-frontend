@@ -16,7 +16,7 @@ import { UserType } from '../../../user/model/UserType';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { MFAConfig } from '../../model/MFAConfig';
 import { UserMFAProperty } from '../../model/UserMFAProperty';
-import { MFASocketClient } from './MFASocketClient';
+import { MFAAPIClient } from '../../../../api-client/session/MFA';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 
 export class MFAService {
@@ -66,7 +66,7 @@ export class MFAService {
     }
 
     public async loadMFAConfigs(userType?: UserType): Promise<MFAConfig[]> {
-        return MFASocketClient.getInstance().loadMFAConfigs(userType);
+        return MFAAPIClient.loadMFAConfigs(userType);
     }
 
     public getMFAPreference(mfaConfig: MFAConfig, secret?: boolean): string {

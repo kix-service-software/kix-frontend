@@ -25,6 +25,7 @@
 
 ## Basic Configuration
 
+<!-- FIXME: add/update default config values / remove info about server.config-->
 ### Server Config
 
 * `/config/server.config.json`

@@ -5,11 +5,6 @@
             "kix-module-file-module": {
                 "module": "kix-module.extension"
             }
-        },
-        "kix:router": {
-            "file-router": {
-                "module": "router.extension"
-            }
         }
     }
 }

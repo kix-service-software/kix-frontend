@@ -8,7 +8,7 @@
  */
 
 // tslint:disable
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Attachment } from '../../../model/kix/Attachment';
 import { Article } from '../model/Article';

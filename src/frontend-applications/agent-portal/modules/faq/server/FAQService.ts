@@ -17,7 +17,6 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
-import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
@@ -316,14 +315,14 @@ export class FAQService extends KIXObjectAPIService {
 
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: string | number,
-        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
+        cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
     ): Promise<Error[]> {
         if (objectType === KIXObjectType.FAQ_CATEGORY) {
             ressourceUri = 'system/faq/categories';
         }
 
         return super.deleteObject(
-            token, clientRequestId, objectType, objectId, deleteOptions, cacheKeyPrefix, ressourceUri
+            token, clientRequestId, objectType, objectId, cacheKeyPrefix, ressourceUri
         );
     }
 

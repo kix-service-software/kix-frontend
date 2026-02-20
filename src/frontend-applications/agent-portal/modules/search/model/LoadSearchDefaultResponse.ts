@@ -7,13 +7,13 @@
  * --
  */
 
-import { ISocketResponse } from '../../../modules/base-components/webapp/core/ISocketResponse';
+
 import { SearchCache } from './SearchCache';
 
-export class LoadSearchDefaultResponse implements ISocketResponse {
+export class LoadSearchDefaultResponse {
 
     public constructor(
-        public requestId: string,
+
         public search: SearchCache
     ) { }
 

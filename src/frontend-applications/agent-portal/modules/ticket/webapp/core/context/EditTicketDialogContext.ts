@@ -19,7 +19,7 @@ import { Contact } from '../../../../customer/model/Contact';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { FormContext } from '../../../../../model/configuration/FormContext';
-import { KIXModulesSocketClient } from '../../../../base-components/webapp/core/KIXModulesSocketClient';
+import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 
 export class EditTicketDialogContext extends Context {
 
@@ -41,7 +41,7 @@ export class EditTicketDialogContext extends Context {
     }
 
     public async postInit(): Promise<void> {
-        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        const releaseInfo = ClientStorageService.getReleaseInfo();
         const kixPro = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
 
         if (!kixPro) {

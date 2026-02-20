@@ -5,11 +5,6 @@
             "kix-module-portal-notification-module": {
                 "module": "kix-module.extension"
             }
-        },
-        "kix:socket:namespace": {
-            "portal-notifications-namespace-registry": {
-                "module": "NamespaceRegistry.extension"
-            }
         }
     }
 }

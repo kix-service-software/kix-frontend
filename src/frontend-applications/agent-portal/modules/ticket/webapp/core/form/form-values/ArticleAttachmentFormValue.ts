@@ -19,7 +19,6 @@ import { Article } from '../../../../model/Article';
 import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { TicketService } from '../../TicketService';
-import { TicketSocketClient } from '../../TicketSocketClient';
 
 export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
 
@@ -148,11 +147,6 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
 
     public destroy(): void {
         super.destroy();
-        if (Array.isArray(this.value) && this.value.length) {
-            const downloadIds = this.value.filter((a) => a.downloadId).map((a) => a.downloadId);
-            if (downloadIds.length) {
-                TicketSocketClient.getInstance().removeArticleAttachmentDownloads(downloadIds);
-            }
-        }
     }
+
 }

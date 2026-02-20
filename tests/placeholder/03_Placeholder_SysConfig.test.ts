@@ -9,7 +9,7 @@
 
 /* tslint:disable */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { SysConfigPlaceholderHandler } from '../../src/frontend-applications/agent-portal/modules/sysconfig/webapp/core/SysConfigPlaceholderHandler';
 import { KIXObjectService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';

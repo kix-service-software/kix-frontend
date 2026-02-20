@@ -7,10 +7,10 @@
  * --
  */
 
-import { Request, Response } from 'express';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 export interface IRouterHandler {
 
-    handle(req: Request, res: Response, next: () => void): Promise<void>;
+    preHandler(req: FastifyRequest, reply: FastifyReply): Promise<void>;
 
 }

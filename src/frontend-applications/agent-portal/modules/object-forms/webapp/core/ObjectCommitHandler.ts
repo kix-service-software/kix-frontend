@@ -7,6 +7,7 @@
  * --
  */
 
+import { ObjectAPIClient } from '../../../../api-client/object/Object';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
@@ -15,7 +16,6 @@ import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldVal
 import { ObjectFormValue } from '../../model/FormValues/ObjectFormValue';
 import { ObjectFormValueMapper } from '../../model/ObjectFormValueMapper';
 import { ObjectCommitHandlerExtension } from './ObjectCommitHandlerExtension';
-import { ObjectCommitSocketClient } from './ObjectCommitSocketClient';
 import { ObjectFormRegistry } from './ObjectFormRegistry';
 
 export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
@@ -41,7 +41,7 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
 
     public async commitObject(): Promise<number | string> {
         const newObject = await this.prepareObject(this.objectValueMapper.object as any, this.objectValueMapper);
-        const id = await ObjectCommitSocketClient.getInstance().commitObject(newObject);
+        const id = await ObjectAPIClient.commitObject(newObject);
         for (const extension of this.extensions || []) {
             await extension.postCommitHandling(id, newObject);
         }

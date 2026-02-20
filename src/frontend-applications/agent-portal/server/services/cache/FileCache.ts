@@ -29,8 +29,7 @@ export class FileCache implements ICache {
     }
 
     private constructor() {
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        this.dataDir = config.FILE_CACHE_DIR;
+        this.dataDir = ConfigurationService.getEnvString('FILE_CACHE_DIR');
         if (!this.dataDir)
             this.dataDir = path.join(ConfigurationService.getInstance().dataDir, '..', 'cache');
 

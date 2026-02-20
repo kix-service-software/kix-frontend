@@ -10,7 +10,7 @@
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { IAutofillConfiguration } from '../../../../modules/base-components/webapp/core/IAutofillConfiguration';
-import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
@@ -49,7 +49,7 @@ export class TextModuleService extends KIXObjectService {
     }
 
     public async getAutoFillConfiguration(textMatch: any, placeholder: string): Promise<IAutofillConfiguration> {
-        const allowed = await AuthenticationSocketClient.getInstance().checkPermissions([
+        const allowed = await SessionAPIClient.checkPermissions([
             new UIComponentPermission('system/textmodules', [CRUD.READ])
         ]);
 

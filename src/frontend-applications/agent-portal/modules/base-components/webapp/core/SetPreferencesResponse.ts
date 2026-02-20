@@ -7,12 +7,12 @@
  * --
  */
 
-import { ISocketResponse } from './ISocketResponse';
 
-export class SetPreferencesResponse implements ISocketResponse {
+
+export class SetPreferencesResponse {
 
     public constructor(
-        public requestId: string
+
     ) { }
 
 }

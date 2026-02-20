@@ -7,91 +7,159 @@
  * --
  */
 
-const http = require('http');
-import express from 'express';
-import markoExpress from '@marko/express';
-import compression from 'compression';
-import cookieParser from 'cookie-parser';
-import { IServerConfiguration } from '../../../server/model/IServerConfiguration';
 import { ConfigurationService } from '../../../server/services/ConfigurationService';
-import { ServerRouter } from './routes/ServerRouter';
-import { IServer } from '../../../server/model/IServer';
-import { MainMenuNamespace } from '../modules/agent-portal/server/MainMenuNamespace';
+import { LoggingService } from '../../../server/services/LoggingService';
 import { SysConfigService } from '../modules/sysconfig/server/SysConfigService';
-import { SocketService } from './services/SocketService';
+import { MainMenuService } from './services/MainMenuService';
+import Fastify, { FastifyInstance } from 'fastify';
+import markoPlugin from '@marko/fastify';
+import path from 'path';
+import { CacheService } from './services/cache';
+import { APIUtil } from './api/APIUtil';
+import { PluginService } from '../../../server/services/PluginService';
+import { AgentPortalExtensions } from './extensions/AgentPortalExtensions';
+import { IConfigurationExtension } from './extensions/IConfigurationExtension';
+import { registerAuthenticationModule } from './routes/FastifyAuthentication';
+import { IAgentPortalPlugin } from './model/IAgentPortalPlugin';
+import { ConfigurationCache } from './api/context/ConfigurationCache';
+import { ConfigurationBuilder } from './api/config/ConfigurationBuilder';
+import { IMarkoApplication } from './extensions/IMarkoApplication';
 
 require('@marko/compiler/register')({ meta: true });
 
-export class Server implements IServer {
+export class Server {
+
+    private static INSTANCE: Server;
+
+    public static getInstance(): Server {
+        if (!Server.INSTANCE) {
+            Server.INSTANCE = new Server();
+        }
+        return Server.INSTANCE;
+    }
+
+    private constructor() { }
 
     public name = 'AgentPortal';
 
-    public application: express.Application;
-    private serverConfig: IServerConfiguration;
-    private httpServer: any;
-    private socketIO: any;
-    private socketService: SocketService;
+    private fastify: FastifyInstance;
 
     public async initialize(): Promise<void> {
-        this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const maxConfig = this.serverConfig?.SOCKET_MAX_HTTP_BUFFER_SIZE;
-        const maxHttpBufferSize = maxConfig || 1e8;
-
-        MainMenuNamespace.getInstance().createDefaultConfiguration(this.serverConfig.BACKEND_API_TOKEN);
+        await this.registerForms();
+        MainMenuService.createDefaultConfiguration(ConfigurationService.getBackendAPIToken());
         SysConfigService.getInstance().preloadOptions();
-        await this.initializeApplication();
 
-        this.createHTTPServer();
+        await this.initCacheDependencies();
+        await ConfigurationBuilder.rebuildConfigCache().catch(() => null);
+        await ConfigurationCache.getInstance().rebuildConfigCache().catch(() => null);
 
+        await this.createHTTPServer();
+    }
 
-        this.socketIO = require('socket.io')(this.httpServer, {
-            path: '/socket.io/',
-            maxHttpBufferSize
+    private async initCacheDependencies(): Promise<void> {
+        const applications = await PluginService.getInstance().getExtensions<IMarkoApplication>(
+            AgentPortalExtensions.MARKO_APPLICATION
+        ).catch((): IMarkoApplication[] => []);
+
+        for (const application of applications) {
+            CacheService.getInstance().adddIgnorePrefixes([`${application.name}ContextConfiguration`]);
+        }
+    }
+
+    private async registerForms(): Promise<void> {
+        CacheService.getInstance().adddIgnorePrefixes(['FormConfiguration']);
+        const extensions = await PluginService.getInstance().getExtensions<IConfigurationExtension>(
+            AgentPortalExtensions.CONFIGURATION
+        ).catch((): IConfigurationExtension[] => []);
+
+        const promises = extensions.map((e) => e.getFormConfigurations());
+        await Promise.allSettled(promises);
+    }
+
+    private async createHTTPServer(): Promise<any> {
+        this.fastify = await this.setupFastify();
+
+        await this.initPluginExtensions();
+
+        this.fastify.listen({ port: this.getPort(), host: '::' }, (err, address) => {
+            if (err) {
+                this.fastify.log.error(err);
+                process.exit(1);
+            }
+            LoggingService.getInstance().info(`[SERVER] start - running on port: ${this.getPort()}`);
         });
     }
 
-    private createHTTPServer(): any {
-        const app = this.application || express();
-        this.httpServer = http.createServer(app);
+    private async initPluginExtensions(): Promise<void> {
+        const extensions = await PluginService.getInstance().getExtensions<IAgentPortalPlugin>(
+            AgentPortalExtensions.PLUGIN
+        ).catch((): IAgentPortalPlugin[] => []);
+
+        for (const e of extensions) {
+            await e.init(this);
+        }
     }
 
-    public async initializeApplication(): Promise<void> {
-        this.application = express();
+    public async setupFastify(): Promise<FastifyInstance> {
+        const fastify = Fastify({
+            logger: true,
+            maxParamLength: 1000000
+        });
 
-        this.application.use(compression());
-        this.application.use(express.json({ limit: '50mb' }));
-        this.application.use(express.urlencoded({ limit: '50mb', extended: true }));
-        this.application.use(cookieParser());
-        this.application.use(markoExpress());
+        fastify.addHook('onRoute', (routeOption) => {
+            LoggingService.getInstance().info(`[SERVER] Route added - ${routeOption.method} ${routeOption.url}`);
+        });
 
-        const path = require('path');
-        this.application.use('/static', express.static(path.join(__dirname, '../static/')));
+        fastify.addContentTypeParser('application/json', { parseAs: 'string' }, (req, body, done) => {
+            try {
+                const json = JSON.parse(body?.toString());
+                done(null, json);
+            } catch (err) {
+                err.statusCode = 400;
+                done(err, undefined);
+            }
+        });
 
-        const router = new ServerRouter(this.application);
-        await router.initializeRoutes();
+        registerAuthenticationModule(fastify);
+        this.registerStatic(fastify);
+        this.registerRoutes(fastify);
+
+        await this.registerPlugins(fastify);
+        return fastify;
     }
 
-    public getHttpServer(): any {
-        return this.httpServer;
+    private registerStatic(fastify: FastifyInstance): void {
+        const fastifyStatic = require('@fastify/static');
+        fastify.register(fastifyStatic, {
+            root: path.join(__dirname, '../../../../static/'),
+            prefix: '/static/'
+        });
+    }
+
+    private registerRoutes(fastify: FastifyInstance): void {
+        const applicationRoutes = [
+            require('./routes/AuthenticationRouter'),
+            require('./routes/ApplicationRouter'),
+            require('./routes/ObjectIconRouter'),
+        ];
+        applicationRoutes.forEach((r) => fastify.register(r));
+
+        const apiRoutes = APIUtil.getRoutes();
+        apiRoutes.forEach((r) => fastify.register(r, { prefix: `${APIUtil.URL_PREFIX}` }));
+    }
+
+    public registerPlugin(plugin: any, options: any = {}): void {
+        options.prefix = `${APIUtil.URL_PREFIX}`;
+        this.fastify.register(plugin, options);
+    }
+
+    private async registerPlugins(fastify: FastifyInstance): Promise<void> {
+        fastify.register(markoPlugin);
     }
 
     public getPort(): number {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const port = serverConfig.HTTP_PORT || 3000;
+        const port = ConfigurationService.getEnvNumber('HTTP_PORT') || 3000;
         return port;
-    }
-
-    public getSocketIO(): any {
-        return this.socketIO;
-    }
-
-    public async initializeSocketIO(): Promise<void> {
-        this.socketService = new SocketService(this.getSocketIO());
-        await this.socketService.initialize();
-    }
-
-    public getSocketService(): SocketService {
-        return this.socketService;
     }
 
 }

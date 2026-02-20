@@ -9,12 +9,12 @@
 
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { AdministrationSocketClient } from '../../core/AdministrationSocketClient';
 import { AdminContext } from '../../core/AdminContext';
 import { AdminModule } from '../../../model/AdminModule';
 import { TreeNode, TreeUtil } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { AdminAPIClient } from '../../../../../api-client/admin/Admin';
 import { Context } from '../../../../../model/Context';
 
 class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
@@ -42,7 +42,7 @@ class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
         }
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
-        const categories = await AdministrationSocketClient.getInstance().loadAdminCategories();
+        const categories = await AdminAPIClient.loadAdminCategories();
 
         if (categories) {
             await this.prepareAdminTreeNodes(categories);

@@ -7,7 +7,7 @@
  * --
  */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ObjectFormValueMapper } from '../../model/ObjectFormValueMapper';
 import { RuleResult } from '../../model/RuleResult';

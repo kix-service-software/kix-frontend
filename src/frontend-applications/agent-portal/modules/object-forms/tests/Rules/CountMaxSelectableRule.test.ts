@@ -7,7 +7,7 @@
  * --
  */
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { SelectObjectFormValue } from '../../model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../model/ObjectFormValueMapper';

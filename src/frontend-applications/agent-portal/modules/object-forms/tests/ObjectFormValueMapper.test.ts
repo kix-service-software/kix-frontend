@@ -8,7 +8,7 @@
  */
 
 // tslint:disable
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ObjectFormValue } from '../model/FormValues/ObjectFormValue';
 import { TestFormObject, TestObjectValueMapper } from './MockData';

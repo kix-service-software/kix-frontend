@@ -14,8 +14,10 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 class Extension extends KIXExtension implements IMarkoApplication {
 
     public name: string = 'agent-portal';
-    public path: string = 'webapp/application';
+    public path: string = 'agent-portal/webapp/application';
     public internal: boolean = true;
+    public applicationName: string = 'agent-portal';
+    public baseRouteENV: string = 'BASE_ROUTE';
 
 }
 

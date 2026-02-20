@@ -12,7 +12,6 @@ import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { KIXObject } from '../../model/kix/KIXObject';
 import { KIXObjectSpecificLoadingOptions } from '../../model/KIXObjectSpecificLoadingOptions';
 import { KIXObjectSpecificCreateOptions } from '../../model/KIXObjectSpecificCreateOptions';
-import { KIXObjectSpecificDeleteOptions } from '../../model/KIXObjectSpecificDeleteOptions';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { Error } from '../../../../server/model/Error';
 import { FilterCriteria } from '../../model/FilterCriteria';
@@ -59,7 +58,7 @@ export abstract class ExtendedKIXObjectAPIService implements IKIXObjectService {
 
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: string | number,
-        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string
+        cacheKeyPrefix: string
     ): Promise<Error[]> {
         return [];
     }

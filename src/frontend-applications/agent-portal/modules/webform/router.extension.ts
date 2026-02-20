@@ -18,7 +18,7 @@ class Extension extends KIXExtension implements IServerRouterExtension {
         const router = Router();
         return router.use(
             KIXIntegrationRouter.getInstance().getBaseRoute(),
-            KIXIntegrationRouter.getInstance().getRouter()
+            // KIXIntegrationRouter.getInstance().getRouter()
         );
     }
 

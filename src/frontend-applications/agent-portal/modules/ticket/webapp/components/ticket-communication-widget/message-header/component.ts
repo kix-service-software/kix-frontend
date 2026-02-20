@@ -128,11 +128,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (event) {
             event.stopPropagation();
         }
+
         if (this.state.article) {
-            const attachment = await TicketService.getInstance().loadArticleZipAttachment(
+            TicketService.getInstance().downloadArticleZipAttachment(
                 this.state.article.TicketID, this.state.article.ArticleID
             );
-            BrowserUtil.startFileDownload(attachment);
         }
     }
 

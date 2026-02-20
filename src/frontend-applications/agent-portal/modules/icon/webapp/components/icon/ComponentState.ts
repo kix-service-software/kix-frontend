@@ -15,13 +15,14 @@ import { ObjectIcon } from '../../../model/ObjectIcon';
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public icon: string | ObjectIcon = null,
         public base64: boolean = false,
         public content: string = null,
         public contentType: string = null,
         public showUnknown: boolean = false,
         public iconId: string = IdService.generateDateBasedId(),
-        public tooltip: string = ''
+        public tooltip: string = '',
+        public srcPath: string = null,
+        public fallbackLoaded: boolean = false
     ) {
         super();
     }

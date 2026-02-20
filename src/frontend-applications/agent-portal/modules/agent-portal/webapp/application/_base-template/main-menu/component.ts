@@ -8,7 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { MainMenuSocketClient } from './MainMenuSocketClient';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../../../model/ContextType';
 import { Context } from '../../../../../../model/Context';
@@ -19,6 +18,7 @@ import { MobileShowEventData } from '../../../../model/MobileShowEventData';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
+import { ClientStorageService } from '../../../../../base-components/webapp/core/ClientStorageService';
 
 class Component extends AbstractMarkoComponent {
 
@@ -71,12 +71,13 @@ class Component extends AbstractMarkoComponent {
         this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
     }
 
-    private async loadEntries(): Promise<void> {
-        const entries = await MainMenuSocketClient.getInstance().loadMenuEntries();
-        if (entries) {
-            await this.updateEntries(entries.primaryMenuEntries, entries.secondaryMenuEntries);
-
-            this.state.showText = entries.showText;
+    private loadEntries(): void {
+        const storedMainMenu = ClientStorageService.getOption('MainMenu');
+        if (storedMainMenu) {
+            const entries = JSON.parse(storedMainMenu);
+            if (entries) {
+                this.updateEntries(entries.primaryMenuEntries, entries.secondaryMenuEntries);
+            }
         }
     }
 

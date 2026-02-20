@@ -12,7 +12,7 @@ import { DisplayValueConfiguration } from '../../../../model/configuration/Displ
 import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
 import { IUIModule } from '../../../../model/IUIModule';
 import { ReleaseInfo } from '../../../../model/ReleaseInfo';
-import { KIXModulesSocketClient } from './KIXModulesSocketClient';
+import { ClientStorageService } from './ClientStorageService';
 
 export class KIXModulesService {
 
@@ -33,11 +33,7 @@ export class KIXModulesService {
 
     private configurationComponents: Map<ConfigurationType | string, string> = new Map();
 
-    public static application = 'agent-portal';
-
     public static displayValueConfigurationKey = DisplayValueConfiguration.CONFIGURATION_ID;
-
-    public static urlPrefix = '';
 
     private releaseInfo: ReleaseInfo;
 
@@ -146,16 +142,16 @@ export class KIXModulesService {
         return this.getComponentTemplate(componentId);
     }
 
-    public async hasPlugin(name: string): Promise<boolean> {
+    public hasPlugin(name: string): boolean {
         if (!this.releaseInfo) {
-            this.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+            this.releaseInfo = ClientStorageService.getReleaseInfo();
         }
         return this.releaseInfo?.plugins?.some((p) => p.product === name);
     }
 
-    public async getBackenTimezoneOffset(): Promise<number> {
+    public getBackenTimezoneOffset(): number {
         if (!this.releaseInfo) {
-            this.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+            this.releaseInfo = ClientStorageService.getReleaseInfo();
         }
         return this.releaseInfo?.backendSystemInfo?.TimeZoneOffset;
     }

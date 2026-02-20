@@ -56,7 +56,11 @@ export class ObjectIconService extends KIXObjectAPIService {
 
         let objectResponse = new ObjectResponse<ObjectIcon>();
         if (objectType === KIXObjectType.OBJECT_ICON) {
-            const objectIcons = await this.getObjectIcons(token);
+            const objectIcons = await this.getObjectIcons();
+
+            if (!iconLoadingOptions?.keepBase64Content) {
+                objectIcons.filter((i) => i.ContentType !== 'text').forEach((i) => delete i.Content);
+            }
 
             if (objectIds && objectIds.length) {
                 const filteredIcons = objectIcons?.filter(
@@ -82,16 +86,17 @@ export class ObjectIconService extends KIXObjectAPIService {
         return objectResponse as any;
     }
 
-    public async getObjectIcons(token: string): Promise<ObjectIcon[]> {
-        const config = ConfigurationService.getInstance().getServerConfiguration();
+    private async getObjectIcons(): Promise<ObjectIcon[]> {
+
         // unlimit search, else it could possible not found if default limit is too low
         const loadingOptions = new KIXObjectLoadingOptions(null, null, 0);
         const objectResponse = await super.load<ObjectIcon>(
-            config?.BACKEND_API_TOKEN, KIXObjectType.OBJECT_ICON, this.RESOURCE_URI, loadingOptions, null, 'ObjectIcon',
+            ConfigurationService.getBackendAPIToken(), KIXObjectType.OBJECT_ICON, this.RESOURCE_URI, loadingOptions, null, 'ObjectIcon',
             'ObjectIconService', ObjectIcon
         );
 
-        return objectResponse?.objects || [];
+        const icons = objectResponse?.objects || [];
+        return icons;
     }
 
     public async createObject(

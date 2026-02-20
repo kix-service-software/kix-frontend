@@ -28,10 +28,10 @@ import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
-import { KIXModulesSocketClient } from '../../../../base-components/webapp/core/KIXModulesSocketClient';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
 import { DefaultSelectInputFormOption } from '../../../../../model/configuration/DefaultSelectInputFormOption';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -88,7 +88,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         fqdnSSPField.readonly = fqdnReadonly;
 
         // show SSP option only if SSP plugin is available
-        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        const releaseInfo = ClientStorageService.getReleaseInfo();
         fqdnSSPField.visible = releaseInfo?.plugins?.some((p) => p.product === 'SSP');
 
         const fqdnValue = sysConfigOptions.find((o) => o.Name === 'FQDN').Value ||

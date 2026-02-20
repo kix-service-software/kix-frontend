@@ -7,12 +7,12 @@
  * --
  */
 
-import { ISocketResponse } from './ISocketResponse';
 
-export class MarkObjectAsSeenResponse implements ISocketResponse {
+
+export class MarkObjectAsSeenResponse {
 
     public constructor(
-        public requestId: string
+
     ) { }
 
 }

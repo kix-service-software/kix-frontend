@@ -202,9 +202,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
     }
 
     private async getReportId(name: string): Promise<number> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         const objectResponse = await ReportingAPIService.getInstance().loadObjects<ReportDefinition>(
-            serverConfig?.BACKEND_API_TOKEN, 'home-configuration', KIXObjectType.REPORT_DEFINITION, null,
+            ConfigurationService.getBackendAPIToken(), 'home-configuration', KIXObjectType.REPORT_DEFINITION, null,
             new KIXObjectLoadingOptions([
                 new FilterCriteria(
                     ReportDefinitionProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, name

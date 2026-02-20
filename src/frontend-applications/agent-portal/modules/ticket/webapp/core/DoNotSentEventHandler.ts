@@ -7,6 +7,7 @@
  * --
  */
 
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { BackendNotification } from '../../../../model/BackendNotification';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
@@ -20,7 +21,6 @@ import { PortalNotification } from '../../../portal-notification/model/PortalNot
 import { PortalNotificationType } from '../../../portal-notification/model/PortalNotificationType';
 import { PortalNotificationService } from '../../../portal-notification/webapp/core/PortalNotificationService';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
-import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { Ticket } from '../../model/Ticket';
 import { TicketUIEvent } from '../../model/TicketUIEvent';
 import { TicketDetailsContext } from './context';
@@ -55,7 +55,7 @@ export class DoNotSentEventHandler {
     private async checkForNotSentError(backendNotification: BackendNotification): Promise<void> {
         const split = backendNotification?.ObjectID?.split('::') || [];
         if (split.length === 4 && split[2] === 'NotSentError') {
-            const currentUser = await AgentSocketClient.getInstance().getCurrentUser()
+            const currentUser = await SessionAPIClient.getCurrentUser()
                 .catch(() => null);
             if (currentUser?.UserID === backendNotification.UserID) {
                 const message = await TranslationService.translate('Translatable#Email could not be sent');
