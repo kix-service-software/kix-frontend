@@ -57,7 +57,10 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
             case PersonalSettingsProperty.OUT_OF_OFFICE_START:
             case PersonalSettingsProperty.OUT_OF_OFFICE_END:
                 if (user[property]) {
-                    value = DateTimeUtil.getKIXDateString(user[property]);
+                    const date = new Date(user[property]);
+                    if (!isNaN(date.getTime())) {
+                        value = DateTimeUtil.getKIXDateString(date);
+                    }
                 }
                 break;
             default:
@@ -116,16 +119,18 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
             (p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_START
         );
         if (outOfOfficeStartParameter) {
-            outOfOfficeStartParameter[1] = outOfOfficeStartParameter[1]
-                ? DateTimeUtil.getKIXDateString(outOfOfficeStartParameter[1])
+            const date = new Date(outOfOfficeStartParameter[1]);
+            outOfOfficeStartParameter[1] = !isNaN(date.getTime())
+                ? DateTimeUtil.getKIXDateString(date)
                 : '';
         }
         const outOfOfficeEndParameter = parameter.find(
             (p) => p[0] === PersonalSettingsProperty.OUT_OF_OFFICE_END
         );
         if (outOfOfficeEndParameter) {
-            outOfOfficeEndParameter[1] = outOfOfficeEndParameter[1]
-                ? DateTimeUtil.getKIXDateString(outOfOfficeEndParameter[1])
+            const date = new Date(outOfOfficeEndParameter[1]);
+            outOfOfficeEndParameter[1] = !isNaN(date.getTime())
+                ? DateTimeUtil.getKIXDateString(date)
                 : '';
         }
 

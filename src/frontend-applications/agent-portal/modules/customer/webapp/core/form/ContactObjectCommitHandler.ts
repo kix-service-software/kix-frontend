@@ -96,7 +96,7 @@ export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {
         return false;
     }
 
-    private checkOutOfOfficeFormValues(newContact: Contact, objectValueMapper?: ObjectFormValueMapper,): void {
+    private checkOutOfOfficeFormValues(newContact: Contact, objectValueMapper?: ObjectFormValueMapper): void {
         const oooFormValue = objectValueMapper?.findFormValue(UserProperty.OUT_OF_OFFICE);
         const startFormValue = oooFormValue?.findFormValue(OutOfOfficeProperty.START);
         const endFormValue = oooFormValue?.findFormValue(OutOfOfficeProperty.END);
