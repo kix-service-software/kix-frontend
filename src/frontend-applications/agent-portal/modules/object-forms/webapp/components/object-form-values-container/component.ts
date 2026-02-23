@@ -36,7 +36,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public getColumnClasses(column: GroupRowLayout): string {
-        let classes = [];
+        const classes = [];
 
         if (column?.colSM > 0) {
             classes.push('col-sm-' + (column.colSM < 3 ? 3 : column.colSM));
@@ -58,7 +58,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public getFormValue(field: FormFieldConfiguration): ObjectFormValue {
-        return this.state.formValues.find((fv) => fv.fieldId === field.id);
+        return this.state.formValues.find((fv) => fv.fieldId === field?.id);
     }
 
 

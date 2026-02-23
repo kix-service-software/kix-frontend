@@ -9,9 +9,7 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import {
-    TicketFormService, TicketBulkManager, EditTicketDialogContext, TicketEditAction
-} from '.';
+import { TicketFormService, TicketBulkManager, EditTicketDialogContext, TicketEditAction } from '.';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
@@ -23,18 +21,11 @@ import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { TicketDetailsContext } from './context';
 import { ObjectFormRegistry } from '../../../object-forms/webapp/core/ObjectFormRegistry';
-import { ArticleProperty } from '../../model/ArticleProperty';
-import { CcFormValueAction } from './form/form-values/actions/CcFormValueAction';
 import { TicketObjectCommitHandler } from './form/TicketObjectCommitHandler';
-import { TicketObjectFormValueMapper } from './form/TicketObjectFormValueMapper';
-import { BccFormValueAction } from './form/form-values/actions/BccFormValueAction';
-import { ReplyAllFormValueAction } from './form/form-values/actions/ReplyAllFormValueAction';
-import { TicketProperty } from '../../model/TicketProperty';
-import { CreateContactFormValueAction } from './form/form-values/actions/CreateContactFormValueAction';
 
 export class UIModule implements IUIModule {
 
-    public priority: number = 101;
+    public priority: number = 102;
 
     public name: string = 'TicketUpdateUIModule';
 
@@ -46,15 +37,7 @@ export class UIModule implements IUIModule {
 
         BulkService.getInstance().registerBulkManager(new TicketBulkManager());
 
-        ObjectFormRegistry.getInstance().registerObjectFormCreator(KIXObjectType.TICKET, TicketObjectFormValueMapper);
         ObjectFormRegistry.getInstance().registerObjectCommitHandler(KIXObjectType.TICKET, TicketObjectCommitHandler);
-        ObjectFormRegistry.getInstance().registerFormValueAction(ArticleProperty.TO, CcFormValueAction);
-        ObjectFormRegistry.getInstance().registerFormValueAction(ArticleProperty.TO, BccFormValueAction);
-        ObjectFormRegistry.getInstance().registerFormValueAction(ArticleProperty.TO, ReplyAllFormValueAction);
-        ObjectFormRegistry.getInstance().registerFormValueAction(ArticleProperty.CC, BccFormValueAction);
-        ObjectFormRegistry.getInstance().registerFormValueAction(
-            TicketProperty.CONTACT_ID, CreateContactFormValueAction
-        );
 
         this.registerContexts();
         this.registerTicketActions();

@@ -22,6 +22,7 @@ import { IColumnConfiguration } from '../../../../../model/configuration/IColumn
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { SearchCache } from '../../../../search/model/SearchCache';
 import { OrganisationDetailsContext } from '../context/OrganisationDetailsContext';
+import { DataType } from '../../../../../model/DataType';
 
 export class OrganisationTableFactory extends TableFactory {
 
@@ -83,6 +84,12 @@ export class OrganisationTableFactory extends TableFactory {
                 );
                 config.translatable = false;
                 break;
+            case OrganisationProperty.PARENT_ID:
+                config = new DefaultColumnConfiguration(null, null, null,
+                    property, true, false, true, false, 150, true, true, false, DataType.STRING, true, null,
+                    'Translatable#Parent Organisation'
+                );
+                break;
             case KIXObjectProperty.VALID_ID:
                 config = new DefaultColumnConfiguration(
                     null, null, null, property, true, false, true, false, 150, true, true, true
@@ -100,6 +107,7 @@ export class OrganisationTableFactory extends TableFactory {
         const tableColumns = [
             this.getDefaultColumnConfiguration(OrganisationProperty.NUMBER),
             this.getDefaultColumnConfiguration(OrganisationProperty.NAME),
+            this.getDefaultColumnConfiguration(OrganisationProperty.PARENT_ID),
             this.getDefaultColumnConfiguration(OrganisationProperty.COUNTRY),
             this.getDefaultColumnConfiguration(OrganisationProperty.CITY),
             this.getDefaultColumnConfiguration(OrganisationProperty.STREET),

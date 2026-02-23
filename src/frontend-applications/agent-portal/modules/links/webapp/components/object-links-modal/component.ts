@@ -28,6 +28,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         await this.prepareTable();
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Close'
+        ]);
+
     }
 
     private async prepareTable(): Promise<void> {

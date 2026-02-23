@@ -30,7 +30,6 @@ import { FormPageConfiguration } from '../../../../../model/configuration/FormPa
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { FormLayout } from '../../../../object-forms/model/layout/FormLayout';
-import { RowLayout } from '../../../../object-forms/model/layout/RowLayout';
 import { RowColumnLayout } from '../../../../object-forms/model/layout/RowColumnLayout';
 import { GroupLayout } from '../../../../object-forms/model/layout/GroupLayout';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
@@ -84,6 +83,9 @@ export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact>
         );
         page.groups.push(preferencesGroup);
         preferencesGroup.formFields.push(
+            new FormFieldConfiguration(
+                'user-form-user-ooo', 'Translatable#Out Of Office', UserProperty.OUT_OF_OFFICE, null
+            ),
             new FormFieldConfiguration(
                 'user-form-user-preferences', 'Translatable#Preferences', UserProperty.PREFERENCES, null
             )
@@ -150,35 +152,38 @@ export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact>
 
         this.formValues.push(new ObjectFormValue(ContactProperty.FIRSTNAME, contact, this, null));
         this.formValues.push(new ObjectFormValue(ContactProperty.LASTNAME, contact, this, null));
-        this.formValues.push(new ObjectFormValue(ContactProperty.TITLE, contact, this, null));
-        this.formValues.push(new ObjectFormValue(ContactProperty.CITY, contact, this, null));
         this.formValues.push(new ObjectFormValue(ContactProperty.STREET, contact, this, null));
+        this.formValues.push(new ObjectFormValue(ContactProperty.FAX, contact, this, null));
+        this.formValues.push(new ObjectFormValue(ContactProperty.MOBILE, contact, this, null));
+        this.formValues.push(new ObjectFormValue(ContactProperty.PHONE, contact, this, null));
 
-        const field = this.objectFormHandler?.findFormFieldByProperty(ContactProperty.COUNTRY);
+        this.formValues.push(await this.setSelectFormValue(ContactProperty.TITLE, contact));
+        this.formValues.push(await this.setSelectFormValue(ContactProperty.COUNTRY, contact));
+        this.formValues.push(await this.setSelectFormValue(ContactProperty.ZIP, contact));
+        this.formValues.push(await this.setSelectFormValue(ContactProperty.CITY, contact));
+
+    }
+
+    protected async setSelectFormValue(property: string, contact: Contact): Promise<ObjectFormValue> {
+        const field = this.objectFormHandler?.findFormFieldByProperty(property);
+
         if (field?.inputComponent === 'default-select-input') {
             const nodesOption = field?.options?.find((o) => o.option === 'NODES');
             if (Array.isArray(nodesOption?.value)) {
-                const countryFormValue = new SelectObjectFormValue(ContactProperty.COUNTRY, contact, this, null);
-                (countryFormValue as any).prepareSelectableNodes = async (objects: KIXObject[]): Promise<void> => {
+                const formValue = new SelectObjectFormValue(property, contact, this, null);
+                (formValue as any).prepareSelectableNodes = async (objects: KIXObject[]): Promise<void> => {
                     const nodes = [];
                     for (const node of nodesOption.value) {
                         node.label = await TranslationService.translate(node.label);
                         nodes.push(node);
                     }
-                    countryFormValue.treeHandler?.setTree(nodes, undefined, true, true);
+                    formValue.treeHandler?.setTree(nodes, undefined, true, true);
                 };
-                this.formValues.push(countryFormValue);
+                return formValue;
             }
-        } else {
-            const countryFormValue = new ObjectFormValue(ContactProperty.COUNTRY, contact, this, null);
-            this.formValues.push(countryFormValue);
         }
 
-        this.formValues.push(new ObjectFormValue(ContactProperty.FAX, contact, this, null));
-        this.formValues.push(new ObjectFormValue(ContactProperty.MOBILE, contact, this, null));
-        this.formValues.push(new ObjectFormValue(ContactProperty.PHONE, contact, this, null));
-        this.formValues.push(new ObjectFormValue(ContactProperty.ZIP, contact, this, null));
-
+        return new ObjectFormValue(property, contact, this, null);
     }
 
 }

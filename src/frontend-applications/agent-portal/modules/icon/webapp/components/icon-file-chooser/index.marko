@@ -21,8 +21,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       on-click("triggerFileUpload")
       title=(state.translations["Translatable#Select image file"])
       class="kix-button form-button icon-upload-button"
+      aria-describedby=state.descriptionId
    >
-      <span class="kix-icon-upload"/>
+      <span class="kix-icon-upload" aria-hidden="true"/>
       <translation-string pattern="Translatable#Select image file"/>
       <input
          type="file"
@@ -36,7 +37,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          <icon icon=state.icon/>
       </if>
    </span>
-   <span style="font-size=0.9rem;">
+   <span id=state.descriptionId style="font-size=0.9rem;">
       ${state.maxUploadSizeInfo}
    </span>
 </div>

@@ -22,9 +22,7 @@ export class Component implements IImageDialogListener {
     private subscriber: IEventSubscriber;
     private state: ComponentState;
     private currImageIndex: number = 0;
-    private keyDownEventFunction: () => {
-        // do nothing ...
-    };
+    private keyDownEventFunction: () => null;
 
     public onCreate(): void {
         this.state = new ComponentState();

@@ -12,7 +12,7 @@ import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { GraphLink } from './GraphLink';
 import { GraphNode } from './GraphNode';
 
-export class Graph<T extends any = any> extends KIXObject {
+export class Graph<T = any> extends KIXObject {
 
     public ObjectId: string | number;
 

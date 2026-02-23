@@ -17,6 +17,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <form-list
             loadNodes=state.loadNodes
             on-nodesChanged("linkableObjectChanged")
+            label=state.translations["Translatable#Link to"]
         />
     </div>
     <div.linkable-objects-form on-keydown("keyPressed")>
@@ -53,7 +54,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             disabled=!state.canSubmit
             on-click("submitClicked")
         >
-            <span.kix-icon-check/>
+            <span.kix-icon-check aria-hidden="true"/>
             <translation-string pattern="Translatable#Submit"/>
         </button>
     </div>

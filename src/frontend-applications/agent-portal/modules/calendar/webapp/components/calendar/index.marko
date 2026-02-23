@@ -26,8 +26,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         "kix-icon-calendar-week": state.view === "month",
                         "kix-icon-calendar-month": state.view !== "month",
                     },
-                ]
-            />
+                ]/>
             <span on-click("changeView")>
                 <translation-string pattern=state.toggleLabel/>
             </span>
@@ -35,10 +34,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </div>
     <div class="col-10" no-update id=state.calendarId/>
     <div class="col-2 ">
-        <if(state.loading)>
-            <span class="kix-icon-arrow-refresh"/>
-            <translation-string pattern="Translatable#Reload Calendar Data ..."/>
-        </if>
         <ul class="list-group mt-2">
             <for|calendar| of=state.calendars>
                 <li
@@ -56,8 +51,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 : "unset",
                         },
                     ]
-                    on-click("toggleCalendar", calendar)
-                >
+                    on-click("toggleCalendar", calendar)>
                     ${calendar.name}
                     <if(calendar.overlay)>
                         <overlay-icon
@@ -69,8 +63,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             data={
                                 object: calendar.overlay.Data,
                                 properties: calendar.overlay.Data.Properties,
-                            }
-                        />
+                            }/>
                     </if>
                 </li>
             </for>

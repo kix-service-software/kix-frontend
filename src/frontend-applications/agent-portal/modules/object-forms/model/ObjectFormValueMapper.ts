@@ -149,7 +149,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     protected async initFormValues(formValues = this.formValues, postInit?: boolean): Promise<Promise<void>> {
-        for (const fv of formValues.filter((fv) => fv.enabled)) {
+        for (const fv of formValues.filter((fv) => fv?.enabled)) {
             const start = Date.now();
 
             if (postInit) {
@@ -291,15 +291,15 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         property: string, field: FormFieldConfiguration, object: T, parentFormValue?: ObjectFormValue
     ): Promise<ObjectFormValue> {
         let formValue: ObjectFormValue;
-        if (property.startsWith(KIXObjectType.DYNAMIC_FIELD)) {
-            formValue = new DynamicFieldObjectFormValue(property, object, this, parentFormValue);
-        }
-
         for (const mapperExtension of this.extensions || []) {
             formValue = await mapperExtension.createFormValue(property, object);
             if (formValue) {
                 break;
             }
+        }
+
+        if (!formValue && property.startsWith(KIXObjectType.DYNAMIC_FIELD)) {
+            formValue = new DynamicFieldObjectFormValue(property, object, this, parentFormValue);
         }
 
         if (!formValue && field?.inputComponent === null) {
@@ -543,5 +543,16 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
     public validateFormValue(formValue: ObjectFormValue, force?: boolean): void {
         this.objectFormHandler?.objectFormValidator?.validate(formValue, force);
+    }
+
+    public canSetDefaultValueForConfig(formValue: ObjectFormValue): boolean {
+        for (const extension of this.extensions) {
+            const extensionResult = extension.canSetDefaultValueForConfig(formValue);
+            if (typeof extensionResult === 'boolean') {
+                return extensionResult;
+            }
+        }
+
+        return true;
     }
 }

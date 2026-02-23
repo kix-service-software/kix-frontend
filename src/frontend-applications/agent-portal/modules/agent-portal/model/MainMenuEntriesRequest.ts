@@ -7,13 +7,10 @@
  * --
  */
 
-import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
-
-export class MainMenuEntriesRequest implements ISocketRequest {
+export class MainMenuEntriesRequest {
 
     public constructor(
-        public requestId: string,
-        public clientRequestId: string,
+
         public tokenPrefrix: string = ''
     ) { }
 

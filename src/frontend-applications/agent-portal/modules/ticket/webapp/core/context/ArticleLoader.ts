@@ -13,8 +13,6 @@ import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
-import { SortUtil } from '../../../../../model/SortUtil';
-import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
@@ -25,6 +23,7 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
 import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
 import { User } from '../../../../user/model/User';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { Article } from '../../../model/Article';
 import { ArticleColorsConfiguration } from '../../../model/ArticleColorsConfiguration';
 import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
@@ -40,7 +39,12 @@ export class ArticleLoader {
 
     private articleColorConfiguration: any;
 
-    public constructor(private ticketId: number, private context: Context, private loadArticleDetails: boolean) { }
+    public constructor(
+        private ticketId: number,
+        private context: Context,
+        private loadArticleDetails: boolean,
+        private loadObjectActions?: boolean
+    ) { }
 
     public queueArticle(articleId: number, cb: (article: Article) => void): void {
         this.articleIds.set(articleId, cb);
@@ -56,9 +60,7 @@ export class ArticleLoader {
             clearTimeout(this.timeout);
         }
 
-        this.timeout = setTimeout(() => {
-            this.loadArticles();
-        }, 150);
+        this.timeout = setTimeout(this.loadArticles.bind(this), 150);
     }
 
     private async loadArticles(): Promise<void> {
@@ -66,11 +68,15 @@ export class ArticleLoader {
         this.articleIds = new Map();
 
         const loadingOptions = new KIXObjectLoadingOptions();
-        loadingOptions.includes = [KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON, 'ObjectActions'];
+        loadingOptions.includes = [KIXObjectType.CONTACT, KIXObjectType.OBJECT_ICON];
+
+        if (this.loadObjectActions) {
+            loadingOptions.includes.push('ObjectActions', ArticleProperty.PLAIN);
+        }
 
         if (this.loadArticleDetails) {
             loadingOptions.includes.push(
-                ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN, KIXObjectProperty.DYNAMIC_FIELDS
+                ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN, KIXObjectProperty.DYNAMIC_FIELDS, 'ObjectActions'
             );
         }
 
@@ -93,7 +99,7 @@ export class ArticleLoader {
     public async prepareArticleActions(article: Article, contextInstanceId?: string): Promise<AbstractAction[]> {
         const actions = await this.context?.getAdditionalActions(article) || [];
 
-        const hasKIXPro = await KIXModulesService.getInstance().hasPlugin('KIXPro');
+        const hasKIXPro = KIXModulesService.getInstance().hasPlugin('KIXPro');
         if (!hasKIXPro) {
             const startActions = ['article-reply-action', 'article-forward-action'];
             const actionInstance = await ActionFactory.getInstance().generateActions(
@@ -238,7 +244,20 @@ export class ArticleLoader {
                 )
             );
         }
-        loadingOptions.query.push(['fields', 'Article.ArticleID,Article.TicketID,Article.IncomingTime']);
+
+        if (articleFilter.filterMyArticles) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            loadingOptions.filter.push(
+                new FilterCriteria(
+                    ArticleProperty.CREATED_BY, SearchOperator.EQUALS,
+                    FilterDataType.NUMERIC, FilterType.AND, currentUser.UserID
+                )
+            );
+        }
+
+        loadingOptions.query.push(
+            ['fields', 'Article.ArticleID,Article.TicketID,Article.IncomingTime']
+        );
 
         const articles: Article[] = await KIXObjectService.loadObjects<Article>(
             KIXObjectType.ARTICLE, null, loadingOptions, new ArticleLoadingOptions(ticketId)
@@ -247,11 +266,16 @@ export class ArticleLoader {
         return articles;
     }
 
-    public static async loadArticle(articleId: number, ticketId: number): Promise<Article> {
+    public static async loadArticle(
+        articleId: number, ticketId: number, loadObjectActions: boolean = false
+    ): Promise<Article> {
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.includes = [
             ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, KIXObjectProperty.DYNAMIC_FIELDS
         ];
+        if (loadObjectActions) {
+            loadingOptions.includes.push('ObjectActions');
+        }
 
         const articles = await KIXObjectService.loadObjects<Article>(
             KIXObjectType.ARTICLE, [articleId], loadingOptions, new ArticleLoadingOptions(ticketId)

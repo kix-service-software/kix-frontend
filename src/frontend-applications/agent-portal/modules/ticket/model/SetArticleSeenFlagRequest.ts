@@ -7,13 +7,10 @@
  * --
  */
 
-import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
-
-export class SetArticleSeenFlagRequest implements ISocketRequest {
+export class SetArticleSeenFlagRequest {
 
     public constructor(
-        public requestId: string,
-        public clientRequestId: string,
+
         public ticketId: number,
         public articleId: number
     ) { }

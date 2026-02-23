@@ -8,18 +8,27 @@
  */
 
 import { DataType } from '../../../../../../model/DataType';
+import { FilterCriteria } from '../../../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../../model/FilterType';
+import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { SortUtil } from '../../../../../../model/SortUtil';
 import { ObjectReferenceUtil } from '../../../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { TimeoutTimer } from '../../../../../base-components/webapp/core/TimeoutTimer';
 import { TreeNode } from '../../../../../base-components/webapp/core/tree';
+import { ValidIDProperty } from '../../../../../base-components/webapp/core/ValidIDProperty';
 import { Contact } from '../../../../../customer/model/Contact';
 import { Organisation } from '../../../../../customer/model/Organisation';
+import { OrganisationProperty } from '../../../../../customer/model/OrganisationProperty';
+import { OrganisationService } from '../../../../../customer/webapp/core/OrganisationService';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
+import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { Ticket } from '../../../../model/Ticket';
 import { TicketProperty } from '../../../../model/TicketProperty';
 
@@ -86,28 +95,49 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                 if (contacts.length) {
                     const contact = contacts[0];
 
+                    const loadingOptions = new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                OrganisationProperty.ID, SearchOperator.IN, FilterDataType.NUMERIC,
+                                FilterType.AND, contact.OrganisationIDs
+                            )
+                        ], null, null,
+                        [OrganisationProperty.SUB_ORGANISATIONS],
+                        [OrganisationProperty.SUB_ORGANISATIONS]
+                    );
                     const organisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, contact.OrganisationIDs
+                        KIXObjectType.ORGANISATION, contact.OrganisationIDs, loadingOptions
                     );
 
-                    const promises = [];
-                    for (const o of organisations) {
-                        promises.push(ObjectReferenceUtil.createTreeNode(
-                            o, this.showInvalidNodes, this.isInvalidClickable, this.useTextAsId, this.translatable
-                        ));
-                    }
-
-                    const nodes = (await Promise.all<TreeNode>(promises)).filter((n) => n instanceof TreeNode);
+                    const nodes = await OrganisationService.getInstance().prepareObjectTree(
+                        organisations, this.showInvalidNodes, this.isInvalidClickable, contact.OrganisationIDs
+                    );
 
                     SortUtil.sortObjects(nodes, 'label', DataType.STRING);
 
-                    this.possibleValues = contact.OrganisationIDs;
+                    // check for changed value to prevent infinite loop by triggered valueSetter listener
+                    const possibleValues = contact.OrganisationIDs.filter((id) => this.findOrgansiationNode(nodes, id));
+                    if (JSON.stringify(this.possibleValues) !== JSON.stringify(possibleValues)) {
+                        this.possibleValues = possibleValues;
+                    }
                     this.treeHandler.setTree(nodes);
                 }
             } else if (typeof contactId === 'string') {
                 this.clearPossibleValuesAndNodes();
             }
         }
+    }
+
+    private findOrgansiationNode(nodes: TreeNode[], id: string | number): boolean {
+        return nodes.some((node) => {
+            if (node.id === id) {
+                return true;
+            } else if (node.children?.length) {
+                if (this.findOrgansiationNode(node.children, id)) {
+                    return true;
+                }
+            }
+        });
     }
 
     private async setOrganisationValue(contactId?: number, init?: boolean): Promise<void> {
@@ -151,7 +181,8 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                 if (contacts.length) {
                     const contact = contacts[0];
 
-                    organisationId = contact.PrimaryOrganisationID;
+                    organisationId = this.possibleValues.some((v) => v === contact.PrimaryOrganisationID) ?
+                        contact.PrimaryOrganisationID : null;
 
                     // current value is acceptable - do not changed
                     if (this.value && this.possibleValues?.some((pv) => pv?.toString() === this.value?.toString())) {
@@ -165,11 +196,13 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
             }
         }
 
-        await this.setFormValue(organisationId, true);
+        if (organisationId) {
+            await this.setFormValue(organisationId, true);
+        }
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
-        this.setFormValueTimeout.restartTimer(() => {
+        return this.setFormValueTimeout.start(async () => {
             let newValue;
             if (value) {
                 if (Array.isArray(value)) {
@@ -180,7 +213,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
             } else {
                 newValue = null;
             }
-            super.setFormValue(newValue, force);
+            await super.setFormValue(newValue, force);
         }, 350);
     }
 
@@ -205,5 +238,4 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     public async removePossibleValues(): Promise<void> {
         return;
     }
-
 }

@@ -48,6 +48,8 @@ export class PluginService {
         ];
 
         this.scanPlugins();
+
+        LoggingService.getInstance().info(`[SERVER] start PluginService - Plugin Count: ${this.availablePlugins?.length}`);
     }
 
     private async initPlugins(): Promise<string[]> {

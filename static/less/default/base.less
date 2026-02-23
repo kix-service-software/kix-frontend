@@ -1,0 +1,157 @@
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+// default "css"
+
+@mobile-breakpoint: 1140px; // have to be px (used for calculations)
+@sidebar-left-breakpoint: 1300px; // have to be px (used for calculations)
+@sidebar-right-breakpoint: 1600px; // have to be px (used for calculations)
+
+@border-radius: 3px;
+@shadow-color: @secondary-2;
+
+.show-object {
+    opacity: 1 !important;
+    transition: opacity .5s;
+}
+
+.shorten-text() {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.shadow-1(@color: @shadow-color) {
+    box-shadow: 2px 2px 2px 0 @color;
+}
+
+.shadow-1-with-inset(@color: @shadow-color, @color-inset: @shadow-color) {
+    box-shadow: 2px 2px 2px 0 @color, 0 -2px 2px -1px inset @color-inset;
+}
+
+.shadow-2(@color: @secondary-0) {
+    box-shadow: 2px 2px 6px 0 @color;
+}
+
+.shadow-3(@color: @shadow-color) {
+    box-shadow: 2px 2px 10px 3px @color;
+}
+
+.error {
+    color: red;
+}
+
+.hidden {
+    display: none;
+}
+
+.not-visible {
+    visibility: hidden;
+}
+
+[class^="kix-icon-"],
+[class*=" kix-icon-"] {
+    &.as-button {
+        cursor: pointer;
+    }
+}
+
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+textarea::placeholder,
+input::placeholder {
+    color: @secondary-2;
+    opacity: 1;
+    font-style: italic;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    *font-size: 100%;
+}
+
+textarea:-ms-input-placeholder,
+input:-ms-input-placeholder,
+textarea::-ms-input-placeholder,
+input::-ms-input-placeholder {
+    color: @secondary-2;
+    font-style: italic;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    *font-size: 100%;
+}
+
+.full-size() {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: unset;
+}
+
+.rtl {
+    direction: rtl;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+pre:not(.CodeMirror-line) {
+    font-family: inherit;
+    max-height: 10rem;
+    overflow: auto;
+    width: 100%;
+    white-space: pre-line;
+}

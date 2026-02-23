@@ -23,6 +23,10 @@ import { SearchProperty } from '../../../search/model/SearchProperty';
 import { OrganisationProperty } from '../../model/OrganisationProperty';
 import { ObjectSearch } from '../../../object-search/model/ObjectSearch';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { ValidIDProperty } from '../../../base-components/webapp/core/ValidIDProperty';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 
@@ -128,6 +132,22 @@ export class OrganisationService extends KIXObjectService<Organisation> {
         let nodes: TreeNode[] = [];
 
         switch (property) {
+            case OrganisationProperty.PARENT_ID:
+                const loadingOptions = new KIXObjectLoadingOptions([
+                    new FilterCriteria(
+                        OrganisationProperty.PARENT_ID, SearchOperator.EMPTY, FilterDataType.STRING,
+                        FilterType.AND, 1
+                    )
+                ], null, null, [OrganisationProperty.SUB_ORGANISATIONS], [OrganisationProperty.SUB_ORGANISATIONS]);
+                const organisations = await KIXObjectService.loadObjects<Organisation>(
+                    KIXObjectType.ORGANISATION, null, loadingOptions
+                );
+
+                nodes = await this.prepareObjectTree(
+                    organisations, showInvalid, invalidClickable,
+                    filterIds ? filterIds.map((fid) => Number(fid)) : null
+                );
+                break;
             default:
                 nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
         }
@@ -179,6 +199,116 @@ export class OrganisationService extends KIXObjectService<Organisation> {
         return filtered ?
             supportedAttributes.filter((sA) => !filterList.some((fp) => fp === sA.Property)) :
             supportedAttributes;
+    }
+
+    public async prepareObjectTree(
+        objects: KIXObject[], showInvalid: boolean = false, invalidClickable: boolean = false,
+        filterIds?: number[], translatable?: boolean
+    ): Promise<TreeNode[]> {
+        let nodes = [];
+        if (objects?.length) {
+            if (objects[0].KIXObjectType === KIXObjectType.ORGANISATION) {
+                objects = await this.prepareOrganisationTree(objects as Organisation[], filterIds);
+
+                if (!showInvalid) {
+                    objects = objects.filter(
+                        (o: Organisation) => o.ValidID === 1 || this.hasValidDescendants(o.SubOrganisations));
+                } else if (!invalidClickable) {
+                    objects = (objects as Organisation[]).filter(
+                        (o) => o.ValidID === 1 || this.hasValidDescendants(o.SubOrganisations)
+                    );
+                }
+
+                for (const org of (objects as Organisation[])) {
+                    const subTree = await this.prepareObjectTree(
+                        org.SubOrganisations, showInvalid, invalidClickable, filterIds
+                    );
+
+                    const treeNode = new TreeNode(
+                        org.ID, org.Name,
+                        new ObjectIcon(null, KIXObjectType.ORGANISATION, org.ID),
+                        null,
+                        subTree,
+                        null, null, null, null, null, null, null,
+                        invalidClickable ? true : org.ValidID === 1,
+                        undefined, undefined, undefined, undefined,
+                        org.ValidID !== 1
+                    );
+                    nodes.push(treeNode);
+                }
+            } else {
+                nodes = await super.prepareObjectTree(objects, showInvalid, invalidClickable, filterIds, translatable);
+            }
+        }
+
+        return nodes;
+    }
+
+    public async prepareOrganisationTree(organisations: Organisation[], assignedOrgIDs: number[] = null,
+        isSub?: boolean, identifiedSubOrgs?: Organisation[]): Promise<Organisation[]> {
+        const result: Organisation[] = [];
+
+        let autoAssignActive = false;
+        const sysConfigValue = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ORGANISATION_VIRTUALLY_ASSIGN_CONTACTS_TO_SUB_ORGANISATIONS]
+        ).catch(() => [] as SysConfigOption[]);
+        if (sysConfigValue && sysConfigValue.length && Number(sysConfigValue[0].Value) > 0) {
+            autoAssignActive = true;
+        }
+
+        if (!isSub)
+            identifiedSubOrgs = [];
+
+        for (const org of organisations) {
+            if (isSub) {
+                if (Array.isArray(assignedOrgIDs) && assignedOrgIDs.indexOf(org.ID) < 0)
+                    org.ValidID = ValidIDProperty.INVALID;
+                identifiedSubOrgs.push(org);
+            }
+
+            if (org.SubOrganisations.length) {
+                const validSubOrgs = await this.prepareOrganisationTree(org.SubOrganisations,
+                    assignedOrgIDs, true, identifiedSubOrgs);
+                if (!validSubOrgs)
+                    org.SubOrganisations = [];
+            }
+        }
+
+
+        if (!isSub) {
+            // filter out all top-level orgs that are sub-orgs of others
+            for (const org of organisations) {
+                const found = identifiedSubOrgs ? identifiedSubOrgs.find((o) => o.ID === org.ID) : false;
+                if (!found)
+                    result.push(org);
+            }
+        }
+        else if (!autoAssignActive) {
+            // filter out all non-valid orgs in sub-trees
+            for (const org of organisations) {
+                if (org.ValidID === ValidIDProperty.VALID)
+                    result.push(org);
+            }
+        }
+
+        return result;
+    }
+
+    private hasValidDescendants(organisations: Organisation[]): boolean {
+        let hasValidDescendants: boolean = false;
+        if (organisations && !!organisations.length) {
+            for (const org of organisations) {
+                if (org.ValidID === 1) {
+                    hasValidDescendants = true;
+                } else {
+                    hasValidDescendants = this.hasValidDescendants(org.SubOrganisations);
+                }
+                if (hasValidDescendants) {
+                    break;
+                }
+            }
+        }
+        return hasValidDescendants;
     }
 
 }

@@ -7,17 +7,12 @@
  * --
  */
 
-import { ReleaseInfo } from '../../../../../../model/ReleaseInfo';
 import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public kixVersion: string = null,
-        public kixProduct: string = null,
         public currentUserLogin: string = null,
-        public buildNumber: string = null,
-        public releaseInfo: ReleaseInfo = null,
         public imprintLink: string = null
     ) {
         super();

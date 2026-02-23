@@ -94,7 +94,7 @@ export class QueueAPIService extends KIXObjectAPIService {
             );
             if (objectIds && objectIds.length) {
                 objectResponse.objects = objectResponse?.objects?.filter(
-                    (f: FollowUpType) => objectIds.some((oid) => oid.toString() === f.ObjectId.toString())
+                    (f: FollowUpType) => objectIds.some((oid) => oid.toString() === f.ID.toString())
                 );
             }
         } else if (objectType === KIXObjectType.QUEUE_TICKET_STATS) {

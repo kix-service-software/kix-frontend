@@ -12,13 +12,13 @@ import { AbstractComponentState } from '../../../../../modules/base-components/w
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
+        public initialized: boolean = false,
+        public activeMobile: number = null,
         public loading: boolean = true,
         public loadingHint: string = '',
-        public reload: boolean = false,
-        public reloadContent: boolean = false,
-        public initialized: boolean = false,
         public isMobile: boolean = false,
-        public activeMobile: number = null
+        public applicationTemplate: any = null,
+        public applicationTemplateData: any = {}
     ) {
         super();
     }

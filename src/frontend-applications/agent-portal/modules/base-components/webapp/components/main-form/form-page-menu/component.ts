@@ -14,9 +14,7 @@ import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 import { ObjectFormEvent } from '../../../../../object-forms/model/ObjectFormEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
-    private keyUpEventFunction: () => {
-        // do nothing ...
-    };
+    private keyUpEventFunction: () => null;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'main-form/form-page-menu');

@@ -19,6 +19,7 @@ class TreeComponent extends AbstractMarkoComponent<ComponentState> {
 
     private setParentFlags: boolean = true;
     private allowExpandCollapseAll: boolean;
+    private previousTreeLength: number;
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -27,6 +28,7 @@ class TreeComponent extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
+        this.previousTreeLength = this.state.tree?.length || 0;
         this.state.tree = input.tree;
         this.state.treeId = input.treeId ? input.treeId : 'tree-' + IdService.generateDateBasedId();
         this.setParentFlags = typeof input.setParentFlags !== 'undefined'
@@ -48,6 +50,8 @@ class TreeComponent extends AbstractMarkoComponent<ComponentState> {
 
             this.state.allowExpandCollapseAll = this.allowExpandCollapseAll;
         }
+
+        this.prepareExpandCollapseAll();
     }
 
     public async onMount(): Promise<void> {
@@ -55,7 +59,6 @@ class TreeComponent extends AbstractMarkoComponent<ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Expand All', 'Translatable#Collapse All'
         ]);
-        this.prepareExpandCollapseAll();
         this.prepareUserPreference();
     }
 

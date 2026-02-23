@@ -9,6 +9,7 @@
 
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { SelectionState } from '../../../../model/SelectionState';
 import { Table } from '../../../../model/Table';
 import { TableEvent } from '../../../../model/TableEvent';
@@ -53,6 +54,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 TableEvent.COLUMN_CREATED
             ]
         );
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Select all'
+        ]);
+
 
         this.setCheckState();
     }

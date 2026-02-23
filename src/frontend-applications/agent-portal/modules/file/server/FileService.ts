@@ -12,25 +12,31 @@ import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import path from 'path';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
-import { Request, Response } from 'express';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { ClientNotificationService } from '../../../server/services/ClientNotificationService';
 import { BackendNotification } from '../../../model/BackendNotification';
 import { BackendNotificationEvent } from '../../../model/BackendNotificationEvent';
 import { User } from '../../user/model/User';
+import { FastifyReply } from 'fastify/types/reply';
 
 export class FileService {
 
     public static initialize(): void {
+        LoggingService.getInstance().info('[SERVER] start FileService - initialization');
+
         const folder = ['downloads', 'uploads'];
         for (const f of folder) {
-            let folderPath = path.join(__dirname, '..', '..', '..', '..', '..', '..', 'data', f);
+            const folderPath = path.join(__dirname, '..', '..', '..', '..', '..', '..', 'data', f);
             if (!fs.existsSync(folderPath)) {
                 fs.mkdirSync(folderPath);
             }
         }
         ClientNotificationService.getInstance().registerNotificationListener(
-            FileService.handleBackendNotification.bind(this));
+            'FileService',
+            FileService.handleBackendNotification.bind(this)
+        );
+
+        LoggingService.getInstance().info('[SERVER] start FileService - initialization finished');
     }
 
     private static handleBackendNotification(events: BackendNotification[]): void {
@@ -88,26 +94,27 @@ export class FileService {
         ConfigurationService.getInstance().saveDataFileContent(downloadFileName, downloads);
     }
 
-    public static async downloadFile(downloadId: string, user: User, res: Response): Promise<void> {
+    public static async downloadFile(downloadId: string, user: User, reply: FastifyReply): Promise<void> {
         const file = FileService.getDownloadFile(downloadId, user?.UserID);
         if (file) {
-            // avoid MIME type sniffing
-            res.setHeader('X-Content-Type-Options', 'nosniff');
-            res.download(
-                FileService.getFilePath(file.downloadId, file.path),
-                file.Filename,
-                (err) => {
-                    if (err) {
-                        LoggingService.getInstance().error(`Error while download file to client (downloadId: ${downloadId}, userId: ${user.UserID}).`, err);
-                    }
-                    // always remove/cleanup
-                    FileService.removeDownload(downloadId, user?.UserID);
-                }
-            );
+            try {
+                // avoid MIME type sniffing
+                reply.header('X-Content-Type-Options', 'nosniff');
+                reply.header('Content-Disposition', `attachment; filename='${file.Filename}`);
+                const filePath = FileService.getFilePath(file.downloadId, file.path);
+                const stream = require('fs').creaeReadStream(filePath);
+                reply.send(stream).code(200);
+            } catch (e) {
+                LoggingService.getInstance().error(
+                    `Error while download file to client (downloadId: ${downloadId}, userId: ${user.UserID}).`,
+                    e
+                );
+            } finally {
+                FileService.removeDownload(downloadId, user?.UserID);
+            }
         } else {
             LoggingService.getInstance().error(`Relevant file not found in ${user?.UserID}_downloads.json (downloadId: ${downloadId}).`);
-            res.status(400);
-            res.render('Invalid request!');
+            reply.status(400).send('Invalid request!');
         }
     }
 
@@ -142,11 +149,6 @@ export class FileService {
             const fileName = `${userId}_downloads.json`;
             ConfigurationService.getInstance().saveDataFileContent(fileName, downloads);
         }
-    }
-
-    public static uploadFile(req: Request, res: Response, next: () => void): void {
-        res.status(201);
-        res.send();
     }
 
     public static removeFile(filename: string, download: boolean = true): void {

@@ -12,6 +12,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       role="button"
       ...state.dropdownAttributes
       tabindex="0"
+      aria-labelledby=input.labelId
       on-keydown("keydownOnSelectInput")
       on-click("inputClicked")
       class="select-input-row">
@@ -33,7 +34,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                <for|node| of=state.selectedNodes>
 
                   <li
-                     class="list-group-item d-flex ps-2 pe-2 pt-0 pb-0 mb-1 me-1 border"
+                     class=[
+                        "list-group-item d-flex ps-2 pe-2 pt-0 pb-0 mb-1 me-1 border",
+                        {
+                           "show-as-invalid": node.showAsInvalid,
+                        },
+                     ]
                      style="max-width: 100%;"
                      title=node.label>
                      <if(node.icon !== null)>
@@ -59,7 +65,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                            on-mouseenter("setIsMouseOnNodeRemove", true)
                            on-mouseleave("setIsMouseOnNodeRemove", false)
                            on-click("removeValue", node)
-                           class="ms-2 fas fa-times"/>
+                           class="ms-2 fas fa-times"
+                           role="button"
+                           aria-label=state.translations["Translatable#Remove node"]/>
                      </if>
                   </li>
                </for>
@@ -71,13 +79,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <button
                type="button"
                on-click("clearValue")
-               class="btn btn-outline-light border-secondary-subtle rounded-0 border-start-0 border-end-0">
+               class="btn btn-outline-light border-secondary-subtle rounded-0 border-start-0 border-end-0"
+               aria-label=state.translations["Translatable#Clear Value"]>
                <i class="far fa-times-circle"/>
             </button>
          </if>
          <button
             type="button"
-            class="btn btn-outline-light dropdown-toggle border-secondary-subtle rounded-0 border-start-0 border-start-0 rounded-end"/>
+            class="btn btn-outline-light dropdown-toggle border-secondary-subtle rounded-0 border-start-0 border-start-0 rounded-end"
+            aria-hidden="true"
+            tabindex="-1"/>
       </if>
    </div>
    <div

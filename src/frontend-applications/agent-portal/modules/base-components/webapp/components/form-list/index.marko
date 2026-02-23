@@ -7,48 +7,72 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.form-list key=state.listId on-click("setKeepExpanded")>
+<div key=state.listId on-click("setKeepExpanded") class="form-list">
     <if(input.loading)>
         <loading-spinner/>
     </if>
     <else>
         <if(state.prepared)>
-            <div.form-list-input-container.input-style
-                class={
-                            "list-shown": state.expanded,
-                            autocomplete: state.asAutocomplete,
-                            invalid: state.invalid,
-                            readonly: state.readonly
-                        }
-                key=("form-list-input-container-" + state.listId)
-                title=state.placeholder>
-                <div.selected-nodes tabindex="0" on-focus("focus") key=("form-list-selected-nodes-" + state.listId)>
+            <div
+                class=[
+                    "form-list-input-container input-style",
+                    {
+                        "list-shown": state.expanded,
+                        autocomplete: state.asAutocomplete,
+                        invalid: state.invalid,
+                        readonly: state.readonly,
+                    },
+                ]
+                key="form-list-input-container-" + state.listId>
+                // wrong aria-role (placeholder, so aria-label is accepted), html needs to be modified
+                <div
+                    tabindex="0"
+                    on-focus("focus")
+                    key="form-list-selected-nodes-" + state.listId
+                    title=state.placeholder
+                    role="textbox"
+                    aria-labelledby=input.labelId
+                    aria-label=input.label
+                    class="selected-nodes">
                     <dropdown-selected-nodes-list
                         treeId=state.treeId
                         canRemoveNode=state.removeNodes
                         placeholder=state.placeholder
                         invalid=state.invalid/>
                 </div>
-                <div.form-input-control-list>
+                <div class="form-input-control-list">
                     <dropdown-action-list actions=state.actions/>
-                    <span.form-list-button.kix-icon-sort-down on-click("toggleList", true)/>
+                    <span
+                        on-click("toggleList", true)
+                        class="form-list-button kix-icon-sort-down"/>
                 </div>
             </div>
             <if(state.expanded)>
-                <div.value-list style=state.treeStyle key=("value-list-" + state.treeId)>
+                <div
+                    style=state.treeStyle
+                    key="value-list-" + state.treeId
+                    class="value-list">
                     <dropdown-filter
                         autocompleteConfiguration=input.autoCompleteConfiguration
                         autocompleteSearchCallback=input.searchCallback
                         treeId=state.treeId
                         freeText=input.freeText
-                        key=("form-list-input-" + state.listId)/>
-                    <form-list-tree key=state.treeId treeId=state.treeId tabIndex=-1/>
+                        labelId=input.labelId
+                        filterByTree=input.filterByTree
+                        key="form-list-input-" + state.listId/>
+                    <form-list-tree
+                        key=state.treeId
+                        treeId=state.treeId
+                        tabIndex=-1/>
                     <if(state.multiselect && !input.hideSubmitButton)>
-                        <dropdown-button-bar treeId=state.treeId on-submit("submitClicked") key=("buttonbar" + state.listId)/>
+                        <dropdown-button-bar
+                            treeId=state.treeId
+                            on-submit("submitClicked")
+                            key="buttonbar" + state.listId/>
                     </if>
                 </div>
             </if>
         </if>
     </else>
 </div>
-<input.d-none type="text" key="hidden-form-list-input"/>
+<input type="text" key="hidden-form-list-input" class="d-none">

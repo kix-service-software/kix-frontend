@@ -24,4 +24,8 @@ export interface IMarkoApplication {
      */
     internal: boolean;
 
+    applicationName: string;
+
+    baseRouteENV: string;
+
 }

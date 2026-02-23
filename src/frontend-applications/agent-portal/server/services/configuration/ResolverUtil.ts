@@ -7,6 +7,7 @@
  * --
  */
 
+import { ConfiguredWidget } from '../../../model/configuration/ConfiguredWidget';
 import { IConfiguration } from '../../../model/configuration/IConfiguration';
 
 import { SysConfigOption } from '../../../modules/sysconfig/model/SysConfigOption';
@@ -51,10 +52,14 @@ export class ResolverUtil {
 
         // some user created config does not have a valid property but should not be ignored now,
         // so no valid property at all is assumed as valid, too (KIX2018-8156)
-        newConfigurations = newConfigurations.filter((c) => typeof c.valid === 'undefined' || c.valid === true);
+        newConfigurations = newConfigurations.filter((c) => ResolverUtil.isValidConfiguration(c));
 
         return newConfigurations;
 
+    }
+
+    public static isValidConfiguration(configuration: IConfiguration): boolean {
+        return !configuration || typeof configuration.valid === 'undefined' || configuration.valid === true;
     }
 
 }

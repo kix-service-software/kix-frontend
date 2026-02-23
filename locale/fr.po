@@ -4217,9 +4217,6 @@ msgstr "Recherche partagée"
 msgid "Shared Searches"
 msgstr "Recherches partagées"
 
-msgid "Show Backlog"
-msgstr "Afficher le carnet de commandes"
-
 msgid "Show Filter"
 msgstr "Afficher le filtre"
 

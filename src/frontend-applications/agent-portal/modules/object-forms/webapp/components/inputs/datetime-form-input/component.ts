@@ -109,6 +109,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 if (this.state.inputType === InputFieldTypes.DATE_TIME) {
                     this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date(this.value?.toString()));
                 }
+                this.setValue();
             }
         }
     }

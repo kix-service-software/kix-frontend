@@ -7,13 +7,14 @@
  * --
  */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import * as chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicField } from '../../../../dynamic-fields/model/DynamicField';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { DynamicFieldTableFormValue } from '../../../model/FormValues/DynamicFields/DynamicFieldTableFormValue';
 import { TestObjectValueMapper } from '../../MockData';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -37,6 +38,7 @@ describe('DynamicFieldTableFormValue', () => {
             const objectValueMapper = new TestObjectValueMapper();
             formValue = new DynamicFieldTableFormValue('Value', dynamicFieldValue, objectValueMapper, null, 'testDF');
             await formValue.initFormValue();
+            await formValue.initFormValueByField(new FormFieldConfiguration('', '', '', null));
         });
 
         after(() => {
@@ -65,9 +67,9 @@ describe('DynamicFieldTableFormValue', () => {
         });
 
         it('should have initial table with 1 row', () => {
-            expect(formValue.value).exist;
-            expect(formValue.value).an('array');
-            expect(formValue.value.length).equals(1);
+            expect(formValue.defaultValue).exist;
+            expect(formValue.defaultValue).an('array');
+            expect(formValue.defaultValue.length).equals(1);
         });
 
     });
@@ -96,6 +98,7 @@ describe('DynamicFieldTableFormValue', () => {
             const objectValueMapper = new TestObjectValueMapper();
             formValue = new DynamicFieldTableFormValue('Value', dynamicFieldValue, objectValueMapper, null, 'testDF');
             await formValue.initFormValue();
+            await formValue.initFormValueByField(new FormFieldConfiguration('', '', '', null));
         });
 
         after(() => {
@@ -124,9 +127,9 @@ describe('DynamicFieldTableFormValue', () => {
         });
 
         it('should have initial table with 2 rows', () => {
-            expect(formValue.value).exist;
-            expect(formValue.value).an('array');
-            expect(formValue.value.length).equals(2);
+            expect(formValue.defaultValue).exist;
+            expect(formValue.defaultValue).an('array');
+            expect(formValue.defaultValue.length).equals(2);
         });
 
     });
@@ -155,6 +158,7 @@ describe('DynamicFieldTableFormValue', () => {
             const objectValueMapper = new TestObjectValueMapper();
             formValue = new DynamicFieldTableFormValue('Value', dynamicFieldValue, objectValueMapper, null, 'testDF');
             await formValue.initFormValue();
+            await formValue.initFormValueByField(new FormFieldConfiguration('', '', '', null));
         });
 
         after(() => {
@@ -162,9 +166,9 @@ describe('DynamicFieldTableFormValue', () => {
         });
 
         it('should have initial table with 3 rows', () => {
-            expect(formValue.value).exist;
-            expect(formValue.value).an('array');
-            expect(formValue.value.length).equals(3);
+            expect(formValue.defaultValue).exist;
+            expect(formValue.defaultValue).an('array');
+            expect(formValue.defaultValue.length).equals(3);
         });
 
     });
@@ -193,6 +197,7 @@ describe('DynamicFieldTableFormValue', () => {
             const objectValueMapper = new TestObjectValueMapper();
             formValue = new DynamicFieldTableFormValue('Value', dynamicFieldValue, objectValueMapper, null, 'testDF');
             await formValue.initFormValue();
+            await formValue.initFormValueByField(new FormFieldConfiguration('', '', '', null));
         });
 
         after(() => {
@@ -200,9 +205,9 @@ describe('DynamicFieldTableFormValue', () => {
         });
 
         it('should have initial table with 2 rows', () => {
-            expect(formValue.value).exist;
-            expect(formValue.value).an('array');
-            expect(formValue.value.length).equals(2);
+            expect(formValue.defaultValue).exist;
+            expect(formValue.defaultValue).an('array');
+            expect(formValue.defaultValue.length).equals(5);
         });
 
     });
@@ -231,6 +236,7 @@ describe('DynamicFieldTableFormValue', () => {
             const objectValueMapper = new TestObjectValueMapper();
             formValue = new DynamicFieldTableFormValue('Value', dynamicFieldValue, objectValueMapper, null, 'testDF');
             await formValue.initFormValue();
+            await formValue.initFormValueByField(new FormFieldConfiguration('', '', '', null));
         });
 
         after(() => {
@@ -238,9 +244,9 @@ describe('DynamicFieldTableFormValue', () => {
         });
 
         it('should have initial table with 1 rows', () => {
-            expect(formValue.value).exist;
-            expect(formValue.value).an('array');
-            expect(formValue.value.length).equals(1);
+            expect(formValue.defaultValue).exist;
+            expect(formValue.defaultValue).an('array');
+            expect(formValue.defaultValue.length).equals(1);
         });
 
     });
@@ -269,6 +275,7 @@ describe('DynamicFieldTableFormValue', () => {
             const objectValueMapper = new TestObjectValueMapper();
             formValue = new DynamicFieldTableFormValue('Value', dynamicFieldValue, objectValueMapper, null, 'testDF');
             await formValue.initFormValue();
+            await formValue.initFormValueByField(new FormFieldConfiguration('', '', '', null));
         });
 
         after(() => {
@@ -276,9 +283,9 @@ describe('DynamicFieldTableFormValue', () => {
         });
 
         it('should have initial table with 1 rows', () => {
-            expect(formValue.value).exist;
-            expect(formValue.value).an('array');
-            expect(formValue.value.length).equals(1);
+            expect(formValue.defaultValue).exist;
+            expect(formValue.defaultValue).an('array');
+            expect(formValue.defaultValue.length).equals(1);
         });
 
     });

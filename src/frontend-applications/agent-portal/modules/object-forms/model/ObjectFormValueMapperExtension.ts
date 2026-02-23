@@ -56,4 +56,8 @@ export abstract class ObjectFormValueMapperExtension<T extends KIXObject = KIXOb
         return;
     }
 
+    public canSetDefaultValueForConfig(formValue: ObjectFormValue): boolean {
+        return null;
+    }
+
 }

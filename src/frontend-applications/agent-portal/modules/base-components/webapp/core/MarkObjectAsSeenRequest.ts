@@ -8,13 +8,11 @@
  */
 
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ISocketRequest } from './ISocketRequest';
 
-export class MarkObjectAsSeenRequest implements ISocketRequest {
+export class MarkObjectAsSeenRequest {
 
     public constructor(
-        public requestId: string,
-        public clientRequestId: string,
+
         public objectType: KIXObjectType | string,
         public objectIds: any[]
     ) { }

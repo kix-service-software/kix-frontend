@@ -11,20 +11,18 @@ export class TimeoutTimer {
 
     private timer = null;
 
-    private startTimer(callback: () => void, timeout: number = 300): void {
-        this.timer = setTimeout(() => {
-            callback();
-            clearTimeout(this.timer);
-        }, timeout);
-    }
-
-    public restartTimer(callback: () => void, timeout: number = 300): void {
+    public start(callback: () => void, timeout: number = 300): Promise<void> {
         if (this.timer) {
             clearTimeout(this.timer);
-            this.timer = null;
-            this.startTimer(callback, timeout);
-        } else {
-            this.startTimer(callback, timeout);
         }
+
+        return new Promise<void>((resolve) => {
+            this.timer = setTimeout(() => {
+                callback();
+                clearTimeout(this.timer);
+                resolve();
+            }, timeout);
+        });
     }
+
 }

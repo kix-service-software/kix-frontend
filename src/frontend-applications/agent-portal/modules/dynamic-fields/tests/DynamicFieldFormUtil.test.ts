@@ -8,8 +8,8 @@
  */
 
 // tslint:disable
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import * as chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { DynamicField } from '../model/DynamicField';
 import { FormConfiguration } from '../../../model/configuration/FormConfiguration';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';

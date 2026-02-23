@@ -13,7 +13,7 @@ import { AbstractAction } from '../../../../../modules/base-components/webapp/co
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 
 export class MailAccountEditAction extends AbstractAction {
 
@@ -33,7 +33,7 @@ export class MailAccountEditAction extends AbstractAction {
             )
         ];
 
-        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        show = await SessionAPIClient.checkPermissions(permissions);
         return show;
     }
 

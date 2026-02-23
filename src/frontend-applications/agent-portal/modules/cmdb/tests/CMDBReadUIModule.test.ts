@@ -8,8 +8,8 @@
  */
 
 // tslint:disable
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import * as chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';

@@ -25,10 +25,10 @@ import { Ticket } from '../../../model/Ticket';
 
 export class Component extends AbstractMarkoComponent<ComponentState, TicketDetailsContext> {
 
-    private readonly displayView = 'selectedListView';
     private sortOrder: string;
     private communicationConfig: TicketCommunicationConfiguration;
     private articleIds: number[];
+    private resizeObserver: ResizeObserver;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'ticket-communication-widget');
@@ -54,16 +54,28 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
         ) : null;
         this.sortOrder = articlePreference?.Value;
 
-        const listViewPreference = user?.Preferences ? user.Preferences.find(
-            (p) => p.ID === PersonalSettingsProperty.MESSAGE_COMPACT_VIEW
-        ) : null;
-        this.state.selectedCompactView = !listViewPreference?.Value || listViewPreference?.Value === 'Compact';
-
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Go to top', 'Translatable#Read all', 'Translatable#Collapse all',
             'Translatable#Preview List', 'Translatable#Compact View', 'Translatable#Change sort direction'
         ]);
 
+        const container = document.getElementsByClassName('communication-list')[0];
+        const wrapper = document.getElementsByClassName('content-wrapper ')[0];
+        try {
+            this.resizeObserver = new ResizeObserver(() => {
+                const goToTopButton = document.getElementById(`goToTop_${this.state.topId}`);
+                if (wrapper.scrollHeight > wrapper.clientHeight) {
+                    goToTopButton.setAttribute('style', `left: ${container.clientWidth - 10}px;`);
+                }
+                else {
+                    goToTopButton.setAttribute('style', 'display: none;');
+                }
+            });
+        } catch (e) {
+            console.error(e);
+        }
+
+        this.resizeObserver.observe(container);
         this.initListener();
 
         await this.setArticleIDs();
@@ -95,6 +107,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
 
     public onDestroy(): void {
         super.onDestroy();
+        this.resizeObserver?.disconnect();
         this.context.unregisterListener('communication-widget');
     }
 
@@ -168,16 +181,6 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
                 EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT);
             }, 50);
         }
-    }
-
-    public selectNormalDisplay(): void {
-        AgentService.getInstance().setPreferences([[PersonalSettingsProperty.MESSAGE_COMPACT_VIEW, 'List']]);
-        this.state.selectedCompactView = false;
-    }
-
-    public selectListDisplay(): void {
-        AgentService.getInstance().setPreferences([[PersonalSettingsProperty.MESSAGE_COMPACT_VIEW, 'Compact']]);
-        this.state.selectedCompactView = true;
     }
 
     public collapseAll(): void {

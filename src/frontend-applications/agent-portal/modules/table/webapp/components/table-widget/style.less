@@ -6,10 +6,42 @@
  * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
  * --
  */
+.widget-viewbar {
 
- .table-reset-filter {
+    .btn:hover,
+    .btn.show {
+        color: @secondary-7;
+        background: fade(#000, 5%);
+    }
+}
+
+.widget-filter-dropdown {
+
+    .btn {
+        font-size: 1.25rem;
+
+        &:hover,
+        &.show {
+            color: @secondary-7;
+            background: fade(#000, 5%);
+        }
+
+        &::after {
+            content: none
+        }
+    }
+}
+
+.table-reset-filter {
     cursor: pointer;
- }
+    color: inherit;
+    background-color: transparent;
+}
+
 .filter-action-list {
     min-width: 25px;
+}
+
+.table {
+    overflow: hidden !important;
 }

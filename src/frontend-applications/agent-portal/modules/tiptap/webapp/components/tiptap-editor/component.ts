@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,13 +22,201 @@ import {
     moveIntoNewParagraph,
     applyLastUsedMarks,
 } from '../../static/utils/helpers';
+import { TiptapEditorService } from '../../core/TipTapEditorService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 
 declare const Tiptap: any;
+function sanitizeTextmoduleHtml(html: string): string {
+    if (!html) return html;
+
+    try {
+        const container = document.createElement('div');
+        container.innerHTML = html;
+
+        const tbodies = Array.from(container.querySelectorAll('tbody'));
+        for (const tbody of tbodies) {
+            const parent = tbody.parentElement;
+            if (!parent || parent.tagName.toLowerCase() !== 'table') {
+                const table = document.createElement('table');
+
+                while (tbody.firstChild) {
+                    table.appendChild(tbody.firstChild);
+                }
+
+                tbody.replaceWith(table);
+            }
+        }
+
+        container.querySelectorAll('tbody').forEach((t) => {
+            while (t.firstChild) {
+                t.parentElement?.insertBefore(t.firstChild, t);
+            }
+            t.remove();
+        });
+
+        const result = container.innerHTML;
+        const normalized = normalizeForTiptap(result);
+        return normalized;
+    } catch {
+        return html;
+    }
+}
+function countImages(html: string | undefined | null): number {
+    if (!html) return 0;
+    return (html.match(/<img\b/gi) || []).length;
+}
+
+function imagesWereLost(rawHtml: string, cleanedHtml: string): boolean {
+    const rawCount = countImages(rawHtml);
+    const cleanedCount = countImages(cleanedHtml);
+    return cleanedCount < rawCount;
+}
+
+
+function embedImageSrcIntoWrapper(html: string): string {
+    if (!html) return html;
+    try {
+        const container = document.createElement('div');
+        container.innerHTML = html;
+
+        const wrappers = container.querySelectorAll('span[data-type="resizable-image-wrapper"]');
+        wrappers.forEach((wrapper) => {
+            const img = wrapper.querySelector('img');
+            if (!img) return;
+            const src = img.getAttribute('src');
+            if (!src) return;
+
+            (wrapper as HTMLElement).setAttribute('data-kix-img-src', src);
+        });
+
+        return container.innerHTML;
+    } catch {
+        return html;
+    }
+}
+
+
+function repairImageSrcFromDataAttr(html: string): string {
+    if (!html) return html;
+    try {
+        const container = document.createElement('div');
+        container.innerHTML = html;
+
+        const wrappers = container.querySelectorAll(
+            'span[data-type="resizable-image-wrapper"][data-kix-img-src]',
+        );
+        wrappers.forEach((wrapper) => {
+            const storedSrc = (wrapper as HTMLElement).getAttribute('data-kix-img-src');
+            if (!storedSrc) return;
+
+            const img = wrapper.querySelector('img');
+            if (!img) return;
+
+            const currentSrc = img.getAttribute('src');
+            if (!currentSrc || !currentSrc.trim()) {
+                img.setAttribute('src', storedSrc);
+            }
+        });
+
+        return container.innerHTML;
+    } catch {
+        return html;
+    }
+}
+
+function isLikelyImageUrl(url: string): boolean {
+    return /^https?:\/\/.+\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(url);
+}
+
+function unwrapImageLinks(container: HTMLElement): void {
+    const links = Array.from(container.querySelectorAll('a'));
+    for (const a of links) {
+        const children = Array.from(a.childNodes).filter((n) => {
+            return !(n.nodeType === Node.TEXT_NODE && !(n.textContent || '').trim());
+        });
+
+        if (children.length !== 1) continue;
+
+        const only = children[0] as any;
+        const isWrapper =
+            only?.nodeType === Node.ELEMENT_NODE &&
+            typeof only.matches === 'function' &&
+            only.matches('span[data-type="resizable-image-wrapper"]');
+
+        const isImg =
+            only?.nodeType === Node.ELEMENT_NODE &&
+            typeof only.matches === 'function' &&
+            only.matches('img');
+
+        if (!isWrapper && !isImg) continue;
+
+        a.replaceWith(only);
+    }
+}
+
+async function fetchAsDataURL(url: string, timeoutMs = 8000): Promise<string> {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), timeoutMs);
+
+    try {
+        const res = await fetch(url, { signal: ctrl.signal, mode: 'cors' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const blob = await res.blob();
+
+        const maxBytes = 5 * 1024 * 1024;
+        if (blob.size > maxBytes) throw new Error(`Image too large (${blob.size} bytes)`);
+
+        const dataUrl = await new Promise<string>((resolve, reject) => {
+            const r = new FileReader();
+            r.onload = (): void => resolve(String(r.result || ''));
+            r.onerror = (): void => reject(new Error('FileReader failed'));
+            r.readAsDataURL(blob);
+        });
+
+        if (!dataUrl.startsWith('data:image/')) throw new Error('Not an image data URL');
+        return dataUrl;
+    } finally {
+        clearTimeout(t);
+    }
+}
+
+async function inlineAllExternalImagesInHtml(html: string): Promise<string> {
+    const d = document.createElement('div');
+    d.innerHTML = html;
+
+    unwrapImageLinks(d);
+
+    const imgs = Array.from(d.querySelectorAll('img'));
+    for (const img of imgs) {
+        const src = (img.getAttribute('src') || '').trim();
+        if (!src) continue;
+
+        if (isLikelyImageUrl(src)) {
+            try {
+                const dataUrl = await fetchAsDataURL(src);
+                img.setAttribute('src', dataUrl);
+            } catch {
+                // noop
+            }
+        }
+    }
+
+    return d.innerHTML;
+}
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
     private editor: any;
     private readOnly: boolean;
     private value: string;
+    private changeTimeout: any;
+    private editorTimeout = 1000;
+    private changeListener: Array<() => null> = [];
+    private focusListener: Array<(value: string) => null> = [];
+    private toolbar: HTMLDivElement;
+
+    private focusListenerEnabled = true;
 
     private _onVisChange?: () => void;
     private _onBeforeUnload?: () => void;
@@ -37,15 +225,55 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private _lastRawHtml?: string;
     private _lastCleanHtml?: string;
 
+    private _lastEmittedValue?: string;
+
     public onCreate(input: any): void {
         super.onCreate(input);
         this.state = new ComponentState();
+        this.changeListener = [];
+        this.focusListener = [];
     }
 
     public onInput(input: any): void {
         super.onInput(input);
         this.readOnly = input.readOnly ?? false;
-        this.value = input.value;
+
+        const repairedValue = repairImageSrcFromDataAttr(input.value ?? '');
+        const newValue: string = repairedValue ?? '';
+        this.value = newValue;
+
+        if (!this.editor) {
+            return;
+        }
+
+        this.editor.setEditable(!this.readOnly);
+        this.setEditorToolbarVisibility(!this.readOnly);
+
+        if (this._lastEmittedValue === newValue) {
+            return;
+        }
+
+        const { from, to } = this.editor.state.selection;
+
+        this.editor.commands.setContent(normalizeForTiptap(newValue), false, { preserveWhitespace: 'full' });
+
+        const size = this.editor.state.doc.content.size;
+        const safeFrom = Math.min(from, size);
+        const safeTo = Math.min(to, size);
+
+        this.editor
+            .chain()
+            .setTextSelection({ from: safeFrom, to: safeTo })
+            .focus()
+            .run();
+    }
+
+    private setEditorToolbarVisibility(visibility: boolean): void {
+        if (visibility && this.toolbar?.classList.contains('d-none')) {
+            this.toolbar.classList.remove('d-none');
+        } else if (!visibility && !this.toolbar?.classList.contains('d-none')) {
+            this.toolbar?.classList.add('d-none');
+        }
     }
 
     public async onMount(): Promise<void> {
@@ -61,20 +289,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         mountElement.innerHTML = '';
 
         const wrapper = createWrapper();
-        const initialContent: string = normalizeForTiptap(this.value);
+
+        const repairedInitial = repairImageSrcFromDataAttr(this.value);
+        const initialContent: string = normalizeForTiptap(repairedInitial);
 
         const createEditor = (content: string, _tag: string): any =>
             new Tiptap.Editor({
                 element: wrapper,
-                enableContentCheck: true,
-                onContentError: (_error): void => {
-                    try {
-                        const cleaned = normalizeForTiptap(comp.value);
-                        comp.editor?.commands.setContent(cleaned, false);
-                    } catch {
-                        /* noop */
-                    }
-                },
+                enableContentCheck: false,
                 extensions: [
                     Tiptap.StarterKit.configure({ bold: false, paragraph: false }),
                     Tiptap.TextStyle,
@@ -105,12 +327,28 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         suggestion: {
                             char: TextmodulePlugin.TRIGGER,
                             startOfLine: false,
-                            items: async ({ query }): Promise<any[]> =>
-                                await TextmodulePlugin.fetchSuggestions(query),
-                            render: (): any => createMentionPopup(),
+                            items: ({ query }) => TextmodulePlugin.fetchSuggestions(query),
+                            render: () => createMentionPopup(),
                             command: async ({ editor, range, props }): Promise<void> => {
-                                const c2 = await TextmodulePlugin.prepareTextContent(props);
-                                editor.chain().focus().deleteRange(range).insertContent(c2).run();
+                                let resolvedContent: string;
+                                try {
+                                    resolvedContent = await TextmodulePlugin.prepareTextContent(props);
+                                } catch {
+                                    return;
+                                }
+
+                                const safeContent = sanitizeTextmoduleHtml(resolvedContent);
+
+                                try {
+                                    editor
+                                        .chain()
+                                        .focus()
+                                        .deleteRange(range)
+                                        .insertContent(safeContent)
+                                        .run();
+                                } catch {
+                                    // swallow Tiptap errors during insertion
+                                }
                             },
                         },
                     }),
@@ -127,7 +365,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 editable: !comp.readOnly,
 
                 editorProps: {
-                    attributes: { class: 'tiptap-editor-body' },
+                    attributes: { class: 'tiptap-editor-body', style: 'overflow-x: scroll;' },
 
                     handleDrop(view: any, event: DragEvent): boolean {
                         const fileList = event.dataTransfer?.files || null;
@@ -153,6 +391,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     handlePaste(view: any, event: ClipboardEvent): boolean {
                         const cd = event.clipboardData || null;
                         const list = cd?.items;
+
+                        const html = cd?.getData('text/html') || '';
+
+                        if (html && /<table[\s>]/i.test(html)) {
+                            return false;
+                        }
 
                         if (list && list.length) {
                             const items: DataTransferItem[] = Array.from(list);
@@ -180,16 +424,50 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                             }
                         }
 
-                        const text = cd?.getData('text/plain')?.trim();
-                        if (text && /^https?:\/\/.+\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(text)) {
-                            const node = view.state.schema.nodes.resizableImage.create({
-                                src: text,
-                                width: 300,
-                                align: 'left',
-                                isGif: /\.gif(\?.*)?$/i.test(text),
-                            });
-                            view.dispatch(view.state.tr.replaceSelectionWith(node));
+                        if (html && html.includes('<img')) {
                             event.preventDefault();
+
+                            void (async (): Promise<void> => {
+                                try {
+                                    const rewrittenHtml = await inlineAllExternalImagesInHtml(html);
+                                    const safe = normalizeForTiptap(rewrittenHtml);
+
+                                    comp.editor.chain().focus().insertContent(safe).run();
+                                } catch {
+                                    try {
+                                        const safe = normalizeForTiptap(html);
+                                        comp.editor.chain().focus().insertContent(safe).run();
+                                    } catch {
+                                        const textFallback = cd?.getData('text/plain') || '';
+                                        if (textFallback) {
+                                            view.dispatch(view.state.tr.insertText(textFallback));
+                                        }
+                                    }
+                                }
+                            })();
+
+                            return true;
+                        }
+
+                        const text = cd?.getData('text/plain')?.trim() || '';
+                        if (text && isLikelyImageUrl(text)) {
+                            event.preventDefault();
+
+                            void (async (): Promise<void> => {
+                                try {
+                                    const dataUrl = await fetchAsDataURL(text);
+                                    const node = view.state.schema.nodes.resizableImage.create({
+                                        src: dataUrl,
+                                        width: 500,
+                                        align: 'left',
+                                        isGif: /\.gif(\?.*)?$/i.test(text),
+                                    });
+                                    view.dispatch(view.state.tr.replaceSelectionWith(node));
+                                } catch {
+                                    view.dispatch(view.state.tr.insertText(text));
+                                }
+                            })();
+
                             return true;
                         }
 
@@ -216,7 +494,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                                 const currentNode = newPos.parent;
 
                                 if (currentNode.type.name === 'paragraph') {
-                                    let chain = comp.editor.chain().focus();
+                                    const chain = comp.editor.chain().focus();
                                     let appliedFont = false;
                                     let appliedSize = false;
                                     let appliedColor = false;
@@ -225,9 +503,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                                     for (const mark of ms) {
                                         if (mark.type.name === 'bold') chain.setMark('bold');
                                         if (mark.type.name === 'italic') chain.setMark('italic');
-                                        if (mark.type.name === 'underline') {
-                                            chain.setMark('underline');
-                                        }
+                                        if (mark.type.name === 'underline') chain.setMark('underline');
 
                                         if (mark.type.name === 'textStyle') {
                                             if (mark.attrs?.color) {
@@ -293,12 +569,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         },
                     },
 
-                    handleTextInput(
-                        _view: any,
-                        _from: number,
-                        _to: number,
-                        text: string
-                    ): boolean {
+                    handleTextInput(_view: any, _from: number, _to: number, text: string): boolean {
                         if (!inTextblock(comp.editor)) {
                             moveIntoNewParagraph(comp.editor);
                             applyLastUsedMarks(comp.editor);
@@ -316,7 +587,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 },
 
                 onUpdate: ({ editor }: { editor: any }): void => {
-                    const rawHtml = editor.getHTML();
+                    let rawHtml = editor.getHTML();
+
+                    rawHtml = embedImageSrcIntoWrapper(rawHtml);
                     comp._lastRawHtml = rawHtml;
 
                     let cleanedHtml = rawHtml;
@@ -327,10 +600,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     }
                     comp._lastCleanHtml = cleanedHtml;
 
-                    if (stylesWereLost(rawHtml, cleanedHtml)) {
+                    const lostStyles = stylesWereLost(rawHtml, cleanedHtml);
+                    const lostImages = imagesWereLost(rawHtml, cleanedHtml);
+
+                    if (lostStyles || lostImages) {
                         cleanedHtml = rawHtml;
                     }
 
+                    comp._lastEmittedValue = cleanedHtml;
                     (comp as any).emit('valueChanged', cleanedHtml);
                 },
             });
@@ -343,14 +620,50 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.editor = createEditor(fixed, 'E2');
         }
 
+        Tiptap.Editor.prototype.getValue = (): any => {
+            return comp.editor.getHTML();
+        };
+
+        Tiptap.Editor.prototype.addFocusListener = (listener: (value: string) => null): void => {
+            comp.focusListener.push(listener);
+        };
+
+        Tiptap.Editor.prototype.addChangeListener = (listener: () => null): void => {
+            comp.changeListener.push(listener);
+        };
+
+        Tiptap.Editor.prototype.disableFocusListener = comp.disableFocusListener;
+
+        this.editor.addChangeListener(() => {
+            if (this.changeTimeout) {
+                clearTimeout(this.changeTimeout);
+            } else {
+                EventService.getInstance().publish(FormEvent.BLOCK, true);
+            }
+            this.changeTimeout = setTimeout(() => {
+                if (!(this as any).isDestroyed()) {
+                    const value = this.editor.getValue();
+
+                    this._lastEmittedValue = value;
+
+                    (this as any).emit('valueChanged', value);
+                    EventService.getInstance().publish(FormEvent.BLOCK, false);
+                }
+                this.changeTimeout = null;
+            }, this.editorTimeout);
+            return null;
+        });
+
+        this.editor.addFocusListener(this.focusLostFallback.bind(this));
+
         const editor = this.editor;
+        TiptapEditorService.getInstance().setActiveEditor(editor);
 
         const applyDefaultsIntoEmptyBlock = (ed: any): void => {
             const { state } = ed;
             const $from = state.selection.$from;
 
-            const isEmptyBlock =
-                $from.parent?.isTextblock && $from.parent.content.size === 0;
+            const isEmptyBlock = $from.parent?.isTextblock && $from.parent.content.size === 0;
             if (!isEmptyBlock) return;
 
             let chain = ed.chain().focus();
@@ -372,26 +685,133 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         };
 
         editor.on('transaction', ({ editor: ed, transaction }: any): void => {
-            if (!transaction.docChanged) return;
+            const { state } = ed;
+            const $from = state.selection.$from;
 
-            const ts = ed.getAttributes('textStyle') || {};
-            if (ts.fontFamily) ed.storage.lastFontFamily = ts.fontFamily;
-            if (ts.fontSize) ed.storage.lastFontSize = ts.fontSize;
-            if (ts.color) ed.storage.lastFontColor = ts.color;
+            let blockDepth = $from.depth;
+            while (blockDepth > 0 && !$from.node(blockDepth).isBlock) {
+                blockDepth--;
+            }
 
-            if (ed.isActive('bold')) ed.storage.lastBold = true;
-            if (ed.isActive('italic')) ed.storage.lastItalic = true;
-            if (ed.isActive('underline')) ed.storage.lastUnderline = true;
-            if (ed.isActive('strike')) ed.storage.lastStrike = true;
+            const blockNode = $from.node(blockDepth);
+            const parentNode = blockDepth > 0 ? $from.node(blockDepth - 1) : null;
 
-            const hl = ed.getAttributes('highlight')?.color;
-            if (hl) ed.storage.lastHighlightColor = hl;
+            const indexInParent = parentNode ? $from.index(blockDepth - 1) : 0;
+
+            const prevSibling =
+                parentNode && indexInParent > 0 ? parentNode.child(indexInParent - 1) : null;
+
+            const nextSibling =
+                parentNode && indexInParent + 1 < parentNode.childCount
+                    ? parentNode.child(indexInParent + 1)
+                    : null;
+
+            const isEmptyTextblock = !!blockNode?.isTextblock && blockNode.content.size === 0;
+
+            const justAfterTableEmptyPara =
+                isEmptyTextblock && !!prevSibling && prevSibling.type?.name === 'table';
+
+            const justBeforeTableEmptyPara =
+                isEmptyTextblock && !!nextSibling && nextSibling.type?.name === 'table';
+
+            if (justAfterTableEmptyPara && prevSibling) {
+                try {
+                    let lastTextNode: any = null;
+
+                    (prevSibling as any).descendants((node: any) => {
+                        if (node.isText && node.marks && node.marks.length) {
+                            lastTextNode = node;
+                        }
+                    });
+
+                    if (lastTextNode) {
+                        const marks = lastTextNode.marks || [];
+
+                        ed.storage.lastBold = false;
+                        ed.storage.lastItalic = false;
+                        ed.storage.lastUnderline = false;
+                        ed.storage.lastStrike = false;
+                        ed.storage.lastHighlightColor = null;
+                        ed.storage.lastFontFamily = null;
+                        ed.storage.lastFontSize = null;
+                        ed.storage.lastFontColor = null;
+
+                        for (const mark of marks) {
+                            switch (mark.type.name) {
+                                case 'bold':
+                                    ed.storage.lastBold = true;
+                                    break;
+                                case 'italic':
+                                    ed.storage.lastItalic = true;
+                                    break;
+                                case 'underline':
+                                    ed.storage.lastUnderline = true;
+                                    break;
+                                case 'strike':
+                                    ed.storage.lastStrike = true;
+                                    break;
+                                case 'highlight':
+                                    ed.storage.lastHighlightColor = mark.attrs?.color ?? null;
+                                    break;
+                                case 'textStyle':
+                                    if (mark.attrs?.fontFamily) ed.storage.lastFontFamily = mark.attrs.fontFamily;
+                                    if (mark.attrs?.fontSize) ed.storage.lastFontSize = mark.attrs.fontSize;
+                                    if (typeof mark.attrs?.color !== 'undefined') {
+                                        ed.storage.lastFontColor = mark.attrs.color ?? null;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                } catch {
+                    // noop
+                }
+            }
+
+            let inTable = false;
+            for (let d = $from.depth; d > 0; d--) {
+                const node = $from.node(d);
+                if (!node) continue;
+                if (node.type && (node.type.name === 'tableCell' || node.type.name === 'tableHeader')) {
+                    inTable = true;
+                    break;
+                }
+            }
+
+            const inFormattingRegion = inTable || justAfterTableEmptyPara || justBeforeTableEmptyPara;
+
+            if (transaction.docChanged && !justAfterTableEmptyPara) {
+                const ts = ed.getAttributes('textStyle') || {};
+
+                if (ts.fontFamily) ed.storage.lastFontFamily = ts.fontFamily;
+                if (ts.fontSize) ed.storage.lastFontSize = ts.fontSize;
+
+                ed.storage.lastFontColor = typeof ts.color !== 'undefined' ? ts.color : null;
+            }
+
+            if (inFormattingRegion) {
+                if (ed.isActive('bold')) ed.storage.lastBold = true;
+                if (ed.isActive('italic')) ed.storage.lastItalic = true;
+                if (ed.isActive('underline')) ed.storage.lastUnderline = true;
+                if (ed.isActive('strike')) ed.storage.lastStrike = true;
+
+                const hl = ed.getAttributes('highlight')?.color;
+                if (hl) ed.storage.lastHighlightColor = hl;
+            } else {
+                ed.storage.lastBold = ed.isActive('bold');
+                ed.storage.lastItalic = ed.isActive('italic');
+                ed.storage.lastUnderline = ed.isActive('underline');
+                ed.storage.lastStrike = ed.isActive('strike');
+                ed.storage.lastHighlightColor = ed.getAttributes('highlight')?.color ?? null;
+            }
         });
 
         editor.on('selectionUpdate', (): void => applyDefaultsIntoEmptyBlock(editor));
 
-        const toolbar: HTMLDivElement = createToolbar(this.editor);
-        mountElement.appendChild(toolbar);
+        this.toolbar = createToolbar(this.editor);
+        mountElement.appendChild(this.toolbar);
         mountElement.appendChild(wrapper);
 
         function setPlainTypingDefaults(ed: any): void {
@@ -461,7 +881,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             });
 
             ensureDefaultsIfEmpty();
-        })(editor, toolbar);
+        })(editor, this.toolbar);
 
         const saveRaw = (): void => {
             if (!this.editor) return;
@@ -484,6 +904,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this._onVisChange = onVisChange;
         this._onBeforeUnload = onBeforeUnload;
         this._saveRaw = saveRaw;
+    }
+
+    private focusLostFallback(): any {
+        if (!(this as any).isDestroyed() && this.editor?.isFocusListenerEnabled()) {
+            const editorValue = this.editor.getValue();
+            (this as any).emit('focusLost', editorValue);
+        }
+    }
+
+    public disableFocusListener(disableTimeout: number = 1000): void {
+        this.focusListenerEnabled = false;
+        setTimeout(() => {
+            this.focusListenerEnabled = true;
+        }, disableTimeout);
     }
 
     public onDestroy(): void {

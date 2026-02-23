@@ -60,7 +60,7 @@ export class Row extends BindableObject {
         children?.forEach((c) => this.children.push(new Row(this.table, c)));
     }
 
-    public async initializeDisplayValues(): Promise<any[]> {
+    public async initializeDisplayValues(): Promise<void> {
         const promises = [];
         this.cells.forEach((c) => {
             promises.push(c.initDisplayValue());
@@ -69,7 +69,8 @@ export class Row extends BindableObject {
         if (Array.isArray(this.children) && this.children.length) {
             this.children.forEach((cr) => promises.push(cr.initializeDisplayValues()));
         }
-        return Promise.all(promises);
+        const result = await Promise.allSettled(promises);
+        result.filter((r) => r.status === 'rejected').forEach((r) => console.error(r.reason));
     }
 
     public getTable(): Table {

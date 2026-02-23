@@ -17,6 +17,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     blocked: state.blocked,
                 },
             ]
+            role="button"
         >
             <translation-string pattern="Close all open tabs"/>
             <span class="fa fa-times"/>
@@ -30,6 +31,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 blocked: state.blocked,
             },
         ]
+        role="button"
+        aria-label=state.translations["Translatable#Scroll tabs to the left"]
     >
         <span class="fa fa-caret-left"/>
     </div>
@@ -40,6 +43,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 key=tab.contextInstanceId
                 active=tab.active
                 title=tab.displayText
+                aria-label=tab.displayText
                 on-click("tabClicked", tab)
                 on-dblclick("tabDblClicked", tab)
                 on-dragstart("drag", tab)
@@ -99,6 +103,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 blocked: state.blocked,
             },
         ]
+        role="button"
+        aria-label=state.translations["Translatable#Scroll tabs to the right"]
     >
         <span class="fa fa-caret-right"/>
     </div>
@@ -111,6 +117,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     blocked: state.blocked,
                 },
             ]
+            role="button"
+            aria-label=state.translations["Translatable#Close all open tabs"]
         >
             <span class="fa fa-times"/>
         </div>

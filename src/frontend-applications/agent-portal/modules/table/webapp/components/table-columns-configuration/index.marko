@@ -10,9 +10,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <h2 class="configuration-title">
     <translation-string pattern="Translatable#Table Columns"/>
 </h2>
-<div class="row">
-    <div class="col-6">
-        <div class="property-chooser">
+<div class="row m-0">
+    <div class="col-12 col-md-6 col-sm-6">
+        <div class="property-chooser p-1">
             <label>
                 ${state.translations["Translatable#Dependency"] +
                 (state.dependencyName ? ` (${state.dependencyName})` : "")}
@@ -20,17 +20,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <form-list treeId=state.dependencyTreeId multiselect/>
         </div>
     </div>
-    <div class="col-6">
-        <div class="property-chooser">
+    <div class="col-12 col-md-6 col-sm-6">
+        <div class="property-chooser p-1">
             <label>${state.translations["Translatable#Property"]}</label>
             <form-list treeId=state.propertyTreeId multiselect freeText/>
             <button
                 type="button"
                 on-click("addColumn")
                 title=(state.translations["Translatable#Add Column(s)"])
-                class="kix-button submit-button"
-            >
-                <span class="kix-icon-plus-blank"/>
+                class="kix-button submit-button">
+                <span class="kix-icon-plus-blank" aria-hidden="true"/>
                 <translation-string pattern="Translatable#Add Column(s)"/>
             </button>
         </div>
@@ -103,8 +102,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 draggable="true"
                 on-dragstart("rowDragstart", column)
                 on-dragover("rowDragover", column)
-                on-drop("rowDroped", column)
-            >
+                on-drop("rowDroped", column)>
                 <if(!state.loading)>
                     <td title=(state.columnNames[column.property])>
                         <span>${state.columnNames[column.property]}</span>
@@ -170,8 +168,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             type="numeric"
                             value=column.size
                             on-change("columnSizeChanged", column)
-                            class="input-style"
-                        >
+                            class="input-style">
                     </td>
                     <td>
                         <input
@@ -182,8 +179,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 "componentId",
                                 column,
                             )
-                            class="input-style"
-                        >
+                            class="input-style">
                     </td>
                     <td>
                         <input
@@ -194,8 +190,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 "defaultText",
                                 column,
                             )
-                            class="input-style"
-                        >
+                            class="input-style">
                     </td>
                 </if>
                 <td>
@@ -203,8 +198,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         type="button"
                         title=(state.translations["Translatable#Remove"])
                         on-click("removeColumn", column)
-                        class="form-control-button button-without-text"
-                    >
+                        class="form-control-button button-without-text">
                         <span class="kix-icon-minus"/>
                     </button>
                 </td>

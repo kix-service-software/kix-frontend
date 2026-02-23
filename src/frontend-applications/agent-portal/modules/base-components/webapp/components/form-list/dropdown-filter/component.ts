@@ -30,6 +30,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.autocompleteConfiguration = input.autocompleteConfiguration;
         this.state.searchCallback = input.autocompleteSearchCallback;
         this.state.freeText = typeof input.freeText !== 'undefined' ? input.freeText : false;
+        this.state.filterByTree = typeof input.filterByTree !== 'undefined' ? input.filterByTree : false;
         this.update();
     }
 
@@ -167,7 +168,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.autocompleteConfiguration.limit, this.state.filterValue
         ) || [];
 
-        this.handler.setTree(nodes, null, true);
+        // filter by tree if requested (filter values with * are not supported => show all nodes)
+        const filterByTree = this.state.filterByTree &&
+            this.state.filterValue && this.state.filterValue.indexOf('*') === -1;
+        this.handler.setTree(nodes, filterByTree ? this.state.filterValue : null, true);
+
         this.state.tree = nodes;
 
         this.state.loading = false;

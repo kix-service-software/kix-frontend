@@ -8,7 +8,15 @@
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
                 "LASSO_TIMEOUT": "360000",
                 "SHOW_MODULE_COMPLAINS": "1",
-                "ENABLE_PROFILING": "true"
+                "LOG_LEVEL": "3",
+                "UPDATE_TRANSLATIONS": "true",
+                "BACKEND_API_TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJWYWxpZFVudGlsIjoiOTk5OS0xMi0zMSAyMzo1OTo1OSIsIklnbm9yZU1heElkbGVUaW1lIjoxLCJDcmVhdGVUaW1lVW5peCI6MTU3Nzk3OTM1MiwiVG9rZW5UeXBlIjoiQWNjZXNzVG9rZW4iLCJWYWxpZFVudGlsVGltZVVuaXgiOjI1MzQwMjI5NzE5OSwiVXNlclR5cGUiOiJBZ2VudCIsIkRlc2NyaXB0aW9uIjoiQVBJIGZyb250ZW5kIHRva2VuIiwiVXNlcklEIjoxLCJBbGxvd2VkT3BlcmF0aW9ucyI6W10sIlJlbW90ZUlQIjoiMC4wLjAuMCIsIkRlbmllZE9wZXJhdGlvbnMiOltdfQ.ctOinG4qewVzTIKdde0TaVbR0JvgeAt4m0fdipFaK9E",
+                "REDIS_CACHE_PORT": "8001",
+                "REDIS_CACHE_HOST": "localhost",
+                "OBJECT_ICONS_PATH": "/home/dhein/KIXng/objecticons",
+                "APPLICATION": "agent-portal,SSP",
+                "CLUSTER_ENABLED": "false",
+                "CLUSTER_WORKER_COUNT": "4"
             },
             "name": "KIX - Start Server",
             "program": "${workspaceFolder}/src/server/index.ts",
@@ -65,10 +73,18 @@
             "cwd": "${workspaceFolder}",
             "env": {
                 "NODE_ENV": "development",
-                "http_proxy": "",
-                "https_proxy": "",
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
-                "LASSO_TIMEOUT": "200000"
+                "LASSO_TIMEOUT": "360000",
+                "SHOW_MODULE_COMPLAINS": "1",
+                "LOG_LEVEL": "3",
+                "UPDATE_TRANSLATIONS": "true",
+                "BACKEND_API_TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJWYWxpZFVudGlsIjoiOTk5OS0xMi0zMSAyMzo1OTo1OSIsIklnbm9yZU1heElkbGVUaW1lIjoxLCJDcmVhdGVUaW1lVW5peCI6MTU3Nzk3OTM1MiwiVG9rZW5UeXBlIjoiQWNjZXNzVG9rZW4iLCJWYWxpZFVudGlsVGltZVVuaXgiOjI1MzQwMjI5NzE5OSwiVXNlclR5cGUiOiJBZ2VudCIsIkRlc2NyaXB0aW9uIjoiQVBJIGZyb250ZW5kIHRva2VuIiwiVXNlcklEIjoxLCJBbGxvd2VkT3BlcmF0aW9ucyI6W10sIlJlbW90ZUlQIjoiMC4wLjAuMCIsIkRlbmllZE9wZXJhdGlvbnMiOltdfQ.ctOinG4qewVzTIKdde0TaVbR0JvgeAt4m0fdipFaK9E",
+                "REDIS_CACHE_PORT": "8001",
+                "REDIS_CACHE_HOST": "localhost",
+                "OBJECT_ICONS_PATH": "/home/dhein/KIXng/objecticons",
+                "APPLICATION": "agent-portal,SSP",
+                "CLUSTER_ENABLED": "false",
+                "CLUSTER_WORKER_COUNT": "4"
             },
             "name": "KIX Restart Server",
             "program": "${workspaceFolder}/src/server/index.ts",
@@ -96,8 +112,7 @@
                 "--require",
                 "source-map-support/register",
                 "--exit",
-                "tests/**/*.test.ts",
-                "src/**/*.test.ts"
+                "src/frontend-applications/agent-portal/server/tests/api/**/*.test.ts"
             ],
             "env": {
                 "NODE_ENV": "test",

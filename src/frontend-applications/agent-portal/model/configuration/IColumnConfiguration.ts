@@ -29,5 +29,6 @@ export interface IColumnConfiguration extends IConfiguration {
     titleTranslatable: boolean;
     useObjectServiceForFilter: boolean;
     rtl: boolean;
+    noLink?: boolean;
 
 }

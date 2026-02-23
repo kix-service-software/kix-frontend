@@ -13,7 +13,7 @@ import { SearchProperty } from '../../../search/model/SearchProperty';
 import { ContactProperty } from '../../model/ContactProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { SearchOperator } from '../../../search/model/SearchOperator';
@@ -26,12 +26,20 @@ import { SearchFormManager } from '../../../base-components/webapp/core/SearchFo
 import { Contact } from '../../model/Contact';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { SearchOperatorUtil } from '../../../search/webapp/core/SearchOperatorUtil';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { OrganisationProperty } from '../../model/OrganisationProperty';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { OrganisationService } from './OrganisationService';
 
 export class ContactSearchFormManager extends SearchFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
 
     protected readPermissions: Map<string, boolean> = new Map();
+
+    public useOwnSearch: boolean = true;
 
     public constructor(
         public ignorePropertiesFixed: string[] = [],
@@ -57,7 +65,10 @@ export class ContactSearchFormManager extends SearchFormManager {
         ];
 
         if (await this.checkReadPermissions('organisations')) {
-            properties.push([ContactProperty.PRIMARY_ORGANISATION_ID, 'Translatable#Assigned Organisation']);
+            properties.push(
+                [ContactProperty.PRIMARY_ORGANISATION_ID, 'Translatable#Primary Organisation'],
+                [ContactProperty.ORGANISATION_IDS, 'Translatable#Assigned Organisations']
+            );
         }
 
         if (await this.checkReadPermissions('system/valid')) {
@@ -84,7 +95,7 @@ export class ContactSearchFormManager extends SearchFormManager {
 
     protected async checkReadPermissions(resource: string): Promise<boolean> {
         if (!this.readPermissions.has(resource)) {
-            const permission = await AuthenticationSocketClient.getInstance().checkPermissions(
+            const permission = await SessionAPIClient.checkPermissions(
                 [new UIComponentPermission(resource, [CRUD.READ])]
             );
             this.readPermissions.set(resource, permission);
@@ -132,7 +143,8 @@ export class ContactSearchFormManager extends SearchFormManager {
 
     private isDropDown(property: string): boolean {
         return property === KIXObjectProperty.VALID_ID
-            || property === ContactProperty.PRIMARY_ORGANISATION_ID;
+            || property === ContactProperty.PRIMARY_ORGANISATION_ID
+            || property === ContactProperty.ORGANISATION_IDS;
     }
 
     public getOperatorDisplayText(operator: string): Promise<string> {
@@ -154,6 +166,7 @@ export class ContactSearchFormManager extends SearchFormManager {
         let nodes = [];
         switch (property) {
             case ContactProperty.PRIMARY_ORGANISATION_ID:
+            case ContactProperty.ORGANISATION_IDS:
                 if (objectIds) {
                     const organisations = await KIXObjectService.loadObjects<Organisation>(
                         KIXObjectType.ORGANISATION, objectIds
@@ -175,5 +188,43 @@ export class ContactSearchFormManager extends SearchFormManager {
     public async getSortAttributeTree(): Promise<TreeNode[]> {
         // TODO: currently not supported
         return;
+    }
+
+    public async searchObjectTree(property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<TreeNode[]> {
+
+        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
+
+        let tree = [];
+        switch (property) {
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+            case ContactProperty.ORGANISATION_IDS:
+                if (!loadingOptions && searchValue)
+                    loadingOptions = new KIXObjectLoadingOptions();
+
+                if (loadingOptions) {
+                    loadingOptions.filter.push(
+                        new FilterCriteria(
+                            OrganisationProperty.NAME, SearchOperator.LIKE, FilterDataType.STRING,
+                            FilterType.AND, '*' + searchValue + '*',
+                        )
+                    );
+                    loadingOptions.includes.push(OrganisationProperty.SUB_ORGANISATIONS);
+                    loadingOptions.expands.push(OrganisationProperty.SUB_ORGANISATIONS);
+                }
+                const organisations = await KIXObjectService.loadObjects(
+                    KIXObjectType.ORGANISATION, undefined, loadingOptions
+                );
+                tree = await OrganisationService.getInstance().prepareObjectTree(
+                    organisations, true, true
+                );
+                break;
+            default:
+                tree = await KIXObjectService.searchObjectTree(
+                    this.objectType, property, searchValue, loadingOptions, undefined, showInvalid
+                );
+        }
+
+        return tree;
     }
 }

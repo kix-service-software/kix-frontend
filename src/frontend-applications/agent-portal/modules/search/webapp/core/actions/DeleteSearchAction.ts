@@ -17,10 +17,9 @@ import { EventService } from '../../../../../modules/base-components/webapp/core
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { Error } from '../../../../../../../server/model/Error';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { SearchContext } from '../SearchContext';
-import { AgentSocketClient } from '../../../../user/webapp/core/AgentSocketClient';
 import { User } from '../../../../user/model/User';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 
 export class DeleteSearchAction extends AbstractAction<any, SearchContext> {
 
@@ -30,7 +29,7 @@ export class DeleteSearchAction extends AbstractAction<any, SearchContext> {
         await super.initAction();
         this.text = 'Translatable#Delete Search';
         this.icon = 'kix-icon-trash';
-        this.user = await AgentSocketClient.getInstance().getCurrentUser();
+        this.user = await SessionAPIClient.getCurrentUser();
     }
 
     public canRun(): boolean {

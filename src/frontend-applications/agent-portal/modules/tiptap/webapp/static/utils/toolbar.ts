@@ -821,45 +821,330 @@ export function createToolbar(editor: any): HTMLDivElement {
     });
 
     // === Text Color Picker ===
-    const colorInput = document.createElement('input');
-    colorInput.type = 'color';
-    colorInput.style.position = 'absolute';
-    colorInput.style.opacity = '0';
-    colorInput.style.width = '100%';
-    colorInput.style.height = '100%';
-    colorInput.style.cursor = 'pointer';
-    colorInput.style.left = '0';
-    colorInput.style.top = '0';
 
-    colorInput.oninput = (): void => {
-        const color = colorInput.value;
-        editor.chain().focus().setColor(color).run();
-        editor.storage.lastFontColor = color;
+    const defaultTextColor = '#000000';
+
+    const presetColors: string[] = [
+        '#000000', '#333333', '#666666', '#999999', '#CCCCCC', '#FFFFFF',
+        '#E03131', '#F08C00', '#FFD43B', '#37B24D', '#1098AD', '#4263EB', '#7048E8', '#D6336C',
+    ];
+
+    let recentColors: string[] = [];
+
+    const getCurrentTextColor = (): string => {
+        const ts = editor.getAttributes('textStyle') || {};
+        const markColor = ts.color ?? null;
+        return markColor ?? editor.storage.lastFontColor ?? defaultTextColor;
     };
 
-    const colorButtonWrapper = document.createElement('div');
+    const applyTextColor = (color: string, recordRecent: boolean = true): void => {
+        const chain = editor.chain().focus();
+
+        chain.setColor(color);
+        editor.storage.lastFontColor = color;
+
+        if (recordRecent) {
+            if (!recentColors.includes(color)) {
+                recentColors.unshift(color);
+                if (recentColors.length > 8) {
+                    recentColors = recentColors.slice(0, 8);
+                }
+            }
+        }
+
+        chain.run();
+        updateColorIndicator();
+        renderColorDropdownItems();
+    };
+
+    const colorButtonWrapper = document.createElement('button');
+    colorButtonWrapper.type = 'button';
     colorButtonWrapper.classList.add(
         'btn',
+        'btn-sm',
         'position-relative',
-        'd-flex',
-        'justify-content-center',
+        'd-inline-flex',
         'align-items-center',
+        'justify-content-center',
         'color-picker-wrapper'
     );
-    colorButtonWrapper.style.width = '36px';
-    colorButtonWrapper.style.height = '36px';
-    colorButtonWrapper.title = 'Text Color';
+    colorButtonWrapper.style.padding = '0 6px';
+    colorButtonWrapper.style.height = '32px';
+    colorButtonWrapper.title = 'Text color';
+    colorButtonWrapper.setAttribute('aria-label', 'Text color');
+    colorButtonWrapper.setAttribute('aria-haspopup', 'true');
+    colorButtonWrapper.setAttribute('aria-expanded', 'false');
 
-    const colorIcon = document.createElement('i');
-    colorIcon.className = 'fas fa-palette';
-    colorButtonWrapper.appendChild(colorIcon);
+    const iconWrapper = document.createElement('span');
+    iconWrapper.style.display = 'flex';
+    iconWrapper.style.flexDirection = 'column';
+    iconWrapper.style.alignItems = 'center';
+    iconWrapper.style.gap = '1px';
 
-    colorButtonWrapper.appendChild(colorInput);
+    const aIcon = document.createElement('span');
+    aIcon.textContent = 'A';
+    aIcon.style.fontSize = '17px';
+    aIcon.style.lineHeight = '16px';
+
+    const underline = document.createElement('span');
+    underline.style.display = 'block';
+    underline.style.width = '16px';
+    underline.style.height = '2px';
+    underline.style.borderRadius = '1px';
+    underline.style.backgroundColor = defaultTextColor;
+
+    iconWrapper.appendChild(aIcon);
+    iconWrapper.appendChild(underline);
+
+    const caretSpan = document.createElement('span');
+    caretSpan.textContent = '▾';
+    caretSpan.style.fontSize = '10px';
+    caretSpan.style.marginLeft = '4px';
+
+    const contentWrapper = document.createElement('span');
+    contentWrapper.style.display = 'inline-flex';
+    contentWrapper.style.alignItems = 'center';
+    contentWrapper.style.gap = '2px';
+
+    contentWrapper.appendChild(iconWrapper);
+    contentWrapper.appendChild(caretSpan);
+    colorButtonWrapper.appendChild(contentWrapper);
+
+    const nativeColorInput = document.createElement('input');
+    nativeColorInput.type = 'color';
+    nativeColorInput.style.position = 'absolute';
+    nativeColorInput.style.opacity = '0';
+    nativeColorInput.style.pointerEvents = 'none';
+    nativeColorInput.style.width = '1px';
+    nativeColorInput.style.height = '1px';
+    nativeColorInput.tabIndex = -1;
+
+    nativeColorInput.addEventListener('input', (): void => {
+        const value = nativeColorInput.value;
+        if (value) {
+            applyTextColor(value);
+        }
+    });
+
+    colorButtonWrapper.appendChild(nativeColorInput);
+
+    const colorDropdown = document.createElement('div');
+    colorDropdown.className = 'tiptap-color-dropdown-menu';
+    Object.assign(colorDropdown.style, {
+        position: 'absolute',
+        top: '100%',
+        left: '0',
+        marginTop: '2px',
+        backgroundColor: '#fff',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+        display: 'none',
+        minWidth: '220px',
+        zIndex: '1000',
+        padding: '6px',
+    });
+    colorDropdown.setAttribute('role', 'menu');
+
+    const makeSectionTitle = (text: string): HTMLDivElement => {
+        const el = document.createElement('div');
+        el.textContent = text;
+        Object.assign(el.style, {
+            fontSize: '11px',
+            textTransform: 'uppercase',
+            color: '#777',
+            margin: '4px 2px 2px 2px',
+        });
+        return el;
+    };
+
+    const makeColorGrid = (colors: string[], ariaPrefix: string): HTMLDivElement => {
+        const wrap = document.createElement('div');
+        Object.assign(wrap.style, {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(8, 20px)',
+            gap: '2px',
+            marginBottom: '4px',
+        });
+
+        colors.forEach((color): void => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'tiptap-color-swatch-btn';
+            btn.setAttribute('role', 'menuitem');
+            btn.setAttribute('aria-label', `${ariaPrefix} ${color}`);
+
+            Object.assign(btn.style, {
+                width: '20px',
+                height: '20px',
+                padding: '0',
+                borderRadius: '2px',
+                border: '1px solid #ccc',
+                backgroundColor: color,
+                cursor: 'pointer',
+            });
+
+            btn.onclick = (e: MouseEvent): void => {
+                e.stopPropagation();
+                applyTextColor(color);
+                hideColorDropdown();
+            };
+
+            wrap.appendChild(btn);
+        });
+
+        return wrap;
+    };
+
+    const renderColorDropdownItems = (): void => {
+        colorDropdown.innerHTML = '';
+
+        const defaultBtn = document.createElement('button');
+        defaultBtn.type = 'button';
+        defaultBtn.className = 'dropdown-item';
+        Object.assign(defaultBtn.style, {
+            width: '100%',
+            textAlign: 'left',
+            padding: '4px 8px',
+            fontSize: '13px',
+            border: 'none',
+            background: 'transparent',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            color: '#000',
+        });
+
+        const defaultDot = document.createElement('span');
+        Object.assign(defaultDot.style, {
+            width: '14px',
+            height: '14px',
+            borderRadius: '3px',
+            border: '1px solid #ccc',
+            backgroundColor: defaultTextColor,
+            display: 'inline-block',
+        });
+
+        const defaultLabel = document.createElement('span');
+        defaultLabel.textContent = 'Default (Automatic)';
+
+        defaultBtn.appendChild(defaultDot);
+        defaultBtn.appendChild(defaultLabel);
+
+        defaultBtn.onmouseenter = (): void => {
+            defaultBtn.style.backgroundColor = '#0a7cb3';
+            defaultBtn.style.color = '#fff';
+        };
+        defaultBtn.onmouseleave = (): void => {
+            defaultBtn.style.backgroundColor = 'transparent';
+            defaultBtn.style.color = '#000';
+        };
+
+        defaultBtn.onclick = (e: MouseEvent): void => {
+            e.stopPropagation();
+            applyTextColor(defaultTextColor);
+            hideColorDropdown();
+        };
+
+        colorDropdown.appendChild(defaultBtn);
+
+        colorDropdown.appendChild(makeSectionTitle('Preset'));
+        colorDropdown.appendChild(makeColorGrid(presetColors, 'Preset color'));
+
+        if (recentColors.length) {
+            colorDropdown.appendChild(makeSectionTitle('Recent'));
+            colorDropdown.appendChild(makeColorGrid(recentColors, 'Recent color'));
+        }
+
+        const customBtn = document.createElement('button');
+        customBtn.type = 'button';
+        customBtn.textContent = 'Custom color…';
+        customBtn.className = 'dropdown-item';
+        Object.assign(customBtn.style, {
+            width: '100%',
+            textAlign: 'left',
+            padding: '4px 8px',
+            fontSize: '13px',
+            border: 'none',
+            background: 'transparent',
+            cursor: 'pointer',
+            marginTop: '4px',
+            color: '#000',
+        });
+
+        customBtn.onmouseenter = (): void => {
+            customBtn.style.backgroundColor = '#0a7cb3';
+            customBtn.style.color = '#fff';
+        };
+        customBtn.onmouseleave = (): void => {
+            customBtn.style.backgroundColor = 'transparent';
+            customBtn.style.color = '#000';
+        };
+
+        customBtn.onclick = (e: MouseEvent): void => {
+            e.stopPropagation();
+            nativeColorInput.click();
+        };
+
+        colorDropdown.appendChild(customBtn);
+    };
+
+    const showColorDropdown = (): void => {
+        renderColorDropdownItems();
+        colorDropdown.style.display = 'block';
+        colorButtonWrapper.setAttribute('aria-expanded', 'true');
+    };
+
+    const hideColorDropdown = (): void => {
+        colorDropdown.style.display = 'none';
+        colorButtonWrapper.setAttribute('aria-expanded', 'false');
+    };
+
+    const toggleColorDropdown = (): void => {
+        const isVisible = colorDropdown.style.display === 'block';
+
+        document.querySelectorAll('.tiptap-color-dropdown-menu').forEach((el): void => {
+            (el as HTMLElement).style.display = 'none';
+        });
+
+        if (isVisible) {
+            hideColorDropdown();
+        } else {
+            showColorDropdown();
+        }
+    };
+
+    colorButtonWrapper.addEventListener('click', (e: MouseEvent): void => {
+        if ((e.target as HTMLElement).closest('.tiptap-color-dropdown-menu')) return;
+        e.stopPropagation();
+        toggleColorDropdown();
+    });
+
+    document.addEventListener('click', (e: MouseEvent): void => {
+        if (!toolbar.contains(e.target as Node)) {
+            hideColorDropdown();
+        }
+    });
+
+    colorButtonWrapper.appendChild(colorDropdown);
     toolbar.appendChild(colorButtonWrapper);
 
-    colorButtonWrapper.onclick = (): void => {
-        colorInput.click();
+    const updateColorIndicator = (): void => {
+        const currentColor = getCurrentTextColor();
+        aIcon.style.color = currentColor || defaultTextColor;
+        underline.style.backgroundColor = currentColor || defaultTextColor;
     };
+
+    editor.on('selectionUpdate', updateColorIndicator);
+    editor.on('transaction', ({ transaction }: any): void => {
+        if (transaction.selectionSet || transaction.docChanged) {
+            updateColorIndicator();
+        }
+    });
+    editor.on('update', updateColorIndicator);
+
+    updateColorIndicator();
 
     // === Resizable Image Input ===
     const resizableImageInput: HTMLInputElement = document.createElement('input');
@@ -897,6 +1182,7 @@ export function createToolbar(editor: any): HTMLDivElement {
     const imageButtonWrapper = document.createElement('div');
     imageButtonWrapper.className = 'btn position-relative';
     imageButtonWrapper.title = 'Insert Image';
+    imageButtonWrapper.tabIndex = 0;
 
     const imageIcon = document.createElement('i');
     imageIcon.className = 'fas fa-image';
@@ -1091,7 +1377,7 @@ export function createToolbar(editor: any): HTMLDivElement {
     // === Reset Button States ===
     const clearFormattingButton = createIconButton(
         'fas fa-eraser',
-        () => {
+        (): void => {
             const { state, view } = editor;
             const wantFamily = 'Arial';
             const wantSize = '14';
@@ -1115,9 +1401,10 @@ export function createToolbar(editor: any): HTMLDivElement {
             view.dispatch(tr);
             view.focus();
 
+            editor.chain().focus().unsetColor().run();
             editor.storage.lastFontFamily = wantFamily;
             editor.storage.lastFontSize = wantSize;
-            editor.storage.lastFontColor = null;
+            editor.storage.lastFontColor = defaultTextColor;
             editor.storage.lastHighlightColor = null;
             editor.storage.lastBold = false;
             editor.storage.lastItalic = false;
@@ -1125,11 +1412,13 @@ export function createToolbar(editor: any): HTMLDivElement {
             editor.storage.lastStrike = false;
             skipNextFormatReapply = true;
 
-            const highlightIcon = toolbar.querySelector('.highlight-icon') as HTMLElement;
-            if (highlightIcon) highlightIcon.style.backgroundColor = 'transparent';
+            recentColors = [
+                defaultTextColor,
+                ...recentColors.filter((c) => c !== defaultTextColor),
+            ].slice(0, 8);
 
-            const colorBtn = toolbar.querySelector('.color-picker-wrapper') as HTMLElement;
-            if (colorBtn) colorBtn.style.backgroundColor = 'transparent';
+            const highlightIconEl = toolbar.querySelector('.highlight-icon') as HTMLElement;
+            if (highlightIconEl) highlightIconEl.style.backgroundColor = 'transparent';
 
             const fontBtn = toolbar.querySelector('.tiptap-font-dropdown-button') as HTMLElement;
             if (fontBtn?.childNodes?.[0]) (fontBtn.childNodes[0] as any).textContent = wantFamily;
@@ -1138,6 +1427,7 @@ export function createToolbar(editor: any): HTMLDivElement {
             if (fontSizeBtn?.childNodes?.[0]) (fontSizeBtn.childNodes[0] as any).textContent = `${wantSize}px`;
 
             updateActiveButtons();
+            updateColorIndicator();
         },
         'Plain typing (reset)'
     );

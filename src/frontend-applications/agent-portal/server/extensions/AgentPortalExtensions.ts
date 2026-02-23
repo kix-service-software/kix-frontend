@@ -21,8 +21,6 @@ export enum AgentPortalExtensions {
 
     PERSONAL_SETTINGS = 'kix:personal:settings',
 
-    ROUTER = 'kix:router',
-
     SERVICES = 'kix:services',
 
     MARKO_APPLICATION = 'kix:agent-portal:marko-application',
@@ -37,6 +35,8 @@ export enum AgentPortalExtensions {
 
     MIGRATION = 'kix:migration',
 
-    AUTH_ROUTER_HANDLER = 'kix:auth-router:handler'
+    AUTH_ROUTER_HANDLER = 'kix:auth-router:handler',
+
+    PLUGIN = 'kix:plugin'
 
 }

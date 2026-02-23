@@ -8,41 +8,25 @@
  */
 
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { OutOfOfficeProperty } from './OutOfOfficeProperty';
-import { User } from '../model/User';
 
 export class OutOfOffice {
 
     public ObjectId: string | number;
 
-    public KIXObjectType: KIXObjectType | string = KIXObjectType.USER_PREFERENCE;
+    public KIXObjectType: KIXObjectType | string = KIXObjectType.USER;
 
     public Start: Date | string = null;
 
     public End: Date | string = null;
 
-    public Substitute: User = null;
+    public Substitute: number = null;
 
-    public Properties: string[] = [];
-
-    public constructor(
-        outOfOffice?: OutOfOffice, start?: Date | string, end?: Date | string, substitute?: User
-    ) {
+    public constructor(outOfOffice?: OutOfOffice) {
 
         if (outOfOffice) {
             this.Start = outOfOffice.Start;
             this.End = outOfOffice.End;
             this.Substitute = outOfOffice.Substitute;
         }
-        else {
-            this.Start = start;
-            this.End = end;
-            this.Substitute = substitute;
-        }
-        this.Properties = [
-            OutOfOfficeProperty.START,
-            OutOfOfficeProperty.END,
-            OutOfOfficeProperty.SUBSTITUTE
-        ];
     }
 }

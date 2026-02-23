@@ -7,13 +7,15 @@
  * --
  */
 
+import { IdService } from '../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public dragging: boolean = false,
-        public maxUploadSizeInfo: string = ''
+        public maxUploadSizeInfo: string = '',
+        public descriptionId: string = IdService.generateDateBasedId('desc-'),
     ) {
         super();
     }

@@ -3595,6 +3595,9 @@ msgstr ""
 msgid "Not more than 5 files possible."
 msgstr ""
 
+msgid "Not set"
+msgstr ""
+
 msgid "Note"
 msgstr ""
 
@@ -4598,15 +4601,12 @@ msgid "Setup email server"
 msgstr ""
 
 msgid "Share_Search_Template"
-msgstr "share search template"
+msgstr "Share search template"
 
 msgid "Shared Search"
 msgstr ""
 
 msgid "Shared Searches"
-msgstr ""
-
-msgid "Show Backlog"
 msgstr ""
 
 msgid "Show Filter"

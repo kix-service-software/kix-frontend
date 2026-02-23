@@ -12,7 +12,7 @@ import { FilterCriteria } from './FilterCriteria';
 export class KIXObjectLoadingOptions {
 
     public constructor(
-        public filter?: FilterCriteria[],
+        public filter: FilterCriteria[] = [],
         public sortOrder?: string,
         public limit?: number,
         public includes: string[] = [],

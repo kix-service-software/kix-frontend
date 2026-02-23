@@ -8,19 +8,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <macro name="widget-viewbar">
-    <if(state.hasViews)>
-        <div class="d-flex justify-content-start gap-1" role="group">
+    <div class="widget-viewbar d-flex justify-content-start gap-0" role="group">
+        <if(state.hasViews)>
             <button
                 type="button"
                 class=[
                     "btn btn-sm fs-4 p-0 px-1",
                     {
-                        "border-0 bg-light text-secondary":
-                            state.activeViewId === "table",
+                        show: state.activeViewId === "table",
                     },
                 ]
                 on-click("toggleView", "table")
-                title="Table">
+                title=(state.translations["Translatable#Table"])>
                 <icon icon="kix-icon-legend"/>
             </button>
             <for|view| of=state.dataViews>
@@ -29,8 +28,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     class=[
                         "btn btn-sm fs-4 p-0 px-1",
                         {
-                            "border-0 bg-light text-secondary":
-                                state.activeViewId === view.id,
+                            show: state.activeViewId === view.id,
                         },
                     ]
                     on-click("toggleView", view.id)
@@ -38,6 +36,28 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <icon icon=view.icon/>
                 </button>
             </for>
+        </if>
+    </div>
+</macro>
+
+<macro name="widget-filter">
+    <if(state.showFilter && !state.showFilterInBody)>
+        <filter
+            filterCount=state.filterCount
+            predefinedFilter=state.predefinedTableFilter
+            predefinedFilterName=state.predefinedFilterName
+            predefinedFilterPlaceholder=state.filterPlaceholder
+            disabled=state.isFiltering
+            filterValue=state.filterValue
+            on-filter("filter")
+            key="table-widget-filter"/>
+    </if>
+    <if(input.filterActions)>
+        <div class="filter-action-list">
+            <action-list
+                contextInstanceId=input.contextInstanceId
+                list=input.filterActions
+                displayText=false/>
         </div>
     </if>
 </macro>
@@ -57,36 +77,45 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <widget-viewbar/>
         </@headercontent>
         <@headerfilter>
-            <if(state.showFilter && !state.showFilterInBody)>
-                <filter
-                    filterCount=state.filterCount
-                    predefinedFilter=state.predefinedTableFilter
-                    predefinedFilterName=state.predefinedFilterName
-                    predefinedFilterPlaceholder=state.filterPlaceholder
-                    disabled=state.isFiltering
-                    filterValue=state.filterValue
-                    on-filter("filter")
-                    key="table-widget-filter"/>
+            <if(state.isLarge)>
+                <widget-filter/>
             </if>
-            <if(input.filterActions)>
-                <div class="filter-action-list">
-                    <action-list
-                        contextInstanceId=input.contextInstanceId
-                        list=input.filterActions
-                        displayText=false/>
+            <else-if(
+                (state.showFilter && !state.showFilterInBody) ||
+                input.filterActions
+            )>
+                <div class="widget-filter-dropdown">
+                    <button
+                        class="btn d-flex align-items-center dropdown-toggle me-2"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        data-bs-auto-close="outside"
+                        title=(state.translations["Translatable#Show filter"])
+                        aria-label=(
+                            state.translations["Translatable#Show filter"]
+                        )
+                        aria-expanded="false">
+                        <icon icon="kix-icon-filter"/>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li class="mx-2">
+                            <widget-filter/>
+                        </li>
+                    </ul>
                 </div>
-            </if>
+            </else-if>
             <if(state.showFilterReset && !state.showFilterInBody)>
-                <span
+                <button
                     class=["table-reset-filter", "icon", "fas fa-window-close"]
                     title=component.resetFilterTitle
+                    aria-label=component.resetFilterTitle
                     on-click("resetFilter")>
                     <span class="path1"/>
                     <span class="path2"/>
                     <span class="path3"/>
                     <span class="path4"/>
                     <span class="path5"/>
-                </span>
+                </button>
             </if>
         </@headerfilter>
         <@content>

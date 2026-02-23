@@ -16,7 +16,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     ]>
         <if(input.page.description)>
             <div class="alert alert-light" role="alert">
-                <iframe-content html=(input.page.description)/>
+                <iframe-content
+                    html=(input.page.description)
+                    style="min-height: unset;"
+                    calculateHeight
+                    extraSpace=0/>
             </div>
         </if>
 

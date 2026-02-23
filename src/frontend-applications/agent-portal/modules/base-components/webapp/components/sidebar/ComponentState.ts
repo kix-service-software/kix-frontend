@@ -14,7 +14,8 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public contextList: Context[] = [],
-        public reloadSidebarId: string = null
+        public reloadSidebarId: string = null,
+        public showSidebarArea: boolean = false
     ) {
         super();
     }

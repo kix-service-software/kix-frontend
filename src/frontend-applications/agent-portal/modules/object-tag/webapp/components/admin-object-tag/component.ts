@@ -57,8 +57,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async doAutocompleteSearch(limit: number, searchValue: string): Promise<TreeNode[]> {
-        let tree: TreeNode[];
-        let loadingOptions: KIXObjectLoadingOptions = new KIXObjectLoadingOptions();
+        const loadingOptions: KIXObjectLoadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.limit = 0;
         loadingOptions.searchLimit = 0;
         loadingOptions.filter = [
@@ -68,7 +67,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             )
         ];
 
-        tree = await KIXObjectService.searchObjectTree(
+        const tree = await KIXObjectService.searchObjectTree(
             KIXObjectType.OBJECT_TAG, ObjectTagProperty.NAME, `*${searchValue}*`, loadingOptions
         );
 

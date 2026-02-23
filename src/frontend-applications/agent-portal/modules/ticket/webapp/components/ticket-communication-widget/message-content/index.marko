@@ -7,230 +7,217 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
+<macro name="left-avatar">
+    <div class="left-avatar">
+        <if(state.isExternal)>
+            <div class="avatar-container">
+                <div title=state.fromDisplayName class="contact-avatar">
+                    <if(state.contactIcon)>
+                        <icon icon=state.contactIcon/>
+                    </if>
+                    <else>
+                        <loading-spinner/>
+                    </else>
+                </div>
+                <if(state.smimeSignedIcon)>
+                    <icon
+                        icon="fas fa-certificate"
+                        tooltip=state.smimeSignedTooltip
+                        class={
+                            "smime-signed-background": true,
+                            "smime-not-signed": !state.smimeSigned,
+                        }/>
+                    <icon
+                        icon=state.smimeSignedIcon
+                        tooltip=state.smimeSignedTooltip
+                        class="smime-signed-icon"/>
+                </if>
+            </div>
+            <div
+                style=`background-color: ${state.backgroundColor};`
+                class="speech-bubble"/>
+        </if>
+    </div>
+</macro>
+
+<macro name="right-avatar">
+    <div class="right-avatar">
+        <if(!state.isExternal)>
+            <div
+                style=`background-color: ${state.backgroundColor};`
+                class="speech-bubble"/>
+            <div class="avatar-container">
+                <div title=state.fromDisplayName class="contact-avatar">
+                    <if(state.contactIcon)>
+                        <icon icon=state.contactIcon/>
+                    </if>
+                    <else>
+                        <loading-spinner/>
+                    </else>
+                </div>
+                <if(state.smimeSignedIcon)>
+                    <icon
+                        icon="fas fa-certificate"
+                        tooltip=state.smimeSignedTooltip
+                        class={
+                            "smime-signed-background": true,
+                            "smime-not-signed": !state.smimeSigned,
+                        }/>
+                    <icon
+                        icon=state.smimeSignedIcon
+                        tooltip=state.smimeSignedTooltip
+                        class="smime-signed-icon"/>
+                </if>
+            </div>
+        </if>
+    </div>
+</macro>
+
+<macro name="article-header">
+    <div
+        class=[
+            "header",
+            {
+                "list-view": !state.articleExpanded,
+            },
+        ]
+        on-click("toggleArticle", false)>
+        <message-header
+            article=state.article
+            articleCountNumber=input.articleCountNumber
+            fromDisplayName=state.fromDisplayName
+            on-actionListClicked("doNotToggleArticle")/>
+    </div>
+</macro>
+
+<macro name="article-footer">
+    <if(state.showContent)>
+        <if(
+            Array.isArray(state.articleAttachments) &&
+            state.articleAttachments.length
+        )>
+            <div class="d-flex flex-column d-flex flex-column p-2 mb-3">
+
+                <div class="d-flex">
+                    <div class=[
+                        "d-flex flex-wrap me-auto",
+                        {
+                            "flex-row": !state.oneColumnLayout,
+                            "flex-column": state.oneColumnLayout,
+                        },
+                    ]>
+                        <for|attachment| of=state.articleAttachments>
+                            <ticket-article-attachment
+                                article=component.detailedArticle
+                                attachment=attachment
+                                images=state.images
+                                useReadonlyStyle=false/>
+                        </for>
+                    </div>
+                    <span
+                        class="fs-5 fw-bold me-2 mt-2"
+                        on-click("switchAttachmentLayout")>
+                        <if(state.oneColumnLayout)>
+                            <icon
+                                icon="fas fa-angle-double-up"
+                                tooltip=state.switchAttachmentListTooltip
+                                class="as-button"/>
+                        </if>
+                        <else>
+                            <icon
+                                icon="fas fa-angle-double-down"
+                                tooltip=state.switchAttachmentListTooltip
+                                class="as-button"/>
+                        </else>
+                    </span>
+                </div>
+
+                <if(state.hasInlineAttachments)>
+                    <a on-click("toggleAttachments") class="mt-2">
+                        <translation-string pattern=`Translatable#${
+                            state.showAllAttachments
+                                ? "Hide inline attachments"
+                                : "Show all attachments"
+                        }`/>
+                    </a>
+                </if>
+            </div>
+        </if>
+        <if(state.showArticleDFContainer)>
+            <div
+                key="article-df-container"
+                class="bg-light border rounded my-2 p-2 overflow-auto">
+                <object-information-card
+                    object=component.detailedArticle
+                    config=state.informationConfig/>
+            </div>
+        </if>
+    </if>
+    <if(state.actions && state.actions.length)>
+        <action-list
+            contextInstanceId=input.contextInstanceId
+            list=state.actions/>
+    </if>
+</macro>
+
+<macro|{ title, value }| name="article-receiver-entry">
+    <tr class="mb-2">
+        <td class="fw-bold" style="width: 5%">
+            <translation-string pattern=title/>
+        </td>
+        <td>${value}</td>
+    </tr>
+</macro>
+
+<macro name="article-receiver-list">
+    <if(state.articleTo || state.articleCc || state.articleBcc)>
+        <table class="w-100 p-2 my-2 rounded">
+            <tbody>
+                <if(state.articleTo)>
+                    <article-receiver-entry
+                        title="Translatable#To"
+                        value=state.articleTo/>
+                </if>
+                <if(state.articleCc)>
+                    <article-receiver-entry
+                        title="Translatable#Cc"
+                        value=state.articleCc/>
+                </if>
+                <if(state.articleBcc)>
+                    <article-receiver-entry
+                        title="Translatable#Bcc"
+                        value=state.articleBcc/>
+                </if>
+            </tbody>
+        </table>
+    </if>
+</macro>
+
 <div class=[
-    "message-content-container",
+    "message-content-container compact-view-message-content-container align-items-center mb-3",
     {
         unread: state.article && state.unseen === 1,
-        "compact-view-message-content-container": state.selectedCompactView,
     },
 ]>
     <if(state.show && state.article)>
-        <div class="left-avatar">
-            <if(state.isExternal)>
-                <div class="avatar-container">
-                    <div title=state.fromDisplayName class="contact-avatar">
-                        <if(state.contactIcon)>
-                            <icon icon=state.contactIcon/>
-                        </if>
-                        <else>
-                            <loading-spinner/>
-                        </else>
-                    </div>
-                    <if(state.smimeSignedIcon)>
-                        <icon
-                            icon="fas fa-certificate"
-                            tooltip=state.smimeSignedTooltip
-                            class={
-                                "smime-signed-background": true,
-                                "smime-not-signed": !state.smimeSigned,
-                            }/>
-                        <icon
-                            icon=state.smimeSignedIcon
-                            tooltip=state.smimeSignedTooltip
-                            class="smime-signed-icon"/>
-                    </if>
-                </div>
-                <div
-                    style=`background-color: ${state.backgroundColor};`
-                    class="speech-bubble"/>
-            </if>
-        </div>
+        <left-avatar/>
         <div
             style=`background-color: ${state.backgroundColor};`
-            class="message">
-            <div
-                class=[
-                    "header",
-                    {
-                        "list-view":
-                            state.selectedCompactView &&
-                            !state.compactViewExpanded,
-                    },
-                ]
-                on-click("toggleArticleCompactView", false)>
-                <message-header
-                    article=state.article
-                    articleCountNumber=input.articleCountNumber
-                    fromDisplayName=state.fromDisplayName/>
-            </div>
-            <if(!state.selectedCompactView || state.compactViewExpanded)>
-                <if(state.expanded && state.showContent)>
-                    <div class="receiver-list">
-                        <if(state.articleTo)>
-                            <div class="receiver">
-                                <span class="title">
-                                    <translation-string pattern="Translatable#To"/>
-                                    ${" "}:
-                                </span>
-                                <span>${state.articleTo}</span>
-                            </div>
-                        </if>
-                        <if(state.articleCc)>
-                            <div class="receiver">
-                                <span class="title">
-                                    <translation-string pattern="Translatable#Cc"/>
-                                    ${" "}:
-                                </span>
-                                <span>${state.articleCc}</span>
-                            </div>
-                        </if>
-                        <if(state.articleBcc)>
-                            <div class="receiver">
-                                <span class="title">
-                                    <translation-string pattern="Translatable#Bcc"/>
-                                    ${" "}:
-                                </span>
-                                <span>${state.articleBcc}</span>
-                            </div>
-                        </if>
-                    </div>
-                    <div key="message-body" class="message-body">
-                        <div
-                            on-click("toggleArticleListView")
-                            class="show-message hide-top">
-                            <translation-string pattern="Translatable#Hide Message"/>
-                        </div>
+            class="message w-100 p-2 rounded shadow-sm">
+            <article-header/>
+            <if(state.articleExpanded)>
+                <if(state.showContent)>
+                    <article-receiver-list/>
+                    <div key="message-body" class="my-2 border rounded">
                         <ticket-article-content article=component.detailedArticle/>
-                        <div
-                            on-click("toggleArticleListView")
-                            class="show-message">
-                            <translation-string pattern="Translatable#Hide Message"/>
-                        </div>
                     </div>
                 </if>
                 <else-if(state.loadingContent)>
                     <loading-spinner/>
                 </else-if>
-                <else>
-                    <div class="message-body-short">
-                        <div class="short-message">
-                            ${state.shortMessage}
-                        </div>
-                        <div
-                            on-click("toggleArticleListView")
-                            class="show-message">
-                            <translation-string pattern="Translatable#Show all"/>
-                        </div>
-                    </div>
-                </else>
-                <div class="message-footer">
-                    <if(state.expanded && state.showContent)>
-                        <div class="row attachments-control">
-                            <if(
-                                Array.isArray(state.articleAttachments) &&
-                                state.articleAttachments.length
-                            )>
-                                <div class="attachments-list-container">
-                                    <div class={
-                                        "attachments-list": true,
-                                        "one-column-layout":
-                                            state.oneColumnLayout,
-                                    }>
-                                        <for|
-                                            attachment,
-                                        | of=state.articleAttachments>
-                                            <ticket-article-attachment
-                                                article=component.detailedArticle
-                                                attachment=attachment
-                                                images=state.images
-                                                useReadonlyStyle=false/>
-                                        </for>
-                                    </div>
-                                    <span
-                                        class="attachment-list-layout-switch"
-                                        on-click("switchAttachmentLayout")>
-                                        <if(state.oneColumnLayout)>
-                                            <icon
-                                                icon="fas fa-angle-double-up"
-                                                tooltip=state.switchAttachmentListTooltip
-                                                class="as-button"/>
-                                        </if>
-                                        <else>
-                                            <icon
-                                                icon="fas fa-angle-double-down"
-                                                tooltip=state.switchAttachmentListTooltip
-                                                class="as-button"/>
-                                        </else>
-                                    </span>
-                                </div>
-                            </if>
-                            <if(state.hasInlineAttachments)>
-                                <a
-                                    on-click("toggleAttachments")
-                                    class="attachmentsToggle">
-                                    <translation-string pattern=`Translatable#${
-                                        state.showAllAttachments
-                                            ? "Hide inline attachments"
-                                            : "Show all attachments"
-                                    }`/>
-                                </a>
-                            </if>
-                        </div>
-                        <if(
-                            state.informationConfig &&
-                            Array.isArray(state.informationConfig.rows) &&
-                            state.informationConfig.rows.length
-                        )>
-                            <div
-                                key="article-df-container"
-                                class="bg-white my-2 p-2 overflow-auto">
-                                <object-information-card
-                                    object=component.detailedArticle
-                                    config=state.informationConfig/>
-                            </div>
-                        </if>
-                    </if>
-                    <div
-                        style=`background-color: ${state.backgroundColor};`
-                        class="row actions-list">
-                        <if(state.actions && state.actions.length)>
-                            <action-list
-                                contextInstanceId=input.contextInstanceId
-                                list=state.actions/>
-                        </if>
-                    </div>
-                </div>
+                <article-footer/>
             </if>
         </div>
-        <div class="right-avatar">
-            <if(!state.isExternal)>
-                <div
-                    style=`background-color: ${state.backgroundColor};`
-                    class="speech-bubble"/>
-                <div class="avatar-container">
-                    <div title=state.fromDisplayName class="contact-avatar">
-                        <if(state.contactIcon)>
-                            <icon icon=state.contactIcon/>
-                        </if>
-                        <else>
-                            <loading-spinner/>
-                        </else>
-                    </div>
-                    <if(state.smimeSignedIcon)>
-                        <icon
-                            icon="fas fa-certificate"
-                            tooltip=state.smimeSignedTooltip
-                            class={
-                                "smime-signed-background": true,
-                                "smime-not-signed": !state.smimeSigned,
-                            }/>
-                        <icon
-                            icon=state.smimeSignedIcon
-                            tooltip=state.smimeSignedTooltip
-                            class="smime-signed-icon"/>
-                    </if>
-                </div>
-            </if>
-        </div>
+        <right-avatar/>
     </if>
 </div>

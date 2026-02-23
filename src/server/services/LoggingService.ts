@@ -7,7 +7,6 @@
  * --
  */
 
-import { rejects } from 'assert';
 import fs from 'fs';
 import path from 'path';
 /* eslint-disable no-console */
@@ -16,12 +15,9 @@ import { Attachment } from '../../frontend-applications/agent-portal/model/kix/A
 import { DateTimeUtil } from '../../frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
 import { LogFile } from '../../frontend-applications/agent-portal/modules/system-log/model/LogFile';
 import { LogTier } from '../../frontend-applications/agent-portal/modules/system-log/model/LogTier';
-import { IServerConfiguration } from '../model/IServerConfiguration';
 import { LogLevel } from '../model/LogLevel';
 import { ServerUtil } from '../ServerUtil';
-import { ConfigurationService } from './ConfigurationService';
 import { FileService } from '../../frontend-applications/agent-portal/modules/file/server/FileService';
-
 
 export class LoggingService {
 
@@ -40,14 +36,12 @@ export class LoggingService {
     private logFileDir: string;
 
     private constructor() {
-        const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
-
-        const logFileDir = serverConfig?.LOG_FILEDIR || 'logs/';
+        const logFileDir = process.env['LOG_FILEDIR'] || 'logs/';
         this.logFileDir = path.join(__dirname, '../../../', logFileDir.replace(/\/\w+\.log$/, ''));
 
-        this.defaultLevelNumber = serverConfig.LOG_LEVEL || LogLevel.ERROR;
+        this.defaultLevelNumber = Number(process.env['LOG_LEVEL']) || LogLevel.ERROR;
 
-        this.trace = serverConfig.LOG_TRACE;
+        this.trace = Number(process.env['LOG_TRACE']) === 1;
 
         // do not log in test mode
         if (!ServerUtil.isTestMode()) {
@@ -163,8 +157,7 @@ export class LoggingService {
     }
 
     public static createLogDirectory(): string {
-        const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
-        let logFileDir = serverConfig.LOG_FILEDIR || 'logs/';
+        let logFileDir = process.env['LOG_FILEDIR'] || 'logs/';
         logFileDir = path.join(__dirname, '../../../', logFileDir.replace(/\/\w+\.log$/, ''));
         if (!fs.existsSync(logFileDir)) {
             try {

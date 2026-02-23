@@ -15,6 +15,7 @@ import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserU
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
 import { IContextListener } from '../../../../../base-components/webapp/core/IContextListener';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
+import { ObjectInformationCardService } from '../../../../../base-components/webapp/core/ObjectInformationCardService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { Article } from '../../../../model/Article';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
@@ -35,6 +36,8 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     private observer: IntersectionObserver;
     private resizeObserver: ResizeObserver;
 
+    private preventToggleArticle: boolean;
+
     public onCreate(input: any): void {
         super.onCreate(input, 'ticket-communication-widget/message-content');
         this.state = new ComponentState();
@@ -49,18 +52,15 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     private async update(input: any): Promise<void> {
         this.articleId = input.articleId;
         this.state.informationConfig = input.informationConfig;
-        this.state.selectedCompactView = typeof input.selectedCompactView !== 'undefined' ? input.selectedCompactView : true;
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        this.state.expanded = this.getArticleToggleState();
-        this.state.show = this.state.expanded;
-        this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
+        this.state.articleExpanded = this.getArticleToggleState();
+        this.state.show = this.state.articleExpanded;
 
         await this.prepareObserver();
-        await this.toggleArticleContent(false);
 
         const focusedArticleId = this.context.getAdditionalInformation('CURRENT_ARTICLE_FOCUS');
         if (focusedArticleId === this.articleId) {
@@ -159,17 +159,15 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
                 this.state.article['countNumber'] = countNumber;
                 this.articleLoaded = true;
 
-                if (this.articleIndex === 0) {
-                    this.toggleArticleCompactView(true);
-                }
-
                 this.state.unseen = this.state.article?.Unseen;
                 if (this.state.unseen) {
                     this.context.registerUnseenArticle(this.state.article.ArticleID);
                 }
                 await this.prepareArticleData();
 
-                if (this.state.expanded) {
+                if (this.articleIndex === 0) {
+                    this.toggleArticle(true);
+                } else if (this.state.articleExpanded) {
                     this.loadDetailedArticle();
                 } else {
                     await this.prepareActions();
@@ -244,9 +242,10 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
         super.registerEventSubscriber(
             async function (data: any, eventId: string): Promise<void> {
                 if (eventId === 'TOGGLE_ARTICLE' && data.articleId === this.articleId) {
-                    this.state.expanded = data.expanded;
-                    this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
-                    this.toggleArticleContent();
+                    this.state.articleExpanded = data.expanded;
+                    if (this.state.articleExpanded) {
+                        this.toggleArticleContent();
+                    }
                 }
                 if (eventId === TicketEvent.MARK_TICKET_AS_SEEN && this.state.article.TicketID === data) {
                     this.state.unseen = 0;
@@ -265,29 +264,26 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
         );
     }
 
-    public toggleArticleListView(event?: any): void {
-        if (event) {
-            event.stopPropagation();
-            event.preventDefault();
-        }
-        this.state.expanded = !this.state.expanded;
-        this.toggleArticleContent();
+    public doNotToggleArticle(): void {
+        this.preventToggleArticle = true;
     }
 
-    public async toggleArticleCompactView(forceOpen?: boolean): Promise<void> {
-        if (forceOpen) {
-            this.state.compactViewExpanded = true;
-            this.state.expanded = this.state.compactViewExpanded;
-            this.toggleArticleContent();
-        } else if (!await BrowserUtil.isTextSelected() && this.state.selectedCompactView) {
-            this.state.compactViewExpanded = !this.state.compactViewExpanded;
-            this.state.expanded = this.state.compactViewExpanded;
-            this.toggleArticleContent();
+    public async toggleArticle(forceOpen?: boolean): Promise<void> {
+        if (this.preventToggleArticle) {
+            this.preventToggleArticle = false;
+        } else {
+            if (forceOpen) {
+                this.toggleArticleContent();
+                this.state.articleExpanded = true;
+            } else if (!await BrowserUtil.isTextSelected()) {
+                this.toggleArticleContent();
+                this.state.articleExpanded = !this.state.articleExpanded;
+            }
         }
     }
 
     private async toggleArticleContent(setFocus: boolean = true): Promise<void> {
-        if (this.state.expanded) {
+        if (!this.state.articleExpanded) {
             this.state.loadingContent = true;
 
             this.loadDetailedArticle(true);
@@ -303,7 +299,13 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     private async prepareArticleContent(allowSetSeen: boolean = false): Promise<void> {
         this.prepareAttachments();
 
-        if (this.state.compactViewExpanded) {
+        if (this.state.informationConfig.rows?.length) {
+            this.state.showArticleDFContainer = await ObjectInformationCardService.getInstance().hasValuesToShow(
+                this.state.informationConfig, this.detailedArticle
+            );
+        }
+
+        if (this.state.articleExpanded) {
             await this.prepareImages();
         }
 
@@ -341,7 +343,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
         }
 
         if (this.articleId) {
-            toggleState.set(this.articleId, this.state.expanded);
+            toggleState.set(this.articleId, this.state.articleExpanded);
         }
 
         this.context.setAdditionalInformation('ARTICLE_TOGGLE_STATE', toggleState);
@@ -358,7 +360,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
     }
 
     private prepareAttachments(): void {
-        if (!this.state.selectedCompactView || this.state.compactViewExpanded) {
+        if (this.state.articleExpanded) {
             this.filterAttachments();
 
             const attachments = this.detailedArticle?.getAttachments(true) || [];
@@ -368,7 +370,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
 
     private async prepareImages(): Promise<void> {
         const imageAttachments = this.state.articleAttachments.filter((a) => a.ContentType.match(/^image\//));
-        let images: DisplayImageDescription[] = [];
+        const images: DisplayImageDescription[] = [];
 
         if (imageAttachments?.length) {
             const attachments = await TicketService.getInstance().loadArticleAttachments(

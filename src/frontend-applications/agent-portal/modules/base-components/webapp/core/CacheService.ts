@@ -107,7 +107,7 @@ export class BrowserCacheService {
             this.clear();
         } else {
             events = events
-                .filter((e) => e.RequestID !== ClientStorageService.getClientRequestId())
+                // .filter((e) => e.RequestID !== ClientStorageService.getClientRequestId())
                 .filter((e) => !e.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN));
 
             events.forEach((e) => this.deleteKeys(e.Namespace));

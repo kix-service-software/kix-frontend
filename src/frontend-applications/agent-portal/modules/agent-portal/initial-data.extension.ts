@@ -15,24 +15,21 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
-import { IServerConfiguration } from '../../../../server/model/IServerConfiguration';
 
 class Extension extends KIXExtension implements IInitialDataExtension {
 
     public name: string = 'Agent Portal Module';
 
     public async createData(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-
-        await this.setObjectIcon(serverConfig, 'agent-portal-logo', '/../../static/img/kix_start.png');
-        await this.setObjectIcon(serverConfig, 'agent-portal-icon', '/../../static/img/kix_start_icon.png');
-        await this.setObjectIcon(serverConfig, 'agent-portal-icon-sw', '/../../static/img/kix_sw.png');
+        await this.setObjectIcon('agent-portal-logo', '/../../../../static/img/kix_start.png');
+        await this.setObjectIcon('agent-portal-icon', '/../../../../static/img/kix_start_icon.png');
+        await this.setObjectIcon('agent-portal-icon-sw', '/../../../../static/img/kix_sw.png');
     }
 
-    private async setObjectIcon(serverConfig: IServerConfiguration, name: string, path: string): Promise<void> {
+    private async setObjectIcon(name: string, path: string): Promise<void> {
         const iconLoadingOptions = new ObjectIconLoadingOptions(name, name);
         const objectResponse = await ObjectIconService.getInstance().loadObjects(
-            serverConfig.BACKEND_API_TOKEN, '', KIXObjectType.OBJECT_ICON, null, null, iconLoadingOptions
+            ConfigurationService.getBackendAPIToken(), '', KIXObjectType.OBJECT_ICON, null, null, iconLoadingOptions
         );
 
         const icons = objectResponse?.objects || [];
@@ -45,7 +42,7 @@ class Extension extends KIXExtension implements IInitialDataExtension {
                     { encoding: 'base64' }
                 );
                 const newIcon = new ObjectIcon(null, name, name, 'image/png', image);
-                await ObjectIconService.getInstance().createIcon(serverConfig.BACKEND_API_TOKEN, '', newIcon)
+                await ObjectIconService.getInstance().createIcon(ConfigurationService.getBackendAPIToken(), '', newIcon)
                     .catch((e) => LoggingService.getInstance().error(e));
             } catch (e) {
                 LoggingService.getInstance().error(e);

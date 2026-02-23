@@ -10,15 +10,15 @@
 import { NotesEditAction } from './NotesEditAction';
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { NotesService } from '../../core/NotesService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
+import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public state: ComponentState;
-    private editorValue: string;
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -41,8 +41,47 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.actions = [new NotesEditAction(this)];
         this.context.widgetService.registerActions(this.state.instanceId, this.state.actions);
         this.state.value = await NotesService.getInstance().loadNotes(this.state.contextId);
-        this.editorValue = this.state.value;
+
+        await this.applyEditorConfiguration();
+
         this.state.editorReady = true;
+    }
+
+    private async applyEditorConfiguration(): Promise<void> {
+        const validEditors = ['tiptap', 'ckeditor5'];
+
+        let editorType = 'ckeditor5';
+        try {
+            const apConfig = await SysConfigService.getInstance()
+                .getPortalConfiguration<AgentPortalConfiguration>();
+            const rawType = apConfig?.editorType;
+
+            editorType = rawType?.toLowerCase() || 'ckeditor5';
+
+            if (!validEditors.includes(editorType)) {
+                editorType = 'ckeditor5';
+            }
+        } catch (e) {
+            editorType = 'ckeditor5';
+        }
+
+        let selectedEditorId = `${editorType}-editor`;
+        if (editorType === 'ckeditor5') {
+            selectedEditorId = 'editor';
+        }
+
+        const template = KIXModulesService.getComponentTemplate(selectedEditorId);
+
+        if (!template) {
+            const fallback = KIXModulesService.getComponentTemplate('editor');
+            if (!fallback) {
+                return;
+            }
+            this.state.editorTemplate = fallback;
+        } else {
+            this.state.editorTemplate = template;
+        }
+
     }
 
     public onDestroy(): void {
@@ -62,10 +101,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submitEditor(): Promise<void> {
-        const component = (this as any).getComponent('notes-editor');
-        this.state.value = component?.getValue();
         await NotesService.getInstance().saveNotes(this.state.contextId, this.state.value);
         this.state.editorActive = false;
+    }
+
+    public valueChanged(value: string): void {
+        this.state.value = value;
     }
 
 }

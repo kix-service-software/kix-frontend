@@ -14,7 +14,6 @@ import { IdService } from '../../../../../../model/IdService';
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
@@ -83,7 +82,14 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     }
 
     private handleNewChannelField(fieldId: string): void {
-        const formValue = this.formValues.find((fv) => fv.fieldId === fieldId);
+        const formValue = this.formValues.find((fv) => {
+            if (fv.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                return fv.formValues.find((dfv) => dfv.fieldId === fieldId);
+            }
+
+            return fv.fieldId === fieldId;
+        });
+
         if (formValue) {
             if (formValue.enabled && !this.enabled) {
                 this.createAndAddChannelField(fieldId);
@@ -212,7 +218,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         const dfValue = this.findFormValue(KIXObjectProperty.DYNAMIC_FIELDS);
         if (channelGroup && channelGroup.formFields?.length && dfValue?.formValues?.length) {
             // get all ArticleDFs from Group
-            let newFormValues = [];
+            const newFormValues = [];
             const dfFields = channelGroup.formFields?.filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
             for (const field of dfFields) {
                 const option = field.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);

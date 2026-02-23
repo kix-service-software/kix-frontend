@@ -77,12 +77,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <div class="slider-content-buttons">
                             <button
                                 type="button"
-                                title=(
-                                    state.translations["Translatable#Let's go"]
-                                )
+                                title=(state.translations["Translatable#Let's go"])
                                 on-click("closeReleaseInfos")
                                 class="kix-button submit-button">
-                                <span class="kix-icon-check"/>
+                                <span class="kix-icon-check" aria-hidden="true"/>
                                 <translation-string pattern="Translatable#Let's go"/>
                             </button>
                         </div>
@@ -91,26 +89,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <div class="slider-content-buttons start-buttons">
                             <button
                                 type="button"
-                                title=(
-                                    state.translations[
-                                        "Translatable#No, thank you"
-                                    ]
-                                )
+                                title=(state.translations["Translatable#No, thank you"])
                                 on-click("closeReleaseInfos")
                                 class="kix-button">
-                                <span class="kix-icon-close"/>
+                                <span class="kix-icon-close" aria-hidden="true"/>
                                 <translation-string pattern="Translatable#No, thank you"/>
                             </button>
                             <button
                                 type="button"
-                                title=(
-                                    state.translations[
-                                        "Translatable#Yes, please"
-                                    ]
-                                )
+                                title=(state.translations["Translatable#Yes, please"])
                                 on-click("showSlider", 1)
                                 class="kix-button">
-                                <span class="kix-icon-check"/>
+                                <span class="kix-icon-check" aria-hidden="true"/>
                                 <translation-string pattern="Translatable#Yes, please"/>
                             </button>
                         </div>

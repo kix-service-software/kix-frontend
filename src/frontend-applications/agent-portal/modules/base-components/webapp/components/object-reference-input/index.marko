@@ -10,6 +10,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <if(state.prepared && state.field)>
     <form-list
         placeholder=state.placeholder
+        labelId=input.labelId
         searchCallback=state.searchCallback
         autoCompleteConfiguration=(
             state.possibleValuesOnly ? null : state.autoCompleteConfiguration
@@ -21,6 +22,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         multiselect=state.multiselect
         treeId=state.treeId
         freeText=!state.possibleValuesOnly && state.freeText
-    />
+        filterByTree=state.filterByTree/>
 </if>
-<else><loading-spinner/></else>
+<else>
+    <loading-spinner/>
+</else>

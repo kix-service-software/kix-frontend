@@ -45,6 +45,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             const element = (this as any).getEl(this.state.searchValueKey + '-keylistener');
             if (this.formValue.treeHandler && element) {
                 this.formValue.treeHandler.setKeyListenerElement(element);
+                this.formValue.treeHandler.registerSelectionListener(
+                    `${this.state.searchValueKey}-selection-listener`, (nodes: []) => {
+                        this.setSelectAllButtonValue();
+                    });
             }
 
             const myDropdown = document.getElementById(`id_${this.state.searchValueKey}`);
@@ -67,7 +71,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 if (this.isMouseOnNodeRemove && this.state.multiselect && this.state.selectedNodes.length > 1) {
                     this.stopPropagation(event);
                 }
-                this.state.selectAll = this.formValue?.treeHandler?.getSelectedNodes()?.length <= 0;
+                this.setSelectAllButtonValue();
             });
 
         }, 100);
@@ -84,6 +88,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             },
             [ObjectFormEvent.BLOCK_FORM]
         );
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Clear Value', 'Translatable#Remove node'
+        ]);
+
     }
 
     public onDestroy(): void {
@@ -143,7 +152,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
                     setTimeout(() => this.state.prepared = true, 20);
                 }, 150);
-            })
+            }),
         );
 
         this.state.multiselect = this.formValue?.multiselect;
@@ -152,6 +161,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         await this.prepareAutocompleteHint();
 
         this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes() || [];
+        this.setSelectAllButtonValue();
 
         this.setReadonly(Boolean(this.formValue?.readonly));
     }
@@ -240,7 +250,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.searchLoading = true;
                 await this.formValue?.search(event.target.value);
                 this.state.noResult = !this.formValue.getSelectableTreeNodeValues()?.length;
-                setTimeout(() => this.state.searchLoading = false, 100);
+                setTimeout(() => {
+                    this.setSelectAllButtonValue();
+                    this.state.searchLoading = false;
+                }, 100);
             }, this.formValue?.autoCompleteConfiguration?.delay || 300);
         }
     }
@@ -341,6 +354,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public setIsMouseOnNodeRemove(isHovering: boolean): void {
         this.isMouseOnNodeRemove = isHovering;
+    }
+
+    private setSelectAllButtonValue(): void {
+        if (this.formValue?.treeHandler) {
+            const visibleNodes = this.formValue.treeHandler.getVisibleNodes();
+            let selectAll = true;
+            if (visibleNodes.every((vn) => vn.selected)) {
+                selectAll = false;
+            }
+            this.state.selectAll = selectAll;
+        }
     }
 
 }

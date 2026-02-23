@@ -7,10 +7,8 @@
  * --
  */
 
-import { ServerManager } from '../../../../server/ServerManager';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { BackendNotification } from '../../model/BackendNotification';
-import { NotificationEvent } from '../../model/NotificationEvent';
 import { CacheService } from './cache';
 import { RedisCache } from './cache/RedisCache';
 
@@ -32,10 +30,14 @@ export class ClientNotificationService {
     private notificationTimeout: any;
     private notificationsQueue: BackendNotification[] = [];
 
-    private notificationListener: Array<(events: BackendNotification[]) => void> = [];
+    private notificationListener: Map<string, (events: BackendNotification[]) => void> = new Map();
 
-    public registerNotificationListener(listener: (events: BackendNotification[]) => void): void {
-        this.notificationListener.push(listener);
+    public registerNotificationListener(id: string, listener: (events: BackendNotification[]) => void): void {
+        this.notificationListener.set(id, listener);
+    }
+
+    public removeListener(id: string): void {
+        this.notificationListener.delete(id);
     }
 
     public queueNotifications(objectEvents: BackendNotification[]): void {
@@ -61,11 +63,6 @@ export class ClientNotificationService {
     private async handleNotifications(): Promise<void> {
         await CacheService.getInstance().updateCaches(this.notificationsQueue)
             .catch((error) => LoggingService.getInstance().error(error));
-
-        const servers = ServerManager.getInstance().getServers();
-        for (const server of servers) {
-            server?.getSocketService()?.broadcast(NotificationEvent.UPDATE_EVENTS, this.notificationsQueue);
-        }
 
         this.notificationListener.forEach((l) => l(this.notificationsQueue));
         this.notificationsQueue = [];

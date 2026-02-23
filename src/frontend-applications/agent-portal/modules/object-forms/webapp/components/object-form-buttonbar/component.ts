@@ -10,6 +10,7 @@
 import { IdService } from '../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
@@ -38,6 +39,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         await super.onMount();
 
         this.formhandler = await this.context.getFormManager().getObjectFormHandler();
+
+        const canCancel = this.context.getAdditionalInformation('DIALOG_ALLOW_CANCEL');
+        if (canCancel !== undefined && canCancel !== null) {
+            this.state.canCancel = canCancel;
+        }
 
         this.prepareSubmitButton();
         this.registerListener();

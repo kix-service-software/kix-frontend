@@ -191,7 +191,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async getNodes(objectType: string): Promise<TreeNode[]> {
-        let nodes: TreeNode[] = [];
+        const nodes: TreeNode[] = [];
         const filterValues = this.column.getFilterValues();
         for (const fv of filterValues) {
             const displayValue = await LabelService.getInstance().getPropertyValueDisplayText(

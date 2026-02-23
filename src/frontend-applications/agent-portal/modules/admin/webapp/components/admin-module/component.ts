@@ -13,7 +13,7 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { AdminContext } from '../../core/AdminContext';
 import { ContextType } from '../../../../../model/ContextType';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
-import { AdministrationSocketClient } from '../../core/AdministrationSocketClient';
+import { AdminAPIClient } from '../../../../../api-client/admin/Admin';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { Context } from '../../../../../model/Context';
 
@@ -28,7 +28,7 @@ class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
         await super.onMount();
 
         ContextService.getInstance().registerListener({
-            constexServiceListenerId: 'admin-module-context-service-listener',
+            contextServiceListenerId: 'admin-module-context-service-listener',
             contextChanged: (contextId: string, c: AdminContext, type: ContextType, history: boolean) => {
                 if (contextId === AdminContext.CONTEXT_ID && c.adminModuleId) {
                     this.moduleChanged();
@@ -54,7 +54,7 @@ class Component extends AbstractMarkoComponent<ComponentState, AdminContext> {
     }
 
     public async moduleChanged(): Promise<void> {
-        const module = await AdministrationSocketClient.getInstance().getAdminModule(this.context?.adminModuleId);
+        const module = await AdminAPIClient.getAdminModule(this.context?.adminModuleId);
         if (module && module.componentId) {
             this.state.template = KIXModulesService.getComponentTemplate(module.componentId);
         }

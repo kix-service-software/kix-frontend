@@ -17,6 +17,7 @@ import { UserProperty } from '../../../../user/model/UserProperty';
 import { Contact } from '../../../model/Contact';
 import { NewContactDialogContext } from '../context/NewContactDialogContext';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { OutOfOfficeProperty } from '../../../../user/model/OutOfOfficeProperty';
 
 export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {
 
@@ -66,13 +67,14 @@ export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {
             }
         }
         else if (Array.isArray(newContact.User?.Preferences)) {
-            const userAccessFormValue = objectValueMapper.findFormValue(UserProperty.USER_ACCESS);
+            const userAccessFormValue = objectValueMapper?.findFormValue(UserProperty.USER_ACCESS);
             const preferencesFormValue = userAccessFormValue?.findFormValue(UserProperty.PREFERENCES);
             newContact.User.Preferences = newContact.User.Preferences.filter(
                 (pref) => this.checkPerferenceFormValues(pref.ID, preferencesFormValue?.formValues)
             );
         }
 
+        this.checkOutOfOfficeFormValues(newContact, objectValueMapper);
         return newContact;
     }
 
@@ -92,6 +94,25 @@ export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {
             );
         }
         return false;
+    }
+
+    private checkOutOfOfficeFormValues(newContact: Contact, objectValueMapper?: ObjectFormValueMapper): void {
+        const oooFormValue = objectValueMapper?.findFormValue(UserProperty.OUT_OF_OFFICE);
+        const startFormValue = oooFormValue?.findFormValue(OutOfOfficeProperty.START);
+        const endFormValue = oooFormValue?.findFormValue(OutOfOfficeProperty.END);
+        const substituteFormValue = oooFormValue?.findFormValue(OutOfOfficeProperty.SUBSTITUTE);
+
+        if (startFormValue?.value) {
+            newContact.User.OutOfOffice.Start = startFormValue.value;
+        }
+
+        if (endFormValue?.value) {
+            newContact.User.OutOfOffice.End = endFormValue.value;
+        }
+
+        if (Array.isArray(substituteFormValue?.value)) {
+            newContact.User.OutOfOffice.Substitute = substituteFormValue.value[0];
+        }
     }
 
 }

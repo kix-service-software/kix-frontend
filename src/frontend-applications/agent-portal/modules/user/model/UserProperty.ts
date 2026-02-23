@@ -37,6 +37,8 @@ export enum UserProperty {
 
     USER_FULLNAME = 'UserFullname',
 
+    OUT_OF_OFFICE = 'OutOfOffice',
+
     // UI properties
     USER_VALID = 'UserValid',
 
@@ -46,12 +48,6 @@ export enum UserProperty {
 
     EXEC_GENERATE_TOKEN = 'ExecGenerateToken',
 
-    EXEC_GENERATE_OTP_SECRET = 'ExecGenerateOTPSecret',
-
-    OUT_OF_OFFICE_START = 'OutOfOfficeStart',
-
-    OUT_OF_OFFICE_END = 'OutOfOfficeEnd',
-
-    OUT_OF_OFFICE_SUBSTITUTE = 'OutOfOfficeSubstitute'
+    EXEC_GENERATE_OTP_SECRET = 'ExecGenerateOTPSecret'
 
 }

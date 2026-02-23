@@ -143,24 +143,29 @@ export function createSpecialCharsDropdown(editor: any): HTMLDivElement {
     specialCharacters.forEach(({ label, value }) => {
         const charButton = document.createElement('button');
         charButton.className = 'tiptap-specialchars-char';
+        charButton.type = 'button';
         charButton.textContent = label;
         charButton.style.padding = '6px';
         charButton.style.cursor = 'pointer';
         charButton.style.background = 'none';
         charButton.style.fontSize = '16px';
-        charButton.onclick = (): void => {
+
+        charButton.addEventListener('click', (ev: MouseEvent): void => {
+            ev.preventDefault();
+            ev.stopPropagation();
+
             editor.chain().focus().insertContent(value).run();
             menu.style.display = 'none';
-        };
-
+        });
 
         menu.appendChild(charButton);
     });
 
-    button.onclick = (e): void => {
+    button.addEventListener('click', (e: MouseEvent): void => {
+        e.preventDefault();
         e.stopPropagation();
         menu.style.display = menu.style.display === 'none' ? 'grid' : 'none';
-    };
+    });
 
     document.addEventListener('click', (e) => {
         if (!wrapper.contains(e.target as Node)) {

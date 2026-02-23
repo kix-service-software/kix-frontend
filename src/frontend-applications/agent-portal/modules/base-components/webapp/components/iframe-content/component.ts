@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { ComponentState } from './ComponentState';
@@ -5,6 +14,7 @@ import { ComponentState } from './ComponentState';
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private updateTimeout: any;
+    private isLoaded: boolean = false;
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -24,6 +34,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.prepareContent(input.html);
 
         this.state.calculateHeight = input.calculateHeight;
+        this.state.extraSpace = input.extraSpace;
     }
 
     public async onMount(): Promise<void> {
@@ -48,8 +59,25 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public viewLoaded(event: any): void {
-        if (this.state.calculateHeight) {
-            BrowserUtil.setFrameHeight(this.state.frameId);
+        if (!this.isLoaded) {
+            this.isLoaded = true;
+            const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
+
+            frame.addEventListener('load', (ev) => {
+                let frameDocument: Document;
+                console.log(ev);
+                try {
+                    frameDocument = frame.contentWindow.document;
+                } catch (e) {
+                    console.warn('iframe content not accessible due to cross-origin policy:', e);
+                    return;
+                }
+
+                if (this.state.calculateHeight) {
+                    BrowserUtil.setFrameHeight(this.state.frameId, this.state.extraSpace);
+                    BrowserUtil.prepareFrameLinks(frameDocument);
+                }
+            });
         }
     }
 

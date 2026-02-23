@@ -7,16 +7,12 @@
  * --
  */
 
-import { RedisCache } from './RedisCache';
-import { FileCache } from './FileCache';
-
 import md5 from 'md5';
+import { RedisCache } from './RedisCache';
 import { BackendNotification } from '../../../model/BackendNotification';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { RequestMethod } from '../../../../../server/model/rest/RequestMethod';
-import { ProfilingService } from '../../../../../server/services/ProfilingService';
-import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { ICache } from './ICache';
 
 export class CacheService {
@@ -47,13 +43,11 @@ export class CacheService {
     }
 
     public init(): void {
-        this.backendType = ConfigurationService.getInstance().getServerConfiguration().CACHE_BACKEND || 'Redis';
-
-        LoggingService.getInstance().info(`Initialize ${this.backendType} cache backend`);
+        LoggingService.getInstance().info('Initialize REDIS cache backend');
 
         const cacheInstance = this.getCacheBackendInstance();
         if (!cacheInstance) {
-            LoggingService.getInstance().error(`Unknown cache backend "${this.backendType}" - No Cache in use`);
+            LoggingService.getInstance().error('Unknown cache backend REDIS - No Cache in use');
         }
     }
 
@@ -96,7 +90,7 @@ export class CacheService {
             }
         }
 
-        await Promise.all(promises);
+        await Promise.allSettled(promises);
     }
 
     private async handleUserPreferencesCache(event: BackendNotification): Promise<void> {
@@ -117,14 +111,9 @@ export class CacheService {
             prefixes = prefixes.filter((p) => !this.ignorePrefixes.some((ip) => ip === p));
         }
 
-        // start profiling
-        const profileTaskId = ProfilingService.getInstance().start(
-            'CacheService', 'deleteKeys\t' + type, { data: prefixes }
-        );
         for (const prefix of prefixes) {
             this.getCacheBackendInstance()?.deleteAll(prefix);
         }
-        ProfilingService.getInstance().stop(profileTaskId);
     }
 
     public async waitFor(key: string, cacheType: string): Promise<any> {
@@ -310,9 +299,7 @@ export class CacheService {
     }
 
     public async clearCache(): Promise<void> {
-        const taskId = ProfilingService.getInstance().start('CacheService', 'Clear Cache');
         await this.getCacheBackendInstance()?.clear(this.ignorePrefixes);
-        ProfilingService.getInstance().stop(taskId);
     }
 
     public adddIgnorePrefixes(ignoreList: string[]): void {
@@ -320,11 +307,7 @@ export class CacheService {
     }
 
     private getCacheBackendInstance(): ICache {
-        if (this.backendType === 'Redis')
-            return RedisCache.getInstance();
-        if (this.backendType === 'File')
-            return FileCache.getInstance();
-        return null;
+        return RedisCache.getInstance();
     }
 
 }

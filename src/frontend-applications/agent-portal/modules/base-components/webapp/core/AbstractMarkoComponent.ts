@@ -53,9 +53,18 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
 
     public async onMount(): Promise<void> {
         if (!this.contextInstanceId) {
-            const thisComponent = (this as any).getEl();
-            if (thisComponent) {
-                const componentContainer = thisComponent.closest('[data-contextinstanceid]');
+            const DOMElement = (this as any).getEl();
+            if (!DOMElement) {
+                // TODO: find generic fallback solution if component itself has no regular html-tag (e.g. tab-widget)
+                // e.g. by parent element
+                // or a child element
+                // - if child is already finished (its onMount) => getEl would have returned it already
+                // - but if "this" only shows it after "prepared = true" something similar it still returns undefined
+                // or maybe "split" this.id (would container the keys of parents elements - see router-outlet)
+
+            }
+            if (DOMElement) {
+                const componentContainer = DOMElement.closest('[data-contextinstanceid]');
                 if (componentContainer?.dataset?.contextinstanceid) {
                     AbstractMarkoComponent.prototype.setComponentContext.call(
                         this,
@@ -72,7 +81,9 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
         }
 
         if (this.state) {
-            this.state.isConfigContext = this.context?.contextId === ObjectFormConfigurationContext.CONTEXT_ID;
+            this.state.isConfigContext =
+                this.context?.contextId === ObjectFormConfigurationContext.CONTEXT_ID ||
+                (this.context?.hasOwnProperty('isConfigurationContext') && this.context['isConfigurationContext']);
         }
 
         await this.prepareMount();
@@ -112,7 +123,7 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
             eventSubscriberId: this.eventSubscriberId,
             eventPublished: eventPublished.bind(this)
         };
-        for (let event of events) {
+        for (const event of events) {
             EventService.getInstance().subscribe(event, eventSubscriber);
         }
     }

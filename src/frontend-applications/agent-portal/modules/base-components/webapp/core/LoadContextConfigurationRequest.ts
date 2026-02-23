@@ -7,13 +7,10 @@
  * --
  */
 
-import { ISocketRequest } from './ISocketRequest';
-
-export class LoadContextConfigurationRequest implements ISocketRequest {
+export class LoadContextConfigurationRequest {
 
     public constructor(
-        public requestId: string,
-        public clientRequestId: string,
+
         public contextId: string,
         public application: string
     ) { }

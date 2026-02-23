@@ -28,7 +28,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 "no-label": !state.label || !state.field.showLabel,
             },
         ]>
-            <span title=state.label class="label-text">
+            <span id=state.field.instanceId + "-label" title=state.label class="label-text">
                 <if(state.field.required && state.field.showLabel)>
                     <span class="required-field">
                         *
@@ -55,6 +55,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     field: state.field,
                     fieldId: state.field.property,
                     formId: state.formId,
+                    labelId: state.field.instanceId + "-label"
                 }/>
             </if>
             <else>

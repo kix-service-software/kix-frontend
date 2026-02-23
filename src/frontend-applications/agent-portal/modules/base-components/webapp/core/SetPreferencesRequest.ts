@@ -7,13 +7,10 @@
  * --
  */
 
-import { ISocketRequest } from './ISocketRequest';
-
-export class SetPreferencesRequest implements ISocketRequest {
+export class SetPreferencesRequest {
 
     public constructor(
-        public requestId: string,
-        public clientRequestId: string,
+
         public parameter: Array<[string, any]>
     ) { }
 

@@ -40,7 +40,7 @@ export abstract class KIXObject extends BindableObject {
 
     public Comment: string = null;
 
-    public DynamicFields: DynamicFieldValue[] = [];
+    public DynamicFields: DynamicFieldValue[];
 
     public LinkCount: number = 0;
 
@@ -58,9 +58,7 @@ export abstract class KIXObject extends BindableObject {
             }
 
             this.displayValues = object.displayValues ? object.displayValues : [];
-            this.DynamicFields = Array.isArray(object.DynamicFields)
-                ? object.DynamicFields.map((df) => new DynamicFieldValue(df))
-                : [];
+            this.DynamicFields = object.DynamicFields?.map((df) => new DynamicFieldValue(df));
 
             this.propertyBindings = [];
         }

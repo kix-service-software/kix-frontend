@@ -25,8 +25,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 placeholder=(state.translations["Translatable#Search Title"])
                 on-input("nameChanged")
                 on-keydown("keyPressed")
-                on-click("inputClicked")
-            >
+                on-click("inputClicked")>
             <if(state.error)>
                 <span class="text-danger">
                     ${state.error}
@@ -40,13 +39,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             type="checkbox"
             role="switch"
             value=""
-            id="share-search"
+            id="share-search-new"
             checked=state.newSearch
             readonly=!component.loadedSearchId
             disabled=!component.loadedSearchId
-            on-change("newChanged")
-        >
-        <label class="form-check-label" for="share-search">
+            on-change("newChanged")>
+        <label class="form-check-label" for="share-search-new">
             <translation-string pattern="Translatable#Create new search template"/>
         </label>
         <p/>
@@ -57,11 +55,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             type="checkbox"
             role="switch"
             value=""
-            id="share-search"
+            id="share-search-changed"
             checked=state.share
-            on-change("shareChanged")
-        >
-        <label class="form-check-label" for="share-search">
+            on-change("shareChanged")>
+        <label class="form-check-label" for="share-search-changed">
             <translation-string pattern="Translatable#Share_Search_Template"/>
         </label>
         <p/>
@@ -73,9 +70,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 type="button"
                 on-click("closeOverlay", false)
                 title=(state.translations["Translatable#Cancel"])
-                class="kix-button cancel-button"
-            >
-                <span class="kix-icon-close"/>
+                class="kix-button cancel-button">
+                <span class="kix-icon-close" aria-hidden="true"/>
                 <translation-string pattern="Translatable#Cancel"/>
             </button>
         </div>
@@ -85,9 +81,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 on-click("closeOverlay", true)
                 title=(state.translations["Translatable#Save"])
                 class="kix-button submit-button"
-                disabled=state.error
-            >
-                <span class="kix-icon-check"/>
+                disabled=state.error>
+                <span class="kix-icon-check" aria-hidden="true"/>
                 <translation-string pattern="Translatable#Save"/>
             </button>
         </div>

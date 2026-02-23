@@ -23,17 +23,27 @@ import { ComponentState } from './ComponentState';
 class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
 
     private clearMinimizedStateOnDestroy: boolean;
-    private additionalActions: IAction[] = [];
+    private additionalActions: IAction[];
+    private canChangeMinimize: boolean;
+    private startAsMinimized: boolean;
+    private minimizeInstanceId: string;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'widget');
         this.state = new ComponentState();
         this.clearMinimizedStateOnDestroy = input.clearMinimizedStateOnDestroy || false;
+        this.additionalActions = [];
+        this.canChangeMinimize = true;
+        this.startAsMinimized = input.startAsMinimized || false;
     }
 
     public onInput(input: any): void {
         super.onInput(input);
+
+        this.startAsMinimized = input.startAsMinimized;
+
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
+        this.minimizeInstanceId = `${input.minimizeInstanceId || this.state.instanceId}-minimized`;
 
         this.state.widgetConfiguration = input.configuration;
 
@@ -78,12 +88,15 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
             this.state.minimized = this.state.widgetConfiguration?.minimized;
         }
 
-        const storedMinimized = ClientStorageService.getOption(`${this.state.instanceId}-minimized`);
+        const storedMinimized = ClientStorageService.getOption(this.minimizeInstanceId);
         if (typeof storedMinimized !== 'undefined' && storedMinimized !== null) {
             this.state.minimized = storedMinimized === 'true';
         }
+        if (this.state.minimized) {
+            (this as any).emit('minimizedChanged', this.state.minimized);
+        }
         this.additionalActions = await ActionFactory.getInstance().getActionsForWidget(
-            this.state.widgetConfiguration?.widgetId
+            this.state.widgetConfiguration?.widgetId, this.contextInstanceId
         );
         this.prepareActions(this.state.actions);
 
@@ -95,16 +108,29 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
             },
             [TabContainerEvent.CHANGE_TITLE]
         );
+        if (this.startAsMinimized) {
+            await this.minimizeWidget(true, null);
+            this.setWidgetClasses(['minimized']);
+        }
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Expand widget', 'Translatable#Collapse widget', 'Translatable#Close widget'
+        ]);
     }
 
     public onDestroy(): void {
         super.onDestroy();
         if (this.clearMinimizedStateOnDestroy) {
-            ClientStorageService.deleteState(`${this.state.instanceId}-minimized`);
+            ClientStorageService.deleteState(this.minimizeInstanceId);
         }
     }
 
-    private canChangeMinimize = true;
+    public minimizeWidgetForce(event): void {
+        this.minimizeWidget(true, event);
+        // prevent state switch back when click event reaches parent element
+        this.canChangeMinimize = false;
+    }
+
     public async minimizeWidget(force: boolean = false, event: any): Promise<void> {
         if (!this.canChangeMinimize) {
             this.canChangeMinimize = true;
@@ -113,7 +139,8 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
             }
         }
         if (event) {
-            event.stopPropagation();
+            // DO NOT stop propagation => e.g. needed to close open action lists
+            // event.stopPropagation();
             event.preventDefault();
         }
 
@@ -127,7 +154,9 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
                     && (event?.target.classList.contains('widget-header')
                         || event.target.classList.contains('header-left')
                         || event.target.classList.contains('header-right')
-                        || event.target.classList.contains('tab-list'))
+                        || event.target.classList.contains('tab-list')
+                        || event.target.classList.contains('action-list-wrapper')
+                        || event.target.classList.contains('action-list'))
                 )
             ) {
                 this.state.minimized = !this.state.minimized;
@@ -138,7 +167,7 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
             }
 
             if (this.state.minimized) {
-                ClientStorageService.setOption(`${this.state.instanceId}-minimized`, this.state.minimized.toString());
+                ClientStorageService.setOption(this.minimizeInstanceId, this.state.minimized.toString());
             } else {
                 setTimeout(() => {
                     const element = (this as any).getEl('widget-content');
@@ -147,7 +176,7 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
                     }
                 }, 100);
 
-                ClientStorageService.deleteState(`${this.state.instanceId}-minimized`);
+                ClientStorageService.deleteState(this.minimizeInstanceId);
             }
         }
     }
@@ -172,13 +201,21 @@ class WidgetComponent extends AbstractMarkoComponent<ComponentState> {
         classes.push(this.getWidgetTypeClass(this.state.widgetType));
 
         if (this.context) {
-            classes.push(this.context.widgetService.getWidgetClasses(this.state.instanceId));
+            classes.push(...this.context.widgetService.getWidgetClasses(this.state.instanceId));
         }
         else {
-            classes.push(WidgetService.getInstance().getWidgetClasses(this.state.instanceId));
+            classes.push(...WidgetService.getInstance().getWidgetClasses(this.state.instanceId));
         }
 
         return classes;
+    }
+
+    private setWidgetClasses(additionalClasses: string[] = []): void {
+        const widgetDiv = (this as any).getEl('widget-' + this.state.instanceId + this.state.componentId);
+        const classes = [...this.getWidgetClasses(), ...additionalClasses];
+        if (classes?.length) {
+            widgetDiv.classList = [...new Set(classes)].join(' ');
+        }
     }
 
     private getWidgetTypeClass(type: WidgetType): string {

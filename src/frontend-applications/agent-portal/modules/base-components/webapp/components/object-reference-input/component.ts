@@ -79,6 +79,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         await this.load();
         this.state.searchCallback = this.search.bind(this);
 
+        await this.handleFilterByTreeOption();
+
         super.registerEventSubscriber(
             async function (data: any, eventId: string): Promise<void> {
                 if (data.formField?.instanceId === this.state.field?.instanceId) {
@@ -89,6 +91,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                         treeHandler.setMultiSelect(this.state.multiselect);
                     }
                     await this.load(false);
+                    await this.handleFilterByTreeOption();
                     this.state.prepared = true;
                 }
             },
@@ -118,6 +121,15 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 },
                 [FormEvent.VALUES_CHANGED]
             );
+        }
+    }
+
+    private async handleFilterByTreeOption(): Promise<void> {
+        const filterByTreeOption = this.state.field?.options?.find(
+            (o) => o.option === ObjectReferenceOptions.FILTER_BY_TREE_IF_NECESSARY
+        );
+        if (filterByTreeOption?.value) {
+            this.state.filterByTree = await ObjectReferenceUtil.shouldFilterByTree(this.state.field?.options);
         }
     }
 
@@ -200,7 +212,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             nodes.filter((n) => n instanceof TreeNode);
         }
 
-        SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+        if (!this.loadingOptions?.sortOrder) {
+            SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+        }
 
         return nodes;
     }

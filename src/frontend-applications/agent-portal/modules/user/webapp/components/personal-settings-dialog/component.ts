@@ -8,6 +8,7 @@
  */
 
 import { Error } from '../../../../../../../server/model/Error';
+import { SearchAPIClient } from '../../../../../api-client/search/Search';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
 import { FormContext } from '../../../../../model/configuration/FormContext';
@@ -27,7 +28,6 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
-import { SearchSocketClient } from '../../../../search/webapp/core/SearchSocketClient';
 import { PersonalSetting } from '../../../model/PersonalSetting';
 import { AgentService } from '../../core/AgentService';
 import { ComponentState } from './ComponentState';
@@ -111,10 +111,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 BrowserUtil.handleBeforeUnload();
                 setTimeout(async () => {
                     BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
+                    await ContextService.getInstance().setDefaultFallbackContext();
                     await ContextService.getInstance().removeContext(
                         this.context.instanceId, undefined, undefined, undefined, true
                     );
-
                     const toast = await TranslationService.translate('Translatable#Changes saved.');
                     BrowserUtil.openSuccessOverlay(toast);
                 }, 100);
@@ -165,7 +165,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async resetSearchDefaults(): Promise<void> {
-        await SearchSocketClient.getInstance().deleteUserDefaultSearch(this.searchObject);
+        await SearchAPIClient.deleteUserDefaultSearch(this.searchObject);
         const message = await TranslationService.translate(
             'Translatable#Search defaults for {0} reseted.', [this.searchObject]
         );

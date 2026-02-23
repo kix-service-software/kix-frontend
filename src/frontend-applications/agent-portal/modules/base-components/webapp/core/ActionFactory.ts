@@ -9,7 +9,7 @@
 
 import { AbstractAction } from './AbstractAction';
 import { IAction } from './IAction';
-import { AuthenticationSocketClient } from './AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
 import { SortOrder } from '../../../../model/SortOrder';
 import { SortUtil } from '../../../../model/SortUtil';
@@ -63,12 +63,12 @@ export class ActionFactory<T extends AbstractAction> {
         this.widgetActions.get(widgetId).push(action);
     }
 
-    public async getActionsForWidget(widgetId: string): Promise<IAction[]> {
+    public async getActionsForWidget(widgetId: string, contextInstanceId?: string): Promise<IAction[]> {
         const actions: IAction[] = [];
         const actionConstructors = this.widgetActions.get(widgetId);
         if (actionConstructors?.length) {
             for (const ac of actionConstructors) {
-                const action = await this.createActionInstance(ac);
+                const action = await this.createActionInstance(ac, undefined, undefined, contextInstanceId);
                 if (action) {
                     actions.push(action);
                 }
@@ -105,10 +105,11 @@ export class ActionFactory<T extends AbstractAction> {
             if (actionMap.has(actionId)) {
                 const action = actionMap.get(actionId);
                 action.setData(data);
+                action.setContext(contextInstanceId);
                 actions.push(action);
             } else if (this.actions.has(actionId) && !this.blacklist.some((a) => a === actionId)) {
                 const actionPrototype = this.actions.get(actionId);
-                const action = await this.createActionInstance(actionPrototype, actionId, data);
+                const action = await this.createActionInstance(actionPrototype, actionId, data, contextInstanceId);
 
                 if (action) {
                     actions.push(action);
@@ -119,18 +120,22 @@ export class ActionFactory<T extends AbstractAction> {
         return actions;
     }
 
-    public async createActionInstance(actionPrototype: new () => T, actionId?: string, data?: any): Promise<IAction> {
+    public async createActionInstance(
+        actionPrototype: new () => T, actionId?: string, data?: any,
+        contextInstanceId?: string
+    ): Promise<IAction> {
         let action: IAction = new actionPrototype();
         action.id = actionId || IdService.generateDateBasedId();
 
         let allowed = true;
         if (action.permissions && action.permissions.length) {
-            allowed = await AuthenticationSocketClient.getInstance().checkPermissions(action.permissions);
+            allowed = await SessionAPIClient.checkPermissions(action.permissions);
         }
 
         if (allowed) {
             await action.initAction();
             await action.setData(data);
+            action.setContext(contextInstanceId);
         } else {
             action = undefined;
         }

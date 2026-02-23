@@ -20,8 +20,7 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public title: string = 'message-content Component',
         public article: Article = null,
-        public expanded: boolean = false,
-        public compactViewExpanded: boolean = false,
+        public articleExpanded: boolean = false,
         public actions: AbstractAction[] = [],
         public isExternal: boolean = false,
         public contactIcon: ObjectIcon | string = null,
@@ -33,7 +32,6 @@ export class ComponentState extends AbstractComponentState {
         public images: DisplayImageDescription[] = [],
         public show: boolean = false,
         public backgroundColor: string = '#fff',
-        public selectedCompactView: boolean = true,
         public fromDisplayName: string = '',
         public showAllAttachments: boolean = false,
         public hasInlineAttachments: boolean = false,
@@ -45,7 +43,8 @@ export class ComponentState extends AbstractComponentState {
         public smimeSignedIcon: ObjectIcon | string = null,
         public smimeSignedTooltip: string = null,
         public smimeSigned: boolean = true,
-        public informationConfig: ObjectInformationCardConfiguration = null
+        public informationConfig: ObjectInformationCardConfiguration = null,
+        public showArticleDFContainer: boolean = false
     ) {
         super();
     }

@@ -29,7 +29,7 @@ export class PersonalSettingsService {
 
     public static async getInitialURLSiteNodes(): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
-        for (let service of this.getInstance().registeredInitialURLSiteExtendedServices) {
+        for (const service of this.getInstance().registeredInitialURLSiteExtendedServices) {
             let serviceNodes = await service.getInitialSiteURLNodes() || [];
             serviceNodes = serviceNodes.filter((sn) => !nodes.some((n) => n.id === sn.id));
             nodes.push(...serviceNodes);

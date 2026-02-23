@@ -7,10 +7,17 @@
  * --
  */
 
-import fs from 'fs';
+/* eslint-disable max-lines-per-function */
+/**
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
 import { AuthenticationService } from '../../../../server/services/AuthenticationService';
-import { IServerConfiguration } from '../../../../server/model/IServerConfiguration';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { RequestMethod } from '../../../../server/model/rest/RequestMethod';
 import { CacheService } from './cache';
@@ -20,7 +27,7 @@ import { Error } from '../../../../server/model/Error';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { User } from '../../modules/user/model/User';
 import { PermissionError } from '../../modules/user/model/PermissionError';
-import { AxiosAdapter, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosAdapter, AxiosError, AxiosResponse } from 'axios';
 import { SocketAuthenticationError } from '../../../../server/model/SocketAuthenticationError';
 import { RequestCounter } from '../../../../server/services/RequestCounter';
 import { HTTPResponse } from './HTTPResponse';
@@ -40,30 +47,12 @@ export class HttpService {
 
     private axios: AxiosAdapter;
     private apiURL: string;
-    private isClusterEnabled: boolean = false;
-    private backendCertificate: any;
     private requestPromises: Map<string, Promise<any>> = new Map();
     private userRoleIds: Map<number, number[]> = new Map();
 
     private constructor() {
-        const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
-        this.apiURL = serverConfig?.BACKEND_API_URL;
-        this.isClusterEnabled = serverConfig.CLUSTER_ENABLED;
+        this.apiURL = ConfigurationService.getEnvString('BACKEND_API_URL');
         this.axios = require('axios');
-
-        const certPath = ConfigurationService.getInstance().certDirectory + '/backend.pem';
-        try {
-            this.backendCertificate = fs.readFileSync(certPath);
-        } catch (error) {
-            LoggingService.getInstance().error(error);
-        }
-
-        if (serverConfig?.LOG_REQUEST_QUEUES_INTERVAL) {
-            setInterval(
-                () => LoggingService.getInstance().debug(`HTTP Request Queue Length: ${RequestCounter.getInstance().getPendingHTTPRequestCount()}`),
-                serverConfig?.LOG_REQUEST_QUEUES_INTERVAL
-            );
-        }
     }
 
     public setUserRoleIds(user: User): void {
@@ -90,22 +79,28 @@ export class HttpService {
             }
         }
 
-        if (this.requestPromises.has(cacheKey)) {
+        if (cacheKey && this.requestPromises.has(cacheKey)) {
             return this.requestPromises.get(cacheKey);
         }
 
         const requestPromise = this.executeRequest<HTTPResponse>(resource, token, clientRequestId, options);
-        this.requestPromises.set(cacheKey, requestPromise);
+        if (cacheKey) {
+            this.requestPromises.set(cacheKey, requestPromise);
+        }
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size, true);
 
         const response = await requestPromise.catch((error) => {
-            this.requestPromises.delete(cacheKey);
+            if (cacheKey) {
+                this.requestPromises.delete(cacheKey);
+            }
             RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
             throw error;
         });
 
-        this.requestPromises.delete(cacheKey);
+        if (cacheKey) {
+            this.requestPromises.delete(cacheKey);
+        }
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
 
@@ -120,7 +115,7 @@ export class HttpService {
         resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = '',
         logError: boolean = true, relevantOrganisationId?: number, headers?: IncomingHttpHeaders
     ): Promise<T> {
-        const options: AxiosRequestConfig = {
+        const options: any = {
             method: RequestMethod.POST,
             data: content,
             params: { RelevantOrganisationID: relevantOrganisationId }
@@ -136,7 +131,7 @@ export class HttpService {
         resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = '',
         relevantOrganisationId: number
     ): Promise<T> {
-        const options: AxiosRequestConfig = {
+        const options: any = {
             method: RequestMethod.PATCH,
             data: content,
             params: { RelevantOrganisationID: relevantOrganisationId }
@@ -151,7 +146,7 @@ export class HttpService {
         resources: string[], token: string, clientRequestId: string, cacheKeyPrefix: string = '',
         logError: boolean = true
     ): Promise<Error[]> {
-        const options: AxiosRequestConfig = {
+        const options: any = {
             method: RequestMethod.DELETE,
         };
 
@@ -170,7 +165,7 @@ export class HttpService {
     public async options(
         token: string, resource: string, content: any, clientRequestId: string, collection: boolean
     ): Promise<OptionsResponse> {
-        const options: AxiosRequestConfig = {
+        const options: any = {
             method: RequestMethod.OPTIONS,
             data: content
         };
@@ -215,7 +210,7 @@ export class HttpService {
     }
 
     private async executeRequest<T = AxiosResponse>(
-        resource: string, token: string, clientRequestId: string, options: AxiosRequestConfig,
+        resource: string, token: string, clientRequestId: string, options: any,
         logError: boolean = true, headers?: IncomingHttpHeaders
     ): Promise<T> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
@@ -240,6 +235,8 @@ export class HttpService {
         if (options.method === 'GET') {
             parameter = ' ' + JSON.stringify(options.params);
         } else if (options.method === 'POST' || options.method === 'PATCH') {
+            delete options.headers['content-length'];
+
             if (typeof options.data === 'object') {
                 const body = this.getPreparedBody(options.data);
                 parameter = ' ' + JSON.stringify(body);
@@ -381,7 +378,7 @@ export class HttpService {
                 'include': 'Preferences,RoleIDs,Contact,DynamicFields'
             };
 
-            const options: AxiosRequestConfig = { method: RequestMethod.GET, params };
+            const options: any = { method: RequestMethod.GET, params };
 
             const uri = 'session/user';
             options.url = this.buildRequestUrl(uri);
@@ -437,7 +434,7 @@ class BackendHTTPError {
         Message: string
     };
 
-    public constructor(error: AxiosError) {
+    public constructor(error: any) {
         const data = error?.response?.data;
         this.error = { Code: data?.Code, Message: data?.Message };
         this.status = error?.response?.status;

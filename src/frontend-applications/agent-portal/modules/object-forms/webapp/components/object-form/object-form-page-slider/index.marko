@@ -14,6 +14,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             style="cursor:pointer"
             class="kix-icon-nook-left fs-3"
             title=(state.translations["Translatable#Previous"])
+            role="button"
+            aria-label=(state.translations["Translatable#Previous"])
             on-click("previousPage")/>
       </div>
       <div class="col-4 text-center fw-bold">
@@ -36,6 +38,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                      },
                   ]
                   title=(state.translations[page.name])
+                  role="button"
+                  aria-label=(state.translations[page.name])
                   on-click("setPage", index)/>
             </for>
          </div>
@@ -45,6 +49,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             style="cursor:pointer"
             class="kix-icon-nook-right fs-3"
             title=(state.translations["Translatable#Next"])
+            role="button"
+            aria-label=(state.translations["Translatable#Next"])
             on-click("nextPage")/>
       </div>
    </div>

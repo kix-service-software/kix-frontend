@@ -17,26 +17,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 : "Queues"
         )>
         <@content>
-            <div
+            <button
                 class=[
-                    "show-all m-1",
-                    {
-                        active: !state.activeNode && !state.myTeamsActive,
-                    },
-                ]
-                on-click("showAll")>
-                <translation-string pattern="Translatable#Show Backlog"/>
-            </div>
-            <div
-                class=[
-                    "show-all m-1",
+                    "show-all p-1",
                     {
                         active: !state.activeNode && state.myTeamsActive,
                     },
                 ]
-                on-click("showMyTeams")>
+                on-click("showMyTeams")
+                role="button"
+                tabindex="0">
                 <translation-string pattern="Translatable#My Teams"/>
-            </div>
+            </button>
             <if(state.nodes)>
                 <tree
                     treeId=state.treeId

@@ -25,11 +25,9 @@ export class ArticleZipAttachmentDownloadAction extends AbstractAction<Article> 
 
     public async run(): Promise<void> {
         if (this.data) {
-            const attachment = await TicketService.getInstance().loadArticleZipAttachment(
+            await TicketService.getInstance().downloadArticleZipAttachment(
                 this.data.TicketID, this.data.ArticleID
             );
-
-            BrowserUtil.startBrowserDownload(attachment.Filename, attachment.Content, attachment.ContentType);
         } else {
             const error = 'Translatable#No article available.';
             OverlayService.getInstance().openOverlay(

@@ -28,9 +28,9 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
 
         this.inputComponentId = 'checklist-form-input';
 
-        const checklist = Array.isArray(object[property]) && object[property].length
+        const checklist = Array.isArray(object?.[property]) && object?.[property].length
             ? object[property][0]
-            : object[property];
+            : object?.[property] ? object[property] : [];
         this.value = DynamicFieldService.parseChecklist(checklist);
     }
 
@@ -53,9 +53,12 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
     }
 
     public async initFormValue(): Promise<void> {
-        if (!this.value && this.defaultValue) {
+        if (!this.value?.length && this.defaultValue) {
             if (typeof this.defaultValue === 'string') {
                 this.value = DynamicFieldService.parseChecklist(this.defaultValue);
+            }
+            else {
+                this.value = this.defaultValue;
             }
         }
         await this.prepareLabel();

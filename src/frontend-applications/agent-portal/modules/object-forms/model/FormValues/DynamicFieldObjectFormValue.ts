@@ -29,7 +29,7 @@ import { DynamicFieldTextAreaFormValue } from './DynamicFields/DynamicFieldTextA
 import { DynamicFieldTextFormValue } from './DynamicFields/DynamicFieldTextFormValue';
 import { ObjectFormValue } from './ObjectFormValue';
 
-export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldValue> {
+export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldValue[]> {
 
     public readonly COUNT_CONTAINER = true;
 
@@ -44,6 +44,7 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         this.enabled = true;
         this.showInUI = false;
         this.isConfigurable = false;
+        this.value ||= [];
     }
 
     public async createDFFormValues(): Promise<void> {
@@ -136,11 +137,11 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
                     );
                     break;
                 case DynamicFieldTypes.CI_REFERENCE:
-                    dfName === 'AffectedAsset' ?
-                        formValue = new DynamicFieldAffectedAssetFormValue(
+                    formValue = dfName === 'AffectedAsset'
+                        ? new DynamicFieldAffectedAssetFormValue(
                             'Value', dynamicFieldValue, this.objectValueMapper, this, dfName
-                        ) :
-                        formValue = new DynamicFieldCIReferenceFormValue(
+                        )
+                        : new DynamicFieldCIReferenceFormValue(
                             'Value', dynamicFieldValue, this.objectValueMapper, this, dfName
                         );
                     break;
