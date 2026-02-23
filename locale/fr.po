@@ -92,6 +92,9 @@ msgstr "Temps comptabilisé : {0}"
 msgid "Action"
 msgstr "Action"
 
+msgid "Action list"
+msgstr ""
+
 msgid "Actions"
 msgstr "Actions"
 
@@ -318,6 +321,9 @@ msgstr "Article Id"
 msgid "Article Text"
 msgstr "Texte de l'article"
 
+msgid "Article content"
+msgstr ""
+
 msgid "Article has printed"
 msgstr "L'article a été imprimé"
 
@@ -365,9 +371,6 @@ msgstr "Actifs affectés"
 
 msgid "Assigned Contacts"
 msgstr "Contacts assignés"
-
-msgid "Assigned Organisation"
-msgstr "Organisation assignée"
 
 msgid "Assigned Organisations"
 msgstr "Organisations assignées"
@@ -422,6 +425,9 @@ msgstr "Widgets du tableau de bord disponibles"
 
 msgid "Available Output Formats"
 msgstr "Formats de sortie disponibles"
+
+msgid "Available in Edit"
+msgstr ""
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -581,6 +587,9 @@ msgstr "Classes"
 msgid "Clear"
 msgstr "Clair"
 
+msgid "Clear Value"
+msgstr ""
+
 msgid "Clear in mask"
 msgstr "Clair dans le masque"
 
@@ -596,11 +605,14 @@ msgstr "Fermer"
 msgid "Close Overlay"
 msgstr "Fermer la superposition"
 
-msgid "Close Sidebars"
-msgstr "Fermer les barres latérales"
+msgid "Close Sidebar"
+msgstr ""
 
 msgid "Close all open tabs"
 msgstr "Fermer tous les onglets ouverts"
+
+msgid "Close widget"
+msgstr ""
 
 msgid "Closed"
 msgstr "Fermé"
@@ -616,6 +628,12 @@ msgstr "Réduire tout"
 
 msgid "Collapse all"
 msgstr "Tout fermer"
+
+msgid "Collapse node"
+msgstr ""
+
+msgid "Collapse widget"
+msgstr ""
 
 msgid "Column Icon"
 msgstr "Icône de colonne"
@@ -858,6 +876,9 @@ msgstr "DESC"
 msgid "DOUBLE_QUOTES"
 msgstr "DOUBLE_QUOTES"
 
+msgid "Danger"
+msgstr ""
+
 msgid "Dashboard Refresh Interval (Minutes)"
 msgstr "Intervalle de rafraîchissement du tableau de bord (minutes)"
 
@@ -869,6 +890,9 @@ msgstr "Type de données"
 
 msgid "Datasource"
 msgstr "Source de données"
+
+msgid "Date Input"
+msgstr ""
 
 msgid "Date Restriction"
 msgstr "Restriction de date"
@@ -1302,6 +1326,12 @@ msgstr "Quitter KIX sans demander"
 
 msgid "Expand All"
 msgstr "Tout développer"
+
+msgid "Expand node"
+msgstr ""
+
+msgid "Expand widget"
+msgstr ""
 
 msgid "Explorer"
 msgstr "Explorateur"
@@ -2230,6 +2260,9 @@ msgstr "Helptext_Customers_OrganisationCreate_Name"
 msgid "Helptext_Customers_OrganisationCreate_Number"
 msgstr "Helptext_Customers_OrganisationCreate_Number"
 
+msgid "Helptext_Customers_OrganisationCreate_ParentOrganisation"
+msgstr ""
+
 msgid "Helptext_Customers_OrganisationCreate_Street"
 msgstr "Helptext_Customers_OrganisationCreate_Street"
 
@@ -2545,9 +2578,6 @@ msgstr "Helptext_i18n_TranslationPatternCreate_Pattern"
 
 msgid "Hide"
 msgstr "Cacher"
-
-msgid "Hide Message"
-msgstr "Cacher le message"
 
 msgid "Hint"
 msgstr "Indice"
@@ -2971,6 +3001,15 @@ msgstr "Mes équipes"
 msgid "My Teams (past)"
 msgstr "Mes équipes (passé)"
 
+msgid "My Teams Table"
+msgstr ""
+
+msgid "My Teams Table Widget"
+msgstr ""
+
+msgid "My Teams Widget"
+msgstr ""
+
 msgid "My Tickets"
 msgstr "Mes billets"
 
@@ -3217,9 +3256,6 @@ msgstr "Non disponible (plus ou pas encore)"
 msgid "Not more than 5 files possible."
 msgstr "Pas plus de 5 fichiers possibles."
 
-msgid "Not set"
-msgstr ""
-
 msgid "Note"
 msgstr "Note"
 
@@ -3343,8 +3379,8 @@ msgstr "Une fois par jour"
 msgid "Open"
 msgstr "Ouvrir"
 
-msgid "Open Sidebars"
-msgstr "Ouvrir les barres latérales"
+msgid "Open Sidebar"
+msgstr ""
 
 msgid "Open Tickets"
 msgstr "Billets ouverts"
@@ -3396,6 +3432,9 @@ msgstr "Tableau de bord des organisations et des contacts"
 
 msgid "Other"
 msgstr "Autres"
+
+msgid "Other Information"
+msgstr ""
 
 msgid "Out Of Office"
 msgstr "Absence de bureau"
@@ -3486,6 +3525,9 @@ msgstr "Paramètres"
 
 msgid "Parent Category"
 msgstr "Catégorie de parents"
+
+msgid "Parent Organisation"
+msgstr ""
 
 msgid "Parent Queue"
 msgstr "File d'attente des parents"
@@ -3782,9 +3824,6 @@ msgstr "Recharger les configurations du portail des agents"
 msgid "Reload Application"
 msgstr "Recharger l'application"
 
-msgid "Reload Calendar Data ..."
-msgstr "Recharger les données du calendrier ..."
-
 msgid "Reload Frontend Configurations"
 msgstr "Recharger les configurations du frontend"
 
@@ -3850,6 +3889,9 @@ msgstr "Supprimer la dépendance à l'égard de l'organisation"
 
 msgid "Remove from Affected Assets"
 msgstr "Retirer des actifs affectés"
+
+msgid "Remove node"
+msgstr ""
 
 msgid "Remove parameter"
 msgstr "Supprimer le paramètre"
@@ -4060,6 +4102,12 @@ msgstr "Programmation"
 msgid "Scope"
 msgstr "Champ d'application"
 
+msgid "Scroll tabs to the left"
+msgstr ""
+
+msgid "Scroll tabs to the right"
+msgstr ""
+
 msgid "Search"
 msgstr "Recherche"
 
@@ -4145,6 +4193,9 @@ msgstr "Sélectionner Aucun"
 msgid "Select all"
 msgstr "Sélectionner tout"
 
+msgid "Select entry"
+msgstr ""
+
 msgid "Select file"
 msgstr "Sélectionner un fichier"
 
@@ -4220,6 +4271,9 @@ msgstr "Recherche partagée"
 msgid "Shared Searches"
 msgstr "Recherches partagées"
 
+msgid "Show FAQ article preview"
+msgstr ""
+
 msgid "Show Filter"
 msgstr "Afficher le filtre"
 
@@ -4234,6 +4288,9 @@ msgstr "Liens de l'exposition"
 
 msgid "Show all"
 msgstr "Afficher tout"
+
+msgid "Show filter"
+msgstr ""
 
 msgid "Show in Customer Portal"
 msgstr "Afficher dans le portail client"
@@ -4450,6 +4507,9 @@ msgstr "Système : Plugins"
 
 msgid "System: Sysconfig ({0})"
 msgstr "Système : Sysconfig ({0})"
+
+msgid "Table"
+msgstr ""
 
 msgid "Table Columns"
 msgstr "Colonnes du tableau"
@@ -4703,6 +4763,12 @@ msgstr "Pour"
 
 msgid "Today"
 msgstr "Aujourd'hui"
+
+msgid "Toggle password visibility"
+msgstr ""
+
+msgid "Toggle row"
+msgstr ""
 
 msgid "Token URL"
 msgstr "URL du jeton"
@@ -5022,6 +5088,9 @@ msgstr "avant"
 msgid "between"
 msgstr "entre"
 
+msgid "checklist progress"
+msgstr ""
+
 msgid "contained in"
 msgstr "contenues dans"
 
@@ -5036,6 +5105,9 @@ msgstr "actuel"
 
 msgid "descending"
 msgstr "descendant"
+
+msgid "download attachment"
+msgstr ""
 
 msgid "draft successfully saved"
 msgstr "projet sauvegardé avec succès"
@@ -5106,6 +5178,9 @@ msgstr "précédent"
 msgid "recipient addresses (To, Cc, etc.)"
 msgstr "les adresses des destinataires (To, Cc, etc.)"
 
+msgid "remove label"
+msgstr ""
+
 msgid "responsibility by me"
 msgstr "responsabilité de ma part"
 
@@ -5141,6 +5216,9 @@ msgstr "setup_assistant_welcome_text"
 
 msgid "setupt_assistant_my-organisation_text"
 msgstr "setupt_assistant_mon-organisation_texte"
+
+msgid "show dropdown"
+msgstr ""
 
 msgid "since"
 msgstr "depuis"
@@ -5210,3 +5288,18 @@ msgstr "{0} : n'a pas de valeur."
 
 msgid "{0}: just white spaces as value is not allowed."
 msgstr "{0} : les espaces blancs ne sont pas autorisés."
+
+#~ msgid "Assigned Organisation"
+#~ msgstr "Organisation assignée"
+
+#~ msgid "Close Sidebars"
+#~ msgstr "Fermer les barres latérales"
+
+#~ msgid "Hide Message"
+#~ msgstr "Cacher le message"
+
+#~ msgid "Open Sidebars"
+#~ msgstr "Ouvrir les barres latérales"
+
+#~ msgid "Reload Calendar Data ..."
+#~ msgstr "Recharger les données du calendrier ..."

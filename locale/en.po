@@ -92,6 +92,9 @@ msgstr "Accounted Time: {0}"
 msgid "Action"
 msgstr "Action"
 
+msgid "Action list"
+msgstr ""
+
 msgid "Actions"
 msgstr "Actions"
 
@@ -328,6 +331,9 @@ msgstr ""
 msgid "Article Text"
 msgstr ""
 
+msgid "Article content"
+msgstr ""
+
 msgid "Article has printed"
 msgstr "Article has been printed"
 
@@ -375,9 +381,6 @@ msgstr "Assigned Assets"
 
 msgid "Assigned Contacts"
 msgstr ""
-
-msgid "Assigned Organisation"
-msgstr "Assigned Organisation"
 
 msgid "Assigned Organisations"
 msgstr ""
@@ -431,6 +434,9 @@ msgid "Available Dashboard Widgets"
 msgstr ""
 
 msgid "Available Output Formats"
+msgstr ""
+
+msgid "Available in Edit"
 msgstr ""
 
 msgid "Avatar"
@@ -589,6 +595,9 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
+msgid "Clear Value"
+msgstr ""
+
 msgid "Clear in mask"
 msgstr ""
 
@@ -604,10 +613,13 @@ msgstr ""
 msgid "Close Overlay"
 msgstr "Close"
 
-msgid "Close Sidebars"
+msgid "Close Sidebar"
 msgstr ""
 
 msgid "Close all open tabs"
+msgstr ""
+
+msgid "Close widget"
 msgstr ""
 
 msgid "Closed"
@@ -623,6 +635,12 @@ msgid "Collapse All"
 msgstr ""
 
 msgid "Collapse all"
+msgstr ""
+
+msgid "Collapse node"
+msgstr ""
+
+msgid "Collapse widget"
 msgstr ""
 
 msgid "Column Icon"
@@ -865,6 +883,9 @@ msgstr ""
 msgid "DOUBLE_QUOTES"
 msgstr "\" (Double Quotes)"
 
+msgid "Danger"
+msgstr ""
+
 msgid "Dashboard Refresh Interval (Minutes)"
 msgstr ""
 
@@ -875,6 +896,9 @@ msgid "Data Type"
 msgstr ""
 
 msgid "Datasource"
+msgstr ""
+
+msgid "Date Input"
 msgstr ""
 
 msgid "Date Restriction"
@@ -1306,6 +1330,12 @@ msgid "Exit KIX without asking"
 msgstr ""
 
 msgid "Expand All"
+msgstr ""
+
+msgid "Expand node"
+msgstr ""
+
+msgid "Expand widget"
 msgstr ""
 
 msgid "Explorer"
@@ -2487,6 +2517,9 @@ msgstr ""
 msgid "Helptext_Customers_OrganisationCreate_Number"
 msgstr "Insert an unique identifier (e.g. customer code) for the organisation."
 
+msgid "Helptext_Customers_OrganisationCreate_ParentOrganisation"
+msgstr ""
+
 msgid "Helptext_Customers_OrganisationCreate_Street"
 msgstr ""
 
@@ -2930,9 +2963,6 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
-msgid "Hide Message"
-msgstr ""
-
 msgid "Hint"
 msgstr ""
 
@@ -3349,6 +3379,15 @@ msgstr ""
 msgid "My Teams (past)"
 msgstr ""
 
+msgid "My Teams Table"
+msgstr ""
+
+msgid "My Teams Table Widget"
+msgstr ""
+
+msgid "My Teams Widget"
+msgstr ""
+
 msgid "My Tickets"
 msgstr ""
 
@@ -3595,9 +3634,6 @@ msgstr ""
 msgid "Not more than 5 files possible."
 msgstr ""
 
-msgid "Not set"
-msgstr ""
-
 msgid "Note"
 msgstr ""
 
@@ -3721,7 +3757,7 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-msgid "Open Sidebars"
+msgid "Open Sidebar"
 msgstr ""
 
 msgid "Open Tickets"
@@ -3773,6 +3809,9 @@ msgid "Organizations and Contacts Dashboard"
 msgstr ""
 
 msgid "Other"
+msgstr ""
+
+msgid "Other Information"
 msgstr ""
 
 msgid "Out Of Office"
@@ -3863,6 +3902,9 @@ msgid "Parameters"
 msgstr ""
 
 msgid "Parent Category"
+msgstr ""
+
+msgid "Parent Organisation"
 msgstr ""
 
 msgid "Parent Queue"
@@ -4174,9 +4216,6 @@ msgstr "Reload Frontend Configurations"
 msgid "Reload Application"
 msgstr ""
 
-msgid "Reload Calendar Data ..."
-msgstr ""
-
 msgid "Reload Frontend Configurations"
 msgstr ""
 
@@ -4241,6 +4280,9 @@ msgid "Remove dependency to organisation"
 msgstr ""
 
 msgid "Remove from Affected Assets"
+msgstr ""
+
+msgid "Remove node"
 msgstr ""
 
 msgid "Remove parameter"
@@ -4450,6 +4492,12 @@ msgstr ""
 msgid "Scope"
 msgstr ""
 
+msgid "Scroll tabs to the left"
+msgstr ""
+
+msgid "Scroll tabs to the right"
+msgstr ""
+
 msgid "Search"
 msgstr ""
 
@@ -4534,6 +4582,9 @@ msgstr ""
 msgid "Select all"
 msgstr ""
 
+msgid "Select entry"
+msgstr ""
+
 msgid "Select file"
 msgstr ""
 
@@ -4609,6 +4660,9 @@ msgstr ""
 msgid "Shared Searches"
 msgstr ""
 
+msgid "Show FAQ article preview"
+msgstr ""
+
 msgid "Show Filter"
 msgstr ""
 
@@ -4622,6 +4676,9 @@ msgid "Show Links"
 msgstr ""
 
 msgid "Show all"
+msgstr ""
+
+msgid "Show filter"
 msgstr ""
 
 msgid "Show in Customer Portal"
@@ -4838,6 +4895,9 @@ msgid "System: Plugins"
 msgstr ""
 
 msgid "System: Sysconfig ({0})"
+msgstr ""
+
+msgid "Table"
 msgstr ""
 
 msgid "Table Columns"
@@ -5072,6 +5132,12 @@ msgid "To"
 msgstr ""
 
 msgid "Today"
+msgstr ""
+
+msgid "Toggle password visibility"
+msgstr ""
+
+msgid "Toggle row"
 msgstr ""
 
 msgid "Token URL"
@@ -5392,6 +5458,9 @@ msgstr "before/less than"
 msgid "between"
 msgstr ""
 
+msgid "checklist progress"
+msgstr ""
+
 msgid "contained in"
 msgstr ""
 
@@ -5405,6 +5474,9 @@ msgid "current"
 msgstr ""
 
 msgid "descending"
+msgstr ""
+
+msgid "download attachment"
 msgstr ""
 
 msgid "draft successfully saved"
@@ -5476,6 +5548,9 @@ msgstr ""
 msgid "recipient addresses (To, Cc, etc.)"
 msgstr ""
 
+msgid "remove label"
+msgstr ""
+
 msgid "responsibility by me"
 msgstr ""
 
@@ -5537,6 +5612,9 @@ msgstr ""
 "Fill the form with your organisations data. This data is used in KIX as a "
 "reference at several occations, e.g. the standard signature contains this "
 "information."
+
+msgid "show dropdown"
+msgstr ""
 
 msgid "since"
 msgstr "since/equal or greater"
@@ -5606,6 +5684,9 @@ msgstr ""
 
 msgid "{0}: just white spaces as value is not allowed."
 msgstr ""
+
+#~ msgid "Assigned Organisation"
+#~ msgstr "Assigned Organisation"
 
 #~ msgid "CMDB View"
 #~ msgstr "Assets View"
