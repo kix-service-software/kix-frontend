@@ -87,7 +87,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
 
             const configuredWidget = await this.context?.getConfiguredWidget(this.state.instanceId);
-            this.state.isLarge = configuredWidget?.size === WidgetSize.LARGE;
+            this.state.isLarge = configuredWidget ? configuredWidget.size === WidgetSize.LARGE : true;
 
             await this.initViews(settings?.objectType);
 
