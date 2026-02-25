@@ -25,8 +25,14 @@ import {
 import { TiptapEditorService } from '../../core/TipTapEditorService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import {
+    showLinkHoverPopup,
+    hideLinkHoverPopup,
+    requestHideLinkHoverPopup,
+} from '../../static/utils/linkHoverPopup';
 
 declare const Tiptap: any;
+
 function sanitizeTextmoduleHtml(html: string): string {
     if (!html) return html;
 
@@ -206,6 +212,43 @@ async function inlineAllExternalImagesInHtml(html: string): Promise<string> {
     return d.innerHTML;
 }
 
+let hoverRaf: number | null = null;
+
+function findLinkRangeFromDomAnchor(
+    view: any,
+    a: HTMLAnchorElement,
+): { from: number; to: number; href: string } | null {
+    try {
+        const href = (a.getAttribute('href') || '').trim();
+        if (!href) return null;
+
+        const linkType = view?.state?.schema?.marks?.link;
+        if (!linkType) return null;
+
+        const from = view.posAtDOM(a, 0);
+        const to = view.posAtDOM(a, a.childNodes.length);
+
+        const safeFrom = Math.max(0, Math.min(from, view.state.doc.content.size));
+        const safeTo = Math.max(0, Math.min(to, view.state.doc.content.size));
+        if (safeTo <= safeFrom) return null;
+
+        let hasLink = false;
+        view.state.doc.nodesBetween(safeFrom, safeTo, (node: any) => {
+            if (hasLink) return false;
+            if (node?.isText && linkType.isInSet(node.marks)) {
+                hasLink = true;
+                return false;
+            }
+            return;
+        });
+
+        if (!hasLink) return null;
+        return { from: safeFrom, to: safeTo, href };
+    } catch {
+        return null;
+    }
+}
+
 export class Component extends AbstractMarkoComponent<ComponentState> {
     private editor: any;
     private readOnly: boolean;
@@ -215,16 +258,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private changeListener: Array<() => null> = [];
     private focusListener: Array<(value: string) => null> = [];
     private toolbar: HTMLDivElement;
-
     private focusListenerEnabled = true;
-
     private _onVisChange?: () => void;
     private _onBeforeUnload?: () => void;
     private _saveRaw?: () => void;
-
     private _lastRawHtml?: string;
     private _lastCleanHtml?: string;
-
     private _lastEmittedValue?: string;
 
     public onCreate(input: any): void {
@@ -417,6 +456,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                                         });
                                         view.dispatch(view.state.tr.replaceSelectionWith(node));
                                     };
+
                                     reader.readAsDataURL(file);
                                     event.preventDefault();
                                     return true;
@@ -431,7 +471,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                                 try {
                                     const rewrittenHtml = await inlineAllExternalImagesInHtml(html);
                                     const safe = normalizeForTiptap(rewrittenHtml);
-
                                     comp.editor.chain().focus().insertContent(safe).run();
                                 } catch {
                                     try {
@@ -565,6 +604,85 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                             if (!isEmptyBlock) return false;
 
                             applyLastUsedMarks(comp.editor);
+                            return false;
+                        },
+                        mousemove: (view: any, ev: MouseEvent): boolean => {
+                            if (!view?.dom || !ev?.target) return false;
+
+                            const target = ev.target as HTMLElement;
+                            const a = target.closest?.('a[href]') as HTMLAnchorElement | null;
+
+                            if (!a || !view.dom.contains(a)) {
+                                requestHideLinkHoverPopup(220);
+                                return false;
+                            }
+
+                            if (hoverRaf) return false;
+
+                            hoverRaf = window.requestAnimationFrame(() => {
+                                hoverRaf = null;
+
+                                const range = findLinkRangeFromDomAnchor(view, a);
+                                if (!range) {
+                                    requestHideLinkHoverPopup(220);
+                                    return;
+                                }
+
+                                const rect = a.getBoundingClientRect();
+
+                                showLinkHoverPopup({
+                                    rect,
+                                    href: range.href,
+                                    onRemove: (): void => {
+                                        try {
+                                            const linkMark = view.state.schema.marks.link;
+                                            if (!linkMark) return;
+
+                                            let tr = view.state.tr;
+                                            let changed = false;
+
+                                            view.state.doc.nodesBetween(
+                                                range.from,
+                                                range.to,
+                                                (node: any, pos: number): void => {
+                                                    if (!node?.isText) return;
+
+                                                    const hasSameHref = (node.marks || []).some((m: any) => {
+                                                        const href = (m.attrs?.href || '').trim();
+                                                        return m.type === linkMark && href === range.href;
+                                                    });
+
+                                                    if (!hasSameHref) return;
+
+                                                    tr = tr.removeMark(pos, pos + node.nodeSize, linkMark);
+                                                    changed = true;
+                                                },
+                                            );
+
+                                            if (changed) {
+                                                view.dispatch(tr);
+                                            }
+                                            view.focus();
+                                        } catch {
+                                            // noop
+                                        } finally {
+                                            hideLinkHoverPopup();
+                                        }
+                                    },
+                                    onRequestClose: (): void => requestHideLinkHoverPopup(220),
+                                });
+                            });
+
+                            return false;
+                        },
+
+                        mouseleave: (): boolean => {
+                            requestHideLinkHoverPopup(220);
+                            return false;
+                        },
+
+                        blur: (): boolean => {
+                            hideLinkHoverPopup();
                             return false;
                         },
                     },
@@ -921,6 +1039,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
+        hideLinkHoverPopup();
+
         if (this._onVisChange) {
             document.removeEventListener('visibilitychange', this._onVisChange);
             this._onVisChange = undefined;
