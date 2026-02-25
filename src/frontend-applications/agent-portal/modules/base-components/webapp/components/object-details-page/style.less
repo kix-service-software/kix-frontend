@@ -62,9 +62,15 @@
                 button {
                     .action {
                         &:not(.inactive) {
-                            color: @secondary-3 !important;
+                            color: @secondary-3  !important;
                         }
                     }
+                }
+
+                .btn-group.is-expansion button,
+                .btn-group.is-expansion .dropdown-menu .list-group-item {
+
+                    background-color: @primary-0;
                 }
             }
         }

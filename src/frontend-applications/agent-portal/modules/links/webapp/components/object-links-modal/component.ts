@@ -29,6 +29,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         await super.onMount();
         await this.prepareTable();
 
+        this.state.filterPlaceholder = await TranslationService.translate('Translatable#enter filter value');
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Close'
         ]);
