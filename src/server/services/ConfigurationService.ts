@@ -95,13 +95,17 @@ export class ConfigurationService {
         return process.env[env] === 'true' || Number(process.env[env]) === 1;
     }
 
-    public static getEnvNumber(env: string): number {
+    public static getEnvNumber(env: string, defaultValue?: number): number {
         this.logEnv(env);
+        if (!process.env[env] && defaultValue)
+            return defaultValue;
         return Number(process.env[env]);
     }
 
-    public static getEnvString(env: string): string {
+    public static getEnvString(env: string, defaultValue?: string): string {
         this.logEnv(env);
+        if (!process.env[env] && defaultValue)
+            return defaultValue;
         return process.env[env];
     }
 
