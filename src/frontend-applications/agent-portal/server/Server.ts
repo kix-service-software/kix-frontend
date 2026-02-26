@@ -81,7 +81,7 @@ export class Server {
 
         await this.initPluginExtensions();
 
-        this.fastify.listen({ port: this.getPort(), host: '::' }, (err, address) => {
+        this.fastify.listen({ port: this.getPort(), host: '0.0.0.0' }, (err, address) => {
             if (err) {
                 this.fastify.log.error(err);
                 process.exit(1);
