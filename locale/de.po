@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2025-12-01 12:17+0000\n"
-"Last-Translator: fkrahl <Frank.Krahl@kixdesk.com>\n"
+"PO-Revision-Date: 2026-02-27 10:53+0000\n"
+"Last-Translator: jbrueckner <Joerg.Brueckner@kixdesk.com>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.16\n"
 
 msgid "', "
 msgstr "', "
@@ -111,7 +111,7 @@ msgid "Add Column(s)"
 msgstr "Spalte(n) hinzufügen"
 
 msgid "Add Field"
-msgstr ""
+msgstr "Feld hinzufügen"
 
 msgid "Add Table Widget"
 msgstr "Tabellenwidget hinzufügen"
@@ -360,7 +360,7 @@ msgid "Asset Classes"
 msgstr "Assetklassen"
 
 msgid "Asset Dashboard"
-msgstr ""
+msgstr "Asset Dashboard"
 
 msgid "Asset Graph"
 msgstr "Asset-Graph"
@@ -628,13 +628,13 @@ msgid "Close Overlay"
 msgstr "Schließen"
 
 msgid "Close Sidebar"
-msgstr ""
+msgstr "Seitenleiste schließen"
 
 msgid "Close all open tabs"
 msgstr "Alle offenen Tabs schließen"
 
 msgid "Close widget"
-msgstr ""
+msgstr "Widget schließen"
 
 msgid "Closed"
 msgstr "Geschlossen"
@@ -901,7 +901,7 @@ msgid "Danger"
 msgstr ""
 
 msgid "Dashboard Refresh Interval (Minutes)"
-msgstr ""
+msgstr "Aktualisierungsintervall des Dashboards (Minuten)"
 
 msgid "Data Source"
 msgstr "Datenquelle"
@@ -1094,13 +1094,13 @@ msgid "Edit FAQ Category"
 msgstr "FAQ Kategorie bearbeiten"
 
 msgid "Edit Field"
-msgstr ""
+msgstr "Feld bearbeiten"
 
 msgid "Edit General Catalog"
 msgstr "General Katalog bearbeiten"
 
 msgid "Edit Group"
-msgstr ""
+msgstr "Gruppe bearbeiten"
 
 msgid "Edit Job"
 msgstr "Job bearbeiten"
@@ -1352,7 +1352,7 @@ msgid "Expand node"
 msgstr ""
 
 msgid "Expand widget"
-msgstr ""
+msgstr "Widget erweitern"
 
 msgid "Explorer"
 msgstr "Explorer"
@@ -3158,7 +3158,7 @@ msgid "Home"
 msgstr "Home"
 
 msgid "Home Dashboard"
-msgstr ""
+msgstr "Startseite Dashboard"
 
 msgid "Host"
 msgstr "Host"
@@ -3569,13 +3569,13 @@ msgid "My Teams (past)"
 msgstr "Meine Teams (Vergangenheit)"
 
 msgid "My Teams Table"
-msgstr ""
+msgstr "Meine Teams Tabelle"
 
 msgid "My Teams Table Widget"
-msgstr ""
+msgstr "Meine Teams-Tabellen-Widget"
 
 msgid "My Teams Widget"
-msgstr ""
+msgstr "Mein Teams-Widget"
 
 msgid "My Tickets"
 msgstr "Meine Tickets"
@@ -3659,7 +3659,7 @@ msgid "New General Catalog"
 msgstr "Neuer General Katalog"
 
 msgid "New Group"
-msgstr ""
+msgstr "Neue Gruppe"
 
 msgid "New Job"
 msgstr "Neuer Job"
@@ -3680,7 +3680,7 @@ msgid "New Organisation"
 msgstr "Neue Organisation"
 
 msgid "New Page"
-msgstr ""
+msgstr "Neue Seite"
 
 msgid "New Password"
 msgstr "Neues Passwort"
@@ -3947,7 +3947,7 @@ msgid "Open"
 msgstr "Offen"
 
 msgid "Open Sidebar"
-msgstr ""
+msgstr "Seitenleiste öffnen"
 
 msgid "Open Tickets"
 msgstr "Offene Tickets"
@@ -4001,7 +4001,7 @@ msgid "Other"
 msgstr "andere"
 
 msgid "Other Information"
-msgstr ""
+msgstr "Weitere Informationen"
 
 msgid "Out Of Office"
 msgstr "Abwesend"
@@ -4778,7 +4778,7 @@ msgid "Select all"
 msgstr "Alle auswählen"
 
 msgid "Select entry"
-msgstr ""
+msgstr "Eintrag auswählen"
 
 msgid "Select file"
 msgstr "Datei auswählen"
@@ -4856,7 +4856,7 @@ msgid "Shared Searches"
 msgstr "geteilte Suchen"
 
 msgid "Show FAQ article preview"
-msgstr ""
+msgstr "Vorschau des FAQ-Artikels anzeigen"
 
 msgid "Show Filter"
 msgstr "Filter zeigen"
@@ -4874,7 +4874,7 @@ msgid "Show all"
 msgstr "Alles anzeigen"
 
 msgid "Show filter"
-msgstr ""
+msgstr "Filter anzeigen"
 
 msgid "Show in Customer Portal"
 msgstr "In Kundenportal Anzeigen"
@@ -5093,7 +5093,7 @@ msgid "System: Sysconfig ({0})"
 msgstr "System: SysConfig ({0})"
 
 msgid "Table"
-msgstr ""
+msgstr "Tabelle"
 
 msgid "Table Columns"
 msgstr "Tabellenspalten"
@@ -5692,7 +5692,7 @@ msgid "descending"
 msgstr "absteigend"
 
 msgid "download attachment"
-msgstr ""
+msgstr "Anhang herunterladen"
 
 msgid "draft successfully saved"
 msgstr "Entwurf gesichert"
@@ -5731,7 +5731,7 @@ msgid "insert filter value"
 msgstr "Filterwert eingeben"
 
 msgid "is empty"
-msgstr ""
+msgstr "ist leer"
 
 msgid "is to large (max {0})."
 msgstr "ist zu lang (max {0})."
@@ -5831,7 +5831,7 @@ msgstr ""
 "Signatur ersetzt."
 
 msgid "show dropdown"
-msgstr ""
+msgstr "Dropdown-Menü anzeigen"
 
 msgid "since"
 msgstr "seit/gleich oder größer"
