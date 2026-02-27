@@ -49,8 +49,15 @@ export class APIClient {
                 return;
             }
 
-            const result = await response.json();
-            const errorDetails = result?.Code ? ` (${result.Code}: ${result.Message})` : '';
+            let result;
+            try {
+                result = await response.json();
+            } catch {
+                // nothing
+            }
+            const errorDetails = result?.Code
+                ? ` (${result.Code}: ${result.Message})`
+                : ` (${response.status}: ${response.statusText})`;
             const errorMessage = `API Error - ${method} - ${relativeUrl}` + errorDetails;
             console.error(errorMessage);
             throw new Error(result?.Code || 'Error', errorMessage);

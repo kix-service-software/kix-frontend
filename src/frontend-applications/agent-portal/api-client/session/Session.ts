@@ -81,8 +81,10 @@ export class SessionAPIClient extends APIClient {
 
             const response = await this.executeRequest(
                 RequestMethod.GET, '/session/permissioncheck', undefined, { permissions: JSON.stringify(permissions) }
-            );
-            resolve(response.status === 200);
+            ).catch((e): Response => {
+                return;
+            });
+            resolve(response?.status === 200);
         });
     }
 
