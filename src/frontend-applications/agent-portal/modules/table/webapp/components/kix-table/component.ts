@@ -143,10 +143,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         let maxheight: number = null;
 
         if (container) {
-            const widgetFrame = container.closest('.widget-frame') as HTMLElement;
+            const widgetContainer = container.closest('.widget-container') as HTMLElement;
+            const widgetContainerParent = widgetContainer?.parentElement;
 
             const isHomeDashboard = Boolean(
-                widgetFrame?.id && widgetFrame.id.indexOf('widget-frame-home-dashboard-') === 0
+                widgetContainerParent?.className && widgetContainerParent.className === 'dashboard home'
             );
 
             if (!isHomeDashboard) {
