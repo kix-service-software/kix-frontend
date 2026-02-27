@@ -476,7 +476,7 @@ export class ContextService {
             url = await context.addExtendedUrlParams(url);
 
             const baseRoute = ClientStorageService.getBaseRoute();
-            url = `${baseRoute}${url}`;
+            url = `${baseRoute}/${url}`;
 
             const state = new BrowserHistoryState(context.contextId, objectId);
             if (oldContext) {
