@@ -42,8 +42,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Help, hints & tricks',
             'Translatable#Field Agent App',
-            'Field Agent App (Android)',
-            'Field Agent App (iOS)',
+            'Translatable#Field Agent App (Android)',
+            'Translatable#Field Agent App (iOS)',
             'Translatable#Manuals',
             'Translatable#User Manual',
             'Translatable#Admin Manual',
