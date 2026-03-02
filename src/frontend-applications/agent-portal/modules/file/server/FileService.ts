@@ -9,24 +9,25 @@
 
 import { IDownloadableFile } from '../../../model/IDownloadableFile';
 import { v4 as uuidv4 } from 'uuid';
-import fs from 'fs';
 import path from 'path';
-import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import fs from 'fs';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { ClientNotificationService } from '../../../server/services/ClientNotificationService';
 import { BackendNotification } from '../../../model/BackendNotification';
 import { BackendNotificationEvent } from '../../../model/BackendNotificationEvent';
-import { User } from '../../user/model/User';
-import { FastifyReply } from 'fastify/types/reply';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 
 export class FileService {
+
+    static basePath: string = path.join(__dirname, '..', '..', '..', '..', '..', '..', 'data');
+    static defaultTTL: number = 30;     // keep the download file for 30s
 
     public static initialize(): void {
         LoggingService.getInstance().info('[SERVER] start FileService - initialization');
 
         const folder = ['downloads', 'uploads'];
         for (const f of folder) {
-            const folderPath = path.join(__dirname, '..', '..', '..', '..', '..', '..', 'data', f);
+            const folderPath = path.join(this.basePath, f);
             if (!fs.existsSync(folderPath)) {
                 fs.mkdirSync(folderPath);
             }
@@ -57,7 +58,10 @@ export class FileService {
             return;
         }
 
-        const downloads = this.getDownloads(userId);
+        const ttl = ConfigurationService.getEnvNumber('FILE_DOWNLOAD_TTL', this.defaultTTL);
+
+        this.cleanupObsolete();
+
         try {
             file.downloadId = uuidv4() + `-${file.Filename}`;
             file.downloadSecret = uuidv4();
@@ -65,13 +69,14 @@ export class FileService {
             try {
                 const filePath = this.getFilePath(file.downloadId);
                 fs.writeFileSync(filePath, file.Content, { encoding: 'base64' });
+
+                // remove the file after TTL + 1s
+                setTimeout(() => {
+                    this.removeFile(file.downloadId, true);
+                }, (ttl + 1) * 1000,);
             } catch (err) {
                 LoggingService.getInstance().error(`Could not save file "${file.Filename}" for download (${err})`);
                 saved = false;
-            }
-            if (saved) {
-                const jsonFileName = `${userId}_downloads.json`;
-                this.addFileToDownloads(file, downloads, jsonFileName);
             }
 
             delete file.Content;
@@ -79,82 +84,11 @@ export class FileService {
             LoggingService.getInstance().error(err);
         }
     }
-
-    private static addFileToDownloads(
-        file: IDownloadableFile, downloads: IDownloadableFile[] = [], downloadFileName: string
-    ): void {
-        const downloadFile: any = {
-            downloadId: file.downloadId,
-            downloadSecret: file.downloadSecret,
-            Filename: file.Filename,
-            FilesizeRaw: file.FilesizeRaw
-        };
-        downloads.push(downloadFile);
-
-        ConfigurationService.getInstance().saveDataFileContent(downloadFileName, downloads);
-    }
-
-    public static async downloadFile(downloadId: string, user: User, reply: FastifyReply): Promise<void> {
-        const file = FileService.getDownloadFile(downloadId, user?.UserID);
-        if (file) {
-            try {
-                // avoid MIME type sniffing
-                reply.header('X-Content-Type-Options', 'nosniff');
-                reply.header('Content-Disposition', `attachment; filename='${file.Filename}`);
-                const filePath = FileService.getFilePath(file.downloadId, file.path);
-                const stream = require('fs').creaeReadStream(filePath);
-                reply.send(stream).code(200);
-            } catch (e) {
-                LoggingService.getInstance().error(
-                    `Error while download file to client (downloadId: ${downloadId}, userId: ${user.UserID}).`,
-                    e
-                );
-            } finally {
-                FileService.removeDownload(downloadId, user?.UserID);
-            }
-        } else {
-            LoggingService.getInstance().error(`Relevant file not found in ${user?.UserID}_downloads.json (downloadId: ${downloadId}).`);
-            reply.status(400).send('Invalid request!');
-        }
-    }
-
-    private static getDownloadFile(downloadId: string, userId: number): IDownloadableFile {
-        const downloads = this.getDownloads(userId);
-        const file = downloads.find((d) => d.downloadId === downloadId);
-        return file;
-    }
-
-    private static getDownloads(userId: number): IDownloadableFile[] {
-        const fileName = `${userId}_downloads.json`;
-        let downloads: IDownloadableFile[] = ConfigurationService.getInstance().getDataFileContent(fileName, []);
-
-        if (!Array.isArray(downloads)) {
-            downloads = [];
-        }
-
-        return downloads;
-    }
-
-    public static removeDownload(downloadId: string, userId: number): void {
-        const downloads = this.getDownloads(userId);
-        const index = downloads.findIndex((d) => d.downloadId === downloadId);
-        if (index !== -1) {
-            const file = downloads[index];
-
-            if (!file.path) {
-                this.removeFile(file.downloadId);
-            }
-
-            downloads.splice(index, 1);
-            const fileName = `${userId}_downloads.json`;
-            ConfigurationService.getInstance().saveDataFileContent(fileName, downloads);
-        }
-    }
-
     public static removeFile(filename: string, download: boolean = true): void {
         const filePath = this.getFilePath(filename, null, download);
         try {
             fs.rmSync(filePath);
+            LoggingService.getInstance().debug(`FileService: deleted download file ${filePath} `);
         } catch (e) {
             LoggingService.getInstance().error(`Could not delete file: ${filePath}`, e);
         }
@@ -175,16 +109,44 @@ export class FileService {
         }
     }
 
+    public static cleanupObsolete(): void {
+        const ttl = ConfigurationService.getEnvNumber('FILE_DOWNLOAD_TTL', this.defaultTTL);
+
+        const directory = this.getDownloadDirectory();
+        const now: Date = new Date();
+        try {
+            const files = fs.readdirSync(directory);
+
+            for (const file of files) {
+                const filePath = path.join(directory, file);
+                const stat = fs.statSync(filePath);
+                if (stat.ctimeMs < now.getTime() - (ttl * 1000)) {
+                    fs.unlinkSync(filePath);
+                    LoggingService.getInstance().debug(`FileService: deleted obsolete download file ${filePath} `);
+                }
+            }
+        } catch (e) {
+            LoggingService.getInstance().error(`Could not remove obsolete files from ${directory}`, e);
+        }
+    }
+
+    public static getDownloadDirectory(): string {
+        return path.join(this.basePath, 'downloads');
+    }
+
+    public static getUploadDirectory(): string {
+        return path.join(this.basePath, 'uploads');
+    }
+
     private static getFilePath(filename?: string, targetPath?: string, download: boolean = true): string {
-        const folder = download ? 'downloads' : 'uploads';
-        let filePath = path.join(__dirname, '..', '..', '..', '..', '..', '..', 'data', folder);
+        let folder = download ? this.getDownloadDirectory() : this.getUploadDirectory();
         if (filename) {
-            filePath = path.join(filePath, filename);
+            folder = path.join(folder, filename);
         }
         if (targetPath) {
-            filePath = path.join(__dirname, '..', '..', '..', '..', '..', '..', targetPath, filename);
+            folder = path.join(this.basePath, '..', targetPath, filename);
         }
-        return filePath;
+        return folder;
     }
 
     public static getFileContent(

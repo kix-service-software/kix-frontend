@@ -115,7 +115,7 @@ export class ConfigurationService {
 
     private static logEnv(env: string): void {
         if (!this.loggedEnv.has(env)) {
-            LoggingService.getInstance().info(`[SERVER] READ ENV: ${env}`);
+            LoggingService.getInstance().info(`[SERVER] READ ENV: ${env} (${process.env[env]})`);
             this.loggedEnv.set(env, true);
         }
     }

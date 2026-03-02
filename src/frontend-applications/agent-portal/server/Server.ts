@@ -24,6 +24,7 @@ import { IAgentPortalPlugin } from './model/IAgentPortalPlugin';
 import { ConfigurationCache } from './api/context/ConfigurationCache';
 import { ConfigurationBuilder } from './api/config/ConfigurationBuilder';
 import { IMarkoApplication } from './extensions/IMarkoApplication';
+import { FileService } from '../modules/file/server/FileService';
 
 require('@marko/compiler/register')({ meta: true });
 
@@ -135,6 +136,13 @@ export class Server {
         fastify.register(fastifyStatic, {
             root: path.join(__dirname, '../../../../static/'),
             prefix: '/static/'
+        });
+
+        const fileDownloadPath = FileService.getDownloadDirectory();
+        fastify.register(fastifyStatic, {
+            root: fileDownloadPath,
+            prefix: '/files/',
+            decorateReply: false
         });
     }
 

@@ -484,7 +484,6 @@ export class TicketAPIService extends KIXObjectAPIService {
                     // probably an attachment from a referenced article
                     if (attachment.Disposition === 'attachment') {
                         content = FileService.getFileContent(attachment.downloadId, true);
-                        FileService.removeDownload(attachment.downloadId, user?.UserID);
                     }
                     // a new attachment
                     else {
@@ -492,7 +491,6 @@ export class TicketAPIService extends KIXObjectAPIService {
                         const md5 = crypto.createHash('md5').update(token).digest('hex');
                         const filename = `${md5}-${attachment.Filename}`;
                         content = FileService.getFileContent(filename, false);
-                        FileService.removeFile(filename, false);
                     }
                     attachment.Content = content;
                 }
