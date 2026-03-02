@@ -50,7 +50,6 @@ export class HTMLUtil {
         return `
                     <html style="height: 100%; overflow: auto">
                         <head>
-                            <link rel='stylesheet' href='${baseRoute}/static/applications/application/lasso-less.css'/>
                             <link rel='stylesheet' href='${baseRoute}/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css'/>
                             ${additionalHeader.join('\n')}
                         </head>
