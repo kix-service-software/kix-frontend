@@ -592,11 +592,6 @@ export class BrowserUtil {
     public static appendKIXStyling(htmlDocument: Document): void {
         const baseRoute = ClientStorageService.getBaseRoute();
 
-        const kixLink = htmlDocument.createElement('link');
-        kixLink.rel = 'stylesheet';
-        kixLink.href = `${baseRoute}/static/applications/application/lasso-less.css`;
-        htmlDocument.head.appendChild(kixLink);
-
         const bootstrapLink = htmlDocument.createElement('link');
         bootstrapLink.rel = 'stylesheet';
         bootstrapLink.href = `${baseRoute}/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css`;
