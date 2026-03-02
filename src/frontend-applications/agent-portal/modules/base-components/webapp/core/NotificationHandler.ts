@@ -34,6 +34,7 @@ export class NotificationHandler {
     private updates: Array<[KIXObjectType | string, string | number]> = [];
 
     public async handleUpdateNotifications(events: BackendNotification[]): Promise<void> {
+        await BrowserCacheService.getInstance().updateCaches(events);
         await this.checkForPermissionUpdate(events);
         this.checkForDataUpdate(events);
         this.publishEvents(events);
