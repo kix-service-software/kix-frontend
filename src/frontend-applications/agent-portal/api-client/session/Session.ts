@@ -94,12 +94,20 @@ export class SessionAPIClient extends APIClient {
 
     public static async getCurrentUser(): Promise<User> {
         const cacheType = KIXObjectType.CURRENT_USER;
-        let currentUserRequestPromise = BrowserCacheService.getInstance().get(cacheType, cacheType);
-        if (!currentUserRequestPromise) {
-            currentUserRequestPromise = this.loadCurrentUser();
-            BrowserCacheService.getInstance().set(cacheType, currentUserRequestPromise, cacheType);
+        let currentUser = BrowserCacheService.getInstance().get(cacheType, cacheType);
+        if (!currentUser) {
+            let currentUserRequestPromise = BrowserCacheService.getInstance().get(`${cacheType}_promise`, cacheType);
+            if (!currentUserRequestPromise) {
+                currentUserRequestPromise = this.loadCurrentUser();
+                BrowserCacheService.getInstance().set(`${cacheType}_promise`, currentUserRequestPromise, cacheType);
+            }
+
+            if (currentUserRequestPromise) {
+                currentUser = new User(await currentUserRequestPromise);
+                BrowserCacheService.getInstance().set(cacheType, currentUser, cacheType);
+            }
         }
-        return currentUserRequestPromise;
+        return currentUser;
     }
 
     private static async loadCurrentUser(): Promise<User> {

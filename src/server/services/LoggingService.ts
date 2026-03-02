@@ -192,7 +192,7 @@ export class LoggingService {
                     } = info;
 
                     return `${timestamp} - ${level}: ${message} ` +
-                        `${Object.keys(args).length ? JSON.stringify(args, null, 2) : ''}`;
+                        `${Object.keys(args).length ? this.stringifyJSON(args) : ''}`;
                 }),
             ),
             transports: [
@@ -227,6 +227,29 @@ export class LoggingService {
                 })
             ]
         });
+    }
+
+    public stringifyJSON(json: any): string {
+        try {
+            const replacerFunc = (): (key: string, value: any) => string => {
+                const visited = new WeakSet();
+                return (key: string, value: any): string => {
+                    if (typeof value === 'object' && value !== null) {
+                        if (visited.has(value)) {
+                            return;
+                        }
+                        visited.add(value);
+                    }
+                    return value;
+                };
+            };
+            json = JSON.stringify(json, replacerFunc(), 4);
+        } catch (e) {
+            console.error(e);
+            json = '';
+        }
+
+        return json;
     }
 
     private getStackTrace(): string {
