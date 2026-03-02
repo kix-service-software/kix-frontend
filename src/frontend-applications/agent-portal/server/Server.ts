@@ -102,11 +102,13 @@ export class Server {
     }
 
     public async setupFastify(): Promise<FastifyInstance> {
-        const maxParamLength = ConfigurationService.getEnvNumber('AP_API_MAX_PARAM_LENGTH', 52428800);      // set to default 50MB like in the BE API
-        LoggingService.getInstance().info(`[SERVER] setting up server with maxParamLength ${maxParamLength}`);
+        const maxParamLength = ConfigurationService.getEnvNumber('AP_API_MAX_PARAM_LENGTH', 1000000);      // set to default 1MB
+        const maxBodyLength = ConfigurationService.getEnvNumber('AP_API_MAX_BODY_LENGTH', 52428800);       // set to default 50MB like in the BE API
+        LoggingService.getInstance().info(`[SERVER] setting up server with maxParamLength ${maxParamLength} and maxBodyLength ${maxBodyLength}`);
         const fastify = Fastify({
             logger: true,
-            maxParamLength: maxParamLength
+            maxParamLength: maxParamLength,
+            bodyLimit: maxBodyLength
         });
 
         fastify.addHook('onRoute', (routeOption) => {
