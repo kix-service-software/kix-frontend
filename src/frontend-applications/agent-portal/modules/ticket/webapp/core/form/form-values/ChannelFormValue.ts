@@ -241,6 +241,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             this.createArticleFormValue(property, article);
         }
 
+        if (!article.DynamicFields) {
+            this.createArticleFormValue(KIXObjectProperty.DYNAMIC_FIELDS, article);
+        }
+
         const index = this.formValues.findIndex((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS);
         if (index !== -1) {
             const dfFormValue = this.formValues.splice(index, 1);
