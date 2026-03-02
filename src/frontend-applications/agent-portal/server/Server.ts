@@ -102,13 +102,30 @@ export class Server {
     }
 
     public async setupFastify(): Promise<FastifyInstance> {
-        const maxParamLength = ConfigurationService.getEnvNumber('AP_API_MAX_PARAM_LENGTH', 1000000);      // set to default 1MB
-        const maxBodyLength = ConfigurationService.getEnvNumber('AP_API_MAX_BODY_LENGTH', 52428800);       // set to default 50MB like in the BE API
-        LoggingService.getInstance().info(`[SERVER] setting up server with maxParamLength ${maxParamLength} and maxBodyLength ${maxBodyLength}`);
+        const fastifyLogLevelMap = { // without 'fatal' and 'trace'
+            0: 'error', // 50 in log
+            1: 'warn',  // 40
+            2: 'info',  // 30
+            3: 'debug'  // 20
+        };
+
+        // set to default 1MB
+        const maxParamLength = ConfigurationService.getEnvNumber('AP_API_MAX_PARAM_LENGTH', 1000000);
+
+        // set to default 50MB like in the BE API
+        const bodyLimit = ConfigurationService.getEnvNumber('AP_API_MAX_BODY_LENGTH', 52428800);
+
+        LoggingService.getInstance().info(`[SERVER] setting up server with maxParamLength ${maxParamLength} and maxBodyLength ${bodyLimit}`);
+
+        const logLevelEnv = ConfigurationService.getEnvNumber('HTTP_LOG_LEVEL');
+        const logOptions = {
+            level: fastifyLogLevelMap[logLevelEnv] || 'error'
+        };
+
         const fastify = Fastify({
-            logger: true,
-            maxParamLength: maxParamLength,
-            bodyLimit: maxBodyLength
+            logger: logLevelEnv === -1 ? false : logOptions,
+            maxParamLength,
+            bodyLimit
         });
 
         fastify.addHook('onRoute', (routeOption) => {
