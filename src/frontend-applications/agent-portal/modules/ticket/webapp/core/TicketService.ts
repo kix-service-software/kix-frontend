@@ -67,10 +67,10 @@ import { UserAPIClient } from '../../../../api-client/user/User';
 import { TicketAPIClient } from '../../../../api-client/ticket/Ticket';
 import { APIClient } from '../../../../api-client/APIClient';
 import { TicketEvent } from '../../model/TicketEvent';
-import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
 import { OrganisationService } from '../../../customer/webapp/core/OrganisationService';
 import { OrganisationProperty } from '../../../customer/model/OrganisationProperty';
 import { RequestMethod } from '../../../../../../server/model/rest/RequestMethod';
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -509,7 +509,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async getPreparedArticleBodyContent(
         article: Article, reduceContent: boolean = false, lineCount?: number, prepareInline: boolean = true
     ): Promise<string> {
-        const url = `/tickets/${article.TicketID}/articles/${article.ArticleID}?resolveInlineCSS=1&reduceContent=${reduceContent}&lineCount=${lineCount}&prepareInline=${prepareInline}`;
+        const url = `/tickets/${article.TicketID}/articles/${article.ArticleID}?application=${ClientStorageService.application}&resolveInlineCSS=1&reduceContent=${reduceContent}&lineCount=${lineCount}&prepareInline=${prepareInline}`;
         const response = await APIClient.executeRequest(RequestMethod.GET, url)
             .catch((error): Response => {
                 console.error('Fetch error:', error);

@@ -23,7 +23,6 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
-import { OutOfOffice } from '../../model/OutOfOffice';
 import { OutOfOfficeProperty } from '../../model/OutOfOfficeProperty';
 import { OverlayIcon } from '../../../base-components/webapp/core/OverlayIcon';
 

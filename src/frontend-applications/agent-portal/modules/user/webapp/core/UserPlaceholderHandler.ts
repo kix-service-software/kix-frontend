@@ -97,7 +97,7 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
                 case ContactProperty.EMAIL4:
                 case ContactProperty.EMAIL5:
                     result = await LabelService.getInstance().getDisplayText(user, attribute, undefined, false);
-                    if (forRichtext) {
+                    if (forRichtext && result) {
                         result = result.replace(/>/g, '&gt;');
                         result = result.replace(/</g, '&lt;');
                     }
