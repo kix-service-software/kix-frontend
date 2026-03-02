@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2026-03-02 08:53+0000\n"
+"PO-Revision-Date: 2026-03-02 14:53+0000\n"
 "Last-Translator: jbrueckner <Joerg.Brueckner@kixdesk.com>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -345,7 +345,7 @@ msgid "Article Text"
 msgstr "Artikeltext"
 
 msgid "Article content"
-msgstr ""
+msgstr "Artikelinhalt"
 
 msgid "Article has printed"
 msgstr "Artikel wurde gedruckt"
@@ -564,8 +564,7 @@ msgid "Changed by"
 msgstr "Geändert von"
 
 msgid "Changes cannot be saved. How do you want to proceed?"
-msgstr ""
-"Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?"
+msgstr "Änderungen können nicht gespeichert werden. Wie möchten Sie fortfahren?"
 
 msgid "Changes saved."
 msgstr "Änderungen wurden gespeichert."
@@ -610,7 +609,7 @@ msgid "Clear"
 msgstr "Leeren"
 
 msgid "Clear Value"
-msgstr ""
+msgstr "Wert entfernen"
 
 msgid "Clear in mask"
 msgstr "Feld leeren"
@@ -652,10 +651,10 @@ msgid "Collapse all"
 msgstr "Alle einklappen"
 
 msgid "Collapse node"
-msgstr ""
+msgstr "Knoten zusammenklappen"
 
 msgid "Collapse widget"
-msgstr ""
+msgstr "Widget einklappen"
 
 msgid "Column Icon"
 msgstr "Spaltensymbol"
@@ -982,7 +981,7 @@ msgid "Deployment state"
 msgstr "Verwendungsstatus"
 
 msgid "Deployment state type"
-msgstr ""
+msgstr "Bereitstellungsstatus-Typ"
 
 msgid "Descending:"
 msgstr "Absteigend:"
@@ -1349,7 +1348,7 @@ msgid "Expand All"
 msgstr "Alle ausklappen"
 
 msgid "Expand node"
-msgstr ""
+msgstr "Knoten erweitern"
 
 msgid "Expand widget"
 msgstr "Widget erweitern"
@@ -1460,7 +1459,7 @@ msgid "Field {0} has an invalid value ({1})."
 msgstr "Feld {0} enthält einen ungültigen Wert ({1})."
 
 msgid "Field {0} has to be a positive integer number."
-msgstr ""
+msgstr "Das Feld {0} muss eine positive ganze Zahl sein."
 
 msgid "File Upload"
 msgstr "Datei hochladen"
@@ -3416,7 +3415,7 @@ msgid "Links will be removed."
 msgstr "Verknüpfungen werden entfernt."
 
 msgid "Load Form"
-msgstr ""
+msgstr "Ladeformular"
 
 msgid "Load more"
 msgstr "weitere laden"
@@ -3995,7 +3994,7 @@ msgid "Organisations Dashboard"
 msgstr "Organisationen Dashboard"
 
 msgid "Organizations and Contacts Dashboard"
-msgstr ""
+msgstr "Organisationen und Kontakte Dashboard"
 
 msgid "Other"
 msgstr "andere"
@@ -4073,13 +4072,13 @@ msgid "Owner Out Of Office Substitute"
 msgstr "\"Bearbeiter Out Of Office\"-Vertretung"
 
 msgid "PKCE"
-msgstr ""
+msgstr "PKCE"
 
 msgid "Page Size"
 msgstr "Seitengröße"
 
 msgid "Page contains invalid values"
-msgstr ""
+msgstr "Seite enthält ungültige Werte"
 
 msgid "Paramater"
 msgstr "Parameter"
@@ -4094,7 +4093,7 @@ msgid "Parent Category"
 msgstr "Übergeordnete Kategorie"
 
 msgid "Parent Organisation"
-msgstr ""
+msgstr "Eltern Organisation"
 
 msgid "Parent Queue"
 msgstr "Übergeordnetes Team"
@@ -4476,7 +4475,7 @@ msgid "Remove from Affected Assets"
 msgstr "Aus betroffenen Assets entfernen"
 
 msgid "Remove node"
-msgstr ""
+msgstr "Knoten entfernen"
 
 msgid "Remove parameter"
 msgstr "Parameter löschen"
@@ -4500,7 +4499,7 @@ msgid "Replace empty value"
 msgstr "Leerwert ersetzen"
 
 msgid "Replace existing search template {0}?"
-msgstr ""
+msgstr "Vorhandene Suchvorlage {0} ersetzen?"
 
 msgid "Reply"
 msgstr "Antworten"
@@ -4688,10 +4687,10 @@ msgid "Scope"
 msgstr "Scope"
 
 msgid "Scroll tabs to the left"
-msgstr ""
+msgstr "Blättern Sie die Registerkarten nach links"
 
 msgid "Scroll tabs to the right"
-msgstr ""
+msgstr "Blättern Sie die Registerkarten nach rechts"
 
 msgid "Search"
 msgstr "Suchen"
@@ -5006,7 +5005,7 @@ msgid "Street"
 msgstr "Straße"
 
 msgid "Sub"
-msgstr ""
+msgstr "unter"
 
 msgid "Sub Category"
 msgstr "Unterkategorie"
@@ -5027,7 +5026,7 @@ msgid "Success"
 msgstr "Erfolg"
 
 msgid "Success!"
-msgstr "Erfolg!"
+msgstr "Erfolgreich!"
 
 msgid "Successfully processed lines"
 msgstr "Erfolgreich verarbeitete Zeilen"
@@ -5138,7 +5137,7 @@ msgid "Team Backlog"
 msgstr "Team Backlog"
 
 msgid "Team Dashboard"
-msgstr ""
+msgstr "Team Dashboard"
 
 msgid ""
 "Technical Customer Service mit KIX - work order documentation, checklists, "
@@ -5341,7 +5340,7 @@ msgid "Title"
 msgstr "Titel"
 
 msgid "Title is required!"
-msgstr ""
+msgstr "Titel ist erforderlich!"
 
 msgid "To"
 msgstr "To"
@@ -5350,10 +5349,10 @@ msgid "Today"
 msgstr "Heute"
 
 msgid "Toggle password visibility"
-msgstr ""
+msgstr "Passwort-Sichtbarkeit umschalten"
 
 msgid "Toggle row"
-msgstr ""
+msgstr "Zeile umschalten"
 
 msgid "Token URL"
 msgstr "Token URL"
@@ -5674,7 +5673,7 @@ msgid "between"
 msgstr "zwischen"
 
 msgid "checklist progress"
-msgstr ""
+msgstr "Fortschritt der Checkliste"
 
 msgid "contained in"
 msgstr "enthalten in"
@@ -5764,7 +5763,7 @@ msgid "recipient addresses (To, Cc, etc.)"
 msgstr "Empfängeradressen (Von, Cc, etc.)"
 
 msgid "remove label"
-msgstr ""
+msgstr "Label entfernen"
 
 msgid "responsibility by me"
 msgstr "verantwortet durch mich"
