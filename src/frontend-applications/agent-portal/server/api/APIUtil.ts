@@ -24,7 +24,8 @@ export class APIUtil {
     public static readonly URL_PREFIX = '/api/v1';
 
     public static getRequestData(req: FastifyRequest): any {
-        const application = req.headers[APIHeader.KIX_APPLICATION]?.toString();
+        let application = req.headers[APIHeader.KIX_APPLICATION]?.toString();
+        application ??= (req as any).query[APIHeader.KIX_APPLICATION];
         const clientRequestId = APIUtil.getClientRequestId(req);
         const token = APIUtil.getToken(req, application);
         const requestId = req.headers[APIHeader.KIX_HEADER_REQUEST_ID];

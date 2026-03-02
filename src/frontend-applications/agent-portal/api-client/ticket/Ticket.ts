@@ -28,7 +28,7 @@ export class TicketAPIClient extends APIClient {
         // FIXME: Caching
         // const cacheKey = `${ticketId}-${articleId}-${attachmentIds.join(',')}-${asDownload}`;
         const response = await this.executeRequest(
-            RequestMethod.GET, `/tickets/${ticketId}/articles/${articleId}`, undefined, undefined, attachmentIds
+            RequestMethod.GET, `/tickets/${ticketId}/articles/${articleId}`, undefined, { 'asDownload': asDownload }, attachmentIds
         );
         const result = await response.json();
         return result.attachments.map((a) => new Attachment(a));

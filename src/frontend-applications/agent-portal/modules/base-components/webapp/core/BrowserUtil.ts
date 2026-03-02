@@ -11,7 +11,6 @@ import { OverlayService } from './OverlayService';
 import { OverlayType } from './OverlayType';
 import { ComponentContent } from './ComponentContent';
 import { ToastContent } from './ToastContent';
-import { ConfirmOverlayContent } from './ConfirmOverlayContent';
 import { DateTimeUtil } from './DateTimeUtil';
 import { ValidationResult } from './ValidationResult';
 import { ValidationSeverity } from './ValidationSeverity';
@@ -30,8 +29,9 @@ import { RoutingService } from './RoutingService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { DefaultColorConfiguration } from '../../../../model/configuration/DefaultColorConfiguration';
 import { ModalSettings } from '../../../toast/model/ModalSettings';
-import DOMPurify from 'dompurify';
 import { ClientStorageService } from './ClientStorageService';
+import { APIClient } from '../../../../api-client/APIClient';
+import { APIHeader } from '../../../../server/api/APIHeader';
 
 export class BrowserUtil {
 
@@ -107,7 +107,7 @@ export class BrowserUtil {
             const baseRoute = ClientStorageService.getBaseRoute();
             const a = document.createElement('a');
             a.style.display = 'none';
-            a.href = `${baseRoute}/files/download/${encodeURIComponent(file.downloadId)}`;
+            a.href = `${baseRoute}/files/${encodeURIComponent(file.downloadId)}`;
             a.download = file.Filename;
             a.target = '_blank';
             document.body.appendChild(a);
