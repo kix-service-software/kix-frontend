@@ -13,7 +13,6 @@
                 "HTTPS_PORT": "3001",
                 "USE_SSL": "false",
                 "FRONTEND_URL": "",
-                "FRONTEND_TOKEN_SECRET": "kix-agent-portal",
                 "CHECK_TOKEN_ORIGIN": "false",
                 "NOTIFICATION_CLIENT_ID": "kix-agent-portal-development-userid",
                 "BACKEND_API_URL": "http://localhost:2345/api/v1",
@@ -28,11 +27,13 @@
                 "LOG_REQUEST_QUEUES_INTERVAL": "90000",
                 "SOCKET_MAX_HTTP_BUFFER_SIZE": "1e8",
                 "CLUSTER_WORKER_COUNT": "2",
-                "CLUSTER_ENABLED": "false",
+                "CLUSTER_ENABLED": "1",
                 "BUILD_MARKO_APPLICATIONS": "",
                 "SSO_ENABLED": "false",
                 "BASE_ROUTE": "",
-                "BASE_ROUTE_SSP": ""
+                "BASE_ROUTE_SSP": "",
+                "TOKEN_SECRET": "f40e2f61f043aac8de17a2a2a3166e08244de17e1847093557c78961ffed4843",
+                "TOKEN_SALT": "b24a8c364c9f1585"
             },
             "name": "KIX - Start Server",
             "program": "${workspaceFolder}/src/server/index.ts",
