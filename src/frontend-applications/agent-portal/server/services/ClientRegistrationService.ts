@@ -104,16 +104,17 @@ export class ClientRegistrationService extends KIXObjectAPIService {
         const backendDependencies = this.getBackendDependencies();
         const plugins = this.getPlugins();
 
+        const clientId = ConfigurationService.getEnvString('NOTIFICATION_CLIENT_ID');
+
         const createClientRegistration = new CreateClientRegistration(
-            ConfigurationService.getEnvString('NOTIFICATION_CLIENT_ID'),
-            poDefinitions,
-            configurations,
-            backendDependencies,
-            plugins,
-            {
-                SystemInfo: 1
-            }
+            clientId, poDefinitions, configurations, backendDependencies, plugins, { SystemInfo: 1 }
         );
+
+        try {
+            await ClientRegistrationService.getInstance().deleteClientRegistration(
+                ConfigurationService.getBackendAPIToken(), null, clientId
+            );
+        } catch (e) { }
 
         await this.submitClientRegistration(
             ConfigurationService.getBackendAPIToken(), null, createClientRegistration
@@ -131,7 +132,7 @@ export class ClientRegistrationService extends KIXObjectAPIService {
         const clientId = IdService.generateDateBasedId();
 
         const createClientRegistration = new CreateClientRegistration(
-            IdService.generateDateBasedId(),
+            clientId,
             [], [], [], [],
             {
                 SystemInfo: 1
