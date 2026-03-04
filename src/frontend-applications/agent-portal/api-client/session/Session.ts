@@ -31,7 +31,11 @@ export class SessionAPIClient extends APIClient {
             userName, password, userType, negotiateToken, redirectUrl, mfaToken, fakeLogin
         );
 
-        const response = await this.executeRequest(RequestMethod.POST, '/session', request);
+        const response = await this.executeRequest(
+            RequestMethod.POST, '/session', request,
+            null, null, null,
+            false
+        );
 
         let loginResult: LoginResult;
         if (response.status === 201) {
