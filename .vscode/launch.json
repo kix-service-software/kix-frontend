@@ -26,15 +26,15 @@
                 "INSTALLED_BUILD": "1",
                 "LOG_REQUEST_QUEUES_INTERVAL": "90000",
                 "SOCKET_MAX_HTTP_BUFFER_SIZE": "1e8",
-                "CLUSTER_WORKER_COUNT": "2",
-                "CLUSTER_ENABLED": "1",
+                "CLUSTER_WORKER_COUNT": "5",
+                "CLUSTER_ENABLED": "0",
                 "BUILD_MARKO_APPLICATIONS": "",
                 "SSO_ENABLED": "false",
                 "BASE_ROUTE": "",
                 "BASE_ROUTE_SSP": "",
                 "TOKEN_SECRET": "f40e2f61f043aac8de17a2a2a3166e08244de17e1847093557c78961ffed4843",
                 "TOKEN_SALT": "b24a8c364c9f1585",
-                "APPLICATION": "AgentPortal,SSP"
+                "APPLICATION": "agent-portal,SSP"
             },
             "name": "KIX - Start Server",
             "program": "${workspaceFolder}/src/server/index.ts",
