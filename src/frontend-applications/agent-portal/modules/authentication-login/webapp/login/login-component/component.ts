@@ -24,6 +24,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { SessionAPIClient } from '../../../../../api-client/session/Session';
+import { MFAAPIClient } from '../../../../../api-client/session/MFA';
 
 declare const window: Window;
 
@@ -142,9 +143,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async login(requireMFAToken: boolean): Promise<void> {
-        const userMFARequired = false; //await MFASocketClient.getInstance().isMFAEnabled(
-        //     this.state.userName, UserType.AGENT, this.mfaConfig
-        // ).catch(() => false);
+        const userMFARequired = await MFAAPIClient.isMFAEnabled(
+            this.state.userName, UserType.AGENT, this.mfaConfig
+        ).catch(() => false);
+
         if (!requireMFAToken && userMFARequired) {
             this.state.showMFA = true;
             this.state.loginProcess = false;
