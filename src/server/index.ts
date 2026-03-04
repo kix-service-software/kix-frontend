@@ -85,7 +85,7 @@ async function initializeServer(): Promise<void> {
 async function initCluster(servers: any[]): Promise<void> {
     if (cluster.isPrimary) {
         await createClientRegistration();
-        LoggingService.getInstance().info('CLUSTER - Master start');
+        LoggingService.getInstance().info('[CLUSTER] - Master start');
 
         await ServerUtil.buildApplications();
 
@@ -100,11 +100,16 @@ async function initCluster(servers: any[]): Promise<void> {
         });
 
     } else {
-        LoggingService.getInstance().info(`CLUSTER - Worker ${process.pid} started`);
+        LoggingService.getInstance().info(`[CLUSTER] - Worker ${process.pid} started`);
         MarkoService.getInstance();
+
+        LoggingService.getInstance().info(`[CLUSTER] - start servers: ${servers.map((s) => s.name).join(', ')}`);
 
         for (const server of servers) {
             await server.initialize();
+            LoggingService.getInstance().info(
+                `[SERVER] started - ${server.name} is running on http://FQDN:${server.getPort()}`
+            );
         }
     }
 }

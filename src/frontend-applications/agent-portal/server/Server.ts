@@ -87,7 +87,7 @@ export class Server {
                 this.fastify.log.error(err);
                 process.exit(1);
             }
-            LoggingService.getInstance().info(`[SERVER] start - running on port: ${this.getPort()}`);
+            LoggingService.getInstance().info(`[SERVER] start - Agent Portal running on port: ${this.getPort()}`);
         });
     }
 
