@@ -17,7 +17,7 @@ async function routes(fastify: FastifyInstance, options): Promise<void> {
 }
 
 async function checkForMFA(req: FastifyRequest, reply: FastifyReply): Promise<void> {
-    const { login, userType, mfaConfig } = (req as any).params;
+    const { login, userType, mfaConfig } = (req as any).query;
     try {
         const config = JSON.parse(mfaConfig);
         const mfaEnabled = await MFAService.getInstance().isUserMFAPEnabled(login, userType, config);
