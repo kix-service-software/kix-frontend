@@ -68,7 +68,7 @@ async function initializeServer(): Promise<void> {
     LoggingService.getInstance().info('[SERVER] start Applications');
 
     if (ConfigurationService.getEnvNumber('CLUSTER_ENABLED') === 1) {
-        initCluster(servers);
+        initCluster(servers, applicationNames);
     } else {
         await createClientRegistration();
         await ServerUtil.buildApplications(applicationNames);
@@ -82,12 +82,12 @@ async function initializeServer(): Promise<void> {
     }
 }
 
-async function initCluster(servers: any[]): Promise<void> {
+async function initCluster(servers: any[], applicationNames?: string[]): Promise<void> {
     if (cluster.isPrimary) {
         await createClientRegistration();
         LoggingService.getInstance().info('[CLUSTER] - Master start');
 
-        await ServerUtil.buildApplications();
+        await ServerUtil.buildApplications(applicationNames);
 
         const numCPUs = ConfigurationService.getEnvNumber('CLUSTER_WORKER_COUNT') || cpus().length;
         for (let i = 0; i < numCPUs; i++) {
