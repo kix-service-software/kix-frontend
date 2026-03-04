@@ -18,7 +18,7 @@ export class APIClient {
     public static async executeRequest(
         method: RequestMethod, relativeUrl: string,
         body?: any, query?: any, objectIds?: Array<string | number>,
-        controller?: AbortController
+        controller?: AbortController, handleError: boolean = true
     ): Promise<Response> {
 
         ClientStorageService.initClientRequestId();
@@ -43,7 +43,7 @@ export class APIClient {
             throw e;
         });
 
-        if (response.status > 400) {
+        if (handleError && response.status > 400) {
             if (response.status === 401) {
                 window.location.replace('/auth');
                 return;
