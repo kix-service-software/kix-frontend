@@ -43,7 +43,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
                 <if(
                     state.error ||
-                    state.logout ||
                     state.unsupportedBrowser ||
                     state.pwResetState
                 )>
@@ -61,14 +60,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 ${state.errorMessage}
                             </div>
                         </if>
-                        <else-if(state.logout)>
-                            <div class="message message-success">
-                                <span class="kix-icon-icircle"/>
-                                ${component.getString(
-                                    "You have successfully logged out.",
-                                )}
-                            </div>
-                        </else-if>
                         <else-if(state.pwResetState === "requested")>
                             <div class="message message-success">
                                 <span class="kix-icon-icircle"/>
@@ -127,7 +118,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     on-click("login", true)
                                     tabindex="3"
                                     class="kix-button special-button">
-                                    <span class="kix-icon-check" aria-hidden="true"/>
+                                    <span
+                                        class="kix-icon-check"
+                                        aria-hidden="true"/>
                                     ${component.getString("Login")}
                                 </button>
                             </div>
@@ -185,7 +178,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                             on-click("togglePWResetDialog")
                                             tabindex="4"
                                             class="kix-button submit-button">
-                                            <span class="kix-icon-question" aria-hidden="true"/>
+                                            <span
+                                                class="kix-icon-question"
+                                                aria-hidden="true"/>
                                             ${component.getString(
                                                 "Forgot Password?",
                                             )}
@@ -196,7 +191,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         on-click("login", false)
                                         tabindex="3"
                                         class="kix-button special-button">
-                                        <span class="kix-icon-check" aria-hidden="true"/>
+                                        <span
+                                            class="kix-icon-check"
+                                            aria-hidden="true"/>
                                         ${component.getString("Login")}
                                     </button>
                                 </div>
@@ -253,7 +250,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     on-click("togglePWResetDialog")
                                     tabindex="4"
                                     class="kix-button submit-button">
-                                    <span class="kix-icon-arrow-left" aria-hidden="true"/>
+                                    <span
+                                        class="kix-icon-arrow-left"
+                                        aria-hidden="true"/>
                                     ${component.getString("Back")}
                                 </button>
                                 <button
@@ -261,7 +260,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     on-click("sendPasswordChangeRequest")
                                     tabindex="3"
                                     class="kix-button special-button">
-                                    <span class="kix-icon-check" aria-hidden="true"/>
+                                    <span
+                                        class="kix-icon-check"
+                                        aria-hidden="true"/>
                                     ${component.getString("Submit")}
                                 </button>
                             </div>

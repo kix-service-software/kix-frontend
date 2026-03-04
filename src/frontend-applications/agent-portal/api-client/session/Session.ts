@@ -13,12 +13,12 @@ import { BrowserCacheService } from '../../modules/base-components/webapp/core/C
 import { UserType } from '../../modules/user/model/UserType';
 import { LoginResult } from '../../modules/base-components/model/LoginResult';
 import { MFAToken } from '../../modules/multifactor-authentication/model/MFAToken';
-import { PasswordResetRequest } from '../../modules/user/model/PasswordResetRequest';
 import { APIClient } from '../APIClient';
 import { User } from '../../modules/user/model/User';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { RequestMethod } from '../../../../server/model/rest/RequestMethod';
 import { WindowListener } from '../../modules/base-components/webapp/core/WindowListener';
+import { ClientStorageService } from '../../modules/base-components/webapp/core/ClientStorageService';
 
 export class SessionAPIClient extends APIClient {
 
@@ -51,7 +51,8 @@ export class SessionAPIClient extends APIClient {
         const response = await this.executeRequest(RequestMethod.DELETE, '/session');
         if (response.status === 204) {
             WindowListener.getInstance().removeBrowserListener();
-            window.location.href = response.url;
+            const baseRoute = ClientStorageService.getBaseRoute();
+            window.location.replace(`${baseRoute}/auth`);
         }
     }
 
