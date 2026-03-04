@@ -26,31 +26,37 @@ async function login(req: FastifyRequest, reply: FastifyReply): Promise<void> {
     const loginData = req.body as LoginRequest;
     const clientRequestId = APIUtil.getClientRequestId(req);
 
+    let status = 201;
+    let result = {};
+
     const token = await AuthenticationService.getInstance().login(
         loginData.userName, loginData.password, loginData.userType, loginData.negotiateToken,
         loginData.mfaToken, clientRequestId, req.headers
     ).catch((error: Error) => {
-        reply.status(401).send(error.message);
+        status = 401;
+        result = error.message;
         return null;
     });
 
     if (!token) {
-        return reply.status(401).send();
-    }
-
-    if (loginData.fakeLogin) {
-        return reply.status(201).send();
+        status = 401;
+    } else if (loginData.fakeLogin) {
+        status = 201;
     } else {
         try {
             const { baseRoute, application } = APIUtil.getRequestData(req);
             AuthenticationService.setSessionCookie(req, application, token);
             const redirect = loginData.redirectUrl ? loginData.redirectUrl : '/';
             const redirectUrl = `${baseRoute}${redirect}`;
-            return reply.status(201).send({ redirectUrl });
+            status = 201;
+            result = { redirectUrl };
         } catch (e) {
-            return reply.status(400).send(e);
+            status = 400;
+            result = e;
         }
     }
+
+    return reply.status(status).send(result);
 }
 
 async function logout(req: FastifyRequest, reply: FastifyReply): Promise<void> {
