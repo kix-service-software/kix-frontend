@@ -93,7 +93,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         );
 
         let classIds;
-        if (classIdCriteria) {
+        if (classIdCriteria?.value) {
             classIds = Array.isArray(classIdCriteria.value) ? classIdCriteria.value : [classIdCriteria.value];
         }
 
