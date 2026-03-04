@@ -67,11 +67,10 @@ async function initializeServer(): Promise<void> {
 
     LoggingService.getInstance().info('[SERVER] start Applications');
 
-    await createClientRegistration();
-
     if (ConfigurationService.getEnvNumber('CLUSTER_ENABLED') === 1) {
         initCluster(servers);
     } else {
+        await createClientRegistration();
         await ServerUtil.buildApplications(applicationNames);
 
         for (const server of servers) {
@@ -85,6 +84,7 @@ async function initializeServer(): Promise<void> {
 
 async function initCluster(servers: any[]): Promise<void> {
     if (cluster.isPrimary) {
+        await createClientRegistration();
         LoggingService.getInstance().info('CLUSTER - Master start');
 
         await ServerUtil.buildApplications();
