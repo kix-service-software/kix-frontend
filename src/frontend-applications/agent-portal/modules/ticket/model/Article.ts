@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -302,94 +302,4 @@ export class Article extends KIXObject {
         const articleProperty = Object.keys(ArticleProperty).map((p) => ArticleProperty[p]);
         return articleProperty.some((p) => p === property);
     }
-
-    public static readonly MAIL_STYLE = `
-    <style>
-      table {
-        display: table;
-        border-collapse: collapse;
-        border-spacing: 0;
-        height: auto;
-      }
-
-      thead,tbody {
-        display: table-row-group;
-        vertical-align: middle;
-        unicode-bidi: isolate;
-      }
-
-      tr {
-        display: table-row;
-        vertical-align: inherit;
-        unicode-bidi: isolate;
-        border: 0;
-      }
-
-      th,td {
-        min-width: 2em;
-        padding: 0.4em;
-      }
-
-      table td {
-        text-align: revert-layer;
-      }
-
-      figure.image {
-        clear: both;
-        display: table;
-        margin: .9em auto;
-        min-width: 50px;
-        text-align: center;
-      }
-      figure.image > img {
-        display: block;
-        height: auto;
-        margin: 0 auto;
-        max-width: 100%;
-        min-width: 100%;
-      }
-      img.image_resized {
-        height:auto;
-      }
-      figure.image.image_resized {
-        box-sizing:border-box;
-        display:block;
-        max-width:100%;
-      }
-      figure.image.image_resized > img{
-        width:100%;
-      }
-
-      figure.image.image-style-block-align-left,
-      figure.image.image-style-block-align-right {
-        max-width: 100%;
-        box-sizing:border-box;
-      }
-      figure.image.image-style-align-left,
-      figure.image.image-style-align-right {
-        clear:none;
-      }
-      figure.image.image-style-side {
-        float:right;
-        max-width:50%
-      }
-      figure.image.image-style-align-left {
-        float:left;
-      }
-      figure.image.image-style-align-right {
-        float:right;
-      }
-      figure.image.image-style-block-align-right {
-        margin-left:auto;
-        margin-right:0;
-      }
-      figure.image.image-style-block-align-left {
-        margin-left:0;
-        margin-right:auto;
-      }
-      figure.image-style-align-center {
-        margin-left:auto;
-        margin-right:auto;
-      }
-    </style>`;
 }

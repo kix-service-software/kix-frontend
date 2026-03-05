@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -72,7 +72,8 @@ async function handleRoute(req: FastifyRequest, reply: FastifyReply): Promise<an
 async function sanitizeHTML(req: FastifyRequest, reply: FastifyReply): Promise<void> {
     const data = req.body as any;
 
-    let html = HTMLUtil.sanitizeContent(data.html, true);
+    const cleanHTML = HTMLUtil.sanitizeContent(data.html, true);
+    let html = cleanHTML?.content;
     html = HTMLUtil.buildHtmlStructur(html);
 
     return reply.status(201).send({ html });
