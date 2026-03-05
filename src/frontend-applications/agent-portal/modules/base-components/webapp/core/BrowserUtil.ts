@@ -589,6 +589,7 @@ export class BrowserUtil {
         }
     }
 
+    // OBSOLETE - no call found. Could be removed
     public static appendKIXStyling(htmlDocument: Document): void {
         const baseRoute = ClientStorageService.getBaseRoute();
 
