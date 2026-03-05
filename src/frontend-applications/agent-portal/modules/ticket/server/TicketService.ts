@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -467,10 +467,6 @@ export class TicketAPIService extends KIXObjectAPIService {
         article.ContentType = 'text/html; charset=utf-8';
         article.MimeType = 'text/html';
         article.Charset = 'utf-8';
-
-        if (!article.Body?.includes('tiptap-table')) {
-            article.Body = Article.MAIL_STYLE + article.Body;
-        }
 
         await this.prepareArticleAttachments(article, token);
     }

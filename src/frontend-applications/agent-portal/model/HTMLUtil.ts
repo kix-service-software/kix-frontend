@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,7 +12,7 @@ import { LoggingService } from '../../../server/services/LoggingService';
 
 export class HTMLUtil {
 
-    public static sanitizeContent(content: string, prepareLinkTargets?: boolean): string {
+    public static sanitizeContent(content: string, prepareLinkTargets?: boolean): any {
         try {
             const { JSDOM } = require('jsdom');
             const jsDOMWindow = new JSDOM('').window;
@@ -22,12 +22,19 @@ export class HTMLUtil {
             const cleanHTML = DOMPurify.sanitize(
                 content,
                 {
+                    // Controls categories of allowed elements
                     USE_PROFILES: { html: true },
-                    ADD_TAGS: ['style']
+                    // Glue elements like style, script or others to `document.body`
+                    // and prevent unintuitive browser behavior in several edge-cases
+                    FORCE_BODY: true,
+                    // Change how e.g. comments containing risky HTML characters are treated
+                    SAFE_FOR_XML: false,
+                    // Return a TrustedHTML object instead of a string if possible
+                    RETURN_TRUSTED_TYPE: true
                 }
             );
-
             const htmlDOM = new JSDOM(cleanHTML).window;
+
             const aElements = htmlDOM.window.document.querySelectorAll('a');
             if (aElements) {
                 aElements.forEach((a) => {
@@ -39,7 +46,22 @@ export class HTMLUtil {
                 });
             }
 
-            return htmlDOM.window.document.documentElement.innerHTML;
+            const returnData = {};
+            // separating the style
+            const styleElements = htmlDOM.window.document.querySelectorAll('style');
+            if (styleElements) {
+                const headers = [];
+                styleElements.forEach((style) => {
+                    headers.push(style.outerHTML);
+                    // after separating the style, it is removed from the DOM element.
+                    style.remove();
+                });
+                returnData['headers'] = headers;
+            }
+
+            returnData['content'] = htmlDOM.window.document.documentElement.innerHTML;
+
+            return returnData;
         } catch (e) {
             LoggingService.getInstance().error(e);
         }
@@ -50,7 +72,6 @@ export class HTMLUtil {
         return `
                     <html style="height: 100%; overflow: auto">
                         <head>
-                            <link rel='stylesheet' href='${baseRoute}/static/thirdparty/bootstrap-5.3.2/css/bootstrap.min.css'/>
                             ${additionalHeader.join('\n')}
                         </head>
                         <body style="height: 100%; overflow: auto">
