@@ -58,6 +58,20 @@ export function createToolbar(editor: any): HTMLDivElement {
         }
     };
 
+    const snapshotTypingMarks = (): any[] => {
+        const { state } = editor;
+        const marks = state.storedMarks || state.selection.$from.marks();
+        return Array.isArray(marks) ? marks : Array.from(marks || []);
+    };
+
+    const restoreTypingMarks = (marks: any[]): void => {
+        try {
+            const { state, view } = editor;
+            view.dispatch(state.tr.setStoredMarks(marks?.length ? marks : null));
+            view.focus();
+        } catch { /* noop */ }
+    };
+
     window.addEventListener('popstate', updateStickyTopForRoute);
     window.addEventListener('hashchange', updateStickyTopForRoute);
     ['pushState', 'replaceState'].forEach((fn) => {
@@ -677,19 +691,16 @@ export function createToolbar(editor: any): HTMLDivElement {
         'Table',
         [
             {
-                label: 'Insert Table', action: (): void => {
-                    const lastFont = editor.storage.lastFontFamily || 'Arial';
-                    const lastSize = editor.storage.lastFontSize || null;
-                    const lastColor = editor.storage.lastFontColor || null;
+                label: 'Insert Table',
+                action: (): void => {
+                    const before = snapshotTypingMarks();
 
-                    let chain = editor.chain().focus()
-                        .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-                        .setFontFamily(lastFont);
+                    editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
 
-                    if (lastSize) chain = chain.setFontSize(lastSize);
-                    if (lastColor) chain = chain.setColor(lastColor);
-
-                    chain.run();
+                    setTimeout(() => {
+                        restoreTypingMarks(before);
+                        try { (editor as any).__kixSyncLastTypographyFromSelection?.(); } catch { }
+                    }, 0);
                 }
             },
             { label: 'Insert Row Above', action: (): void => editor.chain().focus().addRowBefore().run() },
@@ -786,6 +797,9 @@ export function createToolbar(editor: any): HTMLDivElement {
 
                 if (color !== null) {
                     chain.setHighlight({ color });
+                    editor.storage.lastHighlightColor = color;
+                } else {
+                    editor.storage.lastHighlightColor = null;
                 }
 
                 chain.run();
@@ -813,7 +827,10 @@ export function createToolbar(editor: any): HTMLDivElement {
     const highlightIcon = highlightButton.querySelector('.highlight-icon') as HTMLElement;
 
     editor.on('selectionUpdate', () => {
-        const currentColor = editor.getAttributes('highlight')?.color ?? null;
+        const currentColor =
+            editor.getAttributes('highlight')?.color ??
+            editor.storage.lastHighlightColor ??
+            null;
 
         if (highlightIcon) {
             highlightIcon.style.backgroundColor = currentColor || 'transparent';
@@ -1379,32 +1396,34 @@ export function createToolbar(editor: any): HTMLDivElement {
         'fas fa-eraser',
         (): void => {
             const { state, view } = editor;
+
             const wantFamily = 'Arial';
             const wantSize = '14';
+            const wantColor = defaultTextColor;
 
-            const stored: any[] = [];
             const m = state.schema.marks as any;
+            const stored: any[] = [];
 
             if (m.textStyle) {
                 stored.push(
                     m.textStyle.create({
                         fontFamily: wantFamily,
                         fontSize: wantSize,
-                    })
+                        color: wantColor,
+                    }),
                 );
             } else {
                 if (m.fontFamily) stored.push(m.fontFamily.create({ fontFamily: wantFamily }));
                 if (m.fontSize) stored.push(m.fontSize.create({ fontSize: wantSize }));
+                if (m.color) stored.push(m.color.create({ color: wantColor }));
             }
 
-            const tr = state.tr.setStoredMarks(stored);
-            view.dispatch(tr);
+            view.dispatch(state.tr.setStoredMarks(stored.length ? stored : null));
             view.focus();
 
-            editor.chain().focus().unsetColor().run();
             editor.storage.lastFontFamily = wantFamily;
             editor.storage.lastFontSize = wantSize;
-            editor.storage.lastFontColor = defaultTextColor;
+            editor.storage.lastFontColor = wantColor;
             editor.storage.lastHighlightColor = null;
             editor.storage.lastBold = false;
             editor.storage.lastItalic = false;
@@ -1412,10 +1431,7 @@ export function createToolbar(editor: any): HTMLDivElement {
             editor.storage.lastStrike = false;
             skipNextFormatReapply = true;
 
-            recentColors = [
-                defaultTextColor,
-                ...recentColors.filter((c) => c !== defaultTextColor),
-            ].slice(0, 8);
+            recentColors = [wantColor, ...recentColors.filter((c) => c !== wantColor)].slice(0, 8);
 
             const highlightIconEl = toolbar.querySelector('.highlight-icon') as HTMLElement;
             if (highlightIconEl) highlightIconEl.style.backgroundColor = 'transparent';
@@ -1429,7 +1445,7 @@ export function createToolbar(editor: any): HTMLDivElement {
             updateActiveButtons();
             updateColorIndicator();
         },
-        'Plain typing (reset)'
+        'Plain typing (reset)',
     );
 
     toolbar.appendChild(clearFormattingButton);
