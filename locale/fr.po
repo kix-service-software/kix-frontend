@@ -761,6 +761,9 @@ msgstr "Copier l'URL dans le presse-papiers et fermer"
 msgid "Copy of {0}"
 msgstr "Copie de {0}"
 
+msgid "Could not download/open attachment."
+msgstr ""
+
 msgid "Could not handle request."
 msgstr "Impossible de traiter la demande."
 

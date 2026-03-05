@@ -769,6 +769,9 @@ msgstr ""
 msgid "Copy of {0}"
 msgstr ""
 
+msgid "Could not download/open attachment."
+msgstr ""
+
 msgid "Could not handle request."
 msgstr ""
 

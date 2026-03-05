@@ -564,7 +564,8 @@ msgid "Changed by"
 msgstr "Geändert von"
 
 msgid "Changes cannot be saved. How do you want to proceed?"
-msgstr "Änderungen können nicht gespeichert werden. Wie möchten Sie fortfahren?"
+msgstr ""
+"Änderungen können nicht gespeichert werden. Wie möchten Sie fortfahren?"
 
 msgid "Changes saved."
 msgstr "Änderungen wurden gespeichert."
@@ -781,6 +782,9 @@ msgstr "URL in Zwischenablage kopieren und schließen"
 
 msgid "Copy of {0}"
 msgstr "Kopie von {0}"
+
+msgid "Could not download/open attachment."
+msgstr ""
 
 msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
