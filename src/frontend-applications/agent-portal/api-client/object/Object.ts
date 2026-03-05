@@ -21,6 +21,8 @@ import { RequestMethod } from '../../../../server/model/rest/RequestMethod';
 
 export class ObjectAPIClient extends APIClient {
 
+    private static cachedCountMap: Map<string, [number, number, number]> = new Map();
+
     public static async loadDisplayValue(
         objectType: KIXObjectType | string, objectId: string | number
     ): Promise<string> {
@@ -77,13 +79,19 @@ export class ObjectAPIClient extends APIClient {
             if (!requestPromise) {
                 requestPromise = this.createLoadRequestPromise<T>(
                     objectType, objectIds, params, loadingOptions?.limit, objectConstructors,
-                    timeout, silent, collectionId
+                    timeout, silent, collectionId, cacheKey
                 );
                 BrowserCacheService.getInstance().set(cacheKey, requestPromise, cacheType);
 
                 requestPromise.catch((error) => {
                     BrowserCacheService.getInstance().delete(cacheKey, cacheType);
                 });
+            } else if (collectionId && this.cachedCountMap.has(cacheKey)) {
+                // update counts if same collectionId was used but diferrent caches exisist
+                const countValues = this.cachedCountMap.get(cacheKey);
+                CollectionManager.getInstance().handleResult(
+                    collectionId, countValues[0], countValues[1], countValues[2]
+                );
             }
         } else {
             requestPromise = this.createLoadRequestPromise<T>(
@@ -98,7 +106,8 @@ export class ObjectAPIClient extends APIClient {
     // eslint-disable-next-line max-lines-per-function
     private static async createLoadRequestPromise<T extends KIXObject>(
         objectType: string, objectIds: Array<string | number> = null, params: any, limit: number,
-        objectConstructors: Array<new (object?: T) => T>, timeout?: number, silent?: boolean, collectionId?: string
+        objectConstructors: Array<new (object?: T) => T>, timeout?: number, silent?: boolean, collectionId?: string,
+        cacheKey?: string
     ): Promise<T[]> {
 
         let controller: AbortController;
@@ -123,8 +132,11 @@ export class ObjectAPIClient extends APIClient {
 
         if (response.status === 200) {
             CollectionManager.getInstance().handleResult(
-                collectionId, result.objects, limit, result.totalCount
+                collectionId, result.objects?.length, limit, result.totalCount
             );
+            if (cacheKey) {
+                this.cachedCountMap.set(cacheKey, [result.objects?.length, limit, result.totalCount]);
+            }
             objects = result.objects;
         } else {
             const errorMessage = JSON.stringify(result);
