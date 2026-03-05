@@ -7,7 +7,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <div
-    id="refresh-app-toast"
+    id=input.domToastId || "refresh-app-toast"
     class="toast position-absolute top-0 end-0 p-1 bg-light fade me-5 mt-5 border-1 border-danger pe-auto"
     role="alert"
     data-bs-autohide="false"
@@ -22,7 +22,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             type="button"
             class="btn-close"
             data-bs-dismiss="toast"
-            aria-label=state.translations["Translatable#Close"]/>
+            aria-label=(state.translations["Translatable#Close"])/>
     </div>
     <div class="toast-body">
         <h2>
