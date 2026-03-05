@@ -11,6 +11,8 @@ import { RequestMethod } from '../../../../server/model/rest/RequestMethod';
 import { Attachment } from '../../model/kix/Attachment';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { BrowserCacheService } from '../../modules/base-components/webapp/core/CacheService';
+import { ClientStorageService } from '../../modules/base-components/webapp/core/ClientStorageService';
+import { APIHeader } from '../../server/api/APIHeader';
 import { APIClient } from '../APIClient';
 
 export class TicketAPIClient extends APIClient {
@@ -35,10 +37,10 @@ export class TicketAPIClient extends APIClient {
     }
 
     public static async downloadArticleZipAttachment(ticketId: number, articleId: number): Promise<void> {
-        const url = this.getUrl(`/tickets/${ticketId}/articles/${articleId}/zip`);
+        const url = this.getUrl(`/tickets/${ticketId}/articles/${articleId}/zip?${APIHeader.KIX_APPLICATION}=${ClientStorageService.application}`);
         const a = document.createElement('a');
         a.style.display = 'none';
-        a.href = url;;
+        a.href = url;
         a.target = '_blank';
         document.body.appendChild(a);
         a.click();
