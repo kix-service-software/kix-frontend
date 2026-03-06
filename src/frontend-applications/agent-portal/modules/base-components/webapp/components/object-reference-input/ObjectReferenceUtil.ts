@@ -71,10 +71,12 @@ export class ObjectReferenceUtil {
                 ? await service.prepareFullTextFilter(searchValue)
                 : null;
 
-            if (Array.isArray(loadingOptions.filter)) {
-                loadingOptions.filter = [...loadingOptions.filter, ...filter];
-            } else {
-                loadingOptions.filter = filter;
+            if (filter !== null) {
+                if (Array.isArray(loadingOptions.filter)) {
+                    loadingOptions.filter = [...loadingOptions.filter, ...filter];
+                } else {
+                    loadingOptions.filter = filter;
+                }
             }
 
             loadingOptions.limit = autoCompleteConfiguration.limit;
