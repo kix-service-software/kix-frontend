@@ -7,7 +7,6 @@
  * --
  */
 
-import { METHODS } from 'node:http';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { ContextPreference } from '../../model/ContextPreference';
 import { APIClient } from '../APIClient';

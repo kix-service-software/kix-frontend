@@ -25,7 +25,7 @@ export class APIUtil {
 
     public static getRequestData(req: FastifyRequest): any {
         let application = req.headers[APIHeader.KIX_APPLICATION]?.toString();
-        application ??= (req as any).query[APIHeader.KIX_APPLICATION];
+        application ??= this.getQueryValue(req, APIHeader.KIX_APPLICATION);
         const clientRequestId = APIUtil.getClientRequestId(req);
         const token = APIUtil.getToken(req, application);
         const requestId = req.headers[APIHeader.KIX_HEADER_REQUEST_ID];
@@ -40,6 +40,10 @@ export class APIUtil {
 
     public static getHeaderValue(req: FastifyRequest, header: string): string {
         return req.headers[header]?.toString();
+    }
+
+    public static getQueryValue(req: FastifyRequest, param: string): string {
+        return (req as any).query ? (req as any).query[param] : undefined;
     }
 
     public static getToken(req: FastifyRequest, application: string): string {
