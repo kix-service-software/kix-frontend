@@ -89,13 +89,17 @@ async function loadContextConfiguration(req: FastifyRequest, reply: FastifyReply
 async function loadContextConfigurations(req: FastifyRequest, reply: FastifyReply): Promise<void> {
     const configurations = [];
 
-    const { application } = APIUtil.getRequestData(req);
+    let contextApplication = APIUtil.getQueryValue(req, 'application');
+    if (!contextApplication) {
+        const { application } = APIUtil.getRequestData(req);
+        contextApplication = application;
+    }
     const beToken = ConfigurationService.getBackendAPIToken();
 
     const loadingOptions = new KIXObjectLoadingOptions([
         new FilterCriteria(
             SysConfigOptionProperty.CONTEXT, SearchOperator.EQUALS, FilterDataType.STRING,
-            FilterType.AND, application
+            FilterType.AND, contextApplication
         )
     ]);
 
@@ -108,7 +112,7 @@ async function loadContextConfigurations(req: FastifyRequest, reply: FastifyRepl
     const options = objectResponse?.objects || [];
     const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
 
-    const cacheType = `${application}ContextConfiguration`;
+    const cacheType = `${contextApplication}ContextConfiguration`;
     for (const contextOption of contextOptions) {
         const configuration = await CacheService.getInstance().get(contextOption.Name, cacheType);
 
