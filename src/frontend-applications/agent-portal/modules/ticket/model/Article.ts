@@ -302,4 +302,66 @@ export class Article extends KIXObject {
         const articleProperty = Object.keys(ArticleProperty).map((p) => ArticleProperty[p]);
         return articleProperty.some((p) => p === property);
     }
+
+    public static readonly MAIL_STYLE = `
+    <style>
+      figure.image {
+        clear: both;
+        display: table;
+        margin: .9em auto;
+        min-width: 50px;
+        text-align: center;
+      }
+      figure.image > img {
+        display: block;
+        height: auto;
+        margin: 0 auto;
+        max-width: 100%;
+        min-width: 100%;
+      }
+
+      img.image_resized {
+        height:auto;
+      }
+      figure.image.image_resized {
+        box-sizing:border-box;
+        display:block;
+        max-width:100%;
+      }
+      figure.image.image_resized > img{
+        width:100%;
+      }
+
+      figure.image.image-style-block-align-left,
+      figure.image.image-style-block-align-right {
+        max-width: 100%;
+        box-sizing:border-box;
+      }
+      figure.image.image-style-align-left,
+      figure.image.image-style-align-right {
+        clear:none;
+      }
+      figure.image.image-style-side {
+        float:right;
+        max-width:50%
+      }
+      figure.image.image-style-align-left {
+        float:left;
+      }
+      figure.image.image-style-align-right {
+        float:right;
+      }
+      figure.image.image-style-block-align-right {
+        margin-left:auto;
+        margin-right:0;
+      }
+      figure.image.image-style-block-align-left {
+        margin-left:0;
+        margin-right:auto;
+      }
+      figure.image-style-align-center {
+        margin-left:auto;
+        margin-right:auto;
+      }
+    </style>`;
 }

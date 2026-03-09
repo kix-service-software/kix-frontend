@@ -12,7 +12,9 @@ import { LoggingService } from '../../../server/services/LoggingService';
 
 export class HTMLUtil {
 
-    public static sanitizeContent(content: string, prepareLinkTargets?: boolean): any {
+    public static sanitizeContent(
+        content: string, prepareLinkTargets?: boolean, prepareFigures?: boolean
+    ): any {
         try {
             const { JSDOM } = require('jsdom');
             const jsDOMWindow = new JSDOM('').window;
@@ -44,6 +46,25 @@ export class HTMLUtil {
                         a.target = '_top';
                     }
                 });
+            }
+
+            // Special treatment for character tags from CKEditor
+            if (prepareFigures) {
+                const figures = htmlDOM.window.document.querySelectorAll('figure');
+                if (figures) {
+                    figures.forEach((f) => {
+                        const fwidth = f.style.width;
+                        const fheight = f.style.height;
+                        const imgs = f.getElementsByTagName('img');
+                        for (const img of imgs) {
+                            img.style.width = fwidth;
+                            img.style.height = fheight || 'auto';
+                            const ratio = img.style['aspect-ratio'].split('/');
+                            img.width = ratio[0];
+                            img.height = ratio[1];
+                        }
+                    });
+                }
             }
 
             const returnData = {};

@@ -43,6 +43,8 @@ import { SysConfigOption } from '../../sysconfig/model/SysConfigOption';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { Counter } from '../../user/model/Counter';
 import { FileService } from '../../file/server/FileService';
+import { ArticleViewUtil } from './ArticleViewUtil';
+import { HTMLUtil } from '../../../model/HTMLUtil';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -464,6 +466,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             }
         }
 
+        article.Body = await this.prepareArticleBody(token, article.Body);
+
         article.ContentType = 'text/html; charset=utf-8';
         article.MimeType = 'text/html';
         article.Charset = 'utf-8';
@@ -748,6 +752,20 @@ export class TicketAPIService extends KIXObjectAPIService {
             objectClass = SenderType;
         }
         return objectClass;
+    }
+
+    private async prepareArticleBody(token: string, body: string): Promise<string> {
+        let config = await SysConfigService.getInstance().getSysConfigOptionValue(
+            token, 'agent-portal-configuration'
+        );
+        config = JSON.parse(config);
+        if (config?.editorType === 'ckeditor5' && body) {
+            body = Article.MAIL_STYLE + body;
+            body = await ArticleViewUtil.replaceInlineStyle(body, true);
+            const cleanHTML = HTMLUtil.sanitizeContent(body, false, true);
+            body = cleanHTML?.content || body;
+        }
+        return body;
     }
 
 }

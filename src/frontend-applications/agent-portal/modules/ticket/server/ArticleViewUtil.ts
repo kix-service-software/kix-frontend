@@ -49,24 +49,7 @@ export class ArticleViewUtil {
                 );
 
                 if (resolveInlineCSS) {
-                    let error = '';
-                    try {
-                        const juice = require('juice');
-                        content = juice(content);
-                    } catch (e) {
-                        LoggingService.getInstance().error('Error resolving inline css.', e);
-                        LoggingService.getInstance().error(e);
-                        error = 'Possible invalid HTML/CSS in source mail.';
-                    }
-
-                    const bodyMatch = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
-                    if (bodyMatch && bodyMatch.length >= 3) {
-                        content = bodyMatch[2];
-                    }
-
-                    if (error) {
-                        content = `<b style=\"color:red\">${error}</b>${content}`;
-                    }
+                    content = await this.replaceInlineStyle(content);
                 }
             } else {
                 content = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br />\n');
@@ -251,4 +234,26 @@ export class ArticleViewUtil {
         return body;
     }
 
+    public static async replaceInlineStyle(content: string, create: boolean = false): Promise<string> {
+        let error = '';
+        try {
+            const juice = require('juice');
+            content = juice(content);
+        } catch (e) {
+            LoggingService.getInstance().error('Error resolving inline css.', e);
+            LoggingService.getInstance().error(e);
+            error = 'Possible invalid HTML/CSS in source mail.';
+        }
+
+        const bodyMatch = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
+        if (bodyMatch && bodyMatch.length >= 3) {
+            content = bodyMatch[2];
+        }
+
+        if (error && !create) {
+            content = `<b style=\"color:red\">${error}</b>${content}`;
+        }
+
+        return content;
+    }
 }
