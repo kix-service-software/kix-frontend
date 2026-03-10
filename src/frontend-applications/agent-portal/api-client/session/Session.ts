@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,6 +19,7 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { RequestMethod } from '../../../../server/model/rest/RequestMethod';
 import { WindowListener } from '../../modules/base-components/webapp/core/WindowListener';
 import { ClientStorageService } from '../../modules/base-components/webapp/core/ClientStorageService';
+import { PasswordResetRequest } from '../../modules/user/model/PasswordResetRequest';
 
 export class SessionAPIClient extends APIClient {
 
@@ -94,7 +95,9 @@ export class SessionAPIClient extends APIClient {
     }
 
     public static createUserPasswordResetRequest(userLogin: string, userType: UserType = UserType.AGENT): void {
-        this.executeRequest(RequestMethod.POST, '/password-reset', undefined, { userType, userLogin });
+        this.executeRequest(RequestMethod.POST, '/password-reset',
+            new PasswordResetRequest(userLogin, userType)
+        );
     }
 
     public static async getCurrentUser(): Promise<User> {
