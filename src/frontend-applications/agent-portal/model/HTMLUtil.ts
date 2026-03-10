@@ -91,7 +91,7 @@ export class HTMLUtil {
     public static buildHtmlStructur(content: string, additionalHeader: string[] = []): string {
         const baseRoute = ConfigurationService.getEnvString('BASE_ROUTE') || '';
         return `
-                    <html style="height: 100%; overflow: auto">
+                    <html style="height: 100%;">
                         <head>
                             ${additionalHeader.join('\n')}
                         </head>
