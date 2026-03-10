@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,6 +21,7 @@ import { APIUtil } from '../api/APIUtil';
 import { doSSOLogin } from './SSOAuthentication';
 import { MarkoService } from '../services/MarkoService';
 import { UserType } from '../../modules/user/model/UserType';
+import { PasswordResetState } from '../../model/PasswordResetState';
 
 async function routes(fastify: FastifyInstance, options): Promise<void> {
     const authHandler = await PluginService.getInstance().getExtensions<IRouterHandler>(
@@ -33,6 +34,8 @@ async function routes(fastify: FastifyInstance, options): Promise<void> {
         preHandler: authHandler.map((ah) => ah.preHandler),
         handler: login
     });
+
+    fastify.get('/auth/password-reset/:resetToken', sendUserPasswordResetRequestConfirmation);
 }
 
 export default routes;
@@ -106,3 +109,17 @@ async function routeToLoginPage(req: FastifyRequest, reply: FastifyReply): Promi
     }
 }
 
+async function sendUserPasswordResetRequestConfirmation(req: FastifyRequest, reply: FastifyReply): Promise<void> {
+    const resetToken = (req.params as any)?.resetToken?.toString();
+
+    let pwResetState = PasswordResetState.ERROR;
+
+    if (resetToken) {
+        pwResetState = await AuthenticationService.getInstance().sendUserPasswordResetRequestConfirmation(
+            resetToken
+        );
+    }
+
+    const baseRoute = ConfigurationService.getEnvString('BASE_ROUTE') || '';
+    reply.redirect(`${baseRoute}/auth?pwResetState=${pwResetState}`);
+}

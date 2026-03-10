@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -103,20 +103,21 @@ export class APIUtil {
 
     public static getRoutes(): any[] {
         return [
+            require('./admin/Admin'),
+            require('./config/Config'),
+            require('./config/Form'),
+            require('./context/Context'),
+            require('./file/File'),
+            require('./note/Note'),
+            require('./notifications/Notifications'),
+            require('./object/Object'),
+            require('./search/Search'),
             require('./session/Session'),
             require('./session/MFA'),
-            require('./context/Context'),
-            require('./object/Object'),
-            require('./admin/Admin'),
-            require('./config/Form'),
-            require('./config/Config'),
-            require('./note/Note'),
-            require('./user/User'),
+            require('./session/PasswordReset'),
             require('./ticket/Ticket'),
-            require('./search/Search'),
-            require('./webform/Webform'),
-            require('./notifications/Notifications'),
-            require('./file/File')
+            require('./user/User'),
+            require('./webform/Webform')
         ];
     }
 
