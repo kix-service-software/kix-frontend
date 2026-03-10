@@ -43,24 +43,23 @@ export class APIClient {
             throw e;
         });
 
-        if (handleError && response.status > 400) {
+        if (handleError && response.status >= 400) {
             if (response.status === 401) {
                 window.location.replace('/auth');
                 return;
             }
 
-            let result;
+            let errorCode = response.status.toString();
+            let errorMessage = response.statusText;
             try {
-                result = await response.json();
+                const result = await response.json();
+                errorCode = result?.Code || response.status;
+                errorMessage = result?.Message || response.statusText;
             } catch {
                 // nothing
             }
-            const errorDetails = result?.Code
-                ? ` (${result.Code}: ${result.Message})`
-                : ` (${response.status}: ${response.statusText})`;
-            const errorMessage = `API Error - ${method} - ${relativeUrl}` + errorDetails;
-            console.error(errorMessage);
-            throw new Error(result?.Code || 'Error', errorMessage);
+            console.error(`API Error - ${method} - ${relativeUrl} (${errorCode}: ${errorMessage})`);
+            throw new Error(errorCode, errorMessage, response.status);
         }
 
         return response;
