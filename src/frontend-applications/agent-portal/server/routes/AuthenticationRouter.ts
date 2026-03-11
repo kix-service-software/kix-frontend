@@ -31,7 +31,7 @@ async function routes(fastify: FastifyInstance, options): Promise<void> {
     fastify.route({
         method: 'GET',
         url: '/auth',
-        preHandler: authHandler.map((ah) => ah.preHandler),
+        preHandler: authHandler.map((ah) => ah.preHandler.bind(ah)),
         handler: login
     });
 
