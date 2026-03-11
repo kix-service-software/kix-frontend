@@ -326,7 +326,19 @@ export class RoleService extends KIXObjectAPIService {
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        return [];
+        const searchProperties = [
+            RoleProperty.NAME,
+            RoleProperty.USAGE_CONTEXT,
+            'Permissions.' + PermissionProperty.TARGET,
+            'Permissions.' + PermissionProperty.TYPE_ID,
+            'Permissions.' + PermissionProperty.VALUE,
+        ];
+
+        const searchCriteria = criteria.filter(
+            (f) => searchProperties.some((sp) => f.property.match(sp))
+        );
+
+        return searchCriteria;
     }
 
     public async deletePermission(
