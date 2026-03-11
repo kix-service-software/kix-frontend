@@ -419,7 +419,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             if (useInclude && contact.User) {
                 user = contact.User;
             } else if (contact.AssignedUserID) {
-                user = await this.objectLoader.queue<User>(KIXObjectType.USER, contact.AssignedUserID);
+                user = await this.objectLoader.queue<User>(KIXObjectType.USER, contact.AssignedUserID, true);
             }
         }
         return user;
