@@ -205,8 +205,8 @@ export class ContactSearchFormManager extends SearchFormManager {
                 if (loadingOptions) {
                     loadingOptions.filter.push(
                         new FilterCriteria(
-                            OrganisationProperty.NAME, SearchOperator.LIKE, FilterDataType.STRING,
-                            FilterType.AND, '*' + searchValue + '*',
+                            SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING,
+                            FilterType.AND, searchValue,
                         )
                     );
                     loadingOptions.includes.push(OrganisationProperty.SUB_ORGANISATIONS);
@@ -216,7 +216,7 @@ export class ContactSearchFormManager extends SearchFormManager {
                     KIXObjectType.ORGANISATION, undefined, loadingOptions
                 );
                 tree = await OrganisationService.getInstance().prepareObjectTree(
-                    organisations, true, true
+                    organisations, showInvalid, showInvalid
                 );
                 break;
             default:
