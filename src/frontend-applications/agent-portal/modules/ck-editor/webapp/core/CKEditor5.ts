@@ -74,7 +74,7 @@ export class CKEditor5 {
                             }
                         }
 
-                        if (input.readOnly) {
+                        if (input.readOnly && !input.noAutoLink) {
                             contentString = contentString.replace(
                                 /(https?:\/\/[^\s]+)/g,
                                 '<a href="$1" target="_blank">$1</a>'
