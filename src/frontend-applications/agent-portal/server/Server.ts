@@ -101,6 +101,7 @@ export class Server extends AbstractServer {
             require('./routes/AuthenticationRouter'),
             require('./routes/ApplicationRouter'),
             require('./routes/ObjectIconRouter'),
+            require('./routes/OAuth2RedirectRouter'),
         ];
         applicationRoutes.forEach((r) => fastify.register(r));
     }
