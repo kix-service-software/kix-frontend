@@ -22,7 +22,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <p>
                         <translation-string pattern="Translatable#Do not forget to replace the <YOUR_FRONTEND_HOST> placeholder (if it is not already)."/>
                     </p>
-                    <editor readOnly value=state.headCode useReadonlyStyle/>
+                    <editor
+                        readOnly
+                        noAutoLink
+                        value=state.headCode
+                        useReadonlyStyle/>
                 </if>
             </@content>
         </widget>
@@ -36,7 +40,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             )>
             <@content>
                 <if(state.buttonCode)>
-                    <editor readOnly value=state.buttonCode useReadonlyStyle/>
+                    <editor
+                        readOnly
+                        noAutoLink
+                        value=state.buttonCode
+                        useReadonlyStyle/>
                 </if>
             </@content>
         </widget>
