@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,10 +7,10 @@
  * --
  */
 
-import { Server } from '../Server';
+import { IServer } from '../IServer';
 
 export interface IAgentPortalPlugin {
 
-    init(server: Server): Promise<void>;
+    init(server: IServer): Promise<void>;
 
 }

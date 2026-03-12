@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,28 +7,26 @@
  * --
  */
 
+import { FastifyInstance } from 'fastify';
 import { ConfigurationService } from '../../../server/services/ConfigurationService';
-import { LoggingService } from '../../../server/services/LoggingService';
 import { SysConfigService } from '../modules/sysconfig/server/SysConfigService';
 import { MainMenuService } from './services/MainMenuService';
-import Fastify, { FastifyInstance } from 'fastify';
-import markoPlugin from '@marko/fastify';
 import path from 'path';
 import { CacheService } from './services/cache';
-import { APIUtil } from './api/APIUtil';
 import { PluginService } from '../../../server/services/PluginService';
 import { AgentPortalExtensions } from './extensions/AgentPortalExtensions';
 import { IConfigurationExtension } from './extensions/IConfigurationExtension';
-import { registerAuthenticationModule } from './routes/FastifyAuthentication';
-import { IAgentPortalPlugin } from './model/IAgentPortalPlugin';
 import { ConfigurationCache } from './api/context/ConfigurationCache';
 import { ConfigurationBuilder } from './api/config/ConfigurationBuilder';
 import { IMarkoApplication } from './extensions/IMarkoApplication';
 import { FileService } from '../modules/file/server/FileService';
+import { AbstractServer } from './AbstractServer';
+import { registerAuthenticationModule } from './routes/FastifyAuthentication';
 
-require('@marko/compiler/register')({ meta: true });
+export class Server extends AbstractServer {
 
-export class Server {
+    public readonly name = 'Agent Portal';
+    public readonly serverPrefix = 'AP';
 
     private static INSTANCE: Server;
 
@@ -39,13 +37,15 @@ export class Server {
         return Server.INSTANCE;
     }
 
-    private constructor() { }
-
-    public name = 'AgentPortal';
-
-    private fastify: FastifyInstance;
+    private constructor() {
+        super();
+    }
 
     public async initialize(): Promise<void> {
+        await super.initialize();
+    }
+
+    protected async preInitialize(): Promise<void> {
         await this.registerForms();
         MainMenuService.createDefaultConfiguration(ConfigurationService.getBackendAPIToken());
         SysConfigService.getInstance().preloadOptions();
@@ -53,8 +53,6 @@ export class Server {
         await this.initCacheDependencies();
         await ConfigurationBuilder.rebuildConfigCache().catch(() => null);
         await ConfigurationCache.getInstance().rebuildConfigCache().catch(() => null);
-
-        await this.createHTTPServer();
     }
 
     private async initCacheDependencies(): Promise<void> {
@@ -77,80 +75,11 @@ export class Server {
         await Promise.allSettled(promises);
     }
 
-    private async createHTTPServer(): Promise<any> {
-        this.fastify = await this.setupFastify();
-
-        await this.initPluginExtensions();
-
-        this.fastify.listen({ port: this.getPort(), host: '0.0.0.0' }, (err, address) => {
-            if (err) {
-                this.fastify.log.error(err);
-                process.exit(1);
-            }
-            LoggingService.getInstance().info(`[SERVER] start - Agent Portal running on port: ${this.getPort()}`);
-        });
-    }
-
-    private async initPluginExtensions(): Promise<void> {
-        const extensions = await PluginService.getInstance().getExtensions<IAgentPortalPlugin>(
-            AgentPortalExtensions.PLUGIN
-        ).catch((): IAgentPortalPlugin[] => []);
-
-        for (const e of extensions) {
-            await e.init(this);
-        }
-    }
-
-    public async setupFastify(): Promise<FastifyInstance> {
-        const fastifyLogLevelMap = { // without 'fatal' and 'trace'
-            0: 'error', // 50 in log
-            1: 'warn',  // 40
-            2: 'info',  // 30
-            3: 'debug'  // 20
-        };
-
-        // set to default 1MB
-        const maxParamLength = ConfigurationService.getEnvNumber('AP_API_MAX_PARAM_LENGTH', 1000000);
-
-        // set to default 50MB like in the BE API
-        const bodyLimit = ConfigurationService.getEnvNumber('AP_API_MAX_BODY_LENGTH', 52428800);
-
-        LoggingService.getInstance().info(`[SERVER] setting up server with maxParamLength ${maxParamLength} and maxBodyLength ${bodyLimit}`);
-
-        const logLevelEnv = ConfigurationService.getEnvNumber('HTTP_LOG_LEVEL');
-        const logOptions = {
-            level: fastifyLogLevelMap[logLevelEnv] || 'error'
-        };
-
-        const fastify = Fastify({
-            logger: logLevelEnv === -1 ? false : logOptions,
-            maxParamLength,
-            bodyLimit
-        });
-
-        fastify.addHook('onRoute', (routeOption) => {
-            LoggingService.getInstance().info(`[SERVER] Route added - ${routeOption.method} ${routeOption.url}`);
-        });
-
-        fastify.addContentTypeParser('application/json', { parseAs: 'string' }, (req, body, done) => {
-            try {
-                const json = JSON.parse(body?.toString());
-                done(null, json);
-            } catch (err) {
-                err.statusCode = 400;
-                done(err, undefined);
-            }
-        });
-
+    protected registerAuthenticationModule(fastify: FastifyInstance): void {
         registerAuthenticationModule(fastify);
-        this.registerStatic(fastify);
-        this.registerRoutes(fastify);
-
-        await this.registerPlugins(fastify);
-        return fastify;
     }
 
-    private registerStatic(fastify: FastifyInstance): void {
+    protected registerStatic(fastify: FastifyInstance): void {
         const fastifyStatic = require('@fastify/static');
         fastify.register(fastifyStatic, {
             root: path.join(__dirname, '../../../../static/'),
@@ -165,25 +94,15 @@ export class Server {
         });
     }
 
-    private registerRoutes(fastify: FastifyInstance): void {
+    protected registerRoutes(fastify: FastifyInstance): void {
+        super.registerRoutes(fastify);
+
         const applicationRoutes = [
             require('./routes/AuthenticationRouter'),
             require('./routes/ApplicationRouter'),
             require('./routes/ObjectIconRouter'),
         ];
         applicationRoutes.forEach((r) => fastify.register(r));
-
-        const apiRoutes = APIUtil.getRoutes();
-        apiRoutes.forEach((r) => fastify.register(r, { prefix: `${APIUtil.URL_PREFIX}` }));
-    }
-
-    public registerPlugin(plugin: any, options: any = {}): void {
-        options.prefix = `${APIUtil.URL_PREFIX}`;
-        this.fastify.register(plugin, options);
-    }
-
-    private async registerPlugins(fastify: FastifyInstance): Promise<void> {
-        fastify.register(markoPlugin);
     }
 
     public getPort(): number {
