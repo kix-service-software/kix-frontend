@@ -10,7 +10,6 @@
 import { Webform } from '../model/Webform';
 import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
 import { DateTimeUtil } from '../../../modules/base-components/webapp/core/DateTimeUtil';
-import { KIXIntegrationRouter } from './KIXIntegrationRouter';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { CreateWebformTicketRequest } from '../model/CreateWebformTicketRequest';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
@@ -104,9 +103,7 @@ export class WebformService {
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
             token, config, SysConfigAccessLevel.CONFIDENTIAL
-        ).then(() => {
-            KIXIntegrationRouter.getInstance().registerRoute(Number(webform.ObjectId));
-        }).catch((error: Error) => {
+        ).catch((error: Error) => {
             LoggingService.getInstance().error(error.Message, error);
         });
 

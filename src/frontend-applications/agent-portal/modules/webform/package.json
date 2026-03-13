@@ -11,11 +11,6 @@
                 "module": "admin-module.extension"
             }
         },
-        "kix:router": {
-            "webform-router": {
-                "module": "router.extension"
-            }
-        },
         "kix:configuration": {
             "new-webform-dialog-configuration": {
                 "module": "new-webform-dialog-configuration.extension"

@@ -100,6 +100,7 @@ export class Server extends AbstractServer {
         const applicationRoutes = [
             require('./routes/AuthenticationRouter'),
             require('./routes/ApplicationRouter'),
+            require('./routes/KIXIntegrationRouter'),
             require('./routes/ObjectIconRouter'),
             require('./routes/OAuth2RedirectRouter'),
         ];
