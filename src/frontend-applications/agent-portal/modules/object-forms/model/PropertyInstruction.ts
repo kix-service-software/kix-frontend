@@ -22,7 +22,7 @@ export class PropertyInstruction {
     public Set: any;
 
     public ReadOnly: boolean;
-    public Writeable: boolean;
+    public Writable: boolean;
 
     public Clear: boolean;
 
@@ -44,7 +44,7 @@ export class PropertyInstruction {
 
             const booleanProperties = [
                 InstructionProperty.CLEAR,
-                InstructionProperty.READ_ONLY, InstructionProperty.WRITEABLE,
+                InstructionProperty.READ_ONLY, InstructionProperty.WRITABLE,
                 InstructionProperty.SHOW, InstructionProperty.HIDE,
                 InstructionProperty.ENABLE, InstructionProperty.DISABLE,
                 InstructionProperty.OPTIONAL, InstructionProperty.REQUIRED

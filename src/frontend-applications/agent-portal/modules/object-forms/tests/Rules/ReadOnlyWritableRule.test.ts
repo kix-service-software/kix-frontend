@@ -16,7 +16,7 @@ import { TestFormObject, TestObjectValueMapper } from '../MockData';
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-describe('Rule - ReadOnly / Writeable', () => {
+describe('Rule - ReadOnly / Writable', () => {
 
     describe('Enable ReadOnly', () => {
 
@@ -114,14 +114,14 @@ describe('Rule - ReadOnly / Writeable', () => {
 
     });
 
-    describe('Disable Writeable', () => {
+    describe('Disable Writable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
             EvaluationResult: {
-                'testProperty1': [{ Writeable: 0 }],
-                'testProperty3': [{ Writeable: 0 }],
-                'testProperty5': [{ Writeable: 0 }]
+                'testProperty1': [{ Writable: 0 }],
+                'testProperty3': [{ Writable: 0 }],
+                'testProperty5': [{ Writable: 0 }]
             }
         })
 
@@ -159,14 +159,14 @@ describe('Rule - ReadOnly / Writeable', () => {
 
     });
 
-    describe('Enable Writeable', () => {
+    describe('Enable Writable', () => {
 
         let objectFormValueMapper: ObjectFormValueMapper;
         const readonlyRule = new RuleResult({
             EvaluationResult: {
-                'testProperty1': [{ Writeable: 1 }],
-                'testProperty3': [{ Writeable: 1 }],
-                'testProperty5': [{ Writeable: 1 }]
+                'testProperty1': [{ Writable: 1 }],
+                'testProperty3': [{ Writable: 1 }],
+                'testProperty5': [{ Writable: 1 }]
             }
         })
 
