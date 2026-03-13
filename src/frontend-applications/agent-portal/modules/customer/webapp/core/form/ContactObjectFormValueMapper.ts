@@ -38,13 +38,15 @@ import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFi
 
 export class ContactObjectFormValueMapper extends ObjectFormValueMapper<Contact> {
 
+    public hasUserCreatePermission: boolean = false;
+
     public async mapFormValues(contact: Contact): Promise<void> {
         if (!contact.User) {
             contact.User = new User();
         }
 
-        const hasUserCreatePermission = await AgentService.checkPermissions('system/users', [CRUD.CREATE]);
-        if (hasUserCreatePermission) {
+        this.hasUserCreatePermission = await AgentService.checkPermissions('system/users', [CRUD.CREATE]);
+        if (this.hasUserCreatePermission) {
             this.createUserPage();
         }
 
