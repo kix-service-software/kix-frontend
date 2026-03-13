@@ -29,6 +29,7 @@
     "author": "KIX Service Software GmbH",
     "dependencies": {
         "@babel/preset-env": "^7.28.5",
+        "@fastify/accepts": "^4.3.0",
         "@fastify/auth": "^4.6.1",
         "@fastify/cookie": "^9.4.0",
         "@fastify/jwt": "^8.0.1",

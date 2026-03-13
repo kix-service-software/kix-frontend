@@ -85,6 +85,8 @@ export abstract class AbstractServer implements IServer {
             bodyLimit
         });
 
+        fastify.register(require('@fastify/accepts'));
+
         fastify.addHook('onRoute', (routeOption) => {
             LoggingService.getInstance().info(`[${this.serverPrefix}-SERVER] Route added - ${routeOption.method} ${routeOption.url}`);
         });
