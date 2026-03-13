@@ -18,6 +18,7 @@ import { Contact } from '../../../model/Contact';
 import { NewContactDialogContext } from '../context/NewContactDialogContext';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { OutOfOfficeProperty } from '../../../../user/model/OutOfOfficeProperty';
+import { ContactObjectFormValueMapper } from './ContactObjectFormValueMapper';
 
 export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {
 
@@ -45,6 +46,11 @@ export class ContactObjectCommitHandler extends ObjectCommitHandler<Contact> {
             && !newContact.User?.IsAgent
             && !newContact.User?.IsCustomer
         ) {
+            delete newContact.User;
+        }
+        // no user permission => delete user data
+        // TODO: check also/instead whether changes have been made to the user object
+        else if (!(objectValueMapper as ContactObjectFormValueMapper).hasUserCreatePermission) {
             delete newContact.User;
         }
         // user assigned and no context => only update context for user
