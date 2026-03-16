@@ -48,7 +48,6 @@ export class HttpService {
     private axios: AxiosAdapter;
     private apiURL: string;
     private requestPromises: Map<string, Promise<any>> = new Map();
-    private userRoleIds: Map<number, number[]> = new Map();
 
     private constructor() {
         this.apiURL = ConfigurationService.getEnvString('BACKEND_API_URL');
@@ -57,7 +56,8 @@ export class HttpService {
 
     public setUserRoleIds(user: User): void {
         if (user) {
-            this.userRoleIds.set(user.UserID, user.RoleIDs);
+            const roleIds = user.RoleIDs?.sort()?.join(';') || '';
+            CacheService.getInstance().set(`USER_ROLE_IDS_${user.UserID}`, roleIds, 'USER_ROLE_IDS');
         }
     }
 
@@ -72,7 +72,7 @@ export class HttpService {
 
         let cacheKey: string;
         if (useCache) {
-            cacheKey = this.buildCacheKey(resource, queryParameters, token, useToken);
+            cacheKey = await this.buildCacheKey(resource, queryParameters, token, useToken);
             const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
             if (cachedObject) {
                 return cachedObject;
@@ -175,7 +175,8 @@ export class HttpService {
             const backendToken = AuthenticationService.getInstance().getBackendToken(token);
             const decodedToken = AuthenticationService.getInstance().decodeToken(backendToken);
             const userId = decodedToken?.UserID;
-            cacheId = this.userRoleIds.get(userId)?.sort().join(';') + decodedToken?.UserType;
+            const roleIds = await CacheService.getInstance().get(`USER_ROLE_IDS_${userId}`, 'USER_ROLE_IDS');
+            cacheId = roleIds + decodedToken?.UserType;
         }
 
         const cacheKey = cacheId + resource;
@@ -334,12 +335,12 @@ export class HttpService {
         }
     }
 
-    private buildCacheKey(resource: string, query: any, token: string, useToken?: boolean): string {
+    private async buildCacheKey(resource: string, query: any, token: string, useToken?: boolean): Promise<string> {
         let cacheId = token;
         if (!useToken) {
             const backendToken = AuthenticationService.getInstance().getBackendToken(token);
             const userId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
-            cacheId = this.userRoleIds.get(userId)?.sort().join(';');
+            cacheId = await CacheService.getInstance().get(`USER_ROLE_IDS_${userId}`, 'USER_ROLE_IDS');
         }
         const ordered = {};
 
