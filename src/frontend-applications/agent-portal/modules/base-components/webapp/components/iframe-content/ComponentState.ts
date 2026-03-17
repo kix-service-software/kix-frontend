@@ -21,7 +21,8 @@ export class ComponentState extends AbstractComponentState {
             'allow-same-site-none-cookies',
             'allow-popups',
             'allow-top-navigation'
-        ]
+        ],
+        public removeScrolling: boolean = false
     ) {
         super();
     }

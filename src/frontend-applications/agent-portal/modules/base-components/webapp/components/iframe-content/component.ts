@@ -34,6 +34,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.prepareContent(input.html);
 
         this.state.calculateHeight = input.calculateHeight;
+        this.state.removeScrolling = input.removeScrolling;
         this.state.extraSpace = input.extraSpace;
     }
 
@@ -78,6 +79,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     BrowserUtil.prepareFrameLinks(frameDocument);
                 }
             });
+            if (this.state.removeScrolling && frame.contentDocument) {
+                const innerHtmlElement = frame.contentDocument.documentElement;
+                innerHtmlElement.style.overflow = 'hidden';
+                frame.contentDocument.body.style.overflow = 'hidden';
+            }
         }
     }
 
