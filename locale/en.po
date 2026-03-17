@@ -4399,6 +4399,9 @@ msgstr ""
 msgid "Responsible Out Of Office Substitute"
 msgstr ""
 
+msgid "Restore Search Template"
+msgstr ""
+
 msgid "Result names"
 msgstr ""
 

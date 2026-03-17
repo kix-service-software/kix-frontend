@@ -4592,6 +4592,9 @@ msgstr "Verantwortlicher Out Of Office"
 msgid "Responsible Out Of Office Substitute"
 msgstr "\"Verantwortlicher Out Of Office\"-Vertretung"
 
+msgid "Restore Search Template"
+msgstr ""
+
 msgid "Result names"
 msgstr "Ergebnisbezeichnungen"
 

@@ -4007,6 +4007,9 @@ msgstr "Responsable en dehors du bureau"
 msgid "Responsible Out Of Office Substitute"
 msgstr "Responsable de la suppléance en dehors du bureau"
 
+msgid "Restore Search Template"
+msgstr ""
+
 msgid "Result names"
 msgstr "Noms des résultats"
 
