@@ -93,6 +93,13 @@ class Component extends FormInputComponent<JSON, ComponentState> {
                     });
 
                     this.editor.on('ready', () => {
+                        // OVERRIDE purify of string editor to allow html-like strings (placeholder)
+                        if (this.editor.root?.defaults?.editors?.string) {
+                            this.editor.root.defaults.editors.string.prototype.purify = function (val: any): any {
+                                return val;
+                            };
+                        }
+
                         if (value) {
                             this.editor.setValue(value);
                         } else {
