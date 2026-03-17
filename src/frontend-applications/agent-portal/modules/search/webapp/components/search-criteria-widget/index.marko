@@ -13,14 +13,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     instanceId=state.instanceId
     contentActions=state.contentActions
     clearMinimizedStateOnDestroy
-    key=state.instanceId>
+    key=state.instanceId
+>
     <@content>
         <div key="search-criteria-container" class="criteria-container">
             <if(state.manager)>
                 <div class="search-criteria">
                     <dynamic-form-field-container
                         manager=state.manager
-                        key="search-criteria-dynamic-form"/>
+                        key="search-criteria-dynamic-form"
+                    />
                 </div>
                 <if(state.sortTreeId)>
                     <div class="search-sort">
@@ -30,7 +32,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <form-list
                             treeId=state.sortTreeId
                             on-nodesChanged("sortAttributeChanged")
-                            class="input-style"/>
+                            class="input-style"
+                        />
                         <span class="search-sort-descending">
                             <translation-string pattern="Translatable#Descending:"/>
                         </span>
@@ -38,28 +41,36 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             type="checkbox"
                             checked=state.sortDescending
                             on-input("sortDescendingChanged")
-                            class="input-style">
+                            class="input-style"
+                        >
                     </div>
                 </if>
                 <div class="search-button-container">
                     <button
                         type="button"
                         on-click("resetSearch")
-                        title=(state.translations["Translatable#Reset data"])
-                        class="kix-button form-blank-cancel-button">
+                        title=(
+                            state.translations[
+                                "Translatable#Restore Search Template"
+                            ]
+                        )
+                        class="kix-button form-blank-cancel-button"
+                    >
                         <span class="kix-icon-delete" aria-hidden="true"/>
-                        <translation-string pattern="Translatable#Reset data"/>
+                        <translation-string pattern="Translatable#Restore Search Template"/>
                     </button>
                     <button
                         type="button"
                         on-click("search")
                         title=(state.translations["Translatable#Start search"])
                         disabled=!state.canSearch
-                        class="kix-button form-blank-submit-button">
+                        class="kix-button form-blank-submit-button"
+                    >
                         <span class="kix-icon-search" aria-hidden="true"/>
                         <translation-string
                             pattern="Translatable#Start search"
-                            placeholders=[]/>
+                            placeholders=[]
+                        />
                     </button>
                 </div>
             </if>

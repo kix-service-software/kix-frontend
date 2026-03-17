@@ -54,7 +54,7 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Attributes', 'Translatable#Reset data', 'Translatable#Cancel',
+            'Translatable#Attributes', 'Translatable#Restore Search Template', 'Translatable#Cancel',
             'Translatable#Detailed search results', 'Translatable#Start search',
             'Translatable#New Search', 'Translatable#Edit Search'
         ]);
