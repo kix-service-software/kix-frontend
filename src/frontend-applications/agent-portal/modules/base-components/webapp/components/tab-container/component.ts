@@ -148,7 +148,8 @@ class TabLaneComponent extends AbstractMarkoComponent<ComponentState> {
     public async tabClicked(tab: ConfiguredWidget, event: any): Promise<void> {
         event.stopPropagation();
         if (!await BrowserUtil.isTextSelected()) {
-            this.setActiveTab(tab);
+            this.state.activeTab = null;
+            setTimeout(() => this.setActiveTab(tab), 50);
         }
     }
 
