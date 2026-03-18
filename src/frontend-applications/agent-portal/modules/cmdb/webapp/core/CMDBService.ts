@@ -683,7 +683,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                     case 'CIClassReference':
                         return 'Autocomplete';
                     default:
-                        return BackendSearchDataType.TEXTUAL;
+                        return BackendSearchDataType.STRING;
                 }
             }
         }

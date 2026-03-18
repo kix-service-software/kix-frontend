@@ -48,7 +48,7 @@ export class ObjectSearch extends KIXObject {
             }
             this.Property = property;
 
-            this.ValueType = objectSearch.ValueType || BackendSearchDataType.TEXTUAL;
+            this.ValueType = objectSearch.ValueType || BackendSearchDataType.STRING;
         }
     }
 

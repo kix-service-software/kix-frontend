@@ -12,6 +12,7 @@ import { CacheService } from '../../services/cache';
 import { ModuleConfigurationService } from '../../services/configuration/ModuleConfigurationService';
 
 import { routeConfiguration } from '../../routes/FastifyAuthentication';
+import { ConfigurationBuilder } from './ConfigurationBuilder';
 
 async function routes(fastify: FastifyInstance, options): Promise<void> {
     fastify.get('/config/forms', routeConfiguration(fastify), loadFormConfigurations);
@@ -32,7 +33,17 @@ async function loadFormConfiguration(req: FastifyRequest, reply: FastifyReply): 
     const { formId } = req.params as any;
     let status = 200;
 
-    const formConfiguration = await CacheService.getInstance().get(formId, 'FormConfiguration').catch((e) => null);
+    let formConfiguration = await CacheService.getInstance().get(
+        `FormConfiguration${formId}`, 'FormConfiguration'
+    ).catch((e) => null);
+
+    if (!formConfiguration) {
+        await ConfigurationBuilder.getInstance().rebuildConfigCache().catch(() => null);
+        formConfiguration = await CacheService.getInstance().get(
+            `FormConfiguration${formId}`, 'FormConfiguration'
+        ).catch((e) => null);
+    }
+
     if (!formConfiguration) {
         status = 404;
     }

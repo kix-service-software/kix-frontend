@@ -24,9 +24,25 @@ import { FormConfigurationResolver } from '../../services/configuration/FormConf
 
 export class ConfigurationBuilder {
 
-    private static rebuildPromise: Promise<void>;
+    private static INSTANCE: ConfigurationBuilder;
 
-    public static async rebuildConfigCache(): Promise<void> {
+    public static getInstance(): ConfigurationBuilder {
+        if (!ConfigurationBuilder.INSTANCE) {
+            ConfigurationBuilder.INSTANCE = new ConfigurationBuilder();
+        }
+        return ConfigurationBuilder.INSTANCE;
+    }
+
+    private constructor() { }
+
+    private rebuildPromise: Promise<void>;
+
+    public initialize(): Promise<void> {
+        CacheService.getInstance().adddIgnorePrefixes(['FormConfiguration']);
+        return this.rebuildConfigCache();
+    }
+
+    public async rebuildConfigCache(): Promise<void> {
         if (!this.rebuildPromise) {
             // eslint-disable-next-line no-async-promise-executor
             this.rebuildPromise = new Promise<void>(async (resolve, reject) => {
@@ -52,7 +68,9 @@ export class ConfigurationBuilder {
                             return null;
                         });
 
-                        CacheService.getInstance().set(formOption.Name, newConfig, 'FormConfiguration');
+                        CacheService.getInstance().set(
+                            `FormConfiguration${formOption.Name}`, newConfig, 'FormConfiguration'
+                        );
                     }
                 }
 
@@ -63,7 +81,7 @@ export class ConfigurationBuilder {
         return this.rebuildPromise;
     }
 
-    private static async loadFormOptions(): Promise<SysConfigOption[]> {
+    private async loadFormOptions(): Promise<SysConfigOption[]> {
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 SysConfigOptionProperty.CONTEXT, SearchOperator.EQUALS, FilterDataType.STRING,

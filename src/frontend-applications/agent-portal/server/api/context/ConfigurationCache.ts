@@ -11,7 +11,6 @@ import { ConfigurationService } from '../../../../../server/services/Configurati
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { PluginService } from '../../../../../server/services/PluginService';
 import { ContextConfiguration } from '../../../model/configuration/ContextConfiguration';
-import { IConfiguration } from '../../../model/configuration/IConfiguration';
 import { FilterCriteria } from '../../../model/FilterCriteria';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
@@ -42,8 +41,8 @@ export class ConfigurationCache {
 
     private rebuildPromise: Promise<void>;
 
-    protected initialize(): Promise<void> {
-        CacheService.getInstance().adddIgnorePrefixes(['ContextConfiguration']);
+    public initialize(applicationName: string): Promise<void> {
+        CacheService.getInstance().adddIgnorePrefixes([`${applicationName}ContextConfiguration`]);
         return this.rebuildConfigCache();
     }
 
