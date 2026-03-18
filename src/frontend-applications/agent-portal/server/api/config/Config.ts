@@ -17,7 +17,7 @@ async function routes(fastify: FastifyInstance, options): Promise<void> {
 }
 
 async function rebuildConfiguration(req: FastifyRequest, reply: FastifyReply): Promise<void> {
-    await ConfigurationBuilder.rebuildConfigCache();
+    await ConfigurationBuilder.getInstance().rebuildConfigCache();
     return reply.status(201).send();
 }
 

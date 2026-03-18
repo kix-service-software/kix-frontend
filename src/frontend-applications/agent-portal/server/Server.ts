@@ -51,8 +51,8 @@ export class Server extends AbstractServer {
         SysConfigService.getInstance().preloadOptions();
 
         await this.initCacheDependencies();
-        await ConfigurationBuilder.rebuildConfigCache().catch(() => null);
-        await ConfigurationCache.getInstance().rebuildConfigCache().catch(() => null);
+        await ConfigurationBuilder.getInstance().initialize().catch(() => null);
+        await ConfigurationCache.getInstance().initialize('agent-portal').catch(() => null);
     }
 
     private async initCacheDependencies(): Promise<void> {
