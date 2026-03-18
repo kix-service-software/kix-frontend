@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,8 +22,6 @@ import { UpdateContactResponse } from './api/UpdateContactResponse';
 import { UpdateContactRequest } from './api/UpdateContactRequest';
 import { Error } from '../../../../../server/model/Error';
 import { UserProperty } from '../../user/model/UserProperty';
-import { UserService } from '../../user/server/UserService';
-import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { Contact } from '../model/Contact';
 import { SearchOperator } from '../../search/model/SearchOperator';
 import { ObjectIcon } from '../../icon/model/ObjectIcon';
@@ -32,10 +30,7 @@ import { FilterType } from '../../../model/FilterType';
 import { SearchProperty } from '../../search/model/SearchProperty';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
-import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
-import { PermissionService } from '../../../server/services/PermissionService';
-import { UIComponentPermission } from '../../../model/UIComponentPermission';
-import { CRUD } from '../../../../../server/model/rest/CRUD';
+import { User } from '../../user/model/User';
 
 export class ContactAPIService extends KIXObjectAPIService {
 
@@ -108,26 +103,16 @@ export class ContactAPIService extends KIXObjectAPIService {
     public async createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>
     ): Promise<string> {
-
-        const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
         const userParameter = this.getUserParameters(parameter);
-
-        let userId;
-        if (userParameter.length && userParameter.some((up) => up[0] === UserProperty.USER_LOGIN)) {
-            userId = await this.createOrUpdateUser(token, clientRequestId, userParameter, assignedUserId).catch(
-                (error: Error) => {
-                    LoggingService.getInstance().error(
-                        `${error.Code}: Could not create or update user for contact ${error.Message}`, error
-                    );
-                    throw new Error(error.Code, error.Message);
-                }
-            );
-
-            if (!assignedUserId && userId) {
-                parameter.push([ContactProperty.ASSIGNED_USER_ID, userId]);
-            }
+        if (
+            userParameter.length
+            && userParameter.some((up) => up[0] === UserProperty.USER_LOGIN)
+            && !parameter.some((p) => p[0] === ContactProperty.USER)
+        ) {
+            const user: object = {};
+            userParameter.forEach((up) => user[up[0]] = up[1]);
+            parameter.push([ContactProperty.USER, user]);
         }
-
         this.prepareOrganisationIdsParameter(parameter);
 
         const createContact = new CreateContact(parameter);
@@ -153,60 +138,26 @@ export class ContactAPIService extends KIXObjectAPIService {
         return response.ContactID;
     }
 
-    private async createOrUpdateUser(
-        token: string, clientRequestId: string, parameter: Array<[string, any]>, assignedUserId?: number
-    ): Promise<string | number> {
-        let userId: string | number = assignedUserId;
-
-        const validParameterValue = this.getParameterValue(parameter, KIXObjectProperty.VALID_ID);
-        parameter = parameter.filter((p) => p[0] !== UserProperty.USER_ACCESS && p[0] !== KIXObjectProperty.VALID_ID);
-
-        const isAgent = this.getParameterValue(parameter, UserProperty.IS_AGENT);
-        const isCustomer = this.getParameterValue(parameter, UserProperty.IS_CUSTOMER);
-
-        // use own valid (do not overwrite contact valid - reference)
-        const validValue = (!isAgent && !isCustomer) || (validParameterValue && validParameterValue !== 1) ? 2 : 1;
-        parameter.push([KIXObjectProperty.VALID_ID, validValue]);
-
-        if (userId) {
-            await UserService.getInstance().updateObject(
-                token, clientRequestId, KIXObjectType.USER, parameter, userId
-            ).catch((error) => {
-                throw new Error(error.Code, error.Message);
-            });
+    private getUserParameters(parameter: Array<[string, any]>): Array<[string, any]> {
+        const userParameter = this.getParameterValue(parameter, 'User');
+        if (userParameter) {
+            return Object.entries(userParameter);
         } else {
-            userId = await UserService.getInstance().createObject(
-                token, clientRequestId, KIXObjectType.USER, parameter
-            ).catch((error) => {
-                throw new Error(error.Code, error.Message);
-            });
+            return parameter.filter((p) =>
+                p[0] === UserProperty.USER_LOGIN ||
+                p[0] === UserProperty.USER_PASSWORD ||
+                p[0] === UserProperty.IS_AGENT ||
+                p[0] === UserProperty.IS_CUSTOMER ||
+                p[0] === UserProperty.ROLE_IDS
+            );
         }
-        return userId;
     }
+
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        let userId;
-        const userParameter = this.getUserParameters(parameter);
-        if (userParameter.length > 1) {
-            const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
-            userId = await this.createOrUpdateUser(token, clientRequestId, userParameter, assignedUserId).catch(
-                (error: Error) => {
-                    LoggingService.getInstance().error(
-                        `${error.Code}: Could not create or update user for contact ${error.Message}`, error
-                    );
-                    throw new Error(error.Code, error.Message);
-                }
-            );
-            if (!assignedUserId && userId) {
-                parameter.push(
-                    [ContactProperty.ASSIGNED_USER_ID, userId]
-                );
-            }
-        }
-
         this.prepareOrganisationIdsParameter(parameter);
         const updateContact = new UpdateContact(parameter);
 
@@ -229,29 +180,6 @@ export class ContactAPIService extends KIXObjectAPIService {
         }
 
         return response.ContactID;
-    }
-
-    private getUserParameters(parameter: Array<[string, any]>): Array<[string, any]> {
-        const userParameter = this.getParameterValue(parameter, 'User');
-        if (userParameter) {
-            return Object.entries(userParameter);
-        } else {
-            return parameter.filter((p) =>
-                p[0] === UserProperty.USER_LOGIN ||
-                p[0] === UserProperty.USER_PASSWORD ||
-                p[0] === UserProperty.USER_COMMENT ||
-                p[0] === UserProperty.USER_ACCESS ||
-                p[0] === UserProperty.IS_AGENT ||
-                p[0] === UserProperty.IS_CUSTOMER ||
-                p[0] === UserProperty.ROLE_IDS ||
-                p[0] === UserProperty.PREFERENCES ||
-                p[0] === UserProperty.OUT_OF_OFFICE ||
-                p[0] === PersonalSettingsProperty.MY_QUEUES ||
-                p[0] === PersonalSettingsProperty.NOTIFICATIONS ||
-                p[0] === PersonalSettingsProperty.USER_LANGUAGE ||
-                p[0] === KIXObjectProperty.VALID_ID // use contact valid also as user valid
-            );
-        }
     }
 
     private prepareOrganisationIdsParameter(parameter: Array<[string, any]>): void {
