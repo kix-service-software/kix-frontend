@@ -45,6 +45,8 @@ import { Counter } from '../../user/model/Counter';
 import { FileService } from '../../file/server/FileService';
 import { ArticleViewUtil } from './ArticleViewUtil';
 import { HTMLUtil } from '../../../model/HTMLUtil';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -760,15 +762,18 @@ export class TicketAPIService extends KIXObjectAPIService {
     }
 
     private async prepareArticleBody(token: string, body: string): Promise<string> {
+        const beToken = ConfigurationService.getBackendAPIToken();
         let config = await SysConfigService.getInstance().getSysConfigOptionValue(
-            token, 'agent-portal-configuration'
-        );
-        config = JSON.parse(config);
-        if (config?.editorType === 'ckeditor5' && body) {
-            body = Article.MAIL_STYLE + body;
-            body = await ArticleViewUtil.replaceInlineStyle(body, true);
-            const cleanHTML = HTMLUtil.sanitizeContent(body, false, true);
-            body = cleanHTML?.content || body;
+            beToken, 'agent-portal-configuration'
+        ).catch(() => null);
+        if (config) {
+            config = JSON.parse(config);
+            if (config?.editorType === 'ckeditor5' && body) {
+                body = Article.MAIL_STYLE + body;
+                body = await ArticleViewUtil.replaceInlineStyle(body, true);
+                const cleanHTML = HTMLUtil.sanitizeContent(body, false, true);
+                body = cleanHTML?.content || body;
+            }
         }
         return body;
     }
