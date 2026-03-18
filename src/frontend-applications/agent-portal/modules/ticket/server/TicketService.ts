@@ -244,7 +244,10 @@ export class TicketAPIService extends KIXObjectAPIService {
             let from;
             let to = this.getParameterValue(parameter, ArticleProperty.TO);
             if (!to && contactId && senderType !== 3) {
-                if (!isNaN(contactId)) {
+                if (channelId === 1) {
+                    // do nothing - note article will be created with To = Team
+                }
+                else if (!isNaN(contactId)) {
                     const objectResponse = await super.load<Contact>(
                         token, KIXObjectType.CONTACT, 'contacts', null, [contactId], 'Contact',
                         'TicketService', Contact
@@ -441,13 +444,15 @@ export class TicketAPIService extends KIXObjectAPIService {
                 Contact
             );
             const contacts = objectResponse?.objects;
-            if (contacts && contacts.length) {
+            if (Number(article.ChannelID) === 1) {
+                // do nothing - note article will be created with To = Team
+            }
+            else if (contacts?.length) {
                 article.To = contacts[0].Email;
                 if (!article.To.match(/.+\s<.+>/)) {
                     article.To = `"${contacts[0].Firstname} ${contacts[0].Lastname}" <${article.To}>`;
                 }
             }
-
             // new/unkown contact
             else {
                 article.To = ticket.ContactID.toString();
