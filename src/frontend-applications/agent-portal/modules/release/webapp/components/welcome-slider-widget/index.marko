@@ -14,11 +14,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div class="slider-widget">
             <div class="slider-menu">
                 <for|sliderElement, index| of=state.sliderList>
-                    <span
+                    <button
                         class={
                             active: index === state.activeSliderIndex,
                         }
                         title=(state.translations[sliderElement.title])
+                        aria-label=(state.translations[sliderElement.title])
                         on-click("showSlider", index)/>
                 </for>
             </div>
@@ -26,12 +27,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <if(state.activeSlider && state.activeSlider.image)>
                     <if(state.activeSlider.imageIsBase64)>
                         <img
-                            alt=(state.translations[state.activeSlider.title])
+                            aria-hidden="true" 
                             src=(state.activeSlider.image)>
                     </if>
                     <else>
                         <img
-                            alt=(state.translations[state.activeSlider.title])
+                            aria-hidden="true"
                             src=(
                                 state.baseRoute +
                                 "/static/img/release/" +
@@ -42,12 +43,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
             <div class="slider-block">
                 <if(state.activeSliderIndex !== 0)>
-                    <div
+                    <button
                         title=(state.translations["Translatable#previous"])
+                        aria-label=(state.translations["Translatable#previous"])
                         on-click("previousSlider")
                         class="slider-button useable">
-                        <span class="kix-icon-nook-left"/>
-                    </div>
+                        <span class="kix-icon-nook-left" aria-hidden="true"/>
+                    </button>
                 </if>
                 <else>
                     <div class="slider-button"/>
@@ -78,6 +80,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <button
                                 type="button"
                                 title=(state.translations["Translatable#Let's go"])
+                                aria-label=(state.translations["Translatable#Let's go"])
                                 on-click("closeReleaseInfos")
                                 class="kix-button submit-button">
                                 <span class="kix-icon-check" aria-hidden="true"/>
@@ -90,6 +93,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <button
                                 type="button"
                                 title=(state.translations["Translatable#No, thank you"])
+                                aria-label=(state.translations["Translatable#No, thank you"])
                                 on-click("closeReleaseInfos")
                                 class="kix-button">
                                 <span class="kix-icon-close" aria-hidden="true"/>
@@ -98,6 +102,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <button
                                 type="button"
                                 title=(state.translations["Translatable#Yes, please"])
+                                aria-label=(state.translations["Translatable#Yes, please"])
                                 on-click("showSlider", 1)
                                 class="kix-button">
                                 <span class="kix-icon-check" aria-hidden="true"/>
@@ -110,12 +115,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     state.activeSliderIndex > 0 &&
                     state.activeSliderIndex < state.sliderList.length - 1
                 )>
-                    <div
+                    <button
                         title=(state.translations["Translatable#next"])
+                        aria-label=(state.translations["Translatable#next"])
                         on-click("nextSlider")
                         class="slider-button useable">
-                        <span class="kix-icon-nook-right"/>
-                    </div>
+                        <span class="kix-icon-nook-right" aria-hidden="true"/>
+                    </button>
                 </if>
                 <else>
                     <div class="slider-button"/>
@@ -132,15 +138,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <li>
                             <if(version.url && version.url.length > 0)>
                                 <a href=version.url target="_blank">
-                                    <p class="h5">
+                                    <div class="h5">
                                         ${version.label}
-                                    </p>
+                                    </div>
                                 </a>
                             </if>
                             <else>
-                                <p class="h5">
+                                <div class="h5">
                                     ${version.label}
-                                </p>
+                                </div>
                             </else>
                         </li>
                     </for>
