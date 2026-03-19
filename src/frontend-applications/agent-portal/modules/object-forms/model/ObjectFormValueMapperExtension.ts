@@ -12,6 +12,7 @@ import { Context } from '../../../model/Context';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { DynamicField } from '../../dynamic-fields/model/DynamicField';
 import { DynamicFieldValue } from '../../dynamic-fields/model/DynamicFieldValue';
+import { AdditionalSwitchFieldOption } from './AdditionalSwitchFieldOption';
 import { ObjectFormValue } from './FormValues/ObjectFormValue';
 import { ObjectFormValueMapper } from './ObjectFormValueMapper';
 
@@ -58,6 +59,10 @@ export abstract class ObjectFormValueMapperExtension<T extends KIXObject = KIXOb
 
     public canSetDefaultValueForConfig(formValue: ObjectFormValue): boolean {
         return null;
+    }
+
+    public async getAdditionalSwitchOption(property: string): Promise<AdditionalSwitchFieldOption[]> {
+        return;
     }
 
 }

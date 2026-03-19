@@ -25,6 +25,7 @@ import { InteractionHandler } from '../webapp/core/InteractionHandler';
 import { ObjectFormHandler } from '../webapp/core/ObjectFormHandler';
 import { ObjectFormRegistry } from '../webapp/core/ObjectFormRegistry';
 import { PropertyInstructionMapper } from '../webapp/core/PropertyInstructionMapper';
+import { AdditionalSwitchFieldOption } from './AdditionalSwitchFieldOption';
 import { FormValueProperty } from './FormValueProperty';
 import { DynamicFieldObjectFormValue } from './FormValues/DynamicFieldObjectFormValue';
 import { ObjectFormValue } from './FormValues/ObjectFormValue';
@@ -554,5 +555,16 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
 
         return true;
+    }
+
+    public async getAdditionalSwitchOption(property: string): Promise<AdditionalSwitchFieldOption[]> {
+        const additionalSwitchOptions: AdditionalSwitchFieldOption[] = [];
+        for (const extension of this.extensions || []) {
+            const extendedAdditionalSwitchOptions = await extension.getAdditionalSwitchOption(property);
+            if (extendedAdditionalSwitchOptions?.length) {
+                additionalSwitchOptions.push(...extendedAdditionalSwitchOptions);
+            }
+        }
+        return additionalSwitchOptions;
     }
 }

@@ -85,9 +85,10 @@ export class NewTicketDialogContext extends Context {
     }
 
     private async handleOrganisationValue(organisationId: number): Promise<void> {
-        if (!isNaN(organisationId)) {
+        if (organisationId && !isNaN(organisationId)) {
             const organisations = await KIXObjectService.loadObjects(
-                KIXObjectType.ORGANISATION, [organisationId]
+                KIXObjectType.ORGANISATION, [organisationId],
+                undefined, undefined, true
             );
             if (organisations && organisations.length) {
                 this.organisation = organisations[0];
@@ -102,9 +103,10 @@ export class NewTicketDialogContext extends Context {
     }
 
     private async handleContactValue(contactId: number): Promise<void> {
-        if (!isNaN(contactId)) {
+        if (contactId && !isNaN(contactId)) {
             const contacts = await KIXObjectService.loadObjects(
-                KIXObjectType.CONTACT, [contactId]
+                KIXObjectType.CONTACT, [contactId],
+                undefined, undefined, true
             );
             if (contacts && contacts.length) {
                 this.contact = contacts[0];
