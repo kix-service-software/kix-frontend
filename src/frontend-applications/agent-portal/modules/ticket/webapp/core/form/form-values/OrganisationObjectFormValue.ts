@@ -7,20 +7,16 @@
  * --
  */
 
+import { AutoCompleteConfiguration } from '../../../../../../model/configuration/AutoCompleteConfiguration';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { DataType } from '../../../../../../model/DataType';
-import { FilterCriteria } from '../../../../../../model/FilterCriteria';
-import { FilterDataType } from '../../../../../../model/FilterDataType';
-import { FilterType } from '../../../../../../model/FilterType';
-import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { SortUtil } from '../../../../../../model/SortUtil';
-import { ObjectReferenceUtil } from '../../../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { TimeoutTimer } from '../../../../../base-components/webapp/core/TimeoutTimer';
 import { TreeNode } from '../../../../../base-components/webapp/core/tree';
-import { ValidIDProperty } from '../../../../../base-components/webapp/core/ValidIDProperty';
 import { Contact } from '../../../../../customer/model/Contact';
 import { Organisation } from '../../../../../customer/model/Organisation';
 import { OrganisationProperty } from '../../../../../customer/model/OrganisationProperty';
@@ -28,7 +24,6 @@ import { OrganisationService } from '../../../../../customer/webapp/core/Organis
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
-import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { Ticket } from '../../../../model/Ticket';
 import { TicketProperty } from '../../../../model/TicketProperty';
 
@@ -37,6 +32,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     objectBindingId: string;
 
     private setFormValueTimeout: TimeoutTimer;
+    public ORGA_DETERMINES_CONTACT: boolean;
 
     public constructor(
         property: string,
@@ -52,6 +48,21 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
         this.multiselect = false;
 
         this.setFormValueTimeout = new TimeoutTimer();
+        this.loadingOptions = new KIXObjectLoadingOptions();
+        this.loadingOptions.includes = [OrganisationProperty.SUB_ORGANISATIONS];
+        this.loadingOptions.expands = [OrganisationProperty.SUB_ORGANISATIONS];
+    }
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        await super.initFormValueByField(field);
+
+        const objectOption = field?.options?.find((o) => o.option === 'ORGA_DETERMINES_CONTACT');
+        this.ORGA_DETERMINES_CONTACT = Boolean(objectOption?.value);
+        if (this.ORGA_DETERMINES_CONTACT) {
+            this.isAutoComplete = true;
+            this.autoCompleteConfiguration = new AutoCompleteConfiguration();
+            this.hasFilter = true;
+        }
     }
 
     public async initFormValue(): Promise<void> {
@@ -60,19 +71,21 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     }
 
     public async postInitFormValue(): Promise<void> {
-        this.objectBindingId = this.objectValueMapper?.object?.addBinding(
-            TicketProperty.CONTACT_ID,
-            async (value: number) => {
+        if (!this.ORGA_DETERMINES_CONTACT) {
+            this.objectBindingId = this.objectValueMapper?.object?.addBinding(
+                TicketProperty.CONTACT_ID,
+                async (value: number) => {
+                    await this.loadSelectableValues();
+                    await this.setOrganisationValue(value);
+                    this.objectValueMapper?.validateFormValue(this, true);
+                }
+            );
+            const contactFV = this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID);
+            if (contactFV?.value) {
                 await this.loadSelectableValues();
-                await this.setOrganisationValue(value);
+                await this.setOrganisationValue(contactFV.value);
                 this.objectValueMapper?.validateFormValue(this, true);
             }
-        );
-        const contactFV = this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID);
-        if (contactFV?.value) {
-            await this.loadSelectableValues();
-            await this.setOrganisationValue(contactFV.value);
-            this.objectValueMapper?.validateFormValue(this, true);
         }
     }
 
@@ -84,47 +97,45 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     }
 
     public async loadSelectableValues(): Promise<void> {
-        const contactValue = (this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID)) as SelectObjectFormValue;
-        const selectedContactValue = this.initialized && contactValue?.isInitialized() ?
-            contactValue?.value : contactValue?.value || contactValue?.defaultValue;
-        if (selectedContactValue) {
-            const contactId = Array.isArray(selectedContactValue) ? selectedContactValue[0] : selectedContactValue;
-            if (!isNaN(Number(contactId))) {
-                const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, [contactId])
-                    .catch((): Contact[] => []);
-                if (contacts.length) {
-                    const contact = contacts[0];
+        if (!this.ORGA_DETERMINES_CONTACT) {
+            const contactValue = (
+                this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID)
+            ) as SelectObjectFormValue;
+            const selectedContactValue = this.initialized && contactValue?.isInitialized() ?
+                contactValue?.value : contactValue?.value || contactValue?.defaultValue;
+            if (selectedContactValue) {
+                const contactId = Array.isArray(selectedContactValue) ? selectedContactValue[0] : selectedContactValue;
+                if (!isNaN(Number(contactId))) {
+                    const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, [contactId])
+                        .catch((): Contact[] => []);
+                    if (contacts.length) {
+                        const contact = contacts[0];
 
-                    const loadingOptions = new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                OrganisationProperty.ID, SearchOperator.IN, FilterDataType.NUMERIC,
-                                FilterType.AND, contact.OrganisationIDs
-                            )
-                        ], null, null,
-                        [OrganisationProperty.SUB_ORGANISATIONS],
-                        [OrganisationProperty.SUB_ORGANISATIONS]
-                    );
-                    const organisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, contact.OrganisationIDs, loadingOptions
-                    );
+                        const organisations = await KIXObjectService.loadObjects<Organisation>(
+                            KIXObjectType.ORGANISATION, contact.OrganisationIDs, this.loadingOptions
+                        );
 
-                    const nodes = await OrganisationService.getInstance().prepareObjectTree(
-                        organisations, this.showInvalidNodes, this.isInvalidClickable, contact.OrganisationIDs
-                    );
+                        const nodes = await OrganisationService.getInstance().prepareObjectTree(
+                            organisations, this.showInvalidNodes, this.isInvalidClickable, contact.OrganisationIDs
+                        );
 
-                    SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+                        SortUtil.sortObjects(nodes, 'label', DataType.STRING);
 
-                    // check for changed value to prevent infinite loop by triggered valueSetter listener
-                    const possibleValues = contact.OrganisationIDs.filter((id) => this.findOrgansiationNode(nodes, id));
-                    if (JSON.stringify(this.possibleValues) !== JSON.stringify(possibleValues)) {
-                        this.possibleValues = possibleValues;
+                        // check for changed value to prevent infinite loop by triggered valueSetter listener
+                        const possibleValues = contact.OrganisationIDs.filter(
+                            (id) => this.findOrgansiationNode(nodes, id)
+                        );
+                        if (JSON.stringify(this.possibleValues) !== JSON.stringify(possibleValues)) {
+                            this.possibleValues = possibleValues;
+                        }
+                        this.treeHandler.setTree(nodes, undefined, true);
                     }
-                    this.treeHandler.setTree(nodes);
+                } else if (typeof contactId === 'string') {
+                    this.clearPossibleValuesAndNodes();
                 }
-            } else if (typeof contactId === 'string') {
-                this.clearPossibleValuesAndNodes();
             }
+        } else {
+            return super.loadSelectableValues();
         }
     }
 
@@ -151,29 +162,28 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
         }
         if (init && this.empty) {
             organisationId = null;
-        }
-        else if (init && initialOrgId) {
+        } else if (init && initialOrgId) {
             organisationId = initialOrgId;
         } else if (init && this.defaultValue) {
             organisationId = this.defaultValue;
             if (Array.isArray(this.defaultValue)) {
                 organisationId = this.defaultValue[0];
             }
-        } else {
-            if (!contactId) {
-                const contactFormValue = this.objectValueMapper?.findFormValue(TicketProperty.CONTACT_ID);
-                contactId = contactFormValue?.value || contactFormValue?.defaultValue;
+        } else if (!contactId && !this.ORGA_DETERMINES_CONTACT) {
+            await this.setFormValue(null, true);
+        } else if (contactId && !this.ORGA_DETERMINES_CONTACT) {
+
+            // if current value is acceptable - keep it
+            if (this.possibleValues?.some((pv) => pv?.toString() === this.value?.toString())) {
+                return;
             }
+
             if (Array.isArray(contactId)) {
                 contactId = contactId[0];
             }
 
-            if (!contactId) {
-                this.clearPossibleValuesAndNodes();
-            }
-
             // if contact is an id, get its organisations
-            else if (!isNaN(Number(contactId))) {
+            if (!isNaN(Number(contactId))) {
                 const contacts = await KIXObjectService.loadObjects<Contact>(
                     KIXObjectType.CONTACT, [contactId], null, null, true
                 ).catch((): Contact[] => []);
@@ -183,11 +193,6 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
 
                     organisationId = this.possibleValues.some((v) => v === contact.PrimaryOrganisationID) ?
                         contact.PrimaryOrganisationID : null;
-
-                    // current value is acceptable - do not changed
-                    if (this.value && this.possibleValues?.some((pv) => pv?.toString() === this.value?.toString())) {
-                        return;
-                    }
                 }
             }
 
@@ -197,6 +202,10 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
         }
 
         if (organisationId) {
+            const node = this.treeHandler.getTree().find((n) => n.id.toString() === organisationId.toString());
+            if (node && !node.selected) {
+                this.treeHandler.setSelection([node], true);
+            }
             await this.setFormValue(organisationId, true);
         }
     }
