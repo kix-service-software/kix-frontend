@@ -1539,9 +1539,6 @@ msgstr "Formulartitel"
 msgid "Format"
 msgstr "Format"
 
-msgid "Forum"
-msgstr "Forum"
-
 msgid "Forward"
 msgstr "Weiterleiten"
 
@@ -5147,11 +5144,9 @@ msgid "Team Dashboard"
 msgstr "Team Dashboard"
 
 msgid ""
-"Technical Customer Service mit KIX - work order documentation, checklists, "
+"Technical Customer Service with KIX - work order documentation, checklists, "
 "scheduling, offline information for maintenance and repairs."
 msgstr ""
-"Technischer Kundenservice mit KIX - Arbeitsablaufdokumentation, Checklisten, "
-"Zeitplanung, Offline-Informationen für Wartung und Instandhaltung."
 
 msgid "Template"
 msgstr "Vorlage"
@@ -5646,9 +5641,6 @@ msgstr "Ihre Berechtigungen wurden aktualisiert."
 msgid "Your rating"
 msgstr "Ihre Bewertung"
 
-msgid "Youtube"
-msgstr "Youtube"
-
 msgid "ZIP"
 msgstr "PLZ"
 
@@ -5907,6 +5899,20 @@ msgstr "{0}: hat keinen Wert."
 
 msgid "{0}: just white spaces as value is not allowed."
 msgstr "{0}: nur Leerzeichen als Wert sind nicht zulässig."
+
+#~ msgid "Forum"
+#~ msgstr "Forum"
+
+#~ msgid ""
+#~ "Technical Customer Service mit KIX - work order documentation, "
+#~ "checklists, scheduling, offline information for maintenance and repairs."
+#~ msgstr ""
+#~ "Technischer Kundenservice mit KIX - Arbeitsablaufdokumentation, "
+#~ "Checklisten, Zeitplanung, Offline-Informationen für Wartung und "
+#~ "Instandhaltung."
+
+#~ msgid "Youtube"
+#~ msgstr "Youtube"
 
 #~ msgid "Assigned Organisation"
 #~ msgstr "Zugeordnete Organisation"

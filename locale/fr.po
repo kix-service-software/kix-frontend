@@ -1519,9 +1519,6 @@ msgstr "Titre du formulaire"
 msgid "Format"
 msgstr "Format"
 
-msgid "Forum"
-msgstr "Forum"
-
 msgid "Forward"
 msgstr "En avant"
 
@@ -4563,12 +4560,9 @@ msgid "Team Dashboard"
 msgstr "Tableau de bord de l'équipe"
 
 msgid ""
-"Technical Customer Service mit KIX - work order documentation, checklists, "
+"Technical Customer Service with KIX - work order documentation, checklists, "
 "scheduling, offline information for maintenance and repairs."
 msgstr ""
-"Service technique à la clientèle de KIX - documentation des ordres de "
-"travail, listes de contrôle, programmation, informations hors ligne pour "
-"l'entretien et les réparations."
 
 msgid "Template"
 msgstr "Modèle"
@@ -5061,9 +5055,6 @@ msgstr "Vos autorisations ont été mises à jour."
 msgid "Your rating"
 msgstr "Votre note"
 
-msgid "Youtube"
-msgstr "Youtube"
-
 msgid "ZIP"
 msgstr "ZIP"
 
@@ -5294,6 +5285,20 @@ msgstr "{0} : n'a pas de valeur."
 
 msgid "{0}: just white spaces as value is not allowed."
 msgstr "{0} : les espaces blancs ne sont pas autorisés."
+
+#~ msgid "Forum"
+#~ msgstr "Forum"
+
+#~ msgid ""
+#~ "Technical Customer Service mit KIX - work order documentation, "
+#~ "checklists, scheduling, offline information for maintenance and repairs."
+#~ msgstr ""
+#~ "Service technique à la clientèle de KIX - documentation des ordres de "
+#~ "travail, listes de contrôle, programmation, informations hors ligne pour "
+#~ "l'entretien et les réparations."
+
+#~ msgid "Youtube"
+#~ msgstr "Youtube"
 
 #~ msgid "Assigned Organisation"
 #~ msgstr "Organisation assignée"

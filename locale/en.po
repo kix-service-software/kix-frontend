@@ -1519,9 +1519,6 @@ msgstr ""
 msgid "Format"
 msgstr ""
 
-msgid "Forum"
-msgstr ""
-
 msgid "Forward"
 msgstr ""
 
@@ -4952,7 +4949,7 @@ msgid "Team Dashboard"
 msgstr ""
 
 msgid ""
-"Technical Customer Service mit KIX - work order documentation, checklists, "
+"Technical Customer Service with KIX - work order documentation, checklists, "
 "scheduling, offline information for maintenance and repairs."
 msgstr ""
 
@@ -5429,9 +5426,6 @@ msgid "Your Permissions have been updated."
 msgstr ""
 
 msgid "Your rating"
-msgstr ""
-
-msgid "Youtube"
 msgstr ""
 
 msgid "ZIP"
