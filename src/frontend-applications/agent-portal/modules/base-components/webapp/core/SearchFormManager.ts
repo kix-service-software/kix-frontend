@@ -94,6 +94,6 @@ export class SearchFormManager extends AbstractDynamicFormManager {
     public async getSortAttributeType(attribute: string): Promise<string> {
         const supportedAttributes = await KIXObjectService.getSortableAttributes(this.objectType);
         const relevantAttribute = supportedAttributes.find((sA) => sA.Property === attribute);
-        return relevantAttribute?.ValueType || BackendSearchDataType.STRING;
+        return relevantAttribute?.ValueType || BackendSearchDataType.TEXTUAL;
     }
 }
