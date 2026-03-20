@@ -53,7 +53,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (objectType) {
                 const dep = (this.column.getColumnConfiguration() as DefaultDepColumnConfiguration).dep;
                 const type = await KIXObjectService.getBackendFilterType(objectType, this.column.getColumnId(), dep);
-                if (type === BackendSearchDataType.STRING) {
+                if (type === BackendSearchDataType.TEXTUAL) {
                     this.initTextFilter();
                 } else if (type === 'Autocomplete') {
                     this.prepareAutocomplete(objectType);

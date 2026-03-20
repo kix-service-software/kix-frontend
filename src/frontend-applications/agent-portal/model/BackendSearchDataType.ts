@@ -9,7 +9,7 @@
 
 export enum BackendSearchDataType {
 
-    STRING = 'STRING',
+    TEXTUAL = 'TEXTUAL',
 
     NUMERIC = 'NUMERIC',
 

@@ -961,7 +961,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     protected async getSortType(property: string, objectType: KIXObjectType | string): Promise<BackendSearchDataType> {
-        let sortType = BackendSearchDataType.STRING;
+        let sortType = BackendSearchDataType.TEXTUAL;
         const supportedAttributes = await KIXObjectService.getSortableAttributes(objectType);
         if (supportedAttributes?.length) {
             const knownTypes = Object.keys(BackendSearchDataType);
@@ -969,7 +969,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             if (relevantAttribute) {
                 sortType = relevantAttribute.ValueType as BackendSearchDataType;
                 if (!knownTypes.some((t) => t === sortType)) {
-                    sortType = BackendSearchDataType.STRING;
+                    sortType = BackendSearchDataType.TEXTUAL;
                 }
             }
         }
@@ -1103,7 +1103,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
         const supportedAttributes = await this.getFilterableAttributes(false);
         const attribute = supportedAttributes.find((sa) => sa.Property === property);
-        return attribute?.ValueType || BackendSearchDataType.STRING;
+        return attribute?.ValueType || BackendSearchDataType.TEXTUAL;
     }
 
     protected async getBackendFilterTypeForDF(property: string, dep?: string): Promise<BackendSearchDataType | string> {
