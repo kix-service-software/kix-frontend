@@ -26,6 +26,7 @@ import { SelectObjectFormValue } from '../../../../../object-forms/model/FormVal
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
 import { Ticket } from '../../../../model/Ticket';
 import { TicketProperty } from '../../../../model/TicketProperty';
+import { TicketService } from '../../TicketService';
 
 export class OrganisationObjectFormValue extends SelectObjectFormValue<number | string> {
 
@@ -56,9 +57,9 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
 
-        const objectOption = field?.options?.find((o) => o.option === 'ORGA_DETERMINES_CONTACT');
-        this.ORGA_DETERMINES_CONTACT = Boolean(objectOption?.value);
-        if (this.ORGA_DETERMINES_CONTACT) {
+        const config = await TicketService.getTicketModuleConfiguration().catch(() => null);
+        if (config?.organisationDeterminesContact) {
+            this.ORGA_DETERMINES_CONTACT = true;
             this.isAutoComplete = true;
             this.autoCompleteConfiguration = new AutoCompleteConfiguration();
             this.hasFilter = true;
