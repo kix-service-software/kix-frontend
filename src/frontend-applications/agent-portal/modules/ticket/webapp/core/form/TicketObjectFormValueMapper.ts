@@ -172,15 +172,4 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
         return formValue as DynamicFieldObjectFormValue;
     }
 
-    public async getAdditionalSwitchOption(property: string): Promise<AdditionalSwitchFieldOption[]> {
-        const additionalSwitchOptions = await super.getAdditionalSwitchOption(property);
-        if (property === TicketProperty.ORGANISATION_ID) {
-            additionalSwitchOptions.push(new AdditionalSwitchFieldOption(
-                'ORGA_DETERMINES_CONTACT',
-                'Translatable#Organsiation determines contact'
-            ));
-        }
-        return additionalSwitchOptions;
-    }
-
 }

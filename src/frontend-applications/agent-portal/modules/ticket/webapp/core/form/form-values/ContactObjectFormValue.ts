@@ -32,7 +32,7 @@ import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectF
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { Ticket } from '../../../../model/Ticket';
 import { TicketProperty } from '../../../../model/TicketProperty';
-import { OrganisationObjectFormValue } from './OrganisationObjectFormValue';
+import { TicketService } from '../../TicketService';
 
 export class ContactObjectFormValue extends SelectObjectFormValue<string | number> {
 
@@ -68,16 +68,16 @@ export class ContactObjectFormValue extends SelectObjectFormValue<string | numbe
         if (isDefined && !BrowserUtil.isBooleanTrue(option?.value)) {
             this.canCreateContact = false;
         }
+
+        const config = await TicketService.getTicketModuleConfiguration().catch(() => null);
+        if (config?.organisationDeterminesContact) {
+            this.ORGA_DETERMINES_CONTACT = true;
+        }
     }
 
     public async initFormValue(): Promise<void> {
         this.freeText = true;
         await super.initFormValue();
-
-        const orgaFV = this.objectValueMapper.findFormValue<OrganisationObjectFormValue>(
-            TicketProperty.ORGANISATION_ID
-        );
-        this.ORGA_DETERMINES_CONTACT = Boolean(orgaFV?.ORGA_DETERMINES_CONTACT);
         this.setContactValue(undefined, true);
     }
 

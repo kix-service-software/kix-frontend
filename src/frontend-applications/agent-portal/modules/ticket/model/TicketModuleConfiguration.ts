@@ -24,7 +24,8 @@ export class TicketModuleConfiguration implements IConfiguration {
         public roleIds: number[] = [],
         public addQueueSignature: QueueSignatureConfiguration = new QueueSignatureConfiguration(),
         public ticketColors = new TicketColorConfiguration(),
-        public ticketRouteConfiguration = new TicketRouteConfiguration()
+        public ticketRouteConfiguration = new TicketRouteConfiguration(),
+        public organisationDeterminesContact: boolean = false
     ) { }
 }
 
