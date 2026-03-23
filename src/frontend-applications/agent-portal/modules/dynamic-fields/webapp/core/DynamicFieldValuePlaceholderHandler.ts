@@ -374,18 +374,18 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
             const checklist: CheckListItem[] = JSON.parse(v);
             const checkListItems = this.getChecklistItems(checklist);
             if (checkListItems.length) {
-                result += '<table style="border:none; width:90%">'
-                    + '<thead><tr>'
-                    + '<th style="padding:10px 15px;">Action</th>'
-                    + '<th style="padding:10px 15px;">State</th>'
+                result += '<table style="border:none; border-collapse: collapse; width:90%">'
+                    + '<thead><tr style="background: lightgrey; font-weight: bold;">'
+                    + '<th style="border:1px solid; padding:10px 15px;">Action</th>'
+                    + '<th style="border:1px solid; padding:10px 15px;">State</th>'
                     + '</tr></thead>'
                     + '<tbody>';
 
                 checkListItems.forEach((cl) => {
                     const value = cl[1].replace(/\n/g, '<br/>');
                     result += '<tr>'
-                        + '<td style="padding:10px 15px;">' + cl[0] + '</td>'
-                        + '<td style="padding:10px 15px;">' + value + '</td>'
+                        + '<td style="border:1px solid; padding:10px 15px;">' + cl[0] + '</td>'
+                        + '<td style="border:1px solid; padding:10px 15px;">' + value + '</td>'
                         + '</tr>';
                 });
 
@@ -464,7 +464,7 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
                 }
                 if (Array.isArray(rowList) && rowList.length) {
                     result += '<table cellspacing="0" cellpadding="2" '
-                        + 'style="border:1px solid black; width: 100%"><thead><tr>';
+                        + 'style="border:1px solid black; border-collapse: collapse; width: 100%"><thead><tr>';
 
                     translatedColumns.forEach((c) => {
                         result += '<th style="border:1px solid black; padding: 5px; text-align: left; '
