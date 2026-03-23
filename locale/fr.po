@@ -3430,9 +3430,6 @@ msgstr "Tableau de bord des organisations"
 msgid "Organizations and Contacts Dashboard"
 msgstr "Tableau de bord des organisations et des contacts"
 
-msgid "Organsiation determines contact"
-msgstr ""
-
 msgid "Other"
 msgstr "Autres"
 

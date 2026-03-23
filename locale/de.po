@@ -3997,9 +3997,6 @@ msgstr "Organisationen Dashboard"
 msgid "Organizations and Contacts Dashboard"
 msgstr "Organisationen und Kontakte Dashboard"
 
-msgid "Organsiation determines contact"
-msgstr ""
-
 msgid "Other"
 msgstr "andere"
 
