@@ -170,7 +170,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
             if (Array.isArray(this.defaultValue)) {
                 organisationId = this.defaultValue[0];
             }
-        } else if (!contactId && !this.ORGA_DETERMINES_CONTACT) {
+        } else if (!contactId && !this.ORGA_DETERMINES_CONTACT && !init) {
             await this.setFormValue(null, true);
         } else if (contactId && !this.ORGA_DETERMINES_CONTACT) {
 
