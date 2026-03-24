@@ -22,24 +22,25 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       ]>
          <label
             id=state.labelId
-            class="form-label d-flex align-items-center m-0 mb-1 text-truncate">
+            class="form-label d-flex align-items-center m-0 mb-1 text-truncate"
+         >
             <add-remove-form-value-control
                formValue=input.formValue
-               key=("control-" + input.formValue.instanceId)/>
+               key="control-" + input.formValue.instanceId
+            />
             <if(state.isConfigContext)>
                <button
                   type="button"
                   class="btn btn-sm btn-light text-black me-3"
                   aria-label=(state.translations["Translatable#Edit Field"])
                   title=(state.translations["Translatable#Edit Field"])
-                  on-click("editField")>
+                  on-click("editField")
+               >
                   <i class="fa-regular fa-pen-to-square"/>
                </button>
             </if>
             ${state.label}
-            <if(state.required)>
-               *
-            </if>
+            <if(state.required)>*</if>
             <if(state.hint)>
                <overlay-icon isHint content=state.hint title=state.label/>
             </if>
@@ -60,20 +61,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                   </span>
                </if>
                <if(state.configReadOnly)>
-                  <span class="badge text-bg-secondary mx-2">
-                     Readonly
-                  </span>
+                  <span class="badge text-bg-secondary mx-2">Readonly</span>
                </if>
             </if>
          </label>
-
          <if(state.formValue.description)>
             <div class="alert alert-light" role="alert">
                <iframe-content
-                  html=(state.formValue.description)
+                  html=state.formValue.description
                   style="min-height: unset;"
                   calculateHeight
-                  extraSpace=0/>
+               />
             </div>
          </if>
          <div class=[
@@ -90,36 +88,36 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                <if(state.inputTemplate)>
                   <${state.inputTemplate}
                      formValue=input.formValue
-                     labelId=state.labelId/>
+                     labelId=state.labelId
+                  />
                </if>
                <else-if(input.formValue.inputComponentId === "no-input")/>
                <else>
                   <text-form-input
                      formValue=input.formValue
-                     labelId=state.labelId/>
+                     labelId=state.labelId
+                  />
                </else>
             </else-if>
          </div>
       </div>
       <if(
          !state.displayNone &&
-         !state.formValue.readonly &&
-         Array.isArray(state.formValue.actions) &&
-         state.formValue.actions.length > 0
+            !state.formValue.readonly &&
+            Array.isArray(state.formValue.actions) &&
+            state.formValue.actions.length > 0,
       )>
          <actions-container
-            actions=(state.formValue.actions)
-            isSelectInput=(
-               state.formValue.inputComponentId === "select-form-input"
-            )/>
+            actions=state.formValue.actions
+            isSelectInput=state.formValue.inputComponentId ===
+            "select-form-input"
+         />
       </if>
 
       <if(state.validationErrors.length)>
          <div class="col-12">
             <for|validationError| of=state.validationErrors>
-               <span class="text-danger">
-                  ${validationError.message}
-               </span>
+               <span class="text-danger">${validationError.message}</span>
             </for>
          </div>
       </if>
@@ -128,7 +126,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             formValues=state.formValues
             parent=input.formValue
             contextInstanceId=input.contextInstanceId
-            formLayout=input.formLayout/>
+            formLayout=input.formLayout
+         />
       </if>
    </div>
 </if>
