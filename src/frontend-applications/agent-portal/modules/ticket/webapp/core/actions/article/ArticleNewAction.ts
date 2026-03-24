@@ -49,7 +49,8 @@ export class ArticleNewAction extends AbstractAction {
             this.ticketId, undefined,
             [
                 ['REFERENCED_SOURCE_OBJECT_ID', this.ticketId],
-                [AdditionalContextInformation.FORM_ID, 'ticket-article-new-form']
+                [AdditionalContextInformation.FORM_ID, 'ticket-article-new-form'],
+                ['NEW_ARTICLE', true]
             ]
         );
         editContext.setIcon(this.icon);
