@@ -343,13 +343,16 @@ export class TicketAPIService extends KIXObjectAPIService {
             }
 
             newAttachments.forEach(
-                (a) => result.push(
-                    new RequestObject([
-                        ['Content', a.Content],
-                        ['ContentType', a.ContentType],
-                        ['Filename', a.Filename]
-                    ])
-                )
+                (a) => {
+                    const isReference = (typeof a.Content === 'undefined' || a.Content === null) && a.ContentToken;
+                    result.push(
+                        new RequestObject([
+                            isReference ? ['ContentToken', a.ContentToken] : ['Content', a.Content],
+                            ['ContentType', a.ContentType],
+                            ['Filename', a.Filename]
+                        ])
+                    );
+                }
             );
         }
         return result;
@@ -484,22 +487,15 @@ export class TicketAPIService extends KIXObjectAPIService {
 
     private async prepareArticleAttachments(article: Article, token: string): Promise<void> {
         if (Array.isArray(article.Attachments)) {
-            const user = await UserService.getInstance().getUserByToken(token);
             for (const attachment of article.Attachments) {
-                if (!attachment.Content) {
-                    let content;
-                    // probably an attachment from a referenced article
-                    if (attachment.Disposition === 'attachment') {
-                        content = FileService.getFileContent(attachment.downloadId, true);
-                    }
-                    // a new attachment
-                    else {
-                        const crypto = require('crypto');
-                        const md5 = crypto.createHash('md5').update(token).digest('hex');
-                        const filename = `${md5}-${attachment.Filename}`;
-                        content = FileService.getFileContent(filename, false);
-                    }
-                    attachment.Content = content;
+                if (
+                    attachment?.Disposition !== 'attachment'
+                    && !attachment.Content
+                ) {
+                    const crypto = require('crypto');
+                    const md5 = crypto.createHash('md5').update(token).digest('hex');
+                    const filename = `${md5}-${attachment.Filename}`;
+                    attachment.Content = FileService.getFileContent(filename, false);
                 }
             }
         }
