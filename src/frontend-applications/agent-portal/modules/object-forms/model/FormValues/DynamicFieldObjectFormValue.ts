@@ -10,12 +10,11 @@
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
-import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core';
-import { DynamicFieldService } from '../../../dynamic-fields/webapp/core/DynamicFieldService';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
 import { DynamicFieldAffectedAssetFormValue } from './DynamicFields/DynamicFieldAffectedAssetFormValue';
@@ -49,15 +48,11 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
 
     public async createDFFormValues(): Promise<void> {
         const kixObject = this.object as KIXObject;
-        const dynamicFields = await DynamicFieldService.loadDynamicFields(kixObject?.KIXObjectType)
-            .catch((): DynamicField[] => []);
-        if (dynamicFields?.length) {
-            dynamicFields.sort((a, b) => a.Name.localeCompare(b.Name));
-            for (const df of dynamicFields) {
-                const dfValue = kixObject?.DynamicFields?.find((odf) => odf.Name === df.Name);
-                await this.createFormValue(df?.Name, dfValue);
-            }
+
+        for (const dfValue of kixObject?.DynamicFields) {
+            await this.createFormValue(dfValue?.Name, dfValue);
         }
+
     }
 
     public async initFormValue(): Promise<void> {
@@ -164,6 +159,10 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
 
             if (addFormValue) {
                 this.formValues.push(formValue);
+            }
+
+            if (dynamicField.ObjectType === KIXObjectType.ARTICLE) {
+                formValue.isControlledByParent = true;
             }
 
             formValue.setInitialState();

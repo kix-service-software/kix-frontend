@@ -50,6 +50,12 @@ export class TicketStateFormValue extends SelectObjectFormValue {
         }
     }
 
+    public async postInitFormValue(): Promise<void> {
+        if (this.formValues?.length) {
+            await this.formValues[0].postInitFormValue();
+        }
+    }
+
     public async reset(
         ignoreProperties?: string[], ignoreFormValueProperties?: string[], ignoreFormValueReset?: string[]
     ): Promise<void> {

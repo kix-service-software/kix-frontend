@@ -11,6 +11,7 @@ import { AutocompleteOption } from '../../../../../../model/AutocompleteOption';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { IdService } from '../../../../../../model/IdService';
+import { KIXObject } from '../../../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
@@ -44,6 +45,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     private fieldOrder: any = {};
 
     private subscriber: IEventSubscriber;
+    private valueInitialized: boolean;
 
     public constructor(
         property: string,
@@ -128,7 +130,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
+        this.initChannelValue();
+    }
 
+    private async initChannelValue(): Promise<void> {
         if (!this.value) {
             const article = await this.getReferencedArticle();
             this.value = article?.ChannelID;
@@ -149,10 +154,27 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 }
             }
         }
+    }
 
+    public async postInitFormValue(): Promise<void> {
         this.object?.addBinding(ArticleProperty.CHANNEL_ID, async (value: number) => {
             await this.setChannelFields(value);
         });
+
+        this.valueInitialized = true;
+        this.loadSelectableValues();
+    }
+
+    public async loadSelectableValues(allowAll?: boolean): Promise<void> {
+        if (this.valueInitialized) {
+            return super.loadSelectableValues();
+        }
+    }
+
+    protected async prepareSelectableNodes(objects: KIXObject[], keepSortOrder?: boolean): Promise<void> {
+        return super.prepareSelectableNodes(objects, keepSortOrder).then(
+            () => this.setPossibleValues(objects.map((o) => Number(o.ObjectId)))
+        );
     }
 
     private async getReferencedArticle(): Promise<Article> {

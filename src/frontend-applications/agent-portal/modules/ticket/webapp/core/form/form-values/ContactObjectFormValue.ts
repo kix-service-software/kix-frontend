@@ -41,6 +41,8 @@ export class ContactObjectFormValue extends SelectObjectFormValue<string | numbe
     public canCreateContact: boolean;
     public ORGA_DETERMINES_CONTACT: boolean;
 
+    private valueInitialized: boolean;
+
     public constructor(
         property: string,
         ticket: Ticket,
@@ -68,11 +70,6 @@ export class ContactObjectFormValue extends SelectObjectFormValue<string | numbe
         if (isDefined && !BrowserUtil.isBooleanTrue(option?.value)) {
             this.canCreateContact = false;
         }
-
-        const config = await TicketService.getTicketModuleConfiguration().catch(() => null);
-        if (config?.organisationDeterminesContact) {
-            this.ORGA_DETERMINES_CONTACT = true;
-        }
     }
 
     public async initFormValue(): Promise<void> {
@@ -82,36 +79,46 @@ export class ContactObjectFormValue extends SelectObjectFormValue<string | numbe
     }
 
     public async postInitFormValue(): Promise<void> {
-        if (this.ORGA_DETERMINES_CONTACT) {
-            this.autoCompleteConfiguration = undefined;
-            this.isAutoComplete = false;
-
-            this.objectBindingId = this.objectValueMapper?.object?.addBinding(
-                TicketProperty.ORGANISATION_ID,
-                async (value: number) => {
-                    await this.loadSelectableValues();
-                    await this.setContactValue(value);
+        TicketService.getTicketModuleConfiguration()
+            .then((config) => {
+                if (config?.organisationDeterminesContact) {
+                    this.ORGA_DETERMINES_CONTACT = true;
                 }
-            );
-            await this.loadSelectableValues();
-        }
+
+                this.valueInitialized = true;
+
+                if (this.ORGA_DETERMINES_CONTACT) {
+                    this.autoCompleteConfiguration = undefined;
+                    this.isAutoComplete = false;
+
+                    this.objectBindingId = this.objectValueMapper?.object?.addBinding(
+                        TicketProperty.ORGANISATION_ID,
+                        async (value: number) => {
+                            this.loadSelectableValues().then(() => this.setContactValue(value));
+                        }
+                    );
+                    this.loadSelectableValues();
+                }
+            })
+            .catch(() => null);
     }
 
     public async loadSelectableValues(): Promise<void> {
-        if (this.ORGA_DETERMINES_CONTACT) {
+        if (this.valueInitialized && this.ORGA_DETERMINES_CONTACT) {
             const organisationValue = (this.objectValueMapper.findFormValue(
                 TicketProperty.ORGANISATION_ID
             )) as SelectObjectFormValue;
-            const selectedOrgaValue = this.initialized && organisationValue?.isInitialized() ?
-                organisationValue?.value : organisationValue?.value || organisationValue?.defaultValue;
+            const selectedOrgaValue = this.initialized && organisationValue?.isInitialized()
+                ? organisationValue?.value
+                : organisationValue?.value || organisationValue?.defaultValue;
+
             if (selectedOrgaValue) {
                 const orgaId = Number(Array.isArray(selectedOrgaValue) ? selectedOrgaValue[0] : selectedOrgaValue);
                 if (!isNaN(orgaId)) {
 
                     const orgFilter = new FilterCriteria(
                         ContactProperty.ORGANISATION_IDS, SearchOperator.IN,
-                        FilterDataType.NUMERIC, FilterType.AND,
-                        [orgaId]
+                        FilterDataType.NUMERIC, FilterType.AND, [orgaId]
                     );
                     const oldOrgaFilter = this.loadingOptions.filter.find(
                         (f) => f.property === ContactProperty.ORGANISATION_IDS && f.operator === SearchOperator.IN
@@ -143,7 +150,7 @@ export class ContactObjectFormValue extends SelectObjectFormValue<string | numbe
             } else {
                 this.clearPossibleValuesAndNodes();
             }
-        } else {
+        } else if (this.valueInitialized) {
             return super.loadSelectableValues();
         }
     }

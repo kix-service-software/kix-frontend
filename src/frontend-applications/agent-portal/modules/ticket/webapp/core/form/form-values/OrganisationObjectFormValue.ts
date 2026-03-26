@@ -35,6 +35,8 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     private setFormValueTimeout: TimeoutTimer;
     public ORGA_DETERMINES_CONTACT: boolean;
 
+    private valueInitialized: boolean;
+
     public constructor(
         property: string,
         ticket: Ticket,
@@ -55,15 +57,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
-        await super.initFormValueByField(field);
-
-        const config = await TicketService.getTicketModuleConfiguration().catch(() => null);
-        if (config?.organisationDeterminesContact) {
-            this.ORGA_DETERMINES_CONTACT = true;
-            this.isAutoComplete = true;
-            this.autoCompleteConfiguration = new AutoCompleteConfiguration();
-            this.hasFilter = true;
-        }
+        return super.initFormValueByField(field);
     }
 
     public async initFormValue(): Promise<void> {
@@ -72,22 +66,39 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     }
 
     public async postInitFormValue(): Promise<void> {
-        if (!this.ORGA_DETERMINES_CONTACT) {
-            this.objectBindingId = this.objectValueMapper?.object?.addBinding(
-                TicketProperty.CONTACT_ID,
-                async (value: number) => {
-                    await this.loadSelectableValues();
-                    await this.setOrganisationValue(value);
-                    this.objectValueMapper?.validateFormValue(this, true);
+        TicketService.getTicketModuleConfiguration()
+            .then((config) => {
+                if (config?.organisationDeterminesContact) {
+                    this.ORGA_DETERMINES_CONTACT = true;
+                    this.isAutoComplete = true;
+                    this.autoCompleteConfiguration = new AutoCompleteConfiguration();
+                    this.hasFilter = true;
                 }
-            );
-            const contactFV = this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID);
-            if (contactFV?.value) {
-                await this.loadSelectableValues();
-                await this.setOrganisationValue(contactFV.value);
-                this.objectValueMapper?.validateFormValue(this, true);
-            }
-        }
+
+                this.valueInitialized = true;
+
+                if (!this.ORGA_DETERMINES_CONTACT) {
+                    const contactFV = this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID);
+                    if (contactFV?.value) {
+                        this.loadSelectableValues().then(
+                            () => this.setOrganisationValue(contactFV.value).then(
+                                () => this.objectValueMapper?.validateFormValue(this, true)
+                            )
+                        );
+                    }
+
+                    this.objectBindingId = this.objectValueMapper?.object?.addBinding(
+                        TicketProperty.CONTACT_ID,
+                        async (value: number) => {
+                            this.loadSelectableValues().then(
+                                () => this.setOrganisationValue(value).then(
+                                    () => this.objectValueMapper?.validateFormValue(this, true)
+                                )
+                            );
+                        }
+                    );
+                }
+            }).catch(() => null);
     }
 
     public destroy(): void {
@@ -98,7 +109,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     }
 
     public async loadSelectableValues(): Promise<void> {
-        if (!this.ORGA_DETERMINES_CONTACT) {
+        if (this.valueInitialized && !this.ORGA_DETERMINES_CONTACT) {
             const contactValue = (
                 this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID)
             ) as SelectObjectFormValue;
@@ -135,7 +146,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                     this.clearPossibleValuesAndNodes();
                 }
             }
-        } else {
+        } else if (this.valueInitialized) {
             return super.loadSelectableValues();
         }
     }
