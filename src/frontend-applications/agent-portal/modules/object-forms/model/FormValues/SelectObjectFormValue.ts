@@ -188,15 +188,19 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             this.required = true;
         }
 
-        await super.initFormValue();
-
         if (!this.treeHandler) {
             await this.initTreeHandler();
         }
         this.treeHandler?.setMultiSelect(this.multiselect);
 
-        await this.loadSelectableValues();
-        await this.loadSelectedValues();
+        await super.initFormValue();
+
+        this.initialized = true;
+
+        this.loadSelectableValues().then(() => this.loadSelectedValues());
+    }
+
+    public async postInitFormValue(): Promise<void> {
 
         this.addPropertyBinding(FormValueProperty.POSSIBLE_VALUES, (value: SelectObjectFormValue) => {
             if (this.isAutoComplete && this.possibleValues?.length) {
@@ -227,8 +231,6 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.addPropertyBinding(FormValueProperty.ENABLED, (value: SelectObjectFormValue) => {
             this.loadSelectableValues();
         });
-
-        this.initialized = true;
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
@@ -355,8 +357,6 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 await this.setSelectedNodes();
             }
         });
-
-        await this.loadSelectableValues();
     }
 
     public async setSelectedNodes(): Promise<void> {

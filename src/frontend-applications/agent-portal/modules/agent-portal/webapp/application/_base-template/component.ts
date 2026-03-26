@@ -40,13 +40,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        console.groupCollapsed('Mount Base Template');
         await super.onMount();
         const start = Date.now();
 
         this.state.loading = true;
         this.state.loadingHint = 'Loading';
 
+        console.time('Check Authentication');
         await this.checkAuthentication();
+        console.timeEnd('Check Authentication');
 
         await AgentPortalService.initApplication(this.modules);
 
@@ -60,6 +63,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const end = Date.now();
 
         console.debug(`mount base template: ${end - start} ms.`);
+        console.groupEnd();
     }
 
     public onDestroy(): void {

@@ -27,6 +27,10 @@ export abstract class ObjectFormValueMapperExtension<T extends KIXObject = KIXOb
         return;
     }
 
+    public async postInit(): Promise<void> {
+        return;
+    }
+
     public destroy(): void {
         return;
     }

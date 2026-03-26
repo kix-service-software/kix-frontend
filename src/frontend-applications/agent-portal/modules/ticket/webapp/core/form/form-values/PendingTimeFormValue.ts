@@ -29,6 +29,13 @@ export class PendingTimeFormValue extends DateTimeFormValue {
     }
 
     public async initFormValue(): Promise<void> {
+        await super.initFormValue();
+        // It must be “await,” otherwise the FormValue will be set back to its
+        // default value (by “reset”) before it’s finished. (Timing issue)
+        await this.enableIfPending();
+    }
+
+    private async enableIfPending(): Promise<void> {
         const isPending = await TicketService.isPendingState(this.object[TicketProperty.STATE_ID]);
         const isStateEnabled = this.parent?.enabled;
 
@@ -36,22 +43,6 @@ export class PendingTimeFormValue extends DateTimeFormValue {
             await this.enable();
             this.visible = true;
         }
-
-        await super.initFormValue();
-
-        this.object.addBinding(TicketProperty.STATE_ID, async (value: number) => {
-            const isPending = await TicketService.isPendingState(value);
-            if (isPending) {
-                await this.enable();
-            } else {
-                await this.disable();
-            }
-
-            this.visible = isPending;
-
-            this.setNewInitialState('enabled', this.enabled);
-            this.setNewInitialState('visible', this.visible);
-        });
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
@@ -77,9 +68,19 @@ export class PendingTimeFormValue extends DateTimeFormValue {
     }
 
     public async postInitFormValue(): Promise<void> {
-        if (!this.value || this.isRelativeTimeValue) {
-            this.setFormValue(this.defaultValue, true);
-        }
+        this.object.addBinding(TicketProperty.STATE_ID, async (value: number) => {
+            const isPending = await TicketService.isPendingState(value);
+            if (isPending) {
+                await this.enable();
+            } else {
+                await this.disable();
+            }
+
+            this.visible = isPending;
+
+            this.setNewInitialState('enabled', this.enabled);
+            this.setNewInitialState('visible', this.visible);
+        });
     }
 
 }
