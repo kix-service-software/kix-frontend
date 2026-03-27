@@ -166,7 +166,9 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     }
 
     public async loadSelectableValues(allowAll?: boolean): Promise<void> {
-        if (this.valueInitialized) {
+        // If `isConfigurable` is `true`, then the `loadSelectableValues` should also be triggered,
+        // since `postInit` is not executed at this point.
+        if (this.valueInitialized || this.isConfigurable) {
             return super.loadSelectableValues();
         }
     }
