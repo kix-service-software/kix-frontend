@@ -48,7 +48,7 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
             const config = dynamicField?.Config;
             this.defaultValue = config?.DefaultValue;
         } else {
-            this.defaultValue = field.defaultValue.value;
+            this.defaultValue = field?.defaultValue?.value;
         }
     }
 
@@ -56,9 +56,8 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
         if (!this.value?.length && this.defaultValue) {
             if (typeof this.defaultValue === 'string') {
                 this.value = DynamicFieldService.parseChecklist(this.defaultValue);
-            }
-            else {
-                this.value = this.defaultValue;
+            } else {
+                this.value = DynamicFieldService.parseChecklist(JSON.stringify(this.defaultValue));
             }
         }
         await this.prepareLabel();
