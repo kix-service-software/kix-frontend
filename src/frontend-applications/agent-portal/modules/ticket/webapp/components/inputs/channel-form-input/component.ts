@@ -71,12 +71,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.nodes = this.formValue?.getSelectableTreeNodeValues();
         const selectedNodes = await this.formValue?.getSelectedTreeNodes();
         this.state.selectedNode = selectedNodes?.length ? selectedNodes[0] : null;
-
-        if (!this.state.selectedNode) {
-            // Do not use this in the “selectedNodes” binding,
-            // because it will cause an infinite loop.
-            this.clearValue();
-        }
     }
 
     public async onMount(): Promise<void> {
