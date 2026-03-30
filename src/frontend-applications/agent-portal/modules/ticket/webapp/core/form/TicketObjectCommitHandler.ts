@@ -272,7 +272,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 attachment.Filename = f.name;
                 attachment.downloadId = fileId;
 
-                await FileService.uploadFile(f);
+                await FileService.uploadFile(f, fileId);
                 f = attachment;
             }
             this.deleteCommonProperties(f, true);

@@ -12,9 +12,9 @@ import { APIClient } from '../../../../api-client/APIClient';
 
 export class FileService {
 
-    public static async uploadFile(file: File): Promise<void> {
+    public static async uploadFile(file: File, fileName?: string): Promise<void> {
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('file', file, fileName);
         await APIClient.executeRequest(RequestMethod.POST, '/files/upload', formData);
     }
 }
