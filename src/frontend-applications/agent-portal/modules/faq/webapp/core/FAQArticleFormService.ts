@@ -9,6 +9,7 @@
 
 import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
 import { FAQArticle } from '../../model/FAQArticle';
+import { IdService } from '../../../../model/IdService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FAQArticleProperty } from '../../model/FAQArticleProperty';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
@@ -126,10 +127,13 @@ export class FAQArticleFormService extends KIXObjectFormService {
             });
 
             const file = f as File;
+            const fileId = IdService.generateDateBasedId(f.name);
             const attachment = new Attachment();
             attachment.ContentType = file.type !== '' ? file.type : 'text';
             attachment.Filename = file.name;
-            await FileService.uploadFile(file);
+            attachment.downloadId = fileId;
+
+            await FileService.uploadFile(file, fileId);
             attachments.push(attachment);
         }
 

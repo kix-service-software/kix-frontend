@@ -491,10 +491,12 @@ export class TicketAPIService extends KIXObjectAPIService {
                 if (
                     attachment?.Disposition !== 'attachment'
                     && !attachment.Content
+                    && attachment.downloadId
                 ) {
                     const crypto = require('crypto');
                     const md5 = crypto.createHash('md5').update(token).digest('hex');
-                    const filename = `${md5}-${attachment.Filename}`;
+                    attachment.downloadId = Buffer.from(attachment.downloadId, 'latin1').toString('utf8');
+                    const filename = `${md5}-${attachment.downloadId}`;
                     attachment.Content = FileService.getFileContent(filename, false);
                 }
             }
