@@ -31,6 +31,7 @@ import Calendar from 'tui-calendar';
 export class CalendarInstance {
 
     private _calendar: any;
+    private _calendars: any[];
     private _calendarConfig: CalendarConfiguration;
     private _tickets: Ticket[];
     private _schedules: any[] = [];
@@ -40,6 +41,7 @@ export class CalendarInstance {
     private popupTimeout: any;
     private renderTimer: number | null = null;
     private resizeObserver: ResizeObserver | null = null;
+    private shouldInit: boolean = true;
 
     public constructor(private _calendarElementId: string) { }
 
@@ -75,6 +77,7 @@ export class CalendarInstance {
 
     public set tickets(tickets: Ticket[]) {
         this._tickets = tickets || [];
+        this.shouldInit = true;
     }
 
     public get currentDate(): string {
@@ -103,8 +106,14 @@ export class CalendarInstance {
     }
 
     public async init(): Promise<any[]> {
-        const tickets = await this.loadTickets();
-        return this.createCalendar(tickets);
+        if (this.shouldInit) {
+            const tickets = await this.loadTickets();
+            return this.createCalendar(tickets);
+        }
+        else if (this._calendars?.length) {
+            return this._calendars;
+        }
+        return [];
     }
 
     public render(): void {
@@ -137,6 +146,7 @@ export class CalendarInstance {
         let tickets: Ticket[] = [];
 
         if (this._tickets?.length) {
+            this.shouldInit = false;
             tickets = this._tickets;
         } else {
             const ticketFilter = [
@@ -193,6 +203,8 @@ export class CalendarInstance {
                 guide?.clearGuideElement?.();
             });
         }
+
+        this._calendars = calendars;
 
         return calendars;
     }
