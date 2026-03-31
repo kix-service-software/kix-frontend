@@ -679,10 +679,6 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         const timestamp = Date.parse(value);
 
-        const offsetConfig = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_FRONTEND_PENDING_DIFF_TIME], null, null, true
-        ).catch((error): SysConfigOption[] => []);
-
         if (value && isNaN(timestamp)) {
             const parts = value.split(/(\d+)/);
             if (parts.length === 3) {
@@ -691,12 +687,17 @@ export class TicketService extends KIXObjectService<Ticket> {
         }
         else if (timestamp) {
             date = new Date(timestamp);
-        }
-        else if (offsetConfig?.length && offsetConfig[0].Value) {
-            offset = Number(offsetConfig[0].Value);
-        }
-        else {
-            offset = 86400;
+        } else {
+            const offsetConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_FRONTEND_PENDING_DIFF_TIME], null, null, true
+            ).catch((error): SysConfigOption[] => []);
+
+            if (offsetConfig?.[0].Value) {
+                offset = Number(offsetConfig[0].Value);
+            }
+            else {
+                offset = 86400;
+            }
         }
 
         if (offset) {
