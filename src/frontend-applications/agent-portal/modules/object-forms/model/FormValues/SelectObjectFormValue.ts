@@ -725,7 +725,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         loadingOptions: KIXObjectLoadingOptions, service: IKIXObjectService
     ): Promise<void> {
         let usedSearchValue = false;
-        loadingOptions.filter = Array.isArray(this.loadingOptions?.filter) ? [...this.loadingOptions.filter] : [];
+        loadingOptions.filter = Array.isArray(this.loadingOptions?.filter) ?
+            JSON.parse(JSON.stringify(this.loadingOptions.filter)) : [];
 
         if (loadingOptions.filter.length) {
             filter:
