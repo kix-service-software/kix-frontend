@@ -146,6 +146,11 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             await mapperExtension.postInit();
             console.timeEnd(mapperExtension?.constructor?.name);
         }
+
+        console.groupCollapsed('Form Values');
+        console.debug(this.formValues);
+        console.groupEnd();
+
         console.groupEnd();
     }
 
