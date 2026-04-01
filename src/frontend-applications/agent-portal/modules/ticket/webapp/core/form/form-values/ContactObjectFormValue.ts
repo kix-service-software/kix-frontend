@@ -16,7 +16,6 @@ import { FilterType } from '../../../../../../model/FilterType';
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
-import { SortUtil } from '../../../../../../model/SortUtil';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { FormValidationService } from '../../../../../base-components/webapp/core/FormValidationService';
@@ -25,7 +24,6 @@ import { PlaceholderService } from '../../../../../base-components/webapp/core/P
 import { TreeNode, TreeUtil } from '../../../../../base-components/webapp/core/tree';
 import { Contact } from '../../../../../customer/model/Contact';
 import { ContactProperty } from '../../../../../customer/model/ContactProperty';
-import { ContactService } from '../../../../../customer/webapp/core/ContactService';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
@@ -88,9 +86,6 @@ export class ContactObjectFormValue extends SelectObjectFormValue<string | numbe
                 this.valueInitialized = true;
 
                 if (this.ORGA_DETERMINES_CONTACT) {
-                    this.autoCompleteConfiguration = undefined;
-                    this.isAutoComplete = false;
-
                     this.objectBindingId = this.objectValueMapper?.object?.addBinding(
                         TicketProperty.ORGANISATION_ID,
                         async (value: number) => {
@@ -115,7 +110,6 @@ export class ContactObjectFormValue extends SelectObjectFormValue<string | numbe
             if (selectedOrgaValue) {
                 const orgaId = Number(Array.isArray(selectedOrgaValue) ? selectedOrgaValue[0] : selectedOrgaValue);
                 if (!isNaN(orgaId)) {
-
                     const orgFilter = new FilterCriteria(
                         ContactProperty.ORGANISATION_IDS, SearchOperator.IN,
                         FilterDataType.NUMERIC, FilterType.AND, [orgaId]
@@ -128,22 +122,7 @@ export class ContactObjectFormValue extends SelectObjectFormValue<string | numbe
                     } else {
                         this.loadingOptions.filter.push(orgFilter);
                     }
-
-                    const contacts = await KIXObjectService.loadObjects<Contact>(
-                        KIXObjectType.CONTACT, undefined, this.loadingOptions
-                    );
-
-                    const nodes = await ContactService.getInstance().prepareObjectTree(
-                        contacts, this.showInvalidNodes, this.isInvalidClickable
-                    );
-
-                    SortUtil.sortObjects(nodes, 'label', DataType.STRING);
-
-                    const possibleValues = contacts.map((c) => c.ID);
-                    if (JSON.stringify(this.possibleValues) !== JSON.stringify(possibleValues)) {
-                        this.possibleValues = possibleValues;
-                    }
-                    this.treeHandler.setTree(nodes, undefined, true);
+                    return super.loadSelectableValues();
                 } else {
                     this.clearPossibleValuesAndNodes();
                 }
