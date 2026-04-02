@@ -40,6 +40,7 @@ import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
 import { WidgetService } from '../modules/base-components/webapp/core/WidgetService';
 import { LoadingOptionsUtil } from './LoadingOptionsUtil';
+import { ApplicationEvent } from '../modules/base-components/webapp/core/ApplicationEvent';
 
 export abstract class Context {
 
