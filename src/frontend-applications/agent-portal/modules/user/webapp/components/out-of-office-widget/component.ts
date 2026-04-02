@@ -24,6 +24,8 @@ import { TableFactoryService } from '../../../../table/webapp/core/factory/Table
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 import { ContactDetailsContext } from '../../../../customer/webapp/core/context/ContactDetailsContext';
 import { ContextMode } from '../../../../../model/ContextMode';
+import { OutOfOfficeProperty } from '../../../model/OutOfOfficeProperty';
+import { PreferencesLoadingOptions } from '../../../model/PreferencesLoadingOptions';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 

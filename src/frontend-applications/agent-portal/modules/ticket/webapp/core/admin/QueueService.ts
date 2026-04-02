@@ -18,9 +18,9 @@ import { TreeNode, TreeNodeProperty, TreeUtil } from '../../../../base-component
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FollowUpType } from '../../../model/FollowUpType';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
-import { AgentSocketClient } from '../../../../user/webapp/core/AgentSocketClient';
 import { IdService } from '../../../../../model/IdService';
 import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { TicketStats } from '../../../model/TicketStats';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { TreeEvent } from '../../../../base-components/webapp/core/tree/TreeEvent';
@@ -169,7 +169,7 @@ export class QueueService extends KIXObjectService<Queue> {
             loadingOptions.query = [];
 
             if (permissions?.length) {
-                const user = await AgentSocketClient.getInstance().getCurrentUser();
+                const user = await SessionAPIClient.getCurrentUser();
                 const requiredPermission = {
                     Object: KIXObjectType.USER,
                     ObjectID: user?.UserID,

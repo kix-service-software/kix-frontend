@@ -15,7 +15,6 @@ import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpeci
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { TreeNode } from './tree';
 import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
-import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
 import { IAutofillConfiguration } from './IAutofillConfiguration';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { ServiceType } from './ServiceType';
@@ -102,9 +101,7 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
         return null;
     }
 
-    public deleteObject(
-        objectType: string, objectId: string | number, deleteOptions?: KIXObjectSpecificDeleteOptions
-    ): Promise<void> {
+    public deleteObject(objectType: string, objectId: string | number): Promise<void> {
         return null;
     }
 

@@ -1,3 +1,12 @@
+<!--
+Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
 <iframe
     id=state.frameId
     class=[
@@ -6,5 +15,12 @@
             "h-100": !state.calculateHeight,
         },
     ]
+    title=input.title
+    style=[
+        "min-height: 15rem;",
+        !input.removeMaxHeight ? "max-height: 45rem;" : "",
+        input.style || "",
+    ]
     sandbox=state.sandboxAttributes.join(" ")
-    on-load("viewLoaded")/>
+    on-load("viewLoaded")
+/>

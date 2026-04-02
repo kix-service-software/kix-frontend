@@ -11,7 +11,6 @@ import { OverlayService } from './OverlayService';
 import { OverlayType } from './OverlayType';
 import { ComponentContent } from './ComponentContent';
 import { ToastContent } from './ToastContent';
-import { ConfirmOverlayContent } from './ConfirmOverlayContent';
 import { DateTimeUtil } from './DateTimeUtil';
 import { ValidationResult } from './ValidationResult';
 import { ValidationSeverity } from './ValidationSeverity';
@@ -30,8 +29,9 @@ import { RoutingService } from './RoutingService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { DefaultColorConfiguration } from '../../../../model/configuration/DefaultColorConfiguration';
 import { ModalSettings } from '../../../toast/model/ModalSettings';
-import DOMPurify from 'dompurify';
 import { ClientStorageService } from './ClientStorageService';
+import { APIClient } from '../../../../api-client/APIClient';
+import { APIHeader } from '../../../../server/api/APIHeader';
 
 export class BrowserUtil {
 
@@ -107,7 +107,7 @@ export class BrowserUtil {
             const baseRoute = ClientStorageService.getBaseRoute();
             const a = document.createElement('a');
             a.style.display = 'none';
-            a.href = `${baseRoute}/files/download/${encodeURIComponent(file.downloadId)}`;
+            a.href = `${baseRoute}/files/${encodeURIComponent(file.downloadId)}`;
             a.download = file.Filename;
             a.target = '_blank';
             document.body.appendChild(a);
@@ -569,7 +569,7 @@ export class BrowserUtil {
         allElements.push(htmlDocument);
         const types = [];
 
-        for (let ev in htmlDocument) {
+        for (const ev in htmlDocument) {
             if (/^on/.test(ev)) {
                 types.push(ev);
             }
@@ -589,13 +589,9 @@ export class BrowserUtil {
         }
     }
 
+    // OBSOLETE - no call found. Could be removed
     public static appendKIXStyling(htmlDocument: Document): void {
         const baseRoute = ClientStorageService.getBaseRoute();
-
-        const kixLink = htmlDocument.createElement('link');
-        kixLink.rel = 'stylesheet';
-        kixLink.href = `${baseRoute}/static/applications/application/lasso-less.css`;
-        htmlDocument.head.appendChild(kixLink);
 
         const bootstrapLink = htmlDocument.createElement('link');
         bootstrapLink.rel = 'stylesheet';
@@ -628,25 +624,31 @@ export class BrowserUtil {
     }
 
     public static getCurrentContentScrollPosition(): number {
-        const wrapperEl = document.getElementsByClassName('content-wrapper');
-        if (wrapperEl.length) {
-            return wrapperEl[0].scrollTop;
-        } else {
-            return document.documentElement.scrollTop;
+        if (typeof document !== 'undefined') {
+            const wrapperEl = document.getElementsByClassName('content-wrapper');
+            if (wrapperEl.length) {
+                return wrapperEl[0].scrollTop;
+            } else {
+                return document.documentElement.scrollTop;
+            }
         }
+
+        return 0;
     }
 
     public static setCurrentContentScrollPosition(scrollPosition: number): void {
-        const wrapperEl = document.getElementsByClassName('content-wrapper');
-        const options: ScrollToOptions = { top: scrollPosition, left: 0, behavior: 'smooth' };
-        if (wrapperEl.length) {
-            wrapperEl[0].scrollTo(options);
-        } else {
-            document.documentElement.scrollTo(options);
+        if (typeof document !== 'undefined') {
+            const wrapperEl = document.getElementsByClassName('content-wrapper');
+            const options: ScrollToOptions = { top: scrollPosition, left: 0, behavior: 'smooth' };
+            if (wrapperEl.length) {
+                wrapperEl[0].scrollTo(options);
+            } else {
+                document.documentElement.scrollTo(options);
+            }
         }
     }
 
-    public static setFrameHeight(frameId: string): void {
+    public static setFrameHeight(frameId: string, extraSpace: number = 20): void {
         const frame = document.getElementById(frameId) as HTMLIFrameElement;
 
         const frameInterval = this.frameIntervals.get(frameId);
@@ -657,7 +659,10 @@ export class BrowserUtil {
 
             const frameHeight = frame?.contentWindow?.document?.body?.scrollHeight || 0;
             if (frameHeight > 0) {
-                frame.style.height = frameHeight + 20 + 'px';
+                if (isNaN(extraSpace)) {
+                    extraSpace = 20;
+                }
+                frame.style.height = frameHeight + extraSpace + 'px';
 
                 clearInterval(frameInterval);
                 this.frameIntervals.delete(frameId);
@@ -668,6 +673,28 @@ export class BrowserUtil {
         else if (!frameInterval) {
             this.frameIntervals.set(frameId, setInterval(() => this.setFrameHeight(frameId), 500));
         }
+    }
+
+    public static prepareFrameLinks(frameDocument: Document): void {
+        const links = frameDocument.querySelectorAll('a[href]');
+        links.forEach((link: HTMLAnchorElement) => {
+            const href = link.href;
+            const isInternal = href?.startsWith(window.location.origin);
+
+            if (isInternal) {
+                link.addEventListener('click', (event): void => {
+                    event.preventDefault();
+                    BrowserUtil.handleLinkClicked(event);
+                });
+            } else {
+                link.setAttribute('target', '_blank');
+                link.setAttribute('rel', 'noopener noreferrer');
+                link.addEventListener('click', (event): void => {
+                    event.preventDefault();
+                    window.open(href, '_blank', 'noopener,noreferrer');
+                });
+            }
+        });
     }
 
 }

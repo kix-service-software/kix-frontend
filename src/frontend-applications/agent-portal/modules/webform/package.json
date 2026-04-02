@@ -11,11 +11,6 @@
                 "module": "admin-module.extension"
             }
         },
-        "kix:router": {
-            "webform-router": {
-                "module": "router.extension"
-            }
-        },
         "kix:configuration": {
             "new-webform-dialog-configuration": {
                 "module": "new-webform-dialog-configuration.extension"
@@ -25,11 +20,6 @@
             },
             "edit-webform-dialog-configuration": {
                 "module": "edit-webform-dialog-configuration.extension"
-            }
-        },
-        "kix:socket:namespace": {
-            "socket-namespace-registry-webform-module": {
-                "module": "NamespaceRegistry.extension"
             }
         }
     }

@@ -272,7 +272,7 @@ export class TicketBulkManager extends BulkManager {
                 ).catch(() => [] as Contact[]);
 
                 // use primary else use fallback for unknown contact/orga (contact value => organisation value)
-                let orgId = contacts?.length && contacts[0].PrimaryOrganisationID
+                const orgId = contacts?.length && contacts[0].PrimaryOrganisationID
                     ? contacts[0].PrimaryOrganisationID : contactIds[0];
 
                 if (organisationValue) {

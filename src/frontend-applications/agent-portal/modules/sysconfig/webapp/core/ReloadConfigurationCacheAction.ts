@@ -12,10 +12,10 @@ import { ApplicationEvent } from '../../../base-components/webapp/core/Applicati
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
-import { ContextSocketClient } from '../../../base-components/webapp/core/ContextSocketClient';
-import { KIXModulesSocketClient } from '../../../base-components/webapp/core/KIXModulesSocketClient';
+import { ContextAPIClient } from '../../../../api-client/context/Context';
 import { SysconfigEvent } from './SysconfigEvent';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { ConfigAPIClient } from '../../../../api-client/config/Config';
 
 export class ReloadConfigurationCacheAction extends AbstractAction {
 
@@ -37,8 +37,8 @@ export class ReloadConfigurationCacheAction extends AbstractAction {
                     ApplicationEvent.APP_LOADING,
                     { loading: true, hint: 'Translatable#Reload Agent Portal Configurations' }
                 );
-                await ContextSocketClient.getInstance().rebuildConfiguration().catch(() => null);
-                await KIXModulesSocketClient.getInstance().rebuildConfiguration().catch(() => null);
+                await ContextAPIClient.rebuildConfiguration().catch(() => null);
+                await ConfigAPIClient.rebuildConfiguration().catch(() => null);
 
                 await ContextService.getInstance().reloadContextConfigurations();
                 EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });

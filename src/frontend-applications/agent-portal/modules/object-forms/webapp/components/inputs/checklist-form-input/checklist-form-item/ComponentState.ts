@@ -20,7 +20,8 @@ export class ComponentState extends AbstractComponentState {
         public prepared: boolean = false,
         public dropdownId: string = IdService.generateDateBasedId('-checklist-dropdown'),
         public selectedNode: TreeNode = null,
-        public lastChangeDate: string = null
+        public lastChangeDate: string = null,
+        public id: string = IdService.generateDateBasedId()
     ) {
         super();
     }

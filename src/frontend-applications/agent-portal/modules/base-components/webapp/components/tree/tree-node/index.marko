@@ -21,22 +21,31 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 >
     <span class="tree-icon">
         <if(component.hasChildren())>
-            <span
+            <button
                 id="tree-expand"
                 class=(
                     state.node.expanded
                         ? "kix-icon-minus"
                         : "kix-icon-plus-blank"
                 )
+                aria-label=(
+                    state.node.expanded
+                        ? state.translations["Translatable#Collapse node"]
+                        : state.translations["Translatable#Expand node"]
+                    )
+                title=(
+                    state.node.expanded
+                        ? state.translations["Translatable#Collapse node"]
+                        : state.translations["Translatable#Expand node"]
+                    )
                 on-click("toggleNode")
             />
         </if>
     </span>
-    <div
+    <button
         on-mousemove("nodeHovered")
         on-click("nodeClicked")
-        title=component.getLabel()
-        class="node-value"
+        class="node-value bg-transparent"
     >
         <if(state.node.icon)>
             <icon icon=(state.node.icon) showUnknown/>
@@ -62,7 +71,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <if(state.node.secondaryIcon)>
             <icon icon=(state.node.secondaryIcon)/>
         </if>
-    </div>
+    </button>
     <if(state.node.expanded)>
         <ul class="tree-list">
             <for|node| of=(state.node.children)>

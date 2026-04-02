@@ -9,7 +9,7 @@
 
 import { AbstractAction } from './AbstractAction';
 import { IAction } from './IAction';
-import { AuthenticationSocketClient } from './AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
 import { SortOrder } from '../../../../model/SortOrder';
 import { SortUtil } from '../../../../model/SortUtil';
@@ -129,7 +129,7 @@ export class ActionFactory<T extends AbstractAction> {
 
         let allowed = true;
         if (action.permissions && action.permissions.length) {
-            allowed = await AuthenticationSocketClient.getInstance().checkPermissions(action.permissions);
+            allowed = await SessionAPIClient.checkPermissions(action.permissions);
         }
 
         if (allowed) {

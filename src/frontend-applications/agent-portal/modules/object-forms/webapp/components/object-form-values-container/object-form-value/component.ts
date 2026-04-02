@@ -51,7 +51,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             this.state.formValue = input.formValue;
 
-            if (input.contextInstanceId && this.state.formValue) {
+            if (input.contextInstanceId && this.state.formValue && isConfigContext) {
                 this.state.formValue.readonly = false;
             }
 

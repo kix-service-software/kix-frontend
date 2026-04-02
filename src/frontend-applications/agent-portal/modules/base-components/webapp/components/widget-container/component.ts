@@ -168,6 +168,25 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.modifiedWidgets.push(modifiedWidget);
     }
 
+    public advancedModeChanged(widgetInstanceId: string, isAdvancedMode: boolean): void {
+        if (isAdvancedMode) {
+            this.state.advancedModeWidgets.push(widgetInstanceId);
+        } else {
+            const index = this.state.advancedModeWidgets.findIndex((id) => id === widgetInstanceId);
+            this.state.advancedModeWidgets.splice(index, 1);
+        }
+        this.setAdvancedMode(widgetInstanceId);
+    }
+
+    public setAdvancedMode(widgetInstanceId: string): void {
+        const widgetEl = document.getElementById(`widget-frame-${widgetInstanceId}${this.state.componentId}`);
+        if (this.state.configurationMode && this.state.advancedModeWidgets.some((id) => id === widgetInstanceId)) {
+            widgetEl.classList.add('advanced-mode');
+        } else if (widgetEl.classList.contains('advanced-mode')) {
+            widgetEl.classList.remove('advanced-mode');
+        }
+    }
+
     public async saveWidgets(): Promise<void> {
         await ContextService.getInstance().saveUserWidgetList(
             this.context, this.state.widgets.map((w) => w.instanceId), this.modifiedWidgets, this.contextWidgetList
@@ -229,18 +248,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const widget = await this.context?.getConfiguredWidget(nodes[0].id);
                 if (widget) {
                     // Update state widgets
-                    const stateWidgetIndex = this.state.widgets.findIndex((sw) => {
-                        sw.instanceId === widget.instanceId;
-                    });
+                    const stateWidgetIndex = this.state.widgets.findIndex((sw) => sw.instanceId === widget.instanceId);
                     if (stateWidgetIndex === -1) {
                         this.state.widgets.push(widget);
                     } else {
                         this.state.widgets[stateWidgetIndex] = widget;
                     }
                     // Update modified widgets
-                    const modifiedWidgetIndex = this.modifiedWidgets.findIndex((sw) => {
-                        sw.instanceId === widget.instanceId;
-                    });
+                    const modifiedWidgetIndex = this.modifiedWidgets.findIndex(
+                        (sw) => sw.instanceId === widget.instanceId
+                    );
                     if (modifiedWidgetIndex === -1) {
                         this.modifiedWidgets.push(widget);
                     } else {

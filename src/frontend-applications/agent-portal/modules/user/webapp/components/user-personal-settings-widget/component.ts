@@ -33,7 +33,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.state.labelProvider = new UserLabelProvider();
-
         this.context?.registerListener('user-personal-settings-widget', {
             sidebarRightToggled: (): void => { return; },
             sidebarLeftToggled: (): void => { return; },
@@ -54,9 +53,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async initWidget(user: User): Promise<void> {
         this.state.user = user;
-        this.prepareActions(user);
-        this.createMyQueuesLabels(user);
-        this.createNotificationLabels(user);
+        await this.prepareActions(user);
+        await this.createMyQueuesLabels(user);
+        await this.createNotificationLabels(user);
+        await this.loadSubstitute(user);
     }
 
     private async prepareActions(user: User): Promise<void> {
@@ -100,10 +100,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-
-    public onDestroy(): void {
-        super.onDestroy();
+    private async loadSubstitute(user: User): Promise<void> {
+        if (user?.OutOfOffice?.Substitute) {
+            const objects = await KIXObjectService.loadObjects(
+                KIXObjectType.USER, [user.OutOfOffice.Substitute]);
+            this.state.substitute = [new Label(objects[0], null, null, null, null, null, true)];
+        }
     }
+
+    public changeShowProperty(property: string): void {
+        const stateProperty = 'show' + property;
+        this.state[stateProperty] = false;
+    }
+
 }
 
 module.exports = Component;

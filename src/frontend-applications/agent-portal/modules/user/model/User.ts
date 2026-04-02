@@ -11,6 +11,7 @@ import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { UserPreference } from './UserPreference';
 import { Contact } from '../../customer/model/Contact';
+import { OutOfOffice } from './OutOfOffice';
 
 export class User extends KIXObject {
 
@@ -32,6 +33,8 @@ export class User extends KIXObject {
     public IsAgent: number;
     public IsCustomer: number;
 
+    public OutOfOffice: OutOfOffice = new OutOfOffice();
+
     public Preferences: UserPreference[] = [];
     public RoleIDs: number[];
 
@@ -51,6 +54,7 @@ export class User extends KIXObject {
             this.UserFirstname = user.UserFirstname;
             this.UserLastname = user.UserLastname;
             this.UserFullname = user.UserFullname;
+            this.OutOfOffice = user.OutOfOffice ? new OutOfOffice(user.OutOfOffice) : new OutOfOffice();
         }
     }
 

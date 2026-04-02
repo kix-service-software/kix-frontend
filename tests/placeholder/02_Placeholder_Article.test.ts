@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import * as chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { Article } from '../../src/frontend-applications/agent-portal/modules/ticket/model/Article';
 import { ArticleLabelProvider } from '../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/ArticleLabelProvider';
 import { ArticlePlaceholderHandler } from '../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/ArticlePlaceholderHandler';
@@ -280,7 +280,7 @@ describe('Placeholder replacement for article', () => {
                 const newArticleContext = new newArticlePlaceholderDialogContext();
                 newArticleContext.setAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID, ticket.Articles[5].ArticleID);
                 orgFunction = ContextService.getInstance().getActiveContext;
-                ContextService.getInstance().getActiveContext = <T extends Context>(): T => {
+                ContextService.getInstance().getActiveContext = <T = Context>(): T => {
                     return newArticleContext as any;
                 }
             });
@@ -306,7 +306,7 @@ describe('Placeholder replacement for article', () => {
                 const newArticleContext = new newArticlePlaceholderDialogContext();
                 newArticleContext.setAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID, ticket.Articles[5].ArticleID);
                 orgContextFunction = ContextService.getInstance().getActiveContext;
-                ContextService.getInstance().getActiveContext = <T extends Context>(): T => {
+                ContextService.getInstance().getActiveContext = <T = Context>(): T => {
                     return newArticleContext as any;
                 }
 

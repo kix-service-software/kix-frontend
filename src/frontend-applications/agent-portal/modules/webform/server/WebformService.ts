@@ -10,7 +10,6 @@
 import { Webform } from '../model/Webform';
 import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
 import { DateTimeUtil } from '../../../modules/base-components/webapp/core/DateTimeUtil';
-import { KIXIntegrationRouter } from './KIXIntegrationRouter';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { CreateWebformTicketRequest } from '../model/CreateWebformTicketRequest';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
@@ -104,9 +103,7 @@ export class WebformService {
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
             token, config, SysConfigAccessLevel.CONFIDENTIAL
-        ).then(() => {
-            KIXIntegrationRouter.getInstance().registerRoute(Number(webform.ObjectId));
-        }).catch((error: Error) => {
+        ).catch((error: Error) => {
             LoggingService.getInstance().error(error.Message, error);
         });
 
@@ -143,8 +140,7 @@ export class WebformService {
     public async createTicket(request: CreateWebformTicketRequest, formId: number, language?: string): Promise<number> {
         let errorString = await this.checkRequest(request, language);
         if (formId && !errorString) {
-            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-            const form = await this.getWebform(serverConfig.BACKEND_API_TOKEN, formId, true);
+            const form = await this.getWebform(ConfigurationService.getBackendAPIToken(), formId, true);
 
             if (form && form.userLogin && form.webformUserPassword) {
                 const parameter = this.prepareParameter(request, form);
@@ -282,17 +278,15 @@ export class WebformService {
 
     public async getMaxFileSize(): Promise<number> {
         let maxSize = 1000 * 1000 * 24; // 24 MB
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        if (config && config.BACKEND_API_TOKEN) {
-            const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-                config.BACKEND_API_TOKEN, IdService.generateDateBasedId('webform-service-'),
-                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.MAX_ALLOWED_SIZE], null, null
-            ).catch((error) => new ObjectResponse<SysConfigOption>());
 
-            const maxSizeOptions = objectResponse?.objects || [];
-            if (maxSizeOptions && !!maxSizeOptions.length && maxSizeOptions[0].Value) {
-                maxSize = maxSizeOptions[0].Value;
-            }
+        const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+            ConfigurationService.getBackendAPIToken(), IdService.generateDateBasedId('webform-service-'),
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.MAX_ALLOWED_SIZE], null, null
+        ).catch((error) => new ObjectResponse<SysConfigOption>());
+
+        const maxSizeOptions = objectResponse?.objects || [];
+        if (maxSizeOptions && !!maxSizeOptions.length && maxSizeOptions[0].Value) {
+            maxSize = maxSizeOptions[0].Value;
         }
         return maxSize;
     }

@@ -9,6 +9,7 @@
 
 import { AutoCompleteConfiguration } from '../../../../../../model/configuration/AutoCompleteConfiguration';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
+import { DataType } from '../../../../../../model/DataType';
 import { FilterCriteria } from '../../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
@@ -22,15 +23,23 @@ import { KIXObjectService } from '../../../../../base-components/webapp/core/KIX
 import { PlaceholderService } from '../../../../../base-components/webapp/core/PlaceholderService';
 import { TreeNode, TreeUtil } from '../../../../../base-components/webapp/core/tree';
 import { Contact } from '../../../../../customer/model/Contact';
+import { ContactProperty } from '../../../../../customer/model/ContactProperty';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { Ticket } from '../../../../model/Ticket';
+import { TicketProperty } from '../../../../model/TicketProperty';
+import { TicketService } from '../../TicketService';
 
-export class ContactObjectFormValue extends SelectObjectFormValue {
+export class ContactObjectFormValue extends SelectObjectFormValue<string | number> {
+
+    objectBindingId: string;
 
     public canCreateContact: boolean;
+    public ORGA_DETERMINES_CONTACT: boolean;
+
+    private valueInitialized: boolean;
 
     public constructor(
         property: string,
@@ -39,8 +48,10 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
         public parent: ObjectFormValue,
     ) {
         super(property, ticket, objectValueMapper, parent);
+
         this.objectType = KIXObjectType.CONTACT;
         this.isAutoComplete = true;
+        this.multiselect = false;
         this.autoCompleteConfiguration = new AutoCompleteConfiguration();
 
         this.loadingOptions = new KIXObjectLoadingOptions();
@@ -49,23 +60,120 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
         this.canCreateContact = true;
     }
 
-    public async initFormValue(): Promise<void> {
-        this.freeText = true;
-        await super.initFormValue();
-
-        const context = ContextService.getInstance().getActiveContext();
-        const contact = context?.getAdditionalInformation(KIXObjectType.CONTACT);
-        if (contact) {
-            this.setFormValue(this.defaultValue || contact.ID);
-        }
-    }
-
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
+
         const option = field?.options?.find((o) => o.option === 'SHOW_NEW_CONTACT');
         const isDefined = option && option.value !== null && option.value !== 'undefinded';
         if (isDefined && !BrowserUtil.isBooleanTrue(option?.value)) {
             this.canCreateContact = false;
+        }
+    }
+
+    public async initFormValue(): Promise<void> {
+        this.freeText = true;
+        await super.initFormValue();
+        this.setContactValue(undefined, true);
+    }
+
+    public async postInitFormValue(): Promise<void> {
+        TicketService.getTicketModuleConfiguration()
+            .then((config) => {
+                if (config?.organisationDeterminesContact) {
+                    this.ORGA_DETERMINES_CONTACT = true;
+                }
+
+                this.valueInitialized = true;
+
+                if (this.ORGA_DETERMINES_CONTACT) {
+                    this.objectBindingId = this.objectValueMapper?.object?.addBinding(
+                        TicketProperty.ORGANISATION_ID,
+                        async (value: number) => {
+                            this.loadSelectableValues().then(() => this.setContactValue(value));
+                        }
+                    );
+                    this.loadSelectableValues();
+                }
+            })
+            .catch(() => null);
+    }
+
+    public async loadSelectableValues(): Promise<void> {
+        if (this.valueInitialized && this.ORGA_DETERMINES_CONTACT) {
+            const organisationValue = (this.objectValueMapper.findFormValue(
+                TicketProperty.ORGANISATION_ID
+            )) as SelectObjectFormValue;
+            const selectedOrgaValue = this.initialized && organisationValue?.isInitialized()
+                ? organisationValue?.value
+                : organisationValue?.value || organisationValue?.defaultValue;
+
+            if (selectedOrgaValue) {
+                const orgaId = Number(Array.isArray(selectedOrgaValue) ? selectedOrgaValue[0] : selectedOrgaValue);
+                if (!isNaN(orgaId)) {
+                    const orgFilter = new FilterCriteria(
+                        ContactProperty.ORGANISATION_IDS, SearchOperator.IN,
+                        FilterDataType.NUMERIC, FilterType.AND, [orgaId]
+                    );
+                    const oldOrgaFilter = this.loadingOptions.filter.find(
+                        (f) => f.property === ContactProperty.ORGANISATION_IDS && f.operator === SearchOperator.IN
+                    );
+                    if (oldOrgaFilter) {
+                        oldOrgaFilter.value = [orgaId];
+                    } else {
+                        this.loadingOptions.filter.push(orgFilter);
+                    }
+                    return super.loadSelectableValues();
+                } else {
+                    this.clearPossibleValuesAndNodes();
+                }
+            } else {
+                this.clearPossibleValuesAndNodes();
+            }
+        } else if (this.valueInitialized) {
+            return super.loadSelectableValues();
+        }
+    }
+
+    public destroy(): void {
+        if (this.objectBindingId?.length && this.objectValueMapper?.object) {
+            this.objectValueMapper.object.removeBindings([this.objectBindingId]);
+        }
+        super.destroy();
+    }
+    private async setContactValue(orgaId?: number, init?: boolean): Promise<void> {
+        let contactId: number | string = null;
+
+        const context = ContextService.getInstance().getActiveContext();
+
+        let initialContactId = context.getAdditionalInformation(TicketProperty.CONTACT_ID);
+        if (!initialContactId) {
+            const contact = context.getAdditionalInformation(KIXObjectType.CONTACT);
+            initialContactId = contact?.ID;
+        }
+
+        if (init && this.empty) {
+            contactId = null;
+        } else if (init && initialContactId) {
+            contactId = initialContactId;
+        } else if (init && this.defaultValue) {
+            contactId = this.defaultValue;
+            if (Array.isArray(this.defaultValue)) {
+                contactId = this.defaultValue[0];
+            }
+        } else if (!orgaId && this.ORGA_DETERMINES_CONTACT && !init) {
+            await this.setFormValue(null, true);
+        } else if (orgaId && this.value && this.ORGA_DETERMINES_CONTACT) {
+            if (!this.possibleValues.some((cid) => cid.toString() === this.value.toString())) {
+                await this.setFormValue(null, true);
+            }
+        }
+
+        if (contactId) {
+            const node = this.treeHandler.getTree().find((n) => n.id.toString() === contactId.toString());
+            if (node && !node.selected) {
+                this.treeHandler.setSelection([node], true);
+            }
+            await this.setFormValue(contactId, true);
         }
     }
 
@@ -84,6 +192,16 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
             }
         }
         return await super.setFormValue(newValue, force);
+    }
+
+    private clearPossibleValuesAndNodes(): void {
+        // clear only if necessary
+        if (this.possibleValues?.length) {
+            this.possibleValues = [];
+        }
+        if (this.treeHandler?.getTree()) {
+            this.treeHandler.setTree([]);
+        }
     }
 
     public async setObjectValue(value: (string | number)[]): Promise<void> {

@@ -18,7 +18,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 
 export class TicketLockAction extends AbstractAction<Ticket> {
 
@@ -40,7 +40,7 @@ export class TicketLockAction extends AbstractAction<Ticket> {
             new UIComponentPermission(`tickets/${objectId}`, [CRUD.UPDATE], false, 'Object', false)
         ];
 
-        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        show = await SessionAPIClient.checkPermissions(permissions);
         return this.data && this.data.OwnerID !== 1 && show;
     }
 

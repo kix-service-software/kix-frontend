@@ -36,34 +36,24 @@ export class ContextConfigurationResolver {
     public async resolve(
         token: string, configuration: ContextConfiguration, sysConfigOptions: SysConfigOption[]
     ): Promise<ContextConfiguration> {
-        // TODO: rename "explorer" to "leftSidebars" and "sidebars" to "rightSidebars" in ContextConfiguration
-        // - use the following to consider/handle then "old" configurations
-        // if (!configuration.rightSidebars && configuration['sidebars']) {
-        //     configuration.rightSidebars = configuration['sidebars'];
-        //     delete configuration['sidebars'];
-        // }
-        // if (!configuration.leftSidebars && configuration['explorer']) {
-        //     configuration.leftSidebars = configuration['explorer'];
-        //     delete configuration['explorer'];
-        // }
+        const configKeys = ['content', 'lanes', 'sidebars', 'explorer', 'overlays', 'others'];
 
-        const configIds = [
-            ...(configuration.content || []).map((c) => c.configurationId),
-            ...(configuration.lanes || []).map((c) => c.configurationId),
-            ...(configuration.sidebars || []).map((c) => c.configurationId),
-            ...(configuration.explorer || []).map((c) => c.configurationId),
-            ...(configuration.overlays || []).map((c) => c.configurationId),
-            ...(configuration.others || []).map((c) => c.configurationId)
-        ];
+        const configIds = [];
+        configKeys.map((key) => {
+            configIds.push(
+                ...(configuration[key] || [])
+                    .filter((c) => ResolverUtil.isValidConfiguration(c.configuration))
+                    .map((c) => c.configurationId)
+            );
+        });
 
         const configurations = await ResolverUtil.loadConfigurations(token, configIds, [], sysConfigOptions);
 
-        await this.resolveWidgetConfigurations(token, configuration.content, configurations, sysConfigOptions);
-        await this.resolveWidgetConfigurations(token, configuration.lanes, configurations, sysConfigOptions);
-        await this.resolveWidgetConfigurations(token, configuration.sidebars, configurations, sysConfigOptions);
-        await this.resolveWidgetConfigurations(token, configuration.explorer, configurations, sysConfigOptions);
-        await this.resolveWidgetConfigurations(token, configuration.overlays, configurations, sysConfigOptions);
-        await this.resolveWidgetConfigurations(token, configuration.others, configurations, sysConfigOptions);
+        for (const key of configKeys) {
+            configuration[key] = await this.resolveWidgetConfigurations(
+                token, configuration[key], configurations, sysConfigOptions
+            );
+        }
 
         return configuration;
     }
@@ -71,9 +61,10 @@ export class ContextConfigurationResolver {
     private async resolveWidgetConfigurations(
         token: string, widgets: ConfiguredWidget[] = [], configurations: WidgetConfiguration[],
         sysConfigOptions: SysConfigOption[]
-    ): Promise<void> {
-        for (const w of widgets) {
+    ): Promise<ConfiguredWidget[]> {
+        widgets = widgets.filter((c) => ResolverUtil.isValidConfiguration(c.configuration));
 
+        for (const w of widgets) {
             // get referenced config from loaded widget configs
             const config = configurations.find((wc) => wc.id === w.configurationId);
             if (config) {
@@ -86,7 +77,10 @@ export class ContextConfigurationResolver {
             if (w.configuration) {
                 await this.resolveSubConfig(token, w.configuration, sysConfigOptions);
             }
+
         }
+
+        return widgets;
     }
 
     private async resolveSubConfig(

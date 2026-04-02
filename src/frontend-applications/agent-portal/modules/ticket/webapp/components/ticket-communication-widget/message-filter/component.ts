@@ -47,7 +47,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         });
 
         this.state.searchPlaceholder = await TranslationService.translate('Search');
-        this.state.translations = await TranslationService.createTranslationObject(['Translatable#until', 'Translatable#since']);
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#until', 'Translatable#since', 'Translatable#Date Input']);
 
         this.getSettings();
     }
@@ -163,7 +163,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public dateChanged(event: any): void {
-        this.timoutTimer.restartTimer(() => this.setDateChanged(event));
+        this.timoutTimer.start(() => this.setDateChanged(event));
     }
 
     private setDateChanged(event: any): void {

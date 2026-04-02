@@ -93,7 +93,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         );
 
         let classIds;
-        if (classIdCriteria) {
+        if (classIdCriteria?.value) {
             classIds = Array.isArray(classIdCriteria.value) ? classIdCriteria.value : [classIdCriteria.value];
         }
 
@@ -197,7 +197,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
     public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<IColumnConfiguration[]> {
         const classParameter = searchParameter.find((p) => p[0] === 'ClassIDs');
         let attributes: AttributeDefinition[];
-        if (classParameter) {
+        if (classParameter?.[1]) {
             const classIds = Array.isArray(classParameter[1]) ? classParameter[1] : [classParameter[1]];
             attributes = await ConfigItemClassAttributeUtil.getAttributeDefinitions(classIds);
         }

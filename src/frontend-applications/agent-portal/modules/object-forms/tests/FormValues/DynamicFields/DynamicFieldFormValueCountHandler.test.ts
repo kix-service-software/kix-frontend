@@ -16,8 +16,8 @@
 //  * --
 //  */
 
-// import chai = require('chai');
-// import chaiAsPromised = require('chai-as-promised');
+// import * as chai from 'chai';
+// import chaiAsPromised from 'chai-as-promised';
 // import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 // import { DynamicField } from '../../../../dynamic-fields/model/DynamicField';
 // import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';

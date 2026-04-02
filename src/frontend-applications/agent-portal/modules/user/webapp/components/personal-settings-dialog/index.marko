@@ -9,7 +9,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <widget
     contextInstanceId=input.contextInstanceId
-    instanceId="personal-settings-dialog"
+    instanceId="personal-settings-dialog-reset-search"
     title="Translatable#Reset specific user settings"
     icon="kix-icon-arrow-rotate-left">
     <@content>
@@ -30,7 +30,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         ]
                     )
                     class="kix-button cancel-button">
-                    <span class="kix-icon-arrow-rotate-left"/>
+                    <span
+                        class="kix-icon-arrow-rotate-left"
+                        aria-hidden="true"/>
                     <span>
                         ${state.translations[
                             "Translatable#Reset Search To Default"
@@ -57,7 +59,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         on-click("cancel")
                         title=(state.translations["Translatable#Cancel"])
                         class="kix-button cancel-button">
-                        <span class="kix-icon-close"/>
+                        <span class="kix-icon-close" aria-hidden="true"/>
                         <span>
                             ${state.translations["Translatable#Cancel"]}
                         </span>
@@ -67,7 +69,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         on-click("submit")
                         title=(state.translations["Translatable#Save"])
                         class="kix-button submit-button">
-                        <span class="kix-icon-check"/>
+                        <span class="kix-icon-check" aria-hidden="true"/>
                         <span>${state.translations["Translatable#Save"]}</span>
                     </button>
                 </div>

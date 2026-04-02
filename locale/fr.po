@@ -92,6 +92,9 @@ msgstr "Temps comptabilisé : {0}"
 msgid "Action"
 msgstr "Action"
 
+msgid "Action list"
+msgstr ""
+
 msgid "Actions"
 msgstr "Actions"
 
@@ -150,7 +153,8 @@ msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
 msgstr "Admin_DynamicFieldDateTime_DefaultValue_Description"
 
 msgid "Admin_DynamicField_Config_CIRef_DeploymentStates"
-msgstr "Admin_DynamicField_Config_CIRef_DeploymentStates (États de déploiement)"
+msgstr ""
+"Admin_DynamicField_Config_CIRef_DeploymentStates (États de déploiement)"
 
 msgid "Admin_DynamicField_Config_CIRef_IncidentStates"
 msgstr "Admin_DynamicField_Config_CIRef_IncidentStates"
@@ -262,7 +266,8 @@ msgstr ""
 "Une erreur s'est produite pendant l'exécution de l'exportation. Voir le "
 "journal du système pour plus de détails."
 
-msgid "An error occured during import start execution. See system log for details."
+msgid ""
+"An error occured during import start execution. See system log for details."
 msgstr ""
 "Une erreur s'est produite pendant l'exécution du démarrage de l'importation. "
 "Voir le journal du système pour plus de détails."
@@ -316,6 +321,9 @@ msgstr "Article Id"
 msgid "Article Text"
 msgstr "Texte de l'article"
 
+msgid "Article content"
+msgstr ""
+
 msgid "Article has printed"
 msgstr "L'article a été imprimé"
 
@@ -363,9 +371,6 @@ msgstr "Actifs affectés"
 
 msgid "Assigned Contacts"
 msgstr "Contacts assignés"
-
-msgid "Assigned Organisation"
-msgstr "Organisation assignée"
 
 msgid "Assigned Organisations"
 msgstr "Organisations assignées"
@@ -420,6 +425,9 @@ msgstr "Widgets du tableau de bord disponibles"
 
 msgid "Available Output Formats"
 msgstr "Formats de sortie disponibles"
+
+msgid "Available in Edit"
+msgstr ""
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -579,6 +587,9 @@ msgstr "Classes"
 msgid "Clear"
 msgstr "Clair"
 
+msgid "Clear Value"
+msgstr ""
+
 msgid "Clear in mask"
 msgstr "Clair dans le masque"
 
@@ -594,11 +605,14 @@ msgstr "Fermer"
 msgid "Close Overlay"
 msgstr "Fermer la superposition"
 
-msgid "Close Sidebars"
-msgstr "Fermer les barres latérales"
+msgid "Close Sidebar"
+msgstr ""
 
 msgid "Close all open tabs"
 msgstr "Fermer tous les onglets ouverts"
+
+msgid "Close widget"
+msgstr ""
 
 msgid "Closed"
 msgstr "Fermé"
@@ -614,6 +628,12 @@ msgstr "Réduire tout"
 
 msgid "Collapse all"
 msgstr "Tout fermer"
+
+msgid "Collapse node"
+msgstr ""
+
+msgid "Collapse widget"
+msgstr ""
 
 msgid "Column Icon"
 msgstr "Icône de colonne"
@@ -741,6 +761,9 @@ msgstr "Copier l'URL dans le presse-papiers et fermer"
 msgid "Copy of {0}"
 msgstr "Copie de {0}"
 
+msgid "Could not download/open attachment."
+msgstr ""
+
 msgid "Could not handle request."
 msgstr "Impossible de traiter la demande."
 
@@ -856,6 +879,9 @@ msgstr "DESC"
 msgid "DOUBLE_QUOTES"
 msgstr "DOUBLE_QUOTES"
 
+msgid "Danger"
+msgstr ""
+
 msgid "Dashboard Refresh Interval (Minutes)"
 msgstr "Intervalle de rafraîchissement du tableau de bord (minutes)"
 
@@ -867,6 +893,9 @@ msgstr "Type de données"
 
 msgid "Datasource"
 msgstr "Source de données"
+
+msgid "Date Input"
+msgstr ""
 
 msgid "Date Restriction"
 msgstr "Restriction de date"
@@ -958,7 +987,9 @@ msgstr "Nom d'affichage"
 msgid "Disposition"
 msgstr "Disposition"
 
-msgid "Do not forget to replace the <YOUR_FRONTEND_HOST> placeholder (if it is not already)."
+msgid ""
+"Do not forget to replace the <YOUR_FRONTEND_HOST> placeholder (if it is not "
+"already)."
 msgstr ""
 "N'oubliez pas de remplacer le caractère générique <YOUR_FRONTEND_HOST> (s'il "
 "ne l'est pas déjà)."
@@ -1299,6 +1330,12 @@ msgstr "Quitter KIX sans demander"
 msgid "Expand All"
 msgstr "Tout développer"
 
+msgid "Expand node"
+msgstr ""
+
+msgid "Expand widget"
+msgstr ""
+
 msgid "Explorer"
 msgstr "Explorateur"
 
@@ -1434,7 +1471,9 @@ msgstr "Le filtre a été supprimé avec succès."
 msgid "Filterable"
 msgstr "Filtrable"
 
-msgid "Find this saved search within the Dropdown Bookmarks, located in the header menu right besides the New-button or in the left sidebar"
+msgid ""
+"Find this saved search within the Dropdown Bookmarks, located in the header "
+"menu right besides the New-button or in the left sidebar"
 msgstr ""
 "Vous trouverez cette recherche sauvegardée dans la liste déroulante des "
 "signets, située dans le menu d'en-tête à côté du bouton \"Nouveau\" ou dans "
@@ -1461,7 +1500,9 @@ msgstr "Suivi des billets"
 msgid "For Tickets"
 msgstr "Billets d'entrée"
 
-msgid "For a more intensive introduction to the use and administration of KIX, you will find the latest manuals in the online documentation."
+msgid ""
+"For a more intensive introduction to the use and administration of KIX, you "
+"will find the latest manuals in the online documentation."
 msgstr ""
 "Pour une introduction plus intensive à l'utilisation et à l'administration "
 "de KIX, vous trouverez les derniers manuels dans la documentation en ligne."
@@ -1477,9 +1518,6 @@ msgstr "Titre du formulaire"
 
 msgid "Format"
 msgstr "Format"
-
-msgid "Forum"
-msgstr "Forum"
 
 msgid "Forward"
 msgstr "En avant"
@@ -2222,6 +2260,9 @@ msgstr "Helptext_Customers_OrganisationCreate_Name"
 msgid "Helptext_Customers_OrganisationCreate_Number"
 msgstr "Helptext_Customers_OrganisationCreate_Number"
 
+msgid "Helptext_Customers_OrganisationCreate_ParentOrganisation"
+msgstr ""
+
 msgid "Helptext_Customers_OrganisationCreate_Street"
 msgstr "Helptext_Customers_OrganisationCreate_Street"
 
@@ -2538,9 +2579,6 @@ msgstr "Helptext_i18n_TranslationPatternCreate_Pattern"
 msgid "Hide"
 msgstr "Cacher"
 
-msgid "Hide Message"
-msgstr "Cacher le message"
-
 msgid "Hint"
 msgstr "Indice"
 
@@ -2646,7 +2684,9 @@ msgstr "Incluez ce code dans la zone <head> de votre page web."
 msgid "Incoming Time"
 msgstr "Heure d'arrivée"
 
-msgid "Incorrect data mapping. Length of dataset properties is different from value properties."
+msgid ""
+"Incorrect data mapping. Length of dataset properties is different from value "
+"properties."
 msgstr ""
 "Mappage de données incorrect. La longueur des propriétés des ensembles de "
 "données est différente de celle des propriétés des valeurs."
@@ -2960,6 +3000,15 @@ msgstr "Mes équipes"
 
 msgid "My Teams (past)"
 msgstr "Mes équipes (passé)"
+
+msgid "My Teams Table"
+msgstr ""
+
+msgid "My Teams Table Widget"
+msgstr ""
+
+msgid "My Teams Widget"
+msgstr ""
 
 msgid "My Tickets"
 msgstr "Mes billets"
@@ -3330,8 +3379,8 @@ msgstr "Une fois par jour"
 msgid "Open"
 msgstr "Ouvrir"
 
-msgid "Open Sidebars"
-msgstr "Ouvrir les barres latérales"
+msgid "Open Sidebar"
+msgstr ""
 
 msgid "Open Tickets"
 msgstr "Billets ouverts"
@@ -3383,6 +3432,9 @@ msgstr "Tableau de bord des organisations et des contacts"
 
 msgid "Other"
 msgstr "Autres"
+
+msgid "Other Information"
+msgstr ""
 
 msgid "Out Of Office"
 msgstr "Absence de bureau"
@@ -3473,6 +3525,9 @@ msgstr "Paramètres"
 
 msgid "Parent Category"
 msgstr "Catégorie de parents"
+
+msgid "Parent Organisation"
+msgstr ""
 
 msgid "Parent Queue"
 msgstr "File d'attente des parents"
@@ -3769,9 +3824,6 @@ msgstr "Recharger les configurations du portail des agents"
 msgid "Reload Application"
 msgstr "Recharger l'application"
 
-msgid "Reload Calendar Data ..."
-msgstr "Recharger les données du calendrier ..."
-
 msgid "Reload Frontend Configurations"
 msgstr "Recharger les configurations du frontend"
 
@@ -3837,6 +3889,9 @@ msgstr "Supprimer la dépendance à l'égard de l'organisation"
 
 msgid "Remove from Affected Assets"
 msgstr "Retirer des actifs affectés"
+
+msgid "Remove node"
+msgstr ""
 
 msgid "Remove parameter"
 msgstr "Supprimer le paramètre"
@@ -3949,6 +4004,9 @@ msgstr "Responsable en dehors du bureau"
 msgid "Responsible Out Of Office Substitute"
 msgstr "Responsable de la suppléance en dehors du bureau"
 
+msgid "Restore Search Template"
+msgstr ""
+
 msgid "Result names"
 msgstr "Noms des résultats"
 
@@ -4047,6 +4105,12 @@ msgstr "Programmation"
 msgid "Scope"
 msgstr "Champ d'application"
 
+msgid "Scroll tabs to the left"
+msgstr ""
+
+msgid "Scroll tabs to the right"
+msgstr ""
+
 msgid "Search"
 msgstr "Recherche"
 
@@ -4084,7 +4148,8 @@ msgid "Search by tag"
 msgstr "Recherche par mot-clé"
 
 msgid "Search defaults for {0} reseted."
-msgstr "Les valeurs par défaut de la recherche pour {0} ont été réinitialisées."
+msgstr ""
+"Les valeurs par défaut de la recherche pour {0} ont été réinitialisées."
 
 msgid "Search error!"
 msgstr "Erreur de recherche !"
@@ -4130,6 +4195,9 @@ msgstr "Sélectionner Aucun"
 
 msgid "Select all"
 msgstr "Sélectionner tout"
+
+msgid "Select entry"
+msgstr ""
 
 msgid "Select file"
 msgstr "Sélectionner un fichier"
@@ -4206,6 +4274,9 @@ msgstr "Recherche partagée"
 msgid "Shared Searches"
 msgstr "Recherches partagées"
 
+msgid "Show FAQ article preview"
+msgstr ""
+
 msgid "Show Filter"
 msgstr "Afficher le filtre"
 
@@ -4220,6 +4291,9 @@ msgstr "Liens de l'exposition"
 
 msgid "Show all"
 msgstr "Afficher tout"
+
+msgid "Show filter"
+msgstr ""
 
 msgid "Show in Customer Portal"
 msgstr "Afficher dans le portail client"
@@ -4437,6 +4511,9 @@ msgstr "Système : Plugins"
 msgid "System: Sysconfig ({0})"
 msgstr "Système : Sysconfig ({0})"
 
+msgid "Table"
+msgstr ""
+
 msgid "Table Columns"
 msgstr "Colonnes du tableau"
 
@@ -4482,11 +4559,10 @@ msgstr "Backlog de l'équipe"
 msgid "Team Dashboard"
 msgstr "Tableau de bord de l'équipe"
 
-msgid "Technical Customer Service mit KIX - work order documentation, checklists, scheduling, offline information for maintenance and repairs."
+msgid ""
+"Technical Customer Service with KIX - work order documentation, checklists, "
+"scheduling, offline information for maintenance and repairs."
 msgstr ""
-"Service technique à la clientèle de KIX - documentation des ordres de "
-"travail, listes de contrôle, programmation, informations hors ligne pour "
-"l'entretien et les réparations."
 
 msgid "Template"
 msgstr "Modèle"
@@ -4521,7 +4597,9 @@ msgstr "La taille du fichier {0} est trop importante ({1}). Max : {2}"
 msgid "The file {0} has no valid MIME-TYPE."
 msgstr "Le fichier {0} n'a pas de MIME-TYPE valide."
 
-msgid "The following {0} entries and existing sub categories will be deleted. Are you sure?"
+msgid ""
+"The following {0} entries and existing sub categories will be deleted. Are "
+"you sure?"
 msgstr ""
 "Les {0} entrées suivantes et les sous-catégories existantes seront "
 "supprimées. Êtes-vous sûr de vous ?"
@@ -4532,12 +4610,15 @@ msgstr "Les {0} entrées suivantes seront supprimées. Êtes-vous sûr de vous ?
 msgid "The password is changed for Admin."
 msgstr "Le mot de passe est modifié pour Admin."
 
-msgid "The preference ContextWidgetLists will be reseted for the user. Are you sure?"
+msgid ""
+"The preference ContextWidgetLists will be reseted for the user. Are you sure?"
 msgstr ""
 "Les listes de ContextWidget de préférence seront réinitialisées pour "
 "l'utilisateur. Êtes-vous sûr ?"
 
-msgid "The preference ContextWidgetLists will be reseted for the {0} selected user. Are you sure?"
+msgid ""
+"The preference ContextWidgetLists will be reseted for the {0} selected user. "
+"Are you sure?"
 msgstr ""
 "Les listes de ContextWidget de préférence seront réinitialisées pour "
 "l'utilisateur sélectionné {0}. Êtes-vous sûr de vous ?"
@@ -4546,7 +4627,8 @@ msgid "The requested ticket is not available due to restricted permissions."
 msgstr ""
 "Le billet demandé n'est pas disponible en raison d'autorisations restreintes."
 
-msgid "The value for the field is in the future! The date needs to be in the past!"
+msgid ""
+"The value for the field is in the future! The date needs to be in the past!"
 msgstr ""
 "La valeur du champ se situe dans le futur ! La date doit se situer dans le "
 "passé !"
@@ -4557,12 +4639,14 @@ msgstr "L'année peut se situer au maximum {0} ans dans le futur"
 msgid "The year can be a maximum of {0} years in the past"
 msgstr "L'année peut se situer au maximum {0} ans dans le passé"
 
-msgid "There are open dialogs. Any data you may have entered will be lost. Continue?"
+msgid ""
+"There are open dialogs. Any data you may have entered will be lost. Continue?"
 msgstr ""
 "Des dialogues sont ouverts. Les données que vous avez éventuellement saisies "
 "seront perdues. Poursuivre ?"
 
-msgid "This is the administration panel. Please select a module from the explorer."
+msgid ""
+"This is the administration panel. Please select a module from the explorer."
 msgstr ""
 "Ceci est le panneau d'administration. Veuillez sélectionner un module dans "
 "l'explorateur."
@@ -4660,7 +4744,9 @@ msgstr "Basé sur le temps"
 msgid "Time Based Execution"
 msgstr "Exécution en fonction du temps"
 
-msgid "Tips for getting started quickly with KIX can be found on the KIX YouTube channel. In the forum you can also exchange ideas with other KIX users."
+msgid ""
+"Tips for getting started quickly with KIX can be found on the KIX YouTube "
+"channel. In the forum you can also exchange ideas with other KIX users."
 msgstr ""
 "Des conseils pour démarrer rapidement avec KIX sont disponibles sur la "
 "chaîne YouTube de KIX. Le forum vous permet également d'échanger des idées "
@@ -4677,6 +4763,12 @@ msgstr "Pour"
 
 msgid "Today"
 msgstr "Aujourd'hui"
+
+msgid "Toggle password visibility"
+msgstr ""
+
+msgid "Toggle row"
+msgstr ""
 
 msgid "Token URL"
 msgstr "URL du jeton"
@@ -4963,9 +5055,6 @@ msgstr "Vos autorisations ont été mises à jour."
 msgid "Your rating"
 msgstr "Votre note"
 
-msgid "Youtube"
-msgstr "Youtube"
-
 msgid "ZIP"
 msgstr "ZIP"
 
@@ -4996,6 +5085,9 @@ msgstr "avant"
 msgid "between"
 msgstr "entre"
 
+msgid "checklist progress"
+msgstr ""
+
 msgid "contained in"
 msgstr "contenues dans"
 
@@ -5010,6 +5102,9 @@ msgstr "actuel"
 
 msgid "descending"
 msgstr "descendant"
+
+msgid "download attachment"
+msgstr ""
 
 msgid "draft successfully saved"
 msgstr "projet sauvegardé avec succès"
@@ -5080,6 +5175,9 @@ msgstr "précédent"
 msgid "recipient addresses (To, Cc, etc.)"
 msgstr "les adresses des destinataires (To, Cc, etc.)"
 
+msgid "remove label"
+msgstr ""
+
 msgid "responsibility by me"
 msgstr "responsabilité de ma part"
 
@@ -5115,6 +5213,9 @@ msgstr "setup_assistant_welcome_text"
 
 msgid "setupt_assistant_my-organisation_text"
 msgstr "setupt_assistant_mon-organisation_texte"
+
+msgid "show dropdown"
+msgstr ""
 
 msgid "since"
 msgstr "depuis"
@@ -5184,3 +5285,32 @@ msgstr "{0} : n'a pas de valeur."
 
 msgid "{0}: just white spaces as value is not allowed."
 msgstr "{0} : les espaces blancs ne sont pas autorisés."
+
+#~ msgid "Forum"
+#~ msgstr "Forum"
+
+#~ msgid ""
+#~ "Technical Customer Service mit KIX - work order documentation, "
+#~ "checklists, scheduling, offline information for maintenance and repairs."
+#~ msgstr ""
+#~ "Service technique à la clientèle de KIX - documentation des ordres de "
+#~ "travail, listes de contrôle, programmation, informations hors ligne pour "
+#~ "l'entretien et les réparations."
+
+#~ msgid "Youtube"
+#~ msgstr "Youtube"
+
+#~ msgid "Assigned Organisation"
+#~ msgstr "Organisation assignée"
+
+#~ msgid "Close Sidebars"
+#~ msgstr "Fermer les barres latérales"
+
+#~ msgid "Hide Message"
+#~ msgstr "Cacher le message"
+
+#~ msgid "Open Sidebars"
+#~ msgstr "Ouvrir les barres latérales"
+
+#~ msgid "Reload Calendar Data ..."
+#~ msgstr "Recharger les données du calendrier ..."

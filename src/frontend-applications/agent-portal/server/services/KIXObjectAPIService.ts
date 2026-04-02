@@ -14,7 +14,6 @@ import { KIXObject } from '../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../model/KIXObjectSpecificLoadingOptions';
 import { Error } from '../../../../server/model/Error';
-import { KIXObjectSpecificDeleteOptions } from '../../model/KIXObjectSpecificDeleteOptions';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { SortOrder } from '../../model/SortOrder';
 import { FilterCriteria } from '../../model/FilterCriteria';
@@ -80,7 +79,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                 const object = await ObjectLoader.getInstance().queue(objectType, objectId).catch(() => null);
                 if (object) {
                     displayValue = object.toString();
-                    await CacheService.getInstance().set(cacheKey, displayValue, objectType);
+                    CacheService.getInstance().set(cacheKey, displayValue, objectType);
                 }
             }
         }
@@ -213,12 +212,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                 KIXObjectType.OBJECT_TAG
             );
 
-            await tagService.deleteObject(
-                token, clientRequestId, objectType, objectId,
-                null, KIXObjectType.OBJECT_TAG_LINK
-            ).catch((error: Error) => {
-                throw new Error(error.Code, error.Message);
-            });
+            await tagService.deleteObject(token, clientRequestId, objectType, objectId, KIXObjectType.OBJECT_TAG_LINK)
+                .catch((error: Error) => {
+                    throw new Error(error.Code, error.Message);
+                });
 
             if (tags && tags.length) {
                 for (const tag of tags) {
@@ -294,7 +291,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             }
 
             if (loadingOptions.query) {
-                loadingOptions.query.forEach((q) => query[q[0]] = Array.isArray(q[1]) ? JSON.stringify(q[1]) : q[1]);
+                loadingOptions.query.forEach((q) => query[q[0]] = typeof q[1] !== 'string' && q[1] !== null
+                    ? JSON.stringify(q[1]) : q[1]
+                );
             }
 
         }
@@ -380,8 +379,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: string | number,
-        deleteOptions?: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string = objectType,
-        ressourceUri: string = this.RESOURCE_URI
+        cacheKeyPrefix: string = objectType, ressourceUri: string = this.RESOURCE_URI
     ): Promise<Error[]> {
         const uri = [this.buildUri(ressourceUri, objectId)];
 
@@ -397,7 +395,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
         else {
             // triggers the deletion of associated tags for the deleted object
-            await this.commitObjectTag(token, clientRequestId, null, objectType, objectId)
+            await this.commitObjectTag(token, clientRequestId, [], objectType, objectId)
                 .catch(() => {
                     // be silent
                 });

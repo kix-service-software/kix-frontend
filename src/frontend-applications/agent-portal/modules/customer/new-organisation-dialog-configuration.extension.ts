@@ -30,6 +30,12 @@ import { FormContext } from '../../model/configuration/FormContext';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 import { NewOrganisationDialogContext } from './webapp/core/context/NewOrganisationDialogContext';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { SearchOperator } from '../search/model/SearchOperator';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -83,6 +89,28 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         configurations.push(
             new FormFieldConfiguration(
+                'organisation-new-form-field-parent',
+                'Translatable#Parent Organisation', OrganisationProperty.PARENT_ID, 'object-reference-input', false,
+                'Translatable#Helptext_Customers_OrganisationCreate_ParentOrganisation',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [],
+                            null, null,
+                            [OrganisationProperty.SUB_ORGANISATIONS],
+                            [OrganisationProperty.SUB_ORGANISATIONS]
+                        )
+                    ),
+                    new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
+                ]
+            )
+        );
+
+        configurations.push(
+            new FormFieldConfiguration(
                 'organisation-new-form-field-type', null, KIXObjectProperty.DYNAMIC_FIELDS, null,
                 false, 'Translatable#Helptext_Customers_OrganisationCreate_Type',
                 [
@@ -106,6 +134,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'organisation-new-form-field-cno',
                     'organisation-new-form-field-name',
                     'organisation-new-form-field-type',
+                    'organisation-new-form-field-parent',
                     'organisation-new-form-field-url'
                 ]
             )

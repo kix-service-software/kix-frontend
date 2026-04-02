@@ -17,29 +17,34 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <span class="widget-chooser-title">
                     <translation-string pattern="Translatable#Search Templates"/>
                 </span>
-                <form-list treeId=state.searchBookmarkTreeId/>
-                <button
-                    type="button"
-                    on-click("addSearchbookmarkWidget")
-                    title=(state.translations["Translatable#Add Widget"])
-                    class="kix-button form-button">
-                    <span class="kix-icon-plus-blank"/>
-                    <translation-string pattern="Translatable#Add Widget"/>
-                </button>
+                <div class="widget-chooser-controls">
+                    <form-list treeId=state.searchBookmarkTreeId/>
+                    <button
+                        type="button"
+                        on-click("addSearchbookmarkWidget")
+                        title=(state.translations["Translatable#Add Widget"])
+                        class="kix-button form-button">
+                        <span class="kix-icon-plus-blank"/>
+                        <translation-string pattern="Translatable#Add Widget"/>
+                    </button>
+                </div>
             </div>
+
             <div class="widget-chooser">
                 <span class="widget-chooser-title">
                     <translation-string pattern="Translatable#Available Dashboard Widgets"/>
                 </span>
-                <form-list treeId=state.contextTreeId/>
-                <button
-                    type="button"
-                    on-click("addContextWidget")
-                    title=(state.translations["Translatable#Add Widget"])
-                    class="kix-button form-button">
-                    <span class="kix-icon-plus-blank"/>
-                    <translation-string pattern="Translatable#Add Widget"/>
-                </button>
+                <div class="widget-chooser-controls">
+                    <form-list treeId=state.contextTreeId/>
+                    <button
+                        type="button"
+                        on-click("addContextWidget")
+                        title=(state.translations["Translatable#Add Widget"])
+                        class="kix-button form-button">
+                        <span class="kix-icon-plus-blank"/>
+                        <translation-string pattern="Translatable#Add Widget"/>
+                    </button>
+                </div>
             </div>
         </div>
     </if>
@@ -78,6 +83,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             widget=component.copyWidget(kixWidget)
                             on-removeWidget("removeWidget")
                             on-configurationChanged("configurationChanged")
+                            on-advancedModeChanged("advancedModeChanged")
                             contextInstanceId=input.contextInstanceId/>
                     </if>
                     <else>
@@ -99,7 +105,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     on-click("cancel")
                     title=(state.translations["Translatable#Cancel"])
                     class="kix-button cancel-button">
-                    <span class="kix-icon-close"/>
+                    <span class="kix-icon-close" aria-hidden="true"/>
                     <translation-string pattern="Translatable#Cancel"/>
                 </button>
                 <button
@@ -107,18 +113,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     on-click("saveWidgets")
                     title=(state.translations["Translatable#Save"])
                     class="kix-button submit-button">
-                    <span class="kix-icon-plus-blank"/>
+                    <span class="kix-icon-plus-blank" aria-hidden="true"/>
                     <translation-string pattern="Translatable#Save"/>
                 </button>
             </div>
         </div>
     </if>
     <if(!state.configurationMode && state.customizable)>
-        <div on-click("toggleConfigurationMode") class="customize-section">
-            <span class="kix-icon-gear"/>
+        <button on-click("toggleConfigurationMode") class="customize-section">
+            <span class="kix-icon-gear" aria-hidden="true"/>
             <span>
                 <translation-string pattern="Translatable#Customize Dashboard"/>
             </span>
-        </div>
+        </button>
     </if>
 </div>

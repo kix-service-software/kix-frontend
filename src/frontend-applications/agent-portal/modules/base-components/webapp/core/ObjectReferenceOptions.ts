@@ -41,6 +41,8 @@ export enum ObjectReferenceOptions {
 
     TEXT_AS_ID = 'TEXT_AS_ID',
 
-    UNIQUE = 'UNIQUE'
+    UNIQUE = 'UNIQUE',
+
+    FILTER_BY_TREE_IF_NECESSARY = 'FILTER_BY_TREE_IF_NECESSARY'
 
 }

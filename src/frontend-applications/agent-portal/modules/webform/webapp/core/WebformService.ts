@@ -13,7 +13,6 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
-import { WebformSocketClient } from '.';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { ComponentContent } from '../../../../modules/base-components/webapp/core/ComponentContent';
 import { OverlayService } from '../../../../modules/base-components/webapp/core/OverlayService';
@@ -25,7 +24,7 @@ import { Error } from '../../../../../../server/model/Error';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../../../modules/base-components/webapp/core/ServiceType';
 import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
-import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
+import { WebformAPIClient } from '../../../../api-client/webform/Webform';
 
 export class WebformService extends KIXObjectService<Webform> {
 
@@ -52,7 +51,7 @@ export class WebformService extends KIXObjectService<Webform> {
         objectType: KIXObjectType, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
-        let webforms = await WebformSocketClient.getInstance().loadWebforms();
+        let webforms = await WebformAPIClient.loadWebforms();
         if (objectIds && objectIds.length) {
             webforms = webforms.filter((wf) => objectIds.some((oid) => Number(wf.ObjectId) === Number(oid)));
         }
@@ -64,7 +63,7 @@ export class WebformService extends KIXObjectService<Webform> {
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const webform = await this.getWebformFromForm();
-        const objectId = await WebformSocketClient.getInstance().createUpdateWebform(webform)
+        const objectId = await WebformAPIClient.createUpdateWebform(webform)
             .catch(async (error: Error) => {
                 const content = new ComponentContent('list-with-title',
                     {
@@ -84,7 +83,7 @@ export class WebformService extends KIXObjectService<Webform> {
         objectType: KIXObjectType, formId: string, objectId: number | string, cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const webform = await this.getWebformFromForm();
-        const updatedObjectId = await WebformSocketClient.getInstance().createUpdateWebform(webform, Number(objectId))
+        const updatedObjectId = await WebformAPIClient.createUpdateWebform(webform, Number(objectId))
             .catch(async (error: Error) => {
                 const content = new ComponentContent('list-with-title',
                     {
@@ -133,10 +132,9 @@ export class WebformService extends KIXObjectService<Webform> {
     }
 
     public async deleteObject(
-        objectType: string, objectId: string | number,
-        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix?: string
+        objectType: string, objectId: string | number, cacheKeyPrefix?: string
     ): Promise<void> {
-        await WebformSocketClient.getInstance().deleteWebform(Number(objectId));
+        await WebformAPIClient.deleteWebform(Number(objectId));
     }
 
 }

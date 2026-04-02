@@ -44,7 +44,7 @@ export class DateTimeUtil {
             const date = new Date(value);
 
             if (useOffset) {
-                const offset = await KIXModulesService.getInstance().getBackenTimezoneOffset();
+                const offset = KIXModulesService.getInstance().getBackenTimezoneOffset();
                 date.setSeconds(date.getSeconds() + offset);
             }
 
@@ -112,7 +112,12 @@ export class DateTimeUtil {
         const hours = Math.floor((seconds - (days * daysInSeconds)) / hoursInSeconds);
         const minutes = Math.round((seconds - (days * daysInSeconds) - (hours * hoursInSeconds)) / 60);
 
-        const ageResult = `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`;
+        let ageResult = '';
+        if (!noDays) {
+            ageResult = `${days}d `;
+        }
+
+        ageResult += `${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`;
 
         return isNegative ? '- ' + ageResult : ageResult;
     }

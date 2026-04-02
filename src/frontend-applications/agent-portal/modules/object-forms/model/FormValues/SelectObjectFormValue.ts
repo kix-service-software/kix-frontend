@@ -188,15 +188,19 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             this.required = true;
         }
 
-        await super.initFormValue();
-
         if (!this.treeHandler) {
             await this.initTreeHandler();
         }
         this.treeHandler?.setMultiSelect(this.multiselect);
 
-        await this.loadSelectableValues();
-        await this.loadSelectedValues();
+        await super.initFormValue();
+
+        this.initialized = true;
+
+        this.loadSelectableValues().then(() => this.loadSelectedValues());
+    }
+
+    public async postInitFormValue(): Promise<void> {
 
         this.addPropertyBinding(FormValueProperty.POSSIBLE_VALUES, (value: SelectObjectFormValue) => {
             if (this.isAutoComplete && this.possibleValues?.length) {
@@ -227,8 +231,6 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.addPropertyBinding(FormValueProperty.ENABLED, (value: SelectObjectFormValue) => {
             this.loadSelectableValues();
         });
-
-        this.initialized = true;
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
@@ -355,8 +357,6 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 await this.setSelectedNodes();
             }
         });
-
-        await this.loadSelectableValues();
     }
 
     public async setSelectedNodes(): Promise<void> {
@@ -401,14 +401,14 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         return await this.setFormValue(newValue.length ? newValue as any : null);
     }
 
-    public async loadSelectableValues(): Promise<void> {
+    public async loadSelectableValues(allowAll: boolean = true): Promise<void> {
         let objects = [];
         if (this.enabled) {
             if (this.isAutoComplete) {
                 objects = await this.searchObjects();
             } else if (this.possibleValues) {
                 objects = await KIXObjectService.loadObjects(this.objectType, this.possibleValues, this.loadingOptions);
-            } else {
+            } else if (allowAll) {
                 objects = await KIXObjectService.loadObjects(this.objectType, null, this.loadingOptions);
             }
 
@@ -426,11 +426,11 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 );
             }
 
-            await this.prepareSelectableNodes(objects);
+            await this.prepareSelectableNodes(objects, !!this.loadingOptions?.sortOrder);
         }
     }
 
-    protected async prepareSelectableNodes(objects: KIXObject[]): Promise<void> {
+    protected async prepareSelectableNodes(objects: KIXObject[], keepSortOrder: boolean = false): Promise<void> {
         // prevent that possible slower prior prepare overwrites current prepare (see "setTree" below)
         if (this.prepareSelectableController) {
             this.prepareSelectableController.abort();
@@ -459,7 +459,9 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 }
 
                 nodes = nodes.filter((node, index) => nodes.findIndex((n) => n.id === node.id) === index);
-                SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+                if (!keepSortOrder) {
+                    SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+                }
             }
 
             const value = this.value !== undefined && this.value !== null
@@ -572,7 +574,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                     : objectIds.filter((id) => !id.toString().match(/<KIX_.+>/))
                 : [];
             if (idsToLoad.length) {
-                selectedNodes = await this.loadNodes(idsToLoad);
+                // use true, to show selected values (even if they otherwise hidden as selectABLE values)
+                selectedNodes = await this.loadNodes(idsToLoad, true);
             }
 
             if (this.freeText || idsToLoad.length !== objectIds.length) {
@@ -594,7 +597,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.selectedNodes = selectedNodes.sort((a, b) => a.id - b.id);
     }
 
-    private async loadNodes(idsToLoad: T[]): Promise<TreeNode[]> {
+    private async loadNodes(idsToLoad: T[], showInvalidNodes: boolean = this.showInvalidNodes): Promise<TreeNode[]> {
         const selectedNodes: TreeNode[] = [];
         if (this.isAutoComplete) {
             let objects = [];
@@ -609,7 +612,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
             for (const object of objects) {
                 const node = await ObjectReferenceUtil.createTreeNode(
-                    object, this.showInvalidNodes, this.isInvalidClickable, this.useTextAsId,
+                    object, showInvalidNodes, this.isInvalidClickable, this.useTextAsId,
                     this.translatable
                 );
                 if (node) {
@@ -630,7 +633,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             if (objects && !!objects.length) {
                 for (const object of objects) {
                     const node = await ObjectReferenceUtil.createTreeNode(
-                        object, this.translatable, this.isInvalidClickable, this.useTextAsId, this.translatable
+                        object, showInvalidNodes, this.isInvalidClickable, this.useTextAsId, this.translatable
                     );
                     if (node) {
                         node.selected = true;
@@ -722,7 +725,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         loadingOptions: KIXObjectLoadingOptions, service: IKIXObjectService
     ): Promise<void> {
         let usedSearchValue = false;
-        loadingOptions.filter = Array.isArray(this.loadingOptions?.filter) ? [...this.loadingOptions.filter] : [];
+        loadingOptions.filter = Array.isArray(this.loadingOptions?.filter) ?
+            JSON.parse(JSON.stringify(this.loadingOptions.filter)) : [];
 
         if (loadingOptions.filter.length) {
             filter:
@@ -759,7 +763,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     protected async setDefaultValue(field: FormFieldConfiguration): Promise<void> {
-        if (this.context.descriptor.contextMode.toLowerCase().includes('admin')) {
+        if (this.context?.descriptor?.contextMode.toLowerCase().includes('admin')) {
             const isRestoredContext = this.context?.getAdditionalInformation(AdditionalContextInformation.IS_RESTORED);
             if (!isRestoredContext) {
                 this.defaultValue = field?.defaultValue?.value || [];

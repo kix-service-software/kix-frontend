@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import * as chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { AttachmentUtil } from '../src/frontend-applications/agent-portal/modules/base-components/webapp/core/AttachmentUtil';
 import { AttachmentError } from '../src/frontend-applications/agent-portal/model/AttachmentError';
 

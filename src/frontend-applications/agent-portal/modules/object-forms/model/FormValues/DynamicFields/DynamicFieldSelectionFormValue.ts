@@ -7,14 +7,13 @@
  * --
  */
 
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { AgentService } from '../../../../user/webapp/core/AgentService';
-import { AgentSocketClient } from '../../../../user/webapp/core/AgentSocketClient';
 import { FormValueProperty } from '../../FormValueProperty';
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { ObjectFormValue } from '../ObjectFormValue';
@@ -81,7 +80,7 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
             const hasAppendValuesRoles = dfConfig?.AppendValuesRoleIDs?.length > 0;
             if (hasAppendValuesRoles) {
                 const roleIds: number[] = dfConfig?.AppendValuesRoleIDs.map((rid) => Number(rid));
-                const currentUser = await AgentSocketClient.getInstance().getCurrentUser();
+                const currentUser = await SessionAPIClient.getCurrentUser();
                 const userHasRole = currentUser.RoleIDs.some((rid) => roleIds.some((dfRid) => dfRid === rid));
                 if (userHasRole) {
                     this.freeText = true;

@@ -74,7 +74,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         for (const c of this.columns) {
             if (c.property) {
                 let prop = c.property;
-                let dependencyIds = [];
+                const dependencyIds = [];
                 if (!prop.startsWith('DynamicFields.') && prop.indexOf('.') !== -1) {
 
                     const dep = prop.substring(0, prop.indexOf('.'));

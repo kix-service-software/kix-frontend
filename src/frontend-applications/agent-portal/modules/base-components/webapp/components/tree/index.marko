@@ -7,21 +7,23 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
+<if(state.allowExpandCollapseAll)>
+    <div class="d-flex justify-content-end m-0 mb-3 expand-hover border-bottom border-secondary pb-2">
+        <button
+            class="fa-solid fa-angles-up mx-2"
+            on-click("expandOrCollapseAll", false, true)
+            title=(state.translations["Translatable#Collapse All"])
+            aria-label=(state.translations["Translatable#Collapse All"])
+        />
+        <button
+            class="fa-solid fa-angles-down"
+            on-click("expandOrCollapseAll", true, true)
+            title=(state.translations["Translatable#Expand All"])
+            aria-label=(state.translations["Translatable#Expand All"])
+        />
+    </div>
+</if>
 <ul key=state.treeId style=state.treeStyle class="tree-list">
-    <if(state.allowExpandCollapseAll)>
-        <div class="d-flex justify-content-end m-0 mb-3 expand-hover border-bottom border-secondary pb-2">
-            <i
-                class="fa-solid fa-angles-up mx-2"
-                on-click("expandOrCollapseAll", false, true)
-                title=(state.translations["Translatable#Collapse All"])
-            />
-            <i
-                class="fa-solid fa-angles-down"
-                on-click("expandOrCollapseAll", true, true)
-                title=(state.translations["Translatable#Expand All"])
-            />
-        </div>
-    </if>
     <for|node| of=state.tree>
         <if(node.visible)>
             <tree-node

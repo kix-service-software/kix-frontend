@@ -11,10 +11,10 @@ import { AutocompleteOption } from '../../../../../../model/AutocompleteOption';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { IdService } from '../../../../../../model/IdService';
+import { KIXObject } from '../../../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
@@ -45,6 +45,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     private fieldOrder: any = {};
 
     private subscriber: IEventSubscriber;
+    private valueInitialized: boolean;
 
     public constructor(
         property: string,
@@ -83,7 +84,14 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     }
 
     private handleNewChannelField(fieldId: string): void {
-        const formValue = this.formValues.find((fv) => fv.fieldId === fieldId);
+        const formValue = this.formValues.find((fv) => {
+            if (fv.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                return fv.formValues.find((dfv) => dfv.fieldId === fieldId);
+            }
+
+            return fv.fieldId === fieldId;
+        });
+
         if (formValue) {
             if (formValue.enabled && !this.enabled) {
                 this.createAndAddChannelField(fieldId);
@@ -122,7 +130,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
+        this.initChannelValue();
+    }
 
+    private async initChannelValue(): Promise<void> {
         if (!this.value) {
             const article = await this.getReferencedArticle();
             this.value = article?.ChannelID;
@@ -143,10 +154,29 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 }
             }
         }
+    }
 
+    public async postInitFormValue(): Promise<void> {
         this.object?.addBinding(ArticleProperty.CHANNEL_ID, async (value: number) => {
             await this.setChannelFields(value);
         });
+
+        this.valueInitialized = true;
+        this.loadSelectableValues();
+    }
+
+    public async loadSelectableValues(allowAll?: boolean): Promise<void> {
+        // If `isConfigurable` is `true`, then the `loadSelectableValues` should also be triggered,
+        // since `postInit` is not executed at this point.
+        if (this.valueInitialized || this.isConfigurable) {
+            return super.loadSelectableValues();
+        }
+    }
+
+    protected async prepareSelectableNodes(objects: KIXObject[], keepSortOrder?: boolean): Promise<void> {
+        return super.prepareSelectableNodes(objects, keepSortOrder).then(
+            () => this.setPossibleValues(objects.map((o) => Number(o.ObjectId)))
+        );
     }
 
     private async getReferencedArticle(): Promise<Article> {
@@ -212,7 +242,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         const dfValue = this.findFormValue(KIXObjectProperty.DYNAMIC_FIELDS);
         if (channelGroup && channelGroup.formFields?.length && dfValue?.formValues?.length) {
             // get all ArticleDFs from Group
-            let newFormValues = [];
+            const newFormValues = [];
             const dfFields = channelGroup.formFields?.filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
             for (const field of dfFields) {
                 const option = field.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
@@ -233,6 +263,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             }
 
             this.createArticleFormValue(property, article);
+        }
+
+        if (!article.DynamicFields) {
+            this.createArticleFormValue(KIXObjectProperty.DYNAMIC_FIELDS, article);
         }
 
         const index = this.formValues.findIndex((fv) => fv.property === KIXObjectProperty.DYNAMIC_FIELDS);

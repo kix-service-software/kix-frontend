@@ -15,7 +15,7 @@ import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 export abstract class AbstractContextServiceListener implements IContextServiceListener {
 
 
-    public constexServiceListenerId: string = IdService.generateDateBasedId('context-service-listener-');
+    public contextServiceListenerId: string = IdService.generateDateBasedId('context-service-listener-');
 
     public contextChanged(contextId: string, context: Context): void {
         return;

@@ -13,6 +13,4 @@ export class ComponentInput {
 
     public imprintLink: string;
 
-    public releaseInfo: ReleaseInfo;
-
 }

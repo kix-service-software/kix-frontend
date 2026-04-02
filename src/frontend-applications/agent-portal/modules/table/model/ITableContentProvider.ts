@@ -19,6 +19,8 @@ export interface ITableContentProvider<T = any> {
 
     usePaging: boolean;
 
+    useSourceObjectForLoadingOptions: boolean;
+
     initialize(): Promise<void>;
 
     getObjectType(): KIXObjectType | string;

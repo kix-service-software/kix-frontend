@@ -12,6 +12,7 @@ import { TreeNode } from '../../../core/tree';
 import { BrowserUtil } from '../../../core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 import { TreeEvent } from '../../../core/tree/TreeEvent';
+import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 
 class TreeNodeComponent extends AbstractMarkoComponent<ComponentState> {
 
@@ -59,6 +60,10 @@ class TreeNodeComponent extends AbstractMarkoComponent<ComponentState> {
             },
             [TreeEvent.NODE_UPDATED]
         );
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Collapse node', 'Translatable#Expand node'
+        ]);
     }
 
     public onDestroy(): void {

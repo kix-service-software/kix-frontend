@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { AuthenticationSocketClient } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
@@ -38,7 +38,7 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
             'Translatable#Assign Links'
         ]);
 
-        this.state.allowCreate = await AuthenticationSocketClient.getInstance().checkPermissions([
+        this.state.allowCreate = await SessionAPIClient.checkPermissions([
             new UIComponentPermission('links', [CRUD.READ, CRUD.CREATE])
         ]);
     }

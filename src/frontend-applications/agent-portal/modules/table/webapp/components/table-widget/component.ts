@@ -37,6 +37,7 @@ import { WidgetSize } from '../../../../../model/configuration/WidgetSize';
 import { BackendNotification } from '../../../../../model/BackendNotification';
 import { NotificationHandler } from '../../../../base-components/webapp/core/NotificationHandler';
 import { AdminContext } from '../../../../../modules/admin/webapp/core/AdminContext';
+import { ContextEvents } from '../../../../../modules/base-components/webapp/core/ContextEvents';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -78,9 +79,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.useContext) {
             this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         }
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Show filter', 'Translatable#Table'
+        ]);
 
         if (this.state.widgetConfiguration?.configuration) {
             const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
+
+            const configuredWidget = await this.context?.getConfiguredWidget(this.state.instanceId);
+            this.state.isLarge = configuredWidget ? configuredWidget.size === WidgetSize.LARGE : true;
 
             await this.initViews(settings?.objectType);
 
@@ -101,8 +108,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initViews(objectType: KIXObjectType | string): Promise<void> {
-        const configuredWidget = await this.context?.getConfiguredWidget(this.state.instanceId);
-        if (configuredWidget?.size === WidgetSize.SMALL) {
+        if (!this.state.isLarge) {
             return;
         }
 
@@ -184,9 +190,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         objectType = NotificationHandler.getObjectType(data.Namespace);
                     }
                     if (objectType === this.objectType) {
-                        this.state.loading = true;
-                        await this.reloadTable(settings);
-                        setTimeout(() => this.state.loading = false, 50);
+                        EventService.getInstance().publish(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.context);
                     }
                 },
                 [

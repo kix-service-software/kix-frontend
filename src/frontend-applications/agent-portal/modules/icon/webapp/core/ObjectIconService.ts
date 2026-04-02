@@ -8,13 +8,13 @@
  */
 
 import { ObjectIcon } from '../../model/ObjectIcon';
-import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { ObjectIconLoadingOptions } from '../../../../server/model/ObjectIconLoadingOptions';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXIcon } from '../../model/KIXIcon';
 import { FontawesomeIcon } from '../../model/FontawesomeIcon';
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 
 export class ObjectIconService extends KIXObjectService<ObjectIcon> {
 
@@ -33,9 +33,7 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
         this.objectConstructors.set(KIXObjectType.OBJECT_ICON, [ObjectIcon]);
     }
 
-    public async getObjectIcon(
-        object: string | KIXObjectType, objectId: string | number
-    ): Promise<ObjectIcon | string> {
+    public async getObjectIcon(object: string | KIXObjectType, objectId: string | number): Promise<ObjectIcon> {
         const icons = await this.loadObjects(
             KIXObjectType.OBJECT_ICON, null, null, new ObjectIconLoadingOptions(object, objectId)
         );
@@ -95,6 +93,11 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
 
 
         return icons.slice(0, iconLimit);
+    }
+
+    public static async getObjectIconUrl(iconId: number, contentType: string): Promise<string> {
+        const srcPath = `${ClientStorageService.getApplicationUrl()}/objecticons/${iconId}/${encodeURIComponent(contentType)}`;
+        return srcPath;
     }
 
 }

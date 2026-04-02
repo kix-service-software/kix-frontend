@@ -32,6 +32,7 @@
         "require ./core/TicketCreateUIModule",
         "require ./core/TicketReadUIModule",
         "require ./core/TicketUpdateUIModule",
-        "require ./core/ArticleCreateUIModule"
+        "require ./core/ArticleCreateUIModule",
+        "require ./core/TicketUIModule"
     ]
 }

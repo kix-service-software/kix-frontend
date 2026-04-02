@@ -8,38 +8,24 @@
  */
 
 /* eslint-disable max-lines-per-function */
-/**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
- * --
- * This software comes with ABSOLUTELY NO WARRANTY. For details, see
- * the enclosed file LICENSE for license information (GPL3). If you
- * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
- * --
- */
 
 import { ComponentState } from './ComponentState';
-import { ContextType } from '../../../../../model/ContextType';
-import { Context } from '../../../../../model/Context';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { RoutingService } from '../../../../../modules/base-components/webapp/core/RoutingService';
-import { AuthenticationSocketClient } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
-import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
-import { ClientNotificationSocketClient } from '../../../../notification/webapp/core/ClientNotificationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
+import { IKIXModuleExtension } from '../../../../../model/IKIXModuleExtension';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { AgentPortalService } from '../../core/AgentPortalService';
+import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
+import { ContextType } from '../../../../../model/ContextType';
+import { Context } from 'mocha';
 import { MobileShowEvent } from '../../../model/MobileShowEvent';
 import { MobileShowEventData } from '../../../model/MobileShowEventData';
-import { ContextHistory } from '../../../../base-components/webapp/core/ContextHistory';
-import { IKIXModuleExtension } from '../../../../../model/IKIXModuleExtension';
 import { KIXStyle } from '../../../../base-components/model/KIXStyle';
-import { PortalNotificationService } from '../../../../portal-notification/webapp/core/PortalNotificationService';
-import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
-import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
-
-    public state: ComponentState;
 
     private modules: IKIXModuleExtension[];
 
@@ -49,40 +35,68 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        super.onInput(input);
-        if (input && input.socketTimeout) {
-            ClientStorageService.setSocketTimeout(input.socketTimeout);
-            ClientStorageService.setBaseRoute(input.baseRoute || '');
-        }
-
+        ClientStorageService.setApplicationData(input);
         this.modules = input.modules;
     }
 
     public async onMount(): Promise<void> {
+        console.groupCollapsed('Mount Base Template');
         await super.onMount();
-
-        // set base for relative links
-        this.setBaseLink();
         const start = Date.now();
 
         this.state.loading = true;
         this.state.loadingHint = 'Loading';
 
+        console.time('Check Authentication');
         await this.checkAuthentication();
+        console.timeEnd('Check Authentication');
 
-        await ContextService.getInstance().initialize();
-        ClientNotificationSocketClient.getInstance();
-        PortalNotificationService.getInstance();
-        ContextHistory.getInstance();
-        BrowserUtil.handleBeforeUnload();
+        await AgentPortalService.initApplication(this.modules);
 
-        const startInitModules = Date.now();
-        await KIXModulesService.getInstance().init(this.modules);
-        const endInitModules = Date.now();
-        console.debug(`modules initialization finished: ${endInitModules - startInitModules}ms`);
+        this.registerListener();
+
+        RoutingService.getInstance().routeToInitialContext(true);
+
+        this.state.initialized = true;
+        this.state.loading = false;
+
+        const end = Date.now();
+
+        console.debug(`mount base template: ${end - start} ms.`);
+        console.groupEnd();
+    }
+
+    public onDestroy(): void {
+        super.onDestroy();
+    }
+
+    private async checkAuthentication(): Promise<void> {
+        if (!SessionAPIClient.validateToken()) {
+            window.location.replace('/auth');
+        }
+
+        const currentUser = await SessionAPIClient.getCurrentUser();
+        ClientStorageService.setOption('UserId', currentUser?.UserID?.toString());
+    }
+    private registerListener(): void {
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
+                this.state.loading = data.loading;
+                this.state.loadingHint = data.hint;
+            },
+            [ApplicationEvent.APP_LOADING]
+        );
+
+        super.registerEventSubscriber(
+            function (data: any, eventId: string): void {
+                this.state.applicationTemplate = KIXModulesService.getComponentTemplate(data?.componentId);
+                this.state.applicationTemplateData = data?.data || {};
+            },
+            [ApplicationEvent.SWITCH_APPLICATION_TEMPLATE]
+        );
 
         ContextService.getInstance().registerListener({
-            constexServiceListenerId: 'BASE-TEMPLATE',
+            contextServiceListenerId: 'BASE-TEMPLATE',
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 this.resizeHandling();
             },
@@ -131,42 +145,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
-
-        RoutingService.getInstance().routeToInitialContext(true);
-
-        this.state.initialized = true;
-        this.state.loading = false;
-
-        const end = Date.now();
-
-        console.debug(`mount base template: ${end - start} ms.`);
-    }
-
-    private setBaseLink(): void {
-        if (window?.location?.origin) {
-            const head = document.getElementsByTagName('head');
-            if (head && head[0]) {
-                const base = document.createElement('base');
-                base.href = window?.location?.origin;
-                head[0].appendChild(base);
-            }
-        }
-    }
-
-    public onDestroy(): void {
-        super.onDestroy();
-        window.removeEventListener('resize', this.resizeHandling.bind(this), false);
-    }
-
-    private async checkAuthentication(): Promise<void> {
-        if (!AuthenticationSocketClient.getInstance().validateToken()) {
-            window.location.replace('/auth');
-        }
     }
 
     private resizeHandling(): void {
         this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
     }
+
 }
 
 module.exports = Component;

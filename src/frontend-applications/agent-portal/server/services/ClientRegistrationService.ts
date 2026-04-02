@@ -32,6 +32,7 @@ import { IFormConfigurationExtension } from '../extensions/IFormConfigurationExt
 import { IModifyConfigurationExtension } from '../extensions/IModifyConfigurationExtension';
 import { Error } from '../../../../server/model/Error';
 import { ModuleConfigurationService } from './configuration/ModuleConfigurationService';
+import { IdService } from '../../model/IdService';
 
 export class ClientRegistrationService extends KIXObjectAPIService {
 
@@ -70,7 +71,6 @@ export class ClientRegistrationService extends KIXObjectAPIService {
     public async submitClientRegistration(
         token: string, clientRequestId: string, createClientRegistration: CreateClientRegistration
     ): Promise<SystemInfo> {
-
         const uri = this.buildUri(this.RESOURCE_URI, createClientRegistration.ClientID);
         await this.sendDeleteRequest(token, clientRequestId, [uri], null)
             .catch(
@@ -89,43 +89,58 @@ export class ClientRegistrationService extends KIXObjectAPIService {
         return response.SystemInfo;
     }
 
-    public async deleteClientRegistration(token: string, clientRequestId: string, clientId: number): Promise<void> {
+    public async deleteClientRegistration(token: string, clientRequestId: string, clientId: string): Promise<void> {
         const uri = this.buildUri(this.RESOURCE_URI, clientId);
         await this.sendDeleteRequest<void>(token, clientRequestId, [uri], null);
     }
 
     public async createClientRegistration(): Promise<void> {
-        LoggingService.getInstance().info('[CLIENT REGISTRATION] Start');
-        const start = Date.now();
-
-        let poDefinitions = [];
-
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-
-        const updateTranslations = serverConfig.UPDATE_TRANSLATIONS;
-        if (updateTranslations) {
-            LoggingService.getInstance().info('Update translations');
-            poDefinitions = await TranslationAPIService.getInstance().getPODefinitions();
-        }
+        const poDefinitions = await TranslationAPIService.getInstance().getPODefinitions();
+        LoggingService.getInstance().info(`[Clientregistration run - ${poDefinitions?.length} PO definitions`);
 
         const configurations = await this.createDefaultConfigurations();
+        LoggingService.getInstance().info(`[Clientregistration run - ${configurations?.length} configurations`);
 
         const backendDependencies = this.getBackendDependencies();
         const plugins = this.getPlugins();
 
+        const clientId = ConfigurationService.getEnvString('NOTIFICATION_CLIENT_ID');
+
         const createClientRegistration = new CreateClientRegistration(
-            serverConfig.NOTIFICATION_CLIENT_ID,
-            poDefinitions,
-            configurations,
-            backendDependencies,
-            plugins,
+            clientId, poDefinitions, configurations, backendDependencies, plugins, { SystemInfo: 1 }
+        );
+
+        try {
+            await ClientRegistrationService.getInstance().deleteClientRegistration(
+                ConfigurationService.getBackendAPIToken(), null, clientId
+            );
+        } catch (e) { }
+
+        await this.submitClientRegistration(
+            ConfigurationService.getBackendAPIToken(), null, createClientRegistration
+        ).catch((error) => {
+            LoggingService.getInstance().error(error);
+            LoggingService.getInstance().error(
+                'Failed to register frontent server at backend (ClientRegistration). See errors above.'
+            );
+            process.exit(1);
+        });
+    }
+
+    public async setSystemInfo(): Promise<void> {
+        LoggingService.getInstance().info('[SERVER] start - get system info');
+        const clientId = IdService.generateDateBasedId();
+
+        const createClientRegistration = new CreateClientRegistration(
+            clientId,
+            [], [], [], [],
             {
                 SystemInfo: 1
             }
         );
 
-        const systemInfo = await this.submitClientRegistration(
-            serverConfig.BACKEND_API_TOKEN, null, createClientRegistration
+        const SystemInfo = await this.submitClientRegistration(
+            ConfigurationService.getBackendAPIToken(), null, createClientRegistration
         ).catch((error) => {
             LoggingService.getInstance().error(error);
             LoggingService.getInstance().error(
@@ -134,9 +149,13 @@ export class ClientRegistrationService extends KIXObjectAPIService {
             process.exit(1);
         });
 
-        ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo as SystemInfo);
-        const end = Date.now();
-        LoggingService.getInstance().info(`[CLIENT REGISTRATION] Finished in ${(end - start) / 1000}s`);
+        ReleaseInfoUtil.getInstance().setSysteminfo(SystemInfo);
+
+        await this.deleteClientRegistration(
+            ConfigurationService.getBackendAPIToken(), 'ClientregsitrationService', clientId
+        );
+
+        LoggingService.getInstance().info('[SERVER] start - get system info finished');
     }
 
     private async createDefaultConfigurations(): Promise<SysConfigOptionDefinition[]> {
@@ -178,8 +197,6 @@ export class ClientRegistrationService extends KIXObjectAPIService {
 
             await this.extendFormConfigurations(configurations);
             configurations = await this.handleConfigurationExtensions(configurations);
-
-            ConfigurationService.getInstance().getServerConfiguration();
 
             const sysconfigOptionDefinitions = configurations.map((c) => {
                 const name = c.name ? c.name : c.id;

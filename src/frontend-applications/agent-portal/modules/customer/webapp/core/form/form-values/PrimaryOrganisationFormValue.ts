@@ -30,12 +30,15 @@ export class PrimaryOrganisationFormValue extends SelectObjectFormValue<number> 
         this.isAutoComplete = false;
         this.hasFilter = false;
         this.multiselect = false;
+        // allow invalid if given by OrganisationIDs
+        this.showInvalidNodes = true;
     }
 
     public async initFormValue(): Promise<void> {
-        await super.initFormValue();
-
+        // set possible values before super call
         this.possibleValues = this.object?.OrganisationIDs;
+
+        await super.initFormValue();
 
         this.objectBindingId = this.objectValueMapper?.object?.addBinding(
             ContactProperty.ORGANISATION_IDS,
@@ -54,6 +57,12 @@ export class PrimaryOrganisationFormValue extends SelectObjectFormValue<number> 
             this.objectValueMapper.object.removeBindings([this.objectBindingId]);
         }
         super.destroy();
+    }
+
+
+    public async loadSelectableValues(allowAll: boolean = true): Promise<void> {
+        // prevent loading of all organisation
+        return super.loadSelectableValues(false);
     }
 
     public async setPossibleValues(): Promise<void> {

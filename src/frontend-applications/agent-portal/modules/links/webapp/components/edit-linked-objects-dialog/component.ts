@@ -13,7 +13,7 @@ import { LinkObject } from '../../../model/LinkObject';
 import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { AuthenticationSocketClient } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { LinkUtil } from '../../core';
@@ -68,7 +68,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Cancel', 'Translatable#Assign Link', 'Translatable#Delete Link', 'Translatable#Submit'
         ]);
 
-        this.state.allowCreate = await AuthenticationSocketClient.getInstance().checkPermissions(
+        this.state.allowCreate = await SessionAPIClient.checkPermissions(
             [new UIComponentPermission('links', [CRUD.CREATE])]
         );
 

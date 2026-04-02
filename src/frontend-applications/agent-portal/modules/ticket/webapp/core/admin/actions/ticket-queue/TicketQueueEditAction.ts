@@ -11,7 +11,7 @@ import { AbstractAction } from '../../../../../../../modules/base-components/web
 import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
 import { QueueDialogUtil } from '../../QueueDialogUtil';
-import { AuthenticationSocketClient } from '../../../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../../../api-client/session/Session';
 
 export class TicketQueueEditAction extends AbstractAction {
 
@@ -29,7 +29,7 @@ export class TicketQueueEditAction extends AbstractAction {
             new UIComponentPermission(`system/ticket/queues/${objectId}`, [CRUD.UPDATE], false, 'Object', false)
         ];
 
-        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        show = await SessionAPIClient.checkPermissions(permissions);
         return show;
     }
 

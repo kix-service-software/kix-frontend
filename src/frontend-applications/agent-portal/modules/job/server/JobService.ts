@@ -418,7 +418,7 @@ export class JobAPIService extends KIXObjectAPIService {
             if (execPlanId) {
                 this.deleteObject(
                     token, clientRequestId, KIXObjectType.EXEC_PLAN, execPlanId,
-                    undefined, KIXObjectType.EXEC_PLAN, this.RESOURCE_URI_EXEC_PLAN
+                    KIXObjectType.EXEC_PLAN, this.RESOURCE_URI_EXEC_PLAN
                 ).catch((error) => {
                     LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 });

@@ -11,6 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <for|node| of=state.nodes>
         <div.selected-node
             title=(state.translations[node.tooltip] ? state.translations[node.tooltip] : node.tooltip)
+            aria-label=(state.translations[node.tooltip] ? state.translations[node.tooltip] : node.tooltip)
             class={
                         "show-as-invalid": node.showAsInvalid
                     }
@@ -21,7 +22,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <icon icon=node.secondaryIcon showUnknown=true/>
             </if>
             <if(input.canRemoveNode)>
-                <span.kix-icon-close.selected-node-remove tabindex="0" on-click("removeNode", node) on-focus("stopFocus")/>
+                <span.kix-icon-close.selected-node-remove tabindex="0" role="button" aria-label=state.translations["Translatable#Remove node"] on-click("removeNode", node) on-focus("stopFocus")/> // not yet clickable with keyboard
             </if>
         </div>
     </for>

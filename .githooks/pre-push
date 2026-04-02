@@ -1,0 +1,11 @@
+echo "Starting pre push hook";
+
+if ! npm run-script lint; then
+    echo "Aborting push because of failing lint checks";
+    exit 1;
+fi
+
+if ! npm test; then
+    echo "Aborting push because of failing tests";
+    exit 1;
+fi

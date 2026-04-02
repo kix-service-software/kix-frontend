@@ -59,8 +59,8 @@ export class MFAService {
             loadingOptions.includes = [UserProperty.PREFERENCES];
             loadingOptions.searchLimit = 1;
 
-            const config = ConfigurationService.getInstance().getServerConfiguration();
-            const token = config?.BACKEND_API_TOKEN;
+
+            const token = ConfigurationService.getBackendAPIToken();
 
             const users = await UserService.getInstance().loadObjects<User>(
                 token, 'MFAService', KIXObjectType.USER, null, loadingOptions, null
@@ -76,12 +76,11 @@ export class MFAService {
     }
 
     public async loadMFAConfigs(userType?: UserType): Promise<MFAConfig[]> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         const mfaSysconfig = await SysConfigService.getInstance().getSysConfigOptionValue(
-            serverConfig?.BACKEND_API_TOKEN, 'MultiFactorAuthentication'
+            ConfigurationService.getBackendAPIToken(), 'MultiFactorAuthentication'
         ).catch(() => null);
 
-        let mfaConfigs: MFAConfig[] = [];
+        const mfaConfigs: MFAConfig[] = [];
 
         if (mfaSysconfig) {
             for (const key in mfaSysconfig) {

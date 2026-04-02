@@ -75,7 +75,7 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
     }
 
     public async getPortalConfiguration<T = any>(): Promise<T> {
-        const config = this.getUIConfiguration<T>(AgentPortalConfiguration.CONFIGURATION_ID);
+        const config = await this.getUIConfiguration<T>(AgentPortalConfiguration.CONFIGURATION_ID);
         return config as any;
     }
 
@@ -128,14 +128,6 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         objectType: KIXObjectType | string, formId: string, objectId: number | string,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-
-        if (objectId.toString() === SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG) {
-            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(objectType, ServiceType.FORM);
-            const parameter = await service.getFormParameter(true);
-            const value = parameter.find((p) => p.includes('Value'));
-            ClientStorageService.setSocketTimeout(value[1]);
-        }
-
         return super.updateObjectByForm(objectType, formId, objectId, cacheKeyPrefix);
     }
 

@@ -9,12 +9,12 @@
 
 import fs from 'fs';
 import path from 'path';
-import { IServerConfiguration } from '../model/IServerConfiguration';
 import { LoggingService } from './LoggingService';
 
 export class ConfigurationService {
 
     private static INSTANCE: ConfigurationService;
+    private static loggedEnv: Map<string, boolean> = new Map();
 
     public static getInstance(): ConfigurationService {
         if (!ConfigurationService.INSTANCE) {
@@ -25,24 +25,10 @@ export class ConfigurationService {
 
     private constructor() { }
 
-    public configurationDirectory: string;
-    public certDirectory: string;
     public dataDir: string;
 
-    private serverConfiguration: IServerConfiguration;
-
-    public init(configurationDirectory: string, certDirectory: string, dataDir: string): void {
-        this.configurationDirectory = configurationDirectory;
-        this.certDirectory = certDirectory;
+    public init(dataDir: string): void {
         this.dataDir = dataDir;
-
-        const serverConfig = this.getConfigurationFilePath('server.config.json');
-
-        this.serverConfiguration = this.loadServerConfig(serverConfig);
-    }
-
-    public getServerConfiguration(): IServerConfiguration {
-        return this.serverConfiguration;
     }
 
     public getDataFileContents<T = any>(fileNameRegex: RegExp): Map<string, T> {
@@ -78,41 +64,6 @@ export class ConfigurationService {
         fs.writeFileSync(filePath, JSON.stringify(content));
     }
 
-    private loadServerConfig(serverConfig: string): IServerConfiguration {
-        this.clearRequireCache(serverConfig);
-        const config: IServerConfiguration = require(serverConfig);
-
-        // check if config option has been overridden by environment
-        // tslint:disable-next-line:forin
-        for (const key in config) {
-            if (process.env[key]) {
-                switch (typeof config[key]) {
-                    case 'number': {
-                        config[key] = Number(process.env[key]);
-                        break;
-                    }
-                    case 'boolean': {
-                        config[key] = (process.env[key] === 'true');
-                        break;
-                    }
-                    case 'object': {
-                        config[key] = JSON.parse(process.env[key]);
-                        break;
-                    }
-                    default: {
-                        config[key] = process.env[key];
-                    }
-                }
-            }
-        }
-
-        return config;
-    }
-
-    private getConfigurationFilePath(fileName: string): string {
-        return path.join(this.configurationDirectory, fileName);
-    }
-
     private getJSONFileContent(filePath: string): any {
         let configurationFile = null;
         if (fs.existsSync(filePath)) {
@@ -136,6 +87,36 @@ export class ConfigurationService {
             }
         } catch (error) {
             return;
+        }
+    }
+
+    public static isEnvSetTrue(env: string): boolean {
+        this.logEnv(env);
+        return process.env[env] === 'true' || Number(process.env[env]) === 1;
+    }
+
+    public static getEnvNumber(env: string, defaultValue?: number): number {
+        this.logEnv(env);
+        if (!process.env[env] && defaultValue)
+            return defaultValue;
+        return Number(process.env[env]);
+    }
+
+    public static getEnvString(env: string, defaultValue?: string): string {
+        this.logEnv(env);
+        if (!process.env[env] && defaultValue)
+            return defaultValue;
+        return process.env[env];
+    }
+
+    public static getBackendAPIToken(): string {
+        return ConfigurationService.getEnvString('BACKEND_API_TOKEN');
+    }
+
+    private static logEnv(env: string): void {
+        if (!this.loggedEnv.has(env)) {
+            LoggingService.getInstance().info(`[SERVER] READ ENV: ${env} (${process.env[env]})`);
+            this.loggedEnv.set(env, true);
         }
     }
 

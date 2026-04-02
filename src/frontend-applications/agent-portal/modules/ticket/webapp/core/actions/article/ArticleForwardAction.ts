@@ -13,7 +13,7 @@ import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { EditTicketDialogContext } from '../..';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
-import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../../api-client/session/Session';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 import { Article } from '../../../../model/Article';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
@@ -40,7 +40,7 @@ export class ArticleForwardAction extends AbstractAction<Article> {
             const permissions = [
                 new UIComponentPermission(`tickets/${objectId}/articles`, [CRUD.CREATE])
             ];
-            show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+            show = await SessionAPIClient.checkPermissions(permissions);
         }
 
         return show;

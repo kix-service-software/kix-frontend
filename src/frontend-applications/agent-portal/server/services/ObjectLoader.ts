@@ -71,15 +71,15 @@ export class ObjectLoader {
     ): Promise<void> {
         try {
             const service = KIXObjectServiceRegistry.getServiceInstance(objectType);
-            const config = ConfigurationService.getInstance().getServerConfiguration();
 
             const objectIds = [...objectMap.keys()];
 
             const loadingOptions = this.loadingOptionsMap.has(objectType) ?
                 this.loadingOptionsMap.get(objectType) : null;
 
+            const beToken = ConfigurationService.getBackendAPIToken();
             const objectResponse = await service.loadObjects<KIXObject>(
-                config?.BACKEND_API_TOKEN, 'ObjectLoader', objectType, objectIds, loadingOptions, null
+                beToken, 'ObjectLoader', objectType, objectIds, loadingOptions, null
             ).catch((): ObjectResponse<KIXObject> => new ObjectResponse());
 
             const objectClass = service.getObjectClass(objectType);

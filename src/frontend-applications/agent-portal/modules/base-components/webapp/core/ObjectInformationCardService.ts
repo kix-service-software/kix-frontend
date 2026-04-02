@@ -79,7 +79,7 @@ export class ObjectInformationCardService {
                 }
 
                 const values = row.values.flat();
-                for (let value of values) {
+                for (const value of values) {
                     if (
                         value &&
                         AgentService.userHasRole(value.roleIds, currentUser) &&

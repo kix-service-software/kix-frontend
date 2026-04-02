@@ -7,13 +7,13 @@
  * --
  */
 
-import { ISocketResponse } from './ISocketResponse';
+
 import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
 
-export class LoadContextConfigurationResponse<T extends ContextConfiguration> implements ISocketResponse {
+export class LoadContextConfigurationResponse<T extends ContextConfiguration> {
 
     public constructor(
-        public requestId: string,
+
         public contextConfiguration: T
     ) { }
 }

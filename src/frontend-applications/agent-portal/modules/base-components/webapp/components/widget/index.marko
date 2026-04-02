@@ -32,13 +32,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             class=[
                 "header-left",
                 {
-                    "gap-1": !input.removeGap,
+                    "gap-2": !input.removeGap,
                 },
             ]
             style=[
                 input.customGridTemplateColumnsStyle
                     ? input.customGridTemplateColumnsStyle
-                    : "grid-template-columns: minmax(auto, max-content);",
+                    : "",
             ]>
             <div class=[
                 "widget-title",
@@ -49,12 +49,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <if(input.icon)>
                     <icon
                         icon=input.icon
-                        on-click("minimizeWidget", true)
+                        on-click("minimizeWidgetForce")
                         on-mousedown("headerMousedown", true)/>
                 </if>
                 <h2
-                    title=state.title
-                    on-click("minimizeWidget", true)
+                    on-click("minimizeWidgetForce")
                     on-mousedown("headerMousedown", true)
                     class="m-0">
                     <translation-string pattern=state.title/>
@@ -64,12 +63,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <${input.headercontent}/>
             </if>
             <if(input.headerfilter)>
-                <div class="widget-filter">
+                <div class="widget-filter" on-click("doNotChangeMinimize")>
                     <${input.headerfilter}/>
                 </div>
             </if>
         </span>
-        <span on-click("minimizeWidget", true) class="header-right">
+        <span class="header-right">
             <action-list
                 contextInstanceId=input.contextInstanceId
                 list=state.actions
@@ -79,43 +78,37 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if(state.minimizable)>
                 <span class="minimize-icon-wrapper">
                     <if(state.minimized)>
-                        <span
-                            on-click("minimizeWidget", true)
-                            class="kix-icon-sort-down as-button"/>
+                        <button
+                            class="kix-icon-sort-down as-button"
+                            title=state.translations["Translatable#Expand widget"]
+                            aria-label=state.translations["Translatable#Expand widget"]
+                            on-click("minimizeWidgetForce")>
+                        </button>
                     </if>
                     <else>
-                        <span
-                            on-click("minimizeWidget", true)
-                            class="kix-icon-triangle-up as-button">
+                        <button
+                            class="kix-icon-triangle-up as-button"
+                            title=state.translations["Translatable#Collapse widget"]
+                            aria-label=state.translations["Translatable#Collapse widget"]
+                            on-click("minimizeWidgetForce")>
                             <span class="path1"/>
                             <span class="path2"/>
-                        </span>
+                        </button>
                     </else>
                 </span>
             </if>
             <if(state.closable)>
                 <span class="close-icon-wrapper">
-                    <span
-                        on-click("closeClicked")
-                        class="kix-icon-close as-button"/>
+                    <button
+                        class="kix-icon-close as-button"
+                        title=state.translations["Translatable#Close widget"]
+                        aria-label=state.translations["Translatable#Close widget"]
+                        on-click("closeClicked")>
+                    </button>
                 </span>
             </if>
         </span>
     </div>
-    <!-- TODO: maybe not needed anymore -->
-    <!-- <if(component.isLaneWidget() && !state.minimized)>
-        <if(Array.isArray(input.contentActions) && input.contentActions.length)>
-            <ul.lane-content-actions key=("content-actions" + Math.random())>
-                <if(Array.isArray(input.contentActions))>
-                    <for|action| of=input.contentActions>
-                        <li key=action.id>
-                            <action action=action displayText=false/>
-                        </li>
-                    </for>
-                </if>
-            </ul>
-        </if>
-    </if> -->
     <if(!state.minimized)>
         <div key="widget-content" class="widget-content">
             <if(

@@ -9,8 +9,7 @@
 
 import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
 import { AdditionalContextInformation } from '../modules/base-components/webapp/core/AdditionalContextInformation';
-import { ApplicationEvent } from '../modules/base-components/webapp/core/ApplicationEvent';
-import { AuthenticationSocketClient } from '../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../api-client/session/Session';
 import { ClientStorageService } from '../modules/base-components/webapp/core/ClientStorageService';
 import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
 import { ContextService } from '../modules/base-components/webapp/core/ContextService';
@@ -19,10 +18,7 @@ import { FilterUtil } from '../modules/base-components/webapp/core/FilterUtil';
 import { IContextListener } from '../modules/base-components/webapp/core/IContextListener';
 import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
-import { PlaceholderService } from '../modules/base-components/webapp/core/PlaceholderService';
 import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
-import { SearchOperator } from '../modules/search/model/SearchOperator';
-import { SearchProperty } from '../modules/search/model/SearchProperty';
 import { TranslationService } from '../modules/translation/webapp/core/TranslationService';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
 import { ConfiguredWidget } from './configuration/ConfiguredWidget';
@@ -43,6 +39,7 @@ import { KIXObjectType } from './kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
 import { WidgetService } from '../modules/base-components/webapp/core/WidgetService';
+import { LoadingOptionsUtil } from './LoadingOptionsUtil';
 
 export abstract class Context {
 
@@ -118,7 +115,7 @@ export abstract class Context {
             this.storageManager.setContext(this);
         }
 
-        this.contextId = descriptor.contextId;
+        this.contextId = descriptor?.contextId;
     }
 
     private reloadRelevantObjectLists(widgets: ConfiguredWidget[]): void {
@@ -486,7 +483,7 @@ export abstract class Context {
         for (const widget of widgets) {
             let allowedPermissions = true;
             if (widget.permissions?.length) {
-                allowedPermissions = await AuthenticationSocketClient.getInstance().checkPermissions(
+                allowedPermissions = await SessionAPIClient.checkPermissions(
                     widget.permissions
                 );
             }
@@ -637,7 +634,7 @@ export abstract class Context {
         }
 
         if (configuration?.permissions?.length) {
-            const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(configuration.permissions);
+            const allowed = await SessionAPIClient.checkPermissions(configuration.permissions);
             if (!allowed) {
                 return null;
             }
@@ -885,51 +882,8 @@ export abstract class Context {
     public async prepareLoadingOptions(
         loadingOptions: KIXObjectLoadingOptions, searchValue?: string
     ): Promise<KIXObjectLoadingOptions> {
-
-        let preparedLoadingOptions = new KIXObjectLoadingOptions(
-            [],
-            loadingOptions.sortOrder,
-            loadingOptions.limit,
-            loadingOptions.includes,
-            loadingOptions.expands,
-            [],
-            loadingOptions.cacheType,
-            loadingOptions.searchLimit
-        );
-
-        const contextObject = await this.getObject();
-
-        if (Array.isArray(loadingOptions.filter)) {
-            for (const criterion of loadingOptions.filter) {
-                if (typeof criterion.value === 'string') {
-                    const preparedCriterion = new FilterCriteria(
-                        criterion.property, criterion.operator, criterion.type, criterion.filterType, criterion.value
-                    );
-
-                    preparedCriterion.value = await PlaceholderService.getInstance().replacePlaceholders(
-                        criterion.value, contextObject
-                    );
-                    preparedCriterion.value = preparedCriterion.value.replace(SearchProperty.SEARCH_VALUE, searchValue);
-                    if (preparedCriterion.operator === SearchOperator.LIKE) {
-                        preparedCriterion.value = `*${preparedCriterion.value}*`;
-                    }
-                    preparedLoadingOptions.filter.push(preparedCriterion);
-                } else {
-                    preparedLoadingOptions.filter.push(criterion);
-                }
-            }
-        }
-
-        if (Array.isArray(loadingOptions.query)) {
-            for (const q of loadingOptions.query) {
-                const newQuery: [string, string] = [q[0], ''];
-                newQuery[1] = await PlaceholderService.getInstance().replacePlaceholders(q[1], contextObject);
-                newQuery[1] = newQuery[1].replace(SearchProperty.SEARCH_VALUE, searchValue);
-                preparedLoadingOptions.query.push(newQuery);
-            }
-        }
-
-        return preparedLoadingOptions;
+        const object = await this.getObject();
+        return LoadingOptionsUtil.prepareLoadingOptions(object, loadingOptions, searchValue);
     }
 
     public async getPageSize(type: KIXObjectType | string): Promise<number> {

@@ -18,9 +18,9 @@ import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
 import { SetupStep } from '../../../setup-assistant/webapp/core/SetupStep';
-import { AdministrationSocketClient } from './AdministrationSocketClient';
-import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
+import { AdminAPIClient } from '../../../../api-client/admin/Admin';
 
 export class UIModule implements IUIModule {
 
@@ -77,14 +77,14 @@ export class UIModule implements IUIModule {
             AdminContext.CONTEXT_ID, this.contextObjectTypes, ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'admin', ['admin'], AdminContext
         );
-        const adminModules = await AdministrationSocketClient.getInstance().loadAdminCategories().catch(() => []);
+        const adminModules = await AdminAPIClient.loadAdminCategories().catch(() => []);
         if (adminModules.length) {
             ContextService.getInstance().registerContext(contextDescriptor);
         }
     }
 
     private async checkAdminModuleAllowed(): Promise<boolean> {
-        const currentUser = await AgentSocketClient.getInstance().getCurrentUser();
+        const currentUser = await SessionAPIClient.getCurrentUser();
         let allowed = currentUser.UserID === 1;
         if (!allowed && Array.isArray(currentUser.RoleIDs)) {
             const agentPortalConfig = await SysConfigService.getInstance().getPortalConfiguration()

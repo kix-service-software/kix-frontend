@@ -7,10 +7,10 @@
  * --
  */
 
+import { SessionAPIClient } from '../../../../../../api-client/session/Session';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
-import { AgentSocketClient } from '../../../../../user/webapp/core/AgentSocketClient';
 
 export class QueueFormValue extends SelectObjectFormValue<number> {
 
@@ -38,7 +38,7 @@ export class QueueFormValue extends SelectObjectFormValue<number> {
     }
 
     public async loadSelectableValues(): Promise<void> {
-        const user = await AgentSocketClient.getInstance().getCurrentUser();
+        const user = await SessionAPIClient.getCurrentUser();
 
         this.loadingOptions = new KIXObjectLoadingOptions();
         const requiredPermission = {

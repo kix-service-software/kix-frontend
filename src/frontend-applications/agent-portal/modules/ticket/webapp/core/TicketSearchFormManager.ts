@@ -30,6 +30,13 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
 import { SearchOperatorUtil } from '../../../search/webapp/core/SearchOperatorUtil';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { UserProperty } from '../../../user/model/UserProperty';
+import { OrganisationProperty } from '../../../customer/model/OrganisationProperty';
+import { OrganisationService } from '../../../customer/webapp/core/OrganisationService';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -39,6 +46,8 @@ export class TicketSearchFormManager extends SearchFormManager {
     public handleViewableStateType: boolean = true;
 
     public queuePermissionCheck: boolean = true;
+
+    public useOwnSearch: boolean = true;
 
     public constructor(
         public ignorePropertiesFixed: string[] = [],
@@ -241,9 +250,34 @@ export class TicketSearchFormManager extends SearchFormManager {
             TicketProperty.CREATED,
             KIXObjectProperty.CREATE_BY
         ];
-
         if (freeTextProperties.some((p) => p === property)) {
             options.push([ObjectReferenceOptions.FREETEXT, true]);
+        }
+
+        const agentProperties = [
+            TicketProperty.OWNER_ID,
+            TicketProperty.RESPONSIBLE_ID,
+            TicketProperty.CREATED_USER_ID,
+            TicketProperty.WATCHER_USER_ID,
+            TicketProperty.OWNER_OOO_SUBSTITUTE,
+            TicketProperty.RESPONSIBLE_OOO_SUBSTITUTE,
+            TicketProperty.TICKET_OOO_SUBSTITUTE,
+            TicketProperty.HISTORIC_OWNER_ID
+        ];
+        if (agentProperties.some((p) => p === property)) {
+            options.push([
+                ObjectReferenceOptions.LOADINGOPTIONS,
+                new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            UserProperty.IS_AGENT,
+                            SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                            FilterType.AND, 1
+                        )
+                    ],
+                    null, null, [UserProperty.CONTACT], null
+                )
+            ]);
         }
 
         return options;
@@ -264,5 +298,42 @@ export class TicketSearchFormManager extends SearchFormManager {
         }
 
         await super.setValue(newValue, silent);
+    }
+
+    public async searchObjectTree(property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<TreeNode[]> {
+
+        const showInvalid = ContextService.getInstance().getActiveContext()?.getConfiguration()?.provideInvalidValues;
+
+        let tree = [];
+        switch (property) {
+            case TicketProperty.ORGANISATION_ID:
+                if (!loadingOptions && searchValue)
+                    loadingOptions = new KIXObjectLoadingOptions();
+
+                if (loadingOptions) {
+                    loadingOptions.filter.push(
+                        new FilterCriteria(
+                            OrganisationProperty.NAME, SearchOperator.LIKE, FilterDataType.STRING,
+                            FilterType.AND, '*' + searchValue + '*',
+                        )
+                    );
+                    loadingOptions.includes.push(OrganisationProperty.SUB_ORGANISATIONS);
+                    loadingOptions.expands.push(OrganisationProperty.SUB_ORGANISATIONS);
+                }
+                const organisations = await KIXObjectService.loadObjects(
+                    KIXObjectType.ORGANISATION, undefined, loadingOptions
+                );
+                tree = await OrganisationService.getInstance().prepareObjectTree(
+                    organisations, true, true
+                );
+                break;
+            default:
+                tree = await KIXObjectService.searchObjectTree(
+                    this.objectType, property, searchValue, loadingOptions, undefined, showInvalid
+                );
+        }
+
+        return tree;
     }
 }

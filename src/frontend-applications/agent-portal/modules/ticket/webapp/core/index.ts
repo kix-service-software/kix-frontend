@@ -16,7 +16,6 @@ export { ArticleLabelProvider } from './ArticleLabelProvider';
 export { TicketHistoryLabelProvider } from './TicketHistoryLabelProvider';
 export { TicketLabelProvider } from './TicketLabelProvider';
 export { TicketService } from './TicketService';
-export { TicketSocketClient } from './TicketSocketClient';
 export { TicketFormService } from './TicketFormService';
 export { TicketSearchDefinition } from './TicketSearchDefinition';
 export { TicketTypeLabelProvider } from './TicketTypeLabelProvider';

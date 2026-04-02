@@ -12,6 +12,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <input
             value=state.filterValue
             placeholder=state.searchPlaceholder + " ..."
+            aria-label=state.searchPlaceholder
             on-keydown("keyDown")
             class="input-style"
         >
@@ -104,7 +105,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 : "Translatable#since"
                         ]
                     )
-                    on-click("selectDateOrder")
+                    on-click("selectDateOrder") // not yet clickable with keyboard
+                    tabindex=0
+                    role="button"
+                    aria-label=(
+                        state.translations[
+                            state.isFilterDateBefore
+                                ? "Translatable#until"
+                                : "Translatable#since"
+                        ]
+                    )
                 />
                 <input
                     type="date"
@@ -112,6 +122,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     on-change("dateChanged")
                     value=state.selectedDate
                     class="input-style date-input"
+                    aria-placeholder="mm/dd/yyyy"
+                    aria-label=state.translations["Translatable#Date Input"]
                 >
             </div>
         </if>
@@ -126,9 +138,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         checked=state.filterMyArticles
                         class="form-check-input"
                         id="flexSwitchCheckDefault"
+                        aria-checked="false"
+                        aria-labelledby="my-articles-switch-label"
                     >
                 </div>
-                <translation-string pattern="Translatable#My Articles"/>
+                <span id="my-articles-switch-label"><translation-string pattern="Translatable#My Articles"/></span>
             </div>
         </if>
     </div>

@@ -8,23 +8,62 @@
  */
 
 import md5 from 'md5';
+import { ReleaseInfo } from '../../../../model/ReleaseInfo';
 
 export class ClientStorageService {
 
-    public static tokenPrefix = '';
+    private static clientRequestId: string;
 
-    public static setBaseRoute(baseRoute: string): void {
-        this.setOption(this.tokenPrefix + 'BASE_ROUTE', baseRoute || '');
+    private static _application: string;
+
+    public static set application(application: string) {
+        this._application = application;
+    }
+
+    public static get application(): string {
+        return this._application;
+    }
+
+    public static setApplicationData(data: any): void {
+        const { baseRoute, mainMenu, releaseInfo, application } = data;
+        this.application = application;
+        this.setOption('BASE_ROUTE', baseRoute || '');
+
+        if (mainMenu) {
+            this.setOrUpdateObjectValue('MainMenu', mainMenu);
+        }
+
+        if (releaseInfo) {
+            this.setOrUpdateObjectValue('ReleaseInfo', releaseInfo);
+        }
+    }
+
+    private static setOrUpdateObjectValue(option: string, obj: any): void {
+        const objString = JSON.stringify(obj);
+        const objOption = ClientStorageService.getOption(option);
+        if (objOption !== objString) {
+            ClientStorageService.setOption(option, objString);
+        }
+    }
+
+    public static getReleaseInfo(): ReleaseInfo {
+        return this.getObjectValue('ReleaseInfo');
+    }
+
+    private static getObjectValue(option: string): any {
+        const objOption = ClientStorageService.getOption(option);
+        let obj;
+        try {
+            obj = JSON.parse(objOption);
+        } catch (e) {
+
+        }
+
+        return obj;
     }
 
     public static getBaseRoute(): string {
-        return this.getOption(this.tokenPrefix + 'BASE_ROUTE') || '';
-    }
-
-    public static setSocketTimeout(timeout: number): void {
-        if (!isNaN(timeout)) {
-            this.setOption('SocketTimeout', timeout.toString());
-        }
+        return this.getOption('BASE_ROUTE') || '';
     }
 
     public static getSocketTimeout(): number {
@@ -81,7 +120,9 @@ export class ClientStorageService {
 
     public static loadState<T>(id: string): T {
         try {
-            const serializedState = window.localStorage.getItem(id);
+            const serializedState = window.localStorage.getItem(
+                id.startsWith(`${this.application}-`) ? id : `${this.application}-${id}`
+            );
             return serializedState ? JSON.parse(serializedState) : undefined;
         } catch (err) {
             return undefined;
@@ -91,7 +132,10 @@ export class ClientStorageService {
     public static saveState<T>(id: string, state: T): void {
         try {
             const serializedState = JSON.stringify(state);
-            window.localStorage.setItem(id, serializedState);
+            window.localStorage.setItem(
+                id.startsWith(`${this.application}-`) ? id : `${this.application}-${id}`,
+                serializedState
+            );
         } catch (error) {
             console.error(error);
         }
@@ -99,19 +143,26 @@ export class ClientStorageService {
 
     public static deleteState(id: string): void {
         if (typeof window !== 'undefined') {
-            window.localStorage.removeItem(id);
+            window.localStorage.removeItem(
+                id.startsWith(`${this.application}-`) ? id : `${this.application}-${id}`
+            );
         }
     }
 
     public static setOption(key: string, value: string): void {
         if (typeof window !== 'undefined') {
-            window.localStorage.setItem(key, value);
+            window.localStorage.setItem(
+                key.startsWith(`${this.application}-`) ? key : `${this.application}-${key}`,
+                value
+            );
         }
     }
 
     public static getOption(key: string): string {
         if (typeof window !== 'undefined') {
-            return window.localStorage.getItem(key);
+            return window.localStorage.getItem(
+                key.startsWith(`${this.application}-`) ? key : `${this.application}-${key}`
+            );
         }
         return null;
     }
@@ -121,22 +172,29 @@ export class ClientStorageService {
         Object.keys(window.localStorage).forEach((key) => {
             if (!startsWith?.length) {
                 keys.push(key);
-            } else if (key.startsWith(startsWith)) {
+            } else if (key.startsWith(`${this.application}-${startsWith}`) || key.startsWith(startsWith)) {
                 keys.push(key);
             }
         });
         return keys;
     }
 
-    private static clientRequestId: string;
+    public static initClientRequestId(): void {
+        if (!this.clientRequestId && (typeof window !== 'undefined')) {
+            const values = [
+                window.navigator.userAgent,
+                window.navigator.platform,
+                window.navigator.language,
+                window.navigator.product,
+                window.navigator.productSub,
+                window.navigator.vendor,
+                window.navigator.appCodeName,
+                window.navigator.appName
+            ];
 
-    public static getClientRequestId(): string {
-        if (typeof window !== 'undefined') {
-            if (!this.clientRequestId) {
-                this.clientRequestId = md5(window.navigator.userAgent + Date.now());
-            }
+            this.clientRequestId = md5(values.join('-'));
+            document.cookie = `${this.application}-clientRequestId=${this.clientRequestId}`;
         }
-        return this.clientRequestId;
     }
 
 }

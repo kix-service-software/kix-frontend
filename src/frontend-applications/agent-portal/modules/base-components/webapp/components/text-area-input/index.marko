@@ -18,6 +18,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             }
             maxlength=state.field.maxLength
             placeholder=state.placeholder
+            aria-labelledby=input.labelId
             readonly=state.field.readonly
             on-blur("focusLost")
             on-change("valueChanged")>${state.currentValue}</textarea>

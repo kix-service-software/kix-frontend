@@ -7,80 +7,115 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<if(state.article)>
-    <div class="message-header-container">
-        <div class="header-title">
-            [#${input.articleCountNumber}] ${state.article.Subject}
-        </div>
-        <div class="header-right">
-            <if(state.article.CustomerVisible)>
+<macro name="header-title">
+    <div class="me-auto fw-bold fs-4">
+        [#${input.articleCountNumber}] ${state.article.Subject}
+    </div>
+</macro>
+
+<macro name="header-right">
+    <div class="header-right d-flex flex-row align-items-center">
+        <if(state.article.CustomerVisible)>
+            <div class="me-3">
                 <icon
                     icon="kix-icon-men"
                     tooltip=(
                         state.translations[
                             "Translatable#Visible in customer portal"
                         ]
-                    )
-                />
-            </if>
-            <if(state.channelIcon)>
-                <span class="channel-icon">
-                    <icon icon=state.channelIcon tooltip=state.channelTooltip/>
-                    <if(state.smimeEncryptedIcon)>
-                        <icon
-                            icon=state.smimeEncryptedIcon
-                            tooltip=state.smimeEncryptedTooltip
-                            class={
-                                "smime-decrypted-icon": true,
-                                "smime-not-decrypted": !state.smimeDecrypted,
-                            }
-                        />
-                    </if>
-                </span>
-            </if>
-            <if(state.article.AttachmentCount > 0)>
-                <div
-                    on-click("attachmentsClicked")
-                    title=(
-                        state.translations[
-                            "Translatable#Download all attachments"
-                        ]
-                    )
-                    class="zip-download"
-                >
-                    <span class="kix-icon-attachement"/>
-                     (${state.article.AttachmentCount})
-                </div>
-            </if>
-            <if(state.createTimeString)>
-                <span title=state.changeTitle>
-                    ${state.createTimeString}${state.changeTitle ? " (" + state.translations["Translatable#edited"] + ")" : ""}
-                </span>
-            </if>
-        </div>
-        <div class="header-from">
-            <span title=state.from>
-                ${state.from}
+                    )/>
+            </div>
+        </if>
+        <if(state.channelIcon)>
+            <span class="channel-icon me-3">
+                <icon icon=state.channelIcon tooltip=state.channelTooltip/>
+                <if(state.smimeEncryptedIcon)>
+                    <icon
+                        icon=state.smimeEncryptedIcon
+                        tooltip=state.smimeEncryptedTooltip
+                        class={
+                            "smime-decrypted-icon": true,
+                            "smime-not-decrypted": !state.smimeDecrypted,
+                        }/>
+                </if>
             </span>
-            <if(input.fromDisplayName)>
-                <span
-                    title=`${state.translations["Translatable#Created by"]} ${input.fromDisplayName}`
-                    class="fw-bold"
-                >
-                    | ${input.fromDisplayName}
-                </span>
+        </if>
+        <if(state.article.AttachmentCount > 0)>
+            <div
+                on-click("attachmentsClicked")
+                title=(
+                    state.translations["Translatable#Download all attachments"]
+                )
+                class="zip-download me-3">
+                <span class="kix-icon-attachement"/>
+                ${" "}(${state.article.AttachmentCount})
+            </div>
+        </if>
+        <if(state.createTimeString)>
+            <span title=state.changeTitle>
+                ${state.createTimeString}${state.changeTitle
+                    ? " (" + state.translations["Translatable#edited"] + ")"
+                    : ""}
+            </span>
+        </if>
+        <div style="width: 3.5rem">
+            <if(Array.isArray(state.actions))>
+                <action-list
+                    contextInstanceId=input.contextInstanceId
+                    list=state.actions
+                    observeParent=false
+                    initialOpenDropdown
+                    on-actionListClicked("actionListClicked")/>
             </if>
+            <else>
+                <div class="action d-flex justify-content-end overflow-hidden">
+                    <button
+                        type="button"
+                        class="btn d-flex align-items-center"
+                        aria-label=(state.translations["Translatable#Action list"])
+                        on-click("loadActions")>
+                        <icon icon="kix-icon-dots" style="font-size: 1.25rem"/>
+                    </button>
+                </div>
+            </else>
         </div>
-        <div
-            title=(state.translations["Translatable#Accounted Time"])
-            class="accounted-time"
-        >
-            <if(state.timeUnits)>
-                <translation-string
-                    pattern="Translatable#Accounted Time: {0}"
-                    placeholders=[state.timeUnits]
-                />
-            </if>
-        </div>
+    </div>
+</macro>
+
+<macro name="header-from">
+    <div class="me-auto header-from">
+        <span title=state.from>
+            ${state.from}
+        </span>
+        <if(input.fromDisplayName)>
+            <span
+                title=`${state.translations["Translatable#Created by"]} ${input.fromDisplayName}`
+                class="fw-bold">
+                | ${input.fromDisplayName}
+            </span>
+        </if>
+    </div>
+</macro>
+
+<macro name="header-accounted-time">
+    <div
+        title=(state.translations["Translatable#Accounted Time"])
+        style="margin-right: 3.5rem">
+        <if(state.timeUnits)>
+            <translation-string
+                pattern="Translatable#Accounted Time: {0}"
+                placeholders=[state.timeUnits]/>
+        </if>
+    </div>
+</macro>
+
+<if(state.article)>
+    <div class="d-flex">
+        <header-title/>
+        <header-right/>
+    </div>
+    <div class="d-flex">
+        <header-from/>
+        <header-accounted-time/>
     </div>
 </if>

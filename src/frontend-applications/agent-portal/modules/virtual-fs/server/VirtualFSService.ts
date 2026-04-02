@@ -61,7 +61,7 @@ export class VirtualFSAPIService extends KIXObjectAPIService {
             );
 
             if (objectLoadingOptions?.asDownload) {
-                let attachments = objectResponse.objects || [];
+                const attachments = objectResponse.objects || [];
                 const user = await UserService.getInstance().getUserByToken(token);
                 for (const a of attachments) {
                     FileService.prepareFileForDownload(user?.UserID, a);

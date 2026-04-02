@@ -164,7 +164,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormConfiguration(forwardFormId, 'Translatable#Forward',
                 undefined, KIXObjectType.TICKET,
-                undefined, FormContext.NEW, null,
+                undefined, FormContext.EDIT, null,
                 [
                     new FormPageConfiguration('article-forward-page', 'Translatable#Forward',
                         undefined, undefined, undefined,

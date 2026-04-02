@@ -29,7 +29,7 @@ export class UIModule implements IUIModule {
     }
 
     public async registerExtensions(): Promise<void> {
-        const dialogs = await ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
+        const dialogs = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
         if (dialogs && dialogs.length) {
             ActionFactory.getInstance().registerAction('save-search-action', SaveSearchAction);
             ActionFactory.getInstance().registerAction('delete-search-action', DeleteSearchAction);

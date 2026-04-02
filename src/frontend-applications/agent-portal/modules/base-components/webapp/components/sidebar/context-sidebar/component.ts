@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2025 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,7 +29,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.prepareSidebars();
 
         this.state.translations = await TranslationService.createTranslationObject(
-            ['Translatable#Close Sidebars', 'Translatable#Open Sidebars']
+            ['Translatable#Close Sidebar', 'Translatable#Open Sidebar']
         );
 
         window.addEventListener('resize', this.resizeHandling.bind(this), false);

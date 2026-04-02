@@ -32,7 +32,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
-        const config = ConfigurationService.getInstance().getServerConfiguration();
+
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 RoleProperty.NAME, SearchOperator.IN, FilterDataType.STRING, FilterType.AND,
@@ -40,7 +40,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             )
         ]);
         const roles = await RoleService.getInstance().loadObjects<Role>(
-            config.BACKEND_API_TOKEN, 'AgentPortalConfigExtension', KIXObjectType.ROLE, null, loadingOptions, null
+            ConfigurationService.getBackendAPIToken(), 'AgentPortalConfigExtension', KIXObjectType.ROLE, null, loadingOptions, null
         ).catch((): ObjectResponse<Role> => new ObjectResponse([]));
 
         const agentPortalConfig = new AgentPortalConfiguration();

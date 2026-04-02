@@ -164,9 +164,8 @@ export class RedisCache implements ICache {
     private connect(): void {
         this.redisClient = null;
 
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        const port = config.REDIS_CACHE_PORT;
-        const host = config.REDIS_CACHE_HOST;
+        const port = ConfigurationService.getEnvNumber('REDIS_CACHE_PORT');
+        const host = ConfigurationService.getEnvString('REDIS_CACHE_HOST');
 
         const redis = require('redis');
 
@@ -206,9 +205,8 @@ export class RedisCache implements ICache {
     }
 
     public subscribe(channel: string, cb: (events: BackendNotification[]) => void): void {
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        const port = config.REDIS_CACHE_PORT;
-        const host = config.REDIS_CACHE_HOST;
+        const port = ConfigurationService.getEnvNumber('REDIS_CACHE_PORT');
+        const host = ConfigurationService.getEnvString('REDIS_CACHE_HOST');
 
         const redis = require('redis');
         const subscriber = redis.createClient({

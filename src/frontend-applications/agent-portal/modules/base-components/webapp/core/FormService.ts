@@ -7,7 +7,6 @@
  * --
  */
 
-import { KIXModulesSocketClient } from './KIXModulesSocketClient';
 import { FormInstance } from './FormInstance';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 import { FormContext } from '../../../../model/configuration/FormContext';
@@ -23,6 +22,7 @@ import { Error } from '../../../../../../server/model/Error';
 import { Context } from '../../../../model/Context';
 import { IdService } from '../../../../model/IdService';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { FormAPIClient } from '../../../../api-client/config/Form';
 
 export class FormService {
 
@@ -59,7 +59,7 @@ export class FormService {
     }
 
     public async loadFormConfigurations(): Promise<void> {
-        const formConfigurations = await KIXModulesSocketClient.getInstance().loadFormConfigurationsByContext();
+        const formConfigurations = await FormAPIClient.loadFormConfigurationsByContext();
         this.formIDsWithContext = formConfigurations;
     }
 
@@ -102,7 +102,7 @@ export class FormService {
     public async getForm(formId: string): Promise<FormConfiguration> {
         let form = this.forms.find((f) => f.id === formId);
         if (!form) {
-            form = await KIXModulesSocketClient.getInstance().loadFormConfiguration(formId);
+            form = await FormAPIClient.loadFormConfiguration(formId);
         }
         return { ...form };
     }

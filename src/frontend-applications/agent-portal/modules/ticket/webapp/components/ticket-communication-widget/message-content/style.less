@@ -28,10 +28,10 @@
 
 .message-content-container {
    min-height: 15rem;
-   display: grid;
-   grid-template-columns: max-content auto max-content;
    color: @secondary-0;
    width: 100%;
+   display: grid;
+   grid-template-columns: max-content auto max-content;
 
    >.loading-spinner {
       grid-column: 2;
@@ -75,8 +75,10 @@
 
    .left-avatar,
    .right-avatar {
+      @avatar_min_width: 7rem;
       display: grid;
-      width: 8rem;
+      min-width: @avatar_min_width;
+      width: @avatar_min_width + 1;
       gap: @margin-small;
       overflow: hidden;
       height: 100%;
@@ -134,10 +136,6 @@
    }
 
    .message {
-      border-radius: @message-border-radius;
-      padding: @message-padding;
-
-      .message-shadow();
 
       .header {
          margin-bottom: 1rem;
@@ -146,132 +144,6 @@
 
       .header.list-view {
          margin-bottom: 0;
-      }
-
-      .receiver-list {
-         background-color: fade(#777, 10%);
-         padding: @margin-small;
-         margin: 0 -(@margin-small);
-         border-radius: @message-border-radius;
-
-         .receiver {
-            display: grid;
-            grid-template-columns: max-content auto;
-
-            .title {
-               font-weight: bold;
-               margin-right: @margin-small;
-            }
-         }
-      }
-
-      .message-body-short {
-         border: 1px solid @secondary-5;
-
-         >.short-message {
-            background-color: @secondary-6;
-            opacity: 0.5;
-            padding: 0.25rem;
-            font-style: italic;
-         }
-      }
-
-      .message-body-short,
-      .message-body {
-         margin-top: 1rem;
-         border-radius: @message-border-radius;
-
-         >.show-message {
-            background-color: @secondary-6;
-            opacity: 0.5;
-            font-weight: bold;
-            justify-self: center;
-            padding: 0.25rem;
-            text-align: center;
-
-            &.hide-top {
-               border-top-left-radius: @message-border-radius;
-               border-top-right-radius: @message-border-radius;
-            }
-
-            &:not(.hide-top) {
-               border-bottom-left-radius: @message-border-radius;
-               border-bottom-right-radius: @message-border-radius;
-            }
-
-            &:hover {
-               cursor: pointer;
-               color: @primary-2;
-               border-color: @primary-2;
-            }
-         }
-      }
-
-      .message-footer {
-
-         .attachments-control {
-            display: grid;
-
-            .attachments-list-container {
-               margin-top: 1rem;
-               background-color: fade(#777, 8%);
-               border-radius: @border-radius;
-               display: grid;
-               grid-template-columns: auto min-content;
-
-               .attachments-list {
-                  padding: 0.5rem;
-
-                  &:not(.one-column-layout) {
-                     display: grid;
-                     column-gap: 0.75rem;
-                     grid-template-columns: repeat(auto-fit, minmax(15rem, 0fr));
-                  }
-
-                  &.one-column-layout div.attachment {
-                     max-width: fit-content;
-                  }
-               }
-
-               .attachment-list-layout-switch {
-                  justify-self: end;
-                  font-size: 1.125rem;
-                  margin-top: 0.35rem;
-                  margin-right: 0.35rem;
-
-                  span {
-                     cursor: pointer;
-                  }
-               }
-            }
-
-            .attachmentsToggle {
-               margin-top: 1rem;
-
-               &:hover {
-                  cursor: pointer;
-               }
-            }
-         }
-
-         .actions-list {
-            width: 100%;
-            margin-top: .5rem;
-            justify-self: end;
-            position: relative;
-
-            background-color: inherit;
-
-            .is-expansion {
-               background-color: inherit;
-            }
-
-            img {
-               height: 1.5rem;
-               width: 1.5rem;
-               margin-top: -0.2rem;
-            }
-         }
       }
    }
 }

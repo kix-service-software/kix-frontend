@@ -202,6 +202,10 @@ describe('ExtendedLabelProvider', () => {
 
 class ExtendedTestLabelProvider extends ExtendedLabelProvider {
 
+    public isLabelProviderForType(objectType: string): boolean {
+        return objectType === KIXObjectType.TICKET;
+    }
+
     public async getDFDisplayValues(fieldValue: DynamicFieldValue): Promise<[string[], string, string[]]> {
         const values = ['value1', 'value2', 'value3', 'value4'];
         return [values, values.join(', '), values];

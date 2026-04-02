@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,7 +14,6 @@ import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions'
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 import { TicketProperty } from '../model/TicketProperty';
 import { LoggingService } from '../../../../../server/services/LoggingService';
-import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { ArticleProperty } from '../model/ArticleProperty';
 import { UserService } from '../../user/server/UserService';
 import { Attachment } from '../../../model/kix/Attachment';
@@ -38,24 +37,16 @@ import { RequestObject } from '../../../../../server/model/rest/RequestObject';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { CreateTicketWatcherOptions } from '../model/CreateTicketWatcherOptions';
 import { KIXObject } from '../../../model/kix/KIXObject';
-import { TicketTypeAPIService } from './TicketTypeService';
-import { TicketStateAPIService } from './TicketStateService';
-import { TicketPriorityAPIService } from './TicketPriorityService';
-import { ChannelAPIService } from './ChannelService';
-import { TextModuleAPIService } from '../../textmodule/server/TextModuleService';
-import { QueueAPIService } from './QueueService';
-import { DynamicFieldAPIService } from '../../dynamic-fields/server/DynamicFieldService';
 import { SysConfigService } from '../../sysconfig/server/SysConfigService';
 import { SysConfigKey } from '../../sysconfig/model/SysConfigKey';
-import { UIComponentPermission } from '../../../model/UIComponentPermission';
-import { CRUD } from '../../../../../server/model/rest/CRUD';
-import { PermissionService } from '../../../server/services/PermissionService';
 import { SysConfigOption } from '../../sysconfig/model/SysConfigOption';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
-import { ObjectSearchAPIService } from '../../object-search/server/ObjectSearchAPIService';
-import { ObjectSearchLoadingOptions } from '../../object-search/model/ObjectSearchLoadingOptions';
 import { Counter } from '../../user/model/Counter';
 import { FileService } from '../../file/server/FileService';
+import { ArticleViewUtil } from './ArticleViewUtil';
+import { HTMLUtil } from '../../../model/HTMLUtil';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -90,153 +81,6 @@ export class TicketAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.TICKET_HISTORY
             || kixObjectType === KIXObjectType.USER_TICKETS
             || kixObjectType === KIXObjectType.USER_COUNTER;
-    }
-
-    public async preloadObjects(token: string): Promise<void> {
-        const promises = [];
-
-        // check permissions for preloading
-        const permissionPromises = [];
-        const allowedList: Map<KIXObjectType, boolean> = new Map();
-        [
-            { permissions: [new UIComponentPermission('/system/ticket/types', [CRUD.READ])], type: KIXObjectType.TICKET_TYPE },
-            { permissions: [new UIComponentPermission('/system/ticket/states', [CRUD.READ])], type: KIXObjectType.TICKET_STATE },
-            { permissions: [new UIComponentPermission('/system/ticket/states/types', [CRUD.READ])], type: KIXObjectType.TICKET_STATE_TYPE },
-            { permissions: [new UIComponentPermission('/system/ticket/priorities', [CRUD.READ])], type: KIXObjectType.TICKET_PRIORITY },
-            { permissions: [new UIComponentPermission('/system/communication/channels', [CRUD.READ])], type: KIXObjectType.CHANNEL },
-            { permissions: [new UIComponentPermission('/system/textmodules', [CRUD.READ])], type: KIXObjectType.TEXT_MODULE },
-            { permissions: [new UIComponentPermission('/system/ticket/queues', [CRUD.READ])], type: KIXObjectType.QUEUE },
-            { permissions: [new UIComponentPermission('/system/dynamicfields', [CRUD.READ])], type: KIXObjectType.DYNAMIC_FIELD },
-            { permissions: [new UIComponentPermission('/system/config', [CRUD.READ])], type: KIXObjectType.SYS_CONFIG_OPTION },
-            { permissions: [new UIComponentPermission('/objectsearch/ticket', [CRUD.READ])], type: KIXObjectType.OBJECT_SEARCH }
-        ].forEach((cp) => {
-            permissionPromises.push(
-                new Promise(async (resolve) => {
-                    const allowed = await PermissionService.getInstance().checkPermissions(
-                        token, cp.permissions, 'TicketServicePreload'
-                    ).catch(() => false);
-                    if (allowed) {
-                        allowedList.set(cp.type, true);
-                    }
-                    resolve(true);
-                })
-            );
-        });
-
-        await Promise.all(permissionPromises).catch(() => {
-            // ignore fails, just go on
-        });
-
-        if (allowedList.has(KIXObjectType.TICKET_TYPE)) {
-            promises.push(
-                TicketTypeAPIService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.TICKET_TYPE, null, null, null
-                )
-            );
-        }
-        if (allowedList.has(KIXObjectType.TICKET_STATE)) {
-            promises.push(
-                TicketStateAPIService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.TICKET_STATE, null, null, null
-                )
-            );
-        }
-        if (allowedList.has(KIXObjectType.TICKET_STATE_TYPE)) {
-            promises.push(
-                TicketStateAPIService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.TICKET_STATE_TYPE, null, null, null
-                )
-            );
-        }
-        if (allowedList.has(KIXObjectType.TICKET_PRIORITY)) {
-            promises.push(
-                TicketPriorityAPIService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.TICKET_PRIORITY, null, null, null
-                )
-            );
-        }
-        if (allowedList.has(KIXObjectType.CHANNEL)) {
-            promises.push(
-                ChannelAPIService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.CHANNEL, null, null, null
-                )
-            );
-        }
-        if (allowedList.has(KIXObjectType.TEXT_MODULE)) {
-            promises.push(
-                TextModuleAPIService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.TEXT_MODULE, null, null, null
-                )
-            );
-        }
-
-        if (allowedList.has(KIXObjectType.QUEUE)) {
-            const loadingOptions = new KIXObjectLoadingOptions();
-            loadingOptions.includes = ['TicketStats'];
-            loadingOptions.query = [['TicketStats.StateType', 'Open']];
-            loadingOptions.cacheType = 'QUEUE_HIERARCHY';
-            promises.push(
-                QueueAPIService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.QUEUE, null, loadingOptions, null
-                )
-            );
-        }
-
-        if (allowedList.has(KIXObjectType.DYNAMIC_FIELD)) {
-            if (allowedList) {
-                promises.push(DynamicFieldAPIService.getInstance().preloadObjects(token));
-            }
-        }
-
-        if (allowedList.has(KIXObjectType.SYS_CONFIG_OPTION)) {
-            promises.push(
-                SysConfigService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.SYS_CONFIG_OPTION,
-                    [SysConfigKey.TICKET_SEARCH_INDEX_STOPWORDS + '###en'], null, null
-                )
-            );
-            promises.push(
-                SysConfigService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.SYS_CONFIG_OPTION,
-                    [SysConfigKey.TICKET_SEARCH_INDEX_STOPWORDS + '###de'], null, null
-                )
-            );
-            promises.push(
-                SysConfigService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.SYS_CONFIG_OPTION,
-                    [SysConfigKey.CONFIG_ITEM_HOOK], null, null
-                )
-            );
-            promises.push(
-                SysConfigService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.SYS_CONFIG_OPTION,
-                    [SysConfigKey.TICKET_HOOK], null, null
-                )
-            );
-            promises.push(
-                SysConfigService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.SYS_CONFIG_OPTION,
-                    [SysConfigKey.TICKET_HOOK_DIVIDER], null, null
-                )
-            );
-        }
-
-        if (allowedList.has(KIXObjectType.OBJECT_SEARCH)) {
-            promises.push(
-                ObjectSearchAPIService.getInstance().loadObjects(
-                    token, 'TicketServicePreload', KIXObjectType.OBJECT_SEARCH, null, null,
-                    new ObjectSearchLoadingOptions(KIXObjectType.TICKET)
-                )
-            );
-        }
-
-        for (const extendedService of this.extendedServices) {
-            promises.push(extendedService.preloadObjects(token));
-        }
-
-        await Promise.all(promises).catch(() => {
-            // ignore fails, just go on
-        });
     }
 
     public async loadObjects<T>(
@@ -299,7 +143,9 @@ export class TicketAPIService extends KIXObjectAPIService {
             );
 
             if (Array.isArray(objectIds) && objectIds.length) {
-                objectResponse.objects = objectResponse?.objects.filter((o) => objectIds.some((oid) => oid === o.ID));
+                objectResponse.objects = objectResponse?.objects.filter(
+                    (o) => objectIds.some((oid) => Number(oid) === o.ID)
+                );
             }
         } else if (objectType === KIXObjectType.TICKET_LOCK) {
             const uri = this.buildUri('system', 'ticket', 'locks');
@@ -400,7 +246,10 @@ export class TicketAPIService extends KIXObjectAPIService {
             let from;
             let to = this.getParameterValue(parameter, ArticleProperty.TO);
             if (!to && contactId && senderType !== 3) {
-                if (!isNaN(contactId)) {
+                if (channelId === 1) {
+                    // do nothing - note article will be created with To = Team
+                }
+                else if (!isNaN(contactId)) {
                     const objectResponse = await super.load<Contact>(
                         token, KIXObjectType.CONTACT, 'contacts', null, [contactId], 'Contact',
                         'TicketService', Contact
@@ -494,13 +343,16 @@ export class TicketAPIService extends KIXObjectAPIService {
             }
 
             newAttachments.forEach(
-                (a) => result.push(
-                    new RequestObject([
-                        ['Content', a.Content],
-                        ['ContentType', a.ContentType],
-                        ['Filename', a.Filename]
-                    ])
-                )
+                (a) => {
+                    const isReference = (typeof a.Content === 'undefined' || a.Content === null) && a.ContentToken;
+                    result.push(
+                        new RequestObject([
+                            isReference ? ['ContentToken', a.ContentToken] : ['Content', a.Content],
+                            ['ContentType', a.ContentType],
+                            ['Filename', a.Filename]
+                        ])
+                    );
+                }
             );
         }
         return result;
@@ -548,7 +400,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             delete ticket.Articles;
         }
 
-        if (!Array.isArray(ticket.DynamicFields) || !ticket.DynamicFields.length) {
+        if (!Array.isArray(ticket.DynamicFields) || !ticket.DynamicFields?.length) {
             delete ticket.DynamicFields;
         }
 
@@ -597,13 +449,15 @@ export class TicketAPIService extends KIXObjectAPIService {
                 Contact
             );
             const contacts = objectResponse?.objects;
-            if (contacts && contacts.length) {
+            if (Number(article.ChannelID) === 1) {
+                // do nothing - note article will be created with To = Team
+            }
+            else if (contacts?.length) {
                 article.To = contacts[0].Email;
                 if (!article.To.match(/.+\s<.+>/)) {
                     article.To = `"${contacts[0].Firstname} ${contacts[0].Lastname}" <${article.To}>`;
                 }
             }
-
             // new/unkown contact
             else {
                 article.To = ticket.ContactID.toString();
@@ -622,45 +476,35 @@ export class TicketAPIService extends KIXObjectAPIService {
             }
         }
 
+        article.Body = await this.prepareArticleBody(token, article.Body);
+
         article.ContentType = 'text/html; charset=utf-8';
         article.MimeType = 'text/html';
         article.Charset = 'utf-8';
-
-        if (!article.Body?.includes('tiptap-table')) {
-            article.Body = Article.MAIL_STYLE + article.Body;
-        }
 
         await this.prepareArticleAttachments(article, token);
     }
 
     private async prepareArticleAttachments(article: Article, token: string): Promise<void> {
         if (Array.isArray(article.Attachments)) {
-            const user = await UserService.getInstance().getUserByToken(token);
             for (const attachment of article.Attachments) {
-                if (!attachment.Content) {
-                    let content;
-                    // probably an attachment from a referenced article
-                    if (attachment.Disposition === 'attachment') {
-                        content = FileService.getFileContent(attachment.downloadId, true);
-                        FileService.removeDownload(attachment.downloadId, user?.UserID);
-                    }
-                    // a new attachment
-                    else {
-                        const crypto = require('crypto');
-                        const md5 = crypto.createHash('md5').update(token).digest('hex');
-                        const filename = `${md5}-${attachment.Filename}`;
-                        content = FileService.getFileContent(filename, false);
-                        FileService.removeFile(filename, false);
-                    }
-                    attachment.Content = content;
+                if (
+                    attachment?.Disposition !== 'attachment'
+                    && !attachment.Content
+                    && attachment.downloadId
+                ) {
+                    const crypto = require('crypto');
+                    const md5 = crypto.createHash('md5').update(token).digest('hex');
+                    attachment.downloadId = Buffer.from(attachment.downloadId, 'latin1').toString('utf8');
+                    const filename = `${md5}-${attachment.downloadId}`;
+                    attachment.Content = FileService.getFileContent(filename, false);
                 }
             }
         }
     }
 
     public async deleteObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, objectId: number,
-        deleteOptions: KIXObjectSpecificDeleteOptions
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectId: number
     ): Promise<Error[]> {
         if (objectType === KIXObjectType.WATCHER) {
             return this.removeWatcher(token, clientRequestId, objectId);
@@ -703,22 +547,19 @@ export class TicketAPIService extends KIXObjectAPIService {
     }
 
     public async loadArticleZipAttachment(
-        token: string, ticketId: number, articleId: number, relevantOrganisationId?: number
+        token: string, ticketId: number, articleId: number, relevantOrganisationId?: number, clientRequestId: string = 'TicketService'
     ): Promise<Attachment> {
         const uri = this.buildUri(
             this.RESOURCE_URI, ticketId, 'articles', articleId, 'attachments', 'zip'
         );
 
-        const response = await this.getObjectByUri<any>(token, uri, 'TicketService', {
+        const response = await this.getObjectByUri<any>(token, uri, clientRequestId, {
             include: 'Content',
             RelevantOrganisationID: relevantOrganisationId
         });
 
         const attachment = response?.responseData?.Attachment;
         const preparedAttachment = new Attachment(attachment);
-
-        const user = await UserService.getInstance().getUserByToken(token);
-        FileService.prepareFileForDownload(user?.UserID, preparedAttachment);
 
         return preparedAttachment;
     }
@@ -793,6 +634,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         const filterProperties = [
             TicketProperty.STATE,
             KIXObjectProperty.CREATE_BY,
+            ArticleProperty.CREATED_BY,
             KIXObjectProperty.CHANGE_BY,
             'Queue.FollowUpID'
         ];
@@ -812,6 +654,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         let searchCriteria = criteria.filter((f) =>
             f.property !== SearchProperty.PRIMARY
             && f.property !== 'Queue.FollowUpID'
+            && f.property !== ArticleProperty.CREATED_BY
         );
 
         await this.setUserID(searchCriteria, token);
@@ -914,6 +757,23 @@ export class TicketAPIService extends KIXObjectAPIService {
             objectClass = SenderType;
         }
         return objectClass;
+    }
+
+    private async prepareArticleBody(token: string, body: string): Promise<string> {
+        const beToken = ConfigurationService.getBackendAPIToken();
+        let config = await SysConfigService.getInstance().getSysConfigOptionValue(
+            beToken, 'agent-portal-configuration'
+        ).catch(() => null);
+        if (config) {
+            config = JSON.parse(config);
+            if (config?.editorType === 'ckeditor5' && body) {
+                body = Article.MAIL_STYLE + body;
+                body = await ArticleViewUtil.replaceInlineStyle(body, true);
+                const cleanHTML = HTMLUtil.sanitizeContent(body, false, true);
+                body = cleanHTML?.content || body;
+            }
+        }
+        return body;
     }
 
 }

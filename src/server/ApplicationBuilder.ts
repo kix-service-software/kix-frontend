@@ -19,10 +19,8 @@ process.setMaxListeners(0);
 
 async function preBuildApplications(): Promise<void> {
 
-    const configDir = path.join(__dirname, '..', '..', 'config');
-    const certDir = path.join(__dirname, '..', '..', 'cert');
     const dataDir = path.join(__dirname, '..', '..', 'data');
-    ConfigurationService.getInstance().init(configDir, certDir, dataDir);
+    ConfigurationService.getInstance().init(dataDir);
 
     LoggingService.getInstance().info('Starting Application Builder');
     LoggingService.getInstance().info(`Environment: ${process.env.NODE_ENV}`);

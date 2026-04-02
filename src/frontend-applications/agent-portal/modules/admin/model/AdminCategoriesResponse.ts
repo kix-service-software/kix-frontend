@@ -7,13 +7,13 @@
  * --
  */
 
-import { ISocketResponse } from '../../../modules/base-components/webapp/core/ISocketResponse';
+
 import { AdminModule } from './AdminModule';
 
-export class AdminCategoriesResponse implements ISocketResponse {
+export class AdminCategoriesResponse {
 
     public constructor(
-        public requestId: string,
+
         public modules: Array<AdminModule>
     ) { }
 

@@ -25,7 +25,7 @@ export class NewMacroDialogContext extends Context {
             const context = ContextService.getInstance().getActiveContext();
             const formInstance = await context?.getFormManager()?.getFormInstance();
             if (formInstance) {
-                let scope = this.getAdditionalInformation(MacroProperty.SCOPE);
+                const scope = this.getAdditionalInformation(MacroProperty.SCOPE);
                 formInstance.provideFixedValue(MacroProperty.SCOPE, new FormFieldValue(scope));
             }
         }

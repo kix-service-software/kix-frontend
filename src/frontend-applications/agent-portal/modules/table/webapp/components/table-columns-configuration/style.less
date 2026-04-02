@@ -13,14 +13,65 @@
 
     .property-chooser {
         display: grid;
-        grid-auto-flow: column;
-        grid-template-columns: min-content minmax(5rem, 35rem) max-content;
-        grid-column-gap: @margin-small;
-        padding: 1rem;
+        grid-template-columns: max-content minmax(0, 1fr) max-content;
+        column-gap: @margin-small;
+        row-gap: @margin-small;
+        align-items: center;
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0;
 
         label {
             align-self: center;
-            text-wrap: nowrap;
+            white-space: nowrap;
+            min-width: 0;
+        }
+
+        form-list,
+        >.form-list {
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
+            box-sizing: border-box;
+            display: block;
+        }
+
+        >.form-list>.form-list-input-container {
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        >.form-list>.form-list-input-container>.form-input-control.list {
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        >.form-list .selected-nodes,
+        >.form-list .form-list-placeholder {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .property-chooser {
+            grid-template-columns: 1fr;
+            align-items: stretch;
+
+            form-list,
+            >.form-list {
+                width: 100%;
+            }
+
+            .submit-button {
+                justify-self: start;
+            }
         }
     }
 
@@ -47,6 +98,20 @@
                     text-align: center;
                 }
             }
+        }
+    }
+}
+
+@media (max-width: 469px) {
+    .table-configuration-container {
+        .row {
+            flex-wrap: wrap !important;
+        }
+
+        .row>.col-6 {
+            flex: 0 0 100% !important;
+            width: 100% !important;
+            max-width: 100% !important;
         }
     }
 }

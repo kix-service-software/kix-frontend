@@ -71,9 +71,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.nodes = this.formValue?.getSelectableTreeNodeValues();
         const selectedNodes = await this.formValue?.getSelectedTreeNodes();
         this.state.selectedNode = selectedNodes?.length ? selectedNodes[0] : null;
-        if (!this.state.selectedNode) {
-            this.clearValue();
-        }
     }
 
     public async onMount(): Promise<void> {
@@ -81,7 +78,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#No Article'
         ]);
-        this.state.loading = false;
 
         super.registerEventSubscriber(
             function (data: ObjectFormEventData, eventId: string): void {
@@ -95,6 +91,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             [ObjectFormEvent.BLOCK_FORM]
         );
+
+        this.state.loading = false;
     }
 
     public onDestroy(): void {

@@ -111,12 +111,12 @@ export class PropertyInstructionMapper {
                 }
             }
 
-            if (instructionProperty === InstructionProperty.WRITEABLE) {
-                if (formValue.readonly === instruction.Writeable) {
-                    formValue.readonly = !instruction.Writeable;
+            if (instructionProperty === InstructionProperty.WRITABLE) {
+                if (formValue.readonly === instruction.Writable) {
+                    formValue.readonly = !instruction.Writable;
                     if (formValue.formValues && formValue.formValues.length > 0) {
                         formValue.formValues.forEach((fv) => {
-                            fv.readonly = !instruction.Writeable;
+                            fv.readonly = !instruction.Writable;
                         });
                     }
                 }

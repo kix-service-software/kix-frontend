@@ -7,17 +7,15 @@
  * --
  */
 
-import { IService } from './IService';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { KIXObject } from '../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../model/KIXObjectSpecificLoadingOptions';
 import { KIXObjectSpecificCreateOptions } from '../../model/KIXObjectSpecificCreateOptions';
-import { KIXObjectSpecificDeleteOptions } from '../../model/KIXObjectSpecificDeleteOptions';
 import { Error } from '../../../../server/model/Error';
 import { ObjectResponse } from './ObjectResponse';
 
-export interface IKIXObjectService extends IService {
+export interface IKIXObjectService {
 
     isServiceFor(kixObjectType: KIXObjectType | string): boolean;
 
@@ -38,7 +36,7 @@ export interface IKIXObjectService extends IService {
 
     deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: string | number,
-        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string
+        cacheKeyPrefix: string
     ): Promise<Error[]>;
 
     commitObject(

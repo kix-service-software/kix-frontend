@@ -20,13 +20,14 @@ import { LabelService } from '../../../../base-components/webapp/core/LabelServi
 import { LinkUtil } from '../LinkUtil';
 import { RowObject } from '../../../../table/model/RowObject';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
-import { KIXObjectSocketClient } from '../../../../base-components/webapp/core/KIXObjectSocketClient';
+import { ObjectAPIClient } from '../../../../../api-client/object/Object';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { Link } from '../../../model/Link';
 import { EditLinkedObjectsDialogContext } from '../context';
+import { CollectionManager } from '../../../../../api-client/object/CollectionManager';
 
 export class LinkObjectTableContentProvider extends TableContentProvider<LinkObject> {
 
@@ -78,7 +79,7 @@ export class LinkObjectTableContentProvider extends TableContentProvider<LinkObj
             KIXObjectType.LINK, null, loadingOptions, null, null, null, null, this.id
         );
 
-        this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(this.id);
+        this.totalCount = CollectionManager.getInstance().getCollectionsCount(this.id);
 
         this.loadingOptions = new KIXObjectLoadingOptions(
             null, null, 20, [KIXObjectProperty.LINKS], [KIXObjectProperty.LINKS]

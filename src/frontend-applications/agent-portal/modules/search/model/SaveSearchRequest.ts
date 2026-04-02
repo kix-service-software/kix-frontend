@@ -7,14 +7,12 @@
  * --
  */
 
-import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
 import { SearchCache } from './SearchCache';
 
-export class SaveSearchRequest implements ISocketRequest {
+export class SaveSearchRequest {
 
     public constructor(
-        public requestId: string,
-        public clientRequestId: string,
+
         public search: SearchCache,
         public share?: boolean
     ) { }

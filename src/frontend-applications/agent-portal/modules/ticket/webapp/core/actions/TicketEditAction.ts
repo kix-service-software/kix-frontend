@@ -13,7 +13,7 @@ import { UIComponentPermission } from '../../../../../model/UIComponentPermissio
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { TicketDialogUtil } from '..';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 
 export class TicketEditAction extends AbstractAction<Ticket> {
 
@@ -25,7 +25,7 @@ export class TicketEditAction extends AbstractAction<Ticket> {
             new UIComponentPermission(`tickets/${objectId}`, [CRUD.UPDATE], false, 'Object', false)
         ];
 
-        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        show = await SessionAPIClient.checkPermissions(permissions);
         return show;
     }
 

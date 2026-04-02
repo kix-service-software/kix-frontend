@@ -7,7 +7,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div title=state.fileName + " (" + state.fileSize + ")" class="file-entry">
+<div title=state.fileName + " (" + state.fileSize + ")" class="file-entry" aria-label=state.fileName + " (" + state.fileSize + ")">
     <span class="file-entry-icon">
         <icon icon=state.icon showUnknown/>
     </span>
@@ -19,5 +19,5 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             (${state.fileSize})
         </if>
     </span>
-    <span on-click("onClick", true) class="file-download kix-icon-download"/>
+    <span on-click("onClick", true) class="file-download kix-icon-download" role="button" aria-label=state.translations["Translatable#download attachment"]/>
 </div>

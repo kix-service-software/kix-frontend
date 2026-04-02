@@ -84,12 +84,13 @@ export class BrowserCacheService {
     }
 
     public deleteKeys(cacheKeyPrefix: string): void {
+        console.groupCollapsed(`Cache Delete Keys: ${cacheKeyPrefix}`);
         const prefixes = this.getCacheKeyPrefix(cacheKeyPrefix);
         for (const prefix of prefixes) {
             if (this.keyIndex.has(prefix)) {
                 const keys = [...this.keyIndex.get(prefix)];
                 console.debug(
-                    `CacheService: delete cacheKeyPrefix ${prefix} - key count: ${keys.length}`
+                    `delete ${prefix} - key count: ${keys.length}`
                 );
                 for (const key of keys) {
                     this.delete(key, prefix, false);
@@ -100,6 +101,7 @@ export class BrowserCacheService {
             LabelService.getInstance().clearDisplayValueCache(prefix);
         }
         EventService.getInstance().publish(ApplicationEvent.CACHE_KEYS_DELETED, prefixes);
+        console.groupEnd();
     }
 
     public async updateCaches(events: BackendNotification[]): Promise<void> {
@@ -107,10 +109,12 @@ export class BrowserCacheService {
             this.clear();
         } else {
             events = events
-                .filter((e) => e.RequestID !== ClientStorageService.getClientRequestId())
+                // .filter((e) => e.RequestID !== ClientStorageService.getClientRequestId())
                 .filter((e) => !e.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN));
 
+            console.groupCollapsed('Cache Delete');
             events.forEach((e) => this.deleteKeys(e.Namespace));
+            console.groupEnd();
         }
     }
 
@@ -291,6 +295,7 @@ export class BrowserCacheService {
     public clear(): void {
         const iterator = this.keyIndex.keys();
 
+        console.groupCollapsed('Cache Clear');
         let prefix = iterator.next();
         while (prefix && prefix.value) {
             const keys = this.keyIndex.get(prefix.value);
@@ -300,6 +305,7 @@ export class BrowserCacheService {
             keys.forEach((k) => this.cache.delete(k));
             prefix = iterator.next();
         }
+        console.groupEnd();
 
         this.keyIndex = new Map();
         EventService.getInstance().publish(ApplicationEvent.CACHE_CLEARED);

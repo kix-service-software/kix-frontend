@@ -24,6 +24,7 @@ import { TableFactoryService } from '../../../../table/webapp/core/factory/Table
 import { SearchContext } from '../../core/SearchContext';
 import { SearchDefinition } from '../../core/SearchDefinition';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
@@ -53,7 +54,7 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Attributes', 'Translatable#Reset data', 'Translatable#Cancel',
+            'Translatable#Attributes', 'Translatable#Restore Search Template', 'Translatable#Cancel',
             'Translatable#Detailed search results', 'Translatable#Start search',
             'Translatable#New Search', 'Translatable#Edit Search'
         ]);
@@ -65,8 +66,10 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
         this.keyListenerElement = (this as any).getEl('search-criteria-container');
         if (this.keyListenerElement) {
             this.keyListener = this.keyDown.bind(this);
-            this.keyListenerElement.addEventListener('keydown', this.keyListener);
+            //this.keyListenerElement.addEventListener('keydown', this.keyListener, true);
+            document.addEventListener('keydown', this.keyListener);
         }
+
 
         this.searchDefinition = SearchService.getInstance().getSearchDefinition(
             this.context.descriptor.kixObjectTypes[0]
@@ -146,7 +149,7 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
         this.state.manager?.unregisterListener(this.managerListenerId);
 
         if (this.keyListenerElement) {
-            this.keyListenerElement.removeEventListener('keydown', this.keyListener);
+            document.removeEventListener('keydown', this.keyListener);
         }
 
         if (this.sortAttributeTreeHandler && this.state.sortTreeId) {
@@ -275,11 +278,21 @@ class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
     }
 
     public keyDown(event: any): void {
-        if ((event.ctrlKey && event.key === 'Enter') && this.state.canSearch) {
-            if (event.preventDefault) {
-                event.preventDefault();
+        if ((event.key === 'Enter') && this.state.canSearch) {
+            if (
+                this.context.instanceId === ContextService.getInstance().getActiveContext().instanceId &&
+                event.target.tagName === 'INPUT'
+            ) {
+                if (event.preventDefault) {
+                    event.preventDefault();
+                }
+                const isFieldDropdownActive = Array.from(
+                    document.getElementsByClassName('form-list-tree')
+                ).some((t) => t.checkVisibility());
+                if (!isFieldDropdownActive) {
+                    this.search();
+                }
             }
-            this.search();
         }
     }
 

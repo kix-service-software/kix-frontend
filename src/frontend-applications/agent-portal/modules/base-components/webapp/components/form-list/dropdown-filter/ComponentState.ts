@@ -21,7 +21,8 @@ export class ComponentState extends AbstractComponentState {
         public autocompleteNotFoundText: string = '',
         public freeText: boolean = false,
         public loading: boolean = false,
-        public tree: TreeNode[] = []
+        public tree: TreeNode[] = [],
+        public filterByTree: boolean = false
     ) {
         super();
     }

@@ -29,10 +29,8 @@ import { RoleService } from '../../user/server/RoleService';
 import { RoleProperty } from '../../user/model/RoleProperty';
 import { Role } from '../../user/model/Role';
 import { CreatePermissionDescription } from '../../user/server/CreatePermissionDescription';
-import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { Permission } from '../../user/model/Permission';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
-import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 
 export class ReportingAPIService extends KIXObjectAPIService {
 
@@ -199,17 +197,16 @@ export class ReportingAPIService extends KIXObjectAPIService {
 
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: string | number,
-        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
+        cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
     ): Promise<Error[]> {
         if (objectType === KIXObjectType.REPORT) {
             ressourceUri = this.buildUri(this.RESOURCE_URI, 'reports');
-        }
-        else if (objectType === KIXObjectType.REPORT_DEFINITION) {
+        } else if (objectType === KIXObjectType.REPORT_DEFINITION) {
             ressourceUri = this.buildUri(
                 this.RESOURCE_URI, 'reportdefinitions'
             );
         }
-        return super.deleteObject(token, clientRequestId, objectType, objectId, null, objectType, ressourceUri);
+        return super.deleteObject(token, clientRequestId, objectType, objectId, objectType, ressourceUri);
     }
 
     public async prepareAPIFilter(
@@ -249,8 +246,8 @@ export class ReportingAPIService extends KIXObjectAPIService {
             roleIds = [];
         }
 
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        const token = config.BACKEND_API_TOKEN;
+
+        const token = ConfigurationService.getBackendAPIToken();
 
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [RoleProperty.PERMISSIONS]);
         const objectResponse = await RoleService.getInstance().loadObjects<Role>(

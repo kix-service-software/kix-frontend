@@ -13,6 +13,5 @@ export * from './context';
 export { WebformFormService } from './WebformFormService';
 export { WebformLabelProvider } from './WebformLabelProvider';
 export { WebformService } from './WebformService';
-export { WebformSocketClient } from './WebformSocketClient';
 export { WebformTableFactory } from './WebformTableFactory';
 export { UIModule as WebformUIModule } from './WebformUIModule';

@@ -21,6 +21,7 @@ import { OverlayService } from '../../../../../modules/base-components/webapp/co
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { StringContent } from '../../../../../modules/base-components/webapp/core/StringContent';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -67,6 +68,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             // TODO: auf angemeldeten Agenten/IP ändern
             faqVote.Interface = 'agent';
             faqVote.IPAddress = '192.168.0.1';
+
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            faqVote.CreatedBy = currentUser.UserLogin;
 
             await service.createObject(KIXObjectType.FAQ_VOTE, faqVote, new CreateFAQVoteOptions(this.faqArticle.ID))
                 .then(() => {

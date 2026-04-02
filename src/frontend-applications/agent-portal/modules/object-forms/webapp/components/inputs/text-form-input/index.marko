@@ -14,9 +14,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       on-keydown("keyDown")
       on-input("valueChanged")
       class="form-control"
-      autocomplete=state.autocompleteProperty>
+      autocomplete=state.autocompleteProperty
+      aria-labelledby=input.labelId>
    <if(state.isPassword)>
-      <div role="button" on-click("togglePasswordVisible") class="p-2">
+      <button aria-label=state.translations["Translatable#Toggle password visibility"] aria-pressed=state.isPasswordVisible.toString() on-click("togglePasswordVisible") class="p-2 toggle">
          <i class=[
             "far",
             {
@@ -24,6 +25,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                "fa-eye-slash": !state.isPasswordVisible,
             },
          ]/>
-      </div>
+      </button>
    </if>
 </div>

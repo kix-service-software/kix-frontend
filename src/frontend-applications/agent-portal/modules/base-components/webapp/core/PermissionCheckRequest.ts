@@ -7,14 +7,11 @@
  * --
  */
 
-import { ISocketRequest } from './ISocketRequest';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 
-export class PermissionCheckRequest implements ISocketRequest {
+export class PermissionCheckRequest {
 
     public constructor(
-        public requestId: string,
-        public clientRequestId: string,
         public permissions: UIComponentPermission[],
         public object?: any
     ) { }

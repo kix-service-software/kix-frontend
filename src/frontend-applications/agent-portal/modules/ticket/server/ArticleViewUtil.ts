@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -9,10 +9,10 @@
 
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { LoggingService } from '../../../../../server/services/LoggingService';
+import { HTMLUtil } from '../../../model/HTMLUtil';
 import { Attachment } from '../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
-import { HTMLUtil } from '../../../server/routes/HTMLUtil';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { InlineContent } from '../../base-components/webapp/core/InlineContent';
 import { SysConfigKey } from '../../sysconfig/model/SysConfigKey';
@@ -27,14 +27,16 @@ export class ArticleViewUtil {
 
     public static async getArticleHTMLContent(
         token: string, articleId: number, ticketId: number, reduceContent: boolean, resolveInlineCSS: boolean,
-        linesCount?: number, prepareInline: boolean = true, relevantOrganisationID?: number
+        linesCount?: number, prepareInline: boolean = true, relevantOrganisationID?: number,
+        clientRequestId: string = 'ArticleViewUtil'
     ): Promise<string> {
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.includes.push(ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN);
         loadingOptions.query.push(['RelevantOrganisationID', relevantOrganisationID?.toString()]);
 
         const articleResponse = await TicketAPIService.getInstance().loadObjects<Article>(
-            token, 'ArticleRouter', KIXObjectType.ARTICLE, [articleId], loadingOptions, new ArticleLoadingOptions(ticketId)
+            token, clientRequestId, KIXObjectType.ARTICLE, [articleId],
+            loadingOptions, new ArticleLoadingOptions(ticketId)
         );
 
         let content = '';
@@ -47,35 +49,20 @@ export class ArticleViewUtil {
                 );
 
                 if (resolveInlineCSS) {
-                    let error = '';
-                    try {
-                        const juice = require('juice');
-                        content = juice(content);
-                    } catch (e) {
-                        LoggingService.getInstance().error('Error resolving inline css.', e);
-                        LoggingService.getInstance().error(e);
-                        error = 'Possible invalid HTML/CSS in source mail.';
-                    }
-
-                    const bodyMatch = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
-                    if (bodyMatch && bodyMatch.length >= 3) {
-                        content = bodyMatch[2];
-                    }
-
-                    if (error) {
-                        content = `<b style=\"color:red\">${error}</b>${content}`;
-                    }
+                    content = await this.replaceInlineStyle(content);
                 }
             } else {
                 content = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br />\n');
             }
         }
 
-        content = HTMLUtil.sanitizeContent(content);
+        const cleanHTML: any = HTMLUtil.sanitizeContent(content);
+        const additionalHeader = cleanHTML?.headers;
+        content = cleanHTML?.content;
 
         // ignore kix styling (not needed in placeholder context, where reduce is used)
         if (!reduceContent) {
-            content = HTMLUtil.buildHtmlStructur(content, [Article.MAIL_STYLE]);
+            content = HTMLUtil.buildHtmlStructur(content, additionalHeader);
         }
         return content;
     }
@@ -124,7 +111,7 @@ export class ArticleViewUtil {
             }
         }
 
-        let content = buffer.toString('utf8');
+        const content = buffer.toString('utf8');
         let htmlContent: string = content;
 
         if (!contentAttachment.Filename.match(/^file-(1|2|1\.html)$/)) {
@@ -166,9 +153,8 @@ export class ArticleViewUtil {
 
     public static async reduceContent(result: string, linesCount?: number): Promise<string> {
         if (linesCount === null) {
-            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
             const response = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-                serverConfig.BACKEND_API_TOKEN, 'ArticleViewUtil', KIXObjectType.SYS_CONFIG_OPTION,
+                ConfigurationService.getBackendAPIToken(), 'ArticleViewUtil', KIXObjectType.SYS_CONFIG_OPTION,
                 [`${SysConfigKey.TICKET_PLACEHOLDER_BODYRICHTEXT_LINECOUNT}`],
                 null, null
             ).catch((): ObjectResponse<SysConfigOption> => new ObjectResponse());
@@ -248,4 +234,26 @@ export class ArticleViewUtil {
         return body;
     }
 
+    public static async replaceInlineStyle(content: string, create: boolean = false): Promise<string> {
+        let error = '';
+        try {
+            const juice = require('juice');
+            content = juice(content);
+        } catch (e) {
+            LoggingService.getInstance().error('Error resolving inline css.', e);
+            LoggingService.getInstance().error(e);
+            error = 'Possible invalid HTML/CSS in source mail.';
+        }
+
+        const bodyMatch = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
+        if (bodyMatch && bodyMatch.length >= 3) {
+            content = bodyMatch[2];
+        }
+
+        if (error && !create) {
+            content = `<b style=\"color:red\">${error}</b>${content}`;
+        }
+
+        return content;
+    }
 }

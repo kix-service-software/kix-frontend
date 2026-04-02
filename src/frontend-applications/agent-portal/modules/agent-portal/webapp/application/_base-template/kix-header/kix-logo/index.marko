@@ -7,12 +7,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<if(state.logoIcon)>
-    <img#logo src=(
-        "data:" +
-        state.logoIcon.ContentType +
-        ";base64," +
-        state.logoIcon.Content
-    )>
+<if(state.logoSrcPath)>
+    <img src=state.logoSrcPath alt="kix-logo" id="logo">
 </if>
-<else><img#logo src=input.baseRoute + "/static/img/kix_default.png"></else>
+<else>
+    <img
+        src=input.baseRoute + "/static/img/kix_default.png"
+        aria-hidden="true"
+        alt="kix-logo"
+        id="logo">
+</else>

@@ -1,4 +1,4 @@
-const { Editor, Node, Mark, mergeAttributes } = require('@tiptap/core');
+const { Editor, Node, Mark, mergeAttributes, markInputRule, markPasteRule } = require('@tiptap/core');
 const StarterKit = require('@tiptap/starter-kit').default;
 const Underline = require('@tiptap/extension-underline').default;
 const Placeholder = require('@tiptap/extension-placeholder').default;
@@ -29,7 +29,6 @@ function readCssPropFromStyleAttr(element, propName) {
     }
 }
 
-
 const Link = require('@tiptap/extension-link').default.configure({
     HTMLAttributes: {
         rel: 'noopener noreferrer',
@@ -42,10 +41,7 @@ const Subscript = Mark.create({
     name: 'subscript',
 
     parseHTML() {
-        return [
-            { tag: 'sub' },
-            { style: 'vertical-align=sub' }
-        ];
+        return [{ tag: 'sub' }, { style: 'vertical-align=sub' }];
     },
 
     renderHTML({ HTMLAttributes }) {
@@ -54,8 +50,7 @@ const Subscript = Mark.create({
 
     addCommands() {
         return {
-            toggleSubscript: () => ({ commands }) =>
-                commands.toggleMark('subscript'),
+            toggleSubscript: () => ({ commands }) => commands.toggleMark('subscript'),
         };
     },
 
@@ -63,17 +58,14 @@ const Subscript = Mark.create({
         return {
             'Mod-,': () => this.editor.commands.toggleSubscript(),
         };
-    }
+    },
 });
 
 const Superscript = Mark.create({
     name: 'superscript',
 
     parseHTML() {
-        return [
-            { tag: 'sup' },
-            { style: 'vertical-align=super' }
-        ];
+        return [{ tag: 'sup' }, { style: 'vertical-align=super' }];
     },
 
     renderHTML({ HTMLAttributes }) {
@@ -82,8 +74,7 @@ const Superscript = Mark.create({
 
     addCommands() {
         return {
-            toggleSuperscript: () => ({ commands }) =>
-                commands.toggleMark('superscript'),
+            toggleSuperscript: () => ({ commands }) => commands.toggleMark('superscript'),
         };
     },
 
@@ -91,7 +82,7 @@ const Superscript = Mark.create({
         return {
             'Mod-.': () => this.editor.commands.toggleSuperscript(),
         };
-    }
+    },
 });
 
 const Bold = BoldBase.extend({ excludes: '' });
@@ -103,8 +94,8 @@ const Highlight = HighlightBase.extend({
         return {
             color: {
                 default: null,
-                parseHTML: element => element.style?.backgroundColor || null,
-                renderHTML: attributes => {
+                parseHTML: (element) => element.style?.backgroundColor || null,
+                renderHTML: (attributes) => {
                     if (!attributes.color) return { style: 'color: inherit' };
                     return {
                         style: `background-color: ${attributes.color}; color: inherit`,
@@ -123,31 +114,33 @@ const CustomParagraph = Paragraph.extend({
             ...this.parent?.(),
             textAlign: {
                 default: null,
-                parseHTML: el => el.style.textAlign || null,
-                renderHTML: attrs => (attrs.textAlign ? { style: `text-align:${attrs.textAlign}` } : {}),
+                parseHTML: (el) => el.style.textAlign || null,
+                renderHTML: (attrs) => (attrs.textAlign ? { style: `text-align:${attrs.textAlign}` } : {}),
             },
             style: {
                 default: null,
-                parseHTML: el => {
+                parseHTML: (el) => {
                     const raw = el.getAttribute('style') || '';
                     const cleaned = raw
                         .split(';')
-                        .map(s => s.trim())
-                        .filter(s => s && !/^text-align\s*:/i.test(s))
+                        .map((s) => s.trim())
+                        .filter((s) => s && !/^text-align\s*:/i.test(s))
                         .join('; ');
                     return cleaned || null;
                 },
-                renderHTML: attrs => {
+                renderHTML: (attrs) => {
                     const parts = (attrs.style ? attrs.style.split(';') : [])
-                        .map(s => s.trim())
-                        .filter(s => s && !/^text-align\s*:/i.test(s));
+                        .map((s) => s.trim())
+                        .filter((s) => s && !/^text-align\s*:/i.test(s));
                     if (attrs.textAlign) parts.push(`text-align:${attrs.textAlign}`);
                     return parts.length ? { style: parts.join('; ') } : {};
                 },
             },
         };
     },
-    addOptions() { return { ...(this.parent?.() || {}), marks: '_' }; },
+    addOptions() {
+        return { ...(this.parent?.() || {}), marks: '_' };
+    },
 });
 
 const TextStyle = TextStyleBase.extend({
@@ -157,17 +150,19 @@ const TextStyle = TextStyleBase.extend({
             ...parentAttrs,
             fontFamily: {
                 default: null,
-                parseHTML: el => {
+                parseHTML: (el) => {
                     const v = readCssPropFromStyleAttr(el, 'font-family');
                     return v ? v.replace(/['"]/g, '') : null;
                 },
             },
             fontSize: {
                 default: null,
-                parseHTML: el => {
+                parseHTML: (el) => {
                     const v = readCssPropFromStyleAttr(el, 'font-size');
                     if (!v) return null;
-                    const m = String(v).trim().match(/^([0-9.]+)\s*px$/i) || String(v).trim().match(/^([0-9.]+)$/);
+                    const m =
+                        String(v).trim().match(/^([0-9.]+)\s*px$/i) ||
+                        String(v).trim().match(/^([0-9.]+)$/);
                     return m ? m[1] : null;
                 },
             },
@@ -204,25 +199,19 @@ const TextStyle = TextStyleBase.extend({
         const parent = this.parent?.() || {};
         return {
             ...parent,
-            setFontFamily:
-                font => ({ chain }) => chain().setMark('textStyle', { fontFamily: font }).run(),
-            unsetFontFamily:
-                () => ({ chain }) => chain().setMark('textStyle', { fontFamily: null }).run(),
-            setFontSize:
-                size => ({ chain }) => {
-                    const v = typeof size === 'number' ? String(size) : String(size).trim();
-                    return chain().setMark('textStyle', { fontSize: v }).run();
-                },
-            unsetFontSize:
-                () => ({ chain }) => chain().setMark('textStyle', { fontSize: null }).run(),
+            setFontFamily: (font) => ({ chain }) => chain().setMark('textStyle', { fontFamily: font }).run(),
+            unsetFontFamily: () => ({ chain }) => chain().setMark('textStyle', { fontFamily: null }).run(),
+            setFontSize: (size) => ({ chain }) => {
+                const v = typeof size === 'number' ? String(size) : String(size).trim();
+                return chain().setMark('textStyle', { fontSize: v }).run();
+            },
+            unsetFontSize: () => ({ chain }) => chain().setMark('textStyle', { fontSize: null }).run(),
 
-            clearTypography:
-                () => ({ chain, state, commands }) => {
-                    const ch = chain()
-                        .setMark('textStyle', { fontFamily: null, fontSize: null, color: null });
-                    if (commands.unsetColor) ch.unsetColor();
-                    return ch.unsetMark('textStyle').run();
-                },
+            clearTypography: () => ({ chain, commands }) => {
+                const ch = chain().setMark('textStyle', { fontFamily: null, fontSize: null, color: null });
+                if (commands.unsetColor) ch.unsetColor();
+                return ch.unsetMark('textStyle').run();
+            },
         };
     },
 });
@@ -242,7 +231,7 @@ const ResizableImage = Node.create({
             title: { default: null },
             width: {
                 default: 300,
-                parseHTML: el => {
+                parseHTML: (el) => {
                     const dataW = el.getAttribute?.('data-width');
                     const styleW = el.style?.width?.replace('px', '');
                     const attrW = el.getAttribute?.('width');
@@ -250,24 +239,24 @@ const ResizableImage = Node.create({
                     const n = v ? parseInt(v, 10) : 300;
                     return Number.isFinite(n) ? n : 300;
                 },
-                renderHTML: attrs => ({
+                renderHTML: (attrs) => ({
                     'data-width': String(attrs.width),
                     style: `width:${attrs.width}px`,
                 }),
             },
             align: {
                 default: 'left',
-                parseHTML: el => el.getAttribute?.('data-align') || 'left',
-                renderHTML: attrs => ({ 'data-align': attrs.align }),
+                parseHTML: (el) => el.getAttribute?.('data-align') || 'left',
+                renderHTML: (attrs) => ({ 'data-align': attrs.align }),
             },
             isGif: {
                 default: false,
-                parseHTML: el => {
+                parseHTML: (el) => {
                     const img = el.tagName?.toLowerCase() === 'img' ? el : el.querySelector?.('img');
                     const src = img?.getAttribute?.('src') || '';
                     return /^data:image\/gif|\.gif(\?|$)/i.test(src);
                 },
-                renderHTML: attrs => (attrs.isGif ? { 'data-gif': '1' } : {}),
+                renderHTML: (attrs) => (attrs.isGif ? { 'data-gif': '1' } : {}),
             },
         };
     },
@@ -277,7 +266,7 @@ const ResizableImage = Node.create({
             { tag: 'span[data-type="resizable-image-wrapper"]' },
             {
                 tag: 'img[src]',
-                getAttrs: el => {
+                getAttrs: (el) => {
                     const dataW = el.getAttribute?.('data-width');
                     const styleW = el.style?.width?.replace('px', '');
                     const attrW = el.getAttribute?.('width');
@@ -305,7 +294,9 @@ const ResizableImage = Node.create({
             [
                 'img',
                 {
-                    src, alt, title,
+                    src,
+                    alt,
+                    title,
                     'data-width': String(width),
                     width: String(width),
                     style: `max-width:100%; width:${width}px; display:inline-block;`,
@@ -338,13 +329,12 @@ const ResizableImage = Node.create({
             img.style.width = `${node.attrs.width}px`;
             img.setAttribute('data-width', String(node.attrs.width));
             if (node.attrs.isGif) img.setAttribute('data-gif', '1');
-
             img.draggable = false;
 
             wrap.appendChild(img);
             outer.appendChild(wrap);
 
-            const commitWidth = w => {
+            const commitWidth = (w) => {
                 img.style.width = `${w}px`;
                 img.setAttribute('data-width', String(w));
                 if (typeof updateAttributes === 'function') {
@@ -411,7 +401,7 @@ const ResizableImage = Node.create({
                     { cursor: 'nwse-resize', right: '-5px', bottom: '-5px' },
                 ];
 
-                corners.forEach(style => {
+                corners.forEach((style) => {
                     const handle = createHandle(style.cursor);
                     Object.assign(handle.style, style);
                     wrap.appendChild(handle);
@@ -456,8 +446,8 @@ const TableCell = TableCellBase.extend({
             ...this.parent?.(),
             style: {
                 default: null,
-                parseHTML: element => element.getAttribute('style'),
-                renderHTML: attributes => {
+                parseHTML: (element) => element.getAttribute('style'),
+                renderHTML: (attributes) => {
                     if (!attributes.style) return {};
                     return { style: attributes.style };
                 },
@@ -472,8 +462,8 @@ const TableHeader = TableHeaderBase.extend({
             ...this.parent?.(),
             style: {
                 default: null,
-                parseHTML: element => element.getAttribute('style'),
-                renderHTML: attributes => {
+                parseHTML: (element) => element.getAttribute('style'),
+                renderHTML: (attributes) => {
                     if (!attributes.style) return {};
                     return { style: attributes.style };
                 },

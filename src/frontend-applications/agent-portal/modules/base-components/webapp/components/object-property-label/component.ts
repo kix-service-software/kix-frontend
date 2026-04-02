@@ -12,7 +12,6 @@ import { ComponentInput } from './ComponentInput';
 
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { LabelService } from '../../core/LabelService';
-import { ContextService } from '../../core/ContextService';
 import { Context } from '../../../../../model/Context';
 
 export class ObjectPropertyLabelComponent {
@@ -38,6 +37,7 @@ export class ObjectPropertyLabelComponent {
         this.displayText = input.displayText;
         this.state.hasText = typeof input.showText !== 'undefined' ? input.showText : true;
         this.state.showLabel = typeof input.showLabel !== 'undefined' ? input.showLabel : true;
+        this.state.value = input.value;
         if (this.object !== input.object) {
             this.object = input.object;
             this.prepareDisplayText();
@@ -52,6 +52,9 @@ export class ObjectPropertyLabelComponent {
 
     private async prepareDisplayText(): Promise<void> {
         this.state.propertyDisplayText = await this.getPropertyDisplayText();
+        if (!this.state.value && !this.state.propertyDisplayText?.length) {
+            (this as any).emit('noValueToDisplay', this.property);
+        }
         this.state.propertyIcon = await this.getIcon();
     }
 

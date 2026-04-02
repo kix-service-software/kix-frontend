@@ -23,6 +23,7 @@ export class ComponentState extends AbstractComponentState {
         public editorActive: boolean = false,
         public value: string = null,
         public editorReady: boolean = false,
+        public editorTemplate: any = null,
     ) {
         super();
     }

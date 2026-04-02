@@ -49,7 +49,7 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
         if (dynamicField.FieldType === DynamicFieldTypes.DATE) {
             this.inputType = InputFieldTypes.DATE;
         } else if (dynamicField.FieldType === DynamicFieldTypes.DATE_TIME) {
-            this.inputType === InputFieldTypes.DATE_TIME;
+            this.inputType = InputFieldTypes.DATE_TIME;
         }
 
         return dynamicField.Config;
@@ -79,7 +79,8 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
             offset = Number(config?.DefaultValue) >= 0 ? Number(config?.DefaultValue) : null;
         }
 
-        if (!this.value && offset !== null && !this.isEmpty) {
+        const isConfigurationMode = this.objectValueMapper?.objectFormHandler?.configurationMode;
+        if (!this.value && offset !== null && !this.isEmpty && !isConfigurationMode) {
             this.value = this.getOffsetValue(offset);
         }
     }

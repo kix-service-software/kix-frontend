@@ -7,12 +7,10 @@
  * --
  */
 
-import { ISocketRequest } from './ISocketRequest';
-
-export class LoadKIXModulesRequest implements ISocketRequest {
+export class LoadKIXModulesRequest {
 
     public constructor(
-        public requestId: string,
+
         public clientRequestId: string
     ) { }
 

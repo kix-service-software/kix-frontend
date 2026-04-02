@@ -11,6 +11,6 @@ import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
 
 export class LoadKIXModulesResponse {
 
-    public constructor(public requestId: string, public modules: IKIXModuleExtension[]) { }
+    public constructor(public modules: IKIXModuleExtension[]) { }
 
 }

@@ -12,7 +12,7 @@ import { UIComponentPermission } from '../../../../../../model/UIComponentPermis
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { EditTicketDialogContext } from '../..';
-import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../../api-client/session/Session';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { FormService } from '../../../../../base-components/webapp/core/FormService';
@@ -38,7 +38,7 @@ export class ArticleNewAction extends AbstractAction {
             const permissions = [
                 new UIComponentPermission(`tickets/${objectId}/articles`, [CRUD.CREATE])
             ];
-            show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+            show = await SessionAPIClient.checkPermissions(permissions);
         }
 
         return show;
