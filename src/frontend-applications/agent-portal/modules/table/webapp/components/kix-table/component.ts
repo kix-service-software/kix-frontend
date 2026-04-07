@@ -185,17 +185,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         let maxHeightByDisplayLimit = maxheight ?? 2000;
         const isAdminContext = this.context.getConfiguration()?.id === 'admin';
         if (!isAdminContext) {
-            const headerRowHeight = this.browserFontSize * Number(tableConfiguration.headerHeight) + 2;
+            if (displayLimit !== 0) {
+                const headerRowHeight = this.browserFontSize * Number(tableConfiguration.headerHeight) + 2;
 
-            const rowHeight = this.browserFontSize * Number(tableConfiguration.rowHeight);
-            maxHeightByDisplayLimit = (displayLimit * rowHeight) + headerRowHeight;
+                const rowHeight = this.browserFontSize * Number(tableConfiguration.rowHeight);
+                maxHeightByDisplayLimit = (displayLimit * rowHeight) + headerRowHeight;
 
-            const expandedRowHeight = (rowHeight + 10) / 2 * this.browserFontSize;
-            const expandedRowCount = rows.filter((r) => r.isExpanded()).length;
+                const expandedRowHeight = (rowHeight + 10) / 2 * this.browserFontSize;
+                const expandedRowCount = rows.filter((r) => r.isExpanded()).length;
 
-            // The 0.5 * this.browserFontSize is accounting for the padding on the bottom of the table
-            maxHeightByDisplayLimit =
-                maxHeightByDisplayLimit + (expandedRowCount * expandedRowHeight) + 0.5 * this.browserFontSize;
+                // The 0.5 * this.browserFontSize is accounting for the padding on the bottom of the table
+                maxHeightByDisplayLimit =
+                    maxHeightByDisplayLimit + (expandedRowCount * expandedRowHeight) + 0.5 * this.browserFontSize;
+            }
+            else {
+                maxHeightByDisplayLimit = 0;
+            }
         }
 
         maxheight = isNaN(maxheight) ? maxHeightByDisplayLimit : Math.min(maxheight, maxHeightByDisplayLimit);
