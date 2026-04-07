@@ -32,7 +32,6 @@
         "@fastify/accepts": "^4.3.0",
         "@fastify/auth": "^4.6.1",
         "@fastify/cookie": "^9.4.0",
-        "@fastify/jwt": "^8.0.1",
         "@fastify/redis": "^7.0.2",
         "@fastify/routes": "^6.0.2",
         "@fastify/secure-session": "^7.5.1",
