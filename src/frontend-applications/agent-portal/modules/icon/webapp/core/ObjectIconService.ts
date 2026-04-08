@@ -95,9 +95,8 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
         return icons.slice(0, iconLimit);
     }
 
-    public static async getObjectIconUrl(iconId: number, contentType: string): Promise<string> {
-        const srcPath = `${ClientStorageService.getApplicationUrl()}/objecticons/${iconId}/${encodeURIComponent(contentType)}`;
-        return srcPath;
+    public static getObjectIconUrl(iconId: number, contentType: string): string {
+        return `${ClientStorageService.getApplicationUrl()}/objecticons/${iconId}/${encodeURIComponent(contentType)}`;
     }
 
 }

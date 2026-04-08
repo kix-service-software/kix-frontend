@@ -70,7 +70,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         this.state.srcPath = null;
                     }
                     else {
-                        this.state.srcPath = await ObjectIconService.getObjectIconUrl(
+                        this.state.srcPath = ObjectIconService.getObjectIconUrl(
                             objectIcon.ID, objectIcon.ContentType
                         );
                         this.state.content = null;
