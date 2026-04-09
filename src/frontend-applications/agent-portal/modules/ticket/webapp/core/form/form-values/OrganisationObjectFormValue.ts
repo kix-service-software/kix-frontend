@@ -97,6 +97,11 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                             );
                         }
                     );
+                } else if (this.objectValueMapper?.objectFormHandler?.configurationMode) {
+                    const contactFV = this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID);
+                    if (contactFV) {
+                        this.objectValueMapper.objectFormHandler.reInitField(contactFV.fieldId);
+                    }
                 }
             }).catch(() => null);
     }
@@ -109,7 +114,12 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     }
 
     public async loadSelectableValues(): Promise<void> {
-        if (this.valueInitialized && !this.ORGA_DETERMINES_CONTACT) {
+        if (
+            !this.ORGA_DETERMINES_CONTACT && (
+                this.valueInitialized
+                || this.objectValueMapper?.objectFormHandler?.configurationMode
+            )
+        ) {
             const contactValue = (
                 this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID)
             ) as SelectObjectFormValue;
@@ -146,7 +156,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                     this.clearPossibleValuesAndNodes();
                 }
             }
-        } else if (this.valueInitialized) {
+        } else if (this.valueInitialized || this.objectValueMapper?.objectFormHandler?.configurationMode) {
             return super.loadSelectableValues();
         }
     }

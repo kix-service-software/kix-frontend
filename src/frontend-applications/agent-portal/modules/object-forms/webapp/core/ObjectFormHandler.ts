@@ -378,6 +378,9 @@ export class ObjectFormHandler {
             await (formValue as DynamicFieldCountableFormValue).reInitFormValue();
         } else {
             await formValue.initFormValue();
+            if (this.configurationMode) {
+                await formValue.postInitFormValue();
+            }
         }
 
         const configObject = new FormConfigurationObject();
