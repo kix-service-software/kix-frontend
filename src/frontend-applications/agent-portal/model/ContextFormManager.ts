@@ -131,23 +131,22 @@ export class ContextFormManager {
     }
 
     private handleValueChanged(formInstance?: FormInstance): void {
-        if (this.storageTimeout) {
-            if (typeof window !== 'undefined') {
-                window.clearTimeout(this.storageTimeout);
+        if (!formInstance || (formInstance?.instanceId === this.formInstance?.instanceId)) {
+            if (this.storageTimeout) {
+                if (typeof window !== 'undefined') {
+                    window.clearTimeout(this.storageTimeout);
+                }
             }
-            this.storageTimeout = null;
+
+            this.storageTimeout = setTimeout(async () => {
+                const isStoreable = await ContextService.getInstance().isContextStored(this.context?.instanceId);
+
+                if (isStoreable) {
+                    ContextService.getInstance().updateStorage(this.context?.instanceId);
+                }
+                this.storageTimeout = null;
+            }, 2000);
         }
-
-        this.storageTimeout = setTimeout(async () => {
-            let isStoreable = await ContextService.getInstance().isContextStored(this.context?.instanceId);
-            const isFormInstance = !formInstance || (formInstance?.instanceId === this.formInstance?.instanceId);
-            isStoreable = isStoreable && isFormInstance;
-
-            if (isStoreable) {
-                ContextService.getInstance().updateStorage(this.context?.instanceId);
-            }
-            this.storageTimeout = null;
-        }, 2000);
     }
 
     public async getFormId(): Promise<string> {
