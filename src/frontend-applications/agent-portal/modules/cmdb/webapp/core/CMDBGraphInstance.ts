@@ -30,6 +30,7 @@ import { CID3Node } from '../../model/CID3Node';
 import { ConfigItem } from '../../model/ConfigItem';
 import { ConfigItemProperty } from '../../model/ConfigItemProperty';
 import { VersionProperty } from '../../model/VersionProperty';
+import { ObjectIconService } from '../../../icon/webapp/core';
 
 export class CMDBGraphInstance extends GraphInstance<CID3Node, CID3Link, ConfigItem> {
 
@@ -135,10 +136,15 @@ export class CMDBGraphInstance extends GraphInstance<CID3Node, CID3Link, ConfigI
         node.append('image')
             .attr('xlink:href', (d: CID3Node) => {
                 const image = d.image && d.classId ? this.icons.get(d.classId) : null;
-                if (image) {
-                    const contentType = image.ContentType || 'image/png';
-                    const content = image.Content;
-                    return `data:${contentType};base64, ${content}`;
+                if (image?.ContentType) {
+                    if (image.Content) {
+                        return `data:${image.ContentType};base64,${image.Content}`;
+                    }
+                    else if (image.ID) {
+                        return ObjectIconService.getObjectIconUrl(
+                            image.ID, image.ContentType
+                        );
+                    }
                 }
                 return null;
             })
