@@ -82,7 +82,7 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
         }
     }
 
-    protected isSameValue(value: any): boolean {
+    public isSameValue(value: any): boolean {
         return false;
     }
 }

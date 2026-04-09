@@ -417,7 +417,7 @@ export class ObjectFormValue<T = any> {
         }
     }
 
-    protected isSameValue(value: any): boolean {
+    public isSameValue(value: any): boolean {
         if (!this.hasValue(this.value) && !this.hasValue(value)) {
             return true;
         }
