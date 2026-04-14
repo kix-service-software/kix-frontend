@@ -18,6 +18,10 @@ import { Notification } from '../../model/Notification';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { APIClient } from '../../../../api-client/APIClient';
+import { NotificationHandler } from '../../../base-components/webapp/core/NotificationHandler';
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 
 export class NotificationService extends KIXObjectService<SystemAddress> {
 
@@ -34,6 +38,24 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
     private constructor() {
         super(KIXObjectType.NOTIFICATION);
         this.objectConstructors.set(KIXObjectType.NOTIFICATION, [Notification]);
+    }
+
+    public async registerNotificationServiceWorker(): Promise<void> {
+        NotificationHandler.getInstance();
+
+        if ('serviceWorker' in navigator) {
+            const baseRoute = ClientStorageService.getBaseRoute();
+            await navigator.serviceWorker.register(`${baseRoute}/static/notification-worker.js`);
+            const workerChannel = new BroadcastChannel('worker-channel');
+            workerChannel.postMessage({ notificationURL: APIClient.getUrl('/notifications/backend') });
+        } else {
+            console.error('Service workers are not supported.');
+        }
+
+        const channel = new BroadcastChannel('portal-notifications');
+        channel.addEventListener('message', (event) => {
+            EventService.getInstance().publish(event?.data);
+        });
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {

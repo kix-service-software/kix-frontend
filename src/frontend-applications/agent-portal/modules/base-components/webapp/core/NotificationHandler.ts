@@ -28,7 +28,12 @@ export class NotificationHandler {
         return NotificationHandler.INSTANCE;
     }
 
-    private constructor() { }
+    private constructor() {
+        const channel = new BroadcastChannel('be-notifications');
+        channel.addEventListener('message', (event) => {
+            NotificationHandler.getInstance().handleUpdateNotifications(event?.data);
+        });
+    }
 
     private updateTimeout: any;
     private updates: Array<[KIXObjectType | string, string | number]> = [];
