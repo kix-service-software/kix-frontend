@@ -7,8 +7,6 @@
  * --
  */
 
-import { BackendNotificationAPIClient } from '../../../../api-client/notifications/BackendNotificationAPIClient';
-import { PortalNotificationAPIClient } from '../../../../api-client/notifications/PortalNotificationAPIClient';
 import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
@@ -16,6 +14,7 @@ import { ClientStorageService } from '../../../base-components/webapp/core/Clien
 import { ContextHistory } from '../../../base-components/webapp/core/ContextHistory';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
+import { NotificationService } from '../../../notification/webapp/core';
 import { PortalNotificationService } from '../../../portal-notification/webapp/core/PortalNotificationService';
 
 export class AgentPortalService {
@@ -36,8 +35,7 @@ export class AgentPortalService {
 
         await KIXModulesService.getInstance().init(this.modules);
 
-        BackendNotificationAPIClient.initialize();
-        PortalNotificationAPIClient.initialize();
+        NotificationService.getInstance().registerNotificationServiceWorker();
     }
 
     private static setBaseLink(): void {

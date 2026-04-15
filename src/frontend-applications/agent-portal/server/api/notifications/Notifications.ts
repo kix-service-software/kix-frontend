@@ -17,8 +17,7 @@ import { ConfigurationService } from '../../../../../server/services/Configurati
 async function routes(fastify: FastifyInstance, options): Promise<void> {
     fastify.get('/notifications/:userType', loadNotifications);
     fastify.get('/notifications/prelogin/:userType', loadPreloginNotifications);
-    fastify.get('/notifications/backend', waitForBackendNotifications);
-    fastify.get('/notifications/portal', waitForPortalNotifications);
+    fastify.get('/notifications/backend', waitForNotifications);
 }
 
 async function loadNotifications(req: FastifyRequest, reply: FastifyReply): Promise<void> {
@@ -33,13 +32,14 @@ async function loadPreloginNotifications(req: FastifyRequest, reply: FastifyRepl
     return reply.status(200).send({ notifications });
 }
 
-async function waitForBackendNotifications(req: FastifyRequest, reply: FastifyReply): Promise<void> {
+async function waitForNotifications(req: FastifyRequest, reply: FastifyReply): Promise<void> {
     const { requestId } = APIUtil.getRequestData(req);
 
     const timeout = setTimeout(() => {
-        reply.status(200).send({ notifications: [] });
+        reply.status(200).send({});
         ClientNotificationService.getInstance().removeListener(requestId);
-    }, ConfigurationService.getEnvNumber('NOTIFICATION_POLLING_TIMEOUT') || 30000);
+        PortalNotificationService.getInstance().removeListener(requestId);
+    }, ConfigurationService.getEnvNumber('NOTIFICATION_POLLING_TIMEOUT') || 5000);
 
     ClientNotificationService.getInstance().registerNotificationListener(
         requestId,
@@ -47,25 +47,16 @@ async function waitForBackendNotifications(req: FastifyRequest, reply: FastifyRe
             clearTimeout(timeout);
             reply.status(200).send({ notifications: events });
             ClientNotificationService.getInstance().removeListener(requestId);
+            PortalNotificationService.getInstance().removeListener(requestId);
         }
     );
-
-    return reply;
-}
-
-async function waitForPortalNotifications(req: FastifyRequest, reply: FastifyReply): Promise<void> {
-    const { requestId } = APIUtil.getRequestData(req);
-
-    const timeout = setTimeout(() => {
-        reply.status(200).send({ event: '' });
-        PortalNotificationService.getInstance().removeListener(requestId);
-    }, ConfigurationService.getEnvNumber('NOTIFICATION_POLLING_TIMEOUT') || 30000);
 
     PortalNotificationService.getInstance().registerNotificationListener(
         requestId,
         (event: string) => {
             clearTimeout(timeout);
             reply.status(200).send({ event });
+            ClientNotificationService.getInstance().removeListener(requestId);
             PortalNotificationService.getInstance().removeListener(requestId);
         }
     );

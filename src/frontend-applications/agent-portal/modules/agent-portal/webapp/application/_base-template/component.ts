@@ -47,10 +47,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.loading = true;
         this.state.loadingHint = 'Loading';
 
-        console.time('Check Authentication');
-        await this.checkAuthentication();
-        console.timeEnd('Check Authentication');
-
         await AgentPortalService.initApplication(this.modules);
 
         this.registerListener();
