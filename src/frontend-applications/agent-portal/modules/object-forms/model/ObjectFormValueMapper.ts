@@ -336,11 +336,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         let formValue: ObjectFormValue;
         for (const fv of this.formValues || []) {
 
-            const dfName = KIXObjectService.getDynamicFieldName(property);
-            if (!dfName && fv.property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                continue;
-            }
-
             formValue = fv.findFormValue(property);
 
             if (formValue) {
