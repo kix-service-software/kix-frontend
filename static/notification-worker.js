@@ -2,37 +2,71 @@ const beNotificationChannel = new BroadcastChannel('be-notifications');
 const portalNotificationChannel = new BroadcastChannel('portal-notifications');
 const workerChannel = new BroadcastChannel('worker-channel');
 
-let running = false;
+let runningObjectEventPolling = false;
+let runningPortalNotificationPolling = false;
 
 workerChannel.addEventListener('message', (event) => {
-    if (event.data && event.data.notificationURL) {
-        execLongPolling(event.data.notificationURL);
+    if (event.data && event.data.objectEventURL) {
+        execObjectEventPolling(event.data.objectEventURL);
+    }
+
+    if (event.data && event.data.portalNotificationURL) {
+        execPortalNotificationPolling(event.data.portalNotificationURL);
     }
 });
 
-async function execLongPolling(url) {
-    if (url && !running) {
+
+// Object Events Polling
+
+async function execObjectEventPolling(url) {
+    if (url && !runningObjectEventPolling) {
         while (true) {
-            running = true;
-            await waitForNotifications(url);
+            runningObjectEventPolling = true;
+            await waitForObjectEvents(url);
         }
     }
 }
 
-async function waitForNotifications(url) {
-    const response = await fetch(url, {}).catch((e) => {
-        if (e.name !== 'AbortError') {
-            console.error(e);
-        }
-    });
-
+async function waitForObjectEvents(url) {
     try {
+        const response = await fetch(url, {
+            headers: {
+                'kix-requestid': Date.now()
+            }
+        });
         const result = await response?.json();
 
         if (Array.isArray(result?.notifications)) {
             beNotificationChannel.postMessage(result?.notifications);
-        } else if (result?.event) {
-            portalNotificationChannel.postMessage(result?.event);
+        }
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+// Portal Notifications Polling
+
+async function execPortalNotificationPolling(url) {
+    if (url && !runningPortalNotificationPolling) {
+        while (true) {
+            runningPortalNotificationPolling = true;
+            await waitForPortalNotifications(url);
+        }
+    }
+}
+
+async function waitForPortalNotifications(url) {
+    try {
+        const response = await fetch(url, {
+            headers: {
+                'kix-requestid': Date.now()
+            }
+        });
+        const result = await response?.json();
+
+        if (result?.portalNotification) {
+            portalNotificationChannel.postMessage(result?.portalNotification);
         }
     } catch (e) {
         console.error(e);

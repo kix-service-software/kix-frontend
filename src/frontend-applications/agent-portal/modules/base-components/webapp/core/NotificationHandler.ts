@@ -31,7 +31,9 @@ export class NotificationHandler {
     private constructor() {
         const channel = new BroadcastChannel('be-notifications');
         channel.addEventListener('message', (event) => {
-            NotificationHandler.getInstance().handleUpdateNotifications(event?.data);
+            NotificationHandler.getInstance().handleUpdateNotifications(
+                event?.data?.map((e) => new BackendNotification(e))
+            );
         });
     }
 
