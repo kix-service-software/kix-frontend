@@ -43,14 +43,22 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
     public async registerNotificationServiceWorker(): Promise<void> {
         NotificationHandler.getInstance();
 
-        if ('serviceWorker' in navigator) {
+        const workerChannel = new BroadcastChannel('worker-channel');
+
+        try {
             const baseRoute = ClientStorageService.getBaseRoute();
-            await navigator.serviceWorker.register(`${baseRoute}/static/notification-worker.js`);
-            const workerChannel = new BroadcastChannel('worker-channel');
-            workerChannel.postMessage({ notificationURL: APIClient.getUrl('/notifications/backend') });
-        } else {
-            console.error('Service workers are not supported.');
+            const workerJS = `${baseRoute}/static/notification-worker.js`;
+            new SharedWorker(workerJS);
+        } catch (e) {
+            console.error(e);
         }
+
+        setTimeout(
+            () => workerChannel.postMessage({
+                objectEventURL: APIClient.getUrl('/notifications/backend'),
+                portalNotificationURL: APIClient.getUrl('/notifications/portal')
+            }), 500
+        );
 
         const channel = new BroadcastChannel('portal-notifications');
         channel.addEventListener('message', (event) => {
