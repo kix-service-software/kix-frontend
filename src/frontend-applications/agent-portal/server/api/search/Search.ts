@@ -33,9 +33,8 @@ async function loadSearches(req: FastifyRequest, reply: FastifyReply): Promise<v
     let result = { search: [] };
 
     const user = await UserService.getInstance().getUserByToken(token);
-    const preferenceId = ConfigurationService.getEnvString('NOTIFICATION_CLIENT_ID') + 'searchprofiles';
 
-    const searchPreference = user?.Preferences?.find((p) => p.ID === preferenceId);
+    const searchPreference = user?.Preferences?.find((p) => p.ID?.endsWith('searchprofiles'));
     const searchConfigs = [];
     if (searchPreference) {
         const search = JSON.parse(searchPreference.Value);
