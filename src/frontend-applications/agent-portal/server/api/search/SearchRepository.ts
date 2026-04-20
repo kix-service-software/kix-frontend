@@ -48,12 +48,11 @@ export class SearchRepository {
 
         if (share) {
             await this.deleteUserSearch(search.id, token);
-            await this.shareSearchCache(search, user);
+            this.shareSearchCache(search, user);
         } else {
-            await this.deleteSharedSearch(search.id);
-            const preferenceId = ConfigurationService.getEnvString('NOTIFICATION_CLIENT_ID') + 'searchprofiles';
+            this.deleteSharedSearch(search.id);
 
-            const searchPreference = user.Preferences.find((p) => p.ID === preferenceId);
+            const searchPreference = user.Preferences.find((p) => p.ID?.endsWith('searchprofiles'));
             let searchConfig = {};
 
             if (searchPreference) {
@@ -66,7 +65,7 @@ export class SearchRepository {
             searchConfig[search.id] = search;
 
             const value = JSON.stringify(searchConfig);
-            await UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
+            await UserService.getInstance().setPreferences(token, 'SearchRepository', [['searchprofiles', value]]);
         }
 
         const event = new BackendNotification();
@@ -112,16 +111,14 @@ export class SearchRepository {
     public static async deleteUserSearch(id: string, token: string): Promise<void> {
         const user = await UserService.getInstance().getUserByToken(token);
         if (user) {
-            const preferenceId = ConfigurationService.getEnvString('NOTIFICATION_CLIENT_ID') + 'searchprofiles';
-
-            const searchPreference = user.Preferences.find((p) => p.ID === preferenceId);
+            const searchPreference = user.Preferences.find((p) => p.ID?.endsWith('searchprofiles'));
 
             if (searchPreference) {
                 const search = JSON.parse(searchPreference.Value);
                 if (id && search[id]) {
                     delete search[id];
                     const value = JSON.stringify(search);
-                    await UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
+                    await UserService.getInstance().setPreferences(token, 'SearchRepository', [['searchprofiles', value]]);
                 }
             }
         }

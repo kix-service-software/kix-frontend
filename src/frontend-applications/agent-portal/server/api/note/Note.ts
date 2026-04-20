@@ -25,8 +25,7 @@ async function loadNotes(req: FastifyRequest, reply: FastifyReply): Promise<void
 
     let notes = {};
     if (user) {
-        const preferenceId = ConfigurationService.getEnvString('NOTIFICATION_CLIENT_ID') + '_notes';
-        const notesPreference = user.Preferences.find((p) => p.ID === preferenceId);
+        const notesPreference = user.Preferences.find((p) => p.ID?.endsWith('notes'));
         if (notesPreference) {
             notes = JSON.parse(notesPreference.Value);
         }
@@ -47,9 +46,7 @@ async function saveNotes(req: FastifyRequest, reply: FastifyReply): Promise<void
         let result = {};
 
         if (user) {
-            const preferenceId = ConfigurationService.getEnvString('NOTIFICATION_CLIENT_ID') + '_notes';
-
-            const notesPreference = user.Preferences.find((p) => p.ID === preferenceId);
+            const notesPreference = user.Preferences.find((p) => p.ID?.endsWith('notes'));
             let notesConfig = {};
             if (notesPreference) {
                 notesConfig = JSON.parse(notesPreference.Value);
@@ -58,7 +55,7 @@ async function saveNotes(req: FastifyRequest, reply: FastifyReply): Promise<void
             notesConfig[contextId] = notes;
             const value = JSON.stringify(notesConfig);
 
-            await UserService.getInstance().setPreferences(token, 'NotesNamespace', [[preferenceId, value]])
+            await UserService.getInstance().setPreferences(token, 'Notes', [['notes', value]])
                 .catch((error: Error) => {
                     status = 400;
                     result = error;
