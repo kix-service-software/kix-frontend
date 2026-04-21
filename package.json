@@ -68,7 +68,7 @@
         "@tiptap/starter-kit": "2.26.1",
         "@types/d3": "^7.1.0",
         "address-rfc2822": "^2.1.0",
-        "axios": "1.14.0",
+        "axios": "^1.15.1",
         "bowser": "^2.13.1",
         "compression": "^1.8.1",
         "cors": "^2.8.5",
