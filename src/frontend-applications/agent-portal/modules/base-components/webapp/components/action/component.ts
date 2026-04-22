@@ -88,6 +88,13 @@ class ActionComponent extends AbstractMarkoComponent<ComponentState> {
         this.doAction(event);
     }
 
+    public preventDefault(event: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    }
+
 }
 
 module.exports = ActionComponent;

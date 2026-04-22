@@ -129,7 +129,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public getGroupClasses(groupId): string {
         const groupLayout = this.formhandler?.form?.formLayout?.groupLayout?.find((g) => g.groupId === groupId);
-        let classes = [];
+        const classes = [];
 
         if (groupLayout?.colSM > 0) {
             classes.push('col-sm-' + groupLayout.colSM);

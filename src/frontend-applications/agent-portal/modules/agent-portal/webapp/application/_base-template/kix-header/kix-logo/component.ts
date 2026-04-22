@@ -7,12 +7,9 @@
  * --
  */
 
-import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
-import { ObjectIconLoadingOptions } from '../../../../../../../server/model/ObjectIconLoadingOptions';
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { KIXObjectService } from '../../../../../../base-components/webapp/core/KIXObjectService';
-import { ObjectIcon } from '../../../../../../icon/model/ObjectIcon';
 import { ComponentState } from './ComponentState';
+import { ObjectIconService } from '../../../../../../icon/webapp/core';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -25,12 +22,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const logoLoadingOptions = new ObjectIconLoadingOptions('agent-portal-logo', 'agent-portal-logo');
-        const icons = await KIXObjectService.loadObjects<ObjectIcon>(
-            KIXObjectType.OBJECT_ICON, null, null, logoLoadingOptions
-        );
-        if (icons && icons.length) {
-            this.state.logoIcon = icons[0];
+
+        const objectIcon = await ObjectIconService.getInstance().getObjectIcon('agent-portal-logo', 'agent-portal-logo');
+        if (objectIcon) {
+            if (objectIcon.ContentType === 'text') {
+                this.state.logoSrcPath = null;
+            }
+            else {
+                this.state.logoSrcPath = ObjectIconService.getObjectIconUrl(
+                    objectIcon.ID, objectIcon.ContentType
+                );
+            }
         }
     }
 

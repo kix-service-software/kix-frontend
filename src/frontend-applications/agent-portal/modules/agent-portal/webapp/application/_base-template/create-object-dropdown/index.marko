@@ -12,12 +12,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <span
             on-click("valueClicked", state.selectedValue)
             class="selected-value"
+            role="button"
         >
             <if(state.values.length)>
-                <i class="fa fa-ellipsis-v dropdown-button"/>
+                <i class="fa fa-ellipsis-v dropdown-button" aria-hidden="true"/>
             </if>
             <span>${state.selectedValue[1]}</span>
-            <i class="fa fa-plus"/>
+            <i class="fa fa-plus" aria-hidden="true"/>
         </span>
         <ul>
             <for|value| of=state.values>

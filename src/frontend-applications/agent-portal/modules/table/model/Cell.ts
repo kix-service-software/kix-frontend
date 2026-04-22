@@ -21,7 +21,7 @@ export class Cell {
     ) { }
 
     public async initDisplayValue(): Promise<void> {
-        await this.tableValue.initDisplayValue(this);
+        return this.tableValue.initDisplayValue(this);
     }
 
     public getRow(): Row {

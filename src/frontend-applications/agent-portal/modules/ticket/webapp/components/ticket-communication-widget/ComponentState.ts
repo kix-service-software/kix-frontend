@@ -20,7 +20,6 @@ export class ComponentState extends WidgetComponentState {
         public newestArticleId: number = null,
         public expanded: boolean = false,
         public activeUnreadAction: boolean = false,
-        public selectedCompactView: boolean = false,
         public collapseAll: boolean = false,
         public informationConfig: ObjectInformationCardConfiguration = null,
         public topId: string = IdService.generateDateBasedId('communication-top')

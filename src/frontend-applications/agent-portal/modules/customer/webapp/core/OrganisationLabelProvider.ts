@@ -17,6 +17,7 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 
 export class OrganisationLabelProvider extends LabelProvider<Organisation> {
 
@@ -52,6 +53,9 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
                 break;
             case OrganisationProperty.ID:
                 displayValue = 'Translatable#Organisation ID';
+                break;
+            case OrganisationProperty.PARENT_ID:
+                displayValue = 'Translatable#Parent Organisation';
                 break;
             case OrganisationProperty.NEW_TICKETS_COUNT:
                 displayValue = 'Translatable#New Tickets';
@@ -113,6 +117,29 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
                 break;
             default:
                 displayValue = await super.getDisplayText(organisation, property, displayValue, translatable);
+        }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
+        return displayValue ? displayValue.toString() : '';
+    }
+
+    public async getPropertyValueDisplayText(
+        property: string, value: any, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue = value;
+        switch (property) {
+            case OrganisationProperty.PARENT_ID:
+                if (value) {
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.ORGANISATION, value);
+                }
+                break;
+            default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
         if (displayValue) {

@@ -12,7 +12,7 @@ import { AbstractAction } from '../../../../../../../modules/base-components/web
 import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
-import { AuthenticationSocketClient } from '../../../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../../../api-client/session/Session';
 import { EditTicketPriorityDialogContext } from '../../context';
 
 export class TicketPriorityEditAction extends AbstractAction {
@@ -31,7 +31,7 @@ export class TicketPriorityEditAction extends AbstractAction {
             new UIComponentPermission(`system/ticket/priorities/${objectId}`, [CRUD.UPDATE], false, 'Object', false)
         ];
 
-        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        show = await SessionAPIClient.checkPermissions(permissions);
         return show;
     }
 

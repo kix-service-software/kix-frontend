@@ -64,6 +64,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.column) {
             const componentId = this.column.getColumnConfiguration().componentId;
             this.state.showDefaultCell = !componentId || componentId === '';
+            this.state.noLink = this.column.getColumnConfiguration().noLink || false;
         }
 
         if (this.cell) {

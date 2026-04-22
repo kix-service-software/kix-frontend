@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import * as chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { OutOfOffice } from '../../src/frontend-applications/agent-portal/modules/user/model/OutOfOffice';
 
 
@@ -24,9 +24,9 @@ describe('OutOfOffice', () => {
         let outOfOffice: OutOfOffice;
 
         before(() => {
-            outOfOffice = new OutOfOffice(
-                undefined, '2024-01-01', '2024-01-05'
-            );
+            outOfOffice = new OutOfOffice()
+            outOfOffice.Start = '2024-01-01';
+            outOfOffice.End = '2024-01-05';
         });
 
         it('Have the correct Start', () => {

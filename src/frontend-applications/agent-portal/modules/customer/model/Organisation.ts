@@ -35,6 +35,8 @@ export class Organisation extends KIXObject {
 
     public Number: string;
 
+    public ParentID: number;
+
     public Street: string;
 
     public Url: string;
@@ -49,6 +51,8 @@ export class Organisation extends KIXObject {
 
     public AssignedConfigItems: number[];
 
+    public SubOrganisations: Organisation[];
+
     public constructor(organisation?: Organisation) {
         super(organisation);
 
@@ -61,6 +65,7 @@ export class Organisation extends KIXObject {
             this.Country = organisation.Country;
             this.Name = organisation.Name;
             this.Number = organisation.Number;
+            this.ParentID = organisation.ParentID;
             this.Street = organisation.Street;
             this.Url = organisation.Url;
             this.Zip = organisation.Zip;
@@ -75,6 +80,10 @@ export class Organisation extends KIXObject {
                 : [];
 
             this.AssignedConfigItems = organisation.AssignedConfigItems ? organisation.AssignedConfigItems : [];
+
+            this.SubOrganisations = organisation.SubOrganisations
+                ? organisation.SubOrganisations.map((sc) => new Organisation(sc))
+                : [];
         }
     }
 

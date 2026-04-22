@@ -17,7 +17,6 @@ import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpec
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
-import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 
 export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIXService {
@@ -55,9 +54,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
 
     getLinkObjectName(): string;
 
-    deleteObject(
-        objectType: KIXObjectType | string, objectId: string | number, deleteOptions?: KIXObjectSpecificDeleteOptions
-    ): Promise<void>;
+    deleteObject(objectType: KIXObjectType | string, objectId: string | number): Promise<void>;
 
     getAutoFillConfiguration(textMatch: any, placeholder: string): Promise<IAutofillConfiguration>;
 

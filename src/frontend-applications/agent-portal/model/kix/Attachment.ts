@@ -23,6 +23,8 @@ export class Attachment extends KIXObject implements IDownloadableFile {
 
     public ContentID: string;
 
+    public ContentToken: string;
+
     public ContentType: string;
 
     public Filename: string;
@@ -54,6 +56,7 @@ export class Attachment extends KIXObject implements IDownloadableFile {
             this.ObjectId = this.ID;
             this.ContentAlternative = attachment.ContentAlternative;
             this.ContentID = attachment.ContentID;
+            this.ContentToken = attachment.ContentToken;
             this.ContentType = attachment.ContentType;
             this.Filename = attachment.Filename;
             this.Filesize = attachment.Filesize;

@@ -10,6 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { TabWidgetConfiguration } from '../../../../../model/configuration/TabWidgetConfiguration';
+import { ClientStorageService } from '../../core/ClientStorageService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -38,6 +39,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
             this.state.widgets = widgets;
+            if (this.state.widgetConfiguration.minimized) {
+                this.state.startAsMinimized = true;
+            }
         }
         this.state.show = true;
     }

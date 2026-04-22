@@ -10,7 +10,7 @@
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ObjectFormValueMapper } from '../../model/ObjectFormValueMapper';
 
-export abstract class ObjectCommitHandlerExtension<T extends KIXObject = KIXObject>{
+export abstract class ObjectCommitHandlerExtension<T extends KIXObject = KIXObject> {
 
     public constructor(protected objectValueMapper: ObjectFormValueMapper) { }
 
@@ -24,7 +24,7 @@ export abstract class ObjectCommitHandlerExtension<T extends KIXObject = KIXObje
         return;
     }
 
-    public async postCommitHandling(objectId: number | string): Promise<void> {
+    public async postCommitHandling(objectId: number | string, preparedObject: KIXObject): Promise<void> {
         return;
     }
 

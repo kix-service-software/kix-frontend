@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2025-11-10 08:17+0000\n"
-"Last-Translator: rkaiser <Ricky.Kaiser@kixdesk.com>\n"
+"PO-Revision-Date: 2026-03-02 14:53+0000\n"
+"Last-Translator: jbrueckner <Joerg.Brueckner@kixdesk.com>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.16\n"
 
 msgid "', "
 msgstr "', "
@@ -92,6 +92,9 @@ msgstr "Zeitbuchung: {0}"
 msgid "Action"
 msgstr "Action"
 
+msgid "Action list"
+msgstr "Aktionsliste"
+
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -108,7 +111,7 @@ msgid "Add Column(s)"
 msgstr "Spalte(n) hinzufügen"
 
 msgid "Add Field"
-msgstr ""
+msgstr "Feld hinzufügen"
 
 msgid "Add Table Widget"
 msgstr "Tabellenwidget hinzufügen"
@@ -341,6 +344,9 @@ msgstr "Artikel ID"
 msgid "Article Text"
 msgstr "Artikeltext"
 
+msgid "Article content"
+msgstr "Artikelinhalt"
+
 msgid "Article has printed"
 msgstr "Artikel wurde gedruckt"
 
@@ -354,7 +360,7 @@ msgid "Asset Classes"
 msgstr "Assetklassen"
 
 msgid "Asset Dashboard"
-msgstr ""
+msgstr "Asset Dashboard"
 
 msgid "Asset Graph"
 msgstr "Asset-Graph"
@@ -388,9 +394,6 @@ msgstr "Zugeordnete Assets"
 
 msgid "Assigned Contacts"
 msgstr "Zugeordnete Kontakte"
-
-msgid "Assigned Organisation"
-msgstr "Zugeordnete Organisation"
 
 msgid "Assigned Organisations"
 msgstr "Zugeordnete Organisationen"
@@ -445,6 +448,9 @@ msgstr "Verfügbare Dashboard Widgets"
 
 msgid "Available Output Formats"
 msgstr "Verfügbare Ausgabeformate"
+
+msgid "Available in Edit"
+msgstr ""
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -559,7 +565,7 @@ msgstr "Geändert von"
 
 msgid "Changes cannot be saved. How do you want to proceed?"
 msgstr ""
-"Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?"
+"Änderungen können nicht gespeichert werden. Wie möchten Sie fortfahren?"
 
 msgid "Changes saved."
 msgstr "Änderungen wurden gespeichert."
@@ -603,6 +609,9 @@ msgstr "Klassen"
 msgid "Clear"
 msgstr "Leeren"
 
+msgid "Clear Value"
+msgstr "Wert entfernen"
+
 msgid "Clear in mask"
 msgstr "Feld leeren"
 
@@ -618,11 +627,14 @@ msgstr "Schließen"
 msgid "Close Overlay"
 msgstr "Schließen"
 
-msgid "Close Sidebars"
-msgstr "Sidebars schließen"
+msgid "Close Sidebar"
+msgstr "Seitenleiste schließen"
 
 msgid "Close all open tabs"
 msgstr "Alle offenen Tabs schließen"
+
+msgid "Close widget"
+msgstr "Widget schließen"
 
 msgid "Closed"
 msgstr "Geschlossen"
@@ -638,6 +650,12 @@ msgstr "Alle einklappen"
 
 msgid "Collapse all"
 msgstr "Alle einklappen"
+
+msgid "Collapse node"
+msgstr "Knoten zusammenklappen"
+
+msgid "Collapse widget"
+msgstr "Widget einklappen"
 
 msgid "Column Icon"
 msgstr "Spaltensymbol"
@@ -727,7 +745,7 @@ msgid "Configuration"
 msgstr "Konfiguration"
 
 msgid "Configuration Overview"
-msgstr ""
+msgstr "Konfigurationsübersicht"
 
 msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
@@ -764,6 +782,9 @@ msgstr "URL in Zwischenablage kopieren und schließen"
 
 msgid "Copy of {0}"
 msgstr "Kopie von {0}"
+
+msgid "Could not download/open attachment."
+msgstr ""
 
 msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
@@ -879,8 +900,11 @@ msgstr "Absteigend"
 msgid "DOUBLE_QUOTES"
 msgstr "\" (Doppeltes Hochkomma)"
 
+msgid "Danger"
+msgstr "Gefahr"
+
 msgid "Dashboard Refresh Interval (Minutes)"
-msgstr ""
+msgstr "Aktualisierungsintervall des Dashboards (Minuten)"
 
 msgid "Data Source"
 msgstr "Datenquelle"
@@ -890,6 +914,9 @@ msgstr "Datentyp"
 
 msgid "Datasource"
 msgstr "Datenquelle"
+
+msgid "Date Input"
+msgstr "Datumseingabe"
 
 msgid "Date Restriction"
 msgstr "Datumsbeschränkung"
@@ -958,7 +985,7 @@ msgid "Deployment state"
 msgstr "Verwendungsstatus"
 
 msgid "Deployment state type"
-msgstr ""
+msgstr "Bereitstellungsstatus-Typ"
 
 msgid "Descending:"
 msgstr "Absteigend:"
@@ -1070,13 +1097,13 @@ msgid "Edit FAQ Category"
 msgstr "FAQ Kategorie bearbeiten"
 
 msgid "Edit Field"
-msgstr ""
+msgstr "Feld bearbeiten"
 
 msgid "Edit General Catalog"
 msgstr "General Katalog bearbeiten"
 
 msgid "Edit Group"
-msgstr ""
+msgstr "Gruppe bearbeiten"
 
 msgid "Edit Job"
 msgstr "Job bearbeiten"
@@ -1324,6 +1351,12 @@ msgstr "KIX ohne Rückfrage verlassen"
 msgid "Expand All"
 msgstr "Alle ausklappen"
 
+msgid "Expand node"
+msgstr "Knoten erweitern"
+
+msgid "Expand widget"
+msgstr "Widget erweitern"
+
 msgid "Explorer"
 msgstr "Explorer"
 
@@ -1430,7 +1463,7 @@ msgid "Field {0} has an invalid value ({1})."
 msgstr "Feld {0} enthält einen ungültigen Wert ({1})."
 
 msgid "Field {0} has to be a positive integer number."
-msgstr ""
+msgstr "Das Feld {0} muss eine positive ganze Zahl sein."
 
 msgid "File Upload"
 msgstr "Datei hochladen"
@@ -1505,9 +1538,6 @@ msgstr "Formulartitel"
 
 msgid "Format"
 msgstr "Format"
-
-msgid "Forum"
-msgstr "Forum"
 
 msgid "Forward"
 msgstr "Weiterleiten"
@@ -1758,8 +1788,8 @@ msgstr ""
 
 msgid "Helptext_Admin_MailAccountCreate_Host"
 msgstr ""
-"Geben Sie den Name des Hosts an, bei dem das Konto liegt. Beispiel: mail."
-"example.com"
+"Geben Sie den Name des Hosts an, bei dem das Konto liegt. Beispiel: "
+"mail.example.com"
 
 msgid "Helptext_Admin_MailAccountCreate_IMAPFolder"
 msgstr ""
@@ -1850,11 +1880,11 @@ msgid "Helptext_Admin_MailFilter_Sidebar"
 msgstr ""
 "Einkommende Mails können anhand von E-Mail-Kopfzeilen verteilt oder "
 "gefiltert werden. Für die Suche sind reguläre Ausdrücke zulässig. Wenn nur "
-"eine E-Mail-Adresse gesucht wird, dann benutzen Sie EMAILADDRESS:"
-"info@example.com in From, To oder Cc. Wenn Sie reguläre Ausdrücke verwenden, "
-"können Sie die unter „Filterbedingungen“ gefundenen Werte in „()“ setzen und "
-"mit „[***]“ in der Aktion \"Wert setzen\" verwenden. (nur für eine „()“-"
-"Bedingung möglich)"
+"eine E-Mail-Adresse gesucht wird, dann benutzen Sie "
+"EMAILADDRESS:info@example.com in From, To oder Cc. Wenn Sie reguläre "
+"Ausdrücke verwenden, können Sie die unter „Filterbedingungen“ gefundenen "
+"Werte in „()“ setzen und mit „[***]“ in der Aktion \"Wert setzen\" "
+"verwenden. (nur für eine „()“-Bedingung möglich)"
 
 msgid "Helptext_Admin_NotificationCreate_AdditionalRecipient"
 msgstr ""
@@ -2079,8 +2109,8 @@ msgstr ""
 
 msgid "Helptext_Admin_OAuth2ProfileCreate_URL_Auth"
 msgstr ""
-"Tragen Sie die URL für die OAuth2-Authorisierung ein (z.B. https://login."
-"microsoftonline.com/<Tenant-ID/Verzeichnis-ID>/oauth2/v2.0/authorize)."
+"Tragen Sie die URL für die OAuth2-Authorisierung ein (z.B. https://"
+"login.microsoftonline.com/<Tenant-ID/Verzeichnis-ID>/oauth2/v2.0/authorize)."
 
 msgid "Helptext_Admin_OAuth2ProfileCreate_URL_Redirect"
 msgstr ""
@@ -2089,8 +2119,8 @@ msgstr ""
 
 msgid "Helptext_Admin_OAuth2ProfileCreate_URL_Token"
 msgstr ""
-"Tragen Sie die URL für die OAuth2-Token ein (z.B. https://login."
-"microsoftonline.com/<Tenant-ID/Verzeichnis-ID>/oauth2/v2.0/token)."
+"Tragen Sie die URL für die OAuth2-Token ein (z.B. https://"
+"login.microsoftonline.com/<Tenant-ID/Verzeichnis-ID>/oauth2/v2.0/token)."
 
 msgid "Helptext_Admin_OAuth2ProfileCreate_Validity"
 msgstr ""
@@ -2365,8 +2395,8 @@ msgstr "Die Rolle kann nur verwendet werden, wenn sie „gültig“ gesetzt ist.
 
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
-"Die Verwendung von RegEx ist möglich. Für Aufzählungen nutzen Sie \"|"
-"\" (ohne Leerzeichen) und setzen Sie die gesamte Liste in Klammern."
+"Die Verwendung von RegEx ist möglich. Für Aufzählungen nutzen Sie \"|\" "
+"(ohne Leerzeichen) und setzen Sie die gesamte Liste in Klammern."
 
 msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
 msgstr ""
@@ -2628,6 +2658,9 @@ msgstr ""
 msgid "Helptext_Customers_OrganisationCreate_Number"
 msgstr ""
 "Geben Sie einen eindeutigen Identifier (z.B. KNR) für die Organisation ein."
+
+msgid "Helptext_Customers_OrganisationCreate_ParentOrganisation"
+msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Street"
 msgstr ""
@@ -2891,8 +2924,8 @@ msgstr ""
 
 msgid "Helptext_Reporting_ReportCreate_ParameterReferences"
 msgstr ""
-"Angabe der Datenquelle, auf die der Parameter referenziert. Syntax: Objekt."
-"Attribut (z.B.: die ID der Organistation: \"Organisation.ID\"). "
+"Angabe der Datenquelle, auf die der Parameter referenziert. Syntax: "
+"Objekt.Attribut (z.B.: die ID der Organistation: \"Organisation.ID\"). "
 "Detailiertere Informationen finden Sie im Handbuch."
 
 msgid "Helptext_Reporting_ReportCreate_ParameterRequired"
@@ -3115,9 +3148,6 @@ msgstr ""
 msgid "Hide"
 msgstr "Ausblenden"
 
-msgid "Hide Message"
-msgstr "Artikeltext ausblenden"
-
 msgid "Hint"
 msgstr "Hinweis"
 
@@ -3128,7 +3158,7 @@ msgid "Home"
 msgstr "Home"
 
 msgid "Home Dashboard"
-msgstr ""
+msgstr "Startseite Dashboard"
 
 msgid "Host"
 msgstr "Host"
@@ -3386,7 +3416,7 @@ msgid "Links will be removed."
 msgstr "Verknüpfungen werden entfernt."
 
 msgid "Load Form"
-msgstr ""
+msgstr "Ladeformular"
 
 msgid "Load more"
 msgstr "weitere laden"
@@ -3538,6 +3568,15 @@ msgstr "Meine Teams"
 msgid "My Teams (past)"
 msgstr "Meine Teams (Vergangenheit)"
 
+msgid "My Teams Table"
+msgstr "Meine Teams Tabelle"
+
+msgid "My Teams Table Widget"
+msgstr "Meine Teams-Tabellen-Widget"
+
+msgid "My Teams Widget"
+msgstr "Mein Teams-Widget"
+
 msgid "My Tickets"
 msgstr "Meine Tickets"
 
@@ -3620,7 +3659,7 @@ msgid "New General Catalog"
 msgstr "Neuer General Katalog"
 
 msgid "New Group"
-msgstr ""
+msgstr "Neue Gruppe"
 
 msgid "New Job"
 msgstr "Neuer Job"
@@ -3641,7 +3680,7 @@ msgid "New Organisation"
 msgstr "Neue Organisation"
 
 msgid "New Page"
-msgstr ""
+msgstr "Neue Seite"
 
 msgid "New Password"
 msgstr "Neues Passwort"
@@ -3907,8 +3946,8 @@ msgstr "Einmal pro Tag"
 msgid "Open"
 msgstr "Offen"
 
-msgid "Open Sidebars"
-msgstr "Geöffnete Sidebars"
+msgid "Open Sidebar"
+msgstr "Seitenleiste öffnen"
 
 msgid "Open Tickets"
 msgstr "Offene Tickets"
@@ -3956,10 +3995,13 @@ msgid "Organisations Dashboard"
 msgstr "Organisationen Dashboard"
 
 msgid "Organizations and Contacts Dashboard"
-msgstr ""
+msgstr "Organisationen und Kontakte Dashboard"
 
 msgid "Other"
 msgstr "andere"
+
+msgid "Other Information"
+msgstr "Weitere Informationen"
 
 msgid "Out Of Office"
 msgstr "Abwesend"
@@ -4031,13 +4073,13 @@ msgid "Owner Out Of Office Substitute"
 msgstr "\"Bearbeiter Out Of Office\"-Vertretung"
 
 msgid "PKCE"
-msgstr ""
+msgstr "PKCE"
 
 msgid "Page Size"
 msgstr "Seitengröße"
 
 msgid "Page contains invalid values"
-msgstr ""
+msgstr "Seite enthält ungültige Werte"
 
 msgid "Paramater"
 msgstr "Parameter"
@@ -4050,6 +4092,9 @@ msgstr "Parameter"
 
 msgid "Parent Category"
 msgstr "Übergeordnete Kategorie"
+
+msgid "Parent Organisation"
+msgstr "Eltern Organisation"
 
 msgid "Parent Queue"
 msgstr "Übergeordnetes Team"
@@ -4266,7 +4311,7 @@ msgid "QuickstartGuide_Text_Lanes"
 msgstr ""
 "Auf den Detailseiten der einzelnen Objekte (beispielsweise Ticket, Asset) "
 "finden Sie viele Informationen, welche aufgeräumt und platzsparend in "
-"mehreren Lanes untergebracht sind."
+"mehreren Zeilen untergebracht sind."
 
 msgid "QuickstartGuide_Text_Menu"
 msgstr ""
@@ -4364,9 +4409,6 @@ msgstr "Frontend-Konfigurationen neu laden"
 msgid "Reload Application"
 msgstr "Anwendung neu laden"
 
-msgid "Reload Calendar Data ..."
-msgstr "Kalenderdaten neu laden..."
-
 msgid "Reload Frontend Configurations"
 msgstr "Lade Frontend-Konfigurationen neu"
 
@@ -4433,6 +4475,9 @@ msgstr "Abhängigkeit zur Organisation lösen"
 msgid "Remove from Affected Assets"
 msgstr "Aus betroffenen Assets entfernen"
 
+msgid "Remove node"
+msgstr "Knoten entfernen"
+
 msgid "Remove parameter"
 msgstr "Parameter löschen"
 
@@ -4455,7 +4500,7 @@ msgid "Replace empty value"
 msgstr "Leerwert ersetzen"
 
 msgid "Replace existing search template {0}?"
-msgstr ""
+msgstr "Vorhandene Suchvorlage {0} ersetzen?"
 
 msgid "Reply"
 msgstr "Antworten"
@@ -4543,6 +4588,9 @@ msgstr "Verantwortlicher Out Of Office"
 
 msgid "Responsible Out Of Office Substitute"
 msgstr "\"Verantwortlicher Out Of Office\"-Vertretung"
+
+msgid "Restore Search Template"
+msgstr ""
 
 msgid "Result names"
 msgstr "Ergebnisbezeichnungen"
@@ -4642,6 +4690,12 @@ msgstr "Zeitplanung"
 msgid "Scope"
 msgstr "Scope"
 
+msgid "Scroll tabs to the left"
+msgstr "Blättern Sie die Registerkarten nach links"
+
+msgid "Scroll tabs to the right"
+msgstr "Blättern Sie die Registerkarten nach rechts"
+
 msgid "Search"
 msgstr "Suchen"
 
@@ -4726,6 +4780,9 @@ msgstr "Keine Auswählen"
 msgid "Select all"
 msgstr "Alle auswählen"
 
+msgid "Select entry"
+msgstr "Eintrag auswählen"
+
 msgid "Select file"
 msgstr "Datei auswählen"
 
@@ -4801,6 +4858,9 @@ msgstr "Geteilte Suche"
 msgid "Shared Searches"
 msgstr "geteilte Suchen"
 
+msgid "Show FAQ article preview"
+msgstr "Vorschau des FAQ-Artikels anzeigen"
+
 msgid "Show Filter"
 msgstr "Filter zeigen"
 
@@ -4815,6 +4875,9 @@ msgstr "Zeige Links"
 
 msgid "Show all"
 msgstr "Alles anzeigen"
+
+msgid "Show filter"
+msgstr "Filter anzeigen"
 
 msgid "Show in Customer Portal"
 msgstr "In Kundenportal Anzeigen"
@@ -4946,7 +5009,7 @@ msgid "Street"
 msgstr "Straße"
 
 msgid "Sub"
-msgstr ""
+msgstr "unter"
 
 msgid "Sub Category"
 msgstr "Unterkategorie"
@@ -4967,7 +5030,7 @@ msgid "Success"
 msgstr "Erfolg"
 
 msgid "Success!"
-msgstr "Erfolg!"
+msgstr "Erfolgreich!"
 
 msgid "Successfully processed lines"
 msgstr "Erfolgreich verarbeitete Zeilen"
@@ -5032,6 +5095,9 @@ msgstr "System: Plugins"
 msgid "System: Sysconfig ({0})"
 msgstr "System: SysConfig ({0})"
 
+msgid "Table"
+msgstr "Tabelle"
+
 msgid "Table Columns"
 msgstr "Tabellenspalten"
 
@@ -5075,14 +5141,12 @@ msgid "Team Backlog"
 msgstr "Team Backlog"
 
 msgid "Team Dashboard"
-msgstr ""
+msgstr "Team Dashboard"
 
 msgid ""
-"Technical Customer Service mit KIX - work order documentation, checklists, "
+"Technical Customer Service with KIX - work order documentation, checklists, "
 "scheduling, offline information for maintenance and repairs."
 msgstr ""
-"Technischer Kundenservice mit KIX - Arbeitsablaufdokumentation, Checklisten, "
-"Zeitplanung, Offline-Informationen für Wartung und Instandhaltung."
 
 msgid "Template"
 msgstr "Vorlage"
@@ -5278,13 +5342,19 @@ msgid "Title"
 msgstr "Titel"
 
 msgid "Title is required!"
-msgstr ""
+msgstr "Titel ist erforderlich!"
 
 msgid "To"
 msgstr "To"
 
 msgid "Today"
 msgstr "Heute"
+
+msgid "Toggle password visibility"
+msgstr "Passwort-Sichtbarkeit umschalten"
+
+msgid "Toggle row"
+msgstr "Zeile umschalten"
 
 msgid "Token URL"
 msgstr "Token URL"
@@ -5571,9 +5641,6 @@ msgstr "Ihre Berechtigungen wurden aktualisiert."
 msgid "Your rating"
 msgstr "Ihre Bewertung"
 
-msgid "Youtube"
-msgstr "Youtube"
-
 msgid "ZIP"
 msgstr "PLZ"
 
@@ -5604,6 +5671,9 @@ msgstr "vor/kleiner als"
 msgid "between"
 msgstr "zwischen"
 
+msgid "checklist progress"
+msgstr "Fortschritt der Checkliste"
+
 msgid "contained in"
 msgstr "enthalten in"
 
@@ -5618,6 +5688,9 @@ msgstr "aktuell"
 
 msgid "descending"
 msgstr "absteigend"
+
+msgid "download attachment"
+msgstr "Anhang herunterladen"
 
 msgid "draft successfully saved"
 msgstr "Entwurf gesichert"
@@ -5656,7 +5729,7 @@ msgid "insert filter value"
 msgstr "Filterwert eingeben"
 
 msgid "is empty"
-msgstr ""
+msgstr "ist leer"
 
 msgid "is to large (max {0})."
 msgstr "ist zu lang (max {0})."
@@ -5687,6 +5760,9 @@ msgstr "zurück"
 
 msgid "recipient addresses (To, Cc, etc.)"
 msgstr "Empfängeradressen (Von, Cc, etc.)"
+
+msgid "remove label"
+msgstr "Label entfernen"
 
 msgid "responsibility by me"
 msgstr "verantwortet durch mich"
@@ -5737,8 +5813,8 @@ msgstr ""
 "Agentenportal erreichbar ist (z.B. \"your.docker.host:20001\"). Backend "
 "bezieht sich auf FQDN+Port, über den die KIX REST-API erreichbar ist (z.B. "
 "\"your.docker.host:20000\"). Das Customer Frontend sollte entsprechend "
-"eingestellt werden, wenn Sie das KIX Self Service Portal nutzen möchten (z."
-"B. \"your.docker.host:20002\")."
+"eingestellt werden, wenn Sie das KIX Self Service Portal nutzen möchten "
+"(z.B. \"your.docker.host:20002\")."
 
 msgid "setup_assistant_welcome_text"
 msgstr ""
@@ -5751,6 +5827,9 @@ msgstr ""
 "Tragen Sie hier die Daten Ihrer Firma ein. Diese wird an verschiedenen "
 "Stellen in KIX als Referenz genutzt und z.B. automatisch in der Standard-"
 "Signatur ersetzt."
+
+msgid "show dropdown"
+msgstr "Dropdown-Menü anzeigen"
 
 msgid "since"
 msgstr "seit/gleich oder größer"
@@ -5820,6 +5899,38 @@ msgstr "{0}: hat keinen Wert."
 
 msgid "{0}: just white spaces as value is not allowed."
 msgstr "{0}: nur Leerzeichen als Wert sind nicht zulässig."
+
+#~ msgid "Forum"
+#~ msgstr "Forum"
+
+#~ msgid ""
+#~ "Technical Customer Service mit KIX - work order documentation, "
+#~ "checklists, scheduling, offline information for maintenance and repairs."
+#~ msgstr ""
+#~ "Technischer Kundenservice mit KIX - Arbeitsablaufdokumentation, "
+#~ "Checklisten, Zeitplanung, Offline-Informationen für Wartung und "
+#~ "Instandhaltung."
+
+#~ msgid "Youtube"
+#~ msgstr "Youtube"
+
+#~ msgid "Assigned Organisation"
+#~ msgstr "Zugeordnete Organisation"
+
+#~ msgid "Close Sidebars"
+#~ msgstr "Sidebars schließen"
+
+#~ msgid "Hide Message"
+#~ msgstr "Artikeltext ausblenden"
+
+#~ msgid "Not set"
+#~ msgstr "Nicht festgelegt"
+
+#~ msgid "Open Sidebars"
+#~ msgstr "Geöffnete Sidebars"
+
+#~ msgid "Reload Calendar Data ..."
+#~ msgstr "Kalenderdaten neu laden..."
 
 #~ msgid "CMDB View"
 #~ msgstr "Assets-Ansicht"
@@ -5903,8 +6014,8 @@ msgstr "{0}: nur Leerzeichen als Wert sind nicht zulässig."
 #~ msgid "Helptext_Jobs_Create_ResultNames"
 #~ msgstr ""
 #~ "Optional können Sie hier einen Variablen-Name für das Ergebnis der Macro-"
-#~ "Action hinterlegen. Diese Variable kann als spezieller Platzhalter "
-#~ "\"${VariableName}\" in folgenden Aktionen verwendet werden."
+#~ "Action hinterlegen. Diese Variable kann als spezieller Platzhalter \"$"
+#~ "{VariableName}\" in folgenden Aktionen verwendet werden."
 
 #~ msgid "Helptext_PersonalSettings_UserPassword_Hint"
 #~ msgstr "Ihr Anmeldepasswort für die Nutzung des Self-Service-Portals"
@@ -6995,8 +7106,8 @@ msgstr "{0}: nur Leerzeichen als Wert sind nicht zulässig."
 
 #~ msgid "Helptext_Admin_MailAccountEdit_Host"
 #~ msgstr ""
-#~ "Geben Sie den Name des Hosts an, bei dem das Konto liegt. Beispiel: mail."
-#~ "example.com"
+#~ "Geben Sie den Name des Hosts an, bei dem das Konto liegt. Beispiel: "
+#~ "mail.example.com"
 
 #~ msgid "Helptext_Admin_MailAccountEdit_Password"
 #~ msgstr ""

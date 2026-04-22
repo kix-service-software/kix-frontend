@@ -9,6 +9,7 @@
 
 import { ValidationResult } from '../../../../../base-components/webapp/core/ValidationResult';
 import { ValidationSeverity } from '../../../../../base-components/webapp/core/ValidationSeverity';
+import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 import { ObjectFormValueValidator } from '../ObjectFormValueValidator';
 
@@ -24,12 +25,13 @@ export class RegexFormValueValidator extends ObjectFormValueValidator {
 
         if (selectedValues?.length && formValue?.regExList?.length) {
             for (const value of selectedValues) {
-                formValue.regExList.forEach((regExItem) => {
+                for (const regExItem of formValue.regExList) {
                     const regex = new RegExp(regExItem.regEx);
                     if (!regex.test(value)) {
-                        result.push(new ValidationResult(ValidationSeverity.ERROR, regExItem.errorMessage));
+                        const errorMessage = await TranslationService.translate(regExItem.errorMessage);
+                        result.push(new ValidationResult(ValidationSeverity.ERROR, errorMessage));
                     }
-                });
+                }
             }
         }
 

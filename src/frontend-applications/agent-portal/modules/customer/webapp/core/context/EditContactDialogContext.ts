@@ -57,9 +57,9 @@ export class EditContactDialogContext extends Context {
                     KIXObjectType.USER,
                     UserProperty.ROLE_IDS,
                     UserProperty.PREFERENCES
-                ]
+                ], null, [['ignoreVirtuallyAssignedOrganisations', '1']]
             );
-            let contacts = await KIXObjectService.loadObjects<Contact>(
+            const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, [objectId], loadingOptions
             ).catch((): Contact[] => []);
             if (contacts?.length) {

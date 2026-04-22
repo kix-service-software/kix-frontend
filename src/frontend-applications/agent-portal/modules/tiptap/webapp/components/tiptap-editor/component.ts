@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2024 KIX Service Software GmbH
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -25,8 +25,74 @@ import {
 import { TiptapEditorService } from '../../core/TipTapEditorService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import {
+    showLinkHoverPopup,
+    hideLinkHoverPopup,
+    requestHideLinkHoverPopup,
+} from '../../static/utils/linkHoverPopup';
 
 declare const Tiptap: any;
+function normalizeCkeditorTypography(html: string): string {
+    if (!html) return html;
+
+    const extractCss = (style: string, prop: string): string | null => {
+        const m = style.match(new RegExp(`(?:^|;)\\s*${prop}\\s*:\\s*([^;]+)`, 'i'));
+        return m ? m[1].trim() : null;
+    };
+
+    const removeCss = (style: string, props: string[]): string => {
+        const parts = style
+            .split(';')
+            .map((s) => s.trim())
+            .filter(Boolean)
+            .filter((s) => !props.some((p) => new RegExp(`^${p}\\s*:`, 'i').test(s)));
+        return parts.join('; ');
+    };
+
+    try {
+        const container = document.createElement('div');
+        container.innerHTML = html;
+
+        const blocks = Array.from(container.querySelectorAll('p, div, li, td, th'));
+
+        for (const el of blocks) {
+            const style = el.getAttribute('style') || '';
+            if (!style) continue;
+
+            const fontFamily = extractCss(style, 'font-family');
+            const fontSize = extractCss(style, 'font-size');
+            const color = extractCss(style, 'color');
+            const bg = extractCss(style, 'background-color');
+
+            if (!fontFamily && !fontSize && !color && !bg) continue;
+
+            const spanStyleParts: string[] = [];
+            if (fontFamily) spanStyleParts.push(`font-family:${fontFamily.replace(/['"]/g, '')}`);
+            if (fontSize) spanStyleParts.push(`font-size:${fontSize}`);
+            if (color) spanStyleParts.push(`color:${color}`);
+            if (bg) spanStyleParts.push(`background-color:${bg}`);
+
+            if (el.childNodes.length) {
+                const span = document.createElement('span');
+                span.setAttribute('style', spanStyleParts.join('; '));
+
+                while (el.firstChild) {
+                    span.appendChild(el.firstChild);
+                }
+                el.appendChild(span);
+            }
+
+            const cleaned = removeCss(style, ['font-family', 'font-size', 'color', 'background-color']);
+            if (cleaned) el.setAttribute('style', cleaned);
+            else el.removeAttribute('style');
+        }
+
+        return container.innerHTML;
+    } catch {
+        return html;
+    }
+}
+
 function sanitizeTextmoduleHtml(html: string): string {
     if (!html) return html;
 
@@ -55,13 +121,12 @@ function sanitizeTextmoduleHtml(html: string): string {
             t.remove();
         });
 
-        const result = container.innerHTML;
-        const normalized = normalizeForTiptap(result);
-        return normalized;
+        return normalizeForTiptap(container.innerHTML);
     } catch {
         return html;
     }
 }
+
 function countImages(html: string | undefined | null): number {
     if (!html) return 0;
     return (html.match(/<img\b/gi) || []).length;
@@ -72,7 +137,6 @@ function imagesWereLost(rawHtml: string, cleanedHtml: string): boolean {
     const cleanedCount = countImages(cleanedHtml);
     return cleanedCount < rawCount;
 }
-
 
 function embedImageSrcIntoWrapper(html: string): string {
     if (!html) return html;
@@ -95,7 +159,6 @@ function embedImageSrcIntoWrapper(html: string): string {
         return html;
     }
 }
-
 
 function repairImageSrcFromDataAttr(html: string): string {
     if (!html) return html;
@@ -206,6 +269,43 @@ async function inlineAllExternalImagesInHtml(html: string): Promise<string> {
     return d.innerHTML;
 }
 
+let hoverRaf: number | null = null;
+
+function findLinkRangeFromDomAnchor(
+    view: any,
+    a: HTMLAnchorElement,
+): { from: number; to: number; href: string } | null {
+    try {
+        const href = (a.getAttribute('href') || '').trim();
+        if (!href) return null;
+
+        const linkType = view?.state?.schema?.marks?.link;
+        if (!linkType) return null;
+
+        const from = view.posAtDOM(a, 0);
+        const to = view.posAtDOM(a, a.childNodes.length);
+
+        const safeFrom = Math.max(0, Math.min(from, view.state.doc.content.size));
+        const safeTo = Math.max(0, Math.min(to, view.state.doc.content.size));
+        if (safeTo <= safeFrom) return null;
+
+        let hasLink = false;
+        view.state.doc.nodesBetween(safeFrom, safeTo, (node: any) => {
+            if (hasLink) return false;
+            if (node?.isText && linkType.isInSet(node.marks)) {
+                hasLink = true;
+                return false;
+            }
+            return;
+        });
+
+        if (!hasLink) return null;
+        return { from: safeFrom, to: safeTo, href };
+    } catch {
+        return null;
+    }
+}
+
 export class Component extends AbstractMarkoComponent<ComponentState> {
     private editor: any;
     private readOnly: boolean;
@@ -214,16 +314,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private editorTimeout = 1000;
     private changeListener: Array<() => null> = [];
     private focusListener: Array<(value: string) => null> = [];
-
+    private toolbar: HTMLDivElement;
     private focusListenerEnabled = true;
-
     private _onVisChange?: () => void;
     private _onBeforeUnload?: () => void;
     private _saveRaw?: () => void;
-
     private _lastRawHtml?: string;
     private _lastCleanHtml?: string;
-
     private _lastEmittedValue?: string;
 
     public onCreate(input: any): void {
@@ -245,28 +342,36 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             return;
         }
 
+        this.editor.setEditable(!this.readOnly);
+        this.setEditorToolbarVisibility(!this.readOnly);
+
         if (this._lastEmittedValue === newValue) {
             return;
         }
 
         const { from, to } = this.editor.state.selection;
 
-        this.editor.commands.setContent(normalizeForTiptap(newValue), false);
+        this.editor.commands.setContent(normalizeForTiptap(newValue), false, {
+            preserveWhitespace: 'full',
+        });
 
         const size = this.editor.state.doc.content.size;
         const safeFrom = Math.min(from, size);
         const safeTo = Math.min(to, size);
 
-        this.editor
-            .chain()
-            .setTextSelection({ from: safeFrom, to: safeTo })
-            .focus()
-            .run();
+        this.editor.chain().setTextSelection({ from: safeFrom, to: safeTo }).focus().run();
+    }
+
+    private setEditorToolbarVisibility(visibility: boolean): void {
+        if (visibility && this.toolbar?.classList.contains('d-none')) {
+            this.toolbar.classList.remove('d-none');
+        } else if (!visibility && !this.toolbar?.classList.contains('d-none')) {
+            this.toolbar?.classList.add('d-none');
+        }
     }
 
     public async onMount(): Promise<void> {
-        const mountElement =
-            document.querySelector(`#${this.state.editorId}`) as HTMLElement | null;
+        const mountElement = document.querySelector(`#${this.state.editorId}`) as HTMLElement | null;
         if (!mountElement || !Tiptap?.Editor || !Tiptap?.StarterKit) {
             return;
         }
@@ -325,17 +430,33 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                                     return;
                                 }
 
-                                const safeContent = sanitizeTextmoduleHtml(resolvedContent);
+                                let safeContent = sanitizeTextmoduleHtml(resolvedContent);
+                                safeContent = normalizeCkeditorTypography(safeContent);
+                                safeContent = normalizeForTiptap(safeContent);
 
                                 try {
                                     editor
                                         .chain()
                                         .focus()
                                         .deleteRange(range)
+                                        .command(({ tr }) => {
+                                            tr.setStoredMarks(null);
+                                            return true;
+                                        })
                                         .insertContent(safeContent)
                                         .run();
+                                    setTimeout(() => {
+                                        try {
+                                            const ed = comp.editor;
+                                            if (ed) {
+                                                (ed as any).__kixSyncLastTypographyFromSelection?.();
+                                            }
+                                        } catch {
+                                            /* noop */
+                                        }
+                                    }, 0);
                                 } catch {
-                                    // swallow Tiptap errors during insertion
+                                    // noop
                                 }
                             },
                         },
@@ -353,7 +474,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 editable: !comp.readOnly,
 
                 editorProps: {
-                    attributes: { class: 'tiptap-editor-body' },
+                    attributes: { class: 'tiptap-editor-body', style: 'overflow-x: scroll;' },
 
                     handleDrop(view: any, event: DragEvent): boolean {
                         const fileList = event.dataTransfer?.files || null;
@@ -380,6 +501,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         const cd = event.clipboardData || null;
                         const list = cd?.items;
 
+                        const html = cd?.getData('text/html') || '';
+
+                        if (html && /<table[\s>]/i.test(html)) {
+                            return false;
+                        }
+
                         if (list && list.length) {
                             const items: DataTransferItem[] = Array.from(list);
 
@@ -399,6 +526,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                                         });
                                         view.dispatch(view.state.tr.replaceSelectionWith(node));
                                     };
+
                                     reader.readAsDataURL(file);
                                     event.preventDefault();
                                     return true;
@@ -406,7 +534,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                             }
                         }
 
-                        const html = cd?.getData('text/html') || '';
                         if (html && html.includes('<img')) {
                             event.preventDefault();
 
@@ -414,7 +541,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                                 try {
                                     const rewrittenHtml = await inlineAllExternalImagesInHtml(html);
                                     const safe = normalizeForTiptap(rewrittenHtml);
-
                                     comp.editor.chain().focus().insertContent(safe).run();
                                 } catch {
                                     try {
@@ -476,37 +602,46 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                                 const newPos = comp.editor.state.selection.$from;
                                 const currentNode = newPos.parent;
 
-                                if (currentNode.type.name === 'paragraph') {
-                                    let chain = comp.editor.chain().focus();
+                                if (currentNode.type.name === 'paragraph' || currentNode.type.name === 'customParagraph') {
+                                    const chain = comp.editor.chain().focus();
                                     let appliedFont = false;
                                     let appliedSize = false;
                                     let appliedColor = false;
+                                    let appliedHighlight = false;
 
                                     const ms = Array.isArray(marks) ? marks : Array.from(marks ?? []);
                                     for (const mark of ms) {
                                         if (mark.type.name === 'bold') chain.setMark('bold');
                                         if (mark.type.name === 'italic') chain.setMark('italic');
                                         if (mark.type.name === 'underline') chain.setMark('underline');
+                                        if (mark.type.name === 'strike') chain.setMark('strike');
 
                                         if (mark.type.name === 'textStyle') {
-                                            if (mark.attrs?.color) {
-                                                chain.setColor(mark.attrs.color);
+                                            if (mark.attrs && Object.prototype.hasOwnProperty.call(mark.attrs, 'color')) {
+                                                if (mark.attrs.color) {
+                                                    chain.setColor(mark.attrs.color);
+                                                }
                                                 appliedColor = true;
                                             }
+
                                             if (mark.attrs?.fontSize) {
                                                 chain.setFontSize(mark.attrs.fontSize);
                                                 appliedSize = true;
                                             }
+
                                             if (mark.attrs?.fontFamily) {
                                                 chain.setFontFamily(mark.attrs.fontFamily);
                                                 appliedFont = true;
                                             }
                                         }
+
                                         if (mark.type.name === 'highlight') {
                                             const c = mark.attrs?.color;
-                                            if (c) chain.setHighlight({ color: c });
+                                            if (c) {
+                                                chain.setHighlight({ color: c });
+                                                appliedHighlight = true;
+                                            }
                                         }
-                                        if (mark.type.name === 'strike') chain.setMark('strike');
                                     }
 
                                     if (!appliedFont && comp.editor.storage.lastFontFamily) {
@@ -517,6 +652,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                                     }
                                     if (!appliedColor && comp.editor.storage.lastFontColor) {
                                         chain.setColor(comp.editor.storage.lastFontColor);
+                                    }
+
+                                    if (!appliedHighlight && comp.editor.storage.lastHighlightColor) {
+                                        chain.setHighlight({ color: comp.editor.storage.lastHighlightColor });
                                     }
 
                                     chain.run();
@@ -548,6 +687,85 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                             if (!isEmptyBlock) return false;
 
                             applyLastUsedMarks(comp.editor);
+                            return false;
+                        },
+                        mousemove: (view: any, ev: MouseEvent): boolean => {
+                            if (!view?.dom || !ev?.target) return false;
+
+                            const target = ev.target as HTMLElement;
+                            const a = target.closest?.('a[href]') as HTMLAnchorElement | null;
+
+                            if (!a || !view.dom.contains(a)) {
+                                requestHideLinkHoverPopup(220);
+                                return false;
+                            }
+
+                            if (hoverRaf) return false;
+
+                            hoverRaf = window.requestAnimationFrame(() => {
+                                hoverRaf = null;
+
+                                const range = findLinkRangeFromDomAnchor(view, a);
+                                if (!range) {
+                                    requestHideLinkHoverPopup(220);
+                                    return;
+                                }
+
+                                const rect = a.getBoundingClientRect();
+
+                                showLinkHoverPopup({
+                                    rect,
+                                    href: range.href,
+                                    onRemove: (): void => {
+                                        try {
+                                            const linkMark = view.state.schema.marks.link;
+                                            if (!linkMark) return;
+
+                                            let tr = view.state.tr;
+                                            let changed = false;
+
+                                            view.state.doc.nodesBetween(
+                                                range.from,
+                                                range.to,
+                                                (node: any, pos: number): void => {
+                                                    if (!node?.isText) return;
+
+                                                    const hasSameHref = (node.marks || []).some((m: any) => {
+                                                        const href = (m.attrs?.href || '').trim();
+                                                        return m.type === linkMark && href === range.href;
+                                                    });
+
+                                                    if (!hasSameHref) return;
+
+                                                    tr = tr.removeMark(pos, pos + node.nodeSize, linkMark);
+                                                    changed = true;
+                                                },
+                                            );
+
+                                            if (changed) {
+                                                view.dispatch(tr);
+                                            }
+                                            view.focus();
+                                        } catch {
+                                            // noop
+                                        } finally {
+                                            hideLinkHoverPopup();
+                                        }
+                                    },
+                                    onRequestClose: (): void => requestHideLinkHoverPopup(220),
+                                });
+                            });
+
+                            return false;
+                        },
+
+                        mouseleave: (): boolean => {
+                            requestHideLinkHoverPopup(220);
+                            return false;
+                        },
+
+                        blur: (): boolean => {
+                            hideLinkHoverPopup();
                             return false;
                         },
                     },
@@ -641,6 +859,83 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         const editor = this.editor;
         TiptapEditorService.getInstance().setActiveEditor(editor);
+
+        const defaultFontFamily = 'Arial';
+        const defaultFontSize = '14';
+
+        const syncLastTypographyFromSelection = (ed: any): void => {
+            if (!ed) return;
+
+            const { state } = ed;
+            const marks = state.storedMarks || state.selection.$from.marks();
+            const ms = Array.isArray(marks) ? marks : Array.from(marks || []);
+
+            const tsMark = ms.find((m: any) => m?.type?.name === 'textStyle') || null;
+
+            const hasFamily = !!(tsMark && Object.prototype.hasOwnProperty.call(tsMark.attrs || {}, 'fontFamily'));
+            const hasSize = !!(tsMark && Object.prototype.hasOwnProperty.call(tsMark.attrs || {}, 'fontSize'));
+            const hasColor = !!(tsMark && Object.prototype.hasOwnProperty.call(tsMark.attrs || {}, 'color'));
+
+            const nextFamily = hasFamily
+                ? (tsMark.attrs.fontFamily || defaultFontFamily)
+                : (ed.storage.lastFontFamily || defaultFontFamily);
+
+            const nextSize = hasSize
+                ? (tsMark.attrs.fontSize || defaultFontSize)
+                : (ed.storage.lastFontSize || defaultFontSize);
+
+            const nextColor = hasColor
+                ? tsMark.attrs.color
+                : ed.storage.lastFontColor;
+
+            ed.storage.lastFontFamily = nextFamily;
+            ed.storage.lastFontSize = nextSize;
+            ed.storage.lastFontColor = nextColor;
+
+            const hlMark = ms.find((m: any) => m?.type?.name === 'highlight') || null;
+            const hasHighlight = !!hlMark;
+            if (hasHighlight) {
+                const c = hlMark.attrs?.color;
+                if (c) ed.storage.lastHighlightColor = c;
+            }
+
+            try {
+                const { view } = ed;
+                const m = state.schema.marks as any;
+
+                const stored: any[] = [];
+
+                if (m.textStyle) {
+                    stored.push(
+                        m.textStyle.create({
+                            fontFamily: nextFamily,
+                            fontSize: nextSize,
+                            ...(typeof nextColor !== 'undefined' && nextColor !== null && nextColor !== ''
+                                ? { color: nextColor }
+                                : {}),
+                        }),
+                    );
+                }
+
+                for (const mark of ms) {
+                    const n = mark?.type?.name;
+                    if (!n || n === 'textStyle') continue;
+                    stored.push(mark);
+                }
+
+                const alreadyHasHl = stored.some((mk) => mk?.type?.name === 'highlight');
+                if (!alreadyHasHl && ed.storage.lastHighlightColor && m.highlight) {
+                    stored.push(m.highlight.create({ color: ed.storage.lastHighlightColor }));
+                }
+
+                view.dispatch(state.tr.setStoredMarks(stored.length ? stored : null));
+            } catch {
+                /* noop */
+            }
+        };
+
+        (editor as any).__kixSyncLastTypographyFromSelection = (): void =>
+            syncLastTypographyFromSelection(editor);
 
         const applyDefaultsIntoEmptyBlock = (ed: any): void => {
             const { state } = ed;
@@ -771,7 +1066,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 if (ts.fontFamily) ed.storage.lastFontFamily = ts.fontFamily;
                 if (ts.fontSize) ed.storage.lastFontSize = ts.fontSize;
 
-                ed.storage.lastFontColor = typeof ts.color !== 'undefined' ? ts.color : null;
+                if (Object.prototype.hasOwnProperty.call(ts, 'color')) {
+                    ed.storage.lastFontColor = ts.color;
+                }
             }
 
             if (inFormattingRegion) {
@@ -787,14 +1084,21 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 ed.storage.lastItalic = ed.isActive('italic');
                 ed.storage.lastUnderline = ed.isActive('underline');
                 ed.storage.lastStrike = ed.isActive('strike');
-                ed.storage.lastHighlightColor = ed.getAttributes('highlight')?.color ?? null;
+
+                if (ed.isActive('highlight')) {
+                    const hl = ed.getAttributes('highlight')?.color;
+                    if (hl) ed.storage.lastHighlightColor = hl;
+                }
             }
         });
 
-        editor.on('selectionUpdate', (): void => applyDefaultsIntoEmptyBlock(editor));
+        editor.on('selectionUpdate', (): void => {
+            syncLastTypographyFromSelection(editor);
+            applyDefaultsIntoEmptyBlock(editor);
+        });
 
-        const toolbar: HTMLDivElement = createToolbar(this.editor);
-        mountElement.appendChild(toolbar);
+        this.toolbar = createToolbar(this.editor);
+        mountElement.appendChild(this.toolbar);
         mountElement.appendChild(wrapper);
 
         function setPlainTypingDefaults(ed: any): void {
@@ -864,7 +1168,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             });
 
             ensureDefaultsIfEmpty();
-        })(editor, toolbar);
+        })(editor, this.toolbar);
 
         const saveRaw = (): void => {
             if (!this.editor) return;
@@ -904,6 +1208,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
+        hideLinkHoverPopup();
+
         if (this._onVisChange) {
             document.removeEventListener('visibilitychange', this._onVisChange);
             this._onVisChange = undefined;

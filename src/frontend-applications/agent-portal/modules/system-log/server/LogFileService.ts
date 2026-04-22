@@ -50,7 +50,7 @@ export class LogFileService extends KIXObjectAPIService {
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<ObjectResponse<T>> {
 
-        let objectResponse = new ObjectResponse<LogFile>();
+        const objectResponse = new ObjectResponse<LogFile>();
         let logFiles: LogFile[] = [];
 
         if (!Array.isArray(objectIds)) {
@@ -75,7 +75,7 @@ export class LogFileService extends KIXObjectAPIService {
     private async loadLogFiles(
         token: string, loadingOptions: KIXObjectLoadingOptions, clientRequestId: string
     ): Promise<LogFile[]> {
-        let logFiles = [];
+        const logFiles = [];
 
         const tierParameter = loadingOptions?.query?.find((q) => q[0] === 'tier');
         if (!tierParameter || tierParameter[1] === LogTier.BACKEND) {

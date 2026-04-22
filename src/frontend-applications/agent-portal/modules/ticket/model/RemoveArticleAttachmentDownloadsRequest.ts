@@ -10,7 +10,7 @@
 export class RemoveArticleAttachmentDownloadsRequest {
 
     public constructor(
-        public requestId: string,
+
         public downloadIds: string[]
     ) { }
 

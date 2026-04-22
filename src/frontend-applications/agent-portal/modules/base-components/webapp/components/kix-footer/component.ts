@@ -8,7 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { KIXModulesSocketClient } from '../../../../../modules/base-components/webapp/core/KIXModulesSocketClient';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
 import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
@@ -19,6 +18,7 @@ import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { SysConfigService } from '../../../../sysconfig/webapp/core/SysConfigService';
 import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
 import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
+import { ClientStorageService } from '../../core/ClientStorageService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -43,7 +43,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.prepareImprintLink();
 
         if (!this.releaseInfo) {
-            this.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+            this.releaseInfo = ClientStorageService.getReleaseInfo();
         }
 
         if (!this.unauthorized) {
@@ -62,7 +62,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
             // FIXME: This should be removed once the revised layout structure (KIX2018-14141) is implemented,
             // provided it has been taken into account.
-            let component = document.querySelector('.content-wrapper');
+            const component = document.querySelector('.content-wrapper');
             component['style'].marginBottom = 2 + (1.1 * this.state.footerInformation.length) + 'rem';
         }
     }

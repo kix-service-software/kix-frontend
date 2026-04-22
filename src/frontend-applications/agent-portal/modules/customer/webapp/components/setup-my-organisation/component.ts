@@ -31,7 +31,7 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { IdService } from '../../../../../model/IdService';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
@@ -69,7 +69,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.initOrganisation();
 
         if (this.organisation) {
-            this.canOrganisationUpdate = await AuthenticationSocketClient.getInstance().checkPermissions([
+            this.canOrganisationUpdate = await SessionAPIClient.checkPermissions([
                 new UIComponentPermission(`organisations/${this.organisation.ID}`, [CRUD.UPDATE], true, null, false)
             ]);
         } else {
@@ -113,7 +113,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (formId) {
             this.state.formId = formId;
 
-            await this.context?.getFormManager()?.setFormId(this.state.formId);
+            if (this.organisation) {
+                await this.context?.getFormManager()?.setFormId(this.state.formId, this.organisation);
+            }
 
             const formInstance = await this.context?.getFormManager()?.getFormInstance(
                 true, undefined, this.organisation

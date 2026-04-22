@@ -401,7 +401,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         new UIFilterCriterion(
                                             'AccountedTime',
                                             SearchOperator.NOT_EQUALS,
-                                            null
+                                            0
                                         )
                                     ],
                                     roleIds: []
@@ -878,7 +878,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     [
                         new DefaultColumnConfiguration(
                             null, null, null, '', false, false, false, false, 30,
-                            false, false, false, null, false, 'faq-article-html-preview-cell'
+                            false, false, false, null, false, 'faq-article-html-preview-cell',
+                            undefined, undefined, undefined, undefined, undefined, undefined, true
                         ),
                         new DefaultColumnConfiguration(
                             null, null, null, FAQArticleProperty.TITLE, true, false, true, false, 260, true, false
@@ -1027,7 +1028,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         new DefaultColumnConfiguration(
                             null, null, null, '', false, false, false, false, 30,
                             false, false, false, null, false, 'add-to-affected-assets-cell',
-                            'Translatable#Contained in Affected Assets'
+                            'Translatable#Contained in Affected Assets',
+                            undefined, undefined, undefined, undefined, undefined, true
                         ),
                         new DefaultColumnConfiguration(
                             null, null, null, ConfigItemProperty.NUMBER, true, false, true, false, 120, true, true),

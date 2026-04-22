@@ -16,6 +16,8 @@ import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/DynamicFieldFormUtil';
 
+declare const JSONSchemaEditor: any;
+
 class Component extends FormInputComponent<JSON, ComponentState> {
 
     private schema: JSON = null;
@@ -76,8 +78,7 @@ class Component extends FormInputComponent<JSON, ComponentState> {
             setTimeout(() => {
                 const element = document.getElementById(this.state.editorId);
                 if (element) {
-                    const JSONSchemaEditor = require('@json-editor/json-editor');
-                    this.editor = new JSONSchemaEditor.JSONEditor(element, {
+                    this.editor = new JSONSchemaEditor(element, {
                         theme: 'bootstrap5',
                         iconlib: 'fontawesome4',
                         schema: this.schema,
@@ -92,6 +93,13 @@ class Component extends FormInputComponent<JSON, ComponentState> {
                     });
 
                     this.editor.on('ready', () => {
+                        // OVERRIDE purify of string editor to allow html-like strings (placeholder)
+                        if (this.editor.root?.defaults?.editors?.string) {
+                            this.editor.root.defaults.editors.string.prototype.purify = function (val: any): any {
+                                return val;
+                            };
+                        }
+
                         if (value) {
                             this.editor.setValue(value);
                         } else {

@@ -9,7 +9,6 @@
 
 import { ContextMode } from '../../../../../model/ContextMode';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { Cell } from '../../../../table/model/Cell';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ConfigItem } from '../../../model/ConfigItem';
@@ -43,6 +42,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const ticket = await this.context?.getObject<Ticket>();
         if (this.context?.descriptor?.contextMode === ContextMode.DETAILS) {
             this.state.readonly = true;
+            this.state.title = await TranslationService.translate('Translatable#Add to Affected Assets');
         } else {
             const formHandler = await this.context?.getFormManager().getObjectFormHandler();
             this.formValue = formHandler?.objectFormValueMapper?.findFormValue('DynamicField.AffectedAsset');
@@ -51,10 +51,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             });
         }
 
-        const affectedAssetsDF = ticket?.DynamicFields.find((df) => df.Name === 'AffectedAsset');
+        const affectedAssetsDF = ticket?.DynamicFields?.find((df) => df.Name === 'AffectedAsset');
         if (affectedAssetsDF) {
             this.setStates(affectedAssetsDF.Value);
         }
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Available in Edit'
+        ]);
+
     }
 
     private async setStates(value: any): Promise<void> {

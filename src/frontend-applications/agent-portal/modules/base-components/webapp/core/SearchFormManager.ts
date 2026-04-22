@@ -27,7 +27,7 @@ export class SearchFormManager extends AbstractDynamicFormManager {
     }
 
     public async getOperations(property: string): Promise<Array<string | SearchOperator>> {
-        let operations: Array<string | SearchOperator> = [];
+        const operations: Array<string | SearchOperator> = [];
 
         const superOperations = await super.getOperations(property);
         if (superOperations?.length) {

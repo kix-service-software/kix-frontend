@@ -29,15 +29,49 @@ export class PendingTimeFormValue extends DateTimeFormValue {
     }
 
     public async initFormValue(): Promise<void> {
+        await super.initFormValue();
+        this.enableIfPending();
+    }
+
+    private async enableIfPending(): Promise<void> {
         const isPending = await TicketService.isPendingState(this.object[TicketProperty.STATE_ID]);
         const isStateEnabled = this.parent?.enabled;
 
-        if (!this.enabled && isStateEnabled && isPending) {
-            await this.enable();
-            this.visible = true;
+        if (isStateEnabled && isPending) {
+            if (this.enabled) {
+                this.visible = true;
+            } else {
+                this.enable();
+            }
         }
+    }
 
-        await super.initFormValue();
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        return super.initFormValueByField(field);
+    }
+
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        value = DateTimeUtil.calculateRelativeDate(value);
+        await super.setFormValue(value, force);
+    }
+
+    public async enable(): Promise<void> {
+        this.initDefaultValue().then(() => this.enabled = true);
+    }
+
+    private async initDefaultValue(): Promise<void> {
+        // this.defaultValue contains the origin value of the FormFieldConfiguration
+        // it's needed to calculate the right pending time
+        TicketService.getPendingDateDiff(this.defaultValue || this.value)
+            .then((pendingDate) => {
+                this.value = DateTimeUtil.getKIXDateTimeString(pendingDate);
+                this.minDate = DateTimeUtil.getKIXDateTimeString(new Date());
+            });
+    }
+
+    public async postInitFormValue(): Promise<void> {
+
+        this.initDefaultValue().then(() => this.setFormValue(this.value));
 
         this.object.addBinding(TicketProperty.STATE_ID, async (value: number) => {
             const isPending = await TicketService.isPendingState(value);
@@ -52,34 +86,6 @@ export class PendingTimeFormValue extends DateTimeFormValue {
             this.setNewInitialState('enabled', this.enabled);
             this.setNewInitialState('visible', this.visible);
         });
-    }
-
-    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
-        return super.initFormValueByField(field);
-    }
-
-    public async setFormValue(value: any, force?: boolean): Promise<void> {
-        value = DateTimeUtil.calculateRelativeDate(value);
-        await super.setFormValue(value, force);
-    }
-
-    public async enable(): Promise<void> {
-        await this.initDefaultValue();
-        this.enabled = true;
-    }
-
-    private async initDefaultValue(): Promise<void> {
-        // this.defaultValue contains the origin value of the FormFieldConfiguration
-        // it's needed to calculate the right pending time
-        const pendingDate = await TicketService.getPendingDateDiff(this.defaultValue || this.value);
-        this.value = DateTimeUtil.getKIXDateTimeString(pendingDate);
-        this.minDate = DateTimeUtil.getKIXDateTimeString(new Date());
-    }
-
-    public async postInitFormValue(): Promise<void> {
-        if (!this.value || this.isRelativeTimeValue) {
-            this.setFormValue(this.defaultValue, true);
-        }
     }
 
 }

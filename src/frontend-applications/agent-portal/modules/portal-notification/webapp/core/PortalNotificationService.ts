@@ -7,15 +7,15 @@
  * --
  */
 
+import { NotificationsAPIClient } from '../../../../api-client/notifications/NotificationsAPIClient';
 import { DataType } from '../../../../model/DataType';
+import { IdService } from '../../../../model/IdService';
 import { SortOrder } from '../../../../model/SortOrder';
 import { SortUtil } from '../../../../model/SortUtil';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
 import { PortalNotification } from '../../model/PortalNotification';
 import { PortalNotificationEvent } from '../../model/PortalNotificationEvent';
-import { PortalNotificationSocketClient } from './PortalNotificationSocketClient';
-import { IdService } from '../../../../model/IdService';
 
 export class PortalNotificationService {
 
@@ -35,7 +35,6 @@ export class PortalNotificationService {
             eventSubscriberId: IdService.generateDateBasedId('PortalNotificationService'),
             eventPublished: this.loadNotifications.bind(this)
         };
-        PortalNotificationSocketClient.getInstance();
         EventService.getInstance().subscribe(PortalNotificationEvent.NOTIFICATIONS_UPDATED, this.subscriber);
     }
 
@@ -73,11 +72,11 @@ export class PortalNotificationService {
     }
 
     public getPreLoginNotifications(): Promise<PortalNotification[]> {
-        return PortalNotificationSocketClient.getInstance().loadPreLoginNotifications();
+        return NotificationsAPIClient.loadPreLoginNotifications();
     }
 
     private async loadNotifications(): Promise<void> {
-        const serverNotifications = await PortalNotificationSocketClient.getInstance().loadNotifications();
+        const serverNotifications = await NotificationsAPIClient.loadNotifications();
         const groupMap: Map<string, PortalNotification[]> = new Map();
         serverNotifications.forEach((n) => {
             if (!groupMap.has(n.group)) {

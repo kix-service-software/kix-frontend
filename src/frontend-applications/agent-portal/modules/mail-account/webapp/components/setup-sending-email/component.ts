@@ -36,7 +36,7 @@ import { SetupService } from '../../../../setup-assistant/webapp/core/SetupServi
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 import { SystemAddress } from '../../../../system-address/model/SystemAddress';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
@@ -331,7 +331,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             if (Array.isArray(systemAddress) && systemAddress.length) {
                 this.systemAddress = systemAddress[0];
-                this.canUpdateSystemAddress = await AuthenticationSocketClient.getInstance().checkPermissions([
+                this.canUpdateSystemAddress = await SessionAPIClient.checkPermissions([
                     new UIComponentPermission(
                         `system/communication/systemaddresses/${this.systemAddress.ID}`, [CRUD.UPDATE],
                         true, null, false

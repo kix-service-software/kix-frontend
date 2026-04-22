@@ -10,7 +10,7 @@
 import { Bookmark } from '../../../../../../../model/Bookmark';
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ActionFactory } from '../../../../../../base-components/webapp/core/ActionFactory';
-import { AuthenticationSocketClient } from '../../../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../../../api-client/session/Session';
 import { BookmarkService } from '../../../../../../base-components/webapp/core/BookmarkService';
 import { TranslationService } from '../../../../../../translation/webapp/core/TranslationService';
 import { ComponentState } from './ComponentState';
@@ -48,7 +48,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const availableBookmarks: Bookmark[] = [];
         const bookmarks = [...BookmarkService.getInstance().getBookmarks()];
         for (const b of bookmarks) {
-            if (await AuthenticationSocketClient.getInstance().checkPermissions(b.permissions)) {
+            if (await SessionAPIClient.checkPermissions(b.permissions)) {
                 b.title = await TranslationService.translate(b.title);
                 availableBookmarks.push(b);
             }

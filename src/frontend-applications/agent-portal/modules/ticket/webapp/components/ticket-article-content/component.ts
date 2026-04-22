@@ -9,17 +9,17 @@
 
 import { ComponentState } from './ComponentState';
 import { Article } from '../../../model/Article';
-import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
-import { Context } from '../../../../../model/Context';
+import { APIClient } from '../../../../../api-client/APIClient';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
     private resizeTimeout: ReturnType<typeof setTimeout> = null;
     private resizeObserver: ResizeObserver;
 
     private article: Article = null;
+    private isLoaded: boolean = false;
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -30,9 +30,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         super.onInput(input);
         if (this.article?.ChangeTime !== input.article?.ChangeTime) {
             this.article = input.article;
-
-            const applicationUrl = ClientStorageService.getApplicationUrl();
-            this.state.url = `${applicationUrl}/views/tickets/${this.article?.TicketID}/articles/${this.article?.ArticleID}?prepareInline=true`;
+            this.state.url = APIClient.getUrl(`/tickets/${this.article?.TicketID}/articles/${this.article?.ArticleID}?prepareInline=true&application=agent-portal`);
         }
     }
 
@@ -40,6 +38,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await super.onMount();
 
         setTimeout(() => this.prepareObserver(), 50);
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Article content'
+        ]);
     }
 
     public onDestroy(): void {
@@ -73,40 +75,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public viewLoaded(event: any): void {
-        const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
+        if (!this.isLoaded) {
+            this.isLoaded = true;
+            const frame = document.getElementById(this.state.frameId) as HTMLIFrameElement;
 
-        frame.addEventListener('load', () => {
-            let frameDocument: Document;
+            frame.addEventListener('load', () => {
+                let frameDocument: Document;
 
-            try {
-                frameDocument = frame.contentWindow.document;
-            } catch (e) {
-                console.warn('iframe content not accessible due to cross-origin policy:', e);
-                return;
-            }
-
-            BrowserUtil.setFrameHeight(this.state.frameId);
-
-            const links = frameDocument.querySelectorAll('a[href]');
-            links.forEach((link: HTMLAnchorElement) => {
-                const href = link.href;
-                const isInternal = href?.startsWith(window.location.origin);
-
-                if (isInternal) {
-                    link.addEventListener('click', (event): void => {
-                        event.preventDefault();
-                        BrowserUtil.handleLinkClicked(event);
-                    });
-                } else {
-                    link.setAttribute('target', '_blank');
-                    link.setAttribute('rel', 'noopener noreferrer');
-                    link.addEventListener('click', (event): void => {
-                        event.preventDefault();
-                        window.open(href, '_blank', 'noopener,noreferrer');
-                    });
+                try {
+                    frameDocument = frame.contentWindow.document;
+                } catch (e) {
+                    console.warn('iframe content not accessible due to cross-origin policy:', e);
+                    return;
                 }
+
+                BrowserUtil.setFrameHeight(this.state.frameId);
+                BrowserUtil.prepareFrameLinks(frameDocument);
             });
-        });
+        }
     }
 }
 

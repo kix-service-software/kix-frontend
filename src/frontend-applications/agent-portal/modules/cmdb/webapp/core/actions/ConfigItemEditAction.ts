@@ -13,7 +13,7 @@ import { AbstractAction } from '../../../../../modules/base-components/webapp/co
 import { ConfigItem } from '../../../model/ConfigItem';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 
 export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
 
@@ -31,7 +31,7 @@ export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
             new UIComponentPermission(`cmdb/configitems/${objectId}/versions`, [CRUD.CREATE])
         ];
 
-        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        show = await SessionAPIClient.checkPermissions(permissions);
         return show;
     }
 

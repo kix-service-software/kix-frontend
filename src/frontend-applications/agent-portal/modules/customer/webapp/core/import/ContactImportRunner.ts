@@ -144,7 +144,7 @@ export class ContactImportRunner extends ImportRunner {
                     KIXObjectType.CONTACT, null, loadingOptions, null, true
                 );
 
-                let existingContact = Array.isArray(result) && result.length > 0 ? result[0] : undefined;
+                const existingContact = Array.isArray(result) && result.length > 0 ? result[0] : undefined;
                 if (existingContact) {
                     return existingContact;
                 }

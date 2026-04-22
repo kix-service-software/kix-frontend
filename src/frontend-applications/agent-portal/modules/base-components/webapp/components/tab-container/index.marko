@@ -15,8 +15,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             minimizable=state.minimizable
             contentActions=state.contentActions
             title=state.activeTabTitle
-            removeGap
-            customGridTemplateColumnsStyle="grid-template-columns: 3rem auto 3rem;"
+            customGridTemplateColumnsStyle="grid-template-columns: 3rem auto 3rem; gap: 0"
+            startAsMinimized=state.startAsMinimized
             on-minimizedChanged("minimizedChanged")>
             <@headercontent>
                 <if(state.showTabScrollers)>
@@ -30,10 +30,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <for|tab| of=state.tabWidgets>
                         <li
                             title=component.getTitle(tab)
+                            aria-label=component.getTitle(tab)
                             class={
                                 active: component.isActiveTab(tab.instanceId),
                             }
+                            tabindex="0"
                             on-click("tabClicked", tab)>
+                            ${" "}
+                            // not yet clickable with keyboard
                             <if(component.getIcon(tab))>
                                 <icon
                                     icon=component.getIcon(tab)

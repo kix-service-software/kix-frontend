@@ -8,8 +8,8 @@
  */
 
 import { AdditionalRoutingHandler } from '../../../base-components/webapp/core/AdditionalRoutingHandler';
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
-import { KIXModulesSocketClient } from '../../../base-components/webapp/core/KIXModulesSocketClient';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 
 export class ReleaseRoutingHandler extends AdditionalRoutingHandler {
@@ -27,7 +27,7 @@ export class ReleaseRoutingHandler extends AdditionalRoutingHandler {
         if (needReleaseInfo) {
             await ContextService.getInstance().setActiveContext('release');
 
-            const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+            const releaseInfo = ClientStorageService.getReleaseInfo();
             const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
             AgentService.getInstance().setPreferences([
                 [this.VISITED_KEY, buildNumber.toString()]
@@ -46,7 +46,7 @@ export class ReleaseRoutingHandler extends AdditionalRoutingHandler {
             releaseInfoVisited = vistedVersion ? vistedVersion.Value : null;
         }
 
-        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        const releaseInfo = ClientStorageService.getReleaseInfo();
         const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
         return !releaseInfoVisited || (buildNumber && releaseInfoVisited !== buildNumber.toString());
     }

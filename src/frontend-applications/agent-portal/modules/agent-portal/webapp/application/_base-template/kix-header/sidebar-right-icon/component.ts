@@ -10,11 +10,11 @@
 import { ComponentState } from './ComponentState';
 import { EventService } from '../../../../../../base-components/webapp/core/EventService';
 import { MobileShowEvent } from '../../../../../model/MobileShowEvent';
-import { ContextService } from '../../../../../../base-components/webapp/core/ContextService';
 import { Context } from '../../../../../../../model/Context';
 import { TranslationService } from '../../../../../../translation/webapp/core/TranslationService';
 import { MobileShowEventData } from '../../../../../model/MobileShowEventData';
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ContextEvents } from '../../../../../../base-components/webapp/core/ContextEvents';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -33,6 +33,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const sidebars = await this.context?.getSidebarsRight();
         this.state.hasSidebarsRight = Boolean(sidebars?.length);
+
+        super.registerEventSubscriber(
+            async function (data: Context, eventId: string): Promise<void> {
+                const sidbebars = await data?.getSidebarsRight();
+                this.state.hasSidebarsRight = Boolean(sidbebars?.length);
+            },
+            [ContextEvents.CONTEXT_CHANGED]
+        );
     }
 
     public onDestroy(): void {

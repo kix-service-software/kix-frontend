@@ -9,13 +9,13 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import * as chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { ActionFactory } from '../webapp/core/ActionFactory';
 import { AbstractAction } from '../webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../server/model/rest/CRUD';
-import { AuthenticationSocketClient } from '../webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../api-client/session/Session';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -139,14 +139,14 @@ describe('ActionFactory', () => {
             let checkPermissions;
 
             before(() => {
-                checkPermissions = AuthenticationSocketClient.getInstance().checkPermissions;
-                AuthenticationSocketClient.getInstance().checkPermissions = async (permissions: UIComponentPermission[]): Promise<boolean> => {
+                checkPermissions = SessionAPIClient.checkPermissions;
+                SessionAPIClient.checkPermissions = async (permissions: UIComponentPermission[]): Promise<boolean> => {
                     return false;
                 };
             });
 
             after(() => {
-                AuthenticationSocketClient.getInstance().checkPermissions = checkPermissions;
+                SessionAPIClient.checkPermissions = checkPermissions;
             });
 
             it('should generate only actions without permissions', async () => {
@@ -166,14 +166,14 @@ describe('ActionFactory', () => {
             let checkPermissions;
 
             before(() => {
-                checkPermissions = AuthenticationSocketClient.getInstance().checkPermissions;
-                AuthenticationSocketClient.getInstance().checkPermissions = async (permissions: UIComponentPermission[]): Promise<boolean> => {
+                checkPermissions = SessionAPIClient.checkPermissions;
+                SessionAPIClient.checkPermissions = async (permissions: UIComponentPermission[]): Promise<boolean> => {
                     return permissions[0].target === 'ticket';
                 };
             });
 
             after(() => {
-                AuthenticationSocketClient.getInstance().checkPermissions = checkPermissions;
+                SessionAPIClient.checkPermissions = checkPermissions;
             });
 
             it('should generate only actions without or matching permissions', async () => {
@@ -196,14 +196,14 @@ describe('ActionFactory', () => {
             let checkPermissions;
 
             before(() => {
-                checkPermissions = AuthenticationSocketClient.getInstance().checkPermissions;
-                AuthenticationSocketClient.getInstance().checkPermissions = async (permissions: UIComponentPermission[]): Promise<boolean> => {
+                checkPermissions = SessionAPIClient.checkPermissions;
+                SessionAPIClient.checkPermissions = async (permissions: UIComponentPermission[]): Promise<boolean> => {
                     return true;
                 };
             });
 
             after(() => {
-                AuthenticationSocketClient.getInstance().checkPermissions = checkPermissions;
+                SessionAPIClient.checkPermissions = checkPermissions;
             });
 
             it('should generate only actions without or matching permissions', async () => {

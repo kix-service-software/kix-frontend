@@ -7,7 +7,6 @@
  * --
  */
 
-import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { Context } from '../../../../model/Context';
 import { IdService } from '../../../../model/IdService';
@@ -410,12 +409,15 @@ export class ObjectFormValue<T = any> {
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
+        if (typeof value === 'string') {
+            value = value.trim();
+        }
         if ((force || !this.readonly) && !this.isSameValue(value)) {
             this.value = value;
         }
     }
 
-    protected isSameValue(value: any): boolean {
+    public isSameValue(value: any): boolean {
         if (!this.hasValue(this.value) && !this.hasValue(value)) {
             return true;
         }

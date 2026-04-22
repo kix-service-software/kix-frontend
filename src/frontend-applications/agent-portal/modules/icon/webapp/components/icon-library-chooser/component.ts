@@ -73,7 +73,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async filter(): Promise<void> {
-        let filterValue = this.state.iconFilterValue;
+        const filterValue = this.state.iconFilterValue;
         this.state.filteredIcons = await ObjectIconService.getInstance().getAvailableIcons(
             this.state.kixFont, this.state.fontAwesome, this.state.kixIcons, filterValue, this.iconCount
         );

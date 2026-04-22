@@ -63,7 +63,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public switchMode(event: any): void {
         event.stopPropagation();
         event.preventDefault();
-        this.state.fileUpload = !this.state.fileUpload;
+        if (this.formValue.libraryEnabled) {
+            this.state.fileUpload = !this.state.fileUpload;
+        }
     }
 
     public iconChanged(icon: ObjectIcon | string): void {

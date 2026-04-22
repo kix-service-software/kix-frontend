@@ -14,7 +14,7 @@ import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { FilterType } from '../../../../model/FilterType';
-import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
@@ -171,7 +171,7 @@ export abstract class SearchDefinition {
 
     protected async checkReadPermissions(resource: string): Promise<boolean> {
         if (!this.readPermissions.has(resource)) {
-            const permission = await AuthenticationSocketClient.getInstance().checkPermissions(
+            const permission = await SessionAPIClient.checkPermissions(
                 [new UIComponentPermission(resource, [CRUD.READ])]
             );
             this.readPermissions.set(resource, permission);

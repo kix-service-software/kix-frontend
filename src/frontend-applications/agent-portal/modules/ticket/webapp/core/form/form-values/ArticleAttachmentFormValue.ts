@@ -18,12 +18,11 @@ import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectF
 import { Article } from '../../../../model/Article';
 import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
-import { TicketService } from '../../TicketService';
-import { TicketSocketClient } from '../../TicketSocketClient';
 
 export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
 
     public options: Array<[string, any]> = [];
+    private initDone: boolean = false;
 
     public constructor(
         public property: string,
@@ -62,18 +61,18 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
             newValue.push(...this.value);
         }
 
-        const context = ContextService.getInstance().getActiveContext();
-        const updateArticleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
-        const useRefArticleAttachments = context?.getAdditionalInformation('USE_REFERENCED_ATTACHMENTS');
+        if (!this.initDone) {
+            this.initDone = true;
+            const context = ContextService.getInstance().getActiveContext();
+            const updateArticleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+            const useRefArticleAttachments = context?.getAdditionalInformation('USE_REFERENCED_ATTACHMENTS');
 
-        // if no prefedined value is set on update or the referenced attachments should implicitly be used, add them
-        if ((!newValue.length && updateArticleId) || useRefArticleAttachments) {
-            const article = updateArticleId ? await this.getUpdateArticle() : await this.getReferencedArticle();
-            if (article) {
-                const attachments = await this.getRefAttachments(
-                    article.getAttachments(), article.ArticleID, article.TicketID
-                );
-                newValue.push(...attachments);
+            // if no prefedined value is set on update or the referenced attachments should implicitly be used, add them
+            if ((!newValue.length && updateArticleId) || useRefArticleAttachments) {
+                const article = updateArticleId ? await this.getUpdateArticle() : await this.getReferencedArticle();
+                if (article) {
+                    newValue.push(...article.getAttachments());
+                }
             }
         }
 
@@ -115,29 +114,6 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
         return article;
     }
 
-    private async getRefAttachments(
-        articleAttachments: Attachment[], refArticleId: number, refTicketId: number
-    ): Promise<Attachment[]> {
-        let attachmentsWithContent: Attachment[] = [];
-        if (Array.isArray(articleAttachments) && articleAttachments.length) {
-            const attachmentPromises = [];
-            articleAttachments.forEach((a) => {
-                if (!a.Content) {
-                    const attachmentPromise = TicketService.getInstance().loadArticleAttachment(
-                        Number(refTicketId), refArticleId, a.ID, true
-                    );
-                    if (attachmentPromise) {
-                        attachmentPromises.push(attachmentPromise);
-                    }
-                } else {
-                    attachmentPromises.push(a);
-                }
-            });
-            attachmentsWithContent = await Promise.all(attachmentPromises);
-        }
-        return attachmentsWithContent;
-    }
-
     public async setFormValue(value: any, force?: boolean): Promise<void> {
         if (Array.isArray(value) && value.length === 0) {
             value = null;
@@ -148,11 +124,6 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<Attachment[]> {
 
     public destroy(): void {
         super.destroy();
-        if (Array.isArray(this.value) && this.value.length) {
-            const downloadIds = this.value.filter((a) => a.downloadId).map((a) => a.downloadId);
-            if (downloadIds.length) {
-                TicketSocketClient.getInstance().removeArticleAttachmentDownloads(downloadIds);
-            }
-        }
     }
+
 }

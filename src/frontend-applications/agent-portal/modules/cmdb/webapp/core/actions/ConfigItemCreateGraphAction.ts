@@ -14,6 +14,7 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { GraphContext } from '../../../../graph/webapp/core/GraphContext';
 import { ConfigItemDetailsContext } from '..';
 import { GraphContextOptions } from '../../../../graph/model/GraphContextOptions';
+import { ConfigItem } from '../../../model/ConfigItem';
 
 export class ConfigItemCreateGraphAction extends AbstractAction {
 
@@ -29,7 +30,12 @@ export class ConfigItemCreateGraphAction extends AbstractAction {
     }
 
     public async canShow(): Promise<boolean> {
-        return this.context?.contextId === ConfigItemDetailsContext.CONTEXT_ID;
+        let canShow = this.context?.contextId === ConfigItemDetailsContext.CONTEXT_ID;
+
+        const configItem = await this.context?.getObject<ConfigItem>();
+        canShow = canShow && configItem?.CurDeplStateType !== 'postproductive';
+
+        return canShow;
     }
 
     public async run(event: any): Promise<void> {

@@ -86,7 +86,7 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
     }
 
     public dateChanged(event: any): void {
-        this.timoutTimer.restartTimer(() => this.setDateValue(event));
+        this.timoutTimer.start(() => this.setDateValue(event), 750);
     }
 
     private setDateValue(event: any): void {

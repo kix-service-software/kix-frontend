@@ -10,6 +10,7 @@
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { EventService } from '../../../../../../base-components/webapp/core/EventService';
 import { RoutingService } from '../../../../../../base-components/webapp/core/RoutingService';
+import { TranslationService } from '../../../../../../translation/webapp/core/TranslationService';
 import { Cell } from '../../../../../model/Cell';
 import { Column } from '../../../../../model/Column';
 import { TableEvent } from '../../../../../model/TableEvent';
@@ -91,6 +92,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             this.prepareObserver();
         }
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Select entry', 'Translatable#Toggle row'
+        ]);
     }
 
     public onDestroy(): void {

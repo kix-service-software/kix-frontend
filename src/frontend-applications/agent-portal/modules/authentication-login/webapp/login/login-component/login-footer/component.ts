@@ -13,8 +13,6 @@ import { KIXObjectService } from '../../../../../base-components/webapp/core/KIX
 import { SysConfigOption } from '../../../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../../../sysconfig/model/SysConfigKey';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { KIXModulesSocketClient } from '../../../../../base-components/webapp/core/KIXModulesSocketClient';
-import { ReleaseInfo } from '../../../../../../model/ReleaseInfo';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -30,22 +28,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: ComponentInput): void {
         super.onInput(input);
-        this.state.releaseInfo = input.releaseInfo;
         this.state.imprintLink = input.imprintLink;
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
         this.initTranslations();
-        if (!this.state.releaseInfo) {
-            this.state.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-        }
-
-        if (this.state.releaseInfo) {
-            this.state.kixProduct = this.state.releaseInfo.product;
-            this.state.kixVersion = this.state.releaseInfo.version;
-            this.state.buildNumber = this.getBuildNumber(this.state.releaseInfo);
-        }
 
         if (!this.state.imprintLink) {
             const imprintConfig = await KIXObjectService.loadObjects<SysConfigOption>(
@@ -84,11 +72,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
         return pattern;
-    }
-
-    private getBuildNumber(releaseInfo: ReleaseInfo): string {
-        const backendBuildNumber = releaseInfo.backendSystemInfo ? releaseInfo.backendSystemInfo.BuildNumber : '';
-        return `(Build: ${releaseInfo.buildNumber.toString()}.${backendBuildNumber})`;
     }
 }
 

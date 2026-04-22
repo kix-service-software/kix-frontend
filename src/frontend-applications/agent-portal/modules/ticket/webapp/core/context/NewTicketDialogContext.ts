@@ -16,7 +16,7 @@ import { TicketProperty } from '../../../model/TicketProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { FormContext } from '../../../../../model/configuration/FormContext';
-import { KIXModulesSocketClient } from '../../../../base-components/webapp/core/KIXModulesSocketClient';
+import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 
 export class NewTicketDialogContext extends Context {
 
@@ -85,9 +85,10 @@ export class NewTicketDialogContext extends Context {
     }
 
     private async handleOrganisationValue(organisationId: number): Promise<void> {
-        if (!isNaN(organisationId)) {
+        if (organisationId && !isNaN(organisationId)) {
             const organisations = await KIXObjectService.loadObjects(
-                KIXObjectType.ORGANISATION, [organisationId]
+                KIXObjectType.ORGANISATION, [organisationId],
+                undefined, undefined, true
             );
             if (organisations && organisations.length) {
                 this.organisation = organisations[0];
@@ -102,9 +103,10 @@ export class NewTicketDialogContext extends Context {
     }
 
     private async handleContactValue(contactId: number): Promise<void> {
-        if (!isNaN(contactId)) {
+        if (contactId && !isNaN(contactId)) {
             const contacts = await KIXObjectService.loadObjects(
-                KIXObjectType.CONTACT, [contactId]
+                KIXObjectType.CONTACT, [contactId],
+                undefined, undefined, true
             );
             if (contacts && contacts.length) {
                 this.contact = contacts[0];
@@ -120,7 +122,7 @@ export class NewTicketDialogContext extends Context {
     }
 
     public async postInit(): Promise<void> {
-        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        const releaseInfo = ClientStorageService.getReleaseInfo();
         const kixPro = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
 
         if (!kixPro) {

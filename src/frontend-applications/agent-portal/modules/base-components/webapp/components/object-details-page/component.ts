@@ -10,12 +10,10 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextService } from '../../core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

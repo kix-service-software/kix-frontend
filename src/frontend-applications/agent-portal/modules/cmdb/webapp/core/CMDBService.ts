@@ -265,8 +265,11 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                         // GC also without filterIds possible (filtering in table column)
                         if (input.Type === 'GeneralCatalog') {
                             const items = await CMDBService.getGeneralCatalogItems(input['Class'], filterIds);
+                            const translatedNames = await TranslationService.createTranslationObject(
+                                items.map((i) => i.Name)
+                            );
                             return items.map((item) => new TreeNode(
-                                item.ItemID, item.Name,
+                                item.ItemID, translatedNames[item.Name] || item.Name,
                                 new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, item.ObjectId)
                             ));
                         }

@@ -18,6 +18,10 @@ import { Notification } from '../../model/Notification';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { APIClient } from '../../../../api-client/APIClient';
+import { NotificationHandler } from '../../../base-components/webapp/core/NotificationHandler';
+import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
 
 export class NotificationService extends KIXObjectService<SystemAddress> {
 
@@ -34,6 +38,32 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
     private constructor() {
         super(KIXObjectType.NOTIFICATION);
         this.objectConstructors.set(KIXObjectType.NOTIFICATION, [Notification]);
+    }
+
+    public async registerNotificationServiceWorker(): Promise<void> {
+        NotificationHandler.getInstance();
+
+        const workerChannel = new BroadcastChannel('worker-channel');
+
+        try {
+            const baseRoute = ClientStorageService.getBaseRoute();
+            const workerJS = `${baseRoute}/static/notification-worker.js`;
+            new SharedWorker(workerJS);
+        } catch (e) {
+            console.error(e);
+        }
+
+        setTimeout(
+            () => workerChannel.postMessage({
+                objectEventURL: APIClient.getUrl('/notifications/backend'),
+                portalNotificationURL: APIClient.getUrl('/notifications/portal')
+            }), 500
+        );
+
+        const channel = new BroadcastChannel('portal-notifications');
+        channel.addEventListener('message', (event) => {
+            EventService.getInstance().publish(event?.data);
+        });
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {

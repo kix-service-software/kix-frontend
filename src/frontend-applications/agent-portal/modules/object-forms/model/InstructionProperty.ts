@@ -21,7 +21,7 @@ export enum InstructionProperty {
 
     READ_ONLY = 'ReadOnly',
 
-    WRITEABLE = 'Writeable',
+    WRITABLE = 'Writable',
 
     SHOW = 'Show',
 

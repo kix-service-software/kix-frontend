@@ -22,7 +22,7 @@ export class ObjectLoader {
         this.loadingOptionsMap.set(objectType, loadingOptions);
     }
 
-    public queue<T = any>(objectType: string, objectId: string | number): Promise<T> {
+    public queue<T = any>(objectType: string, objectId: string | number, silent: boolean = false): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             if (!objectType || !objectId) {
                 return resolve(null);
@@ -41,33 +41,36 @@ export class ObjectLoader {
 
                 objectMap.get(key).push([resolve, reject]);
 
-                this.load();
+                this.load(silent);
             }
         });
     }
 
-    private load(): void {
+    private load(silent: boolean = false): void {
         if (this.timeout) {
             clearTimeout(this.timeout);
         }
 
         this.timeout = setTimeout(() => {
             this.objectIdMap.forEach((value, key) => {
-                this.loadObjects(key, value);
+                this.loadObjects(key, value, silent);
                 this.objectIdMap.delete(key);
             });
         }, 150);
     }
 
     private async loadObjects(
-        objectType: string, objectMap: Map<string, Array<[(object: any) => void, (error: any) => void]>>
+        objectType: string, objectMap: Map<string, Array<[(object: any) => void, (error: any) => void]>>,
+        silent: boolean = false
     ): Promise<void> {
         try {
             const objectIds = [...objectMap.keys()];
             const loadingOptions = this.loadingOptionsMap.has(objectType) ?
                 this.loadingOptionsMap.get(objectType) : null;
 
-            const objects = await KIXObjectService.loadObjects(objectType, objectIds, loadingOptions);
+            const objects = await KIXObjectService.loadObjects(
+                objectType, objectIds, loadingOptions, null, silent
+            );
 
             for (const obj of objects) {
                 const cbArray = objectMap.get(obj.ObjectId?.toString());

@@ -9,7 +9,6 @@
 
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { SearchSocketClient } from '../../core/SearchSocketClient';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SearchCache } from '../../../model/SearchCache';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
@@ -19,6 +18,7 @@ import { SearchEvent } from '../../../model/SearchEvent';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { SearchContextConfiguration } from '../../../../../model/configuration/SearchContextConfiguration';
 import { SearchContext } from '../../core/SearchContext';
+import { SearchAPIClient } from '../../../../../api-client/search/Search';
 
 export class Component extends AbstractMarkoComponent<ComponentState, SearchContext> {
 
@@ -57,7 +57,7 @@ export class Component extends AbstractMarkoComponent<ComponentState, SearchCont
 
     private async loadSearches(): Promise<void> {
         this.state.prepared = false;
-        let searches = await SearchSocketClient.getInstance().loadAllSearches() || [];
+        let searches = await SearchAPIClient.loadAllSearches() || [];
         searches = searches.filter((s) => s.objectType === this.objectType);
 
         const userSearches = searches.filter((s) => !s.userId);

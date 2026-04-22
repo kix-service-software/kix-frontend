@@ -21,6 +21,7 @@ import { ComponentState } from './ComponentState';
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private browserFontSize: number;
+    private resizeHandler: () => void;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'kix-table');
@@ -30,7 +31,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
-        if (!this.state.table && input.table || this.isTableChanged(input.table)) {
+        if ((!this.state.table && input.table) || this.isTableChanged(input.table)) {
             if (this.state.table && this.isTableChanged(input.table)) {
                 this.state.table.destroy();
             }
@@ -40,12 +41,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private isTableChanged(table: Table): boolean {
-        return table && this.state.table.getTableId() !== table.getTableId();
+        return Boolean(table && this.state.table?.getTableId() !== table.getTableId());
     }
 
     private async init(table: Table): Promise<void> {
         await table.initialize(false);
-        this.setTableHeight();
+        await this.setTableHeight();
     }
 
     public async onMount(): Promise<void> {
@@ -58,15 +59,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         this.state.showLoadingShield = Boolean(eventId === TableEvent.TABLE_WAITING_START);
                     }
 
-                    if (eventId === TableEvent.REFRESH) {
-                        this.setTableHeight();
-                    }
-
-                    if (eventId === TableEvent.RERENDER_TABLE) {
-                        this.setTableHeight();
-                    }
-
-                    if (eventId === TableEvent.ROW_TOGGLED) {
+                    if (
+                        eventId === TableEvent.REFRESH ||
+                        eventId === TableEvent.RERENDER_TABLE ||
+                        eventId === TableEvent.ROW_TOGGLED
+                    ) {
                         this.setTableHeight();
                     }
 
@@ -112,6 +109,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             ]
         );
 
+        this.resizeHandler = (): void => this.setTableHeight();
+        window.addEventListener('resize', this.resizeHandler);
+
         setTimeout(() => {
             const scrollPosString = ClientStorageService.getOption(`${this.state.table?.getTableId()}-scrollpos`);
             const element: HTMLElement = (this as any).getEl(this.state.table?.getTableId() + 'table-container');
@@ -128,28 +128,87 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }, 500);
     }
 
-    public setTableHeight(): void {
-        this.state.tableHeight = '100%';
+    private setTableHeight(): void {
         const tableConfiguration = this.state.table?.getTableConfiguration();
 
-        if (tableConfiguration?.displayLimit) {
+        const allRows: Row[] = this.state.table?.getRows(false) || [];
+        if (allRows.length === 0) {
+            this.state.tableStyle = 'height: auto;';
+            return;
+        }
 
-            const rows = this.state.table.getRows(false);
-            const displayLimit = tableConfiguration.displayLimit;
+        const container: HTMLElement = (this as any).getEl(
+            this.state.table?.getTableId() + 'table-container'
+        );
+        let maxheight: number = null;
 
-            if (rows && rows.length > displayLimit) {
+        if (container) {
+            const widgetContainer = container.closest('.widget-container') as HTMLElement;
+            const widgetContainerParent = widgetContainer?.parentElement;
 
-                const headerRowHeight = this.browserFontSize * Number(tableConfiguration.headerHeight);
+            const isHomeDashboard = Boolean(
+                widgetContainerParent?.className && widgetContainerParent.className === 'dashboard home'
+            );
+
+            if (!isHomeDashboard) {
+                const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+                const rect = container.getBoundingClientRect();
+
+                let bottomLimit = viewportHeight;
+                const footer = document.querySelector('.footer-wrapper') as HTMLElement;
+                if (footer) {
+                    const footerRect = footer.getBoundingClientRect();
+                    bottomLimit = footerRect.top;
+                }
+
+                const bottomGap = 16;
+                const availableHeight = bottomLimit - rect.top - bottomGap;
+                if (availableHeight > 0) {
+                    maxheight = availableHeight;
+                }
+            }
+
+            const isReportingContext = this.context.getConfiguration()?.id === 'reporting';
+
+            if (isReportingContext) {
+                // gap is the gap between tables
+                // with the x2 at the end because of the height of the second widget's header
+                const gap = this.browserFontSize * Number(tableConfiguration.rowHeight) * 2;
+                this.state.tableStyle = `height: auto; max-height: ${(maxheight - gap) / 2}px;`;
+                return;
+            }
+        }
+
+        const rows = this.state.table.getRows(false);
+        const displayLimit = tableConfiguration?.displayLimit;
+
+        let maxHeightByDisplayLimit = maxheight ?? 2000;
+        const isAdminContext = this.context.getConfiguration()?.id === 'admin';
+        if (!isAdminContext) {
+            if (displayLimit !== 0) {
+                const headerRowHeight = this.browserFontSize * Number(tableConfiguration.headerHeight) + 2;
 
                 const rowHeight = this.browserFontSize * Number(tableConfiguration.rowHeight);
-                let height = ((displayLimit * rowHeight) + headerRowHeight);
+                maxHeightByDisplayLimit = (displayLimit * rowHeight) + headerRowHeight;
 
-                const expandedRowHeight = (31.5 + 10) / 2 * this.browserFontSize;
+                const expandedRowHeight = (rowHeight + 10) / 2 * this.browserFontSize;
                 const expandedRowCount = rows.filter((r) => r.isExpanded()).length;
-                height = height + (expandedRowCount * expandedRowHeight);
 
-                this.state.tableHeight = height + 'px';
+                // The 0.5 * this.browserFontSize is accounting for the padding on the bottom of the table
+                maxHeightByDisplayLimit =
+                    maxHeightByDisplayLimit + (expandedRowCount * expandedRowHeight) + 0.5 * this.browserFontSize;
             }
+            else {
+                maxHeightByDisplayLimit = 0;
+            }
+        }
+
+        maxheight = isNaN(maxheight) ? maxHeightByDisplayLimit : Math.min(maxheight, maxHeightByDisplayLimit);
+
+        if (maxheight > 0) {
+            this.state.tableStyle = `height: auto; max-height: ${maxheight}px;`;
+        } else {
+            this.state.tableStyle = 'height: auto;';
         }
     }
 
@@ -204,6 +263,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
+        if (this.resizeHandler) {
+            window.removeEventListener('resize', this.resizeHandler);
+        }
         super.onDestroy();
     }
 }

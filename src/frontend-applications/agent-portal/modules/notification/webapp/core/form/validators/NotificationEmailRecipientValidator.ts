@@ -9,17 +9,16 @@
 
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../../../model/configuration/FormFieldValue';
-import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { FormValidationService } from '../../../../../../modules/base-components/webapp/core/FormValidationService';
 import { IFormFieldValidator } from '../../../../../../modules/base-components/webapp/core/IFormFieldValidator';
-import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ValidationResult } from '../../../../../../modules/base-components/webapp/core/ValidationResult';
 import { ValidationSeverity } from '../../../../../../modules/base-components/webapp/core/ValidationSeverity';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { DynamicField } from '../../../../../dynamic-fields/model/DynamicField';
-import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
+import { SystemAddressService } from '../../../../../system-address/webapp/core';
 import { NotificationProperty } from '../../../../model/NotificationProperty';
+import addrparser from 'address-rfc2822';
 
 export class NotificationEmailRecipientValidator implements IFormFieldValidator {
 
@@ -37,7 +36,11 @@ export class NotificationEmailRecipientValidator implements IFormFieldValidator 
         );
 
         if (this.isDefined(emailValue)) {
-            const mailCheckResult = await this.checkEmail(emailValue.value);
+            const emailAddresses: string[] = [];
+            emailValue.value.forEach((v) => {
+                emailAddresses.push(...this.parseAddresses(v));
+            });
+            const mailCheckResult = await this.checkEmail(emailAddresses);
             if (mailCheckResult.severity === ValidationSeverity.ERROR) {
                 return mailCheckResult;
             }
@@ -57,12 +60,12 @@ export class NotificationEmailRecipientValidator implements IFormFieldValidator 
                 if (!(/^<KIX_.*>$/gi.test(mail))) {
                     if (!FormValidationService.getInstance().isValidEmail(mail)) {
                         const errorString = await TranslationService.translate(
-                            `${ FormValidationService.EMAIL_REGEX_ERROR_MESSAGE } ({0}).`, [mail]
+                            `${FormValidationService.EMAIL_REGEX_ERROR_MESSAGE} ({0}).`, [mail]
                         );
                         return new ValidationResult(ValidationSeverity.ERROR, errorString);
                     }
 
-                    if (await this.isSystemAddress(mail.replace(/.+ <(.+)>/, '$1'))) {
+                    if (await SystemAddressService.getInstance().isSystemAddress(mail)) {
                         const errorString = await TranslationService.translate(
                             'Translatable#Inserted email address must not be a system address ({0}).', [mail]
                         );
@@ -74,21 +77,29 @@ export class NotificationEmailRecipientValidator implements IFormFieldValidator 
         return new ValidationResult(ValidationSeverity.OK, '');
     }
 
-    private async isSystemAddress(mail: string): Promise<boolean> {
-        const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(KIXObjectType.SYSTEM_ADDRESS);
-        if (systemAddresses) {
-            return systemAddresses.some((sa) => sa.Name === mail);
-        }
-
-        return false;
-    }
-
     public isValidatorForDF(dynamicField: DynamicField): boolean {
         return false;
     }
 
     public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
         return new ValidationResult(ValidationSeverity.OK, '');
+    }
+
+    private parseAddresses(value: string): string[] {
+        const emailAddresses = [];
+        try {
+            const parseResult = addrparser.parse(value);
+            for (const address of parseResult) {
+                if (address.phrase && address.phrase !== address.address) {
+                    emailAddresses.push(`"${address.phrase}" <${address.address}>`);
+                } else {
+                    emailAddresses.push(address.address);
+                }
+            }
+        } catch (error) {
+            emailAddresses.push(value);
+        }
+        return emailAddresses;
     }
 
 }

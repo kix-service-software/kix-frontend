@@ -11,6 +11,6 @@ import { Webform } from './Webform';
 
 export class LoadWebformsResponse {
 
-    public constructor(public requestId: string, public webforms: Webform[]) { }
+    public constructor(public webforms: Webform[]) { }
 
 }

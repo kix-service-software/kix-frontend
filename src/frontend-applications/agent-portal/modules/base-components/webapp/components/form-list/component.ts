@@ -22,6 +22,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private removeTreeHandler: boolean = false;
 
     private toggleTimeout: any;
+    private reposition?: () => void;
 
     public getTreeHandler(): TreeHandler {
         return this.treeHandler;
@@ -86,7 +87,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             (this as any).emit('nodesChanged', nodes);
         });
 
-        this.treeHandler.registerListener(this.state.treeId + '-listener', (nodes: TreeNode[]) => {
+        this.treeHandler.registerListener(this.state.treeId + '-listener', (_nodes: TreeNode[]) => {
             setTimeout(() => this.setDropdownStyle(), 100);
         });
 
@@ -116,6 +117,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onDestroy(): void {
         super.onDestroy();
         document.removeEventListener('click', this.checkExpandState.bind(this));
+        if (this.reposition) {
+            window.removeEventListener('scroll', this.reposition, true);
+            window.removeEventListener('resize', this.reposition);
+            this.reposition = undefined;
+        }
         if (this.removeTreeHandler) {
             TreeService.getInstance().removeTreeHandler(this.state.treeId);
         }
@@ -155,6 +161,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         this.state.expanded = false;
                         this.treeHandler.active = false;
 
+                        if (this.reposition) {
+                            window.removeEventListener('scroll', this.reposition, true);
+                            window.removeEventListener('resize', this.reposition);
+                            this.reposition = undefined;
+                        }
+
                         const hiddenInput = (this as any).getEl('hidden-form-list-input');
                         if (hiddenInput && holdFocus) {
                             hiddenInput.focus();
@@ -172,6 +184,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         EventService.getInstance().publish(ApplicationEvent.DROPDOWN_OPENED, this.state.treeId);
                         setTimeout(() => {
                             this.setDropdownStyle();
+                            if (!this.reposition) {
+                                this.reposition = (): void => this.setDropdownStyle();
+                                window.addEventListener('scroll', this.reposition, true);
+                                window.addEventListener('resize', this.reposition);
+                            }
                         }, 100);
                     }
                     this.toggleTimeout = null;
@@ -182,49 +199,56 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private setDropdownStyle(): void {
-        const valueList = (this as any).getEl('value-list-' + this.state.treeId);
-        let transformValue = 1;
-        if (valueList) {
-            const formListInputContainer = (this as any).getEl('form-list-input-container-' + this.state.listId);
+        const valueList = (this as any).getEl('value-list-' + this.state.treeId) as HTMLElement | null;
+        if (!valueList) { return; }
 
-            const dropdownListEnd = formListInputContainer.getBoundingClientRect().top
-                + formListInputContainer.getBoundingClientRect().height
-                + valueList.getBoundingClientRect().height;
+        const formListInputContainer =
+            (this as any).getEl('form-list-input-container-' + this.state.listId) as HTMLElement | null;
+        if (!formListInputContainer) { return; }
 
-            const input = (this as any).getComponent('form-list-input-' + this.state.listId)?.el;
-            const list = (this as any).getComponent(this.state.treeId)?.el;
-            const buttons = (this as any).getComponent('buttonbar' + this.state.listId)?.el;
+        const r = formListInputContainer.getBoundingClientRect();
+        const vw = document.documentElement.clientWidth || window.innerWidth;
+        const vh = document.documentElement.clientHeight || window.innerHeight;
 
-            const gap = (window.innerHeight || document.documentElement.clientHeight) - dropdownListEnd;
-            if (gap < 0) {
-                transformValue
-                    = formListInputContainer.getBoundingClientRect().height
-                    + valueList.getBoundingClientRect().height
-                    - 1;
-                this.state.treeStyle = { transform: `translate(0px, -${transformValue}px)` };
+        const maxDropdown = Math.min(vh * 0.5, 320);
+        const naturalHeight = Math.max(0, valueList.scrollHeight || valueList.getBoundingClientRect().height || 0);
+        const h = Math.min(naturalHeight || maxDropdown, maxDropdown);
 
-                if (input) {
-                    input.style = `grid-row: ${buttons ? 3 : 2}`;
-                }
-                if (list) {
-                    list.style = 'grid-row: 1';
-                }
-                if (buttons) {
-                    buttons.style = 'grid-row: 2';
-                }
-            } else {
-                this.state.treeStyle = { top: (formListInputContainer.getBoundingClientRect().height - 1) + 'px' };
-                if (input) {
-                    input.style = 'grid-row: 1';
-                }
-                if (list) {
-                    list.style = 'grid-row: 2';
-                }
-                if (buttons) {
-                    buttons.style = 'grid-row: 3';
-                }
-            }
+        const spaceBelow = vh - r.bottom;
+        const openAbove = spaceBelow < h && r.top > h;
+
+        const gutter = 8;
+        const seamOverlap = 1;
+        const yGap = 2;
+
+        let top: number;
+        if (openAbove) {
+            top = r.top - h + seamOverlap - yGap;
+            top = Math.max(gutter, top);
+        } else {
+            top = r.bottom - seamOverlap + yGap;
+            top = Math.min(vh - gutter - h, top);
         }
+
+        const minWidth = Math.max(180, r.width);
+        const left = Math.min(vw - gutter - minWidth, Math.max(gutter, r.left));
+
+        this.state.treeStyle = {
+            position: 'fixed',
+            top: `${top}px`,
+            left: `${left}px`,
+            minWidth: `${minWidth}px`,
+            maxHeight: `${maxDropdown}px`,
+            overflow: 'auto',
+            zIndex: 1000
+        } as any;
+
+        const input = (this as any).getComponent('form-list-input-' + this.state.listId)?.el;
+        const list = (this as any).getComponent(this.state.treeId)?.el;
+        const buttons = (this as any).getComponent('buttonbar' + this.state.listId)?.el;
+        if (input) { input.style = 'grid-row: 1'; }
+        if (list) { list.style = 'grid-row: 2'; }
+        if (buttons) { buttons.style = 'grid-row: 3'; }
     }
 
 }

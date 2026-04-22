@@ -23,10 +23,8 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
-import { OutOfOffice } from '../../model/OutOfOffice';
 import { OutOfOfficeProperty } from '../../model/OutOfOfficeProperty';
 import { OverlayIcon } from '../../../base-components/webapp/core/OverlayIcon';
-import { UserService } from '../../server/UserService';
 
 
 export class UserLabelProvider extends LabelProvider<User> {
@@ -93,14 +91,13 @@ export class UserLabelProvider extends LabelProvider<User> {
                 displayValue = 'Translatable#Customer Login';
                 break;
             case OutOfOfficeProperty.START:
-            case PersonalSettingsProperty.OUT_OF_OFFICE_START:
                 displayValue = 'Translatable#From';
                 break;
             case OutOfOfficeProperty.END:
             case PersonalSettingsProperty.OUT_OF_OFFICE_END:
                 displayValue = 'Translatable#Till';
                 break;
-            case PersonalSettingsProperty.OUT_OF_OFFICE_SUBSTITUTE:
+            case OutOfOfficeProperty.SUBSTITUTE:
                 displayValue = 'Translatable#Substitute';
                 break;
             default:
@@ -206,14 +203,30 @@ export class UserLabelProvider extends LabelProvider<User> {
                 break;
             case OutOfOfficeProperty.START:
             case OutOfOfficeProperty.END:
-                displayValue = await DateTimeUtil.getLocalDateString(user[property]);
+                if (user[property]) {
+                    displayValue = await DateTimeUtil.getLocalDateString(user[property]);
+                }
                 break;
             case PersonalSettingsProperty.OUT_OF_OFFICE_START:
+                if (user?.OutOfOffice?.Start) {
+                    displayValue = await DateTimeUtil.getLocalDateString(user.OutOfOffice.Start);
+                }
+                break;
             case PersonalSettingsProperty.OUT_OF_OFFICE_END:
-                if (user.Preferences) {
-                    const outOfOfficeDate = user.Preferences.find((p) => p.ID === property);
-                    if (outOfOfficeDate) {
-                        displayValue = await DateTimeUtil.getLocalDateString(outOfOfficeDate.Value);
+                if (user?.OutOfOffice?.End) {
+                    displayValue = await DateTimeUtil.getLocalDateString(user.OutOfOffice.End);
+                }
+                break;
+            case OutOfOfficeProperty.SUBSTITUTE:
+                if (user[property]) {
+                    const substitute: User = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [user[property]]
+                    ).catch(() => null);
+                    if (
+                        Array.isArray(substitute)
+                        && Boolean(substitute[0]?.IsAgent)
+                    ) {
+                        displayValue = await this.getObjectText(substitute[0]);
                     }
                 }
                 break;
@@ -326,50 +339,42 @@ export class UserLabelProvider extends LabelProvider<User> {
             ).catch(() => [] as User[]);
             const user = users && users.length ? users[0] : null;
 
-            if (user?.Preferences?.length) {
-                const outOfOffice = await this.getOutOfOffice(user);
-                if (outOfOffice) {
-                    const title = await TranslationService.translate(
-                        'Translatable#Out Of Office', undefined, undefined, false
-                    );
-                    overlay = new OverlayIcon(
-                        undefined, title, 'object-information',
-                        'fas fa-user-slash', outOfOffice, false, true
-                    );
-                }
+            const outOfOffice = await this.getOutOfOffice(user);
+            if (outOfOffice) {
+                const title = await TranslationService.translate(
+                    'Translatable#Out Of Office', undefined, undefined, false
+                );
+                overlay = new OverlayIcon(
+                    undefined, title, 'object-information',
+                    'fas fa-user-slash', outOfOffice, false, true
+                );
             }
         }
         return overlay;
     }
 
-    private async getOutOfOffice(object: User): Promise<OutOfOffice> {
-        let outOfOffice = null;
-
-        if (object && object?.Preferences?.length) {
-            const start = object.Preferences.find((p) => p.ObjectId === UserProperty.OUT_OF_OFFICE_START);
-            const end = object.Preferences.find((p) => p.ObjectId === UserProperty.OUT_OF_OFFICE_END);
-            const substitute = object.Preferences.find((p) => p.ObjectId === UserProperty.OUT_OF_OFFICE_SUBSTITUTE);
+    private async getOutOfOffice(object: User): Promise<any> {
+        if (object) {
             if (
-                start?.Value
-                && end?.Value
+                object?.OutOfOffice?.Start
+                && object?.OutOfOffice?.End
             ) {
                 if (
-                    DateTimeUtil.betweenDays(new Date(start.Value), new Date(end.Value))
+                    DateTimeUtil.betweenDays(
+                        new Date(object.OutOfOffice.Start),
+                        new Date(object.OutOfOffice.End)
+                    )
                 ) {
-                    let substituteUser = null;
-                    if (substitute?.Value) {
-                        const userWithContact = await KIXObjectService.loadObjects<User>(
-                            KIXObjectType.USER, [substitute?.Value], null, null, true
-                        ).catch((): User[] => []);
-                        substituteUser = userWithContact?.length ? userWithContact[0] : null;
-                    }
-                    outOfOffice = new OutOfOffice(
-                        undefined, start?.Value, end?.Value, substituteUser
-                    );
+                    const outOfOffice = object.OutOfOffice;
+                    outOfOffice['Properties'] = [
+                        OutOfOfficeProperty.START,
+                        OutOfOfficeProperty.END,
+                        OutOfOfficeProperty.SUBSTITUTE
+                    ];
                     return outOfOffice;
                 }
             }
         }
-        return outOfOffice;
+        return null;
     }
 }

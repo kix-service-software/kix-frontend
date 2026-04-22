@@ -16,7 +16,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     ]>
         <if(input.page.description)>
             <div class="alert alert-light" role="alert">
-                <iframe-content html=(input.page.description)/>
+                <iframe-content
+                    html=input.page.description
+                    style="min-height: unset;"
+                    calculateHeight
+                />
             </div>
         </if>
 
@@ -32,14 +36,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             ]>
                                 <if(
                                     Array.isArray(column.groups) &&
-                                    column.groups.length
+                                        column.groups.length,
                                 )>
                                     <div class="column-row row m-0 p-0 h-100">
                                         <for|group| of=column.groups>
                                             <object-form-group
                                                 group=group
-                                                pageId=(input.page.id)
-                                                contextInstanceId=input.contextInstanceId/>
+                                                pageId=input.page.id
+                                                contextInstanceId=input.contextInstanceId
+                                            />
                                         </for>
                                     </div>
                                 </if>

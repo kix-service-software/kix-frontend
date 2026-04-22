@@ -19,6 +19,7 @@ class TreeComponent extends AbstractMarkoComponent<ComponentState> {
 
     private setParentFlags: boolean = true;
     private allowExpandCollapseAll: boolean;
+    private previousTreeLength: number;
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -27,6 +28,7 @@ class TreeComponent extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
+        this.previousTreeLength = this.state.tree?.length || 0;
         this.state.tree = input.tree;
         this.state.treeId = input.treeId ? input.treeId : 'tree-' + IdService.generateDateBasedId();
         this.setParentFlags = typeof input.setParentFlags !== 'undefined'

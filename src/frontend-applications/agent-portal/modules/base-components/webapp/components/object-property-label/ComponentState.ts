@@ -20,7 +20,8 @@ export class ComponentState extends AbstractComponentState {
         public propertyIcon: string | ObjectIcon = null,
         public hasText: boolean = true,
         public showLabel: boolean = true,
-        public overlay: OverlayIcon = null
+        public overlay: OverlayIcon = null,
+        public value: any = null
     ) {
         super();
     }

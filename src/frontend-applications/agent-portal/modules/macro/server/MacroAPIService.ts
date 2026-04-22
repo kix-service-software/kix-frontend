@@ -17,7 +17,6 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Error } from '../../../../../server/model/Error';
 import { CacheService } from '../../../server/services/cache';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
-import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { Macro } from '../model/Macro';
 import { MacroActionType } from '../model/MacroActionType';
 import { MacroType } from '../model/MacroType';
@@ -140,7 +139,7 @@ export class MacroAPIService extends KIXObjectAPIService {
 
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: string | number,
-        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
+        cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
     ): Promise<Error[]> {
         if (objectType === KIXObjectType.MACRO) {
             await this.deleteMacro(
@@ -151,8 +150,7 @@ export class MacroAPIService extends KIXObjectAPIService {
             });
         }
         else {
-            return super.deleteObject(token, clientRequestId, objectType, objectId,
-                deleteOptions, cacheKeyPrefix, ressourceUri);
+            return super.deleteObject(token, clientRequestId, objectType, objectId, cacheKeyPrefix, ressourceUri);
         }
     }
 
@@ -161,7 +159,7 @@ export class MacroAPIService extends KIXObjectAPIService {
         const macroUri = this.buildUri(this.RESOURCE_URI);
         await super.deleteObject(
             token, 'MacroAPIService', KIXObjectType.MACRO, macroId,
-            null, KIXObjectType.MACRO, macroUri
+            KIXObjectType.MACRO, macroUri
         );
     }
     public async deleteMacroActions(token: string, macroId: number): Promise<void> {
@@ -174,7 +172,7 @@ export class MacroAPIService extends KIXObjectAPIService {
                 const actionUri = this.buildUri(this.RESOURCE_URI, macroId, 'actions');
                 await super.deleteObject(
                     token, 'MacroAPIService', KIXObjectType.MACRO_ACTION, macroAction.ID,
-                    null, KIXObjectType.MACRO_ACTION, actionUri
+                    KIXObjectType.MACRO_ACTION, actionUri
                 );
             }
         }

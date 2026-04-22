@@ -7,7 +7,7 @@
         "lasso-marko",
         "lasso-less"
     ],
-    "outputDir": "dist/frontend-applications/agent-portal/static/applications",
+    "outputDir": "static/applications",
     "urlPrefix": "/static/applications",
     "bundleReadTimeout": 360000,
     "cacheProfile": "production"

@@ -8,4 +8,3 @@
  */
 
 export { NotesService } from './NotesService';
-export { NotesSocketClient } from './NotesSocketClient';

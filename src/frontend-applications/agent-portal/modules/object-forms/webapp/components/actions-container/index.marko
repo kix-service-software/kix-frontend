@@ -9,8 +9,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(
    state.prepared &&
-   Array.isArray(state.visibleActions) &&
-   state.visibleActions.length > 0
+      Array.isArray(state.visibleActions) &&
+      state.visibleActions.length > 0,
 )>
    <div class="btn-group">
       <for|action| of=state.visibleActions>
@@ -23,6 +23,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                "mt-1",
                "d-flex",
                "align-items-center",
+               "column-gap-1",
                {
                   active: action.isActive(),
                },

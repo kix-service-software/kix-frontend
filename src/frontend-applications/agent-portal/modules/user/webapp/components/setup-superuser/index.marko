@@ -16,7 +16,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     type="button"
                     on-click("skip")
                     title=state.translations["Translatable#Skip & Continue"]>
-                    <span.kix-icon-arrow-outward/>
+                    <span.kix-icon-arrow-outward aria-hidden="true"/>
                     <translation-string pattern="Translatable#Skip & Continue"/>
                 </button>
             </if>
@@ -24,14 +24,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 type="button"
                 on-click("submit", true)
                 title=state.translations["Translatable#Save & Logout"]>
-                <span.kix-icon-arrow-outward/>
+                <span.kix-icon-arrow-outward aria-hidden="true"/>
                 <translation-string pattern="Translatable#Save & Logout"/>
             </button>
             <button.kix-button.submit-button
                 type="button"
                 on-click("submit", false)
                 title=state.translations["Translatable#Save & Continue"]>
-                <span.kix-icon-arrow-outward/>
+                <span.kix-icon-arrow-outward aria-hidden="true"/>
                 <translation-string pattern="Translatable#Save & Continue"/>
             </button>
         </div>

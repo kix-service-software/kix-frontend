@@ -86,26 +86,26 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         ], null, null, false,
                     ),
                     {
-                        roleIds:[],
+                        roleIds: [],
                         values: [
                             [
                                 {
                                     icon: 'kix-icon-call',
                                     text: '<KIX_CONTACT_Phone>',
                                     linkSrc: 'tel:<KIX_CONTACT_Phone>',
-                                    roleIds:[]
+                                    roleIds: []
                                 },
                                 {
                                     icon: 'kix-icon-mail',
                                     text: '<KIX_CONTACT_Email>',
                                     linkSrc: null,
-                                    roleIds:[]
+                                    roleIds: []
                                 }
                             ]
                         ]
                     },
                     {
-                        roleIds:[],
+                        roleIds: [],
                         values: [
                             [
                                 {
@@ -113,21 +113,21 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     text: '<KIX_CONTACT_Street>',
                                     // tslint:disable-next-line: max-line-length
                                     linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>',
-                                    roleIds:[]
+                                    roleIds: []
                                 },
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Zip> <KIX_CONTACT_City>',
                                     // tslint:disable-next-line: max-line-length
                                     linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>',
-                                    roleIds:[]
+                                    roleIds: []
                                 },
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Country>',
                                     // tslint:disable-next-line: max-line-length
                                     linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>',
-                                    roleIds:[]
+                                    roleIds: []
                                 }
                             ]
                         ]
@@ -276,11 +276,13 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     [
                         new DefaultColumnConfiguration(
                             null, null, null, '', false, false, false, false, 30,
-                            false, false, false, null, false, 'faq-article-import-cell'
+                            false, false, false, null, false, 'faq-article-import-cell',
+                            undefined, undefined, undefined, undefined, undefined, undefined, true
                         ),
                         new DefaultColumnConfiguration(
                             null, null, null, '', false, false, false, false, 30,
-                            false, false, false, null, false, 'faq-article-html-preview-cell'
+                            false, false, false, null, false, 'faq-article-html-preview-cell',
+                            undefined, undefined, undefined, undefined, undefined, undefined, true
                         ),
                         new DefaultColumnConfiguration(
                             null, null, null, FAQArticleProperty.TITLE, true, false, true, false, 260, true, false
@@ -339,7 +341,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         new DefaultColumnConfiguration(
                             null, null, null, '', false, false, false, false, 30,
                             false, false, false, null, false, 'add-to-affected-assets-cell',
-                            'Translatable#Contained in Affected Assets'
+                            'Translatable#Contained in Affected Assets',
+                            undefined, undefined, undefined, undefined, undefined, true
                         ),
                         new DefaultColumnConfiguration(
                             null, null, null, ConfigItemProperty.NUMBER, true, false, true, false, 120, true, true),

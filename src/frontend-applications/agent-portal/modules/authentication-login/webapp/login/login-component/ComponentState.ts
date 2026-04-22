@@ -21,7 +21,6 @@ export class ComponentState extends AbstractComponentState {
         public error: boolean = false,
         public errorMessage: string = null,
         public doLogin: boolean = false,
-        public logout: boolean = false,
         public unsupportedBrowser: boolean = false,
         public userName: string = null,
         public notifications: PortalNotification[] = [],

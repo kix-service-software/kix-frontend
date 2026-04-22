@@ -13,13 +13,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     (!state.isMobile || state.showMobile)
 )>
     <if(!state.isMobile)>
-        <div
+        <button
             key=state.componentId + "-togglesidebar"
             on-click("toggleSidebarArea")
             title=(
                 state.showSidebarArea
-                    ? state.translations["Translatable#Close Sidebars"]
-                    : state.translations["Translatable#Open Sidebars"]
+                    ? state.translations["Translatable#Close Sidebar"]
+                    : state.translations["Translatable#Open Sidebar"]
+            )
+            aria-label=(
+                state.showSidebarArea
+                    ? state.translations["Translatable#Close Sidebar"]
+                    : state.translations["Translatable#Open Sidebar"]
             )
             class="sidebar-toggle">
             <if(state.isLeft)>
@@ -42,7 +47,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <translation-string pattern="Translatable#Hide"/>
                 </if>
             </else>
-        </div>
+        </button>
     </if>
     <div
         key=state.componentId + "-sidebar-container"

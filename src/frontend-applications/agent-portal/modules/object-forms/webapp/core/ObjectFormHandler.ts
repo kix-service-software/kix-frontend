@@ -75,22 +75,20 @@ export class ObjectFormHandler {
             this.objectFormValueMapper.formContext = this.form?.formContext;
             this.objectFormValueMapper.setFormConfiguration(this.form);
 
-            const startLoadObject = Date.now();
+            console.time('Load Form Object');
             let formObject = this.context.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
             if (!formObject) {
                 formObject = await this.context.getObject(
                     this.form?.objectType || this.context.descriptor.kixObjectTypes[0], createNewInstance
                 );
             }
-            const endLoadObject = Date.now();
-            console.debug(`Form Object loaded: ${(endLoadObject - startLoadObject)}ms`);
+            console.timeEnd('Load Form Object');
 
             this.activePageId = this.form?.pages[0]?.id;
 
-            const start = Date.now();
+            console.time('Map Form Values');
             await this.objectFormValueMapper.mapFormValues(formObject).catch((e) => console.error(e));
-            const end = Date.now();
-            console.debug(`Map Form Values Finished: ${(end - start)}ms`);
+            console.timeEnd('Map Form Values');
 
             this.objectFormValidator = new ObjectFormValidator(this.objectFormValueMapper);
         }
@@ -380,6 +378,9 @@ export class ObjectFormHandler {
             await (formValue as DynamicFieldCountableFormValue).reInitFormValue();
         } else {
             await formValue.initFormValue();
+            if (this.configurationMode) {
+                await formValue.postInitFormValue();
+            }
         }
 
         const configObject = new FormConfigurationObject();

@@ -7,25 +7,14 @@
  * --
  */
 
-import { ClientStorageService } from '../../../base-components/webapp/core/ClientStorageService';
+import { RequestMethod } from '../../../../../../server/model/rest/RequestMethod';
+import { APIClient } from '../../../../api-client/APIClient';
 
 export class FileService {
 
-    public static async uploadFile(file: File): Promise<void> {
+    public static async uploadFile(file: File, fileName?: string): Promise<void> {
         const formData = new FormData();
-        formData.append('file', file);
-
-        const request = {
-            method: 'POST',
-            body: formData,
-        };
-
-        const baseRoute = ClientStorageService.getBaseRoute() || '';
-
-        const url = location.protocol + '//' + location.host + baseRoute;
-        await fetch(`${url}/files/upload`, request).catch((err) => {
-            console.error(err);
-            throw err;
-        });
+        formData.append('file', file, fileName);
+        await APIClient.executeRequest(RequestMethod.POST, '/files/upload', formData);
     }
 }

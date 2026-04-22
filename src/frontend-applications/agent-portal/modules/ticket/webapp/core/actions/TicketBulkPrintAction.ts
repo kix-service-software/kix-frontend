@@ -10,7 +10,7 @@
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
@@ -35,7 +35,7 @@ export class TicketBulkPrintAction extends AbstractAction {
             new UIComponentPermission('tickets', [CRUD.READ])
         ];
 
-        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        show = await SessionAPIClient.checkPermissions(permissions);
         return show;
     }
 

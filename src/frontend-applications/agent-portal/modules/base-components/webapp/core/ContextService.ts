@@ -15,10 +15,10 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { BrowserHistoryState } from './BrowserHistoryState';
 import { ContextHistory } from './ContextHistory';
 import { ContextHistoryEntry } from './ContextHistoryEntry';
-import { ContextSocketClient } from './ContextSocketClient';
+import { ContextAPIClient } from '../../../../api-client/context/Context';
 import { Context } from '../../../../model/Context';
 import { ContextExtension } from '../../../../model/ContextExtension';
-import { AuthenticationSocketClient } from './AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { ContextEvents } from './ContextEvents';
 import { EventService } from './EventService';
 import { BrowserUtil } from './BrowserUtil';
@@ -71,7 +71,9 @@ export class ContextService {
 
     public contextRefreshInterval: ContextRefreshInterval;
 
-    private componentContextMap: Object = new Object();
+    private componentContextMap: object = new Object();
+
+    private _allowedContextIds: string[] = [];
 
     public async initialize(): Promise<void> {
         this.contextRefreshInterval = new ContextRefreshInterval();
@@ -83,6 +85,14 @@ export class ContextService {
             this.contextDescriptorList.push(contextDescriptor);
             this.serviceListener.forEach((l) => l.contextRegistered(contextDescriptor));
         }
+    }
+
+    public set allowedContextIds(contextIds: string[]) {
+        this._allowedContextIds = contextIds || [];
+    }
+
+    public get allowedContextIds(): string[] {
+        return this._allowedContextIds || [];
     }
 
     public async initUserContextInstances(): Promise<void> {
@@ -152,6 +162,12 @@ export class ContextService {
             }
         }
         return context;
+    }
+
+    public findContextInstance(contextId: string, objectId: string | number): Context {
+        return this.contextInstances.find(
+            (ci) => ci.contextId === contextId && ci.getObjectId()?.toString() === objectId?.toString()
+        );
     }
 
     private isStorableDialogContext(context: Context): boolean {
@@ -331,7 +347,7 @@ export class ContextService {
             context = await this.setContextByInstanceId(
                 this.contextInstances[this.contextInstances.length - 1].instanceId
             );
-        } else {
+        } else if (typeof window !== 'undefined') {
             const url = `${window.location.protocol}//${window.location.host}/${this.DEFAULT_FALLBACK_CONTEXT_URL}`;
             await RoutingService.getInstance().routeToURL(true, url);
         }
@@ -367,10 +383,16 @@ export class ContextService {
         return context;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async setContextByInstanceId(
         instanceId: string, objectId?: string | number, history: boolean = true
     ): Promise<Context> {
         const context = this.contextInstances.find((i) => i.instanceId === instanceId);
+
+        if (this._allowedContextIds?.length && !this._allowedContextIds.some((c) => c === context.contextId)) {
+            return null;
+        }
+
         const hint = await TranslationService.translate('Translatable#Loading ...');
 
         BrowserUtil.toggleLoadingShield(
@@ -390,7 +412,7 @@ export class ContextService {
             this.activeContext = context;
             this.activeContextIndex = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
 
-            if (!this.activeContext.initialized) {
+            if (!this.activeContext?.initialized) {
                 await this.activeContext.postInit();
 
                 for (const extension of context?.contextExtensions) {
@@ -404,8 +426,8 @@ export class ContextService {
 
             EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
             setTimeout(() => {
-                BrowserUtil.setCurrentContentScrollPosition(this.activeContext.lastScrollPosition);
-            }, 100);
+                BrowserUtil.setCurrentContentScrollPosition(this.activeContext?.lastScrollPosition);
+            }, 500);
             // TODO: Use Event
             this.serviceListener.forEach(
                 (sl) => sl.contextChanged(
@@ -425,7 +447,9 @@ export class ContextService {
     ): Promise<Context> {
         if (removeCurrent) {
             const currentContext = this.getActiveContext();
-            await this.removeContext(currentContext.instanceId);
+            if (currentContext) {
+                await this.removeContext(currentContext.instanceId, undefined, undefined, false);
+            }
         }
 
         const context = await this.getContextInstance(
@@ -451,15 +475,8 @@ export class ContextService {
             // extended params should already be encoded
             url = await context.addExtendedUrlParams(url);
 
-            const prefix = KIXModulesService.urlPrefix || '';
-            if (prefix) {
-                url = `/${prefix}/${url}`;
-            } else {
-                url = `/${url}`;
-            }
-
             const baseRoute = ClientStorageService.getBaseRoute();
-            url = `${baseRoute}${url}`;
+            url = `${baseRoute}/${url}`;
 
             const state = new BrowserHistoryState(context.contextId, objectId);
             if (oldContext) {
@@ -471,8 +488,7 @@ export class ContextService {
         }
 
         if (typeof document !== 'undefined') {
-            const documentTitle = displayText;
-            document.title = documentTitle;
+            document.title = displayText;
         }
     }
 
@@ -551,10 +567,10 @@ export class ContextService {
 
             let context: Context;
             if (descriptor) {
-                const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(descriptor.permissions);
+                const allowed = await SessionAPIClient.checkPermissions(descriptor.permissions);
 
                 if (allowed) {
-                    const configuration = await ContextSocketClient.getInstance().loadContextConfiguration(
+                    const configuration = await ContextAPIClient.loadContextConfiguration(
                         descriptor.contextId
                     ).catch(
                         (error) => { reject(error); }
@@ -637,7 +653,7 @@ export class ContextService {
 
     public async getStoredContextList(): Promise<ContextPreference[]> {
         if (!this.storedContexts) {
-            this.storedContexts = await ContextSocketClient.getInstance().loadStoredContexts().catch(() => []);
+            this.storedContexts = await ContextAPIClient.loadStoredContexts().catch(() => []);
         }
 
         return [...this.storedContexts];
@@ -675,7 +691,7 @@ export class ContextService {
 
             let stored = false;
             if (remove) {
-                ContextSocketClient.getInstance().removeStoredContext(context.instanceId);
+                ContextAPIClient.removeStoredContext(context.instanceId);
             } else {
                 const preference = await context?.getStorageManager()?.getStorableContextPreference()
                     .catch((error) => {
@@ -689,7 +705,7 @@ export class ContextService {
                     this.storedContexts.push(preference);
                     stored = true;
                 }
-                ContextSocketClient.getInstance().storeContext(preference);
+                ContextAPIClient.storeContext(preference);
             }
 
             if (stored) {
@@ -733,7 +749,7 @@ export class ContextService {
 
     // TODO: OBSOLOTE: Do not use listener concept. Use EventService
     public registerListener(listener: IContextServiceListener): void {
-        this.serviceListener.set(listener.constexServiceListenerId, listener);
+        this.serviceListener.set(listener.contextServiceListenerId, listener);
     }
 
     public unregisterListener(listenerId: string): void {
@@ -783,7 +799,7 @@ export class ContextService {
 
     public async reloadContextConfigurations(): Promise<void> {
         for (const context of this.contextInstances) {
-            const configuration = await ContextSocketClient.getInstance().loadContextConfiguration(
+            const configuration = await ContextAPIClient.loadContextConfiguration(
                 context.descriptor.contextId
             ).catch((error): ContextConfiguration => {
                 console.error(error);

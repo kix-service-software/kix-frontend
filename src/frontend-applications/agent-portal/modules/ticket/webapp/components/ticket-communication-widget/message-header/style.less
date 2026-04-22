@@ -7,55 +7,33 @@
  * --
  */
 
-.message-header-container {
-   display: grid;
-   grid-template-columns: auto max-content;
-   gap: 0 @margin-small;
-   position: sticky;
-   top: 0;
+.header-right {
 
-   .header-title {
-      font-weight: bold;
-      font-size: 1.25rem;
+   .icon {
+      font-size: 1.75rem;
+      margin-top: -0.25rem;
    }
 
-   .header-right {
-      justify-self: end;
-      display: grid;
-      grid-auto-flow: column;
-      grid-column-gap: @margin-small;
-      align-items: start;
+   .channel-icon {
+      position: relative;
 
-      .icon {
-         font-size: 1.75rem;
-         margin-top: -0.25rem;
-      }
+      .smime-decrypted-icon {
+         font-size: 0.9rem;
+         position: absolute;
+         top: -0.125rem;
+         margin-left: -0.125rem;
 
-      .channel-icon {
-         position: relative;
+         &:not(.smime-not-decrypted) {
+            color: @tertiary-5;
+         }
 
-         .smime-decrypted-icon {
-            font-size: 0.9rem;
-            position: absolute;
-            top: -0.125rem;
-            margin-left: -0.125rem;
-
-            &:not(.smime-not-decrypted) {
-               color: @tertiary-5;
-            }
-
-            &.smime-not-decrypted {
-               color: @tertiary-0;
-            }
+         &.smime-not-decrypted {
+            color: @tertiary-0;
          }
       }
-
-      .zip-download {
-         cursor: pointer;
-      }
    }
 
-   .accounted-time {
-      justify-self: end;
+   .zip-download {
+      cursor: pointer;
    }
 }

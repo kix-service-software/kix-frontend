@@ -28,13 +28,12 @@ export class MigrationService {
     private constructor() { }
 
     public async startMigration(): Promise<boolean> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         const releaseInfo = await ReleaseInfoUtil.getInstance().getReleaseInfo();
 
         const migrations = await PluginService.getInstance().getExtensions<IMigration>(AgentPortalExtensions.MIGRATION);
 
         const migrationsList = migrations.filter(
-            (m) => m.buildNumber > serverConfig.INSTALLED_BUILD && m.buildNumber <= releaseInfo.buildNumber
+            (m) => m.buildNumber > ConfigurationService.getEnvNumber('INSTALLED_BUILD') && m.buildNumber <= releaseInfo.buildNumber
         ).sort((a, b) => a.buildNumber - b.buildNumber);
 
         let failed = false;

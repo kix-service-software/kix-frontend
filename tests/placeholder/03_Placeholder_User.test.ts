@@ -9,8 +9,8 @@
 
 /* tslint:disable */
 
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import * as chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { User } from '../../src/frontend-applications/agent-portal/modules/user/model/User';
 import { UserPlaceholderHandler } from '../../src/frontend-applications/agent-portal/modules/user/webapp/core/UserPlaceholderHandler';
 import { UserLabelProvider } from '../../src/frontend-applications/agent-portal/modules/user/webapp/core/UserLabelProvider';

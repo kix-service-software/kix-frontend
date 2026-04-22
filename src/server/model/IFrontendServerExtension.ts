@@ -7,12 +7,10 @@
  * --
  */
 
-import { IServer } from './IServer';
-
 export interface IFrontendServerExtension {
 
     name: string;
 
-    getServer(): IServer;
+    getServer(): any;
 
 }

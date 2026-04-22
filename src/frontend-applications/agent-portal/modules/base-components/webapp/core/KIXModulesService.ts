@@ -12,7 +12,7 @@ import { DisplayValueConfiguration } from '../../../../model/configuration/Displ
 import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
 import { IUIModule } from '../../../../model/IUIModule';
 import { ReleaseInfo } from '../../../../model/ReleaseInfo';
-import { KIXModulesSocketClient } from './KIXModulesSocketClient';
+import { ClientStorageService } from './ClientStorageService';
 
 export class KIXModulesService {
 
@@ -33,17 +33,16 @@ export class KIXModulesService {
 
     private configurationComponents: Map<ConfigurationType | string, string> = new Map();
 
-    public static application = 'agent-portal';
-
     public static displayValueConfigurationKey = DisplayValueConfiguration.CONFIGURATION_ID;
-
-    public static urlPrefix = '';
 
     private releaseInfo: ReleaseInfo;
 
     private uiModules: IUIModule[] = [];
 
     public async init(modules: IKIXModuleExtension[]): Promise<void> {
+        console.groupCollapsed('Load Agent Portal');
+        const startInitModules = Date.now();
+
         this.tags = new Map();
         this.modules = modules;
         this.modules.forEach((m) => {
@@ -53,6 +52,10 @@ export class KIXModulesService {
         this.loadModules();
         await this.registerModules();
         await this.registerModuleExtensions();
+
+        const endInitModules = Date.now();
+        console.debug(`modules initialization finished: ${endInitModules - startInitModules}ms`);
+        console.groupEnd();
     }
 
     private loadModules(): void {
@@ -75,6 +78,7 @@ export class KIXModulesService {
     }
 
     private async registerModules(): Promise<void> {
+        console.groupCollapsed('Init UI Modules');
         const moduleStart = Date.now();
         this.uiModules.sort((a, b) => a.priority - b.priority);
         for (let i = 0; i < this.uiModules.length; i++) {
@@ -89,10 +93,12 @@ export class KIXModulesService {
             const percent = Math.round((i / this.uiModules.length) * 100);
         }
         const moduleEnd = Date.now();
+        console.groupEnd();
         console.debug(`Init modules in ${moduleEnd - moduleStart}ms`);
     }
 
     private async registerModuleExtensions(): Promise<void> {
+        console.groupCollapsed('Register UI Module Extensions');
         const moduleStart = Date.now();
         this.uiModules.sort((a, b) => a.priority - b.priority);
         for (const uiModule of this.uiModules) {
@@ -106,6 +112,7 @@ export class KIXModulesService {
             }
         }
         const moduleEnd = Date.now();
+        console.groupEnd();
         console.debug(`Register Module Extensions modules in ${moduleEnd - moduleStart}ms`);
     }
 
@@ -141,16 +148,16 @@ export class KIXModulesService {
         return this.getComponentTemplate(componentId);
     }
 
-    public async hasPlugin(name: string): Promise<boolean> {
+    public hasPlugin(name: string): boolean {
         if (!this.releaseInfo) {
-            this.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+            this.releaseInfo = ClientStorageService.getReleaseInfo();
         }
         return this.releaseInfo?.plugins?.some((p) => p.product === name);
     }
 
-    public async getBackenTimezoneOffset(): Promise<number> {
+    public getBackenTimezoneOffset(): number {
         if (!this.releaseInfo) {
-            this.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+            this.releaseInfo = ClientStorageService.getReleaseInfo();
         }
         return this.releaseInfo?.backendSystemInfo?.TimeZoneOffset;
     }

@@ -7,19 +7,32 @@
  * --
  */
 
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
 import { AttachmentUtil } from '../../../../../modules/base-components/webapp/core/AttachmentUtil';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
-class ArticleAttachmentComponent {
+class ArticleAttachmentComponent extends AbstractMarkoComponent<ComponentState> {
 
-    private state: ComponentState;
+    public state: ComponentState;
 
-    public onCreate(): void {
+    public onCreate(input: any): void {
+        super.onCreate(input);
         this.state = new ComponentState();
     }
 
+    public async onMount(): Promise<void> {
+        await super.onMount();
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#download attachment'
+        ]);
+
+    }
+
     public onInput(input: any): void {
+        super.onInput(input);
         if (input.attachment) {
             this.state.fileName = input.attachment.Filename;
             this.state.fileSize = typeof input.attachment.FilesizeRaw !== 'undefined' ?

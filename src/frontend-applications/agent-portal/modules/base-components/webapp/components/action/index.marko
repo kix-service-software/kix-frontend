@@ -6,39 +6,34 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<div
-    on-click("doAction")
+<button 
+    type="button" 
+    class="btn p-0" 
     title=state.text
-    class=[
-        "action d-flex align-items-center overflow-hidden p-1",
-        {
-            inactive: !state.canRunAction || state.lockRunAction,
-        },
-    ]>
-    <if(state.action.hasLink)>
-        <a
-            href=("?actionId=" + state.action.id + "&data=" + state.actionData)
-            on-click("linkClicked")>
+    aria-label=state.text 
+    on-click("doAction")>
+    <div
+        class=[
+            "action d-flex align-items-center overflow-hidden p-1",
+            {
+                disabled: !state.canRunAction || state.lockRunAction,
+            },
+        ]>
+        <if(state.action.hasLink)>
             <icon icon=(state.action.icon)/>
-        </a>
-    </if>
-    <else>
-        <icon icon=(state.action.icon)/>
-    </else>
-    <if(state.displayText && state.action.hasLink)>
-        <a
-            class="ms-2 text-truncate"
-            href=("?actionId=" + state.action.id + "&data=" + state.actionData)
-            on-click("linkClicked")>
-            <span class="text text-nowrap">
+        </if>
+        <else>
+            <icon icon=(state.action.icon)/>
+        </else>
+        <if(state.displayText && state.action.hasLink)>
+            <span class="text text-nowrap ms-2 text-truncate">
                 ${state.text}
             </span>
-        </a>
-    </if>
-    <else-if(state.displayText)>
-        <span class="ms-2 text text-nowrap text-truncate">
-            ${state.text}
-        </span>
-    </else-if>
-</div>
+        </if>
+        <else-if(state.displayText)>
+            <span class="ms-2 text text-nowrap text-truncate">
+                ${state.text}
+            </span>
+        </else-if>
+    </div>
+</button>

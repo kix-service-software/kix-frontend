@@ -17,7 +17,6 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
-import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
@@ -154,10 +153,14 @@ export class FAQService extends KIXObjectAPIService {
 
         const newAttachments = attachments ? attachments.filter((a) => !a.ID) : [];
         for (const attachment of newAttachments) {
-            if (!attachment.Content) {
+            if (
+                !attachment.Content
+                && attachment.downloadId
+            ) {
                 const crypto = require('crypto');
                 const md5 = crypto.createHash('md5').update(token).digest('hex');
-                const filename = `${md5}-${attachment.Filename}`;
+                attachment.downloadId = Buffer.from(attachment.downloadId, 'latin1').toString('utf8');
+                const filename = `${md5}-${attachment.downloadId}`;
                 const content = FileService.getFileContent(filename, false);
                 attachment.Content = content;
                 FileService.removeFile(filename, false);
@@ -188,10 +191,14 @@ export class FAQService extends KIXObjectAPIService {
         if (Array.isArray(attachmentParameter) && Array.isArray(attachmentParameter[1])) {
             const attachments: Attachment[] = attachmentParameter[1];
             for (const attachment of attachments) {
-                if (!attachment.Content) {
+                if (
+                    !attachment.Content
+                    && attachment.downloadId
+                ) {
                     const crypto = require('crypto');
                     const md5 = crypto.createHash('md5').update(token).digest('hex');
-                    const filename = `${md5}-${attachment.Filename}`;
+                    attachment.downloadId = Buffer.from(attachment.downloadId, 'latin1').toString('utf8');
+                    const filename = `${md5}-${attachment.downloadId}`;
                     const content = FileService.getFileContent(filename, false);
                     attachment.Content = content;
                     FileService.removeFile(filename, false);
@@ -316,14 +323,14 @@ export class FAQService extends KIXObjectAPIService {
 
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: string | number,
-        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
+        cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
     ): Promise<Error[]> {
         if (objectType === KIXObjectType.FAQ_CATEGORY) {
             ressourceUri = 'system/faq/categories';
         }
 
         return super.deleteObject(
-            token, clientRequestId, objectType, objectId, deleteOptions, cacheKeyPrefix, ressourceUri
+            token, clientRequestId, objectType, objectId, cacheKeyPrefix, ressourceUri
         );
     }
 

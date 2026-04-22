@@ -5,11 +5,6 @@
             "kix-module-multifactor-authentication-module": {
                 "module": "kix-module.extension"
             }
-        },
-        "kix:socket:namespace": {
-            "mfa-socket-namespace-registry": {
-                "module": "NamespaceRegistry.extension"
-            }
         }
     }
 }

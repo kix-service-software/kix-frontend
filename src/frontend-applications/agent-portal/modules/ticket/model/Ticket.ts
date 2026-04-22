@@ -582,35 +582,35 @@ export class Ticket extends KIXObject {
         },
         {
             Property: TicketProperty.HISTORIC_OWNER_ID,
-            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
+            Operations: [SearchOperator.IN],
             APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.DROPDOWN
         },
         {
             Property: TicketProperty.HISTORIC_PRIORITY_ID,
-            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
+            Operations: [SearchOperator.IN],
             APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.DROPDOWN
         },
         {
             Property: TicketProperty.HISTORIC_QUEUE_ID,
-            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
+            Operations: [SearchOperator.IN],
             APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.DROPDOWN
         },
         {
             Property: TicketProperty.HISTORIC_STATE_ID,
-            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
+            Operations: [SearchOperator.IN],
             APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.DROPDOWN
         },
         {
             Property: TicketProperty.HISTORIC_TYPE_ID,
-            Operations: [SearchOperator.IN, SearchOperator.NOT_IN],
+            Operations: [SearchOperator.IN],
             APIOperations: Ticket.NUMBER_OPERATORS_EXTENDED,
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.DROPDOWN

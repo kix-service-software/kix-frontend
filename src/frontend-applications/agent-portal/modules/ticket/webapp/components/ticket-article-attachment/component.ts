@@ -40,35 +40,50 @@ class ArticleAttachmentComponent {
     }
 
     public async download(force: boolean = false, event: any): Promise<void> {
-        event.stopPropagation();
-        event.preventDefault();
+        event?.stopPropagation?.();
+        event?.preventDefault?.();
 
-        if (this.state.article && this.state.attachment) {
+        if (!this.state.article || !this.state.attachment) {
+            return;
+        }
 
-            if (!force && this.images && this.images.some((i) => i.imageId === this.state.attachment.ID)) {
-                EventService.getInstance().publish(
-                    ImageViewerEvent.OPEN_VIEWER,
-                    new ImageViewerEventData(this.images, this.state.attachment.ID)
-                );
-            } else {
-                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                    loading: true, hint: 'Translatable#Prepare File Download'
-                });
-                const isPDF = this.state.attachment.ContentType === 'application/pdf';
-                const asDownload = (isPDF && force || !isPDF);
+        if (!force && this.images && this.images.some((i) => i.imageId === this.state.attachment.ID)) {
+            EventService.getInstance().publish(
+                ImageViewerEvent.OPEN_VIEWER,
+                new ImageViewerEventData(this.images, this.state.attachment.ID)
+            );
+            return;
+        }
 
-                this.state.progress = true;
-                const attachment = await this.loadArticleAttachment(this.state.attachment.ID, asDownload);
-                this.state.progress = false;
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+            loading: true,
+            hint: 'Translatable#Prepare File Download'
+        });
 
-                if (!asDownload) {
-                    BrowserUtil.openPDF(attachment.Content, attachment.Filename);
-                } else {
-                    BrowserUtil.startFileDownload(attachment);
+        this.state.progress = true;
+
+        try {
+            const contentType = (this.state.attachment.ContentType || '').split(/;\s*/)[0];
+            const isPDF = contentType === 'application/pdf';
+
+            if (isPDF && !force) {
+                const inlineAttachment = await this.loadArticleAttachment(this.state.attachment.ID, false);
+
+                if (inlineAttachment?.Content && typeof inlineAttachment.Content === 'string') {
+                    BrowserUtil.openPDF(inlineAttachment.Content, inlineAttachment.Filename);
+                    return;
                 }
-
-                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
             }
+
+            const downloadable = await this.loadArticleAttachment(this.state.attachment.ID, true);
+            BrowserUtil.startFileDownload(downloadable);
+
+        } catch (e) {
+            console.error('Attachment open/download failed:', e);
+            BrowserUtil.openErrorOverlay('Translatable#Could not download/open attachment.');
+        } finally {
+            this.state.progress = false;
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         }
     }
 

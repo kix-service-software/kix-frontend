@@ -145,8 +145,8 @@ export class RoleService extends KIXObjectAPIService {
     }
 
     private async applyAllowAdminModule(roleId: number, remove?: boolean): Promise<void> {
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        const token = config.BACKEND_API_TOKEN;
+
+        const token = ConfigurationService.getBackendAPIToken();
         const agentPortalConfig = await SysConfigService.getInstance().getPortalConfiguration(token);
         if (!Array.isArray(agentPortalConfig?.adminRoleIds)) {
             agentPortalConfig.adminRoleIds = [];
@@ -326,7 +326,19 @@ export class RoleService extends KIXObjectAPIService {
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        return [];
+        const searchProperties = [
+            RoleProperty.NAME,
+            RoleProperty.USAGE_CONTEXT,
+            'Permissions.' + PermissionProperty.TARGET,
+            'Permissions.' + PermissionProperty.TYPE_ID,
+            'Permissions.' + PermissionProperty.VALUE,
+        ];
+
+        const searchCriteria = criteria.filter(
+            (f) => searchProperties.some((sp) => f.property.match(sp))
+        );
+
+        return searchCriteria;
     }
 
     public async deletePermission(

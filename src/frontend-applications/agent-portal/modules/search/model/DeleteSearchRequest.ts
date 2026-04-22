@@ -7,13 +7,10 @@
  * --
  */
 
-import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
-
-export class DeleteSearchRequest implements ISocketRequest {
+export class DeleteSearchRequest {
 
     public constructor(
-        public requestId: string,
-        public clientRequestId: string,
+
         public id: string,
     ) { }
 

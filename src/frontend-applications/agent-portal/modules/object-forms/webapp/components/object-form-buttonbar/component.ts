@@ -40,6 +40,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.formhandler = await this.context.getFormManager().getObjectFormHandler();
 
+        const canCancel = this.context.getAdditionalInformation('DIALOG_ALLOW_CANCEL');
+        if (canCancel !== undefined && canCancel !== null) {
+            this.state.canCancel = canCancel;
+        }
+
         this.prepareSubmitButton();
         this.registerListener();
 

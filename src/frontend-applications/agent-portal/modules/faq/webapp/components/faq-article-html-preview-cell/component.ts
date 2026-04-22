@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.state.title = await TranslationService.translate('Translatable#Preview');
+        this.state.title = await TranslationService.translate('Translatable#Show FAQ article preview');
     }
 
     public async showPreview(event: any): Promise<void> {

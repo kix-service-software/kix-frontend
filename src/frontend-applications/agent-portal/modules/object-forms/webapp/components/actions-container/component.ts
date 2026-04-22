@@ -54,7 +54,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private sortActions(): void {
         this.state.actions = this.state.actions.reduce((arr, action) => {
-            action.isActive() ? arr.unshift(action) : arr.push(action);
+            if (action.isActive()) {
+                arr.unshift(action);
+            } else {
+                arr.push(action);
+            }
             return arr;
         }, []);
     }

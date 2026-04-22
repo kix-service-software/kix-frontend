@@ -22,9 +22,10 @@ export class TicketModuleConfiguration implements IConfiguration {
         public type: string = 'Ticket Module',
         public valid: boolean = true,
         public roleIds: number[] = [],
-        public addQueueSignature: boolean = true,
+        public addQueueSignature: QueueSignatureConfiguration = new QueueSignatureConfiguration(),
         public ticketColors = new TicketColorConfiguration(),
-        public ticketRouteConfiguration = new TicketRouteConfiguration()
+        public ticketRouteConfiguration = new TicketRouteConfiguration(),
+        public organisationDeterminesContact: boolean = false
     ) { }
 }
 
@@ -48,4 +49,13 @@ export class TicketColorConfiguration {
             unseen: 'font-weight:bold;'
         }
     ) { }
+}
+
+export class QueueSignatureConfiguration {
+
+    public constructor(
+        public addQueueSignature: boolean = true,
+        public newTicketOnly: boolean = false
+    ) { }
+
 }

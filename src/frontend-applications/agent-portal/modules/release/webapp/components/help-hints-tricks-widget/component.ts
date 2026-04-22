@@ -15,7 +15,7 @@ import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
 import { FAQDetailsContext } from '../../../../faq/webapp/core/context/FAQDetailsContext';
-import { AuthenticationSocketClient } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
@@ -42,8 +42,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Help, hints & tricks',
             'Translatable#Field Agent App',
-            'Field Agent App (Android)',
-            'Field Agent App (iOS)',
+            'Translatable#Field Agent App (Android)',
+            'Translatable#Field Agent App (iOS)',
             'Translatable#Manuals',
             'Translatable#User Manual',
             'Translatable#Admin Manual',
@@ -78,7 +78,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async checkReadPermissions(resource: string): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
+        return await SessionAPIClient.checkPermissions(
             [new UIComponentPermission(resource, [CRUD.READ])]
         );
     }

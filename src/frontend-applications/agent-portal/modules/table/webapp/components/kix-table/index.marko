@@ -8,13 +8,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <div
-    style="height:" + state.tableHeight
+    style=state.tableStyle
     key=(
         state.table ? state.table.getTableId() + "table-container" : "no-table"
     )
     on-scroll("onScroll")
-    class="table-container"
->
+    class="table-container">
     <if(state.table)>
         <table class="kix-table">
             <thead>
@@ -22,8 +21,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </thead>
             <table-body
                 table=input.table
-                key=input.table.getTableId() + "table-body"
-            />
+                key=input.table.getTableId() + "table-body"/>
             <if(state.showLoadingShield)>
                 <div class="table-shield">
                     <loading-spinner/>

@@ -16,11 +16,6 @@
                 "module": "kix-module.extension"
             }
         },
-        "kix:router": {
-            "oauth2-profile-redirect-router": {
-                "module": "router.extension"
-            }
-        },
         "kix:configuration": {
             "edit-oauth2-profile-dialog-configuration": {
                 "module": "edit-oauth2-profile-dialog-configuration.extension"

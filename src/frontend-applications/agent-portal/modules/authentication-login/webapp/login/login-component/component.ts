@@ -16,15 +16,15 @@ import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFi
 import { AuthMethod } from '../../../../../model/AuthMethod';
 import { PasswordResetState } from '../../../../../model/PasswordResetState';
 import { UserType } from '../../../../user/model/UserType';
-import { MFASocketClient } from '../../../../multifactor-authentication/webapp/core/MFASocketClient';
 import { MFAToken } from '../../../../multifactor-authentication/model/MFAToken';
 import { MFAConfig } from '../../../../multifactor-authentication/model/MFAConfig';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { SessionAPIClient } from '../../../../../api-client/session/Session';
+import { MFAAPIClient } from '../../../../../api-client/session/MFA';
 
 declare const window: Window;
 
@@ -43,14 +43,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
-        this.state.logout = input.logout;
         this.redirectUrl = input.redirectUrl;
         this.authMethods = input.authMethods || [];
         this.state.error = input.error;
         this.mfaConfig = input.mfaConfig;
         this.state.pwResetEnabled = input.pwResetEnabled;
         this.state.pwResetState = input.pwResetState;
-        ClientStorageService.setBaseRoute(input.baseRoute);
+        ClientStorageService.setApplicationData(input);
     }
 
     public async onMount(): Promise<void> {
@@ -144,11 +143,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async login(requireMFAToken: boolean): Promise<void> {
-        this.state.logout = false;
-
-        const userMFARequired = await MFASocketClient.getInstance().isMFAEnabled(
+        const userMFARequired = await MFAAPIClient.isMFAEnabled(
             this.state.userName, UserType.AGENT, this.mfaConfig
-        );
+        ).catch(() => false);
+
         if (!requireMFAToken && userMFARequired) {
             this.state.showMFA = true;
             this.state.loginProcess = false;
@@ -227,7 +225,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.pwResetProcess = true;
 
         if (this.state.userName) {
-            AuthenticationSocketClient.getInstance().createUserPasswordResetRequest(this.state.userName);
+            SessionAPIClient.createUserPasswordResetRequest(this.state.userName);
             // show login form again
             this.state.pwResetProcess = false;
             this.state.showPWResetDialog = false;
