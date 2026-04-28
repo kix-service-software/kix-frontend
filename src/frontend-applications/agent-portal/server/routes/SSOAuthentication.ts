@@ -26,7 +26,7 @@ export async function doSSOLogin(
             // already negotiated (SSO)
             negotiationToken = authorization.split(' ')[1];
             authType = 'negotiate token (SSO)';
-        } else if (!(reply as any).cookies.authNegotiationDone && !(reply as any).cookies.authNoSSO) {
+        } else if (!(reply as any).cookie.authNegotiationDone && !(reply as any).cookie.authNoSSO) {
             // no token - start the negotiation process
             (reply as any).cookie('authNegotiationDone', true, { httpOnly: true, path: '/' });
             reply.header('WWW-Authenticate', 'Negotiate');
@@ -70,5 +70,6 @@ export async function doSSOLogin(
         reply.redirect(`${baseRoute}${redirectUrl}`);
         return true;
     }
+
     return false;
 }
