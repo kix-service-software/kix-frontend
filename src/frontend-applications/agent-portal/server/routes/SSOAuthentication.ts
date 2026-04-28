@@ -30,17 +30,19 @@ export async function doSSOLogin(
             // no token - start the negotiation process
             (reply as any).cookie('authNegotiationDone', true, { httpOnly: true, path: '/' });
             reply.header('WWW-Authenticate', 'Negotiate');
-            reply.status(401);
-            reply.send(
-                `<!DOCTYPE html>
-                <html lang='en'>
-                    <head>
-                        <title>KIX SSO Login</title>
-                        <meta http-equiv='refresh' content='3; URL=${req.url}'>
-                    </head>
-                    <body></body>
-                </html>`
-            );
+            reply
+                .status(401)
+                .type('text/html; charset=utf-8')
+                .send(
+                    `<!DOCTYPE html>
+                    <html lang='en'>
+                        <head>
+                            <title>KIX SSO Login</title>
+                            <meta http-equiv='refresh' content='3; URL=${req.url}'>
+                        </head>
+                        <body></body>
+                    </html>`
+                );
             return true;
         }
     }
