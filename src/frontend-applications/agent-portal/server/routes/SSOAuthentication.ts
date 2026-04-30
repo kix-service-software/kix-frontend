@@ -13,6 +13,7 @@ import { LoggingService } from '../../../../server/services/LoggingService';
 import { UserType } from '../../modules/user/model/UserType';
 import { APIUtil } from '../api/APIUtil';
 
+// eslint-disable-next-line max-lines-per-function
 export async function doSSOLogin(
     req: FastifyRequest, reply: FastifyReply, ssoEnabled: boolean, baseRoute: string, userType: UserType
 ): Promise<boolean> {
@@ -26,15 +27,14 @@ export async function doSSOLogin(
             // already negotiated (SSO)
             negotiationToken = authorization.split(' ')[1];
             authType = 'negotiate token (SSO)';
-        } else if (!(reply as any).cookie.authNegotiationDone && !(reply as any).cookie.authNoSSO) {
+        } else if (!(req as any).cookies.authNegotiationDone && !(req as any).cookies.authNoSSO) {
             // no token - start the negotiation process
             (reply as any).cookie('authNegotiationDone', true, { httpOnly: true, path: '/' });
             reply.header('WWW-Authenticate', 'Negotiate');
-            reply
-                .status(401)
-                .type('text/html; charset=utf-8')
-                .send(
-                    `<!DOCTYPE html>
+            reply.status(401);
+            reply.type('text/html; charset=utf-8');
+            reply.send(
+                `<!DOCTYPE html>
                     <html lang='en'>
                         <head>
                             <title>KIX SSO Login</title>
@@ -42,7 +42,7 @@ export async function doSSOLogin(
                         </head>
                         <body></body>
                     </html>`
-                );
+            );
             return true;
         }
     }
