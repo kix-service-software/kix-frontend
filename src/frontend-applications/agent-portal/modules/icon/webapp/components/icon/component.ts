@@ -58,7 +58,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     icon.Object, contextObject
                 );
                 this.objectId = await PlaceholderService.getInstance().replacePlaceholders(
-                    icon.ObjectId ? icon.ObjectId.toString() : '', contextObject
+                    icon.ObjectID ? icon.ObjectID.toString() : '', contextObject
                 );
 
                 const objectIcon = await ObjectIconService.getInstance().getObjectIcon(this.object, this.objectId);
