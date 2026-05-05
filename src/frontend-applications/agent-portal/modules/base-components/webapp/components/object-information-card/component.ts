@@ -99,7 +99,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             // The componentId must be checked in addition to the preparedText because
             // the object information is usually supplied via components and the preparedText is often not filled.
             const hasValue = group.some((value) => Boolean(value.componentId)
-                || Boolean(value.preparedText?.trim().length)
+                || (
+                    typeof value.preparedText === 'string'
+                    && Boolean(value.preparedText?.trim().length)
+                )
             );
             if (hasValue) {
                 return true;
