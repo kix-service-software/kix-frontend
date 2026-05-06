@@ -697,4 +697,23 @@ export class BrowserUtil {
         });
     }
 
+    public static async retry<T extends (...arg0: any[]) => any>(
+        retryFunction: T, args: Parameters<T>, maxTry: number = 1, retryTimeout = 0, retryCount = 1
+    ): Promise<Awaited<ReturnType<T>>> {
+        return new Promise<Awaited<ReturnType<T>>>((resolve, reject) => {
+            setTimeout(async () => {
+                const currentRetry = isNaN(retryCount) ? 1 : retryCount;
+                try {
+                    const result = await retryFunction(...args);
+                    resolve(result);
+                } catch (e) {
+                    if (currentRetry > maxTry) {
+                        throw e;
+                    }
+                    resolve(this.retry(retryFunction, args, maxTry, retryTimeout, currentRetry + 1));
+                }
+            }, retryTimeout);
+        });
+    }
+
 }
