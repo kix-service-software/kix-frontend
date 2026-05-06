@@ -14,35 +14,37 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             title=state.tooltip
             key=state.iconId
             alt=state.tooltip
-            class="svg-icon">
+            class="svg-icon"
+        >
     </if>
     <else>
         <span
             style=input.style
             class=state.content
             title=state.tooltip
-            key=state.iconId>
-            <span class="path1"/>
-            <span class="path2"/>
-            <span class="path3"/>
-            <span class="path4"/>
-            <span class="path5"/>
+            key=state.iconId
+        >
+            <span class="path1"/><span class="path2"/><span class="path3"/>
+            <span class="path4"/><span class="path5"/>
         </span>
     </else>
 </macro>
 
-<span class=["icon", input.class]>
-    <if(state.content)>
-        <kix-icon/>
-    </if>
-    <else-if(state.srcPath)>
-        <img
-            src=state.srcPath
-            style=input.style
-            class="svg-icon"
-            on-error("setFallback")
-            title=state.tooltip
-            key=state.iconId
-            alt=state.tooltip>
-    </else-if>
-</span>
+<if(state.prepared)>
+    <span class=["icon", input.class]>
+        <if(state.content)>
+            <kix-icon/>
+        </if>
+        <else-if(state.srcPath)>
+            <img
+                src=state.srcPath
+                style=input.style
+                class="svg-icon"
+                on-error("setFallback")
+                title=state.tooltip
+                key=state.iconId
+                alt=state.tooltip
+            >
+        </else-if>
+    </span>
+</if>

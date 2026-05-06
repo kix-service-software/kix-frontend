@@ -18,7 +18,6 @@ export class ComponentState extends AbstractComponentState {
         public listDefault: Array<ActionGroup | IAction> = [],
         public listExpansion: Array<ActionGroup | IAction> = [],
         public displayText: boolean = true,
-        public prepared: boolean = false,
         public key: string = IdService.generateDateBasedId()
     ) {
         super();
