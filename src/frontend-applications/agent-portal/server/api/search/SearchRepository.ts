@@ -52,7 +52,8 @@ export class SearchRepository {
         } else {
             this.deleteSharedSearch(search.id);
 
-            const searchPreference = user.Preferences.find((p) => p.ID?.endsWith('searchprofiles'));
+            const searchPreference = user?.Preferences?.find((p) => p.ID === 'searchprofiles') ||
+                user.Preferences.find((p) => p.ID?.endsWith('searchprofiles'));
             let searchConfig = {};
 
             if (searchPreference) {
@@ -111,7 +112,8 @@ export class SearchRepository {
     public static async deleteUserSearch(id: string, token: string): Promise<void> {
         const user = await UserService.getInstance().getUserByToken(token);
         if (user) {
-            const searchPreference = user.Preferences.find((p) => p.ID?.endsWith('searchprofiles'));
+            const searchPreference = user?.Preferences?.find((p) => p.ID === 'searchprofiles') ||
+                user.Preferences.find((p) => p.ID?.endsWith('searchprofiles'));
 
             if (searchPreference) {
                 const search = JSON.parse(searchPreference.Value);
