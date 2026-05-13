@@ -428,6 +428,10 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
                     if (dfElement) {
                         dfElement.style.width = width;
                     }
+                    const actionElement = (this as any).getEl('article-action-container');
+                    if (actionElement) {
+                        actionElement.style.width = width;
+                    }
 
                     clearInterval(this.elementInterval);
                 }

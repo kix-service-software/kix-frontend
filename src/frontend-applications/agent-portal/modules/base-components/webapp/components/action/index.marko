@@ -12,8 +12,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     title=state.text
     aria-label=state.text
     on-click("doAction")
-    key=state.key
->
+    key=state.key>
     <div
         key=state.key + "-actiondiv"
         class=[
@@ -21,18 +20,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             {
                 disabled: !state.canRunAction || state.lockRunAction,
             },
-        ]
-    >
-        <icon icon=state.action.icon/>
-        <if(state.displayText && state.action.hasLink)>
-            <span class="text text-nowrap ms-2 text-truncate">
-                ${state.text}
-            </span>
-        </if>
-        <else-if(state.displayText)>
+        ]>
+        <icon icon=(state.action.icon)/>
+        <if(state.displayText)>
             <span class="ms-2 text text-nowrap text-truncate">
                 ${state.text}
             </span>
-        </else-if>
+        </if>
     </div>
 </button>

@@ -30,8 +30,6 @@ import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigServic
 import { DefaultColorConfiguration } from '../../../../model/configuration/DefaultColorConfiguration';
 import { ModalSettings } from '../../../toast/model/ModalSettings';
 import { ClientStorageService } from './ClientStorageService';
-import { APIClient } from '../../../../api-client/APIClient';
-import { APIHeader } from '../../../../server/api/APIHeader';
 
 export class BrowserUtil {
 
@@ -699,20 +697,27 @@ export class BrowserUtil {
 
     public static async retry<T extends (...arg0: any[]) => any>(
         retryFunction: T, args: Parameters<T>, maxTry: number = 1, retryTimeout = 0, retryCount = 1
-    ): Promise<Awaited<ReturnType<T>>> {
-        return new Promise<Awaited<ReturnType<T>>>((resolve, reject) => {
-            setTimeout(async () => {
-                const currentRetry = isNaN(retryCount) ? 1 : retryCount;
-                try {
-                    const result = await retryFunction(...args);
-                    resolve(result);
-                } catch (e) {
-                    if (currentRetry > maxTry) {
-                        throw e;
-                    }
-                    resolve(this.retry(retryFunction, args, maxTry, retryTimeout, currentRetry + 1));
+    ): Promise<ReturnType<T>> {
+        return new Promise<Awaited<ReturnType<T>>>(async (resolve, reject) => {
+            const currentRetry = isNaN(retryCount) ? 1 : retryCount;
+            try {
+                const result = await retryFunction(...args);
+                resolve(result);
+            } catch (e) {
+                if (currentRetry > maxTry - 1) {
+                    console.error(e);
+                    reject(e);
+                } else {
+                    setTimeout(async () => {
+                        BrowserUtil.retry(retryFunction, args, maxTry, retryTimeout, currentRetry + 1)
+                            .then((v) => {
+                                resolve(v);
+                            }, (e) => {
+                                reject(e);
+                            });
+                    }, retryTimeout);
                 }
-            }, retryTimeout);
+            }
         });
     }
 
