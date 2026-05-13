@@ -44,11 +44,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.actionList = [];
         this.actionsToShow = [];
+
+        this.observeParent = super.getInputValue(input.observeParent, true);
     }
 
     public onInput(input: any): void {
         super.onInput(input);
-        this.observeParent = super.getInputValue(input.observeParent, true);
         this.initialOpenDropdown = super.getInputValue(input.initialOpenDropdown);
         this.state.displayText = super.getInputValue(input.displayText, true);
 
@@ -87,13 +88,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 });
             }
             await this.actionsChanged();
+            if (this.observeParent) {
+                this.prepareObserver();
+            }
         } else if (this.actionsToShow.length) {
             this.state.listDefault = [...this.actionsToShow];
             this.prepareActionLists().then(() => {
                 if (this.observeParent) {
                     this.prepareObserver();
                 }
-
                 this.initialized = true;
             });
         }
@@ -205,11 +208,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         actionListElement.classList.add('opacity-0');
 
+        (this as any).once('update', () => {
+            // use short timeout to make sure DOM update is done
+            // else some actions may be still in extension list and return wrong width
+            setTimeout(async () => {
+                this.calculateActionLists(maxWidth, actionListElement);
+            }, 50);
+        });
         this.state.listDefault = [...this.actionsToShow];
         this.state.listExpansion = [];
         (this as any).setStateDirty();
+    }
 
-
+    private async calculateActionLists(maxWidth: number, actionListElement: any): Promise<void> {
         const listDefault: Array<ActionGroup | IAction> = [];
         const listExpansion: Array<ActionGroup | IAction> = [];
 
@@ -218,17 +229,18 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             for (const action of this.actionsToShow) {
                 const actionElement = await BrowserUtil.retry(
-                    this.getActionElement.bind(this), [`${this.state.key}${action['key']}`], 5, 10
-                );
+                    this.getActionElement.bind(this), [`${this.state.key}${action['key']}`, action.text], 5, 10
+                ).catch(() => null);
+                if (actionElement) {
+                    const width = actionElement?.offsetWidth || ((this.state.displayText ? 16 : 3) * this.fontSize);
 
-                const width = actionElement?.offsetWidth || ((this.state.displayText ? 16 : 3) * this.fontSize);
-
-                if (actionsWidth + width < maxWidth) {
-                    listDefault.push(action);
-                    actionsWidth += width;
-                } else {
-                    listExpansion.push(action);
-                }
+                    if (!listExpansion.length && actionsWidth + width < maxWidth) {
+                        listDefault.push(action);
+                        actionsWidth += width;
+                    } else {
+                        listExpansion.push(action);
+                    }
+                };
             }
 
             if (
@@ -276,10 +288,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         return actionListElement;
     }
 
-    private async getActionElement(key: string): Promise<HTMLElement> {
+    private async getActionElement(key: string, actionText: string = ''): Promise<HTMLElement> {
         const actionElement: HTMLElement = (this as any).getEl(key);
         if (!actionElement) {
-            throw Error('No actionElement');
+            throw Error(`No actionElement found (${actionText})`);
         }
         return actionElement;
     }
